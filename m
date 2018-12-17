@@ -1,81 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Dec 2018 22:33:59 +0100
-Subject: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
-In-Reply-To: <CAGt4E5sQsXUYd-Aa6A7nHB7GnF18-MmRwve=JgDSUWwmP6WJyw@mail.gmail.com>
-References: <20180309224149.20225-1-mmayer@broadcom.com>
- <20181216152603.GD2384@scaer>
- <CAGt4E5v655G7xF0sXUx7gb9ecfDC6UE+Jbx8jEK1_roKzFNKng@mail.gmail.com>
- <20181216184725.GA2951@scaer>
- <CAGt4E5sQsXUYd-Aa6A7nHB7GnF18-MmRwve=JgDSUWwmP6WJyw@mail.gmail.com>
-Message-ID: <20181217213359.GA24194@scaer>
+From: Chris Lesiak <chris.lesiak@licor.com>
+Date: Mon, 17 Dec 2018 21:24:47 +0000
+Subject: [Buildroot] [PATCH v2] package/openssh: Add sysusers.d snippet
+In-Reply-To: <20181217181319.GD2951@scaer>
+References: <20180123232221.6106-1-chris.lesiak@licor.com>
+ <20180216181016.8747-1-chris.lesiak@licor.com> <20181216134502.GB2384@scaer>
+ <f71a4a61-0cca-0fa3-a9f7-bfbc1d8ad6af@licor.com>
+ <20181217181319.GD2951@scaer>
+Message-ID: <9cff125b-6458-ae1f-e7c2-27c96c843297@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+On 12/17/18 12:13 PM, Yann E. MORIN wrote:
 
-On 2018-12-17 10:51 -0800, Markus Mayer spake thusly:
-> On Sun, 16 Dec 2018 at 10:47, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > Would it make sense to use the order /bin:/usr/bin:/sbin:/usr/sbin?
-> > > Conceptually, that would make it pick up non-admin and non-system
-> > > tools first. In reality, it likely wouldn't make a difference, because
-> > > there won't be programs of the same name in a "bin" path and in an
-> > > "sbin" path. But if there are, for whatever reason, it's nicer if it
-> > > picks the one that will do "less damage" by default, unless explicitly
-> > > told otherwise.
-> > > Anyway, it's just a thought.
-> >
-> > Currently, system/skeleton/etc/profile contains /bin:/sbin:/usr/bin:/usr/sbin
-> > so I'd suggest we keep that as the default for this new option.
-> 
-> Okay, I'll leave it as is.
-> 
-> > Cool thanks! Don't forget to Cc me on the resulting series, so I'm sure
-> > not to miss it. (which does not mean you'll get a fast review, mind
-> > you! :-/)
-> 
-> Looks like the main challenge will be to change etc/profile. Right
-> now, it is being copied (rsynched) as is. That won't be possible
-> anymore. It'll have to replace a place holder with the actual PATH as
-> set in the new config option.
-> 
-> $ head system/skeleton/etc/profile
-> export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-> 
-> if [ "$PS1" ]; then
->     if [ "`id -u`" -eq 0 ]; then
->         export PS1='# '
->     else
->         export PS1='$ '
->     fi
-> fi
-> 
-> Do you know of any examples in the Buildroot code where the "build"
-> process has to modify a script and insert the value of a Buildroot
-> config option? If this is already being done elsewhere, I'd like to
-> use the same approach here if possible.
+> [--SNIP--]
+>
+> Currently, the set of users created by FOO_USERS and the set of users
+> created by sysusers.d files is not consistent. Your proposed patch fixes
+> it for openssh only, but:
+>
+>    - the user definition is duplicated: one in the .mk, one in the
+>      sysusers.d file, so becomes a maintenacne burden (e.g. should we
+>      need to create anotehr user for it, for example)
+>
+>    - other packages are left out in the cold.
+>
+> So, I'd like we find a solution so that the set of users installed in
+> /etc/paswd and the set of users created by sysusers.d are identical.
+>
+> I don't have a good suggestion, though... :-/
+>
+> Regards,
+> Yann E. MORIN.
 
-Use $(SED) to sed the file after it has been installed. See for example
-pppd:
-    https://git.buildroot.org/buildroot/tree/package/pppd/pppd.mk#n74
 
-So, in SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS, add a line something
-like:
-    $(SED) 's at PATH=.*$@PATH=$(BR2_SYSTEM_PATH)@' \
-        $(TARGET_DIR)/etc/profile
+I haven't tried this yet, but maybe the systemd Dynamic Users feature is 
+a better solution.
 
-And note in the commit log that BR2_SYSTEM_PATH is a kconfig string, so
-it is already quoted, so we end up with a properly-quoted assignment.
+See: http://0pointer.net/blog/dynamic-users-with-systemd.html
 
-Regards,
-Yann E. MORIN.
+The user name would still appear in two places (the make fragment and 
+the service file), but it could eliminate the need for both the 
+sysusers.d and tmpfiles.d snippets.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Chris Lesiak
+Principal Design Engineer, Software
+LI-COR Biosciences
+4647 Superior Street
+Lincoln, NE 68504 USA
+chris.lesiak at licor.com
