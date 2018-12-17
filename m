@@ -1,60 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Dec 2018 09:19:34 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: download: add <CROSS>-cc
- symlink if not present
-Message-ID: <20181217081934.24807-1-peter@korsgaard.com>
+Date: Mon, 17 Dec 2018 09:25:02 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-12-16
+In-Reply-To: <20181217090810.18bfe9d0@windsurf> (Thomas Petazzoni's message of
+ "Mon, 17 Dec 2018 09:08:10 +0100")
+References: <20181217070031.7A1922072F@mail.bootlin.com>
+ <875zvs4lwp.fsf@dell.be.48ers.dk> <20181217090810.18bfe9d0@windsurf>
+Message-ID: <871s6g4l29.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/dbb/dbb3c4634d5fc726ca0b27c2dac0befbbab70912
-http://autobuild.buildroot.net/results/dbb/dbb69acadc20b4bb559311348eca276c1e6343f7
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Some external toolchains do not have a <CROSS>-cc binary/symlink, which is
-used by some packages.  As a workaround, add a symlink to <CROSS>-gcc.
+ > Hello,
+ > On Mon, 17 Dec 2018 09:06:46 +0100, Peter Korsgaard wrote:
 
-Notice that we can only do this for external toolchains we download
-ourselves, and not pre-installed ones as we might not have write access to
-them.
+ >> >      aarch64 | swupdate-2018.11 | NOK |
+ >> > http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
+ >> > |
+ >> >          arm | swupdate-2018.11 | NOK |
+ >> > http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
+ >> > |
+ >> 
+ >> /bin/sh: /home/naourr/work/instance-0/output/host/bin/aarch64-linux-gnu-cc: No such file or directory
+ >> 
+ >> swupdate uses $CROSS-cc and not $CROSS-gcc, which not all external
+ >> toolchain have. I think it makes sense to add a cc -> gcc symlink for
+ >> external toolchains we download if not present. We cannot really do it
+ >> for pre-installed external toolchains as we might not have write access
+ >> to them.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-external/pkg-toolchain-external.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ > Does it make sense for swupdate to use -cc instead of -gcc ?
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d96f..753a6c5207 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -106,6 +106,16 @@ define TOOLCHAIN_EXTERNAL_MOVE
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
- 	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
- endef
-+
-+# Some external toolchains do not have a <CROSS>-cc binary/symlink,
-+# which is used by some packages. As a workaround, add a (relative)
-+# symlink to <CROSS>-gcc
-+define TOOLCHAIN_EXTERNAL_ADD_CC_SYMLINK
-+	if [ ! -e $(TOOLCHAIN_EXTERNAL_CROSS)cc ]; then \
-+		ln -s $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc $(TOOLCHAIN_EXTERNAL_CROSS)cc; \
-+	fi
-+endef
-+
- endif
- 
- #
-@@ -515,7 +525,8 @@ ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- $(2)_EXCLUDES = usr/lib/locale/*
- 
- $(2)_POST_EXTRACT_HOOKS += \
--	TOOLCHAIN_EXTERNAL_MOVE
-+	TOOLCHAIN_EXTERNAL_MOVE \
-+	TOOLCHAIN_EXTERNAL_ADD_CC_SYMLINK
- endif
- 
- # Checks for an already installed toolchain: check the toolchain
+Maybe not, but a number of packages use cc for compatibility (E.G. they
+should work with other compilers than just gcc).
+
+E.G. the default built in make rule for .c -> binary uses cc:
+
+echo 'int main(void) { return 0; }' > test.c
+make test
+cc     test.c   -o test
+
+So I think it makes sense to add the symlink for compatibility.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
