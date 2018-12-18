@@ -1,77 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Dec 2018 20:27:28 +0100
-Subject: [Buildroot] [PATCH 1/4] system cfg: introduce option
- BR2_SYSTEM_DEFAULT_PATH
-In-Reply-To: <20181218005116.17435-2-mmayer@broadcom.com>
+Date: Tue, 18 Dec 2018 20:32:40 +0100
+Subject: [Buildroot] [PATCH 2/4] skeleton: use BR2_SYSTEM_DEFAULT_PATH
+ as default PATH
+In-Reply-To: <20181218005116.17435-3-mmayer@broadcom.com>
 References: <20181218005116.17435-1-mmayer@broadcom.com>
- <20181218005116.17435-2-mmayer@broadcom.com>
-Message-ID: <20181218192728.GB24194@scaer>
+ <20181218005116.17435-3-mmayer@broadcom.com>
+Message-ID: <20181218193240.GC24194@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
-
 On 2018-12-17 16:51 -0800, Markus Mayer spake thusly:
-> The configuration option BR2_SYSTEM_DEFAULT_PATH allows the user to
-> override the default path, which can be used by /etc/profile and some
-> system daemons.
-> 
-> It defaults to the value previously hard-coded in /etc/profile. This
-> default should be suitable for most users.
+> We substitute the path specified in system/skeleton/etc/profile with
+> the path specified in the configuration varialbe
+> BR2_SYSTEM_DEFAULT_PATH.
 > 
 > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 > ---
->  system/Config.in | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  package/skeleton-init-common/skeleton-init-common.mk | 3 +++
+>  system/skeleton/etc/profile                          | 1 +
+>  2 files changed, 4 insertions(+)
 > 
-> diff --git a/system/Config.in b/system/Config.in
-> index 0f77b9b6721a..93458c0011b7 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -386,6 +386,16 @@ comment "automatic network configuration via DHCP needs ifupdown or busybox or n
+> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> index e8a052205268..358336599389 100644
+> --- a/package/skeleton-init-common/skeleton-init-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> @@ -22,6 +22,9 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+>  	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+>  	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+>  		$(TARGET_DIR_WARNING_FILE)
+> +	$(SED) '/.*the PATH below may be replaced.*/d' $(TARGET_DIR)/etc/profile
+> +	$(SED) 's|PATH=.*|PATH=$(BR2_SYSTEM_DEFAULT_PATH)|' \
+> +		$(TARGET_DIR)/etc/profile
+>  endef
 >  
->  endif # BR2_ROOTFS_SKELETON_DEFAULT
->  
-> +config BR2_SYSTEM_DEFAULT_PATH
-> +	string "Set the system's default PATH"
-> +	default "/bin:/sbin:/usr/bin:/usr/sbin" if !BR2_ROOTFS_MERGED_USR
-> +	default "/bin:/sbin" if BR2_ROOTFS_MERGED_USR
+>  # We don't care much about what goes in staging, as long as it is
+> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> index 1255d23ff40d..5ed47743d8f4 100644
+> --- a/system/skeleton/etc/profile
+> +++ b/system/skeleton/etc/profile
+> @@ -1,3 +1,4 @@
+> +# At install, the PATH below may be replaced with BR2_SYSTEM_DEFAULT_PATH.
 
-Do we really care to have a different value at all?
+No need for the boilerplate, just:
 
-In the merged-/usr case: if the command exists, it is found in either
-/bin or /sbin, and the lookup stops there. If the command does not
-exist, it is looked for in the four locations, instead of only two.
+    export PATH=@PATH@
 
-This does not look like too much of an overhead, does it?
+This is enough to understand the value is actually replaced at some
+point in the build process. This is so very similar to what the
+autotools do. And thus, the sed expression becomes:
 
-Anyway, if we really want different values, then:
-  - we can simplify it a bit,
-  - and use the realy locations rahter than the  symlinks:
+    $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' \
+        $(TARGET_DIR)/etc/profile
 
-    default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
-    default "/bin:/sbin:/usr/bin:/usr/sbin"
-
-(kconfig will stop on the fiurst default that is valid.)
-
-But for my part, I think a single default as is currently used is
-enough (i.e. /bin:/sbin:/usr/bin:/usr/sbin).
+(yeah, I see you went for the code snippet I initially provided, but
+you should learn that you should not always do take what I say to
+the letter! ;-] )
 
 Regards,
 Yann E. MORIN.
 
-> +	help
-> +	  Sets the system's default PATH. It is being used in /etc/profile
-> +	  in the skeleton-init-common package and by some daemons.
-> +
-> +	  The default should work in most cases.
-> +
->  config BR2_ENABLE_LOCALE_PURGE
->  	bool "Purge unwanted locales"
->  	default y
+>  export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+>  
+>  if [ "$PS1" ]; then
 > -- 
 > 2.17.1
 > 
