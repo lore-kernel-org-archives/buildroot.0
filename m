@@ -1,37 +1,97 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 18 Dec 2018 01:39:40 +0000
-Subject: [Buildroot] [Bug 11001] loopback interface not configure properly
- with ifupdown-scripts + standalone ifupdown + systemd
-In-Reply-To: <bug-11001-163@https.bugs.busybox.net/>
-References: <bug-11001-163@https.bugs.busybox.net/>
-Message-ID: <bug-11001-163-dYQLEBS9Ej@https.bugs.busybox.net/>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 18 Dec 2018 03:02:34 -0200
+Subject: [Buildroot] [PATCH 1/2] package/procps-ng: add init script for
+ sysctl
+In-Reply-To: <20181218050235.27187-1-casantos@datacom.com.br>
+References: <20181218050235.27187-1-casantos@datacom.com.br>
+Message-ID: <20181218050235.27187-2-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11001
+Add a simple init script that invokes sysctl early in the initialization
+process to configure kernel parameters. This is already performed by
+systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
 
---- Comment #1 from Trent Piepho <tpiepho@gmail.com> ---
-There is another issue that we discovered with the way buildroot's
-network.service works with systemd.
+Files are read from directories in the following list in the given order
+from top to bottom:
 
-Systemd will bring the lo interface up itself early in the boot.  Later, when
-network.service runs, it will remove the address from the lo interface, as part
-of the ExecStart command in network.service to do exactly that.  At this point
-lo no longer has an address.  Then network.service runs ifup -a and properly
-configures lo.
+    /run/sysctl.d/*.conf
+    /etc/sysctl.d/*.conf
+    /usr/local/lib/sysctl.d/*.conf
+    /usr/lib/sysctl.d/*.conf
+    /lib/sysctl.d/*.conf
+    /etc/sysctl.conf
 
-There a window, after the address is removed from lo and before ifup runs,
-where lo is not configured correctly.  Anything that expects lo to be
-configured will fail to start correctly if it happens to hit this window when
-it tries to, e.g., bind a socket to an address on the lo interface.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/procps-ng/S01sysctl    | 41 ++++++++++++++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk |  5 +++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 package/procps-ng/S01sysctl
 
-Since the systemd init design is that lo is already up, there are services that
-do this and will randomly fail.  It's not necessary to be After network.target
-in order to use loopback.
-
+diff --git a/package/procps-ng/S01sysctl b/package/procps-ng/S01sysctl
+new file mode 100644
+index 0000000000..e93bdb9e17
+--- /dev/null
++++ b/package/procps-ng/S01sysctl
+@@ -0,0 +1,41 @@
++#!/bin/sh
++
++PROGRAM="sysctl"
++
++SYSCTL_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
++
++start() {
++	printf 'Starting %s: ' "$PROGRAM"
++	# shellcheck disable=SC2086 # we need the word splitting
++	/sbin/sysctl --quiet --system $SYSCTL_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: OK\n' "$PROGRAM"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++        start|stop)
++		"$1";;
++	restart|reload)
++		restart;;
++        *)
++                echo "Usage: $0 {start|stop|restart|reload}"
++                exit 1
++esac
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 03b74784d2..e40aeb5a2a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -44,4 +44,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ PROCPS_NG_CONF_OPTS += --disable-numa
+ endif
+ 
++define PROCPS_NG_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/procps-ng/S01sysctl \
++		$(TARGET_DIR)/etc/init.d/S01sysctl
++endef
++
+ $(eval $(autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.19.2
