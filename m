@@ -1,24 +1,59 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 18 Dec 2018 09:21:38 -0600
-Subject: [Buildroot] runtime tests and use of br2-external
-Message-ID: <CANQCQpYC_Gk_MxXuhQ=RZoSAN-v9R71QGuAfLm+xxHQy3Djhyg@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 18 Dec 2018 11:13:27 -0500
+Subject: [Buildroot] [PATCH v3 1/2] dependencies.sh: Check for a host
+ python version >= 2.7
+In-Reply-To: <3924a6bb-00c4-8157-6294-6b24834456b6@mind.be>
+References: <20181216232734.100068-1-aduskett@gmail.com>
+ <20181217082836.72eff0aa@gmx.net>
+ <2B863C9D-397E-4EED-B47D-1E08D4D45741@gmail.com>
+ <3924a6bb-00c4-8157-6294-6b24834456b6@mind.be>
+Message-ID: <CAFSsvmpWuEcruH55C-93Ek9fb0JKfHvex4NY2arGCxG5LD68OQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These two patches from Ricardo would be nice to have merged to support
-additional test development.  I've got a couple new patch
-series(OpenJDK and Docker example) in process where is would be nice
-to leverage this same approach.
+Hello;
 
-testing/infra/builder: build with target and environment
-http://patchwork.ozlabs.org/patch/1007436/
+On Mon, Dec 17, 2018 at 6:25 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 17/12/2018 14:10, ratbert90 wrote:
+> > Hello Peter;
+> >
+> > I would question as to why we would do anything to support such an old version of
+>> Python that was EOLed over 5 years ago.  Heck, even 2.7 will be EOLed in 2020.
+> >
+> > Looking around, the only distribution that has 2.6 that still has any kind of support
+>> is CentOS6, and even that is in maintenance mode.
+>
+>  RHEL6 will be retired November 30, 2020. SLES11 also hase Python 2.6 and will
+> be retired 31 Mar 2022.
+>
+> > 2.7 is a safe bet in my opinion.
+>
+>  Indeed, because it can be installed both on RHEL6 and on SLES11.
+>
+>  However, IIUC, it is *not* possible to install python 2.7 as the *default*
+> python on these distros, because some scripts that are used in normal operation
+> don't work with python 2.7.
+In the case of RHEL; one can run: `source /opt/rh/python27/enable` which will
+add the appropriate paths for Python2.7 to be the default.
 
-testing/infra/basetest: support br2-external
-http://patchwork.ozlabs.org/patch/1007434/
+As far as SLES11 goes, I don't know how many people use it, but it has to be
+microscopic at this point.
 
+> So, the test that you added to dependencies.sh is
+> probably too strict, because it checks that python -V gives at least 2.7...
+If one runs `source /opt/rh/python27/enable` in CentOS6, then running
+`python -V`
+will give 2.7.13.
+
+>
+>  Regards,
+>  Arnout
 
 Thanks!
-Matt
+Adam
