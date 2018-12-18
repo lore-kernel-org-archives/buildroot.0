@@ -1,30 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Dec 2018 14:41:24 +0100
-Subject: [Buildroot] [PATCH] swupdate: ensure TARGET_CC is used for
+Date: Tue, 18 Dec 2018 14:41:09 +0100
+Subject: [Buildroot] [git commit] swupdate: ensure TARGET_CC is used for
  compiling/linking
-In-Reply-To: <20181218091106.18688-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 18 Dec 2018 10:11:06 +0100")
-References: <20181218091106.18688-1-peter@korsgaard.com>
-Message-ID: <87r2ef0x6j.fsf@dell.be.48ers.dk>
+Message-ID: <20181218133719.11D6A8153D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=291ec1d2be2409fddc897a5f6ab28e6b8b56ce38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >     http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
- >     http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
+Fixes:
+http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
+http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
 
- > Swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not available in all
- > external toolchains, and use CC for linking. Ensure TARGET_CC is used for both.
+Swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not available in all
+external toolchains, and use CC for linking. Ensure TARGET_CC is used for both.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/swupdate/swupdate.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 6285437aaa..08d6ba9372 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -9,6 +9,11 @@ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
+ SWUPDATE_LICENSE_FILES = COPYING
+ 
++# swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
++# available in all external toolchains, and use CC for linking. Ensure
++# TARGET_CC is used for both.
++SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
++
+ # swupdate bundles its own version of mongoose (version 6.11)
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
