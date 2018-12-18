@@ -1,44 +1,192 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Dec 2018 14:41:09 +0100
-Subject: [Buildroot] [git commit] swupdate: ensure TARGET_CC is used for
- compiling/linking
-Message-ID: <20181218133719.11D6A8153D@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 18 Dec 2018 07:49:11 -0600
+Subject: [Buildroot] [PATCH 2/2] package/busybox: add init script for
+ sysctl
+In-Reply-To: <20181218050235.27187-3-casantos@datacom.com.br>
+References: <20181218050235.27187-1-casantos@datacom.com.br>
+ <20181218050235.27187-3-casantos@datacom.com.br>
+Message-ID: <CANQCQpYTmyXfgbmB_0P_+P5MreC=QPzY8RoHSzQn9SyYUsXbog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=291ec1d2be2409fddc897a5f6ab28e6b8b56ce38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Carlos,
 
-Fixes:
-http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
-http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
 
-Swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not available in all
-external toolchains, and use CC for linking. Ensure TARGET_CC is used for both.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/swupdate/swupdate.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On Mon, Dec 17, 2018 at 11:03 PM Carlos Santos <casantos@datacom.com.br> wrote:
+>
+> Add a simple init script that invokes sysctl early in the initialization
+> process to configure kernel parameters. This is already performed by
+> systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
+>
+> Files are read from directories in the following list in the given order
+> from top to bottom:
+>
+>     /run/sysctl.d/*.conf
+>     /etc/sysctl.d/*.conf
+>     /usr/local/lib/sysctl.d/*.conf
+>     /usr/lib/sysctl.d/*.conf
+>     /lib/sysctl.d/*.conf
+>     /etc/sysctl.conf
+>
+> A file may be used more than once, since there can be multiple symlinks
+> to it. No attempt is made to prevent this.
+>
+> Busybox's sysctl does not support "--quiet --system" arguments like the
+> sysctl provided by procps-ng, so we resort to some scripting to mimic
+> its behavior.
+>
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 6285437aaa..08d6ba9372 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -9,6 +9,11 @@ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
- SWUPDATE_LICENSE_FILES = COPYING
- 
-+# swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
-+# available in all external toolchains, and use CC for linking. Ensure
-+# TARGET_CC is used for both.
-+SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
-+
- # swupdate bundles its own version of mongoose (version 6.11)
- 
- ifeq ($(BR2_PACKAGE_JSON_C),y)
+Thanks for sending this one in.  We usually have some version of a
+script that does similar in each product rootfs overlay.
+
+I've reviewed the general function of the script is correct, I did not
+verify the SYSCTL_SOURCES are all the right plans to include.  We
+primarily just use the /etc/sysctl.conf default config and
+/etc/sysctl.d/.
+
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+> ---
+>  package/busybox/S01sysctl  | 63 ++++++++++++++++++++++++++++++++++++++
+>  package/busybox/busybox.mk | 12 ++++++++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 package/busybox/S01sysctl
+>
+> diff --git a/package/busybox/S01sysctl b/package/busybox/S01sysctl
+> new file mode 100644
+> index 0000000000..35e0cef291
+> --- /dev/null
+> +++ b/package/busybox/S01sysctl
+> @@ -0,0 +1,63 @@
+> +#!/bin/sh
+> +
+> +PROGRAM="sysctl"
+> +
+> +SYSCTL_ARGS=""
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
+> +
+> +# Files are read from directories in the SYSCTL_SOURCES list, in given order.
+> +SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
+> +
+> +# A file may be used more than once, since there can be multiple symlinks to
+> +# it. No attempt is made to prevent this.
+> +#
+> +# Busybox's sysctl does not support "--quiet --system" arguments like the
+> +# sysctl provided by procps-ng, so we resort to some scripting to mimic its
+> +# behavior.
+> +#
+> +# The "return 1" below is fruitless, at the moment, since sysctl ends with
+> +# status zero even if errors happen. Hopefully this will be fixed in a future
+> +# version of Busybox.
+> +apply_configs() {
+> +       # shellcheck disable=SC2086 # we need the word splitting
+> +       find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
+
+Why restrict to .conf?
+
+> +       xargs -0 -r readlink -f | \
+> +       {
+> +               read -r file
+> +               [ -z "$file" ] || /sbin/sysctl -q -p "$file" $SYSCTL_ARGS || return 1
+> +       }
+> +}
+> +
+> +start() {
+> +       printf 'Starting %s: ' "$PROGRAM"
+> +       apply_configs
+> +       status=$?
+> +       if [ "$status" -eq 0 ]; then
+> +               echo "OK"
+> +       else
+> +               echo "FAIL"
+> +       fi
+> +       return "$status"
+> +}
+> +
+> +stop() {
+> +       printf 'Stopping %s: OK\n' "$PROGRAM"
+> +}
+> +
+> +restart() {
+> +       stop
+> +       sleep 1
+> +       start
+> +}
+> +
+> +case "$1" in
+> +        start|stop)
+> +               "$1";;
+> +       restart|reload)
+> +               restart;;
+> +        *)
+> +                echo "Usage: $0 {start|stop|restart|reload}"
+> +                exit 1
+> +esac
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index bfcca6ed3e..bf101d7d46 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -259,6 +259,17 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>  endef
+>  endif
+>
+> +# Only install our sysctl scripts if no other package does it.
+> +ifeq ($(BR2_PACKAGE_PROCPS_NG),)
+> +define BUSYBOX_INSTALL_SYSCTL_SCRIPT
+> +       if grep -q CONFIG_BB_SYSCTL=y $(@D)/.config; \
+> +       then \
+> +               $(INSTALL) -m 0755 -D package/busybox/S01sysctl \
+> +                       $(TARGET_DIR)/etc/init.d/S01sysctl ; \
+> +       fi
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_INIT_BUSYBOX),y)
+>  define BUSYBOX_INSTALL_INITTAB
+>         $(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
+> @@ -344,6 +355,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+>         $(BUSYBOX_INSTALL_MDEV_SCRIPT)
+>         $(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+>         $(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+> +       $(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
+>         $(BUSYBOX_INSTALL_TELNET_SCRIPT)
+>         $(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+>  endef
+> --
+> 2.19.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+-- 
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
