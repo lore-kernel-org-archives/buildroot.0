@@ -1,55 +1,111 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Dec 2018 15:32:03 +0100
-Subject: [Buildroot] [PATCH v2] package/openssh: Add sysusers.d snippet
-In-Reply-To: <353c4c5d-5064-f92d-bfd0-5232bad2204a@licor.com>
-References: <20180123232221.6106-1-chris.lesiak@licor.com>
- <20180216181016.8747-1-chris.lesiak@licor.com> <20181216134502.GB2384@scaer>
- <f71a4a61-0cca-0fa3-a9f7-bfbc1d8ad6af@licor.com>
- <20181217181319.GD2951@scaer> <9cf83ac8-2d39-0eb5-92cb-0469eb0a9d6e@mind.be>
- <20181218084937.47142880@windsurf>
- <353c4c5d-5064-f92d-bfd0-5232bad2204a@licor.com>
-Message-ID: <06b4ea81-0a24-4242-7525-a142345c516c@mind.be>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 18 Dec 2018 12:37:26 -0200 (BRST)
+Subject: [Buildroot] [PATCH 2/2] package/busybox: add init script for
+ sysctl
+In-Reply-To: <CANQCQpYTmyXfgbmB_0P_+P5MreC=QPzY8RoHSzQn9SyYUsXbog@mail.gmail.com>
+References: <20181218050235.27187-1-casantos@datacom.com.br>
+ <20181218050235.27187-3-casantos@datacom.com.br>
+ <CANQCQpYTmyXfgbmB_0P_+P5MreC=QPzY8RoHSzQn9SyYUsXbog@mail.gmail.com>
+Message-ID: <1094336821.36316672.1545143846574.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> From: "Matthew Weber" <Matthew.Weber@collins.com>
+> To: "Carlos Santos" <casantos@datacom.com.br>
+> Cc: "buildroot" <buildroot@buildroot.org>, "ratbert90" <aduskett@gmail.com>, "DATACOM" <rodrigo.rebello@datacom.com.br>
+> Sent: Ter?a-feira, 18 de dezembro de 2018 11:49:11
+> Subject: Re: [Buildroot] [PATCH 2/2] package/busybox: add init script for sysctl
 
-
-On 18/12/2018 15:14, Chris Lesiak wrote:
-> 
-> On 12/18/18 1:49 AM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Mon, 17 Dec 2018 23:59:04 +0100, Arnout Vandecappelle wrote:
->>
->>>   Which brings me to my question to Chris: what was the purpose of this patch to
->>> begin with? Since OPENSSH_USERS is already set, the sshd user will already exist
->>> in /etc/passwd, so the sysusers.d directive will be ignored... Either that, or
->>> our mkusers script doesn't work correctly.
->> Stateless systems, where /etc and /var don't even "exist" in a
->> persistent fashion, and are entirely populated at boot time.
->>
->> Best regards,
->>
->> Thomas
+> Carlos,
 > 
 > 
-> In my particular case, /etc is empty on first boot, but retains state 
-> after that.? Even if I started with a populated /etc/passwd, when 
-> updating /usr (switching in a new version to update the the OS), I might 
-> have new services with associated users that I would like to have 
-> automatically added to /etc/passwd.
+> 
+> On Mon, Dec 17, 2018 at 11:03 PM Carlos Santos <casantos@datacom.com.br> wrote:
+>>
+>> Add a simple init script that invokes sysctl early in the initialization
+>> process to configure kernel parameters. This is already performed by
+>> systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
+>>
+>> Files are read from directories in the following list in the given order
+>> from top to bottom:
+>>
+>>     /run/sysctl.d/*.conf
+>>     /etc/sysctl.d/*.conf
+>>     /usr/local/lib/sysctl.d/*.conf
+>>     /usr/lib/sysctl.d/*.conf
+>>     /lib/sysctl.d/*.conf
+>>     /etc/sysctl.conf
+>>
+>> A file may be used more than once, since there can be multiple symlinks
+>> to it. No attempt is made to prevent this.
+>>
+>> Busybox's sysctl does not support "--quiet --system" arguments like the
+>> sysctl provided by procps-ng, so we resort to some scripting to mimic
+>> its behavior.
+>>
+>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> 
+> Thanks for sending this one in.  We usually have some version of a
+> script that does similar in each product rootfs overlay.
 
- That's a very good motivation!
+Same case here.
 
- So you're generating a rootfs with empty /etc? Do you need any other changes to
-make that work? To support this use case, it would be nice if we could add an
-option to the system menu that enables it (this would depend on systemd of
-course), so that it can be used fo force packages to do whatever is needed to
-support empty /etc. And then we can add a post-build check that /etc is really
-empty at the end of the build, so that the autobuilders can detect problems.
+> I've reviewed the general function of the script is correct, I did not
+> verify the SYSCTL_SOURCES are all the right plans to include.  We
+> primarily just use the /etc/sysctl.conf default config and
+> /etc/sysctl.d/.
+> 
+> Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> 
+>> ---
+>>  package/busybox/S01sysctl  | 63 ++++++++++++++++++++++++++++++++++++++
+>>  package/busybox/busybox.mk | 12 ++++++++
+>>  2 files changed, 75 insertions(+)
+>>  create mode 100644 package/busybox/S01sysctl
+>>
+>> diff --git a/package/busybox/S01sysctl b/package/busybox/S01sysctl
+>> new file mode 100644
+>> index 0000000000..35e0cef291
+>> --- /dev/null
+>> +++ b/package/busybox/S01sysctl
+>> @@ -0,0 +1,63 @@
+>> +#!/bin/sh
+>> +
+>> +PROGRAM="sysctl"
+>> +
+>> +SYSCTL_ARGS=""
+>> +
+>> +# shellcheck source=/dev/null
+>> +[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
+>> +
+>> +# Files are read from directories in the SYSCTL_SOURCES list, in given order.
+>> +SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/
+>> /lib/sysctl.d/ /etc/sysctl.conf"
+>> +
+>> +# A file may be used more than once, since there can be multiple symlinks to
+>> +# it. No attempt is made to prevent this.
+>> +#
+>> +# Busybox's sysctl does not support "--quiet --system" arguments like the
+>> +# sysctl provided by procps-ng, so we resort to some scripting to mimic its
+>> +# behavior.
+>> +#
+>> +# The "return 1" below is fruitless, at the moment, since sysctl ends with
+>> +# status zero even if errors happen. Hopefully this will be fixed in a future
+>> +# version of Busybox.
+>> +apply_configs() {
+>> +       # shellcheck disable=SC2086 # we need the word splitting
+>> +       find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
+> 
+> Why restrict to .conf?
 
- Regards,
- Arnout
+That's what procps-ng's sysctl does and I wanted to mimic it as
+faithfully as possible. It also prevents attempting to use some README
+file.
+
+[...]
+
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
