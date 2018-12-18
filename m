@@ -1,58 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Dec 2018 10:08:17 +0100
-Subject: [Buildroot] [PATCH] swupdate: pass full TARGET_CONFIGURE_OPTS
-In-Reply-To: <87y38n19wu.fsf@dell.be.48ers.dk>
-References: <20181217234301.7111-1-arnout@mind.be>
- <8736qv2q5i.fsf@dell.be.48ers.dk> <87y38n19wu.fsf@dell.be.48ers.dk>
-Message-ID: <b6eed3cd-2693-bf7d-9bb6-56aeb367083c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Dec 2018 10:11:06 +0100
+Subject: [Buildroot] [PATCH] swupdate: ensure TARGET_CC is used for
+ compiling/linking
+Message-ID: <20181218091106.18688-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+    http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
+    http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
 
+Swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not available in all
+external toolchains, and use CC for linking. Ensure TARGET_CC is used for both.
 
-On 18/12/2018 10:06, Peter Korsgaard wrote:
->>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
->  >> Although we set CONFIG_CROSS_COMPILE to TARGET_CROSS in swupdate's
->  >> .config file, swupdate's build system just appends 'cc' to it, not
->  >> 'gcc'. Some external toolchains don't provide a cc -> gcc symlink,
->  >> leading to errors like:
-> 
->  >> /bin/sh: .../host/bin/arm-none-linux-gnueabi-cc: No such file or directory
-> 
->  >> We can just pass TARGET_CONFIGURE_OPTS which explicitly sets CC=, like
->  >> we do for all other packages.
-> 
->  > Hmm, wait - This also passes LD="$(TARGET_LD)", whereas swupdate used CC
->  > to link. Is that really working?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/swupdate/swupdate.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- Crap. I did think of that but not hard enough. Mental note: next time test
-mipsel...
-
- Regards,
- Arnout
-
-> 
-> No it doesn't:
-> 
->   LD      core/built-in.o
-> /home/peko/source/buildroot/output-sw/host/bin/mips-img-linux-gnu-ld: core/swupdate.o: compiled for a little endian system and target is big endian
-> 
-> scripts/Makefile.build:224: recipe for target 'core/built-in.o' failed
-> make[3]: *** [core/built-in.o] Error 1
-> Makefile:480: recipe for target 'core' failed
-> make[2]: *** [core] Error 2
-> 
-> With this defconfig:
-> BR2_mipsel=y
-> BR2_mips_32r6=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_SWUPDATE=y
-> 
-> I will change it to explicitly pass CC="$(TARGET_CC)" LD="$(TARGET_CC)"
-> instead.
-> 
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 6285437aaa..08d6ba9372 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -9,6 +9,11 @@ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
+ SWUPDATE_LICENSE_FILES = COPYING
+ 
++# swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
++# available in all external toolchains, and use CC for linking. Ensure
++# TARGET_CC is used for both.
++SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
++
+ # swupdate bundles its own version of mongoose (version 6.11)
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+-- 
+2.11.0
