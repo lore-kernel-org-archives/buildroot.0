@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Dec 2018 15:27:34 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] swupdate: ensure
+Date: Tue, 18 Dec 2018 15:27:28 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] swupdate: ensure
  TARGET_CC is used for compiling/linking
-Message-ID: <20181218142359.E62B6817BC@busybox.osuosl.org>
+Message-ID: <20181218142403.50583817BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=323757f1b88e100ecca70595bd7ac382a02fefc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=73a9f0f8d0f0ff219f7ef54e12526685901ffb58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
