@@ -1,76 +1,79 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Tue, 18 Dec 2018 15:16:32 -0800
-Subject: [Buildroot] [PATCH 4/4] dropbear: use BR2_SYSTEM_DEFAULT_PATH
- as default PATH
-In-Reply-To: <CAGt4E5uXpteKpCCt_XmKG2HONQ3PQQADHjSyjeBKRPhphxhWhQ@mail.gmail.com>
-References: <20181218005116.17435-1-mmayer@broadcom.com>
- <20181218005116.17435-5-mmayer@broadcom.com>
- <20181218194732.GF24194@scaer>
- <CAGt4E5uXpteKpCCt_XmKG2HONQ3PQQADHjSyjeBKRPhphxhWhQ@mail.gmail.com>
-Message-ID: <CAGt4E5tLubsCtOawS8qsrRVVsbz6_7L_PLyFw6wiSwJMaKTU9A@mail.gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Wed, 19 Dec 2018 07:41:28 +0800
+Subject: [Buildroot] [PATCH 1/2] package/systemd: add systemd-boot build
+ option
+Message-ID: <1545176489-17146-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Dec 2018 at 14:08, Markus Mayer <markus.mayer@broadcom.com> wrote:
->
-> On Tue, 18 Dec 2018 at 11:47, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
->
-> > In fact I think I missed that in the initial patch: we should ensure
-> > that it can't be empty (unelss there is a good reason to accept a
-> > system-wide empty PATH). Maybe something in system/system.mk:
-> >
-> >     ifeq ($(BR_BUILDLING)$(BR2_SYSTEM_DEFAULT_PATH)),y"")
-> >     $(error BR2_SYSTEM_DEFAULT_PATH can't be empty)
-> >     endif
->
-> Makes sense to me. I can't think of a good use-case for an empty
-> default PATH. I'll add this for now. If it is decided that an empty
-> path does make sense, I can remove it again from the series.
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Hm. I can't seem to get this to work.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/systemd/Config.in  | 21 +++++++++++++++++++++
+ package/systemd/systemd.mk |  8 ++++++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-ifeq ($(BR_BUILDING)$(BR2_SYSTEM_DEFAULT_PATH)),y"")
-#$(error BR2_SYSTEM_DEFAULT_PATH can't be empty)
-$(error '$(BR_BUILDING)$(BR2_SYSTEM_DEFAULT_PATH)')
-endif
-
-For debug purposes, I replaced the error message with a message that
-prints the value of the two variables with single quotes around, so
-potential spaces and such become visible. It never enters the if. If I
-change it to ifneq, it enters the "if", but prints the exact values
-that it supposedly does not match.
-
-How can it have the value y"" and still enter ifneq?
-
-system/system.mk:101: *** 'y""'.  Stop.
-Makefile:25: recipe for target '_all' failed
-
-If I keep the ifneq and set the default path so some value:
-
-system/system.mk:101: *** 'y"abc"'.  Stop.
-Makefile:25: recipe for target '_all' failed
-
-It still matches. This time, it makes sense.
-
-Any thoughs why case of y"" doesn't match as I would have anticipated?
-
-Thanks,
--Markus
-
-
-> > (no need to properly finish the sentence, the $(error) will do it for
-> > you.)
-> >
-> > And then we can safely use it as-is, unconditionally, in the three other
-> > locations (profile, openssh, dropbear).
-> >
-> > Of course, if we decide that an empty BR2_SYSTEM_DEFAULT_PATH is valid,
-> > then we should also use it as-is in dropbear and openssh, because we
-> > should just abide by the user's decision.
-> >
-> > Regards,
-> > Yann E. MORIN.
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 25f322e..ff71323 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -77,6 +77,27 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
++config BR2_PACKAGE_SYSTEMD_BOOT
++	bool "systemd-boot"
++	select BR2_PACKAGE_GNU_EFI
++	help
++	  systemd-boot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
++
++	  systemd-boot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
++
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using systemd-boot: the instructions are
++	  exactly the same, except that the systemd-boot configuration
++	  files will be located in /loader/ inside the EFI partition.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e53f0b6..0fa3b83 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -24,8 +24,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dman=false \
+ 	-Dima=false \
+ 	-Dlibcryptsetup=false \
+-	-Defi=false \
+-	-Dgnu-efi=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
+@@ -332,6 +330,12 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
++SYSTEMD_CONF_OPTS += -Defi=true -Dgnu-efi=true
++else
++SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++endif
++
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+-- 
+2.7.4
