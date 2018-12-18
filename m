@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Dec 2018 08:49:37 +0100
-Subject: [Buildroot] [PATCH v2] package/openssh: Add sysusers.d snippet
-In-Reply-To: <9cf83ac8-2d39-0eb5-92cb-0469eb0a9d6e@mind.be>
-References: <20180123232221.6106-1-chris.lesiak@licor.com>
- <20180216181016.8747-1-chris.lesiak@licor.com>
- <20181216134502.GB2384@scaer>
- <f71a4a61-0cca-0fa3-a9f7-bfbc1d8ad6af@licor.com>
- <20181217181319.GD2951@scaer>
- <9cf83ac8-2d39-0eb5-92cb-0469eb0a9d6e@mind.be>
-Message-ID: <20181218084937.47142880@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Dec 2018 09:22:20 +0100
+Subject: [Buildroot] [PATCH] swupdate: pass full TARGET_CONFIGURE_OPTS
+In-Reply-To: <20181217234301.7111-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 18 Dec 2018 00:43:01 +0100")
+References: <20181217234301.7111-1-arnout@mind.be>
+Message-ID: <87bm5j2qir.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-On Mon, 17 Dec 2018 23:59:04 +0100, Arnout Vandecappelle wrote:
+ > Although we set CONFIG_CROSS_COMPILE to TARGET_CROSS in swupdate's
+ > .config file, swupdate's build system just appends 'cc' to it, not
+ > 'gcc'. Some external toolchains don't provide a cc -> gcc symlink,
+ > leading to errors like:
 
->  Which brings me to my question to Chris: what was the purpose of this patch to
-> begin with? Since OPENSSH_USERS is already set, the sshd user will already exist
-> in /etc/passwd, so the sysusers.d directive will be ignored... Either that, or
-> our mkusers script doesn't work correctly.
+ > /bin/sh: .../host/bin/arm-none-linux-gnueabi-cc: No such file or directory
 
-Stateless systems, where /etc and /var don't even "exist" in a
-persistent fashion, and are entirely populated at boot time.
+ > We can just pass TARGET_CONFIGURE_OPTS which explicitly sets CC=, like
+ > we do for all other packages.
 
-Best regards,
+ > Although this makes setting CONFIG_CROSS_COMPILE redundant, it's nice to
+ > keep it as well for consistency.
 
-Thomas
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e302d0edb59ff7617b5f2d21f06eb65ae04981fe
+ > http://autobuild.buildroot.net/results/dbb69acadc20b4bb559311348eca276c1e6343f7
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+Do we still want https://patchwork.ozlabs.org/patch/1014334/ to handle
+similar issues in other packages?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
