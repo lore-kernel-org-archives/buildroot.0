@@ -1,39 +1,46 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 18 Dec 2018 15:19:49 -0200 (BRST)
-Subject: [Buildroot] [PATCH 2/2] package/busybox: add init script for
- sysctl
-In-Reply-To: <0ba00958-416a-3bac-4815-05b1d67fd02e@green-communications.fr>
-References: <20181218050235.27187-1-casantos@datacom.com.br>
- <20181218050235.27187-3-casantos@datacom.com.br>
- <0ba00958-416a-3bac-4815-05b1d67fd02e@green-communications.fr>
-Message-ID: <1762589626.39649690.1545153589448.JavaMail.zimbra@datacom.com.br>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 18 Dec 2018 19:24:07 +0200
+Subject: [Buildroot] [PATCH 1/1] python-autobahn: bump to version 18.12.1
+Message-ID: <20181218172407.17086-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Nicolas Cavallari" <Nicolas.Cavallari@green-communications.fr>
-> To: "Carlos Santos" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Cc: "ratbert90" <aduskett@gmail.com>, "DATACOM" <rodrigo.rebello@datacom.com.br>
-> Sent: Ter?a-feira, 18 de dezembro de 2018 14:32:18
-> Subject: Re: [Buildroot] [PATCH 2/2] package/busybox: add init script for sysctl
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> On 18/12/2018 06:02, Carlos Santos wrote:
->> +	find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
->> +	xargs -0 -r readlink -f | \
->> +	{
->> +		read -r file
->> +		[ -z "$file" ] || /sbin/sysctl -q -p "$file" $SYSCTL_ARGS || return 1
->> +	}
-> 
-> So it will only read the first file it finds ?
-
-The "||" operator means "do the RHS if the LHS is false", so if "$file"
-is empty it doesn't run sysctl; otherwise if syscl fails (which currently
-never happens due to a bug in Busybox) it returns from the function.
-
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 024617fd81..f6023ab2ee 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	4a63c94ea306e07602eaca6befd86751  autobahn-18.11.2.tar.gz
+-sha256	43262e500aaf8b89fb5f0b60ab13163500ee877908cdd6861208546d95c6dba0  autobahn-18.11.2.tar.gz
++md5	51b416c5503127911d9d8f1254967d44  autobahn-18.12.1.tar.gz
++sha256	bec9e04c97536a6c0044965db4a478672a01c4adee0aa84d9c4a0945b2adc879  autobahn-18.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index d175244fc0..6d51ede723 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 18.11.2
++PYTHON_AUTOBAHN_VERSION = 18.12.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3a/9f/9552ce8fec2703370f63eedbedffa1151865f1265fbfc5c3bbd1029710cc
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/76/5b/ab59e271a11a08d02b1a3a3b777f7dde442cf89b169bbc67219016a84e7e
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.19.1
