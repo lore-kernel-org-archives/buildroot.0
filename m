@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Dec 2018 22:48:19 +0100
-Subject: [Buildroot] [PATCH 1/1] python-autobahn: bump to version 18.12.1
-In-Reply-To: <20181218172407.17086-1-asafka7@gmail.com>
-References: <20181218172407.17086-1-asafka7@gmail.com>
-Message-ID: <20181218224819.38795215@windsurf>
+Date: Tue, 18 Dec 2018 22:50:20 +0100
+Subject: [Buildroot] [PATCH] rauc: target rauc needs unsquashfs at
+ runtime
+In-Reply-To: <20181217221500.7317-1-tpiepho@impinj.com>
+References: <20181217221500.7317-1-tpiepho@impinj.com>
+Message-ID: <20181218225020.4ca03af4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 18 Dec 2018 19:24:07 +0200, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+On Mon, 17 Dec 2018 22:15:19 +0000, Trent Piepho wrote:
+> In order to provide info about a bundle file, e.g. running "rauc info
+> bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
+> package.
+> 
+> This was not documented until upstream commit 10c501c12752 ("docs:
+> integration: document need for 'unsquashfs' tool for 'rauc info'"), but
+> is already present in rauc.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 > ---
->  package/python-autobahn/python-autobahn.hash | 4 ++--
->  package/python-autobahn/python-autobahn.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/rauc/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
+I am not familiar with rauc, so sorry for what is perhaps a silly
+question: is squashfs needed in all cases, or just for a certain bundle
+format, or certain use cases ?
+
+I'm just trying to figure out if we really want this to be a mandatory
+dependency, or rather not enforce it, and simply document that it might
+be needed.
+
+Thanks for your feedback,
 
 Thomas
 -- 
