@@ -1,100 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Dec 2018 23:34:13 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2018.11.1
-Message-ID: <20181219223018.58554812ED@busybox.osuosl.org>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Wed, 19 Dec 2018 15:24:48 -0800
+Subject: [Buildroot] [PATCH v2 2/4] skeleton: use
+ BR2_SYSTEM_DEFAULT_PATH as default PATH
+In-Reply-To: <20181219213430.GP24194@scaer>
+References: <20181219210455.14754-1-mmayer@broadcom.com>
+ <20181219210455.14754-3-mmayer@broadcom.com>
+ <20181219213430.GP24194@scaer>
+Message-ID: <CAGt4E5uL_ygcie-O8A9CBHy4sG5JSaPYMc4L210WBdiiMv94BQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed1a8b57ee8dc79bb4b75086513c25a13198522c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+On Wed, 19 Dec 2018 at 13:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Markus, All,
+>
+> > diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> > index e8a052205268..866273bbd7ee 100644
+> > --- a/package/skeleton-init-common/skeleton-init-common.mk
+> > +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> > @@ -22,6 +22,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+> >       $(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+> >       $(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> >               $(TARGET_DIR_WARNING_FILE)
+> > +     $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
+>
+> I think we should keep the warning file the last command executed.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index b447251a10..2125bb78ad 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2018.11</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2018.11.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.11.tar.gz">buildroot-2018.11.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.11.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.11.1.tar.gz">buildroot-2018.11.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.11.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.11.tar.bz2">buildroot-2018.11.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.11.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.11.1.tar.bz2">buildroot-2018.11.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.11.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index a6ac140748..a2ee46df51 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.11.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 December 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.11.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.11 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-December/239184.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.11.1.tar.bz2">2018.11.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+I am not sure I am following. I am not doing anything to target-dir-warning.txt.
+
+> Otherwise:
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+
+Thanks,
+-Markus
