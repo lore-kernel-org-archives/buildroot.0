@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Dec 2018 22:32:45 +0100
-Subject: [Buildroot] [PATCH v2 1/4] system cfg: introduce option
- BR2_SYSTEM_DEFAULT_PATH
-In-Reply-To: <20181219210455.14754-2-mmayer@broadcom.com>
+Date: Wed, 19 Dec 2018 22:34:30 +0100
+Subject: [Buildroot] [PATCH v2 2/4] skeleton: use
+ BR2_SYSTEM_DEFAULT_PATH as default PATH
+In-Reply-To: <20181219210455.14754-3-mmayer@broadcom.com>
 References: <20181219210455.14754-1-mmayer@broadcom.com>
- <20181219210455.14754-2-mmayer@broadcom.com>
-Message-ID: <20181219213245.GO24194@scaer>
+ <20181219210455.14754-3-mmayer@broadcom.com>
+Message-ID: <20181219213430.GP24194@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,63 +15,51 @@ To: buildroot@busybox.net
 Markus, All,
 
 On 2018-12-19 13:04 -0800, Markus Mayer spake thusly:
-> The configuration option BR2_SYSTEM_DEFAULT_PATH allows the user to
-> override the default path, which can be used by /etc/profile and some
-> system daemons.
+> We substitute the path specified in system/skeleton/etc/profile with
+> the path specified in the configuration variable
+> $(BR2_SYSTEM_DEFAULT_PATH).
 > 
-> It defaults to the value previously hard-coded in /etc/profile. This
-> default should be suitable for most users.
+> $(BR2_SYSTEM_DEFAULT_PATH) is a Kconfig string. So it is already
+> quoted, which is exactly what we want.
 > 
 > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 > ---
->  system/Config.in | 9 +++++++++
->  system/system.mk | 4 ++++
->  2 files changed, 13 insertions(+)
+>  package/skeleton-init-common/skeleton-init-common.mk | 1 +
+>  system/skeleton/etc/profile                          | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/system/Config.in b/system/Config.in
-> index 0f77b9b6721a..afae487a4bd5 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -386,6 +386,15 @@ comment "automatic network configuration via DHCP needs ifupdown or busybox or n
->  
->  endif # BR2_ROOTFS_SKELETON_DEFAULT
->  
-> +config BR2_SYSTEM_DEFAULT_PATH
-> +	string "Set the system's default PATH"
-> +	default "/bin:/sbin:/usr/bin:/usr/sbin"
-> +	help
-> +	  Sets the system's default PATH. It is being used in /etc/profile
+> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> index e8a052205268..866273bbd7ee 100644
+> --- a/package/skeleton-init-common/skeleton-init-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> @@ -22,6 +22,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+>  	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+>  	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+>  		$(TARGET_DIR_WARNING_FILE)
+> +	$(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
 
-Slight formatting issue here, check-package conplains:
+I think we should keep the warning file the last command executed.
 
-    system/Config.in:393: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+Otherwise:
 
-Otherwise (no need to respin, that can be fixed when applying I hope):
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +	  in the skeleton-init-common package and by some daemons.
-> +
-> +	  The default should work in most cases.
-> +
->  config BR2_ENABLE_LOCALE_PURGE
->  	bool "Purge unwanted locales"
->  	default y
-> diff --git a/system/system.mk b/system/system.mk
-> index ca6bf1388f39..8db87cb12930 100644
-> --- a/system/system.mk
-> +++ b/system/system.mk
-> @@ -86,3 +86,7 @@ define SYSTEM_REMOUNT_ROOT_INITTAB
->  	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
 >  endef
->  endif
-> +
-> +ifeq ($(BR_BUILDING)$(BR2_SYSTEM_DEFAULT_PATH),y"")
-> +$(error BR2_SYSTEM_DEFAULT_PATH can't be empty)
-> +endif
+>  
+>  # We don't care much about what goes in staging, as long as it is
+> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> index 1255d23ff40d..db29e44920e8 100644
+> --- a/system/skeleton/etc/profile
+> +++ b/system/skeleton/etc/profile
+> @@ -1,4 +1,4 @@
+> -export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+> +export PATH=@PATH@
+>  
+>  if [ "$PS1" ]; then
+>  	if [ "`id -u`" -eq 0 ]; then
 > -- 
 > 2.17.1
 > 
