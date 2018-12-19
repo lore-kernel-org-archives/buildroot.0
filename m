@@ -1,41 +1,37 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 19 Dec 2018 17:04:19 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-12-18
-In-Reply-To: <20181219070026.D137620AA3@mail.bootlin.com>
-References: <20181219070026.D137620AA3@mail.bootlin.com>
-Message-ID: <CAMRc=MfsgFfmS_V_p8k-FbP6GtXTbBiVDDjv0N-6pm0kJ21NOw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 19 Dec 2018 17:17:35 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_11556=5D_Can_not_build_qt5base_5=2E?=
+ =?utf-8?q?11=2E2_with_weston_3=2E0=2E0_and_vivante_GPU=2E_error=3A_invali?=
+ =?utf-8?b?ZCBjb252ZXJzaW9uIGZyb20g4oCYdm9pZCrigJkgdG8g4oCYRUdMTmF0aXZl?=
+ =?utf-8?q?DisplayType_=7Baka_wl=5Fdisplay*=7D=E2=80=99_=5B-fpermissive=5D?=
+In-Reply-To: <bug-11556-163@https.bugs.busybox.net/>
+References: <bug-11556-163@https.bugs.busybox.net/>
+Message-ID: <bug-11556-163-2kTx9guHnP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?r., 19 gru 2018 o 08:00 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> napisa?(a):
->
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-12-18, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the '2018.02.x' branch
-> ==================================
->
-> Build failures related to your packages:
->
->          arm |                pulseview-0.4.0 | http://autobuild.buildroot.net/results/e32164284d79b4bb814a962907a35fc45bcbb89c
->
-> --
-> http://autobuild.buildroot.net
+https://bugs.busybox.net/show_bug.cgi?id=11556
 
-I can reproduce this alright but I'm not sure what this C++ build
-error means. Why are we even building tests in the first place?
+--- Comment #11 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Patrick Koller from comment #10)
 
-Bernd: I see you added this switch to the package - can you take a
-look at this failure?
+> Thanks for your hint. Now, I am able to build wayland/weston (without qt)
+> sucessfully (With both toolchains). As soon as I try to build qt5, the
+> previous mentioned error (qwaylanddisplay.cpp:315:35: error: could not
+> convert ?{listener, data}? from ?<brace-enclosed initializer list>? to
+> ?QtWaylandClient::QWaylandDisplay::Listener?) occurs. Do you have a
+> hint to solve this problem?
 
-Bart
+Please do not mix toolchains, I doubt wayland/weston builds with the linaro
+toolchain (see comment #1), please re-build complete (make clean; make) (the
+complete buildroot build, not only a single package)  after changing to the
+buildroot toolchain (used buildroot git latest, gcc-7.4.0, qt-5.11.3)...
+
+In case of failure post your .config/defconfig
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
