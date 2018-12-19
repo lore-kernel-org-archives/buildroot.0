@@ -1,66 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Dec 2018 23:04:07 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] Update for 2018.11.1
-Message-ID: <20181219220024.C44CC81EE3@busybox.osuosl.org>
+Date: Wed, 19 Dec 2018 23:25:27 +0100
+Subject: [Buildroot] Buildroot 2018.11.1 released
+Message-ID: <87k1k5upbc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29675f8e54d36660a7c0a0c3b54b9cc612395e9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 23 +++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index edefd4bab8..c4ccda92e7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,26 @@
-+2018.11.1, Released December 20th, 2018
-+
-+	Important / security related fixes.
-+
-+	defconfigs: Fixes for bananapi m2 ultra, ci20
-+
-+	Download wrapper: Fix for urlencode handling
-+
-+	Updated/fixed packages: asterisk, docker-compose,
-+	docker-engine, dt-utils, gnutls, go, grub, libbsd, libcurl,
-+	libpgpme, libiscsi, liblo, libmpd, libopenssl, liboping,
-+	libpam-tacplus, libpjsip, linux-firmware, liquid-dsp,
-+	lua-cqueue, luvi, lxc, lynx, nginx, nodejs, openzwave, php,
-+	pps-tools, proftpd, prosody, sdl2_net, squashfs, swupdate,
-+	uclibc, vtu, webkitgtk, wine, xen
-+
-+	New packages: docker-cli
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11426: pps-tools bash dependency
-+	#11536: dt-utils building fails with glibc 2.28
-+
- 2018.11, Released December 1st, 2018
- 
- 	Minor fixes.
-diff --git a/Makefile b/Makefile
-index c4c34b0ff2..dd8cc7a9ae 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.11
-+export BR2_VERSION := 2018.11.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1543701000
-+BR2_VERSION_EPOCH = 1545257000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2018.11.1 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2018.11.1.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2018.11.1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2018.11.1 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2018.11 release.
+
+- Fix a runtime error in docker engine by bumping to the v18.09.0
+  release. This splits off the client side in the docker-cli package.
+
+- Security fixes for go, nodejs, php, lxc, webkitgtk, xen
+
+- Fixes for download/compilation/runtime issues in asterisk,
+  docker-compose, docker-engine, dt-utils, gnutls, grub, libiscsi,
+  liblo, libmpd, liboping, libpam-tacplus, libpjsip, liquid-dsp,
+  lua-cqueues, luvi, lxc, lynx, nginx, openzwave, pps-tools, prosody,
+  sdl2_net, swupdate, uclibc, vte, wine
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.1
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.11..
+
+    11  Peter Korsgaard
+    11  Thomas Petazzoni
+     9  Fabrice Fontaine
+     4  Bernd Kuhls
+     3  Yann E. MORIN
+     2  Joel Stanley
+     2  Trent Piepho
+     1  Adrian Perez de Castro
+     1  Carlos Santos
+     1  Christian Stewart
+     1  Damien Th?bault
+     1  Ezequiel Garcia
+     1  Francois Perrad
+     1  Jared Bents
+     1  J?rg Krause
+     1  Max Filippov
+     1  Romain Naour
+     1  Waldemar Brodkorb
+
+-- 
+Bye, Peter Korsgaard
