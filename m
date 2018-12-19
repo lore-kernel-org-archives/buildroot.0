@@ -1,52 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Dec 2018 23:29:24 +0100
-Subject: [Buildroot] [git commit] Update for 2018.11.1
-Message-ID: <20181219223018.4B8C482929@busybox.osuosl.org>
+Date: Wed, 19 Dec 2018 23:34:13 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2018.11.1
+Message-ID: <20181219223018.58554812ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab3d2dead1691466d2c034d7cedfc7bafef5e7e7
+commit: https://git.buildroot.net/buildroot/commit/?id=ed1a8b57ee8dc79bb4b75086513c25a13198522c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 29675f8e54d36660a7c0a0c3b54b9cc612395e9a)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index edefd4bab8..c4ccda92e7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,26 @@
-+2018.11.1, Released December 20th, 2018
-+
-+	Important / security related fixes.
-+
-+	defconfigs: Fixes for bananapi m2 ultra, ci20
-+
-+	Download wrapper: Fix for urlencode handling
-+
-+	Updated/fixed packages: asterisk, docker-compose,
-+	docker-engine, dt-utils, gnutls, go, grub, libbsd, libcurl,
-+	libpgpme, libiscsi, liblo, libmpd, libopenssl, liboping,
-+	libpam-tacplus, libpjsip, linux-firmware, liquid-dsp,
-+	lua-cqueue, luvi, lxc, lynx, nginx, nodejs, openzwave, php,
-+	pps-tools, proftpd, prosody, sdl2_net, squashfs, swupdate,
-+	uclibc, vtu, webkitgtk, wine, xen
-+
-+	New packages: docker-cli
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11426: pps-tools bash dependency
-+	#11536: dt-utils building fails with glibc 2.28
-+
- 2018.11, Released December 1st, 2018
+diff --git a/docs/website/download.html b/docs/website/download.html
+index b447251a10..2125bb78ad 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Minor fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2018.11</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2018.11.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.11.tar.gz">buildroot-2018.11.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11.1.tar.gz">buildroot-2018.11.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.11.tar.bz2">buildroot-2018.11.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11.1.tar.bz2">buildroot-2018.11.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index a6ac140748..a2ee46df51 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.11.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 December 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.11.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.11 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-December/239184.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.11.1.tar.bz2">2018.11.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
