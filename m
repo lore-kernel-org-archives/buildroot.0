@@ -1,57 +1,20 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 20 Dec 2018 20:18:38 -0200
-Subject: [Buildroot] [PATCH v2] package/shairport-sync: fix init script
- (stop)
-Message-ID: <20181220221838.21000-1-casantos@datacom.com.br>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Dec 2018 22:19:36 +0000
+Subject: [Buildroot] [Bug 11566] Fix init script
+In-Reply-To: <bug-11566-163@https.bugs.busybox.net/>
+References: <bug-11566-163@https.bugs.busybox.net/>
+Message-ID: <bug-11566-163-95oB2JagH7@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-shairport-sync creates its pidfile at /var/run/shairport-sync/, so pass
-that path to start-stop-daemon in the stop operation.
+https://bugs.busybox.net/show_bug.cgi?id=11566
 
-Also pass the executable path, allowing start-stop-daemon to check if
-the PID matches the shairport-sync process, preventing killing some
-other inocent daemon.
+--- Comment #2 from Carlos Santos <casantos@datacom.com.br> ---
+Patch updated: https://patchwork.ozlabs.org/patch/1017087/
 
-Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=11566
-
-Reported-by: Bin Zhang <yangtze31@gmail.com>
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
-Changes v1->v2
-  - Recreated patch with the PID checking part
----
- package/shairport-sync/S99shairport-sync | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
-index 5443ed138c..80b2fddbc6 100644
---- a/package/shairport-sync/S99shairport-sync
-+++ b/package/shairport-sync/S99shairport-sync
-@@ -6,16 +6,18 @@ OPTIONS="-d"
- case "$1" in
-     start)
- 	printf "Starting shairport-sync: "
--	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
-+	start-stop-daemon -S -q --exec /usr/bin/shairport-sync -- $OPTIONS
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	;;
-     stop)
- 	printf "Stopping shairport-sync: "
--	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
-+	start-stop-daemon -K -q --exec /usr/bin/shairport-sync \
-+		-p /var/run/shairport-sync/shairport-sync.pid
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	;;
-     restart)
- 	$0 stop
-+	sleep 1
- 	$0 start
- 	;;
-     *)
 -- 
-2.19.2
+You are receiving this mail because:
+You are on the CC list for the bug.
