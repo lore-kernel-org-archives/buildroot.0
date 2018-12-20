@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 20 Dec 2018 00:31:59 -0200
-Subject: [Buildroot] [PATCH v2 1/2] package/procps-ng: add init script for
+Date: Thu, 20 Dec 2018 00:32:00 -0200
+Subject: [Buildroot] [PATCH v2 2/2] package/busybox: add init script for
  sysctl
 In-Reply-To: <20181220023200.17119-1-casantos@datacom.com.br>
 References: <20181220023200.17119-1-casantos@datacom.com.br>
-Message-ID: <20181220023200.17119-2-casantos@datacom.com.br>
+Message-ID: <20181220023200.17119-3-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,32 +25,32 @@ from top to bottom:
     /lib/sysctl.d/*.conf
     /etc/sysctl.conf
 
+A file may be used more than once, since there can be multiple symlinks
+to it. No attempt is made to prevent this.
+
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
 Changes v1->v2:
-  - The "--system" option activates "--ignore", which is bad because
-    invalid variable settings in the configuration files will not be
-    reported on the system log. Use some scripting to mimic the --system
-    behavior but still reporting errors.
+  - Use a while loop to process all files.
   - Redirect sysctl's standard output to syslog with facility.level
     "kern.info" and standard error to syslog with facility.level
     "kern.err".
-  - Do not pass "--quiet" to sysctl, since we wanto to see the results.
+  - Do not pass "-q" to sysctl, since we wanto to see the results.
   - Use "Running" and "Rerunning" instead of "Starting", since we do not
     really start anything, just run a program.
   - Do nothing on "stop", since ther is no running daemon to stop.
 ---
- package/procps-ng/S02sysctl    | 64 ++++++++++++++++++++++++++++++++++
- package/procps-ng/procps-ng.mk |  5 +++
- 2 files changed, 69 insertions(+)
- create mode 100644 package/procps-ng/S02sysctl
+ package/busybox/S02sysctl  | 66 ++++++++++++++++++++++++++++++++++++++
+ package/busybox/busybox.mk | 12 +++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 package/busybox/S02sysctl
 
-diff --git a/package/procps-ng/S02sysctl b/package/procps-ng/S02sysctl
+diff --git a/package/busybox/S02sysctl b/package/busybox/S02sysctl
 new file mode 100644
-index 0000000000..3a58578de4
+index 0000000000..6bb2fa165e
 --- /dev/null
-+++ b/package/procps-ng/S02sysctl
-@@ -0,0 +1,64 @@
++++ b/package/busybox/S02sysctl
+@@ -0,0 +1,66 @@
 +#!/bin/sh
 +
 +PROGRAM="sysctl"
@@ -65,17 +65,19 @@ index 0000000000..3a58578de4
 +# symlinks to it. No attempt is made to prevent this.
 +SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
 +
-+# The "--system" option activates "--ignore", which is bad because invalid
-+# variable settings in the configuration files will not be reported on the
-+# system log. Use some scripting to mimic the --system behavior but still
-+# reporting errors. Users not interested on error report can put "-e" in
-+# SYSCTL_ARGS.
++# Use some scripting to mimic the --system option of the sysctl provided by
++# procps-ng but still reporting errors. Users not interested on error report
++# can put "-e" in SYSCTL_ARGS.
 +#
 +# The file redirections do the following:
 +#
 +# - stdout is redirected to syslog with facility.level "kern.info"
 +# - stderr is redirected to syslog with facility.level "kern.err"
 +# - file dscriptor 4 is used to pass the result to the "start" function.
++#
++# Testing the sysctl exit code is fruitless, as at the moment, since it ends
++# with status zero even if errors happen. Hopefully this will be fixed in a
++# future version of Busybox.
 +#
 +run_program() {
 +	# shellcheck disable=SC2086 # we need the word splitting
@@ -115,19 +117,35 @@ index 0000000000..3a58578de4
 +		echo "Usage: $0 {start|stop|restart|reload}"
 +		exit 1
 +esac
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 03b74784d2..6a41e9b322 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -44,4 +44,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
- PROCPS_NG_CONF_OPTS += --disable-numa
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index bfcca6ed3e..0e63aa5cf6 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -259,6 +259,17 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ endef
  endif
  
-+define PROCPS_NG_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/procps-ng/S02sysctl \
-+		$(TARGET_DIR)/etc/init.d/S02sysctl
++# Only install our sysctl scripts if no other package does it.
++ifeq ($(BR2_PACKAGE_PROCPS_NG),)
++define BUSYBOX_INSTALL_SYSCTL_SCRIPT
++	if grep -q CONFIG_BB_SYSCTL=y $(@D)/.config; \
++	then \
++		$(INSTALL) -m 0755 -D package/busybox/S02sysctl \
++			$(TARGET_DIR)/etc/init.d/S02sysctl ; \
++	fi
 +endef
++endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_INSTALL_INITTAB
+ 	$(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
+@@ -344,6 +355,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ 	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+ endef
 -- 
 2.19.2
