@@ -1,48 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Dec 2018 17:04:08 +0100
-Subject: [Buildroot] [PATCH v2 2/4] skeleton: use
- BR2_SYSTEM_DEFAULT_PATH as default PATH
-In-Reply-To: <CAGt4E5uL_ygcie-O8A9CBHy4sG5JSaPYMc4L210WBdiiMv94BQ@mail.gmail.com>
-References: <20181219210455.14754-1-mmayer@broadcom.com>
- <20181219210455.14754-3-mmayer@broadcom.com>
- <20181219213430.GP24194@scaer>
- <CAGt4E5uL_ygcie-O8A9CBHy4sG5JSaPYMc4L210WBdiiMv94BQ@mail.gmail.com>
-Message-ID: <20181220160408.GT24194@scaer>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 20 Dec 2018 14:54:11 -0200
+Subject: [Buildroot] [PATCH 1/2] configs/imx6slevk: Bump U-Boot version
+Message-ID: <20181220165412.7982-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+U-Boot 2017.11 has the following build issue:
 
-On 2018-12-19 15:24 -0800, Markus Mayer spake thusly:
-> On Wed, 19 Dec 2018 at 13:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-> > > index e8a052205268..866273bbd7ee 100644
-> > > --- a/package/skeleton-init-common/skeleton-init-common.mk
-> > > +++ b/package/skeleton-init-common/skeleton-init-common.mk
-> > > @@ -22,6 +22,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
-> > >       $(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
-> > >       $(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
-> > >               $(TARGET_DIR_WARNING_FILE)
-> > > +     $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
-> > I think we should keep the warning file the last command executed.
-> I am not sure I am following. I am not doing anything to target-dir-warning.txt.
+  MKIMAGE u-boot-dtb.imx
+Error: No BOOT_FROM tag in board/freescale/mx6slevk/imximage.cfg.cfgtmp
+arch/arm/mach-imx/Makefile:86: recipe for target 'u-boot-dtb.imx' failed
+make[2]: *** [u-boot-dtb.imx] Error 1
+Makefile:907: recipe for target 'u-boot-dtb.imx' failed
+make[1]: *** [u-boot-dtb.imx] Error 2
+make[1]: *** Waiting for unfinished jobs....
 
-Just put your sed command before the warning file:
+This issue has been fixed by commit  f916757300c1  ("imx: Create
+distinct pre-processed mkimage config files"), which landed in
+U-Boot 2018.05.
 
-    $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
-    $(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
-            $(TARGET_DIR_WARNING_FILE)
+Bump the U-Boot version to fix this build error.
 
-Regards,
-Yann E. MORIN.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980040
 
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6slevk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/imx6slevk_defconfig b/configs/imx6slevk_defconfig
+index be4b42e88e..90a02964e7 100644
+--- a/configs/imx6slevk_defconfig
++++ b/configs/imx6slevk_defconfig
+@@ -11,7 +11,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
