@@ -1,63 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Dec 2018 10:44:05 +0100
-Subject: [Buildroot] [git commit branch/2018.08.x] Update for 2018.08.4
-Message-ID: <20181220093959.82E00816B8@busybox.osuosl.org>
+Date: Thu, 20 Dec 2018 11:15:57 +0100
+Subject: [Buildroot] Buildroot 2018.08.4 released / EOL
+Message-ID: <87ftusv6zm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=348d79a331d30a4f547827c71f75d9d4da7aab82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.08.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 20 ++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 22 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index 46b2b43732..0c689f42a7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,23 @@
-+2018.08.4, Released December 20th, 2018
-+
-+	Important / security related fixes.
-+
-+	Defconfigs: Fixes for ci20, orangepi zero plus 2
-+
-+	Download wrapper: Fix for urlencode handling
-+
-+	Updated/fixed packages: c-ares, dante, docker-compose,
-+	domoticz, freetype, ghostscript, gnutls, libcurl, libgpgme,
-+	libid3tag, libiscsi, libmpd, libopenssl, liboping, libpjsip,
-+	linux-firmware, liquid-dsp, luvi, lynx, msgpack, nginx,
-+	nodejs, php, popt, pps-tools, prosody, python-numpy,
-+	python-requests, samba4, sdl2_net, squashfs, swupdate,
-+	systemd, uclibc, vte, webkitgtk, wine, xfsprogs
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11426: pps-tools bash dependency
-+
- 2018.08.3, Released November 26th, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index ef0a8ab5ed..afee3cc1f6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.08.3
-+export BR2_VERSION := 2018.08.4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1543269000
-+BR2_VERSION_EPOCH = 1545299000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2018.08.4 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2018.08.4.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2018.08.4.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2018.08.4 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2018.08.3 release.
+
+- Security fixes for freetype, ghostscript, libopenssl, nodejs, php,
+  python-requests, samba4, webkitgtk
+
+- Fixes for download/compilation/runtime issues in dante,
+  docker-compose, domoticz, gnutls, libgpgme, libid3tag, libiscsi,
+  libmpd, liboping, libpjsip, linux, liquid-dsp, luvi, lynx, msgpack,
+  nginx, php, popt, pps-tools, prosody, python-numpy, sdl2_net,
+  swupdate, systemd, uclibc, vte, wine, xfsprogs
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08.4
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.08.3..
+
+    12  Peter Korsgaard
+    11  Fabrice Fontaine
+     8  Yann E. MORIN
+     7  Thomas Petazzoni
+     6  Bernd Kuhls
+     2  Asaf Kahlon
+     2  Joel Stanley
+     2  Trent Piepho
+     1  Adrian Perez de Castro
+     1  Damien Th?bault
+     1  Ezequiel Garcia
+     1  Florian Fainelli
+     1  Francois Perrad
+     1  Jared Bents
+     1  J?rg Krause
+     1  Martin Bark
+     1  Max Filippov
+     1  Peter Seiderer
+     1  Waldemar Brodkorb
+
+Notice that the 2018.08.x series is now EOL. Users are urged to migrate
+to 2018.11 (current release) or 2018.02 (long term release) instead.
+
+-- 
+Bye, Peter Korsgaard
