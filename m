@@ -1,100 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Dec 2018 14:25:03 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.9
-Message-ID: <20181220132107.47371817BB@busybox.osuosl.org>
+From: Mark Jackson <mpfj-list@newflow.co.uk>
+Date: Thu, 20 Dec 2018 13:27:42 +0000
+Subject: [Buildroot] busybox build fail ...
+ BUG_off_t_size_is_misdetected()
+In-Reply-To: <877eg58g5o.fsf@tkos.co.il>
+References: <306d14cd-bc37-0552-6e8d-cb583999d5b1@newflow.co.uk>
+ <eeaa721d-51e5-9adc-51ff-cad1156387ab@newflow.co.uk>
+ <877eg58g5o.fsf@tkos.co.il>
+Message-ID: <abbd4a82-945c-a311-2953-b8fe6811a263@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=030fc5eaa69363152bf01a1fa361d7385673305a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/12/2018 19:34, Baruch Siach wrote:
+> Hi Mark,
+> 
+> Mark Jackson writes:
+>> On 19/12/2018 11:46, Mark Jackson wrote:
+>>> I have an old buildroot setup that I'm trying to coax back into life using the later version.
+>>>
+>>> I've done:-
+>>>
+>>> $ git pull
+>>> $ make clean
+>>> $ make menuconfig (and fixed any deprecated options)
+>>> $ make
+>>>
+>>> All seemed okay until the busybox build, where I got the message:-
+>>>
+>>>>   CC applets/applets.o
+>>>> In file included from include/busybox.h:8:0,
+>>>>   from applets/applets.c:9:
+>>>> include/libbb.h:304:7: error: size of array ?BUG_off_t_size_is_misdetected? is negative
+>>>>   char BUG_off_t_size_is_misdetected[sizeof(off_t) == sizeof(uoff_t) ? 1 : -1];
+>>>>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>> scripts/Makefile.build:197: recipe for target 'applets/applets.o' failed
+>>>
+>>> If I use the default busybox config, then everything seems to build correctly, so I can only put it down to some mis-match in my custom busybox config.
+>>>
+>>> I've attached my busybox .config ... if anyone can shed some light on what's wrong, I'd be most grateful.
+>>
+>> After some web searching [1], I have found that if I enable LFS, it all builds fine.
+>>
+>> So I assume there's some other applet that assumes LFS is enabled.
+>> If so, should there be some dependency check to flag that as an issue ?
+>>
+>> And how do I build *without* LFS enabled ?
+> 
+> Buildroot removed support for non-LFS build in version 2015.05. See
+> commit 7f96ef3580a ("toolchain/helpers: make LFS mandatory for uclibc
+> toolchains").
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+Fair enough ... but shouldn't there be some sort of warning ?
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 2125bb78ad..e2eae30189 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.8</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.9</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.8.tar.gz">buildroot-2018.02.8.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.8.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.9.tar.gz">buildroot-2018.02.9.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.9.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.8.tar.bz2">buildroot-2018.02.8.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.8.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.9.tar.bz2">buildroot-2018.02.9.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.9.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f5246cf35a..ae25396cc2 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.9 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>20 December 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.9 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02.8 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.9">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-December/239206.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.9.tar.bz2">2018.02.9 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+Yes, I know it failed to compile (which is quite a decent warning !!), but
+technically my config was invalid, and it would have been nice if I'd been
+pointed at least in the right direction (or simply told outright) ?
+
+Cheers
+Mark JACKSON
