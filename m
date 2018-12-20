@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Dec 2018 09:16:56 +0100
-Subject: [Buildroot] Buildroot 2018.11.1 released
-In-Reply-To: <87k1k5upbc.fsf@dell.be.48ers.dk>
-References: <87k1k5upbc.fsf@dell.be.48ers.dk>
-Message-ID: <20181220091656.40397ad9@windsurf>
+Date: Thu, 20 Dec 2018 10:07:33 +0100
+Subject: [Buildroot] Cross compiling kernel module for the target
+In-Reply-To: <CA+OsCCQ2TWYiEv-a8uRaJVSd4YX9A4T_EV1ihC1Y2ZyrNPAkag@mail.gmail.com>
+References: <CA+OsCCTCqQ+Fne+=VtXKgi5E_ezkdTAva-zTk6KaWa9egem0Sg@mail.gmail.com>
+ <20181220090411.7ab00f70@windsurf>
+ <CA+OsCCQ2TWYiEv-a8uRaJVSd4YX9A4T_EV1ihC1Y2ZyrNPAkag@mail.gmail.com>
+Message-ID: <20181220100733.5c6d0860@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-+Fabio for Freescale/NXP related build failures, +Ricardo for the
-systemd test failure.
+Please keep the mailing list in Cc when replying. Thanks!
 
-On Wed, 19 Dec 2018 23:25:27 +0100, Peter Korsgaard wrote:
+On Thu, 20 Dec 2018 09:55:41 +0100, ?ukasz Przenios?o wrote:
+> Hello Thomas, thank you for answer.
+> Yes, I know it should point to the build dir, but the problem is, I dont
+> have that directory and I dont know how to "place" is there. On my host I
+> have seen that this build dir is a soft link to the linux headers folder,
+> thus, thought this is the way around it. Could you please give me a hint on
+> what I am missing in the buildroot config maybe?
 
-> Buildroot 2018.11.1 is released - Go download it at:
+Are you building a Linux kernel image as part of your Buildroot
+configuration ?
 
-Thanks for this release. There was a Gitlab CI run on the 2018.11.1
-tag, see
-https://gitlab.com/buildroot.org/buildroot/pipelines/40779740/builds.
-We have only 3 failures on a total of 262 tests, which is not bad.
-
-Here is a quick analysis:
-
-imx6slevk_defconfig,
-https://gitlab.com/buildroot.org/buildroot/-/jobs/136980040
-
-freescale_imx7dsabresd_defconfig,
-https://gitlab.com/buildroot.org/buildroot/-/jobs/136980027
-
-Both of these look very similar to what was fixed by commit
-1ad9c45a059deaaae65a78a9ed7f78b579fed422 in master, but this commit is
-also in 2018.11.x.
-
-However, commit 1ad9c45a059deaaae65a78a9ed7f78b579fed422 does not apply
-to the failing defconfigs, as they don't use the patch added in
-board/freescale/ by this commit.
-
-Fabio, could you perhaps have a look ?
-
-The last failure is on a systemd test, where it says that the boot
-didn't work:
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206
-
-However, looking at the boot log at
-https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206/artifacts/file/test-output/TestInitSystemSystemdRwFull-run.log,
-it did boot, the login prompt appears.
-
-Perhaps something for Ricardo ? :-)
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
