@@ -1,46 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Dec 2018 22:54:38 +0100
-Subject: [Buildroot] [PATCH v1] libinput: bump version to 1.12.4
-Message-ID: <20181220215438.4525-1-ps.report@gmx.net>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 20 Dec 2018 20:08:52 -0200
+Subject: [Buildroot] [PATCH] package/shairport-sync: fix init script (stop)
+Message-ID: <20181220220852.17829-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+shairport-sync creates its pidfile at /var/run/shairport-sync/, so pass
+that path to start-stop-daemon in the stop operation.
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 3ead0f0501..6cfb34242f 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-November/039620.html
--md5  083d6bf311d5e1e3a62440dc634bb8f0  libinput-1.12.3.tar.xz
--sha1 0b0b1285589bbe9924af81959ae1e6204e1c8a00  libinput-1.12.3.tar.xz
--sha256 f266ff861a2e7a97e1402c4345e3547b900efde68adbd40e56403e2617fee255  libinput-1.12.3.tar.xz
--sha512 cdc512cb53442ae85d5a23e10db9dd3548bcca0de24d7fcc48954a60773563d84d9b10278b6a693ade95d0789bb5d42bbb8b7cf1c178fe85401cb09a5402ff02  libinput-1.12.3.tar.xz
-+# https://lists.freedesktop.org/archives/wayland-devel/2018-December/039782.html
-+md5 8d3c7a7467a45a3ba544d1a745267d38 libinput-1.12.4.tar.xz
-+sha1 9c1a7a2fead7f03eb21a5a0f5ac3bff6af00ebf8 libinput-1.12.4.tar.xz
-+sha256 a4f329641c2e2d98199840f99792f646a3041256a380d074e00200991fcb31e6 libinput-1.12.4.tar.xz
-+sha512 4e43ed5213059a481e5a73549c8325e5729d08512c4f580b924d4338a1b69dabd77fb612bec418f294c1da96c738ce26e45f8de8fbc222ab1af71a1535b3240f libinput-1.12.4.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 28eda28aed..89461bf494 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.12.3
-+LIBINPUT_VERSION = 1.12.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+Also pass the executable path, allowing start-stop-daemon to check if
+the PID matches the shairport-sync process, preventing killing some
+other inocent daemon.
+
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=11566
+
+Reported-by: Bin Zhang <yangtze31@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/shairport-sync/S99shairport-sync | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+index 5443ed138c..ef2fa0dcd2 100644
+--- a/package/shairport-sync/S99shairport-sync
++++ b/package/shairport-sync/S99shairport-sync
+@@ -6,16 +6,17 @@ OPTIONS="-d"
+ case "$1" in
+     start)
+ 	printf "Starting shairport-sync: "
+-	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
++	start-stop-daemon -S -q --exec /usr/bin/shairport-sync -- $OPTIONS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
+ 	printf "Stopping shairport-sync: "
+-	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
++	start-stop-daemon -K -q -p /var/run/shairport-sync/shairport-sync.pid
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     restart)
+ 	$0 stop
++	sleep 1
+ 	$0 start
+ 	;;
+     *)
 -- 
 2.19.2
