@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Dec 2018 09:04:11 +0100
-Subject: [Buildroot] Cross compiling kernel module for the target
-In-Reply-To: <CA+OsCCTCqQ+Fne+=VtXKgi5E_ezkdTAva-zTk6KaWa9egem0Sg@mail.gmail.com>
-References: <CA+OsCCTCqQ+Fne+=VtXKgi5E_ezkdTAva-zTk6KaWa9egem0Sg@mail.gmail.com>
-Message-ID: <20181220090411.7ab00f70@windsurf>
+Date: Thu, 20 Dec 2018 09:16:56 +0100
+Subject: [Buildroot] Buildroot 2018.11.1 released
+In-Reply-To: <87k1k5upbc.fsf@dell.be.48ers.dk>
+References: <87k1k5upbc.fsf@dell.be.48ers.dk>
+Message-ID: <20181220091656.40397ad9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Dec 2018 08:39:26 +0100, ?ukasz Przenios?o wrote:
++Fabio for Freescale/NXP related build failures, +Ricardo for the
+systemd test failure.
 
-> obj-m	:= simp.o
-> KERNELDIR ?= /home/lukasz/brl/Machine/beaglebone/build/linux-headers-a75d8e93056181d512f6c818e8627bd4554aaf92
+On Wed, 19 Dec 2018 23:25:27 +0100, Peter Korsgaard wrote:
 
-This should point to output/build/linux-<version>/ and not
-output/build/linux-headers-<version>/.
+> Buildroot 2018.11.1 is released - Go download it at:
 
->   CC [M]  /tmp/test/simp.o
-> In file included from <command-line>:0:0:
-> ././include/linux/kconfig.h:4:32: fatal error: generated/autoconf.h:
-> No such file or directory
->  #include <generated/autoconf.h>
+Thanks for this release. There was a Gitlab CI run on the 2018.11.1
+tag, see
+https://gitlab.com/buildroot.org/buildroot/pipelines/40779740/builds.
+We have only 3 failures on a total of 262 tests, which is not bad.
 
-As explained above, this is because you're using the linux-headers
-source, which is not "configured" (i.e no kernel configuration has been
-applied to it), and building a kernel module requires a configured
-source tree.
+Here is a quick analysis:
 
-Best regards,
+imx6slevk_defconfig,
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980040
+
+freescale_imx7dsabresd_defconfig,
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980027
+
+Both of these look very similar to what was fixed by commit
+1ad9c45a059deaaae65a78a9ed7f78b579fed422 in master, but this commit is
+also in 2018.11.x.
+
+However, commit 1ad9c45a059deaaae65a78a9ed7f78b579fed422 does not apply
+to the failing defconfigs, as they don't use the patch added in
+board/freescale/ by this commit.
+
+Fabio, could you perhaps have a look ?
+
+The last failure is on a systemd test, where it says that the boot
+didn't work:
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206
+
+However, looking at the boot log at
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206/artifacts/file/test-output/TestInitSystemSystemdRwFull-run.log,
+it did boot, the login prompt appears.
+
+Perhaps something for Ricardo ? :-)
+
+Thanks,
 
 Thomas
 -- 
