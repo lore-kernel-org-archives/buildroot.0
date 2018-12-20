@@ -1,33 +1,57 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Dec 2018 22:12:21 +0000
-Subject: [Buildroot] [Bug 11566] Fix init script
-In-Reply-To: <bug-11566-163@https.bugs.busybox.net/>
-References: <bug-11566-163@https.bugs.busybox.net/>
-Message-ID: <bug-11566-163-hTtyFzoE0d@https.bugs.busybox.net/>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 20 Dec 2018 20:18:38 -0200
+Subject: [Buildroot] [PATCH v2] package/shairport-sync: fix init script
+ (stop)
+Message-ID: <20181220221838.21000-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11566
+shairport-sync creates its pidfile at /var/run/shairport-sync/, so pass
+that path to start-stop-daemon in the stop operation.
 
-Carlos Santos <casantos@datacom.com.br> changed:
+Also pass the executable path, allowing start-stop-daemon to check if
+the PID matches the shairport-sync process, preventing killing some
+other inocent daemon.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-           Assignee|unassigned at buildroot.uclibc |casantos at datacom.com.br
-                   |.org                        |
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=11566
 
---- Comment #1 from Carlos Santos <casantos@datacom.com.br> ---
-(In reply to Bin Zhang from comment #0)
+Reported-by: Bin Zhang <yangtze31@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+Changes v1->v2
+  - Recreated patch with the PID checking part
+---
+ package/shairport-sync/S99shairport-sync | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thanks for reporting this bug. A patch to fix it has been submitted:
-
-    https://patchwork.ozlabs.org/patch/1017084/
-
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+index 5443ed138c..80b2fddbc6 100644
+--- a/package/shairport-sync/S99shairport-sync
++++ b/package/shairport-sync/S99shairport-sync
+@@ -6,16 +6,18 @@ OPTIONS="-d"
+ case "$1" in
+     start)
+ 	printf "Starting shairport-sync: "
+-	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
++	start-stop-daemon -S -q --exec /usr/bin/shairport-sync -- $OPTIONS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
+ 	printf "Stopping shairport-sync: "
+-	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
++	start-stop-daemon -K -q --exec /usr/bin/shairport-sync \
++		-p /var/run/shairport-sync/shairport-sync.pid
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     restart)
+ 	$0 stop
++	sleep 1
+ 	$0 start
+ 	;;
+     *)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.19.2
