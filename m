@@ -1,62 +1,48 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Thu, 20 Dec 2018 13:27:42 +0000
-Subject: [Buildroot] busybox build fail ...
- BUG_off_t_size_is_misdetected()
-In-Reply-To: <877eg58g5o.fsf@tkos.co.il>
-References: <306d14cd-bc37-0552-6e8d-cb583999d5b1@newflow.co.uk>
- <eeaa721d-51e5-9adc-51ff-cad1156387ab@newflow.co.uk>
- <877eg58g5o.fsf@tkos.co.il>
-Message-ID: <abbd4a82-945c-a311-2953-b8fe6811a263@newflow.co.uk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Dec 2018 17:04:08 +0100
+Subject: [Buildroot] [PATCH v2 2/4] skeleton: use
+ BR2_SYSTEM_DEFAULT_PATH as default PATH
+In-Reply-To: <CAGt4E5uL_ygcie-O8A9CBHy4sG5JSaPYMc4L210WBdiiMv94BQ@mail.gmail.com>
+References: <20181219210455.14754-1-mmayer@broadcom.com>
+ <20181219210455.14754-3-mmayer@broadcom.com>
+ <20181219213430.GP24194@scaer>
+ <CAGt4E5uL_ygcie-O8A9CBHy4sG5JSaPYMc4L210WBdiiMv94BQ@mail.gmail.com>
+Message-ID: <20181220160408.GT24194@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/12/2018 19:34, Baruch Siach wrote:
-> Hi Mark,
-> 
-> Mark Jackson writes:
->> On 19/12/2018 11:46, Mark Jackson wrote:
->>> I have an old buildroot setup that I'm trying to coax back into life using the later version.
->>>
->>> I've done:-
->>>
->>> $ git pull
->>> $ make clean
->>> $ make menuconfig (and fixed any deprecated options)
->>> $ make
->>>
->>> All seemed okay until the busybox build, where I got the message:-
->>>
->>>>   CC applets/applets.o
->>>> In file included from include/busybox.h:8:0,
->>>>   from applets/applets.c:9:
->>>> include/libbb.h:304:7: error: size of array ?BUG_off_t_size_is_misdetected? is negative
->>>>   char BUG_off_t_size_is_misdetected[sizeof(off_t) == sizeof(uoff_t) ? 1 : -1];
->>>>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>> scripts/Makefile.build:197: recipe for target 'applets/applets.o' failed
->>>
->>> If I use the default busybox config, then everything seems to build correctly, so I can only put it down to some mis-match in my custom busybox config.
->>>
->>> I've attached my busybox .config ... if anyone can shed some light on what's wrong, I'd be most grateful.
->>
->> After some web searching [1], I have found that if I enable LFS, it all builds fine.
->>
->> So I assume there's some other applet that assumes LFS is enabled.
->> If so, should there be some dependency check to flag that as an issue ?
->>
->> And how do I build *without* LFS enabled ?
-> 
-> Buildroot removed support for non-LFS build in version 2015.05. See
-> commit 7f96ef3580a ("toolchain/helpers: make LFS mandatory for uclibc
-> toolchains").
+Markus, All,
 
-Fair enough ... but shouldn't there be some sort of warning ?
+On 2018-12-19 15:24 -0800, Markus Mayer spake thusly:
+> On Wed, 19 Dec 2018 at 13:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> > > index e8a052205268..866273bbd7ee 100644
+> > > --- a/package/skeleton-init-common/skeleton-init-common.mk
+> > > +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> > > @@ -22,6 +22,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+> > >       $(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
+> > >       $(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> > >               $(TARGET_DIR_WARNING_FILE)
+> > > +     $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
+> > I think we should keep the warning file the last command executed.
+> I am not sure I am following. I am not doing anything to target-dir-warning.txt.
 
-Yes, I know it failed to compile (which is quite a decent warning !!), but
-technically my config was invalid, and it would have been nice if I'd been
-pointed at least in the right direction (or simply told outright) ?
+Just put your sed command before the warning file:
 
-Cheers
-Mark JACKSON
+    $(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
+    $(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+            $(TARGET_DIR_WARNING_FILE)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
