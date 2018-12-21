@@ -1,45 +1,51 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 21 Dec 2018 14:29:35 +0200
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 3.1.1
-Message-ID: <20181221122935.21885-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Dec 2018 13:56:59 +0100
+Subject: [Buildroot] [PATCH] package/netatalk: security bump to version
+ 3.1.23
+Message-ID: <20181221125659.9409-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Fixes CVE-2018-1160: Netatalk before 3.1.12 is vulnerable to an out of
+bounds write in dsi_opensess.c.  This is due to lack of bounds checking on
+attacker controlled data.  A remote unauthenticated attacker can leverage
+this vulnerability to achieve arbitrary code execution.
+
+For more details, see the release notes:
+http://netatalk.sourceforge.net/3.1/ReleaseNotes3.1.12.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
+ package/netatalk/netatalk.hash | 6 +++---
+ package/netatalk/netatalk.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index 47e2333ecd..b92b908a64 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	3e2428aa3b9ba1d1ff5b6bff2c306e7e  python-engineio-3.1.0.tar.gz
--sha256	d7341725001afded65e42620e26adc54a450cf4082dd54a407480cb9a64fcdf9  python-engineio-3.1.0.tar.gz
-+md5	203f9b530086c83b6948d750c080d14e  python-engineio-3.1.1.tar.gz
-+sha256	3ec885307c404ff97d14dbdbf1461ede14c70c5adb015b2c97666819edbeef81  python-engineio-3.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index f31b948e3c..de9070a55d 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index ce78373ae3..762fcd460e 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.11/
+-md5 8f79ce2a275b128ebb07188766f088fc  netatalk-3.1.11.tar.bz2
+-sha1 5aa7900e6f7de3c7ee812aa1130c1245d1974586  netatalk-3.1.11.tar.bz2
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.12/
++md5 021d2330cb7f7cd2977aec46299dcc1b  netatalk-3.1.12.tar.bz2
++sha1 cc1fe1ebdbdb4da9cf82835c440e82ba28a832c5  netatalk-3.1.12.tar.bz2
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 28a87509e0..1214fc3bf5 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ENGINEIO_VERSION = 3.1.0
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/25/37/57dc050723f3e64a0a652711b3831263d99f5ade2e05e5d6038354be7eaa
-+PYTHON_ENGINEIO_VERSION = 3.1.1
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/c7/fd/9dad6c1794be838c05610c04e869bca9a3e0d94145ac71e57a9345a784b9
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+-NETATALK_VERSION = 3.1.11
++NETATALK_VERSION = 3.1.12
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+ # For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
 -- 
-2.19.1
+2.11.0
