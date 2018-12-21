@@ -1,52 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Dec 2018 22:51:59 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: security bump to
- version 1.5.5
-Message-ID: <20181221215805.CB769827ED@busybox.osuosl.org>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Fri, 21 Dec 2018 16:29:59 -0700
+Subject: [Buildroot] [PATCH 1/1] iptables: add patch to fix symlink path of
+ iptables-xml
+Message-ID: <20181221232959.27895-1-JoelsonCarl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=726be29277933268a5fb564f7d5eaf8a6fe953cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+iptables-xml currently gets installed as a symlink to
+${sbindir}/xtables-multi, which should have ${DESTDIR} prepended to
+point to the correct binary.
 
-From the release notes:
-
-If per_listener_settings is set to true, then the acl_file setting was
-ignored for the "default listener" only.  This has been fixed.  This does
-not affect any listeners defined with the listener option.
-
-https://mosquitto.org/blog/2018/12/version-155-released/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
 ---
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is probably not a problem until
+https://patchwork.ozlabs.org/patch/1009598/
+ends up on master. Which I hope it does, as sdk generation is broken
+without that series.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 96e2ae9369..831171c082 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 5fd7f3454fd6d286645d032bc07f44a1c8583cec02ef2422c9eb32e0a89a9b2f  mosquitto-1.5.4.tar.gz
-+sha256 fcdb47e340864c545146681af7253399cc292e41775afd76400fda5b0d23d668  mosquitto-1.5.5.tar.gz
+Anyway, if those sdk patches are applied, then without this change sdk
+generation will fail as the symlink that iptables installs will point to
+/usr/sbin/xtables-multi instead of
+/path/to/sysroot/usr/sbin/xtables-multi
+
+I will admit I don't fully understand autotools/automake/etc stuff very
+well. When I had just the patch, the build failed with complaints about
+automake version mismatch, but adding AUTORECONF=YES fixed that. I am
+unsure if there is a better or more proper way.
+---
+ .../0002-iptables-xml-fix-symlink-path.patch  | 36 +++++++++++++++++++
+ package/iptables/iptables.mk                  |  1 +
+ 2 files changed, 37 insertions(+)
+ create mode 100644 package/iptables/0002-iptables-xml-fix-symlink-path.patch
+
+diff --git a/package/iptables/0002-iptables-xml-fix-symlink-path.patch b/package/iptables/0002-iptables-xml-fix-symlink-path.patch
+new file mode 100644
+index 0000000000..99711bfdba
+--- /dev/null
++++ b/package/iptables/0002-iptables-xml-fix-symlink-path.patch
+@@ -0,0 +1,36 @@
++From ce154ab4a06d79bd5830c7f0e353635ee49a93c2 Mon Sep 17 00:00:00 2001
++From: Joel Carlson <JoelsonCarl@gmail.com>
++Date: Fri, 21 Dec 2018 15:19:38 -0700
++Subject: [PATCH iptables] iptables-xml: fix symlink path
++
++The symlinks for vx_bin_links should prepend ${DESTDIR} so it links
++against the installed xtables-multi binary if installing to a location
++specified via ${DESTDIR}.
++
++Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
++---
++I committed this upstream to netfilter-devel at
++http://patchwork.ozlabs.org/patch/1017739/
++
++This is a modified version of that patch to work with v1.6.2 that we are
++currently grabbing.
++---
++ iptables/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/iptables/Makefile.am b/iptables/Makefile.am
++index f92cc4ff..fe5195d7 100644
++--- a/iptables/Makefile.am
+++++ b/iptables/Makefile.am
++@@ -88,7 +88,7 @@ pkgconfig_DATA = xtables.pc
++ install-exec-hook:
++ 	-if test -z "${DESTDIR}"; then /sbin/ldconfig; fi;
++ 	${INSTALL} -dm0755 "${DESTDIR}${bindir}";
++-	for i in ${vx_bin_links}; do ${LN_S} -f "${sbindir}/xtables-multi" "${DESTDIR}${bindir}/$$i"; done;
+++	for i in ${vx_bin_links}; do ${LN_S} -f "${DESTDIR}${sbindir}/xtables-multi" "${DESTDIR}${bindir}/$$i"; done;
++ 	for i in ${v4_sbin_links}; do ${LN_S} -f xtables-multi "${DESTDIR}${sbindir}/$$i"; done;
++ 	for i in ${v6_sbin_links}; do ${LN_S} -f xtables-multi "${DESTDIR}${sbindir}/$$i"; done;
++ 	for i in ${x_sbin_links}; do ${LN_S} -f xtables-compat-multi "${DESTDIR}${sbindir}/$$i"; done;
++-- 
++2.17.1
++
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 54494937af..71d3975f52 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -15,6 +15,7 @@ IPTABLES_LICENSE_FILES = COPYING
+ # Building static causes ugly warnings on some plugins
+ IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
+ 	$(if $(BR2_STATIC_LIBS),,--disable-static)
++IPTABLES_AUTORECONF=YES
  
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 9f3e1d3d5a..1536a5ef26 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.4
-+MOSQUITTO_VERSION = 1.5.5
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+ # For connlabel match
+ ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
+-- 
+2.17.1
