@@ -1,71 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Dec 2018 23:02:11 +0100
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2018-12-13
-In-Reply-To: <20181221173729.41870-1-Nikita.Sobolev@synopsys.com> (Nikita
- Sobolev's message of "Fri, 21 Dec 2018 20:37:29 +0300")
-References: <20181221173729.41870-1-Nikita.Sobolev@synopsys.com>
-Message-ID: <875zvmtu70.fsf@dell.be.48ers.dk>
+Date: Fri, 21 Dec 2018 22:52:06 +0100
+Subject: [Buildroot] [git commit] libinput: add license file hash
+Message-ID: <20181221215805.D12EB8323A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nikita" == Nikita Sobolev <Nikita.Sobolev@synopsys.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa2ba44e74ffd27dc8021bb2b94758760f319c78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: NikitaSobolev <Nikita.Sobolev@synopsys.com>
- > Bump azure-iot-sdk-c to 2018-12-13 release.
- > Add patch, that removes Windows specified variables from
- > azure-iot-sdk-c-2018-12-13 release. That variables cause
- > build errors.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libinput/libinput.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
- > ---
- >  ...-azure-iot-sdk-c-Delete-windows-variables.patch | 34 ++++++++++++++++++++++
- >  package/azure-iot-sdk-c/azure-iot-sdk-c.mk         |  2 +-
- >  2 files changed, 35 insertions(+), 1 deletion(-)
- >  create mode 100644 package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
-
- > diff --git
- > a/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
- > b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
- > new file mode 100644
- > index 0000000000..e8ff53cb5a
- > --- /dev/null
- > +++ b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
- > @@ -0,0 +1,34 @@
- > +From 6c01ef50e0c2d562388aacbb60a1506e70db2218 Mon Sep 17 00:00:00 2001
- > +From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
- > +Date: Thu, 20 Dec 2018 19:31:20 +0300
- > +Subject: [PATCH] azure-iot-sdk-c: Delete windows variables
- > +
- > +Delete windows specified variables, that have been added
- > +to azure-iot-sdk-c-2018-12-13 release. These variables
- > +are not defined for Linux and cause build errors.
- > +
- > +Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
- > +---
- > + c-utility/CMakeLists.txt | 6 ------
- > + 1 file changed, 6 deletions(-)
- > +
- > +diff --git a/c-utility/CMakeLists.txt b/c-utility/CMakeLists.txt
- > +index 190ea87dca..464d6d1069 100644
- > +--- a/c-utility/CMakeLists.txt
- > ++++ b/c-utility/CMakeLists.txt
- > +@@ -264,12 +264,6 @@ if(${use_applessl})
- > +     include_directories(./pal/ios-osx/)
- > + endif()
- > + 
- > +-if (WIN32 AND (${CMAKE_SYSTEM_VERSION} VERSION_EQUAL "10.0.17763.0"
- > OR ${CMAKE_SYSTEM_VERSION} VERSION_GREATER "10.0.17763.0"))
- > +-    # Windows added support for UNIX domain sockets to the OS and SDK
- > +-    # in the Oct 2018 update (10.0.17763.0, aka RS5)
- > +-    add_definitions(-DAF_UNIX_ON_WINDOWS)
- > +-endif()
-
-Can you be more specific what the issue is exactly? Given the WIN32 in
-this conditional this should never be true in the context of Buildroot,
-so the define shouldn't get added?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 6cfb34242f..238ad13ece 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -3,3 +3,6 @@ md5 8d3c7a7467a45a3ba544d1a745267d38 libinput-1.12.4.tar.xz
+ sha1 9c1a7a2fead7f03eb21a5a0f5ac3bff6af00ebf8 libinput-1.12.4.tar.xz
+ sha256 a4f329641c2e2d98199840f99792f646a3041256a380d074e00200991fcb31e6 libinput-1.12.4.tar.xz
+ sha512 4e43ed5213059a481e5a73549c8325e5729d08512c4f580b924d4338a1b69dabd77fb612bec418f294c1da96c738ce26e45f8de8fbc222ab1af71a1535b3240f libinput-1.12.4.tar.xz
++
++# License files
++sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
