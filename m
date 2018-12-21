@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Dec 2018 14:58:55 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/imx6slevk: Bump U-Boot version
-In-Reply-To: <20181220165412.7982-1-festevam@gmail.com> (Fabio Estevam's
- message of "Thu, 20 Dec 2018 14:54:11 -0200")
+Date: Fri, 21 Dec 2018 14:59:01 +0100
+Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7dsabresd: Apply
+ upstream U-Boot fix
+In-Reply-To: <20181220165412.7982-2-festevam@gmail.com> (Fabio Estevam's
+ message of "Thu, 20 Dec 2018 14:54:12 -0200")
 References: <20181220165412.7982-1-festevam@gmail.com>
-Message-ID: <87y38jt200.fsf@dell.be.48ers.dk>
+ <20181220165412.7982-2-festevam@gmail.com>
+Message-ID: <87tvj7t1zu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +15,22 @@ To: buildroot@busybox.net
 
 >>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > U-Boot 2017.11 has the following build issue:
+ > NXP U-Boot tree has the following build issue:
  >   MKIMAGE u-boot-dtb.imx
- > Error: No BOOT_FROM tag in board/freescale/mx6slevk/imximage.cfg.cfgtmp
- > arch/arm/mach-imx/Makefile:86: recipe for target 'u-boot-dtb.imx' failed
+ > Error: No BOOT_FROM tag in board/freescale/mx7dsabresd/imximage.cfg.cfgtmp
+ > arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
  > make[2]: *** [u-boot-dtb.imx] Error 1
- > Makefile:907: recipe for target 'u-boot-dtb.imx' failed
- > make[1]: *** [u-boot-dtb.imx] Error 2
- > make[1]: *** Waiting for unfinished jobs....
+ > Makefile:877: recipe for target 'u-boot-dtb.imx' failed
 
  > This issue has been fixed by commit  f916757300c1  ("imx: Create
- > distinct pre-processed mkimage config files"), which landed in
- > U-Boot 2018.05.
-
- > Bump the U-Boot version to fix this build error.
+ > distinct pre-processed mkimage config files"), so backport this
+ > commit to the NXP U-Boot tree in order to fix the build error.
 
  > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/136980040
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/136980027
 
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
  > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
