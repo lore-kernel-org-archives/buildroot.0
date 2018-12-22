@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Dec 2018 08:04:55 +0100
-Subject: [Buildroot] [PATCH 1/1] iptables: add patch to fix symlink path
- of iptables-xml
-In-Reply-To: <20181221232959.27895-1-JoelsonCarl@gmail.com>
-References: <20181221232959.27895-1-JoelsonCarl@gmail.com>
-Message-ID: <20181222080455.6419ae8c@windsurf.home>
+Date: Sat, 22 Dec 2018 08:10:03 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Vicente Olivert Riera
+Message-ID: <20181222070812.B0FB0821E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee58353462f32f46f3f5b93f6dc78e94b31bad78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Dec 2018 16:29:59 -0700, Joel Carlson wrote:
+Vicente is no longer working at Imgtec, and his e-mail is now
+bouncing:
 
-> +diff --git a/iptables/Makefile.am b/iptables/Makefile.am
-> +index f92cc4ff..fe5195d7 100644
-> +--- a/iptables/Makefile.am
-> ++++ b/iptables/Makefile.am
-> +@@ -88,7 +88,7 @@ pkgconfig_DATA = xtables.pc
-> + install-exec-hook:
-> + 	-if test -z "${DESTDIR}"; then /sbin/ldconfig; fi;
-> + 	${INSTALL} -dm0755 "${DESTDIR}${bindir}";
-> +-	for i in ${vx_bin_links}; do ${LN_S} -f "${sbindir}/xtables-multi" "${DESTDIR}${bindir}/$$i"; done;
-> ++	for i in ${vx_bin_links}; do ${LN_S} -f "${DESTDIR}${sbindir}/xtables-multi" "${DESTDIR}${bindir}/$$i"; done;
+<Vincent.Riera@imgtec.com>: host
+    mxa-00376f01.gslb.pphosted.com[185.132.180.163] said: 550 5.1.1 User
+    Unknown (in reply to RCPT TO command)
 
-For the target installation, this looks wrong. It means you would have
-on the target a link that points
-to /the/original/path/to/where/buildroot/was/built/output/target/sbin/xtables-multi.
-Doesn't sound good.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-A relative symlink instead would fix the problem.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59b549e0f7..2d58ea9014 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2150,19 +2150,6 @@ F:	package/llvm/
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
+ 
+-N:	Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-F:	arch/Config.in.mips
+-F:	package/gnupg2/
+-F:	package/hidapi/
+-F:	package/libfm/
+-F:	package/libfm-extra/
+-F:	package/libksba/
+-F:	package/menu-cache/
+-F:	package/openblas/
+-F:	package/openmpi/
+-F:	package/pinentry/
+-F:	package/trinity/
+-
+ N:	Vincent Prince <vincent.prince.fr@gmail.com>
+ F:	package/nss-myhostname/
+ 
