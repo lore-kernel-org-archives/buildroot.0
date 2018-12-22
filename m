@@ -1,56 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Dec 2018 08:44:47 +0100
-Subject: [Buildroot] [PATCH] package/sqlite: security bump to version 3.25.3
-Message-ID: <20181222074448.24100-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Dec 2018 09:31:41 +0100
+Subject: [Buildroot] [PATCH 0/2] core/sdk: fix relative symlinks in
+ generated tarball (branch yem/sdk)
+In-Reply-To: <CA+1k=2ZqHeLif6866SYX+hqRwatGiL1e-hZz-zdFuy_Ysfy+8g@mail.gmail.com>
+References: <cover.1544206190.git.yann.morin.1998@free.fr>
+ <df37a271-7012-b8d2-fc4d-edfa66a0e163@andin.de>
+ <CA+1k=2ZqHeLif6866SYX+hqRwatGiL1e-hZz-zdFuy_Ysfy+8g@mail.gmail.com>
+Message-ID: <20181222083141.GU24194@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-20346: SQLite before 3.25.3, when the FTS3 extension is
-enabled, encounters an integer overflow (and resultant buffer overflow) for
-FTS3 queries that occur after crafted changes to FTS3 shadow tables,
-allowing remote attackers to execute arbitrary code by leveraging the
-ability to run arbitrary SQL statements (such as in certain WebSQL use
-cases), aka Magellan.
+Joel, Andreas, All,
 
-For more details, see:
-https://blade.tencent.com/magellan/index_en.html
-https://www.sqlite.org/releaselog/3_25_3.html
-https://www.mail-archive.com/sqlite-users at mailinglists.sqlite.org/msg113218.html
+On 2018-12-21 17:13 -0700, Joel Carlson spake thusly:
+> On Fri, Dec 21, 2018 at 2:46 AM Andreas Naumann <dev@andin.de> wrote:
+> > However, the check for symlinks pointing out of host/ showed to two
+> > issues originating in install steps of iptables and eudev. Both create
+> > links that point to system pathes.
+> >
+> > I have locally made POST_STAGING_HOOKS to fix that but that's probably a
+> > non acceptable hack.
+> 
+> Would be hard to tell without seeing the actual change. ;-)
+> That being said, this is probably something that would need to be
+> fixed in iptables and eudev (patches submitted upstream), and then
+> those patches added to buildroot to fix the issue.
+> 
+> So far I've submitted a patch to iptables here:
+> http://patchwork.ozlabs.org/patch/1017739/
+> 
+> And a patch to buildroot to pull in a version of that here:
+> https://patchwork.ozlabs.org/patch/1017740/
+> 
+> I've also submitted a pull request for eudev (and while typing this
+> email it was already merged):
+> https://github.com/gentoo/eudev/pull/165
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I did nt see Thomas' reply to the iptables patch before I replied to
+your eudev one. It turns out we basically said exactly the same thing:
+this is not the correct solution.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index eefa31ffb7..7be42a0aca 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
-+sha1 5d6dc7634ec59e7a6fffa8758c1e184b2522c2e5  sqlite-autoconf-3250300.tar.gz
- # Calculated based on the hash above
--sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
-+sha256 00ebf97be13928941940cc71de3d67e9f852698233cd98ce2d178fd08092f3dd  sqlite-autoconf-3250300.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 34a0b9538e..6cf5710e5d 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3250200
-+SQLITE_VERSION = 3250300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+If you do what you propose, then you can see that at runtime, on the
+_target_, the symlinks will be wrong, bnecause they would be prefixed
+with the DESTDIR, which is clearly not appropriate.
+
+A better solution, in that case, wuld be to make relative symlinks
+instead, but that is a little bit trickier.  A simple way to do that is
+to use 'ln -r -s FILE LINK' but the -r option is not old enough to be
+widely available on all distors, especially entreprise-grade distros.
+
+An other approach, would be that we whietelist certain PATHs from our
+SDK. Afterall, there are things we do not care about in the SDK. For
+example, most executables in staging/{,usr/}{,s}bin are not needed. We
+only really need libs and headers, so we could just ignore anything
+that is not in staging/{lib,usr/lib,usr/include}/
+
+I.e. the heuristic would become:
+
+  if it is a symlink:
+      if is not below staging/:
+          check and fix it
+      else if it is below staging/{lib,usr/lib,usr/include}:
+          check and fix it
+      else
+          ignore it
+
+I can try to look into fixing that in my series. Is enabling eudev
+and/or iptables enough to echibit the problem?
+
+Regards,
+Yann E. MORIN.
+
+> I'll submit a patch for eudev in buildroot to pull in that change once
+> I see feedback on the iptables one. For it to work for me I needed to
+> set AUTORECONF=YES on eudev, but I don't really understand
+> autotools/automake stuff very well and I don't know if that is the
+> right way to be doing things.
+> -Joel
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
