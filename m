@@ -1,58 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Dec 2018 19:54:13 +0100
-Subject: [Buildroot] [PATCH 0/2] core/sdk: fix relative symlinks in
- generated tarball (branch yem/sdk)
-In-Reply-To: <CA+1k=2ay7v0G0pjwB4PTTR-6mH3_FueDiFi8D3rhbcZa35zq+g@mail.gmail.com>
-References: <cover.1544206190.git.yann.morin.1998@free.fr>
- <df37a271-7012-b8d2-fc4d-edfa66a0e163@andin.de>
- <CA+1k=2ZqHeLif6866SYX+hqRwatGiL1e-hZz-zdFuy_Ysfy+8g@mail.gmail.com>
- <20181222083141.GU24194@scaer>
- <CA+1k=2ay7v0G0pjwB4PTTR-6mH3_FueDiFi8D3rhbcZa35zq+g@mail.gmail.com>
-Message-ID: <20181222185413.GW24194@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 22 Dec 2018 22:30:43 +0100
+Subject: [Buildroot] [PATCH 1/1] scanpypi: write _SOURCE only when needed
+In-Reply-To: <20181222181532.25326-1-asafka7@gmail.com>
+References: <20181222181532.25326-1-asafka7@gmail.com>
+Message-ID: <CAGm1_ktER+RswzCoPUSvHmYgOKne0OpXH1tNZ1ytVxRnnp7O_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joel, All,
+On Sat, Dec 22, 2018 at 7:15 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> For some packages, there's no need to add the _SOURCE variable,
+> since the name of the source file is the same as the name of the package
+> (like python-engineio).
+> Hence, we'll add it to the .mk file only if needed.
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-On 2018-12-22 11:21 -0700, Joel Carlson spake thusly:
-> On Sat, Dec 22, 2018 at 1:31 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > I did nt see Thomas' reply to the iptables patch before I replied to
-> > your eudev one. It turns out we basically said exactly the same thing:
-> > this is not the correct solution.
-> My apologies on submitting a bad patch.
+It was a long requested feature. Thanks.
 
-Hey, no worries! :-)  That's what reviews are for.
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> >   if it is a symlink:
-> >       if is not below staging/:
-> >           check and fix it
-> >       else if it is below staging/{lib,usr/lib,usr/include}:
-> >           check and fix it
-> >       else
-> >           ignore it
-> >
-> > I can try to look into fixing that in my series. Is enabling eudev
-> > and/or iptables enough to echibit the problem?
-> 
-> That is a better solution. And yes, with the previous sdk fixes
-> applied, just enabling eudev and/or iptables and then trying to 'make
-> sdk' would error out because of the symlink path being outside of
-> staging.
+Yegor
 
-Yeah, I eventually managed to reproduce the issue, indeed. so I
-submitted v3 of the series. Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+>  utils/scanpypi | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 9335bedee4..a75d696222 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -354,13 +354,14 @@ class BuildrootPackage():
+>              version=self.version)
+>          lines.append(version_line)
+>
+> -        targz = self.filename.replace(
+> -            self.version,
+> -            '$({name}_VERSION)'.format(name=self.mk_name))
+> -        targz_line = '{name}_SOURCE = {filename}\n'.format(
+> -            name=self.mk_name,
+> -            filename=targz)
+> -        lines.append(targz_line)
+> +        if self.buildroot_name != self.real_name:
+> +            targz = self.filename.replace(
+> +                self.version,
+> +                '$({name}_VERSION)'.format(name=self.mk_name))
+> +            targz_line = '{name}_SOURCE = {filename}\n'.format(
+> +                name=self.mk_name,
+> +                filename=targz)
+> +            lines.append(targz_line)
+>
+>          if self.filename not in self.url:
+>              # Sometimes the filename is in the url, sometimes it's not
+> --
+> 2.19.1
+>
