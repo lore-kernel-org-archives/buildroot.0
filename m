@@ -1,7 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 23 Dec 2018 17:36:36 -0500
-Subject: [Buildroot] [PATCH 1/1] json-for-modern-cpp: bump version to v3.5.0
-Message-ID: <20181223223636.125706-1-aduskett@gmail.com>
+Date: Sun, 23 Dec 2018 17:55:18 -0500
+Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: bump version to v2.10.8
+Message-ID: <20181223225518.48902-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,41 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+In adition:
+  - Add -DCPPREST_EXCLUDE_WEBSOCKETS=ON as a default CONF_OPT as websocketspp
+    is not checked as a dependency.
 ---
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcpprestsdk/libcpprestsdk.hash | 2 +-
+ package/libcpprestsdk/libcpprestsdk.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index 4b9adf73ca..cff01db74c 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+index b8c5d5430e..9a8155f354 100644
+--- a/package/libcpprestsdk/libcpprestsdk.hash
++++ b/package/libcpprestsdk/libcpprestsdk.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256	e8fffa6cbdb3c15ecdff32eebf958b6c686bc188da8ad5c6489462d16f83ae54	json-v3.1.2.tar.gz
-+sha256	e0b1fc6cc6ca05706cce99118a87aca5248bd9db3113e703023d23f044995c1d	json-v3.5.0.tar.gz
- sha256	7b875bb7a4e28abb7956ea821b4b7d88ff6a2a4fabf261c3993730a365ec56dd	LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index e547c07875..86399fd60d 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256 cf4d57bdcc1ce53f1d228156620dd87af95cbff109d85c81e8be01d0bb58fd25	libcpprestsdk-v2.10.5.tar.gz
++sha256 fd79d34b3fad4622ff58480f57ecdf374061c5bdbd83e317019422575c820443	libcpprestsdk-v2.10.8.tar.gz
+ sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index 14526e7de4..e5500d8c7f 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--JSON_FOR_MODERN_CPP_VERSION = v3.1.2
-+JSON_FOR_MODERN_CPP_VERSION = v3.5.0
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
+-LIBCPPRESTSDK_VERSION = v2.10.5
++LIBCPPRESTSDK_VERSION = v2.10.8
+ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+-LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
++LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
+ 
+ $(eval $(cmake-package))
 -- 
 2.19.2
