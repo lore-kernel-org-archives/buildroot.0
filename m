@@ -1,66 +1,46 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 23 Dec 2018 15:19:48 -0200
-Subject: [Buildroot] [PATCH v3 1/3] package/waf: add a blind Config.in.host
-Message-ID: <20181223171950.3979-1-casantos@datacom.com.br>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 23 Dec 2018 21:16:40 +0200
+Subject: [Buildroot] [PATCH 1/1] python-aiohttp: bump to version 3.5.0
+Message-ID: <20181223191640.19545-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The plan for the future is:
-
- * All host packages have a Config.in.host option.
-
- * The host packages that are only build dependencies of other packages
-   have a blind Config.in.host option
-
- * The host packages that are useful by themselves continue to have a
-   visible Config.in.host option.
-
-host-waf gets a blind Config.in.host, because it exists only to build
-Waf-based packages that set <PKG>_NEEDS_EXTERNAL_WAF to YES.
-
-A help text is included to document the package, only, since it is not
-shown in the configuration menu.
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-Changes v1->v2:
-  - Explain the motivation in the commit message
-  - Make the Config.in.host blind
-Changes v2->v3:
-  - Removes "quoting Thomas Petazzoni" from the commit messege, since
-    it's not a personal opinion but a consensus among project members.
----
- package/Config.in.host     | 1 +
- package/waf/Config.in.host | 6 ++++++
- 2 files changed, 7 insertions(+)
- create mode 100644 package/waf/Config.in.host
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 16b474fc9d..3644436fe3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -64,6 +64,7 @@ menu "Host utilities"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
- 	source "package/vboot-utils/Config.in.host"
-+	source "package/waf/Config.in.host"
- 	source "package/xorriso/Config.in.host"
- 	source "package/zip/Config.in.host"
- 	source "package/zstd/Config.in.host"
-diff --git a/package/waf/Config.in.host b/package/waf/Config.in.host
-new file mode 100644
-index 0000000000..81a5c5cc27
---- /dev/null
-+++ b/package/waf/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_WAF
-+	bool
-+	help
-+	  WAF, the meta build system
-+
-+	  https://waf.io/
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index 8f158af3cb..c76f49b4a4 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5	80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
+-sha256	51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
++md5	b692d5c602458957a0ef2df92ac48705  aiohttp-3.5.0.tar.gz
++sha256	1d00d58cf2665ce61bd637790988accca609aa3a898bb45747b6369830c0de28  aiohttp-3.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index df8bdfb4b2..c17daf6a27 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_VERSION = 3.4.4
++PYTHON_AIOHTTP_VERSION = 3.5.0
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e4/a4/48e455139e03dc1555f904cf3843c9228c2a922f61512eb4d2482e04135c
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 -- 
-2.20.1
+2.19.1
