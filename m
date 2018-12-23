@@ -1,84 +1,96 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 24 Dec 2018 00:37:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package: pkg-autotools: Add option to run
- autogen.sh
+Date: Mon, 24 Dec 2018 00:37:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package: Use $(PKG)_AUTOGEN instead of
+ calling autogen.sh manually
 In-Reply-To: <20181223223742.23710-1-vadim4j@gmail.com>
 References: <20181223223742.23710-1-vadim4j@gmail.com>
-Message-ID: <20181223223742.23710-2-vadim4j@gmail.com>
+Message-ID: <20181223223742.23710-3-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add $(PKG)_AUTOGEN variable which allows to execute autogen.sh script
-on pre-configure stage.
+Use $(PKG)_AUTOGEN variable whenever it is possible instead of
+custom pre-configure hooks which calls autogen.sh manually.
 
 Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- docs/manual/adding-packages-autotools.txt |  4 ++++
- package/pkg-autotools.mk                  | 20 ++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ package/faifa/faifa.mk | 10 +---------
+ package/gpm/gpm.mk     |  8 +-------
+ package/sdl/sdl.mk     | 10 +---------
+ 3 files changed, 3 insertions(+), 25 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index a041d91eb6..105c038961 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -159,6 +159,10 @@ cases, typical packages will therefore only use a few of them.
-   value is correct for most autotools packages, but it is still possible
-   to override it if needed.
+diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
+index af7a1741ff..0af87c841f 100644
+--- a/package/faifa/faifa.mk
++++ b/package/faifa/faifa.mk
+@@ -10,18 +10,10 @@ FAIFA_INSTALL_STAGING = YES
+ FAIFA_DEPENDENCIES = libpcap host-autoconf
+ FAIFA_LICENSE = BSD-3-Clause
+ FAIFA_LICENSE_FILES = COPYING
++FAIFA_AUTOGEN = YES
  
-+* +LIBFOO_AUTOGEN+, tells whether the autogen.sh script should be
-+  executed to generate 'configure' script. Valid values are +YES+ and +NO+.
-+  By default, the value is +NO+
-+
- With the autotools infrastructure, all the steps required to build
- and install the packages are already defined, and they generally work
- well for most autotools-based packages. However, when required, it is
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 45de99356f..4f0f93d71c 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -103,6 +103,14 @@ define AUTORECONF_HOOK
- 	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
- endef
+ FAIFA_MAKE_OPTS += GIT_REV=$(FAIFA_VERSION)
  
-+#
-+# Hook to call autogen.sh if needed
-+#
-+define AUTOGEN_HOOK
-+	@$(call MESSAGE,"Running autogen.sh")
-+	$(Q)cd $($(PKG)_SRCDIR) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+
- ################################################################################
- # inner-autotools-package -- defines how the configuration, compilation and
- # installation of an autotools package should be done, implements a
-@@ -144,6 +152,14 @@ ifndef $(2)_AUTORECONF
-  endif
- endif
+-# This package uses autoconf, but not automake, so we need to call
+-# their special autogen.sh script, and have custom target and staging
+-# installation commands.
+-
+-define FAIFA_RUN_AUTOGEN
+-	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+-endef
+-FAIFA_PRE_CONFIGURE_HOOKS += FAIFA_RUN_AUTOGEN
+-
+ define FAIFA_INSTALL_TARGET_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		PREFIX=/usr \
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+index f59d059a41..ebe210b908 100644
+--- a/package/gpm/gpm.mk
++++ b/package/gpm/gpm.mk
+@@ -11,6 +11,7 @@ GPM_LICENSE = GPL-2.0+
+ GPM_LICENSE_FILES = COPYING
+ GPM_INSTALL_STAGING = YES
+ GPM_DEPENDENCIES = host-bison
++GPM_AUTOGEN = YES
  
-+ifndef $(2)_AUTOGEN
-+ ifdef $(3)_AUTOGEN
-+  $(2)_AUTOGEN = $$($(3)_AUTOGEN)
-+ else
-+  $(2)_AUTOGEN ?= NO
-+ endif
-+endif
-+
- ifndef $(2)_GETTEXTIZE
-  ifdef $(3)_GETTEXTIZE
-   $(2)_GETTEXTIZE = $$($(3)_GETTEXTIZE)
-@@ -241,6 +257,10 @@ endif
+ # if not already installed in staging dir, gpm Makefile may fail to find some
+ # of the headers needed to generate build dependencies, the first time it is
+@@ -34,13 +35,6 @@ endif
+ # http://invisible-island.net/ncurses/ncurses.faq.html#using_gpm_lib
+ GPM_CONF_OPTS = --without-curses
  
- $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+-# configure is missing but gpm seems not compatible with our autoreconf
+-# mechanism so we have to do it manually instead of using GPM_AUTORECONF = YES
+-define GPM_RUN_AUTOGEN
+-	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+-endef
+-GPM_PRE_CONFIGURE_HOOKS += GPM_RUN_AUTOGEN
+-
+ GPM_DEPENDENCIES += host-automake host-autoconf host-libtool
  
-+ifeq ($$($(2)_AUTOGEN),YES)
-+$(2)_PRE_CONFIGURE_HOOKS += AUTOGEN_HOOK
-+endif
-+
- ifeq ($$($(2)_AUTORECONF),YES)
+ # gpm tries to build/install .info doc even if makeinfo isn't installed on the
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 0a6a7de139..a0fa69d6df 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -10,15 +10,7 @@ SDL_SITE = http://www.libsdl.org/release
+ SDL_LICENSE = LGPL-2.1+
+ SDL_LICENSE_FILES = COPYING
+ SDL_INSTALL_STAGING = YES
+-
+-# we're patching configure.in, but package cannot autoreconf with our version of
+-# autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
+-define SDL_RUN_AUTOGEN
+-	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+-endef
+-
+-SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+-HOST_SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
++SDL_AUTOGEN = YES
  
- # This has to come before autoreconf
+ SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+ HOST_SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
 -- 
 2.14.1
