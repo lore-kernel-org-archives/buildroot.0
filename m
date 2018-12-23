@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 23 Dec 2018 16:48:43 +0100
-Subject: [Buildroot] [RFC 1/3] libwpe: new package
+Date: Sun, 23 Dec 2018 16:48:44 +0100
+Subject: [Buildroot] [RFC 2/3] wpebackend-fdo: new package
 In-Reply-To: <20181223154845.23556-1-francois.perrad@gadz.org>
 References: <20181223154845.23556-1-francois.perrad@gadz.org>
-Message-ID: <20181223154845.23556-2-francois.perrad@gadz.org>
+Message-ID: <20181223154845.23556-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,90 +12,95 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libwpe/Config.in   | 12 ++++++++++++
- package/libwpe/libwpe.hash |  7 +++++++
- package/libwpe/libwpe.mk   | 15 +++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/libwpe/Config.in
- create mode 100644 package/libwpe/libwpe.hash
- create mode 100644 package/libwpe/libwpe.mk
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/wpebackend-fdo/Config.in           | 17 +++++++++++++++++
+ package/wpebackend-fdo/wpebackend-fdo.hash |  7 +++++++
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 15 +++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/wpebackend-fdo/Config.in
+ create mode 100644 package/wpebackend-fdo/wpebackend-fdo.hash
+ create mode 100644 package/wpebackend-fdo/wpebackend-fdo.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6f687d748..705842310 100644
+index 705842310..93a2bf5ad 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -810,6 +810,7 @@ F:	package/gdbm/
- F:	package/libtomcrypt/
- F:	package/libtommath/
- F:	package/libump/
-+F:	package/libwpe/
- F:	package/linenoise/
- F:	package/ljlinenoise/
- F:	package/lpeg/
+@@ -828,6 +828,7 @@ F:	package/qemu/
+ F:	package/sdl2_mixer/
+ F:	package/sdl2_net/
+ F:	package/tekui/
++F:	package/wpebackend-fdo/
+ F:	package/wsapi-fcgi/
+ F:	package/wsapi-xavante/
+ F:	utils/scancpan
 diff --git a/package/Config.in b/package/Config.in
-index 038ddf6b2..7615c5853 100644
+index 7615c5853..e8a676ab0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1283,6 +1283,7 @@ menu "Graphics"
- 	source "package/libva-intel-driver/Config.in"
- 	source "package/libvdpau/Config.in"
- 	source "package/libvips/Config.in"
-+	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opencv3/Config.in"
-diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
+@@ -1302,6 +1302,7 @@ menu "Graphics"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
+ 	source "package/woff2/Config.in"
++	source "package/wpebackend-fdo/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
 new file mode 100644
-index 000000000..8cf99fe0c
+index 000000000..9025834e1
 --- /dev/null
-+++ b/package/libwpe/Config.in
-@@ -0,0 +1,12 @@
-+comment "libwpe needs an OpenEGL-capable backend"
++++ b/package/wpebackend-fdo/Config.in
+@@ -0,0 +1,17 @@
++comment "wpebackend-fdo needs an OpenEGL-capable backend"
 +	depends on !BR2_PACKAGE_HAS_LIBEGL
 +
-+config BR2_PACKAGE_LIBWPE
-+	bool "libwpe"
++config BR2_PACKAGE_WPEBACKEND_FDO
++	bool "wpebackend-fdo"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
++	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_USE_MMU # fork()
 +	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBWPE
++	select BR2_PACKAGE_WAYLAND
 +	help
-+	  General-purpose library specifically developed for the
-+	  WPE-flavored port of WebKit.
++	  WPE's backend based on a freedesktop.org stack.
 +
 +	  https://wpewebkit.org/
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
 new file mode 100644
-index 000000000..bda380988
+index 000000000..6ebfcf335
 --- /dev/null
-+++ b/package/libwpe/libwpe.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
 @@ -0,0 +1,7 @@
-+# From https://wpewebkit.org/releases/libwpe-1.1.0.tar.xz.sums
-+md5 b34c3920cb749ebc74fe45a793cf57af libwpe-1.1.0.tar.xz
-+sha1 69f0bc7f422c6a196c49439a454f7734ecac1126 libwpe-1.1.0.tar.xz
-+sha256 72e34ad754be11abd1a438cfe195d8d644c52105ab2b1c3b39dec6228bc776ce libwpe-1.1.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.1.0.tar.xz.sums
++md5 dc852a6cafaf4b6392dcb91e36cd7abb wpebackend-fdo-1.1.0.tar.xz
++sha1 688377f441e19273fe2b44c0a2ea9da149f97fa4 wpebackend-fdo-1.1.0.tar.xz
++sha256 f6c72130d16e50860cb83eb0f6e109c76f1826d2c6bee39025fb3651941761e7 wpebackend-fdo-1.1.0.tar.xz
 +
 +# Hashes for license files:
-+sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
++sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
 new file mode 100644
-index 000000000..2b9309843
+index 000000000..b62e710a9
 --- /dev/null
-+++ b/package/libwpe/libwpe.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# libwpe
++# wpebackend-fdo
 +#
 +################################################################################
 +
-+LIBWPE_VERSION = 1.1.0
-+LIBWPE_SITE = http://wpewebkit.org/releases
-+LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
-+LIBWPE_INSTALL_STAGING = YES
-+LIBWPE_LICENSE = BSD-2-Clause
-+LIBWPE_LICENSE_FILES = COPYING
-+LIBWPE_DEPENDENCIES = libegl libxkbcommon
++WPEBACKEND_FDO_VERSION = 1.1.0
++WPEBACKEND_FDO_SITE = http://wpewebkit.org/releases
++WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
++WPEBACKEND_FDO_INSTALL_STAGING = YES
++WPEBACKEND_FDO_LICENSE = BSD-2-Clause
++WPEBACKEND_FDO_LICENSE_FILES = COPYING
++WPEBACKEND_FDO_DEPENDENCIES = libglib2 libwpe wayland
 +
 +$(eval $(cmake-package))
 -- 
