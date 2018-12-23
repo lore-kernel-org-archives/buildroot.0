@@ -1,91 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Dec 2018 22:29:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix swig build error
- when using cmake 3.12
-In-Reply-To: <20181223195714.17155-1-mark.corbin@embecosm.com>
-References: <20181223195714.17155-1-mark.corbin@embecosm.com>
-Message-ID: <20181223212923.GB24194@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Dec 2018 22:29:18 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/asterisk:
+ security bump version to 14.7.8
+Message-ID: <20181223212606.953C3827E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=efb4c2ffcc1c1a89529ca77e2504530bd5f30682
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On 2018-12-23 19:57 +0000, Mark Corbin spake thusly:
-> The build fails with 'Unable to find' swig.swg and python.swg when
-> using cmake version 3.12.
+Fixes the following security issues:
 
-We've another user on IRC, reporting issues with cmake-3.13. Should we
-now black=list cmake 3.12 and above, and always build our own?
+AST-2018-009: Remote crash vulnerability in HTTP websocket upgrade
+There is a stack overflow vulnerability in the res_http_websocket.so module of
+Asterisk that allows an attacker to crash Asterisk via a specially crafted
+HTTP request to upgrade the connection to a websocket. The attacker???s
+request causes Asterisk to run out of stack space and crash.
 
-Did you try to investigate and find the change in cmake that caused this
-regression?
+For more details, see the announcement:
+https://www.asterisk.org/downloads/asterisk-news/asterisk-13231-1478-1561-and-1321-cert3-now-available-security-release
 
-> This commit adds a patch from upstream libftdi.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/cc54fec0cd6e35e99dde2f43e0eb28b9d628cd19
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Peter: mark as security fix, extend commit message]
+(cherry picked from commit 19b64c22862e81e9a2757aac72af70ea43c3028d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This is indeed an adaptation of an upstream libftdi1 commit.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libftdi1/0004-cmake-find-swig.patch | 26 +++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libftdi1/0004-cmake-find-swig.patch
-> 
-> diff --git a/package/libftdi1/0004-cmake-find-swig.patch b/package/libftdi1/0004-cmake-find-swig.patch
-> new file mode 100644
-> index 0000000000..25922cca53
-> --- /dev/null
-> +++ b/package/libftdi1/0004-cmake-find-swig.patch
-> @@ -0,0 +1,26 @@
-> +From fcda9c6a208d3a7fe651ef661b2eb6e462a89c17 Mon Sep 17 00:00:00 2001
-> +From: Eneas U de Queiroz <cote2004-github@yahoo.com>
-> +Date: Tue, 31 Jul 2018 17:44:57 -0300
-> +Subject: [PATCH] CMake: use find_package (SWIG) for cmake >= 3.0.0
-> +
-> +There's a workaround for a bug (fixed in cmake 3.0.0) that does not
-> +work in CMake 3.12.  Only use the workaround with cmake < 3.0.0.
-> +
-> +Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
-> +[Mark: patch retrieved and updated from
-> +http://developer.intra2net.com/git/?p=libftdi;a=commit;h=fcda9c6a208d3a7fe651ef661b2eb6e462a89c17]
-> +Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> +---
-> +diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
-> +index 31ef1c6..eefc344 100644
-> +--- a/python/CMakeLists.txt
-> ++++ b/python/CMakeLists.txt
-> +@@ -3,7 +3,7 @@ option ( LINK_PYTHON_LIBRARY "Link against python libraries" ON )
-> + 
-> + if ( PYTHON_BINDINGS )
-> +   # workaround for cmake bug #0013449
-> +-  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH )
-> ++  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.0.0 )
-> +     find_package ( SWIG )
-> +   else ()
-> +     find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
-> -- 
-> 2.19.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index a3e9d10aff..2449aeb4d1 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  249cf223ef4dd7aea01f0d250a6b9cad661ebd78910c73adb7f59c1c46f9fed8  asterisk-14.7.6.tar.gz
++sha256  41c99bd2236af95d056e15f9d044c28b69e00935e67791b18fa70b0614402012  asterisk-14.7.8.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 28b85da562..b5a73ed766 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 14.7.6
++ASTERISK_VERSION = 14.7.8
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
