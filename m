@@ -1,87 +1,98 @@
-From: Nikita Sobolev <nikita.sobolev@synopsys.com>
-Date: Mon, 24 Dec 2018 12:46:07 +0000
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2018-12-13
-In-Reply-To: <875zvmtu70.fsf@dell.be.48ers.dk>
-References: <20181221173729.41870-1-Nikita.Sobolev@synopsys.com>
- <875zvmtu70.fsf@dell.be.48ers.dk>
-Message-ID: <2dd91b90433f754e0aa9bd59f28bc68b72e35b53.camel@synopsys.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Mon, 24 Dec 2018 15:08:52 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/brcm-patchram-plus: Add new
+ package
+Message-ID: <20181224130852.28685-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's no problem with WIN32 variable.
-Buildroot can not find CMAKE_SYSTEM_VERSION while building in Linux.
-It fails with error:
--------------------->8----------------------
-CMake Error at c-utility/CMakeLists.txt:267 (if):
- if given arguments:
+Add tool which allows to setup broadcom bluetooth
+device via UART.
 
-   "WIN32" "AND" "(" "VERSION_EQUAL" "10.0.17763.0" "OR" "VERSION_GREATER" "10.0.17763.0" ")"
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
 
- Unknown arguments specified
+v2:
+    1) Add link to the github in Config.in help section [Yann E. Morin]
+    2) Use autoreconf instaed of direct call to autogen.sh [Yann E. Morin]
 
+ DEVELOPERS                                         |  3 +++
+ package/Config.in                                  |  1 +
+ package/brcm-patchram-plus/Config.in               |  7 +++++++
+ package/brcm-patchram-plus/brcm-patchram-plus.hash |  2 ++
+ package/brcm-patchram-plus/brcm-patchram-plus.mk   | 12 ++++++++++++
+ 5 files changed, 25 insertions(+)
+ create mode 100644 package/brcm-patchram-plus/Config.in
+ create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.hash
+ create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.mk
 
--- Configuring incomplete, errors occurred!
--------------------->8-----------------------
-
-   On Fri, 2018-12-21 at 23:02 +0100, Peter Korsgaard wrote:
-   > > > > > > "Nikita" == Nikita Sobolev <Nikita.Sobolev@synopsys.com> writes:
-> 
->  > From: NikitaSobolev <Nikita.Sobolev@synopsys.com>
->  > Bump azure-iot-sdk-c to 2018-12-13 release.
->  > Add patch, that removes Windows specified variables from
->  > azure-iot-sdk-c-2018-12-13 release. That variables cause
->  > build errors.
-> 
->  > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
->  > ---
->  >  ...-azure-iot-sdk-c-Delete-windows-variables.patch | 34 ++++++++++++++++++++++
->  >  package/azure-iot-sdk-c/azure-iot-sdk-c.mk         |  2 +-
->  >  2 files changed, 35 insertions(+), 1 deletion(-)
->  >  create mode 100644 package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
-> 
->  > diff --git
->  > a/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
->  > b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
->  > new file mode 100644
->  > index 0000000000..e8ff53cb5a
->  > --- /dev/null
->  > +++ b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
->  > @@ -0,0 +1,34 @@
->  > +From 6c01ef50e0c2d562388aacbb60a1506e70db2218 Mon Sep 17 00:00:00 2001
->  > +From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
->  > +Date: Thu, 20 Dec 2018 19:31:20 +0300
->  > +Subject: [PATCH] azure-iot-sdk-c: Delete windows variables
->  > +
->  > +Delete windows specified variables, that have been added
->  > +to azure-iot-sdk-c-2018-12-13 release. These variables
->  > +are not defined for Linux and cause build errors.
->  > +
->  > +Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
->  > +---
->  > + c-utility/CMakeLists.txt | 6 ------
->  > + 1 file changed, 6 deletions(-)
->  > +
->  > +diff --git a/c-utility/CMakeLists.txt b/c-utility/CMakeLists.txt
->  > +index 190ea87dca..464d6d1069 100644
->  > +--- a/c-utility/CMakeLists.txt
->  > ++++ b/c-utility/CMakeLists.txt
->  > +@@ -264,12 +264,6 @@ if(${use_applessl})
->  > +     include_directories(./pal/ios-osx/)
->  > + endif()
->  > + 
->  > +-if (WIN32 AND (${CMAKE_SYSTEM_VERSION} VERSION_EQUAL "10.0.17763.0"
->  > OR ${CMAKE_SYSTEM_VERSION} VERSION_GREATER "10.0.17763.0"))
->  > +-    # Windows added support for UNIX domain sockets to the OS and SDK
->  > +-    # in the Oct 2018 update (10.0.17763.0, aka RS5)
->  > +-    add_definitions(-DAF_UNIX_ON_WINDOWS)
->  > +-endif()
-> 
-> Can you be more specific what the issue is exactly? Given the WIN32 in
-> this conditional this should never be true in the context of Buildroot,
-> so the define shouldn't get added?
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d58ea9014..03727e8fa4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2141,6 +2141,9 @@ N:	Tzu-Jung Lee <roylee17@gmail.com>
+ F:	package/dropwatch/
+ F:	package/tstools/
+ 
++N:	Vadim Kochan <vadim4j@gmail.com>
++F:	package/brcm-patchram-plus/
++
+ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+ F:	package/clinfo/
+diff --git a/package/Config.in b/package/Config.in
+index c3e069134e..72a52a0682 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1819,6 +1819,7 @@ menu "Networking applications"
+ 	source "package/bmon/Config.in"
+ 	source "package/boa/Config.in"
+ 	source "package/boinc/Config.in"
++	source "package/brcm-patchram-plus/Config.in"
+ 	source "package/bridge-utils/Config.in"
+ 	source "package/bwm-ng/Config.in"
+ 	source "package/c-icap/Config.in"
+diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
+new file mode 100644
+index 0000000000..2742016eb7
+--- /dev/null
++++ b/package/brcm-patchram-plus/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
++	bool "brcm-patchram-plus"
++	help
++	  Broadcom utility to flash Bluetooth firmwares, extended with
++	  per-device Low Power Mode configuration.
++
++	  https://github.com/AsteroidOS/brcm-patchram-plus
+diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
+new file mode 100644
+index 0000000000..59263f23d4
+--- /dev/null
++++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
+diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+new file mode 100644
+index 0000000000..7ef82f2b15
+--- /dev/null
++++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# brcm-patchram-plus
++#
++################################################################################
++
++BRCM_PATCHRAM_PLUS_VERSION = 94fb127e614b19a9a95561b8c1a0716e2e1e6293
++BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
++BRCM_PATCHRAM_PLUS_LICENSE = APACHE-2.0
++BRCM_PATCHRAM_PLUS_AUTORECONF = YES
++
++$(eval $(autotools-package))
 -- 
-Niktia Sobolev <sobolev@synopsys.com>
+2.14.1
