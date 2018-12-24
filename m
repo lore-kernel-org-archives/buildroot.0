@@ -1,99 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Dec 2018 13:25:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/brcm-patchram-plus: Add new
- package
-In-Reply-To: <20181224115357.5520-1-vadim4j@gmail.com>
-References: <20181224115357.5520-1-vadim4j@gmail.com>
-Message-ID: <20181224122509.GC2703@scaer>
+From: Nikita Sobolev <nikita.sobolev@synopsys.com>
+Date: Mon, 24 Dec 2018 12:46:07 +0000
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2018-12-13
+In-Reply-To: <875zvmtu70.fsf@dell.be.48ers.dk>
+References: <20181221173729.41870-1-Nikita.Sobolev@synopsys.com>
+ <875zvmtu70.fsf@dell.be.48ers.dk>
+Message-ID: <2dd91b90433f754e0aa9bd59f28bc68b72e35b53.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vadim, All,
+There's no problem with WIN32 variable.
+Buildroot can not find CMAKE_SYSTEM_VERSION while building in Linux.
+It fails with error:
+-------------------->8----------------------
+CMake Error at c-utility/CMakeLists.txt:267 (if):
+ if given arguments:
 
-On 2018-12-24 13:53 +0200, Vadim Kochan spake thusly:
-> Add tool which allows to setup broadcom bluetooth
-> device via UART.
+   "WIN32" "AND" "(" "VERSION_EQUAL" "10.0.17763.0" "OR" "VERSION_GREATER" "10.0.17763.0" ")"
 
-You should explain in the commit log why you use autogen.sh and not
-BRCM_PATCHRAM_PLUS_AUTORECONF=YES.
+ Unknown arguments specified
 
-And since I just tried, I can tell it works...
 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
-> new file mode 100644
-> index 0000000000..0f3ad4c951
-> --- /dev/null
-> +++ b/package/brcm-patchram-plus/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
-> +	bool "brcm-patchram-plus"
-> +	help
-> +	  Broadcom utility to flash Bluetooth firmwares, extended with
-> +	  per-device Low Power Mode configuration.
+-- Configuring incomplete, errors occurred!
+-------------------->8-----------------------
 
-We usually like to add a pointer to the homepage for a project, but
-since there is none here, we can just add the pointer to the github
-repository.
-
-> diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-> new file mode 100644
-> index 0000000000..59263f23d4
-> --- /dev/null
-> +++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed
-> +sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
-> diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-> new file mode 100644
-> index 0000000000..e9528efc5f
-> --- /dev/null
-> +++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# brcm-patchram-plus
-> +#
-> +################################################################################
-> +
-> +BRCM_PATCHRAM_PLUS_VERSION = 94fb127e614b19a9a95561b8c1a0716e2e1e6293
-> +BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
-> +BRCM_PATCHRAM_PLUS_LICENSE = APACHE-2.0
-> +
-> +define BRCM_PATCHRAM_PLUS_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-
-This is in fact incorrect, because autogen.sh will end up running
-configure, unless the environment variable NOCONFIGURE is set an non
-empty. So, you end up running configure for the host, not the target.
-
-Besides, using autoreconf does work, in fact.
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
-> +BRCM_PATCHRAM_PLUS_PRE_CONFIGURE_HOOKS += BRCM_PATCHRAM_PLUS_AUTOGEN
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.14.1
+   On Fri, 2018-12-21 at 23:02 +0100, Peter Korsgaard wrote:
+   > > > > > > "Nikita" == Nikita Sobolev <Nikita.Sobolev@synopsys.com> writes:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+>  > From: NikitaSobolev <Nikita.Sobolev@synopsys.com>
+>  > Bump azure-iot-sdk-c to 2018-12-13 release.
+>  > Add patch, that removes Windows specified variables from
+>  > azure-iot-sdk-c-2018-12-13 release. That variables cause
+>  > build errors.
+> 
+>  > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+>  > ---
+>  >  ...-azure-iot-sdk-c-Delete-windows-variables.patch | 34 ++++++++++++++++++++++
+>  >  package/azure-iot-sdk-c/azure-iot-sdk-c.mk         |  2 +-
+>  >  2 files changed, 35 insertions(+), 1 deletion(-)
+>  >  create mode 100644 package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
+> 
+>  > diff --git
+>  > a/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
+>  > b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
+>  > new file mode 100644
+>  > index 0000000000..e8ff53cb5a
+>  > --- /dev/null
+>  > +++ b/package/azure-iot-sdk-c/0001-azure-iot-sdk-c-Delete-windows-variables.patch
+>  > @@ -0,0 +1,34 @@
+>  > +From 6c01ef50e0c2d562388aacbb60a1506e70db2218 Mon Sep 17 00:00:00 2001
+>  > +From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+>  > +Date: Thu, 20 Dec 2018 19:31:20 +0300
+>  > +Subject: [PATCH] azure-iot-sdk-c: Delete windows variables
+>  > +
+>  > +Delete windows specified variables, that have been added
+>  > +to azure-iot-sdk-c-2018-12-13 release. These variables
+>  > +are not defined for Linux and cause build errors.
+>  > +
+>  > +Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+>  > +---
+>  > + c-utility/CMakeLists.txt | 6 ------
+>  > + 1 file changed, 6 deletions(-)
+>  > +
+>  > +diff --git a/c-utility/CMakeLists.txt b/c-utility/CMakeLists.txt
+>  > +index 190ea87dca..464d6d1069 100644
+>  > +--- a/c-utility/CMakeLists.txt
+>  > ++++ b/c-utility/CMakeLists.txt
+>  > +@@ -264,12 +264,6 @@ if(${use_applessl})
+>  > +     include_directories(./pal/ios-osx/)
+>  > + endif()
+>  > + 
+>  > +-if (WIN32 AND (${CMAKE_SYSTEM_VERSION} VERSION_EQUAL "10.0.17763.0"
+>  > OR ${CMAKE_SYSTEM_VERSION} VERSION_GREATER "10.0.17763.0"))
+>  > +-    # Windows added support for UNIX domain sockets to the OS and SDK
+>  > +-    # in the Oct 2018 update (10.0.17763.0, aka RS5)
+>  > +-    add_definitions(-DAF_UNIX_ON_WINDOWS)
+>  > +-endif()
+> 
+> Can you be more specific what the issue is exactly? Given the WIN32 in
+> this conditional this should never be true in the context of Buildroot,
+> so the define shouldn't get added?
+> 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Niktia Sobolev <sobolev@synopsys.com>
