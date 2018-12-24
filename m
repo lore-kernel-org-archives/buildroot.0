@@ -1,107 +1,132 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 24 Dec 2018 19:28:47 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/brcm-patchram-plus: Add new
- package
-Message-ID: <20181224172847.8343-1-vadim4j@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Dec 2018 19:57:42 +0100
+Subject: [Buildroot] [PATCH] boot/mv-ddr-marvell: support custom GIT
+ settings
+In-Reply-To: <20181224131814.20804-1-kostap@marvell.com>
+References: <20181224131814.20804-1-kostap@marvell.com>
+Message-ID: <20181224185742.GF2703@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add tool which allows to setup broadcom bluetooth
-device via UART.
+Konstantin, All,
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
+On 2018-12-24 15:18 +0200, kostap at marvell.com spake thusly:
+> From: Konstantin Porotchkin <kostap@marvell.com>
+> 
+> Add support for custom repositories for mv-ddr-marvell sources.
+> This patch allows getting the mv-ddr-marvell package sources
+> out of user-defined repositories.
+> The configuration options are similar to uboot package - once
+> the BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT=y, the following
+> configuration entries are used for fetching the package sources:
+> BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL
+> BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION
+> 
+> Change-Id: Ibdef65a3ccdfbe47123f27ab6ba311a75d66d50e
 
-v4:
-    1) Wrongly specified license files [Yann E. Morin]
-    2) Fix APACHE-2.0 -> Apache-2.0 [Yann E. Morin]
+No need for this 'Change-Id' because it means nothing to us.
 
-v3:
-    1) Specify src/main.c as license file [Yann E. Morin]
+> Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+> ---
+>  boot/mv-ddr-marvell/Config.in         | 16 ++++++++++++++++
+>  boot/mv-ddr-marvell/mv-ddr-marvell.mk |  7 +++++++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/boot/mv-ddr-marvell/Config.in b/boot/mv-ddr-marvell/Config.in
+> index 4ee8c95b2c..0a9ed7aca5 100644
+> --- a/boot/mv-ddr-marvell/Config.in
+> +++ b/boot/mv-ddr-marvell/Config.in
+> @@ -8,3 +8,19 @@ config BR2_TARGET_MV_DDR_MARVELL
+>  	  and 8040 SoCs.
+>  
+>  	  https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/
+> +
+> +config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
+> +	bool "Custom Git repository"
 
-v2:
-    1) Add link to the github in Config.in help section [Yann E. Morin]
-    2) Use autoreconf instaed of direct call to autogen.sh [Yann E. Morin]
+I think I would prefer that we have a choice selection, like for U-Boot
+for example:
 
- DEVELOPERS                                         |  3 +++
- package/Config.in                                  |  1 +
- package/brcm-patchram-plus/Config.in               |  7 +++++++
- package/brcm-patchram-plus/brcm-patchram-plus.hash |  2 ++
- package/brcm-patchram-plus/brcm-patchram-plus.mk   | 13 +++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/brcm-patchram-plus/Config.in
- create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.hash
- create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.mk
+    choice
+        bool "mv-ddr-marvell version"
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2d58ea9014..03727e8fa4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2141,6 +2141,9 @@ N:	Tzu-Jung Lee <roylee17@gmail.com>
- F:	package/dropwatch/
- F:	package/tstools/
- 
-+N:	Vadim Kochan <vadim4j@gmail.com>
-+F:	package/brcm-patchram-plus/
-+
- N:	Valentin Korenblit <valentinkorenblit@gmail.com>
- F:	package/clang/
- F:	package/clinfo/
-diff --git a/package/Config.in b/package/Config.in
-index c3e069134e..72a52a0682 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1819,6 +1819,7 @@ menu "Networking applications"
- 	source "package/bmon/Config.in"
- 	source "package/boa/Config.in"
- 	source "package/boinc/Config.in"
-+	source "package/brcm-patchram-plus/Config.in"
- 	source "package/bridge-utils/Config.in"
- 	source "package/bwm-ng/Config.in"
- 	source "package/c-icap/Config.in"
-diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
-new file mode 100644
-index 0000000000..2742016eb7
---- /dev/null
-+++ b/package/brcm-patchram-plus/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
-+	bool "brcm-patchram-plus"
-+	help
-+	  Broadcom utility to flash Bluetooth firmwares, extended with
-+	  per-device Low Power Mode configuration.
-+
-+	  https://github.com/AsteroidOS/brcm-patchram-plus
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-new file mode 100644
-index 0000000000..59263f23d4
---- /dev/null
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-new file mode 100644
-index 0000000000..511ec991bc
---- /dev/null
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# brcm-patchram-plus
-+#
-+################################################################################
-+
-+BRCM_PATCHRAM_PLUS_VERSION = 94fb127e614b19a9a95561b8c1a0716e2e1e6293
-+BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
-+BRCM_PATCHRAM_PLUS_LICENSE = Apache-2.0
-+BRCM_PATCHRAM_PLUS_LICENSE_FILES = src/main.c
-+BRCM_PATCHRAM_PLUS_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+    config BR2_TARGET_MV_DDR_MARVELL_MARVELL
+        bool "Marvell github" # Maybe get a better prompt here?
+
+    config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
+        bool "Custom Git repository"
+
+    endchoice
+
+    if BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
+
+    config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL
+        string "URL of custom repository"
+
+    config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION
+        string "Custom repository version"
+
+    endif # BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
+
+Otherwise, we usually frown upon adding custom location to packages. Is
+it customary for board integrators to have local adaptations to this,
+like there is for u-boot and the other bootloaders?
+
+As I see you're an @marvell.com, do you need that to use an internal
+repository during development? If so, then why can't you just use the
+OVERRIDE_SRCDIR mechanism instead?
+
+Regards,
+Yann E. MORIN.
+
+> +if BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
+> +
+> +config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL
+> +	string "URL of custom repository"
+> +
+> +config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION
+> +	string "Custom repository version"
+> +	help
+> +	  Revision to use in the typical format used by Git
+> +	  E.G. a sha id, a tag, branch, ..
+> +
+> +endif
+> diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> index 8d508215f8..100aaccb5f 100644
+> --- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> +++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> @@ -4,9 +4,16 @@
+>  #
+>  ################################################################################
+>  
+> +ifeq ($(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT),y)
+> +MV_DDR_MARVELL_VERSION = $(call qstrip,$(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION))
+> +MV_DDR_MARVELL_SITE = $(call qstrip,$(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL))
+> +MV_DDR_MARVELL_SITE_METHOD = git
+> +BR_NO_CHECK_HASH_FOR += $(MV_DDR_MARVELL_SOURCE)
+> +else
+>  # This is the commit for mv_ddr-armada-18.09.2
+>  MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
+>  MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
+> +endif
+>  MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
+>  MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
+>  
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
