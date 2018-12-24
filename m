@@ -1,75 +1,69 @@
-From: kostap at marvell.com <kostap@marvell.com>
-Date: Mon, 24 Dec 2018 15:18:14 +0200
-Subject: [Buildroot] [PATCH] boot/mv-ddr-marvell: support custom GIT settings
-Message-ID: <20181224131814.20804-1-kostap@marvell.com>
+From: Kostya Porotchkin <kostap@marvell.com>
+Date: Mon, 24 Dec 2018 13:56:41 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH] boot/uboot: add support for
+ custom DT name
+In-Reply-To: <20181224144759.283fe055@windsurf.home>
+References: <20181224131904.20891-1-kostap@marvell.com>
+ <20181224144759.283fe055@windsurf.home>
+Message-ID: <SN2PR18MB073664134EBFD4559E291C89CABB0@SN2PR18MB0736.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Konstantin Porotchkin <kostap@marvell.com>
+Hi, Thomas,
 
-Add support for custom repositories for mv-ddr-marvell sources.
-This patch allows getting the mv-ddr-marvell package sources
-out of user-defined repositories.
-The configuration options are similar to uboot package - once
-the BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT=y, the following
-configuration entries are used for fetching the package sources:
-BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL
-BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION
-
-Change-Id: Ibdef65a3ccdfbe47123f27ab6ba311a75d66d50e
-Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
----
- boot/mv-ddr-marvell/Config.in         | 16 ++++++++++++++++
- boot/mv-ddr-marvell/mv-ddr-marvell.mk |  7 +++++++
- 2 files changed, 23 insertions(+)
-
-diff --git a/boot/mv-ddr-marvell/Config.in b/boot/mv-ddr-marvell/Config.in
-index 4ee8c95b2c..0a9ed7aca5 100644
---- a/boot/mv-ddr-marvell/Config.in
-+++ b/boot/mv-ddr-marvell/Config.in
-@@ -8,3 +8,19 @@ config BR2_TARGET_MV_DDR_MARVELL
- 	  and 8040 SoCs.
- 
- 	  https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/
-+
-+config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
-+	bool "Custom Git repository"
-+
-+if BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT
-+
-+config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  E.G. a sha id, a tag, branch, ..
-+
-+endif
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index 8d508215f8..100aaccb5f 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,9 +4,16 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_GIT),y)
-+MV_DDR_MARVELL_VERSION = $(call qstrip,$(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_VERSION))
-+MV_DDR_MARVELL_SITE = $(call qstrip,$(BR2_TARGET_MV_DDR_MARVELL_CUSTOM_REPO_URL))
-+MV_DDR_MARVELL_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(MV_DDR_MARVELL_SOURCE)
-+else
- # This is the commit for mv_ddr-armada-18.09.2
- MV_DDR_MARVELL_VERSION = 99d772547314f84921268d57e53d8769197d3e21
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
-+endif
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
- 
--- 
-2.17.1
+> -----Original Message-----
+> From: buildroot <buildroot-bounces@busybox.net> On Behalf Of Thomas
+> Petazzoni
+> Sent: Monday, December 24, 2018 15:48
+> To: Kostya Porotchkin <kostap@marvell.com>
+> Cc: Clemens Gruber <clemens.gruber@pqgruber.com>;
+> buildroot at buildroot.org
+> Subject: [EXT] Re: [Buildroot] [PATCH] boot/uboot: add support for custom
+> DT name
+> 
+> External Email
+> 
+> ----------------------------------------------------------------------
+> Hello Kostya,
+> 
+> +Clemens Gruber in Cc, who posted a related U-Boot patch.
+> 
+> On Mon, 24 Dec 2018 15:19:04 +0200, kostap at marvell.com wrote:
+> > From: Konstantin Porotchkin <kostap@marvell.com>
+> >
+> > Some u-boot default configuration files could be shared between
+> > targets and used for building images for multiple board types.
+> > The only difference between such builds is the DTB embedded in in the
+> > boot image for each specific platform.
+> > This approach is widely used by Marvell, having the same u-boot
+> > configuration file for the entire SoC family, but allowing builds of
+> > multiple target flavors by supplying the device tree name through make
+> > command parameter DEVICE_TREE=xxx This patch adds such capability to
+> > uboot module of the buildroot.
+> > The custome DT name could be  defined by
+> > BR2_TARGET_UBOOT_CUSTOM_DTS_NAME entry.
+> >
+> > Change-Id: I69e193339b0369a736bdf98491b9914d24a54e17
+> > Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+> 
+> Reading this again, in fact it is very similar to patch
+> http://patchwork.ozlabs.org/patch/881197/ we already have in the queue.
+> With a very important distinction: your patch passes DEVICE_TREE=, while
+> the existing pending patch passes EXT_DTB=. The obvious question that
+> comes up is: which one is right ? Or are these two orthogonal things ?
+[KP] As far as I understand, the EXT_DTP is used for pointing to out of the tree pre-compiled DTB file, while DEVICE_TREE allows selection between DTS files existing in u-boot tree. So the first one is for customers that do not want to share their DT details and the second one for re-using the same configuration with different DTs.
+Does it makes sense?
+Kosta
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
