@@ -1,147 +1,79 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 23 Dec 2018 18:31:13 -0500
-Subject: [Buildroot] [PATCH 1/1] sngrep: bump version to v1.4.6
-Message-ID: <20181223233113.69562-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 24 Dec 2018 08:00:18 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-12-23
+Message-ID: <20181224070018.9F6F520BA3@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello,
 
-Remove upstream patch.
----
- package/refpolicy/refpolicy.mk                |  2 +-
- .../0001-Fix-building-against-LibreSSL.patch  | 78 -------------------
- package/sngrep/sngrep.hash                    |  6 +-
- package/sngrep/sngrep.mk                      |  2 +-
- 4 files changed, 5 insertions(+), 83 deletions(-)
- delete mode 100644 package/sngrep/0001-Fix-building-against-LibreSSL.patch
+Build statistics for 2018-12-23
+===============================
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 590e0ebd9a..9f829f4e68 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -6,7 +6,7 @@
- 
- REFPOLICY_VERSION = 2.20180114
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
--REFPOLICY_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/refpolicy/files
-+REFPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/refpolicy/files
- REFPOLICY_LICENSE = GPL-2.0
- REFPOLICY_LICENSE_FILES = COPYING
- REFPOLICY_INSTALL_STAGING = YES
-diff --git a/package/sngrep/0001-Fix-building-against-LibreSSL.patch b/package/sngrep/0001-Fix-building-against-LibreSSL.patch
-deleted file mode 100644
-index 311f0b3d52..0000000000
---- a/package/sngrep/0001-Fix-building-against-LibreSSL.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 05d110ef57e9647b84c9656e746f72a76ea8c758 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Tue, 6 Feb 2018 12:47:43 -0500
--Subject: [PATCH] Fix building against LibreSSL
--
--LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
--changes from OpenSSL >= 1.1.
--
--To work around this:
--
--- Check to see if LIBRESSL_VERSION_NUMBER is defined.
--- If so, define MODSSL_USE_OPENSSL_PRE_1_1_API.
--- Change all checks for OPENSSL_VERSION_NUMBER < 0x10100000L to
--  '#if MODSSL_USE_OPENSSL_PRE_1_1_API'
--
--Upstream-Status: Committed
--https://github.com/irontec/sngrep/commit/0ee014d497986c40de264f6392b01fdf4e337fd5
--
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- src/capture_openssl.c | 6 +++---
-- src/capture_openssl.h | 9 +++++++++
-- 2 files changed, 12 insertions(+), 3 deletions(-)
--
--diff --git a/src/capture_openssl.c b/src/capture_openssl.c
--index 0a052c3..a4e1de0 100644
----- a/src/capture_openssl.c
--+++ b/src/capture_openssl.c
--@@ -94,7 +94,7 @@ P_hash(const char *digest, unsigned char *dest, int dlen, unsigned char *secret,
-- 
--     // Calculate enough data to fill destination
--     while (pending > 0) {
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if MODSSL_USE_OPENSSL_PRE_1_1_API
--         HMAC_CTX hm;
--         HMAC_Init(&hm, secret, sslen, md);
--         HMAC_Update(&hm, tmpseed, tmpslen);
--@@ -495,7 +495,7 @@ tls_process_record(struct SSLConnection *conn, const uint8_t *payload,
--                 break;
--             case change_cipher_spec:
--                 // From now on, this connection will be encrypted using MasterSecret
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if MODSSL_USE_OPENSSL_PRE_1_1_API
--                 if (conn->client_cipher_ctx->cipher && conn->server_cipher_ctx->cipher)
--                     conn->encrypted = 1;
-- #else
--@@ -588,7 +588,7 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
--                 // Decrypt PreMasterKey
--                 clientkeyex = (struct ClientKeyExchange *) body;
-- 
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if MODSSL_USE_OPENSSL_PRE_1_1_API
--                 RSA_private_decrypt(UINT16_INT(clientkeyex->length),
--                                     (const unsigned char *) &clientkeyex->exchange_keys,
--                                     (unsigned char *) &conn->pre_master_secret,
--diff --git a/src/capture_openssl.h b/src/capture_openssl.h
--index 31f48ce..b3e88fe 100644
----- a/src/capture_openssl.h
--+++ b/src/capture_openssl.h
--@@ -65,6 +65,15 @@
-- #define OLD_OPENSSL_VERSION 1
-- #endif
-- 
--+/* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
--+ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
--+ */
--+#if defined(LIBRESSL_VERSION_NUMBER)
--+#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
--+#else
--+#define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
--+#endif
--+
-- //! Three bytes unsigned integer
-- typedef struct uint16 {
--     unsigned char x[2];
---- 
--2.14.3
--
-diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
-index 16552cf5cd..f751a14632 100644
---- a/package/sngrep/sngrep.hash
-+++ b/package/sngrep/sngrep.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/irontec/sngrep/releases/download/v1.4.5/sngrep-1.4.5.tar.gz.md5sum
--md5 11f1cdb8e8f3a3c9ef02ecd12268322e  sngrep-1.4.5.tar.gz
-+# From https://github.com/irontec/sngrep/releases/download/v1.4.6/sngrep-1.4.6.tar.gz.md5sum
-+md5 094e76786b118258bac69e1514aac826  sngrep-1.4.6.tar.gz
- 
- # Locally computed
--sha256 16f1566f4507ba560c7461cc7ff1c1653beb14b8baf7846269bbb4880564e57f sngrep-v1.4.5.tar.gz
-+sha256 638d6557dc68db401b07d73b2e7f8276800281f021fe0c942992566d6b59a48a sngrep-v1.4.6.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 3f1fe989cf..c6d2a292b3 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNGREP_VERSION = v1.4.5
-+SNGREP_VERSION = v1.4.6
- SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
- SNGREP_LICENSE = GPL-3.0+
- SNGREP_LICENSE_FILES = LICENSE
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  12 |   0 |   0 |  12 |
+   2018.11.x |  14 |   0 |   0 |  14 |
+      master | 101 |  33 |   0 | 134 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+        glib-networking-2.50.0 | 12
+                  ffmpeg-3.4.5 | 5 
+                   netsurf-3.8 | 5 
+                  linuxptp-2.0 | 3 
+                    php-7.2.13 | 2 
+               asterisk-16.0.0 | 1 
+                  dhcpdump-1.8 | 1 
+                libmad-0.15.1b | 1 
+   libtorrent-rasterbar-1.1.11 | 1 
+              lua-curl-0.3.8-2 | 1 
+                qt5base-5.11.3 | 1 
+
+
+Detail of failures
+------------------
+
+        i686 |                asterisk-16.0.0 | NOK | http://autobuild.buildroot.net/results/bfa2fc3fd08bd885f70c833d63908be93254c371 |     
+      x86_64 |                   dhcpdump-1.8 | NOK | http://autobuild.buildroot.net/results/7231170d3d3e3637f02382c1a0a96009b0527618 | ORPH
+         arc |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/6ebe85dde14b8aa43e7b917f29cb6585083ba8b6 |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/22c4984a745d90d7d055ccde9617d1e1a3b1f1d0 |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/5285fffa237c9955003975e3a4eb0624e7ce13f8 |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/5f4880a90b4e2d1858c1482afca2f390fd28b36e |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/d7b345724bea01ee96612c3e3c86e9a0d020026e |     
+     powerpc |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/a16fd5b5a8087d678593e84eba393285f3fbb9c3 |     
+         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/2423ffc80e057b8c9dc17adfbec1085d0bcfc3b3 |     
+        i686 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/64ee3fec36707eb5893ce70fbb17862033fedbbc |     
+      mipsel |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/4a877f9ceb3bed86dcd482f1ffde8b540e3ea6ee |     
+         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/d3a428b447fe3cc8fe01b6294e3ac32d4f574d8e |     
+        i586 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/0b10073a037c21d21e7d6001dfb36f2c6550de9e |     
+       nios2 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/09a0b6a8ba462932070671433175e4a156ef39dd |     
+         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/cf57c59d2101ead23420131edcbe3c5f2d7bd55a |     
+       sparc |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/8565cda89e0f281b49af9bcf4be08f98ecfe8c31 |     
+        i686 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/dea422c23e9e7d342a7edd3b4c005937ec18a99f |     
+         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/28371fdc0425d9cd5b4bc5a36ae968d321732035 |     
+    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/3d862effce894bf407d9fff7f8172870132a42d0 |     
+     riscv64 |                 libmad-0.15.1b | NOK | http://autobuild.buildroot.net/results/65f297a7da43ccc9872e09dad00fdcf513438d40 | ORPH
+        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/f83ccc4bf50f1d3097437e4d347e06bc6c3ee121 |     
+         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/253f73445263bee29998078a02bda54c0a6fc0d7 |     
+         arc |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/ad752abb9110fd7cf8d13220b8e13aab8d5f3a0b |     
+     riscv64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/e1084e6033412237bf998e9b3b1adbada1c2c455 |     
+         arm |               lua-curl-0.3.8-2 | NOK | http://autobuild.buildroot.net/results/f3c0c1aa8f860fddc1312823530ab369b198820c |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/b774df9094d61239775c788e05aba32dfe17faa9 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/4e18dfdbb9830e768971e01c773494be59cf4138 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0144ef5b28c1c067cd0a0cc0a9d2d0da46e3239d |     
+microblazeel |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/26460a310b511d81c1db8af2123748d49e6a57d5 |     
+     sparc64 |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0ed8591f1abb19d5ffe732a0aab2ba25989a6750 |     
+    mips64el |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/6f2406f3a4068e763c49ddc549e847f814cec55c | ORPH
+    mips64el |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/6336c698b4256e54181882a3d03cbc0de040721a | ORPH
+         arm |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/36144fc5e12236f65609338b226836a0a9843e8e |     
+
+
 -- 
-2.19.2
+http://autobuild.buildroot.net
