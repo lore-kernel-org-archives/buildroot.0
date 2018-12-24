@@ -1,81 +1,66 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 24 Dec 2018 14:07:24 +0100
-Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to version 7.0.1
-In-Reply-To: <a2190ac8-6afe-ab55-57f1-daecf7db9b86@gmail.com>
-References: <20181224115041.426-1-valentinkorenblit@gmail.com>
- <a2190ac8-6afe-ab55-57f1-daecf7db9b86@gmail.com>
-Message-ID: <08b99892-fa5c-4a14-a3a3-75e0eeabfad5@gmail.com>
+From: kostap at marvell.com <kostap@marvell.com>
+Date: Mon, 24 Dec 2018 15:19:04 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add support for custom DT name
+Message-ID: <20181224131904.20891-1-kostap@marvell.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Valentin,
+From: Konstantin Porotchkin <kostap@marvell.com>
 
-En priv?:
+Some u-boot default configuration files could be shared between
+targets and used for building images for multiple board types.
+The only difference between such builds is the DTB embedded in
+in the boot image for each specific platform.
+This approach is widely used by Marvell, having the same u-boot
+configuration file for the entire SoC family, but allowing builds
+of multiple target flavors by supplying the device tree name through
+make command parameter DEVICE_TREE=xxx
+This patch adds such capability to uboot module of the buildroot.
+The custome DT name could be  defined by
+BR2_TARGET_UBOOT_CUSTOM_DTS_NAME entry.
 
-Le 24/12/2018 ? 14:01, Romain Naour a ?crit?:
-> Hi Valentin,
-> 
-> Le 24/12/2018 ? 12:50, Valentin Korenblit a ?crit?:
->> llvmpipe tested on Raspberry Pi 3
-> 
-> Thanks for your work and testing on llvm/clang update.
-> 
-> Maybe you can add a small comment about the ABI issue discovered in llvm 7:
-> http://lists.llvm.org/pipermail/llvm-announce/2018-December/000081.html
-> 
-> and:
-> https://bugs.llvm.org/show_bug.cgi?id=39427
-> 
-> Best regards,
-> Romain
-> 
->> ---
->>  package/llvm/llvm.hash | 2 +-
->>  package/llvm/llvm.mk   | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
->> index 200907fc89..531361ae10 100644
->> --- a/package/llvm/llvm.hash
->> +++ b/package/llvm/llvm.hash
->> @@ -1,3 +1,3 @@
->>  # locally calculated
->> -sha256 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222 llvm-7.0.0.src.tar.xz
->> +sha256 a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b llvm-7.0.1.src.tar.xz
->>  sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
->> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
->> index 1f9bd447f5..f33ec11fbf 100644
->> --- a/package/llvm/llvm.mk
->> +++ b/package/llvm/llvm.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  ################################################################################
->>  
+Change-Id: I69e193339b0369a736bdf98491b9914d24a54e17
+Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+---
+ boot/uboot/Config.in | 8 ++++++++
+ boot/uboot/uboot.mk  | 5 +++++
+ 2 files changed, 13 insertions(+)
 
-Tu n'a pas mis ? jour ta branche sur master :p
-
-Il y a un nouveau commentaire dans le .mk
-
-# LLVM and Clang should be version bumped together
-
->> -LLVM_VERSION = 7.0.0
->> +LLVM_VERSION = 7.0.1
-
-Du coup tes patches ne s'appliquent pas :p
-C'est dommage car tu as fait le plus difficile et ta contribution ne peux pas
-?tre merg?e tel quel pour un d?tail.
-
-D?s que tu as 5min, peux tu renvoyer une v2 stp ?
-
-Passe de bonnes f?tes.
-
-Romain
-
->>  LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
->>  LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
->>  LLVM_LICENSE = NCSA
->>
-> 
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index ac6f8bc8c1..c67994229a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -529,4 +529,12 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+ 
+ endif
+ 
++config BR2_TARGET_UBOOT_CUSTOM_DTS_NAME
++	string "Device Tree Source name"
++	help
++	  The value of u-boot DEVICE_TREE for usage with the selected board
++	  configuration file. Allows sharing of the same u-boot configuration
++	  for building images for different platforms/boards.
++
++
+ endif # BR2_TARGET_UBOOT
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index cbdfee6ac3..a0342ec6c8 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -135,6 +135,11 @@ UBOOT_MAKE_OPTS += \
+ 	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+ 
++UBOOT_CUSTOM_DTS_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_NAME))
++ifneq ($(UBOOT_CUSTOM_DTS_NAME),)
++UBOOT_MAKE_OPTS += DEVICE_TREE=$(UBOOT_CUSTOM_DTS_NAME)
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
+ UBOOT_DEPENDENCIES += arm-trusted-firmware
+ UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
+-- 
+2.17.1
