@@ -1,98 +1,56 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 24 Dec 2018 15:08:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/brcm-patchram-plus: Add new
- package
-Message-ID: <20181224130852.28685-1-vadim4j@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 24 Dec 2018 14:01:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to version 7.0.1
+In-Reply-To: <20181224115041.426-1-valentinkorenblit@gmail.com>
+References: <20181224115041.426-1-valentinkorenblit@gmail.com>
+Message-ID: <a2190ac8-6afe-ab55-57f1-daecf7db9b86@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add tool which allows to setup broadcom bluetooth
-device via UART.
+Hi Valentin,
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
+Le 24/12/2018 ? 12:50, Valentin Korenblit a ?crit?:
+> llvmpipe tested on Raspberry Pi 3
 
-v2:
-    1) Add link to the github in Config.in help section [Yann E. Morin]
-    2) Use autoreconf instaed of direct call to autogen.sh [Yann E. Morin]
+Thanks for your work and testing on llvm/clang update.
 
- DEVELOPERS                                         |  3 +++
- package/Config.in                                  |  1 +
- package/brcm-patchram-plus/Config.in               |  7 +++++++
- package/brcm-patchram-plus/brcm-patchram-plus.hash |  2 ++
- package/brcm-patchram-plus/brcm-patchram-plus.mk   | 12 ++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/brcm-patchram-plus/Config.in
- create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.hash
- create mode 100644 package/brcm-patchram-plus/brcm-patchram-plus.mk
+Maybe you can add a small comment about the ABI issue discovered in llvm 7:
+http://lists.llvm.org/pipermail/llvm-announce/2018-December/000081.html
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2d58ea9014..03727e8fa4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2141,6 +2141,9 @@ N:	Tzu-Jung Lee <roylee17@gmail.com>
- F:	package/dropwatch/
- F:	package/tstools/
- 
-+N:	Vadim Kochan <vadim4j@gmail.com>
-+F:	package/brcm-patchram-plus/
-+
- N:	Valentin Korenblit <valentinkorenblit@gmail.com>
- F:	package/clang/
- F:	package/clinfo/
-diff --git a/package/Config.in b/package/Config.in
-index c3e069134e..72a52a0682 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1819,6 +1819,7 @@ menu "Networking applications"
- 	source "package/bmon/Config.in"
- 	source "package/boa/Config.in"
- 	source "package/boinc/Config.in"
-+	source "package/brcm-patchram-plus/Config.in"
- 	source "package/bridge-utils/Config.in"
- 	source "package/bwm-ng/Config.in"
- 	source "package/c-icap/Config.in"
-diff --git a/package/brcm-patchram-plus/Config.in b/package/brcm-patchram-plus/Config.in
-new file mode 100644
-index 0000000000..2742016eb7
---- /dev/null
-+++ b/package/brcm-patchram-plus/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BRCM_PATCHRAM_PLUS
-+	bool "brcm-patchram-plus"
-+	help
-+	  Broadcom utility to flash Bluetooth firmwares, extended with
-+	  per-device Low Power Mode configuration.
-+
-+	  https://github.com/AsteroidOS/brcm-patchram-plus
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-new file mode 100644
-index 0000000000..59263f23d4
---- /dev/null
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-new file mode 100644
-index 0000000000..7ef82f2b15
---- /dev/null
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# brcm-patchram-plus
-+#
-+################################################################################
-+
-+BRCM_PATCHRAM_PLUS_VERSION = 94fb127e614b19a9a95561b8c1a0716e2e1e6293
-+BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
-+BRCM_PATCHRAM_PLUS_LICENSE = APACHE-2.0
-+BRCM_PATCHRAM_PLUS_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-2.14.1
+and:
+https://bugs.llvm.org/show_bug.cgi?id=39427
+
+Best regards,
+Romain
+
+> ---
+>  package/llvm/llvm.hash | 2 +-
+>  package/llvm/llvm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+> index 200907fc89..531361ae10 100644
+> --- a/package/llvm/llvm.hash
+> +++ b/package/llvm/llvm.hash
+> @@ -1,3 +1,3 @@
+>  # locally calculated
+> -sha256 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222 llvm-7.0.0.src.tar.xz
+> +sha256 a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b llvm-7.0.1.src.tar.xz
+>  sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 1f9bd447f5..f33ec11fbf 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LLVM_VERSION = 7.0.0
+> +LLVM_VERSION = 7.0.1
+>  LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+>  LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+>  LLVM_LICENSE = NCSA
+> 
