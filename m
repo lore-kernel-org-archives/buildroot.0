@@ -1,168 +1,157 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 25 Dec 2018 15:26:47 -0600
-Subject: [Buildroot] [PATCH 2/2] boot/systemd-boot: new package
-In-Reply-To: <20181225124818.GK2703@scaer>
-References: <1545176489-17146-1-git-send-email-james.hilliard1@gmail.com>
- <1545176489-17146-2-git-send-email-james.hilliard1@gmail.com>
- <20181224212655.GG2703@scaer>
- <CADvTj4riYDgsZKYbWOi8KnB6PJXmKHpOm_n=rPGup=_z86JjUQ@mail.gmail.com>
- <20181225124818.GK2703@scaer>
-Message-ID: <CADvTj4pvrUm3Om8J0ZuwrsosHL0zeEXeiED+Bow-X1zojEgVYg@mail.gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Wed, 26 Dec 2018 07:56:39 +0800
+Subject: [Buildroot] [PATCH v2 1/2] package/systemd: enable building of
+ systemd-boot
+Message-ID: <1545782200-1312-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 25, 2018 at 6:48 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2018-12-24 16:44 -0600, James Hilliard spake thusly:
-> > On Mon, Dec 24, 2018 at 3:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2018-12-19 07:41 +0800, james.hilliard1 at gmail.com spake thusly:
-> > > > From: James Hilliard <james.hilliard1@gmail.com>
-> [--SNIP--]
-> > > > +     select BR2_PACKAGE_SYSTEMD_BOOT if BR2_INIT_SYSTEMD
-> > > I think it is much more simple if you just do:
-> > >     depends on !BR2_PACKAGE_SYSTEMD
-> [--SNIP--]
-> > > That way, you don't have to need to be schizophrenic about being a
-> > > generic-package or a meson-package. Just be a meson-package.
-> > So I ended up doing things this way so that the systemd-boot package
-> > is used for the image installation regardless of where the bootloader
-> > is compiled.
->
-> Well, I don;t think that is interesting, becasue the duplication is not
-> so big. There are in fact just a very few commands to do.
->
-> Besides, with the way you split the patches, if only the first one is
-> applied, then the boot files are in fact not installed. So that is not
-> good. You need to ensure that the series is functional (and makes sense)
-> even if only partially applied.
-It is actually functional but only when used in a somewhat non-standard
-way, if you don't do the images install step you still have the bootloader
-installed to the target rootfs where it is useful for runtime installs. This
-is a somewhat exotic use case, I do use use runtime installs myself
-but I use systemd-boot for both the image and the runtime install so
-I don't need this flexibility myself although I could see others
-potentially needing it. One potential use case for this would be if
-someone needs to create a runtime installer that will dynamically
-choose to install grub or systemd-boot depending on the target system
-configuration but needs to build the image(for say a USB jump drive) which
-uses grub for booting itself but installs systemd-boot to the internal
-hard disk.
->
-> > > > +     select BR2_PACKAGE_UTIL_LINUX
-> > > > +     select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> > >
-> > > Beware, that libblkid uses fork(), so needs an MMU, so you need to
-> > > propagate that dependency with (the comment is to indicate that it's an
-> > > inherited dependency):
-> > >
-> > >     depends on BR2_USE_MMU # util-linux' libblkid
-> > >
-> > > But since we're only building the boot blobs, can we do away without
-> > > util-linux?
-> > The issue I was running into here is that systemd's meson build system
-> > will not work without util-linux, even though util-linux does not need
-> > to be installed for the bootloader to function.
->
-> I made a very small patch to no longer require that, but it is
-> definietely not upstreamable. See below...
->
-> > > Looking at an impothetical situation (e.g. recovery system, or a
-> > > first-stage initramfs...):
-> > >
-> > >     minimalist system with just busybox,
-> > >   - systemd-boot as bootloader
-> > >
-> > > this would force having util-linux library, even though nothing would
-> > > use them...
-> > Yeah, this isn't ideal, from my discussions with systemd upstream
-> > there would need to be a major refactoring of their meson build system
-> > to allow building systemd-boot without util-linux.
->
-> OK, I found your PR: https://github.com/systemd/systemd/pull/11141
-> Next time you say "I talked with upstream", please add a pointer, so we
-> can go and see the discussion without asking you to explain all of it
-> again. ;-)
->
-> > Is there a way to
-> > satisfy the util-linux requirement without actually installing
-> > util-linux into the target?
->
-> Needs a patch, see below...
->
-> > > > diff --git a/boot/systemd-boot/buildroot.conf b/boot/systemd-boot/buildroot.conf
-> > > > diff --git a/boot/systemd-boot/loader.conf b/boot/systemd-boot/loader.conf
-> > > I see that your previous patch in systemd did not provide thoose two
-> > > files.
-> > I think I just had them in a different place, I'm not actually sure
-> > how useful it is to provide this since most setups will need to
-> > customize them in their post-image.sh. I included them since other
-> > packages like grub and gummiboot also provide defaults.
->
-> As I said previously, I don't think it is a good idea. And as explained
-> above, that means your series is not working is only the first patch is
-> applied.
->
-> [--SNIP--]
-> > > > +SYSTEMD_BOOT_SITE = $(call github,systemd,systemd,v$(SYSTEMD_BOOT_VERSION))
-> > > > +SYSTEMD_BOOT_DL_SUBDIR = systemd
-> > > Yes! :-)
->
-> In fact, it does not work as expected, because the generated tarball is
-> named ''systemd-boot-239.tar.gz instead of 'systemd-239.tar.gz'.
->
-> But it can be made to work by adding an explicit:
->
->     SYSTEMD_BOOT_SOURCE = systemd-$(SYSTEMD_BOOT_VERSION).tar.gz
->
-> [--SNIP--]
-> > > > +ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
-> > > > +define SYSTEMD_BOOT_BUILD_CMDS
-> > > > +     mkdir -p $(@D)/build/src/boot/efi
-> > > > +     cp $(TARGET_DIR)/usr/lib/systemd/boot/efi/systemd-boot$(SYSTEMD_BOOT_IMGARCH).efi \
-> > > > +             $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_IMGARCH).efi
-> > > > +     cp $(TARGET_DIR)/usr/lib/systemd/boot/efi/linux$(SYSTEMD_BOOT_IMGARCH).efi.stub \
-> > > > +             $(@D)/build/src/boot/efi/linux$(SYSTEMD_BOOT_IMGARCH).efi.stub
-> > > > +endef
-> > >
-> > > You can now also get rid of this trick.
-> > So I have things like this so that the bootloader built by the systemd
-> > package can be reused by the systemd-boot package.
->
-> Yeah, I understand why you did that (but you should have said so in the
-> commit log), and I still do not think it is worth the complexity.
->
-> Yet, to prove how much more simple it is if you just accept the little
-> duplication, and because I did not have anything better to do during
-> x-mas, please have a look at the series I prepared, last three commits
-> on:
->     https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/systemd-boot
->
-> I tested building systemd-boot standalone, and it works (not sure it
-> boots, I did not run-test it). I however did not try to test-build the
-> config where it is provided by systemd itself; I'll let it to you as an
-> exercise. ;-)
->
-> Feel free to grab those commits and ammend them further if needed; if
-> not, just grab them and resend them (you can git-fetch from
-> git://git.buildroot.org/~ymorin/git/buildroot).
-Will do, I agree your approach is simpler and easier to understand.
->
-> However, if you do add new features (TPM, more archs), please do so as
-> additional patches, so the whole series is easier to review.
-I'll follow up on that after initial systemd-boot support is merged.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+From: James Hilliard <james.hilliard1@gmail.com>
+
+systemd-boot is the integration of gummiboot into systemd, when
+gummiboot is no longer maintained [0].
+
+Add an option to build systemd-boot as part of the systemd build.
+
+Install the boot files, that can serve as a template for the user
+to tweak for their system.
+
+[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add missing depends on i386 || x86_64
+  - add missing dependency to gnu-efi
+  - add missing boot files (they will be shared with standalone
+    systemd-boot later)
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/systemd/Config.in                 | 28 +++++++++++++++++++++++++
+ package/systemd/boot-files/buildroot.conf |  3 +++
+ package/systemd/boot-files/loader.conf    |  2 ++
+ package/systemd/systemd.mk                | 34 +++++++++++++++++++++++++++++--
+ 4 files changed, 65 insertions(+), 2 deletions(-)
+ create mode 100644 package/systemd/boot-files/buildroot.conf
+ create mode 100644 package/systemd/boot-files/loader.conf
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 25f322e..50d09b3 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -77,6 +77,34 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
++config BR2_PACKAGE_SYSTEMD_BOOT
++	bool "systemd-boot"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_GNU_EFI
++	help
++	  systemd-boot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
++
++	  systemd-boot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
++
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using systemd-boot: the instructions are
++	  exactly the same, except that the systemd-boot configuration
++	  files will be located in /loader/ inside the EFI partition.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++
++config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
++	string
++	depends on BR2_PACKAGE_SYSTEMD_BOOT
++	default "ia32"  if BR2_i386
++	default "x64"   if BR2_x86_64
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
+new file mode 100644
+index 0000000..16d4d85
+--- /dev/null
++++ b/package/systemd/boot-files/buildroot.conf
+@@ -0,0 +1,3 @@
++title	Buildroot
++linux	/bzImage
++options	root=/dev/sda2 rootwait console=tty1
+diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
+new file mode 100644
+index 0000000..93b77b8
+--- /dev/null
++++ b/package/systemd/boot-files/loader.conf
+@@ -0,0 +1,2 @@
++timeout 3
++default buildroot
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e53f0b6..2822d44 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -24,8 +24,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dman=false \
+ 	-Dima=false \
+ 	-Dlibcryptsetup=false \
+-	-Defi=false \
+-	-Dgnu-efi=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
+@@ -332,6 +330,34 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
++SYSTEMD_INSTALL_IMAGES = YES
++SYSTEMD_DEPENDENCIES += gnu-efi
++SYSTEMD_CONF_OPTS += \
++	-Defi=true \
++	-Dgnu-efi=true \
++	-Defi-cc=$(TARGET_CC) \
++	-Defi-ld=$(TARGET_LD) \
++	-Defi-libdir=$(STAGING_DIR)/usr/lib \
++	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
++	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
++
++SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
++define SYSTEMD_INSTALL_BOOT_FILES
++	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
++		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
++	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
++		$(BINARIES_DIR)/efi-part/startup.nsh
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
++		$(BINARIES_DIR)/efi-part/loader/loader.conf
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
++		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
++endef
++
++else
++SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++endif # BR2_PACKAGE_SYSTEMD_BOOT == y
++
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+@@ -356,6 +382,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
++define SYSTEMD_INSTALL_IMAGES_CMDS
++	$(SYSTEMD_INSTALL_BOOT_FILES)
++endef
++
+ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
+-- 
+2.7.4
