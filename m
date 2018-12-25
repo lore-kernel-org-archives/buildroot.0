@@ -1,38 +1,35 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 25 Dec 2018 09:00:08 +0100
-Subject: [Buildroot] [PATCH 1/2] webkitgtk: remove an old workaround
-Message-ID: <20181225080009.25780-1-francois.perrad@gadz.org>
+Date: Tue, 25 Dec 2018 09:00:09 +0100
+Subject: [Buildroot] [PATCH 2/2] webkitgtk: fix host dependencies
+In-Reply-To: <20181225080009.25780-1-francois.perrad@gadz.org>
+References: <20181225080009.25780-1-francois.perrad@gadz.org>
+Message-ID: <20181225080009.25780-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fixed upstream by https://trac.webkit.org/changeset/220007/webkit
+python 2.7 is required by the cmake stuff.
+bison & flex are not used in the webkitgtk tree.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/webkitgtk/webkitgtk.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 4cfddd1eb..e03fd969e 100644
+index e03fd969e..80daadd15 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -39,13 +39,9 @@ WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_WEB_AUDIO=ON
- WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-base gst1-plugins-good
- else
--# ENABLE_MEDIA_STREAM has to be explicitly disabled because there is a missing
--# feature dependency in the WebKitGTK+ CMake files. This can be removed once
--# https://bugs.webkit.org/show_bug.cgi?id=174940 makes it into a release.
- WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_VIDEO=OFF \
--	-DENABLE_WEB_AUDIO=OFF \
--	-DENABLE_MEDIA_STREAM=OFF
-+	-DENABLE_WEB_AUDIO=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_WEBDRIVER),y)
+@@ -12,7 +12,7 @@ WEBKITGTK_LICENSE = LGPL-2.1+, BSD-2-Clause
+ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+-WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
++WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+ 	libtasn1 libxml2 libxslt sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
 -- 
 2.17.1
