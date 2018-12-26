@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Dec 2018 09:52:27 +0100
-Subject: [Buildroot] [PATCH 2/5 v5] package/meson: fix CPU familly
+Date: Wed, 26 Dec 2018 09:52:29 +0100
+Subject: [Buildroot] [PATCH 4/5 v5] package/systemd: enable building of
+ systemd-boot
 In-Reply-To: <cover.1545814334.git.yann.morin.1998@free.fr>
 References: <cover.1545814334.git.yann.morin.1998@free.fr>
-Message-ID: <ab061e6fba04bad42265bf795b717de583f370db.1545814334.git.yann.morin.1998@free.fr>
+Message-ID: <ee29899e3557cda33763768cfb580f094c54723a.1545814334.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +13,147 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-As explained in [0], meson recognises a certain set of CPU famillies,
-whose names slightly differ from those we know them as.
+systemd-boot is the integration of gummiboot into systemd, when
+gummiboot is no longer maintained [0].
 
-If we don't pass the proper cpu_familly, meson whines:
-    WARNING: Unknown CPU family 'i686', please report this at [...]
+Add an option to build systemd-boot as part of the systemd build.
 
-Subsequently, packages that use that to decide on what they should build
-and how they should build it, fail to build. That is the case for the
-upcoming systemd-boot, for example.
+Install the boot files, that can serve as a template for the user
+to tweak for their system.
 
-Fix that by using the list propvided by the meson documentation [0].
-
-[0] https://mesonbuild.com/Reference-tables.html#cpu-families
+[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 [yann.morin.1998 at free.fr:
-  - split in its own patch
-  - imnprove commit log
+  - add missing depends on i386 || x86_64
+  - add missing dependency to gnu-efi
+  - add missing boot files (they will be shared with standalone
+    systemd-boot later)
 ]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/meson/meson.mk | 31 ++++++++++++++++++++++++++++++-
- 1 file changed, 30 insertions(+), 1 deletion(-)
+ package/systemd/Config.in                 | 28 +++++++++++++++++++++++++
+ package/systemd/boot-files/buildroot.conf |  3 +++
+ package/systemd/boot-files/loader.conf    |  2 ++
+ package/systemd/systemd.mk                | 34 +++++++++++++++++++++++++++++--
+ 4 files changed, 65 insertions(+), 2 deletions(-)
+ create mode 100644 package/systemd/boot-files/buildroot.conf
+ create mode 100644 package/systemd/boot-files/loader.conf
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e1675c21b8..1113bf0e29 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -16,6 +16,35 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
- HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
- HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 25f322e8f3..50d09b34a5 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -77,6 +77,34 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
  
-+# https://mesonbuild.com/Reference-tables.html#cpu-families
-+ifeq ($(BR2_arcle)$(BR2_arceb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arc
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arm
-+else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-+HOST_MESON_TARGET_CPU_FAMILY = aarch64
-+else ifeq ($(BR2_i386),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86
-+else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips
-+else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips64
-+else ifeq ($(BR2_powerpc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc
-+else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc64
-+else ifeq ($(BR2_riscv),y)
-+HOST_MESON_TARGET_CPU_FAMILY = riscv64
-+else ifeq ($(BR2_sparc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc
-+else ifeq ($(BR2_sparc64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc64
-+else ifeq ($(BR2_x86_64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86_64
-+else
-+HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
-+endif
++config BR2_PACKAGE_SYSTEMD_BOOT
++	bool "systemd-boot"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_GNU_EFI
++	help
++	  systemd-boot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
 +
- HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
- HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
- HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-@@ -23,7 +52,7 @@ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARG
- define HOST_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
- 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-+	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
- 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
- 	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
++	  systemd-boot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
++
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using systemd-boot: the instructions are
++	  exactly the same, except that the systemd-boot configuration
++	  files will be located in /loader/ inside the EFI partition.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++
++config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
++	string
++	depends on BR2_PACKAGE_SYSTEMD_BOOT
++	default "ia32"  if BR2_i386
++	default "x64"   if BR2_x86_64
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
+new file mode 100644
+index 0000000000..16d4d85f4a
+--- /dev/null
++++ b/package/systemd/boot-files/buildroot.conf
+@@ -0,0 +1,3 @@
++title	Buildroot
++linux	/bzImage
++options	root=/dev/sda2 rootwait console=tty1
+diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
+new file mode 100644
+index 0000000000..93b77b8f93
+--- /dev/null
++++ b/package/systemd/boot-files/loader.conf
+@@ -0,0 +1,2 @@
++timeout 3
++default buildroot
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e53f0b699a..2822d4423c 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -24,8 +24,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dman=false \
+ 	-Dima=false \
+ 	-Dlibcryptsetup=false \
+-	-Defi=false \
+-	-Dgnu-efi=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
+@@ -332,6 +330,34 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
++SYSTEMD_INSTALL_IMAGES = YES
++SYSTEMD_DEPENDENCIES += gnu-efi
++SYSTEMD_CONF_OPTS += \
++	-Defi=true \
++	-Dgnu-efi=true \
++	-Defi-cc=$(TARGET_CC) \
++	-Defi-ld=$(TARGET_LD) \
++	-Defi-libdir=$(STAGING_DIR)/usr/lib \
++	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
++	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
++
++SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
++define SYSTEMD_INSTALL_BOOT_FILES
++	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
++		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
++	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
++		$(BINARIES_DIR)/efi-part/startup.nsh
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
++		$(BINARIES_DIR)/efi-part/loader/loader.conf
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
++		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
++endef
++
++else
++SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++endif # BR2_PACKAGE_SYSTEMD_BOOT == y
++
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+@@ -356,6 +382,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
++define SYSTEMD_INSTALL_IMAGES_CMDS
++	$(SYSTEMD_INSTALL_BOOT_FILES)
++endef
++
+ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
 -- 
 2.14.1
