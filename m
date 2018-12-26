@@ -1,65 +1,74 @@
-From: Kostya Porotchkin <kostap@marvell.com>
-Date: Wed, 26 Dec 2018 10:59:22 +0000
-Subject: [Buildroot] [EXT] Re: [PATCH] boot/mv-ddr-marvell: support
- custom GIT settings
-In-Reply-To: <20181226113153.696dc370@windsurf.home>
-References: <20181224131814.20804-1-kostap@marvell.com>
- <20181224185742.GF2703@scaer>
- <SN2PR18MB07361F184E2286FF9C3EB1B0CAB40@SN2PR18MB0736.namprd18.prod.outlook.com>
- <20181226113153.696dc370@windsurf.home>
-Message-ID: <SN2PR18MB0736CDC273B172000ABF67B7CAB50@SN2PR18MB0736.namprd18.prod.outlook.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 26 Dec 2018 05:16:41 -0600
+Subject: [Buildroot] [PATCH v3 1/1] package/meson: fix cpu_family format
+In-Reply-To: <20181226085059.GB14286@scaer>
+References: <1545002062-20630-1-git-send-email-james.hilliard1@gmail.com>
+ <20181225185624.GL2703@scaer> <20181226080049.GA14286@scaer>
+ <CADvTj4oa7NxYjQTaaTQUUbwn8WoeWizf5foq5ZtZ-Hw=B50tdg@mail.gmail.com>
+ <20181226085059.GB14286@scaer>
+Message-ID: <CADvTj4r1Mjqzwajkof1ULgGv+uXwk3TXPoT5CW6Y7vK0Wrfi4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas,
-
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Wednesday, December 26, 2018 12:32
-> To: Kostya Porotchkin <kostap@marvell.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>; buildroot at buildroot.org
-> Subject: Re: [Buildroot] [EXT] Re: [PATCH] boot/mv-ddr-marvell: support
-> custom GIT settings
-> 
-> Hello Kostya,
-> 
-> On Tue, 25 Dec 2018 09:09:26 +0000, Kostya Porotchkin wrote:
-> 
-> > > As I see you're an @marvell.com, do you need that to use an internal
-> > > repository during development? If so, then why can't you just use
-> > > the OVERRIDE_SRCDIR mechanism instead?
-> > [KP] It is more than just a local repository. I have to allow CI server to
-> automatically build test and release images from the current internal GIT
-> trees.
-> 
-> Sorry, but this is not a valid justification. With this justification, we would
-> have to add version selection to *all* Buildroot packages.
-> Indeed, one might want to do CI testing on any random user-space library or
-> application. So if your use-case for wanting version selection in mv-ddr-
-> marvell is CI testing, then we won't accept this patch.
-[KP] Understand. We can keep this change private if you think others will not benefit from it.
-> 
-> However, if people porting ATF/U-Boot to new Marvell-based platforms
-> need to have their own custom version of mv-ddr-marvell, then having
-> version selection can be accepted because it puts this package in the same
-> situation as uboot, linux or atf, where we do offer version selection.
-[KP] I am trying to find a reason for customer to use different mv-ddr releases.
-It may happen if a customer wants to use older ATF base, for instance v1.3 instead of v1.5 or v2.0.
-In such case the DDR API in latest mv-ddr release will not be compatible with it and the build will fail.
-Another reason is a customer willing to use latest fixes in mv-ddr GIT prior to the official release drop.
-For instance, the new V7 Espressobin boards were released with DDR4 chips, while our official SW only supported DDR3.
-So the new board customers were forced to use outdated SW from vendor builds that supported such memory type.
-
-Regards
-Kosta
-> 
-> Best regards,
-> 
-> Thomas
+On Wed, Dec 26, 2018 at 2:51 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2018-12-26 02:34 -0600, James Hilliard spake thusly:
+> > On Wed, Dec 26, 2018 at 2:00 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2018-12-25 19:56 +0100, Yann E. MORIN spake thusly:
+> > > > On 2018-12-17 07:14 +0800, james.hilliard1 at gmail.com spake thusly:
+> > > > > From: James Hilliard <james.hilliard1@gmail.com>
+> > > > >
+> > > > > Meson expects the cpu_family to be in a specific format for
+> > > > > cross compilation, otherwise packages that use cpu_family
+> > > > > detection may fail to build.
+> > > >
+> > > > As explained in:
+> > > >     https://mesonbuild.com/Reference-tables.html#cpu-families
+> > > >
+> > > > > We also need to set needs_exe_wrapper = true to ensure that
+> > > > > meson won't try and execute test binaries.
+> > > >
+> > > > As explained in:
+> > > >     https://mesonbuild.com/Cross-compilation.html
+> > > >
+> > > > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > >
+> > > Well, now I think this should have really been two patches, like Thomas
+> > > initially suggested:
+> > >
+> > >  1- prevent meson from ever thinking it can run what it builds, and so
+> > >     add needs_exe_wrapper on its own, because we may already have that
+> > >     situation today (e.g. x86_64 targetting x86_64)
+> > We actually never get that issue right now AFAICT because we are
+> > setting the wrong cpu_family so the host target comparison always
+> > fails to match.
+>
+> But for x86_64, we currently do pass the correct value 'x86_64', so the
+> comparison does not fail when both the host and target are x86_64.
+Ah, you're right, it's not an issue currently for x86_64 in that case
+since the tests do succeed for x86_64(I tested this just now), the
+failure happens for 32 bit x86 since meson incorrectly thinks it can
+run x86 test binaries on x86_64. So fixing cpu_family without the exe
+wrapper fix probably only causes regular x86 builds to fail. The x86
+cpu_family was definitely incorrect so that's why the comparison would
+fail and the build would succeed.
+>
+> And since meson only uses the CPU familly name and the 'system' name to
+> decide, and that the 'system' name is linux in both cases, then we do
+> have the issue currently, even if it never got triggered yet.
+>
+> Regards,
+> Yann E. MORIN.
+>
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
