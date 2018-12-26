@@ -1,45 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Dec 2018 10:33:15 +0100
-Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
-In-Reply-To: <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
-References: <cover.1545814334.git.yann.morin.1998@free.fr>
- <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
-Message-ID: <20181226093315.GD14286@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Dec 2018 11:31:53 +0100
+Subject: [Buildroot] [EXT] Re: [PATCH] boot/mv-ddr-marvell: support
+ custom GIT settings
+In-Reply-To: <SN2PR18MB07361F184E2286FF9C3EB1B0CAB40@SN2PR18MB0736.namprd18.prod.outlook.com>
+References: <20181224131814.20804-1-kostap@marvell.com>
+ <20181224185742.GF2703@scaer>
+ <SN2PR18MB07361F184E2286FF9C3EB1B0CAB40@SN2PR18MB0736.namprd18.prod.outlook.com>
+Message-ID: <20181226113153.696dc370@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello Kostya,
 
-On 2018-12-26 09:52 +0100, Yann E. MORIN spake thusly:
-[--SNIP--]
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 50d09b34a5..a99358fc7b 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -101,9 +101,9 @@ config BR2_PACKAGE_SYSTEMD_BOOT
->  
->  config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
->  	string
-> -	depends on BR2_PACKAGE_SYSTEMD_BOOT
->  	default "ia32"  if BR2_i386
->  	default "x64"   if BR2_x86_64
-> +	depends on BR2_PACKAGE_SYSTEMD_BOOT
+On Tue, 25 Dec 2018 09:09:26 +0000, Kostya Porotchkin wrote:
 
-Woops... I git-commit-fixup'ed the wrong commit...
+> > As I see you're an @marvell.com, do you need that to use an internal
+> > repository during development? If so, then why can't you just use the
+> > OVERRIDE_SRCDIR mechanism instead?  
+> [KP] It is more than just a local repository. I have to allow CI server to automatically build test and release images from the current internal GIT trees.
 
-I'll wait for other comments before respinning, unless the proper fixup
-is done when applying; just say.
+Sorry, but this is not a valid justification. With this justification,
+we would have to add version selection to *all* Buildroot packages.
+Indeed, one might want to do CI testing on any random user-space
+library or application. So if your use-case for wanting version
+selection in mv-ddr-marvell is CI testing, then we won't accept this
+patch.
 
-Regards,
-Yann E. MORIN.
+However, if people porting ATF/U-Boot to new Marvell-based platforms
+need to have their own custom version of mv-ddr-marvell, then having
+version selection can be accepted because it puts this package in the
+same situation as uboot, linux or atf, where we do offer version
+selection.
 
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
