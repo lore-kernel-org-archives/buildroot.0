@@ -1,13 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 17:40:01 +0100
-Subject: [Buildroot] [PATCH next v6 10/10] package/pkg-kconfig: handle
- KCONFIG_DEPENDENCIES with per-package directories
-In-Reply-To: <a8dd7196-7542-24ee-7ca2-44318d33d626@andin.de>
+Date: Wed, 26 Dec 2018 18:34:22 +0100
+Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
+ SDK and target
+In-Reply-To: <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
 References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-11-thomas.petazzoni@bootlin.com>
- <64e9a50c-97d4-c90a-fac5-eae91cb8ae8e@andin.de>
- <a8dd7196-7542-24ee-7ca2-44318d33d626@andin.de>
-Message-ID: <20181226174001.54c5e7d8@windsurf.home>
+ <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
+ <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+ <20181205173103.1eb30a7b@windsurf>
+ <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
+ <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
+Message-ID: <20181226183422.76c6ff6c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,61 +18,87 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 6 Dec 2018 15:07:53 +0100, Andreas Naumann wrote:
+Arnout, Yann, see below some discussion where your input might be
+useful.
 
-> >> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> >> index d6c95b897e..bf43632adc 100644
-> >> --- a/package/pkg-kconfig.mk
-> >> +++ b/package/pkg-kconfig.mk
-> >> @@ -113,6 +113,7 @@ endef
-> >> ? # Since the file could be a defconfig file it needs to be expanded to a
-> >> ? # full .config first.
-> >> ? $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) 
-> >> $$($(2)_KCONFIG_FRAGMENT_FILES)
-> >> +??? $$(call prepare-per-package-folder,$$($(2)_KCONFIG_DEPENDENCIES))  
+On Thu, 6 Dec 2018 11:21:25 +0100, Andreas Naumann wrote:
+
+> Just to make sure I just did the above using your ppsh-v6 branch with 
+> the wandboard_defconfig. The only additional change was to use the 
+> external linaro toolchain. After 'make'
+>    $ readelf -d output/host/sbin/mkfs.ext3
+> shows
+>    0x000000000000001d (RUNPATH)            Bibliothek runpath: 
+> [/local/gsrc/buildroot.upstream/output/per-package/host-e2fsprogs/host/lib]
 > 
-> just realized that this doesn't match the function definition in 
-> pkg-utils.mk in this series (prepare-per-package-directories), thus is 
-> not executed at all. With that fixed ccache is, as part of toolchain, 
-> properly prepared and I no longer see the issue below.
+> which is already unexpected, shouldn't it show .../output/host/lib?
+> After 'make prepare-sdk'
+>    $ readelf -d output/host/sbin/mkfs.ext3
+> shows
+>    0x000000000000001d (RUNPATH)            Bibliothek runpath: []
 
-This will certainly not fix the U-Boot issue you reported. It will fix
-the issue for linux because LINUX_KCONFIG_DEPENDENCIES contains
-"toolchain", and toolchain depends on host-ccache.
+OK, so I investigated this issue, and now I understand where it comes
+from, but I'm not yet sure how to fix it properly.
 
-However, UBOOT_KCONFIG_DEPENDENCIES does not contain toolchain, and
-therefore does not depend on host-ccache.
+Basically, *without* per-package directory enabled, the RPATH of
+binaries looks like this:
 
-The issue you're seeing already exists today, without per-package
-directory support. Try the current master, with a completely clean
-build tree. Use the following defconfig:
+  Library rpath: [/home/thomas/projets/buildroot/output/host/lib]
 
-BR2_arm=y
-BR2_CCACHE=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mvebu_mcbin-88f8040"
+then, support/scripts/fix-rpath calls patchelf with the following
+invocation:
 
-And run just "make uboot-menuconfig". It will fail due to ccache being
-missing. This bug is not related to per-package directory support.
+  /home/thomas/projets/buildroot/output/host/bin/patchelf --make-rpath-relative /home/thomas/projets/buildroot/output/host --relative-to-file /home/thomas/projets/buildroot/output/host/sbin/mke2fs
 
-The fix you proposed in your previous e-mail, i.e using HOSTCC_NOCCACHE
-looks good, but I believe we need a more generic solution to this
-problem, because all other kconfig packages will be affected as well
-(except linux, because it has "toolchain" in its
-<pkg>_KCONFIG_DEPENDENCIES) variable.
+This works fine, and causes the resulting binary to have the following
+RPATH:
+
+  Library runpath: [$ORIGIN/../lib]
+
+You can see that the original "Library rpath", which
+is /home/thomas/projets/buildroot/output/host/lib is located *inside*
+the ROOTDIR passed as the --make-rpath-relative
+option: /home/thomas/projets/buildroot/output/host.
+
+Now, with per-package directory enabled, the RPATH of binaries when
+building looks like this:
+
+  Library rpath: [/home/thomas/projets/buildroot/output/per-package/host-e2fsprogs/host/lib]
+
+So it is no longer within the ROOTDIR passed as patchelf's
+--make-rpath-relative argument.
+
+The logic used by patchelf is explained in
+package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch:
+
+====
+
+RPATHDIR starts with "$ORIGIN":
+    The original build-system already took care of setting a relative
+    RPATH, resolve it and test if it's valid (does exist)
+
+RPATHDIR starts with ROOTDIR:
+    The original build-system added some absolute RPATH (absolute on
+    the build machine). Test if it's valid (does exist).
+
+ROOTDIR/RPATHDIR exists:
+    The original build-system already took care of setting an absolute
+    RPATH (absolute in the final rootfs), resolve it and test if it's
+    valid (does exist).
+
+RPATHDIR points somewhere else:
+    (can be anywhere: build trees, staging tree, host location,
+    non-existing location, etc.). Just discard such a path.
+
+====
+
+So, without per-package directory, we fall in case (2) above.
+
+With per-package directory, we fall in case (4) above, and therefore
+the RPATH is discarded.
+
+At this point, I am not sure at which level and how the issue should be
+fixed. Needs some thought. Input/ideas welcome.
 
 Best regards,
 
