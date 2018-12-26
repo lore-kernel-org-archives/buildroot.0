@@ -1,40 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Dec 2018 22:30:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix swig build error
- when using cmake 3.12
-In-Reply-To: <20181226221840.0181c8ec@windsurf>
-References: <20181223195714.17155-1-mark.corbin@embecosm.com>
- <20181223212923.GB24194@scaer> <20181226221840.0181c8ec@windsurf>
-Message-ID: <20181226213048.GJ14286@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Dec 2018 22:31:41 +0100
+Subject: [Buildroot] [PATCH v3 2/3] doc/manual: document the waf
+ packages may need to select host-waf
+In-Reply-To: <20181223171950.3979-2-casantos@datacom.com.br>
+References: <20181223171950.3979-1-casantos@datacom.com.br>
+ <20181223171950.3979-2-casantos@datacom.com.br>
+Message-ID: <20181226223141.5ba89c26@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Carlos,
 
-On 2018-12-26 22:18 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 23 Dec 2018 22:29:23 +0100, Yann E. MORIN wrote:
-> > We've another user on IRC, reporting issues with cmake-3.13. Should we
-> > now black=list cmake 3.12 and above, and always build our own?
+Minor nit: title should use the prefix docs/manual.
+
+On Sun, 23 Dec 2018 15:19:49 -0200, Carlos Santos wrote:
+> Now that waf has a blind Config.in.host we can require that packages
+> setting <PKG>_NEEDS_EXTERNAL_WAF to YES slso select host-waf.
 > 
-> I really don't like blacklisting recent versions of tools. So if we
-> were to blacklist CMake 3.13 and newer, I'd like to see a proper
-> explanation of what the problem is and why blacklisting CMake 3.13 and
-> newer is the only reasonable solution.
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> ---
+>  docs/manual/adding-packages-waf.txt | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
+> index 43b557c070..f38c3a6f55 100644
+> --- a/docs/manual/adding-packages-waf.txt
+> +++ b/docs/manual/adding-packages-waf.txt
+> @@ -64,7 +64,10 @@ also be defined.
+>    Buildroot to use the bundled +waf+ executable. If set to +NO+, the
+>    default, then Buildroot will use the waf executable provided in the
+>    package source tree; if set to +YES+, then Buidlroot will download,
+> -  install waf as a host tool and use it to build the package.
+> +  install waf as a host tool and use it to build the package. Packages
+> +  that need the host waf tool must select +BR2_PACKAGE_HOST_WAF+ in
 
-100% agreed.
+Perhaps: "Packages in this situation must select..."
 
-Let's put this at rest until we have proper explanation and reproducer.
+> +  their Config.in. It is not necessary to add host-waf to
+> +  +LIBFOO_DEPENDENCIES+, since this is done atomatically.
 
-Regards,
-Yann E. MORIN.
+atomatically -> automatically.
 
+(Note: I would have fixed these minors nits myself when applying, but I
+sent some other questions/comments on PATCH 1/3 anyway.)
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
