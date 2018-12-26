@@ -1,35 +1,62 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Wed, 26 Dec 2018 18:22:26 +0000
-Subject: [Buildroot] [PATCH 0/2] core/sdk: fix relative symlinks in
- generated tarball (branch yem/sdk)
-In-Reply-To: <CA+1k=2ay7v0G0pjwB4PTTR-6mH3_FueDiFi8D3rhbcZa35zq+g@mail.gmail.com>
-References: <cover.1544206190.git.yann.morin.1998@free.fr>
- <df37a271-7012-b8d2-fc4d-edfa66a0e163@andin.de>
- <CA+1k=2ZqHeLif6866SYX+hqRwatGiL1e-hZz-zdFuy_Ysfy+8g@mail.gmail.com>
- <20181222083141.GU24194@scaer>
- <CA+1k=2ay7v0G0pjwB4PTTR-6mH3_FueDiFi8D3rhbcZa35zq+g@mail.gmail.com>
-Message-ID: <1545848546.7501.7.camel@impinj.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Dec 2018 19:58:52 +0100
+Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
+ SDK and target
+In-Reply-To: <20181226183422.76c6ff6c@windsurf.home>
+References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
+ <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
+ <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
+ <20181205173103.1eb30a7b@windsurf>
+ <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
+ <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
+ <20181226183422.76c6ff6c@windsurf.home>
+Message-ID: <20181226185852.GI14286@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2018-12-22 at 11:21 -0700, Joel Carlson wrote:
-> On Sat, Dec 22, 2018 at 1:31 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > 
-> > 
-> > An other approach, would be that we whietelist certain PATHs from our
-> > SDK. Afterall, there are things we do not care about in the SDK. For
-> > example, most executables in staging/{,usr/}{,s}bin are not needed. We
-> > only really need libs and headers, so we could just ignore anything
-> > that is not in staging/{lib,usr/lib,usr/include}/
+Thomas, All,
 
-With per-package staging, could this be done before the per-package
-staging areas are combined?  The idea would be to reduce differences
-between the stage in buildroot and the stage when using an SDK.  Every
-difference is a possible source of problems, even if it is something
-that we are not supposed to care about.
+On 2018-12-26 18:34 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 6 Dec 2018 11:21:25 +0100, Andreas Naumann wrote:
+> > Just to make sure I just did the above using your ppsh-v6 branch with 
+> > the wandboard_defconfig. The only additional change was to use the 
+> > external linaro toolchain. After 'make'
+> >    $ readelf -d output/host/sbin/mkfs.ext3
+> > shows
+> >    0x000000000000001d (RUNPATH)            Bibliothek runpath: 
+> > [/local/gsrc/buildroot.upstream/output/per-package/host-e2fsprogs/host/lib]
+[--SNIP--]
+> OK, so I investigated this issue, and now I understand where it comes
+> from, but I'm not yet sure how to fix it properly.
+[--SNIP--]
+> Now, with per-package directory enabled, the RPATH of binaries when
+> building looks like this:
+>   Library rpath: [/home/thomas/projets/buildroot/output/per-package/host-e2fsprogs/host/lib]
+> 
+> So it is no longer within the ROOTDIR passed as patchelf's
+> --make-rpath-relative argument.
+[--SNIP--]
+> At this point, I am not sure at which level and how the issue should be
+> fixed. Needs some thought. Input/ideas welcome.
 
-Could this be taken further, and everything not in the stage whitelist
-be deleted?  It would be nice if the SDK were smaller.
+Well, one obvious suggestion would be to run patchelf after the
+installation of each package, and scan the package-file-0list to limit
+ourselves to the files the current package just installed (to avoid
+re-patchelf-ing what has already been patchelf-ed).
+
+That way, we know at that time what the host dir is, and we can tweak it
+appropriately.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
