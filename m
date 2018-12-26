@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 22:21:35 +0100
-Subject: [Buildroot] [PATCH 1/2 v3] core: make symlinks relative when
- preparing the SDK
-In-Reply-To: <9f4825baa7a475b4d8f262925e1ff652b31cd6fb.1545491919.git.yann.morin.1998@free.fr>
-References: <cover.1545491919.git.yann.morin.1998@free.fr>
- <9f4825baa7a475b4d8f262925e1ff652b31cd6fb.1545491919.git.yann.morin.1998@free.fr>
-Message-ID: <20181226222135.4ef03363@windsurf>
+Date: Wed, 26 Dec 2018 22:23:29 +0100
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+Message-ID: <20181226222329.18046c1c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Dec 2018 16:18:51 +0100, Yann E. MORIN wrote:
-> The SDK is supposed to be relocatable, so symlinks must not be
-> absolute.
+Thanks for working on this!
+
+On Wed, 26 Dec 2018 09:52:30 +0100, Yann E. MORIN wrote:
+> From: James Hilliard <james.hilliard1@gmail.com>
 > 
-> Add a new helper script, that replaces all absolute symlinks with
-> relative ones.
+> systemd-boot is the integration of gummiboot into systemd, and gummiboot
+> is no longer maintained [0]. However, it is still interesting to use it
+> as a simple, stand-alone bootloader.
+> 
+> Since systemd-boot is really part of systemd, when systemd is enabled
+> (as an init system), we rely on it to build the boot blobs, and
+> systemd-boot (this package) is not available.
+> 
+> Now, when systemd is not enabled, systemd-boot (this package) will
+> actually build the boot blobs, and only that. No userspace tool is
+> built.
+> 
+> To avoid duplication, we just symlink the systemd patches as-is. We just
+> need to add a specific patch, that just relaxes the dependency checks,
+> since we're only interested in building the boot blobs.
+> 
+> [0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-This script is really not trivial. This additional complexity raises a
-simple question: how many packages install such absolute symlinks?
-Should we instead detect such absolute symlinks, and use that to fix
-the problematic packages ?
+Do we have a serious valid use-case for wanting to use systemd-boot
+without systemd? This adds a fair bit of complexity, so I'd like to be
+sure of what we're doing here.
 
-I am not saying at all that the approach of fixing all symlinks is
-wrong, but I'd like to see a proper discussion on the balance between
-fixing the problematic packages vs. taking the "brutal" approach of
-this new fix-symlinks script.
+An example of the complexity is with the symlinks to the patches. Every
+time a patch is added/removed in package/systemd/, one should remember
+to adjust the symlinks in boot/systemd-boot/. This is something that
+can very easily be missed.
+
+So it would be good to make sure we have a really solid use-case for
+adding this complexity.
 
 Best regards,
 
