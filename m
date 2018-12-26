@@ -1,10 +1,10 @@
 From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 26 Dec 2018 23:31:11 +0100
-Subject: [Buildroot] [PATCH 8/9] board/freescale/common/imx: Add support for
- i.MX8X
+Date: Wed, 26 Dec 2018 23:31:09 +0100
+Subject: [Buildroot] [PATCH 6/9] package/imx-mkimage: Bump to
+ imx_4.14.62_1.0.0_beta
 In-Reply-To: <20181226223112.24456-1-nerv@dawncrow.de>
 References: <20181226223112.24456-1-nerv@dawncrow.de>
-Message-ID: <20181226223112.24456-8-nerv@dawncrow.de>
+Message-ID: <20181226223112.24456-6-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,98 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- .../common/imx/genimage.cfg.template_imx8     |  2 +-
- .../common/imx/imx8-bootloader-prepare.sh     | 20 ++++++++++++++-----
- board/freescale/common/imx/post-image.sh      | 13 ++++++++++++
- 3 files changed, 29 insertions(+), 6 deletions(-)
+ package/imx-mkimage/imx-mkimage.hash | 2 +-
+ package/imx-mkimage/imx-mkimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index 2f8842f8e0..bd5f6cdc73 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -23,7 +23,7 @@ image sdcard.img {
-   partition imx-boot {
-     in-partition-table = "no"
-     image = "imx8-boot-sd.bin"
--    offset = 33K
-+    offset = %IMXOFFSET%
-   }
+diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+index e1cbdd973c..ceaac64b1c 100644
+--- a/package/imx-mkimage/imx-mkimage.hash
++++ b/package/imx-mkimage/imx-mkimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 bc79e11cfbde303e200287fa6624028c8ce5344f8a35ed179b3fe217d74155da  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
++sha256 17e22d0127879bb9f6f3aae82b22d02e0372578dc7a4f6c71647fce75c632ee2  imx-mkimage-rel_imx_4.14.62_1.0.0_beta.tar.gz
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index 6fd6aa39b0..cde4fefcea 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-   partition boot {
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index cc12666ae6..e98e93a857 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -7,12 +7,22 @@ main ()
- 		echo "ERROR: couldn't find dtb: $UBOOT_DTB"
- 		exit 1
- 	fi
--	cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
--	BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
--	${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
--	rm -f ${BINARIES_DIR}/u-boot.its
- 
--	${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
-+		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		rm -f ${BINARIES_DIR}/u-boot.its
-+
-+		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	else
-+		${HOST_DIR}/bin/mkimage_imx8 -commit > ${BINARIES_DIR}/mkimg.commit
-+		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
-+		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
-+		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
-+
-+		${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	fi
- 
- 	exit $?
- }
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 6590beda3e..12a5bea73b 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -34,6 +34,8 @@ genimage_type()
- {
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_spl"
- 	else
-@@ -41,6 +43,15 @@ genimage_type()
- 	fi
- }
- 
-+imx_offset()
-+{
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+		echo "33K"
-+	else
-+		echo "32K"
-+	fi
-+}
-+
- uboot_image()
- {
- 	if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
-@@ -53,11 +64,13 @@ uboot_image()
- main()
- {
- 	local FILES="$(dtb_list) $(linux_image)"
-+	local IMXOFFSET="$(imx_offset)"
- 	local UBOOTBIN="$(uboot_image)"
- 	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
- 	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
- 	sed -e "s/%FILES%/${FILES}/" \
-+		-e "s/%IMXOFFSET%/${IMXOFFSET}/" \
- 		-e "s/%UBOOTBIN%/${UBOOTBIN}/" \
- 		board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
- 
+-IMX_MKIMAGE_VERSION = rel_imx_4.9.51_8mq_ga
++IMX_MKIMAGE_VERSION = rel_imx_4.14.62_1.0.0_beta
+ IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+ IMX_MKIMAGE_SITE_METHOD = git
+ IMX_MKIMAGE_LICENSE = GPL-2.0+
 -- 
 2.17.1
