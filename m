@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 15:11:04 +0100
-Subject: [Buildroot] [git commit] package/webkitgtk: fix host dependencies
-Message-ID: <20181226140646.5C1B7838EE@busybox.osuosl.org>
+Date: Wed, 26 Dec 2018 15:11:46 +0100
+Subject: [Buildroot] [PATCH 1/2] webkitgtk: remove an old workaround
+In-Reply-To: <20181225080009.25780-1-francois.perrad@gadz.org>
+References: <20181225080009.25780-1-francois.perrad@gadz.org>
+Message-ID: <20181226151146.72c66c07@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=188da35eda0dc4fc39feec37ff17b0403daeb529
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-python 2.7 is required by the cmake stuff.
-bison & flex are not used in the webkitgtk tree.
+On Tue, 25 Dec 2018 09:00:08 +0100, Francois Perrad wrote:
+> fixed upstream by https://trac.webkit.org/changeset/220007/webkit
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/webkitgtk/webkitgtk.mk | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/webkitgtk/webkitgtk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, both patches applied, with Adrian Acked-by. Thanks!
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 9a1b392bb5..152f42bd7c 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -12,7 +12,7 @@ WEBKITGTK_LICENSE = LGPL-2.1+, BSD-2-Clause
- WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
- 	Source/WebCore/LICENSE-LGPL-2.1
--WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
-+WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libtasn1 libxml2 libxslt sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
