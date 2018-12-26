@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 21:24:29 +0100
-Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
- 16.1.0
-In-Reply-To: <20181223212205.1115-1-peter@korsgaard.com>
-References: <20181223212205.1115-1-peter@korsgaard.com>
-Message-ID: <20181226212429.6e289e7d@windsurf.home>
+Date: Wed, 26 Dec 2018 21:24:43 +0100
+Subject: [Buildroot] [PATCH] package/supertux: bump to version 0.6.0
+In-Reply-To: <20181224113401.13309-1-romain.naour@gmail.com>
+References: <20181224113401.13309-1-romain.naour@gmail.com>
+Message-ID: <20181226212443.18489d9c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Dec 2018 22:22:05 +0100, Peter Korsgaard wrote:
-> Fixes the following security issues:
+On Mon, 24 Dec 2018 12:34:01 +0100, Romain Naour wrote:
+> * Bump the minimum version of gcc since supertux require the C++14
+>   standard.
+> * Add boost locale dependency since it's now checked by the build
+>   system.
+> * Add libpng dependency for savepng feature.
+> * Add freetype dependency for the support for right-to-left languages.
+> * Disable ENABLE_OPENGLES2 for now, it can be enabled by a follow up
+>   patch.
+> * We don't add SDL_ttf dependency since it's included in the supertux
+>   source code.
+> * There is curently no libraqm package in Buildroot.
+> * Remove the two sed command from SUPERTUX_FIX_ALTIVEC_ISSUE since the
+>   CMake code has changed. Keep the one for tinygettext.
 > 
-> - ASTERISK-28127: Buffer overflow for DNS SRV/NAPTR records
->   https://issues.asterisk.org/jira/browse/ASTERISK-28127
+> See:
+> https://www.supertux.org/news/2018/12/23/0.6.0
 > 
-> - ASTERISK-28013: res_http_websocket: Crash when reading HTTP Upgrade
->   requests
->   https://issues.asterisk.org/jira/browse/ASTERISK-28013
-> 
-> For more details, see the announcement:
-> https://www.asterisk.org/downloads/asterisk-news/asterisk-1610-now-available
-> 
-> Asterisk now also contains m4 code needed to autoreconf under
-> third-party/jansson, so add that to _AUTORECONF_OPTS.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/asterisk/asterisk.hash | 2 +-
->  package/asterisk/asterisk.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/supertux/Config.in     |  9 ++++++---
+>  package/supertux/supertux.hash |  2 +-
+>  package/supertux/supertux.mk   | 12 ++++++------
+>  3 files changed, 13 insertions(+), 10 deletions(-)
 
 Applied to master, thanks.
 
