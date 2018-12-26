@@ -1,59 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 22:23:29 +0100
-Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
-In-Reply-To: <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
-References: <cover.1545814334.git.yann.morin.1998@free.fr>
- <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
-Message-ID: <20181226222329.18046c1c@windsurf>
+Date: Wed, 26 Dec 2018 22:23:57 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
+ 3.5.0
+Message-ID: <20181226211934.D6F94838D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=689082581446b3a4afce81b433ce7bda89707fd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for working on this!
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Wed, 26 Dec 2018 09:52:30 +0100, Yann E. MORIN wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> systemd-boot is the integration of gummiboot into systemd, and gummiboot
-> is no longer maintained [0]. However, it is still interesting to use it
-> as a simple, stand-alone bootloader.
-> 
-> Since systemd-boot is really part of systemd, when systemd is enabled
-> (as an init system), we rely on it to build the boot blobs, and
-> systemd-boot (this package) is not available.
-> 
-> Now, when systemd is not enabled, systemd-boot (this package) will
-> actually build the boot blobs, and only that. No userspace tool is
-> built.
-> 
-> To avoid duplication, we just symlink the systemd patches as-is. We just
-> need to add a specific patch, that just relaxes the dependency checks,
-> since we're only interested in building the boot blobs.
-> 
-> [0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Do we have a serious valid use-case for wanting to use systemd-boot
-without systemd? This adds a fair bit of complexity, so I'd like to be
-sure of what we're doing here.
-
-An example of the complexity is with the symlinks to the patches. Every
-time a patch is added/removed in package/systemd/, one should remember
-to adjust the symlinks in boot/systemd-boot/. This is something that
-can very easily be missed.
-
-So it would be good to make sure we have a really solid use-case for
-adding this complexity.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index 8f158af3cb..c76f49b4a4 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5	80a6e0c6c452d511d1d37755d6f0995a  aiohttp-3.4.4.tar.gz
+-sha256	51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa  aiohttp-3.4.4.tar.gz
++md5	b692d5c602458957a0ef2df92ac48705  aiohttp-3.5.0.tar.gz
++sha256	1d00d58cf2665ce61bd637790988accca609aa3a898bb45747b6369830c0de28  aiohttp-3.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index df8bdfb4b2..c17daf6a27 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_VERSION = 3.4.4
++PYTHON_AIOHTTP_VERSION = 3.5.0
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/70/27/6098b4b60a3302a97f8ec97eb85d42f55a2fa904da4a369235a8e3b84352
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e4/a4/48e455139e03dc1555f904cf3843c9228c2a922f61512eb4d2482e04135c
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
