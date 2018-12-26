@@ -1,10 +1,10 @@
 From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 26 Dec 2018 23:31:10 +0100
-Subject: [Buildroot] [PATCH 7/9] package/imx-mkimage: Add support for all
- other i.MX8 SOCs
+Date: Wed, 26 Dec 2018 23:31:05 +0100
+Subject: [Buildroot] [PATCH 2/9] package/freescale-imx/firmware-imx: Fix
+ typos
 In-Reply-To: <20181226223112.24456-1-nerv@dawncrow.de>
 References: <20181226223112.24456-1-nerv@dawncrow.de>
-Message-ID: <20181226223112.24456-7-nerv@dawncrow.de>
+Message-ID: <20181226223112.24456-2-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/imx-mkimage/imx-mkimage.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index cde4fefcea..36e25c2a7c 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -11,15 +11,25 @@ IMX_MKIMAGE_LICENSE = GPL-2.0+
- IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
- HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 0a503d7a66..240985297c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -35,7 +35,7 @@ endef
  
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
- define HOST_IMX_MKIMAGE_BUILD_CMDS
--	# Currently this only supports iMX8M. When more hardware is available
--	# this needs to be selectable based on iMX8-version (iMX8M,iMXQ etc).
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
- endef
-+else
-+define HOST_IMX_MKIMAGE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
-+endef
-+endif
- 
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
- define HOST_IMX_MKIMAGE_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
- 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin/mkimage_fit_atf.sh
- endef
-+else
-+define HOST_IMX_MKIMAGE_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
-+endef
-+endif
- 
- $(eval $(host-generic-package))
+ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
+-	# lpddr4_pmu_train_fw.bin isneeded when generating imx-boot-imx8mqevk-sd.bin
++	# lpddr4_pmu_train_fw.bin is needed when generating imx-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,1d)
+ 	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,2d)
 -- 
 2.17.1
