@@ -1,130 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Dec 2018 22:55:21 +0100
-Subject: [Buildroot] [PATCH v3 1/3] package/waf: add a blind
- Config.in.host
-In-Reply-To: <20181226223005.71dca29a@windsurf>
-References: <20181223171950.3979-1-casantos@datacom.com.br>
- <20181226223005.71dca29a@windsurf>
-Message-ID: <20181226215521.GL14286@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 26 Dec 2018 16:07:33 -0600
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <20181226214100.GK14286@scaer>
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+ <20181226222329.18046c1c@windsurf> <20181226214100.GK14286@scaer>
+Message-ID: <CADvTj4rPZqjx_iNHF7Q8DKa63P+OOX=v-YuhCfUZMR4VOa-zsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Carlos, All,
-
-On 2018-12-26 22:30 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 23 Dec 2018 15:19:48 -0200, Carlos Santos wrote:
-> > The plan for the future is:
-> > 
-> >  * All host packages have a Config.in.host option.
-> > 
-> >  * The host packages that are only build dependencies of other packages
-> >    have a blind Config.in.host option
-> > 
-> >  * The host packages that are useful by themselves continue to have a
-> >    visible Config.in.host option.
-> > 
-> > host-waf gets a blind Config.in.host, because it exists only to build
-> > Waf-based packages that set <PKG>_NEEDS_EXTERNAL_WAF to YES.
-> > 
-> > A help text is included to document the package, only, since it is not
-> > shown in the configuration menu.
-> > 
-> > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> > ---
-> > Changes v1->v2:
-> >   - Explain the motivation in the commit message
-> 
-> In fact the commit message doesn't explain the actual motivation. What
-> prompted you to add a blind Config.in.host option for waf
-> specifically ? Is this just a part of "let's start adding blind option
-> for all host packages", or is there a specific issue with host-waf that
-> this blind Config.in.host option will allow to solve ?
-> 
-> I.e: I am all in favor of this change, but I'm just curious to
-> understand why you did it in the first place.
-
-Well, I am not really happy with that, though: do we really plan on
-having packages really select all the host tools they need?
-
-If so, do we really envision autotools-based packages selecting
-host-autoconf, host-automake, host-libtool? And then packages that use
-host-pkgconf you should also select it...
-
-Also, what about host-cmake, which is conditionally built, but for which
-we do not have the info in kconfig? (well, we can argue we'd have to do
-like we do for host-gcc, but still). Oh, and host-tar, host-flex,
-host-bison, and so on... :-/
-
-So, no, I'm not happy with that direction...
-
-    config BR2_PACKAGE_FOO
-        bool "foo"
-        select BR2_PACKAGE_HOST_AUTOCONF
-        select BR2_PACKAGE_HOST_AUTOMAKE
-        select BR2_PACKAGE_HOST_LIBTOOL
-        select BR2_PACKAGE_MAYBE_HOST_TAR
-        select BR2_PACKAGE_MAYBE_HOST_FLEX_FOR_KCONFIG
-        select BR2_PACKAGE_MAYBE_HOST_BISON_FOR_KCONFIG
-        select BR2_PACKAGE_HOST_PKGCONF
-
-Unles we're planning on hiding that away into meta-config, like:
-
-    config BR2_PACKAGE_FOO
-        bool "foo"
-        select BR2_AUTOTOOLS_PACKAGE # mimick $(eval $(autotools-package))
-        select BR2_PACKAGE_HOST_PKGCONF_BECAUSE_IT_S_NOT_MANDATORY
-
-And still, the optionally-required host packages like tar, flex et al.
-are not covered...
-
-Meh... :-(
-
-> > diff --git a/package/Config.in.host b/package/Config.in.host
-> > index 16b474fc9d..3644436fe3 100644
-> > --- a/package/Config.in.host
-> > +++ b/package/Config.in.host
-> > @@ -64,6 +64,7 @@ menu "Host utilities"
-> >  	source "package/uboot-tools/Config.in.host"
-> >  	source "package/util-linux/Config.in.host"
-> >  	source "package/vboot-utils/Config.in.host"
-> > +	source "package/waf/Config.in.host"
-> >  	source "package/xorriso/Config.in.host"
-> >  	source "package/zip/Config.in.host"
-> >  	source "package/zstd/Config.in.host"
-> 
-> I'm not sure it's really nice to include all the host packages
-> Config.in.host files inside the "Host utilities" menu. In practice,
-> it's a blind option so it doesn't matter much, but it will clutter a
-> lot this list, making it difficult to see which one is there to be
-> really visible in menuconfig, and which one is here just so that the
-> kconfig machinery knows about all those blind options.
-> 
-> I think I would prefer a new list, at the bottom of
-> package/Config.in.host, outside of the Host utilities menu.
-> 
-> Let's see what Arnout/Peter/Yann have to say about this.
-
-If we have to have it, then indeed, let's at least move it away of the
-user-selectable ones, into its own section, yes.
-
-Regards,
-Yann E. MORIN.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Wed, Dec 26, 2018 at 3:41 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Thomas, All,
+>
+> Adding Peter in the loop; see at the end.
+>
+> On 2018-12-26 22:23 +0100, Thomas Petazzoni spake thusly:
+> > On Wed, 26 Dec 2018 09:52:30 +0100, Yann E. MORIN wrote:
+> > > From: James Hilliard <james.hilliard1@gmail.com>
+> > >
+> > > systemd-boot is the integration of gummiboot into systemd, and gummiboot
+> > > is no longer maintained [0]. However, it is still interesting to use it
+> > > as a simple, stand-alone bootloader.
+> > >
+> > > Since systemd-boot is really part of systemd, when systemd is enabled
+> > > (as an init system), we rely on it to build the boot blobs, and
+> > > systemd-boot (this package) is not available.
+> > >
+> > > Now, when systemd is not enabled, systemd-boot (this package) will
+> > > actually build the boot blobs, and only that. No userspace tool is
+> > > built.
+> > >
+> > > To avoid duplication, we just symlink the systemd patches as-is. We just
+> > > need to add a specific patch, that just relaxes the dependency checks,
+> > > since we're only interested in building the boot blobs.
+> > >
+> > > [0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >
+> > Do we have a serious valid use-case for wanting to use systemd-boot
+> > without systemd? This adds a fair bit of complexity, so I'd like to be
+> > sure of what we're doing here.
+> >
+> > An example of the complexity is with the symlinks to the patches. Every
+> > time a patch is added/removed in package/systemd/, one should remember
+> > to adjust the symlinks in boot/systemd-boot/. This is something that
+> > can very easily be missed.
+>
+> And I now even dropped all of them completely, with the v240 bump, so we
+> no longer whare any patch with systemd. There is only one patch that is
+> now needed to build systemd-boot standalone. We still need to investigate
+> why James was not able to build it, though. James, care to give my series
+> a new spin, please? (I've repushed the branch just now)
+Did a fresh compilation run, I get a failure here
+https://github.com/systemd/systemd/blob/v239/meson.build#L278
+meson.build:293:8: ERROR:  Unknown compiler(s):
+[['/home/buildroot/buildroot/output/host/bin/i586-buildroot-linux-uclibc-g++']]
+>
+> So, the only complexity that remains is the sharing of the boot files
+> and their install commands.
+>
+> That, and the little trick to share the source file.
+>
+> > So it would be good to make sure we have a really solid use-case for
+> > adding this complexity.
+>
+> Peter, care to elaborate your position, since you were advocating also
+> for it, earlier? ;-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
