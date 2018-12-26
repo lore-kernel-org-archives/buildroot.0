@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 26 Dec 2018 16:26:31 -0500
-Subject: [Buildroot] [PATCH v2 1/4] janus-gateway: bump version to v0.5.0
-Message-ID: <20181226212634.89240-1-aduskett@gmail.com>
+Date: Wed, 26 Dec 2018 16:26:32 -0500
+Subject: [Buildroot] [PATCH v2 2/4] libcpprestsdk: bump version to v2.10.8
+In-Reply-To: <20181226212634.89240-1-aduskett@gmail.com>
+References: <20181226212634.89240-1-aduskett@gmail.com>
+Message-ID: <20181226212634.89240-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +12,46 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+In adition:
+  - Add -DCPPREST_EXCLUDE_WEBSOCKETS=ON as a default CONF_OPT as websocketspp
+    is not checked as a dependency.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v2:
   - Added missing Signed off by line.
 
- package/janus-gateway/janus-gateway.hash | 2 +-
- package/janus-gateway/janus-gateway.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcpprestsdk/libcpprestsdk.hash | 2 +-
+ package/libcpprestsdk/libcpprestsdk.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index f84ed8b6db..9b13e0f0fc 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+index b8c5d5430e..9a8155f354 100644
+--- a/package/libcpprestsdk/libcpprestsdk.hash
++++ b/package/libcpprestsdk/libcpprestsdk.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 35cbbd5e7b7067e3a0b5ba221ea845814e5b59c733302f88fea80bcf98ce416f janus-gateway-v0.2.6.tar.gz
-+sha256 c9c3b741a5d9f956845d5094c211690178cc0d630a7b23b870437c88a7e4ed3b janus-gateway-v0.5.0.tar.gz
- sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 261fc25202..cea06b754e 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256 cf4d57bdcc1ce53f1d228156620dd87af95cbff109d85c81e8be01d0bb58fd25	libcpprestsdk-v2.10.5.tar.gz
++sha256 fd79d34b3fad4622ff58480f57ecdf374061c5bdbd83e317019422575c820443	libcpprestsdk-v2.10.8.tar.gz
+ sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index 14526e7de4..e5500d8c7f 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = v0.2.6
-+JANUS_GATEWAY_VERSION = v0.5.0
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-LIBCPPRESTSDK_VERSION = v2.10.5
++LIBCPPRESTSDK_VERSION = v2.10.8
+ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+-LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
++LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
+ 
+ $(eval $(cmake-package))
 -- 
 2.19.2
