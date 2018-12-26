@@ -1,94 +1,153 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 08:00:16 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-12-25
-Message-ID: <20181226070016.77CDB20A60@mail.bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Dec 2018 09:00:49 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/meson: fix cpu_family format
+In-Reply-To: <20181225185624.GL2703@scaer>
+References: <1545002062-20630-1-git-send-email-james.hilliard1@gmail.com>
+ <20181225185624.GL2703@scaer>
+Message-ID: <20181226080049.GA14286@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+James, All,
 
-Build statistics for 2018-12-25
-===============================
+On 2018-12-25 19:56 +0100, Yann E. MORIN spake thusly:
+> On 2018-12-17 07:14 +0800, james.hilliard1 at gmail.com spake thusly:
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> > 
+> > Meson expects the cpu_family to be in a specific format for
+> > cross compilation, otherwise packages that use cpu_family
+> > detection may fail to build.
+> 
+> As explained in:
+>     https://mesonbuild.com/Reference-tables.html#cpu-families
+> 
+> > We also need to set needs_exe_wrapper = true to ensure that
+> > meson won't try and execute test binaries.
+> 
+> As explained in:
+>     https://mesonbuild.com/Cross-compilation.html
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  10 |   0 |   0 |  10 |
-   2018.11.x |  14 |   0 |   0 |  14 |
-      master | 110 |  49 |   0 | 159 |
+Well, now I think this should have really been two patches, like Thomas
+initially suggested:
 
-Results for branch 'master'
-===========================
+ 1- prevent meson from ever thinking it can run what it builds, and so
+    add needs_exe_wrapper on its own, because we may already have that
+    situation today (e.g. x86_64 targetting x86_64)
 
-Classification of failures by reason
-------------------------------------
+ 2- add the CPU fix on a second patch, which can safely be applied now
+    that meson will never try to run what it builds.
 
-        glib-networking-2.50.0 | 26
-                  linuxptp-2.0 | 6 
-                    php-7.2.13 | 5 
-                   netsurf-3.8 | 4 
-                  libssh-0.8.5 | 2 
-             stress-ng-0.09.47 | 2 
-                 dmalloc-5.5.2 | 1 
-                  ffmpeg-3.4.5 | 1 
-       gst-plugins-bad-0.10.23 | 1 
-          libcdaudio-0.99.12p2 | 1 
+Besides, you forgot, in your systemd-boot series, to specify that this
+patch was required first. But I'll reply further in that series...
 
+Regards,
+Yann E. MORIN.
 
-Detail of failures
-------------------
-
-    mips64el |                  dmalloc-5.5.2 | NOK | http://autobuild.buildroot.net/results/784bc57d732781826b65c459a7ff7f6e5c40fe7f | ORPH
-         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/f99520debe238a10ebb4f825c59ab98d0b386334 |     
-      mipsel |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/f6557bd9d7207a02b43fbbab31372d7d3c023bfb |     
-    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/20d0ae5f1281716c12d533eb716b5256196ef70a |     
-      mipsel |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/76a159549b79070c8aed353392c2ee51368de9cc |     
-    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/d440cf0719c55557cc0dc197f8a062b1dba928b8 |     
-        i586 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/71246acd98b276758c74aa694b9765d092f61bec |     
-    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/82b16fa7890e8985f640061f722ae786a4164f84 |     
-         arc |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/6d9b19e31cf442c82fbb6821d754e9a7dfa3b34c |     
-         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/5cddb016b25faaa5720eece6f37f57b494a18403 |     
-      x86_64 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/519bdbdf7b83499b160da5c71ce2c3ff4cc70e9f |     
-         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/ed501b468b46428c54c15c9c0fc82bdb8061570d |     
-      x86_64 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/d29b84da880c4741ff85545bc670c8d90790129d |     
-      xtensa |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/8c3e2f6f4afc6981c87da7a3a08b33bf7296f325 |     
-      x86_64 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/d44e044bc9024b06bdb431fc3b607b68af9dac5d |     
-      mipsel |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/21f58feda64a0329d5b88f34cf9d1b98537ff3d6 |     
-         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/46067e490fbb6d0318e66bf1499ccf03d4e59174 |     
-    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/88985dfb23b8e3aca1c06c08bcdbeea16330a288 |     
-       nios2 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/31239424a305678cf3b232afa8164cad06a9f99f |     
-  aarch64_be |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/c844d57b0c5a329a5fd5ef1c6c5fc16eef868e97 |     
-     powerpc |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/1c0feee9eb0bf68ddfcfbc1e4804226adfb6f5e2 |     
-     powerpc |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/aa97b792ba00d006bfbccce3a26ac4d654ab33a0 |     
-      mipsel |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/983c29dda7a46859251e0668a057c9e98f99ac1b |     
-         arm |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/db6de3eb866f171bef96f4407079bdbe5600589a |     
-    mips64el |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/bc5a99bf3008ffc48da6ea8c0c21052f71fc9374 |     
-      x86_64 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/bfcfd49b84604243a6fcdf01f9022aa59b5439c6 |     
-      xtensa |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/941f176bb57cfa027383a3052dab61edc0243da1 |     
-     aarch64 |         glib-networking-2.50.0 | NOK | http://autobuild.buildroot.net/results/a94910a01657cacb69c8bcf60e67a951b66db126 |     
-      xtensa |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/2af4919ce076798cf05dd4dd372b56d6d27bafb3 | ORPH
-microblazeel |           libcdaudio-0.99.12p2 | NOK | http://autobuild.buildroot.net/results/5d417c45f11cf2d28b22affd36637fce60977a02 | ORPH
-     aarch64 |                   libssh-0.8.5 | NOK | http://autobuild.buildroot.net/results/2adf3ec8e94fcf97a6d600cc63e8744269a20631 |     
-      mipsel |                   libssh-0.8.5 | NOK | http://autobuild.buildroot.net/results/465a8af89372333cd76d6e0a4931c1dae6778389 |     
-      xtensa |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/7363c99be24aef9932d9172d2c78fede0a418deb |     
-         arc |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/6fe3f190d2d2a26f9f409b688fb9c8b122ad3dfb |     
-         arc |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/92c1fa5934c41cefee5c2a366a192d7db4507d31 |     
-         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/3616b4b5d0c061a18ac78f4d7cf8baaba96778d8 |     
-         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/92f35221c66b2b9d1a67a2019a8ba5437df80cec |     
-microblazeel |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/081de386d75ab6c7d86ad2297ef0a649a86226e4 |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/8bc2c20ede400a215dde39120244196abcdbe291 |     
-         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/2c2967cc41d98e10b6d697ece5ed776d08ca966a |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/480e3849b8e8c57340dec216006d1bd3b0ad130c |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/4bc924de51aee4f7ac7b0c5ff80538b26576eaa6 |     
-    mips64el |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/51543da1cca8a9ff66be9eeed7412e9f47966ed5 | ORPH
-         arc |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/bc1c1439d37ec0a0c28032813010f44969030682 | ORPH
-         arm |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/aade2bee055682c860031323671e5b1056438006 | ORPH
-    mips64el |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/9e1e4ff2259f8eed3ff3d5e624776c8d5f2aa026 | ORPH
-    mips64el |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/078e301a8d9816fc14efe6c27df6002139759140 | ORPH
-     powerpc |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/eb1b9e6848db9fc5c97998e8e60a55857afab600 |     
-    mips64el |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/c7e08e9856ace89fe0d497d3fcbbace5965a6c05 |     
-
+> Regards,
+> Yann E. MORIN.
+> 
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v1 -> v2:
+> >   - change riscv to 64 bit
+> > 
+> > Changes v2 -> v3:
+> >   - combine HOST_MESON_TARGET_CPU_FAMILY archs
+> > ---
+> >  package/meson/cross-compilation.conf.in |  1 +
+> >  package/meson/meson.mk                  | 31 ++++++++++++++++++++++++++++++-
+> >  2 files changed, 31 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> > index 0eec740..fc8e27f 100644
+> > --- a/package/meson/cross-compilation.conf.in
+> > +++ b/package/meson/cross-compilation.conf.in
+> > @@ -11,6 +11,7 @@ strip = '@TARGET_CROSS at strip'
+> >  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> >  
+> >  [properties]
+> > +needs_exe_wrapper = true
+> >  c_args = [@TARGET_CFLAGS@]
+> >  c_link_args = [@TARGET_LDFLAGS@]
+> >  cpp_args = [@TARGET_CXXFLAGS@]
+> > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> > index e1675c2..1113bf0 100644
+> > --- a/package/meson/meson.mk
+> > +++ b/package/meson/meson.mk
+> > @@ -16,6 +16,35 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
+> >  HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+> >  HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+> >  
+> > +# https://mesonbuild.com/Reference-tables.html#cpu-families
+> > +ifeq ($(BR2_arcle)$(BR2_arceb),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = arc
+> > +else ifeq ($(BR2_arm)$(BR2_armeb),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = arm
+> > +else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = aarch64
+> > +else ifeq ($(BR2_i386),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = x86
+> > +else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = mips
+> > +else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = mips64
+> > +else ifeq ($(BR2_powerpc),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = ppc
+> > +else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = ppc64
+> > +else ifeq ($(BR2_riscv),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = riscv64
+> > +else ifeq ($(BR2_sparc),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = sparc
+> > +else ifeq ($(BR2_sparc64),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = sparc64
+> > +else ifeq ($(BR2_x86_64),y)
+> > +HOST_MESON_TARGET_CPU_FAMILY = x86_64
+> > +else
+> > +HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+> > +endif
+> > +
+> >  HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+> >  HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+> >  HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+> > @@ -23,7 +52,7 @@ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARG
+> >  define HOST_MESON_INSTALL_CROSS_CONF
+> >  	mkdir -p $(HOST_DIR)/etc/meson
+> >  	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+> > -	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+> > +	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+> >  	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+> >  	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> >  	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+> > -- 
+> > 2.7.4
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-http://autobuild.buildroot.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
