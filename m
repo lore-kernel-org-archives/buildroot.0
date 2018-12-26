@@ -1,44 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 11:31:53 +0100
+From: Kostya Porotchkin <kostap@marvell.com>
+Date: Wed, 26 Dec 2018 10:59:22 +0000
 Subject: [Buildroot] [EXT] Re: [PATCH] boot/mv-ddr-marvell: support
  custom GIT settings
-In-Reply-To: <SN2PR18MB07361F184E2286FF9C3EB1B0CAB40@SN2PR18MB0736.namprd18.prod.outlook.com>
+In-Reply-To: <20181226113153.696dc370@windsurf.home>
 References: <20181224131814.20804-1-kostap@marvell.com>
  <20181224185742.GF2703@scaer>
  <SN2PR18MB07361F184E2286FF9C3EB1B0CAB40@SN2PR18MB0736.namprd18.prod.outlook.com>
-Message-ID: <20181226113153.696dc370@windsurf.home>
+ <20181226113153.696dc370@windsurf.home>
+Message-ID: <SN2PR18MB0736CDC273B172000ABF67B7CAB50@SN2PR18MB0736.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kostya,
+Hi, Thomas,
 
-On Tue, 25 Dec 2018 09:09:26 +0000, Kostya Porotchkin wrote:
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Wednesday, December 26, 2018 12:32
+> To: Kostya Porotchkin <kostap@marvell.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>; buildroot at buildroot.org
+> Subject: Re: [Buildroot] [EXT] Re: [PATCH] boot/mv-ddr-marvell: support
+> custom GIT settings
+> 
+> Hello Kostya,
+> 
+> On Tue, 25 Dec 2018 09:09:26 +0000, Kostya Porotchkin wrote:
+> 
+> > > As I see you're an @marvell.com, do you need that to use an internal
+> > > repository during development? If so, then why can't you just use
+> > > the OVERRIDE_SRCDIR mechanism instead?
+> > [KP] It is more than just a local repository. I have to allow CI server to
+> automatically build test and release images from the current internal GIT
+> trees.
+> 
+> Sorry, but this is not a valid justification. With this justification, we would
+> have to add version selection to *all* Buildroot packages.
+> Indeed, one might want to do CI testing on any random user-space library or
+> application. So if your use-case for wanting version selection in mv-ddr-
+> marvell is CI testing, then we won't accept this patch.
+[KP] Understand. We can keep this change private if you think others will not benefit from it.
+> 
+> However, if people porting ATF/U-Boot to new Marvell-based platforms
+> need to have their own custom version of mv-ddr-marvell, then having
+> version selection can be accepted because it puts this package in the same
+> situation as uboot, linux or atf, where we do offer version selection.
+[KP] I am trying to find a reason for customer to use different mv-ddr releases.
+It may happen if a customer wants to use older ATF base, for instance v1.3 instead of v1.5 or v2.0.
+In such case the DDR API in latest mv-ddr release will not be compatible with it and the build will fail.
+Another reason is a customer willing to use latest fixes in mv-ddr GIT prior to the official release drop.
+For instance, the new V7 Espressobin boards were released with DDR4 chips, while our official SW only supported DDR3.
+So the new board customers were forced to use outdated SW from vendor builds that supported such memory type.
 
-> > As I see you're an @marvell.com, do you need that to use an internal
-> > repository during development? If so, then why can't you just use the
-> > OVERRIDE_SRCDIR mechanism instead?  
-> [KP] It is more than just a local repository. I have to allow CI server to automatically build test and release images from the current internal GIT trees.
-
-Sorry, but this is not a valid justification. With this justification,
-we would have to add version selection to *all* Buildroot packages.
-Indeed, one might want to do CI testing on any random user-space
-library or application. So if your use-case for wanting version
-selection in mv-ddr-marvell is CI testing, then we won't accept this
-patch.
-
-However, if people porting ATF/U-Boot to new Marvell-based platforms
-need to have their own custom version of mv-ddr-marvell, then having
-version selection can be accepted because it puts this package in the
-same situation as uboot, linux or atf, where we do offer version
-selection.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards
+Kosta
+> 
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
