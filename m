@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Dec 2018 22:17:45 +0100
+Date: Wed, 26 Dec 2018 22:18:40 +0100
 Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix swig build error
  when using cmake 3.12
-In-Reply-To: <20181223195714.17155-1-mark.corbin@embecosm.com>
+In-Reply-To: <20181223212923.GB24194@scaer>
 References: <20181223195714.17155-1-mark.corbin@embecosm.com>
-Message-ID: <20181226221745.577c2fa9@windsurf>
+ <20181223212923.GB24194@scaer>
+Message-ID: <20181226221840.0181c8ec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 23 Dec 2018 19:57:14 +0000, Mark Corbin wrote:
-> The build fails with 'Unable to find' swig.swg and python.swg when
-> using cmake version 3.12.
-> 
-> This commit adds a patch from upstream libftdi.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/cc54fec0cd6e35e99dde2f43e0eb28b9d628cd19
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  package/libftdi1/0004-cmake-find-swig.patch | 26 +++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libftdi1/0004-cmake-find-swig.patch
+On Sun, 23 Dec 2018 22:29:23 +0100, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> We've another user on IRC, reporting issues with cmake-3.13. Should we
+> now black=list cmake 3.12 and above, and always build our own?
+
+I really don't like blacklisting recent versions of tools. So if we
+were to blacklist CMake 3.13 and newer, I'd like to see a proper
+explanation of what the problem is and why blacklisting CMake 3.13 and
+newer is the only reasonable solution.
+
+Best regards,
 
 Thomas
 -- 
