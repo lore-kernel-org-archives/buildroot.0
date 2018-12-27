@@ -1,53 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 27 Dec 2018 16:41:57 +0100
-Subject: [Buildroot] [git commit] package/libcpprestsdk: bump version to
- v2.10.8
-Message-ID: <20181227153814.3736183C21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sngrep: bump version to v1.4.6
+Message-ID: <20181227153814.45CB9815A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f0f8bf66d3b247e4f442acfef67a80fc6e1fef3
+commit: https://git.buildroot.net/buildroot/commit/?id=9913e093f06a6a1256d0608d408cabb4b0040c33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In adition:
-  - Add -DCPPREST_EXCLUDE_WEBSOCKETS=ON as a default CONF_OPT as websocketspp
-    is not checked as a dependency.
+Remove upstreamed patch.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcpprestsdk/libcpprestsdk.hash | 2 +-
- package/libcpprestsdk/libcpprestsdk.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Fix-building-against-LibreSSL.patch       | 78 ----------------------
+ package/sngrep/sngrep.hash                         |  6 +-
+ package/sngrep/sngrep.mk                           |  2 +-
+ 3 files changed, 4 insertions(+), 82 deletions(-)
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
-index b8c5d5430e..9a8155f354 100644
---- a/package/libcpprestsdk/libcpprestsdk.hash
-+++ b/package/libcpprestsdk/libcpprestsdk.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 cf4d57bdcc1ce53f1d228156620dd87af95cbff109d85c81e8be01d0bb58fd25	libcpprestsdk-v2.10.5.tar.gz
-+sha256 fd79d34b3fad4622ff58480f57ecdf374061c5bdbd83e317019422575c820443	libcpprestsdk-v2.10.8.tar.gz
- sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 14526e7de4..e5500d8c7f 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/sngrep/0001-Fix-building-against-LibreSSL.patch b/package/sngrep/0001-Fix-building-against-LibreSSL.patch
+deleted file mode 100644
+index 311f0b3d52..0000000000
+--- a/package/sngrep/0001-Fix-building-against-LibreSSL.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 05d110ef57e9647b84c9656e746f72a76ea8c758 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Tue, 6 Feb 2018 12:47:43 -0500
+-Subject: [PATCH] Fix building against LibreSSL
+-
+-LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
+-changes from OpenSSL >= 1.1.
+-
+-To work around this:
+-
+-- Check to see if LIBRESSL_VERSION_NUMBER is defined.
+-- If so, define MODSSL_USE_OPENSSL_PRE_1_1_API.
+-- Change all checks for OPENSSL_VERSION_NUMBER < 0x10100000L to
+-  '#if MODSSL_USE_OPENSSL_PRE_1_1_API'
+-
+-Upstream-Status: Committed
+-https://github.com/irontec/sngrep/commit/0ee014d497986c40de264f6392b01fdf4e337fd5
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- src/capture_openssl.c | 6 +++---
+- src/capture_openssl.h | 9 +++++++++
+- 2 files changed, 12 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/capture_openssl.c b/src/capture_openssl.c
+-index 0a052c3..a4e1de0 100644
+---- a/src/capture_openssl.c
+-+++ b/src/capture_openssl.c
+-@@ -94,7 +94,7 @@ P_hash(const char *digest, unsigned char *dest, int dlen, unsigned char *secret,
+- 
+-     // Calculate enough data to fill destination
+-     while (pending > 0) {
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if MODSSL_USE_OPENSSL_PRE_1_1_API
+-         HMAC_CTX hm;
+-         HMAC_Init(&hm, secret, sslen, md);
+-         HMAC_Update(&hm, tmpseed, tmpslen);
+-@@ -495,7 +495,7 @@ tls_process_record(struct SSLConnection *conn, const uint8_t *payload,
+-                 break;
+-             case change_cipher_spec:
+-                 // From now on, this connection will be encrypted using MasterSecret
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if MODSSL_USE_OPENSSL_PRE_1_1_API
+-                 if (conn->client_cipher_ctx->cipher && conn->server_cipher_ctx->cipher)
+-                     conn->encrypted = 1;
+- #else
+-@@ -588,7 +588,7 @@ tls_process_record_handshake(struct SSLConnection *conn, const opaque *fragment,
+-                 // Decrypt PreMasterKey
+-                 clientkeyex = (struct ClientKeyExchange *) body;
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if MODSSL_USE_OPENSSL_PRE_1_1_API
+-                 RSA_private_decrypt(UINT16_INT(clientkeyex->length),
+-                                     (const unsigned char *) &clientkeyex->exchange_keys,
+-                                     (unsigned char *) &conn->pre_master_secret,
+-diff --git a/src/capture_openssl.h b/src/capture_openssl.h
+-index 31f48ce..b3e88fe 100644
+---- a/src/capture_openssl.h
+-+++ b/src/capture_openssl.h
+-@@ -65,6 +65,15 @@
+- #define OLD_OPENSSL_VERSION 1
+- #endif
+- 
+-+/* LibreSSL declares OPENSSL_VERSION_NUMBER == 2.0 but does not include most
+-+ * changes from OpenSSL >= 1.1 (new functions, macros, deprecations, ...)
+-+ */
+-+#if defined(LIBRESSL_VERSION_NUMBER)
+-+#define MODSSL_USE_OPENSSL_PRE_1_1_API (1)
+-+#else
+-+#define MODSSL_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
+-+#endif
+-+
+- //! Three bytes unsigned integer
+- typedef struct uint16 {
+-     unsigned char x[2];
+--- 
+-2.14.3
+-
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index 16552cf5cd..f751a14632 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/irontec/sngrep/releases/download/v1.4.5/sngrep-1.4.5.tar.gz.md5sum
+-md5 11f1cdb8e8f3a3c9ef02ecd12268322e  sngrep-1.4.5.tar.gz
++# From https://github.com/irontec/sngrep/releases/download/v1.4.6/sngrep-1.4.6.tar.gz.md5sum
++md5 094e76786b118258bac69e1514aac826  sngrep-1.4.6.tar.gz
+ 
+ # Locally computed
+-sha256 16f1566f4507ba560c7461cc7ff1c1653beb14b8baf7846269bbb4880564e57f sngrep-v1.4.5.tar.gz
++sha256 638d6557dc68db401b07d73b2e7f8276800281f021fe0c942992566d6b59a48a sngrep-v1.4.6.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 3f1fe989cf..c6d2a292b3 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCPPRESTSDK_VERSION = v2.10.5
-+LIBCPPRESTSDK_VERSION = v2.10.8
- LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
--LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
-+LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
- 
- $(eval $(cmake-package))
+-SNGREP_VERSION = v1.4.5
++SNGREP_VERSION = v1.4.6
+ SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
