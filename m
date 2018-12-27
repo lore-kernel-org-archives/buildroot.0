@@ -1,53 +1,53 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 27 Dec 2018 21:50:15 +0100
-Subject: [Buildroot] Building cargo with per-package directories
-In-Reply-To: <20181226154959.6a793c8d@windsurf.home>
-References: <20181211171252.02ddb571@windsurf> <20181211212705.GA13119@itchy>
- <20181212225041.GA15035@itchy>
- <20181226154959.6a793c8d@windsurf.home>
-Message-ID: <20181227205015.GA27373@ned>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 27 Dec 2018 21:53:07 +0000
+Subject: [Buildroot] [PATCH] qemu: Remove broken/unneeded PYTHONPATH
+Message-ID: <20181227215246.14372-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-12-26 15:49, Thomas Petazzoni wrote:
-> Hello Eric,
->
-> On Wed, 12 Dec 2018 23:50:41 +0100, Eric Le Bihan wrote:
->
-> > diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-> > index 1b1053ba41..891901578e 100644
-> > --- a/package/cargo/cargo.mk
-> > +++ b/package/cargo/cargo.mk
-> > @@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
-> >  	$(if $(VERBOSE),--verbose)
-> >
-> >  HOST_CARGO_ENV = \
-> > -	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-> > +	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib -Clink-arg=-L$(HOST_DIR)/lib" \
-> >  	CARGO_HOME=$(HOST_CARGO_HOME)
-> >
-> >  define HOST_CARGO_BUILD_CMDS
-> > ```
-> >
-> > [1] https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
->
-> Thanks a lot, I was finally able to test this, and confirm it works
-> fine.
->
-> I propose to change it to:
->
-> 	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))"
->
-> so that if we ever change HOST_LDFLAGS in the future, it will continue
-> to work. What do you think ?
+Qemu uses the host-python when building, but the .mk file is pointing the
+host-python interpreter to the target python site-packages, which is both
+incorrect and also unneeded.
 
-I tested this change without issues, so I will post a patch to include
-it in the cargo package.
+Qemu doesn't need any extra packages [1], so there's no need to provide
+this path.  And indeed qemu builds fine when setting the path to a
+non-existent directory.
 
-Regards,
+Since target qemu neither depends on nor selects target python, it's
+quite possible to build qemu without a target python, in which case the
+supplied PYTHONPATH is a non-existent directory.
 
---
-ELB
+But even if qemu did want a python package, pointing the host-python to
+the target site-packages will not work.  The package could contain a
+compiled shared library for the target architecture that the host python
+can not load.  This can be tested by adding "import numpy" to one of
+qemu's python scripts and observing target python-numpy failing to load
+when the script is run at build time.
+
+[1] https://lists.gnu.org/archive/html/qemu-devel/2017-08/msg01758.html
+  "Avoid third-party package dependencies - QEMU currently has none!"
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/qemu/qemu.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a1bd7e5d6e..3f51e88e1c 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -26,8 +26,7 @@ QEMU_OPTS =
+ 
+ QEMU_VARS = \
+ 	LIBTOOL=$(HOST_DIR)/bin/libtool \
+-	PYTHON=$(HOST_DIR)/bin/python2 \
+-	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++	PYTHON=$(HOST_DIR)/bin/python2
+ 
+ # If we want to specify only a subset of targets, we must still enable all
+ # of them, so that QEMU properly builds its list of default targets, from
+-- 
+2.14.4
