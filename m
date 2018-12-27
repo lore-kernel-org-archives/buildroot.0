@@ -1,61 +1,51 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 27 Dec 2018 05:01:21 -0600
-Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
-In-Reply-To: <20181227105731.GR14286@scaer>
-References: <CADvTj4rPZqjx_iNHF7Q8DKa63P+OOX=v-YuhCfUZMR4VOa-zsw@mail.gmail.com>
- <CADvTj4ognr24o+CU-gBsCkH2K=KqbwAtrNv2Vv+9L_97HFUQhg@mail.gmail.com>
- <CADvTj4pMMmcwaij-ApcgHQB0ZSAyh3vQHQ_VEb-rQGtraxHuwA@mail.gmail.com>
- <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
- <20181227084902.GN14286@scaer>
- <CADvTj4qwOPD774mrqNOWK+FZ1wWVX8jAhsYnW3fQ0b7-nTaswA@mail.gmail.com>
- <20181227091134.GO14286@scaer>
- <CADvTj4oEdXRcOScrou=L0-AWG1pGu3kD9PLj=j9WoeJUBUG8bA@mail.gmail.com>
- <20181227104029.GP14286@scaer>
- <CADvTj4rdOXyUF-WN+ZATt6v1L9QH7pEA2iQhP7YtfHdQRG3AjA@mail.gmail.com>
- <20181227105731.GR14286@scaer>
-Message-ID: <CADvTj4rcDC0hkZZ8Zfjw6Tv26PROUc7AOiuPXn6paBJjxt8szw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Dec 2018 13:10:44 +0200
+Subject: [Buildroot] [PATCH] tmux: bump to version 2.8
+Message-ID: <bd48f5e4578d612e0c32d92c132d58f5078d7a54.1545909044.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 27, 2018 at 4:57 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2018-12-27 04:42 -0600, James Hilliard spake thusly:
-> > On Thu, Dec 27, 2018 at 4:40 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > I can confirm that, without the hunk in src/systemd/meson.build, I was
-> > > able to build systemd with this defconfig:
-> > >     BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > >     BR2_INIT_SYSTEMD=y
-> > That's without c++ right?
->
-> Yes, that's without C++.
-I guess the extra c++ opts here
-https://github.com/systemd/systemd/blob/v240/src/systemd/meson.build#L57-L59
-probably just get ignored then.
->
-> You can check a defconfig by doing:
->
->     $ cat >.config <<_EOF_
->     BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->     BR2_INIT_SYSTEMD=y
->     _EOF_
->
->     $ make olddefconfig
->
->     $ grep CXX .config
->     # BR2_TOOLCHAIN_BUILDROOT_CXX is not set
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Remove README from license files. The Buildroot generated image does not
+use the source files that README mentioned. README states that other
+files "have a license and copyright notice at their start", which
+doesn't add much information.
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/tmux/tmux.hash | 3 +--
+ package/tmux/tmux.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index 27a3ccaaeb61..306dc52c33a5 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,4 +1,3 @@
+ # Locally computed:
+-sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
+-sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
++sha256 7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  tmux-2.8.tar.gz
+ sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index deae99717b6a..8b7a96e89809 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-TMUX_VERSION = 2.7
++TMUX_VERSION = 2.8
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+-TMUX_LICENSE_FILES = README COPYING
++TMUX_LICENSE_FILES = COPYING
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
+ # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
+-- 
+2.19.2
