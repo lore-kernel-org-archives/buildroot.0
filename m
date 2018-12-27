@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 16:41:55 +0100
-Subject: [Buildroot] [git commit] package/janus-gateway: bump version to
- v0.5.0
-Message-ID: <20181227153814.30F49815A4@busybox.osuosl.org>
+Date: Thu, 27 Dec 2018 16:41:57 +0100
+Subject: [Buildroot] [git commit] package/libressl: bump to version 2.8.3
+Message-ID: <20181227153814.3E684815A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731adfdce64d7e5dfd11e72ea7ed0827c99b2889
+commit: https://git.buildroot.net/buildroot/commit/?id=02c2cebd939309a3d9d83c7ec22af3f656533592
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/janus-gateway/janus-gateway.hash | 2 +-
- package/janus-gateway/janus-gateway.mk   | 2 +-
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index f84ed8b6db..9b13e0f0fc 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index b0d1928e10..a98f344677 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 b8cb31e59f1294557bfc80f2a662969bc064e83006ceef0574e2553a1c254fd5  libressl-2.8.2.tar.gz
++sha256 9b640b13047182761a99ce3e4f000be9687566e0828b4a72709e9e6a3ef98477  libressl-2.8.3.tar.gz
  # Locally computed
--sha256 35cbbd5e7b7067e3a0b5ba221ea845814e5b59c733302f88fea80bcf98ce416f janus-gateway-v0.2.6.tar.gz
-+sha256 c9c3b741a5d9f956845d5094c211690178cc0d630a7b23b870437c88a7e4ed3b janus-gateway-v0.5.0.tar.gz
- sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 261fc25202..cea06b754e 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
+ sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index f035f9044e..e02ab90269 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = v0.2.6
-+JANUS_GATEWAY_VERSION = v0.5.0
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-LIBRESSL_VERSION = 2.8.2
++LIBRESSL_VERSION = 2.8.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
