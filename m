@@ -1,27 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 16:39:04 +0100
-Subject: [Buildroot] [PATCH v2 0/2] bump llvm/clang to 7.0.1
-In-Reply-To: <20181226204150.6623-1-valentinkorenblit@gmail.com>
-References: <20181226204150.6623-1-valentinkorenblit@gmail.com>
-Message-ID: <20181227163904.518cbfb7@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 27 Dec 2018 13:40:18 -0200
+Subject: [Buildroot] [PATCH 7/9] package/imx-mkimage: Add support for
+ all other i.MX8 SOCs
+In-Reply-To: <20181226223112.24456-7-nerv@dawncrow.de>
+References: <20181226223112.24456-1-nerv@dawncrow.de>
+ <20181226223112.24456-7-nerv@dawncrow.de>
+Message-ID: <CAOMZO5BWJVF=swYxJyMoogr1q_tWWSBpZ=QBwoWg4JffO_KGbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Andr?,
 
-On Wed, 26 Dec 2018 21:41:48 +0100, Valentin Korenblit wrote:
+On Wed, Dec 26, 2018 at 8:34 PM Andr? Hentschel <nerv@dawncrow.de> wrote:
+>
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
-> Valentin Korenblit (2):
->   package/llvm: bump to version 7.0.1
->   package/clang: bump to version 7.0.1
-
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Please add a simple commit log and state the imx8 variants that will
+be supported.
