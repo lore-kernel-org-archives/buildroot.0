@@ -1,100 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 15:15:23 +0100
-Subject: [Buildroot] [PATCH] package/pkgconf: fix behavior of pkg-config
- --version
-Message-ID: <20181227141523.18796-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Dec 2018 15:27:27 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xapp_rgb: add missing
+ host-pkgconf dependency
+Message-ID: <20181227142727.19535-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some odd reason, the new pkg-config 1.5.3 changed the behavior of
-"pkg-config --version": as soon as another argument than "--version"
-is passed, the code assumes the user wanted to run "--modversion"
-instead.
+Building a minimal defconfig such as:
 
-Sadly, this breaks badly with our pkg-config wrapper that
-unconditionally passes --static to pkg-config when
-BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
-pkg-config is available and functional, it's actually "pkg-config
---static --version" that gets executed. pkg-config assumes that the
-user wanted to use --modversion and bails out with an error.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XAPP_RGB=y
 
-This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
-configuration.
+by running "make xapp_rgb" gives the following build failure:
 
-This misbehavior of pkg-config has been reported upstream at
-https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
-gets fixed, we work around the issue by patching pkg-config so that it
-ignores --static in the count of arguments when doing its
---version/--modversion dance.
+checking for RGB... configure: error: in `/home/test/buildroot/output/build/xapp_rgb-1.0.6':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-Fixes:
+Alternatively, you may set the environment variables RGB_CFLAGS
+and RGB_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-  http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
-  (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
+The configure script uses pkg-config, but host-pkgconf is missing in
+the list of dependencies.
+
+This issue was detected thanks to per-package directory support.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-count-static-as-an-argument-when-ha.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
+ package/x11r7/xapp_rgb/xapp_rgb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch b/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
-new file mode 100644
-index 0000000000..817c23c985
---- /dev/null
-+++ b/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
-@@ -0,0 +1,49 @@
-+From f7a58c164ab1d2dc296ce47ab238ed1ea39cb559 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 27 Dec 2018 14:50:38 +0100
-+Subject: [PATCH] cli/main.c: don't count --static as an argument when handling
-+ --version
-+
-+In commit 12a0eb124cea85586e57f33c91a1e4c73459eef6 ("main: assume
-+--modversion insted of --version if other flags or module names are
-+provided"), the handling of the --version option was changed so that
-+if any other option than --version is passed, pkg-config assumes the
-+user wanted to use --modversion.
-+
-+This breaks the use case where "pkg-config --static --version" is
-+passed, a situation where we really want the normal --version
-+behavior.
-+
-+This issue has been reported upstream at
-+https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until a
-+resolution is found, let's not count the --static option in the count
-+of options that trigger this "the user wanted --modversion" behavior.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ cli/main.c | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/cli/main.c b/cli/main.c
-+index b52cc85..8f6c4c9 100644
-+--- a/cli/main.c
-++++ b/cli/main.c
-+@@ -955,7 +955,14 @@ main(int argc, char *argv[])
-+ 
-+ 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
-+ 	{
-+-		if (argc > 2)
-++		int nargs = argc;
-++
-++		/* Don't count --static as an argument for the
-++		 * following test */
-++		if ((want_flags & PKG_STATIC) == PKG_STATIC)
-++			nargs--;
-++
-++		if (nargs > 2)
-+ 		{
-+ 			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
-+ 
-+-- 
-+2.20.1
-+
+diff --git a/package/x11r7/xapp_rgb/xapp_rgb.mk b/package/x11r7/xapp_rgb/xapp_rgb.mk
+index d63576f44d..b2d5d77744 100644
+--- a/package/x11r7/xapp_rgb/xapp_rgb.mk
++++ b/package/x11r7/xapp_rgb/xapp_rgb.mk
+@@ -9,6 +9,6 @@ XAPP_RGB_SOURCE = rgb-$(XAPP_RGB_VERSION).tar.bz2
+ XAPP_RGB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_RGB_LICENSE = MIT
+ XAPP_RGB_LICENSE_FILES = COPYING
+-XAPP_RGB_DEPENDENCIES = xorgproto
++XAPP_RGB_DEPENDENCIES = xorgproto host-pkgconf
+ 
+ $(eval $(autotools-package))
 -- 
 2.20.1
