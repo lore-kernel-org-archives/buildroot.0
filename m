@@ -1,42 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 10:02:41 +0100
-Subject: [Buildroot] [PATCH 2/9] package/freescale-imx/firmware-imx: Fix
- typos
-In-Reply-To: <20181226223112.24456-2-nerv@dawncrow.de>
-References: <20181226223112.24456-1-nerv@dawncrow.de>
- <20181226223112.24456-2-nerv@dawncrow.de>
-Message-ID: <20181227100241.3c7c1113@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 27 Dec 2018 03:07:06 -0600
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <20181227084902.GN14286@scaer>
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+ <20181226222329.18046c1c@windsurf> <20181226214100.GK14286@scaer>
+ <CADvTj4rPZqjx_iNHF7Q8DKa63P+OOX=v-YuhCfUZMR4VOa-zsw@mail.gmail.com>
+ <CADvTj4ognr24o+CU-gBsCkH2K=KqbwAtrNv2Vv+9L_97HFUQhg@mail.gmail.com>
+ <CADvTj4pMMmcwaij-ApcgHQB0ZSAyh3vQHQ_VEb-rQGtraxHuwA@mail.gmail.com>
+ <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
+ <20181227084902.GN14286@scaer>
+Message-ID: <CADvTj4qwOPD774mrqNOWK+FZ1wWVX8jAhsYnW3fQ0b7-nTaswA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 26 Dec 2018 23:31:05 +0100, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index 0a503d7a66..240985297c 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -35,7 +35,7 @@ endef
->  
->  define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
->  	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
-> -	# lpddr4_pmu_train_fw.bin isneeded when generating imx-boot-imx8mqevk-sd.bin
-> +	# lpddr4_pmu_train_fw.bin is needed when generating imx-boot-sd.bin
-
-Ditto, isn't this imx8-boot-sd.bin ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Thu, Dec 27, 2018 at 2:49 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2018-12-26 19:27 -0600, James Hilliard spake thusly:
+> > On Wed, Dec 26, 2018 at 4:52 PM James Hilliard
+> > > > > meson.build:293:8: ERROR:  Unknown compiler(s):
+> > > > > [['/home/buildroot/buildroot/output/host/bin/i586-buildroot-linux-uclibc-g++']]
+> > > Upstream bug report https://github.com/systemd/systemd/issues/11278
+> > Potential fix: https://github.com/systemd/systemd/pull/11279
+>
+> That unfortunately does not work:
+>
+> ERROR: No specified compiler can handle file src/libsystemd/sd-bus/test-bus-vtable-cc.cc
+>
+> But if you also add:
+>
+>     diff --git a/src/test/meson.build b/src/test/meson.build
+>     index ea049a6fb..d9d87e02c 100644
+>     --- a/src/test/meson.build
+>     +++ b/src/test/meson.build
+>     @@ -957,7 +957,7 @@ tests += [
+>
+>      ]
+>
+>     -if cxx.found()
+>     +if cxx_cmd != ''
+>              tests += [
+>                      [['src/libsystemd/sd-bus/test-bus-vtable-cc.cc'],
+>                       [],
+>
+> Then it works.
+Pushed that fix and one other I found, didn't realize cxx.found() was
+being used other places(I only tested that pull request against a c
+only cross toolchain).
+>
+> Obviously, I'm not sure this is the right fix...
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
