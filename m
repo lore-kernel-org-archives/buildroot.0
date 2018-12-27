@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 17:09:59 +0100
-Subject: [Buildroot] [git commit] board/freescale/common/imx: fix typo
-Message-ID: <20181227160530.02432838C2@busybox.osuosl.org>
+Date: Thu, 27 Dec 2018 17:09:54 +0100
+Subject: [Buildroot] [git commit] board/freescale/imx8mqevk: fix typos in
+ readme
+Message-ID: <20181227160529.E9ED7838C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2c1e2e885c8182c452accbb7c9fb0404bcebafb
+commit: https://git.buildroot.net/buildroot/commit/?id=92daeae9603043b7cd7af25bb53a9b3ef2ce6eff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/freescale/imx8mqevk/readme.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index fdb645014a..2f8842f8e0 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -3,7 +3,7 @@
- # We mimic the .sdcard Freescale's image format:
- # * the SD card must have 33 kB free space at the beginning,
- # * U-Boot is integrated into imx8-boot-sd.bin and is dumped as is,
--# * a FAT partition at offset 32MB is containing Image and DTB files
-+# * a FAT partition at offset 8MB is containing Image and DTB files
- # * a single root filesystem partition is required (ext2, ext3 or ext4)
- #
+diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
+index a32c122f91..e60eba4cb6 100644
+--- a/board/freescale/imx8mqevk/readme.txt
++++ b/board/freescale/imx8mqevk/readme.txt
+@@ -21,7 +21,7 @@ You will find in output/images/ the following files:
+   - boot.vfat
+   - fsl-imx8mq-evk.dtb
+   - Image
+-  - imx-boot-imx8mqevk-sd.bin
++  - imx8-boot-sd.bin
+   - lpddr4_pmu_train_fw.bin
+   - rootfs.ext2
+   - rootfs.ext4
+@@ -69,7 +69,7 @@ Enable HDMI output
  
+ To enable HDMI output at boot you must provide the video kernel boot
+ argument.  To set the video boot argument from U-Boot run after
+-stoping in U-Boot prompt:
++stopping in U-Boot prompt:
+ 
+ setenv mmcargs 'setenv bootargs console=${console} root=${mmcroot} video=HDMI-A-1:1920x1080-32 at 60'
+ saveenv
