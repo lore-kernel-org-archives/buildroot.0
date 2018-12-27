@@ -1,44 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 27 Dec 2018 13:20:54 +0200
-Subject: [Buildroot] [PATCH] sed: bump to version 4.7
-Message-ID: <f89610c802fd41fac43e03ee1decf03b2a6d1c89.1545909654.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 27 Dec 2018 12:34:31 +0100
+Subject: [Buildroot] [PATCH 1/3] lm-sensors: remove redundant
+ BUILD_STATIC_LIB build parameter
+In-Reply-To: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
+References: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
+Message-ID: <ae471095-2be7-3ccd-569d-b94e0f9a7e9b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/sed/sed.hash | 4 ++--
- package/sed/sed.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Baruch,
 
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index 470e5f259588..cc3bebafe190 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/sed/sed-4.5.tar.xz.sig
-+# https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz.sig
- # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256	7aad73c8839c2bdadca9476f884d2953cdace9567ecd0d90f9959f229d146b40	sed-4.5.tar.xz
-+sha256	2885768cd0a29ff8d58a6280a270ff161f6a3deb5690b2be6c49f46d4c67bd6a	sed-4.7.tar.xz
- # Locally calculated
- sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 4b2ed0313f34..6fee598f66c1 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SED_VERSION = 4.5
-+SED_VERSION = 4.7
- SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPL-3.0
--- 
-2.19.2
+Le 27/12/2018 ? 11:13, Baruch Siach a ?crit?:
+> Commit 3e05efd76636 ("package/lm-sensors: disable static library for
+> shared-only build") added BUILD_STATIC_LIB to LM_SENSORS_MAKE_OPTS with
+> value that depends on BR2_SHARED_LIBS, but forgot to remove it from the
+> common LM_SENSORS_MAKE_OPTS. Fix that.
+
+IIRC, this patch was part of a series fixing packages that build a static
+library when BR2_SHARED_LIBS is set. I had a special hook checking if a package
+install a *.a file to STAGING_DIR.
+But this effort was stopped since there is some corner case where a .a file is
+needed:
+
+http://lists.busybox.net/pipermail/buildroot/2015-January/116736.html
+
+But, we still have a case where a package A install a shared and a static
+library and a package B that depend on package A can choose to link against the
+shared or the static library.
+
+Acked-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> 
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/lm-sensors/lm-sensors.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+> index 6fc7ce4981c9..778a355b0f7a 100644
+> --- a/package/lm-sensors/lm-sensors.mk
+> +++ b/package/lm-sensors/lm-sensors.mk
+> @@ -21,7 +21,6 @@ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_PWMCONFIG) += sbin/pwmconfig
+>  LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT) += sbin/sensors-detect
+>  
+>  LM_SENSORS_MAKE_OPTS = \
+> -	BUILD_STATIC_LIB=1 \
+>  	MACHINE=$(KERNEL_ARCH) \
+>  	PREFIX=/usr
+>  
+> 
