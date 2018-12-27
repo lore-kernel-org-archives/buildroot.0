@@ -1,86 +1,390 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Dec 2018 19:59:49 +0100
-Subject: [Buildroot] [PATCH] docs/manual: update package-make-target.txt
- with more targets
-In-Reply-To: <20181227164533.21663-1-thomas.petazzoni@bootlin.com>
-References: <20181227164533.21663-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181227185949.GS14286@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Dec 2018 21:42:28 +0200
+Subject: [Buildroot] [PATCH] package/e2fsprogs: bump to version 1.44.5
+Message-ID: <c5a1fe48f39b959ad5d9d2496cb6a076b7ba68a6.1545939748.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Drop musl build fix patch; issue fixed in upstream commit 98c6113b4147
+("Define __GNUC_PREREQ if necessary").
 
-On 2018-12-27 17:45 +0100, Thomas Petazzoni spake thusly:
-> This commit updates package-make-target.txt with a few additional
-> useful per-package targets that have been added in recent times.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Drop the forced -DHAVE_SYS_STAT_H; issue fixed in upstream commit
+68192a8f83e00 ("util: allow subst to build in cross build environemnt").
 
-Sorry, but I can only review this patch if you eventually look at my
-series that speeds up all those rules! ;-)
+Drop libmagic disable in the host package. RHEL 5 is no longer a
+supported host platform; cfr. commit 27797caf76b ("docs/manual: update
+host gcc minimum required version").
 
-> ---
->  docs/manual/package-make-target.txt | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
-> index c91106e8e9..fd5f9e8e7f 100644
-> --- a/docs/manual/package-make-target.txt
-> +++ b/docs/manual/package-make-target.txt
-> @@ -59,14 +59,28 @@ Additionally, there are some other useful make targets:
->  |===================================================
->  | command/target    | Description
->  
-> -| +show-depends+    | Displays the dependencies required to build the
-> +| +show-depends+    | Displays the first order dependencies required to build the
->  package
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...x-musl-compile-__GNUC_PREREQ-related.patch | 306 ------------------
+ package/e2fsprogs/e2fsprogs.hash              |   4 +-
+ package/e2fsprogs/e2fsprogs.mk                |  17 +-
+ 3 files changed, 5 insertions(+), 322 deletions(-)
+ delete mode 100644 package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch
 
-This should be "first-order".
-
-> +| +show-recursive-depends+ | Recursively displays the dependencies
-> +  required to build the package
-> +
-> +| +show-rdepends+   | Displays the first order reverse dependencies of
-> +  the package (i.e packages that directly depend on it)
-
-Ditto, "first-order".
-
-With the two above fixed, and as a pledge of my good will, though,
-please accept my foregoing review, below:
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> +| +show-recursive-rdepends+ | Recursively displays the reverse
-> +  dependencies of the package (i.e the packages that depend on it,
-> +  directly or indirectly)
-> +
->  | +graph-depends+   | Generate a dependency graph of the package, in the
->  context of the current Buildroot configuration. See
->  xref:graph-depends[this section] for more details about dependency
->  graphs.
->  
-> +| +graph-rdepends+  | Generate a graph of this package reverse
-> +  dependencies (i.e the packages that depend on it, directly or
-> +  indirectly)
-> +
->  | +dirclean+        | Remove the whole package build directory
->  
->  | +reinstall+       | Re-run the install commands
-> -- 
-> 2.20.1
-> 
-
+diff --git a/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch b/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch
+deleted file mode 100644
+index 7027347bc69c..000000000000
+--- a/package/e2fsprogs/0001-Fix-musl-compile-__GNUC_PREREQ-related.patch
++++ /dev/null
+@@ -1,306 +0,0 @@
+-From 2b826d09c0c0033f52d47c477ae43655f3ae0fa9 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Tue, 25 Sep 2018 21:31:16 +0200
+-Subject: [PATCH] Fix musl compile (__GNUC_PREREQ related)
+-
+-Use __GNUC_PREREQ only if defined, patch taken frrom [1].
+-
+-[1] https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- debugfs/set_fields.c  | 5 ++++-
+- e2fsck/problem.c      | 4 ++++
+- lib/ext2fs/ext4_acl.h | 4 ++++
+- lib/ext2fs/fiemap.h   | 4 ++++
+- lib/ext2fs/hashmap.h  | 4 ++++
+- lib/ext2fs/mmp.c      | 4 ++++
+- lib/ext2fs/unix_io.c  | 4 ++++
+- lib/uuid/gen_uuid.c   | 4 ++++
+- misc/e2undo.c         | 4 ++++
+- misc/filefrag.c       | 4 ++++
+- misc/fuse2fs.c        | 4 ++++
+- 11 files changed, 44 insertions(+), 1 deletion(-)
+-
+-diff --git a/debugfs/set_fields.c b/debugfs/set_fields.c
+-index e1e23a5..834a19b 100644
+---- a/debugfs/set_fields.c
+-+++ b/debugfs/set_fields.c
+-@@ -74,11 +74,12 @@ static errcode_t parse_bmap(struct field_set_info *info, char *field, char *arg)
+- static errcode_t parse_gd_csum(struct field_set_info *info, char *field, char *arg);
+- static errcode_t parse_mmp_clear(struct field_set_info *info, char *field,
+- 				 char *arg);
+--
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+- #endif
+-+#endif
+- 
+- static struct field_set_info super_fields[] = {
+- 	{ "inodes_count", &set_sb.s_inodes_count, NULL, 4, parse_uint },
+-@@ -291,9 +292,11 @@ static struct field_set_info mmp_fields[] = {
+- 	{ "checksum", &set_mmp.mmp_checksum, NULL, 4, parse_uint },
+- 	{ 0, 0, 0, 0 }
+- };
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- 
+- #ifdef UNITTEST
+- 
+-diff --git a/e2fsck/problem.c b/e2fsck/problem.c
+-index 0f60396..68eb79f 100644
+---- a/e2fsck/problem.c
+-+++ b/e2fsck/problem.c
+-@@ -99,10 +99,12 @@ static const char *preen_msg[] = {
+- 	"",			/* 20 */
+- };
+- 
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+- #endif
+-+#endif
+- 
+- static struct e2fsck_problem problem_table[] = {
+- 
+-@@ -2094,9 +2096,11 @@ static struct latch_descr pr_latch_info[] = {
+- 	{ PR_LATCH_OPTIMIZE_EXT, PR_1E_OPTIMIZE_EXT_HEADER, PR_1E_OPTIMIZE_EXT_END },
+- 	{ -1, 0, 0 },
+- };
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- 
+- static struct e2fsck_problem *find_problem(problem_t code)
+- {
+-diff --git a/lib/ext2fs/ext4_acl.h b/lib/ext2fs/ext4_acl.h
+-index 8d4d974..c1a2801 100644
+---- a/lib/ext2fs/ext4_acl.h
+-+++ b/lib/ext2fs/ext4_acl.h
+-@@ -50,13 +50,17 @@ typedef struct {
+- 
+- typedef struct {
+-         __le32                  a_version;
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wpedantic"
+-+#endif
+- #endif
+-         posix_acl_xattr_entry   a_entries[0];
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- } posix_acl_xattr_header;
+- 
+-diff --git a/lib/ext2fs/fiemap.h b/lib/ext2fs/fiemap.h
+-index 0d1072a..76860ac 100644
+---- a/lib/ext2fs/fiemap.h
+-+++ b/lib/ext2fs/fiemap.h
+-@@ -31,14 +31,18 @@ struct fiemap {
+- 	__u32 fm_mapped_extents;/* number of extents that were mapped (out) */
+- 	__u32 fm_extent_count;  /* size of fm_extents array (in) */
+- 	__u32 fm_reserved;
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wpedantic"
+-+#endif
+- #endif
+- 	struct fiemap_extent fm_extents[0]; /* array of mapped extents (out) */
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- };
+- 
+- #if defined(__linux__) && !defined(FS_IOC_FIEMAP)
+-diff --git a/lib/ext2fs/hashmap.h b/lib/ext2fs/hashmap.h
+-index 228f439..a6ba686 100644
+---- a/lib/ext2fs/hashmap.h
+-+++ b/lib/ext2fs/hashmap.h
+-@@ -17,14 +17,18 @@ struct ext2fs_hashmap {
+- 		struct ext2fs_hashmap_entry *next;
+- 		struct ext2fs_hashmap_entry *list_next;
+- 		struct ext2fs_hashmap_entry *list_prev;
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wpedantic"
+-+#endif
+- #endif
+- 	} *entries[0];
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- };
+- 
+- struct ext2fs_hashmap *ext2fs_hashmap_create(
+-diff --git a/lib/ext2fs/mmp.c b/lib/ext2fs/mmp.c
+-index 2da935e..f4069c2 100644
+---- a/lib/ext2fs/mmp.c
+-+++ b/lib/ext2fs/mmp.c
+-@@ -34,8 +34,10 @@
+- #define O_DIRECT 0
+- #endif
+- 
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic push
+-+#endif
+- #ifndef CONFIG_MMP
+- #pragma GCC diagnostic ignored "-Wunused-parameter"
+- #endif
+-@@ -467,6 +469,8 @@ mmp_error:
+- 	return EXT2_ET_OP_NOT_SUPPORTED;
+- #endif
+- }
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+-diff --git a/lib/ext2fs/unix_io.c b/lib/ext2fs/unix_io.c
+-index 7a4c9bf..9e863a5 100644
+---- a/lib/ext2fs/unix_io.c
+-+++ b/lib/ext2fs/unix_io.c
+-@@ -1127,10 +1127,12 @@ unimplemented:
+- }
+- 
+- /* parameters might not be used if OS doesn't support zeroout */
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wunused-parameter"
+- #endif
+-+#endif
+- static errcode_t unix_zeroout(io_channel channel, unsigned long long block,
+- 			      unsigned long long count)
+- {
+-@@ -1197,9 +1199,11 @@ err:
+- unimplemented:
+- 	return EXT2_ET_UNIMPLEMENTED;
+- }
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- 
+- static struct struct_io_manager struct_unix_manager = {
+- 	.magic		= EXT2_ET_MAGIC_IO_MANAGER,
+-diff --git a/lib/uuid/gen_uuid.c b/lib/uuid/gen_uuid.c
+-index 0198363..cc26ddc 100644
+---- a/lib/uuid/gen_uuid.c
+-+++ b/lib/uuid/gen_uuid.c
+-@@ -484,7 +484,9 @@ static void close_all_fds(void)
+- }
+- #endif /* defined(USE_UUIDD) && defined(HAVE_SYS_UN_H) */
+- 
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+-+#endif
+- #pragma GCC diagnostic push
+- #if !defined(USE_UUIDD) || !defined(HAVE_SYS_UN_H)
+- #pragma GCC diagnostic ignored "-Wunused-parameter"
+-@@ -572,9 +574,11 @@ fail:
+- #endif
+- 	return -1;
+- }
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 6)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- 
+- void uuid__generate_time(uuid_t out, int *num)
+- {
+-diff --git a/misc/e2undo.c b/misc/e2undo.c
+-index 71991e0..4f5dd9f 100644
+---- a/misc/e2undo.c
+-+++ b/misc/e2undo.c
+-@@ -81,14 +81,18 @@ struct undo_key_block {
+- 	__le32 magic;		/* KEYBLOCK_MAGIC number */
+- 	__le32 crc;		/* block checksum */
+- 	__le64 reserved;	/* zero */
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wpedantic"
+-+#endif
+- #endif
+- 	struct undo_key keys[0];	/* keys, which come immediately after */
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- };
+- 
+- struct undo_key_info {
+-diff --git a/misc/filefrag.c b/misc/filefrag.c
+-index 56f84ed..4d63ef3 100644
+---- a/misc/filefrag.c
+-+++ b/misc/filefrag.c
+-@@ -535,9 +535,11 @@ int main(int argc, char**argv)
+- 				char *end;
+- 				blocksize = strtoul(optarg, &end, 0);
+- 				if (end) {
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (7, 0)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+-+#endif
+- #endif
+- 					switch (end[0]) {
+- 					case 'g':
+-@@ -555,8 +557,10 @@ int main(int argc, char**argv)
+- 					default:
+- 						break;
+- 					}
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (7, 0)
+- #pragma GCC diagnostic pop
+-+#endif
+- #endif
+- 				}
+- 			} else { /* Allow -b without argument for compat. Remove
+-diff --git a/misc/fuse2fs.c b/misc/fuse2fs.c
+-index 5c73895..bf09b55 100644
+---- a/misc/fuse2fs.c
+-+++ b/misc/fuse2fs.c
+-@@ -118,14 +118,18 @@ typedef struct {
+- 
+- typedef struct {
+- 	u_int32_t	a_version;
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic push
+- #pragma GCC diagnostic ignored "-Wpedantic"
+-+#endif
+- #endif
+- 	acl_ea_entry	a_entries[0];
+-+#ifdef __GNUC_PREREQ
+- #if __GNUC_PREREQ (4, 8)
+- #pragma GCC diagnostic pop
+- #endif
+-+#endif
+- } acl_ea_header;
+- 
+- static inline size_t acl_ea_size(int count)
+--- 
+-2.19.0
+-
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 71653c933ff2..7619e2627550 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.4/sha256sums.asc
+-sha256 ee03b2f2180614c5ae5f6dd2666f8808de61c3d8b37d22ba86cc6daea25be55a  e2fsprogs-1.44.4.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.5/sha256sums.asc
++sha256 ba5eb3069d69160d96818bb9700de9ab5a8458d9add1fd85d427c0000d34c5b9  e2fsprogs-1.44.5.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index a483261caa5a..f5785ab4f2ff 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.44.4
++E2FSPROGS_VERSION = 1.44.5
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+@@ -60,20 +60,9 @@ ifeq ($(BR2_nios2),y)
+ E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
+ endif
+ 
+-# Some programs are built for the host, but use definitions guessed by
+-# the configure script (i.e with the cross-compiler). Help them by
+-# saying that <sys/stat.h> is available on the host, which is needed
+-# for util/subst.c to build properly.
+-E2FSPROGS_CONF_ENV += \
+-	BUILD_CFLAGS="-DHAVE_SYS_STAT_H" \
+-	ac_cv_path_LDCONFIG=true
++E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
+ 
+-# Disable use of the host magic.h, as on older hosts (e.g. RHEL 5)
+-# it doesn't provide definitions expected by e2fsprogs support lib.
+-HOST_E2FSPROGS_CONF_ENV += \
+-	ac_cv_header_magic_h=no \
+-	ac_cv_lib_magic_magic_file=no \
+-	ac_cv_path_LDCONFIG=true
++HOST_E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
+ 
+ E2FSPROGS_INSTALL_STAGING_OPTS = \
+ 	DESTDIR=$(STAGING_DIR) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.2
