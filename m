@@ -1,83 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 17:17:59 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <20181226183422.76c6ff6c@windsurf.home>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
- <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
- <20181205173103.1eb30a7b@windsurf>
- <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
- <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
- <20181226183422.76c6ff6c@windsurf.home>
-Message-ID: <20181227171759.0118ff77@windsurf>
+Date: Thu, 27 Dec 2018 17:45:33 +0100
+Subject: [Buildroot] [PATCH] docs/manual: update package-make-target.txt
+ with more targets
+Message-ID: <20181227164533.21663-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit updates package-make-target.txt with a few additional
+useful per-package targets that have been added in recent times.
 
-On Wed, 26 Dec 2018 18:34:22 +0100, Thomas Petazzoni wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/package-make-target.txt | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-> So, without per-package directory, we fall in case (2) above.
-> 
-> With per-package directory, we fall in case (4) above, and therefore
-> the RPATH is discarded.
-> 
-> At this point, I am not sure at which level and how the issue should be
-> fixed. Needs some thought. Input/ideas welcome.
-
-So for now, the way I fixed this is by rewriting the RPATH in fix-rpath
-so that they don't point to per-package host directories. It is a bit
-annoying that we end up rewriting RPATHs twice, but it is the easiest /
-most straightforward solution to be able to move forward with the whole
-per-package directory stuff.
-
-Here is what I have locally:
-
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index fa138ca15a..67bf1eb1b3 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -127,14 +127,24 @@ main() {
+diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+index c91106e8e9..fd5f9e8e7f 100644
+--- a/docs/manual/package-make-target.txt
++++ b/docs/manual/package-make-target.txt
+@@ -59,14 +59,28 @@ Additionally, there are some other useful make targets:
+ |===================================================
+ | command/target    | Description
  
-     while read file ; do
-         # check if it's an ELF file
--        if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
--            # make files writable if necessary
--            changed=$(chmod -c u+w "${file}")
--            # call patchelf to sanitize the rpath
--            ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
--            # restore the original permission
--            test "${changed}" != "" && chmod u-w "${file}"
-+        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
-+        if test $? -ne 0 ; then
-+            continue
-         fi
-+
-+        # make files writable if necessary
-+        changed=$(chmod -c u+w "${file}")
-+
-+        # rewrite the per-package rpaths
-+        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]*/host@${HOST_DIR}@")
-+        if test "${rpath}" != "${changed_rpath}" ; then
-+            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
-+        fi
-+
-+        # call patchelf to sanitize the rpath
-+        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+        # restore the original permission
-+        test "${changed}" != "" && chmod u-w "${file}"
-     done < <(find "${rootdir}" ${find_args[@]})
+-| +show-depends+    | Displays the dependencies required to build the
++| +show-depends+    | Displays the first order dependencies required to build the
+ package
  
-     # Restore patched patchelf utility
-
-Best regards,
-
-Thomas
++| +show-recursive-depends+ | Recursively displays the dependencies
++  required to build the package
++
++| +show-rdepends+   | Displays the first order reverse dependencies of
++  the package (i.e packages that directly depend on it)
++
++| +show-recursive-rdepends+ | Recursively displays the reverse
++  dependencies of the package (i.e the packages that depend on it,
++  directly or indirectly)
++
+ | +graph-depends+   | Generate a dependency graph of the package, in the
+ context of the current Buildroot configuration. See
+ xref:graph-depends[this section] for more details about dependency
+ graphs.
+ 
++| +graph-rdepends+  | Generate a graph of this package reverse
++  dependencies (i.e the packages that depend on it, directly or
++  indirectly)
++
+ | +dirclean+        | Remove the whole package build directory
+ 
+ | +reinstall+       | Re-run the install commands
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
