@@ -1,90 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Dec 2018 09:23:02 +0100
-Subject: [Buildroot] [PATCH 3/5 v5] core/pkg-infra: allow meson packages
- to specify custom build rules
-In-Reply-To: <CADvTj4pab06_x_r6N4q1d-RNTBekoAcZ1aEwB83ks3YzbrdBaw@mail.gmail.com>
-References: <cover.1545814334.git.yann.morin.1998@free.fr>
- <acd0d092fa0c62970c3c8b5e3cecedeb73dcc4aa.1545814334.git.yann.morin.1998@free.fr>
- <CADvTj4qeYHq9+QuBfzHoYdhfF0WrVB_f5yxJivuxUdJQcR6EVg@mail.gmail.com>
- <20181226120610.GF14286@scaer>
- <CADvTj4pab06_x_r6N4q1d-RNTBekoAcZ1aEwB83ks3YzbrdBaw@mail.gmail.com>
-Message-ID: <20181227082302.GM14286@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Dec 2018 09:46:57 +0100
+Subject: [Buildroot] [PATCH 5/9] package/freescale-imx: Add
+ imx-sc-firmware package
+In-Reply-To: <20181226223112.24456-5-nerv@dawncrow.de>
+References: <20181226223112.24456-1-nerv@dawncrow.de>
+ <20181226223112.24456-5-nerv@dawncrow.de>
+Message-ID: <20181227094657.64049784@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hello,
 
-On 2018-12-26 22:21 -0600, James Hilliard spake thusly:
-> On Wed, Dec 26, 2018 at 6:06 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > James, ?ric, All,
-> >
-> > On 2018-12-26 05:36 -0600, James Hilliard spake thusly:
-> > > On Wed, Dec 26, 2018 at 2:52 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > Some packages may want to build only specific targets, instead of the
-> > > > default.
-> > [--SNIP--]
-> > > > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> > > > index 507e686068..0588660dbf 100644
-> > > > --- a/package/pkg-meson.mk
-> > > > +++ b/package/pkg-meson.mk
-> > > > @@ -103,12 +103,12 @@ ifndef $(2)_BUILD_CMDS
-> > > >  ifeq ($(4),target)
-> > > >  define $(2)_BUILD_CMDS
-> > > >         $$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-> > > > -               $$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> > > > +               $$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> > > >  endef
-> > > >  else
-> > > >  define $(2)_BUILD_CMDS
-> > > >         $$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-> > > > -               $$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> > > > +               $$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> > > shouldn't $$($$(PKG)_NINJA_OPTS) come after $$($$(PKG)_SRCDIR)/build?
-> >
-> > I don't know. It worked that way for me, and I wanted to group together
-> > the two _OPTS variables, and also like we do for the autotools infra. But
-> > your suggestion also makes sense, and is indeed more in-line with the
-> > ninja's short-help:
-> Maybe add a $$($$(PKG)_NINJA_TARGETS) option as well?
+Looks good overall, thanks for this work! Just one comment/suggestion
+below.
 
-Not really, because we want to do the same in all the packages infras.
+On Wed, 26 Dec 2018 23:31:08 +0100, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  DEVELOPERS                                    |  1 +
+>  package/freescale-imx/Config.in               |  1 +
+>  .../freescale-imx/imx-sc-firmware/Config.in   |  8 +++++
+>  .../imx-sc-firmware/imx-sc-firmware.mk        | 29 +++++++++++++++++++
+>  4 files changed, 39 insertions(+)
+>  create mode 100644 package/freescale-imx/imx-sc-firmware/Config.in
+>  create mode 100644 package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 2d58ea9014..11d3524b88 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -124,6 +124,7 @@ F:	package/ktap/
+>  
+>  N:	Andr? Hentschel <nerv@dawncrow.de>
+>  F:	package/azure-iot-sdk-c/
+> +F:	package/freescale-imx/imx-sc-firmware/
+>  F:	package/libkrb5/
+>  F:	package/openal/
+>  F:	package/p7zip/
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index 9001764437..fcceacdc9e 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -90,6 +90,7 @@ source "package/freescale-imx/imx-vpu/Config.in"
+>  source "package/freescale-imx/imx-vpu-hantro/Config.in"
+>  source "package/freescale-imx/imx-vpuwrap/Config.in"
+>  source "package/freescale-imx/firmware-imx/Config.in"
+> +source "package/freescale-imx/imx-sc-firmware/Config.in"
+>  if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
+>  source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
+>  source "package/freescale-imx/libz160/Config.in"
+> diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
+> new file mode 100644
+> index 0000000000..b0e11c9dff
+> --- /dev/null
+> +++ b/package/freescale-imx/imx-sc-firmware/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_IMX_SC_FIRMWARE
+> +	bool "imx-sc-firmware"
+> +	depends on BR2_aarch64 # Only relevant for i.MX8
+> +	help
+> +	  System Control Unit Firmware blobs for the Freescale i.MX8 SoCs.
+> +
+> +	  This library is provided by Freescale as-is and doesn't have
+> +	  an upstream.
+> diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+> new file mode 100644
+> index 0000000000..aa10322753
+> --- /dev/null
+> +++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# imx-sc-firmware
+> +#
+> +################################################################################
+> +
+> +IMX_SC_FIRMWARE_VERSION = 1.0
+> +IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
+> +IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
+> +
+> +IMX_SC_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
+> +IMX_SC_FIRMWARE_LICENSE_FILES = EULA COPYING
+> +IMX_SC_FIRMWARE_REDISTRIBUTE = NO
+> +
+> +define IMX_SC_FIRMWARE_EXTRACT_CMDS
+> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_SC_FIRMWARE_DL_DIR)/$(IMX_SC_FIRMWARE_SOURCE))
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
 
-For example, autotools-package uses FOO_MAKE_OPTS to apss arbitrary
-options to make, and that is almost exclusively used to in fact pass the
-target rule to make.
+So this package doesn't do anything on platforms other than
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X. Should the package "depends
+on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X" ?
 
-So, we want to keep this idiosyncracy consistent acros infras, hence
-FOO_NINJA_OPTS, when I agree that it will almost exclusively (or even
-exclusively) be used to pass the target rules.
+Best regards,
 
-Regards,
-Yann E. MORIN.
-
-> >     $ ./output/host/bin/ninja -h
-> >     usage: ninja [options] [targets...]
-> >     [...]
-> >
-> > ?ric, your opinion?
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
