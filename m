@@ -1,53 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 16:35:53 +0100
-Subject: [Buildroot] [git commit] package/tmux: bump to version 2.8
-Message-ID: <20181227153126.8EDAB8379F@busybox.osuosl.org>
+Date: Thu, 27 Dec 2018 16:35:55 +0100
+Subject: [Buildroot] [git commit] package/sed: bump to version 4.7
+Message-ID: <20181227153126.9C25380E53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=818adc7e01b5dc65efca929846509c5dfe4e178f
+commit: https://git.buildroot.net/buildroot/commit/?id=1f3183f316648a2f853714f38ff3393c0996fb10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove README from license files. The Buildroot generated image does not
-use the source files that README mentioned. README states that other
-files "have a license and copyright notice at their start", which
-doesn't add much information.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tmux/tmux.hash | 3 +--
- package/tmux/tmux.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/sed/sed.hash | 4 ++--
+ package/sed/sed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index 27a3ccaaeb..306dc52c33 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,4 +1,3 @@
- # Locally computed:
--sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
--sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
-+sha256 7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  tmux-2.8.tar.gz
- sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index deae99717b..8b7a96e898 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/sed/sed.hash b/package/sed/sed.hash
+index 470e5f2595..cc3bebafe1 100644
+--- a/package/sed/sed.hash
++++ b/package/sed/sed.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/sed/sed-4.5.tar.xz.sig
++# https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz.sig
+ # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256	7aad73c8839c2bdadca9476f884d2953cdace9567ecd0d90f9959f229d146b40	sed-4.5.tar.xz
++sha256	2885768cd0a29ff8d58a6280a270ff161f6a3deb5690b2be6c49f46d4c67bd6a	sed-4.7.tar.xz
+ # Locally calculated
+ sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 4b2ed0313f..6fee598f66 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TMUX_VERSION = 2.7
-+TMUX_VERSION = 2.8
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
--TMUX_LICENSE_FILES = README COPYING
-+TMUX_LICENSE_FILES = COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
+-SED_VERSION = 4.5
++SED_VERSION = 4.7
+ SED_SOURCE = sed-$(SED_VERSION).tar.xz
+ SED_SITE = $(BR2_GNU_MIRROR)/sed
+ SED_LICENSE = GPL-3.0
