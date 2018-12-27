@@ -1,100 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 16:10:11 +0100
-Subject: [Buildroot] [PATCH] package/dhcpdump: fix build at -O2
-Message-ID: <20181227151012.22996-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Dec 2018 16:27:11 +0100
+Subject: [Buildroot] [git commit] package/libglib2: explicitly specify gio
+ module path
+Message-ID: <20181227152247.0800B83976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit aa556e2035c023d4328185a46e15df532e566067
-("utils/genrandconfig: test with BR2_OPTIMIZE_2=y"), we are doing
-builds at -O2 instead of -Os. This has unveiled an issue in the
-strsep.c file:
+commit: https://git.buildroot.net/buildroot/commit/?id=4f534562483c65c43a34820d9b0a6625014e1f35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-strsep.c:65:23: error: register name not specified for 'delim'
-  register const char *delim;
+Since the switch to pkgconf 1.5.3 in commit
+4e423669399ad8389edd81761ea5c9cc26bf312d, the glib-networking package
+has been failing to build with:
 
-This strsep.c compatibility code is compiled in if HAVE_STRSEP is not
-defined, but dhcpdump does not use any kind of configure script to
-detect the availability of strsep(). Therefore by default, it gets
-compiled in, and the "register" specifier used for some variable
-declarations in strsep.c cause build issues at -O2.
+glib-networking: installs files in /home/naourr/work/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot//home/naourr/work/instance-0/output
 
-A previous commit in Buildroot from
-c2a7f0d6051f71f3bb9d83b574d70814339e4b95 ("dhcpdump: Fix strsep()
-feature test"), attempted to fix this problem by changing the test on
-HAVE_STRSEP by a test on _BSD_SOURCE.
+This error is due to glib-networking having installed its GIO GnuTLS
+module into an invalid location. This invalid location is
+$(DESTDIR)$(GIO_MODULE_DIR). GIO_MODULE_DIR is found by using:
 
-Unfortunately, _BSD_SOURCE is not meant to be tested: it's a feature
-macro that is meant to be *defined* by some code to tell the C library
-headers to expose (or not) some given functionality.
+  pkg-config --variable giomoduledir gio-2.0
 
-So instead, we basically revert commit
-c2a7f0d6051f71f3bb9d83b574d70814339e4b95 by dropping the patch, and
-pass -DHAVE_STRSEP in the CFLAGS when building dhcpdump.
+Unfortunately, despite the pkgconf fix in commit
+7125fc5c1a8a96ff8eee057789358702e1b55835 ("package/pkgconf: add patch
+to restore pre-1.5.3 behavior for sysroot prefixing"), the value
+returned by pkg-config for giomoduledir remains prefixed by the
+sysroot.
+
+This is due to the fact that giomoduledir is defined by default with
+the value ${libdir}/gio/modules. When running pkg-config --variable
+giomoduledir gio-2.0 with the new pkg-config version, what happens is
+that libdir is resolved first, and libdir is one of the variable for
+which we add the sysroot prefix. Then later, giomoduledir is
+resolved. For this variable, we don't prefix with the
+sysroot. However, when resolving the value of giomoduledir, it re-uses
+the value of libdir that was already resolved, and this value includes
+the sysroot prefix.
+
+There is no simple way to solve this problem within pkg-config. So for
+the time being, we take a simple route: make sure giomoduledir isn't
+defined in terms of ${libdir}. This is easily done by passing
+--with-gio-module-dir to libglib2 configure script.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/7231170d3d3e3637f02382c1a0a96009b0527618/
+  http://autobuild.buildroot.net/results/4167159c4a03f5a72dbd7e286aedb3845164cc22/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-fix-strsep-feature-test.patch        | 27 -------------------
- package/dhcpdump/dhcpdump.mk                  |  5 +++-
- 2 files changed, 4 insertions(+), 28 deletions(-)
- delete mode 100644 package/dhcpdump/0002-fix-strsep-feature-test.patch
+ package/libglib2/libglib2.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/dhcpdump/0002-fix-strsep-feature-test.patch b/package/dhcpdump/0002-fix-strsep-feature-test.patch
-deleted file mode 100644
-index 06bab947c0..0000000000
---- a/package/dhcpdump/0002-fix-strsep-feature-test.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Use the official _BSD_SOURCE feature test macro instead of the meaningless
--HAVE_STRSEP macro in order to detect the availability of strsep().
--
--This allows toolchains supporting strsep() to use it instead of the custom
--implementation from dhcpdump, which also avoids the following error with some
--toolchains:
--
--	In file included from dhcpdump.c:30:0:
--	dhcpdump.c: At top level:
--	strsep.c:65:23: error: register name not specified for ?delim?
--	  register const char *delim;
--	                       ^
--
--Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
--
--diff -Nrdup dhcpdump-1.8.orig/dhcpdump.c dhcpdump-1.8/dhcpdump.c
----- dhcpdump-1.8.orig/dhcpdump.c	2008-06-24 05:26:52.000000000 +0200
--+++ dhcpdump-1.8/dhcpdump.c	2011-05-31 19:22:15.987388498 +0200
--@@ -26,7 +26,7 @@
-- #include <regex.h>
-- #include "dhcp_options.h"
-- 
---#ifndef HAVE_STRSEP
--+#ifndef _BSD_SOURCE
-- #include "strsep.c"
-- #endif
-- 
-diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
-index 96f231962d..2413812880 100644
---- a/package/dhcpdump/dhcpdump.mk
-+++ b/package/dhcpdump/dhcpdump.mk
-@@ -15,8 +15,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
- endif
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 67db5ac359..b112b84f99 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -112,9 +112,14 @@ HOST_LIBGLIB2_DEPENDENCIES = \
+ 	host-util-linux \
+ 	host-zlib
  
-+# glibc, uclibc and musl have strsep()
-+DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
-+
- define DHCPDUMP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
- 		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
- endef
++# We explicitly specify a giomodule-dir to avoid having a value
++# containing ${libdir} in gio-2.0.pc. Indeed, a value depending on
++# ${libdir} would be prefixed by the sysroot by pkg-config, causing a
++# bogus installation path once combined with $(DESTDIR).
+ LIBGLIB2_CONF_OPTS = \
+ 	--with-pcre=system \
+-	--disable-compile-warnings
++	--disable-compile-warnings \
++	--with-gio-module-dir=/usr/lib/gio/modules
  
--- 
-2.20.1
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
