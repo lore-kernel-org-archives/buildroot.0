@@ -1,40 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 09:48:39 +0100
-Subject: [Buildroot] [PATCH 1/1] glib-networking: bump version to 2.56.1
-In-Reply-To: <20181226232942.99929-1-aduskett@gmail.com>
-References: <20181226232942.99929-1-aduskett@gmail.com>
-Message-ID: <20181227094839.395f7102@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Dec 2018 09:49:02 +0100
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+ <20181226222329.18046c1c@windsurf> <20181226214100.GK14286@scaer>
+ <CADvTj4rPZqjx_iNHF7Q8DKa63P+OOX=v-YuhCfUZMR4VOa-zsw@mail.gmail.com>
+ <CADvTj4ognr24o+CU-gBsCkH2K=KqbwAtrNv2Vv+9L_97HFUQhg@mail.gmail.com>
+ <CADvTj4pMMmcwaij-ApcgHQB0ZSAyh3vQHQ_VEb-rQGtraxHuwA@mail.gmail.com>
+ <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
+Message-ID: <20181227084902.GN14286@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+James, All,
 
-On Wed, 26 Dec 2018 18:29:42 -0500, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - glib-networking is now a meson package and has no support for auto-tools.
->   - Update configure options to reflect the above change to meson.
->   - gnutls is now a dependency of glib-networking.
->   - Add License file hash.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/848282be656809e26a704ff92842e6bde6875a3e
+On 2018-12-26 19:27 -0600, James Hilliard spake thusly:
+> On Wed, Dec 26, 2018 at 4:52 PM James Hilliard
+> > > > meson.build:293:8: ERROR:  Unknown compiler(s):
+> > > > [['/home/buildroot/buildroot/output/host/bin/i586-buildroot-linux-uclibc-g++']]
+> > Upstream bug report https://github.com/systemd/systemd/issues/11278
+> Potential fix: https://github.com/systemd/systemd/pull/11279
 
-Thanks for this version bump. However, before committing this version
-bump, I'd like to fix the build failure of glib-network with the
-current version, and then apply this version bump.
+That unfortunately does not work:
 
-The current glib-networking version used to build fine, and it's only
-the recent pkg-config changes that broke it. I'm looking into this.
+ERROR: No specified compiler can handle file src/libsystemd/sd-bus/test-bus-vtable-cc.cc
 
-Best regards,
+But if you also add:
 
-Thomas
+    diff --git a/src/test/meson.build b/src/test/meson.build
+    index ea049a6fb..d9d87e02c 100644
+    --- a/src/test/meson.build
+    +++ b/src/test/meson.build
+    @@ -957,7 +957,7 @@ tests += [
+     
+     ]
+     
+    -if cxx.found()
+    +if cxx_cmd != ''
+             tests += [
+                     [['src/libsystemd/sd-bus/test-bus-vtable-cc.cc'],
+                      [],
+
+Then it works.
+
+Obviously, I'm not sure this is the right fix...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
