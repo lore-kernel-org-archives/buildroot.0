@@ -1,61 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Dec 2018 09:49:02 +0100
-Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
-In-Reply-To: <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
-References: <cover.1545814334.git.yann.morin.1998@free.fr>
- <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
- <20181226222329.18046c1c@windsurf> <20181226214100.GK14286@scaer>
- <CADvTj4rPZqjx_iNHF7Q8DKa63P+OOX=v-YuhCfUZMR4VOa-zsw@mail.gmail.com>
- <CADvTj4ognr24o+CU-gBsCkH2K=KqbwAtrNv2Vv+9L_97HFUQhg@mail.gmail.com>
- <CADvTj4pMMmcwaij-ApcgHQB0ZSAyh3vQHQ_VEb-rQGtraxHuwA@mail.gmail.com>
- <CADvTj4r=OkPbwSyN2ZUmFxraHQYp07ciW700574-ZD2Xzjqihw@mail.gmail.com>
-Message-ID: <20181227084902.GN14286@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Dec 2018 10:56:24 +0200
+Subject: [Buildroot] [PATCH 6/9] package/imx-mkimage: Bump to
+ imx_4.14.62_1.0.0_beta
+In-Reply-To: <20181226223112.24456-6-nerv@dawncrow.de>
+References: <20181226223112.24456-1-nerv@dawncrow.de>
+ <20181226223112.24456-6-nerv@dawncrow.de>
+Message-ID: <20181227085624.b2xoscre4rgongha@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hi Andr?,
 
-On 2018-12-26 19:27 -0600, James Hilliard spake thusly:
-> On Wed, Dec 26, 2018 at 4:52 PM James Hilliard
-> > > > meson.build:293:8: ERROR:  Unknown compiler(s):
-> > > > [['/home/buildroot/buildroot/output/host/bin/i586-buildroot-linux-uclibc-g++']]
-> > Upstream bug report https://github.com/systemd/systemd/issues/11278
-> Potential fix: https://github.com/systemd/systemd/pull/11279
+On Wed, Dec 26, 2018 at 11:31:09PM +0100, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/imx-mkimage/imx-mkimage.hash | 2 +-
+>  package/imx-mkimage/imx-mkimage.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+> index e1cbdd973c..ceaac64b1c 100644
+> --- a/package/imx-mkimage/imx-mkimage.hash
+> +++ b/package/imx-mkimage/imx-mkimage.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 bc79e11cfbde303e200287fa6624028c8ce5344f8a35ed179b3fe217d74155da  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
+> +sha256 17e22d0127879bb9f6f3aae82b22d02e0372578dc7a4f6c71647fce75c632ee2  imx-mkimage-rel_imx_4.14.62_1.0.0_beta.tar.gz
+>  sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
+> diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+> index 6fd6aa39b0..cde4fefcea 100644
+> --- a/package/imx-mkimage/imx-mkimage.mk
+> +++ b/package/imx-mkimage/imx-mkimage.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IMX_MKIMAGE_VERSION = rel_imx_4.9.51_8mq_ga
+> +IMX_MKIMAGE_VERSION = rel_imx_4.14.62_1.0.0_beta
 
-That unfortunately does not work:
+Why not bump to the latest rel_imx_4.14.78_1.0.0_ga?
 
-ERROR: No specified compiler can handle file src/libsystemd/sd-bus/test-bus-vtable-cc.cc
+baruch
 
-But if you also add:
-
-    diff --git a/src/test/meson.build b/src/test/meson.build
-    index ea049a6fb..d9d87e02c 100644
-    --- a/src/test/meson.build
-    +++ b/src/test/meson.build
-    @@ -957,7 +957,7 @@ tests += [
-     
-     ]
-     
-    -if cxx.found()
-    +if cxx_cmd != ''
-             tests += [
-                     [['src/libsystemd/sd-bus/test-bus-vtable-cc.cc'],
-                      [],
-
-Then it works.
-
-Obviously, I'm not sure this is the right fix...
-
-Regards,
-Yann E. MORIN.
+>  IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+>  IMX_MKIMAGE_SITE_METHOD = git
+>  IMX_MKIMAGE_LICENSE = GPL-2.0+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
