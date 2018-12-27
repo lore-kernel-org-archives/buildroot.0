@@ -1,40 +1,36 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 27 Dec 2018 12:13:47 +0200
-Subject: [Buildroot] [PATCH 2/3] lm-sensors: make ISA tools depend on x86
-In-Reply-To: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
-References: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
-Message-ID: <1b5190fd8020442b7297d7144535e9ddd421c1bc.1545905628.git.baruch@tkos.co.il>
+Date: Thu, 27 Dec 2018 12:13:46 +0200
+Subject: [Buildroot] [PATCH 1/3] lm-sensors: remove redundant
+ BUILD_STATIC_LIB build parameter
+Message-ID: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The isadump and isaset tools are built for x86 targets only.
+Commit 3e05efd76636 ("package/lm-sensors: disable static library for
+shared-only build") added BUILD_STATIC_LIB to LM_SENSORS_MAKE_OPTS with
+value that depends on BR2_SHARED_LIBS, but forgot to remove it from the
+common LM_SENSORS_MAKE_OPTS. Fix that.
 
+Cc: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/lm-sensors/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lm-sensors/lm-sensors.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/lm-sensors/Config.in b/package/lm-sensors/Config.in
-index 60571b784f2a..a2e027599908 100644
---- a/package/lm-sensors/Config.in
-+++ b/package/lm-sensors/Config.in
-@@ -25,12 +25,14 @@ config BR2_PACKAGE_LM_SENSORS_FANCONTROL
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 6fc7ce4981c9..778a355b0f7a 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -21,7 +21,6 @@ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_PWMCONFIG) += sbin/pwmconfig
+ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT) += sbin/sensors-detect
  
- config BR2_PACKAGE_LM_SENSORS_ISADUMP
- 	bool "isadump"
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  Isadump is a small helper program to examine registers
- 	  visible through the ISA bus.
+ LM_SENSORS_MAKE_OPTS = \
+-	BUILD_STATIC_LIB=1 \
+ 	MACHINE=$(KERNEL_ARCH) \
+ 	PREFIX=/usr
  
- config BR2_PACKAGE_LM_SENSORS_ISASET
- 	bool "isaset"
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  Isaset is a small helper program to set register visible
- 	  through the ISA bus.
 -- 
 2.19.2
