@@ -1,16 +1,18 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 27 Dec 2018 17:08:06 +0100
-Subject: [Buildroot] [PATCH 3/3] board/freescale/common/imx: Fix typo
-In-Reply-To: <20181227160806.4466-1-nerv@dawncrow.de>
-References: <20181227160806.4466-1-nerv@dawncrow.de>
-Message-ID: <20181227160806.4466-3-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Dec 2018 17:09:59 +0100
+Subject: [Buildroot] [git commit] board/freescale/common/imx: fix typo
+Message-ID: <20181227160530.02432838C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=f2c1e2e885c8182c452accbb7c9fb0404bcebafb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -28,5 +30,3 @@ index fdb645014a..2f8842f8e0 100644
  # * a single root filesystem partition is required (ext2, ext3 or ext4)
  #
  
--- 
-2.17.1
