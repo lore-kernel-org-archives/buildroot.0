@@ -1,8 +1,10 @@
 From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 27 Dec 2018 17:08:04 +0100
-Subject: [Buildroot] [PATCH 1/3] board/freescale/imx8mqevk: Fix typos in
- readme
-Message-ID: <20181227160806.4466-1-nerv@dawncrow.de>
+Date: Thu, 27 Dec 2018 17:08:05 +0100
+Subject: [Buildroot] [PATCH 2/3] package/freescale-imx/firmware-imx: Fix
+ typos
+In-Reply-To: <20181227160806.4466-1-nerv@dawncrow.de>
+References: <20181227160806.4466-1-nerv@dawncrow.de>
+Message-ID: <20181227160806.4466-2-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- board/freescale/imx8mqevk/readme.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
-index a32c122f91..e60eba4cb6 100644
---- a/board/freescale/imx8mqevk/readme.txt
-+++ b/board/freescale/imx8mqevk/readme.txt
-@@ -21,7 +21,7 @@ You will find in output/images/ the following files:
-   - boot.vfat
-   - fsl-imx8mq-evk.dtb
-   - Image
--  - imx-boot-imx8mqevk-sd.bin
-+  - imx8-boot-sd.bin
-   - lpddr4_pmu_train_fw.bin
-   - rootfs.ext2
-   - rootfs.ext4
-@@ -69,7 +69,7 @@ Enable HDMI output
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 0a503d7a66..f9db09dae8 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -35,7 +35,7 @@ endef
  
- To enable HDMI output at boot you must provide the video kernel boot
- argument.  To set the video boot argument from U-Boot run after
--stoping in U-Boot prompt:
-+stopping in U-Boot prompt:
- 
- setenv mmcargs 'setenv bootargs console=${console} root=${mmcroot} video=HDMI-A-1:1920x1080-32 at 60'
- saveenv
+ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
+-	# lpddr4_pmu_train_fw.bin isneeded when generating imx-boot-imx8mqevk-sd.bin
++	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,1d)
+ 	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,2d)
 -- 
 2.17.1
