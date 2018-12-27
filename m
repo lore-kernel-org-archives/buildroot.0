@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Dec 2018 16:38:46 +0100
-Subject: [Buildroot] [git commit] package/clang: bump to version 7.0.1
-Message-ID: <20181227153412.D75B183B2E@busybox.osuosl.org>
+Date: Thu, 27 Dec 2018 16:38:41 +0100
+Subject: [Buildroot] [git commit] package/llvm: bump to version 7.0.1
+Message-ID: <20181227153412.D031083B2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b016f20c32dfb4c1aefdefae7d28f74b03740b44
+commit: https://git.buildroot.net/buildroot/commit/?id=8ad93cc6347c94fda716530fb2d2a766ab063f49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/clang/clang.hash | 2 +-
- package/clang/clang.mk   | 2 +-
+ package/llvm/llvm.hash | 2 +-
+ package/llvm/llvm.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index aaca1a74a2..fe868f5874 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 200907fc89..531361ae10 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
 @@ -1,3 +1,3 @@
  # locally calculated
--sha256 550212711c752697d2f82c648714a7221b1207fd9441543ff4aa9e3be45bba55 cfe-7.0.0.src.tar.xz
-+sha256 a45b62dde5d7d5fdcdfa876b0af92f164d434b06e9e89b5d0b1cbc65dfe3f418 cfe-7.0.1.src.tar.xz
- sha256 3f3f2e96e3b7319d2b4b49227d6da624a717340107ce2ca5342a25e0e57dfd35 LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index f9d4ae3713..c15f2b0d2a 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
+-sha256 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222 llvm-7.0.0.src.tar.xz
++sha256 a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b llvm-7.0.1.src.tar.xz
+ sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 1f9bd447f5..f33ec11fbf 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLANG_VERSION = 7.0.0
-+CLANG_VERSION = 7.0.1
- CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
- CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = NCSA
+-LLVM_VERSION = 7.0.0
++LLVM_VERSION = 7.0.1
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
