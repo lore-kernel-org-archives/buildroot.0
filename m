@@ -1,28 +1,21 @@
 From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 27 Dec 2018 15:39:18 +0100
-Subject: [Buildroot] [PATCH 6/9] package/imx-mkimage: Bump to
- imx_4.14.62_1.0.0_beta
-In-Reply-To: <20181227085624.b2xoscre4rgongha@sapphire.tkos.co.il>
+Date: Thu, 27 Dec 2018 15:39:23 +0100
+Subject: [Buildroot] [PATCH 5/9] package/freescale-imx: Add
+ imx-sc-firmware package
+In-Reply-To: <20181227094657.64049784@windsurf>
 References: <20181226223112.24456-1-nerv@dawncrow.de>
- <20181226223112.24456-6-nerv@dawncrow.de>
- <20181227085624.b2xoscre4rgongha@sapphire.tkos.co.il>
-Message-ID: <0baa2974-e710-5017-49e7-469aa1b5fdf8@dawncrow.de>
+ <20181226223112.24456-5-nerv@dawncrow.de> <20181227094657.64049784@windsurf>
+Message-ID: <a91e5340-d938-9d95-6d39-d47a6cab69a0@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 27.12.18 um 09:56 schrieb Baruch Siach:
->> -IMX_MKIMAGE_VERSION = rel_imx_4.9.51_8mq_ga
->> +IMX_MKIMAGE_VERSION = rel_imx_4.14.62_1.0.0_beta
-> 
-> Why not bump to the latest rel_imx_4.14.78_1.0.0_ga?
-
-Hi Baruch,
+Am 27.12.18 um 09:46 schrieb Thomas Petazzoni:
+> So this package doesn't do anything on platforms other than
+> BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X. Should the package "depends
+> on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X" ?
 
 Thanks for having a look!
-rel_imx_4.14.62_1.0.0_beta is the version currently used in:
-https://git.buildroot.net/buildroot/tree/configs/freescale_imx8mqevk_defconfig
-Further I did all my testing with it and don't have access to the imx8x board for the next two weeks.
-So for now I'd like to stick to that version until I and the imx8mq maintainers can test it.
+If it is better to change it later I can do that. Just note there is a third variant of i.MX8 which also needs this, evalboards should be out early 2019 for it.
