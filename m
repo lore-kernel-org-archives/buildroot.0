@@ -1,158 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 18:01:30 +0100
-Subject: [Buildroot] [PATCH 2/3] package/pkg-python: use
- host-python3-setuptools when needed
+Date: Fri, 28 Dec 2018 18:01:31 +0100
+Subject: [Buildroot] [PATCH 3/3] package/pkg-python: use
+ --single-version-externally-managed for host setuptools
 In-Reply-To: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
 References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228170132.13049-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20181228170132.13049-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package uses "setuptools" as its <pkg>_SETUP_TYPE, we currently
-add a dependency on host-python-setuptools. This means that:
+Currently, host Python packages that use setuptools are installed as
+Python Eggs, i.e they are installed in
+$(HOST_DIR)/lib/python2.7/site-packages/Something-<version>.egg. Once
+installed, each Python Egg is registered to a file called
+$(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. This file is
+read by the Python interpreter so that the installation location of
+each Egg is added to the Python path, and can be found by the Python
+interpreter.
 
- (1) When BR2_PACKAGE_PYTHON=y, the default host Python version is
-     Python 2.x, and host-python-setuptools is installed for
-     host-python.
+However, the fact that the installation of different Python modules
+need to update a common file is clearly not compatible with
+per-package directories and top-level parallel build.
 
- (2) When BR2_PACKAGE_PYTHON3=y, the default host Python version is
-     Python 3.x, and host-python-setuptools is installed for
-     host-python3.
+To fix this, we avoid using Python Eggs using the same
+--single-version-externally-managed option that we use for target
+modules. This option is normally meant for distributions packaging
+Python modules, and can therefore only be used if either --record (to
+record the list of files being installed) or --root is
+passed. --root=/ works fine and was suggested by
+https://stackoverflow.com/questions/6301003/stopping-setup-py-from-installing-as-egg/33791008#33791008.
 
- (3) When no target Python interpreter is selected, the default host
-     Python version is Python 2.x, and host-python-setuptools is
-     installed for host-python.
+With this change, host Python modules installed by setuptools are now
+installed in the "regular" way, i.e directly in
+$(HOST_DIR)/lib/python2.7/site-packages/mako for host-python-mako.
 
-Situations (1) and (3) are problematic for host Python packages that
-need Python 3.x. Such packages use <pkg>_NEEDS_HOST_PYTHON = python3,
-but if they use setuptools as their setup type, they will not find
-setuptools installed for host-python3 in situations (1) and (3)
-described above.
-
-We currently have a single package that sets <pkg>_NEEDS_HOST_PYTHON =
-python3: host-meson. host-meson generally works because if setuptools
-is not found, it falls back to distutils, which is part of the
-standard Python library. However, if there is a setuptools version
-installed system-wide, it may be picked up, but may not necessarily be
-the same version as Buildroot setuptools, potentially causing
-problems.
-
-This commit makes the necessary change to the python-package
-infrastructure to fix this behavior, by identifying the following
-cases:
-
- - When a host Python package says <pkg>_NEEDS_HOST_PYTHON = python3,
-   then we know it wants setuptools installed for host-python3, so we
-   use host-python3-setuptools.
-
- - When a host Python package says <pkg>_NEEDS_HOST_PYTHON = python2,
-   then we known it wants setuptools installed for host-python, so we
-   use host-python-setuptools.
-
- - When BR2_PACKAGE_PYTHON3=y, and we have a target package, or a host
-   package with no NEEDS_HOST_PYTHON option, then we want setuptools
-   installed for host-python3, so we use host-python3-setuptools.
-
- - When BR2_PACKAGE_PYTHON=y or no target interpreter is enabled at
-   all, and we have a target package, or a host package with no
-   NEEDS_HOST_PYTHON option, then we want setuptools for host-python,
-   so we use host-python-setuptools.
-
-To make this happen, we use host-python3-setuptools introduced in a
-previous commit, but we also change host-python-setuptools to force
-its installation for host-python. The latter is needed if you build
-with BR2_PACKAGE_PYTHON3=y but want to install a Python-based package
-that has NEEDS_HOST_PYTHON=python2.
-
-There is one single package that needs be adjusted following this:
-lirc-tools, because it is not using the python-package
-infrastructure. It directly depends on host-python-setuptools, which
-no longer works because host-python-setuptools now only installs for
-Python 2.x, while lirc-tools Python binding only supports Python
-3.x. Switching to host-python3-setuptools solves this problem.
+This makes the installation of host Python modules more similar to the
+one of target modules, and makes it compatible with per-package
+directory support and top-level parallel build.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lirc-tools/lirc-tools.mk              |  2 +-
- package/pkg-python.mk                         | 35 ++++++++++++++-----
- .../python-setuptools/python-setuptools.mk    |  1 +
- 3 files changed, 29 insertions(+), 9 deletions(-)
+ package/pkg-python.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index a5165ad438..e468f2a25d 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -46,7 +46,7 @@ LIRC_TOOLS_DEPENDENCIES += libftdi1
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
--LIRC_TOOLS_DEPENDENCIES += python3 host-python-setuptools
-+LIRC_TOOLS_DEPENDENCIES += python3 host-python3-setuptools
- LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV="$(PKG_PYTHON_SETUPTOOLS_ENV)"
- endif
- 
 diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 3dc8a5d10f..b641e3f865 100644
+index b641e3f865..4f42e2efc2 100644
 --- a/package/pkg-python.mk
 +++ b/package/pkg-python.mk
-@@ -188,16 +188,35 @@ endif
- endif # ($$($(2)_NEEDS_HOST_PYTHON),)
- endif # ($(4),target)
+@@ -85,7 +85,9 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PYTHONNOUSERSITE=1
  
--# Setuptools based packages will need host-python-setuptools (both
--# host and target). We need to have a special exclusion for the
--# host-setuptools package itself: it is setuptools-based, but
--# shouldn't depend on host-setuptools (because it would otherwise
--# depend on itself!).
-+# Setuptools based packages will need setuptools for the host Python
-+# interpreter (both host and target).
-+#
-+# If we have a host package that says "I need Python 3", we install
-+# setuptools for python3.
-+#
-+# If we have a host packge that says "I need Python 2", we install
-+# setuptools for python2.
-+#
-+# If we have a target package, or a host package that doesn't have any
-+# <pkg>_NEEDS_HOST_PYTHON, and BR2_PACKAGE_PYTHON3 is used, then
-+# Python 3.x is the default Python interpreter, so we install
-+# setuptools for python3.
-+#
-+# In all other cases, we install setuptools for python2. Those other
-+# cases are: a target package or host package with
-+# BR2_PACKAGE_PYTHON=y, or a host-package with neither
-+# BR2_PACKAGE_PYTHON3=y or BR2_PACKAGE_PYTHON=y.
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
--ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
--$(2)_DEPENDENCIES += host-python-setuptools
--endif
-+ifeq ($(4):$$($(2)_NEEDS_HOST_PYTHON),host:python3)
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python3-setuptools,$(1)),,host-python3-setuptools)
-+else ifeq ($(4):$$($(2)_NEEDS_HOST_PYTHON),host:python2)
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
-+else ifeq ($$(BR2_PACKAGE_PYTHON3),y)
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python3-setuptools,$(1)),,host-python3-setuptools)
-+else
-+$(2)_DEPENDENCIES += $$(if $$(filter host-python-setuptools,$(1)),,host-python-setuptools)
- endif
-+endif # SETUP_TYPE
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+-	--prefix=$(HOST_DIR)
++	--prefix=$(HOST_DIR) \
++	--root=/ \
++	--single-version-externally-managed
  
- # Python interpreter to use for building the package.
- #
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index cc6f991cdd..d915449c5d 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -10,6 +10,7 @@ PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-+HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
- 
- define PYTHON_SETUPTOOLS_EXTRACT_CMDS
- 	$(UNZIP) -d $(@D) $(PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
+ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
 -- 
 2.20.1
