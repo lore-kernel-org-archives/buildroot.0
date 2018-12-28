@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Dec 2018 13:49:08 +0100
-Subject: [Buildroot] [PATCH v7 2/8] Makefile: move definition of
- TARGET_DIR inside .config condition
-In-Reply-To: <20181228104335.22379-3-thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Dec 2018 13:51:23 +0100
+Subject: [Buildroot] [PATCH v7 4/8] Makefile: allow top-level parallel
+ build with BR2_PER_PACKAGE_DIRECTORIES=y
+In-Reply-To: <20181228104335.22379-5-thomas.petazzoni@bootlin.com>
 References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228104335.22379-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228124908.GU14286@scaer>
+ <20181228104335.22379-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20181228125123.GV14286@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +15,52 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2018-12-28 11:43 +0100, Thomas Petazzoni spake thusly:
-> In a follow-up commit introducing per-package directory support, we
-> will need to define TARGET_DIR in a different way depending on the
-> value of a Config.in option. To make this possible, the definition of
-> TARGET_DIR should be moved inside the BR2_HAVE_DOT_CONFIG condition.
+> With per-package folder support, top-level parallel build becomes
+> safe, so we can enclose the .NOTPARALLEL statement in a
+> !BR2_PER_PACKAGE_DIRECTORIES condition.
 > 
-> We have verified that $(TARGET_DIR) is only used within the
-> BR2_HAVE_DOT_CONFIG condition. Outside of this condition, such as in
-> the "clean" target, $(BASE_TARGET_DIR) is used.
-> 
-> Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  Makefile | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  Makefile | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
 > 
 > diff --git a/Makefile b/Makefile
-> index c5b78b3274..9de8e0c725 100644
+> index e01ec4c963..74c0757fd8 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -204,10 +204,7 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+> @@ -228,21 +228,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>  -include $(BR2_CONFIG)
+>  endif
 >  
->  BUILD_DIR := $(BASE_DIR)/build
->  BINARIES_DIR := $(BASE_DIR)/images
-> -# The target directory is common to all packages,
-> -# but there is one that is specific to each filesystem.
->  BASE_TARGET_DIR := $(BASE_DIR)/target
-> -TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
->  # initial definition so that 'make clean' works for most users, even without
->  # .config. HOST_DIR will be overwritten later when .config is included.
->  HOST_DIR := $(BASE_DIR)/host
-> @@ -457,6 +454,10 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
->  # packages compiled for the host go here
->  HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+> -# Parallel execution of this Makefile is disabled because it changes
+> -# the packages building order, that can be a problem for two reasons:
+> -# - If a package has an unspecified optional dependency and that
+> -#   dependency is present when the package is built, it is used,
+> -#   otherwise it isn't (but compilation happily proceeds) so the end
+> -#   result will differ if the order is swapped due to parallel
+> -#   building.
+> -# - Also changing the building order can be a problem if two packages
+> -#   manipulate the same file in the target directory.
+> -#
+> -# Taking into account the above considerations, if you still want to execute
+> -# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+> -# use the -j<jobs> option when building, e.g:
+> -#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
+> +# Disable top-level parallel build if per-package directories is not
+> +# used. Indeed, per-package directories is necessary to guarantee
+> +# determinism and reproducibility with top-level parallel build.
+>  .NOTPARALLEL:
+> +endif
 >  
-> +# The target directory is common to all packages,
-> +# but there is one that is specific to each filesystem.
-> +TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
-> +
->  ifneq ($(HOST_DIR),$(BASE_DIR)/host)
->  HOST_DIR_SYMLINK = $(BASE_DIR)/host
->  $(HOST_DIR_SYMLINK): $(BASE_DIR)
+>  # timezone and locale may affect build output
+>  ifeq ($(BR2_REPRODUCIBLE),y)
 > -- 
 > 2.20.1
 > 
