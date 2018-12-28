@@ -1,45 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:43:33 +0100
-Subject: [Buildroot] [PATCH v7 6/8] package/pkg-kconfig: handle
- KCONFIG_DEPENDENCIES with per-package directories
+Date: Fri, 28 Dec 2018 11:43:34 +0100
+Subject: [Buildroot] [PATCH v7 7/8] docs/manual: add details about top-level
+ parallel build support
 In-Reply-To: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
 References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228104335.22379-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20181228104335.22379-8-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pkg-kconfig infrastructure hijacks the regular chain of build
-steps to insert its own step to prepare the configuration of kconfig
-packages. This additional step may have dependencies of its own, such
-as host-flex, host-bison or toolchain.
-
-In the context of per-package directory support, those dependencies
-must be copied to the per-package directory of the current package
-prior to doing the config preparation. This commit implements this
-logic by adding a call to prepare-per-package-directory at the right
-spot.
-
-Reported-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-kconfig.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/common-usage.txt        | 44 +++++++++++++++++++++++++++++
+ docs/manual/faq-troubleshooting.txt |  3 ++
+ docs/manual/quickstart.txt          |  8 +++---
+ 3 files changed, 51 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index d6c95b897e..281d02de98 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -113,6 +113,7 @@ endef
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
- $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-+	$$(call prepare-per-package-directory,$$($(2)_KCONFIG_DEPENDENCIES))
- 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
- 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
- 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index e3d7578c85..ebe3238e38 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -329,6 +329,50 @@ Refer to the help text of this script for more details:
+ utils/size-stats-compare -h
+ ----------------
+ 
++[[top-level-parallel-build]]
++=== Top-level parallel build
++
++Buildroot has always been capable of using parallel build on a per
++package basis: each package is built by Buildroot using +make -jN+ (or
++the equivalent invocation for non-make-based build systems). The level
++of parallelism is by default number of CPUs + 1, but it can be
++adjusted using the +BR2_JLEVEL+ configuration option.
++
++Until 2019.02, Buildroot was however building packages in a serial
++fashion: each package was built one after the other, without
++parallelization of the build between packages. As of 2019.02,
++Buildroot has experimental support for *top-level parallel build*,
++which allows some signicant build time savings by building packages
++that have no dependency relationship in parallel. This feature is
++however marked as experimental and is known to not work in all
++situations.
++
++In order to use top-level parallel build, one must:
++
++. Enable the option +BR2_PER_PACKAGE_DIRECTORIES+ in the Buildroot
++configuration
++
++. Use +make -jN+ when starting the Buildroot build
++
++Internally, the +BR2_PER_PACKAGE_DIRECTORIES+ will enable a mechanism
++called *per-package directories*, which will have the following
++effects:
++
++* Instead of a global _target_ directory and a global _host_ directory
++  common to all packages, per-package _target_ and _host_ directories
++  will be used, in +$(O)/per-package/<pkg>/target/+ and
++  +$(O)/per-package/<pkg>/host/+ respectively. Those folders will be
++  populated from the corresponding folders of the package dependencies
++  at the beginning of +<pkg>+ build. The compiler and all other tools
++  will therefore only be able to see and access files installed by
++  dependencies explicitly listed by +<pkg>+.
++
++* At the end of the build, the global _target_ and _host_ directories
++  will be populated, located in +$(O)/target+ and +$(O)/host+
++  respectively. This means that during the build, those folders will
++  be empty and it's only at the very end of the build that they will
++  be populated.
++
+ include::eclipse-integration.txt[]
+ 
+ include::advanced.txt[]
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index b144c9e7f0..5adf3fa6ce 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -239,3 +239,6 @@ help reduce the build time:
+ 
+  * Buy new hardware. SSDs and lots of RAM are key to speeding up the
+    builds.
++
++ * Experiment with top-level parallel build, see
++   xref:top-level-parallel-build[].
+diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
+index 74158ae249..77b73ef116 100644
+--- a/docs/manual/quickstart.txt
++++ b/docs/manual/quickstart.txt
+@@ -60,10 +60,10 @@ To start the build process, simply run:
+  $ make
+ --------------------
+ 
+-You *should never* use +make -jN+ with Buildroot: top-level parallel
+-make is currently not supported. Instead, use the +BR2_JLEVEL+ option
+-to tell Buildroot to run the compilation of each individual package
+-with +make -jN+.
++By default, Buildroot does not support top-level parallel build, so
++running +make -jN+ is not necessary. There is however experimental
++support for top-level parallel build, see
++xref:top-level-parallel-build[].
+ 
+ The `make` command will generally perform the following steps:
+ 
 -- 
 2.20.1
