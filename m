@@ -1,34 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 12:10:03 +0100
-Subject: [Buildroot] [PATCH 1/3] lm-sensors: remove redundant
- BUILD_STATIC_LIB build parameter
-In-Reply-To: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
-References: <6592ba5b855eb8d5f79c6d883a45bdf02f1bfb49.1545905628.git.baruch@tkos.co.il>
-Message-ID: <20181228121003.7c0dfd2c@windsurf>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 28 Dec 2018 12:49:29 +0100
+Subject: [Buildroot] Building cargo with per-package directories
+In-Reply-To: <20181228102147.056d86ee@windsurf>
+References: <20181211171252.02ddb571@windsurf> <20181211212705.GA13119@itchy>
+ <20181212225041.GA15035@itchy>
+ <20181226154959.6a793c8d@windsurf.home>
+ <20181227205015.GA27373@ned> <20181228102147.056d86ee@windsurf>
+Message-ID: <20181228114929.GA29283@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2018-12-28 10:21, Thomas Petazzoni wrote:
+> Hello Eric,
+>
+> On Thu, 27 Dec 2018 21:50:15 +0100, Eric Le Bihan wrote:
+>
+> > > so that if we ever change HOST_LDFLAGS in the future, it will continue
+> > > to work. What do you think ?
+> >
+> > I tested this change without issues, so I will post a patch to include
+> > it in the cargo package.
+>
+> Thanks. In fact I already had a patch at
+> https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-v7-work&id=55c8e671d5130b22c72cedd194659c3dde5a6923,
+> but I will happily take an alternate patch if you have one.
 
-On Thu, 27 Dec 2018 12:13:46 +0200, Baruch Siach wrote:
-> Commit 3e05efd76636 ("package/lm-sensors: disable static library for
-> shared-only build") added BUILD_STATIC_LIB to LM_SENSORS_MAKE_OPTS with
-> value that depends on BR2_SHARED_LIBS, but forgot to remove it from the
-> common LM_SENSORS_MAKE_OPTS. Fix that.
-> 
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/lm-sensors/lm-sensors.mk | 1 -
->  1 file changed, 1 deletion(-)
+I do not have one yet, so your patch is fine.
 
-Series applied to master, thanks.
+Regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+ELB
