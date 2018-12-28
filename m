@@ -1,59 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:51:23 +0100
-Subject: [Buildroot] [git commit] package/netsurf: use
- HOST_CFLAGS/HOST_LDFLAGS
-Message-ID: <20181228104701.D6DC883703@busybox.osuosl.org>
+Date: Fri, 28 Dec 2018 11:51:30 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_rgb: add missing
+ host-pkgconf dependency
+Message-ID: <20181228104701.DF7647FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84be6912bb8991986cd1a5d751c514942b36e713
+commit: https://git.buildroot.net/buildroot/commit/?id=401b7b94a39710cd9d9f5a98febd8f8ea528708d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 9b0ac875385e3bcb052fc2f376f45fa61e102673 ("package/netsurf:
-make sure host libpng can be found"), the netsurf package was modified
-to pass -L$(HOST_DIR)/lib so that libpng is found at link time.
+Building a minimal defconfig such as:
 
-However, this is not sufficient: for the host tool to work at runtime,
-we need to have the proper RPATH encoded in the host
-binary. Otherwise, building netsurf fails with:
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XAPP_RGB=y
 
-build/Linux-framebuffer/tools/convert_image: error while loading shared libraries: libpng16.so.16: cannot open shared object file: No such file or directory
-make[3]: *** [build/Linux-framebuffer/image-caret_image.c] Error 127
+by running "make xapp_rgb" gives the following build failure:
 
-So basically, we need to build not only with -L$(HOST_DIR)/lib, but
-with the complete HOST_LDFLAGS provided by Buildroot.
+checking for RGB... configure: error: in `/home/test/buildroot/output/build/xapp_rgb-1.0.6':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-For consistency, we also use HOST_CFLAGS instead of hardcoding
--I$(HOST_DIR)/include.
+Alternatively, you may set the environment variables RGB_CFLAGS
+and RGB_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-It is worth mentioning that we must use single quotes here, because
-the NETSURF_CONFIG variable value then gets put within double quotes
-to be passed to the netsurf build system.
+The configure script uses pkg-config, but host-pkgconf is missing in
+the list of dependencies.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/4ff6a8c4017d006a4b6b9ca369a569fa72862900/
+This issue was detected thanks to per-package directory support.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsurf/netsurf.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_rgb/xapp_rgb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index e5a251b9c1..2e17c5768f 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -36,8 +36,8 @@ ifeq ($(BR2_PACKAGE_NETSURF_SDL),y)
- NETSURF_DEPENDENCIES += sdl host-libpng
- NETSURF_FRONTEND = framebuffer
- NETSURF_CONFIG = \
--	HOST_CFLAGS=-I$(HOST_DIR)/include \
--	HOST_LDFLAGS='-lpng -L$(HOST_DIR)/lib'
-+	HOST_CFLAGS='$(HOST_CFLAGS)' \
-+	HOST_LDFLAGS='$(HOST_LDFLAGS) -lpng'
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- NETSURF_DEPENDENCIES += freetype
- define NETSURF_FONTLIB_CONFIGURE_CMDS
+diff --git a/package/x11r7/xapp_rgb/xapp_rgb.mk b/package/x11r7/xapp_rgb/xapp_rgb.mk
+index d63576f44d..b2d5d77744 100644
+--- a/package/x11r7/xapp_rgb/xapp_rgb.mk
++++ b/package/x11r7/xapp_rgb/xapp_rgb.mk
+@@ -9,6 +9,6 @@ XAPP_RGB_SOURCE = rgb-$(XAPP_RGB_VERSION).tar.bz2
+ XAPP_RGB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_RGB_LICENSE = MIT
+ XAPP_RGB_LICENSE_FILES = COPYING
+-XAPP_RGB_DEPENDENCIES = xorgproto
++XAPP_RGB_DEPENDENCIES = xorgproto host-pkgconf
+ 
+ $(eval $(autotools-package))
