@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 14:22:57 +0100
-Subject: [Buildroot] [PATCH 1/2] php: fix building curl extension.
-In-Reply-To: <20181227174903.39339-1-aduskett@gmail.com>
-References: <20181227174903.39339-1-aduskett@gmail.com>
-Message-ID: <20181228142257.1d99b43e@windsurf>
+Date: Fri, 28 Dec 2018 14:25:50 +0100
+Subject: [Buildroot] [PATCH] package/cargo: pass appropriate library path to
+ the linker
+Message-ID: <20181228132551.29819-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When linking the host cargo binary, the linker should be told to find
+libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
+such as libhttp_parser. This was found with per-package directory
+support, where the build failed with:
 
-On Thu, 27 Dec 2018 12:49:02 -0500, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> The configure option "--with-curl=$(STAGING_DIR)/usr" is broken.
-> PHP will detect libcurl.pc, which will pass the configure checks, but will then
-> prepend $(STAGING_DIR)/usr to the paths in libcurl.pc.
-> 
-> Thus php will then search $(STAGING_DIR)/usr/$(STAGING_DIR)/usr/lib/ for
-> curl libraries during linking, which causes linking errors.
-> 
-> Removing "=$(STAGING_DIR)/usr" from --with-curl fixes the issue.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/44b/44b9ea1edca85b222a117a8e241a26b8dce33929/
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/php/php.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+  = note: /usr/bin/ld: cannot find -lhttp_parser
+          collect2: error: ld returned 1 exit status
 
-Both applied. Thanks!
+In order to fix this, instead of passing -L$(HOST_DIR)/lib during the
+build of Cargo, we make sure all flags in $(HOST_LDFLAGS) are passed.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cargo/cargo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+index 1b1053ba41..a387281b4c 100644
+--- a/package/cargo/cargo.mk
++++ b/package/cargo/cargo.mk
+@@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
+ 	$(if $(VERBOSE),--verbose)
+ 
+ HOST_CARGO_ENV = \
+-	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
++	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
+ 	CARGO_HOME=$(HOST_CARGO_HOME)
+ 
+ define HOST_CARGO_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
