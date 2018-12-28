@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:51:52 +0100
-Subject: [Buildroot] [PATCH] package/netsurf: use
- HOST_CFLAGS/HOST_LDFLAGS
-In-Reply-To: <20181227131818.17917-1-thomas.petazzoni@bootlin.com>
-References: <20181227131818.17917-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228115152.00146498@windsurf>
+Date: Fri, 28 Dec 2018 11:51:57 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xapp_rgb: add missing
+ host-pkgconf dependency
+In-Reply-To: <20181227142727.19535-1-thomas.petazzoni@bootlin.com>
+References: <20181227142727.19535-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181228115157.41561890@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 27 Dec 2018 14:18:17 +0100, Thomas Petazzoni wrote:
-> In commit 9b0ac875385e3bcb052fc2f376f45fa61e102673 ("package/netsurf:
-> make sure host libpng can be found"), the netsurf package was modified
-> to pass -L$(HOST_DIR)/lib so that libpng is found at link time.
+On Thu, 27 Dec 2018 15:27:27 +0100, Thomas Petazzoni wrote:
+> Building a minimal defconfig such as:
 > 
-> However, this is not sufficient: for the host tool to work at runtime,
-> we need to have the proper RPATH encoded in the host
-> binary. Otherwise, building netsurf fails with:
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XAPP_RGB=y
 > 
-> build/Linux-framebuffer/tools/convert_image: error while loading shared libraries: libpng16.so.16: cannot open shared object file: No such file or directory
-> make[3]: *** [build/Linux-framebuffer/image-caret_image.c] Error 127
+> by running "make xapp_rgb" gives the following build failure:
 > 
-> So basically, we need to build not only with -L$(HOST_DIR)/lib, but
-> with the complete HOST_LDFLAGS provided by Buildroot.
+> checking for RGB... configure: error: in `/home/test/buildroot/output/build/xapp_rgb-1.0.6':
+> configure: error: The pkg-config script could not be found or is too old.  Make sure it
+> is in your PATH or set the PKG_CONFIG environment variable to the full
+> path to pkg-config.
 > 
-> For consistency, we also use HOST_CFLAGS instead of hardcoding
-> -I$(HOST_DIR)/include.
+> Alternatively, you may set the environment variables RGB_CFLAGS
+> and RGB_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
 > 
-> It is worth mentioning that we must use single quotes here, because
-> the NETSURF_CONFIG variable value then gets put within double quotes
-> to be passed to the netsurf build system.
+> The configure script uses pkg-config, but host-pkgconf is missing in
+> the list of dependencies.
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/4ff6a8c4017d006a4b6b9ca369a569fa72862900/
+> This issue was detected thanks to per-package directory support.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/netsurf/netsurf.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/x11r7/xapp_rgb/xapp_rgb.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
