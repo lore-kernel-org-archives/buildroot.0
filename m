@@ -1,61 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:54:04 +0100
-Subject: [Buildroot] [git commit] package/pkg-meson: allow meson packages to
- specify custom build rules
-Message-ID: <20181228104954.7141480F8F@busybox.osuosl.org>
+Date: Fri, 28 Dec 2018 11:52:58 +0100
+Subject: [Buildroot] [git commit] package/meson: fix CPU familly
+Message-ID: <20181228104954.662A981240@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efb774bbda73ed89a97501e1d6b13d1fbd0261ef
+commit: https://git.buildroot.net/buildroot/commit/?id=f3bacda0c0e0adb2ac7f515476f6bb83d1385130
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages may want to build only specific targets, instead of the
-default.
+As explained in [0], meson recognises a certain set of CPU famillies,
+whose names slightly differ from those we know them as.
 
-So, allow them to provide FOO_NINJA_OPTS (not really options, but we
-just mimicked the naming we already have for autotools packages).
+If we don't pass the proper cpu_familly, meson whines:
+    WARNING: Unknown CPU family 'i686', please report this at [...]
 
-Update the manual accordingly.
+Subsequently, packages that use that to decide on what they should build
+and how they should build it, fail to build. That is the case for the
+upcoming systemd-boot, for example.
 
+Fix that by using the list propvided by the meson documentation [0].
+
+[0] https://mesonbuild.com/Reference-tables.html#cpu-families
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - split in its own patch
+  - imnprove commit log
+]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-meson.txt | 3 +++
- package/pkg-meson.mk                  | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/meson/meson.mk | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index c52fe10506..549319b192 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -94,3 +94,6 @@ will therefore only use a few of them.
- * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-   +ninja+, meson companion tool in charge of the build operations. By default,
-   empty.
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e1675c21b8..1113bf0e29 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -16,6 +16,35 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
+ HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+ HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
+ 
++# https://mesonbuild.com/Reference-tables.html#cpu-families
++ifeq ($(BR2_arcle)$(BR2_arceb),y)
++HOST_MESON_TARGET_CPU_FAMILY = arc
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++HOST_MESON_TARGET_CPU_FAMILY = arm
++else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++HOST_MESON_TARGET_CPU_FAMILY = aarch64
++else ifeq ($(BR2_i386),y)
++HOST_MESON_TARGET_CPU_FAMILY = x86
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++HOST_MESON_TARGET_CPU_FAMILY = mips
++else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
++HOST_MESON_TARGET_CPU_FAMILY = mips64
++else ifeq ($(BR2_powerpc),y)
++HOST_MESON_TARGET_CPU_FAMILY = ppc
++else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
++HOST_MESON_TARGET_CPU_FAMILY = ppc64
++else ifeq ($(BR2_riscv),y)
++HOST_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_sparc),y)
++HOST_MESON_TARGET_CPU_FAMILY = sparc
++else ifeq ($(BR2_sparc64),y)
++HOST_MESON_TARGET_CPU_FAMILY = sparc64
++else ifeq ($(BR2_x86_64),y)
++HOST_MESON_TARGET_CPU_FAMILY = x86_64
++else
++HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
++endif
 +
-+* +FOO_NINJA_OPTS+, to specify a space-separated list of targets to build. By
-+  default, empty, to build the default target(s).
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 507e686068..0588660dbf 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -103,12 +103,12 @@ ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
- endef
- else
- define $(2)_BUILD_CMDS
- 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
- endef
- endif
- endif
+ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+@@ -23,7 +52,7 @@ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARG
+ define HOST_MESON_INSTALL_CROSS_CONF
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+-	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
++	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+ 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+ 	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
