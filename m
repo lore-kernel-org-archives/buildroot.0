@@ -1,42 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 18:21:59 +0100
-Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
-In-Reply-To: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228182159.02a8a6c4@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 28 Dec 2018 19:26:50 +0100
+Subject: [Buildroot] [PATCH] package/terminology: convert to the
+ meson-package infrastructure
+In-Reply-To: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
+References: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
+Message-ID: <213047b4-ae2f-8361-d30f-34919f839202@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Fri, 28 Dec 2018 11:43:27 +0100, Thomas Petazzoni wrote:
+Le 28/12/2018 ? 16:07, Thomas Petazzoni a ?crit?:
+> This conversion reduces the complexity of the .mk file, but also
+> allows to prepare terminology for per-package meson
+> cross-compilation.conf, where the cross-compilation.conf file will not
+> be located in $(HOST_DIR)/etc/meson/cross-compilation.conf.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-> Here is a seventh iteration of the per-package SDK and target
-> directory implementation, offering top-level parallel build
-> capability.
-
-Regarding top-level parallel build, I prepared this Wiki page that
-documents the progress of the effort:
-
-  https://elinux.org/Buildroot:Top_Level_Parallel_Build
-
-Especially, I'd like to make it clear: this patch series is only the
-*core* support for per-package directories. There are a number of fixes
-needed for Meson, Python and more to make it usable with some packages.
-I wanted to keep this patch series reasonable in size by only
-submitting the core support.
-
-If you want to do some testing, please use
-https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
-which has all the fixes I currently have.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+> ---
+>  package/terminology/terminology.mk | 28 +++++-----------------------
+>  1 file changed, 5 insertions(+), 23 deletions(-)
+> 
+> diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+> index af37187d90..3d144f8655 100644
+> --- a/package/terminology/terminology.mk
+> +++ b/package/terminology/terminology.mk
+> @@ -10,31 +10,13 @@ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+>  TERMINOLOGY_LICENSE = BSD-2-Clause
+>  TERMINOLOGY_LICENSE_FILES = COPYING
+>  
+> -TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-meson host-pkgconf
+> -TERMINOLOGY_MESON_OPTS = \
+> -	--prefix=/usr \
+> -	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+> -	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
+> -	-Dedje-cc=$(HOST_DIR)/bin/edje_cc
+> +TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-pkgconf
+> +TERMINOLOGY_CONF_OPTS = -Dedje-cc=$(HOST_DIR)/bin/edje_cc
+>  
+>  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+> -TERMINOLOGY_MESON_OPTS += -Dnls=true
+> +TERMINOLOGY_CONF_OPTS += -Dnls=true
+>  else
+> -TERMINOLOGY_MESON_OPTS += -Dnls=false
+> +TERMINOLOGY_CONF_OPTS += -Dnls=false
+>  endif
+>  
+> -define TERMINOLOGY_CONFIGURE_CMDS
+> -	rm -rf $(@D)/build
+> -	mkdir -p $(@D)/build
+> -	$(TARGET_MAKE_ENV) meson $(TERMINOLOGY_MESON_OPTS) $(@D) $(@D)/build
+> -endef
+> -
+> -define TERMINOLOGY_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
+> -endef
+> -
+> -define TERMINOLOGY_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
+> -endef
+> -
+> -$(eval $(generic-package))
+> +$(eval $(meson-package))
+> 
