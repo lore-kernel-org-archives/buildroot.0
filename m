@@ -1,47 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:52:37 +0100
-Subject: [Buildroot] [git commit] package/meson: never try to run generated
- target binaries
-Message-ID: <20181228104954.5FF0681240@busybox.osuosl.org>
+Date: Fri, 28 Dec 2018 11:54:04 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson: allow meson packages to
+ specify custom build rules
+Message-ID: <20181228104954.7141480F8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f112f2b991b47a7309116e132c969e3731a7e911
+commit: https://git.buildroot.net/buildroot/commit/?id=efb774bbda73ed89a97501e1d6b13d1fbd0261ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As explained in [0], meson will try on its own to decide whether it can
-run what it builds. If it happens that the host and target CPUs are
-"compatible", that test may fail and meson may believe it can run what
-it builds.
+Some packages may want to build only specific targets, instead of the
+default.
 
-Override that test by using needs_exe_wrapper=true, and not defining an
-actual exe_wrapper.
+So, allow them to provide FOO_NINJA_OPTS (not really options, but we
+just mimicked the naming we already have for autotools packages).
 
-[0] https://mesonbuild.com/Cross-compilation.html
+Update the manual accordingly.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - split in its own patch
-  - improve commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/meson/cross-compilation.conf.in | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/adding-packages-meson.txt | 3 +++
+ package/pkg-meson.mk                  | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 0eec74087b..fc8e27f7eb 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -11,6 +11,7 @@ strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
- 
- [properties]
-+needs_exe_wrapper = true
- c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
+diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+index c52fe10506..549319b192 100644
+--- a/docs/manual/adding-packages-meson.txt
++++ b/docs/manual/adding-packages-meson.txt
+@@ -94,3 +94,6 @@ will therefore only use a few of them.
+ * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+   +ninja+, meson companion tool in charge of the build operations. By default,
+   empty.
++
++* +FOO_NINJA_OPTS+, to specify a space-separated list of targets to build. By
++  default, empty, to build the default target(s).
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..0588660dbf 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -103,12 +103,12 @@ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+-		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+ endef
+ else
+ define $(2)_BUILD_CMDS
+ 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+-		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+ endef
+ endif
+ endif
