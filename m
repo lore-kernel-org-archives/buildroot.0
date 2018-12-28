@@ -1,36 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 10:21:47 +0100
-Subject: [Buildroot] Building cargo with per-package directories
-In-Reply-To: <20181227205015.GA27373@ned>
-References: <20181211171252.02ddb571@windsurf> <20181211212705.GA13119@itchy>
- <20181212225041.GA15035@itchy>
- <20181226154959.6a793c8d@windsurf.home>
- <20181227205015.GA27373@ned>
-Message-ID: <20181228102147.056d86ee@windsurf>
+From: daggs <daggs@gmx.com>
+Date: Fri, 28 Dec 2018 11:11:17 +0100
+Subject: [Buildroot] buildroot image over qemu doesn't get ip
+Message-ID: <trinity-fcf0ec6d-0c93-4a6c-823e-2f2001f214bf-1545991877647@3c-app-mailcom-bs08>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+Greetings,
 
-On Thu, 27 Dec 2018 21:50:15 +0100, Eric Le Bihan wrote:
+I've created a buildroot image based on the qemu x64 config, I'm able to boot the vm but it doesn't seems to get any ip.
+I've check the infrastructure with a similar vm config (network is the same) with a linux void installation and it works ok.
+I'm using buildroot git, a week old I think.
+here are the relevant configs:
+buildroot: http://paste.ubuntu.com/p/JzHNsb82DC/
+kernel: http://paste.ubuntu.com/p/VcPBhKFnq2/
 
-> > so that if we ever change HOST_LDFLAGS in the future, it will continue
-> > to work. What do you think ?  
-> 
-> I tested this change without issues, so I will post a patch to include
-> it in the cargo package.
+any ideas what can be the issue? I've tried both busybox's dhcp client and the dhcp client pkg, neither worked.
 
-Thanks. In fact I already had a patch at
-https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=ppsh-v7-work&id=55c8e671d5130b22c72cedd194659c3dde5a6923,
-but I will happily take an alternate patch if you have one.
+Thanks,
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Dagg.
