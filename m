@@ -1,111 +1,80 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 28 Dec 2018 01:34:48 +0100
-Subject: [Buildroot] [RFC 0/3] WPE WebKit
-In-Reply-To: <20181223154845.23556-1-francois.perrad@gadz.org>
-References: <20181223154845.23556-1-francois.perrad@gadz.org>
-Message-ID: <20181228013448.GB19602@momiji>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Fri, 28 Dec 2018 08:37:30 +0800
+Subject: [Buildroot] [PATCH 1/3] package/lua-debug: new package
+Message-ID: <1545957452-9451-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+From: James Hilliard <james.hilliard1@gmail.com>
 
-I had been thinking myself of submitting a patch series for WPE, and at Igalia
-we are maintaining an overlay (to be used with BR2_EXTERNAL, which can be
-found at https://github.com/Igalia/buildroot-wpe). I have had plenty to do in
-the latest few months, so I barely haven't had any time for Buildroot other
-than updating the WebKitGTK+ packaging whenever there is a release -- so
-thanks a lot for helping out by submitting this patch set :)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/Config.in                |  1 +
+ package/lua-debug/Config.in      |  7 +++++++
+ package/lua-debug/lua-debug.hash |  2 ++
+ package/lua-debug/lua-debug.mk   | 16 ++++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/lua-debug/Config.in
+ create mode 100644 package/lua-debug/lua-debug.hash
+ create mode 100644 package/lua-debug/lua-debug.mk
 
-Later I will be doing a few comments on each of the individual patches. As for
-general comments:
-
-- It looks like you took the basis for your patch set from the *downstream*
-  fork of Buildroot at https://github.com/WebPlatformForEmbedded/buildroot
-  Please do NOT use anything from there, as it is based on a very old version
-  of Buildroot, and it packages versions of the ?wpewebkit? package older
-  than the official packages releases from https://wpewebkit.org
-
-- The way I was hoping to do the WPE packaging for upstream Buildroot was to
-  reuse as many bits and pieces as possible from the WebKitGTK+ packaging,
-  and share code with the WPE packaging. For example: right now there is a
-  BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS configuration symbol, and in the WPE
-  overlay I mentioned above there is BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS...
-  ideally we would have a single BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS, which
-  gets used both by the ?wpewebkit? and ?webkitgtk? packages (the same would
-  go for the logic that determines whether the target supports the JSC JIT,
-  and others). I'll follow up on this in a different e-mail.
-
-- I would like to allow building more backends than WPEBackend-fdo. More
-  precisely, WPEBackend-rdk is a good option to use dispmanx on the Raspberry
-  Pi directly, without needing a Wayland compositor.
-
-- It would be good as well to have a launcher/browser which is NOT the
-  MiniBrowser included with the ?wpewebkit? package, which is intended just
-  for testing. The better option at the moment is Cog, for which I have
-  recently started doing packaged releases as well, and it is known to work
-  with the -fdo and -rdk backends (and others which are not publicly available
-  as well). It can be found at https://github.com/Igalia/cog
-
-Please note that I am not trying to demotivate you with all the comments
-above, I think it's awesome that third parties are finding WPE useful and
-want to help out with the upstream packaging in Buildroot: that is *awesome*
-and super appreciated -- I just want to share my ideas in the mailing list
-to see what we all agree is th way go to provide the best packaging we can
-for WPE :)
-
-
-On Sun, 23 Dec 2018 16:48:42 +0100, Francois Perrad <fperrad@gmail.com> wrote:
-
-> Another port of WebKit (https://wpewebkit.org/), a project started in 2018.
-> 
-> Testing fresh code of various OpenGL backends is awful.
-
-What do you mean with this? Does this have to do with the packaging/testing of
-the different WPE backends, or is it something else? I am really interested in
-knowing what your pain points have been, to see if there is something that we
-can improve (and here I am talking with my ?WebKit developer hat? on :D).
-
-> Francois Perrad (3):
->   libwpe: new package
->   wpebackend-fdo: new package
->   wpewebkit: new package
-> 
->  DEVELOPERS                                 |  3 +
->  package/Config.in                          |  3 +
->  package/libwpe/Config.in                   | 12 ++++
->  package/libwpe/libwpe.hash                 |  7 ++
->  package/libwpe/libwpe.mk                   | 15 ++++
->  package/wpebackend-fdo/Config.in           | 17 +++++
->  package/wpebackend-fdo/wpebackend-fdo.hash |  7 ++
->  package/wpebackend-fdo/wpebackend-fdo.mk   | 15 ++++
->  package/wpewebkit/Config.in                | 82 ++++++++++++++++++++++
->  package/wpewebkit/wpewebkit.hash           |  8 +++
->  package/wpewebkit/wpewebkit.mk             | 69 ++++++++++++++++++
->  11 files changed, 238 insertions(+)
->  create mode 100644 package/libwpe/Config.in
->  create mode 100644 package/libwpe/libwpe.hash
->  create mode 100644 package/libwpe/libwpe.mk
->  create mode 100644 package/wpebackend-fdo/Config.in
->  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.hash
->  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.mk
->  create mode 100644 package/wpewebkit/Config.in
->  create mode 100644 package/wpewebkit/wpewebkit.hash
->  create mode 100644 package/wpewebkit/wpewebkit.mk
-> 
-> -- 
-> 2.17.1
-
-Best regards, and thanks again for bringing up the topic of WPE packaging!
-
-
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181228/00034d54/attachment.asc>
+diff --git a/package/Config.in b/package/Config.in
+index c3e0691..324830d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -613,6 +613,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-csnappy/Config.in"
+ 	source "package/lua-curl/Config.in"
+ 	source "package/lua-datafile/Config.in"
++	source "package/lua-debug/Config.in"
+ 	source "package/lua-ev/Config.in"
+ 	source "package/lua-fifo/Config.in"
+ 	source "package/lua-flu/Config.in"
+diff --git a/package/lua-debug/Config.in b/package/lua-debug/Config.in
+new file mode 100644
+index 0000000..4d9f368
+--- /dev/null
++++ b/package/lua-debug/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_DEBUG
++	bool "lua-debug"
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	help
++	  Manage an overall debug state, and associated hint substates.
++
++	  http://lua-stdlib.github.io/_debug
+diff --git a/package/lua-debug/lua-debug.hash b/package/lua-debug/lua-debug.hash
+new file mode 100644
+index 0000000..2c48711
+--- /dev/null
++++ b/package/lua-debug/lua-debug.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 7f6b84283d4b78dafee17e7765dd5f1f8e75c3314169977f4dda0e7873616ce2  std._debug-1.0.1-1.src.rock
+diff --git a/package/lua-debug/lua-debug.mk b/package/lua-debug/lua-debug.mk
+new file mode 100644
+index 0000000..e18bef7
+--- /dev/null
++++ b/package/lua-debug/lua-debug.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# lua-debug
++#
++################################################################################
++
++LUA_DEBUG_VERSION_UPSTREAM = 1.0.1
++LUA_DEBUG_VERSION = $(LUA_DEBUG_VERSION_UPSTREAM)-1
++LUA_DEBUG_NAME_UPSTREAM = std._debug
++LUA_DEBUG_SUBDIR = _debug-$(LUA_DEBUG_VERSION_UPSTREAM)
++LUA_DEBUG_ROCKSPEC = $(LUA_DEBUG_NAME_UPSTREAM)-$(LUA_DEBUG_VERSION).rockspec
++LUA_DEBUG_SOURCE = $(LUA_DEBUG_NAME_UPSTREAM)-$(LUA_DEBUG_VERSION).src.rock
++LUA_DEBUG_LICENSE = MIT
++LUA_DEBUG_LICENSE_FILES = LICENSE.md
++
++$(eval $(luarocks-package))
+-- 
+2.7.4
