@@ -1,53 +1,67 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 28 Dec 2018 16:25:31 +0100
-Subject: [Buildroot] [PATCH] package/solarus: bump to version 1.6.0
-In-Reply-To: <20181226213358.01ef170c@windsurf.home>
-References: <20181223133317.3490-1-romain.naour@gmail.com>
- <20181226213358.01ef170c@windsurf.home>
-Message-ID: <ce4698b6-7b30-51ae-bff0-f9ba3d417b05@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 28 Dec 2018 17:09:31 +0100
+Subject: [Buildroot] [PATCH 1/3] package/lua-debug: new package
+In-Reply-To: <20181228161618.39acb1bd@windsurf>
+References: <1545957452-9451-1-git-send-email-james.hilliard1@gmail.com>
+ <CAB0FRssfuEbz=KUdcpaaoeJd+a1Yoo-URrjvFf1N8L3Csxdr1Q@mail.gmail.com>
+ <20181228161618.39acb1bd@windsurf>
+Message-ID: <CAB0FRssRpE8AZwYiTrr=yJGkNSOxjRuhN+z7OLxC3KkFvBjXvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Le ven. 28 d?c. 2018 ? 16:16, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Le 26/12/2018 ? 21:33, Thomas Petazzoni a ?crit?:
-> Hello Romain,
-> 
-> On Sun, 23 Dec 2018 14:33:17 +0100, Romain Naour wrote:
->> Here are the big features in Solarus 1.6:
->>
->>     * OpenGL backend and support for GLSL shaders (by Stdgregwar and Vlag)
-> 
-> I am a bit confused because this OpenGL dependency now seems to be
-> mandatory, but you don't make it mandatory.
-> 
-> cmake/AddDependencies.cmake contains:
-> 
-> find_package(OpenGL)
-> if(NOT OPENGL_FOUND)
->   find_package(OpenGLES2 REQUIRED)
-> endif()
-> 
-> So it seems like it wants either OpenGL or OpenGL ES2, no?
-> 
-> In any case, if it's really not mandatory, passing the appropriate
-> -D<blah>=OFF to explicitly disable OpenGL support would be good.
+> Hello Fran?ois,
+>
+> Thanks a lot for your feedback on this series.
+>
+> On Fri, 28 Dec 2018 15:32:39 +0100, Fran?ois Perrad wrote:
+>
+> > > +# lua-debug
+> >
+> > This rock uses the namespace std.
+> > So, in order to avoid future name collision, it must be named
+> lua-std-debug
+>
+> Just for my own understanding, could you give a few more details about
+> this? We don't have any package today named lua-std-<something>, so I'm
+> interested in understanding this "namespace std" thing and the
+> namespace pollution issue.
+>
+>
+The risk of collision is with `debug` and `normalize` which are very common
+word, not with `std`.
 
-The dependency on OpenGL is new with this release.
-Also the dependency on OpenGLES doesn't build.
+On luarocks, their name are std._debug & std.normalize.
+See https://luarocks.org/modules/gvvaughan/std._debug and
+https://luarocks.org/modules/gvvaughan/std.normalize
 
-Since I can test only with OpenGL support (GLX) I disabled entirely the openGLES
-support (which doesn't seems to build).
+Also, is your automated luarocks package generation logic
+> (http://patchwork.ozlabs.org/patch/1015895/) going to name such a
+> package lua-std-debug and not lua-debug ?
+>
 
-Best regards,
-Romain
+You could run :
+    $ luarocks buildroot std._debug lua-std-debug
+
+std._debug allows to find it on luarocks
+lua-std-debug is our name on BR
+
+Fran?ois
 
 
-> 
-> Thanks,
-> 
+> Thanks!
+>
 > Thomas
-> 
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181228/f37187e7/attachment.html>
