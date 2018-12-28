@@ -1,82 +1,147 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Fri, 28 Dec 2018 08:37:32 +0800
-Subject: [Buildroot] [PATCH 3/3] package/luaposix: bump version to 34.0.4
-In-Reply-To: <1545957452-9451-1-git-send-email-james.hilliard1@gmail.com>
-References: <1545957452-9451-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <1545957452-9451-3-git-send-email-james.hilliard1@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 28 Dec 2018 01:47:45 +0100
+Subject: [Buildroot] [RFC 1/3] libwpe: new package
+In-Reply-To: <20181223154845.23556-2-francois.perrad@gadz.org>
+References: <20181223154845.23556-1-francois.perrad@gadz.org>
+ <20181223154845.23556-2-francois.perrad@gadz.org>
+Message-ID: <20181228014745.GD19602@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Hello,
 
-This version has a new dependency on lua-normalize.
+On Sun, 23 Dec 2018 16:48:43 +0100, Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/luaposix/Config.in     |  1 +
- package/luaposix/luaposix.hash |  2 +-
- package/luaposix/luaposix.mk   | 26 +++++---------------------
- 3 files changed, 7 insertions(+), 22 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/libwpe/Config.in   | 12 ++++++++++++
+>  package/libwpe/libwpe.hash |  7 +++++++
+>  package/libwpe/libwpe.mk   | 15 +++++++++++++++
+>  5 files changed, 36 insertions(+)
+>  create mode 100644 package/libwpe/Config.in
+>  create mode 100644 package/libwpe/libwpe.hash
+>  create mode 100644 package/libwpe/libwpe.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 6f687d748..705842310 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -810,6 +810,7 @@ F:	package/gdbm/
+>  F:	package/libtomcrypt/
+>  F:	package/libtommath/
+>  F:	package/libump/
+> +F:	package/libwpe/
+>  F:	package/linenoise/
+>  F:	package/ljlinenoise/
+>  F:	package/lpeg/
+> diff --git a/package/Config.in b/package/Config.in
+> index 038ddf6b2..7615c5853 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1283,6 +1283,7 @@ menu "Graphics"
+>  	source "package/libva-intel-driver/Config.in"
+>  	source "package/libvdpau/Config.in"
+>  	source "package/libvips/Config.in"
+> +	source "package/libwpe/Config.in"
+>  	source "package/menu-cache/Config.in"
+>  	source "package/opencv/Config.in"
+>  	source "package/opencv3/Config.in"
+> diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
+> new file mode 100644
+> index 000000000..8cf99fe0c
+> --- /dev/null
+> +++ b/package/libwpe/Config.in
+> @@ -0,0 +1,12 @@
+> +comment "libwpe needs an OpenEGL-capable backend"
+> +	depends on !BR2_PACKAGE_HAS_LIBEGL
+> +
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index 91abcb9..f1e5cbd 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	select BR2_PACKAGE_LUA_NORMALIZE # runtime
- 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
- 	# "bit" module, but since it has a different name, luaposix
- 	# doesn't find it.
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index b3984c1..e219407 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7  luaposix-34.0.1.tar.gz
-+sha256 e262c91bc9f89bacb816a77499e5037ec39bf511d2474a9afca0f9282c2b357b  luaposix-34.0.4-1.src.rock
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 779e707..db0a4e7 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,27 +4,11 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 34.0.1
--LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
-+LUAPOSIX_VERSION_UPSTREAM = 34.0.4
-+LUAPOSIX_VERSION = $(LUAPOSIX_VERSION_UPSTREAM)-1
-+LUAPOSIX_NAME_UPSTREAM = luaposix
-+LUAPOSIX_SUBDIR = luaposix-$(LUAPOSIX_VERSION_UPSTREAM)
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
--LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
- 
--define LUAPOSIX_BUILD_CMDS
--	(cd $(@D); \
--		$(LUA_RUN) build-aux/luke \
--		CC="$(TARGET_CC)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LUA_INCDIR=$(STAGING_DIR)/usr/include \
--	)
--endef
--
--define LUAPOSIX_INSTALL_TARGET_CMDS
--	(cd $(@D); \
--		$(LUA_RUN) build-aux/luke install \
--		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
--		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
--	)
--endef
--
--$(eval $(generic-package))
-+$(eval $(luarocks-package))
--- 
-2.7.4
+The dependency line for the comment should be:
+
+   depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_STATIC_LIBS
+
+(See the related comment below, too.)
+
+> +config BR2_PACKAGE_LIBWPE
+> +	bool "libwpe"
+> +	depends on BR2_PACKAGE_HAS_LIBEGL
+> +	select BR2_PACKAGE_LIBXKBCOMMON
+
+You are missing a couple of dependencies here:
+
+   depends on BR2_INSTALL_LIBSTDCPP  # uses C++
+   depends on !BR2_STATIC_LIBS       # uses dlopen()
+
+> +	help
+> +	  General-purpose library specifically developed for the
+> +	  WPE-flavored port of WebKit.
+> +
+> +	  https://wpewebkit.org/
+
+I am aware that this is the description we have in the GitHub project page,
+but IMO this description is pretty badly written (this is our fault as WPE
+developes, BTW). I would go with something simple and more descriptive like
+?Base library for the WPE WebKit port?  O:-)
+
+> diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+> new file mode 100644
+> index 000000000..bda380988
+> --- /dev/null
+> +++ b/package/libwpe/libwpe.hash
+> @@ -0,0 +1,7 @@
+> +# From https://wpewebkit.org/releases/libwpe-1.1.0.tar.xz.sums
+> +md5 b34c3920cb749ebc74fe45a793cf57af libwpe-1.1.0.tar.xz
+> +sha1 69f0bc7f422c6a196c49439a454f7734ecac1126 libwpe-1.1.0.tar.xz
+> +sha256 72e34ad754be11abd1a438cfe195d8d644c52105ab2b1c3b39dec6228bc776ce libwpe-1.1.0.tar.xz
+> +
+> +# Hashes for license files:
+> +sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+> diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+> new file mode 100644
+> index 000000000..2b9309843
+> --- /dev/null
+> +++ b/package/libwpe/libwpe.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# libwpe
+> +#
+> +################################################################################
+> +
+> +LIBWPE_VERSION = 1.1.0
+
+You really want to use 1.0.0 here.
+
+The versioning scheme follows the same rule as for WebKitGTK+, WPE WebKit, and
+most other GLib-based components: for a version number X.Y.Z, an even Y number
+means that a release is stable, and odd Y number is used for development
+releases (with Y>=90 for release candidates).
+
+(The versioning scheme should clearly described somewhere in the project
+GitHub page, of course. My apologies for that being missing.)
+
+> +LIBWPE_SITE = http://wpewebkit.org/releases
+> +LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+> +LIBWPE_INSTALL_STAGING = YES
+> +LIBWPE_LICENSE = BSD-2-Clause
+> +LIBWPE_LICENSE_FILES = COPYING
+> +LIBWPE_DEPENDENCIES = libegl libxkbcommon
+> +
+> +$(eval $(cmake-package))
+> -- 
+> 2.17.1
+
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181228/7f7a065f/attachment.asc>
