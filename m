@@ -1,107 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:43:34 +0100
-Subject: [Buildroot] [PATCH v7 7/8] docs/manual: add details about top-level
- parallel build support
-In-Reply-To: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228104335.22379-8-thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Dec 2018 11:44:59 +0100
+Subject: [Buildroot] [git commit] package/qemu: remove broken/unneeded
+ PYTHONPATH
+Message-ID: <20181228104052.2814783A22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9000889da79b554e50c87fd5aad3aed11cf60bb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Qemu uses the host-python when building, but the .mk file is pointing the
+host-python interpreter to the target python site-packages, which is both
+incorrect and also unneeded.
+
+Qemu doesn't need any extra packages [1], so there's no need to provide
+this path.  And indeed qemu builds fine when setting the path to a
+non-existent directory.
+
+Since target qemu neither depends on nor selects target python, it's
+quite possible to build qemu without a target python, in which case the
+supplied PYTHONPATH is a non-existent directory.
+
+But even if qemu did want a python package, pointing the host-python to
+the target site-packages will not work.  The package could contain a
+compiled shared library for the target architecture that the host python
+can not load.  This can be tested by adding "import numpy" to one of
+qemu's python scripts and observing target python-numpy failing to load
+when the script is run at build time.
+
+[1] https://lists.gnu.org/archive/html/qemu-devel/2017-08/msg01758.html
+  "Avoid third-party package dependencies - QEMU currently has none!"
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/common-usage.txt        | 44 +++++++++++++++++++++++++++++
- docs/manual/faq-troubleshooting.txt |  3 ++
- docs/manual/quickstart.txt          |  8 +++---
- 3 files changed, 51 insertions(+), 4 deletions(-)
+ package/qemu/qemu.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index e3d7578c85..ebe3238e38 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -329,6 +329,50 @@ Refer to the help text of this script for more details:
- utils/size-stats-compare -h
- ----------------
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a1bd7e5d6e..3f51e88e1c 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -26,8 +26,7 @@ QEMU_OPTS =
  
-+[[top-level-parallel-build]]
-+=== Top-level parallel build
-+
-+Buildroot has always been capable of using parallel build on a per
-+package basis: each package is built by Buildroot using +make -jN+ (or
-+the equivalent invocation for non-make-based build systems). The level
-+of parallelism is by default number of CPUs + 1, but it can be
-+adjusted using the +BR2_JLEVEL+ configuration option.
-+
-+Until 2019.02, Buildroot was however building packages in a serial
-+fashion: each package was built one after the other, without
-+parallelization of the build between packages. As of 2019.02,
-+Buildroot has experimental support for *top-level parallel build*,
-+which allows some signicant build time savings by building packages
-+that have no dependency relationship in parallel. This feature is
-+however marked as experimental and is known to not work in all
-+situations.
-+
-+In order to use top-level parallel build, one must:
-+
-+. Enable the option +BR2_PER_PACKAGE_DIRECTORIES+ in the Buildroot
-+configuration
-+
-+. Use +make -jN+ when starting the Buildroot build
-+
-+Internally, the +BR2_PER_PACKAGE_DIRECTORIES+ will enable a mechanism
-+called *per-package directories*, which will have the following
-+effects:
-+
-+* Instead of a global _target_ directory and a global _host_ directory
-+  common to all packages, per-package _target_ and _host_ directories
-+  will be used, in +$(O)/per-package/<pkg>/target/+ and
-+  +$(O)/per-package/<pkg>/host/+ respectively. Those folders will be
-+  populated from the corresponding folders of the package dependencies
-+  at the beginning of +<pkg>+ build. The compiler and all other tools
-+  will therefore only be able to see and access files installed by
-+  dependencies explicitly listed by +<pkg>+.
-+
-+* At the end of the build, the global _target_ and _host_ directories
-+  will be populated, located in +$(O)/target+ and +$(O)/host+
-+  respectively. This means that during the build, those folders will
-+  be empty and it's only at the very end of the build that they will
-+  be populated.
-+
- include::eclipse-integration.txt[]
+ QEMU_VARS = \
+ 	LIBTOOL=$(HOST_DIR)/bin/libtool \
+-	PYTHON=$(HOST_DIR)/bin/python2 \
+-	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++	PYTHON=$(HOST_DIR)/bin/python2
  
- include::advanced.txt[]
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index b144c9e7f0..5adf3fa6ce 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -239,3 +239,6 @@ help reduce the build time:
- 
-  * Buy new hardware. SSDs and lots of RAM are key to speeding up the
-    builds.
-+
-+ * Experiment with top-level parallel build, see
-+   xref:top-level-parallel-build[].
-diff --git a/docs/manual/quickstart.txt b/docs/manual/quickstart.txt
-index 74158ae249..77b73ef116 100644
---- a/docs/manual/quickstart.txt
-+++ b/docs/manual/quickstart.txt
-@@ -60,10 +60,10 @@ To start the build process, simply run:
-  $ make
- --------------------
- 
--You *should never* use +make -jN+ with Buildroot: top-level parallel
--make is currently not supported. Instead, use the +BR2_JLEVEL+ option
--to tell Buildroot to run the compilation of each individual package
--with +make -jN+.
-+By default, Buildroot does not support top-level parallel build, so
-+running +make -jN+ is not necessary. There is however experimental
-+support for top-level parallel build, see
-+xref:top-level-parallel-build[].
- 
- The `make` command will generally perform the following steps:
- 
--- 
-2.20.1
+ # If we want to specify only a subset of targets, we must still enable all
+ # of them, so that QEMU properly builds its list of default targets, from
