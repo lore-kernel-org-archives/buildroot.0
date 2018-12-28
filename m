@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:54:51 +0100
-Subject: [Buildroot] [PATCH 1/5 v5] package/meson: never try to run
- generated target binaries
-In-Reply-To: <898a91d14004c0149c8a6c4fcf85670d736ffe11.1545814334.git.yann.morin.1998@free.fr>
+Date: Fri, 28 Dec 2018 11:54:58 +0100
+Subject: [Buildroot] [PATCH 3/5 v5] core/pkg-infra: allow meson packages
+ to specify custom build rules
+In-Reply-To: <acd0d092fa0c62970c3c8b5e3cecedeb73dcc4aa.1545814334.git.yann.morin.1998@free.fr>
 References: <cover.1545814334.git.yann.morin.1998@free.fr>
- <898a91d14004c0149c8a6c4fcf85670d736ffe11.1545814334.git.yann.morin.1998@free.fr>
-Message-ID: <20181228115451.148b39ef@windsurf>
+ <acd0d092fa0c62970c3c8b5e3cecedeb73dcc4aa.1545814334.git.yann.morin.1998@free.fr>
+Message-ID: <20181228115458.5aec06af@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Dec 2018 09:52:26 +0100, Yann E. MORIN wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
+On Wed, 26 Dec 2018 09:52:28 +0100, Yann E. MORIN wrote:
+> Some packages may want to build only specific targets, instead of the
+> default.
 > 
-> As explained in [0], meson will try on its own to decide whether it can
-> run what it builds. If it happens that the host and target CPUs are
-> "compatible", that test may fail and meson may believe it can run what
-> it builds.
+> So, allow them to provide FOO_NINJA_OPTS (not really options, but we
+> just mimicked the naming we already have for autotools packages).
 > 
-> Override that test by using needs_exe_wrapper=true, and not defining an
-> actual exe_wrapper.
+> Update the manual accordingly.
 > 
-> [0] https://mesonbuild.com/Cross-compilation.html
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> [yann.morin.1998 at free.fr:
->   - split in its own patch
->   - improve commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/meson/cross-compilation.conf.in | 1 +
->  1 file changed, 1 insertion(+)
+>  docs/manual/adding-packages-meson.txt | 3 +++
+>  package/pkg-meson.mk                  | 4 ++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
