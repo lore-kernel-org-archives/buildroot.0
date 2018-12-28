@@ -1,64 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 18:01:31 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pkg-python: use
- --single-version-externally-managed for host setuptools
-In-Reply-To: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
-References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228170132.13049-4-thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Dec 2018 18:01:28 +0100
+Subject: [Buildroot] [PATCH 0/3] Prepare Python support for top-level
+ parallel build
+Message-ID: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, host Python packages that use setuptools are installed as
-Python Eggs, i.e they are installed in
-$(HOST_DIR)/lib/python2.7/site-packages/Something-<version>.egg. Once
-installed, each Python Egg is registered to a file called
-$(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. This file is
-read by the Python interpreter so that the installation location of
-each Egg is added to the Python path, and can be found by the Python
-interpreter.
+Hello,
 
-However, the fact that the installation of different Python modules
-need to update a common file is clearly not compatible with
-per-package directories and top-level parallel build.
+This series prepares our Python support for top-level parallel
+build. To understand it, you need to read it from the last patch to
+the first patch, because PATCH 1 is a consequence of PATCH 2, which is
+itself a consequence of PATCH 3.
 
-To fix this, we avoid using Python Eggs using the same
---single-version-externally-managed option that we use for target
-modules. This option is normally meant for distributions packaging
-Python modules, and can therefore only be used if either --record (to
-record the list of files being installed) or --root is
-passed. --root=/ works fine and was suggested by
-https://stackoverflow.com/questions/6301003/stopping-setup-py-from-installing-as-egg/33791008#33791008.
+So, the problem started with the fact that when we install host Python
+modules based on setuptools, we use the "regular" Python installation
+process based on Python Eggs. This installation process has the
+not-so-nice property of registering all installed Python Eggs in a
+single common file:
+$(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. Clearly,
+this doesn't work well with per-package directory: if you have package
+A that depends on host-python-B and host-python-C, with no dependency
+relationship between host-python-B and host-python-C, when the
+per-package directory for "A" gets created, it gets a version of the
+easy-install.pth file either from host-python-B or host-python-C... so
+it will not "see" one of them.
 
-With this change, host Python modules installed by setuptools are now
-installed in the "regular" way, i.e directly in
-$(HOST_DIR)/lib/python2.7/site-packages/mako for host-python-mako.
+To fix this, we want to use the same installation process we use for
+host Python modules than the one we use for target Python modules:
+avoid Python Eggs, using the --single-version-externally-managed
+setuptools option. This is the purpose of PATCH 3/3, which is simple
+enough.
 
-This makes the installation of host Python modules more similar to the
-one of target modules, and makes it compatible with per-package
-directory support and top-level parallel build.
+However, the story started becoming more complicated when we tried to
+build host-meson. Indeed, host-meson needs host-python3 and its
+installation process is based on setuptools. The issue is that when
+Python 2.x is enabled for the target, or when no Python at all is
+selected for the target, the default host Python version is 2.x, and
+therefore host-python-setuptools is installed for Python 2.x, not
+Python 3.x. This makes python-setuptools not usable for the
+installation of host-meson. This was not visible until now, because
+host-meson "transparently" falls back to distutils for its
+installation process. *But* once you pass
+--single-version-externally-managed, you have a problem: this option
+is only supported by setuptools, not by distutils, so PATCH 3/3 breaks
+the build of host-meson.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-python.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+To solve this, we do something that we have been discussing for quite
+a while: make sure python-setuptools can be available for host Python
+3.x, even if Python 3.x is not the default host Python version. To
+achieve this:
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index b641e3f865..4f42e2efc2 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -85,7 +85,9 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)
-+	--prefix=$(HOST_DIR) \
-+	--root=/ \
-+	--single-version-externally-managed
- 
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
- define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+ - PATCH 1/3 adds a host-python3-setuptools package.
+
+ - PATCH 2/3 changes the Python package infrastructure to use
+   host-python3-setuptools or host-python-setuptools depending on the
+   situation. host-python-setuptools is changed to always install for
+   Python 2.x, regardless of what is the default host Python version
+   so that host-python-setuptools and host-python3-setuptools never
+   step on each other.
+
+Hopefully this cover letter helps explain the overall situation
+clearly enough. Let me know if additional details are needed. This
+code has survived some extensive autobuilder testing, hopefully I
+haven't missed any special case.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (3):
+  package/python3-setuptools: new package
+  package/pkg-python: use host-python3-setuptools when needed
+  package/pkg-python: use --single-version-externally-managed for host
+    setuptools
+
+ package/lirc-tools/lirc-tools.mk              |  2 +-
+ package/pkg-python.mk                         | 39 +++++++---
+ .../python-setuptools/python-setuptools.mk    |  1 +
+ .../0001-add-executable.patch                 | 72 +++++++++++++++++++
+ .../python3-setuptools.hash                   |  1 +
+ .../python3-setuptools/python3-setuptools.mk  | 24 +++++++
+ 6 files changed, 129 insertions(+), 10 deletions(-)
+ create mode 100644 package/python3-setuptools/0001-add-executable.patch
+ create mode 120000 package/python3-setuptools/python3-setuptools.hash
+ create mode 100644 package/python3-setuptools/python3-setuptools.mk
+
 -- 
 2.20.1
