@@ -1,64 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 16:07:47 +0100
-Subject: [Buildroot] [PATCH] package/terminology: convert to the
- meson-package infrastructure
-Message-ID: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Dec 2018 16:16:18 +0100
+Subject: [Buildroot] [PATCH 1/3] package/lua-debug: new package
+In-Reply-To: <CAB0FRssfuEbz=KUdcpaaoeJd+a1Yoo-URrjvFf1N8L3Csxdr1Q@mail.gmail.com>
+References: <1545957452-9451-1-git-send-email-james.hilliard1@gmail.com>
+ <CAB0FRssfuEbz=KUdcpaaoeJd+a1Yoo-URrjvFf1N8L3Csxdr1Q@mail.gmail.com>
+Message-ID: <20181228161618.39acb1bd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This conversion reduces the complexity of the .mk file, but also
-allows to prepare terminology for per-package meson
-cross-compilation.conf, where the cross-compilation.conf file will not
-be located in $(HOST_DIR)/etc/meson/cross-compilation.conf.
+Hello Fran?ois,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/terminology/terminology.mk | 28 +++++-----------------------
- 1 file changed, 5 insertions(+), 23 deletions(-)
+Thanks a lot for your feedback on this series.
 
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index af37187d90..3d144f8655 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -10,31 +10,13 @@ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
- TERMINOLOGY_LICENSE_FILES = COPYING
- 
--TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-meson host-pkgconf
--TERMINOLOGY_MESON_OPTS = \
--	--prefix=/usr \
--	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
--	-Dedje-cc=$(HOST_DIR)/bin/edje_cc
-+TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-pkgconf
-+TERMINOLOGY_CONF_OPTS = -Dedje-cc=$(HOST_DIR)/bin/edje_cc
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
--TERMINOLOGY_MESON_OPTS += -Dnls=true
-+TERMINOLOGY_CONF_OPTS += -Dnls=true
- else
--TERMINOLOGY_MESON_OPTS += -Dnls=false
-+TERMINOLOGY_CONF_OPTS += -Dnls=false
- endif
- 
--define TERMINOLOGY_CONFIGURE_CMDS
--	rm -rf $(@D)/build
--	mkdir -p $(@D)/build
--	$(TARGET_MAKE_ENV) meson $(TERMINOLOGY_MESON_OPTS) $(@D) $(@D)/build
--endef
--
--define TERMINOLOGY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
--endef
--
--define TERMINOLOGY_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
--endef
--
--$(eval $(generic-package))
-+$(eval $(meson-package))
+On Fri, 28 Dec 2018 15:32:39 +0100, Fran?ois Perrad wrote:
+
+> > +# lua-debug
+> 
+> This rock uses the namespace std.
+> So, in order to avoid future name collision, it must be named lua-std-debug
+
+Just for my own understanding, could you give a few more details about
+this? We don't have any package today named lua-std-<something>, so I'm
+interested in understanding this "namespace std" thing and the
+namespace pollution issue.
+
+Also, is your automated luarocks package generation logic
+(http://patchwork.ozlabs.org/patch/1015895/) going to name such a
+package lua-std-debug and not lua-debug ?
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
