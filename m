@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 11:51:57 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xapp_rgb: add missing
- host-pkgconf dependency
-In-Reply-To: <20181227142727.19535-1-thomas.petazzoni@bootlin.com>
-References: <20181227142727.19535-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181228115157.41561890@windsurf>
+Date: Fri, 28 Dec 2018 11:52:04 +0100
+Subject: [Buildroot] [PATCH] package/dhcpdump: fix build at -O2
+In-Reply-To: <20181227151012.22996-1-thomas.petazzoni@bootlin.com>
+References: <20181227151012.22996-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181228115204.0159da51@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +12,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 27 Dec 2018 15:27:27 +0100, Thomas Petazzoni wrote:
-> Building a minimal defconfig such as:
+On Thu, 27 Dec 2018 16:10:11 +0100, Thomas Petazzoni wrote:
+> Since commit aa556e2035c023d4328185a46e15df532e566067
+> ("utils/genrandconfig: test with BR2_OPTIMIZE_2=y"), we are doing
+> builds at -O2 instead of -Os. This has unveiled an issue in the
+> strsep.c file:
 > 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XAPP_RGB=y
+> strsep.c:65:23: error: register name not specified for 'delim'
+>   register const char *delim;
 > 
-> by running "make xapp_rgb" gives the following build failure:
+> This strsep.c compatibility code is compiled in if HAVE_STRSEP is not
+> defined, but dhcpdump does not use any kind of configure script to
+> detect the availability of strsep(). Therefore by default, it gets
+> compiled in, and the "register" specifier used for some variable
+> declarations in strsep.c cause build issues at -O2.
 > 
-> checking for RGB... configure: error: in `/home/test/buildroot/output/build/xapp_rgb-1.0.6':
-> configure: error: The pkg-config script could not be found or is too old.  Make sure it
-> is in your PATH or set the PKG_CONFIG environment variable to the full
-> path to pkg-config.
+> A previous commit in Buildroot from
+> c2a7f0d6051f71f3bb9d83b574d70814339e4b95 ("dhcpdump: Fix strsep()
+> feature test"), attempted to fix this problem by changing the test on
+> HAVE_STRSEP by a test on _BSD_SOURCE.
 > 
-> Alternatively, you may set the environment variables RGB_CFLAGS
-> and RGB_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
+> Unfortunately, _BSD_SOURCE is not meant to be tested: it's a feature
+> macro that is meant to be *defined* by some code to tell the C library
+> headers to expose (or not) some given functionality.
 > 
-> The configure script uses pkg-config, but host-pkgconf is missing in
-> the list of dependencies.
+> So instead, we basically revert commit
+> c2a7f0d6051f71f3bb9d83b574d70814339e4b95 by dropping the patch, and
+> pass -DHAVE_STRSEP in the CFLAGS when building dhcpdump.
 > 
-> This issue was detected thanks to per-package directory support.
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/7231170d3d3e3637f02382c1a0a96009b0527618/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/x11r7/xapp_rgb/xapp_rgb.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../0002-fix-strsep-feature-test.patch        | 27 -------------------
+>  package/dhcpdump/dhcpdump.mk                  |  5 +++-
+>  2 files changed, 4 insertions(+), 28 deletions(-)
+>  delete mode 100644 package/dhcpdump/0002-fix-strsep-feature-test.patch
 
 Applied to master, thanks.
 
