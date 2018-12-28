@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Dec 2018 14:08:39 +0100
-Subject: [Buildroot] [PATCH v7 7/8] docs/manual: add details about
- top-level parallel build support
-In-Reply-To: <20181228130327.GW14286@scaer>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228104335.22379-8-thomas.petazzoni@bootlin.com>
- <20181228130327.GW14286@scaer>
-Message-ID: <20181228140839.621bda16@windsurf>
+Date: Fri, 28 Dec 2018 14:22:57 +0100
+Subject: [Buildroot] [PATCH 1/2] php: fix building curl extension.
+In-Reply-To: <20181227174903.39339-1-aduskett@gmail.com>
+References: <20181227174903.39339-1-aduskett@gmail.com>
+Message-ID: <20181228142257.1d99b43e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for the review. I obviously agree on all points, except one,
-which I'm discussing below.
+On Thu, 27 Dec 2018 12:49:02 -0500, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> The configure option "--with-curl=$(STAGING_DIR)/usr" is broken.
+> PHP will detect libcurl.pc, which will pass the configure checks, but will then
+> prepend $(STAGING_DIR)/usr to the paths in libcurl.pc.
+> 
+> Thus php will then search $(STAGING_DIR)/usr/$(STAGING_DIR)/usr/lib/ for
+> curl libraries during linking, which causes linking errors.
+> 
+> Removing "=$(STAGING_DIR)/usr" from --with-curl fixes the issue.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/44b/44b9ea1edca85b222a117a8e241a26b8dce33929/
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/php/php.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 28 Dec 2018 14:03:27 +0100, Yann E. MORIN wrote:
-
-> Besides, it would be interesting to list at least a few cases where it
-> is known to break, e.g.: qt5 packages...
-
-I'm not sure this is really useful to do, because the list of things
-that are known to not work is going to vary a lot over time.
-
-With just the base patch series I posted, a number of things is
-breaking, but I will be submitting separately fixes for Meson packages,
-for Python packages, and for various random other packages that need
-some minor fixups. Hence keeping a list of what works/breaks in the
-manual is going to be really annoying to maintain, and I prefer to keep
-things simple and say "the feature is experimental, some things may be
-broken" until the point where we are confident enough with the feature
-to drop the "experimental" mark.
-
-What do you think?
-
-Best regards,
+Both applied. Thanks!
 
 Thomas
 -- 
