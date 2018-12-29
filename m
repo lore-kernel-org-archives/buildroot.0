@@ -1,64 +1,29 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sat, 29 Dec 2018 10:07:25 +0800
-Subject: [Buildroot] [PATCH v2 3/3] package/luaposix: bump version to 34.0.4
-In-Reply-To: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
-References: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <1546049245-22865-3-git-send-email-james.hilliard1@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 28 Dec 2018 20:46:50 -0800
+Subject: [Buildroot] [PATCH] package/docker-containerd: add missing
+ dependency on host-pkgconf
+In-Reply-To: <20181228150740.29890-1-thomas.petazzoni@bootlin.com>
+References: <20181228150740.29890-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CA+h8R2q+H=kpewLO2q2zbxMWGJ8AaznRVd4xnn-jXbjf-q9jQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Hi Thomas,
 
-This version has a new dependency on lua-std-normalize.
+On Fri, Dec 28, 2018 at 7:07 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> When libsseccomp support is enabled, docker-containerd uses pkg-config
+> to find libsseccomp, so we must depend on host-pkconf.
+> +DOCKER_CONTAINERD_DEPENDENCIES += libseccomp host-pkgconf
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+LGTM.
 
----
-Changes v1 -> v2:
-  - Use generic package infrastructure instead of luarocks
----
- package/luaposix/Config.in     | 1 +
- package/luaposix/luaposix.hash | 2 +-
- package/luaposix/luaposix.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+Signed-off-by: Christian Stewart <christian@paral.in>
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index 91abcb9..176c765 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
- 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
- 	# "bit" module, but since it has a different name, luaposix
- 	# doesn't find it.
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index b3984c1..a13cb4a 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7  luaposix-34.0.1.tar.gz
-+sha256 eb6e7322da3013bdb3d524f68df4f5510a2efd805c06bf7cc27be6611eab7483  luaposix-34.0.4.tar.gz
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 779e707..f467992 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 34.0.1
--LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
-+LUAPOSIX_VERSION = 34.0.4
-+LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
- LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
--- 
-2.7.4
+- I hope signed-off-by is appropriate here.
+
+Best,
+Christian
