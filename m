@@ -1,109 +1,172 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 29 Dec 2018 09:16:47 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/lua-std-normalize: new
- package
-In-Reply-To: <1546049245-22865-2-git-send-email-james.hilliard1@gmail.com>
-References: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
- <1546049245-22865-2-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAB0FRsuVevSbUYjX9h9p6rEqa9jm98GT4a0wqRDGpXJO8eGjLw@mail.gmail.com>
+Date: Sat, 29 Dec 2018 10:15:41 +0100
+Subject: [Buildroot] [RFC 2/3] wpebackend-fdo: new package
+In-Reply-To: <20181228015802.GF19602@momiji>
+References: <20181223154845.23556-1-francois.perrad@gadz.org>
+ <20181223154845.23556-3-francois.perrad@gadz.org>
+ <20181228015802.GF19602@momiji>
+Message-ID: <CAB0FRsvF_3nJV2uA9se26Gji0RrS5KrpDZxnAH8MXZJ=EDPkxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 29 d?c. 2018 ? 03:07, <james.hilliard1@gmail.com> a ?crit :
+Le ven. 28 d?c. 2018 ? 01:58, Adrian Perez de Castro <aperez@igalia.com> a
+?crit :
 
-> From: James Hilliard <james.hilliard1@gmail.com>
+> Hello,
 >
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Quick review here...
 >
+> On Sun, 23 Dec 2018 16:48:44 +0100, Francois Perrad <fperrad@gmail.com>
+> wrote:
+>
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  DEVELOPERS                                 |  1 +
+> >  package/Config.in                          |  1 +
+> >  package/wpebackend-fdo/Config.in           | 17 +++++++++++++++++
+> >  package/wpebackend-fdo/wpebackend-fdo.hash |  7 +++++++
+> >  package/wpebackend-fdo/wpebackend-fdo.mk   | 15 +++++++++++++++
+> >  5 files changed, 41 insertions(+)
+> >  create mode 100644 package/wpebackend-fdo/Config.in
+> >  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.hash
+> >  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 705842310..93a2bf5ad 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -828,6 +828,7 @@ F:        package/qemu/
+> >  F:   package/sdl2_mixer/
+> >  F:   package/sdl2_net/
+> >  F:   package/tekui/
+> > +F:   package/wpebackend-fdo/
+> >  F:   package/wsapi-fcgi/
+> >  F:   package/wsapi-xavante/
+> >  F:   utils/scancpan
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 7615c5853..e8a676ab0 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -1302,6 +1302,7 @@ menu "Graphics"
+> >       source "package/webkitgtk/Config.in"
+> >       source "package/webp/Config.in"
+> >       source "package/woff2/Config.in"
+> > +     source "package/wpebackend-fdo/Config.in"
+> >       source "package/zbar/Config.in"
+> >       source "package/zxing-cpp/Config.in"
+> >  endmenu
+> > diff --git a/package/wpebackend-fdo/Config.in
+> b/package/wpebackend-fdo/Config.in
+> > new file mode 100644
+> > index 000000000..9025834e1
+> > --- /dev/null
+> > +++ b/package/wpebackend-fdo/Config.in
+> > @@ -0,0 +1,17 @@
+> > +comment "wpebackend-fdo needs an OpenEGL-capable backend"
+> > +     depends on !BR2_PACKAGE_HAS_LIBEGL
+> > +
+>
+> The dependency line for the comment needs to be updated to be the reverse
+> of the list of dependencies for the BR2_PACKAGE_WPEBACKEND_FDO symbol
+> below.
+>
+> Also, the comment text should follow the Buildroot style:
+>
+>     foo needs a toolchain w/ featA, featB, featC
+>
+> (There's more details about this in the Buildroot manual, which you can
+> find
+> at https://buildroot.org/downloads/manual/manual.html)
+>
+> > +config BR2_PACKAGE_WPEBACKEND_FDO
+> > +     bool "wpebackend-fdo"
+> > +     depends on !BR2_STATIC_LIBS # dlfcn.h
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+> > +     depends on BR2_USE_WCHAR # gettext
+> > +     depends on BR2_USE_MMU # fork()
+>
+> The BR2_USE_MMU belongs in the ?wpewebkit? package (the backend itself does
+> no forking), and should not be needed here.
+>
+> The BR2_USE_WCHAR dependency should not be needed here, as gettext is not
+> required nor used by this package, neither it is needed by ?wayland? nor
+> ?libxkbcommon?.
+>
+>
+These two dependencies comes from LIBGLIB2
 
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-
-
-> ---
-> Changes v1 -> v2:
->   - rename lua-normalize to lua-std-normalize
-> ---
->  package/Config.in                                |  1 +
->  package/lua-std-normalize/Config.in              | 13 +++++++++++++
->  package/lua-std-normalize/lua-std-normalize.hash |  2 ++
->  package/lua-std-normalize/lua-std-normalize.mk   | 14 ++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/lua-std-normalize/Config.in
->  create mode 100644 package/lua-std-normalize/lua-std-normalize.hash
->  create mode 100644 package/lua-std-normalize/lua-std-normalize.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f33aaf9..eaf3c04 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -625,6 +625,7 @@ menu "Lua libraries/modules"
->         source "package/lua-periphery/Config.in"
->         source "package/lua-sdl2/Config.in"
->         source "package/lua-std-debug/Config.in"
-> +       source "package/lua-std-normalize/Config.in"
->         source "package/lua-stdlib/Config.in"
->         source "package/lua-testmore/Config.in"
->         source "package/lua-utf8/Config.in"
-> diff --git a/package/lua-std-normalize/Config.in
-> b/package/lua-std-normalize/Config.in
-> new file mode 100644
-> index 0000000..b959836
-> --- /dev/null
-> +++ b/package/lua-std-normalize/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LUA_STD_NORMALIZE
-> +       bool "lua-std-normalize"
-> +       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> +       select BR2_PACKAGE_LUA_STD_DEBUG # runtime
-> +       help
-> +         This module can inject deterministic versions of core Lua
-> +         functions that do not behave identically across all supported Lua
-> +         implementations into your module's lexical environment.   Each
-> +         function is as thin and fast a version as is possible in each Lua
-> +         implementation, evaluating to the Lua C implementation with no
-> +         overhead when semantics allow.
-> +
-> +         https://lua-stdlib.github.io/normalize
-> diff --git a/package/lua-std-normalize/lua-std-normalize.hash
-> b/package/lua-std-normalize/lua-std-normalize.hash
-> new file mode 100644
-> index 0000000..831528d
-> --- /dev/null
-> +++ b/package/lua-std-normalize/lua-std-normalize.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 50baac6fbcbc6bbe72b63ce0871ec36176d75c04dccc6e368590ba6ef107c67a
-> std.normalize-2.0.2-1.src.rock
-> diff --git a/package/lua-std-normalize/lua-std-normalize.mk
-> b/package/lua-std-normalize/lua-std-normalize.mk
-> new file mode 100644
-> index 0000000..efbf48b
-> --- /dev/null
-> +++ b/package/lua-std-normalize/lua-std-normalize.mk
-> @@ -0,0 +1,14 @@
->
+> +     depends on BR2_PACKAGE_HAS_LIBEGL
+> > +     select BR2_PACKAGE_LIBGLIB2
+> > +     select BR2_PACKAGE_LIBWPE
+> > +     select BR2_PACKAGE_WAYLAND
+> > +     help
+> > +       WPE's backend based on a freedesktop.org stack.
+> > +
+> > +       https://wpewebkit.org/
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash
+> b/package/wpebackend-fdo/wpebackend-fdo.hash
+> > new file mode 100644
+> > index 000000000..6ebfcf335
+> > --- /dev/null
+> > +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+> > @@ -0,0 +1,7 @@
+> > +# From https://wpewebkit.org/releases/wpebackend-fdo-1.1.0.tar.xz.sums
+> > +md5 dc852a6cafaf4b6392dcb91e36cd7abb wpebackend-fdo-1.1.0.tar.xz
+> > +sha1 688377f441e19273fe2b44c0a2ea9da149f97fa4
+> wpebackend-fdo-1.1.0.tar.xz
+> > +sha256 f6c72130d16e50860cb83eb0f6e109c76f1826d2c6bee39025fb3651941761e7
+> wpebackend-fdo-1.1.0.tar.xz
+> > +
+> > +# Hashes for license files:
+> > +sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825
+> COPYING
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk
+> b/package/wpebackend-fdo/wpebackend-fdo.mk
+> > new file mode 100644
+> > index 000000000..b62e710a9
+> > --- /dev/null
+> > +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+> > @@ -0,0 +1,15 @@
+> >
 > +################################################################################
-> +#
-> +# lua-std-normalize
-> +#
->
+> > +#
+> > +# wpebackend-fdo
+> > +#
+> >
 > +################################################################################
-> +
-> +LUA_STD_NORMALIZE_VERSION_UPSTREAM = 2.0.2
-> +LUA_STD_NORMALIZE_VERSION = $(LUA_STD_NORMALIZE_VERSION_UPSTREAM)-1
-> +LUA_STD_NORMALIZE_NAME_UPSTREAM = std.normalize
-> +LUA_STD_NORMALIZE_SUBDIR = normalize-$(LUA_STD_NORMALIZE_VERSION_UPSTREAM)
-> +LUA_STD_NORMALIZE_LICENSE = MIT
-> +LUA_STD_NORMALIZE_LICENSE_FILES = LICENSE.md
-> +
-> +$(eval $(luarocks-package))
-> --
-> 2.7.4
+> > +
+> > +WPEBACKEND_FDO_VERSION = 1.1.0
 >
+> As with libwpe, please use version 1.0.0 here.
+>
+> > +WPEBACKEND_FDO_SITE = http://wpewebkit.org/releases
+> > +WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+> > +WPEBACKEND_FDO_INSTALL_STAGING = YES
+> > +WPEBACKEND_FDO_LICENSE = BSD-2-Clause
+> > +WPEBACKEND_FDO_LICENSE_FILES = COPYING
+> > +WPEBACKEND_FDO_DEPENDENCIES = libglib2 libwpe wayland
+>
+> This is missing ?libegl? here.
+>
+>
+libegl is not needed here, libegl is already a dependency of libwpe.
+
+Fran?ois
+
+> +$(eval $(cmake-package))
+> > --
+> > 2.17.1
+>
+>
+> -Adri?n
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181229/d7dd2cc3/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181229/3791b95c/attachment.html>
