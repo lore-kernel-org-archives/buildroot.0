@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Dec 2018 10:42:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: bump to v3.1.0
-In-Reply-To: <1546068063-11514-1-git-send-email-qwendu@gmail.com>
-References: <1546068063-11514-1-git-send-email-qwendu@gmail.com>
-Message-ID: <20181229104239.16975c35@windsurf>
+Date: Sat, 29 Dec 2018 10:44:44 +0100
+Subject: [Buildroot] [PATCH] package/docker-containerd: add missing
+ dependency on host-pkgconf
+In-Reply-To: <CA+h8R2q+H=kpewLO2q2zbxMWGJ8AaznRVd4xnn-jXbjf-q9jQw@mail.gmail.com>
+References: <20181228150740.29890-1-thomas.petazzoni@bootlin.com>
+ <CA+h8R2q+H=kpewLO2q2zbxMWGJ8AaznRVd4xnn-jXbjf-q9jQw@mail.gmail.com>
+Message-ID: <20181229104444.432615e2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks a lot for this new iteration! From a formatting point of view,
-it looks correct now (thanks to the patch being sent using git
-send-email). There is however one remaining issue, see below.
+On Fri, 28 Dec 2018 20:46:50 -0800, Christian Stewart wrote:
 
-On Sat, 29 Dec 2018 15:21:03 +0800, qwendu wrote:
-> From: qwen dux <qwendu@gmail.com>
+> On Fri, Dec 28, 2018 at 7:07 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > When libsseccomp support is enabled, docker-containerd uses pkg-config
+> > to find libsseccomp, so we must depend on host-pkconf.
+> > +DOCKER_CONTAINERD_DEPENDENCIES += libseccomp host-pkgconf  
 > 
-> Signed-off-by: qwen dux <qwendu@gmail.com>
-> ---
->  package/libwebsockets/0001-cmake-no-strict-aliasin.patch | 16 ++++++++++++++++
->  package/libwebsockets/0002-libuv.c.uninitialized.patch   | 13 +++++++++++++
->  package/libwebsockets/libwebsockets.hash                 |  2 +-
->  package/libwebsockets/libwebsockets.mk                   |  2 +-
->  4 files changed, 31 insertions(+), 2 deletions(-)
->  create mode 100644 package/libwebsockets/0001-cmake-no-strict-aliasin.patch
->  create mode 100644 package/libwebsockets/0002-libuv.c.uninitialized.patch
+> LGTM.
+
+Thanks for the review.
+
+> Signed-off-by: Christian Stewart <christian@paral.in>
 > 
-> diff --git a/package/libwebsockets/0001-cmake-no-strict-aliasin.patch b/package/libwebsockets/0001-cmake-no-strict-aliasin.patch
-> new file mode 100644
-> index 0000000..8515d40
-> --- /dev/null
-> +++ b/package/libwebsockets/0001-cmake-no-strict-aliasin.patch
+> - I hope signed-off-by is appropriate here.
 
-For all patches, we require them to have a description + Signed-off-by
-line. In addition, for this specific package, which is managed using
-Git by the upstream developers, we like to have git-formatted patches.
-So, you should clone the libwebsockets Git repository, create a branch
-based on the tag v3.1.0, and create two commits for your two build
-fixes, with an appropriate commit log containing a description +
-Signed-off-by, and then use:
+Signed-off-by is when you're the author, or in the chain of
+developers/maintainers that carry the patch all the way to upstream.
 
-	git format-patch -N HEAD~2
+In this case, what you should ideally have used is a Acked-by or
+Reviewed-by. See also
+https://buildroot.org/downloads/manual/manual.html#_reviewing_and_testing_patches.
 
-to generate the two patches.
-
-Could you fix this up and send an updated version ?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
