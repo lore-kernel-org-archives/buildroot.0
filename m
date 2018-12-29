@@ -1,75 +1,68 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 29 Dec 2018 05:43:23 -0600
-Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
-In-Reply-To: <20181229113847.GZ14286@scaer>
-References: <20181227084902.GN14286@scaer>
- <CADvTj4qwOPD774mrqNOWK+FZ1wWVX8jAhsYnW3fQ0b7-nTaswA@mail.gmail.com>
- <20181227091134.GO14286@scaer>
- <CADvTj4oEdXRcOScrou=L0-AWG1pGu3kD9PLj=j9WoeJUBUG8bA@mail.gmail.com>
- <20181227104029.GP14286@scaer>
- <CADvTj4rdOXyUF-WN+ZATt6v1L9QH7pEA2iQhP7YtfHdQRG3AjA@mail.gmail.com>
- <20181227105731.GR14286@scaer>
- <CADvTj4rcDC0hkZZ8Zfjw6Tv26PROUc7AOiuPXn6paBJjxt8szw@mail.gmail.com>
- <20181229093522.GX14286@scaer>
- <CADvTj4ri-LUvySkGaHbstAuOZ+Ez8qhOU8cExZVu3_2f7yw-bQ@mail.gmail.com>
- <20181229113847.GZ14286@scaer>
-Message-ID: <CADvTj4pSc_mORNp+PhMCTHT=ER3HYWsmBSqOhqsca5P6dkf6HA@mail.gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Sat, 29 Dec 2018 19:49:12 +0800
+Subject: [Buildroot] [PATCH 1/1] package/systemd: backport meson cpp fix
+Message-ID: <1546084152-27181-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 29, 2018 at 5:38 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2018-12-29 04:50 -0600, James Hilliard spake thusly:
-> > On Sat, Dec 29, 2018 at 3:35 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2018-12-27 05:01 -0600, James Hilliard spake thusly:
-> > > > On Thu, Dec 27, 2018 at 4:57 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > > On 2018-12-27 04:42 -0600, James Hilliard spake thusly:
-> > > > > > On Thu, Dec 27, 2018 at 4:40 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > > > > I can confirm that, without the hunk in src/systemd/meson.build, I was
-> > > > > > > able to build systemd with this defconfig:
-> > > > > > >     BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > > > > > >     BR2_INIT_SYSTEMD=y
-> > > > > > That's without c++ right?
-> > >
-> > > Your no-C++ patch has been accepted upstream! :-)
-> > >
-> > > Care to backport that fix in Buildroot, please?
-> > Backported in my tree here
-> > https://github.com/jameshilliard/buildroot/tree/systemd-boot
->
-> Could you please send it soon to the list as a patch to systemd, as it
-> is not correlated to systemd-boot at all (it is also needed by systemd
-> to build on a non-C++ toolchain)?
-Will do, hadn't noticed the v240 bump was already merged.
->
-> > I did a test build selecting only systemd-boot and now I get this error:
-> > Program gperf found: NO
-> > meson.build:634:0: ERROR:  Program(s) ['gperf'] not found or not executable
->
-> Until now, only minor patching was needed (a header and two libs checks)
-> that were trivial to patchout. But this new gperf check is less trivial
-> to patch-out in a way that is maintainable long-term.
-I'm pretty sure I had this same issue even in systemd v239. That's why
-I sent that giant patch here
-https://patchwork.ozlabs.org/patch/1018502/.
->
-> My opinion now is now joining that of Thomas, that we should not try to
-> build a standalone systemd-boot until it is properly supported by
-> upstream. Work to that effect should be directed at upstream rather than
-> monkey-patching in Buildroot.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+From: James Hilliard <james.hilliard1@gmail.com>
+
+This is needed so that systemd can be built without a cpp toolchain.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...-use-cross-compilation-compatible-c-check.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
+
+diff --git a/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
+new file mode 100644
+index 0000000..f6eea34
+--- /dev/null
++++ b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
+@@ -0,0 +1,40 @@
++From de8eab973f4d4b0f1f1eb8169165be524aefa306 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Thu, 27 Dec 2018 09:16:20 +0800
++Subject: [PATCH 1/1] meson: use cross compilation compatible c++ check
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ meson.build             | 1 -
++ src/systemd/meson.build | 3 +--
++ 2 files changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 337e014..4f1b3f9 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -289,7 +289,6 @@ install_tests = get_option('install-tests')
++ 
++ if add_languages('cpp', required : fuzzer_build)
++         #  Used only for tests
++-        add_languages('cpp')
++         cxx_cmd = ' '.join(meson.get_compiler('cpp').cmd_array())
++ else
++         cxx_cmd = ''
++diff --git a/src/systemd/meson.build b/src/systemd/meson.build
++index e0c967e..75c48b0 100644
++--- a/src/systemd/meson.build
+++++ b/src/systemd/meson.build
++@@ -52,8 +52,7 @@ if cc.has_argument('-std=iso9899:2017')
++         opts += [['c', '-std=iso9899:2017']]
++ endif
++ 
++-cxx = find_program('c++', required : false)
++-if cxx.found()
+++if add_languages('cpp', required : false)
++         opts += [['c++'],
++                  ['c++', '-std=c++98'],
++                  ['c++', '-std=c++11']]
++-- 
++2.7.4
++
+-- 
+2.7.4
