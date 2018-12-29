@@ -1,68 +1,73 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sat, 29 Dec 2018 19:49:12 +0800
-Subject: [Buildroot] [PATCH 1/1] package/systemd: backport meson cpp fix
-Message-ID: <1546084152-27181-1-git-send-email-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 29 Dec 2018 13:31:20 +0100
+Subject: [Buildroot] [PATCH] package/supertux: needs gcc >= 6
+Message-ID: <20181229123120.30803-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+The initial build issue [1] has been fixed upstream but the supertux
+fail to link with boost libraries when using gcc 5 (which use C++11 by default):
 
-This is needed so that systemd can be built without a cpp toolchain.
+libsupertux2_lib.a(main.cpp.o): In function `boost::system::error_category::std_category::equivalent(std::error_code const&, int) const':
+main.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x32): undefined reference to `boost::system::detail::generic_category_instance'
+main.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x47): undefined reference to `boost::system::detail::generic_category_instance'
+main.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei[_ZNK5boost6system14error_category12std_category10equivalentERKSt10error_codei]+0x99): undefined reference to `boost::system::detail::generic_category_instance'
+libsupertux2_lib.a(main.cpp.o): In function `boost::system::error_category::std_category::equivalent(int, std::error_condition const&) const':
+main.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0x33): undefined reference to `boost::system::detail::generic_category_instance'
+main.cpp:(.text._ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition[_ZNK5boost6system14error_category12std_category10equivalentEiRKSt15error_condition]+0x48): undefined reference to `boost::system::detail::generic_category_instance'
+collect2: error: ld returned 1 exit status
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This is a similar issue as the one reported by [2].
+
+With gcc 5, boost libraries are compiled using C++11 but
+supertux2_lib.a is using C++14 standard.
+
+To fix the issue, boost libraries should be build using C++14
+standard but we currently don't have an option to "force" the
+default C++ standard used by the compiler.
+
+So bump the minimum gcc version to gcc 6 since the C++14 is
+used by default.
+
+[1] https://github.com/SuperTux/supertux/issues/1014
+[2] https://github.com/boostorg/system/issues/26
+
+Fixes:
+http://autobuild.buildroot.net/results/5b4/5b452c155917d783b3d8167fde48c2c938a74b95
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...-use-cross-compilation-compatible-c-check.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
+ package/supertux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
-new file mode 100644
-index 0000000..f6eea34
---- /dev/null
-+++ b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
-@@ -0,0 +1,40 @@
-+From de8eab973f4d4b0f1f1eb8169165be524aefa306 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 27 Dec 2018 09:16:20 +0800
-+Subject: [PATCH 1/1] meson: use cross compilation compatible c++ check
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ meson.build             | 1 -
-+ src/systemd/meson.build | 3 +--
-+ 2 files changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 337e014..4f1b3f9 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -289,7 +289,6 @@ install_tests = get_option('install-tests')
-+ 
-+ if add_languages('cpp', required : fuzzer_build)
-+         #  Used only for tests
-+-        add_languages('cpp')
-+         cxx_cmd = ' '.join(meson.get_compiler('cpp').cmd_array())
-+ else
-+         cxx_cmd = ''
-+diff --git a/src/systemd/meson.build b/src/systemd/meson.build
-+index e0c967e..75c48b0 100644
-+--- a/src/systemd/meson.build
-++++ b/src/systemd/meson.build
-+@@ -52,8 +52,7 @@ if cc.has_argument('-std=iso9899:2017')
-+         opts += [['c', '-std=iso9899:2017']]
-+ endif
-+ 
-+-cxx = find_program('c++', required : false)
-+-if cxx.found()
-++if add_languages('cpp', required : false)
-+         opts += [['c++'],
-+                  ['c++', '-std=c++98'],
-+                  ['c++', '-std=c++11']]
-+-- 
-+2.7.4
-+
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
+index 50bea58610..c77d1ae2bd 100644
+--- a/package/supertux/Config.in
++++ b/package/supertux/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SUPERTUX
+ 	depends on BR2_PACKAGE_HAS_LIBGL # libglew
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_XORG7 # libglew, SDL2 OpenGL (GLX)
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on BR2_USE_MMU # SDL2 OpenGL (GLX)
+ 	depends on !BR2_STATIC_LIBS # SDL2
+@@ -33,10 +33,10 @@ config BR2_PACKAGE_SUPERTUX
+ 
+ 	  http://supertux.github.io/
+ 
+-comment "supertux needs OpenGL and a toolchain w/ C++, gcc >= 5, NPTL, dynamic library, wchar"
++comment "supertux needs OpenGL and a toolchain w/ C++, gcc >= 6, NPTL, dynamic library, wchar"
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_LIBGL || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_STATIC_LIBS || !BR2_USE_WCHAR
 -- 
-2.7.4
+2.20.1
