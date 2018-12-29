@@ -1,166 +1,129 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 28 Dec 2018 23:36:02 -0600
-Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
- PKCS#11 engine
-In-Reply-To: <20181207181314.24051-1-tpiepho@impinj.com>
-References: <20181207181314.24051-1-tpiepho@impinj.com>
-Message-ID: <CA+-urNQc0mDN=iMiM--O3Ts7Z1jZewSvZYx0G_NT4JCHaobpSQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Dec 2018 08:00:31 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-12-28
+Message-ID: <20181229070031.506F02073D@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Trent,
+Hello,
 
-I was about to submit libp11 and then saw your patch, so thanks for submitting.
+Build statistics for 2018-12-28
+===============================
 
-The commit title should be "libp11: new package".
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  17 |   3 |   0 |  20 |
+   2018.11.x |  11 |   1 |   0 |  12 |
+      master | 139 |  39 |   0 | 178 |
 
-On Fri, Dec 7, 2018 at 12:28 PM Trent Piepho <tpiepho@impinj.com> wrote:
->
-> Library for using PKCS#11, which includes an engine for OpenSSL that
-> lets it use PKCS#11 modules.  Which is really what this package is
-> about, not that libp11 library itself, which has no users outside the of
-> OpenSSL engine.
->
-> If p11-kit is enabled, configure the engine to use that as the default
-> PKCS#11 module.  That module is a sort of multiplexer that allows
-> multiple modules to be used at once, so it makes sense to use it even if
-> there are other modules present, e.g. softhsm2, nssckbi, pkcs11-proxy,
-> ykcs11, etc.
->
-> A host package is created too, with a host configuration option.  Since
-> this a dynamically loaded module, there is no build time reason to
-> select it from a host package.  It could be used by host openssl, to
-> allow host rauc to sign a software update bundle using a key from a HSM
-> with a PKCS#11 interface.
->
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> ---
->  package/Config.in             |  1 +
->  package/Config.in.host        |  1 +
->  package/libp11/Config.in      |  7 +++++++
->  package/libp11/Config.in.host |  6 ++++++
->  package/libp11/libp11.hash    |  3 +++
->  package/libp11/libp11.mk      | 21 +++++++++++++++++++++
->  6 files changed, 39 insertions(+)
->  create mode 100644 package/libp11/Config.in
->  create mode 100644 package/libp11/Config.in.host
->  create mode 100644 package/libp11/libp11.hash
->  create mode 100644 package/libp11/libp11.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f6252f2abb..940e7d2d2c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1177,6 +1177,7 @@ menu "Crypto"
->         source "package/libmcrypt/Config.in"
->         source "package/libmhash/Config.in"
->         source "package/libnss/Config.in"
-> +       source "package/libp11/Config.in"
->         source "package/libscrypt/Config.in"
->         source "package/libsecret/Config.in"
->         source "package/libsha1/Config.in"
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 06fb2e1996..89b39b0007 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -31,6 +31,7 @@ menu "Host utilities"
->         source "package/imx-usb-loader/Config.in.host"
->         source "package/jq/Config.in.host"
->         source "package/jsmin/Config.in.host"
-> +       source "package/libp11/Config.in.host"
->         source "package/lpc3250loader/Config.in.host"
->         source "package/lttng-babeltrace/Config.in.host"
->         source "package/mfgtools/Config.in.host"
-> diff --git a/package/libp11/Config.in b/package/libp11/Config.in
-> new file mode 100644
-> index 0000000000..0b9a739db3
-> --- /dev/null
-> +++ b/package/libp11/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBP11
-> +       bool "libp11"
-> +       select BR2_PACKAGE_OPENSSL
-> +       help
-> +         OpenSSL engine for PKCS#11 modules.  Part of the OpenSC project.
-> +
-> +         https://github.com/OpenSC/OpenSC/wiki
-> diff --git a/package/libp11/Config.in.host b/package/libp11/Config.in.host
-> new file mode 100644
-> index 0000000000..ccc171025a
-> --- /dev/null
-> +++ b/package/libp11/Config.in.host
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_LIBP11
-> +       bool "host libp11"
-> +       help
-> +         OpenSSL engine for PKCS#11 modules.  Part of the OpenSC project.
-> +
-> +         https://github.com/OpenSC/OpenSC/wiki
-> diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-> new file mode 100644
-> index 0000000000..01cea6466b
-> --- /dev/null
-> +++ b/package/libp11/libp11.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256 9d1c76d74c21ca224f96204982097ebc6b956f645b2b0b5f9c502a20e9ffcfd8  libp11-0.4.9.tar.gz
-> +sha256 d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-> diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-> new file mode 100644
-> index 0000000000..9dc098870e
-> --- /dev/null
-> +++ b/package/libp11/libp11.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# libp11
-> +#
-> +################################################################################
-> +
-> +LIBP11_VERSION = 0.4.9
-> +LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
+Results for branch '2018.02.x'
+==============================
 
-I'm not sure what official BR policy is, but it seems that most
-github-hosted packages use the github helper:
+Classification of failures by reason
+------------------------------------
 
-LIBP11_VERSION = libp11-0.4.9
-LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+         libcpprestsdk-v2.10.1 | 2 
+                 mesa3d-17.3.6 | 1 
 
-and then you'll need
 
-LIBP11_AUTORECONF = YES
+Detail of failures
+------------------
 
-> +LIBP11_DEPENDENCIES = openssl
-> +LIBP11_INSTALL_STAGING = YES
-> +LIBP11_LICENSE = LGPLv2.1
+     powerpc |          libcpprestsdk-v2.10.1 | NOK | http://autobuild.buildroot.net/results/5b6271141bf189ae2cbff2898bf755c3d245b079 |     
+     powerpc |          libcpprestsdk-v2.10.1 | NOK | http://autobuild.buildroot.net/results/2ab7860d53b24f41c2c673fff4611bc6f1631b27 |     
+     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/51010073bb47ecf9597e7c462c77ad5ef804853f |     
 
-It looks like the license is "LGPL-2.1+"
+Results for branch '2018.11.x'
+==============================
 
-> +LIBP11_LICENSE_FILES = COPYING
-> +
-> +ifeq ($(BR2_PACKAGE_P11_KIT),y)
-> +LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-> +endif
-> +
-> +HOST_LIBP11_DEPENDENCIES = host-openssl
+Classification of failures by reason
+------------------------------------
 
-I've tested this on device and with OpenSSL 1.1.0 (not OpenSSL 1.0.2
-which is currently in BR master). That combination works well. I'm
-hopeful that the OpenSSL 1.1.0 patches can be integrated. When that
-happens,
+              libostree-2018.9 | 1 
 
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> --
-> 2.14.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Detail of failures
+------------------
+
+   powerpc64 |               libostree-2018.9 | NOK | http://autobuild.buildroot.net/results/0986953a3e31b18bc870c25a0a77a3751161b131 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   netsurf-3.8 | 6 
+                     php-7.3.0 | 4 
+                  ffmpeg-3.4.5 | 3 
+                  linuxptp-2.0 | 3 
+   libtorrent-rasterbar-1.1.11 | 2 
+             stress-ng-0.09.47 | 2 
+                   systemd-240 | 2 
+    azure-iot-sdk-c-2018-03-16 | 1 
+                collectd-5.7.1 | 1 
+                 dmalloc-5.5.2 | 1 
+                     efivar-34 | 1 
+    json-for-modern-cpp-v3.5.0 | 1 
+                libmad-0.15.1b | 1 
+      lua-cqueues-rel-20161215 | 1 
+                mongodb-r3.3.4 | 1 
+                  monkey-1.6.9 | 1 
+                    php-7.2.13 | 1 
+                php-ssh2-1.1.2 | 1 
+                 php-zmq-1.1.3 | 1 
+                 sngrep-v1.4.6 | 1 
+sunxi-cedarx-b8f52d913f7372... | 1 
+                supertux-0.6.0 | 1 
+                  udisks-1.0.5 | 1 
+                   whois-5.3.2 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/0a0ebc59c204d3e21246d50130b0f0d5de4975cc |     
+  aarch64_be |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/142c573a71df4550a8f474d4877f2ae0cc0c404d | ORPH
+         arm |                  dmalloc-5.5.2 | NOK | http://autobuild.buildroot.net/results/6b9cb130f9649e28126852fe630d093c67dbe54d | ORPH
+     aarch64 |                      efivar-34 | NOK | http://autobuild.buildroot.net/results/3dd82d63b9583696df538305fcea665c1c7bde5e |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/ec0392422cb14b5a2e93a839e19e13c05ab660dd |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/9513a4a538ba0ad26a0e24a267c04803e362c65a |     
+        i686 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/e692f34728981e5f2f9cc893ee16ec16a6101b04 |     
+     powerpc |     json-for-modern-cpp-v3.5.0 | NOK | http://autobuild.buildroot.net/results/0bf7c216b2a4d29f39cae25bd4f9f8b23e2fb9d2 |     
+         arm |                 libmad-0.15.1b | NOK | http://autobuild.buildroot.net/results/6a6aa29295bd70679c3a22a149e79010fa20c1bf | ORPH
+        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/cb5c1bcc8d95c65ae2027b7c9572e61211d84e03 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/355f5c2820859d7c1f55283ca873343063a96001 |     
+         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/d8d25da0c2e79278c2a1c5516e592208269060eb |     
+         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/2f07b28552485114a9d496620196b2b313a13ab2 |     
+         arm |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/249f8fff82c34bdb814c182aa7ec54ceed21e798 |     
+microblazeel |       lua-cqueues-rel-20161215 | NOK | http://autobuild.buildroot.net/results/1074191de657d545e59d0100ff3d0e83c2c7b087 |     
+     aarch64 |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/b684e810ac6f740ae03610a6c29c1d1dd102a699 |     
+        m68k |                   monkey-1.6.9 | NOK | http://autobuild.buildroot.net/results/8ee6998916c374e8867148ecb4dbdc9696ceedde |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/430c3c1375887c54d83e67cd591209b2146b8f31 |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/35c04fbb46b6432f15d4f8f385450c9834ac534b |     
+       sparc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/22520a91bc69c8e75a0ec23dcf971ff457aaeaf9 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e3fb0d720e05039805f5338133b278bee756e2e3 |     
+      xtensa |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/252ea9c935349889bc7b8783b93a268bb2a5252a |     
+      x86_64 |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/bca5ca1b60d2aed7d983f5edfe7f79e6eaf2ce5b |     
+      mipsel |                     php-7.2.13 | NOK | http://autobuild.buildroot.net/results/8557a4da2e2825a804a1599ebb5aa12b5766f9ec | ORPH
+    mips64el |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/586f56e8fcf2d2bbbd3bdf69b1c3befff7ce8bbf | ORPH
+microblazeel |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/e784342b980bb817de4d893a16601359880b6c3b | ORPH
+     riscv64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/8195826b4ed515591f8df54b039fab4e01db679f | ORPH
+         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/211a695fec0980bd733688783375dfd000e6c7b9 | ORPH
+         arm |                 php-ssh2-1.1.2 | NOK | http://autobuild.buildroot.net/results/576f72c85b499b492961bbd5a24e4ef8696ab3ab | ORPH
+      xtensa |                  php-zmq-1.1.3 | NOK | http://autobuild.buildroot.net/results/f9638359ca3f127d64e6709b67e73a754d23720f | ORPH
+         arm |                  sngrep-v1.4.6 | NOK | http://autobuild.buildroot.net/results/f0bb762381948f7820405d307b12e2a95b3e8cb6 |     
+         arm |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/5ce7fffe569401aa800f66910b56de338d06640d |     
+    mips64el |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/8f05ef30f32eff4abb56e2305f689edea9ffb9af |     
+         arm | sunxi-cedarx-b8f52d913f7372... | NOK | http://autobuild.buildroot.net/results/2bf09c42341313af0dd44b4458425c0541ea4a04 | ORPH
+        mips |                 supertux-0.6.0 | NOK | http://autobuild.buildroot.net/results/5b452c155917d783b3d8167fde48c2c938a74b95 |     
+        mips |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/8f32d970c910a75ae447dde8195aa85766377d48 |     
+         arm |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/e92b1d55f5565269bee74dfcbaac0968c1bab2a1 |     
+         arc |                   udisks-1.0.5 | NOK | http://autobuild.buildroot.net/results/099df30e4608a84504059d1c92b1040727fbcca5 |     
+        m68k |                    whois-5.3.2 | NOK | http://autobuild.buildroot.net/results/c139030e8383027dc679cfc59feddad426919900 |     
+
+
+-- 
+http://autobuild.buildroot.net
