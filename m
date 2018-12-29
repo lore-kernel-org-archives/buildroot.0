@@ -1,9 +1,11 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 29 Dec 2018 09:15:30 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/lua-std-debug: new package
-In-Reply-To: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
+Date: Sat, 29 Dec 2018 09:16:09 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/luaposix: bump version to
+ 34.0.4
+In-Reply-To: <1546049245-22865-3-git-send-email-james.hilliard1@gmail.com>
 References: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <CAB0FRsswkyiMicaDU-H3KwbwqQnmtpWEypji2=miugWj4SG0EQ@mail.gmail.com>
+ <1546049245-22865-3-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CAB0FRsswnf3ry3GN-uss+i7f__dbSjgXdjeWmopu43++XQH6LA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,92 +16,68 @@ Le sam. 29 d?c. 2018 ? 03:07, <james.hilliard1@gmail.com> a ?crit :
 
 > From: James Hilliard <james.hilliard1@gmail.com>
 >
+> This version has a new dependency on lua-std-normalize.
+>
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 >
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
 
+>
 > ---
 > Changes v1 -> v2:
->   - rename lua-debug to lua-std-debug
+>   - Use generic package infrastructure instead of luarocks
 > ---
->  package/Config.in                        |  1 +
->  package/lua-std-debug/Config.in          |  7 +++++++
->  package/lua-std-debug/lua-std-debug.hash |  2 ++
->  package/lua-std-debug/lua-std-debug.mk   | 16 ++++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/lua-std-debug/Config.in
->  create mode 100644 package/lua-std-debug/lua-std-debug.hash
->  create mode 100644 package/lua-std-debug/lua-std-debug.mk
+>  package/luaposix/Config.in     | 1 +
+>  package/luaposix/luaposix.hash | 2 +-
+>  package/luaposix/luaposix.mk   | 4 ++--
+>  3 files changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index c3e0691..f33aaf9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -624,6 +624,7 @@ menu "Lua libraries/modules"
->         source "package/lua-msgpack-native/Config.in"
->         source "package/lua-periphery/Config.in"
->         source "package/lua-sdl2/Config.in"
-> +       source "package/lua-std-debug/Config.in"
->         source "package/lua-stdlib/Config.in"
->         source "package/lua-testmore/Config.in"
->         source "package/lua-utf8/Config.in"
-> diff --git a/package/lua-std-debug/Config.in
-> b/package/lua-std-debug/Config.in
-> new file mode 100644
-> index 0000000..3774292
-> --- /dev/null
-> +++ b/package/lua-std-debug/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LUA_STD_DEBUG
-> +       bool "lua-std-debug"
-> +       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> +       help
-> +         Manage an overall debug state, and associated hint substates.
-> +
-> +         http://lua-stdlib.github.io/_debug
-> diff --git a/package/lua-std-debug/lua-std-debug.hash
-> b/package/lua-std-debug/lua-std-debug.hash
-> new file mode 100644
-> index 0000000..2c48711
-> --- /dev/null
-> +++ b/package/lua-std-debug/lua-std-debug.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 7f6b84283d4b78dafee17e7765dd5f1f8e75c3314169977f4dda0e7873616ce2
-> std._debug-1.0.1-1.src.rock
-> diff --git a/package/lua-std-debug/lua-std-debug.mk
-> b/package/lua-std-debug/lua-std-debug.mk
-> new file mode 100644
-> index 0000000..b9e6312
-> --- /dev/null
-> +++ b/package/lua-std-debug/lua-std-debug.mk
-> @@ -0,0 +1,16 @@
+> diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+> index 91abcb9..176c765 100644
+> --- a/package/luaposix/Config.in
+> +++ b/package/luaposix/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LUAPOSIX
+>         bool "luaposix"
+>         depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> +       select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
+>         # "bit32" is included in Lua 5.2+. luajit has an equivalent
+>         # "bit" module, but since it has a different name, luaposix
+>         # doesn't find it.
+> diff --git a/package/luaposix/luaposix.hash
+> b/package/luaposix/luaposix.hash
+> index b3984c1..a13cb4a 100644
+> --- a/package/luaposix/luaposix.hash
+> +++ b/package/luaposix/luaposix.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 ba0bc343783fc33958cd02a68cdbfd65430152d9f297f7ed92678b1a305bd5d7
+> luaposix-34.0.1.tar.gz
+> +sha256 eb6e7322da3013bdb3d524f68df4f5510a2efd805c06bf7cc27be6611eab7483
+> luaposix-34.0.4.tar.gz
+> diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+> index 779e707..f467992 100644
+> --- a/package/luaposix/luaposix.mk
+> +++ b/package/luaposix/luaposix.mk
+> @@ -4,8 +4,8 @@
+>  #
 >
-> +################################################################################
-> +#
-> +# lua-std-debug
-> +#
+>  ################################################################################
 >
-> +################################################################################
-> +
-> +LUA_STD_DEBUG_VERSION_UPSTREAM = 1.0.1
-> +LUA_STD_DEBUG_VERSION = $(LUA_STD_DEBUG_VERSION_UPSTREAM)-1
-> +LUA_STD_DEBUG_NAME_UPSTREAM = std._debug
-> +LUA_STD_DEBUG_SUBDIR = _debug-$(LUA_STD_DEBUG_VERSION_UPSTREAM)
-> +LUA_STD_DEBUG_ROCKSPEC =
-> $(LUA_STD_DEBUG_NAME_UPSTREAM)-$(LUA_STD_DEBUG_VERSION).rockspec
-> +LUA_STD_DEBUG_SOURCE =
-> $(LUA_STD_DEBUG_NAME_UPSTREAM)-$(LUA_STD_DEBUG_VERSION).src.rock
-> +LUA_STD_DEBUG_LICENSE = MIT
-> +LUA_STD_DEBUG_LICENSE_FILES = LICENSE.md
-> +
-> +$(eval $(luarocks-package))
+> -LUAPOSIX_VERSION = 34.0.1
+> -LUAPOSIX_SITE = $(call
+> github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+> +LUAPOSIX_VERSION = 34.0.4
+> +LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
+>  LUAPOSIX_LICENSE = MIT
+>  LUAPOSIX_LICENSE_FILES = LICENSE
+>  LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
 > --
 > 2.7.4
 >
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181229/d1714a74/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181229/1c20aab9/attachment.html>
