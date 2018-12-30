@@ -1,130 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 18:10:26 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
- package
-In-Reply-To: <20181223150448.21980-2-vadim4j@gmail.com>
-References: <20181223150448.21980-1-vadim4j@gmail.com>
- <20181223150448.21980-2-vadim4j@gmail.com>
-Message-ID: <20181230181026.3ce6aca3@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Dec 2018 19:49:56 +0200
+Subject: [Buildroot] [PATCH] package/sngrep: fix build with musl libc
+Message-ID: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+Add upstream patch fixing typo that causes build failure under musl,
+where stdin is constant.
 
-First of all, thanks a *lot* for pursuing this work, it is really nice
-to see some progress in this area. Every time host-gettext is building
-on my machine, I'm really annoyed, and remember about the need to have
-gettext-tiny support. See below for some comment.
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...0001-capture-fix-typo-in-FILE-object.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
 
-On Sun, 23 Dec 2018 17:04:47 +0200, Vadim Kochan wrote:
-
-> diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-> index e55663b1d7..9546468571 100644
-> --- a/package/gettext/Config.in
-> +++ b/package/gettext/Config.in
-> @@ -1,5 +1,12 @@
-> -config BR2_PACKAGE_GETTEXT
-> +menuconfig BR2_PACKAGE_GETTEXT
->  	bool "gettext"
-> +	select BR2_PACKAGE_HAS_GETTEXT
-> +
-> +if BR2_PACKAGE_GETTEXT
-> +
-> +config BR2_PACKAGE_GETTEXT_GNU
-> +	bool "gettext-gnu"
-> +	default y
->  	depends on BR2_USE_WCHAR
->  	help
->  	  The GNU `gettext' utilities are a set of tools that provide a
-> @@ -12,14 +19,23 @@ config BR2_PACKAGE_GETTEXT
->  
->  	  http://www.gnu.org/software/gettext/
->  
-> -if BR2_PACKAGE_GETTEXT
-> +comment "gettext-gnu needs a toolchain w/ wchar"
-> +	depends on !BR2_USE_WCHAR
->  
->  config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
->  	bool
->  	default y if BR2_SYSTEM_ENABLE_NLS
->  	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
->  
-> -endif
-> +config BR2_PACKAGE_PROVIDES_GETTEXT
-> +	string
-> +	default "gettext-gnu" if BR2_PACKAGE_GETTEXT_GNU
->  
-> -comment "gettext needs a toolchain w/ wchar"
-> -	depends on !BR2_USE_WCHAR
-> +config BR2_PACKAGE_HAS_GETTEXT
-> +	bool
-> +
-> +config BR2_PACKAGE_PROVIDES_HOST_GETTEXT
-> +	string
-> +	default "host-gettext-gnu"
-> +
-> +endif
-
-I'm not convinced by how this virtual package is handled in Config.in.
-In fact, if you apply both of your patches, it's broken, you have:
-
-config BR2_PACKAGE_PROVIDES_HOST_GETTEXT
-        string
-        default "host-gettext-gnu" if BR2_PACKAGE_GETTEXT_GNU
-        default "host-gettext-tiny" if BR2_PACKAGE_GETTEXT_TINY
-
-which means that when the target package is not selected, the
-host-gettext virtual package doesn't "point" to anything. And indeed:
-do a simple build with nothing enable, and run "make host-flex". It
-will fail with:
-
-make[1]: *** No rule to make target 'host-', needed by '/home/thomas/projets/buildroot/output/build/host-gettext/.stamp_configured'.  Stop.
-make: *** [Makefile:84: _all] Error 2
-
-Because the host-gettext virtual package has no provider.
-
-So let's analyze this in detail.
-
-First, for the *target* gettext virtual package, what do we want. I
-guess what we want is simply:
-
- - To use the full gettext when BR2_TARGET_ENABLE_NLS=y
-
- - To use gettext-tiny when BR2_TARGET_ENABLE_NLS is disabled
-
-I don't see any meaningful use case for full gettext with
-BR2_TARGET_ENABLE_NLS disabled, or for gettext-tiny with
-BR2_TARGET_ENABLE_NLS=y.
-
-To me, this means that for the target package,
-package/gettext/Config.in shouldn't offer a choice between full and
-tiny: it should automatically use full or tiny depending on the
-BR2_TARGET_ENABLE_NLS value.
-
-Now, there is the question of what to do with the host-gettext virtual
-package, i.e in which case it should use the full host gettext or host
-gettext-tiny.
-
-So, we need host-gettext for two things:
-
- - Some packages explicitly need it.
-
- - Some packages need it through TARGET_NLS_DEPENDENCIES
-
- - Some packages need it through <pkg>_GETTEXTIZE = YES
-
-So we need to understand if the rule is as simple as: full host gettext
-when BR2_TARGET_ENABLE_NLS=y and tiny host gettext when
-BR2_TARGET_ENABLE_NLS is disabled, or whether it is possible to use
-gettext tiny for host gettext when BR2_TARGET_ENABLE_NLS=y.
-
-Do you have some ideas about this ?
-
-Thomas
+diff --git a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+new file mode 100644
+index 000000000000..ec8a0f5dc5bc
+--- /dev/null
++++ b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+@@ -0,0 +1,43 @@
++From 604f6d0ce2ec42ac494d76c95e68850ea6e7da8f Mon Sep 17 00:00:00 2001
++From: Sebastian Kemper <sebastian_ml@gmx.net>
++Date: Sun, 4 Nov 2018 16:58:00 +0100
++Subject: [PATCH] capture: fix typo in FILE object
++
++FILE *fstdin is defined, but when calling freopen() stdin is used instead
++of fstdin.
++
++This causes the compile to fail:
++
++  CC       sngrep-capture.o
++capture.c: In function 'capture_offline':
++capture.c:194:21: error: assignment of read-only variable 'stdin'
++         if (!(stdin = freopen("/dev/tty", "r", stdin))) {
++                     ^
++make[5]: *** [Makefile:519: sngrep-capture.o] Error 1
++
++This commit fixes the typo.
++
++Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 604f6d0ce2ec
++
++ src/capture.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/capture.c b/src/capture.c
++index 911c35f43a35..a799413e2b0e 100644
++--- a/src/capture.c
+++++ b/src/capture.c
++@@ -191,7 +191,7 @@ capture_offline(const char *infile, const char *outfile)
++ 
++     // Reopen tty for ncurses after pcap have used stdin
++     if (!strncmp(infile, "/dev/stdin", 10)) {
++-        if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+++        if (!(fstdin = freopen("/dev/tty", "r", stdin))) {
++             fprintf(stderr, "Failed to reopen tty while using stdin for capture.");
++             return 1;
++         }
++-- 
++2.19.2
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
