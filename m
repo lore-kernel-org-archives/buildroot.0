@@ -1,53 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 30 Dec 2018 20:15:17 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python3-setuptools: new package
-In-Reply-To: <20181230142407.69d10ba8@windsurf>
-References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
- <20181230121932.39e696f9@windsurf>
- <CADvTj4qinyrbrutcb_WkO4rveJgA9i9F6bX9Txhp+MAWxZSyfg@mail.gmail.com>
- <20181230142407.69d10ba8@windsurf>
-Message-ID: <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
+Date: Sun, 30 Dec 2018 20:15:29 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyasn1: bump to version 0.4.5
+Message-ID: <20181230181529.29761-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+License change - 2019 year bump.
 
-On Sun, Dec 30, 2018 at 3:24 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sun, 30 Dec 2018 06:10:04 -0600, James Hilliard wrote:
->
-> > > Could you instead test if those patches also work for you ?
-> > Looks good, I was able to successfully do a clean build with my meson
-> > version bump patch on top.
->
-> Thanks for the confirmation. Do you know what changed in Meson that
-> makes it *require* setuptools? As I explained in the cover letter of my
-> Python 3 Setuptools series, meson (at least in the version we currently
-> have in Buildroot) uses setuptools if available, and otherwise falls
-> back to distutils, which is why it has been working well so far without
-> a python3-setuptools package.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-pyasn1/python-pyasn1.hash | 6 +++---
+ package/python-pyasn1/python-pyasn1.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I don't heavily use the meson build system, but after looking at the
-history of setup.py in the official repository,
-I found the commit which made the change. At the commit message they
-stated that:
-"This gives us a consistent experience and a simpler setup across all
-operating systems. Setuptools is available everywhere these days."
-The change is relevant since 0.48.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Regards,
-Asaf.
+diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
+index fd34621523..bd21cebd74 100644
+--- a/package/python-pyasn1/python-pyasn1.hash
++++ b/package/python-pyasn1/python-pyasn1.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyasn1/json
+-md5	0d182b71e1f72fe147d7957bc90be7f2  pyasn1-0.4.4.tar.gz
+-sha256	f58f2a3d12fd754aa123e9fa74fb7345333000a035f3921dbdaa08597aa53137  pyasn1-0.4.4.tar.gz
++md5	f3c0cfbf882a20811be5ad5a41f74b82  pyasn1-0.4.5.tar.gz
++sha256	da2420fe13a9452d8ae97a0e478adde1dee153b11ba832a95b223a2ba01c10f7  pyasn1-0.4.5.tar.gz
+ # Locally computed sha256 checksums
+-sha256	f82128f64d567c333936a12b99a21d0e8cd66ce628d51ce0a7770cc38dc7fe43  LICENSE.rst
++sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
+diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
+index f658fc9187..3f79cc2e7e 100644
+--- a/package/python-pyasn1/python-pyasn1.mk
++++ b/package/python-pyasn1/python-pyasn1.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYASN1_VERSION = 0.4.4
++PYTHON_PYASN1_VERSION = 0.4.5
+ PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
+-PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/10/46/059775dc8e50f722d205452bced4b3cc965d27e8c3389156acd3b1123ae3
++PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/46/60/b7e32f6ff481b8a1f6c8f02b0fd9b693d1c92ddd2efb038ec050d99a7245
+ PYTHON_PYASN1_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
+-- 
+2.19.1
