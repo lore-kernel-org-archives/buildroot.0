@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 17:42:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lua-curl: Fix define for
- lcurl_mime_t for curl 7.56.0
-In-Reply-To: <20181225013125.31787-1-vadim4j@gmail.com>
-References: <20181225013125.31787-1-vadim4j@gmail.com>
-Message-ID: <20181230174211.2cae3421@windsurf>
+Date: Sun, 30 Dec 2018 17:42:32 +0100
+Subject: [Buildroot] [git commit] utils/scanpypi: write _SOURCE only when
+ needed
+Message-ID: <20181230163928.666A2837C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2bcc4edceb9617308092c9101671f000d6cdbc8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Dec 2018 03:31:25 +0200, Vadim Kochan wrote:
-> Remove ';' at the end of #define for lcurl_mime_t, which looks like a
-> typo.
-> 
-> It fixes failing of lua-curl for build results:
-> http://autobuild.buildroot.net/results/f3c0c1aa8f860fddc1312823530ab369b198820c/config
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  ...x-define-for-lcurl_mime_t-for-curl-7.56.0.patch | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/lua-curl/0002-lceasy.h-Fix-define-for-lcurl_mime_t-for-curl-7.56.0.patch
+For some packages, there's no need to add the _SOURCE variable, since
+the name of the source file is the same as the name of the package
+(like python-engineio). Hence, we'll add it to the .mk file only if
+needed.
 
-Thanks, I've applied, but after replacing your patch by a backport of
-the exact same patch from upstream. Also, upstream has a newer 0.3.9
-version available, which has this fix included.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scanpypi | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 9335bedee4..a75d696222 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -354,13 +354,14 @@ class BuildrootPackage():
+             version=self.version)
+         lines.append(version_line)
+ 
+-        targz = self.filename.replace(
+-            self.version,
+-            '$({name}_VERSION)'.format(name=self.mk_name))
+-        targz_line = '{name}_SOURCE = {filename}\n'.format(
+-            name=self.mk_name,
+-            filename=targz)
+-        lines.append(targz_line)
++        if self.buildroot_name != self.real_name:
++            targz = self.filename.replace(
++                self.version,
++                '$({name}_VERSION)'.format(name=self.mk_name))
++            targz_line = '{name}_SOURCE = {filename}\n'.format(
++                name=self.mk_name,
++                filename=targz)
++            lines.append(targz_line)
+ 
+         if self.filename not in self.url:
+             # Sometimes the filename is in the url, sometimes it's not
