@@ -1,90 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Dec 2018 20:06:43 +0200
-Subject: [Buildroot] [PATCH] package/sngrep: fix build with musl libc
-In-Reply-To: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
-References: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
-Message-ID: <87d0pix51o.fsf@tkos.co.il>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 30 Dec 2018 20:15:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python3-setuptools: new package
+In-Reply-To: <20181230142407.69d10ba8@windsurf>
+References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
+ <20181230121932.39e696f9@windsurf>
+ <CADvTj4qinyrbrutcb_WkO4rveJgA9i9F6bX9Txhp+MAWxZSyfg@mail.gmail.com>
+ <20181230142407.69d10ba8@windsurf>
+Message-ID: <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Hello,
 
-Baruch Siach writes:
-
-> Add upstream patch fixing typo that causes build failure under musl,
-> where stdin is constant.
-
-I forgot this:
-
-Fixes:
-http://autobuild.buildroot.net/results/ab8/ab827021d4dae8ae98f667328e4a9a7e1c4288d0/
-http://autobuild.buildroot.net/results/e99/e99e937c05be38d33e029fbfc737665b590c33bd/
-http://autobuild.buildroot.net/results/e8c/e8ca0a40d8cd2c333b55fa9e67ddeead1f502d5a/
-
-baruch
-
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...0001-capture-fix-typo-in-FILE-object.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+On Sun, Dec 30, 2018 at 3:24 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> diff --git a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
-> new file mode 100644
-> index 000000000000..ec8a0f5dc5bc
-> --- /dev/null
-> +++ b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
-> @@ -0,0 +1,43 @@
-> +From 604f6d0ce2ec42ac494d76c95e68850ea6e7da8f Mon Sep 17 00:00:00 2001
-> +From: Sebastian Kemper <sebastian_ml@gmx.net>
-> +Date: Sun, 4 Nov 2018 16:58:00 +0100
-> +Subject: [PATCH] capture: fix typo in FILE object
-> +
-> +FILE *fstdin is defined, but when calling freopen() stdin is used instead
-> +of fstdin.
-> +
-> +This causes the compile to fail:
-> +
-> +  CC       sngrep-capture.o
-> +capture.c: In function 'capture_offline':
-> +capture.c:194:21: error: assignment of read-only variable 'stdin'
-> +         if (!(stdin = freopen("/dev/tty", "r", stdin))) {
-> +                     ^
-> +make[5]: *** [Makefile:519: sngrep-capture.o] Error 1
-> +
-> +This commit fixes the typo.
-> +
-> +Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: commit 604f6d0ce2ec
-> +
-> + src/capture.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/capture.c b/src/capture.c
-> +index 911c35f43a35..a799413e2b0e 100644
-> +--- a/src/capture.c
-> ++++ b/src/capture.c
-> +@@ -191,7 +191,7 @@ capture_offline(const char *infile, const char *outfile)
-> + 
-> +     // Reopen tty for ncurses after pcap have used stdin
-> +     if (!strncmp(infile, "/dev/stdin", 10)) {
-> +-        if (!(stdin = freopen("/dev/tty", "r", stdin))) {
-> ++        if (!(fstdin = freopen("/dev/tty", "r", stdin))) {
-> +             fprintf(stderr, "Failed to reopen tty while using stdin for capture.");
-> +             return 1;
-> +         }
-> +-- 
-> +2.19.2
-> +
+> Hello,
+>
+> On Sun, 30 Dec 2018 06:10:04 -0600, James Hilliard wrote:
+>
+> > > Could you instead test if those patches also work for you ?
+> > Looks good, I was able to successfully do a clean build with my meson
+> > version bump patch on top.
+>
+> Thanks for the confirmation. Do you know what changed in Meson that
+> makes it *require* setuptools? As I explained in the cover letter of my
+> Python 3 Setuptools series, meson (at least in the version we currently
+> have in Buildroot) uses setuptools if available, and otherwise falls
+> back to distutils, which is why it has been working well so far without
+> a python3-setuptools package.
 
+I don't heavily use the meson build system, but after looking at the
+history of setup.py in the official repository,
+I found the commit which made the change. At the commit message they
+stated that:
+"This gives us a consistent experience and a simpler setup across all
+operating systems. Setuptools is available everywhere these days."
+The change is relevant since 0.48.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Regards,
+Asaf.
