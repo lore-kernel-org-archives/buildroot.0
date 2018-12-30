@@ -1,53 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 22:32:53 +0100
-Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: bump to version
- 2018-12-13
-Message-ID: <20181230212944.7EB0A88172@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 30 Dec 2018 15:38:02 -0600
+Subject: [Buildroot] [PATCH v2 1/3] package/lua-std-debug: new package
+In-Reply-To: <20181230145330.3f930031@windsurf>
+References: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
+ <20181230145330.3f930031@windsurf>
+Message-ID: <CADvTj4pp1AXkige=X5PKOyPk01daPkHyjA194GQYRSQPnu=SGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51ef4bbf6bbefbd60cd19a44f510958ae952eca0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump azure-iot-sdk-c to 2018-12-13 release.
-
-We need to specify a value for CMAKE_SYSTEM_VERSION, because the
-azure-iot-sdk-c build system is doing a test on this value, and CMake
-doesn't internally define it when cross-compiling (see
-https://cmake.org/cmake/help/v3.4/variable/CMAKE_SYSTEM_VERSION.html).
-
-Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-[Thomas: drop patch, pass dummy CMAKE_SYSTEM_VERSION instead.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 504929aee6..3618e591a9 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = 2018-03-16
-+AZURE_IOT_SDK_C_VERSION = 2018-12-13
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
-@@ -14,6 +14,11 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
- AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
- AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
- 
-+# When cross-compiling, CMake doesn't internally pass any
-+# CMAKE_SYSTEM_VERSION, so pass a dummy version to make the c-utility
-+# WIN32 test happy.
-+AZURE_IOT_SDK_C_CONF_OPTS += -DCMAKE_SYSTEM_VERSION=1.0
-+
- # The project only supports building one kind of library.
- # Further the install target installs the wrong files, so we do it here:
- ifeq ($(BR2_STATIC_LIBS),y)
+On Sun, Dec 30, 2018 at 7:53 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I have applied, but there were a few things to fix. I'm Cc'ing
+> Fran?ois, who gave his Acked-by, so that he can hopefully take into
+> account these details for the next reviews. For me, it is *very* useful
+> to have the reviews of Fran?ois on Lua patches, but it's even better
+> when such a review catches all the small details! :-)
+>
+> On Sat, 29 Dec 2018 10:07:23 +0800, james.hilliard1 at gmail.com wrote:
+>
+> >  package/Config.in                        |  1 +
+> >  package/lua-std-debug/Config.in          |  7 +++++++
+> >  package/lua-std-debug/lua-std-debug.hash |  2 ++
+> >  package/lua-std-debug/lua-std-debug.mk   | 16 ++++++++++++++++
+>
+> First issue: no entry was added to the DEVELOPERS file. Even if
+> Fran?ois entry covers all Lua modules, it's good when someone
+> contributes a new package that he gets referenced as such in the
+> DEVELOPERS file.
+Yeah, I didn't do that for these since I was adding these packages
+only since they were required for the luaposix version bump, I also
+don't normally write anything in lua(I'm primarily a python developer)
+but needed to use lua for the built in script interface in the
+swupdate package for automatic disk formatting and installation.
+>
+>
+> > diff --git a/package/lua-std-debug/Config.in b/package/lua-std-debug/Config.in
+> > new file mode 100644
+> > index 0000000..3774292
+> > --- /dev/null
+> > +++ b/package/lua-std-debug/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_LUA_STD_DEBUG
+> > +     bool "lua-std-debug"
+> > +     depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+>
+> This dependency is not needed: all Lua modules inclusions in
+> package/Config.in are already enclosed in a
+> BR2_PACKAGE_HAS_LUAINTERPRETER & !BR2_STATIC_LIBS condition.
+Yeah, I wasn't sure what was supposed to be there, I copied that from luaposix.
+>
+> > diff --git a/package/lua-std-debug/lua-std-debug.hash b/package/lua-std-debug/lua-std-debug.hash
+> > new file mode 100644
+> > index 0000000..2c48711
+> > --- /dev/null
+> > +++ b/package/lua-std-debug/lua-std-debug.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally calculated
+> > +sha256 7f6b84283d4b78dafee17e7765dd5f1f8e75c3314169977f4dda0e7873616ce2  std._debug-1.0.1-1.src.rock
+>
+> The hash for the license file was missing.
+>
+> > diff --git a/package/lua-std-debug/lua-std-debug.mk b/package/lua-std-debug/lua-std-debug.mk
+> > new file mode 100644
+> > index 0000000..b9e6312
+> > --- /dev/null
+> > +++ b/package/lua-std-debug/lua-std-debug.mk
+> > @@ -0,0 +1,16 @@
+> > +################################################################################
+> > +#
+> > +# lua-std-debug
+> > +#
+> > +################################################################################
+> > +
+> > +LUA_STD_DEBUG_VERSION_UPSTREAM = 1.0.1
+> > +LUA_STD_DEBUG_VERSION = $(LUA_STD_DEBUG_VERSION_UPSTREAM)-1
+> > +LUA_STD_DEBUG_NAME_UPSTREAM = std._debug
+> > +LUA_STD_DEBUG_SUBDIR = _debug-$(LUA_STD_DEBUG_VERSION_UPSTREAM)
+> > +LUA_STD_DEBUG_ROCKSPEC = $(LUA_STD_DEBUG_NAME_UPSTREAM)-$(LUA_STD_DEBUG_VERSION).rockspec
+> > +LUA_STD_DEBUG_SOURCE = $(LUA_STD_DEBUG_NAME_UPSTREAM)-$(LUA_STD_DEBUG_VERSION).src.rock
+>
+> I was a bit surprised that those values were not automatically inferred
+> by the luarocks package infrastructure. However indeed, due to the
+> infrastructure using $(call LOWERCASE) and the upstream name containing
+> a underscore, it gets turned into a dash, and it no longer matches.
+> I don't think it's worth fixing the infrastructure about this right
+> now, but it's worth keeping in mind, in case several other packages are
+> in the same situation, in which case we could think about improving the
+> common infrastructure logic.
+>
+> > +LUA_STD_DEBUG_LICENSE = MIT
+> > +LUA_STD_DEBUG_LICENSE_FILES = LICENSE.md
+>
+> This was clearly not tested with "make legal-info". Indeed LICENSE.md
+> is inside LUA_STD_DEBUG_SUBDIR.
+>
+> I fixed those details, and applied. Thanks!
+>
+> Best regards
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
