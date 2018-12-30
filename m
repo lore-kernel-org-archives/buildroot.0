@@ -1,49 +1,77 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 30 Dec 2018 20:15:29 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pyasn1: bump to version 0.4.5
-Message-ID: <20181230181529.29761-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 30 Dec 2018 20:15:01 +0100
+Subject: [Buildroot] [git commit] package/sngrep: fix build with musl libc
+Message-ID: <20181230191042.899EC812A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License change - 2019 year bump.
+commit: https://git.buildroot.net/buildroot/commit/?id=c5f707bd66cd4ba024687a725751f118540197b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Add upstream patch fixing typo that causes build failure under musl,
+where stdin is constant.
+
+Fixes:
+http://autobuild.buildroot.net/results/ab827021d4dae8ae98f667328e4a9a7e1c4288d0/
+http://autobuild.buildroot.net/results/e99e937c05be38d33e029fbfc737665b590c33bd/
+http://autobuild.buildroot.net/results/e8ca0a40d8cd2c333b55fa9e67ddeead1f502d5a/
+
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyasn1/python-pyasn1.hash | 6 +++---
- package/python-pyasn1/python-pyasn1.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-capture-fix-typo-in-FILE-object.patch     | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
-index fd34621523..bd21cebd74 100644
---- a/package/python-pyasn1/python-pyasn1.hash
-+++ b/package/python-pyasn1/python-pyasn1.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1/json
--md5	0d182b71e1f72fe147d7957bc90be7f2  pyasn1-0.4.4.tar.gz
--sha256	f58f2a3d12fd754aa123e9fa74fb7345333000a035f3921dbdaa08597aa53137  pyasn1-0.4.4.tar.gz
-+md5	f3c0cfbf882a20811be5ad5a41f74b82  pyasn1-0.4.5.tar.gz
-+sha256	da2420fe13a9452d8ae97a0e478adde1dee153b11ba832a95b223a2ba01c10f7  pyasn1-0.4.5.tar.gz
- # Locally computed sha256 checksums
--sha256	f82128f64d567c333936a12b99a21d0e8cd66ce628d51ce0a7770cc38dc7fe43  LICENSE.rst
-+sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
-diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
-index f658fc9187..3f79cc2e7e 100644
---- a/package/python-pyasn1/python-pyasn1.mk
-+++ b/package/python-pyasn1/python-pyasn1.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYASN1_VERSION = 0.4.4
-+PYTHON_PYASN1_VERSION = 0.4.5
- PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
--PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/10/46/059775dc8e50f722d205452bced4b3cc965d27e8c3389156acd3b1123ae3
-+PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/46/60/b7e32f6ff481b8a1f6c8f02b0fd9b693d1c92ddd2efb038ec050d99a7245
- PYTHON_PYASN1_SETUP_TYPE = setuptools
- PYTHON_PYASN1_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
--- 
-2.19.1
+diff --git a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+new file mode 100644
+index 0000000000..ec8a0f5dc5
+--- /dev/null
++++ b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+@@ -0,0 +1,43 @@
++From 604f6d0ce2ec42ac494d76c95e68850ea6e7da8f Mon Sep 17 00:00:00 2001
++From: Sebastian Kemper <sebastian_ml@gmx.net>
++Date: Sun, 4 Nov 2018 16:58:00 +0100
++Subject: [PATCH] capture: fix typo in FILE object
++
++FILE *fstdin is defined, but when calling freopen() stdin is used instead
++of fstdin.
++
++This causes the compile to fail:
++
++  CC       sngrep-capture.o
++capture.c: In function 'capture_offline':
++capture.c:194:21: error: assignment of read-only variable 'stdin'
++         if (!(stdin = freopen("/dev/tty", "r", stdin))) {
++                     ^
++make[5]: *** [Makefile:519: sngrep-capture.o] Error 1
++
++This commit fixes the typo.
++
++Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 604f6d0ce2ec
++
++ src/capture.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/capture.c b/src/capture.c
++index 911c35f43a35..a799413e2b0e 100644
++--- a/src/capture.c
+++++ b/src/capture.c
++@@ -191,7 +191,7 @@ capture_offline(const char *infile, const char *outfile)
++ 
++     // Reopen tty for ncurses after pcap have used stdin
++     if (!strncmp(infile, "/dev/stdin", 10)) {
++-        if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+++        if (!(fstdin = freopen("/dev/tty", "r", stdin))) {
++             fprintf(stderr, "Failed to reopen tty while using stdin for capture.");
++             return 1;
++         }
++-- 
++2.19.2
++
