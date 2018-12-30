@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 20:15:55 +0100
-Subject: [Buildroot] [PATCH] package/sngrep: fix build with musl libc
-In-Reply-To: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
-References: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
-Message-ID: <20181230201555.620e48c5@windsurf>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 30 Dec 2018 20:34:33 +0100
+Subject: [Buildroot] [PATCH 1/1] libglib2: Bump to version 2.56.3
+In-Reply-To: <20181207173836.13091-1-petr.vorel@gmail.com>
+References: <20181207173836.13091-1-petr.vorel@gmail.com>
+Message-ID: <20181230193432.GA10930@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sun, 30 Dec 2018 19:49:56 +0200, Baruch Siach wrote:
-> Add upstream patch fixing typo that causes build failure under musl,
-> where stdin is constant.
-> 
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Drop 2 patches accepted by upstream.
+
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  ...0001-capture-fix-typo-in-FILE-object.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+>  ...gobject-fix-compilation-with-gcc-4.7.patch | 50 ------------------
+>  ...compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 -------------------
+>  package/libglib2/libglib2.hash                |  4 +-
+>  package/libglib2/libglib2.mk                  |  2 +-
+>  4 files changed, 3 insertions(+), 105 deletions(-)
+>  delete mode 100644 package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+>  delete mode 100644 package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
 
-Applied to master after adjusting the commit log with a reference to
-the autobuilder failures.
+Ping, please.
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Kind regards,
+Petr
