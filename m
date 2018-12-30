@@ -1,7 +1,9 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sun, 30 Dec 2018 14:41:34 +0800
-Subject: [Buildroot] [PATCH 1/2] package/python3-setuptools: new package
-Message-ID: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
+Date: Sun, 30 Dec 2018 14:41:35 +0800
+Subject: [Buildroot] [PATCH 2/2] package/meson: bump to version 0.49.0
+In-Reply-To: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
+References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <1546152095-4439-2-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,113 +12,37 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-This package is used to build host-python3-setuptools.
+This version requires host-python3-setuptools.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pkg-python.mk                              |  8 +++++-
- package/python-setuptools/python-setuptools.mk     |  1 +
- .../python3-setuptools/0001-add-executable.patch   |  1 +
- package/python3-setuptools/python3-setuptools.hash |  1 +
- package/python3-setuptools/python3-setuptools.mk   | 31 ++++++++++++++++++++++
- 5 files changed, 41 insertions(+), 1 deletion(-)
- create mode 120000 package/python3-setuptools/0001-add-executable.patch
- create mode 120000 package/python3-setuptools/python3-setuptools.hash
- create mode 100644 package/python3-setuptools/python3-setuptools.mk
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 1ee465b..3f0da61 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -187,9 +187,13 @@ endif # ($(4),target)
- # depend on itself!).
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
-+ifeq ($$($(2)_NEEDS_HOST_PYTHON),python3)
-+$(2)_DEPENDENCIES += host-python3-setuptools
-+else
- $(2)_DEPENDENCIES += host-python-setuptools
- endif
- endif
-+endif
- 
- # Python interpreter to use for building the package.
- #
-@@ -208,7 +212,9 @@ endif
- ifeq ($(4),target)
- $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/python
- else
--ifeq ($$($(2)_NEEDS_HOST_PYTHON),)
-+ifeq ($(2),HOST_PYTHON3_SETUPTOOLS)
-+$(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/python3
-+else ifeq ($$($(2)_NEEDS_HOST_PYTHON),)
- $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/python
- else
- $(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/$$($(2)_NEEDS_HOST_PYTHON)
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index cc6f991..ae31454 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,6 +4,7 @@
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index a996897..3a5c7dd 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.47.2/meson-0.47.2.tar.gz.asc
+-sha256 92d8afd921751261e36151643464efd3394162f69efbe8cd53e0a66b1cf395eb meson-0.47.2.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz.asc
++sha256 fb0395c4ac208eab381cd1a20571584bdbba176eb562a7efa9cb17cace0e1551 meson-0.49.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 1113bf0..5ac9a1d 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# When updating this version, please also update it in package/python3-setuptools/
- PYTHON_SETUPTOOLS_VERSION = 40.6.3
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
- PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-new file mode 120000
-index 0000000..5bab3d9
---- /dev/null
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -0,0 +1 @@
-+../python-setuptools/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-new file mode 120000
-index 0000000..a3af7f0
---- /dev/null
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -0,0 +1 @@
-+../python-setuptools/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-new file mode 100644
-index 0000000..a49e0b1
---- /dev/null
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# python3-setuptools
-+#
-+################################################################################
-+
-+# When updating this version, please also update it in package/python-setuptools/
-+PYTHON3_SETUPTOOLS_VERSION = 40.6.3
-+PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
-+PYTHON3_SETUPTOOLS_DL_SUBDIR = setuptools
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
-+PYTHON3_SETUPTOOLS_LICENSE = MIT
-+PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
-+PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
-+
-+PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
-+
-+define PYTHON3_SETUPTOOLS_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
-+	mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
-+endef
-+
-+define HOST_PYTHON3_SETUPTOOLS_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
-+	mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
-+endef
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+-MESON_VERSION = 0.47.2
++MESON_VERSION = 0.49.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
 2.7.4
