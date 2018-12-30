@@ -1,147 +1,90 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 30 Dec 2018 19:01:03 +0100
-Subject: [Buildroot] [RFC 0/3] WPE WebKit
-In-Reply-To: <20181228013448.GB19602@momiji>
-References: <20181223154845.23556-1-francois.perrad@gadz.org>
- <20181228013448.GB19602@momiji>
-Message-ID: <CAB0FRssC9T+z-zV_PyFDgsQNdmcZTr4ZOxhhW5uLkrqDXYBEDA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Dec 2018 20:06:43 +0200
+Subject: [Buildroot] [PATCH] package/sngrep: fix build with musl libc
+In-Reply-To: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
+References: <04bdf53b08f3f7c511f730fb1bd6bd61f4966115.1546192196.git.baruch@tkos.co.il>
+Message-ID: <87d0pix51o.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 28 d?c. 2018 ? 01:35, Adrian Perez de Castro <aperez@igalia.com> a
-?crit :
+Hi Buildroot list,
 
-> Hello Fran?ois,
+Baruch Siach writes:
+
+> Add upstream patch fixing typo that causes build failure under musl,
+> where stdin is constant.
+
+I forgot this:
+
+Fixes:
+http://autobuild.buildroot.net/results/ab8/ab827021d4dae8ae98f667328e4a9a7e1c4288d0/
+http://autobuild.buildroot.net/results/e99/e99e937c05be38d33e029fbfc737665b590c33bd/
+http://autobuild.buildroot.net/results/e8c/e8ca0a40d8cd2c333b55fa9e67ddeead1f502d5a/
+
+baruch
+
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...0001-capture-fix-typo-in-FILE-object.patch | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
 >
-> I had been thinking myself of submitting a patch series for WPE, and at
-> Igalia
-> we are maintaining an overlay (to be used with BR2_EXTERNAL, which can be
-> found at https://github.com/Igalia/buildroot-wpe). I have had plenty to
-> do in
-> the latest few months, so I barely haven't had any time for Buildroot other
-> than updating the WebKitGTK+ packaging whenever there is a release -- so
-> thanks a lot for helping out by submitting this patch set :)
->
-> Later I will be doing a few comments on each of the individual patches. As
-> for
-> general comments:
->
-> - It looks like you took the basis for your patch set from the *downstream*
->   fork of Buildroot at https://github.com/WebPlatformForEmbedded/buildroot
->   Please do NOT use anything from there, as it is based on a very old
-> version
->   of Buildroot, and it packages versions of the ?wpewebkit? package older
->   than the official packages releases from https://wpewebkit.org
->
-> - The way I was hoping to do the WPE packaging for upstream Buildroot was
-> to
->   reuse as many bits and pieces as possible from the WebKitGTK+ packaging,
->   and share code with the WPE packaging. For example: right now there is a
->   BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS configuration symbol, and in the WPE
->   overlay I mentioned above there is BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS...
->   ideally we would have a single BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS, which
->   gets used both by the ?wpewebkit? and ?webkitgtk? packages (the same
-> would
->   go for the logic that determines whether the target supports the JSC JIT,
->   and others). I'll follow up on this in a different e-mail.
->
->
-Good idea.
+> diff --git a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+> new file mode 100644
+> index 000000000000..ec8a0f5dc5bc
+> --- /dev/null
+> +++ b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+> @@ -0,0 +1,43 @@
+> +From 604f6d0ce2ec42ac494d76c95e68850ea6e7da8f Mon Sep 17 00:00:00 2001
+> +From: Sebastian Kemper <sebastian_ml@gmx.net>
+> +Date: Sun, 4 Nov 2018 16:58:00 +0100
+> +Subject: [PATCH] capture: fix typo in FILE object
+> +
+> +FILE *fstdin is defined, but when calling freopen() stdin is used instead
+> +of fstdin.
+> +
+> +This causes the compile to fail:
+> +
+> +  CC       sngrep-capture.o
+> +capture.c: In function 'capture_offline':
+> +capture.c:194:21: error: assignment of read-only variable 'stdin'
+> +         if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+> +                     ^
+> +make[5]: *** [Makefile:519: sngrep-capture.o] Error 1
+> +
+> +This commit fixes the typo.
+> +
+> +Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> +Upstream status: commit 604f6d0ce2ec
+> +
+> + src/capture.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/capture.c b/src/capture.c
+> +index 911c35f43a35..a799413e2b0e 100644
+> +--- a/src/capture.c
+> ++++ b/src/capture.c
+> +@@ -191,7 +191,7 @@ capture_offline(const char *infile, const char *outfile)
+> + 
+> +     // Reopen tty for ncurses after pcap have used stdin
+> +     if (!strncmp(infile, "/dev/stdin", 10)) {
+> +-        if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+> ++        if (!(fstdin = freopen("/dev/tty", "r", stdin))) {
+> +             fprintf(stderr, "Failed to reopen tty while using stdin for capture.");
+> +             return 1;
+> +         }
+> +-- 
+> +2.19.2
+> +
 
 
-> - I would like to allow building more backends than WPEBackend-fdo. More
->   precisely, WPEBackend-rdk is a good option to use dispmanx on the
-> Raspberry
->   Pi directly, without needing a Wayland compositor.
->
-> - It would be good as well to have a launcher/browser which is NOT the
->   MiniBrowser included with the ?wpewebkit? package, which is intended just
->   for testing. The better option at the moment is Cog, for which I have
->   recently started doing packaged releases as well, and it is known to work
->   with the -fdo and -rdk backends (and others which are not publicly
-> available
->   as well). It can be found at https://github.com/Igalia/cog
->
->
-Hello Adrian,
-
-I will add cog to my serie.
-
-Another question:
-Have you try to run with cog some applications from Gaia (the top layer of
-the defunct Firefox OS) ?
-See https://github.com/mozilla-b2g/gaia/tree/v2.5/apps
-
-Fran?ois
-
-
-> Please note that I am not trying to demotivate you with all the comments
-> above, I think it's awesome that third parties are finding WPE useful and
-> want to help out with the upstream packaging in Buildroot: that is
-> *awesome*
-> and super appreciated -- I just want to share my ideas in the mailing list
-> to see what we all agree is th way go to provide the best packaging we can
-> for WPE :)
->
->
-> On Sun, 23 Dec 2018 16:48:42 +0100, Francois Perrad <fperrad@gmail.com>
-> wrote:
->
-> > Another port of WebKit (https://wpewebkit.org/), a project started in
-> 2018.
-> >
-> > Testing fresh code of various OpenGL backends is awful.
->
-> What do you mean with this? Does this have to do with the
-> packaging/testing of
-> the different WPE backends, or is it something else? I am really
-> interested in
-> knowing what your pain points have been, to see if there is something that
-> we
-> can improve (and here I am talking with my ?WebKit developer hat? on :D).
->
-> > Francois Perrad (3):
-> >   libwpe: new package
-> >   wpebackend-fdo: new package
-> >   wpewebkit: new package
-> >
-> >  DEVELOPERS                                 |  3 +
-> >  package/Config.in                          |  3 +
-> >  package/libwpe/Config.in                   | 12 ++++
-> >  package/libwpe/libwpe.hash                 |  7 ++
-> >  package/libwpe/libwpe.mk                   | 15 ++++
-> >  package/wpebackend-fdo/Config.in           | 17 +++++
-> >  package/wpebackend-fdo/wpebackend-fdo.hash |  7 ++
-> >  package/wpebackend-fdo/wpebackend-fdo.mk   | 15 ++++
-> >  package/wpewebkit/Config.in                | 82 ++++++++++++++++++++++
-> >  package/wpewebkit/wpewebkit.hash           |  8 +++
-> >  package/wpewebkit/wpewebkit.mk             | 69 ++++++++++++++++++
-> >  11 files changed, 238 insertions(+)
-> >  create mode 100644 package/libwpe/Config.in
-> >  create mode 100644 package/libwpe/libwpe.hash
-> >  create mode 100644 package/libwpe/libwpe.mk
-> >  create mode 100644 package/wpebackend-fdo/Config.in
-> >  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.hash
-> >  create mode 100644 package/wpebackend-fdo/wpebackend-fdo.mk
-> >  create mode 100644 package/wpewebkit/Config.in
-> >  create mode 100644 package/wpewebkit/wpewebkit.hash
-> >  create mode 100644 package/wpewebkit/wpewebkit.mk
-> >
-> > --
-> > 2.17.1
->
-> Best regards, and thanks again for bringing up the topic of WPE packaging!
->
->
-> -Adri?n
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20181230/f6d93769/attachment.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
