@@ -1,91 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 16:09:17 +0100
-Subject: [Buildroot] [git commit] arch/arm: add armv8.2a cortex-based cores
-Message-ID: <20181230150528.CE208838D8@busybox.osuosl.org>
+Date: Sun, 30 Dec 2018 16:11:17 +0100
+Subject: [Buildroot] [PATCH 2/4] arch/arm: restrict more armv8a cores to
+ aarch64
+In-Reply-To: <891faf01bce122d52613f7fc831f32526beaa1a3.1546179362.git.yann.morin.1998@free.fr>
+References: <cover.1546179362.git.yann.morin.1998@free.fr>
+ <891faf01bce122d52613f7fc831f32526beaa1a3.1546179362.git.yann.morin.1998@free.fr>
+Message-ID: <20181230161117.35538f05@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56a315f18f47626a98facac71a52e7e8541c5753
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The armv8.2a generation is a cumulative extension to armv8.1a.
+On Sun, 30 Dec 2018 15:16:11 +0100, Yann E. MORIN wrote:
+> Since gcc-8, falkor and qdf24xx have been available only as AArch64.
+> 
+> Although we could support building in 32-bit for older gcc versions, we
+> decided not to, in the sake of simplicity.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  arch/Config.in.arm | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
 
-Since gcc correctly enables the appropriate extensions based on the core
-name, we don't really need to introduce a separate config for armv8.2a,
-and we can piggyback on armv8a.
+Applied to master after reworking the commit log to mention the exact
+gcc commit that dropped falkor and qdf24xx availability for ARM32.
+Since it was due to the released HW never supporting AArch32, it does
+not make sense to support these cores in AArch32 with older gcc
+versions.
 
-In theory, gcc supports those cores in arm mode. However, configuring
-gcc thusly generates a non-working gcc that constantly whines:
-    cc1: warning: switch -mcpu=cortex-a55 conflicts with -march=armv8.2-a switch
+Best regards,
 
-It is to be noted that the -march flag is internal to gcc. It is not
-something that Buildroot did set when configuring gcc; Buildroot only
-ever sets --with-cpu (not --with-arch).
-
-Additionally, uClibc fails to build entirely (unsure if this is caused
-by the above, or if it is a separate issue, though), with:
-    #### Your compiler does not support TLS and you are trying to build uClibc-ng
-    #### with NPTL support. Upgrade your binutils and gcc to versions which
-    #### support TLS for your architecture. Do not contact uClibc-ng maintainers
-    #### about this problem.
-
-Glibc and musl have not been tested in arm mode, so maybe we could have
-a toolchain that eventually works (or at least, pretends to be working),
-but we decided it was not worth the effort.
-
-Thus, we restrict those cores to AArch64 mode only.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in.arm | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index bc1bb26582..e3c64d12ab 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -451,6 +451,28 @@ config BR2_vulcan
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- endif # BR2_ARCH_IS_64
-+
-+if BR2_ARCH_IS_64
-+comment "armv8.2a cores"
-+config BR2_cortex_a55
-+	bool "cortex-A55"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+config BR2_cortex_a75
-+	bool "cortex-A75"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+config BR2_cortex_a75_a55
-+	bool "cortex-A75/A55 big.LITTLE"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+endif # BR2_ARCH_IS_64
- endchoice
- 
- config BR2_ARM_ENABLE_NEON
-@@ -796,6 +818,10 @@ config BR2_GCC_TARGET_CPU
- 	default "thunderx2t99"	if BR2_thunderx2t99
- 	default "thunderx2t99p1"	if BR2_thunderx2t99p1
- 	default "vulcan"	if BR2_vulcan
-+	# armv8.2a
-+	default "cortex-a55"	if BR2_cortex_a55
-+	default "cortex-a75"	if BR2_cortex_a75
-+	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
- 
- config BR2_GCC_TARGET_ABI
- 	default "aapcs-linux"	if BR2_arm || BR2_armeb
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
