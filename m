@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 22:42:27 +0100
-Subject: [Buildroot] [git commit] package/rauc: target rauc needs unsquashfs
- at runtime
-Message-ID: <20181230213751.BE74881374@busybox.osuosl.org>
+Date: Sun, 30 Dec 2018 22:42:39 +0100
+Subject: [Buildroot] [PATCH] package/sqlite: security bump to version
+ 3.25.3
+In-Reply-To: <20181222074448.24100-1-peter@korsgaard.com>
+References: <20181222074448.24100-1-peter@korsgaard.com>
+Message-ID: <20181230224239.7f204bc2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a4dba21b9f9469b189ad04f74138039a4ba8109
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In order to provide info about a bundle file, e.g. running "rauc info
-bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
-package.
+On Sat, 22 Dec 2018 08:44:47 +0100, Peter Korsgaard wrote:
+> Fixes CVE-2018-20346: SQLite before 3.25.3, when the FTS3 extension is
+> enabled, encounters an integer overflow (and resultant buffer overflow) for
+> FTS3 queries that occur after crafted changes to FTS3 shadow tables,
+> allowing remote attackers to execute arbitrary code by leveraging the
+> ability to run arbitrary SQL statements (such as in certain WebSQL use
+> cases), aka Magellan.
+> 
+> For more details, see:
+> https://blade.tencent.com/magellan/index_en.html
+> https://www.sqlite.org/releaselog/3_25_3.html
+> https://www.mail-archive.com/sqlite-users at mailinglists.sqlite.org/msg113218.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/sqlite/sqlite.hash | 4 ++--
+>  package/sqlite/sqlite.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-This was not documented until upstream commit 10c501c12752 ("docs:
-integration: document need for 'unsquashfs' tool for 'rauc info'"), but
-is already present in rauc.
+Applied to master, thanks.
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rauc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 6433b827d3..456f8f382c 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_RAUC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DBUS # run-time dependency
-+	select BR2_PACKAGE_SQUASHFS # run-time dependency
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. It supports updating embedded Linux
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
