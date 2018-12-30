@@ -1,35 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Dec 2018 23:41:26 +0100
-Subject: [Buildroot] [PATCH 1/1] apache: enable support for nghttp2
-In-Reply-To: <20181230164644.353139af@windsurf> (Thomas Petazzoni's message of
- "Sun, 30 Dec 2018 16:46:44 +0100")
-References: <20181229013909.2439-1-bluemrp9@gmail.com>
- <20181230164644.353139af@windsurf>
-Message-ID: <87y386skmh.fsf@dell.be.48ers.dk>
+Date: Mon, 31 Dec 2018 00:01:24 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-12-28
+In-Reply-To: <87o994vweq.fsf@tkos.co.il> (Baruch Siach's message of "Sat, 29
+ Dec 2018 23:46:21 +0200")
+References: <20181229070031.506F02073D@mail.bootlin.com>
+ <87o994vweq.fsf@tkos.co.il>
+Message-ID: <87tviusjp7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hello,
- > (Also a question for Bernd below)
+ > Hi Peter,
+ > Thomas Petazzoni writes:
+ >> m68k | whois-5.3.2 | NOK |
+ >> http://autobuild.buildroot.net/results/c139030e8383027dc679cfc59feddad426919900
+ >> |
 
- > On Fri, 28 Dec 2018 17:39:09 -0800, Ryan Coe wrote:
- >> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- >> ---
- >> package/apache/apache.mk | 9 +++++++++
- >> 1 file changed, 9 insertions(+)
+ > This is a transient issue with the snapshot.debian.org server. However,
+ > the sources.buildroot.net fallback doesn't work either:
 
- > Applied to master, thanks. I just noticed that Apache modules are
- > installed in $(TARGET_DIR)/usr/modules/. It's not a really great path,
- > as it's not apache specific. Can we make this
- > $(TARGET_DIR)/usr/lib/apache/modules/ or something like that ?
+ > --2018-12-27 19:51:56--  http://sources.buildroot.net/whois/whois_5.3.2.tar.xz
+ > Resolving sources.buildroot.net
+ > (sources.buildroot.net)... 104.25.211.19, 104.25.210.19,
+ > 2606:4700:20::6819:d213, ...
+ > Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
+ > HTTP request sent, awaiting response... 404 Not Found
+ > 2018-12-27 19:51:56 ERROR 404: Not Found.
 
-FYI, Debian installs into /usr/lib/apache2/modules/ (but that is
-presumably for legacy reasons with apache 1.x).
+ > And indeed the whois tarball is not there even though version 5.3.2 is
+ > in Buildroot since July, and is included in the 2018.11 release. What
+ > went wrong?
+
+I'm not quite sure. I have explicitly added the 2018.11.x branch to the
+list of branches to run 'make source' on and manually triggered a run,
+and the file is now there.
 
 -- 
 Bye, Peter Korsgaard
