@@ -1,31 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 22:46:26 +0100
-Subject: [Buildroot] [PATCH 1/1] libglib2: Bump to version 2.56.3
-In-Reply-To: <20181207173836.13091-1-petr.vorel@gmail.com>
-References: <20181207173836.13091-1-petr.vorel@gmail.com>
-Message-ID: <20181230224626.321891ca@windsurf>
+Date: Sun, 30 Dec 2018 22:50:06 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/lua-std-debug: new package
+In-Reply-To: <CADvTj4pp1AXkige=X5PKOyPk01daPkHyjA194GQYRSQPnu=SGw@mail.gmail.com>
+References: <1546049245-22865-1-git-send-email-james.hilliard1@gmail.com>
+ <20181230145330.3f930031@windsurf>
+ <CADvTj4pp1AXkige=X5PKOyPk01daPkHyjA194GQYRSQPnu=SGw@mail.gmail.com>
+Message-ID: <20181230225006.157b6c31@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello James,
 
-On Fri,  7 Dec 2018 18:38:36 +0100, Petr Vorel wrote:
-> Drop 2 patches accepted by upstream.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  ...gobject-fix-compilation-with-gcc-4.7.patch | 50 ------------------
->  ...compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 -------------------
->  package/libglib2/libglib2.hash                |  4 +-
->  package/libglib2/libglib2.mk                  |  2 +-
->  4 files changed, 3 insertions(+), 105 deletions(-)
->  delete mode 100644 package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
->  delete mode 100644 package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
+On Sun, 30 Dec 2018 15:38:02 -0600, James Hilliard wrote:
 
-Applied to master, thanks.
+> Yeah, I didn't do that for these since I was adding these packages
+> only since they were required for the luaposix version bump, I also
+> don't normally write anything in lua(I'm primarily a python developer)
+> but needed to use lua for the built in script interface in the
+> swupdate package for automatic disk formatting and installation.
+
+OK, understood. But by default, we expect people who add new packages
+to be willing to take care of them, at least to some extent.
+
+
+> > This dependency is not needed: all Lua modules inclusions in
+> > package/Config.in are already enclosed in a
+> > BR2_PACKAGE_HAS_LUAINTERPRETER & !BR2_STATIC_LIBS condition.  
+> Yeah, I wasn't sure what was supposed to be there, I copied that from luaposix.
+
+A number of other Lua packages have this redundant dependency. I have
+sent a patch to remove it: http://patchwork.ozlabs.org/patch/1019425/.
+
+Best regards,
 
 Thomas
 -- 
