@@ -1,52 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 22:52:27 +0100
-Subject: [Buildroot] [PATCH v3 2/4] skeleton: use
- BR2_SYSTEM_DEFAULT_PATH as default PATH
-In-Reply-To: <20181220175814.2195-2-mmayer@broadcom.com>
-References: <20181220175508.2091-1-mmayer@broadcom.com>
- <20181220175814.2195-1-mmayer@broadcom.com>
- <20181220175814.2195-2-mmayer@broadcom.com>
-Message-ID: <20181230225227.7abf943c@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Dec 2018 23:02:00 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/check-uniq-files: Only
+ report each package once
+In-Reply-To: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
+References: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
+Message-ID: <20181230220200.GB24224@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 20 Dec 2018 09:58:12 -0800, Markus Mayer wrote:
-> We substitute the path specified in system/skeleton/etc/profile with
-> the path specified in the configuration variable
-> $(BR2_SYSTEM_DEFAULT_PATH).
+On 2018-12-11 15:05 +0100, Einar Jon Gunnarsson spake thusly:
+> Rebuilding the same package should not trigger
+> a 'touched by more than one package' warning
 > 
-> $(BR2_SYSTEM_DEFAULT_PATH) is a Kconfig string. So it is already
-> quoted, which is exactly what we want.
+> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+> ---
+>  support/scripts/check-uniq-files | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+> index fbc6b5d..03faa71 100755
+> --- a/support/scripts/check-uniq-files
+> +++ b/support/scripts/check-uniq-files
+> @@ -28,7 +28,8 @@ def main():
+>      with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+>          for line in pkg_file_list.readlines():
+>              pkg, _, file = line.rstrip(b'\n').partition(b',')
+> -            file_to_pkg[file].append(pkg)
+> +            if not pkg in file_to_pkg[file]:
+> +                file_to_pkg[file].append(pkg)
 
-I am curious about this sentence: why is it "exactly what we want" ?
+I think the proper way would be to change file_to_pkg[file] to be a set
+rather than a list. Care to test the following, instead:
 
-> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> index 1255d23ff40d..db29e44920e8 100644
-> --- a/system/skeleton/etc/profile
-> +++ b/system/skeleton/etc/profile
-> @@ -1,4 +1,4 @@
-> -export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-> +export PATH=@PATH@
+    diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+    index fbc6b5d6e7..eb92724e42 100755
+    --- a/support/scripts/check-uniq-files
+    +++ b/support/scripts/check-uniq-files
+    @@ -24,11 +24,11 @@ def main():
+             sys.stderr.write('No type was provided\n')
+             return False
+     
+    -    file_to_pkg = defaultdict(list)
+    +    file_to_pkg = defaultdict(set)
+         with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+             for line in pkg_file_list.readlines():
+                 pkg, _, file = line.rstrip(b'\n').partition(b',')
+    -            file_to_pkg[file].append(pkg)
+    +            file_to_pkg[file].add(pkg)
+     
+         for file in file_to_pkg:
+             if len(file_to_pkg[file]) > 1:
 
-Indeed, the variable assignment was not double quoted before, and now
-it becomes double quoted:
+Regards,
+Yann E. MORIN.
 
-export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+>      for file in file_to_pkg:
+>          if len(file_to_pkg[file]) > 1:
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-is what I have in the resulting /etc/profile.
-
-So does "exactly what we want" means "preserves the existing behavior"
-or means "is better than the existing behavior" for some reason ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
