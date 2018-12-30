@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 16:57:52 +0100
-Subject: [Buildroot] [PATCH] package/terminology: convert to the
- meson-package infrastructure
-In-Reply-To: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
-References: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181230165752.56d59d80@windsurf>
+Date: Sun, 30 Dec 2018 17:00:22 +0100
+Subject: [Buildroot] [git commit] package/acpica: add missing dependencies
+ for host variant
+Message-ID: <20181230155541.C39DA817C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=86814306288d2f46b042123a7883737d0c388db4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 28 Dec 2018 16:07:47 +0100, Thomas Petazzoni wrote:
-> This conversion reduces the complexity of the .mk file, but also
-> allows to prepare terminology for per-package meson
-> cross-compilation.conf, where the cross-compilation.conf file will not
-> be located in $(HOST_DIR)/etc/meson/cross-compilation.conf.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/terminology/terminology.mk | 28 +++++-----------------------
->  1 file changed, 5 insertions(+), 23 deletions(-)
+Just like the target acpica package needs host-flex and host-bison,
+the host variant also needs the same dependencies. This allows to fix
+the build of "make host-acpica", which was detected thanks to
+per-package directory support.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/acpica/acpica.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 57cc37f85e..c540061928 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -10,6 +10,7 @@ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ ACPICA_LICENSE_FILES = source/include/acpi.h
+ ACPICA_DEPENDENCIES = host-bison host-flex
++HOST_ACPICA_DEPENDENCIES = host-bison host-flex
+ 
+ define ACPICA_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
