@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Dec 2018 16:57:41 +0100
-Subject: [Buildroot] [PATCH] package/docker-containerd: add missing
- dependency on host-pkgconf
-In-Reply-To: <20181228150740.29890-1-thomas.petazzoni@bootlin.com>
-References: <20181228150740.29890-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181230165741.4ff444d1@windsurf>
+Date: Sun, 30 Dec 2018 16:57:52 +0100
+Subject: [Buildroot] [PATCH] package/terminology: convert to the
+ meson-package infrastructure
+In-Reply-To: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
+References: <20181228150747.29965-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181230165752.56d59d80@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 28 Dec 2018 16:07:40 +0100, Thomas Petazzoni wrote:
-> When libsseccomp support is enabled, docker-containerd uses pkg-config
-> to find libsseccomp, so we must depend on host-pkconf.
-> 
-> Fixes the following build issue, detected with per-package directory
-> support:
-> 
-> pkg-config: exec: "pkg-config": executable file not found in $PATH
+On Fri, 28 Dec 2018 16:07:47 +0100, Thomas Petazzoni wrote:
+> This conversion reduces the complexity of the .mk file, but also
+> allows to prepare terminology for per-package meson
+> cross-compilation.conf, where the cross-compilation.conf file will not
+> be located in $(HOST_DIR)/etc/meson/cross-compilation.conf.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/docker-containerd/docker-containerd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/terminology/terminology.mk | 28 +++++-----------------------
+>  1 file changed, 5 insertions(+), 23 deletions(-)
 
 Applied to master, thanks.
 
