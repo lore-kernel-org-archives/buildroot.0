@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 14:30:27 +0100
-Subject: [Buildroot] [PATCH v3 14/17] package/pulseaudio: use the new
- fftw-single package
+Date: Mon, 31 Dec 2018 14:30:28 +0100
+Subject: [Buildroot] [PATCH v3 15/17] package/liquid-dsp: use the new
+ fftw-{single, double, long-double} packages
 In-Reply-To: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181231133030.25991-15-thomas.petazzoni@bootlin.com>
+Message-ID: <20181231133030.25991-16-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,43 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pulseaudio/pulseaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/liquid-dsp/liquid-dsp.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index d1c35654cf..c91af22935 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
- 	$(if $(BR2_PACKAGE_DBUS),dbus) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
--	$(if $(BR2_PACKAGE_FFTW),fftw) \
-+	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index db67893844..6aa27a5248 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -30,9 +30,9 @@ LIQUID_DSP_CFLAGS += -ffast-math
+ endif
  
- ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
+ # use FFTW instead of built-in FFT
+-ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
++ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3f
+-LIQUID_DSP_DEPENDENCIES += fftw
++LIQUID_DSP_DEPENDENCIES += fftw-single
+ endif
+ 
+ # disable altivec, it has build issues
+@@ -40,14 +40,14 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+ LIQUID_DSP_CONF_OPTS += --enable-simdoverride
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
++ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3
+-LIQUID_DSP_DEPENDENCIES += fftw
++LIQUID_DSP_DEPENDENCIES += fftw-double
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
++ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+ LIQUID_DSP_LDFLAGS += -lfftw3l
+-LIQUID_DSP_DEPENDENCIES += fftw
++LIQUID_DSP_DEPENDENCIES += fftw-long-double
+ endif
+ 
+ LIQUID_DSP_CONF_OPTS += \
 -- 
 2.20.1
