@@ -1,90 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:11:23 +0100
-Subject: [Buildroot] [PATCH] package/grpc: fix build on non-NPTL systems
-Message-ID: <20181231161123.12693-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 17:13:56 +0100
+Subject: [Buildroot] [PATCH/next 1/1] linuxptp: fix build with kernel
+ headers >= 4.19
+In-Reply-To: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
+References: <20181129214730.7225-1-fontaine.fabrice@gmail.com>
+Message-ID: <20181231171356.49fb674d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng in non-NPTL configurations doesn't implement
-pthread_setname_np(). Unfortunately grpc assumes that as soon as
-__GLIBC__ is defined, pthread_setname_np() is available. It is
-particularly sad, because grpc build system uses CMake, so it is
-trivial to do such a check.
+Hello,
 
-This commit adds a patch that does just this: check for the
-availability of pthread_setname_np(), and use it only if
-available. The patch has been submitted upstream.
+On Thu, 29 Nov 2018 22:47:30 +0100, Fabrice Fontaine wrote:
+> clockid_t has been added in net_tstamp.h since kernel 4.19 and
+> https://github.com/torvalds/linux/commit/80b14dee2bea128928537d61c333f24cb8cbb62f
+> 
+> As a result, build fails on:
+> In file included from clock.c:20:
+> /home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-uclibc/sysroot/usr/include/linux/net_tstamp.h:158:2: error: unknown type name 'clockid_t'
+>   clockid_t clockid; /* reference clockid */
+> 
+> To fix this error, add (or move) include on time.h before net_tstamp.h
+> in clock.c, sk.c and timemaster.c
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4f53c0b6f3395f4d1ec0aa58f9df36c8145b1066
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
+The issue has been fixed in the upstream Linux kernel:
 
-  http://autobuild.buildroot.org/results/47991306abbcd80fb8e6baad0bd7490fa74f696c/
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/net_tstamp.h?id=e2c4cf7f98a519eb4d95532bfa06bcaf3562fed5
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...the-availability-of-pthread_setname_.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+This commit is part of Linux 4.20. It has a "Fixes" tag, so it should
+normally be backported to Linux 4.19 at some point, even though this
+hasn't happened yet.
 
-diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-new file mode 100644
-index 0000000000..766f758172
---- /dev/null
-+++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -0,0 +1,52 @@
-+From 0aeefca28104f86f14b511feee8d5711f2e8bcb5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Mon, 31 Dec 2018 16:22:07 +0100
-+Subject: [PATCH] Properly detect the availability of pthread_setname_np()
-+
-+This commit adds a CMake check for the availability of
-+pthread_setname_np(), and only uses it on Linux when available.
-+
-+Indeed, some C libraries, such as uClibc, do not provide this
-+non-POSIX function in all cases.
-+
-+Upstream: https://github.com/grpc/grpc/pull/17610
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ CMakeLists.txt                            | 6 ++++++
-+ include/grpc/impl/codegen/port_platform.h | 2 ++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index fc76cf50da..8dd457fb1a 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -94,6 +94,12 @@ endif()
-+ 
-+ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-+ 
-++include(CheckSymbolExists)
-++check_symbol_exists(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
-++if (HAVE_PTHREAD_SETNAME_NP)
-++  add_definitions(-DHAVE_PTHREAD_SETNAME_NP)
-++endif ()
-++
-+ add_definitions(-DPB_FIELD_16BIT)
-+ 
-+ if (MSVC)
-+diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
-+index b2028a6305..dc89e6ed57 100644
-+--- a/include/grpc/impl/codegen/port_platform.h
-++++ b/include/grpc/impl/codegen/port_platform.h
-+@@ -173,7 +173,9 @@
-+ #endif /* _LP64 */
-+ #ifdef __GLIBC__
-+ #define GPR_POSIX_CRASH_HANDLER 1
-++#if defined(HAVE_PTHREAD_SETNAME_NP)
-+ #define GPR_LINUX_PTHREAD_NAME 1
-++#endif /* HAVE_PTHREAD_SETNAME_NP */
-+ #include <linux/version.h>
-+ #else /* musl libc */
-+ #define GPR_MUSL_LIBC_COMPAT 1
-+-- 
-+2.20.1
-+
+So instead of doing a work around in linuxptp, we'll use the upstream
+Linux kernel fix.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
