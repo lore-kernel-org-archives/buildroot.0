@@ -1,48 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:58:22 +0100
-Subject: [Buildroot] [PATCH v3] lua*: regeneration of Config.in
-In-Reply-To: <20181219081707.1983-4-francois.perrad@gadz.org>
-References: <20181219081707.1983-1-francois.perrad@gadz.org>
- <20181219081707.1983-4-francois.perrad@gadz.org>
-Message-ID: <20181231175822.7d2abd02@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Dec 2018 18:00:14 +0100
+Subject: [Buildroot] [PATCH] support/dependencies: require at least
+ CMake 3.8
+In-Reply-To: <20181231174735.70dd53b5@windsurf>
+References: <20181231162638.13606-1-thomas.petazzoni@bootlin.com>
+ <20181231164454.GA26917@scaer> <20181231174735.70dd53b5@windsurf>
+Message-ID: <20181231170014.GB26917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Thomas, All,
 
-On Wed, 19 Dec 2018 09:17:05 +0100, Francois Perrad wrote:
+On 2018-12-31 17:47 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 31 Dec 2018 17:44:54 +0100, Yann E. MORIN wrote:
+> > On 2018-12-31 17:26 +0100, Thomas Petazzoni spake thusly:
+> > > The json-for-modern-cpp package unfortunately now requires CMake >=
+> > > 3.8, so we need to bump our requirement from 3.1 to 3.8. If the host
+> > > doesn't have a CMake >= 3.8, Buildroot will build its own host-cmake
+> > > package.  
+> > 
+> > The upstream commit that bumped the requirement to cmake 3.8 states:
+> > 
+> >     Using target_compile_features to specify C++ 11 standard
+> >     https://github.com/nlohmann/json/commit/73cc5089e33ea950b6677e19ee7ec656c9bcf985
+> > 
+> > However, target_compile_features has been available even since 3.1 at
+> > least:
+> > 
+> >     https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
+> > 
+> > I'll kick-start a build with a patched json-for-modern-cpp, to see if we
+> > can stay on 3.1.
+> 
+> Thanks! It would be a lot nicer! Do you have a CMake 3.1 installation
+> readily available ?
 
-> diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
-> index e6b587e65..26e79e23b 100644
-> --- a/package/ljlinenoise/Config.in
-> +++ b/package/ljlinenoise/Config.in
-> @@ -1,9 +1,7 @@
->  config BR2_PACKAGE_LJLINENOISE
->  	bool "ljlinenoise"
-> -	# ljsyscall is specifically for LuaJIT, not Lua.
+Now I have! ;-)
 
-I think this was useful to keep.
+Regards,
+Yann E. MORIN.
 
-> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-> index 3af9dabe9..601d0b122 100644
-> --- a/package/ljsyscall/Config.in
-> +++ b/package/ljsyscall/Config.in
-> @@ -1,12 +1,11 @@
->  config BR2_PACKAGE_LJSYSCALL
->  	bool "ljsyscall"
-> -	# ljsyscall is specifically for LuaJIT, not Lua.
-
-And this as well.
-
-So I've re-added those two lines when applying the patch.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
