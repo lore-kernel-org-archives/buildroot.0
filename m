@@ -1,44 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Dec 2018 00:01:24 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-12-28
-In-Reply-To: <87o994vweq.fsf@tkos.co.il> (Baruch Siach's message of "Sat, 29
- Dec 2018 23:46:21 +0200")
-References: <20181229070031.506F02073D@mail.bootlin.com>
- <87o994vweq.fsf@tkos.co.il>
-Message-ID: <87tviusjp7.fsf@dell.be.48ers.dk>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Sun, 30 Dec 2018 16:13:20 -0800
+Subject: [Buildroot] [PATCH v3 2/4] skeleton: use
+ BR2_SYSTEM_DEFAULT_PATH as default PATH
+In-Reply-To: <20181230225227.7abf943c@windsurf>
+References: <20181220175508.2091-1-mmayer@broadcom.com>
+ <20181220175814.2195-1-mmayer@broadcom.com>
+ <20181220175814.2195-2-mmayer@broadcom.com> <20181230225227.7abf943c@windsurf>
+Message-ID: <CAGt4E5usg6rpmd2eds+f=pk=1B7qhyJnHuTdWOG4_CFDB622qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Sun, 30 Dec 2018 at 13:52, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 20 Dec 2018 09:58:12 -0800, Markus Mayer wrote:
+> > We substitute the path specified in system/skeleton/etc/profile with
+> > the path specified in the configuration variable
+> > $(BR2_SYSTEM_DEFAULT_PATH).
+> >
+> > $(BR2_SYSTEM_DEFAULT_PATH) is a Kconfig string. So it is already
+> > quoted, which is exactly what we want.
+>
+> I am curious about this sentence: why is it "exactly what we want" ?
+>
+> > diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> > index 1255d23ff40d..db29e44920e8 100644
+> > --- a/system/skeleton/etc/profile
+> > +++ b/system/skeleton/etc/profile
+> > @@ -1,4 +1,4 @@
+> > -export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+> > +export PATH=@PATH@
+>
+> Indeed, the variable assignment was not double quoted before, and now
+> it becomes double quoted:
+>
+> export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+>
+> is what I have in the resulting /etc/profile.
+>
+> So does "exactly what we want" means "preserves the existing behavior"
+> or means "is better than the existing behavior" for some reason ?
 
- > Hi Peter,
- > Thomas Petazzoni writes:
- >> m68k | whois-5.3.2 | NOK |
- >> http://autobuild.buildroot.net/results/c139030e8383027dc679cfc59feddad426919900
- >> |
+I hadn't actually noticed this difference in quoting, but it does seem
+like a good idea to have them.
 
- > This is a transient issue with the snapshot.debian.org server. However,
- > the sources.buildroot.net fallback doesn't work either:
+"Exactly what we want" was just meant to indicate that we get a quoted
+string out of Kconfig, and we can use that quoted string in our code
+unchanged (explaining why there are no quotes being added in the code
+and why they aren't being stripped, either).
 
- > --2018-12-27 19:51:56--  http://sources.buildroot.net/whois/whois_5.3.2.tar.xz
- > Resolving sources.buildroot.net
- > (sources.buildroot.net)... 104.25.211.19, 104.25.210.19,
- > 2606:4700:20::6819:d213, ...
- > Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
- > HTTP request sent, awaiting response... 404 Not Found
- > 2018-12-27 19:51:56 ERROR 404: Not Found.
+This can be reworded if you think it is too confusing.
 
- > And indeed the whois tarball is not there even though version 5.3.2 is
- > in Buildroot since July, and is included in the 2018.11 release. What
- > went wrong?
+Regards,
+-Markus
 
-I'm not quite sure. I have explicitly added the 2018.11.x branch to the
-list of branches to run 'make source' on and manually triggered a run,
-and the file is now there.
-
--- 
-Bye, Peter Korsgaard
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
