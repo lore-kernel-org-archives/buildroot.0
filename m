@@ -1,161 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 14:30:29 +0100
-Subject: [Buildroot] [PATCH v3 16/17] package/fftw: remove as regular package
+Date: Mon, 31 Dec 2018 14:30:30 +0100
+Subject: [Buildroot] [PATCH v3 17/17] package/liquid-dsp: drop support for
+ fftw-double and fftw-long-double
 In-Reply-To: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181231133030.25991-17-thomas.petazzoni@bootlin.com>
+Message-ID: <20181231133030.25991-18-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fftw is no longer a package: only fftw-single, fftw-double,
-fftw-long-double and fftw-quad are. fftw.mk only contains some common
-definitions that are used by the different fftw variants.
+liquid-dsp has the following code:
 
-The old BR2_PACKAGE_FFTW_PRECISION_* options, which are no longer used
-anywhere, are moved to Config.in.legacy.
+So, if it uses the external fftw library, it can only use the fftwf
+variant, i.e the fftw-single variant. Otherwise, it uses its internal
+FFT library.
+
+There is no way for liquid-dsp to use fftw-double or fftw-long-double.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy       | 36 ++++++++++++++++++++++++++++++++++++
- package/fftw/Config.in | 41 -----------------------------------------
- package/fftw/fftw.mk   | 18 ------------------
- 3 files changed, 36 insertions(+), 59 deletions(-)
+ package/liquid-dsp/liquid-dsp.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8cab6a23af..836c10fa48 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,42 @@ endif
- 
- comment "Legacy options removed in 2019.02"
- 
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_SINGLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_SINGLE.
-+
-+
-+config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
-+	bool "double"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_DOUBLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_DOUBLE.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double"
-+	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
-+		(BR2_arm || BR2_mips || BR2_mipsel))
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_LONG_DOUBLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_LONG_DOUBLE.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad"
-+	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_QUAD
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_QUAD.
-+
- config BR2_PACKAGE_LUA_5_2
- 	bool "Lua 5.2.x version removed"
- 	select BR2_LEGACY
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index ed87de1a70..9e060ba5da 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -12,47 +12,6 @@ config BR2_PACKAGE_FFTW
- 
- if BR2_PACKAGE_FFTW
- 
--choice
--	prompt "fftw precision"
--	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
--	help
--	  Selects fftw precision
--
--config BR2_PACKAGE_FFTW_PRECISION_SINGLE
--	bool "single"
--	select BR2_PACKAGE_FFTW_SINGLE
--	help
--	  Compile fftw in single precision, i.e. use 'float' for
--	  floating point type.
--
--config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
--	bool "double"
--	select BR2_PACKAGE_FFTW_DOUBLE
--	help
--	  Compile fftw in double precision (the default), i.e. use
--	  'double' for floating point type.
--
--config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
--	bool "long double"
--	# long-double precision require long-double trigonometric routines
--	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
--		(BR2_arm || BR2_mips || BR2_mipsel))
--	select BR2_PACKAGE_FFTW_LONG_DOUBLE
--	help
--	  Compile fftw in long double precision, i.e. use 'long double'
--	  for floating point type.
--
--config BR2_PACKAGE_FFTW_PRECISION_QUAD
--	bool "quad"
--	# quad-precision needs to have a gcc with libquadmath
--	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
--	select BR2_PACKAGE_FFTW_QUAD
--	help
--	  Compile fftw in quadruple precision, i.e. use '__float128' for
--	  floating point type.
--
--endchoice
--
- source "package/fftw/fftw-single/Config.in"
- source "package/fftw/fftw-double/Config.in"
- source "package/fftw/fftw-long-double/Config.in"
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 862ad5edc0..bcfdb9c96a 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -10,22 +10,6 @@ FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPL-2.0+
- FFTW_LICENSE_FILES = COPYING
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index 6aa27a5248..64c403e87f 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -40,16 +40,6 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+ LIQUID_DSP_CONF_OPTS += --enable-simdoverride
+ endif
  
 -ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
--FFTW_DEPENDENCIES += fftw-double
+-LIQUID_DSP_LDFLAGS += -lfftw3
+-LIQUID_DSP_DEPENDENCIES += fftw-double
 -endif
 -
 -ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
--FFTW_DEPENDENCIES += fftw-long-double
+-LIQUID_DSP_LDFLAGS += -lfftw3l
+-LIQUID_DSP_DEPENDENCIES += fftw-long-double
 -endif
 -
--ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
--FFTW_DEPENDENCIES += fftw-quad
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
--FFTW_DEPENDENCIES += fftw-single
--endif
--
- # fortran support only enables generation and installation of fortran sources
- ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
- FFTW_COMMON_CONF_OPTS += --enable-fortran
-@@ -49,6 +33,4 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
- endif
- FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
- 
--$(eval $(generic-package))
--
- include $(sort $(wildcard package/fftw/*/*.mk))
+ LIQUID_DSP_CONF_OPTS += \
+ 	CFLAGS="$(LIQUID_DSP_CFLAGS)" \
+ 	LDFLAGS="$(LIQUID_DSP_LDFLAGS)"
 -- 
 2.20.1
