@@ -1,122 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Dec 2018 19:53:44 +0100
-Subject: [Buildroot] [PATCH] package/json-for-modern-cpp: relax dependency
- on cmake version
-Message-ID: <20181231185344.18570-1-yann.morin.1998@free.fr>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Mon, 31 Dec 2018 20:10:31 +0000
+Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
+ PKCS#11 engine
+In-Reply-To: <CA+-urNQc0mDN=iMiM--O3Ts7Z1jZewSvZYx0G_NT4JCHaobpSQ@mail.gmail.com>
+References: <20181207181314.24051-1-tpiepho@impinj.com>
+ <CA+-urNQc0mDN=iMiM--O3Ts7Z1jZewSvZYx0G_NT4JCHaobpSQ@mail.gmail.com>
+Message-ID: <1546287030.12415.10.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, json-for-modern-cpp requires cmake to be at least cmake-3.8,
-but our dependencies only check for cmake-3.1.
+On Fri, 2018-12-28 at 23:36 -0600, Frank Hunleth wrote:
+> Hi Trent,
+> 
+> I was about to submit libp11 and then saw your patch, so thanks for submitting.
+> 
+> The commit title should be "libp11: new package".
 
-It turns out that json-for-modern-cpp is over strict, and could very
-well do with just cmake-3.1
+I see the imperative form is much less common, 100 vs 1604.  I wanted
+to add the engine bit, since the package name, libp11, sounds like a
+library for pkcs11.  Which exists, but no one uses that.  It's really
+about the openssl engine.
 
-Fixes:
-    http://autobuild.buildroot.org/results/1f8/1f893d8bc7df3bfefd31df69aba918e2121cfaf7/
+> > 
+> I'm not sure what official BR policy is, but it seems that most
+> github-hosted packages use the github helper:
+> 
+> LIBP11_VERSION = libp11-0.4.9
+> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+> 
+> and then you'll need
+> 
+> LIBP11_AUTORECONF = YES
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adam Duskett <aduskett@gmail.com>
----
- ...system-relax-requirement-on-cmake-version.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
+I didn't want to use that, since the github macro didn't produce the
+official release tarball.  Hence the need for autoreconf.  I was under
+the impression buildroot policy was to prefer an official release
+package vs a git repository tag.
 
-diff --git a/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch b/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
-new file mode 100644
-index 0000000000..a5921527a0
---- /dev/null
-+++ b/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
-@@ -0,0 +1,85 @@
-+From e8b6b7adc138a66f8d47396a2e707366d3771028 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 31 Dec 2018 18:42:09 +0100
-+Subject: [PATCH] buildsystem: relax requirement on cmake version
-+
-+Commit 73cc5089 (Using target_compile_features to specify C++ 11
-+standard) bumped the required cmake version, from 3.0 to 3.8, so
-+as to get the definition of target_compile_features().
-+
-+However, target_compile_features() was introduced in cmake-3.1:
-+    https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
-+
-+And using cmake-3.1 is indeed sufficient to properly build.
-+
-+As such, relax the minimum required version down to cmake-3.1,
-+so we can build on oldish, entreprise-grade distributions that
-+only have cmake-3.1 (or at least, don't have up to cmake-3.8).
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status: MR pending
-+https://github.com/nlohmann/json/pull/1409
-+---
-+ CMakeLists.txt                                     | 2 +-
-+ benchmarks/CMakeLists.txt                          | 2 +-
-+ test/cmake_add_subdirectory/project/CMakeLists.txt | 2 +-
-+ test/cmake_import/project/CMakeLists.txt           | 2 +-
-+ test/cmake_import_minver/project/CMakeLists.txt    | 2 +-
-+ 5 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 409f5bff..da6f08e7 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.8)
-++cmake_minimum_required(VERSION 3.1)
-+ 
-+ ##
-+ ## PROJECT
-+diff --git a/benchmarks/CMakeLists.txt b/benchmarks/CMakeLists.txt
-+index a53812c1..dd3f3027 100644
-+--- a/benchmarks/CMakeLists.txt
-++++ b/benchmarks/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.8)
-++cmake_minimum_required(VERSION 3.1)
-+ project(JSON_Benchmarks LANGUAGES CXX)
-+ 
-+ # set compiler flags
-+diff --git a/test/cmake_add_subdirectory/project/CMakeLists.txt b/test/cmake_add_subdirectory/project/CMakeLists.txt
-+index 2c5be183..21357b68 100644
-+--- a/test/cmake_add_subdirectory/project/CMakeLists.txt
-++++ b/test/cmake_add_subdirectory/project/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.8)
-++cmake_minimum_required(VERSION 3.1)
-+ 
-+ project(DummyImport CXX)
-+ 
-+diff --git a/test/cmake_import/project/CMakeLists.txt b/test/cmake_import/project/CMakeLists.txt
-+index d268d72c..fe892fc1 100644
-+--- a/test/cmake_import/project/CMakeLists.txt
-++++ b/test/cmake_import/project/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.8)
-++cmake_minimum_required(VERSION 3.1)
-+ 
-+ project(DummyImport CXX)
-+ 
-+diff --git a/test/cmake_import_minver/project/CMakeLists.txt b/test/cmake_import_minver/project/CMakeLists.txt
-+index eeef3296..29056bdc 100644
-+--- a/test/cmake_import_minver/project/CMakeLists.txt
-++++ b/test/cmake_import_minver/project/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.8)
-++cmake_minimum_required(VERSION 3.1)
-+ 
-+ project(DummyImportMinVer CXX)
-+ 
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+> 
+> > +LIBP11_DEPENDENCIES = openssl
+> > +LIBP11_INSTALL_STAGING = YES
+> > +LIBP11_LICENSE = LGPLv2.1
+> 
+> It looks like the license is "LGPL-2.1+"
+
+Yes, you're right, I failed to update this.  I added this package back
+in 2017 and up to buildroot 2017.02 the license string was
+"LGLPv2.1(+?)".
+
+> > +LIBP11_LICENSE_FILES = COPYING
+> > +
+> > +ifeq ($(BR2_PACKAGE_P11_KIT),y)
+> > +LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+> > +endif
+> > +
+> > +HOST_LIBP11_DEPENDENCIES = host-openssl
+> 
+> I've tested this on device and with OpenSSL 1.1.0 (not OpenSSL 1.0.2
+> which is currently in BR master). That combination works well. I'm
+> hopeful that the OpenSSL 1.1.0 patches can be integrated. When that
+> happens,
+> 
+> Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
+> 
+> > 
