@@ -1,53 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Dec 2018 18:18:49 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: require at least
- CMake 3.8
-In-Reply-To: <20181231170014.GB26917@scaer>
-References: <20181231162638.13606-1-thomas.petazzoni@bootlin.com>
- <20181231164454.GA26917@scaer> <20181231174735.70dd53b5@windsurf>
- <20181231170014.GB26917@scaer>
-Message-ID: <20181231171849.GC26917@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 31 Dec 2018 18:21:02 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain: add necessary options to
+ support 4.20 kernel headers
+In-Reply-To: <20181231160701.12086-2-thomas.petazzoni@bootlin.com>
+References: <20181231160701.12086-1-thomas.petazzoni@bootlin.com>
+ <20181231160701.12086-2-thomas.petazzoni@bootlin.com>
+Message-ID: <d06a3599-fc15-75e5-bfad-cfea34567a26@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-12-31 18:00 +0100, Yann E. MORIN spake thusly:
-> On 2018-12-31 17:47 +0100, Thomas Petazzoni spake thusly:
-> > On Mon, 31 Dec 2018 17:44:54 +0100, Yann E. MORIN wrote:
-> > > On 2018-12-31 17:26 +0100, Thomas Petazzoni spake thusly:
-> > > > The json-for-modern-cpp package unfortunately now requires CMake >=
-> > > > 3.8, so we need to bump our requirement from 3.1 to 3.8. If the host
-> > > > doesn't have a CMake >= 3.8, Buildroot will build its own host-cmake
-> > > > package.  
-> > > 
-> > > The upstream commit that bumped the requirement to cmake 3.8 states:
-> > > 
-> > >     Using target_compile_features to specify C++ 11 standard
-> > >     https://github.com/nlohmann/json/commit/73cc5089e33ea950b6677e19ee7ec656c9bcf985
-> > > 
-> > > However, target_compile_features has been available even since 3.1 at
-> > > least:
-> > > 
-> > >     https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
-> > > 
-> > > I'll kick-start a build with a patched json-for-modern-cpp, to see if we
-> > > can stay on 3.1.
-> > Thanks! It would be a lot nicer! Do you have a CMake 3.1 installation
-> > readily available ?
-> Now I have! ;-)
+Hi Thomas,
 
-And indeed, that is sufficient to stick to 3.1. I'll send a proper patch
-and submit it upstream too.
+Le 31/12/2018 ? 17:06, Thomas Petazzoni a ?crit?:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  toolchain/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index bf8ed5bf5b..baf192c936 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -370,10 +370,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+>  	bool
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+>  
+> +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+> +	bool
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+> +
+>  # This order guarantees that the highest version is set, as kconfig
+>  # stops affecting a value on the first matching default.
+>  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+>  	string
+> +	default "4.20" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+>  	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+>  	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+>  	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+> 
 
-Regards,
-Yann E. MORIN.
+It seems you forgot to add a new entry in toolchain-external-custom package
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+See:
+https://git.buildroot.net/buildroot/commit/?id=561770fd032744b4daac186c1ede9bce1d4b4c45
+
+Otherwise the rest of the series is ok
+
+Best regards,
+Romain
