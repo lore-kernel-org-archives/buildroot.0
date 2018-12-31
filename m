@@ -1,42 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 13:36:26 +0100
-Subject: [Buildroot] [PATCH 2/2] atk: bump to version 2.30.0
-In-Reply-To: <20181203073043.21021-2-fontaine.fabrice@gmail.com>
-References: <20181203073043.21021-1-fontaine.fabrice@gmail.com>
- <20181203073043.21021-2-fontaine.fabrice@gmail.com>
-Message-ID: <20181231133626.757b9dbb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 31 Dec 2018 13:43:05 +0100
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <20181226214100.GK14286@scaer> (Yann E. MORIN's message of "Wed, 
+ 26 Dec 2018 22:41:00 +0100")
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+ <20181226222329.18046c1c@windsurf> <20181226214100.GK14286@scaer>
+Message-ID: <87pnthsw86.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon,  3 Dec 2018 08:30:43 +0100, Fabrice Fontaine wrote:
-> - Switch to meson-package
-> - Remove ATK_INSTALL_STAGING_OPTS and host-pkgconf: not needed anymore
-> - Add hash for license file
-> - This bump fix the issue with glib 2.58.1 (because meson does not use
->   pkgconfig to find glib-genmarshal):
->   /bin/bash: /usr/bin/glib-genmarshal: No such file or directory
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/23cf5227c21365cda0babf1922425f8adaa97fba
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/atk/atk.hash | 7 +++++--
->  package/atk/atk.mk   | 9 ++++-----
->  2 files changed, 9 insertions(+), 7 deletions(-)
+Hi,
+ >> So it would be good to make sure we have a really solid use-case for
+ >> adding this complexity.
 
-I've adjust the commit log, because it no longer fixes any build
-failure, and I've applied to master. Thanks!
+ > Peter, care to elaborate your position, since you were advocating also
+ > for it, earlier? ;-)
 
-Best regards,
+One interesting feature it has is that it can bundle the bootloader,
+kernel, initramfs and kernel command line into a single EFI binary,
+which can be handy for E.G. A/B boot and EFI secure boot.
 
-Thomas
+But with that said, if upstream does not make it easy to build it
+seperately, then I'm OK with only allowing it if systemd is built.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
