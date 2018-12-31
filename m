@@ -1,52 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Dec 2018 18:00:14 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: require at least
- CMake 3.8
-In-Reply-To: <20181231174735.70dd53b5@windsurf>
-References: <20181231162638.13606-1-thomas.petazzoni@bootlin.com>
- <20181231164454.GA26917@scaer> <20181231174735.70dd53b5@windsurf>
-Message-ID: <20181231170014.GB26917@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 17:59:52 +0100
+Subject: [Buildroot] [git commit] package/lua*: fix indentation of license
+ file lists
+Message-ID: <20181231165620.45944882A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=42fa5bcbfb48f188c2c180854c0bbdefd98c32c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-12-31 17:47 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 31 Dec 2018 17:44:54 +0100, Yann E. MORIN wrote:
-> > On 2018-12-31 17:26 +0100, Thomas Petazzoni spake thusly:
-> > > The json-for-modern-cpp package unfortunately now requires CMake >=
-> > > 3.8, so we need to bump our requirement from 3.1 to 3.8. If the host
-> > > doesn't have a CMake >= 3.8, Buildroot will build its own host-cmake
-> > > package.  
-> > 
-> > The upstream commit that bumped the requirement to cmake 3.8 states:
-> > 
-> >     Using target_compile_features to specify C++ 11 standard
-> >     https://github.com/nlohmann/json/commit/73cc5089e33ea950b6677e19ee7ec656c9bcf985
-> > 
-> > However, target_compile_features has been available even since 3.1 at
-> > least:
-> > 
-> >     https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
-> > 
-> > I'll kick-start a build with a patched json-for-modern-cpp, to see if we
-> > can stay on 3.1.
-> 
-> Thanks! It would be a lot nicer! Do you have a CMake 3.1 installation
-> readily available ?
+The Luarocks addon does not properly indent with a tab, let's fix that
+manually for the time being, to avoid check-package complaints.
 
-Now I have! ;-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/orbit/orbit.mk                 | 4 ++--
+ package/wsapi-fcgi/wsapi-fcgi.mk       | 4 ++--
+ package/wsapi-xavante/wsapi-xavante.mk | 4 ++--
+ package/wsapi/wsapi.mk                 | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
+index 77549a28c1..5cf7ac643a 100644
+--- a/package/orbit/orbit.mk
++++ b/package/orbit/orbit.mk
+@@ -8,7 +8,7 @@ ORBIT_VERSION = 2.2.4-1
+ ORBIT_SUBDIR = orbit
+ ORBIT_LICENSE = MIT
+ ORBIT_LICENSE_FILES = \
+-    $(ORBIT_SUBDIR)/doc/us/license.html \
+-    $(ORBIT_SUBDIR)/doc/us/license.md
++	$(ORBIT_SUBDIR)/doc/us/license.html \
++	$(ORBIT_SUBDIR)/doc/us/license.md
+ 
+ $(eval $(luarocks-package))
+diff --git a/package/wsapi-fcgi/wsapi-fcgi.mk b/package/wsapi-fcgi/wsapi-fcgi.mk
+index d94721e4e3..677bb774be 100644
+--- a/package/wsapi-fcgi/wsapi-fcgi.mk
++++ b/package/wsapi-fcgi/wsapi-fcgi.mk
+@@ -8,8 +8,8 @@ WSAPI_FCGI_VERSION = 1.7-1
+ WSAPI_FCGI_SUBDIR = wsapi
+ WSAPI_FCGI_LICENSE = MIT
+ WSAPI_FCGI_LICENSE_FILES = \
+-    $(WSAPI_FCGI_SUBDIR)/doc/us/license.html \
+-    $(WSAPI_FCGI_SUBDIR)/doc/us/license.md
++	$(WSAPI_FCGI_SUBDIR)/doc/us/license.html \
++	$(WSAPI_FCGI_SUBDIR)/doc/us/license.md
+ WSAPI_FCGI_DEPENDENCIES = libfcgi
+ 
+ $(eval $(luarocks-package))
+diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
+index 46aa10651b..3a747e9b0b 100644
+--- a/package/wsapi-xavante/wsapi-xavante.mk
++++ b/package/wsapi-xavante/wsapi-xavante.mk
+@@ -8,7 +8,7 @@ WSAPI_XAVANTE_VERSION = 1.7-1
+ WSAPI_XAVANTE_SUBDIR = wsapi
+ WSAPI_XAVANTE_LICENSE = MIT
+ WSAPI_XAVANTE_LICENSE_FILES = \
+-    $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html \
+-    $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.md
++	$(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html \
++	$(WSAPI_XAVANTE_SUBDIR)/doc/us/license.md
+ 
+ $(eval $(luarocks-package))
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index ad62a05f5a..d67efd0e7b 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -8,7 +8,7 @@ WSAPI_VERSION = 1.7-1
+ WSAPI_SUBDIR = wsapi
+ WSAPI_LICENSE = MIT
+ WSAPI_LICENSE_FILES = \
+-    $(WSAPI_SUBDIR)/doc/us/license.html \
+-    $(WSAPI_SUBDIR)/doc/us/license.md
++	$(WSAPI_SUBDIR)/doc/us/license.html \
++	$(WSAPI_SUBDIR)/doc/us/license.md
+ 
+ $(eval $(luarocks-package))
