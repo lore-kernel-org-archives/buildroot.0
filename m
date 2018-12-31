@@ -1,79 +1,119 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Dec 2018 15:27:39 +0100
-Subject: [Buildroot] [PATCH v3 1/2] dependencies.sh: Check for a host
- python version >= 2.7
-In-Reply-To: <CAFSsvmpWuEcruH55C-93Ek9fb0JKfHvex4NY2arGCxG5LD68OQ@mail.gmail.com>
-References: <20181216232734.100068-1-aduskett@gmail.com>
- <20181217082836.72eff0aa@gmx.net>
- <2B863C9D-397E-4EED-B47D-1E08D4D45741@gmail.com>
- <3924a6bb-00c4-8157-6294-6b24834456b6@mind.be>
- <CAFSsvmpWuEcruH55C-93Ek9fb0JKfHvex4NY2arGCxG5LD68OQ@mail.gmail.com>
-Message-ID: <20181231142739.GA21682@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 15:31:01 +0100
+Subject: [Buildroot] [PATCH v7 3/8] core: implement per-package SDK and
+ target
+In-Reply-To: <20181230215212.GA24224@scaer>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
+ <20181230215212.GA24224@scaer>
+Message-ID: <20181231153101.387c7d57@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-12-18 11:13 -0500, Adam Duskett spake thusly:
-> Hello;
+Hello,
+
+Thanks for the review!
+
+On Sun, 30 Dec 2018 22:52:12 +0100, Yann E. MORIN wrote:
+
+> I don;t have much to propose asa review, except very-minor issues.
+
+Which is good :-) Hopefully I can get some Reviewed-by soon, and merge
+this series.
+
+> > There are two main benefits:
+> > 
+> >  - Packages will no longer discover dependencies that they do not
+> >    explicitly indicate in their <pkg>_DEPENDENCIES variable.  
 > 
-> On Mon, Dec 17, 2018 at 6:25 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 17/12/2018 14:10, ratbert90 wrote:
-> > > Hello Peter;
-> > >
-> > > I would question as to why we would do anything to support such an old version of
-> >> Python that was EOLed over 5 years ago.  Heck, even 2.7 will be EOLed in 2020.
-> > >
-> > > Looking around, the only distribution that has 2.6 that still has any kind of support
-> >> is CentOS6, and even that is in maintenance mode.
-> >
-> >  RHEL6 will be retired November 30, 2020. SLES11 also hase Python 2.6 and will
-> > be retired 31 Mar 2022.
+> Note that non-expressed dependencies may still be gathered, if they are
+> transitive dependencies.
 
-RHEL5 gets extended support until end of 2020, while RHEL6 gets extended
-support until mid-2024.
+Yes, of course, but what can we do about this ? It's pretty logical and
+obvious that transitive dependencies will be copied, no ?
 
-You would be amazed how old stuff tend to stick around in entrerpise-y
-context. ;-]
-
-> >
-> > > 2.7 is a safe bet in my opinion.
-> >
-> >  Indeed, because it can be installed both on RHEL6 and on SLES11.
-> >
-> >  However, IIUC, it is *not* possible to install python 2.7 as the *default*
-> > python on these distros, because some scripts that are used in normal operation
-> > don't work with python 2.7.
-> In the case of RHEL; one can run: `source /opt/rh/python27/enable` which will
-> add the appropriate paths for Python2.7 to be the default.
+> > +PER_PACKAGE_DIR := $(BASE_DIR)/per-package  
 > 
-> As far as SLES11 goes, I don't know how many people use it, but it has to be
-> microscopic at this point.
+> Why don't you simply export this variable, like HOST_DIR and TARGET_DIR?
+> This would simplify calls to fix-rpath:
+
+Because I generally don't like those global exports. It pollutes the
+namespace with some random variable that is really internal to
+Buildroot. There is no reason for the build system of all packages to
+even see this variable. In fact, I am personally not a big fan of
+exporting TARGET_DIR, STAGING_DIR, etc. since they become visible in
+packages, and people tend to use them in their package build system,
+which is very wrong.
+
+Of course, if the overall consensus is that PER_PACKAGE_DIR should be
+exported, I'll do so because I don't want to hold this series just for
+this detail.
+
+
+> > -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+> > +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) \
+> > +	$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):  
 > 
-> > So, the test that you added to dependencies.sh is
-> > probably too strict, because it checks that python -V gives at least 2.7...
-> If one runs `source /opt/rh/python27/enable` in CentOS6, then running
-> `python -V`
-> will give 2.7.13.
+> Don't ident this continuation line, it is misleading: the target of
+> the rule appear to be part of the commands.
 
-Since there are practical workarounds for affected users, I'm fine that
-we require pythhon-2.7 now.
+ACK.
 
-Note that, if libglib2 does require a host pytrhon-2.7 and we are not
-willing to change our own requirements, then we can always add
-host-python to libglib2's dependencies. But, meh...
+> [--SNIP--]
+> > diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+> > index c8939569e2..d903a82958 100755
+> > --- a/support/scripts/check-host-rpath
+> > +++ b/support/scripts/check-host-rpath  
+> 
+> As I was saying on IRC: when we are not using per-package directories,
+> then I was a bit surprised to see that this script (and fix_rpath,
+> below) still worked, when the support for PPD is not optional in it.
+> 
+> What confused me, was that PER_PACKAGE_DIR is always used, even when
+> BR2_PER_PACKAGE_DIRECTORIES is unset.
+> 
+> But as you pointed to on IRC, PER_PACKAGE_DIR is also always defined to
+> an non-empty string, that either points to a valid location when
+> BR2_PER_PACKAGE_DIRECTORIES=y, or points to a non-existent location
+> otherwise.
 
-Regards,
-Yann E. MORIN.
+Yes, I'll add some comments about this.
 
+> 
+> > @@ -77,6 +93,7 @@ check_elf_has_rpath() {
+> >              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+> >              [ "${dir}" = "${hostdir}/lib" ] && return 0
+> >              [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
+> > +            [[ ${dir} =~ ${perpackagedir}/[^/]*/host/lib ]] && return 0  
+>                                             ^^^^^^^
+> That would also match the string '//' so maybe we want:
+> 
+>     ${perpackagedir}/([^/]+/)?host/lib
+
+I'm not sure to understand the ? in ([^/]+/)?. We definitely want one
+path component between $(PER_PACKAGE_DIR) and host/lib. So what about:
+
+	${perpackagedir}/[^/]+/host/lib
+
+> > +        if test "${rpath}" != "${changed_rpath}" ; then
+> > +            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"  
+> 
+> Can't you do that unconditioanlly? If it's changed, we need to set it;
+> if it's not changed, that set it to the initial value anyway...
+
+There is a reason to do it conditionally: patchelf is slow, you don't
+want to run patchelf when you don't need to, and here it's trivial to
+know whether it is useful or not to run it. For example, this condition
+ensures that people not using per-package directory don't pay the cost
+of running all those additional patchelf invocations.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
