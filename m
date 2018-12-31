@@ -1,35 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:06:58 +0100
-Subject: [Buildroot] [PATCH 0/3] Linux 4.20 addition
-Message-ID: <20181231160701.12086-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 17:06:59 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain: add necessary options to support
+ 4.20 kernel headers
+In-Reply-To: <20181231160701.12086-1-thomas.petazzoni@bootlin.com>
+References: <20181231160701.12086-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181231160701.12086-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-This adds support for using Linux 4.20 for the kernel headers and/or
-kernel build.
-
-Amongst other things, Linux 4.20 has the fix of the net_tstamp.h
-header which will fix the build failure of linuxptp.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (3):
-  toolchain: add necessary options to support 4.20 kernel headers
-  package/linux-headers: add support for Linux 4.20 kernel headers
-  linux: add support for Linux 4.20
-
- linux/Config.in                      |  4 ++--
- linux/linux.hash                     |  1 +
- package/linux-headers/Config.in.host | 11 ++++++++++-
- toolchain/Config.in                  |  5 +++++
- 4 files changed, 18 insertions(+), 3 deletions(-)
-
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index bf8ed5bf5b..baf192c936 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -370,10 +370,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.20" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+ 	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ 	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
 -- 
 2.20.1
