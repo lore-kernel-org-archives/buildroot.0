@@ -1,78 +1,154 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 31 Dec 2018 19:30:29 +0100
-Subject: [Buildroot] [PATCH 3/3] package/pkg-python: use
- --single-version-externally-managed for host setuptools
-In-Reply-To: <CALFsTFVbRhBSYz2O7gi-wkygEjEwoczMvnZD9q66mTKbWc1GiQ@mail.gmail.com>
+Date: Mon, 31 Dec 2018 19:32:13 +0100
+Subject: [Buildroot] [PATCH 1/3] package/python3-setuptools: new package
+In-Reply-To: <20181228170132.13049-2-thomas.petazzoni@bootlin.com>
 References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
- <20181228170132.13049-4-thomas.petazzoni@bootlin.com>
- <CALFsTFVbRhBSYz2O7gi-wkygEjEwoczMvnZD9q66mTKbWc1GiQ@mail.gmail.com>
-Message-ID: <CAGm1_kv60Z-t+gKy9s80SXp8MOcHUx5x=uTo9VVk=4Q1Crv+1g@mail.gmail.com>
+ <20181228170132.13049-2-thomas.petazzoni@bootlin.com>
+Message-ID: <CAGm1_ku-j7c4-kZRGna0CndixFXgqox0hhmi0h+ee0E64gq9GQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 29, 2018 at 4:16 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+On Fri, Dec 28, 2018 at 6:01 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> This new package allows to install the host version of setuptools for
+> python3, regardless of what the default Python version is. It will be
+> used by the python-package infrastructure to make sure that host
+> Python packages that need python3 and setuptools have setuptools
+> installed for Python 3.
 >
-> On Fri, Dec 28, 2018 at 7:01 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Currently, host Python packages that use setuptools are installed as
-> > Python Eggs, i.e they are installed in
-> > $(HOST_DIR)/lib/python2.7/site-packages/Something-<version>.egg. Once
-> > installed, each Python Egg is registered to a file called
-> > $(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. This file is
-> > read by the Python interpreter so that the installation location of
-> > each Egg is added to the Python path, and can be found by the Python
-> > interpreter.
-> >
-> > However, the fact that the installation of different Python modules
-> > need to update a common file is clearly not compatible with
-> > per-package directories and top-level parallel build.
-> >
-> > To fix this, we avoid using Python Eggs using the same
-> > --single-version-externally-managed option that we use for target
-> > modules. This option is normally meant for distributions packaging
-> > Python modules, and can therefore only be used if either --record (to
-> > record the list of files being installed) or --root is
-> > passed. --root=/ works fine and was suggested by
-> > https://stackoverflow.com/questions/6301003/stopping-setup-py-from-installing-as-egg/33791008#33791008.
-> >
-> > With this change, host Python modules installed by setuptools are now
-> > installed in the "regular" way, i.e directly in
-> > $(HOST_DIR)/lib/python2.7/site-packages/mako for host-python-mako.
-> >
-> > This makes the installation of host Python modules more similar to the
-> > one of target modules, and makes it compatible with per-package
-> > directory support and top-level parallel build.
-> >
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  package/pkg-python.mk | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> > index b641e3f865..4f42e2efc2 100644
-> > --- a/package/pkg-python.mk
-> > +++ b/package/pkg-python.mk
-> > @@ -85,7 +85,9 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
-> >         PYTHONNOUSERSITE=1
-> >
-> >  HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
-> > -       --prefix=$(HOST_DIR)
-> > +       --prefix=$(HOST_DIR) \
-> > +       --root=/ \
-> > +       --single-version-externally-managed
-> >
-> >  ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> >  define PKG_PYTHON_FIXUP_SYSCONFIGDATA
-> > --
-> > 2.20.1
-> >
->
-> Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+> ---
+>  .../0001-add-executable.patch                 | 72 +++++++++++++++++++
+>  .../python3-setuptools.hash                   |  1 +
+>  .../python3-setuptools/python3-setuptools.mk  | 24 +++++++
+>  3 files changed, 97 insertions(+)
+>  create mode 100644 package/python3-setuptools/0001-add-executable.patch
+>  create mode 120000 package/python3-setuptools/python3-setuptools.hash
+>  create mode 100644 package/python3-setuptools/python3-setuptools.mk
+>
+> diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
+> new file mode 100644
+> index 0000000000..1f8714eaeb
+> --- /dev/null
+> +++ b/package/python3-setuptools/0001-add-executable.patch
+> @@ -0,0 +1,72 @@
+> +From 9b3d307f8f6a1af88f3f810f5a6cf0835830e1e8 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Mon, 7 Dec 2015 01:14:33 +0100
+> +Subject: [PATCH 1/1] add executable
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Add a new --executable option to distribute so that we can
+> +force the shebang line in installed python scripts.
+> +
+> +[Thomas: refresh for setuptools 5.8.]
+> +[J?rg: refresh for setuptools 18.7.1]
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +---
+> + setuptools/command/install.py         | 2 ++
+> + setuptools/command/install_scripts.py | 9 +++++++++
+> + 2 files changed, 11 insertions(+)
+> +
+> +diff --git a/setuptools/command/install.py b/setuptools/command/install.py
+> +index d2bca2e..b60ef19 100644
+> +--- a/setuptools/command/install.py
+> ++++ b/setuptools/command/install.py
+> +@@ -16,6 +16,7 @@ class install(orig.install):
+> +     """Use easy_install to install the package, w/dependencies"""
+> +
+> +     user_options = orig.install.user_options + [
+> ++        ('executable=', 'e', "specify final destination interpreter path"),
+> +         ('old-and-unmanageable', None, "Try not to use this!"),
+> +         ('single-version-externally-managed', None,
+> +          "used by system package builders to create 'flat' eggs"),
+> +@@ -31,6 +32,7 @@ class install(orig.install):
+> +
+> +     def initialize_options(self):
+> +         orig.install.initialize_options(self)
+> ++        self.executable = None
+> +         self.old_and_unmanageable = None
+> +         self.single_version_externally_managed = None
+> +
+> +diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
+> +index be66cb2..07afaf8 100755
+> +--- a/setuptools/command/install_scripts.py
+> ++++ b/setuptools/command/install_scripts.py
+> +@@ -11,6 +11,13 @@ class install_scripts(orig.install_scripts):
+> +     def initialize_options(self):
+> +         orig.install_scripts.initialize_options(self)
+> +         self.no_ep = False
+> ++        self.executable = None
+> ++
+> ++    def finalize_options(self):
+> ++        orig.install_scripts.finalize_options(self)
+> ++        self.set_undefined_options('install',
+> ++                ('executable','executable')
+> ++        )
+> +
+> +     def run(self):
+> +         import setuptools.command.easy_install as ei
+> +@@ -31,6 +38,8 @@ class install_scripts(orig.install_scripts):
+> +         )
+> +         bs_cmd = self.get_finalized_command('build_scripts')
+> +         exec_param = getattr(bs_cmd, 'executable', None)
+> ++        if self.executable is not None:
+> ++            exec_param = self.executable
+> +         bw_cmd = self.get_finalized_command("bdist_wininst")
+> +         is_wininst = getattr(bw_cmd, '_is_running', False)
+> +         writer = ei.ScriptWriter
+> +--
+> +2.6.3
+> +
+> diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
+> new file mode 120000
+> index 0000000000..a3af7f0fb1
+> --- /dev/null
+> +++ b/package/python3-setuptools/python3-setuptools.hash
+> @@ -0,0 +1 @@
+> +../python-setuptools/python-setuptools.hash
+> \ No newline at end of file
+> diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
+> new file mode 100644
+> index 0000000000..b6de5d4b25
+> --- /dev/null
+> +++ b/package/python3-setuptools/python3-setuptools.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# python3-setuptools
+> +#
+> +################################################################################
+> +
+> +# Please keep in sync with
+> +# package/python-setuptools/python-setuptools.mk
+> +PYTHON3_SETUPTOOLS_VERSION = 40.6.3
+> +PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
+> +PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
+> +PYTHON3_SETUPTOOLS_LICENSE = MIT
+> +PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
+> +PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
+> +HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
+> +HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
+> +
+> +define HOST_PYTHON3_SETUPTOOLS_EXTRACT_CMDS
+> +       $(UNZIP) -d $(@D) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
+> +       mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
+> +       $(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
+> +endef
+> +
+> +$(eval $(host-python-package))
+> --
+> 2.20.1
+>
