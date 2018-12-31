@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:26:38 +0100
-Subject: [Buildroot] [PATCH] support/dependencies: require at least CMake 3.8
-Message-ID: <20181231162638.13606-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 17:31:52 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/php_amqp: fix build with php
+ 7.3.0
+In-Reply-To: <20181231160714.94082-1-fhunleth@troodon-software.com>
+References: <20181231160714.94082-1-fhunleth@troodon-software.com>
+Message-ID: <20181231173152.01c9897f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The json-for-modern-cpp package unfortunately now requires CMake >=
-3.8, so we need to bump our requirement from 3.1 to 3.8. If the host
-doesn't have a CMake >= 3.8, Buildroot will build its own host-cmake
-package.
+Hello,
 
-Fixes:
+On Mon, 31 Dec 2018 11:07:14 -0500, Frank Hunleth wrote:
+> This includes an upstream patch that fixes the following error:
+> 
+> ```
+> /home/naourr/work/instance-1/output/build/php-amqp-1.9.3/amqp_channel.c: In function 'php_amqp_destroy_fci':
+> /home/naourr/work/instance-1/output/build/php-amqp-1.9.3/amqp_channel.c:104:37: error: lvalue required as decrement operand
+>              GC_REFCOUNT(fci->object)--;
+>                                      ^~
+> /home/naourr/work/instance-1/output/build/php-amqp-1.9.3/amqp_channel.c: In function 'php_amqp_duplicate_fci':
+> /home/naourr/work/instance-1/output/build/php-amqp-1.9.3/amqp_channel.c:115:40: error: lvalue required as increment operand
+>              GC_REFCOUNT(source->object)++;
+>                                         ^~
+> make[1]: *** [Makefile:206: amqp_channel.lo] Error 1
+> ```
 
-  http://autobuild.buildroot.org/results/1f893d8bc7df3bfefd31df69aba918e2121cfaf7/
+Don't we need a similar fix for php-zmq ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/dependencies/check-host-cmake.mk | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+See:
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 4300e6f600..3ea422ea87 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,14 +1,5 @@
--# Versions before 3.0 are affected by the bug described in
--# https://git.busybox.net/buildroot/commit/?id=ef2c1970e4bff3be3992014070392b0e6bc28bd2
--# and fixed in upstream CMake in version 3.0:
--# https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
--#
--# Set this to either 3.0 or higher, depending on the highest minimum
--# version required by any of the packages bundled in Buildroot. If a
--# package is bumped or a new one added, and it requires a higher
--# version, our cmake infra will catch it and whine.
--#
--BR2_CMAKE_VERSION_MIN = 3.1
-+# The json-for-modern-cpp package needs at least CMake 3.8
-+BR2_CMAKE_VERSION_MIN = 3.8
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+  http://autobuild.buildroot.org/results/3f2/3f258fbc7352c3d7205bc6402145be1102d69683/build-end.log
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
