@@ -1,69 +1,79 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 31 Dec 2018 20:10:31 +0000
-Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
- PKCS#11 engine
-In-Reply-To: <CA+-urNQc0mDN=iMiM--O3Ts7Z1jZewSvZYx0G_NT4JCHaobpSQ@mail.gmail.com>
-References: <20181207181314.24051-1-tpiepho@impinj.com>
- <CA+-urNQc0mDN=iMiM--O3Ts7Z1jZewSvZYx0G_NT4JCHaobpSQ@mail.gmail.com>
-Message-ID: <1546287030.12415.10.camel@impinj.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 31 Dec 2018 17:22:06 -0500
+Subject: [Buildroot] [PATCH 1/1] json-for-modern-cpp: use include.zip
+Message-ID: <20181231222206.69527-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2018-12-28 at 23:36 -0600, Frank Hunleth wrote:
-> Hi Trent,
-> 
-> I was about to submit libp11 and then saw your patch, so thanks for submitting.
-> 
-> The commit title should be "libp11: new package".
+From: Adam Duskett <Aduskett@gmail.com>
 
-I see the imperative form is much less common, 100 vs 1604.  I wanted
-to add the engine bit, since the package name, libp11, sounds like a
-library for pkcs11.  Which exists, but no one uses that.  It's really
-about the openssl engine.
+Currently, the json for modern c++ uses the release tarball for configuring
+and installation. However; this tarball is actually 114.5Mb of unit tests, and
+500Kb of actual code, which is just a header file.
 
-> > 
-> I'm not sure what official BR policy is, but it seems that most
-> github-hosted packages use the github helper:
-> 
-> LIBP11_VERSION = libp11-0.4.9
-> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
-> 
-> and then you'll need
-> 
-> LIBP11_AUTORECONF = YES
+When the package was initially submitted to Buildroot, json for modern c++ only
+had the option of either just the header file, or the tarball. Since then,
+the project has been able to break apart the header file into several, more
+managable files and have included them in a "include.zip" file for each release.
+This tar file is only 134K, and includes no unit tests.
 
-I didn't want to use that, since the github macro didn't produce the
-official release tarball.  Hence the need for autoreconf.  I was under
-the impression buildroot policy was to prefer an official release
-package vs a git repository tag.
+This patch does the following:
+- Change the package to a generic package.
+- Manually unzip and install the header files to staging.
+- Update the sha256 hash's for the new files.
 
-> 
-> > +LIBP11_DEPENDENCIES = openssl
-> > +LIBP11_INSTALL_STAGING = YES
-> > +LIBP11_LICENSE = LGPLv2.1
-> 
-> It looks like the license is "LGPL-2.1+"
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ .../json-for-modern-cpp.hash                  |  6 ++---
+ .../json-for-modern-cpp.mk                    | 22 +++++++++++++------
+ 2 files changed, 18 insertions(+), 10 deletions(-)
 
-Yes, you're right, I failed to update this.  I added this package back
-in 2017 and up to buildroot 2017.02 the license string was
-"LGLPv2.1(+?)".
-
-> > +LIBP11_LICENSE_FILES = COPYING
-> > +
-> > +ifeq ($(BR2_PACKAGE_P11_KIT),y)
-> > +LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-> > +endif
-> > +
-> > +HOST_LIBP11_DEPENDENCIES = host-openssl
-> 
-> I've tested this on device and with OpenSSL 1.1.0 (not OpenSSL 1.0.2
-> which is currently in BR master). That combination works well. I'm
-> hopeful that the OpenSSL 1.1.0 patches can be integrated. When that
-> happens,
-> 
-> Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
-> 
-> > 
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+index cff01db74c..254e513035 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+@@ -1,3 +1,3 @@
+-# Locally computed
+-sha256	e0b1fc6cc6ca05706cce99118a87aca5248bd9db3113e703023d23f044995c1d	json-v3.5.0.tar.gz
+-sha256	7b875bb7a4e28abb7956ea821b4b7d88ff6a2a4fabf261c3993730a365ec56dd	LICENSE.MIT
++# From https://github.com/nlohmann/json/releases
++sha256	3564da9c5b0cf2e032f97c69baedf10ddbc98030c337d0327a215ea72259ea21	include.zip
++sha256	8e118538f66f1f13c78a215ddb7f9c1b83e835702fcd5a8586f77bb7455a1b99	json.hpp
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+index 86399fd60d..62971bca08 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+@@ -5,13 +5,21 @@
+ ################################################################################
+ 
+ JSON_FOR_MODERN_CPP_VERSION = v3.5.0
+-JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+-JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
++JSON_FOR_MODERN_CPP_SOURCE = include.zip
++JSON_FOR_MODERN_CPP_SITE = https://github.com/nlohmann/json/releases/download/$(JSON_FOR_MODERN_CPP_VERSION)
+ JSON_FOR_MODERN_CPP_LICENSE = MIT
+-JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
++JSON_FOR_MODERN_CPP_LICENSE_FILES = json.hpp
+ JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
+-# header only library
+-JSON_FOR_MODERN_CPP_INSTALL_TARGET = NO
+-JSON_FOR_MODERN_CPP_CONF_OPTS = -DJSON_BuildTests=OFF
+ 
+-$(eval $(cmake-package))
++define JSON_FOR_MODERN_CPP_EXTRACT_CMDS
++	unzip $(JSON_FOR_MODERN_CPP_DL_DIR)/$(JSON_FOR_MODERN_CPP_SOURCE) -d $(@D)
++	mv $(@D)/include/nlohmann/* $(@D)
++	rm -r $(@D)/include
++endef
++
++define JSON_FOR_MODERN_CPP_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/nlohmann
++	cp -r $(@D)/* $(STAGING_DIR)/usr/include/nlohmann
++endef
++
++$(eval $(generic-package))
+-- 
+2.20.1
