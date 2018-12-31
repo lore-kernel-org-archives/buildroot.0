@@ -1,30 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 14:59:33 +0100
-Subject: [Buildroot] [PATCH] WPE WebKit
-In-Reply-To: <20181231133932.29718-1-francois.perrad@gadz.org>
-References: <20181231133932.29718-1-francois.perrad@gadz.org>
-Message-ID: <20181231145933.05d1c5fc@windsurf>
+Date: Mon, 31 Dec 2018 15:02:05 +0100
+Subject: [Buildroot] [RFC 2/3] wpebackend-fdo: new package
+In-Reply-To: <20181228015802.GF19602@momiji>
+References: <20181223154845.23556-1-francois.perrad@gadz.org>
+ <20181223154845.23556-3-francois.perrad@gadz.org>
+ <20181228015802.GF19602@momiji>
+Message-ID: <20181231150205.2a68a09b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adrian,
 
-+Adrian in Cc. Adrian, could you do a review of this patch series ?
+Thanks for the review!
 
-On Mon, 31 Dec 2018 14:39:27 +0100, Francois Perrad wrote:
-> Another port of WebKit (https://wpewebkit.org/), a project started in 2018.
+On Fri, 28 Dec 2018 01:58:02 +0100, Adrian Perez de Castro wrote:
+
+> > diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+> > new file mode 100644
+> > index 000000000..9025834e1
+> > --- /dev/null
+> > +++ b/package/wpebackend-fdo/Config.in
+> > @@ -0,0 +1,17 @@
+> > +comment "wpebackend-fdo needs an OpenEGL-capable backend"
+> > +	depends on !BR2_PACKAGE_HAS_LIBEGL
+> > +  
 > 
-> Francois Perrad (5):
->   libwpe: new package
->   wpebackend-fdo: new package
->   webkitgtk: remove GTK in WEBKITGTK_ARCH_SUPPORTS* variable names
->   wpewebkit: new package
->   cog: new package
+> The dependency line for the comment needs to be updated to be the reverse
+> of the list of dependencies for the BR2_PACKAGE_WPEBACKEND_FDO symbol below.
+> 
+> Also, the comment text should follow the Buildroot style:
+> 
+>     foo needs a toolchain w/ featA, featB, featC
 
-Fran?ois, what are the changes since the previous iteration ?
+Actually this form applies to toolchain features. For something like
+OpenGL, we do use a comment similar to what Fran?ois has used. See:
+
+$ git grep "comment.*OpenGL"
 
 Thanks,
 
