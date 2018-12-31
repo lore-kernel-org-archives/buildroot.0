@@ -1,53 +1,102 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Dec 2018 18:21:02 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain: add necessary options to
- support 4.20 kernel headers
-In-Reply-To: <20181231160701.12086-2-thomas.petazzoni@bootlin.com>
-References: <20181231160701.12086-1-thomas.petazzoni@bootlin.com>
- <20181231160701.12086-2-thomas.petazzoni@bootlin.com>
-Message-ID: <d06a3599-fc15-75e5-bfad-cfea34567a26@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 18:45:53 +0100
+Subject: [Buildroot] [git commit] board/pc: ensure grub.cfg is copied to
+ target filesystem
+Message-ID: <20181231174141.B78648229D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0b28397a9bed339e9aca2acfe51b1f0c68dbee65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 31/12/2018 ? 17:06, Thomas Petazzoni a ?crit?:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  toolchain/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index bf8ed5bf5b..baf192c936 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -370,10 +370,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
->  	bool
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
->  
-> +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
-> +	bool
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-> +
->  # This order guarantees that the highest version is set, as kconfig
->  # stops affecting a value on the first matching default.
->  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
->  	string
-> +	default "4.20" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
->  	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
->  	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
->  	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-> 
+Before this commit, the grub configuration file was copied to the
+TARGET_DIR in a post-image hook, after the filesystem has been
+generated. It was kinda working because the board/pc's grub
+configuration and the default one are the same and the later was
+copied during the build process of the grub2 package.
 
-It seems you forgot to add a new entry in toolchain-external-custom package
+This commit ensures the custom board/pc grub configuration is copied at
+the right time.
 
-See:
-https://git.buildroot.net/buildroot/commit/?id=561770fd032744b4daac186c1ede9bce1d4b4c45
+Signed-off-by: Gr??goire Delattre <gregoire.delattre@gmail.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/pc/post-build.sh           | 15 +++++++++++++++
+ board/pc/post-image.sh           | 14 --------------
+ configs/pc_x86_64_bios_defconfig |  3 ++-
+ configs/pc_x86_64_efi_defconfig  |  3 ++-
+ 4 files changed, 19 insertions(+), 16 deletions(-)
 
-Otherwise the rest of the series is ok
-
-Best regards,
-Romain
+diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+new file mode 100755
+index 0000000000..552d488160
+--- /dev/null
++++ b/board/pc/post-build.sh
+@@ -0,0 +1,15 @@
++#!/bin/sh
++
++set -e
++
++BOARD_DIR=$(dirname "$0")
++
++# Detect boot strategy, EFI or BIOS
++if [ -f "$BINARIES_DIR/efi-part/startup.nsh" ]; then
++    cp -f "$BOARD_DIR/grub-efi.cfg" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
++else
++    cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
++
++    # Copy grub 1st stage to binaries, required for genimage
++    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
++fi
+diff --git a/board/pc/post-image.sh b/board/pc/post-image.sh
+deleted file mode 100755
+index bdd0847ec5..0000000000
+--- a/board/pc/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-
+-# Detect boot strategy, EFI or BIOS
+-if [ -f ${BINARIES_DIR}/efi-part/startup.nsh ]; then
+-  cp -f ${BOARD_DIR}/grub-efi.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+-else
+-  cp -f ${BOARD_DIR}/grub-bios.cfg ${TARGET_DIR}/boot/grub/grub.cfg
+-  # Copy grub 1st stage to binaries, required for genimage
+-  cp -f ${HOST_DIR}/lib/grub/i386-pc/boot.img ${BINARIES_DIR}
+-fi
+-
+-exit $?
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 6e9220bb31..1c1f7a3666 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -19,7 +19,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
+ 
+ # Linux headers same as kernel, a 4.18 series
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index 2a76f403df..bba04c8f5d 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -22,7 +22,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-efi.cfg"
+ 
+ # Linux headers same as kernel, a 4.18 series
