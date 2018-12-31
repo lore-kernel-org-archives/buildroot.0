@@ -1,68 +1,151 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Sun, 30 Dec 2018 16:13:20 -0800
-Subject: [Buildroot] [PATCH v3 2/4] skeleton: use
- BR2_SYSTEM_DEFAULT_PATH as default PATH
-In-Reply-To: <20181230225227.7abf943c@windsurf>
-References: <20181220175508.2091-1-mmayer@broadcom.com>
- <20181220175814.2195-1-mmayer@broadcom.com>
- <20181220175814.2195-2-mmayer@broadcom.com> <20181230225227.7abf943c@windsurf>
-Message-ID: <CAGt4E5usg6rpmd2eds+f=pk=1B7qhyJnHuTdWOG4_CFDB622qg@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Mon, 31 Dec 2018 06:03:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
+ package
+In-Reply-To: <20181230181026.3ce6aca3@windsurf>
+References: <20181223150448.21980-1-vadim4j@gmail.com>
+ <20181223150448.21980-2-vadim4j@gmail.com>
+ <20181230181026.3ce6aca3@windsurf>
+Message-ID: <CAMw6YJLfzWh+=5NVkjO=TPiZ75KdOw6x-qApgPUeV+mUMKYqOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 30 Dec 2018 at 13:52, Thomas Petazzoni
+Hi Thomas, All
+
+On Sun, Dec 30, 2018 at 7:10 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> Hello Vadim,
 >
-> On Thu, 20 Dec 2018 09:58:12 -0800, Markus Mayer wrote:
-> > We substitute the path specified in system/skeleton/etc/profile with
-> > the path specified in the configuration variable
-> > $(BR2_SYSTEM_DEFAULT_PATH).
+> First of all, thanks a *lot* for pursuing this work, it is really nice
+> to see some progress in this area. Every time host-gettext is building
+> on my machine, I'm really annoyed, and remember about the need to have
+> gettext-tiny support. See below for some comment.
+>
+> On Sun, 23 Dec 2018 17:04:47 +0200, Vadim Kochan wrote:
+>
+> > diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+> > index e55663b1d7..9546468571 100644
+> > --- a/package/gettext/Config.in
+> > +++ b/package/gettext/Config.in
+> > @@ -1,5 +1,12 @@
+> > -config BR2_PACKAGE_GETTEXT
+> > +menuconfig BR2_PACKAGE_GETTEXT
+> >       bool "gettext"
+> > +     select BR2_PACKAGE_HAS_GETTEXT
+> > +
+> > +if BR2_PACKAGE_GETTEXT
+> > +
+> > +config BR2_PACKAGE_GETTEXT_GNU
+> > +     bool "gettext-gnu"
+> > +     default y
+> >       depends on BR2_USE_WCHAR
+> >       help
+> >         The GNU `gettext' utilities are a set of tools that provide a
+> > @@ -12,14 +19,23 @@ config BR2_PACKAGE_GETTEXT
 > >
-> > $(BR2_SYSTEM_DEFAULT_PATH) is a Kconfig string. So it is already
-> > quoted, which is exactly what we want.
+> >         http://www.gnu.org/software/gettext/
+> >
+> > -if BR2_PACKAGE_GETTEXT
+> > +comment "gettext-gnu needs a toolchain w/ wchar"
+> > +     depends on !BR2_USE_WCHAR
+> >
+> >  config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+> >       bool
+> >       default y if BR2_SYSTEM_ENABLE_NLS
+> >       depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
+> >
+> > -endif
+> > +config BR2_PACKAGE_PROVIDES_GETTEXT
+> > +     string
+> > +     default "gettext-gnu" if BR2_PACKAGE_GETTEXT_GNU
+> >
+> > -comment "gettext needs a toolchain w/ wchar"
+> > -     depends on !BR2_USE_WCHAR
+> > +config BR2_PACKAGE_HAS_GETTEXT
+> > +     bool
+> > +
+> > +config BR2_PACKAGE_PROVIDES_HOST_GETTEXT
+> > +     string
+> > +     default "host-gettext-gnu"
+> > +
+> > +endif
 >
-> I am curious about this sentence: why is it "exactly what we want" ?
+> I'm not convinced by how this virtual package is handled in Config.in.
+> In fact, if you apply both of your patches, it's broken, you have:
 >
-> > diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> > index 1255d23ff40d..db29e44920e8 100644
-> > --- a/system/skeleton/etc/profile
-> > +++ b/system/skeleton/etc/profile
-> > @@ -1,4 +1,4 @@
-> > -export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-> > +export PATH=@PATH@
+> config BR2_PACKAGE_PROVIDES_HOST_GETTEXT
+>         string
+>         default "host-gettext-gnu" if BR2_PACKAGE_GETTEXT_GNU
+>         default "host-gettext-tiny" if BR2_PACKAGE_GETTEXT_TINY
 >
-> Indeed, the variable assignment was not double quoted before, and now
-> it becomes double quoted:
->
-> export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
->
-> is what I have in the resulting /etc/profile.
->
-> So does "exactly what we want" means "preserves the existing behavior"
-> or means "is better than the existing behavior" for some reason ?
+So looks like it needs to be enabled by default "host-gettext-gnu" but should
+allow to set "host-gettext-tiny" if BR2_PACKAGE_GETTEXT_TINY was forced
+by the user ?
 
-I hadn't actually noticed this difference in quoting, but it does seem
-like a good idea to have them.
-
-"Exactly what we want" was just meant to indicate that we get a quoted
-string out of Kconfig, and we can use that quoted string in our code
-unchanged (explaining why there are no quotes being added in the code
-and why they aren't being stripped, either).
-
-This can be reworded if you think it is too confusing.
-
-Regards,
--Markus
-
-> Best regards,
+> which means that when the target package is not selected, the
+> host-gettext virtual package doesn't "point" to anything. And indeed:
+> do a simple build with nothing enable, and run "make host-flex". It
+> will fail with:
 >
+> make[1]: *** No rule to make target 'host-', needed by '/home/thomas/projets/buildroot/output/build/host-gettext/.stamp_configured'.  Stop.
+> make: *** [Makefile:84: _all] Error 2
+>
+> Because the host-gettext virtual package has no provider.
+>
+> So let's analyze this in detail.
+>
+> First, for the *target* gettext virtual package, what do we want. I
+> guess what we want is simply:
+>
+>  - To use the full gettext when BR2_TARGET_ENABLE_NLS=y
+>
+>  - To use gettext-tiny when BR2_TARGET_ENABLE_NLS is disabled
+>
+> I don't see any meaningful use case for full gettext with
+> BR2_TARGET_ENABLE_NLS disabled, or for gettext-tiny with
+> BR2_TARGET_ENABLE_NLS=y.
+>
+> To me, this means that for the target package,
+> package/gettext/Config.in shouldn't offer a choice between full and
+> tiny: it should automatically use full or tiny depending on the
+> BR2_TARGET_ENABLE_NLS value.
+>
+> Now, there is the question of what to do with the host-gettext virtual
+> package, i.e in which case it should use the full host gettext or host
+> gettext-tiny.
+>
+> So, we need host-gettext for two things:
+>
+>  - Some packages explicitly need it.
+>
+>  - Some packages need it through TARGET_NLS_DEPENDENCIES
+>
+>  - Some packages need it through <pkg>_GETTEXTIZE = YES
+>
+> So we need to understand if the rule is as simple as: full host gettext
+> when BR2_TARGET_ENABLE_NLS=y and tiny host gettext when
+> BR2_TARGET_ENABLE_NLS is disabled, or whether it is possible to use
+> gettext tiny for host gettext when BR2_TARGET_ENABLE_NLS=y.
+>
+> Do you have some ideas about this ?
+>
+May be I don;t have a view of a whole picture, but for me it looks simple -
+by default gettext-gnu is selected when ENABLE_NLS is set, but
+gettext-tiny should
+be selected by force choosing the BR2_PACKAGE_GETTEXT_TINY. For the "host"
+case - the similar case with the only difference that "tiny" might be
+selected if NLS is disabled.
+May be I missed something ))
+
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+
+Regards,
+Vadim Kochan
