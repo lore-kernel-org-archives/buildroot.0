@@ -1,84 +1,122 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 31 Dec 2018 13:43:17 -0500
-Subject: [Buildroot] [PATCH 1/1] test-pkg: Force checking dependencies.
-Message-ID: <20181231184317.107597-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Dec 2018 19:53:44 +0100
+Subject: [Buildroot] [PATCH] package/json-for-modern-cpp: relax dependency
+ on cmake version
+Message-ID: <20181231185344.18570-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Currently, json-for-modern-cpp requires cmake to be at least cmake-3.8,
+but our dependencies only check for cmake-3.1.
 
-Currently, if a user runs "make" while specifying a specific package
-(IE: make -p foo),  the Makefile logic skips checking to see if all the
-dependencies are selected in the specified packages config file. This behavior
-is useful to test simple packages which do not have "complex" dependencies.
+It turns out that json-for-modern-cpp is over strict, and could very
+well do with just cmake-3.1
 
-However; if a developer uses test-pkg -p ${package_name} to check their package,
-the package may pass all the checks, but would have otherwise failed with a
-simple "make" because the developer may have failed to add a select line in
-packages config file, even if there is a new dependency in the packages
-Makefile.
+Fixes:
+    http://autobuild.buildroot.org/results/1f8/1f893d8bc7df3bfefd31df69aba918e2121cfaf7/
 
-Pass the environment variable "FORCE_CHECK_DEPENDENCIES"  to the Makefile in
-the test-pkg script,  and check it's value in the Makefile. If the value is
-"YES" force checking for dependency issues.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 ---
- Makefile       | 9 ++++++++-
- utils/test-pkg | 6 +++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ ...system-relax-requirement-on-cmake-version.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
 
-diff --git a/Makefile b/Makefile
-index c5b78b3274..bc83c6505f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -550,9 +550,16 @@ include $(BR2_EXTERNAL_MKS)
- #
- # Only trigger the check for default builds. If the user forces building
- # a package, even if not enabled in the configuration, we want to accept
--# it.
-+# it. However; we also want to be able to force checking the dependencies
-+# if the user so desires. Forcing a dependency check is useful in the case
-+# of test-pkg, as we want to make sure during testing, that a package has
-+# all the dependencies selected in the config file.
- #
- ifeq ($(MAKECMDGOALS),)
-+FORCE_CHECK_DEPENDENCIES = YES
-+endif
+diff --git a/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch b/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
+new file mode 100644
+index 0000000000..a5921527a0
+--- /dev/null
++++ b/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
+@@ -0,0 +1,85 @@
++From e8b6b7adc138a66f8d47396a2e707366d3771028 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Mon, 31 Dec 2018 18:42:09 +0100
++Subject: [PATCH] buildsystem: relax requirement on cmake version
 +
-+ifeq ($(FORCE_CHECK_DEPENDENCIES),YES)
- 
- define CHECK_ONE_DEPENDENCY
- ifeq ($$($(2)_TYPE),target)
-diff --git a/utils/test-pkg b/utils/test-pkg
-index e4f68ed061..e54990a349 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -146,19 +146,19 @@ build_one() {
-     rm -f "${dir}/missing.config"
- 
-     if [ -n "${pkg}" ]; then
--        if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
-+        if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
-             return 2
-         fi
-     fi
- 
-     # shellcheck disable=SC2086
--    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-+    if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-         return 2
-     fi
- 
-     # legal-info done systematically, because some packages have different
-     # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
--    if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
-+    if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
-         return 3
-     fi
- }
++Commit 73cc5089 (Using target_compile_features to specify C++ 11
++standard) bumped the required cmake version, from 3.0 to 3.8, so
++as to get the definition of target_compile_features().
++
++However, target_compile_features() was introduced in cmake-3.1:
++    https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
++
++And using cmake-3.1 is indeed sufficient to properly build.
++
++As such, relax the minimum required version down to cmake-3.1,
++so we can build on oldish, entreprise-grade distributions that
++only have cmake-3.1 (or at least, don't have up to cmake-3.8).
++
++Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: MR pending
++https://github.com/nlohmann/json/pull/1409
++---
++ CMakeLists.txt                                     | 2 +-
++ benchmarks/CMakeLists.txt                          | 2 +-
++ test/cmake_add_subdirectory/project/CMakeLists.txt | 2 +-
++ test/cmake_import/project/CMakeLists.txt           | 2 +-
++ test/cmake_import_minver/project/CMakeLists.txt    | 2 +-
++ 5 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 409f5bff..da6f08e7 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.8)
+++cmake_minimum_required(VERSION 3.1)
++ 
++ ##
++ ## PROJECT
++diff --git a/benchmarks/CMakeLists.txt b/benchmarks/CMakeLists.txt
++index a53812c1..dd3f3027 100644
++--- a/benchmarks/CMakeLists.txt
+++++ b/benchmarks/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.8)
+++cmake_minimum_required(VERSION 3.1)
++ project(JSON_Benchmarks LANGUAGES CXX)
++ 
++ # set compiler flags
++diff --git a/test/cmake_add_subdirectory/project/CMakeLists.txt b/test/cmake_add_subdirectory/project/CMakeLists.txt
++index 2c5be183..21357b68 100644
++--- a/test/cmake_add_subdirectory/project/CMakeLists.txt
+++++ b/test/cmake_add_subdirectory/project/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.8)
+++cmake_minimum_required(VERSION 3.1)
++ 
++ project(DummyImport CXX)
++ 
++diff --git a/test/cmake_import/project/CMakeLists.txt b/test/cmake_import/project/CMakeLists.txt
++index d268d72c..fe892fc1 100644
++--- a/test/cmake_import/project/CMakeLists.txt
+++++ b/test/cmake_import/project/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.8)
+++cmake_minimum_required(VERSION 3.1)
++ 
++ project(DummyImport CXX)
++ 
++diff --git a/test/cmake_import_minver/project/CMakeLists.txt b/test/cmake_import_minver/project/CMakeLists.txt
++index eeef3296..29056bdc 100644
++--- a/test/cmake_import_minver/project/CMakeLists.txt
+++++ b/test/cmake_import_minver/project/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.8)
+++cmake_minimum_required(VERSION 3.1)
++ 
++ project(DummyImportMinVer CXX)
++ 
++-- 
++2.14.1
++
 -- 
-2.20.1
+2.14.1
