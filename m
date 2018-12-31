@@ -1,43 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 15:35:05 +0100
-Subject: [Buildroot] [PATCH 1/2] package/python3-setuptools: new package
-In-Reply-To: <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
-References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
- <20181230121932.39e696f9@windsurf>
- <CADvTj4qinyrbrutcb_WkO4rveJgA9i9F6bX9Txhp+MAWxZSyfg@mail.gmail.com>
- <20181230142407.69d10ba8@windsurf>
- <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
-Message-ID: <20181231153505.62460694@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Dec 2018 15:45:34 +0100
+Subject: [Buildroot] [PATCH v7 3/8] core: implement per-package SDK and
+ target
+In-Reply-To: <20181231153101.387c7d57@windsurf>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
+ <20181230215212.GA24224@scaer> <20181231153101.387c7d57@windsurf>
+Message-ID: <20181231144534.GB21682@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-+Yegor in Cc.
+On 2018-12-31 15:31 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 30 Dec 2018 22:52:12 +0100, Yann E. MORIN wrote:
+> > > There are two main benefits:
+> > >  - Packages will no longer discover dependencies that they do not
+> > >    explicitly indicate in their <pkg>_DEPENDENCIES variable.  
+> > Note that non-expressed dependencies may still be gathered, if they are
+> > transitive dependencies.
+> Yes, of course, but what can we do about this ?
 
-On Sun, 30 Dec 2018 20:15:17 +0200, Asaf Kahlon wrote:
+What I mean is, if
 
-> I don't heavily use the meson build system, but after looking at the
-> history of setup.py in the official repository,
-> I found the commit which made the change. At the commit message they
-> stated that:
-> "This gives us a consistent experience and a simpler setup across all
-> operating systems. Setuptools is available everywhere these days."
-> The change is relevant since 0.48.
+  - A needs B and C, but has a dependency only on B,
+  - B depends on C,
 
-Indeed, upstream commit 86298f2109d215ad6b26d3462af7b685d52d0dd7 drops
-the fallback on distutils, and only setuptools is supported now. This
-makes my patch series introducing python3-setuptools even more relevant
-then. I would like to see a review from Yegor on this series first, as
-he has lots of background in the Python integration in Buildroot.
+then the dependency of A to C is fullfilled, even though it is missing
+in the dependencies. I.e, it is a _hidden_ dependency. It is not
+"explicitly indicate[d] in A_DEPENDENCIES" but still gathered.
 
-Thanks,
+And no, there is nothing we can do about it.
 
-Thomas
+> It's pretty logical and
+> obvious that transitive dependencies will be copied, no ?
+
+Not as you wrote it.
+
+So, you could rephrase as:
+
+    Packages will now see only the dependencies they explicitly list in
+    their <pkg>_DEPENDENCIES variable, and the recursive dependencies
+    thereof.
+
+> > > +PER_PACKAGE_DIR := $(BASE_DIR)/per-package  
+> > 
+> > Why don't you simply export this variable, like HOST_DIR and TARGET_DIR?
+> > This would simplify calls to fix-rpath:
+> 
+> Because I generally don't like those global exports. It pollutes the
+> namespace with some random variable that is really internal to
+> Buildroot. There is no reason for the build system of all packages to
+> even see this variable. In fact, I am personally not a big fan of
+> exporting TARGET_DIR, STAGING_DIR, etc. since they become visible in
+> packages, and people tend to use them in their package build system,
+> which is very wrong.
+> 
+> Of course, if the overall consensus is that PER_PACKAGE_DIR should be
+> exported, I'll do so because I don't want to hold this series just for
+> this detail.
+
+Oh, I would tend to agree with you.
+
+I'm just pointing a discrepancy in the way those variables are handled,
+and I think it is good to have some consistency, especially in this
+difficult topic, even though said consistency's not very nice...
+
+[--SNIP--]
+> > > @@ -77,6 +93,7 @@ check_elf_has_rpath() {
+> > >              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+> > >              [ "${dir}" = "${hostdir}/lib" ] && return 0
+> > >              [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
+> > > +            [[ ${dir} =~ ${perpackagedir}/[^/]*/host/lib ]] && return 0  
+> >                                             ^^^^^^^
+> > That would also match the string '//' so maybe we want:
+> > 
+> >     ${perpackagedir}/([^/]+/)?host/lib
+> 
+> I'm not sure to understand the ? in ([^/]+/)?. We definitely want one
+> path component between $(PER_PACKAGE_DIR) and host/lib. So what about:
+> 
+> 	${perpackagedir}/[^/]+/host/lib
+
+Yes, that is it (and is what I eventually suggested in my review of
+patch 5 (about fixing libtool.la files).
+
+> > > +        if test "${rpath}" != "${changed_rpath}" ; then
+> > > +            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"  
+> > 
+> > Can't you do that unconditioanlly? If it's changed, we need to set it;
+> > if it's not changed, that set it to the initial value anyway...
+> 
+> There is a reason to do it conditionally: patchelf is slow, you don't
+> want to run patchelf when you don't need to, and here it's trivial to
+> know whether it is useful or not to run it. For example, this condition
+> ensures that people not using per-package directory don't pay the cost
+> of running all those additional patchelf invocations.
+
+OK.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
