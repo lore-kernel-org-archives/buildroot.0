@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 15:31:01 +0100
-Subject: [Buildroot] [PATCH v7 3/8] core: implement per-package SDK and
- target
-In-Reply-To: <20181230215212.GA24224@scaer>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
- <20181230215212.GA24224@scaer>
-Message-ID: <20181231153101.387c7d57@windsurf>
+Date: Mon, 31 Dec 2018 15:35:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python3-setuptools: new package
+In-Reply-To: <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
+References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
+ <20181230121932.39e696f9@windsurf>
+ <CADvTj4qinyrbrutcb_WkO4rveJgA9i9F6bX9Txhp+MAWxZSyfg@mail.gmail.com>
+ <20181230142407.69d10ba8@windsurf>
+ <CALFsTFUXOqqGEUfFuT62jD=7xJVCg09wk6BNf0mAi_dFZ+_cGw@mail.gmail.com>
+Message-ID: <20181231153505.62460694@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,102 +16,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for the review!
++Yegor in Cc.
 
-On Sun, 30 Dec 2018 22:52:12 +0100, Yann E. MORIN wrote:
+On Sun, 30 Dec 2018 20:15:17 +0200, Asaf Kahlon wrote:
 
-> I don;t have much to propose asa review, except very-minor issues.
+> I don't heavily use the meson build system, but after looking at the
+> history of setup.py in the official repository,
+> I found the commit which made the change. At the commit message they
+> stated that:
+> "This gives us a consistent experience and a simpler setup across all
+> operating systems. Setuptools is available everywhere these days."
+> The change is relevant since 0.48.
 
-Which is good :-) Hopefully I can get some Reviewed-by soon, and merge
-this series.
+Indeed, upstream commit 86298f2109d215ad6b26d3462af7b685d52d0dd7 drops
+the fallback on distutils, and only setuptools is supported now. This
+makes my patch series introducing python3-setuptools even more relevant
+then. I would like to see a review from Yegor on this series first, as
+he has lots of background in the Python integration in Buildroot.
 
-> > There are two main benefits:
-> > 
-> >  - Packages will no longer discover dependencies that they do not
-> >    explicitly indicate in their <pkg>_DEPENDENCIES variable.  
-> 
-> Note that non-expressed dependencies may still be gathered, if they are
-> transitive dependencies.
-
-Yes, of course, but what can we do about this ? It's pretty logical and
-obvious that transitive dependencies will be copied, no ?
-
-> > +PER_PACKAGE_DIR := $(BASE_DIR)/per-package  
-> 
-> Why don't you simply export this variable, like HOST_DIR and TARGET_DIR?
-> This would simplify calls to fix-rpath:
-
-Because I generally don't like those global exports. It pollutes the
-namespace with some random variable that is really internal to
-Buildroot. There is no reason for the build system of all packages to
-even see this variable. In fact, I am personally not a big fan of
-exporting TARGET_DIR, STAGING_DIR, etc. since they become visible in
-packages, and people tend to use them in their package build system,
-which is very wrong.
-
-Of course, if the overall consensus is that PER_PACKAGE_DIR should be
-exported, I'll do so because I don't want to hold this series just for
-this detail.
-
-
-> > -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-> > +$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) \
-> > +	$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):  
-> 
-> Don't ident this continuation line, it is misleading: the target of
-> the rule appear to be part of the commands.
-
-ACK.
-
-> [--SNIP--]
-> > diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> > index c8939569e2..d903a82958 100755
-> > --- a/support/scripts/check-host-rpath
-> > +++ b/support/scripts/check-host-rpath  
-> 
-> As I was saying on IRC: when we are not using per-package directories,
-> then I was a bit surprised to see that this script (and fix_rpath,
-> below) still worked, when the support for PPD is not optional in it.
-> 
-> What confused me, was that PER_PACKAGE_DIR is always used, even when
-> BR2_PER_PACKAGE_DIRECTORIES is unset.
-> 
-> But as you pointed to on IRC, PER_PACKAGE_DIR is also always defined to
-> an non-empty string, that either points to a valid location when
-> BR2_PER_PACKAGE_DIRECTORIES=y, or points to a non-existent location
-> otherwise.
-
-Yes, I'll add some comments about this.
-
-> 
-> > @@ -77,6 +93,7 @@ check_elf_has_rpath() {
-> >              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-> >              [ "${dir}" = "${hostdir}/lib" ] && return 0
-> >              [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
-> > +            [[ ${dir} =~ ${perpackagedir}/[^/]*/host/lib ]] && return 0  
->                                             ^^^^^^^
-> That would also match the string '//' so maybe we want:
-> 
->     ${perpackagedir}/([^/]+/)?host/lib
-
-I'm not sure to understand the ? in ([^/]+/)?. We definitely want one
-path component between $(PER_PACKAGE_DIR) and host/lib. So what about:
-
-	${perpackagedir}/[^/]+/host/lib
-
-> > +        if test "${rpath}" != "${changed_rpath}" ; then
-> > +            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"  
-> 
-> Can't you do that unconditioanlly? If it's changed, we need to set it;
-> if it's not changed, that set it to the initial value anyway...
-
-There is a reason to do it conditionally: patchelf is slow, you don't
-want to run patchelf when you don't need to, and here it's trivial to
-know whether it is useful or not to run it. For example, this condition
-ensures that people not using per-package directory don't pay the cost
-of running all those additional patchelf invocations.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
