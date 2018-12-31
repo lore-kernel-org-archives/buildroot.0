@@ -1,53 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Dec 2018 09:30:21 +0100
-Subject: [Buildroot] [PATCH] package/wireshark: security bump to version
- 2.6.5
-Message-ID: <20181231083022.4370-1-peter@korsgaard.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 31 Dec 2018 09:41:48 +0100
+Subject: [Buildroot] [PATCH] netsurf: fix linking with some toolchains
+Message-ID: <20181231084148.28775-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following vulnerabilities have been fixed:
+see http://autobuild.buildroot.net/results/5f0d051cd60655a37a161782135b72bddec353a6/
 
-- wnpa-sec-2018-51 The Wireshark dissection engine could crash. Bug 14466. CVE-2018-19625.
-- wnpa-sec-2018-52 The DCOM dissector could crash. Bug 15130. CVE-2018-19626.
-- wnpa-sec-2018-53 The LBMPDM dissector could crash. Bug 15132. CVE-2018-19623.
-- wnpa-sec-2018-54 The MMSE dissector could go into an infinite loop. Bug 15250. CVE-2018-19622.
-- wnpa-sec-2018-55 The IxVeriWave file parser could crash. Bug 15279. CVE-2018-19627.
-- wnpa-sec-2018-56 The PVFS dissector could crash. Bug 15280. CVE-2018-19624.
-- wnpa-sec-2018-57 The ZigBee ZCL dissector could crash. Bug 15281. CVE-2018-19628.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netsurf/0005-fix-linking-nsfb.patch | 27 +++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/netsurf/0005-fix-linking-nsfb.patch
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index a0178b9f56..7748dd8409 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.4.txt
--sha256 a06b007e6343f148b8b93443b2fcfc9bb3204311cd268565d54d1b71660bc861  wireshark-2.6.4.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.5.txt
-+sha256 93155b798544b2f07693920f4ac1b531c952965ee4eb1d98419961240177438a  wireshark-2.6.5.tar.xz
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 3b83389c19..07c1ade24d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.6.4
-+WIRESHARK_VERSION = 2.6.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/netsurf/0005-fix-linking-nsfb.patch b/package/netsurf/0005-fix-linking-nsfb.patch
+new file mode 100644
+index 000000000..0859b51e5
+--- /dev/null
++++ b/package/netsurf/0005-fix-linking-nsfb.patch
+@@ -0,0 +1,27 @@
++From 313fe128be671e7b53621a365130867fbbbd72bd Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sun, 30 Dec 2018 18:48:01 +0100
++Subject: [PATCH] fix linking nsfb
++
++see http://autobuild.buildroot.net/results/5f0d051cd60655a37a161782135b72bddec353a6/
++---
++ netsurf/frontends/framebuffer/Makefile | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/netsurf/frontends/framebuffer/Makefile b/netsurf/frontends/framebuffer/Makefile
++index 249c7c4..53bdcff 100644
++--- a/netsurf/frontends/framebuffer/Makefile
+++++ b/netsurf/frontends/framebuffer/Makefile
++@@ -29,9 +29,7 @@ CFLAGS += -std=c99 -g -Dsmall \
++ LDFLAGS += -lm
++ 
++ # non optional pkg-configed libs
++-LDFLAGS += -Wl,--whole-archive
++ $(eval $(call pkg_config_find_and_add,libnsfb,libnsfb))
++-LDFLAGS += -Wl,--no-whole-archive
++ 
++ # freetype is optional but does not use pkg-config
++ ifeq ($(NETSURF_FB_FONTLIB),freetype)
++-- 
++2.17.1
++
 -- 
-2.11.0
+2.17.1
