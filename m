@@ -1,49 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 14:30:30 +0100
-Subject: [Buildroot] [PATCH v3 17/17] package/liquid-dsp: drop support for
- fftw-double and fftw-long-double
-In-Reply-To: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
-References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20181231133030.25991-18-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 14:31:46 +0100
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 2.6.5
+Message-ID: <20181231132704.18C75827FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-liquid-dsp has the following code:
+commit: https://git.buildroot.net/buildroot/commit/?id=2ec38321d6643202c122297878bba88785795a96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So, if it uses the external fftw library, it can only use the fftwf
-variant, i.e the fftw-single variant. Otherwise, it uses its internal
-FFT library.
+The following vulnerabilities have been fixed:
 
-There is no way for liquid-dsp to use fftw-double or fftw-long-double.
+- wnpa-sec-2018-51 The Wireshark dissection engine could crash. Bug 14466. CVE-2018-19625.
+- wnpa-sec-2018-52 The DCOM dissector could crash. Bug 15130. CVE-2018-19626.
+- wnpa-sec-2018-53 The LBMPDM dissector could crash. Bug 15132. CVE-2018-19623.
+- wnpa-sec-2018-54 The MMSE dissector could go into an infinite loop. Bug 15250. CVE-2018-19622.
+- wnpa-sec-2018-55 The IxVeriWave file parser could crash. Bug 15279. CVE-2018-19627.
+- wnpa-sec-2018-56 The PVFS dissector could crash. Bug 15280. CVE-2018-19624.
+- wnpa-sec-2018-57 The ZigBee ZCL dissector could crash. Bug 15281. CVE-2018-19628.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liquid-dsp/liquid-dsp.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index 6aa27a5248..64c403e87f 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -40,16 +40,6 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
- LIQUID_DSP_CONF_OPTS += --enable-simdoverride
- endif
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index a0178b9f56..7748dd8409 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.4.txt
+-sha256 a06b007e6343f148b8b93443b2fcfc9bb3204311cd268565d54d1b71660bc861  wireshark-2.6.4.tar.xz
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.5.txt
++sha256 93155b798544b2f07693920f4ac1b531c952965ee4eb1d98419961240177438a  wireshark-2.6.5.tar.xz
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 3b83389c19..07c1ade24d 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
--LIQUID_DSP_LDFLAGS += -lfftw3
--LIQUID_DSP_DEPENDENCIES += fftw-double
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
--LIQUID_DSP_LDFLAGS += -lfftw3l
--LIQUID_DSP_DEPENDENCIES += fftw-long-double
--endif
--
- LIQUID_DSP_CONF_OPTS += \
- 	CFLAGS="$(LIQUID_DSP_CFLAGS)" \
- 	LDFLAGS="$(LIQUID_DSP_LDFLAGS)"
--- 
-2.20.1
+-WIRESHARK_VERSION = 2.6.4
++WIRESHARK_VERSION = 2.6.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
