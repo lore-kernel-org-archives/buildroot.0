@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:57:45 +0100
-Subject: [Buildroot] [PATCH v3] luarocks addon
-In-Reply-To: <20181219081707.1983-1-francois.perrad@gadz.org>
+Date: Mon, 31 Dec 2018 17:58:22 +0100
+Subject: [Buildroot] [PATCH v3] lua*: regeneration of Config.in
+In-Reply-To: <20181219081707.1983-4-francois.perrad@gadz.org>
 References: <20181219081707.1983-1-francois.perrad@gadz.org>
-Message-ID: <20181231175745.35c7ac37@windsurf>
+ <20181219081707.1983-4-francois.perrad@gadz.org>
+Message-ID: <20181231175822.7d2abd02@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fran?ois,
 
-On Wed, 19 Dec 2018 09:17:02 +0100, Francois Perrad wrote:
+On Wed, 19 Dec 2018 09:17:05 +0100, Francois Perrad wrote:
 
-> Francois Perrad (5):
->   luarocks: add buildroot addon
->   lua*: regeneration of *.mk files
->   lua*: regeneration of Config.in
->   lua*: regeneration of hash files
->   pkg-luarocks: add per package upgrade target
+> diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
+> index e6b587e65..26e79e23b 100644
+> --- a/package/ljlinenoise/Config.in
+> +++ b/package/ljlinenoise/Config.in
+> @@ -1,9 +1,7 @@
+>  config BR2_PACKAGE_LJLINENOISE
+>  	bool "ljlinenoise"
+> -	# ljsyscall is specifically for LuaJIT, not Lua.
 
-I have applied this series, after improving a bit the commit titles and
-commit logs and the wording of the change in the Buildroot manual.
+I think this was useful to keep.
 
-Also, in the regeneration of the Config.in files, there were two lines
-that got removed that I found should be kept, I'll reply to that patch
-specifically.
+> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
+> index 3af9dabe9..601d0b122 100644
+> --- a/package/ljsyscall/Config.in
+> +++ b/package/ljsyscall/Config.in
+> @@ -1,12 +1,11 @@
+>  config BR2_PACKAGE_LJSYSCALL
+>  	bool "ljsyscall"
+> -	# ljsyscall is specifically for LuaJIT, not Lua.
 
-Best regards,
+And this as well.
+
+So I've re-added those two lines when applying the patch.
+
+Thanks,
 
 Thomas
 -- 
