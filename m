@@ -1,39 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 14:31:55 +0100
-Subject: [Buildroot] [PATCH] package/wireshark: security bump to version
- 2.6.5
-In-Reply-To: <20181231083022.4370-1-peter@korsgaard.com>
-References: <20181231083022.4370-1-peter@korsgaard.com>
-Message-ID: <20181231143155.1fea116e@windsurf>
+Date: Mon, 31 Dec 2018 14:32:44 +0100
+Subject: [Buildroot] [git commit] skeleton: use BR2_SYSTEM_DEFAULT_PATH as
+ default PATH
+Message-ID: <20181231132916.5623781522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=df20a836c14ca50ea2fd761046144b93f9551224
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 31 Dec 2018 09:30:21 +0100, Peter Korsgaard wrote:
-> The following vulnerabilities have been fixed:
-> 
-> - wnpa-sec-2018-51 The Wireshark dissection engine could crash. Bug 14466. CVE-2018-19625.
-> - wnpa-sec-2018-52 The DCOM dissector could crash. Bug 15130. CVE-2018-19626.
-> - wnpa-sec-2018-53 The LBMPDM dissector could crash. Bug 15132. CVE-2018-19623.
-> - wnpa-sec-2018-54 The MMSE dissector could go into an infinite loop. Bug 15250. CVE-2018-19622.
-> - wnpa-sec-2018-55 The IxVeriWave file parser could crash. Bug 15279. CVE-2018-19627.
-> - wnpa-sec-2018-56 The PVFS dissector could crash. Bug 15280. CVE-2018-19624.
-> - wnpa-sec-2018-57 The ZigBee ZCL dissector could crash. Bug 15281. CVE-2018-19628.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireshark/wireshark.hash | 4 ++--
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+We substitute the path specified in system/skeleton/etc/profile with
+the path specified in the configuration variable
+$(BR2_SYSTEM_DEFAULT_PATH).
 
-Applied to master, thanks.
+$(BR2_SYSTEM_DEFAULT_PATH) is a Kconfig string, so it is already
+double quoted. This means that export PATH=value will now be export
+PATH="value" in /etc/profile, which is perfectly fine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: rework commit log about the double quoting]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/skeleton-init-common/skeleton-init-common.mk | 1 +
+ system/skeleton/etc/profile                          | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+index e8a0522052..7d2c68ada3 100644
+--- a/package/skeleton-init-common/skeleton-init-common.mk
++++ b/package/skeleton-init-common/skeleton-init-common.mk
+@@ -20,6 +20,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(TARGET_DIR))
+ 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+ 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
++	$(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+ 		$(TARGET_DIR_WARNING_FILE)
+ endef
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 1255d23ff4..db29e44920 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -1,4 +1,4 @@
+-export PATH=/bin:/sbin:/usr/bin:/usr/sbin
++export PATH=@PATH@
+ 
+ if [ "$PS1" ]; then
+ 	if [ "`id -u`" -eq 0 ]; then
