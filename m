@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 31 Dec 2018 14:39:31 +0100
-Subject: [Buildroot] [PATCH] wpewebkit: new package
+Date: Mon, 31 Dec 2018 14:39:32 +0100
+Subject: [Buildroot] [PATCH] cog: new package
 In-Reply-To: <20181231133932.29718-1-francois.perrad@gadz.org>
 References: <20181231133932.29718-1-francois.perrad@gadz.org>
-Message-ID: <20181231133932.29718-5-francois.perrad@gadz.org>
+Message-ID: <20181231133932.29718-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,216 +12,112 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS                       |  2 +
- package/Config.in                |  1 +
- package/wpewebkit/Config.in      | 84 ++++++++++++++++++++++++++++++++
- package/wpewebkit/wpewebkit.hash |  8 +++
- package/wpewebkit/wpewebkit.mk   | 61 +++++++++++++++++++++++
- 5 files changed, 156 insertions(+)
- create mode 100644 package/wpewebkit/Config.in
- create mode 100644 package/wpewebkit/wpewebkit.hash
- create mode 100644 package/wpewebkit/wpewebkit.mk
+ DEVELOPERS            |  2 ++
+ package/Config.in     |  1 +
+ package/cog/Config.in | 20 ++++++++++++++++++++
+ package/cog/cog.hash  |  5 +++++
+ package/cog/cog.mk    | 24 ++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/cog/Config.in
+ create mode 100644 package/cog/cog.hash
+ create mode 100644 package/cog/cog.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c2fabe98..af392f73f 100644
+index af392f73f..27dc7fe44 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -71,6 +71,7 @@ F:	package/libwpe/
- F:	package/webkitgtk/
- F:	package/woff2/
- F:	package/wpebackend-fdo/
-+F:	package/wpewebkit/
+@@ -66,6 +66,7 @@ F:	package/sngrep/
  
- N:	Adrien Gallou?t <adrien@gallouet.fr>
- F:	package/bird/
-@@ -832,6 +833,7 @@ F:	package/sdl2_mixer/
- F:	package/sdl2_net/
- F:	package/tekui/
- F:	package/wpebackend-fdo/
-+F:	package/wpewebkit/
- F:	package/wsapi-fcgi/
- F:	package/wsapi-xavante/
- F:	utils/scancpan
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
++F:	package/cog/
+ F:	package/libepoxy/
+ F:	package/libwpe/
+ F:	package/webkitgtk/
+@@ -807,6 +808,7 @@ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+ F:	package/botan/
+ F:	package/chipmunk/
++F:	package/cog/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/gdbm/
 diff --git a/package/Config.in b/package/Config.in
-index e57937d57..95a61da1c 100644
+index 95a61da1c..88c179b0e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1304,6 +1304,7 @@ menu "Graphics"
- 	source "package/webp/Config.in"
- 	source "package/woff2/Config.in"
- 	source "package/wpebackend-fdo/Config.in"
-+	source "package/wpewebkit/Config.in"
- 	source "package/zbar/Config.in"
- 	source "package/zxing-cpp/Config.in"
- endmenu
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+@@ -259,6 +259,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
++	source "package/cog/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+diff --git a/package/cog/Config.in b/package/cog/Config.in
 new file mode 100644
-index 000000000..0e82c0370
+index 000000000..bd4b6acb3
 --- /dev/null
-+++ b/package/wpewebkit/Config.in
-@@ -0,0 +1,84 @@
-+comment "wpewebkit needs an OpenGL ES w/ EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL
-+
-+config BR2_PACKAGE_WPEWEBKIT
-+	bool "wpewebkit"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_INSTALL_LIBSTDCPP # icu
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
-+	depends on BR2_USE_WCHAR # gettext
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_HARFBUZZ
-+	select BR2_PACKAGE_ICU
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBEPOXY
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBTASN1
-+	select BR2_PACKAGE_LIBXSLT
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	select BR2_PACKAGE_WEBP
-+	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WPEBACKEND_FDO
++++ b/package/cog/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_COG
++	bool "cog"
++	depends on BR2_PACKAGE_WPEWEBKIT
 +	help
-+	  WPE (Web Platform for Embedded) port of the WebKit engine,
-+	  to allow embedders to create simple and performant systems
-+	  based on Web platform technologies.
++	  Single "window" launcher for the WebKit WPE port, and
++	  helper library for implementing WPE launcher. It does
++	  not provide any chrome, and is suitable to be used
++	  as a Web application container.
 +
-+	  https://wpewebkit.org/
++if BR2_PACKAGE_COG
 +
-+if BR2_PACKAGE_WPEWEBKIT
-+
-+config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
-+	bool "multimedia support"
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
-+	select BR2_PACKAGE_GST1_LIBAV
++config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
++	string "home uri"
++	default "https://wpewebkit.org"
 +	help
-+	  This option pulls in all of the required dependencies
-+	  to enable multimedia (video/audio) support.
-+
-+if BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
-+
-+config BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL
-+	bool "use gstreamer-gl"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
-+	help
-+	  Use the GStreamer GL elements for handling video content.
-+	  This is recommended as it improves performance of video
-+	  playback. In some target configurations incorrect rendering
-+	  might be produced, and disabling this option may help.
++	  Default URI to open when "cog" is launched. If an empty
++	  string is used, there is no default and the URI to open
++	  must be always specified in the command line.
 +
 +endif
-+
-+config BR2_PACKAGE_WPEWEBKIT_WEBDRIVER
-+	bool "WebDriver support"
-+	help
-+	  Enable support for WebDriver. This will build and install the
-+	  WebKitWebDriver program in the target.
-+
-+endif
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
 new file mode 100644
-index 000000000..39937a346
+index 000000000..85f242413
 --- /dev/null
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -0,0 +1,8 @@
-+# From https://wpewebkit.org/releases/wpewebkit-2.22.3.tar.xz.sums
-+md5 6d0c693ea49a93fc9e701cf784245ea5 wpewebkit-2.22.3.tar.xz
-+sha1 d8a22bec787f38939c7922dc43bf27c9144cef74 wpewebkit-2.22.3.tar.xz
-+sha256 241f177cded1a4ba3088716650eaaac25588878882170789b3c630ac45dbb2fa wpewebkit-2.22.3.tar.xz
++++ b/package/cog/cog.hash
+@@ -0,0 +1,5 @@
++# Locally generated
++sha256 562ad3db11c3340f62a51df1dba44c2acfb2cf3210b2ebd2c1e2d2284ba38c2c  cog-1b83211d939c97f12331593217d2514e2e9cf0ba.tar.gz
 +
 +# Hashes for license files:
-+sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-+sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
++sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
 new file mode 100644
-index 000000000..b305e4f07
+index 000000000..00593de95
 --- /dev/null
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -0,0 +1,61 @@
++++ b/package/cog/cog.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# wpewebkit
++# cog
 +#
 +################################################################################
 +
-+WPEWEBKIT_VERSION = 2.22.3
-+WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
-+WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
-+WPEWEBKIT_INSTALL_STAGING = YES
-+WPEWEBKIT_LICENSE = LGPL-2.1+, BSD-2-Clause
-+WPEWEBKIT_LICENSE_FILES = \
-+	Source/WebCore/LICENSE-APPLE \
-+	Source/WebCore/LICENSE-LGPL-2.1
-+WPEWEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
-+	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
-+	libpng libxslt wayland-protocols webp wpebackend-fdo
++COG_VERSION = 1b83211d939c97f12331593217d2514e2e9cf0ba
++COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
++COG_DEPENDENCIES = wpewebkit wpebackend-fdo
++COG_LICENSE = MIT
++COG_LICENSE_FILES = COPYING
++COG_CONF_OPTS = \
++	-DCOG_BUILD_PROGRAMS=ON \
++	-DCOG_PLATFORM_FDO=ON \
++	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
 +
-+WPEWEBKIT_CONF_OPTS = \
-+	-DPORT=WPE \
-+	-DENABLE_API_TESTS=OFF \
-+	-DENABLE_MINIBROWSER=OFF
-+
-+ifeq ($(BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT),y)
-+WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
++ifeq ($(BR2_PACKAGE_DBUS),y)
++COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
++COG_DEPENDENCIES += dbus
 +else
-+WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA),y)
-+WPEWEBKIT_CONF_OPTS += \
-+	-DENABLE_VIDEO=ON \
-+	-DENABLE_WEB_AUDIO=ON
-+WPEWEBKIT_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-base gst1-plugins-good
-+else
-+WPEWEBKIT_CONF_OPTS += \
-+	-DENABLE_VIDEO=OFF \
-+	-DENABLE_WEB_AUDIO=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
-+WPEWEBKIT_DEPENDENCIES += gst1-plugins-bad
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_WEBDRIVER),y)
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=ON
-+else
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WOFF2),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=ON
-+WPEWEBKIT_DEPENDENCIES += woff2
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
++COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
 +endif
 +
 +$(eval $(cmake-package))
