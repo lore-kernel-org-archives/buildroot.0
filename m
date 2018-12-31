@@ -1,82 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:59:52 +0100
-Subject: [Buildroot] [git commit] package/lua*: fix indentation of license
- file lists
-Message-ID: <20181231165620.45944882A5@busybox.osuosl.org>
+Date: Mon, 31 Dec 2018 18:06:55 +0100
+Subject: [Buildroot] [PATCH v3] luarocks: add buildroot addon
+In-Reply-To: <20181219081707.1983-2-francois.perrad@gadz.org>
+References: <20181219081707.1983-1-francois.perrad@gadz.org>
+ <20181219081707.1983-2-francois.perrad@gadz.org>
+Message-ID: <20181231180655.1e49b950@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42fa5bcbfb48f188c2c180854c0bbdefd98c32c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The Luarocks addon does not properly indent with a tab, let's fix that
-manually for the time being, to avoid check-package complaints.
+On Wed, 19 Dec 2018 09:17:03 +0100, Francois Perrad wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/orbit/orbit.mk                 | 4 ++--
- package/wsapi-fcgi/wsapi-fcgi.mk       | 4 ++--
- package/wsapi-xavante/wsapi-xavante.mk | 4 ++--
- package/wsapi/wsapi.mk                 | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+> ++   if #licenses == 1 then
+> ++      f:write(ucname .. '_LICENSE_FILES = $(' .. ucname .. '_SUBDIR)/' .. licenses[1] .. '\n')
+> ++   elseif #licenses > 1 then
+> ++      f:write(ucname .. '_LICENSE_FILES =')
+> ++      for i = 1, #licenses do
+> ++         local file = licenses[i]
+> ++         f:write(' \\\n    $(' .. ucname .. '_SUBDIR)/' .. file)
 
-diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
-index 77549a28c1..5cf7ac643a 100644
---- a/package/orbit/orbit.mk
-+++ b/package/orbit/orbit.mk
-@@ -8,7 +8,7 @@ ORBIT_VERSION = 2.2.4-1
- ORBIT_SUBDIR = orbit
- ORBIT_LICENSE = MIT
- ORBIT_LICENSE_FILES = \
--    $(ORBIT_SUBDIR)/doc/us/license.html \
--    $(ORBIT_SUBDIR)/doc/us/license.md
-+	$(ORBIT_SUBDIR)/doc/us/license.html \
-+	$(ORBIT_SUBDIR)/doc/us/license.md
- 
- $(eval $(luarocks-package))
-diff --git a/package/wsapi-fcgi/wsapi-fcgi.mk b/package/wsapi-fcgi/wsapi-fcgi.mk
-index d94721e4e3..677bb774be 100644
---- a/package/wsapi-fcgi/wsapi-fcgi.mk
-+++ b/package/wsapi-fcgi/wsapi-fcgi.mk
-@@ -8,8 +8,8 @@ WSAPI_FCGI_VERSION = 1.7-1
- WSAPI_FCGI_SUBDIR = wsapi
- WSAPI_FCGI_LICENSE = MIT
- WSAPI_FCGI_LICENSE_FILES = \
--    $(WSAPI_FCGI_SUBDIR)/doc/us/license.html \
--    $(WSAPI_FCGI_SUBDIR)/doc/us/license.md
-+	$(WSAPI_FCGI_SUBDIR)/doc/us/license.html \
-+	$(WSAPI_FCGI_SUBDIR)/doc/us/license.md
- WSAPI_FCGI_DEPENDENCIES = libfcgi
- 
- $(eval $(luarocks-package))
-diff --git a/package/wsapi-xavante/wsapi-xavante.mk b/package/wsapi-xavante/wsapi-xavante.mk
-index 46aa10651b..3a747e9b0b 100644
---- a/package/wsapi-xavante/wsapi-xavante.mk
-+++ b/package/wsapi-xavante/wsapi-xavante.mk
-@@ -8,7 +8,7 @@ WSAPI_XAVANTE_VERSION = 1.7-1
- WSAPI_XAVANTE_SUBDIR = wsapi
- WSAPI_XAVANTE_LICENSE = MIT
- WSAPI_XAVANTE_LICENSE_FILES = \
--    $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html \
--    $(WSAPI_XAVANTE_SUBDIR)/doc/us/license.md
-+	$(WSAPI_XAVANTE_SUBDIR)/doc/us/license.html \
-+	$(WSAPI_XAVANTE_SUBDIR)/doc/us/license.md
- 
- $(eval $(luarocks-package))
-diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
-index ad62a05f5a..d67efd0e7b 100644
---- a/package/wsapi/wsapi.mk
-+++ b/package/wsapi/wsapi.mk
-@@ -8,7 +8,7 @@ WSAPI_VERSION = 1.7-1
- WSAPI_SUBDIR = wsapi
- WSAPI_LICENSE = MIT
- WSAPI_LICENSE_FILES = \
--    $(WSAPI_SUBDIR)/doc/us/license.html \
--    $(WSAPI_SUBDIR)/doc/us/license.md
-+	$(WSAPI_SUBDIR)/doc/us/license.html \
-+	$(WSAPI_SUBDIR)/doc/us/license.md
- 
- $(eval $(luarocks-package))
+This is not good: it indents each line with 4 spaces, while it should
+indent with one tab. Due to this, the regenerated .mk files caused
+check-package to complain. I fixed the issues manually in:
+
+  https://git.busybox.net/buildroot/commit/?id=42fa5bcbfb48f188c2c180854c0bbdefd98c32c8
+
+But of course the Luarocks addon must be fixed to not re-introduce
+similar issues. Could you cook a patch to that effect ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
