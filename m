@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 31 Dec 2018 17:50:00 +0100
-Subject: [Buildroot] [PATCH v2 0/2] Misc Lua package fixes
-Message-ID: <20181231165003.18574-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Dec 2018 17:50:02 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/lua-msgpack-native: adjust
+ Config.in comment
+In-Reply-To: <20181231165003.18574-1-thomas.petazzoni@bootlin.com>
+References: <20181231165003.18574-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20181231165003.18574-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The Config.in comment of lua-msgpack-native only indicates that it
+needs Lua 5.1, while the package can actually build with LuaJIT. This
+commit adjusts the comment to match the reality.
 
-This is a new iteration of my Lua package fixes. They have been
-rebased on master, following the merge of the Luarocks addon and the
-changes to many existing Lua packages to match the output of the
-addon. As part of this, lots of BR2_PACKAGE_HAS_LUAINTERPRETER have
-been dropped, and only a few remain to be removed in this series.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-msgpack-native/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (2):
-  package/lua*: drop redundant dependencies on
-    BR2_PACKAGE_HAS_LUAINTERPRETER
-  package/lua-msgpack-native: adjust Config.in comment
-
- package/lbase64/Config.in            | 1 -
- package/lua-ev/Config.in             | 1 -
- package/lua-msgpack-native/Config.in | 3 +--
- package/luaposix/Config.in           | 1 -
- package/lutok/Config.in              | 1 -
- 5 files changed, 1 insertion(+), 6 deletions(-)
-
+diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+index 8b6283cc95..8af508dd95 100644
+--- a/package/lua-msgpack-native/Config.in
++++ b/package/lua-msgpack-native/Config.in
+@@ -7,6 +7,6 @@ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 
+ 	  https://github.com/kengonakajima/lua-msgpack-native
+ 
+-comment "lua-msgpack-native needs a Lua 5.1 interpreter"
++comment "lua-msgpack-native needs Lua 5.1 or LuaJIT"
+ 	depends on !BR2_PACKAGE_LUA_5_1
+ 	depends on !BR2_PACKAGE_LUAJIT
 -- 
 2.20.1
