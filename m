@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:30:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/meson: bump to version 0.49.0
-In-Reply-To: <1546152095-4439-2-git-send-email-james.hilliard1@gmail.com>
-References: <1546152095-4439-1-git-send-email-james.hilliard1@gmail.com>
- <1546152095-4439-2-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <20190101113050.60e4eb4e@windsurf>
+Date: Tue, 1 Jan 2019 11:31:29 +0100
+Subject: [Buildroot] [PATCH 1/3] package/python3-setuptools: new package
+In-Reply-To: <20181228170132.13049-2-thomas.petazzoni@bootlin.com>
+References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
+ <20181228170132.13049-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101113129.48b91ab5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Dec 2018 14:41:35 +0800, james.hilliard1 at gmail.com wrote:
-> From: James Hilliard <james.hilliard1@gmail.com>
+On Fri, 28 Dec 2018 18:01:29 +0100, Thomas Petazzoni wrote:
+> This new package allows to install the host version of setuptools for
+> python3, regardless of what the default Python version is. It will be
+> used by the python-package infrastructure to make sure that host
+> Python packages that need python3 and setuptools have setuptools
+> installed for Python 3.
 > 
-> This version requires host-python3-setuptools.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../0001-add-executable.patch                 | 72 +++++++++++++++++++
+>  .../python3-setuptools.hash                   |  1 +
+>  .../python3-setuptools/python3-setuptools.mk  | 24 +++++++
+>  3 files changed, 97 insertions(+)
+>  create mode 100644 package/python3-setuptools/0001-add-executable.patch
+>  create mode 120000 package/python3-setuptools/python3-setuptools.hash
+>  create mode 100644 package/python3-setuptools/python3-setuptools.mk
 
-Applied to master, thanks.
+Applied to master after changing the duplicated patch by a symlink to
+the same patch in package/python-setuptools/, as suggested by Asaf.
+Thanks Asaf and Yegor for the review!
+
+Best regards,
 
 Thomas
 -- 
