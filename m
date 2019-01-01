@@ -1,47 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 22:57:47 +0100
-Subject: [Buildroot] [PATCH v3 15/17] package/liquid-dsp: use the new
- fftw-{single, double, long-double} packages
-In-Reply-To: <20190101215058.GE23435@scaer>
-References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-16-thomas.petazzoni@bootlin.com>
- <20190101215058.GE23435@scaer>
-Message-ID: <20190101215747.GG23435@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Jan 2019 22:58:44 +0100
+Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
+In-Reply-To: <20181231175234.14572-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 31 Dec 2018 18:52:30 +0100")
+References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87sgycox9n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Gwenha?l, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On 2019-01-01 22:50 +0100, Yann E. MORIN spake thusly:
-> On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
-> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > 
-> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-[--SNIP--]
-> Since those three fftw variants can now be enabled at the same time,
-> we'd end up with:
->     LIQUID_DSP_DEPENDENCIES = fftw-single fftw-double fftw-long-double
->     LIQUID_DSP_LDFLAGS = -lfftw3f -lfftw3 -lfftw3l
-> Is that really what we want?
+ > Hello,
+ > This adds support for using Linux 4.20 for the kernel headers and/or
+ > kernel build.
 
-OK, seeing patch 17 in this seriesm the above does not really matter,
-since liquid-dsp eventually keeps support for a single variant.
+ > Amongst other things, Linux 4.20 has the fix of the net_tstamp.h
+ > header which will fix the build failure of linuxptp.
 
-So, maybe it makes sense to drop the variants before switching to the
-new packages?
+ > Changes since v1:
 
-Regards,
-Yann E. MORIN.
+ >  - Add one more patch that makes it possible to use custom external
+ >    toolchains that use Linux 4.20 kernel headers, as noticed by Romain
+ >    Naour.
+
+ > Thomas Petazzoni (4):
+ >   toolchain: add necessary options to support 4.20 kernel headers
+ >   package/linux-headers: add support for Linux 4.20 kernel headers
+ >   linux: add support for Linux 4.20
+ >   toolchain/toolchain-external-custom: support Linux 4.20 kernel headers
+
+Committed series, thanks.
+
+With 2019.02 becoming our next LTS and 4.20 NOT a LTS release, I wonder
+if it would make sense to still default to 4.19.x instead of 4.20.x?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
