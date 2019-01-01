@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 16:30:26 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/netatalk:
+Date: Tue, 1 Jan 2019 16:30:00 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/netatalk:
  security bump to version 3.1.23
-Message-ID: <20190101153021.E5D4B816C2@busybox.osuosl.org>
+Message-ID: <20190101153030.3D9AB8177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a79e329efd20c600fe8e19d7204d8167ca50df8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b91c8fa31e5684223d89efffa957698a4a6abded
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2018-1160: Netatalk before 3.1.12 is vulnerable to an out of
 bounds write in dsi_opensess.c.  This is due to lack of bounds checking on
