@@ -1,84 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  1 Jan 2019 15:37:02 +0100
-Subject: [Buildroot] [PATCH 4/4] package/opus-tools: bump to version 0.2
-In-Reply-To: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
-References: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101143702.2736-4-thomas.petazzoni@bootlin.com>
+Date: Tue,  1 Jan 2019 15:51:39 +0100
+Subject: [Buildroot] [PATCH] package/nano: bump to version 3.2
+Message-ID: <20190101145139.30078-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In this release the Opus decoder opusdec has been converted to use the
-opusfile library, and the Opus encoder opusenc has been converted to
-use the libopusenc library. These libraries make it easy to robustly
-read and write Ogg Opus audio files, and enable some new features.
-
-Due to this, opus-tools now needs to depend on opusfile and
-libopusenc. We take this opportunity to reorder alphabetically the
-dependencies in Config.in and .mk files.
-
-The license file hash has changed for two reasons:
-
- - The xiph.org URL was changed from http:// to https://
- - White-space changes
-
-There are no other changes, and no change that affect the licensing
-conditions.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opus-tools/Config.in       | 4 +++-
- package/opus-tools/opus-tools.hash | 4 ++--
- package/opus-tools/opus-tools.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/opus-tools/Config.in b/package/opus-tools/Config.in
-index 2552d19515..c045239ea7 100644
---- a/package/opus-tools/Config.in
-+++ b/package/opus-tools/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_OPUS_TOOLS
- 	bool "opus-tools"
--	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBOPUSENC
-+	select BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_OPUSFILE
- 	help
- 	  Opus codec command line tools. This package provides the
- 	  reference implementations of encoder and decoder utilities
-diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
-index c7759e559f..1b87458f53 100644
---- a/package/opus-tools/opus-tools.hash
-+++ b/package/opus-tools/opus-tools.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 6b0f90bf49..eae648d16e 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,5 +1,5 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256 a2357532d19471b70666e0e0ec17d514246d8b3cb2eb168f68bb0f6fd372b28c  opus-tools-0.1.10.tar.gz
-+sha256 b4e56cb00d3e509acfba9a9b627ffd8273b876b4e2408642259f6da28fa0ff86  opus-tools-0.2.tar.gz
- 
- # Hash for license file
--sha256 88021117568c64038175d7fb3b8286056f7cdb54f09dc806578f6bd9342c62cc  COPYING
-+sha256 c28016e58544119d6b93aea28297d040f17dcef7a9f548d3e6a4d0b558c5d248  COPYING
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index ab00ced705..f69c3bef8b 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -4,12 +4,12 @@
- #
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v3/nano-3.0.tar.xz.asc
++# https://www.nano-editor.org/dist/v3/nano-3.2.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256 e0a5bca354514e64762c987c200a8758b05e7bcced3b00b3e48ea0a2d383c8a0  nano-3.0.tar.xz
++sha256 d12773af3589994b2e4982c5792b07c6240da5b86c5aef2103ab13b401fe6349  nano-3.2.tar.xz
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index a1d2fe9869..206d210a16 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPUS_TOOLS_VERSION = 0.1.10
-+OPUS_TOOLS_VERSION = 0.2
- OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_TOOLS_LICENSE = BSD-2-Clause, GPL-2.0 (opusinfo)
- OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
--OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
-+OPUS_TOOLS_DEPENDENCIES = libogg libopusenc opus opusfile host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- OPUS_TOOLS_DEPENDENCIES += libpcap
+ NANO_VERSION_MAJOR = 3
+-NANO_VERSION = $(NANO_VERSION_MAJOR).0
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
 2.20.1
