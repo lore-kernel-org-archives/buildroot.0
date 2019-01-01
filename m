@@ -1,54 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 16:52:30 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/mosquitto:
- security bump to version 1.5.5
-Message-ID: <20190101154748.56DC9817B7@busybox.osuosl.org>
+Date: Tue, 01 Jan 2019 16:55:43 +0100
+Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
+ 1.5.5
+In-Reply-To: <20181221155249.9942-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 21 Dec 2018 16:52:49 +0100")
+References: <20181221155249.9942-1-peter@korsgaard.com>
+Message-ID: <874lass77k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27f46a867dbe6eed0601277d79cbde7c08e960d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-From the release notes:
+ > From the release notes:
+ > If per_listener_settings is set to true, then the acl_file setting was
+ > ignored for the "default listener" only.  This has been fixed.  This does
+ > not affect any listeners defined with the listener option.
 
-If per_listener_settings is set to true, then the acl_file setting was
-ignored for the "default listener" only.  This has been fixed.  This does
-not affect any listeners defined with the listener option.
+ > https://mosquitto.org/blog/2018/12/version-155-released/
 
-https://mosquitto.org/blog/2018/12/version-155-released/
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 726be29277933268a5fb564f7d5eaf8a6fe953cf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed to 2018.02.x and 2018.11.x, thanks.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 96e2ae9369..831171c082 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 5fd7f3454fd6d286645d032bc07f44a1c8583cec02ef2422c9eb32e0a89a9b2f  mosquitto-1.5.4.tar.gz
-+sha256 fcdb47e340864c545146681af7253399cc292e41775afd76400fda5b0d23d668  mosquitto-1.5.5.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index fcce0535cb..3fb529b804 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.4
-+MOSQUITTO_VERSION = 1.5.5
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-- 
+Bye, Peter Korsgaard
