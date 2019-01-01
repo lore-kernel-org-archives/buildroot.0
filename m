@@ -1,62 +1,58 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue,  1 Jan 2019 17:41:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stress-ng: Fix build issue with
- libbsd wchar check
-Message-ID: <20190101154105.22148-1-vadim4j@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Jan 2019 16:12:44 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/shairport-sync:
+ fix init script (stop)
+Message-ID: <20190101153021.DD2FF886B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-stress-ng uses test/test-bsd-wchar.c program to check if there is
-support for libbsd's wchar, but the test fails because wchar.h also
-requires the FILE* definition from stdio.h which is not included
-automatically, so fix it by include stdio.h explicitly.
+commit: https://git.buildroot.net/buildroot/commit/?id=2fcdad2a12a965939263966fd3bfbffd7799feaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+
+shairport-sync creates its pidfile at /var/run/shairport-sync/, so pass
+that path to start-stop-daemon in the stop operation.
+
+Also pass the executable path, allowing start-stop-daemon to check if
+the PID matches the shairport-sync process, preventing killing some
+other inocent daemon.
 
 Fixes:
-	http://autobuild.buildroot.net/results/6def1bba8e7ec05682e74c4edc3a35c8c118d28b
+  https://bugs.busybox.net/show_bug.cgi?id=11566
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Reported-by: Bin Zhang <yangtze31@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6568b939293e46718434e284bded04b746fbd80f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...test-bsd-wchar-Explicitly-include-stdio.h.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
+ package/shairport-sync/S99shairport-sync | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-new file mode 100644
-index 0000000000..79d381bc65
---- /dev/null
-+++ b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-@@ -0,0 +1,29 @@
-+From 291070801245da26e4841c321910b55016ca23c0 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim.kochan@petcube.com>
-+Date: Tue, 1 Jan 2019 17:24:54 +0200
-+Subject: [PATCH] test/test-bsd-wchar: Explicitly include stdio.h
-+
-+libbsd's wchar requires FILE for some it's functions, for some
-+reason it is not included by wchar automatically and the test fails. So
-+include it explicitly.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ test/test-bsd-wchar.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/test/test-bsd-wchar.c b/test/test-bsd-wchar.c
-+index 4f7c7ca..6125968 100644
-+--- a/test/test-bsd-wchar.c
-++++ b/test/test-bsd-wchar.c
-+@@ -22,6 +22,7 @@
-+  * functionality.
-+  *
-+  */
-++#include <stdio.h>
-+ #include <bsd/wchar.h>
-+ 
-+ int main(void)
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
+index 5443ed138c..80b2fddbc6 100644
+--- a/package/shairport-sync/S99shairport-sync
++++ b/package/shairport-sync/S99shairport-sync
+@@ -6,16 +6,18 @@ OPTIONS="-d"
+ case "$1" in
+     start)
+ 	printf "Starting shairport-sync: "
+-	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
++	start-stop-daemon -S -q --exec /usr/bin/shairport-sync -- $OPTIONS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
+ 	printf "Stopping shairport-sync: "
+-	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
++	start-stop-daemon -K -q --exec /usr/bin/shairport-sync \
++		-p /var/run/shairport-sync/shairport-sync.pid
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     restart)
+ 	$0 stop
++	sleep 1
+ 	$0 start
+ 	;;
+     *)
