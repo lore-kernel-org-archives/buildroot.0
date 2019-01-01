@@ -1,59 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  1 Jan 2019 15:36:59 +0100
-Subject: [Buildroot] [PATCH 1/4] package/opus: bump to version 1.3
-Message-ID: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
+Date: Tue,  1 Jan 2019 15:37:01 +0100
+Subject: [Buildroot] [PATCH 3/4] package/opusfile: bump to version 0.11
+In-Reply-To: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
+References: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101143702.2736-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This Opus 1.3 major release again brings quality improvements, new
-features, and bug fixes. Changes since 1.2.x include:
+Changes since the v0.10 release:
 
-- Improvements to the VAD and speech/music classification using an RNN
-- Support for ambisonics coding using channel mapping families 2 and 3
-- Improvements to stereo speech coding at low bitrate
-- Using wideband encoding down to 9 kb/s
-- Making it possible to use SILK down to bitrates around 5 kb/s
-- Minor quality improvement on tones
-- Enabling the spec fixes in RFC 8251 by default
-- Security/hardening improvements
+- Fix two potential integer overflows. (These were not
+  security-critical unless the compiler took the opportunity provided
+  by the undefined behavior to format your hard drive.)
+- Allow JPEGs in METADATA_BLOCK_PICTURE tags to include EXIF data.
+- A few warning fixes for gcc 8.
+- Make opus_tags_copy return OP_EFAULT on failure instead of returning
+  success.
+- Various integration and testing environment improvements.
 
-Notable bug fixes include:
-
-- Fixes to the CELT PLC
-- Bandwidth detection fixes
+This release is backward-compatible with the previous release. We
+recommend all users upgrade.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
+ package/opusfile/opusfile.hash | 2 +-
+ package/opusfile/opusfile.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index c1a92d6b94..c916647916 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index f1fcf5f9d6..e9ecf83feb 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
 @@ -1,5 +1,5 @@
  # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256 cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732  opus-1.2.1.tar.gz
-+sha256 4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398820dc550  opus-1.3.tar.gz
+-sha256 48e03526ba87ef9cf5f1c47b5ebe3aa195bd89b912a57060c36184a6cd19412f  opusfile-0.10.tar.gz
++sha256 74ce9b6cf4da103133e7b5c95df810ceb7195471e1162ed57af415fabf5603bf  opusfile-0.11.tar.gz
  
  # Hash for license file
- sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  COPYING
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index 44de5db253..b3cfa21fde 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
+ sha256 0267ae795ab744c4e0f9c45e249440fdf2e75dac8c804f36066b28649bf74aaf  COPYING
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index 0cfe623941..49a53b3958 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPUS_VERSION = 1.2.1
-+OPUS_VERSION = 1.3
- OPUS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3-Clause
- OPUS_LICENSE_FILES = COPYING
+-OPUSFILE_VERSION = 0.10
++OPUSFILE_VERSION = 0.11
+ OPUSFILE_SITE = https://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3-Clause
 -- 
 2.20.1
