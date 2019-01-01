@@ -1,99 +1,126 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 1 Jan 2019 08:29:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/lua*: drop redundant
- dependencies on BR2_PACKAGE_HAS_LUAINTERPRETER
-In-Reply-To: <20181231165003.18574-2-thomas.petazzoni@bootlin.com>
-References: <20181231165003.18574-1-thomas.petazzoni@bootlin.com>
- <20181231165003.18574-2-thomas.petazzoni@bootlin.com>
-Message-ID: <CAB0FRstyOBhs1=ugbWDJD5oqTTisn1GLeJnLp39d6wDstvdHZw@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue,  1 Jan 2019 11:59:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: Fix build issue with
+ SENSORS_API_VERSION >= 0x500
+Message-ID: <20190101095954.8313-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 31 d?c. 2018 ? 17:50, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+Current collectd version 5.7.1 fails to compile because there is
+check which breaks the compilation if lm_sensors API >= 0x500, but
+in the mainline codebase this check was removed in commit:
 
-> All the packages modified by this commit have their Config.in included
-> by package/Config.in inside a BR2_PACKAGE_HAS_LUAINTERPRETER &&
-> !BR2_STATIC_LIBS condition. Therefore, duplicating the
-> BR2_PACKAGE_HAS_LUAINTERPRETER condition in each of their Config.in
-> file is redundant and unnecessary. This commit drops such redundant
-> "depends on" statements.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
+	https://github.com/collectd/collectd/commit/069796bd76dd1ab0089a64f7c9c2a3c9f1475414
 
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+So add backported patch based on this commit.
 
+Fixes:
 
-> ---
->  package/lbase64/Config.in            | 1 -
->  package/lua-ev/Config.in             | 1 -
->  package/lua-msgpack-native/Config.in | 1 -
->  package/luaposix/Config.in           | 1 -
->  package/lutok/Config.in              | 1 -
->  5 files changed, 5 deletions(-)
->
-> diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
-> index 34ef943aac..c836ffb5e2 100644
-> --- a/package/lbase64/Config.in
-> +++ b/package/lbase64/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_LBASE64
->         bool "lbase64"
-> -       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
->         help
->           A base64 library for Lua
->
-> diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
-> index 52f82e1128..1e89c270a0 100644
-> --- a/package/lua-ev/Config.in
-> +++ b/package/lua-ev/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_LUA_EV
->         bool "lua-ev"
-> -       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
->         select BR2_PACKAGE_LIBEV
->         help
->           Get access to the libev library from Lua.
-> diff --git a/package/lua-msgpack-native/Config.in
-> b/package/lua-msgpack-native/Config.in
-> index 3837228fa0..8b6283cc95 100644
-> --- a/package/lua-msgpack-native/Config.in
-> +++ b/package/lua-msgpack-native/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_LUA_MSGPACK_NATIVE
->         bool "lua-msgpack-native"
-> -       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
->         depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
->         help
->           This is a native, C language implementation of msgpack
-> diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-> index d8c30e4fb2..bdc9926b1e 100644
-> --- a/package/luaposix/Config.in
-> +++ b/package/luaposix/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_LUAPOSIX
->         bool "luaposix"
-> -       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
->         select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
->         # "bit32" is included in Lua 5.2+. luajit has an equivalent
->         # "bit" module, but since it has a different name, luaposix
-> diff --git a/package/lutok/Config.in b/package/lutok/Config.in
-> index ab9c32b6d5..abeaa4011d 100644
-> --- a/package/lutok/Config.in
-> +++ b/package/lutok/Config.in
-> @@ -9,4 +9,3 @@ config BR2_PACKAGE_LUTOK
->
->  comment "lutok needs a toolchain w/ C++ and full Lua"
->         depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-> -       depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> --
-> 2.20.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190101/6098605d/attachment.html>
+	http://autobuild.buildroot.net/results/c3c84ca6e11b268ba5ada7e3dca18bca681ee43d/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ ...oved-checks-for-upper-limit-of-SENSORS_AP.patch | 89 ++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
+
+diff --git a/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
+new file mode 100644
+index 0000000000..9270021dd6
+--- /dev/null
++++ b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
+@@ -0,0 +1,89 @@
++From 069796bd76dd1ab0089a64f7c9c2a3c9f1475414 Mon Sep 17 00:00:00 2001
++From: Pavel Rochnyack <pavel2000@ngs.ru>
++Date: Mon, 3 Dec 2018 18:34:14 +0700
++Subject: [PATCH] sensors: Removed checks for upper limit of
++ SENSORS_API_VERSION
++
++That makes no more sense after lm-sensors got new maintainers.
++
++Issue: #3006
++
++[Vadim Kochan: backported to support 5.7.1 version]
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ src/sensors.c | 17 ++++++-----------
++ 1 file changed, 6 insertions(+), 11 deletions(-)
++
++diff --git a/src/sensors.c b/src/sensors.c
++index 8f1824d..409dc38 100644
++--- a/src/sensors.c
+++++ b/src/sensors.c
++@@ -149,7 +149,7 @@ typedef struct featurelist {
++ static char *conffile = SENSORS_CONF_PATH;
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++ typedef struct featurelist {
++   const sensors_chip_name *chip;
++   const sensors_feature *feature;
++@@ -159,11 +159,6 @@ typedef struct featurelist {
++ 
++ static char *conffile = NULL;
++ static _Bool use_labels = 0;
++-/* #endif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
++-
++-#else /* if SENSORS_API_VERSION >= 0x500 */
++-#error "This version of libsensors is not supported yet. Please report this " \
++-	"as bug."
++ #endif
++ 
++ static featurelist_t *first_feature = NULL;
++@@ -223,7 +218,7 @@ static int sensors_config(const char *key, const char *value) {
++     if (IS_TRUE(value))
++       ignorelist_set_invert(sensor_list, 0);
++   }
++-#if (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#if (SENSORS_API_VERSION >= 0x400)
++   else if (strcasecmp(key, "UseLabels") == 0) {
++     use_labels = IS_TRUE(value) ? 1 : 0;
++   }
++@@ -353,7 +348,7 @@ static int sensors_load_conf(void) {
++   }   /* while sensors_get_detected_chips */
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++   chip_num = 0;
++   while ((chip = sensors_get_detected_chips(NULL, &chip_num)) != NULL) {
++     const sensors_feature *feature;
++@@ -404,7 +399,7 @@ static int sensors_load_conf(void) {
++       } /* while (subfeature) */
++     }   /* while (feature) */
++   }     /* while (chip) */
++-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
+++#endif /* (SENSORS_API_VERSION >= 0x400) */
++ 
++   if (first_feature == NULL) {
++     sensors_cleanup();
++@@ -479,7 +474,7 @@ static int sensors_read(void) {
++   } /* for fl = first_feature .. NULL */
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++   for (featurelist_t *fl = first_feature; fl != NULL; fl = fl->next) {
++     double value;
++     int status;
++@@ -518,7 +513,7 @@ static int sensors_read(void) {
++ 
++     sensors_submit(plugin_instance, type, type_instance, value);
++   } /* for fl = first_feature .. NULL */
++-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
+++#endif /* (SENSORS_API_VERSION >= 0x400) */
++ 
++   return (0);
++ } /* int sensors_read */
++-- 
++2.14.1
++
+-- 
+2.14.1
