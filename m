@@ -1,40 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 14:07:27 +0100
-Subject: [Buildroot] [PATCH v3 08/17] package/gnuradio: use the new
- fftw-single package
-In-Reply-To: <20190101121657.GN26917@scaer>
-References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-9-thomas.petazzoni@bootlin.com>
- <20190101121657.GN26917@scaer>
-Message-ID: <20190101140727.12302abe@windsurf>
+Date: Tue,  1 Jan 2019 15:37:00 +0100
+Subject: [Buildroot] [PATCH 2/4] package/libopusenc: bump to version 0.2.1
+In-Reply-To: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
+References: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101143702.2736-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This release fixes two minor bugs:
 
-On Tue, 1 Jan 2019 13:16:57 +0100, Yann E. MORIN wrote:
+- a gapless bug in the LPC filtering
+- a crash on destroy when using the pull API
 
-> >  config BR2_PACKAGE_GNURADIO_FFT
-> >  	bool "gr-fft support"
-> > +	select BR2_PACKAGE_FFTW
-> > +	select BR2_PACKAGE_FFTW_SINGLE  
-> 
-> So, here we're selecting both fftw and fftw-single, yet...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libopusenc/libopusenc.hash | 2 +-
+ package/libopusenc/libopusenc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Well that's how the whole thing is designed: if you want to use one of
-the fftw-* packages, you need to select both BR2_PACKAGE_FFTW or
-BR2_PACKAGE_FFTW_SINGLE. See what the package/fftw/Config.in file looks
-like with the whole series applied.
-
-Note: I am not saying this is the only solution to do that, and that's
-it's the best, I'm just saying that doing both of those selects is
-needed with the solution proposed in this series.
-
-Thomas
+diff --git a/package/libopusenc/libopusenc.hash b/package/libopusenc/libopusenc.hash
+index 122e792bf7..bdb4cf8fde 100644
+--- a/package/libopusenc/libopusenc.hash
++++ b/package/libopusenc/libopusenc.hash
+@@ -1,3 +1,3 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256  c79e95eeee43a0b965e9b2c59a243763a8f8b0a7e71441df2aa9084f6171c73a  libopusenc-0.2.tar.gz
++sha256  8298db61a8d3d63e41c1a80705baa8ce9ff3f50452ea7ec1c19a564fe106cbb9  libopusenc-0.2.1.tar.gz
+ sha256  93b17ab56b8230127fea532be0dcb4e6d71e66ab5e8ce5d6ae8785d7288b164f  COPYING
+diff --git a/package/libopusenc/libopusenc.mk b/package/libopusenc/libopusenc.mk
+index 16b83d0c40..3b4dc0e714 100644
+--- a/package/libopusenc/libopusenc.mk
++++ b/package/libopusenc/libopusenc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPUSENC_VERSION = 0.2
++LIBOPUSENC_VERSION = 0.2.1
+ LIBOPUSENC_SITE = https://downloads.xiph.org/releases/opus
+ LIBOPUSENC_LICENSE = BSD-3-Clause
+ LIBOPUSENC_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
