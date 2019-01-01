@@ -1,42 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Jan 2019 21:34:47 +0100
-Subject: [Buildroot] [PATCH 2/4] package/libopusenc: bump to version
- 0.2.1
-In-Reply-To: <20190101211531.788b58de@windsurf> (Thomas Petazzoni's message of
- "Tue, 1 Jan 2019 21:15:31 +0100")
-References: <20190101143702.2736-1-thomas.petazzoni@bootlin.com>
- <20190101143702.2736-2-thomas.petazzoni@bootlin.com>
- <87ef9wqgu6.fsf@dell.be.48ers.dk> <20190101211531.788b58de@windsurf>
-Message-ID: <87wonop15k.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jan 2019 22:03:39 +0100
+Subject: [Buildroot] [PATCH v3 12/17] package/imagemagick: use the new
+ fftw-double package
+In-Reply-To: <20181231133030.25991-13-thomas.petazzoni@bootlin.com>
+References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
+ <20181231133030.25991-13-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101210339.GB23435@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Thomas, Gwenha?l, All,
 
- > Hello,
- > On Tue, 01 Jan 2019 21:10:41 +0100, Peter Korsgaard wrote:
- >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
- >> 
- >> > This release fixes two minor bugs:
- >> > - a gapless bug in the LPC filtering
- >> > - a crash on destroy when using the pull API  
- >> 
- >> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
- >> 
- >> Committed, thanks.
- >> 
- >> Does this depend on opus 1.3
+On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/imagemagick/imagemagick.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 72482267ce..7678980582 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -113,11 +113,11 @@ else
+>  IMAGEMAGICK_CONF_OPTS += --without-lzma
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
 
- > I don't think it does, it's really a point release with two bug fixes.
+Same as for hackrf: why do we restrict it from any fftwe variant, to
+only fftw-double?
 
- >> / should this be added to the 2018.02.x / 2018.11.x branches?
+Regards,
+Yann E. MORIN.
 
- > Considering it's a bugfix only release, perhaps.
-
-Ok, I'll backport it.
+>  # configure script misdetects these leading to build errors
+>  IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
+>  IMAGEMAGICK_CONF_OPTS += --with-fftw
+> -IMAGEMAGICK_DEPENDENCIES += fftw
+> +IMAGEMAGICK_DEPENDENCIES += fftw-double
+>  else
+>  IMAGEMAGICK_CONF_OPTS += --without-fftw
+>  endif
+> -- 
+> 2.20.1
+> 
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
