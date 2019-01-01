@@ -1,55 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 12:55:57 +0100
-Subject: [Buildroot] [PATCH v3 06/17] package/alsa-utils: use the new
- fftw-single package
-In-Reply-To: <20181231133030.25991-7-thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 13:00:18 +0100
+Subject: [Buildroot] [PATCH v3 02/17] package/fftw: break fftw-single
+ into a dedicated package
+In-Reply-To: <20190101110952.GG26917@scaer>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-7-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101115557.GK26917@scaer>
+ <20181231133030.25991-3-thomas.petazzoni@bootlin.com>
+ <20190101110952.GG26917@scaer>
+Message-ID: <20190101130018.1e077516@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Gwenha?l, All,
+Hello,
 
-On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Tue, 1 Jan 2019 12:09:52 +0100, Yann E. MORIN wrote:
+
+> There is a minor nit, though: the various flavours do install some of
+> the same files. For example, with just this patch applied, and enabling
+> fftw-single and fftw's remaining long-double option:
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/alsa-utils/alsa-utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> ./support/scripts/check-uniq-files -t target /home/ymorin/dev/buildroot/O/build/packages-file-list.txt
+> Warning: target file "./usr/bin/fftw-wisdom-to-conf" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/include/fftw3.f03" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/include/fftw3.f" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/include/fftw3.h" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/include/fftw3l.f03" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/share/man/man1/fftw-wisdom-to-conf.1" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: target file "./usr/include/fftw3q.f03" is touched by more than one package: [u'fftw-single', u'fftw']
+> ./support/scripts/check-uniq-files -t staging /home/ymorin/dev/buildroot/O/build/packages-file-list-staging.txt
+> Warning: staging file "./usr/share/man/man1/fftw-wisdom-to-conf.1" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/bin/fftw-wisdom-to-conf" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/lib/libfftw3f.la" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/include/fftw3.f03" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/include/fftw3.f" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/include/fftw3.h" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/include/fftw3l.f03" is touched by more than one package: [u'fftw-single', u'fftw']
+> Warning: staging file "./usr/include/fftw3q.f03" is touched by more than one package: [u'fftw-single', u'fftw']
 > 
-> diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-> index 4ce4aace46..b5c36e0a46 100644
-> --- a/package/alsa-utils/alsa-utils.mk
-> +++ b/package/alsa-utils/alsa-utils.mk
-> @@ -41,7 +41,7 @@ endif
->  ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
->  ALSA_UTILS_CONF_OPTS += --enable-bat
->  # Analysis support requires fftw single precision
-> -ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
-> +ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single)
->  else
->  ALSA_UTILS_CONF_OPTS += --disable-bat
->  endif
-> -- 
-> 2.20.1
+> In practice, I'm not sure this causes any issue, in fact, because:
 > 
+>   - we don't care about the man pages;
+> 
+>   - ./usr/lib/libfftw3f.la should in fact not be installed by fftw's
+>     long-double;
+> 
+>   - ./usr/bin/fftw-wisdom-to-conf is bit-for-bit the same in the two
+>     cases;
+> 
+>   - the headers are each also the same in both cases.
+> 
+> So, when we switched the file list from a md5-based comparison, to a
+> time-based comparison, we lost the precision that md5 offered. :-/
+> 
+> So far, there's not much we can do for now, but in the future, we'll
+> have to revisit the way we establish the per-package file list and the
+> way we check uniq files.
 
+Meh. This is not really nice. I see a few possible solutions:
+
+ (1) Have the per-precision packages not install to STAGING/TARGET but
+     to some common intermediate location, and have the common fftw
+     package stay a real package, which does the actual final location.
+
+ (2) Have the per-precision packages only install libraries, and
+     have the common fftw package install the rest that is
+     common/identical between variants.
+
+That being said, I still think (and it seems like your
+Reviewed-by/Tested-by also says the same) this patch series goes in the
+right direction, and we can live with this drawback for now.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
