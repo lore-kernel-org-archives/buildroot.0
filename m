@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 13:16:57 +0100
-Subject: [Buildroot] [PATCH v3 08/17] package/gnuradio: use the new
- fftw-single package
-In-Reply-To: <20181231133030.25991-9-thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 13:24:59 +0100
+Subject: [Buildroot] [PATCH v3 16/17] package/fftw: remove as regular
+ package
+In-Reply-To: <20181231133030.25991-17-thomas.petazzoni@bootlin.com>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-9-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101121657.GN26917@scaer>
+ <20181231133030.25991-17-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101122459.GO26917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +15,94 @@ To: buildroot@busybox.net
 Thomas, Gwenha?l, All,
 
 On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> fftw is no longer a package: only fftw-single, fftw-double,
+> fftw-long-double and fftw-quad are. fftw.mk only contains some common
+> definitions that are used by the different fftw variants.
 > 
-> Thanks to the new fftw package organization, we can use a "select"
-> instead of "depends on".
+> The old BR2_PACKAGE_FFTW_PRECISION_* options, which are no longer used
+> anywhere, are moved to Config.in.legacy.
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, minor nit, below...
+A review of that one even if the previoius are not still reviewed, so
+that I don;t forget what I noticed...
 
 > ---
->  package/gnuradio/Config.in   | 8 ++------
->  package/gnuradio/gnuradio.mk | 2 +-
->  2 files changed, 3 insertions(+), 7 deletions(-)
+>  Config.in.legacy       | 36 ++++++++++++++++++++++++++++++++++++
+>  package/fftw/Config.in | 41 -----------------------------------------
+>  package/fftw/fftw.mk   | 18 ------------------
+>  3 files changed, 36 insertions(+), 59 deletions(-)
 > 
-> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> index 56957d59e4..533a49c81e 100644
-> --- a/package/gnuradio/Config.in
-> +++ b/package/gnuradio/Config.in
-> @@ -78,11 +78,6 @@ config BR2_PACKAGE_GNURADIO_ZEROMQ
->  	help
->  	  zeromq communication support
+[--SNIP--]
+> diff --git a/package/fftw/Config.in b/package/fftw/Config.in
+> index ed87de1a70..9e060ba5da 100644
+> --- a/package/fftw/Config.in
+> +++ b/package/fftw/Config.in
+> @@ -12,47 +12,6 @@ config BR2_PACKAGE_FFTW
 >  
-> -comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
-> -	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-> -
-> -if BR2_PACKAGE_FFTW_PRECISION_SINGLE
-> -
->  config BR2_PACKAGE_GNURADIO_ANALOG
->  	bool "gr-analog support"
->  	select BR2_PACKAGE_GNURADIO_FILTER
-> @@ -103,6 +98,8 @@ config BR2_PACKAGE_GNURADIO_DIGITAL
+>  if BR2_PACKAGE_FFTW
 >  
->  config BR2_PACKAGE_GNURADIO_FFT
->  	bool "gr-fft support"
-> +	select BR2_PACKAGE_FFTW
-> +	select BR2_PACKAGE_FFTW_SINGLE
+> -choice
+[--SNIP--]
+> -endchoice
 
-So, here we're selecting both fftw and fftw-single, yet...
+So, basically, enabling the fftw package no longer ensures there is at
+least one variant to build.
 
->  	select BR2_PACKAGE_GNURADIO_BLOCKS
->  	help
->  	  FFT signal processing blocks
-> @@ -136,4 +133,3 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
->  	  Trellis coded modulation blocks
->  
->  endif
-> -endif
-> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-> index ed537e3934..564ad8b2a4 100644
-> --- a/package/gnuradio/gnuradio.mk
-> +++ b/package/gnuradio/gnuradio.mk
-> @@ -101,7 +101,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_GNURADIO_FFT),y)
-> -GNURADIO_DEPENDENCIES += fftw
-> +GNURADIO_DEPENDENCIES += fftw-single
+This basically means that a defconfig that relied on the default flavour
+to be enabled (double) now breaks.
 
-... here we only have fftw-single as a dependency. That's a bit weird.
+What about:
 
-But heck...
+    config BR2_PACKAGE_FFTW
+        bool "fftw"
+        select BR2_PACKAGE_FFTW_DOUBLE if !BR2_PACKAGE_FFTW_SINGLE \
+                                       && !BR2_PACKAGE_FFTW_LONG_DOUBLE \
+                                       && !BR2_PACKAGE_FFTW_QUAD
+
+Or something to ensure there is at least one variant enabled (and the
+same as the default precviouslty was).
 
 Regards,
 Yann E. MORIN.
 
->  GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=ON
->  else
->  GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=OFF
+>  source "package/fftw/fftw-single/Config.in"
+>  source "package/fftw/fftw-double/Config.in"
+>  source "package/fftw/fftw-long-double/Config.in"
+> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+> index 862ad5edc0..bcfdb9c96a 100644
+> --- a/package/fftw/fftw.mk
+> +++ b/package/fftw/fftw.mk
+> @@ -10,22 +10,6 @@ FFTW_INSTALL_STAGING = YES
+>  FFTW_LICENSE = GPL-2.0+
+>  FFTW_LICENSE_FILES = COPYING
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+> -FFTW_DEPENDENCIES += fftw-double
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+> -FFTW_DEPENDENCIES += fftw-long-double
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
+> -FFTW_DEPENDENCIES += fftw-quad
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+> -FFTW_DEPENDENCIES += fftw-single
+> -endif
+> -
+>  # fortran support only enables generation and installation of fortran sources
+>  ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+>  FFTW_COMMON_CONF_OPTS += --enable-fortran
+> @@ -49,6 +33,4 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
+>  endif
+>  FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+>  
+> -$(eval $(generic-package))
+> -
+>  include $(sort $(wildcard package/fftw/*/*.mk))
 > -- 
 > 2.20.1
 > 
