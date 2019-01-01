@@ -1,91 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 13:33:12 +0100
-Subject: [Buildroot] [PATCH v3 09/17] package/gqrx: remove unneeded fftw
- dependency
-In-Reply-To: <20190101122951.GP26917@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 14:07:27 +0100
+Subject: [Buildroot] [PATCH v3 08/17] package/gnuradio: use the new
+ fftw-single package
+In-Reply-To: <20190101121657.GN26917@scaer>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-10-thomas.petazzoni@bootlin.com>
- <20190101122951.GP26917@scaer>
-Message-ID: <20190101123312.GQ26917@scaer>
+ <20181231133030.25991-9-thomas.petazzoni@bootlin.com>
+ <20190101121657.GN26917@scaer>
+Message-ID: <20190101140727.12302abe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenha?l, All,
+Hello,
 
-On 2019-01-01 13:29 +0100, Yann E. MORIN spake thusly:
-> On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
-> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > 
-> > Thanks to the new fftw package organization, gnuradio already selects
-> > the appropriate fftw precision, and there is no need to propagate the
-> > "depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE" that used to be present
-> > in the gnuradio package.
-> > 
-> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> However, Gwenha?l, one question: why does it depend on gnuradio rather
-> than selecting it (and propagating its dependencies, of course)?
-> 
-> As I understand it, gqrx is an application, and for applications, we try
-> as much as posiible to have them visible and select the libraries they
-> need, rather than hide them behind their libs.
+On Tue, 1 Jan 2019 13:16:57 +0100, Yann E. MORIN wrote:
 
-Oh, I see why, now: that's because of the historical fftw precision
-dependency that we could not select gnuradio so far. But now we could.
-
-> Regards,
-> Yann E. MORIN.
+> >  config BR2_PACKAGE_GNURADIO_FFT
+> >  	bool "gr-fft support"
+> > +	select BR2_PACKAGE_FFTW
+> > +	select BR2_PACKAGE_FFTW_SINGLE  
 > 
-> > ---
-> >  package/gqrx/Config.in | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-> > index 1dc40c6d24..94ccb60d44 100644
-> > --- a/package/gqrx/Config.in
-> > +++ b/package/gqrx/Config.in
-> > @@ -2,13 +2,11 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar"
-> >  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> >  		!BR2_USE_WCHAR
-> >  
-> > -comment "gqrx needs qt5, gnuradio, fftw's single precision"
-> > -	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
-> > -		!BR2_PACKAGE_QT5
-> > +comment "gqrx needs qt5, gnuradio"
-> > +	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_QT5
-> >  
-> >  config BR2_PACKAGE_GQRX
-> >  	bool "gqrx"
-> > -	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
-> >  	depends on BR2_PACKAGE_GNURADIO
-> >  	depends on BR2_PACKAGE_QT5
-> >  	depends on BR2_INSTALL_LIBSTDCPP # boost
-> > -- 
-> > 2.20.1
-> > 
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> So, here we're selecting both fftw and fftw-single, yet...
 
+Well that's how the whole thing is designed: if you want to use one of
+the fftw-* packages, you need to select both BR2_PACKAGE_FFTW or
+BR2_PACKAGE_FFTW_SINGLE. See what the package/fftw/Config.in file looks
+like with the whole series applied.
+
+Note: I am not saying this is the only solution to do that, and that's
+it's the best, I'm just saying that doing both of those selects is
+needed with the solution proposed in this series.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
