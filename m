@@ -1,21 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:03:40 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jan 2019 11:04:52 +0100
 Subject: [Buildroot] [PATCH 1/1] json-for-modern-cpp: use include.zip
 In-Reply-To: <20181231222206.69527-1-aduskett@gmail.com>
 References: <20181231222206.69527-1-aduskett@gmail.com>
-Message-ID: <20190101110340.6600f4de@windsurf>
+Message-ID: <20190101100452.GE26917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Adam, All,
 
-Happy New Year!
-
-On Mon, 31 Dec 2018 17:22:06 -0500, aduskett at gmail.com wrote:
-
+On 2018-12-31 17:22 -0500, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Currently, the json for modern c++ uses the release tarball for configuring
+> and installation. However; this tarball is actually 114.5Mb of unit tests, and
+> 500Kb of actual code, which is just a header file.
+> 
+> When the package was initially submitted to Buildroot, json for modern c++ only
+> had the option of either just the header file, or the tarball. Since then,
+> the project has been able to break apart the header file into several, more
+> managable files and have included them in a "include.zip" file for each release.
+> This tar file is only 134K, and includes no unit tests.
+> 
+> This patch does the following:
+> - Change the package to a generic package.
+> - Manually unzip and install the header files to staging.
+> - Update the sha256 hash's for the new files.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  .../json-for-modern-cpp.hash                  |  6 ++---
+>  .../json-for-modern-cpp.mk                    | 22 +++++++++++++------
+>  2 files changed, 18 insertions(+), 10 deletions(-)
+> 
 > diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
 > index cff01db74c..254e513035 100644
 > --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
@@ -27,24 +47,60 @@ On Mon, 31 Dec 2018 17:22:06 -0500, aduskett at gmail.com wrote:
 > +# From https://github.com/nlohmann/json/releases
 > +sha256	3564da9c5b0cf2e032f97c69baedf10ddbc98030c337d0327a215ea72259ea21	include.zip
 > +sha256	8e118538f66f1f13c78a215ddb7f9c1b83e835702fcd5a8586f77bb7455a1b99	json.hpp
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> index 86399fd60d..62971bca08 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> @@ -5,13 +5,21 @@
+>  ################################################################################
+>  
+>  JSON_FOR_MODERN_CPP_VERSION = v3.5.0
+> -JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+> -JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
+> +JSON_FOR_MODERN_CPP_SOURCE = include.zip
 
-While this looks really nice, a file named "include.zip" with no
-version in the name, is going to be very annoying to handle. Indeed,
-every time you will bump the version, the file name will be the same.
-Thanks to the hash, the right version of the file will be
-re-downloaded, but this will entirely break sources.buildroot.net, in
-the sense that they will not be able to provide include.zip for older
-Buildroot versions, that use an older version of json-for-modern-cpp.
+So, the release file does not include the version in its name. That's
+sad. Very sad... :-(
 
-So at this point, I prefer to keep the existing situation. I encourage
-you to get in touch with upstream to see if they are willing to fix the
-name of include.zip into something more sensible, that includes the
-version.
+I think I'd prefer that we find another solution...
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
+> +JSON_FOR_MODERN_CPP_SITE = https://github.com/nlohmann/json/releases/download/$(JSON_FOR_MODERN_CPP_VERSION)
+>  JSON_FOR_MODERN_CPP_LICENSE = MIT
+> -JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
+> +JSON_FOR_MODERN_CPP_LICENSE_FILES = json.hpp
+>  JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
+> -# header only library
+> -JSON_FOR_MODERN_CPP_INSTALL_TARGET = NO
+> -JSON_FOR_MODERN_CPP_CONF_OPTS = -DJSON_BuildTests=OFF
+>  
+> -$(eval $(cmake-package))
+> +define JSON_FOR_MODERN_CPP_EXTRACT_CMDS
+> +	unzip $(JSON_FOR_MODERN_CPP_DL_DIR)/$(JSON_FOR_MODERN_CPP_SOURCE) -d $(@D)
+> +	mv $(@D)/include/nlohmann/* $(@D)
+> +	rm -r $(@D)/include
+> +endef
+> +
+> +define JSON_FOR_MODERN_CPP_INSTALL_STAGING_CMDS
+> +	mkdir -p $(STAGING_DIR)/usr/include/nlohmann
+> +	cp -r $(@D)/* $(STAGING_DIR)/usr/include/nlohmann
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
