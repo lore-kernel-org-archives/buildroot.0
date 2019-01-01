@@ -1,108 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 10:59:01 +0100
-Subject: [Buildroot] [PATCH 1/1] test-pkg: Force checking dependencies.
-In-Reply-To: <20181231184317.107597-1-aduskett@gmail.com>
-References: <20181231184317.107597-1-aduskett@gmail.com>
-Message-ID: <20190101095901.GD26917@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 11:03:40 +0100
+Subject: [Buildroot] [PATCH 1/1] json-for-modern-cpp: use include.zip
+In-Reply-To: <20181231222206.69527-1-aduskett@gmail.com>
+References: <20181231222206.69527-1-aduskett@gmail.com>
+Message-ID: <20190101110340.6600f4de@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hello,
 
-On 2018-12-31 13:43 -0500, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Currently, if a user runs "make" while specifying a specific package
-> (IE: make -p foo),  the Makefile logic skips checking to see if all the
-> dependencies are selected in the specified packages config file. This behavior
-> is useful to test simple packages which do not have "complex" dependencies.
-> 
-> However; if a developer uses test-pkg -p ${package_name} to check their package,
-> the package may pass all the checks, but would have otherwise failed with a
-> simple "make" because the developer may have failed to add a select line in
-> packages config file, even if there is a new dependency in the packages
-> Makefile.
-> 
-> Pass the environment variable "FORCE_CHECK_DEPENDENCIES"  to the Makefile in
-> the test-pkg script,  and check it's value in the Makefile. If the value is
-> "YES" force checking for dependency issues.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  Makefile       | 9 ++++++++-
->  utils/test-pkg | 6 +++---
->  2 files changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index c5b78b3274..bc83c6505f 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -550,9 +550,16 @@ include $(BR2_EXTERNAL_MKS)
->  #
->  # Only trigger the check for default builds. If the user forces building
->  # a package, even if not enabled in the configuration, we want to accept
-> -# it.
-> +# it. However; we also want to be able to force checking the dependencies
-> +# if the user so desires. Forcing a dependency check is useful in the case
-> +# of test-pkg, as we want to make sure during testing, that a package has
-> +# all the dependencies selected in the config file.
->  #
->  ifeq ($(MAKECMDGOALS),)
-> +FORCE_CHECK_DEPENDENCIES = YES
-> +endif
-> +
-> +ifeq ($(FORCE_CHECK_DEPENDENCIES),YES)
->  
->  define CHECK_ONE_DEPENDENCY
->  ifeq ($$($(2)_TYPE),target)
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index e4f68ed061..e54990a349 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -146,19 +146,19 @@ build_one() {
->      rm -f "${dir}/missing.config"
->  
->      if [ -n "${pkg}" ]; then
-> -        if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
-> +        if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
->              return 2
->          fi
->      fi
->  
->      # shellcheck disable=SC2086
-> -    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-> +    if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
+Happy New Year!
 
-I think we only really need it here, not in the two other places.
+On Mon, 31 Dec 2018 17:22:06 -0500, aduskett at gmail.com wrote:
 
-Regards,
-Yann E. MORIN.
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> index cff01db74c..254e513035 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> @@ -1,3 +1,3 @@
+> -# Locally computed
+> -sha256	e0b1fc6cc6ca05706cce99118a87aca5248bd9db3113e703023d23f044995c1d	json-v3.5.0.tar.gz
+> -sha256	7b875bb7a4e28abb7956ea821b4b7d88ff6a2a4fabf261c3993730a365ec56dd	LICENSE.MIT
+> +# From https://github.com/nlohmann/json/releases
+> +sha256	3564da9c5b0cf2e032f97c69baedf10ddbc98030c337d0327a215ea72259ea21	include.zip
+> +sha256	8e118538f66f1f13c78a215ddb7f9c1b83e835702fcd5a8586f77bb7455a1b99	json.hpp
 
->          return 2
->      fi
->  
->      # legal-info done systematically, because some packages have different
->      # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
-> -    if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
-> +    if ! FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
->          return 3
->      fi
->  }
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+While this looks really nice, a file named "include.zip" with no
+version in the name, is going to be very annoying to handle. Indeed,
+every time you will bump the version, the file name will be the same.
+Thanks to the hash, the right version of the file will be
+re-downloaded, but this will entirely break sources.buildroot.net, in
+the sense that they will not be able to provide include.zip for older
+Buildroot versions, that use an older version of json-for-modern-cpp.
 
+So at this point, I prefer to keep the existing situation. I encourage
+you to get in touch with upstream to see if they are willing to fix the
+name of include.zip into something more sensible, that includes the
+version.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
