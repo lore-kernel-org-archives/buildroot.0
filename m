@@ -1,127 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:13:49 +0100
-Subject: [Buildroot] [git commit] package/collectd: Fix build issue with
- SENSORS_API_VERSION >= 0x500
-Message-ID: <20190101100929.E30AC8820B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jan 2019 11:14:32 +0100
+Subject: [Buildroot] [PATCH v3 01/17] package/fftw: prepare for
+ splitting into multiple packages
+In-Reply-To: <20181231133030.25991-2-thomas.petazzoni@bootlin.com>
+References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
+ <20181231133030.25991-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101101432.GF26917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8da238787216c03ed49eed135bfde515533fe6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, Gwenha?l, All,
 
-Current collectd version 5.7.1 fails to compile because there is a
-check which breaks the compilation if lm_sensors API >= 0x500, but in
-the mainline codebase this check was removed in commit:
+On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
+> In preparation for splitting into multiple packages, this commit
+> changes the fftw.mk package to use FFTW_COMMON_CONF_OPTS,
+> FFTW_COMMON_CONF_ENV and FFTW_COMMON_CFLAGS, which will be re-used by
+> the soon-to-be-introduced per-precision packages.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-  https://github.com/collectd/collectd/commit/069796bd76dd1ab0089a64f7c9c2a3c9f1475414
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-So add backported patch based on this commit.
+Regards,
+Yann E. MORIN.
 
-Fixes:
+> ---
+>  package/fftw/fftw.mk | 40 +++++++++++++++++++++-------------------
+>  1 file changed, 21 insertions(+), 19 deletions(-)
+> 
+> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+> index b167a2f6f7..8b76b7c190 100644
+> --- a/package/fftw/fftw.mk
+> +++ b/package/fftw/fftw.mk
+> @@ -12,38 +12,40 @@ FFTW_LICENSE_FILES = COPYING
+>  
+>  # fortran support only enables generation and installation of fortran sources
+>  ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+> -FFTW_CONF_OPTS += --enable-fortran
+> -FFTW_CONF_ENV += FLIBS="-lgfortran -lm"
+> +FFTW_COMMON_CONF_OPTS += --enable-fortran
+> +FFTW_COMMON_CONF_ENV += FLIBS="-lgfortran -lm"
+>  else
+> -FFTW_CONF_OPTS += --disable-fortran
+> +FFTW_COMMON_CONF_OPTS += --disable-fortran
+>  endif
+>  
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision
+> -
+> -FFTW_CFLAGS = $(TARGET_CFLAGS)
+> +FFTW_COMMON_CFLAGS = $(TARGET_CFLAGS)
+>  ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+> -FFTW_CFLAGS += -O3 -ffast-math
+> +FFTW_COMMON_CFLAGS += -O3 -ffast-math
+>  endif
+>  
+>  # x86 optimisations
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE),--enable,--disable)-sse
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE2),--enable,--disable)-sse2
+> +FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE),--enable,--disable)-sse
+> +FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE2),--enable,--disable)-sse2
+>  
+>  # ARM optimisations
+> -FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),--enable,--disable)-neon
+> -FFTW_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
+> +FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),--enable,--disable)-neon
+> +FFTW_COMMON_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
+>  
+>  # Generic optimisations
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> -FFTW_CONF_OPTS += --enable-threads
+> -FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
+> +FFTW_COMMON_CONF_OPTS += --enable-threads
+> +FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
+>  else
+> -FFTW_CONF_OPTS += --disable-threads
+> +FFTW_COMMON_CONF_OPTS += --disable-threads
+>  endif
+> -FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+> -
+> -FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
+> +FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+> +
+> +FFTW_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
+> +FFTW_CONF_OPTS += \
+> +	$(FFTW_COMMON_CONF_OPTS) \
+> +	$(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single \
+> +	$(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double \
+> +	$(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision \
+> +	CFLAGS="$(FFTW_COMMON_CFLAGS)"
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.20.1
+> 
 
-  http://autobuild.buildroot.net/results/c3c84ca6e11b268ba5ada7e3dca18bca681ee43d/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...oved-checks-for-upper-limit-of-SENSORS_AP.patch | 89 ++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
-
-diff --git a/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
-new file mode 100644
-index 0000000000..9270021dd6
---- /dev/null
-+++ b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
-@@ -0,0 +1,89 @@
-+From 069796bd76dd1ab0089a64f7c9c2a3c9f1475414 Mon Sep 17 00:00:00 2001
-+From: Pavel Rochnyack <pavel2000@ngs.ru>
-+Date: Mon, 3 Dec 2018 18:34:14 +0700
-+Subject: [PATCH] sensors: Removed checks for upper limit of
-+ SENSORS_API_VERSION
-+
-+That makes no more sense after lm-sensors got new maintainers.
-+
-+Issue: #3006
-+
-+[Vadim Kochan: backported to support 5.7.1 version]
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ src/sensors.c | 17 ++++++-----------
-+ 1 file changed, 6 insertions(+), 11 deletions(-)
-+
-+diff --git a/src/sensors.c b/src/sensors.c
-+index 8f1824d..409dc38 100644
-+--- a/src/sensors.c
-++++ b/src/sensors.c
-+@@ -149,7 +149,7 @@ typedef struct featurelist {
-+ static char *conffile = SENSORS_CONF_PATH;
-+ /* #endif SENSORS_API_VERSION < 0x400 */
-+ 
-+-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
-++#elif (SENSORS_API_VERSION >= 0x400)
-+ typedef struct featurelist {
-+   const sensors_chip_name *chip;
-+   const sensors_feature *feature;
-+@@ -159,11 +159,6 @@ typedef struct featurelist {
-+ 
-+ static char *conffile = NULL;
-+ static _Bool use_labels = 0;
-+-/* #endif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
-+-
-+-#else /* if SENSORS_API_VERSION >= 0x500 */
-+-#error "This version of libsensors is not supported yet. Please report this " \
-+-	"as bug."
-+ #endif
-+ 
-+ static featurelist_t *first_feature = NULL;
-+@@ -223,7 +218,7 @@ static int sensors_config(const char *key, const char *value) {
-+     if (IS_TRUE(value))
-+       ignorelist_set_invert(sensor_list, 0);
-+   }
-+-#if (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
-++#if (SENSORS_API_VERSION >= 0x400)
-+   else if (strcasecmp(key, "UseLabels") == 0) {
-+     use_labels = IS_TRUE(value) ? 1 : 0;
-+   }
-+@@ -353,7 +348,7 @@ static int sensors_load_conf(void) {
-+   }   /* while sensors_get_detected_chips */
-+ /* #endif SENSORS_API_VERSION < 0x400 */
-+ 
-+-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
-++#elif (SENSORS_API_VERSION >= 0x400)
-+   chip_num = 0;
-+   while ((chip = sensors_get_detected_chips(NULL, &chip_num)) != NULL) {
-+     const sensors_feature *feature;
-+@@ -404,7 +399,7 @@ static int sensors_load_conf(void) {
-+       } /* while (subfeature) */
-+     }   /* while (feature) */
-+   }     /* while (chip) */
-+-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
-++#endif /* (SENSORS_API_VERSION >= 0x400) */
-+ 
-+   if (first_feature == NULL) {
-+     sensors_cleanup();
-+@@ -479,7 +474,7 @@ static int sensors_read(void) {
-+   } /* for fl = first_feature .. NULL */
-+ /* #endif SENSORS_API_VERSION < 0x400 */
-+ 
-+-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
-++#elif (SENSORS_API_VERSION >= 0x400)
-+   for (featurelist_t *fl = first_feature; fl != NULL; fl = fl->next) {
-+     double value;
-+     int status;
-+@@ -518,7 +513,7 @@ static int sensors_read(void) {
-+ 
-+     sensors_submit(plugin_instance, type, type_instance, value);
-+   } /* for fl = first_feature .. NULL */
-+-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
-++#endif /* (SENSORS_API_VERSION >= 0x400) */
-+ 
-+   return (0);
-+ } /* int sensors_read */
-+-- 
-+2.14.1
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
