@@ -1,35 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 22:57:21 +0100
-Subject: [Buildroot] [git commit] toolchain/toolchain-external-custom:
- support Linux 4.20 kernel headers
-Message-ID: <20190101215421.B512E88CD2@busybox.osuosl.org>
+Date: Tue, 1 Jan 2019 22:56:26 +0100
+Subject: [Buildroot] [git commit] package/linux-headers: add support for
+ Linux 4.20 kernel headers
+Message-ID: <20190101215421.A800488CD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35f53b0588a905eb0c868e02ccd777cc1fd4203c
+commit: https://git.buildroot.net/buildroot/commit/?id=e2a8d3de40f0bedb9471ea90f729e127ed01529a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We need to update linux/linux.hash as part of this commit, because
+package/linux-headers/linux-headers.hash is a symlink to
+linux/linux.hash.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external/toolchain-external-custom/Config.in.options    | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/linux.hash                     |  1 +
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 288fc3f3e0..08a79ee4d9 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -123,6 +123,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 693605d3ec..adc133495c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
++sha256 ad0823183522e743972382df0aa08fb5ae3077f662b125f1e599b0b2aaa12438  linux-4.20.tar.xz
+ sha256 84d7aa436e10690b53165b9d59ec20548e6a4ce3324b135c5019fb0f7dd2a2d2  linux-4.19.7.tar.xz
+ sha256 68ac319e0fb7edd6b6051541d9cf112cd4f77a29e16a69ae1e133ff51117f653  linux-4.18.20.tar.xz
+ sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1d66759ac9..3c43bc8536 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_19
++	default BR2_KERNEL_HEADERS_4_20
+ 	help
+ 	  Select the kernel version to get headers from.
  
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_20
+@@ -64,6 +64,10 @@ config BR2_KERNEL_HEADERS_4_19
+ 	bool "Linux 4.19.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ 
++config BR2_KERNEL_HEADERS_4_20
++	bool "Linux 4.20.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 	help
+@@ -129,6 +133,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20
 +	bool "4.20.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19
  	bool "4.19.x"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+@@ -304,6 +312,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.18.20"	if BR2_KERNEL_HEADERS_4_18
+ 	default "4.19.7"	if BR2_KERNEL_HEADERS_4_19
++	default "4.20"		if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
