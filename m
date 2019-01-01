@@ -1,76 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:15:35 +0100
-Subject: [Buildroot] [git commit] package/python3-setuptools: new package
-Message-ID: <20190101102406.C510D882A9@busybox.osuosl.org>
+Date: Tue, 1 Jan 2019 11:16:33 +0100
+Subject: [Buildroot] [git commit] package/pkg-python: use
+ --single-version-externally-managed for host setuptools
+Message-ID: <20190101102406.D7C847FEA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=331a23041de73d449f9892e4fd97f2fcf414d6de
+commit: https://git.buildroot.net/buildroot/commit/?id=c577ad692f36cedbcc3378b86e1af237402b0083
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new package allows to install the host version of setuptools for
-python3, regardless of what the default Python version is. It will be
-used by the python-package infrastructure to make sure that host
-Python packages that need python3 and setuptools have setuptools
-installed for Python 3.
+Currently, host Python packages that use setuptools are installed as
+Python Eggs, i.e they are installed in
+$(HOST_DIR)/lib/python2.7/site-packages/Something-<version>.egg. Once
+installed, each Python Egg is registered to a file called
+$(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. This file is
+read by the Python interpreter so that the installation location of
+each Egg is added to the Python path, and can be found by the Python
+interpreter.
+
+However, the fact that the installation of different Python modules
+need to update a common file is clearly not compatible with
+per-package directories and top-level parallel build.
+
+To fix this, we avoid using Python Eggs using the same
+--single-version-externally-managed option that we use for target
+modules. This option is normally meant for distributions packaging
+Python modules, and can therefore only be used if either --record (to
+record the list of files being installed) or --root is
+passed. --root=/ works fine and was suggested by
+https://stackoverflow.com/questions/6301003/stopping-setup-py-from-installing-as-egg/33791008#33791008.
+
+With this change, host Python modules installed by setuptools are now
+installed in the "regular" way, i.e directly in
+$(HOST_DIR)/lib/python2.7/site-packages/mako for host-python-mako.
+
+This makes the installation of host Python modules more similar to the
+one of target modules, and makes it compatible with per-package
+directory support and top-level parallel build.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas: replace duplicated patch by a symlink to the same patch in
-package/python-setuptools/]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../python3-setuptools/0001-add-executable.patch   |  1 +
- package/python3-setuptools/python3-setuptools.hash |  1 +
- package/python3-setuptools/python3-setuptools.mk   | 24 ++++++++++++++++++++++
- 3 files changed, 26 insertions(+)
+ package/pkg-python.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-new file mode 120000
-index 0000000000..5bab3d96a1
---- /dev/null
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -0,0 +1 @@
-+../python-setuptools/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-new file mode 120000
-index 0000000000..a3af7f0fb1
---- /dev/null
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -0,0 +1 @@
-+../python-setuptools/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-new file mode 100644
-index 0000000000..b6de5d4b25
---- /dev/null
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# python3-setuptools
-+#
-+################################################################################
-+
-+# Please keep in sync with
-+# package/python-setuptools/python-setuptools.mk
-+PYTHON3_SETUPTOOLS_VERSION = 40.6.3
-+PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
-+PYTHON3_SETUPTOOLS_LICENSE = MIT
-+PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
-+PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
-+HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
-+HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
-+
-+define HOST_PYTHON3_SETUPTOOLS_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
-+	mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
-+endef
-+
-+$(eval $(host-python-package))
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index af8b86968d..8d40a7ca48 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -85,7 +85,9 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PYTHONNOUSERSITE=1
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+-	--prefix=$(HOST_DIR)
++	--prefix=$(HOST_DIR) \
++	--root=/ \
++	--single-version-externally-managed
+ 
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
