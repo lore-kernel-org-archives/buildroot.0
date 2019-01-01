@@ -1,49 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 21:08:27 +0100
-Subject: [Buildroot] [git commit] package/libssh: bump to version 0.8.6
-Message-ID: <20190101200759.0EF948843A@busybox.osuosl.org>
+Date: Tue, 1 Jan 2019 21:11:20 +0100
+Subject: [Buildroot] [git commit] package/opus-tools: bump to version 0.2
+Message-ID: <20190101200759.2A8E38843A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fdec92caa5c950ee35ef7c20e17169f41819219
+commit: https://git.buildroot.net/buildroot/commit/?id=3b7cb7ae7905b2d3917ba4e5e35b8d336f8bc5a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license file hash; last paragraph text formatting change.
+In this release the Opus decoder opusdec has been converted to use the
+opusfile library, and the Opus encoder opusenc has been converted to
+use the libopusenc library. These libraries make it easy to robustly
+read and write Ogg Opus audio files, and enable some new features.
 
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Due to this, opus-tools now needs to depend on opusfile and
+libopusenc. We take this opportunity to reorder alphabetically the
+dependencies in Config.in and .mk files.
+
+The license file hash has changed for two reasons:
+
+ - The xiph.org URL was changed from http:// to https://
+ - White-space changes
+
+There are no other changes, and no change that affect the licensing
+conditions.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/libssh.hash | 6 +++---
- package/libssh/libssh.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/opus-tools/Config.in       | 4 +++-
+ package/opus-tools/opus-tools.hash | 4 ++--
+ package/opus-tools/opus-tools.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 9ddada4a16..3971519a9c 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
+diff --git a/package/opus-tools/Config.in b/package/opus-tools/Config.in
+index 2552d19515..c045239ea7 100644
+--- a/package/opus-tools/Config.in
++++ b/package/opus-tools/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_OPUS_TOOLS
+ 	bool "opus-tools"
+-	select BR2_PACKAGE_OPUS
+ 	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBOPUSENC
++	select BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_OPUSFILE
+ 	help
+ 	  Opus codec command line tools. This package provides the
+ 	  reference implementations of encoder and decoder utilities
+diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
+index c7759e559f..1b87458f53 100644
+--- a/package/opus-tools/opus-tools.hash
++++ b/package/opus-tools/opus-tools.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.8/libssh-0.8.5.tar.xz.asc
-+# https://www.libssh.org/files/0.8/libssh-0.8.6.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256 07d2c431240fc88f6b06bcb36ae267f9afeedce2e32f6c42f8844b205ab5a335  libssh-0.8.5.tar.xz
--sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-+sha256 1046b95632a07fc00b1ea70ee683072d0c8a23f544f4535440b727812002fd01  libssh-0.8.6.tar.xz
-+sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 5d3b87aafc..016d67546f 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256 a2357532d19471b70666e0e0ec17d514246d8b3cb2eb168f68bb0f6fd372b28c  opus-tools-0.1.10.tar.gz
++sha256 b4e56cb00d3e509acfba9a9b627ffd8273b876b4e2408642259f6da28fa0ff86  opus-tools-0.2.tar.gz
+ 
+ # Hash for license file
+-sha256 88021117568c64038175d7fb3b8286056f7cdb54f09dc806578f6bd9342c62cc  COPYING
++sha256 c28016e58544119d6b93aea28297d040f17dcef7a9f548d3e6a4d0b558c5d248  COPYING
+diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
+index ab00ced705..f69c3bef8b 100644
+--- a/package/opus-tools/opus-tools.mk
++++ b/package/opus-tools/opus-tools.mk
+@@ -4,12 +4,12 @@
+ #
  ################################################################################
  
- LIBSSH_VERSION_MAJOR = 0.8
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).6
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+-OPUS_TOOLS_VERSION = 0.1.10
++OPUS_TOOLS_VERSION = 0.2
+ OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
+ OPUS_TOOLS_LICENSE = BSD-2-Clause, GPL-2.0 (opusinfo)
+ OPUS_TOOLS_LICENSE_FILES = COPYING
+ OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
+-OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
++OPUS_TOOLS_DEPENDENCIES = libogg libopusenc opus opusfile host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+ OPUS_TOOLS_DEPENDENCIES += libpcap
