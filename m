@@ -1,58 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 16:11:55 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/shairport-sync:
- fix init script (stop)
-Message-ID: <20190101153030.04B8B82680@busybox.osuosl.org>
+Date: Tue, 1 Jan 2019 16:27:06 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] configs/imx6slevk: Bump
+ U-Boot version
+Message-ID: <20190101153030.2E2518177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74cf3121d44e63d8e0a043022ce273f064a8ccc8
+commit: https://git.buildroot.net/buildroot/commit/?id=b33019863101f92f86797be2053677e290b26b54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-shairport-sync creates its pidfile at /var/run/shairport-sync/, so pass
-that path to start-stop-daemon in the stop operation.
+U-Boot 2017.11 has the following build issue:
 
-Also pass the executable path, allowing start-stop-daemon to check if
-the PID matches the shairport-sync process, preventing killing some
-other inocent daemon.
+  MKIMAGE u-boot-dtb.imx
+Error: No BOOT_FROM tag in board/freescale/mx6slevk/imximage.cfg.cfgtmp
+arch/arm/mach-imx/Makefile:86: recipe for target 'u-boot-dtb.imx' failed
+make[2]: *** [u-boot-dtb.imx] Error 1
+Makefile:907: recipe for target 'u-boot-dtb.imx' failed
+make[1]: *** [u-boot-dtb.imx] Error 2
+make[1]: *** Waiting for unfinished jobs....
+
+This issue has been fixed by commit  f916757300c1  ("imx: Create
+distinct pre-processed mkimage config files"), which landed in
+U-Boot 2018.05.
+
+Bump the U-Boot version to fix this build error.
 
 Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=11566
+https://gitlab.com/buildroot.org/buildroot/-/jobs/136980040
 
-Reported-by: Bin Zhang <yangtze31@gmail.com>
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6568b939293e46718434e284bded04b746fbd80f)
+(cherry picked from commit 1fc75dfbde9aa6fbe018fded79af4c17bb6fb523)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shairport-sync/S99shairport-sync | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ configs/imx6slevk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/shairport-sync/S99shairport-sync b/package/shairport-sync/S99shairport-sync
-index 5443ed138c..80b2fddbc6 100644
---- a/package/shairport-sync/S99shairport-sync
-+++ b/package/shairport-sync/S99shairport-sync
-@@ -6,16 +6,18 @@ OPTIONS="-d"
- case "$1" in
-     start)
- 	printf "Starting shairport-sync: "
--	start-stop-daemon -S -q -p /var/run/shairport-sync.pid --exec /usr/bin/shairport-sync -- $OPTIONS
-+	start-stop-daemon -S -q --exec /usr/bin/shairport-sync -- $OPTIONS
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	;;
-     stop)
- 	printf "Stopping shairport-sync: "
--	start-stop-daemon -K -q -p /var/run/shairport-sync.pid
-+	start-stop-daemon -K -q --exec /usr/bin/shairport-sync \
-+		-p /var/run/shairport-sync/shairport-sync.pid
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	;;
-     restart)
- 	$0 stop
-+	sleep 1
- 	$0 start
- 	;;
-     *)
+diff --git a/configs/imx6slevk_defconfig b/configs/imx6slevk_defconfig
+index be4b42e88e..90a02964e7 100644
+--- a/configs/imx6slevk_defconfig
++++ b/configs/imx6slevk_defconfig
+@@ -11,7 +11,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
