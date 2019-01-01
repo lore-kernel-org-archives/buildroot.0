@@ -1,59 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 22:44:06 +0100
-Subject: [Buildroot] [PATCH v3 14/17] package/pulseaudio: use the new
- fftw-single package
-In-Reply-To: <20181231133030.25991-15-thomas.petazzoni@bootlin.com>
-References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-15-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101214406.GD23435@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  1 Jan 2019 22:49:42 +0100
+Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20181218
+Message-ID: <20190101214942.3220-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Gwenha?l, All,
+For details of the changes, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
 
-On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pulseaudio/pulseaudio.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-> index d1c35654cf..c91af22935 100644
-> --- a/package/pulseaudio/pulseaudio.mk
-> +++ b/package/pulseaudio/pulseaudio.mk
-> @@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
->  	$(if $(BR2_PACKAGE_DBUS),dbus) \
->  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
-> -	$(if $(BR2_PACKAGE_FFTW),fftw) \
-> +	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I think I may end up being seen as an old dotard, re-hashing the same
-nonsense endlessly again and again, but...
-
-Why did we switch to fftw-single only, when previously fftw was checked
-for, which meant any variant of it?
-
-Regards,
-Yann E. MORIN.
-
->  	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
->  
->  ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-> -- 
-> 2.20.1
-> 
-
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index f757a86630..265ae671ef 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-November/003572.html
+-sha256 7d47f7996dd291069de4efb3097c42f769f60dc3ac6f850a4d5705f321e4406b  WireGuard-0.0.20181119.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
++sha256 2e9f86acefa49dbfb7fa6f5e10d543f1885a2d5460cd5e102696901107675735  WireGuard-0.0.20181218.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 93373d8538..d36929efd8 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20181119
++WIREGUARD_VERSION = 0.0.20181218
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
