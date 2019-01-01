@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Jan 2019 22:58:44 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
-In-Reply-To: <20181231175234.14572-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 31 Dec 2018 18:52:30 +0100")
-References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87sgycox9n.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Jan 2019 22:57:21 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain-external-custom:
+ support Linux 4.20 kernel headers
+Message-ID: <20190101215421.B512E88CD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=35f53b0588a905eb0c868e02ccd777cc1fd4203c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > This adds support for using Linux 4.20 for the kernel headers and/or
- > kernel build.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../toolchain-external/toolchain-external-custom/Config.in.options    | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Amongst other things, Linux 4.20 has the fix of the net_tstamp.h
- > header which will fix the build failure of linuxptp.
-
- > Changes since v1:
-
- >  - Add one more patch that makes it possible to use custom external
- >    toolchains that use Linux 4.20 kernel headers, as noticed by Romain
- >    Naour.
-
- > Thomas Petazzoni (4):
- >   toolchain: add necessary options to support 4.20 kernel headers
- >   package/linux-headers: add support for Linux 4.20 kernel headers
- >   linux: add support for Linux 4.20
- >   toolchain/toolchain-external-custom: support Linux 4.20 kernel headers
-
-Committed series, thanks.
-
-With 2019.02 becoming our next LTS and 4.20 NOT a LTS release, I wonder
-if it would make sense to still default to 4.19.x instead of 4.20.x?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 288fc3f3e0..08a79ee4d9 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_20
++	bool "4.20.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19
+ 	bool "4.19.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
