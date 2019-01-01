@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:31:44 +0100
-Subject: [Buildroot] [PATCH 2/3] package/pkg-python: use
- host-python3-setuptools when needed
-In-Reply-To: <20181228170132.13049-3-thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 11:31:55 +0100
+Subject: [Buildroot] [PATCH 3/3] package/pkg-python: use
+ --single-version-externally-managed for host setuptools
+In-Reply-To: <20181228170132.13049-4-thomas.petazzoni@bootlin.com>
 References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
- <20181228170132.13049-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101113144.40d63e41@windsurf>
+ <20181228170132.13049-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101113155.4bc9cce5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,78 +14,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 28 Dec 2018 18:01:30 +0100, Thomas Petazzoni wrote:
-> When a package uses "setuptools" as its <pkg>_SETUP_TYPE, we currently
-> add a dependency on host-python-setuptools. This means that:
+On Fri, 28 Dec 2018 18:01:31 +0100, Thomas Petazzoni wrote:
+> Currently, host Python packages that use setuptools are installed as
+> Python Eggs, i.e they are installed in
+> $(HOST_DIR)/lib/python2.7/site-packages/Something-<version>.egg. Once
+> installed, each Python Egg is registered to a file called
+> $(HOST_DIR)/lib/python2.7/site-packages/easy-install.pth. This file is
+> read by the Python interpreter so that the installation location of
+> each Egg is added to the Python path, and can be found by the Python
+> interpreter.
 > 
->  (1) When BR2_PACKAGE_PYTHON=y, the default host Python version is
->      Python 2.x, and host-python-setuptools is installed for
->      host-python.
+> However, the fact that the installation of different Python modules
+> need to update a common file is clearly not compatible with
+> per-package directories and top-level parallel build.
 > 
->  (2) When BR2_PACKAGE_PYTHON3=y, the default host Python version is
->      Python 3.x, and host-python-setuptools is installed for
->      host-python3.
+> To fix this, we avoid using Python Eggs using the same
+> --single-version-externally-managed option that we use for target
+> modules. This option is normally meant for distributions packaging
+> Python modules, and can therefore only be used if either --record (to
+> record the list of files being installed) or --root is
+> passed. --root=/ works fine and was suggested by
+> https://stackoverflow.com/questions/6301003/stopping-setup-py-from-installing-as-egg/33791008#33791008.
 > 
->  (3) When no target Python interpreter is selected, the default host
->      Python version is Python 2.x, and host-python-setuptools is
->      installed for host-python.
+> With this change, host Python modules installed by setuptools are now
+> installed in the "regular" way, i.e directly in
+> $(HOST_DIR)/lib/python2.7/site-packages/mako for host-python-mako.
 > 
-> Situations (1) and (3) are problematic for host Python packages that
-> need Python 3.x. Such packages use <pkg>_NEEDS_HOST_PYTHON = python3,
-> but if they use setuptools as their setup type, they will not find
-> setuptools installed for host-python3 in situations (1) and (3)
-> described above.
-> 
-> We currently have a single package that sets <pkg>_NEEDS_HOST_PYTHON =
-> python3: host-meson. host-meson generally works because if setuptools
-> is not found, it falls back to distutils, which is part of the
-> standard Python library. However, if there is a setuptools version
-> installed system-wide, it may be picked up, but may not necessarily be
-> the same version as Buildroot setuptools, potentially causing
-> problems.
-> 
-> This commit makes the necessary change to the python-package
-> infrastructure to fix this behavior, by identifying the following
-> cases:
-> 
->  - When a host Python package says <pkg>_NEEDS_HOST_PYTHON = python3,
->    then we know it wants setuptools installed for host-python3, so we
->    use host-python3-setuptools.
-> 
->  - When a host Python package says <pkg>_NEEDS_HOST_PYTHON = python2,
->    then we known it wants setuptools installed for host-python, so we
->    use host-python-setuptools.
-> 
->  - When BR2_PACKAGE_PYTHON3=y, and we have a target package, or a host
->    package with no NEEDS_HOST_PYTHON option, then we want setuptools
->    installed for host-python3, so we use host-python3-setuptools.
-> 
->  - When BR2_PACKAGE_PYTHON=y or no target interpreter is enabled at
->    all, and we have a target package, or a host package with no
->    NEEDS_HOST_PYTHON option, then we want setuptools for host-python,
->    so we use host-python-setuptools.
-> 
-> To make this happen, we use host-python3-setuptools introduced in a
-> previous commit, but we also change host-python-setuptools to force
-> its installation for host-python. The latter is needed if you build
-> with BR2_PACKAGE_PYTHON3=y but want to install a Python-based package
-> that has NEEDS_HOST_PYTHON=python2.
-> 
-> There is one single package that needs be adjusted following this:
-> lirc-tools, because it is not using the python-package
-> infrastructure. It directly depends on host-python-setuptools, which
-> no longer works because host-python-setuptools now only installs for
-> Python 2.x, while lirc-tools Python binding only supports Python
-> 3.x. Switching to host-python3-setuptools solves this problem.
+> This makes the installation of host Python modules more similar to the
+> one of target modules, and makes it compatible with per-package
+> directory support and top-level parallel build.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/lirc-tools/lirc-tools.mk              |  2 +-
->  package/pkg-python.mk                         | 35 ++++++++++++++-----
->  .../python-setuptools/python-setuptools.mk    |  1 +
->  3 files changed, 29 insertions(+), 9 deletions(-)
+>  package/pkg-python.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Applied to master, thanks. Thanks Asaf and Yegor for the review!
+Applied to master, thanks.
 
 Thomas
 -- 
