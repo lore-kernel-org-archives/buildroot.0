@@ -1,96 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 12:46:40 +0100
-Subject: [Buildroot] [PATCH v3 04/17] package/fftw: break fftw-quad into
- a dedicated package
-In-Reply-To: <20181231133030.25991-5-thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 12:52:23 +0100
+Subject: [Buildroot] [PATCH v3 05/17] package/fftw: break fftw-double
+ into a dedicated package
+In-Reply-To: <20181231133030.25991-6-thomas.petazzoni@bootlin.com>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-5-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101114640.GI26917@scaer>
+ <20181231133030.25991-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101115223.GJ26917@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Gwenha?l, All,
-
-Gwenha?l, question for you, below...
-
 On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
 > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
 > fftw's library name depends on the precision option. Consequently,
 > it's possible to install multiple flavor on the same target.
-
-.. and the now-usual files installed by the various flavours...
-
-> This patch breaks fftw quad precision into a new package and:
 > 
-> - makes BR2_PACKAGE_FFTW_PRECISION_QUAD select BR2_PACKAGE_FFTW_QUAD
+> This patch breaks fftw double precision into a new package and:
+> 
+> - makes BR2_PACKAGE_FFTW_PRECISION_DOUBLE select BR2_PACKAGE_FFTW_DOUBLE
 >   to keep compatibility with packages that use
->   BR2_PACKAGE_FFTW_PRECISION_QUAD. This option will be removed in a
+>   BR2_PACKAGE_FFTW_PRECISION_DOUBLE. This option will be removed in a
 >   follow-up commit;
-> 
-> - makes fftw depend on fftw-quad when this package is enabled.
+> - removes BR2_PACKAGE_FFTW_USE_SSE2 since it is only used for single
+>   and double precision. The corresponding options are directly handled in
+>   fftw-double package;
+> - makes fftw depend on fftw-double when this package is enabled;
+> - turns fftw itself into a generic-package instead of an
+>   autotools-package: it no longer builds anything and only allows to
+>   trigger the build of the appropriate fftw-* sub-packages, as a
+>   temporary compatibility mechanism.
 > 
 > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > [Yann/Thomas:
->  - Force --disable-quad in FFTW_CONF_OPTS, just for the sake of
->    clarity (fftw is no longer going to build the quad variant)
->  - Use FFTW_QUAD_DL_SUBDIR to avoid downloading fftw multiple times
->  - Minor reformatting tweaks in fftw-quad.mk
->  - Do not deprecate BR2_PACKAGE_FFTW_PRECISION_QUAD and instead
->    make it select BR2_PACKAGE_FFTW_QUAD, so that packages using
+>  - Use FFTW_DOUBLE_DL_SUBDIR to avoid downloading fftw multiple times
+>  - Minor reformatting tweaks in fftw-double.mk
+>  - Drop from fftw.mk FFTW_CONF_ENV/FFTW_CONF_OPTS which are no
+>    longer used
+>  - Make fftw a generic package so that its dependencies are built
+>  - Do not deprecate BR2_PACKAGE_FFTW_PRECISION_DOUBLE and instead
+>    make it select BR2_PACKAGE_FFTW_DOUBLE, so that packages using
 >    BR2_PACKAGE_FFTW_PRECISION_QUAD continue to work.]
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/fftw/Config.in                |  2 ++
->  package/fftw/fftw-quad/Config.in      |  7 +++++++
->  package/fftw/fftw-quad/fftw-quad.hash |  1 +
->  package/fftw/fftw-quad/fftw-quad.mk   | 22 ++++++++++++++++++++++
->  package/fftw/fftw.mk                  |  6 +++++-
->  5 files changed, 37 insertions(+), 1 deletion(-)
->  create mode 100644 package/fftw/fftw-quad/Config.in
->  create mode 120000 package/fftw/fftw-quad/fftw-quad.hash
->  create mode 100644 package/fftw/fftw-quad/fftw-quad.mk
-> 
-> diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-> index 4f37b43a60..8699d9c350 100644
-> --- a/package/fftw/Config.in
-> +++ b/package/fftw/Config.in
-> @@ -49,6 +49,7 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
->  	bool "quad"
->  	# quad-precision needs to have a gcc with libquadmath
->  	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-> +	select BR2_PACKAGE_FFTW_QUAD
->  	help
->  	  Compile fftw in quadruple precision, i.e. use '__float128' for
->  	  floating point type.
-> @@ -57,6 +58,7 @@ endchoice
->  
->  source "package/fftw/fftw-single/Config.in"
->  source "package/fftw/fftw-long-double/Config.in"
-> +source "package/fftw/fftw-quad/Config.in"
->  
->  config BR2_PACKAGE_FFTW_FAST
->  	bool "optimise for speed over accuracy"
-> diff --git a/package/fftw/fftw-quad/Config.in b/package/fftw/fftw-quad/Config.in
-> new file mode 100644
-> index 0000000000..bb724bc260
-> --- /dev/null
-> +++ b/package/fftw/fftw-quad/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_FFTW_QUAD
-> +	bool "fftw-quad"
-> +	# quad-precision needs to have a gcc with libquadmath
-> +	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-
-Unrelated to the change, but this dependency is supposedly due to a
-requirement for the toolchain to have libquadmath. We do have a symbol
-that represents so: BR2_TOOLCHAIN_HAS_LIBQUADMATH.
-
-So, maybe we could take the opportunity of this series to add a patch
-that fixes the codition, no? ;-)
 
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -98,69 +51,136 @@ Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/fftw/Config.in                    |  6 ++----
+>  package/fftw/fftw-double/Config.in        |  5 +++++
+>  package/fftw/fftw-double/fftw-double.hash |  1 +
+>  package/fftw/fftw-double/fftw-double.mk   | 22 ++++++++++++++++++++++
+>  package/fftw/fftw.mk                      | 17 +++++------------
+>  5 files changed, 35 insertions(+), 16 deletions(-)
+>  create mode 100644 package/fftw/fftw-double/Config.in
+>  create mode 120000 package/fftw/fftw-double/fftw-double.hash
+>  create mode 100644 package/fftw/fftw-double/fftw-double.mk
+> 
+> diff --git a/package/fftw/Config.in b/package/fftw/Config.in
+> index 8699d9c350..ed87de1a70 100644
+> --- a/package/fftw/Config.in
+> +++ b/package/fftw/Config.in
+> @@ -12,9 +12,6 @@ config BR2_PACKAGE_FFTW
+>  
+>  if BR2_PACKAGE_FFTW
+>  
+> -config BR2_PACKAGE_FFTW_USE_SSE2
+> -	bool
+> -
+>  choice
+>  	prompt "fftw precision"
+>  	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+> @@ -30,7 +27,7 @@ config BR2_PACKAGE_FFTW_PRECISION_SINGLE
+>  
+>  config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+>  	bool "double"
+> -	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+> +	select BR2_PACKAGE_FFTW_DOUBLE
+>  	help
+>  	  Compile fftw in double precision (the default), i.e. use
+>  	  'double' for floating point type.
+> @@ -57,6 +54,7 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
+>  endchoice
+>  
+>  source "package/fftw/fftw-single/Config.in"
+> +source "package/fftw/fftw-double/Config.in"
+>  source "package/fftw/fftw-long-double/Config.in"
+>  source "package/fftw/fftw-quad/Config.in"
+>  
+> diff --git a/package/fftw/fftw-double/Config.in b/package/fftw/fftw-double/Config.in
+> new file mode 100644
+> index 0000000000..cfcd1ef997
+> --- /dev/null
+> +++ b/package/fftw/fftw-double/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_FFTW_DOUBLE
+> +	bool "fftw-double"
 > +	help
-> +	  Compile fftw in quadruple precision, i.e. use '__float128' for
-> +	  floating point type.
-> diff --git a/package/fftw/fftw-quad/fftw-quad.hash b/package/fftw/fftw-quad/fftw-quad.hash
+> +	  Compile fftw in double precision (the default), i.e. use
+> +	  'double' for floating point type.
+> diff --git a/package/fftw/fftw-double/fftw-double.hash b/package/fftw/fftw-double/fftw-double.hash
 > new file mode 120000
 > index 0000000000..3ee7ecb3ba
 > --- /dev/null
-> +++ b/package/fftw/fftw-quad/fftw-quad.hash
+> +++ b/package/fftw/fftw-double/fftw-double.hash
 > @@ -0,0 +1 @@
 > +../fftw.hash
 > \ No newline at end of file
-> diff --git a/package/fftw/fftw-quad/fftw-quad.mk b/package/fftw/fftw-quad/fftw-quad.mk
+> diff --git a/package/fftw/fftw-double/fftw-double.mk b/package/fftw/fftw-double/fftw-double.mk
 > new file mode 100644
-> index 0000000000..5ff79b1d46
+> index 0000000000..4bacb26e56
 > --- /dev/null
-> +++ b/package/fftw/fftw-quad/fftw-quad.mk
+> +++ b/package/fftw/fftw-double/fftw-double.mk
 > @@ -0,0 +1,22 @@
 > +################################################################################
 > +#
-> +# fftw-quad
+> +# fftw-double
 > +#
 > +################################################################################
 > +
-> +FFTW_QUAD_VERSION = $(FFTW_VERSION)
-> +FFTW_QUAD_SOURCE = fftw-$(FFTW_VERSION).tar.gz
-> +FFTW_QUAD_SITE = $(FFTW_SITE)
-> +FFTW_QUAD_DL_SUBDIR = fftw
-> +FFTW_QUAD_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
-> +FFTW_QUAD_LICENSE = $(FFTW_LICENSE)
-> +FFTW_QUAD_LICENSE_FILES = $(FFTW_LICENSE_FILES)
+> +FFTW_DOUBLE_VERSION = $(FFTW_VERSION)
+> +FFTW_DOUBLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
+> +FFTW_DOUBLE_SITE = $(FFTW_SITE)
+> +FFTW_DOUBLE_DL_SUBDIR = fftw
+> +FFTW_DOUBLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
+> +FFTW_DOUBLE_LICENSE = $(FFTW_LICENSE)
+> +FFTW_DOUBLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
 > +
-> +FFTW_QUAD_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
+> +FFTW_DOUBLE_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
 > +
-> +FFTW_QUAD_CONF_OPTS = \
+> +FFTW_DOUBLE_CONF_OPTS = \
 > +	$(FFTW_COMMON_CONF_OPTS) \
 > +	CFLAGS="$(FFTW_COMMON_CFLAGS)" \
-> +	--enable-quad-precision
+> +	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
 > +
 > +$(eval $(autotools-package))
 > diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index 26137b9f7c..ccec0e0f2d 100644
+> index ccec0e0f2d..862ad5edc0 100644
 > --- a/package/fftw/fftw.mk
 > +++ b/package/fftw/fftw.mk
-> @@ -14,6 +14,10 @@ ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
->  FFTW_DEPENDENCIES += fftw-long-double
->  endif
+> @@ -10,6 +10,10 @@ FFTW_INSTALL_STAGING = YES
+>  FFTW_LICENSE = GPL-2.0+
+>  FFTW_LICENSE_FILES = COPYING
 >  
-> +ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
-> +FFTW_DEPENDENCIES += fftw-quad
+> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+> +FFTW_DEPENDENCIES += fftw-double
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
->  FFTW_DEPENDENCIES += fftw-single
+>  ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+>  FFTW_DEPENDENCIES += fftw-long-double
 >  endif
-> @@ -49,7 +53,7 @@ FFTW_CONF_OPTS += \
->  	$(FFTW_COMMON_CONF_OPTS) \
->  	--disable-single \
->  	--disable-long-double \
-> -	$(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision \
-> +	--disable-quad-precision \
->  	CFLAGS="$(FFTW_COMMON_CFLAGS)"
+> @@ -36,9 +40,6 @@ ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+>  FFTW_COMMON_CFLAGS += -O3 -ffast-math
+>  endif
 >  
->  $(eval $(autotools-package))
+> -# x86 optimisations
+> -FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE2),--enable,--disable)-sse2
+> -
+>  # Generic optimisations
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  FFTW_COMMON_CONF_OPTS += --enable-threads
+> @@ -48,14 +49,6 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
+>  endif
+>  FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+>  
+> -FFTW_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
+> -FFTW_CONF_OPTS += \
+> -	$(FFTW_COMMON_CONF_OPTS) \
+> -	--disable-single \
+> -	--disable-long-double \
+> -	--disable-quad-precision \
+> -	CFLAGS="$(FFTW_COMMON_CFLAGS)"
+> -
+> -$(eval $(autotools-package))
+> +$(eval $(generic-package))
+>  
+>  include $(sort $(wildcard package/fftw/*/*.mk))
 > -- 
 > 2.20.1
 > 
