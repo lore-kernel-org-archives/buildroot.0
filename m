@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:12:48 +0100
-Subject: [Buildroot] [PATCH] package/json-for-modern-cpp: relax
- dependency on cmake version
-In-Reply-To: <20181231185344.18570-1-yann.morin.1998@free.fr>
-References: <20181231185344.18570-1-yann.morin.1998@free.fr>
-Message-ID: <20190101111248.02b30b89@windsurf>
+Date: Tue, 1 Jan 2019 11:13:03 +0100
+Subject: [Buildroot] [git commit] package/luarocks: fix generation of
+ license file list in Buildroot addon
+Message-ID: <20190101100833.9D518884A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f2b783a8f237e8294bc371d3e52d3e994cfd80ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 31 Dec 2018 19:53:44 +0100, Yann E. MORIN wrote:
-> Currently, json-for-modern-cpp requires cmake to be at least cmake-3.8,
-> but our dependencies only check for cmake-3.1.
-> 
-> It turns out that json-for-modern-cpp is over strict, and could very
-> well do with just cmake-3.1
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/1f8/1f893d8bc7df3bfefd31df69aba918e2121cfaf7/
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> ---
->  ...system-relax-requirement-on-cmake-version.patch | 85 ++++++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
+check-package requires an hardtab instead of 4 spaces.
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luarocks/0002-Buildroot-addon.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luarocks/0002-Buildroot-addon.patch b/package/luarocks/0002-Buildroot-addon.patch
+index 3d7ea1156c..56b28eab2c 100644
+--- a/package/luarocks/0002-Buildroot-addon.patch
++++ b/package/luarocks/0002-Buildroot-addon.patch
+@@ -235,7 +235,7 @@ index 0000000..606b94c
+ +      f:write(ucname .. '_LICENSE_FILES =')
+ +      for i = 1, #licenses do
+ +         local file = licenses[i]
+-+         f:write(' \\\n    $(' .. ucname .. '_SUBDIR)/' .. file)
+++         f:write(' \\\n\t$(' .. ucname .. '_SUBDIR)/' .. file)
+ +      end
+ +      f:write('\n')
+ +   end
