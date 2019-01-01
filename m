@@ -1,84 +1,145 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jan 2019 21:11:20 +0100
-Subject: [Buildroot] [git commit] package/opus-tools: bump to version 0.2
-Message-ID: <20190101200759.2A8E38843A@busybox.osuosl.org>
+Date: Tue, 1 Jan 2019 21:12:25 +0100
+Subject: [Buildroot] [git commit] lua-curl: bump to version 0.3.9
+Message-ID: <20190101200759.31F8B8843A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b7cb7ae7905b2d3917ba4e5e35b8d336f8bc5a6
+commit: https://git.buildroot.net/buildroot/commit/?id=608b3fc885b919e8e28c812991e46f0256328c2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In this release the Opus decoder opusdec has been converted to use the
-opusfile library, and the Opus encoder opusenc has been converted to
-use the libopusenc library. These libraries make it easy to robustly
-read and write Ogg Opus audio files, and enable some new features.
-
-Due to this, opus-tools now needs to depend on opusfile and
-libopusenc. We take this opportunity to reorder alphabetically the
-dependencies in Config.in and .mk files.
-
-The license file hash has changed for two reasons:
-
- - The xiph.org URL was changed from http:// to https://
- - White-space changes
-
-There are no other changes, and no change that affect the licensing
-conditions.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opus-tools/Config.in       | 4 +++-
- package/opus-tools/opus-tools.hash | 4 ++--
- package/opus-tools/opus-tools.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ .../lua-curl/0001-Fix-build-with-curl-7.62.0.patch | 58 ----------------------
+ .../0002-Fix.-Removed-invalid-semicolon.patch      | 28 -----------
+ package/lua-curl/lua-curl.hash                     |  4 +-
+ package/lua-curl/lua-curl.mk                       |  4 +-
+ 4 files changed, 4 insertions(+), 90 deletions(-)
 
-diff --git a/package/opus-tools/Config.in b/package/opus-tools/Config.in
-index 2552d19515..c045239ea7 100644
---- a/package/opus-tools/Config.in
-+++ b/package/opus-tools/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_OPUS_TOOLS
- 	bool "opus-tools"
--	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBOPUSENC
-+	select BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_OPUSFILE
- 	help
- 	  Opus codec command line tools. This package provides the
- 	  reference implementations of encoder and decoder utilities
-diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
-index c7759e559f..1b87458f53 100644
---- a/package/opus-tools/opus-tools.hash
-+++ b/package/opus-tools/opus-tools.hash
-@@ -1,5 +1,5 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256 a2357532d19471b70666e0e0ec17d514246d8b3cb2eb168f68bb0f6fd372b28c  opus-tools-0.1.10.tar.gz
-+sha256 b4e56cb00d3e509acfba9a9b627ffd8273b876b4e2408642259f6da28fa0ff86  opus-tools-0.2.tar.gz
- 
- # Hash for license file
--sha256 88021117568c64038175d7fb3b8286056f7cdb54f09dc806578f6bd9342c62cc  COPYING
-+sha256 c28016e58544119d6b93aea28297d040f17dcef7a9f548d3e6a4d0b558c5d248  COPYING
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index ab00ced705..f69c3bef8b 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch b/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
+deleted file mode 100644
+index f1c1f2e21c..0000000000
+--- a/package/lua-curl/0001-Fix-build-with-curl-7.62.0.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 4e3764ecf2b2c3f62475579fee6af4a753729f07 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 1 Nov 2018 19:12:20 +0200
+-Subject: [PATCH] Fix build with curl 7.62.0
+-
+-Fixes #134.
+-
+-curl 7.62.0 deprecates the CURLE_SSL_CACERT error code, and unifies it
+-with CURLE_PEER_FAILED_VERIFICATION. Adjust the errors list to match.
+-
+-This fixes the following build failure:
+-
+-src/lcerr_easy.h: In function 'lcurl_err_easy_mnemo':
+-src/lcerror.c:32:22: error: duplicate case value
+- #define ERR_ENTRY(E) case CURLE_##E: return #E;
+-                      ^
+-src/lcerr_easy.h:74:1: note: in expansion of macro 'ERR_ENTRY'
+- ERR_ENTRY ( SSL_CACERT               )
+- ^~~~~~~~~
+-src/lcerror.c:32:22: note: previously used here
+- #define ERR_ENTRY(E) case CURLE_##E: return #E;
+-                      ^
+-src/lcerr_easy.h:65:1: note: in expansion of macro 'ERR_ENTRY'
+- ERR_ENTRY ( PEER_FAILED_VERIFICATION )
+- ^~~~~~~~~
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/Lua-cURL/Lua-cURLv3/pull/136
+-
+-diff --git a/src/lcerr_easy.h b/src/lcerr_easy.h
+-index 94ad143c3bfe..895c6d87d72f 100644
+---- a/Lua-cURLv3-0.3.8/src/lcerr_easy.h
+-+++ b/Lua-cURLv3-0.3.8/src/lcerr_easy.h
+-@@ -62,7 +62,11 @@ ERR_ENTRY ( UNKNOWN_TELNET_OPTION    ) /* User specified an unknown option */
+- #endif
+- ERR_ENTRY ( TELNET_OPTION_SYNTAX     )
+- ERR_ENTRY ( OBSOLETE50               )
+-+#if LCURL_CURL_VER_GE(7,62,0)
+-+ERR_ENTRY ( OBSOLETE51               )
+-+#else
+- ERR_ENTRY ( PEER_FAILED_VERIFICATION )
+-+#endif
+- ERR_ENTRY ( GOT_NOTHING              )
+- ERR_ENTRY ( SSL_ENGINE_NOTFOUND      )
+- ERR_ENTRY ( SSL_ENGINE_SETFAILED     )
+-@@ -71,7 +75,11 @@ ERR_ENTRY ( RECV_ERROR               )
+- ERR_ENTRY ( OBSOLETE57               )
+- ERR_ENTRY ( SSL_CERTPROBLEM          )
+- ERR_ENTRY ( SSL_CIPHER               )
+-+#if LCURL_CURL_VER_GE(7,62,0)
+-+ERR_ENTRY ( PEER_FAILED_VERIFICATION )
+-+#else
+- ERR_ENTRY ( SSL_CACERT               )
+-+#endif
+- ERR_ENTRY ( BAD_CONTENT_ENCODING     )
+- ERR_ENTRY ( LDAP_INVALID_URL         )
+- ERR_ENTRY ( FILESIZE_EXCEEDED        )
+diff --git a/package/lua-curl/0002-Fix.-Removed-invalid-semicolon.patch b/package/lua-curl/0002-Fix.-Removed-invalid-semicolon.patch
+deleted file mode 100644
+index 288f5a1374..0000000000
+--- a/package/lua-curl/0002-Fix.-Removed-invalid-semicolon.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 39aeb8aa6f3a379918c58560d58f243fa7ec2b8b Mon Sep 17 00:00:00 2001
+-From: Anderson Silva <anderson.silva@cujo.com>
+-Date: Wed, 11 Jul 2018 11:59:33 -0700
+-Subject: [PATCH] Fix. Removed invalid semicolon
+-
+-[Thomas: backported from upstream commit
+-3f0489157d2f1e3a90a32f8fb31ade6e02296367]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/lceasy.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Lua-cURLv3-0.3.8/src/lceasy.h b/Lua-cURLv3-0.3.8/src/lceasy.h
+-index d6ccefd..7c95668 100644
+---- a/Lua-cURLv3-0.3.8/src/lceasy.h
+-+++ b/Lua-cURLv3-0.3.8/src/lceasy.h
+-@@ -47,7 +47,7 @@ struct lcurl_multi_tag;
+- #define lcurl_multi_t struct lcurl_multi_tag
+- #if LCURL_CURL_VER_GE(7,56,0)
+- struct lcurl_mime_tag;
+--#define lcurl_mime_t struct lcurl_mime_tag;
+-+#define lcurl_mime_t struct lcurl_mime_tag
+- #endif
+- #endif
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
+index c2497bc0af..49cd6653a5 100644
+--- a/package/lua-curl/lua-curl.hash
++++ b/package/lua-curl/lua-curl.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 ab07d40dad98bbd025b02e3bde397d582fae2b41451d748925120e3aa9192043  lua-curl-0.3.8-2.src.rock
+-sha256 264807cb89f960808fed1ef9922aed9d9f8437764e836d8e594e66db7be9c54c  Lua-cURLv3-0.3.8/LICENSE
++sha256 ec761e800cec630ff0e78f100e1a61246c35823073014de65f1af0a85bfe1dc0  lua-curl-0.3.9-1.src.rock
++sha256 264807cb89f960808fed1ef9922aed9d9f8437764e836d8e594e66db7be9c54c  Lua-cURLv3-0.3.9/LICENSE
+diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+index 6ac6351bc4..9fa9408a4e 100644
+--- a/package/lua-curl/lua-curl.mk
++++ b/package/lua-curl/lua-curl.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--OPUS_TOOLS_VERSION = 0.1.10
-+OPUS_TOOLS_VERSION = 0.2
- OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_TOOLS_LICENSE = BSD-2-Clause, GPL-2.0 (opusinfo)
- OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
--OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
-+OPUS_TOOLS_DEPENDENCIES = libogg libopusenc opus opusfile host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- OPUS_TOOLS_DEPENDENCIES += libpcap
+-LUA_CURL_VERSION_UPSTREAM = 0.3.8
+-LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-2
++LUA_CURL_VERSION_UPSTREAM = 0.3.9
++LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
+ LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
+ LUA_CURL_LICENSE = MIT
+ LUA_CURL_LICENSE_FILES = $(LUA_CURL_SUBDIR)/LICENSE
