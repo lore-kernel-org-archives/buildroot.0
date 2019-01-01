@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Jan 2019 22:06:59 +0100
-Subject: [Buildroot] [PATCH v3 13/17] package/libvips: use the new
- fftw-double package
-In-Reply-To: <20181231133030.25991-14-thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Jan 2019 22:44:06 +0100
+Subject: [Buildroot] [PATCH v3 14/17] package/pulseaudio: use the new
+ fftw-single package
+In-Reply-To: <20181231133030.25991-15-thomas.petazzoni@bootlin.com>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-14-thomas.petazzoni@bootlin.com>
-Message-ID: <20190101210659.GC23435@scaer>
+ <20181231133030.25991-15-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101214406.GD23435@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,32 +20,32 @@ On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
 > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/libvips/libvips.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/pulseaudio/pulseaudio.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-> index 8078e046d1..7622f32fbc 100644
-> --- a/package/libvips/libvips.mk
-> +++ b/package/libvips/libvips.mk
-> @@ -68,9 +68,9 @@ else
->  LIBVIPS_CONF_OPTS += --without-tiff
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_FFTW),y)
-> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+> index d1c35654cf..c91af22935 100644
+> --- a/package/pulseaudio/pulseaudio.mk
+> +++ b/package/pulseaudio/pulseaudio.mk
+> @@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+>  	$(if $(BR2_PACKAGE_DBUS),dbus) \
+>  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+> -	$(if $(BR2_PACKAGE_FFTW),fftw) \
+> +	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
 
-Once more, why only fftw-double, when it previously could build with any
-variant?
+I think I may end up being seen as an old dotard, re-hashing the same
+nonsense endlessly again and again, but...
+
+Why did we switch to fftw-single only, when previously fftw was checked
+for, which meant any variant of it?
 
 Regards,
 Yann E. MORIN.
 
->  LIBVIPS_CONF_OPTS += --with-fftw
-> -LIBVIPS_DEPENDENCIES += fftw
-> +LIBVIPS_DEPENDENCIES += fftw-double
->  else
->  LIBVIPS_CONF_OPTS += --without-fftw
->  endif
+>  	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+>  
+>  ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
 > -- 
 > 2.20.1
 > 
