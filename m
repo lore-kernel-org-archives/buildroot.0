@@ -1,45 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  1 Jan 2019 22:49:42 +0100
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20181218
-Message-ID: <20190101214942.3220-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Jan 2019 22:50:58 +0100
+Subject: [Buildroot] [PATCH v3 15/17] package/liquid-dsp: use the new
+ fftw-{single, double, long-double} packages
+In-Reply-To: <20181231133030.25991-16-thomas.petazzoni@bootlin.com>
+References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
+ <20181231133030.25991-16-thomas.petazzoni@bootlin.com>
+Message-ID: <20190101215058.GE23435@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
+Thomas, Gwenha?l, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/liquid-dsp/liquid-dsp.mk | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+> index db67893844..6aa27a5248 100644
+> --- a/package/liquid-dsp/liquid-dsp.mk
+> +++ b/package/liquid-dsp/liquid-dsp.mk
+> @@ -30,9 +30,9 @@ LIQUID_DSP_CFLAGS += -ffast-math
+>  endif
+>  
+>  # use FFTW instead of built-in FFT
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3f
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-single
+>  endif
+>  
+>  # disable altivec, it has build issues
+> @@ -40,14 +40,14 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+>  LIQUID_DSP_CONF_OPTS += --enable-simdoverride
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-double
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3l
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-long-double
+>  endif
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index f757a86630..265ae671ef 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-November/003572.html
--sha256 7d47f7996dd291069de4efb3097c42f769f60dc3ac6f850a4d5705f321e4406b  WireGuard-0.0.20181119.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
-+sha256 2e9f86acefa49dbfb7fa6f5e10d543f1885a2d5460cd5e102696901107675735  WireGuard-0.0.20181218.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 93373d8538..d36929efd8 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20181119
-+WIREGUARD_VERSION = 0.0.20181218
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+Since those three fftw variants can now be enabled at the same time,
+we'd end up with:
+    LIQUID_DSP_DEPENDENCIES = fftw-single fftw-double fftw-long-double
+    LIQUID_DSP_LDFLAGS = -lfftw3f -lfftw3 -lfftw3l
+
+Is that really what we want?
+
+If not, then the theree conditions must be mutually exclusive, and a
+priority must be given (I'll assume the most precise is to be favoured):
+
+ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+LIQUID_DSP_LDFLAGS += -lfftw3l
+LIQUID_DSP_DEPENDENCIES += fftw-long-double
+else ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+LIQUID_DSP_LDFLAGS += -lfftw3
+LIQUID_DSP_DEPENDENCIES += fftw-double
+else ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+LIQUID_DSP_LDFLAGS += -lfftw3f
+LIQUID_DSP_DEPENDENCIES += fftw-single
+endif
+
+Regards,
+Yann E. MORIN.
+
+>  LIQUID_DSP_CONF_OPTS += \
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
