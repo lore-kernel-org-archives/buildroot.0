@@ -1,30 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Jan 2019 11:13:30 +0100
-Subject: [Buildroot] [PATCH] luarocks: fix generation of license file
- list
-In-Reply-To: <20190101072120.28018-1-francois.perrad@gadz.org>
-References: <20190101072120.28018-1-francois.perrad@gadz.org>
-Message-ID: <20190101111330.73e46657@windsurf>
+Date: Tue, 1 Jan 2019 11:13:49 +0100
+Subject: [Buildroot] [git commit] package/collectd: Fix build issue with
+ SENSORS_API_VERSION >= 0x500
+Message-ID: <20190101100929.E30AC8820B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e8da238787216c03ed49eed135bfde515533fe6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  1 Jan 2019 08:21:20 +0100, Francois Perrad wrote:
-> check-package requires an hardtab instead of 4 spaces.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/0002-Buildroot-addon.patch | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Current collectd version 5.7.1 fails to compile because there is a
+check which breaks the compilation if lm_sensors API >= 0x500, but in
+the mainline codebase this check was removed in commit:
 
-Applied to master, thanks.
+  https://github.com/collectd/collectd/commit/069796bd76dd1ab0089a64f7c9c2a3c9f1475414
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So add backported patch based on this commit.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c3c84ca6e11b268ba5ada7e3dca18bca681ee43d/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...oved-checks-for-upper-limit-of-SENSORS_AP.patch | 89 ++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+
+diff --git a/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
+new file mode 100644
+index 0000000000..9270021dd6
+--- /dev/null
++++ b/package/collectd/0003-sensors-Removed-checks-for-upper-limit-of-SENSORS_AP.patch
+@@ -0,0 +1,89 @@
++From 069796bd76dd1ab0089a64f7c9c2a3c9f1475414 Mon Sep 17 00:00:00 2001
++From: Pavel Rochnyack <pavel2000@ngs.ru>
++Date: Mon, 3 Dec 2018 18:34:14 +0700
++Subject: [PATCH] sensors: Removed checks for upper limit of
++ SENSORS_API_VERSION
++
++That makes no more sense after lm-sensors got new maintainers.
++
++Issue: #3006
++
++[Vadim Kochan: backported to support 5.7.1 version]
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ src/sensors.c | 17 ++++++-----------
++ 1 file changed, 6 insertions(+), 11 deletions(-)
++
++diff --git a/src/sensors.c b/src/sensors.c
++index 8f1824d..409dc38 100644
++--- a/src/sensors.c
+++++ b/src/sensors.c
++@@ -149,7 +149,7 @@ typedef struct featurelist {
++ static char *conffile = SENSORS_CONF_PATH;
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++ typedef struct featurelist {
++   const sensors_chip_name *chip;
++   const sensors_feature *feature;
++@@ -159,11 +159,6 @@ typedef struct featurelist {
++ 
++ static char *conffile = NULL;
++ static _Bool use_labels = 0;
++-/* #endif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
++-
++-#else /* if SENSORS_API_VERSION >= 0x500 */
++-#error "This version of libsensors is not supported yet. Please report this " \
++-	"as bug."
++ #endif
++ 
++ static featurelist_t *first_feature = NULL;
++@@ -223,7 +218,7 @@ static int sensors_config(const char *key, const char *value) {
++     if (IS_TRUE(value))
++       ignorelist_set_invert(sensor_list, 0);
++   }
++-#if (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#if (SENSORS_API_VERSION >= 0x400)
++   else if (strcasecmp(key, "UseLabels") == 0) {
++     use_labels = IS_TRUE(value) ? 1 : 0;
++   }
++@@ -353,7 +348,7 @@ static int sensors_load_conf(void) {
++   }   /* while sensors_get_detected_chips */
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++   chip_num = 0;
++   while ((chip = sensors_get_detected_chips(NULL, &chip_num)) != NULL) {
++     const sensors_feature *feature;
++@@ -404,7 +399,7 @@ static int sensors_load_conf(void) {
++       } /* while (subfeature) */
++     }   /* while (feature) */
++   }     /* while (chip) */
++-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
+++#endif /* (SENSORS_API_VERSION >= 0x400) */
++ 
++   if (first_feature == NULL) {
++     sensors_cleanup();
++@@ -479,7 +474,7 @@ static int sensors_read(void) {
++   } /* for fl = first_feature .. NULL */
++ /* #endif SENSORS_API_VERSION < 0x400 */
++ 
++-#elif (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500)
+++#elif (SENSORS_API_VERSION >= 0x400)
++   for (featurelist_t *fl = first_feature; fl != NULL; fl = fl->next) {
++     double value;
++     int status;
++@@ -518,7 +513,7 @@ static int sensors_read(void) {
++ 
++     sensors_submit(plugin_instance, type, type_instance, value);
++   } /* for fl = first_feature .. NULL */
++-#endif /* (SENSORS_API_VERSION >= 0x400) && (SENSORS_API_VERSION < 0x500) */
+++#endif /* (SENSORS_API_VERSION >= 0x400) */
++ 
++   return (0);
++ } /* int sensors_read */
++-- 
++2.14.1
++
