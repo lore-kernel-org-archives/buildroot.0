@@ -1,8 +1,10 @@
 From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Wed,  2 Jan 2019 15:15:58 +0000
+Date: Wed,  2 Jan 2019 15:15:59 +0000
 Subject: [Buildroot] [PATCH v2 1/1] package/glibc: fix include of syscalls.h
  for RISC-V architecture
-Message-ID: <20190102151559.32221-1-mark.corbin@embecosm.com>
+In-Reply-To: <20190102151559.32221-1-mark.corbin@embecosm.com>
+References: <20190102151559.32221-1-mark.corbin@embecosm.com>
+Message-ID: <20190102151559.32221-2-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +19,7 @@ This commit applies the upstream glibc patch for this issue.
 
 Fixes:
   http://autobuild.buildroot.net/results/8190eb74b2b97911e03671138487d747fcb22cba/
-
 Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-
----
-Changes v1 -> v2:
-  - referenced the commit rather than the mailing list message as the
-    source of the upstream patch (Yann)
 ---
  .../0002-fix-syscalls-header-for-riscv.patch  | 67 +++++++++++++++++++
  1 file changed, 67 insertions(+)
