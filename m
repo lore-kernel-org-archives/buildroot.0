@@ -1,110 +1,124 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Wed, 2 Jan 2019 15:21:33 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/glibc: fix include of
- syscalls.h for RISC-V architecture
-In-Reply-To: <20190102151559.32221-2-mark.corbin@embecosm.com>
-References: <20190102151559.32221-1-mark.corbin@embecosm.com>
- <20190102151559.32221-2-mark.corbin@embecosm.com>
-Message-ID: <b91c3872-f8de-aa3d-e458-b4a65b7828a0@embecosm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Jan 2019 16:48:17 +0100
+Subject: [Buildroot] [PATCH] package/pkgconf: fix behavior of pkg-config
+ --version
+In-Reply-To: <20181227141523.18796-1-thomas.petazzoni@bootlin.com>
+References: <20181227141523.18796-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190102154817.GJ23435@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please ignore this version - it is a backup copy of the v2 patch sent by
-accident.
+Thomas, All,
 
-On 02/01/2019 15:15, Mark Corbin wrote:
-> UAPI header file asm/syscalls.h has been merged into the UAPI
-> asm/unistd.h header file for the RISC-V architecture in the
-> 4.20 kernel. This causes the glibc 2.28 build to break.
->
-> This commit applies the upstream glibc patch for this issue.
->
+On 2018-12-27 15:15 +0100, Thomas Petazzoni spake thusly:
+> For some odd reason, the new pkg-config 1.5.3 changed the behavior of
+> "pkg-config --version": as soon as another argument than "--version"
+> is passed, the code assumes the user wanted to run "--modversion"
+> instead.
+> 
+> Sadly, this breaks badly with our pkg-config wrapper that
+> unconditionally passes --static to pkg-config when
+> BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
+> pkg-config is available and functional, it's actually "pkg-config
+> --static --version" that gets executed. pkg-config assumes that the
+> user wanted to use --modversion and bails out with an error.
+> 
+> This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
+> configuration.
+> 
+> This misbehavior of pkg-config has been reported upstream at
+> https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
+> gets fixed, we work around the issue by patching pkg-config so that it
+> ignores --static in the count of arguments when doing its
+> --version/--modversion dance.
+
+Why don't we simply revert the upstream commit that changed the
+behaviour?
+
+Regards,
+Yann E. MORIN.
+
 > Fixes:
->   http://autobuild.buildroot.net/results/8190eb74b2b97911e03671138487d747fcb22cba/
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> 
+>   http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
+>   (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  .../0002-fix-syscalls-header-for-riscv.patch  | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
->
-> diff --git a/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+>  ...-count-static-as-an-argument-when-ha.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
+> 
+> diff --git a/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch b/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
 > new file mode 100644
-> index 0000000000..2fc666dfdc
+> index 0000000000..817c23c985
 > --- /dev/null
-> +++ b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
-> @@ -0,0 +1,67 @@
-> +<asm/syscalls.h> has been removed by
+> +++ b/package/pkgconf/0002-cli-main.c-don-t-count-static-as-an-argument-when-ha.patch
+> @@ -0,0 +1,49 @@
+> +From f7a58c164ab1d2dc296ce47ab238ed1ea39cb559 Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Date: Thu, 27 Dec 2018 14:50:38 +0100
+> +Subject: [PATCH] cli/main.c: don't count --static as an argument when handling
+> + --version
 > +
-> +commit 27f8899d6002e11a6e2d995e29b8deab5aa9cc25
-> +Author: David Abdurachmanov <david.abdurachmanov@gmail.com>
-> +Date:   Thu Nov 8 20:02:39 2018 +0100
+> +In commit 12a0eb124cea85586e57f33c91a1e4c73459eef6 ("main: assume
+> +--modversion insted of --version if other flags or module names are
+> +provided"), the handling of the --version option was changed so that
+> +if any other option than --version is passed, pkg-config assumes the
+> +user wanted to use --modversion.
 > +
-> +    riscv: add asm/unistd.h UAPI header
+> +This breaks the use case where "pkg-config --static --version" is
+> +passed, a situation where we really want the normal --version
+> +behavior.
 > +
-> +    Marcin Juszkiewicz reported issues while generating syscall table for riscv
-> +    using 4.20-rc1. The patch refactors our unistd.h files to match some other
-> +    architectures.
+> +This issue has been reported upstream at
+> +https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until a
+> +resolution is found, let's not count the --static option in the count
+> +of options that trigger this "the user wanted --modversion" behavior.
 > +
-> +    - Add asm/unistd.h UAPI header, which has __ARCH_WANT_NEW_STAT only for 64-bit
-> +    - Remove asm/syscalls.h UAPI header and merge to asm/unistd.h
-> +    - Adjust kernel asm/unistd.h
-> +
-> +    So now asm/unistd.h UAPI header should show all syscalls for riscv.
-> +
-> +<asm/syscalls.h> may be restored by
-> +
-> +Subject: [PATCH] riscv: restore asm/syscalls.h UAPI header
-> +Date: Tue, 11 Dec 2018 09:09:35 +0100
-> +
-> +UAPI header asm/syscalls.h was merged into UAPI asm/unistd.h header,
-> +which did resolve issue with missing syscalls macros resulting in
-> +glibc (2.28) build failure. It also broke glibc in a different way:
-> +asm/syscalls.h is being used by glibc. I noticed this while doing
-> +Fedora 30/Rawhide mass rebuild.
-> +
-> +The patch returns asm/syscalls.h header and incl. it into asm/unistd.h.
-> +I plan to send a patch to glibc to use asm/unistd.h instead of
-> +asm/syscalls.h
-> +
-> +In the meantime, we use __has_include__, which was added to GCC 5, to
-> +check if <asm/syscalls.h> exists before including it.  Tested with
-> +build-many-glibcs.py for riscv against kernel 4.19.12 and 4.20-rc7.
-> +
-> +	[BZ #24022]
-> +	* sysdeps/unix/sysv/linux/riscv/flush-icache.c: Check if
-> +	<asm/syscalls.h> exists with __has_include__ before including it.
-> +
-> +[Mark: patch retrieved from
-> +https://sourceware.org/git/?p=glibc.git;a=commit;h=0b9c84906f653978fb8768c7ebd0ee14a47e662e]
-> +
-> +Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > +---
-> + sysdeps/unix/sysv/linux/riscv/flush-icache.c | 4 ++++
-> + 1 file changed, 4 insertions(+)
+> + cli/main.c | 9 ++++++++-
+> + 1 file changed, 8 insertions(+), 1 deletion(-)
 > +
-> +diff --git a/sysdeps/unix/sysv/linux/riscv/flush-icache.c b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
-> +index d612ef4c6c..d0ecec5107 100644
-> +--- a/sysdeps/unix/sysv/linux/riscv/flush-icache.c
-> ++++ b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
-> +@@ -21,7 +21,11 @@
-> + #include <stdlib.h>
-> + #include <atomic.h>
-> + #include <sys/cachectl.h>
-> ++#if __has_include__ (<asm/syscalls.h>)
-> + #include <asm/syscalls.h>
-> ++#else
-> ++#include <asm/unistd.h>
-> ++#endif
+> +diff --git a/cli/main.c b/cli/main.c
+> +index b52cc85..8f6c4c9 100644
+> +--- a/cli/main.c
+> ++++ b/cli/main.c
+> +@@ -955,7 +955,14 @@ main(int argc, char *argv[])
 > + 
-> + typedef int (*func_type) (void *, void *, unsigned long int);
+> + 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
+> + 	{
+> +-		if (argc > 2)
+> ++		int nargs = argc;
+> ++
+> ++		/* Don't count --static as an argument for the
+> ++		 * following test */
+> ++		if ((want_flags & PKG_STATIC) == PKG_STATIC)
+> ++			nargs--;
+> ++
+> ++		if (nargs > 2)
+> + 		{
+> + 			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
 > + 
 > +-- 
-> +2.19.2
+> +2.20.1
+> +
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
