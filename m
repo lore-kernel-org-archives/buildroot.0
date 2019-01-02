@@ -1,73 +1,132 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Jan 2019 14:26:29 +0100
-Subject: [Buildroot] [PATCH] package/linux-headers: drop obsolete 3.2.x
- / 4.{1, 16, 18}.x versions
-In-Reply-To: <20190102135720.232e4f5f@windsurf> (Thomas Petazzoni's message of
- "Wed, 2 Jan 2019 13:57:20 +0100")
-References: <20190102111140.13016-1-peter@korsgaard.com>
- <20190102135720.232e4f5f@windsurf>
-Message-ID: <8736qbp4vu.fsf@dell.be.48ers.dk>
+Date: Wed,  2 Jan 2019 14:52:45 +0100
+Subject: [Buildroot] [PATCH v2] package/linux-headers: drop obsolete 3.2.x /
+ 4.{1, 16, 18}.x versions
+Message-ID: <20190102135246.16616-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+According to https://www.kernel.org/category/releases.html, these kernel
+versions are no longer supported, so drop them now that we have added 4.20.x
 
- > Hello,
- > On Wed,  2 Jan 2019 12:11:40 +0100, Peter Korsgaard wrote:
- >> According to https://www.kernel.org/category/releases.html, these kernel
- >> versions are no longer supported, so drop them now that we have added 4.20.x
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> linux/linux.hash                     |  5 -----
- >> package/linux-headers/Config.in.host | 23 -----------------------
- >> 2 files changed, 28 deletions(-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+Changes since v1:
+- Add Config.in.legacy entries as suggested by Thomas
 
- > We do have some Config.in.legacy handling for those options:
+ Config.in.legacy                     | 28 ++++++++++++++++++++++++++++
+ linux/linux.hash                     |  5 -----
+ package/linux-headers/Config.in.host | 23 -----------------------
+ 3 files changed, 28 insertions(+), 28 deletions(-)
 
- > $ grep KERNEL_HEADERS Config.in.legacy 
- > config BR2_KERNEL_HEADERS_4_10
- > config BR2_KERNEL_HEADERS_4_11
- > config BR2_KERNEL_HEADERS_4_12
- > config BR2_KERNEL_HEADERS_4_13
- > config BR2_KERNEL_HEADERS_4_15
- > config BR2_KERNEL_HEADERS_4_17
- > config BR2_KERNEL_HEADERS_3_4
- > config BR2_KERNEL_HEADERS_3_10
- > config BR2_KERNEL_HEADERS_3_12
- > config BR2_KERNEL_HEADERS_4_8
- > config BR2_KERNEL_HEADERS_3_18
- > config BR2_KERNEL_HEADERS_4_7
- > config BR2_KERNEL_HEADERS_4_6
- > config BR2_KERNEL_HEADERS_4_5
- > config BR2_KERNEL_HEADERS_3_14
- > config BR2_KERNEL_HEADERS_4_3
- > config BR2_KERNEL_HEADERS_4_2
- > config BR2_KERNEL_HEADERS_4_0
- > config BR2_KERNEL_HEADERS_3_19
- > config BR2_KERNEL_HEADERS_3_17
- > config BR2_KERNEL_HEADERS_3_16
- > config BR2_KERNEL_HEADERS_3_0
- > config BR2_KERNEL_HEADERS_3_11
- > config BR2_KERNEL_HEADERS_3_13
- > config BR2_KERNEL_HEADERS_3_15
- > config BR2_KERNEL_HEADERS_3_8
- > config BR2_KERNEL_HEADERS_3_6
- > config BR2_KERNEL_HEADERS_3_7
- > config BR2_KERNEL_HEADERS_SNAP
- > config BR2_KERNEL_HEADERS_3_1
- > config BR2_KERNEL_HEADERS_3_3
- > config BR2_KERNEL_HEADERS_3_5
-
- > Shouldn't we continue with the same process ?
-
-Yes, certainly. I got interrupted while making this patch and completely
-forgot about it again.
-
-Will fix.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8cab6a23af..6f1e3eef2b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -255,6 +255,34 @@ config BR2_PACKAGE_LIBNFTNL_XML
+ 	help
+ 	  libnftnl removed integration with libmxml.
+ 
++config BR2_KERNEL_HEADERS_3_2
++	bool "kernel headers version 3.2.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 3.2.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
++config BR2_KERNEL_HEADERS_4_1
++	bool "kernel headers version 4.1.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 4.1.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
++config BR2_KERNEL_HEADERS_4_16
++	bool "kernel headers version 4.16.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 4.16.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
++config BR2_KERNEL_HEADERS_4_18
++	bool "kernel headers version 4.18.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 4.18.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ ###############################################################################
+ comment "Legacy options removed in 2018.08"
+ 
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 3e7fdbc81f..6467d8abca 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 ad0823183522e743972382df0aa08fb5ae3077f662b125f1e599b0b2aaa12438  linux-4.20.tar.xz
+ sha256 f50a77fc40e13fc406791346fa91926394205874cd50246c7c2374006bacc0c2  linux-4.19.13.tar.xz
+-sha256 68ac319e0fb7edd6b6051541d9cf112cd4f77a29e16a69ae1e133ff51117f653  linux-4.18.20.tar.xz
+-sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
+ sha256 6a587c8b4160918efa082b0c2eda8c2db0f50d8814ad1d1ac94be1edf66ca6a9  linux-4.14.91.tar.xz
+ sha256 6067151b0225a8de1ab79abc9be7bae237eaca0cd838eb26684169560d88a994  linux-4.9.148.tar.xz
+ sha256 06f1b080332251628727e42d21b4530035f03f00d75432199b2548172b1650a9  linux-4.4.169.tar.xz
+-sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
+-# From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
+-sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 32ddcef5f9..907725093d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -26,17 +26,6 @@ config BR2_KERNEL_HEADERS_AS_KERNEL
+ 	bool "Same as kernel being built"
+ 	depends on BR2_LINUX_KERNEL
+ 
+-config BR2_KERNEL_HEADERS_3_2
+-	bool "Linux 3.2.x kernel headers"
+-	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_arc && !BR2_nios2
+-	depends on !BR2_riscv
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+-
+-config BR2_KERNEL_HEADERS_4_1
+-	bool "Linux 4.1.x kernel headers"
+-	depends on !BR2_riscv
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+-
+ config BR2_KERNEL_HEADERS_4_4
+ 	bool "Linux 4.4.x kernel headers"
+ 	depends on !BR2_riscv
+@@ -52,14 +41,6 @@ config BR2_KERNEL_HEADERS_4_14
+ 	depends on !BR2_riscv
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 
+-config BR2_KERNEL_HEADERS_4_16
+-	bool "Linux 4.16.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+-
+-config BR2_KERNEL_HEADERS_4_18
+-	bool "Linux 4.18.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+-
+ config BR2_KERNEL_HEADERS_4_19
+ 	bool "Linux 4.19.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+@@ -304,13 +285,9 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+-	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.169"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.148"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.91"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.18.20"	if BR2_KERNEL_HEADERS_4_18
+ 	default "4.19.13"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20"		if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+2.11.0
