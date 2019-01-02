@@ -1,30 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Jan 2019 09:16:47 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
-In-Reply-To: <87sgycox9n.fsf@dell.be.48ers.dk>
-References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
- <87sgycox9n.fsf@dell.be.48ers.dk>
-Message-ID: <20190102091647.319e2c96@windsurf>
+From: qwendu <qwendu@gmail.com>
+Date: Wed,  2 Jan 2019 17:32:50 +0800
+Subject: [Buildroot] [PATCH] package/libwebsockets: bump to v3.1.0
+Message-ID: <1546421571-18627-1-git-send-email-qwendu@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+added -fno-strict-aliasing to fixed the following error:
+...
+libwebsockets-v3.1.0/lib/event-libs/libev/libev.c:34:3: error: dereferencing type-punned pointer will break strict-aliasing rules [-Werror=strict-aliasing]
+    ev_timer_set(&pt->ev.hrtimer, ((float)us) / 1000000.0, 0);
 
-On Tue, 01 Jan 2019 22:58:44 +0100, Peter Korsgaard wrote:
+Signed-off-by: qwendu <qwendu@gmail.com>
+---
+ package/libwebsockets/cmake-no-strict-aliasin.patch | 16 ++++++++++++++++
+ package/libwebsockets/libwebsockets.hash            |  2 +-
+ package/libwebsockets/libwebsockets.mk              |  2 +-
+ 3 files changed, 18 insertions(+), 2 deletions(-)
+ create mode 100644 package/libwebsockets/cmake-no-strict-aliasin.patch
 
-> With 2019.02 becoming our next LTS and 4.20 NOT a LTS release, I wonder
-> if it would make sense to still default to 4.19.x instead of 4.20.x?
-
-Yes, that probably make sense. But in this case, we would need to get
-in touch with the kernel folks to get the net_tstamp.h fix in -stable.
-It has the Fixes: tag, but it still hasn't been backported to
-4.19-stable.
-
-Thomas
+diff --git a/package/libwebsockets/cmake-no-strict-aliasin.patch b/package/libwebsockets/cmake-no-strict-aliasin.patch
+new file mode 100644
+index 0000000..8515d40
+--- /dev/null
++++ b/package/libwebsockets/cmake-no-strict-aliasin.patch
+@@ -0,0 +1,16 @@
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 453fdfd..6fd1712 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1233,9 +1233,9 @@ if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR (CMAKE_C_COMPILER_ID
++     endif()
++ 
++     if (UNIX AND NOT LWS_WITH_ESP32)
++-	    set(CMAKE_C_FLAGS "-Wall -Wsign-compare -Wignored-qualifiers -Wtype-limits -Wuninitialized -Werror ${VISIBILITY_FLAG} -Wundef ${GCOV_FLAGS} ${CMAKE_C_FLAGS} ${ASAN_FLAGS}" )
+++	    set(CMAKE_C_FLAGS "-fno-strict-aliasing -Wall -Wsign-compare -Wignored-qualifiers -Wtype-limits -Wuninitialized -Werror ${VISIBILITY_FLAG} -Wundef ${GCOV_FLAGS} ${CMAKE_C_FLAGS} ${ASAN_FLAGS}" )
++     else()
++-	    set(CMAKE_C_FLAGS "-Wall -Wsign-compare -Wignored-qualifiers -Wtype-limits -Wuninitialized -Werror ${VISIBILITY_FLAG} ${GCOV_FLAGS} ${CMAKE_C_FLAGS}" )
+++	    set(CMAKE_C_FLAGS "-fno-strict-aliasing -Wall -Wsign-compare -Wignored-qualifiers -Wtype-limits -Wuninitialized -Werror ${VISIBILITY_FLAG} ${GCOV_FLAGS} ${CMAKE_C_FLAGS}" )
++     endif()
++ endif ()
++ 
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index ea7c8ca..2cd94dac 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	73012d7fcf428dedccc816e83a63a01462e27819d5537b8e0d0c7264bfacfad6    libwebsockets-v2.4.2.tar.gz
++sha256  db948be74c78fc13f1f1a55e76707d7baae3a1c8f62b625f639e8f2736298324    libwebsockets-v3.1.0.tar.gz
+ sha256  078fbbbeab357fc6d4f8090e95e9022fa4cb9eac1efd77b2f1387e9ccc51917a    LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 81e398b..238410f 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = v2.4.2
++LIBWEBSOCKETS_VERSION = v3.1.0
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPL-2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
