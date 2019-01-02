@@ -1,88 +1,55 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  2 Jan 2019 23:14:07 +0100
-Subject: [Buildroot] [PATCH 3/3] toolchain-external: update Arm AArch64
- toolchain 8.2-2018.11
-In-Reply-To: <20190102221407.11603-1-romain.naour@gmail.com>
-References: <20190102221407.11603-1-romain.naour@gmail.com>
-Message-ID: <20190102221407.11603-3-romain.naour@gmail.com>
+Date: Thu,  3 Jan 2019 00:10:25 +0100
+Subject: [Buildroot] [PATCH] package/solarus: update license.txt file hash
+ and remove license_gpl.txt hash.
+Message-ID: <20190102231026.8189-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
-* All GCC 8.2 features. For details on GCC 8 release series.
-* Linaro specific pre-processor macros to ensure that this is a
-  continuation from the Linaro releases.
-* Spectre v1 mitigation backport from upstream FSF trunk include the
-  revisions. This is an initial backport of those mitigations in
-  the GNU toolchain and should be regarded as support for prototyping
-  and early access only. Moreover, while the backports include support
-  for the other architectures, they are included for completeness and
-  all issues regarding these patches must be taken up upstream in the
-  https://gcc.gnu.org/bugzilla by reproducing the same with upstream
-  FSF trunk.
-  Arm is interested in feedback regarding these workarounds for
-  Spectre v1.
-  A description of the mitigation has been published on LWN.net.
+The license.txt file has been updated with Solarus Free Resource Pack URL.
 
-See "Release Note":
-[1] https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
+Before version 1.6.0, the archive was downloaded from github and license_gpl.txt
+file which is present in the git repository.
+Since version 1.6.0, the archive is downloaded from [1] but the license_gpl.txt
+file is missing.
 
-Tested with qemu_aarch64_virt_defconfig.
+This has been reported upstream [2].
+
+[1] http://www.solarus-games.org
+[2] https://gitlab.com/solarus-games/solarus/issues/1328
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 4 ++--
- .../toolchain-external-arm-aarch64.hash                             | 6 +++---
- .../toolchain-external-arm-aarch64.mk                               | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/solarus/solarus.hash | 3 +--
+ package/solarus/solarus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-index ba627129cb..fbb5e025e8 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-@@ -1,5 +1,5 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
--	bool "Arm AArch64 2018.08"
-+	bool "Arm AArch64 2018.11"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_STATIC_LIBS
-@@ -7,7 +7,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-index d651bb0182..cda90f7517 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-@@ -1,4 +1,4 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.08/gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz.asc
--md5 1c47f4edc431cf19604a9f1b09975269 gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.11/gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz.asc
-+md5 319ca548ff05b0ec1008988a7e5ab619 gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
- # locally calculated
--sha256 3e60644846ac60693e58ad71a319d64c5f7bcf95ff34411272c8d9674f85648f gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz
-+sha256 0142366da2f30feb1c366997cbdaa02286c8f1aa527c0fc177ee5ce8e77970fc gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-index 515b66cd79..0398bd1297 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+index e4a7a3a6b6..dab8d1a1fa 100644
+--- a/package/solarus/solarus.hash
++++ b/package/solarus/solarus.hash
+@@ -1,5 +1,4 @@
+ # Locally calculated
+ sha256 d800fdf388f860732f2d40c8dd635c34fd1c452857f75bf9b3a421e3ef5ee751  solarus-1.6.0-src.tar.gz
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.08
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.11
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)
+-sha256 09cb24006b6a3f2698d8851dc5df4f413c1a98e20d4008bffd76ec236f14244d  license.txt
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  license_gpl.txt
++sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+index 663ccb173d..d1c49af83f 100644
+--- a/package/solarus/solarus.mk
++++ b/package/solarus/solarus.mk
+@@ -10,7 +10,7 @@ SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
  
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-linux-gnu.tar.xz
+ SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
+ 	CC-BY-SA-3.0 (GUI icons)
+-SOLARUS_LICENSE_FILES = license.txt license_gpl.txt
++SOLARUS_LICENSE_FILES = license.txt
+ 
+ # Install libsolarus.so
+ SOLARUS_INSTALL_STAGING = YES
 -- 
 2.14.5
