@@ -1,98 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Jan 2019 18:17:04 +0100
-Subject: [Buildroot] [PATCH 1/1] glib-networking: depend on target
- ca-certificates.
-In-Reply-To: <20190102165411.60822-1-aduskett@gmail.com>
-References: <20190102165411.60822-1-aduskett@gmail.com>
-Message-ID: <20190102171704.GL23435@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  2 Jan 2019 18:36:38 +0100
+Subject: [Buildroot] [PATCH v2] package/pkgconf: fix behavior of pkg-config
+ --version
+Message-ID: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+For some odd reason, the new pkg-config 1.5.3 changed the behavior of
+"pkg-config --version": as soon as another argument than "--version"
+is passed, the code assumes the user wanted to run "--modversion"
+instead.
 
-Thomas, question for you bbelow...
+Sadly, this breaks badly with our pkg-config wrapper that
+unconditionally passes --static to pkg-config when
+BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
+pkg-config is available and functional, it's actually "pkg-config
+--static --version" that gets executed. pkg-config assumes that the
+user wanted to use --modversion and bails out with an error.
 
-On 2019-01-02 11:54 -0500, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Currently, glib-networking uses the hosts ca-certificates, which, if not
-> installed or if they are installed in a different directory will cause a
-> configuration error.
-> 
-> Instead, select and depend on ca-certificates, and add $(TARGET_DIR) to the
-> -Dca_certificates_path option.
+This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
+configuration.
 
-As discussed on IRC, this is not the correct fix, because that path is
-used at runtime.
+This misbehavior of pkg-config has been reported upstream at
+https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
+gets fixed, we work around the issue by reverting the commit that does
+the "hey let's assume you're using --modversion if --version is passed
+with more than one argument".
 
-The proper fix would be to fix their meson.build to behave in
-cross-compilation.
+Fixes:
 
-It is to be noted that upstream no longer has the issue, because they
-changed the way the handle certifcate trust store:
-    https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df
+  http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
+  (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
 
-... but we can't backport this as a fix, though... :-(
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Changes since v1:
+- Revert the problematic upstream commit instead of doing a workaround
+  specific to the -static option.
+---
+ ...me-modversion-insted-of-version-if-o.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
 
-Thomas: maybe we can look at updating it instead of trying to fix it?
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
-> http://autobuild.buildroot.net/results/cc0/cc094e0a7c130c60641d32e9f4cbc46b0eba0852/build-end.log
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/glib-networking/Config.in          | 1 +
->  package/glib-networking/glib-networking.mk | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-> index b84a739460..a5fe7a8d65 100644
-> --- a/package/glib-networking/Config.in
-> +++ b/package/glib-networking/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
->  	depends on !BR2_STATIC_LIBS # gnutls
->  	select BR2_PACKAGE_GNUTLS
->  	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_CA_CERTIFICATES
->  	help
->  	  Network-related GIO modules for glib.
->  
-> diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-> index 2852f90121..5b96847f24 100644
-> --- a/package/glib-networking/glib-networking.mk
-> +++ b/package/glib-networking/glib-networking.mk
-> @@ -14,10 +14,11 @@ GLIB_NETWORKING_DEPENDENCIES = \
->  	host-pkgconf \
->  	host-intltool \
->  	libglib2 \
-> -	gnutls
-> +	gnutls \
-> +	ca-certificates
->  
->  GLIB_NETWORKING_CONF_OPTS = \
-> -	-Dca_certificates_path=/etc/ssl/certs/ca-certificates.crt \
-> +	-Dca_certificates_path=$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt \
->  	-Dlibproxy_support=false \
->  	-Dgnome_proxy_support=false \
->  	-Dpkcs11_support=false
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+new file mode 100644
+index 0000000000..e79bea93a5
+--- /dev/null
++++ b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+@@ -0,0 +1,45 @@
++From 4ccef40918a539905a2951bfb81cf8dba4a245c6 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 2 Jan 2019 18:15:50 +0100
++Subject: [PATCH] Revert "main: assume --modversion insted of --version if
++ other flags or module names are provided"
++
++This reverts commit 12a0eb124cea85586e57f33c91a1e4c73459eef6, as it
++causes pkg-config to assume --modversion is used when something as
++simple as 'pkg-config --static --version' is used, leading to a
++failure instead of the expected behavior: the one of "pkg-config
++--version".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cli/main.c | 14 ++------------
++ 1 file changed, 2 insertions(+), 12 deletions(-)
++
++diff --git a/cli/main.c b/cli/main.c
++index b52cc85..c5acc10 100644
++--- a/cli/main.c
+++++ b/cli/main.c
++@@ -955,18 +955,8 @@ main(int argc, char *argv[])
++ 
++ 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
++ 	{
++-		if (argc > 2)
++-		{
++-			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
++-
++-			want_flags &= ~PKG_VERSION;
++-			want_flags |= PKG_MODVERSION;
++-		}
++-		else
++-		{
++-			version();
++-			return EXIT_SUCCESS;
++-		}
+++		version();
+++		return EXIT_SUCCESS;
++ 	}
++ 
++ 	if ((want_flags & PKG_HELP) == PKG_HELP)
++-- 
++2.20.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
