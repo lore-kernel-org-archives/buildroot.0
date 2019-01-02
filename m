@@ -1,47 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jan 2019 08:49:41 +0100
-Subject: [Buildroot] [git commit] package/wireguard: bump version to
- 0.0.20181218
-Message-ID: <20190102074531.84672811FC@busybox.osuosl.org>
+Date: Wed, 2 Jan 2019 08:48:16 +0100
+Subject: [Buildroot] [git commit] package/lua*: drop redundant dependencies
+ on BR2_PACKAGE_HAS_LUAINTERPRETER
+Message-ID: <20190102074531.6E7D7888F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1afcef1234818f9e30c02af14ca46e77bd9015ea
+commit: https://git.buildroot.net/buildroot/commit/?id=d17c0d78f74a6f103e82ea63cb9e929be3dfb3ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
+All the packages modified by this commit have their Config.in included
+by package/Config.in inside a BR2_PACKAGE_HAS_LUAINTERPRETER &&
+!BR2_STATIC_LIBS condition. Therefore, duplicating the
+BR2_PACKAGE_HAS_LUAINTERPRETER condition in each of their Config.in
+file is redundant and unnecessary. This commit drops such redundant
+"depends on" statements.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lbase64/Config.in            | 1 -
+ package/lua-ev/Config.in             | 1 -
+ package/lua-msgpack-native/Config.in | 1 -
+ package/luaposix/Config.in           | 1 -
+ package/lutok/Config.in              | 1 -
+ 5 files changed, 5 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index f757a86630..265ae671ef 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-November/003572.html
--sha256 7d47f7996dd291069de4efb3097c42f769f60dc3ac6f850a4d5705f321e4406b  WireGuard-0.0.20181119.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
-+sha256 2e9f86acefa49dbfb7fa6f5e10d543f1885a2d5460cd5e102696901107675735  WireGuard-0.0.20181218.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 93373d8538..d36929efd8 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+index 34ef943aac..c836ffb5e2 100644
+--- a/package/lbase64/Config.in
++++ b/package/lbase64/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LBASE64
+ 	bool "lbase64"
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	help
+ 	  A base64 library for Lua
  
--WIREGUARD_VERSION = 0.0.20181119
-+WIREGUARD_VERSION = 0.0.20181218
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
+index 52f82e1128..1e89c270a0 100644
+--- a/package/lua-ev/Config.in
++++ b/package/lua-ev/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUA_EV
+ 	bool "lua-ev"
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	select BR2_PACKAGE_LIBEV
+ 	help
+ 	  Get access to the libev library from Lua.
+diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+index 3837228fa0..8b6283cc95 100644
+--- a/package/lua-msgpack-native/Config.in
++++ b/package/lua-msgpack-native/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 	bool "lua-msgpack-native"
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  This is a native, C language implementation of msgpack
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index d8c30e4fb2..bdc9926b1e 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
+ 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
+ 	# "bit" module, but since it has a different name, luaposix
+diff --git a/package/lutok/Config.in b/package/lutok/Config.in
+index ab9c32b6d5..abeaa4011d 100644
+--- a/package/lutok/Config.in
++++ b/package/lutok/Config.in
+@@ -9,4 +9,3 @@ config BR2_PACKAGE_LUTOK
+ 
+ comment "lutok needs a toolchain w/ C++ and full Lua"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
