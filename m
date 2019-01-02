@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Jan 2019 13:50:06 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
-In-Reply-To: <877efnpa7x.fsf@dell.be.48ers.dk>
-References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
- <87sgycox9n.fsf@dell.be.48ers.dk>
- <20190102091647.319e2c96@windsurf>
- <877efnpa7x.fsf@dell.be.48ers.dk>
-Message-ID: <20190102135006.22f4f096@windsurf>
+Date: Wed, 2 Jan 2019 13:57:20 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: drop obsolete 3.2.x
+ / 4.{1, 16, 18}.x versions
+In-Reply-To: <20190102111140.13016-1-peter@korsgaard.com>
+References: <20190102111140.13016-1-peter@korsgaard.com>
+Message-ID: <20190102135720.232e4f5f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +13,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 02 Jan 2019 12:31:14 +0100, Peter Korsgaard wrote:
-
->  > Yes, that probably make sense. But in this case, we would need to get
->  > in touch with the kernel folks to get the net_tstamp.h fix in -stable.
->  > It has the Fixes: tag, but it still hasn't been backported to
->  > 4.19-stable.  
+On Wed,  2 Jan 2019 12:11:40 +0100, Peter Korsgaard wrote:
+> According to https://www.kernel.org/category/releases.html, these kernel
+> versions are no longer supported, so drop them now that we have added 4.20.x
 > 
-> Ok. The last few 4.19.x releases did not contain any net/ fixes, perhaps
-> that will fixed now the holidays are over.
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  linux/linux.hash                     |  5 -----
+>  package/linux-headers/Config.in.host | 23 -----------------------
+>  2 files changed, 28 deletions(-)
 
-Ah, yes, it's true that for net/ stuff, having the Fixes: tag doesn't
-automatically backport the patch, davem wants to have a manual look at
-each and every net/ patch that goes into stable.
+We do have some Config.in.legacy handling for those options:
 
-> If not, will you take care of it?
+$ grep KERNEL_HEADERS Config.in.legacy 
+config BR2_KERNEL_HEADERS_4_10
+config BR2_KERNEL_HEADERS_4_11
+config BR2_KERNEL_HEADERS_4_12
+config BR2_KERNEL_HEADERS_4_13
+config BR2_KERNEL_HEADERS_4_15
+config BR2_KERNEL_HEADERS_4_17
+config BR2_KERNEL_HEADERS_3_4
+config BR2_KERNEL_HEADERS_3_10
+config BR2_KERNEL_HEADERS_3_12
+config BR2_KERNEL_HEADERS_4_8
+config BR2_KERNEL_HEADERS_3_18
+config BR2_KERNEL_HEADERS_4_7
+config BR2_KERNEL_HEADERS_4_6
+config BR2_KERNEL_HEADERS_4_5
+config BR2_KERNEL_HEADERS_3_14
+config BR2_KERNEL_HEADERS_4_3
+config BR2_KERNEL_HEADERS_4_2
+config BR2_KERNEL_HEADERS_4_0
+config BR2_KERNEL_HEADERS_3_19
+config BR2_KERNEL_HEADERS_3_17
+config BR2_KERNEL_HEADERS_3_16
+config BR2_KERNEL_HEADERS_3_0
+config BR2_KERNEL_HEADERS_3_11
+config BR2_KERNEL_HEADERS_3_13
+config BR2_KERNEL_HEADERS_3_15
+config BR2_KERNEL_HEADERS_3_8
+config BR2_KERNEL_HEADERS_3_6
+config BR2_KERNEL_HEADERS_3_7
+config BR2_KERNEL_HEADERS_SNAP
+config BR2_KERNEL_HEADERS_3_1
+config BR2_KERNEL_HEADERS_3_3
+config BR2_KERNEL_HEADERS_3_5
 
-I looked up the e-mails archives, and on December 18, when davem
-applied the patch, he said:
-
-  Applied and queued up for -stable, thanks.
-
-So I suppose it will land in stable at some point.
+Shouldn't we continue with the same process ?
 
 Best regards,
 
