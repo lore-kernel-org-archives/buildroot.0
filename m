@@ -1,46 +1,41 @@
-From: qwendu <qwendu@gmail.com>
-Date: Wed,  2 Jan 2019 17:32:51 +0800
-Subject: [Buildroot] [PATCH] package/libwebsockets: bump to v3.1.0
-In-Reply-To: <1546421571-18627-1-git-send-email-qwendu@gmail.com>
-References: <1546421571-18627-1-git-send-email-qwendu@gmail.com>
-Message-ID: <1546421571-18627-2-git-send-email-qwendu@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Jan 2019 10:41:37 +0100
+Subject: [Buildroot] [PATCH 2/2] atk: bump to version 2.30.0
+In-Reply-To: <20181203073043.21021-2-fontaine.fabrice@gmail.com>
+References: <20181203073043.21021-1-fontaine.fabrice@gmail.com>
+ <20181203073043.21021-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190102104137.74794175@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this patch fixed the following error:
-...
-output/build/libwebsockets-v3.1.0/lib/event-libs/libuv/libuv.c: In function 'elops_destroy_context1_uv':
-output/build/libwebsockets-v3.1.0/lib/event-libs/libuv/libuv.c:519:7: error: 'm' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-    if (m)
-       ^
+Hello,
 
-Signed-off-by: qwendu <qwendu@gmail.com>
----
- package/libwebsockets/libuv-uninitialized.patch | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/libwebsockets/libuv-uninitialized.patch
+On Mon,  3 Dec 2018 08:30:43 +0100, Fabrice Fontaine wrote:
+> - Switch to meson-package
+> - Remove ATK_INSTALL_STAGING_OPTS and host-pkgconf: not needed anymore
+> - Add hash for license file
+> - This bump fix the issue with glib 2.58.1 (because meson does not use
+>   pkgconfig to find glib-genmarshal):
+>   /bin/bash: /usr/bin/glib-genmarshal: No such file or directory
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/23cf5227c21365cda0babf1922425f8adaa97fba
 
-diff --git a/package/libwebsockets/libuv-uninitialized.patch b/package/libwebsockets/libuv-uninitialized.patch
-new file mode 100644
-index 0000000..319afee
---- /dev/null
-+++ b/package/libwebsockets/libuv-uninitialized.patch
-@@ -0,0 +1,13 @@
-+diff --git a/lib/event-libs/libuv/libuv.c b/lib/event-libs/libuv/libuv.c
-+index 39363f1..746d6ba 100644
-+--- a/lib/event-libs/libuv/libuv.c
-++++ b/lib/event-libs/libuv/libuv.c
-+@@ -503,7 +503,7 @@ static int
-+ elops_destroy_context1_uv(struct lws_context *context)
-+ {
-+ 	struct lws_context_per_thread *pt;
-+-	int n, m;
-++	int n, m=0;
-+ 
-+ 	for (n = 0; n < context->count_threads; n++) {
-+ 		int budget = 10000;
+This causes a build failure in BR2_STATIC_LIBS=y configurations. Seems
+like the meson build system always wants to build a dynamic library:
+
+  http://autobuild.buildroot.net/?reason=atk-2.30.0
+
+Rather than adding a !BR2_STATIC_LIBS dependency, it would be nice to
+teach meson to build only a static library.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
