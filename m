@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 Jan 2019 10:41:37 +0100
-Subject: [Buildroot] [PATCH 2/2] atk: bump to version 2.30.0
-In-Reply-To: <20181203073043.21021-2-fontaine.fabrice@gmail.com>
-References: <20181203073043.21021-1-fontaine.fabrice@gmail.com>
- <20181203073043.21021-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190102104137.74794175@windsurf>
+Date: Wed, 2 Jan 2019 11:21:30 +0100
+Subject: [Buildroot] Xtensa toolchain issue ?
+Message-ID: <20190102112130.0b8d32f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Max,
 
-On Mon,  3 Dec 2018 08:30:43 +0100, Fabrice Fontaine wrote:
-> - Switch to meson-package
-> - Remove ATK_INSTALL_STAGING_OPTS and host-pkgconf: not needed anymore
-> - Add hash for license file
-> - This bump fix the issue with glib 2.58.1 (because meson does not use
->   pkgconfig to find glib-genmarshal):
->   /bin/bash: /usr/bin/glib-genmarshal: No such file or directory
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/23cf5227c21365cda0babf1922425f8adaa97fba
+We have a build failure of the libtorrent-rasterbar package that seems
+to be toolchain related, and happens on Xtensa:
 
-This causes a build failure in BR2_STATIC_LIBS=y configurations. Seems
-like the meson build system always wants to build a dynamic library:
+  http://autobuild.buildroot.net/?reason=libtorrent-rasterbar-1.1.11
 
-  http://autobuild.buildroot.net/?reason=atk-2.30.0
+The failure looks like this:
 
-Rather than adding a !BR2_STATIC_LIBS dependency, it would be nice to
-teach meson to build only a static library.
+In file included from peer_connection.cpp:56:0:
+../include/libtorrent/peer_connection.hpp:550:8: error: generic thunk code fails for method 'virtual void libtorrent::peer_connection::_ZThn96_NK10libtorrent15peer_connection8peer_logENS_14peer_log_alert11direction_tEPKcS4_z(libtorrent::peer_log_alert::direction_t, const char*, const char*, ...) const' which uses '...'
+   void peer_log(peer_log_alert::direction_t direction
+        ^~~~~~~~
+  CXX      packet_buffer.lo
+
+It is worth mentioning though that the exact same issue happens on the
+OpenRISC architecture, and that Xtensa and OpenRISC seem to be the two
+only affected architectures.
+
+It is apparently a bug in gcc 7.x, that has been fixed in gcc 8.x,
+according to https://bugzilla.redhat.com/show_bug.cgi?id=1511021, but
+this bug report doesn't give any detail on which commit could have
+fixed that.
 
 Best regards,
 
