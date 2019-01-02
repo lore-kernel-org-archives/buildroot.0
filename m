@@ -1,42 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Jan 2019 13:12:18 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/check-uniq-files: Only
- report each package once
-In-Reply-To: <20181230220200.GB24224@scaer>
-References: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
- <20181230220200.GB24224@scaer>
-Message-ID: <20190102121218.GH23435@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Jan 2019 13:50:06 +0100
+Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
+In-Reply-To: <877efnpa7x.fsf@dell.be.48ers.dk>
+References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
+ <87sgycox9n.fsf@dell.be.48ers.dk>
+ <20190102091647.319e2c96@windsurf>
+ <877efnpa7x.fsf@dell.be.48ers.dk>
+Message-ID: <20190102135006.22f4f096@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Einar, All,
+Hello,
 
-On 2018-12-30 23:02 +0100, Yann E. MORIN spake thusly:
-> On 2018-12-11 15:05 +0100, Einar Jon Gunnarsson spake thusly:
-> > Rebuilding the same package should not trigger
-> > a 'touched by more than one package' warning
+On Wed, 02 Jan 2019 12:31:14 +0100, Peter Korsgaard wrote:
 
-In fact, commit d3dca1e993 (core/pkg-generic: only save latest package
-list) should have already fixed that case, no?
+>  > Yes, that probably make sense. But in this case, we would need to get
+>  > in touch with the kernel folks to get the net_tstamp.h fix in -stable.
+>  > It has the Fixes: tag, but it still hasn't been backported to
+>  > 4.19-stable.  
+> 
+> Ok. The last few 4.19.x releases did not contain any net/ fixes, perhaps
+> that will fixed now the holidays are over.
 
-That commit has even been backported to the 2018.02.x branch already, as
-commit a2b029afe5.
+Ah, yes, it's true that for net/ stuff, having the Fixes: tag doesn't
+automatically backport the patch, davem wants to have a manual look at
+each and every net/ patch that goes into stable.
 
-If you are using a version of Buildroot that is older than that, then
-please update. If you still have the issue after updating to a version
-that has either one of the aforementionned commits, then please report
-the issue again.
+> If not, will you take care of it?
 
-Regards,
-Yann E. MORIN.
+I looked up the e-mails archives, and on December 18, when davem
+applied the patch, he said:
 
+  Applied and queued up for -stable, thanks.
+
+So I suppose it will land in stable at some point.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
