@@ -1,132 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  2 Jan 2019 14:52:45 +0100
-Subject: [Buildroot] [PATCH v2] package/linux-headers: drop obsolete 3.2.x /
- 4.{1, 16, 18}.x versions
-Message-ID: <20190102135246.16616-1-peter@korsgaard.com>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Wed,  2 Jan 2019 14:17:24 +0000
+Subject: [Buildroot] [PATCH 1/1] package/glibc: fix include of syscalls.h
+ for RISC-V architecture
+Message-ID: <20190102141724.23898-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to https://www.kernel.org/category/releases.html, these kernel
-versions are no longer supported, so drop them now that we have added 4.20.x
+UAPI header file asm/syscalls.h has been merged into the UAPI
+asm/unistd.h header file for the RISC-V architecture in the
+4.20 kernel. This causes the glibc 2.28 build to break.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This commit applies the upstream glibc patch for this issue.
+
+Fixes:
+  http://autobuild.buildroot.net/results/8190eb74b2b97911e03671138487d747fcb22cba/
+
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
-Changes since v1:
-- Add Config.in.legacy entries as suggested by Thomas
+ .../0002-fix-syscalls-header-for-riscv.patch  | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
 
- Config.in.legacy                     | 28 ++++++++++++++++++++++++++++
- linux/linux.hash                     |  5 -----
- package/linux-headers/Config.in.host | 23 -----------------------
- 3 files changed, 28 insertions(+), 28 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8cab6a23af..6f1e3eef2b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -255,6 +255,34 @@ config BR2_PACKAGE_LIBNFTNL_XML
- 	help
- 	  libnftnl removed integration with libmxml.
- 
-+config BR2_KERNEL_HEADERS_3_2
-+	bool "kernel headers version 3.2.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 3.2.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
+diff --git a/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+new file mode 100644
+index 0000000000..a740018e12
+--- /dev/null
++++ b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+@@ -0,0 +1,67 @@
++<asm/syscalls.h> has been removed by
 +
-+config BR2_KERNEL_HEADERS_4_1
-+	bool "kernel headers version 4.1.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 4.1.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
++commit 27f8899d6002e11a6e2d995e29b8deab5aa9cc25
++Author: David Abdurachmanov <david.abdurachmanov@gmail.com>
++Date:   Thu Nov 8 20:02:39 2018 +0100
 +
-+config BR2_KERNEL_HEADERS_4_16
-+	bool "kernel headers version 4.16.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 4.16.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
++    riscv: add asm/unistd.h UAPI header
 +
-+config BR2_KERNEL_HEADERS_4_18
-+	bool "kernel headers version 4.18.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 4.18.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
++    Marcin Juszkiewicz reported issues while generating syscall table for riscv
++    using 4.20-rc1. The patch refactors our unistd.h files to match some other
++    architectures.
 +
- ###############################################################################
- comment "Legacy options removed in 2018.08"
- 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 3e7fdbc81f..6467d8abca 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 ad0823183522e743972382df0aa08fb5ae3077f662b125f1e599b0b2aaa12438  linux-4.20.tar.xz
- sha256 f50a77fc40e13fc406791346fa91926394205874cd50246c7c2374006bacc0c2  linux-4.19.13.tar.xz
--sha256 68ac319e0fb7edd6b6051541d9cf112cd4f77a29e16a69ae1e133ff51117f653  linux-4.18.20.tar.xz
--sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
- sha256 6a587c8b4160918efa082b0c2eda8c2db0f50d8814ad1d1ac94be1edf66ca6a9  linux-4.14.91.tar.xz
- sha256 6067151b0225a8de1ab79abc9be7bae237eaca0cd838eb26684169560d88a994  linux-4.9.148.tar.xz
- sha256 06f1b080332251628727e42d21b4530035f03f00d75432199b2548172b1650a9  linux-4.4.169.tar.xz
--sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
--# From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
--sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 32ddcef5f9..907725093d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -26,17 +26,6 @@ config BR2_KERNEL_HEADERS_AS_KERNEL
- 	bool "Same as kernel being built"
- 	depends on BR2_LINUX_KERNEL
- 
--config BR2_KERNEL_HEADERS_3_2
--	bool "Linux 3.2.x kernel headers"
--	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_arc && !BR2_nios2
--	depends on !BR2_riscv
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
--
--config BR2_KERNEL_HEADERS_4_1
--	bool "Linux 4.1.x kernel headers"
--	depends on !BR2_riscv
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
--
- config BR2_KERNEL_HEADERS_4_4
- 	bool "Linux 4.4.x kernel headers"
- 	depends on !BR2_riscv
-@@ -52,14 +41,6 @@ config BR2_KERNEL_HEADERS_4_14
- 	depends on !BR2_riscv
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 
--config BR2_KERNEL_HEADERS_4_16
--	bool "Linux 4.16.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
--
--config BR2_KERNEL_HEADERS_4_18
--	bool "Linux 4.18.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
--
- config BR2_KERNEL_HEADERS_4_19
- 	bool "Linux 4.19.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-@@ -304,13 +285,9 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
--	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.169"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.148"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.91"	if BR2_KERNEL_HEADERS_4_14
--	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.18.20"	if BR2_KERNEL_HEADERS_4_18
- 	default "4.19.13"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20"		if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++    - Add asm/unistd.h UAPI header, which has __ARCH_WANT_NEW_STAT only for 64-bit
++    - Remove asm/syscalls.h UAPI header and merge to asm/unistd.h
++    - Adjust kernel asm/unistd.h
++
++    So now asm/unistd.h UAPI header should show all syscalls for riscv.
++
++<asm/syscalls.h> may be restored by
++
++Subject: [PATCH] riscv: restore asm/syscalls.h UAPI header
++Date: Tue, 11 Dec 2018 09:09:35 +0100
++
++UAPI header asm/syscalls.h was merged into UAPI asm/unistd.h header,
++which did resolve issue with missing syscalls macros resulting in
++glibc (2.28) build failure. It also broke glibc in a different way:
++asm/syscalls.h is being used by glibc. I noticed this while doing
++Fedora 30/Rawhide mass rebuild.
++
++The patch returns asm/syscalls.h header and incl. it into asm/unistd.h.
++I plan to send a patch to glibc to use asm/unistd.h instead of
++asm/syscalls.h
++
++In the meantime, we use __has_include__, which was added to GCC 5, to
++check if <asm/syscalls.h> exists before including it.  Tested with
++build-many-glibcs.py for riscv against kernel 4.19.12 and 4.20-rc7.
++
++	[BZ #24022]
++	* sysdeps/unix/sysv/linux/riscv/flush-icache.c: Check if
++	<asm/syscalls.h> exists with __has_include__ before including it.
++
++[Mark: patch retrieved from
++https://sourceware.org/ml/libc-alpha/2018-12/msg00875.html]
++
++Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
++---
++ sysdeps/unix/sysv/linux/riscv/flush-icache.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/sysdeps/unix/sysv/linux/riscv/flush-icache.c b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
++index d612ef4c6c..d0ecec5107 100644
++--- a/sysdeps/unix/sysv/linux/riscv/flush-icache.c
+++++ b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
++@@ -21,7 +21,11 @@
++ #include <stdlib.h>
++ #include <atomic.h>
++ #include <sys/cachectl.h>
+++#if __has_include__ (<asm/syscalls.h>)
++ #include <asm/syscalls.h>
+++#else
+++#include <asm/unistd.h>
+++#endif
++ 
++ typedef int (*func_type) (void *, void *, unsigned long int);
++ 
++-- 
++2.19.2
 -- 
-2.11.0
+2.19.1
