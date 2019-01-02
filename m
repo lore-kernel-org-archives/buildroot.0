@@ -1,85 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jan 2019 08:48:16 +0100
-Subject: [Buildroot] [git commit] package/lua*: drop redundant dependencies
- on BR2_PACKAGE_HAS_LUAINTERPRETER
-Message-ID: <20190102074531.6E7D7888F8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 2 Jan 2019 09:16:47 +0100
+Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
+In-Reply-To: <87sgycox9n.fsf@dell.be.48ers.dk>
+References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
+ <87sgycox9n.fsf@dell.be.48ers.dk>
+Message-ID: <20190102091647.319e2c96@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d17c0d78f74a6f103e82ea63cb9e929be3dfb3ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-All the packages modified by this commit have their Config.in included
-by package/Config.in inside a BR2_PACKAGE_HAS_LUAINTERPRETER &&
-!BR2_STATIC_LIBS condition. Therefore, duplicating the
-BR2_PACKAGE_HAS_LUAINTERPRETER condition in each of their Config.in
-file is redundant and unnecessary. This commit drops such redundant
-"depends on" statements.
+On Tue, 01 Jan 2019 22:58:44 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lbase64/Config.in            | 1 -
- package/lua-ev/Config.in             | 1 -
- package/lua-msgpack-native/Config.in | 1 -
- package/luaposix/Config.in           | 1 -
- package/lutok/Config.in              | 1 -
- 5 files changed, 5 deletions(-)
+> With 2019.02 becoming our next LTS and 4.20 NOT a LTS release, I wonder
+> if it would make sense to still default to 4.19.x instead of 4.20.x?
 
-diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
-index 34ef943aac..c836ffb5e2 100644
---- a/package/lbase64/Config.in
-+++ b/package/lbase64/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LBASE64
- 	bool "lbase64"
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	help
- 	  A base64 library for Lua
- 
-diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
-index 52f82e1128..1e89c270a0 100644
---- a/package/lua-ev/Config.in
-+++ b/package/lua-ev/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LUA_EV
- 	bool "lua-ev"
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	select BR2_PACKAGE_LIBEV
- 	help
- 	  Get access to the libev library from Lua.
-diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
-index 3837228fa0..8b6283cc95 100644
---- a/package/lua-msgpack-native/Config.in
-+++ b/package/lua-msgpack-native/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LUA_MSGPACK_NATIVE
- 	bool "lua-msgpack-native"
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
- 	help
- 	  This is a native, C language implementation of msgpack
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index d8c30e4fb2..bdc9926b1e 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
- 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
- 	# "bit" module, but since it has a different name, luaposix
-diff --git a/package/lutok/Config.in b/package/lutok/Config.in
-index ab9c32b6d5..abeaa4011d 100644
---- a/package/lutok/Config.in
-+++ b/package/lutok/Config.in
-@@ -9,4 +9,3 @@ config BR2_PACKAGE_LUTOK
- 
- comment "lutok needs a toolchain w/ C++ and full Lua"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+Yes, that probably make sense. But in this case, we would need to get
+in touch with the kernel folks to get the net_tstamp.h fix in -stable.
+It has the Fixes: tag, but it still hasn't been backported to
+4.19-stable.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
