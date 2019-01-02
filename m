@@ -1,100 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  2 Jan 2019 18:36:38 +0100
-Subject: [Buildroot] [PATCH v2] package/pkgconf: fix behavior of pkg-config
- --version
-Message-ID: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 2 Jan 2019 20:51:17 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/glibc: fix include of
+ syscalls.h for RISC-V architecture
+In-Reply-To: <20190102151559.32221-2-mark.corbin@embecosm.com>
+References: <20190102151559.32221-1-mark.corbin@embecosm.com>
+ <20190102151559.32221-2-mark.corbin@embecosm.com>
+Message-ID: <7d593615-b620-89af-4d58-3e4b496726d6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some odd reason, the new pkg-config 1.5.3 changed the behavior of
-"pkg-config --version": as soon as another argument than "--version"
-is passed, the code assumes the user wanted to run "--modversion"
-instead.
+Hi Mark, All,
 
-Sadly, this breaks badly with our pkg-config wrapper that
-unconditionally passes --static to pkg-config when
-BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
-pkg-config is available and functional, it's actually "pkg-config
---static --version" that gets executed. pkg-config assumes that the
-user wanted to use --modversion and bails out with an error.
+Le 02/01/2019 ? 16:15, Mark Corbin a ?crit?:
+> UAPI header file asm/syscalls.h has been merged into the UAPI
+> asm/unistd.h header file for the RISC-V architecture in the
+> 4.20 kernel. This causes the glibc 2.28 build to break.
+> 
+> This commit applies the upstream glibc patch for this issue.
 
-This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
-configuration.
+Can you ask upstream to backport this patch to the glibc 2.28 stable branch?
+When it's done you can just bump the glibc version up to the backported patch.
 
-This misbehavior of pkg-config has been reported upstream at
-https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
-gets fixed, we work around the issue by reverting the commit that does
-the "hey let's assume you're using --modversion if --version is passed
-with more than one argument".
+Best regards,
+Romain
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
-  (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Changes since v1:
-- Revert the problematic upstream commit instead of doing a workaround
-  specific to the -static option.
----
- ...me-modversion-insted-of-version-if-o.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-
-diff --git a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-new file mode 100644
-index 0000000000..e79bea93a5
---- /dev/null
-+++ b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-@@ -0,0 +1,45 @@
-+From 4ccef40918a539905a2951bfb81cf8dba4a245c6 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 2 Jan 2019 18:15:50 +0100
-+Subject: [PATCH] Revert "main: assume --modversion insted of --version if
-+ other flags or module names are provided"
-+
-+This reverts commit 12a0eb124cea85586e57f33c91a1e4c73459eef6, as it
-+causes pkg-config to assume --modversion is used when something as
-+simple as 'pkg-config --static --version' is used, leading to a
-+failure instead of the expected behavior: the one of "pkg-config
-+--version".
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ cli/main.c | 14 ++------------
-+ 1 file changed, 2 insertions(+), 12 deletions(-)
-+
-+diff --git a/cli/main.c b/cli/main.c
-+index b52cc85..c5acc10 100644
-+--- a/cli/main.c
-++++ b/cli/main.c
-+@@ -955,18 +955,8 @@ main(int argc, char *argv[])
-+ 
-+ 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
-+ 	{
-+-		if (argc > 2)
-+-		{
-+-			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
-+-
-+-			want_flags &= ~PKG_VERSION;
-+-			want_flags |= PKG_MODVERSION;
-+-		}
-+-		else
-+-		{
-+-			version();
-+-			return EXIT_SUCCESS;
-+-		}
-++		version();
-++		return EXIT_SUCCESS;
-+ 	}
-+ 
-+ 	if ((want_flags & PKG_HELP) == PKG_HELP)
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/8190eb74b2b97911e03671138487d747fcb22cba/
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> ---
+>  .../0002-fix-syscalls-header-for-riscv.patch  | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+> 
+> diff --git a/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+> new file mode 100644
+> index 0000000000..2fc666dfdc
+> --- /dev/null
+> +++ b/package/glibc/glibc-2.28-50-gb8dd0f42780a3133c02f064a2c0c5c4e7ab61aaa/0002-fix-syscalls-header-for-riscv.patch
+> @@ -0,0 +1,67 @@
+> +<asm/syscalls.h> has been removed by
+> +
+> +commit 27f8899d6002e11a6e2d995e29b8deab5aa9cc25
+> +Author: David Abdurachmanov <david.abdurachmanov@gmail.com>
+> +Date:   Thu Nov 8 20:02:39 2018 +0100
+> +
+> +    riscv: add asm/unistd.h UAPI header
+> +
+> +    Marcin Juszkiewicz reported issues while generating syscall table for riscv
+> +    using 4.20-rc1. The patch refactors our unistd.h files to match some other
+> +    architectures.
+> +
+> +    - Add asm/unistd.h UAPI header, which has __ARCH_WANT_NEW_STAT only for 64-bit
+> +    - Remove asm/syscalls.h UAPI header and merge to asm/unistd.h
+> +    - Adjust kernel asm/unistd.h
+> +
+> +    So now asm/unistd.h UAPI header should show all syscalls for riscv.
+> +
+> +<asm/syscalls.h> may be restored by
+> +
+> +Subject: [PATCH] riscv: restore asm/syscalls.h UAPI header
+> +Date: Tue, 11 Dec 2018 09:09:35 +0100
+> +
+> +UAPI header asm/syscalls.h was merged into UAPI asm/unistd.h header,
+> +which did resolve issue with missing syscalls macros resulting in
+> +glibc (2.28) build failure. It also broke glibc in a different way:
+> +asm/syscalls.h is being used by glibc. I noticed this while doing
+> +Fedora 30/Rawhide mass rebuild.
+> +
+> +The patch returns asm/syscalls.h header and incl. it into asm/unistd.h.
+> +I plan to send a patch to glibc to use asm/unistd.h instead of
+> +asm/syscalls.h
+> +
+> +In the meantime, we use __has_include__, which was added to GCC 5, to
+> +check if <asm/syscalls.h> exists before including it.  Tested with
+> +build-many-glibcs.py for riscv against kernel 4.19.12 and 4.20-rc7.
+> +
+> +	[BZ #24022]
+> +	* sysdeps/unix/sysv/linux/riscv/flush-icache.c: Check if
+> +	<asm/syscalls.h> exists with __has_include__ before including it.
+> +
+> +[Mark: patch retrieved from
+> +https://sourceware.org/git/?p=glibc.git;a=commit;h=0b9c84906f653978fb8768c7ebd0ee14a47e662e]
+> +
+> +Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> +---
+> + sysdeps/unix/sysv/linux/riscv/flush-icache.c | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/sysdeps/unix/sysv/linux/riscv/flush-icache.c b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
+> +index d612ef4c6c..d0ecec5107 100644
+> +--- a/sysdeps/unix/sysv/linux/riscv/flush-icache.c
+> ++++ b/sysdeps/unix/sysv/linux/riscv/flush-icache.c
+> +@@ -21,7 +21,11 @@
+> + #include <stdlib.h>
+> + #include <atomic.h>
+> + #include <sys/cachectl.h>
+> ++#if __has_include__ (<asm/syscalls.h>)
+> + #include <asm/syscalls.h>
+> ++#else
+> ++#include <asm/unistd.h>
+> ++#endif
+> + 
+> + typedef int (*func_type) (void *, void *, unsigned long int);
+> + 
+> +-- 
+> +2.19.2
+> 
