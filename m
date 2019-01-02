@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Jan 2019 18:00:52 +0100
-Subject: [Buildroot] [PATCH v2 1/1] test-pkg: Force checking
- dependencies.
-In-Reply-To: <20190102154920.116641-1-aduskett@gmail.com>
-References: <20190102154920.116641-1-aduskett@gmail.com>
-Message-ID: <20190102170052.GK23435@scaer>
+Date: Wed, 2 Jan 2019 18:17:04 +0100
+Subject: [Buildroot] [PATCH 1/1] glib-networking: depend on target
+ ca-certificates.
+In-Reply-To: <20190102165411.60822-1-aduskett@gmail.com>
+References: <20190102165411.60822-1-aduskett@gmail.com>
+Message-ID: <20190102171704.GL23435@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +13,74 @@ To: buildroot@busybox.net
 
 Adam, All,
 
-On 2019-01-02 10:49 -0500, aduskett at gmail.com spake thusly:
+Thomas, question for you bbelow...
+
+On 2019-01-02 11:54 -0500, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Currently, if a user runs "make" while specifying a specific package
-> (IE: make -p foo),  the Makefile logic skips checking to see if all the
-> dependencies are selected in the specified packages config file. This behavior
-> is useful to test simple packages which do not have "complex" dependencies.
+> Currently, glib-networking uses the hosts ca-certificates, which, if not
+> installed or if they are installed in a different directory will cause a
+> configuration error.
 > 
-> However; if a developer uses test-pkg -p ${package_name} to check their package,
-> the package may pass all the checks, but would have otherwise failed with a
-> simple "make" because the developer may have failed to add a select line in
-> packages config file, even if there is a new dependency in the packages
-> Makefile.
-> 
-> Pass the environment variable "BR_FORCE_CHECK_DEPENDENCIES"  to the Makefile in
-> the test-pkg script,  and check it's value in the Makefile. If the value is
-> "YES" force checking for dependency issues.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Instead, select and depend on ca-certificates, and add $(TARGET_DIR) to the
+> -Dca_certificates_path option.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+As discussed on IRC, this is not the correct fix, because that path is
+used at runtime.
+
+The proper fix would be to fix their meson.build to behave in
+cross-compilation.
+
+It is to be noted that upstream no longer has the issue, because they
+changed the way the handle certifcate trust store:
+    https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df
+
+... but we can't backport this as a fix, though... :-(
+
+Thomas: maybe we can look at updating it instead of trying to fix it?
 
 Regards,
 Yann E. MORIN.
 
+> Fixes:
+> http://autobuild.buildroot.net/results/cc0/cc094e0a7c130c60641d32e9f4cbc46b0eba0852/build-end.log
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
-> Changes v1 -> v2:
->   - Change FORCE_CHECK_DEPENDENCIES to BR_FORCE_CHECK_DEPENDENCIES (Thomas)
->   - Only set BR_FORCE_CHECK_DEPENDENCIES=YES on line 155 of test-pkg (Yann)
+>  package/glib-networking/Config.in          | 1 +
+>  package/glib-networking/glib-networking.mk | 5 +++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
->  Makefile       | 9 ++++++++-
->  utils/test-pkg | 2 +-
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index c5b78b3274..47df9e4842 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -550,9 +550,16 @@ include $(BR2_EXTERNAL_MKS)
->  #
->  # Only trigger the check for default builds. If the user forces building
->  # a package, even if not enabled in the configuration, we want to accept
-> -# it.
-> +# it. However; we also want to be able to force checking the dependencies
-> +# if the user so desires. Forcing a dependency check is useful in the case
-> +# of test-pkg, as we want to make sure during testing, that a package has
-> +# all the dependencies selected in the config file.
->  #
->  ifeq ($(MAKECMDGOALS),)
-> +BR_FORCE_CHECK_DEPENDENCIES = YES
-> +endif
-> +
-> +ifeq ($(BR_FORCE_CHECK_DEPENDENCIES),YES)
+> diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+> index b84a739460..a5fe7a8d65 100644
+> --- a/package/glib-networking/Config.in
+> +++ b/package/glib-networking/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+>  	depends on !BR2_STATIC_LIBS # gnutls
+>  	select BR2_PACKAGE_GNUTLS
+>  	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_CA_CERTIFICATES
+>  	help
+>  	  Network-related GIO modules for glib.
 >  
->  define CHECK_ONE_DEPENDENCY
->  ifeq ($$($(2)_TYPE),target)
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index e4f68ed061..1995fa8578 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -152,7 +152,7 @@ build_one() {
->      fi
+> diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+> index 2852f90121..5b96847f24 100644
+> --- a/package/glib-networking/glib-networking.mk
+> +++ b/package/glib-networking/glib-networking.mk
+> @@ -14,10 +14,11 @@ GLIB_NETWORKING_DEPENDENCIES = \
+>  	host-pkgconf \
+>  	host-intltool \
+>  	libglib2 \
+> -	gnutls
+> +	gnutls \
+> +	ca-certificates
 >  
->      # shellcheck disable=SC2086
-> -    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-> +    if ! BR_FORCE_CHECK_DEPENDENCIES=YES make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
->          return 2
->      fi
->  
+>  GLIB_NETWORKING_CONF_OPTS = \
+> -	-Dca_certificates_path=/etc/ssl/certs/ca-certificates.crt \
+> +	-Dca_certificates_path=$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt \
+>  	-Dlibproxy_support=false \
+>  	-Dgnome_proxy_support=false \
+>  	-Dpkcs11_support=false
 > -- 
 > 2.20.1
 > 
