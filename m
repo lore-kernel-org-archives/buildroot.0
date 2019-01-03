@@ -1,55 +1,120 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  3 Jan 2019 15:52:48 -0600
-Subject: [Buildroot] [PATCH v6 7/7] package/llvm: disable libxml2
+Date: Thu,  3 Jan 2019 15:52:44 -0600
+Subject: [Buildroot] [PATCH v6 3/7] testing/infra/builder: build with target
+ and environment
 In-Reply-To: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1546552368-50707-7-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1546552368-50707-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libxml2 is needed during Windows builds to populate the COFF
-file manifest info
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 
-If left enabled, a dependency would need to be added and paths
-set for libxml2 include and library paths. This isn't require at
-this point for Linux builds.
+Make the builder able to call 'VAR1=1 make VAR2=2 target'.
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Allow to send extra parameters to be added to the end of make command
+line. It can be used for these purposes:
+ - to configure a br2-external, by passing 'BR2_EXTERNAL="dir"';
+ - to specify a make target, such as 'foo-source'.
+
+Allow to add variables to the environment in which make runs. It can be
+used to override values from environment, such as 'BR2_DL_DIR="dl"'.
+
+This change will be needed when adding support for br2-externals to the
+test infra.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-This change was discovered during testing of compiler-rt
-patchset.  This patch could be independently applied.
+Changes
+v2
+ - New from: http://patchwork.ozlabs.org/patch/912351/
 
-Romain, hopefully you are able to verify this resolves the path
-posioning you observed with the target build and libxml2.
+v2 -> v3
+[Ricardo
+ - Updated patch commit description context.
 
 v4
- - New patch
+ - None
 
 v5
  - Rebased post 2018.11 on master
 ---
- package/llvm/llvm.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ support/testing/infra/builder.py | 38 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 2973689..5174be3 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -123,6 +123,11 @@ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_ZLIB=ON
- HOST_LLVM_DEPENDENCIES += host-zlib
- LLVM_CONF_OPTS += -DLLVM_ENABLE_ZLIB=OFF
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index fc318fe..4d9c512 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -12,7 +12,18 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
  
-+# libxml2 can be disabled as it is used for LLVM Windows builds where COFF
-+# files include manifest info
-+HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
-+LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
+-    def configure(self):
++    def configure(self, make_extra_opts=[], make_extra_env={}):
++        """
++        Configure the build.
 +
- # We don't use llvm for static only build, so enable PIC
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
- LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
++        make_extra_opts: a list of arguments to be passed to the make
++        command.
++        e.g. make_extra_opts=["BR2_EXTERNAL=/path"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         if not os.path.isdir(self.builddir):
+             os.makedirs(self.builddir)
+ 
+@@ -25,22 +36,41 @@ class Builder(object):
+         self.logfile.flush()
+ 
+         env = {"PATH": os.environ["PATH"]}
++        env.update(make_extra_env)
++
+         cmd = ["make",
+-               "O={}".format(self.builddir),
+-               "olddefconfig"]
++               "O={}".format(self.builddir)]
++        cmd += make_extra_opts
++        cmd += ["olddefconfig"]
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
+-    def build(self):
++    def build(self, make_extra_opts=[], make_extra_env={}):
++        """
++        Perform the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command. It can include a make target.
++        e.g. make_extra_opts=["foo-source"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         env = {"PATH": os.environ["PATH"]}
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
+             env['http_proxy'] = os.environ["http_proxy"]
+             env['https_proxy'] = os.environ["http_proxy"]
++        env.update(make_extra_env)
++
+         cmd = ["make", "-C", self.builddir]
++        cmd += make_extra_opts
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
 -- 
 1.9.1
