@@ -1,68 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2019 21:38:37 +0100
-Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
- upstream version information
-In-Reply-To: <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
-References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
- <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
-Message-ID: <20190103203837.GA5991@scaer>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu,  3 Jan 2019 21:47:47 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fix typo get-developer (->
+ get-developers)
+Message-ID: <20190103204748.1149-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brandon, All,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On 2019-01-03 13:57 -0600, Brandon Maier spake thusly:
-> This is a useful tool, thanks! I don't have time to test it right now,
-> but an observation.
-> 
-> On Thu, Jan 3, 2019 at 2:38 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> ...
-> > +        elif pkg.latest_version[1] == pkg.current_version:
-> > +            stats["version-uptodate"] += 1
-> ...
-> > +    elif pkg.latest_version[1] != pkg.current_version:
-> > +        td_class.append("version-needs-update")
-> 
-> From https://bootlin.com/~thomas/stats.html, there's a few packages
-> that are up-to-date, but get marked "version-needs-update" because
-> either the Buildroot or release-monitoring version string starts with
-> a "v".
+The script is utils/get-developers but the manual refers to get-developer in
+several places.
 
-There was an issue raised (long ago) about this in the anitya tool
-(which generatees the DB at r-m.o):
-    https://github.com/release-monitoring/anitya/issues/374
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ docs/manual/developers.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-So, the version strings we get from r-m.o should no longer have a
-leading 'v' anymore.
-
-Yet, in our FOO_VERSION, we in Buildroot may still have those leading
-'v'. So, we should try to compare the versions as-is, and then remove
-out leading 'v' and compare again. ot sure of the exact heuristic,
-though...
-
-Regards,
-Yann E. MORIN.
-
-> For example, the vmtouch and libmodbus packages. It would be
-> nice to change the version comparison to ignore a leading "v". E.g.
-> 
-> def version_uptodate(pkg):
->     latest = remove_prefix(pkg.latest_version[1], 'v')
->     current = remove_prefix(pkg.current_version, 'v')
->     return latest == current
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
+index 0da499e100..7058d57b20 100644
+--- a/docs/manual/developers.txt
++++ b/docs/manual/developers.txt
+@@ -6,7 +6,7 @@
+ 
+ The main Buildroot directory contains a file named +DEVELOPERS+ that
+ lists the developers involved with various areas of Buildroot. Thanks
+-to this file, the +get-developer+ tool allows to:
++to this file, the +get-developers+ tool allows to:
+ 
+ - Calculate the list of developers to whom patches should be sent, by
+   parsing the patches and matching the modified files with the
+@@ -26,21 +26,21 @@ to include in his patch the appropriate modification to the
+ The +DEVELOPERS+ file format is documented in detail inside the file
+ itself.
+ 
+-The +get-developer+ tool, located in +utils/+ allows to use
++The +get-developers+ tool, located in +utils/+ allows to use
+ the +DEVELOPERS+ file for various tasks:
+ 
+ - When passing one or several patches as command line argument,
+-  +get-developer+ will return the appropriate +git send-email+
++  +get-developers+ will return the appropriate +git send-email+
+   command. If the +-e+ option is passed, only the email addresses are
+   printed in a format suitable for +git send-email --cc-cmd+.
+ 
+-- When using the +-a <arch>+ command line option, +get-developer+ will
++- When using the +-a <arch>+ command line option, +get-developers+ will
+   return the list of developers in charge of the given architecture.
+ 
+-- When using the +-p <package>+ command line option, +get-developer+
++- When using the +-p <package>+ command line option, +get-developers+
+   will return the list of developers in charge of the given package.
+ 
+-- When using the +-c+ command line option, +get-developer+ will look
++- When using the +-c+ command line option, +get-developers+ will look
+   at all files under version control in the Buildroot repository, and
+   list the ones that are not handled by any developer. The purpose of
+   this option is to help completing the +DEVELOPERS+ file.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.1
