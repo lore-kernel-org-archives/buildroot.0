@@ -1,35 +1,41 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Thu, 3 Jan 2019 13:57:46 -0600
-Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
- upstream version information
-In-Reply-To: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
-References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  3 Jan 2019 21:08:15 +0100
+Subject: [Buildroot] [PATCH] configs/bananapro: bump Linux and U-Boot version
+Message-ID: <20190103200815.15666-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a useful tool, thanks! I don't have time to test it right now,
-but an observation.
+Bump Linux to version 4.14.91 and U-Boot to version 2018.11.
 
-On Thu, Jan 3, 2019 at 2:38 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-...
-> +        elif pkg.latest_version[1] == pkg.current_version:
-> +            stats["version-uptodate"] += 1
-...
-> +    elif pkg.latest_version[1] != pkg.current_version:
-> +        td_class.append("version-needs-update")
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ configs/bananapro_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-From https://bootlin.com/~thomas/stats.html, there's a few packages
-that are up-to-date, but get marked "version-needs-update" because
-either the Buildroot or release-monitoring version string starts with
-a "v". For example, the vmtouch and libmodbus packages. It would be
-nice to change the version comparison to ignore a leading "v". E.g.
-
-def version_uptodate(pkg):
-    latest = remove_prefix(pkg.latest_version[1], 'v')
-    current = remove_prefix(pkg.current_version, 'v')
-    return latest == current
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index b4141e3608..136a166d72 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.32"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.91"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-- 
+2.20.1
