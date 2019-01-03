@@ -1,83 +1,77 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Thu, 3 Jan 2019 15:02:24 -0600
-Subject: [Buildroot] [External] Re: [PATCH v5]
- support/scripts/pkg-stats: add latest upstream version information
-In-Reply-To: <20190103213316.637c464b@windsurf>
-References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
- <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
- <20190103213316.637c464b@windsurf>
-Message-ID: <CA+fik51_toDs8PPL6wk8OZDNVTAkBb5a5CkuaPzk6JjnPDvzyQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 3 Jan 2019 22:03:15 +0100
+Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
+In-Reply-To: <20190103205518.GB5991@scaer>
+References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
+ <20190103204026.23512-2-patrickdepinguin@gmail.com>
+ <20190103205518.GB5991@scaer>
+Message-ID: <CAAXf6LU6m9WnwztW6bVOxobwFkpVi3TBUAJc8pWNxJR5s8HfNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-:
+On Thu, Jan 3, 2019, 21:55 Yann E. MORIN <yann.morin.1998@free.fr wrote:
 
-On Thu, Jan 3, 2019 at 2:33 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+> Thomas, All,
 >
-> Hello Brandon,
->
-> Thanks for the feedback.
->
-> On Thu, 3 Jan 2019 13:57:46 -0600, Brandon Maier wrote:
->
-> > From https://urldefense.proofpoint.com/v2/url?u=https-3A__bootlin.com_-7Ethomas_stats.html&d=DwICAg&c=ilBQI1lupc9Y65XwNblLtw&r=bIwUnEkCqKFQQ0RVQaaY0gBWY7SIAhmiWLyMS82_mSU&m=BLGQQMtjdYeO462A3rnKjL7GVl8jKWnqncRGOzwJuc8&s=nJR7ACo6ote42lIcGZ0XW87x_SqYCdyi5OdeloYNqu4&e=, there's a few packages
-> > that are up-to-date, but get marked "version-needs-update" because
-> > either the Buildroot or release-monitoring version string starts with
-> > a "v". For example, the vmtouch and libmodbus packages. It would be
-> > nice to change the version comparison to ignore a leading "v". E.g.
+> On 2019-01-03 21:40 +0100, Thomas De Schampheleire spake thusly:
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > >
-> > def version_uptodate(pkg):
-> >     latest = remove_prefix(pkg.latest_version[1], 'v')
-> >     current = remove_prefix(pkg.current_version, 'v')
-> >     return latest == current
+> > scp download is broken, because scp is called without filename argument
+> and
+> > only the server is specified. The call is:
+> >     scp <server> <outputfile>
+> >
+> > but should be:
+> >     scp <server>/<filename> <outputfile>
+> >
+> > Instead of assuming '-u' lists a full URL including filename (which it is
+> > not), align with the wget helper where -u is the server URL and -f gives
+> the
+> > filename.
+> >
+> > With this commit, an scp download can work if FOO_SITE_METHOD is
+> explicitly
+> > set to 'scp' and the server does not have a scheme prefix 'scp://'.
+> > The next commit will handle the case where a scheme prefix is present.
+> >
+> > Signed-off-by: Thomas De Schampheleire <
+> thomas.de_schampheleire at nokia.com>
+> > ---
+> >  support/download/scp | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/support/download/scp b/support/download/scp
+> > index 8ecf2f4b22..746c3c6ba0 100755
+> > --- a/support/download/scp
+> > +++ b/support/download/scp
+> > @@ -8,7 +8,8 @@ set -e
+> >  # Options:
+> >  #   -q          Be quiet.
+> >  #   -o FILE     Copy to local file FILE.
+> > -#   -u FILE     Copy from remote file FILE.
+> > +#   -f FILE     Copy from remote file FILE.
+> > +#   -u URL      Download file at URL.
 >
-> I'm aware of this problem, but I'm not sure we should handle this with
-> a hack in the pkg-stats script itself. Indeed sometimes the version
-> prefix is just "v", but sometimes it's the entire name of the package,
-> sometimes something slightly different.
-
-Agreed it's not a pretty hack. I wouldn't want to handle the other
-oddities in here, as that would get messy. I suggested it for "v" only
-because it seems to be very common. It would be a way to get us most
-of the way there, then it could be reverted if e.g. all the github
-versions are fixed up.
-
-On those other packages though, perhaps adding an optional variable to
-package mk files for custom versions? E.g. package/libnfs/libnfs.mk
-defines version as "libnfs-3.0.0", but the r-m version is "3.0.0".
-E.g.
-
-package/libnfs/libnfs.mk:
-  LIBNFS_RM_VERSION = 3.0.0
-  LIBNFS_VERSION = libnfs-$(LIBNFS_RM_VERSION)
-
+> This is not an URL, but an URI, and even then, this is only the
+> authority part [0] of the URI. ;-) But, Oh well... I'm bikeshedding
+> here, so:
 >
-> Back when I initially started working on this script, I had a series
-> that changed all the packages that used vX.Y.Z as a version to use just
-> X.Y.Z, and similarly for other packages in similar but slightly
-> different situations. I found (with some effort) the old branch I had
-> with those changes:
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
->   https://urldefense.proofpoint.com/v2/url?u=https-3A__git.bootlin.com_users_thomas-2Dpetazzoni_buildroot_log_-3Fh-3Dfix-2Dversions&d=DwICAg&c=ilBQI1lupc9Y65XwNblLtw&r=bIwUnEkCqKFQQ0RVQaaY0gBWY7SIAhmiWLyMS82_mSU&m=BLGQQMtjdYeO462A3rnKjL7GVl8jKWnqncRGOzwJuc8&s=YcscSq6riQ_8BeiMfo3XUuVEigc3adPnIJrOJn7hl3w&e=
->
-> It seems like I never posted them. I thought there was some discussion
-> on the list about this issue, but I can't find it. Perhaps I should
-> update this series, submit it for good, and see what the feedback is ?
+> [0]
+> https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax
 
-Regardless of this patch series, this sounds like a good idea to me.
-Especially considering Anitya does this too, as Yann mentioned[1].
 
-[1] https://github.com/release-monitoring/anitya/issues/374
+The differences between URL and URI have never been really clear to me.
+So from the link, URI is the generic term and URL is a type of URI?
+And because this -u argument does not refer to one resource but a server
+hosting multiple resources, it cannot be a URL?
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__bootlin.com&d=DwICAg&c=ilBQI1lupc9Y65XwNblLtw&r=bIwUnEkCqKFQQ0RVQaaY0gBWY7SIAhmiWLyMS82_mSU&m=BLGQQMtjdYeO462A3rnKjL7GVl8jKWnqncRGOzwJuc8&s=Pqp_noteyWtmSPPMYtHFZwlZbRE-a5HRmBWfPJcGDV0&e=
+Thanks,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190103/2537e779/attachment.html>
