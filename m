@@ -1,8 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  3 Jan 2019 21:40:15 +0100
-Subject: [Buildroot] [PATCH 00/11] support/download: fix scp and reintroduce
- source-check
-Message-ID: <20190103204026.23512-1-patrickdepinguin@gmail.com>
+Date: Thu,  3 Jan 2019 21:40:16 +0100
+Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
+In-Reply-To: <20190103204026.23512-1-patrickdepinguin@gmail.com>
+References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
+Message-ID: <20190103204026.23512-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,47 +12,53 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Hello and happy 2019 to you all!
+scp download is broken, because scp is called without filename argument and
+only the server is specified. The call is:
+    scp <server> <outputfile>
 
-This series has two parts:
-1. fix the broken scp download helper (seems no-one is using it on recent
-   releases?) (patches 1 and 2)
+but should be:
+    scp <server>/<filename> <outputfile>
 
-2. reintroduce source-check (patches 3-11)
+Instead of assuming '-u' lists a full URL including filename (which it is
+not), align with the wget helper where -u is the server URL and -f gives the
+filename.
 
-Details in the commit messages...
+With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
+set to 'scp' and the server does not have a scheme prefix 'scp://'.
+The next commit will handle the case where a scheme prefix is present.
 
-Best regards,
-Thomas
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ support/download/scp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-
-Thomas De Schampheleire (11):
-  support/download: fix scp downloads
-  support/download: fix scp download with scheme prefix 'scp://'
-  support/download: reintroduce 'source-check' target
-  support/download: implement source-check in hg backend
-  support/download: implement source-check in wget backend
-  support/download: implement source-check in file backend
-  support/download: implement source-check in scp backend
-  support/download: implement source-check in git backend
-  support/download: implement source-check in bzr backend
-  support/download: implement source-check in cvs backend
-  support/download: implement source-check in svn backend
-
- Config.in                   |  4 ++
- Makefile                    |  7 +++
- package/pkg-download.mk     | 20 ++++++++
- package/pkg-generic.mk      | 14 +++++-
- support/download/bzr        |  9 ++++
- support/download/cvs        | 11 +++++
- support/download/dl-wrapper | 99 ++++++++++++++++++++-----------------
- support/download/file       | 12 ++++-
- support/download/git        | 22 ++++++---
- support/download/hg         |  7 +++
- support/download/scp        | 22 ++++++++-
- support/download/svn        |  7 +++
- support/download/wget       |  7 +++
- 13 files changed, 187 insertions(+), 54 deletions(-)
-
+diff --git a/support/download/scp b/support/download/scp
+index 8ecf2f4b22..746c3c6ba0 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -8,7 +8,8 @@ set -e
+ # Options:
+ #   -q          Be quiet.
+ #   -o FILE     Copy to local file FILE.
+-#   -u FILE     Copy from remote file FILE.
++#   -f FILE     Copy from remote file FILE.
++#   -u URL      Download file at URL.
+ #
+ # Environment:
+ #   SCP       : the scp command to call
+@@ -18,6 +19,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+     o)  output="${OPTARG}";;
++    f)  filename="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+@@ -32,4 +34,4 @@ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
++_scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
 -- 
 2.18.1
