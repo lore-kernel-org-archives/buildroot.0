@@ -1,123 +1,300 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  3 Jan 2019 08:00:28 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-02
-Message-ID: <20190103070028.770E92074E@mail.bootlin.com>
+Date: Thu,  3 Jan 2019 09:38:18 +0100
+Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
+ upstream version information
+Message-ID: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds fetching the latest upstream version of each package
+from release-monitoring.org.
 
-Build statistics for 2019-01-02
-===============================
+The fetching process first tries to use the package mappings of the
+"Buildroot" distribution [1]. This mapping mechanism allows to tell
+release-monitoring.org what is the name of a package in a given
+distribution/build-system. For example, the package xutil_util-macros
+in Buildroot is named xorg-util-macros on release-monitoring.org. This
+mapping can be seen in the section "Mappings" of
+https://release-monitoring.org/project/15037/.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  22 |   2 |   0 |  24 |
-   2018.11.x |  30 |   0 |   0 |  30 |
-      master | 201 |  52 |   2 | 255 |
+If there is no mapping, then it does a regular search, and within the
+search results, looks for a package whose name matches the Buildroot
+name.
 
-Results for branch '2018.02.x'
-==============================
+Even though fetching from release-monitoring.org is a bit slow, using
+multiprocessing.Pool has proven to not be reliable, with some requests
+ending up with an exception. So we keep a serialized approach, but
+with a single HTTPSConnectionPool() for all queries. Long term, we
+hope to be able to use a database dump of release-monitoring.org
+instead.
 
-Classification of failures by reason
-------------------------------------
+From an output point of view, the latest version column:
 
-                   attr-2.4.48 | 1 
-        network-manager-1.10.2 | 1 
+ - Is green when the version in Buildroot matches the latest upstream
+   version
 
+ - Is orange when the latest upstream version is unknown because the
+   package was not found on release-monitoring.org
 
-Detail of failures
-------------------
+ - Is red when the version in Buildroot doesn't match the latest
+   upstream version. Note that we are not doing anything smart here:
+   we are just testing if the strings are equal or not.
 
-        bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/bc2ee174569a853be7b3c87e5422d181d7fb9a20 |     
-   powerpc64 |         network-manager-1.10.2 | NOK | http://autobuild.buildroot.net/results/a14ab848e1cae09e943041b9748008167480d3f1 |     
+ - The cell contains the link to the project on release-monitoring.org
+   if found.
 
-Results for branch 'master'
-===========================
+ - The cell indicates if the match was done using a distro mapping, or
+   through a regular search.
 
-Classification of failures by reason
-------------------------------------
+[1] https://release-monitoring.org/distro/Buildroot/
 
-                     php-7.3.0 | 18
-        glib-networking-2.56.1 | 6 
-glibc-glibc-2.28-50-gb8dd0f... | 4 
-   libtorrent-rasterbar-1.1.11 | 4 
-                    atk-2.30.0 | 3 
-                  ffmpeg-3.4.5 | 3 
-                  libssh-0.8.6 | 3 
-                  libftdi1-1.4 | 2 
-                   netsurf-3.8 | 2 
-                        glibmm | 1 
-                    host-clang | 1 
-             host-grpc-v1.16.1 | 1 
-         libcpprestsdk-v2.10.8 | 1 
-odhcp6c-7533a6243dc3ac5a747... | 1 
-                 php-zmq-1.1.3 | 1 
-             stress-ng-0.09.47 | 1 
-             terminology-1.2.1 | 1 
-                wolfssl-3.15.5 | 1 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Changes since v4:
+- Don't use multiprocessing.Pool(), stick to a serialized approach,
+  which is more reliable.
+- Handle errors/exceptions properly.
+- Improve the layout of the resulting table column.
 
+Changes since v3:
+- Use Pool(), like is done for the upstream URL checking added by Matt
+  Weber
+- Use the requests Python module instead of the urllib2 Python module,
+  so that we use the same module as the one used for the upstream URL
+  checking
+- Adjusted to work with the latest pkg-stats code
 
-Detail of failures
-------------------
+Changes since v2:
+- Use the "timeout" argument of urllib2.urlopen() in order to make
+  sure that the requests terminate at some point, even if
+  release-monitoring.org is stuck.
+- Move a lot of the logic as methods of the Package() class.
 
-        i586 |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/86aa9cdde0a6d9faa3ba0d4e154b1a88453cf66b | ORPH
-         arm |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/368d08331955e5b179cc872d4f8416515addda95 | ORPH
-         arm |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/b933aedc84f21681033f109e2fdd58390dcde2e4 | ORPH
-         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/2155e418d2ab2ef8d1b7cd83998a59054ca546a4 |     
-         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/f6b3590a4c466f9ddf14b7b55b3902f2ca76a706 |     
-         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/32e17b6f29ef9a15e09350bccda08c8a632c10a0 |     
-        i686 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/cc094e0a7c130c60641d32e9f4cbc46b0eba0852 |     
-         arc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/9c87ecd5597044eb640d3a46ea0d118efd5d3f27 |     
-     powerpc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/604ac7d5b0829eeaebabb87c64528bef9aaa3d94 |     
-      x86_64 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/4d04aaea26fde89ecf19d6da726540747c87d2cf |     
- powerpc64le |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/9fd6e7b2eb076c22e276e187d1a0a99a76c3f6b8 |     
-         arm |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/c126e98c3b1fe30ebed258cece64b33a41fd5819 |     
-     riscv64 | glibc-glibc-2.28-50-gb8dd0f... | NOK | http://autobuild.buildroot.net/results/4420a6602e14482b9be74b23f305c0fffede75a3 | ORPH
-     riscv64 | glibc-glibc-2.28-50-gb8dd0f... | NOK | http://autobuild.buildroot.net/results/3e3f83ced72cd0fa4fb6e15d06c759f9c3729cd6 | ORPH
-     riscv64 | glibc-glibc-2.28-50-gb8dd0f... | NOK | http://autobuild.buildroot.net/results/575fa648929df61de927fabe9fa0d5cbd4a7660b | ORPH
-     riscv64 | glibc-glibc-2.28-50-gb8dd0f... | NOK | http://autobuild.buildroot.net/results/8190eb74b2b97911e03671138487d747fcb22cba | ORPH
-microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/ab26ef117abc4754ccc4c978a44fb790c67c00d9 |     
-     aarch64 |                     host-clang | TIM | http://autobuild.buildroot.net/results/637d62565a1b119cafdcac5ce04adb2205724491 |     
-         arc |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/6d863532f98e4059ab3db604242eb275d00b7dba |     
-    mips64el |          libcpprestsdk-v2.10.8 | NOK | http://autobuild.buildroot.net/results/3f3fc5ac36e282ccde4698f54b47bf30f2d12ffe |     
-    mips64el |                   libftdi1-1.4 | NOK | http://autobuild.buildroot.net/results/869ce70782f04d163441bd653a95233915b7f397 |     
-         arm |                   libftdi1-1.4 | NOK | http://autobuild.buildroot.net/results/ea4d319dc4fee737aededa43304b118d3d2267fd |     
-         arm |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/31d994afab2e23e1bd6af59e64e91b65bae3fe1e |     
-     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/4a1506811dcafdf12d8295b98484918851e94cf4 |     
-    mips64el |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/962f46c1009a2cf0cd13c62637ec24bd71aed05e |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/db675e259ecfdbec977856ccd33d836bcc5fb880 |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/f74a590e80223f627842586f50dc6d1eca1a0e82 |     
-        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/fd7ca20c4c8dc51441b04f17c5bc87e25f06eac1 |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/b66f17d327b5143546dcccd0c937d89fae1bc3d5 |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/f1a25efb20afed03f50e74c079e7ac61de22e757 |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/134426a6eb9e12d7f223d9f07493839c43fd9015 |     
-         arc | odhcp6c-7533a6243dc3ac5a747... | NOK | http://autobuild.buildroot.net/results/64ae399d1d7bf5833825d500b2418ae9543afccd |     
-     aarch64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/8ddfd9323ad0abf73c4b16a3559a9dbe19b01e74 | ORPH
-         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/98608ea84419d29c01e9e23216b2d1ea4d844f23 | ORPH
-         arm |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/e2833559139a1ffc138903edfd36479d499b53ac | ORPH
-         arm |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/611a87d2295ec1414bbec443d65fb5ffed88ca51 | ORPH
-      x86_64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/8e7c842011a6d59fcc6a7ab4ec2cbdcce5889cce | ORPH
-     powerpc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/af1f4da1bde0b3af28ab6bb2d5f2cd33270c8ab6 | ORPH
-       sparc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/d4eb9a0f6ac10b0a28015df03613a50ac93cc4f3 | ORPH
-     sparc64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/c61b5416877c0515a11b0c8181a5607983b80975 | ORPH
-        m68k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/489ef5fe0d55db75765421b04675749336aa4222 | ORPH
-      xtensa |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/64260ff73a7967f7aa17a6f1bc71c04eaf654efc | ORPH
-       nios2 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/c2f12011a26dbcdf37d631c591a3f5f1264f9930 | ORPH
-      xtensa |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/f1e686f7f33aedd55ae4e45580284be574e1325e | ORPH
- powerpc64le |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/d12531296ce6cc4b855af537a8a3dc5e447541cc | ORPH
-        or1k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/bbb6fa078bdf90ab5a98f8ab9856b5032a829628 | ORPH
-     aarch64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/36244b691b420f41c1935c6bfe925681e70fa58c | ORPH
-      x86_64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/aa58a112ba967dd67bca5f2b927ebbed7ece4654 | ORPH
-    mips64el |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/84d002d25d99bb689725bbed93e7d24ef5f6fb4d | ORPH
-     aarch64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/deeb16582c00aa6d6862cb11134f9fac496a18fb | ORPH
-        i686 |                  php-zmq-1.1.3 | NOK | http://autobuild.buildroot.net/results/d1dad9a94993f2635a157c0c97b6f11cb3730c4d | ORPH
-    mips64el |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/3cdd367140fe147f71269657c46f7fb3bbe36895 |     
-     powerpc |              terminology-1.2.1 | NOK | http://autobuild.buildroot.net/results/6e445e8f0c973fad58937824452aac9b593b3e8d |     
-  aarch64_be |                 wolfssl-3.15.5 | NOK | http://autobuild.buildroot.net/results/cf335dc71d54458132f6887cc84e1ff6dfa2b5b2 |     
+Changes since v1:
+- Fix flake8 warnings
+- Add missing newline in HTML
+---
+ support/scripts/pkg-stats | 137 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 137 insertions(+)
 
-
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index d0b06b1e74..d32087cda1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -25,11 +25,19 @@ import re
+ import subprocess
+ import sys
+ import requests  # URL checking
++import json
++import certifi
++from urllib3 import HTTPSConnectionPool
+ from multiprocessing import Pool
+ 
+ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile("\s*https?://\S*\s*$")
++RELEASE_MONITORING_API = "http://release-monitoring.org/api"
+ 
++RM_API_STATUS_ERROR = 1
++RM_API_STATUS_FOUND_BY_DISTRO = 2
++RM_API_STATUS_FOUND_BY_PATTERN = 3
++RM_API_STATUS_NOT_FOUND = 4
+ 
+ class Package:
+     all_licenses = list()
+@@ -49,6 +57,7 @@ class Package:
+         self.url = None
+         self.url_status = None
+         self.url_worker = None
++        self.latest_version = None
+ 
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+@@ -297,6 +306,66 @@ def check_package_urls(packages):
+     for pkg in packages:
+         pkg.url_status = pkg.url_worker.get(timeout=3600)
+ 
++def release_monitoring_get_latest_version_by_distro(pool, name):
++    try:
++        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
++    except:
++        return (RM_API_STATUS_ERROR, None, None)
++
++    if req.status != 200:
++        return (RM_API_STATUS_NOT_FOUND, None, None)
++
++    data = json.loads(req.data)
++
++    if len(data['versions']) > 0:
++        return (RM_API_STATUS_FOUND_BY_DISTRO, data['versions'][0], data['id'])
++    else:
++        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
++
++def release_monitoring_get_latest_version_by_guess(pool, name):
++    try:
++        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
++    except:
++        print("Exception release_monitoring_get_latest_version_by_guess for '%s': %s" % (name, err))
++        return (RM_API_STATUS_ERROR, None, None)
++
++    if req.status != 200:
++        return (RM_API_STATUS_NOT_FOUND, None, None)
++
++    data = json.loads(req.data)
++
++    for p in data['projects']:
++        if p['name'] == name and len(p['versions']) > 0:
++            return (RM_API_STATUS_FOUND_BY_PATTERN, p['versions'][0], p['id'])
++
++    return (RM_API_STATUS_NOT_FOUND, None, None)
++
++def check_package_latest_version(packages):
++    """
++    Fills in the .latest_version field of all Package objects
++
++    This field has a special format:
++      (status, version, id)
++    with:
++    - status: one of RM_API_STATUS_ERROR,
++      RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
++      RM_API_STATUS_NOT_FOUND
++    - version: string containing the latest version known by
++      release-monitoring.org for this package
++    - id: string containing the id of the project corresponding to this
++      package, as known by release-monitoring.org
++    """
++    pool = HTTPSConnectionPool('release-monitoring.org', port=443,
++                               cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
++    count = 0
++    for pkg in packages:
++        v = release_monitoring_get_latest_version_by_distro(pool, pkg.name)
++        if v[0] == RM_API_STATUS_NOT_FOUND:
++            v = release_monitoring_get_latest_version_by_guess(pool, pkg.name)
++
++        pkg.latest_version = v
++        print("[%d/%d] Package %s" % (count, len(packages), pkg.name))
++        count += 1
+ 
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+@@ -322,6 +391,16 @@ def calculate_stats(packages):
+             stats["hash"] += 1
+         else:
+             stats["no-hash"] += 1
++        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++            stats["rmo-mapping"] += 1
++        else:
++            stats["rmo-no-mapping"] += 1
++        if not pkg.latest_version[1]:
++            stats["version-unknown"] += 1
++        elif pkg.latest_version[1] == pkg.current_version:
++            stats["version-uptodate"] += 1
++        else:
++            stats["version-not-uptodate"] += 1
+         stats["patches"] += pkg.patch_count
+     return stats
+ 
+@@ -354,6 +433,7 @@ td.somepatches {
+ td.lotsofpatches {
+   background: #ff9a69;
+ }
++
+ td.good_url {
+   background: #d2ffc4;
+ }
+@@ -363,6 +443,20 @@ td.missing_url {
+ td.invalid_url {
+   background: #ff9a69;
+ }
++
++td.version-good {
++  background: #d2ffc4;
++}
++td.version-needs-update {
++  background: #ff9a69;
++}
++td.version-unknown {
++ background: #ffd870;
++}
++td.version-error {
++ background: #ccc;
++}
++
+ </style>
+ <title>Statistics of Buildroot packages</title>
+ </head>
+@@ -465,6 +559,36 @@ def dump_html_pkg(f, pkg):
+         current_version = pkg.current_version
+     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
+ 
++    # Latest version
++    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++        td_class.append("version-error")
++    if pkg.latest_version[1] is None:
++        td_class.append("version-unknown")
++    elif pkg.latest_version[1] != pkg.current_version:
++        td_class.append("version-needs-update")
++    else:
++        td_class.append("version-good")
++
++    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++        latest_version_text = "<b>Error</b>"
++    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
++        latest_version_text = "<b>Not found</b>"
++    else:
++        if pkg.latest_version[1] is None:
++            latest_version_text = "<b>Found, but not version</b>"
++        else:
++            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % (pkg.latest_version[2], str(pkg.latest_version[1]))
++
++        latest_version_text += "<br/>"
++
++        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++            latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
++        else:
++            latest_version_text += "found by guess"
++
++    f.write("  <td class=\"%s\">%s</td>\n" %
++            (" ".join(td_class), latest_version_text))
++
+     # Warnings
+     td_class = ["centered"]
+     if pkg.warnings == 0:
+@@ -502,6 +626,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">License files</td>
+ <td class=\"centered\">Hash file</td>
+ <td class=\"centered\">Current version</td>
++<td class=\"centered\">Latest version</td>
+ <td class=\"centered\">Warnings</td>
+ <td class=\"centered\">Upstream URL</td>
+ </tr>
+@@ -532,6 +657,16 @@ def dump_html_stats(f, stats):
+             stats["no-hash"])
+     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
+             stats["patches"])
++    f.write("<tr><td>Packages having a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
++            stats["rmo-mapping"])
++    f.write("<tr><td>Packages lacking a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
++            stats["rmo-no-mapping"])
++    f.write("<tr><td>Packages that are up-to-date</td><td>%s</td></tr>\n" %
++            stats["version-uptodate"])
++    f.write("<tr><td>Packages that are not up-to-date</td><td>%s</td></tr>\n" %
++            stats["version-not-uptodate"])
++    f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>\n" %
++            stats["version-unknown"])
+     f.write("</table>\n")
+ 
+ 
+@@ -587,6 +722,8 @@ def __main__():
+         pkg.set_url()
+     print("Checking URL status")
+     check_package_urls(packages)
++    print("Getting latest versions ...")
++    check_package_latest_version(packages)
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     print("Write HTML")
 -- 
-http://autobuild.buildroot.net
+2.20.1
