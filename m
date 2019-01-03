@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  3 Jan 2019 21:40:22 +0100
-Subject: [Buildroot] [PATCH 07/11] support/download: implement source-check
- in scp backend
+Date: Thu,  3 Jan 2019 21:40:21 +0100
+Subject: [Buildroot] [PATCH 06/11] support/download: implement source-check
+ in file backend
 In-Reply-To: <20190103204026.23512-1-patrickdepinguin@gmail.com>
 References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
-Message-ID: <20190103204026.23512-8-patrickdepinguin@gmail.com>
+Message-ID: <20190103204026.23512-7-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +13,44 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Note that this reintroduces BR2_SSH removed with
-db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
-command").
-
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in               |  4 ++++
- package/pkg-download.mk |  1 +
- support/download/scp    | 13 +++++++++++++
- 3 files changed, 18 insertions(+)
+ support/download/file | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index f965e9d6d8..03e4eb3928 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,6 +136,10 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
- 
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index cc04e316e2..e9506ae2a5 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
-+export SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
-diff --git a/support/download/scp b/support/download/scp
-index 55f588e157..c8fa58f952 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -7,17 +7,20 @@ set -e
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..3a92fa9f67 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -7,6 +7,7 @@ set -e
  #
  # Options:
  #   -q          Be quiet.
-+#   -C          Only check that the file exists remotely
- #   -o FILE     Copy to local file FILE.
- #   -f FILE     Copy from remote file FILE.
- #   -u URL      Download file at URL.
- #
- # Environment:
- #   SCP       : the scp command to call
-+#   SSH       : the ssh command to use for checkonly
- 
- verbose=
++#   -C          Only check that the source file exists
+ #   -o FILE     Copy to file FILE.
+ #   -f FILE     Copy from basename file FILE.
+ #   -u DIR      Copy from FILE in DIR.
+@@ -23,6 +24,7 @@ verbose=-v
  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
      case "${OPT}" in
-     q)  verbose=-q;;
+     q)  verbose=;;
 +    C)  checkonly=1;;
      o)  output="${OPTARG}";;
-     f)  filename="${OPTARG}";;
-     u)  uri="${OPTARG}";;
-@@ -33,6 +36,16 @@ shift $((OPTIND-1)) # Get rid of our options
- _scp() {
-     eval ${SCP} "${@}"
+     f)  file="${OPTARG}";;
+     u)  dir="${OPTARG}";;
+@@ -39,4 +41,12 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
  }
-+_ssh() {
-+    eval ${SSH} "${@}"
-+}
+ 
+-_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
++# Remove any scheme prefix
++dir="${dir##file://}"
 +
 +if [ -n "${checkonly}" ]; then
-+    domain="${uri%%:*}"
-+    path="${uri#*:}"
-+    _ssh ${verbose} "${@}" "'${domain}'" ls "'${path}'" > /dev/null
++    test -e "'${dir}/${file}'"
 +    exit ${?}
 +fi
- 
- # Remove any scheme prefix
- uri="${uri##scp://}"
++
++_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
 -- 
 2.18.1
