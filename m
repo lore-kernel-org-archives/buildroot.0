@@ -1,65 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  3 Jan 2019 11:56:56 +0100
-Subject: [Buildroot] [PATCH 2/2] utils/get-developers: really make it
- callable from elsewhere than the toplevel directory
-In-Reply-To: <20190103105657.23751-1-peter@korsgaard.com>
-References: <20190103105657.23751-1-peter@korsgaard.com>
-Message-ID: <20190103105657.23751-2-peter@korsgaard.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Thu,  3 Jan 2019 22:00:36 +1100
+Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+Message-ID: <20190103110036.14604-1-flatmax@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 62d5558f76a (utils/get-developers: make it callable from elsewhere
-than the toplevel directory) tried to fix this by passing in the toplevel
-directory when the DEVELOPERS file is parsed.
+This patch enables the inclusion of the Pi's overlays. Previously
+the overlays were not included in the genimage configuration.
+This patch ensures overlays are included in the sdcard (when
+enabled) by defaulting to the inclusion of an empty
+output/images/rpi-firmware/overlays directory in genimage cfg.
 
-Unfortunately this is not enough, as E.G.  also the paths listed in the
-patches are relative to the toplevel directory, causing it to not match the
-entries in the DEVELOPERS file.
+The Pi's overlays are built with the following config
+variables:
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
 
-In concept this can be fixed by also passing the toplevel directory to the
-Developers class, but the simplest solution is just to chdir to the toplevel
-Buildroot directory before calling any of the getdeveloperlib functions.
+After building, the dtbo files are present in the
+output/images/rpi-firmware/overlays directory but not added
+to the sdcard because they are missing from the genimage cfg
+file.
 
-This does require us to finish parsing command line arguments (which opens
-the provided patch files) to not get into trouble with relative paths to
-patches before chdir'ing / initializing getdeveloperlib.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
 ---
- utils/get-developers | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+ package/rpi-firmware/rpi-firmware.mk           | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index ce882e6699..750fc556dc 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -24,9 +24,6 @@ def parse_args():
+diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+index 0d0ca750a7..af1d17cde7 100644
+--- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+@@ -9,6 +9,7 @@ image boot.vfat {
+       "rpi-firmware/config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
++      "rpi-firmware/overlays",
+       "Image"
+     }
+   }
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index bb54904ae6..0df7b17cbd 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+ 	done
+ endef
++else
++define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
++		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
++endef
+ endif
  
- 
- def __main__():
--    devs = getdeveloperlib.parse_developers()
--    if devs is None:
--        sys.exit(1)
-     args = parse_args()
- 
-     # Check that only one action is given
-@@ -48,6 +45,14 @@ def __main__():
-         print("No action specified")
-         return
- 
-+    # getdeveloperlib expects to be executed from the toplevel buildroot
-+    # directory, which is one level up from this script
-+    os.chdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-+
-+    devs = getdeveloperlib.parse_developers()
-+    if devs is None:
-+        sys.exit(1)
-+
-     # Handle the check action
-     if args.check:
-         files = getdeveloperlib.check_developers(devs)
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
 -- 
-2.11.0
+2.19.1
