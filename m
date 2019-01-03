@@ -1,39 +1,89 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 3 Jan 2019 21:54:19 +0100
-Subject: [Buildroot] [PATCH 00/11] support/download: fix scp and
- reintroduce source-check
-In-Reply-To: <20190103214654.435a7043@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Jan 2019 21:55:18 +0100
+Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
+In-Reply-To: <20190103204026.23512-2-patrickdepinguin@gmail.com>
 References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
- <20190103214654.435a7043@windsurf>
-Message-ID: <CAAXf6LVUvjymZVheDA2ihJ5ifmrB26p2d0Hm2aeaV3UahEOG=Q@mail.gmail.com>
+ <20190103204026.23512-2-patrickdepinguin@gmail.com>
+Message-ID: <20190103205518.GB5991@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 3, 2019, 21:46 Thomas Petazzoni <thomas.petazzoni@bootlin.com
-wrote:
+Thomas, All,
 
-> Hello,
->
-> On Thu,  3 Jan 2019 21:40:15 +0100, Thomas De Schampheleire wrote:
->
-> > Hello and happy 2019 to you all!
-> >
-> > This series has two parts:
-> > 1. fix the broken scp download helper (seems no-one is using it on recent
-> >    releases?) (patches 1 and 2)
->
-> Indeed, I believe the scp download method is rarely used and tested. The
-> only solution to not break it again is to have proper tests for it in
-> support/testing/. Should it be part of your patch series ? :-)
->
+On 2019-01-03 21:40 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> scp download is broken, because scp is called without filename argument and
+> only the server is specified. The call is:
+>     scp <server> <outputfile>
+> 
+> but should be:
+>     scp <server>/<filename> <outputfile>
+> 
+> Instead of assuming '-u' lists a full URL including filename (which it is
+> not), align with the wget helper where -u is the server URL and -f gives the
+> filename.
+> 
+> With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
+> set to 'scp' and the server does not have a scheme prefix 'scp://'.
+> The next commit will handle the case where a scheme prefix is present.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  support/download/scp | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/download/scp b/support/download/scp
+> index 8ecf2f4b22..746c3c6ba0 100755
+> --- a/support/download/scp
+> +++ b/support/download/scp
+> @@ -8,7 +8,8 @@ set -e
+>  # Options:
+>  #   -q          Be quiet.
+>  #   -o FILE     Copy to local file FILE.
+> -#   -u FILE     Copy from remote file FILE.
+> +#   -f FILE     Copy from remote file FILE.
+> +#   -u URL      Download file at URL.
 
-But how to generically test it? It requires a configured ssh server, which
-is not even guaranteed on localhost.
+This is not an URL, but an URI, and even then, this is only the
+authority part [0] of the URI. ;-) But, Oh well... I'm bikeshedding
+here, so:
 
-/Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190103/c9e4942c/attachment.html>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+[0] https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax
+
+Regards,
+Yann E. MORIN.
+
+>  #
+>  # Environment:
+>  #   SCP       : the scp command to call
+> @@ -18,6 +19,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+>      case "${OPT}" in
+>      q)  verbose=-q;;
+>      o)  output="${OPTARG}";;
+> +    f)  filename="${OPTARG}";;
+>      u)  uri="${OPTARG}";;
+>      :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+>      \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+> @@ -32,4 +34,4 @@ _scp() {
+>      eval ${SCP} "${@}"
+>  }
+>  
+> -_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
+> +_scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
+> -- 
+> 2.18.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
