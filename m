@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2019 22:26:14 +0100
-Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
-In-Reply-To: <CAAXf6LU6m9WnwztW6bVOxobwFkpVi3TBUAJc8pWNxJR5s8HfNg@mail.gmail.com>
+Date: Thu, 3 Jan 2019 22:32:00 +0100
+Subject: [Buildroot] [PATCH 02/11] support/download: fix scp download
+ with scheme prefix 'scp://'
+In-Reply-To: <20190103204026.23512-3-patrickdepinguin@gmail.com>
 References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
- <20190103204026.23512-2-patrickdepinguin@gmail.com>
- <20190103205518.GB5991@scaer>
- <CAAXf6LU6m9WnwztW6bVOxobwFkpVi3TBUAJc8pWNxJR5s8HfNg@mail.gmail.com>
-Message-ID: <20190103212614.GD5991@scaer>
+ <20190103204026.23512-3-patrickdepinguin@gmail.com>
+Message-ID: <20190103213200.GE5991@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +14,50 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2019-01-03 22:03 +0100, Thomas De Schampheleire spake thusly:
-> On Thu, Jan 3, 2019, 21:55 Yann E. MORIN < [1]yann.morin.1998@free.fr wrote:
->   This is not an URL, but an URI, and even then, this is only the
->   authority part [0] of the URI. ;-) But, Oh well... I'm bikeshedding
->   here, so:
-> The differences between URL and URI have never been really clear to me.
-> So from the link, URI is the generic term and URL is a type of URI??
+On 2019-01-03 21:40 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> The scp download helper is broken when the server URL starts with 'scp://'.
+> Such prefix is used in two situations:
+> 1. to let FOO_SITE point to an scp location without explicitly having to set
+>    'FOO_SITE_METHOD = scp'
+> 
+> 2. when BR2_PRIMARY_SITE or BR2_BACKUP_SITE points to an scp location. In
+>    this case, there is no equivalent of 'SITE_METHOD'.
+> 
+> Strip out the scheme prefix, similarly to how the 'file' download helper
+> does it. That helper has the same cases as above.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  support/download/scp | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/support/download/scp b/support/download/scp
+> index 746c3c6ba0..55f588e157 100755
+> --- a/support/download/scp
+> +++ b/support/download/scp
+> @@ -34,4 +34,7 @@ _scp() {
+>      eval ${SCP} "${@}"
+>  }
+>  
+> +# Remove any scheme prefix
+> +uri="${uri##scp://}"
 
-Don't bother: in all practicality, they are useable interchangeably in
-the contexts we are most dealing with here. And as I wrote: I was really
-just bikeshedding (well, I should have rather said that I were being
-pedantic, but this would be starting to be a bit meta now...).
+I was pretty sure that we could pass sdcp:// to the scp tool. That's
+funny how one can get very wrong about such simple things...
+
+So it only proves that I don't use scp that often, indee.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> And because this -u argument does not refer to one resource but a server hosting multiple resources, it cannot be a URL?
-> Thanks,
-> Thomas
+>  _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
+> -- 
+> 2.18.1
 > 
-> Links:
-> 1. mailto:yann.morin.1998 at free.fr
-> 2. mailto:thomas.de_schampheleire at nokia.com
-> 3. mailto:thomas.de_schampheleire at nokia.com
-> 4. mailto:yann.morin.1998 at free.fr
-> 5. https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
