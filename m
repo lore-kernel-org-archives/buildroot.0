@@ -1,55 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Jan 2019 21:33:16 +0100
-Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
- upstream version information
-In-Reply-To: <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
-References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
- <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
-Message-ID: <20190103213316.637c464b@windsurf>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu,  3 Jan 2019 21:40:15 +0100
+Subject: [Buildroot] [PATCH 00/11] support/download: fix scp and reintroduce
+ source-check
+Message-ID: <20190103204026.23512-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Brandon,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Thanks for the feedback.
+Hello and happy 2019 to you all!
 
-On Thu, 3 Jan 2019 13:57:46 -0600, Brandon Maier wrote:
+This series has two parts:
+1. fix the broken scp download helper (seems no-one is using it on recent
+   releases?) (patches 1 and 2)
 
-> From https://bootlin.com/~thomas/stats.html, there's a few packages
-> that are up-to-date, but get marked "version-needs-update" because
-> either the Buildroot or release-monitoring version string starts with
-> a "v". For example, the vmtouch and libmodbus packages. It would be
-> nice to change the version comparison to ignore a leading "v". E.g.
-> 
-> def version_uptodate(pkg):
->     latest = remove_prefix(pkg.latest_version[1], 'v')
->     current = remove_prefix(pkg.current_version, 'v')
->     return latest == current
+2. reintroduce source-check (patches 3-11)
 
-I'm aware of this problem, but I'm not sure we should handle this with
-a hack in the pkg-stats script itself. Indeed sometimes the version
-prefix is just "v", but sometimes it's the entire name of the package,
-sometimes something slightly different.
-
-Back when I initially started working on this script, I had a series
-that changed all the packages that used vX.Y.Z as a version to use just
-X.Y.Z, and similarly for other packages in similar but slightly
-different situations. I found (with some effort) the old branch I had
-with those changes:
-
-  https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=fix-versions
-
-It seems like I never posted them. I thought there was some discussion
-on the list about this issue, but I can't find it. Perhaps I should
-update this series, submit it for good, and see what the feedback is ?
+Details in the commit messages...
 
 Best regards,
-
 Thomas
+
+
+Thomas De Schampheleire (11):
+  support/download: fix scp downloads
+  support/download: fix scp download with scheme prefix 'scp://'
+  support/download: reintroduce 'source-check' target
+  support/download: implement source-check in hg backend
+  support/download: implement source-check in wget backend
+  support/download: implement source-check in file backend
+  support/download: implement source-check in scp backend
+  support/download: implement source-check in git backend
+  support/download: implement source-check in bzr backend
+  support/download: implement source-check in cvs backend
+  support/download: implement source-check in svn backend
+
+ Config.in                   |  4 ++
+ Makefile                    |  7 +++
+ package/pkg-download.mk     | 20 ++++++++
+ package/pkg-generic.mk      | 14 +++++-
+ support/download/bzr        |  9 ++++
+ support/download/cvs        | 11 +++++
+ support/download/dl-wrapper | 99 ++++++++++++++++++++-----------------
+ support/download/file       | 12 ++++-
+ support/download/git        | 22 ++++++---
+ support/download/hg         |  7 +++
+ support/download/scp        | 22 ++++++++-
+ support/download/svn        |  7 +++
+ support/download/wget       |  7 +++
+ 13 files changed, 187 insertions(+), 54 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.1
