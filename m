@@ -1,63 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jan 2019 22:44:43 +0100
-Subject: [Buildroot] [git commit] docs/manual: fix typo get-developer (->
- get-developers)
-Message-ID: <20190103214019.CE89E89101@busybox.osuosl.org>
+Date: Thu, 03 Jan 2019 22:46:09 +0100
+Subject: [Buildroot] [PATCH v2] package/linux-headers: drop obsolete
+ 3.2.x / 4.{1, 16, 18}.x versions
+In-Reply-To: <20190102135246.16616-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 2 Jan 2019 14:52:45 +0100")
+References: <20190102135246.16616-1-peter@korsgaard.com>
+Message-ID: <87lg41o1ni.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81aeab60cd830c4f674df24e860f342233315d38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-The script is utils/get-developers but the manual refers to get-developer in
-several places.
+ > According to https://www.kernel.org/category/releases.html, these kernel
+ > versions are no longer supported, so drop them now that we have added 4.20.x
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/developers.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ > - Add Config.in.legacy entries as suggested by Thomas
 
-diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
-index 0da499e100..7058d57b20 100644
---- a/docs/manual/developers.txt
-+++ b/docs/manual/developers.txt
-@@ -6,7 +6,7 @@
- 
- The main Buildroot directory contains a file named +DEVELOPERS+ that
- lists the developers involved with various areas of Buildroot. Thanks
--to this file, the +get-developer+ tool allows to:
-+to this file, the +get-developers+ tool allows to:
- 
- - Calculate the list of developers to whom patches should be sent, by
-   parsing the patches and matching the modified files with the
-@@ -26,21 +26,21 @@ to include in his patch the appropriate modification to the
- The +DEVELOPERS+ file format is documented in detail inside the file
- itself.
- 
--The +get-developer+ tool, located in +utils/+ allows to use
-+The +get-developers+ tool, located in +utils/+ allows to use
- the +DEVELOPERS+ file for various tasks:
- 
- - When passing one or several patches as command line argument,
--  +get-developer+ will return the appropriate +git send-email+
-+  +get-developers+ will return the appropriate +git send-email+
-   command. If the +-e+ option is passed, only the email addresses are
-   printed in a format suitable for +git send-email --cc-cmd+.
- 
--- When using the +-a <arch>+ command line option, +get-developer+ will
-+- When using the +-a <arch>+ command line option, +get-developers+ will
-   return the list of developers in charge of the given architecture.
- 
--- When using the +-p <package>+ command line option, +get-developer+
-+- When using the +-p <package>+ command line option, +get-developers+
-   will return the list of developers in charge of the given package.
- 
--- When using the +-c+ command line option, +get-developer+ will look
-+- When using the +-c+ command line option, +get-developers+ will look
-   at all files under version control in the Buildroot repository, and
-   list the ones that are not handled by any developer. The purpose of
-   this option is to help completing the +DEVELOPERS+ file.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
