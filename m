@@ -1,77 +1,59 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 3 Jan 2019 22:03:15 +0100
-Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
-In-Reply-To: <20190103205518.GB5991@scaer>
-References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
- <20190103204026.23512-2-patrickdepinguin@gmail.com>
- <20190103205518.GB5991@scaer>
-Message-ID: <CAAXf6LU6m9WnwztW6bVOxobwFkpVi3TBUAJc8pWNxJR5s8HfNg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Jan 2019 22:04:37 +0100
+Subject: [Buildroot] [PATCH v2] package/pkgconf: fix behavior of
+ pkg-config --version
+In-Reply-To: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
+References: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190103220437.29005bbc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 3, 2019, 21:55 Yann E. MORIN <yann.morin.1998@free.fr wrote:
+Hello,
 
-> Thomas, All,
->
-> On 2019-01-03 21:40 +0100, Thomas De Schampheleire spake thusly:
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > scp download is broken, because scp is called without filename argument
-> and
-> > only the server is specified. The call is:
-> >     scp <server> <outputfile>
-> >
-> > but should be:
-> >     scp <server>/<filename> <outputfile>
-> >
-> > Instead of assuming '-u' lists a full URL including filename (which it is
-> > not), align with the wget helper where -u is the server URL and -f gives
-> the
-> > filename.
-> >
-> > With this commit, an scp download can work if FOO_SITE_METHOD is
-> explicitly
-> > set to 'scp' and the server does not have a scheme prefix 'scp://'.
-> > The next commit will handle the case where a scheme prefix is present.
-> >
-> > Signed-off-by: Thomas De Schampheleire <
-> thomas.de_schampheleire at nokia.com>
-> > ---
-> >  support/download/scp | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/support/download/scp b/support/download/scp
-> > index 8ecf2f4b22..746c3c6ba0 100755
-> > --- a/support/download/scp
-> > +++ b/support/download/scp
-> > @@ -8,7 +8,8 @@ set -e
-> >  # Options:
-> >  #   -q          Be quiet.
-> >  #   -o FILE     Copy to local file FILE.
-> > -#   -u FILE     Copy from remote file FILE.
-> > +#   -f FILE     Copy from remote file FILE.
-> > +#   -u URL      Download file at URL.
->
-> This is not an URL, but an URI, and even then, this is only the
-> authority part [0] of the URI. ;-) But, Oh well... I'm bikeshedding
-> here, so:
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> [0]
-> https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax
+On Wed,  2 Jan 2019 18:36:38 +0100, Thomas Petazzoni wrote:
+> For some odd reason, the new pkg-config 1.5.3 changed the behavior of
+> "pkg-config --version": as soon as another argument than "--version"
+> is passed, the code assumes the user wanted to run "--modversion"
+> instead.
+> 
+> Sadly, this breaks badly with our pkg-config wrapper that
+> unconditionally passes --static to pkg-config when
+> BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
+> pkg-config is available and functional, it's actually "pkg-config
+> --static --version" that gets executed. pkg-config assumes that the
+> user wanted to use --modversion and bails out with an error.
+> 
+> This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
+> configuration.
+> 
+> This misbehavior of pkg-config has been reported upstream at
+> https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
+> gets fixed, we work around the issue by reverting the commit that does
+> the "hey let's assume you're using --modversion if --version is passed
+> with more than one argument".
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
+>   (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Changes since v1:
+> - Revert the problematic upstream commit instead of doing a workaround
+>   specific to the -static option.
+> ---
+>  ...me-modversion-insted-of-version-if-o.patch | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
 
+Applied to master, thanks.
 
-The differences between URL and URI have never been really clear to me.
-So from the link, URI is the generic term and URL is a type of URI?
-And because this -u argument does not refer to one resource but a server
-hosting multiple resources, it cannot be a URL?
-
-Thanks,
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190103/2537e779/attachment.html>
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
