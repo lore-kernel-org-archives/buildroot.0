@@ -1,54 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  3 Jan 2019 21:40:26 +0100
-Subject: [Buildroot] [PATCH 11/11] support/download: implement source-check
- in svn backend
-In-Reply-To: <20190103204026.23512-1-patrickdepinguin@gmail.com>
-References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
-Message-ID: <20190103204026.23512-12-patrickdepinguin@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Jan 2019 21:38:37 +0100
+Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
+ upstream version information
+In-Reply-To: <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
+References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
+ <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
+Message-ID: <20190103203837.GA5991@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Brandon, All,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- support/download/svn | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 2019-01-03 13:57 -0600, Brandon Maier spake thusly:
+> This is a useful tool, thanks! I don't have time to test it right now,
+> but an observation.
+> 
+> On Thu, Jan 3, 2019 at 2:38 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> ...
+> > +        elif pkg.latest_version[1] == pkg.current_version:
+> > +            stats["version-uptodate"] += 1
+> ...
+> > +    elif pkg.latest_version[1] != pkg.current_version:
+> > +        td_class.append("version-needs-update")
+> 
+> From https://bootlin.com/~thomas/stats.html, there's a few packages
+> that are up-to-date, but get marked "version-needs-update" because
+> either the Buildroot or release-monitoring version string starts with
+> a "v".
 
-diff --git a/support/download/svn b/support/download/svn
-index 542b25c0a2..e6f41f24fc 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -7,6 +7,7 @@ set -e
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          Only check that the revision exists in the remote repository
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
-@@ -19,6 +20,7 @@ verbose=
- while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  verbose=-q;;
-+    C)  checkonly=1;;
-     o)  output="${OPTARG}";;
-     u)  uri="${OPTARG}";;
-     c)  rev="${OPTARG}";;
-@@ -36,6 +38,11 @@ _svn() {
-     eval ${SVN} "${@}"
- }
- 
-+if [ -n "${checkonly}" ]; then
-+    _svn ls ${verbose} "${@}" "'${uri}@${rev}'" > /dev/null
-+    exit ${?}
-+fi
-+
- _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
- 
- tar czf "${output}" "${basename}"
+There was an issue raised (long ago) about this in the anitya tool
+(which generatees the DB at r-m.o):
+    https://github.com/release-monitoring/anitya/issues/374
+
+So, the version strings we get from r-m.o should no longer have a
+leading 'v' anymore.
+
+Yet, in our FOO_VERSION, we in Buildroot may still have those leading
+'v'. So, we should try to compare the versions as-is, and then remove
+out leading 'v' and compare again. ot sure of the exact heuristic,
+though...
+
+Regards,
+Yann E. MORIN.
+
+> For example, the vmtouch and libmodbus packages. It would be
+> nice to change the version comparison to ignore a leading "v". E.g.
+> 
+> def version_uptodate(pkg):
+>     latest = remove_prefix(pkg.latest_version[1], 'v')
+>     current = remove_prefix(pkg.current_version, 'v')
+>     return latest == current
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.18.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
