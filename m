@@ -1,66 +1,85 @@
-From: Matt Flax <flatmax@flatmax.org>
-Date: Thu,  3 Jan 2019 22:00:36 +1100
-Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
- inclusion
-Message-ID: <20190103110036.14604-1-flatmax@flatmax.org>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Thu, 3 Jan 2019 16:28:52 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
+ package
+In-Reply-To: <20181231160614.0f7e9f0b@windsurf>
+References: <20181223150448.21980-1-vadim4j@gmail.com>
+ <20181223150448.21980-2-vadim4j@gmail.com>
+ <20181230181026.3ce6aca3@windsurf>
+ <CAMw6YJLfzWh+=5NVkjO=TPiZ75KdOw6x-qApgPUeV+mUMKYqOg@mail.gmail.com>
+ <20181231160614.0f7e9f0b@windsurf>
+Message-ID: <CAMw6YJKfY_+pK=gDCb9QF=sbg+RXhJbgC=zJC8qXy_MxMwjsVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables the inclusion of the Pi's overlays. Previously
-the overlays were not included in the genimage configuration.
-This patch ensures overlays are included in the sdcard (when
-enabled) by defaulting to the inclusion of an empty
-output/images/rpi-firmware/overlays directory in genimage cfg.
+Hi Thomas, All
 
-The Pi's overlays are built with the following config
-variables:
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
-BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-BR2_LINUX_KERNEL_IMAGE_NAME="Image"
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
+On Mon, Dec 31, 2018 at 5:06 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Vadim,
+>
+> On Mon, 31 Dec 2018 06:03:30 +0200, Vadim Kochan wrote:
+>
+> > > I'm not convinced by how this virtual package is handled in Config.in.
+> > > In fact, if you apply both of your patches, it's broken, you have:
+> > >
+> > > config BR2_PACKAGE_PROVIDES_HOST_GETTEXT
+> > >         string
+> > >         default "host-gettext-gnu" if BR2_PACKAGE_GETTEXT_GNU
+> > >         default "host-gettext-tiny" if BR2_PACKAGE_GETTEXT_TINY
+> > >
+> > So looks like it needs to be enabled by default "host-gettext-gnu" but should
+> > allow to set "host-gettext-tiny" if BR2_PACKAGE_GETTEXT_TINY was forced
+> > by the user ?
+>
+> No, I don't think that's what we want. Is there any reason to use
+> host-gettext-gnu, unless BR2_SYSTEM_ENABLE_NLS is enabled ?
+>
+> If not, then I think we should:
+>
+>         default "host-gettext-gnu" if BR2_SYSTEM_ENABLE_NLS
+>         default "host-gettext-tiny" if !BR2_SYSTEM_ENABLE_NLS
+>
+> > May be I don;t have a view of a whole picture, but for me it looks simple -
+> > by default gettext-gnu is selected when ENABLE_NLS is set, but
+> > gettext-tiny should
+> > be selected by force choosing the BR2_PACKAGE_GETTEXT_TINY
+>
+> We don't need BR2_PACKAGE_GETTEXT_TINY at all. Just make the virtual
+> package behave properly, using gettext-gnu as the provider when
+> BR2_SYSTEM_ENABLE_NLS=y, and using gettext-tiny as the provider when
+> BR2_SYSTEM_ENABLE_NLS is not enabled.
+>
+> >. For the "host"
+> > case - the similar case with the only difference that "tiny" might be
+> > selected if NLS is disabled.
+>
+> Why would one want to use the full gettext when NLS is disabled ? When
+> NLS is disabled, you don't care about message translations, so the
+> dummy implementation provided by gettext-tiny should be enough.
+>
+> However: this is a massive change in Buildroot. Most people are
+> building with BR2_SYSTEM_ENABLE_NLS disabled (that's our default), so
+> such a change will mean that everybody will switch from one day to the
+> other from gettext-gnu to gettext-tiny.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-After building, the dtbo files are present in the
-output/images/rpi-firmware/overlays directory but not added
-to the sdcard because they are missing from the genimage cfg
-file.
+Why do we need default host-gettext dependencies for such packages
+like wine, flex
+if they builds successfully (I tried uclibc, musl) if to manually
+remove such dependency
+from their *.mk files ?
 
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
----
- board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
- package/rpi-firmware/rpi-firmware.mk           | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-index 0d0ca750a7..af1d17cde7 100644
---- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-@@ -9,6 +9,7 @@ image boot.vfat {
-       "rpi-firmware/config.txt",
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
-+      "rpi-firmware/overlays",
-       "Image"
-     }
-   }
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index bb54904ae6..0df7b17cbd 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
-+else
-+define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
-+		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
-+endef
- endif
- 
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
--- 
-2.19.1
+Regards,
+Vadim Kochan
