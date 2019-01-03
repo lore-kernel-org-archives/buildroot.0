@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Jan 2019 22:07:09 +0100
-Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
-In-Reply-To: <20190103204026.23512-2-patrickdepinguin@gmail.com>
-References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
- <20190103204026.23512-2-patrickdepinguin@gmail.com>
-Message-ID: <20190103220709.72d2cda3@windsurf>
+Date: Thu, 3 Jan 2019 22:16:04 +0100
+Subject: [Buildroot] [External] Re: [PATCH v5]
+ support/scripts/pkg-stats: add latest upstream version information
+In-Reply-To: <CA+fik51_toDs8PPL6wk8OZDNVTAkBb5a5CkuaPzk6JjnPDvzyQ@mail.gmail.com>
+References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
+ <CA+fik52n+izpqRGSSP1QFMoPCCd1y0Mub714-1cHWFYotXuhNg@mail.gmail.com>
+ <20190103213316.637c464b@windsurf>
+ <CA+fik51_toDs8PPL6wk8OZDNVTAkBb5a5CkuaPzk6JjnPDvzyQ@mail.gmail.com>
+Message-ID: <20190103221604.4da001d1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +16,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 Jan 2019 21:40:16 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> scp download is broken, because scp is called without filename argument and
-> only the server is specified. The call is:
->     scp <server> <outputfile>
-> 
-> but should be:
->     scp <server>/<filename> <outputfile>
-> 
-> Instead of assuming '-u' lists a full URL including filename (which it is
-> not), align with the wget helper where -u is the server URL and -f gives the
-> filename.
-> 
-> With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
-> set to 'scp' and the server does not have a scheme prefix 'scp://'.
-> The next commit will handle the case where a scheme prefix is present.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  support/download/scp | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+On Thu, 3 Jan 2019 15:02:24 -0600, Brandon Maier wrote:
 
-Applied to master after s/URL/URI/ in the comment, as suggested by Yann.
+> Agreed it's not a pretty hack. I wouldn't want to handle the other
+> oddities in here, as that would get messy. I suggested it for "v" only
+> because it seems to be very common. It would be a way to get us most
+> of the way there, then it could be reverted if e.g. all the github
+> versions are fixed up.
+> 
+> On those other packages though, perhaps adding an optional variable to
+> package mk files for custom versions? E.g. package/libnfs/libnfs.mk
+> defines version as "libnfs-3.0.0", but the r-m version is "3.0.0".
+> E.g.
+> 
+> package/libnfs/libnfs.mk:
+>   LIBNFS_RM_VERSION = 3.0.0
+>   LIBNFS_VERSION = libnfs-$(LIBNFS_RM_VERSION)
+
+We could do that, but is that really needed/useful ?
+
+> > It seems like I never posted them. I thought there was some discussion
+> > on the list about this issue, but I can't find it. Perhaps I should
+> > update this series, submit it for good, and see what the feedback is ?  
+> 
+> Regardless of this patch series, this sounds like a good idea to me.
+> Especially considering Anitya does this too, as Yann mentioned[1].
+> 
+> [1] https://github.com/release-monitoring/anitya/issues/374
+
+Right. So you say I should submit this "fix-versions" patch series ?
+
+Best regards,
 
 Thomas
 -- 
