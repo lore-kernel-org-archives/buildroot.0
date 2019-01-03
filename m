@@ -1,66 +1,66 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  3 Jan 2019 15:52:47 -0600
-Subject: [Buildroot] [PATCH v6 6/7] llvm/clang: add note about version
- bumping together
+Date: Thu,  3 Jan 2019 15:52:45 -0600
+Subject: [Buildroot] [PATCH v6 4/7] testing/infra/basetest: support
+ br2-external
 In-Reply-To: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1546552368-50707-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1546552368-50707-4-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Acked-by: Romain Naour <romain.naour@smile.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+
+Some upcoming test cases can use one or more br2-external trees as
+fixtures that provide packages used only in runtime tests.
+
+Add support for br2-external into the BRTest class. Any test case can
+then provide a list of paths for be used as br2-external trees during
+the build of the image to be tested.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
-v1 -> v2
- - None
+v2
+ - New from: http://patchwork.ozlabs.org/patch/912354/
 
 v2 -> v3
 [Ricardo
- - Added compiler-rt to list of items to bump. I originaly had kept this
-   patch independent of the compiler-rt series but since compiler-rt is
-   first in the series, this one may as well include it in the statements
+ - Updated patch commit description context.
 
 v4
  - None
 
 v5
  - Rebased post 2018.11 on master
-
-v6
- - Rebased after LLVM/Clang bump to 7.0.1
 ---
- package/clang/clang.mk | 1 +
- package/llvm/llvm.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ support/testing/infra/basetest.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index c15f2b0..a74448d 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 5014fef..8413943 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -30,6 +30,7 @@ MINIMAL_CONFIG = \
  
-+# LLVM, Clang and Compiler-RT should be version bumped together
- CLANG_VERSION = 7.0.1
- CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
- CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 49034e0..2973689 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
+ class BRTest(unittest.TestCase):
+     config = None
++    br2_external = list()
+     downloaddir = None
+     outputdir = None
+     logtofile = True
+@@ -58,7 +59,7 @@ class BRTest(unittest.TestCase):
  
-+# LLVM, Clang and Compiler-RT should be version bumped together
- LLVM_VERSION = 7.0.1
- LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+         if not self.b.is_finished():
+             self.show_msg("Building")
+-            self.b.configure()
++            self.b.configure(["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
+             self.b.build()
+             self.show_msg("Building done")
+ 
 -- 
 1.9.1
