@@ -1,43 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Jan 2019 15:28:34 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
- package
-In-Reply-To: <CAMw6YJKfY_+pK=gDCb9QF=sbg+RXhJbgC=zJC8qXy_MxMwjsVg@mail.gmail.com>
-References: <20181223150448.21980-1-vadim4j@gmail.com>
- <20181223150448.21980-2-vadim4j@gmail.com>
- <20181230181026.3ce6aca3@windsurf>
- <CAMw6YJLfzWh+=5NVkjO=TPiZ75KdOw6x-qApgPUeV+mUMKYqOg@mail.gmail.com>
- <20181231160614.0f7e9f0b@windsurf>
- <CAMw6YJKfY_+pK=gDCb9QF=sbg+RXhJbgC=zJC8qXy_MxMwjsVg@mail.gmail.com>
-Message-ID: <20190103152834.3194d737@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  3 Jan 2019 15:44:21 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libhttpparser: bump version to
+ v2.9.0
+Message-ID: <20190103144423.14883-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+Needed by nodejs v8.15.0+
 
-On Thu, 3 Jan 2019 16:28:52 +0200, Vadim Kochan wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libhttpparser/libhttpparser.hash | 2 +-
+ package/libhttpparser/libhttpparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Why do we need default host-gettext dependencies for such packages
-> like wine, flex
-> if they builds successfully (I tried uclibc, musl) if to manually
-> remove such dependency
-> from their *.mk files ?
-
-Do you have gettext installed on your system ? If you do, then the
-build of wine for example may succeed by using the "gettext" command of
-your build machine. But Buildroot is not supposed to depend on the
-gettext available on the build machine.
-
-Note: this is speculation, I have not re-tested. If you want a
-confirmation, I can do a proper test.
-
-Best regards,
-
-Thomas
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index acbf3787f9..b7df9ca602 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 51615f68b8d67eadfd2482decc63b3e55d749ce0055502bbb5b0032726d22d96  libhttpparser-v2.8.1.tar.gz
++sha256 ef26268c54c8084d17654ba2ed5140bffeffd2a040a895ffb22a6cca3f6c613f  libhttpparser-v2.9.0.tar.gz
+ sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 502ab75b88..8c0afe2807 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTTPPARSER_VERSION = v2.8.1
++LIBHTTPPARSER_VERSION = v2.9.0
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
