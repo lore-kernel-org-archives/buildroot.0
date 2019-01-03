@@ -1,59 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Jan 2019 22:04:37 +0100
-Subject: [Buildroot] [PATCH v2] package/pkgconf: fix behavior of
- pkg-config --version
-In-Reply-To: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
-References: <20190102173639.30553-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190103220437.29005bbc@windsurf>
+Date: Thu, 3 Jan 2019 22:05:43 +0100
+Subject: [Buildroot] [git commit] support/download: fix scp downloads
+Message-ID: <20190103210114.AF03089137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6e20ff46661d4f02fdd8595295f5496e8d64a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  2 Jan 2019 18:36:38 +0100, Thomas Petazzoni wrote:
-> For some odd reason, the new pkg-config 1.5.3 changed the behavior of
-> "pkg-config --version": as soon as another argument than "--version"
-> is passed, the code assumes the user wanted to run "--modversion"
-> instead.
-> 
-> Sadly, this breaks badly with our pkg-config wrapper that
-> unconditionally passes --static to pkg-config when
-> BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
-> pkg-config is available and functional, it's actually "pkg-config
-> --static --version" that gets executed. pkg-config assumes that the
-> user wanted to use --modversion and bails out with an error.
-> 
-> This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
-> configuration.
-> 
-> This misbehavior of pkg-config has been reported upstream at
-> https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
-> gets fixed, we work around the issue by reverting the commit that does
-> the "hey let's assume you're using --modversion if --version is passed
-> with more than one argument".
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
->   (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Changes since v1:
-> - Revert the problematic upstream commit instead of doing a workaround
->   specific to the -static option.
-> ---
->  ...me-modversion-insted-of-version-if-o.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+scp download is broken, because scp is called without filename argument and
+only the server is specified. The call is:
+    scp <server> <outputfile>
 
-Applied to master, thanks.
+but should be:
+    scp <server>/<filename> <outputfile>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Instead of assuming '-u' lists a full URL including filename (which it is
+not), align with the wget helper where -u is the server URL and -f gives the
+filename.
+
+With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
+set to 'scp' and the server does not have a scheme prefix 'scp://'.
+The next commit will handle the case where a scheme prefix is present.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: s/URL/URI/, as noticed by Yann.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/download/scp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/support/download/scp b/support/download/scp
+index 8ecf2f4b22..49cfff2b9f 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -8,7 +8,8 @@ set -e
+ # Options:
+ #   -q          Be quiet.
+ #   -o FILE     Copy to local file FILE.
+-#   -u FILE     Copy from remote file FILE.
++#   -f FILE     Copy from remote file FILE.
++#   -u URI      Download file at URI.
+ #
+ # Environment:
+ #   SCP       : the scp command to call
+@@ -18,6 +19,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+     o)  output="${OPTARG}";;
++    f)  filename="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+@@ -32,4 +34,4 @@ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
++_scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
