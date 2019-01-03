@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  3 Jan 2019 21:40:16 +0100
-Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
+Date: Thu,  3 Jan 2019 21:40:17 +0100
+Subject: [Buildroot] [PATCH 02/11] support/download: fix scp download with
+ scheme prefix 'scp://'
 In-Reply-To: <20190103204026.23512-1-patrickdepinguin@gmail.com>
 References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
-Message-ID: <20190103204026.23512-2-patrickdepinguin@gmail.com>
+Message-ID: <20190103204026.23512-3-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +13,33 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-scp download is broken, because scp is called without filename argument and
-only the server is specified. The call is:
-    scp <server> <outputfile>
+The scp download helper is broken when the server URL starts with 'scp://'.
+Such prefix is used in two situations:
+1. to let FOO_SITE point to an scp location without explicitly having to set
+   'FOO_SITE_METHOD = scp'
 
-but should be:
-    scp <server>/<filename> <outputfile>
+2. when BR2_PRIMARY_SITE or BR2_BACKUP_SITE points to an scp location. In
+   this case, there is no equivalent of 'SITE_METHOD'.
 
-Instead of assuming '-u' lists a full URL including filename (which it is
-not), align with the wget helper where -u is the server URL and -f gives the
-filename.
-
-With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
-set to 'scp' and the server does not have a scheme prefix 'scp://'.
-The next commit will handle the case where a scheme prefix is present.
+Strip out the scheme prefix, similarly to how the 'file' download helper
+does it. That helper has the same cases as above.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/scp | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ support/download/scp | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/support/download/scp b/support/download/scp
-index 8ecf2f4b22..746c3c6ba0 100755
+index 746c3c6ba0..55f588e157 100755
 --- a/support/download/scp
 +++ b/support/download/scp
-@@ -8,7 +8,8 @@ set -e
- # Options:
- #   -q          Be quiet.
- #   -o FILE     Copy to local file FILE.
--#   -u FILE     Copy from remote file FILE.
-+#   -f FILE     Copy from remote file FILE.
-+#   -u URL      Download file at URL.
- #
- # Environment:
- #   SCP       : the scp command to call
-@@ -18,6 +19,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  verbose=-q;;
-     o)  output="${OPTARG}";;
-+    f)  filename="${OPTARG}";;
-     u)  uri="${OPTARG}";;
-     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
-     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-@@ -32,4 +34,4 @@ _scp() {
+@@ -34,4 +34,7 @@ _scp() {
      eval ${SCP} "${@}"
  }
  
--_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
-+_scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
++# Remove any scheme prefix
++uri="${uri##scp://}"
++
+ _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
 -- 
 2.18.1
