@@ -1,89 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2019 21:55:18 +0100
-Subject: [Buildroot] [PATCH 01/11] support/download: fix scp downloads
-In-Reply-To: <20190103204026.23512-2-patrickdepinguin@gmail.com>
-References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
- <20190103204026.23512-2-patrickdepinguin@gmail.com>
-Message-ID: <20190103205518.GB5991@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Jan 2019 21:55:15 +0100
+Subject: [Buildroot] [git commit] package/pkgconf: fix behavior of
+ pkg-config --version
+Message-ID: <20190103205032.319EA81229@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0d244183bfce0c5cf74f4897e57bb4b00b00bfa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-01-03 21:40 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> scp download is broken, because scp is called without filename argument and
-> only the server is specified. The call is:
->     scp <server> <outputfile>
-> 
-> but should be:
->     scp <server>/<filename> <outputfile>
-> 
-> Instead of assuming '-u' lists a full URL including filename (which it is
-> not), align with the wget helper where -u is the server URL and -f gives the
-> filename.
-> 
-> With this commit, an scp download can work if FOO_SITE_METHOD is explicitly
-> set to 'scp' and the server does not have a scheme prefix 'scp://'.
-> The next commit will handle the case where a scheme prefix is present.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  support/download/scp | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/download/scp b/support/download/scp
-> index 8ecf2f4b22..746c3c6ba0 100755
-> --- a/support/download/scp
-> +++ b/support/download/scp
-> @@ -8,7 +8,8 @@ set -e
->  # Options:
->  #   -q          Be quiet.
->  #   -o FILE     Copy to local file FILE.
-> -#   -u FILE     Copy from remote file FILE.
-> +#   -f FILE     Copy from remote file FILE.
-> +#   -u URL      Download file at URL.
+For some odd reason, the new pkg-config 1.5.3 changed the behavior of
+"pkg-config --version": as soon as another argument than "--version"
+is passed, the code assumes the user wanted to run "--modversion"
+instead.
 
-This is not an URL, but an URI, and even then, this is only the
-authority part [0] of the URI. ;-) But, Oh well... I'm bikeshedding
-here, so:
+Sadly, this breaks badly with our pkg-config wrapper that
+unconditionally passes --static to pkg-config when
+BR2_STATIC_LIBS=y. When ffmpeg calls "pkg-config --version" to test if
+pkg-config is available and functional, it's actually "pkg-config
+--static --version" that gets executed. pkg-config assumes that the
+user wanted to use --modversion and bails out with an error.
 
+This causes a build failure of ffmpeg in BR2_STATIC_LIBS=y
+configuration.
+
+This misbehavior of pkg-config has been reported upstream at
+https://git.dereferenced.org/pkgconf/pkgconf/issues/19, but until it
+gets fixed, we work around the issue by reverting the commit that does
+the "hey let's assume you're using --modversion if --version is passed
+with more than one argument".
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ed82a95e1866ea2caadbb3433b2a255b2cf621d2/
+  (and plenty of other ffmpeg + BR2_STATIC_LIBS=y build failures)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-assume-modversion-insted-of-version-if-o.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-[0] https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax
-
-Regards,
-Yann E. MORIN.
-
->  #
->  # Environment:
->  #   SCP       : the scp command to call
-> @@ -18,6 +19,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
->      case "${OPT}" in
->      q)  verbose=-q;;
->      o)  output="${OPTARG}";;
-> +    f)  filename="${OPTARG}";;
->      u)  uri="${OPTARG}";;
->      :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
->      \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-> @@ -32,4 +34,4 @@ _scp() {
->      eval ${SCP} "${@}"
->  }
->  
-> -_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
-> +_scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
-> -- 
-> 2.18.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+new file mode 100644
+index 0000000000..e79bea93a5
+--- /dev/null
++++ b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+@@ -0,0 +1,45 @@
++From 4ccef40918a539905a2951bfb81cf8dba4a245c6 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 2 Jan 2019 18:15:50 +0100
++Subject: [PATCH] Revert "main: assume --modversion insted of --version if
++ other flags or module names are provided"
++
++This reverts commit 12a0eb124cea85586e57f33c91a1e4c73459eef6, as it
++causes pkg-config to assume --modversion is used when something as
++simple as 'pkg-config --static --version' is used, leading to a
++failure instead of the expected behavior: the one of "pkg-config
++--version".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cli/main.c | 14 ++------------
++ 1 file changed, 2 insertions(+), 12 deletions(-)
++
++diff --git a/cli/main.c b/cli/main.c
++index b52cc85..c5acc10 100644
++--- a/cli/main.c
+++++ b/cli/main.c
++@@ -955,18 +955,8 @@ main(int argc, char *argv[])
++ 
++ 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
++ 	{
++-		if (argc > 2)
++-		{
++-			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
++-
++-			want_flags &= ~PKG_VERSION;
++-			want_flags |= PKG_MODVERSION;
++-		}
++-		else
++-		{
++-			version();
++-			return EXIT_SUCCESS;
++-		}
+++		version();
+++		return EXIT_SUCCESS;
++ 	}
++ 
++ 	if ((want_flags & PKG_HELP) == PKG_HELP)
++-- 
++2.20.1
++
