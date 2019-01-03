@@ -1,46 +1,63 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 3 Jan 2019 14:17:51 -0800
-Subject: [Buildroot] Xtensa toolchain issue ?
-In-Reply-To: <20190102112130.0b8d32f8@windsurf>
-References: <20190102112130.0b8d32f8@windsurf>
-Message-ID: <CAMo8BfJR7vgLDONmKDX3S8RLyJBMYmXEKjjEr3JK5JOTHrd5hg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Jan 2019 23:18:32 +0100
+Subject: [Buildroot] [PATCH 08/11] support/download: implement
+ source-check in git backend
+In-Reply-To: <20190103215953.012ee1a8@windsurf>
+References: <20190103204026.23512-1-patrickdepinguin@gmail.com>
+ <20190103204026.23512-9-patrickdepinguin@gmail.com>
+ <20190103215953.012ee1a8@windsurf>
+Message-ID: <20190103221832.GI5991@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, DS, Thomas P, All,
 
-On Wed, Jan 2, 2019 at 2:21 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> We have a build failure of the libtorrent-rasterbar package that seems
-> to be toolchain related, and happens on Xtensa:
->
->   http://autobuild.buildroot.net/?reason=libtorrent-rasterbar-1.1.11
->
-> The failure looks like this:
->
-> In file included from peer_connection.cpp:56:0:
-> ../include/libtorrent/peer_connection.hpp:550:8: error: generic thunk code fails for method 'virtual void libtorrent::peer_connection::_ZThn96_NK10libtorrent15peer_connection8peer_logENS_14peer_log_alert11direction_tEPKcS4_z(libtorrent::peer_log_alert::direction_t, const char*, const char*, ...) const' which uses '...'
-> It is apparently a bug in gcc 7.x, that has been fixed in gcc 8.x,
-> according to https://bugzilla.redhat.com/show_bug.cgi?id=1511021, but
-> this bug report doesn't give any detail on which commit could have
-> fixed that.
+On 2019-01-03 21:59 +0100, Thomas Petazzoni spake thusly:
+> On Thu,  3 Jan 2019 21:40:23 +0100, Thomas De Schampheleire wrote:
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > 
+> > The implementation is the same as originally was present.
+> > It suffers from the disadvantage that an invalid revision on a valid URL
+> > will not be detected.
+> > 
+> > However, git does not seem to allow a good way to remotely check the
+> > validity of a revision, without cloning the repository.
+> > 
+> > For source-check, we don't want to do such download which can be large.
+> 
+> While I understand the limitation, I don't really agree with the
+> conclusion: we should go ahead and download the full thing. Indeed the
+> selling argument for source-check in your cover letter is precisely to
+> verify that the version of the package that has been committed by
+> someone is *really* available. If there's no version check in the git,
+> bzr and cvs source-check implementation, it makes the selling point of
+> the cover letter a bit moot, no?
 
-My understanding is that this is not something that could be fixed
-in a generic way, but requires support from the compiler backend.
-Specifically it needs a way to tail-call a variadic function from a
-thunk, something that is not trivial to do on xtensa architecture.
-The corresponding test in the gcc test suite
-(gcc/testsuite/g++.old-deja/g++.jason/thunk3.C)
-has been disabled since 2002.
+Agreed here. *If* we were to re-add support for source-check, it should
+really behave as it says on the can: check that the source really
+exists. If a backend can't do a cheap check, then it has to download
+everything.
 
-The test in the bug that you've referenced still fails on xtensa with
-gcc 8 and gcc 9.
+> Of course, I realize that your primary interest is in hg, and hg has
+> this capability. But still we should ensure git/bzr/cvs provide the same
+> guarantees, by falling back to the slower but working method of
+> downloading everything.
 
-I'll try to implement required support in the xtensa backend for the
-above to work.
---
-Thanks.
--- Max
+Yup.
+
+But this is not an endorsement of re-adding source-check, mind you1 ;-)
+I'm still unconvinced we need it.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
