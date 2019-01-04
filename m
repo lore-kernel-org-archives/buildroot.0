@@ -1,66 +1,84 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  4 Jan 2019 20:32:33 +0100
-Subject: [Buildroot] [PATCH v1] meson: fix RPATH patch
-Message-ID: <20190104193233.27527-1-ps.report@gmx.net>
+Date: Fri, 4 Jan 2019 20:50:42 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+In-Reply-To: <20190103110036.14604-1-flatmax@flatmax.org>
+References: <20190103110036.14604-1-flatmax@flatmax.org>
+Message-ID: <20190104204653.04489413@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The re-added ([1]) patch missed to remove two lines of the
-original unconditional code.
+Hello Max,
 
-[1] https://git.buildroot.net/buildroot/commit/?id=5c939246a802c0ad9704dac1505105037542a1d3
+On Thu,  3 Jan 2019 22:00:36 +1100, Matt Flax <flatmax@flatmax.org> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...-RPATH-if-install_rpath-is-not-empty.patch | 20 +++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+> This patch enables the inclusion of the Pi's overlays. Previously
+> the overlays were not included in the genimage configuration.
+> This patch ensures overlays are included in the sdcard (when
+> enabled) by defaulting to the inclusion of an empty
+> output/images/rpi-firmware/overlays directory in genimage cfg.
+> 
+> The Pi's overlays are built with the following config
+> variables:
+> BR2_PACKAGE_RPI_FIRMWARE=y
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
+> 
+> After building, the dtbo files are present in the
+> output/images/rpi-firmware/overlays directory but not added
+> to the sdcard because they are missing from the genimage cfg
+> file.
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-index 0e59907a05..a7b66c1067 100644
---- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -1,21 +1,25 @@
--From 649140f09d8a8805125830cd7b2327d35447ffe8 Mon Sep 17 00:00:00 2001
-+From 4db4fd79d9bb2b98cea1117f22b6c97942ab2ecd Mon Sep 17 00:00:00 2001
- From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- Date: Sat, 14 Jul 2018 11:18:45 +0200
- Subject: [PATCH] Only fix RPATH if install_rpath is not empty
- 
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+[Fix: remove leftover from original/unconditional code]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-- mesonbuild/minstall.py | 8 ++++++++
-- 1 file changed, 8 insertions(+)
-+ mesonbuild/minstall.py | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
- 
- diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
--index 1d721795..e04e1f6a 100644
-+index 8ac6aab1..7ef04116 100644
- --- a/mesonbuild/minstall.py
- +++ b/mesonbuild/minstall.py
--@@ -495,6 +495,14 @@ class Installer:
-+@@ -478,8 +478,14 @@ class Installer:
-+                         printed_symlink_error = True
-+             if os.path.isfile(outname):
-                  try:
--                     depfixer.fix_rpath(outname, install_rpath, final_path,
--                                        install_name_mappings, verbose=False)
-+-                    depfixer.fix_rpath(outname, install_rpath, final_path,
-+-                                       install_name_mappings, verbose=False)
- +                    # Buildroot check-host-rpath script expects RPATH
- +                    # But if install_rpath is empty, it will stripped.
- +                    # So, preserve it in this case
-@@ -28,5 +32,5 @@ index 1d721795..e04e1f6a 100644
-                      if isinstance(e.code, int) and e.code == 0:
-                          pass
- -- 
--2.14.4
-+2.20.1
- 
--- 
-2.20.1
+Thanks for suggested patch, the reasoning for genimage-raspberrypi3-64.cfg not
+containing a overlays entry is it is not needed for the raspberrypi3_64_defconfig
+use case (mind the buildroot minimalistic defconfig approach) in contrast to the
+raspberrypi3_defconfig where the overlay is needed for the pi3-miniuart-bt one...
+
+Adding a (maybe) empty overlays directory to the sdcard image would violate
+the minimalistic approach...
+
+Regards,
+Peter
+
+[Skipped CC to 'Matt Flax <flatmax@flatmax.org>' - mail server answers with 'mailbox unavailable']
+
+> 
+> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+> ---
+>  board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+>  package/rpi-firmware/rpi-firmware.mk           | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> index 0d0ca750a7..af1d17cde7 100644
+> --- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> +++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> @@ -9,6 +9,7 @@ image boot.vfat {
+>        "rpi-firmware/config.txt",
+>        "rpi-firmware/fixup.dat",
+>        "rpi-firmware/start.elf",
+> +      "rpi-firmware/overlays",
+>        "Image"
+>      }
+>    }
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index bb54904ae6..0df7b17cbd 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+>  	done
+>  endef
+> +else
+> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
+> +endef
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
