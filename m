@@ -1,55 +1,39 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Fri, 4 Jan 2019 21:04:49 +0000
-Subject: [Buildroot] [PATCH 1/1] package/php: fix building pcre extension
-In-Reply-To: <20181228165634.63387-1-aduskett@gmail.com>
-References: <20181228165634.63387-1-aduskett@gmail.com>
-Message-ID: <70859168-64ca-f537-b327-887eeb8f01af@embecosm.com>
+From: David J. Fogle <Dave@exitstrategytech.com>
+Date: Fri, 4 Jan 2019 21:35:23 +0000
+Subject: [Buildroot] [PATCH] package/systemd: set vconsole support option to
+ default y
+Message-ID: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam
 
-On 28/12/2018 16:56, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> The configure option "--with-pcre-regex=$(STAGING_DIR)/usr" is broken.
-> PHP will  prepend $(STAGING_DIR)/usr to the paths, which will cause a
-> failure because it won't be able to find pcre, and will then fallback to
-> searching for pcre2, which won't be installed.
->
-> Removing "=$(STAGING_DIR)/usr" from --with-pcre-regex fixes the issue.
->
-> Fixes:
->   http://autobuild.buildroot.net/results/586/586f56e8fcf2d2bbbd3bdf69b1c3befff7ce8bbf
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/php/php.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index fd428e192a..7d7d78353b 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -244,7 +244,7 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
->  
->  ### Use external PCRE if it's available
->  ifeq ($(BR2_PACKAGE_PCRE),y)
-> -PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
-> +PHP_CONF_OPTS += --with-pcre-regex
->  PHP_DEPENDENCIES += pcre
->  else
->  # The bundled pcre library is not configurable through ./configure options,
+package/systemd:? set vconsole support option to default y
 
-I can confirm that this fixes
-http://autobuild.buildroot.net/results/586/586f56e8fcf2d2bbbd3bdf69b1c3befff7ce8bbf
-on my build system.
+Without this support option enabled, systemd does not allow vterm switching, and could possibly lead to user lockout on tty1. 
 
-Tested-by: Mark Corbin <mark.corbin@embecosm.com>
+We prevent these scenarios by enabling the vconsole tool default y, as console login is much more prevalent than not. This allows the option to disable the tool if needed, but as this is a rare usage, it is better to let a user decide they do *not* need it than to expect them to know they *do*.
 
+Any serial connections will not be impacted by absence of this tool, as there are no vconsoles on serial.
+
+Signed-off-by: David Fogle <dave@exitstrategytech.com>
+---
+?package/systemd/Config.in | 1 +
+?1 file changed, 1 insertion(+)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 25f322e8f3..920b65db44 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -325,6 +325,7 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
+?
+?config BR2_PACKAGE_SYSTEMD_VCONSOLE
+??????? bool "enable vconsole tool"
++?????? default y
+??????? help
+????????? systemd-vconsole-setup is an early boot service that
+????????? configures the virtual console font and console keymap.
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+2.19.2
