@@ -1,50 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Jan 2019 08:35:26 +0100
-Subject: [Buildroot] [git commit] python-lxml: bump to version 4.2.6
-Message-ID: <20190104073104.3AF7489149@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Jan 2019 09:39:38 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
+ package
+In-Reply-To: <CAMw6YJLvioTwKbgAdYvtZqbVg1W-RAADT_umZkGMaw9MnVpHMw@mail.gmail.com>
+References: <20181223150448.21980-1-vadim4j@gmail.com>
+ <20181223150448.21980-2-vadim4j@gmail.com>
+ <20181230181026.3ce6aca3@windsurf>
+ <CAMw6YJLfzWh+=5NVkjO=TPiZ75KdOw6x-qApgPUeV+mUMKYqOg@mail.gmail.com>
+ <20181231160614.0f7e9f0b@windsurf>
+ <CAMw6YJKfY_+pK=gDCb9QF=sbg+RXhJbgC=zJC8qXy_MxMwjsVg@mail.gmail.com>
+ <20190103152834.3194d737@windsurf>
+ <CAMw6YJ+xU9GiZ809dCQTmPEgtpu3iCOErT5w7fqoee09R-hpaQ@mail.gmail.com>
+ <CAMw6YJLvioTwKbgAdYvtZqbVg1W-RAADT_umZkGMaw9MnVpHMw@mail.gmail.com>
+Message-ID: <20190104093938.00fb138b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=493a27f2f014a46cc90df763aed79eeea4a4d37d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Update site to files.pythonhosted.org.
+Please keep the mailing list in Cc, i.e use "Reply All" when replying
+to mailing list e-mails. Thanks!
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I'm also adding Andr? and Yann in Cc, since they are involved in the
+host-gettext dependency in wine.
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 610c0d6db4..6558f107e3 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  36720698c29e7a9626a0dc802ef8885f8f0239bfd1689628ecd459a061f2807f  lxml-4.2.5.tgz
-+sha256  7035d9361f3ceec9ccc1dd3482094d1174580e7e1bf6870b77ea758f7cad15d2  lxml-4.2.6.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 61f81e6363..1b46670ffd 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_LXML_VERSION = 4.2.5
--PYTHON_LXML_SITE = http://lxml.de/files
--PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
-+PYTHON_LXML_VERSION = 4.2.6
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/b0/06/37437e348cd296c56a8bac0396007960abb2bcdaf77e8a3bde52bb68e550
-+PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
- PYTHON_LXML_LICENSE = BSD-3-Clause, Others
+On Fri, 4 Jan 2019 03:49:49 +0200, Vadim Kochan wrote:
+
+> So the wine builds OK w/o host-gettext (tested with dockerfile), but
+> this libgettextpo is required by (optionally)
+> 'tools/wrc' which allows to convert window's resources into *.po files
+> (https://linux.die.net/man/1/wrc). And
+> looks like it might be needed on the host only if NLS=y.
+
+The dependency on host-gettext was added in commit
+164ac197fef763dfa61154ad41588b6701baca86, which says:
+
+""
+    wine: Add gettext dependency for host-wine
+    
+    Mostly based on a comment by Yann E. MORIN
+""
+
+I am not sure what "comment" Yann made about this, and especially if
+the dependency really needs to be mandatory.
+
+Andr?, Yann, do you remember ? Could you give more details about the
+host-gettext dependency in wine ?
+
+Do we need it unconditionally, or only when BR2_SYSTEM_ENABLE_NLS=y ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
