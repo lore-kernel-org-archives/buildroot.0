@@ -1,47 +1,58 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Jan 2019 16:11:08 +0200
-Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 2.1.5
-Message-ID: <20190104141108.31551-1-asafka7@gmail.com>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Fri, 4 Jan 2019 08:54:52 -0600
+Subject: [Buildroot] [PATCH v5] support/scripts/pkg-stats: add latest
+ upstream version information
+In-Reply-To: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
+References: <20190103083818.19702-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CA+fik52dKr6eiaED74VaDOOh56FPgwzGndkGMndHGUK+Lx12sg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Thu, Jan 3, 2019 at 2:38 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+...
+> +    if len(data['versions']) > 0:
+> +        return (RM_API_STATUS_FOUND_BY_DISTRO, data['versions'][0], data['id'])
+> +    else:
+> +        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
+> +
+...
+> +    for p in data['projects']:
+> +        if p['name'] == name and len(p['versions']) > 0:
+> +            return (RM_API_STATUS_FOUND_BY_PATTERN, p['versions'][0], p['id'])
+> +
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b6c85922a5..4b932ac907 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	3afc8bcec941e37221287f1a5323b1f1  Django-2.1.4.tar.gz
--sha256	068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7  Django-2.1.4.tar.gz
-+md5	9309c48c8b92503b8969a7603a97e2a1  Django-2.1.5.tar.gz
-+sha256	d6393918da830530a9516bbbcbf7f1214c3d733738779f06b0f649f49cc698c3  Django-2.1.5.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9ce74fbdc5..53e8f20e87 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 2.1.4
-+PYTHON_DJANGO_VERSION = 2.1.5
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/83/f7/4939b60c4127d5f49ccb570e34f4c59ecc222949220234a88e4f363f1456
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/7f/4c750e09b246621e5e90fa08f93dec1b991f5c203b0ff615d62a891c8f41
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
--- 
-2.19.1
+In these two places, instead of using "versions", could we use
+"version"? It looks like the first item in "versions" isn't always
+correct. For example see cdrkit. I did a mock API call with Postman
+and there's a separate "version" field without the prefix.
+
+Here's what a GET to
+https://release-monitoring.org/api/projects/?pattern=cdrkit returns:
+{
+    "projects": [
+        {
+            "backend": "GitHub",
+            "created_on": 1460976471,
+            "ecosystem": "https://github.com/Distrotech/cdrkit",
+            "homepage": "https://github.com/Distrotech/cdrkit",
+            "id": 10520,
+            "name": "cdrkit",
+            "regex": null,
+            "updated_on": 1533644065,
+            "version": "1.1.11",
+            "version_url": "Distrotech/cdrkit",
+            "versions": [
+                "release_1.1.11",
+                "1.1.11"
+            ]
+        }
+    ],
+    "total": 1
+}
+
+Otherwise I ran the script on my setup and everything looks good.
+Reviewed-By: Brandon Maier <brandon.maier@rockwellcollins.com>
