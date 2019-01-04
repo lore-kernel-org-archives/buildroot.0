@@ -1,84 +1,105 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 4 Jan 2019 20:50:42 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
- inclusion
-In-Reply-To: <20190103110036.14604-1-flatmax@flatmax.org>
-References: <20190103110036.14604-1-flatmax@flatmax.org>
-Message-ID: <20190104204653.04489413@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Jan 2019 20:51:04 +0100
+Subject: [Buildroot] [PATCH] systemd: set vconsole support option to
+ default y
+In-Reply-To: <8e4371b94ff9458b901d240de1c97cce@exitstrategytech.com>
+References: <8e4371b94ff9458b901d240de1c97cce@exitstrategytech.com>
+Message-ID: <20190104195104.GE19623@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Max,
+David,All,
 
-On Thu,  3 Jan 2019 22:00:36 +1100, Matt Flax <flatmax@flatmax.org> wrote:
+On 2019-01-04 18:16 +0000, David J. Fogle spake thusly:
+> This patch defaults the systemd vconsole support option to y. The reasoning is a matter of convention, Linux systems have vconsoles in almost all cases. Personally, I spent a few hours feeling I had broken something when I was switching to systemd. In an effort to prevent future buildroot users from suffering this fate, we are enabling this support by default, as it is far less likely to *not* want vterms, and if that is the use-case, it can be disabled as needed. 
 
-> This patch enables the inclusion of the Pi's overlays. Previously
-> the overlays were not included in the genimage configuration.
-> This patch ensures overlays are included in the sdcard (when
-> enabled) by defaulting to the inclusion of an empty
-> output/images/rpi-firmware/overlays directory in genimage cfg.
+So, it is too bad that your previous attempts did not hit the mailing
+list, becasue they were properly formatted, while this one is a single
+ultra long ling... :-(  Let me wrap it below for clarity, and ease of
+review:
+
+> This patch defaults the systemd vconsole support option to y. The
+> reasoning is a matter of convention, Linux systems have vconsoles in
+> almost all cases. Personally, I spent a few hours feeling I had broken
+> something when I was switching to systemd. In an effort to prevent
+> future buildroot users from suffering this fate, we are enabling this
+> support by default, as it is far less likely to *not* want vterms, and
+> if that is the use-case, it can be disabled as needed.
+
+So, all the needed info is there, but I have a few comments to do about
+it nonetheless:
+
+  - the title should start with 'package/systemd' (unwritten convention,
+    you could not know);
+
+  - start by describing the actual problem;
+
+  - then explain why it happens (that may be mixed in the explanations,
+    above);
+
+  - and finally, explain how it is solved;
+
+  - avoid personal messages like "I did", "I find..." etc.. Instead,
+    prefer the neutral first-person plural 'we'.
+
+So, that wouldprobably give something along the lines of:
+
+    package/systemd: set vconsole support option to default y
+
+    Without support for vconsole, systemd will abruptly kill anything
+    spawned on the console, thus preventing users from loging in from
+    the console, effectively locking them out if the target does not
+    have another mean of logging in (no sshd, no serial line...)
+
+    We fix that by making support for vconsole default to y, since
+    logging in from the console if more frequent than not. Users can
+    still de-activate it when they know they don't need it.
+
+    Note that logging from a serial line is not impacted, and still
+    works whether vconsole is enabled or not.
+
+    Signed-off-by: You.
+
+Please, fool-proof this, I may have written a completely bogus blurb,
+epsecially the part of the serial line in the last paragraph.
+
+> Signed-off-by: David Fogle <david.j.fogle@gmail.com>
+> ---
+> ?package/systemd/Config.in | 1 +
+> ?1 file changed, 1 insertion(+)
 > 
-> The Pi's overlays are built with the following config
-> variables:
-> BR2_PACKAGE_RPI_FIRMWARE=y
-> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
-> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
-> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
-> 
-> After building, the dtbo files are present in the
-> output/images/rpi-firmware/overlays directory but not added
-> to the sdcard because they are missing from the genimage cfg
-> file.
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 25f322e8f3..920b65db44 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -325,6 +325,7 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
+> ?
+> ?config BR2_PACKAGE_SYSTEMD_VCONSOLE
+> ??????? bool "enable vconsole tool"
+> +?????? default y
 
-Thanks for suggested patch, the reasoning for genimage-raspberrypi3-64.cfg not
-containing a overlays entry is it is not needed for the raspberrypi3_64_defconfig
-use case (mind the buildroot minimalistic defconfig approach) in contrast to the
-raspberrypi3_defconfig where the overlay is needed for the pi3-miniuart-bt one...
+So, that was that simple to enable logging from tty1? Damn... ;-)
 
-Adding a (maybe) empty overlays directory to the sdcard image would violate
-the minimalistic approach...
+With the commit log amended:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
-Peter
+Yann E. MORIN.
 
-[Skipped CC to 'Matt Flax <flatmax@flatmax.org>' - mail server answers with 'mailbox unavailable']
+> ??????? help
+> ????????? systemd-vconsole-setup is an early boot service that
+> ????????? configures the virtual console font and console keymap.
+> -- 
+> 2.19.2
 
-> 
-> Signed-off-by: Matt Flax <flatmax@flatmax.org>
-> ---
->  board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
->  package/rpi-firmware/rpi-firmware.mk           | 4 ++++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-> index 0d0ca750a7..af1d17cde7 100644
-> --- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-> @@ -9,6 +9,7 @@ image boot.vfat {
->        "rpi-firmware/config.txt",
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
-> +      "rpi-firmware/overlays",
->        "Image"
->      }
->    }
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index bb54904ae6..0df7b17cbd 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
->  	done
->  endef
-> +else
-> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
-> +		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
-> +endef
->  endif
->  
->  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
