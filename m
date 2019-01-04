@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Jan 2019 12:45:02 +0100
-Subject: [Buildroot] [git commit] toolchain-external: update Arm AArch64-BE
+Date: Fri, 4 Jan 2019 12:45:17 +0100
+Subject: [Buildroot] [git commit] toolchain-external: update Arm AArch64
  toolchain 8.2-2018.11
-Message-ID: <20190104114554.2548882A9D@busybox.osuosl.org>
+Message-ID: <20190104114554.2657783607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=216aefa20562e13995274b1a7283976c22a6bbd0
+commit: https://git.buildroot.net/buildroot/commit/?id=46b6ae6a665225fbbeeb80f8bfba128739a9e4ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 From [1]:
@@ -31,26 +31,28 @@ From [1]:
 See "Release Note":
 [1] https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
 
+Tested with qemu_aarch64_virt_defconfig.
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64-be/Config.in  | 4 ++--
- .../toolchain-external-arm-aarch64-be.hash                          | 6 +++---
- .../toolchain-external-arm-aarch64-be.mk                            | 2 +-
+ .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 4 ++--
+ .../toolchain-external-arm-aarch64.hash                             | 6 +++---
+ .../toolchain-external-arm-aarch64.mk                               | 2 +-
  3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index 1e303c5ec2..d992be0190 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index ba627129cb..fbb5e025e8 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
 @@ -1,5 +1,5 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
--	bool "Arm AArch64 BE 2018.08"
-+	bool "Arm AArch64 BE 2018.11"
- 	depends on BR2_aarch64_be
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 2018.08"
++	bool "Arm AArch64 2018.11"
+ 	depends on BR2_aarch64
  	depends on BR2_HOSTARCH = "x86_64"
  	depends on !BR2_STATIC_LIBS
-@@ -7,7 +7,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+@@ -7,7 +7,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
  	select BR2_TOOLCHAIN_HAS_SSP
  	select BR2_INSTALL_LIBSTDCPP
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
@@ -59,28 +61,28 @@ index 1e303c5ec2..d992be0190 100644
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
  	select BR2_TOOLCHAIN_HAS_FORTRAN
  	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-index 9ab0eb519c..580e10dd79 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index d651bb0182..cda90f7517 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
 @@ -1,4 +1,4 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.08/gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz.asc
--md5 789171dc11bc2e37e90ea3c6de46c719 gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.11/gcc-arm-8.2-2018.11-x86_64-aarch64_be-linux-gnu.tar.xz.asc
-+md5 ab9a31ebe529b0a0cae78e610a9ffa0b gcc-arm-8.2-2018.11-x86_64-aarch64_be-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.08/gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz.asc
+-md5 1c47f4edc431cf19604a9f1b09975269 gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2018.11/gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz.asc
++md5 319ca548ff05b0ec1008988a7e5ab619 gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
  # locally calculated
--sha256 2cd8a1a35a892db5f0cd738a8b17bd1563f6d6e4be43a2b527b355bcfb295df8 gcc-arm-8.2-2018.08-x86_64-aarch64_be-linux-gnu.tar.xz
-+sha256 36df73194804ac52053edf469c7ace73fb4b243a8306dadfb7b95c4f485abde4 gcc-arm-8.2-2018.11-x86_64-aarch64_be-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-index 4a4e5a01b6..a41d9cadf2 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+-sha256 3e60644846ac60693e58ad71a319d64c5f7bcf95ff34411272c8d9674f85648f gcc-arm-8.2-2018.08-x86_64-aarch64-linux-gnu.tar.xz
++sha256 0142366da2f30feb1c366997cbdaa02286c8f1aa527c0fc177ee5ce8e77970fc gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index 515b66cd79..0398bd1297 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2018.08
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2018.11
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.08
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.11
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)
  
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-linux-gnu.tar.xz
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-linux-gnu.tar.xz
