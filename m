@@ -1,69 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Jan 2019 15:01:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wine: Add gettext dependency
- for host-wine only with NLS enabled
-In-Reply-To: <20190104114909.14166-1-vadim4j@gmail.com>
-References: <20190104114909.14166-1-vadim4j@gmail.com>
-Message-ID: <20190104140109.GB19623@scaer>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  4 Jan 2019 16:11:08 +0200
+Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 2.1.5
+Message-ID: <20190104141108.31551-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vadim, All,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2019-01-04 13:49 +0200, Vadim Kochan spake thusly:
-> Checked that host-wine compiles ok without host-gettext, so no
-> needs to specify this dependency.
-> 
-> libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
-> which allows to convert windows resources also to *.po format, which is
-> not needed if NLS is disabled.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  package/wine/wine.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index 78c8e6ab63..ef70b6276c 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-> @@ -307,8 +307,10 @@ WINE_CONF_OPTS += --without-zlib
->  endif
->  
->  # host-gettext is essential for .po file support in host-wine wrc
-> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
->  HOST_WINE_DEPENDENCIES += host-gettext
->  HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-> +endif
-
-At the beginning, I was failing to see how/why a target-related option,
-BR2_SYSTEM_ENABLE_NLS, would affect a host package.
-
-But it truns out that the target wine needs the host wrc to buile the
-.po stuff.
-
-However, we unconditionally compile the target wine with:
-    --without-gettext --without-gettextpo
-
-So, why do we need a host wrc? And if we need it, why does it needs
-gettext support?
-
-Regards,
-Yann E. MORIN.
-
->  # Wine needs to enable 64-bit build tools on 64-bit host
->  ifeq ($(HOSTARCH),x86_64)
-> -- 
-> 2.14.1
-> 
-
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index b6c85922a5..4b932ac907 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	3afc8bcec941e37221287f1a5323b1f1  Django-2.1.4.tar.gz
+-sha256	068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7  Django-2.1.4.tar.gz
++md5	9309c48c8b92503b8969a7603a97e2a1  Django-2.1.5.tar.gz
++sha256	d6393918da830530a9516bbbcbf7f1214c3d733738779f06b0f649f49cc698c3  Django-2.1.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 9ce74fbdc5..53e8f20e87 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.1.4
++PYTHON_DJANGO_VERSION = 2.1.5
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/83/f7/4939b60c4127d5f49ccb570e34f4c59ecc222949220234a88e4f363f1456
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/7f/4c750e09b246621e5e90fa08f93dec1b991f5c203b0ff615d62a891c8f41
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.1
