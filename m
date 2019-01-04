@@ -1,64 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Jan 2019 13:23:41 +0100
-Subject: [Buildroot] [git commit] utils/get-developers: really make it
- callable from elsewhere than the toplevel directory
-Message-ID: <20190104121928.7B01E82683@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Jan 2019 13:42:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wine: Add gettext dependency
+ for host-wine only with NLS enabled
+In-Reply-To: <20190104114909.14166-1-vadim4j@gmail.com>
+References: <20190104114909.14166-1-vadim4j@gmail.com>
+Message-ID: <20190104134238.484d60b2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45aabcddc5668b926078d43decc5fc5e59d43788
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit 62d5558f76a (utils/get-developers: make it callable from elsewhere
-than the toplevel directory) tried to fix this by passing in the toplevel
-directory when the DEVELOPERS file is parsed.
+On Fri,  4 Jan 2019 13:49:09 +0200, Vadim Kochan wrote:
+> Checked that host-wine compiles ok without host-gettext, so no
+> needs to specify this dependency.
+> 
+> libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
+> which allows to convert windows resources also to *.po format, which is
+> not needed if NLS is disabled.
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+>  package/wine/wine.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> index 78c8e6ab63..ef70b6276c 100644
+> --- a/package/wine/wine.mk
+> +++ b/package/wine/wine.mk
+> @@ -307,8 +307,10 @@ WINE_CONF_OPTS += --without-zlib
+>  endif
+>  
+>  # host-gettext is essential for .po file support in host-wine wrc
+> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+>  HOST_WINE_DEPENDENCIES += host-gettext
+>  HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
+> +endif
 
-Unfortunately this is not enough, as E.G.  also the paths listed in the
-patches are relative to the toplevel directory, causing it to not match the
-entries in the DEVELOPERS file.
+It probably needs a "else" clause, to pass --without-gettext
+--without-gettextpo.
 
-In concept this can be fixed by also passing the toplevel directory to the
-Developers class, but the simplest solution is just to chdir to the toplevel
-Buildroot directory before calling any of the getdeveloperlib functions.
+Best regards,
 
-This does require us to finish parsing command line arguments (which opens
-the provided patch files) to not get into trouble with relative paths to
-patches before chdir'ing / initializing getdeveloperlib.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/get-developers | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/utils/get-developers b/utils/get-developers
-index ce882e6699..750fc556dc 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -24,9 +24,6 @@ def parse_args():
- 
- 
- def __main__():
--    devs = getdeveloperlib.parse_developers()
--    if devs is None:
--        sys.exit(1)
-     args = parse_args()
- 
-     # Check that only one action is given
-@@ -48,6 +45,14 @@ def __main__():
-         print("No action specified")
-         return
- 
-+    # getdeveloperlib expects to be executed from the toplevel buildroot
-+    # directory, which is one level up from this script
-+    os.chdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-+
-+    devs = getdeveloperlib.parse_developers()
-+    if devs is None:
-+        sys.exit(1)
-+
-     # Handle the check action
-     if args.check:
-         files = getdeveloperlib.check_developers(devs)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
