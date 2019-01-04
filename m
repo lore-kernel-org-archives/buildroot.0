@@ -1,96 +1,94 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 4 Jan 2019 19:10:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wine: Add gettext dependency
- for host-wine only with NLS enabled
-In-Reply-To: <20190104140109.GB19623@scaer>
-References: <20190104114909.14166-1-vadim4j@gmail.com>
- <20190104140109.GB19623@scaer>
-Message-ID: <CAMw6YJKDP03RM3FXkvQgA4OEdvvoQvJoiA28xRyRVexVCH1y3Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Jan 2019 18:51:50 +0100
+Subject: [Buildroot] [PATCH v3] core/pkg-generic: only save latest
+ package list
+In-Reply-To: <25b04dd9-68de-9f1e-c830-fa6e86cb6d68@green-communications.fr>
+References: <20180501132629.4a4831bb.john@metanate.com>
+ <20180501122841.13818-1-john@metanate.com>
+ <20190104131250.GA19623@scaer>
+ <25b04dd9-68de-9f1e-c830-fa6e86cb6d68@green-communications.fr>
+Message-ID: <20190104175150.GD19623@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, All
+Nicolas, All,
 
-On Fri, Jan 4, 2019 at 4:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Vadim, All,
->
-> On 2019-01-04 13:49 +0200, Vadim Kochan spake thusly:
-> > Checked that host-wine compiles ok without host-gettext, so no
-> > needs to specify this dependency.
-> >
-> > libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
-> > which allows to convert windows resources also to *.po format, which is
-> > not needed if NLS is disabled.
-> >
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> >  package/wine/wine.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> > index 78c8e6ab63..ef70b6276c 100644
-> > --- a/package/wine/wine.mk
-> > +++ b/package/wine/wine.mk
-> > @@ -307,8 +307,10 @@ WINE_CONF_OPTS += --without-zlib
-> >  endif
-> >
-> >  # host-gettext is essential for .po file support in host-wine wrc
-> > +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-> >  HOST_WINE_DEPENDENCIES += host-gettext
-> >  HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-> > +endif
->
-> At the beginning, I was failing to see how/why a target-related option,
-> BR2_SYSTEM_ENABLE_NLS, would affect a host package.
->
-> But it truns out that the target wine needs the host wrc to buile the
-> .po stuff.
->
-> However, we unconditionally compile the target wine with:
->     --without-gettext --without-gettextpo
->
-> So, why do we need a host wrc? And if we need it, why does it needs
-> gettext support?
->
+On 2019-01-04 16:30 +0100, Nicolas Cavallari spake thusly:
+> On 04/01/2019 14:12, Yann E. MORIN wrote:
+> > On 2018-05-01 13:28 +0100, John Keeping spake thusly:
+> >> When rebuilding a package, simply appending the package's file list to
+> >> the global list means that the package list grows for every rebuild, as
+> > 
+> > Is there a particular issue with those three files growing on rebuild?
+> 
+> The problem is that not only does this makes the file list grow, it also
+> adds loads of incorrect data: when rebuilding a package that was
+> compiled early, all files modified since the package was built will be
+> included. So the list will include files that have been installed by
+> this package and all packages compiled after it. For some core packages,
+> this usually means "almost everything".
 
-So there are programs/*/ and dlls/*/ and there are 'tools/makedep.c' which
-generates programs/*/Makefile and dlls/*/Makefile for these
-sub-folders. This tool
-generates Makefile which calls 'wrc' from host to generate windows
-resource files,
-and if there was gettextpo enabled then it generates rules to create
-'pot' files by wrc (tools/makedep.c +3169).
-But if gettextpo was disabled then the '.pot' rules does nothing (as I
-understand), for example
-here are the programs/regedit/Makefile:
+Sorry, but I don't understand what you mean.
 
-------------------------------------8<--------------------------------------------
-regedit.pot: regedit.rc
-../.././../host-wine-3.0.4/tools/wrc/wrc -O pot -o $@ -b
-i586-buildroot-linux-musl --nostdinc -I. \
-  -I../../include -I../../include/msvcrt -D__WINESRC__ regedit.rc
-regedit.pot regedit.res: ../.././../host-wine-3.0.4/tools/wrc/wrc
-resource.h ../../include/windef.h \
-  ../../include/winnt.h ../../include/basetsd.h ../../include/guiddef.h \
-  ../../include/msvcrt/string.h ../../include/msvcrt/crtdefs.h
-../../include/msvcrt/ctype.h \
-  ../../include/msvcrt/stddef.h ../../include/winnt.rh
-../../include/pshpack2.h \
-  ../../include/poppack.h ../../include/pshpack8.h
-../../include/pshpack4.h ../../include/winuser.h \
-  ../../include/winuser.rh folderopen.ico folder.ico computer.ico
-string.ico bin.ico regedit.ico \
-  ../../include/wine/wine_common_ver.rc ../../include/winresrc.h
-../../include/commctrl.rh \
-  ../../include/dde.rh ../../include/dlgs.h ../../include/winver.h
-../../include/verrsrc.h
------------------------>8------------------------------------------------------------------------
+Whether you install or reinstall a package, there is no guarantte on the
+order of the other packages it is unrelated to: they may very well be
+built before or after the package.
 
-So, for me it looks like gettextpo might be disabled.
+So yes, when you re-install a package, the file list contains all files
+installed before it, but they are not assigned to this package, with one
+exception: the .la files, which are all assigned to the latest package
+installed. And in any case, even if you were not re-installing your
+package, but it was the latest to be built, then you'd still have the
+issue that the .la files would all be accounted to for your package.
+
+But, two things;
+  - this only accounts for .la files in staging, not in target/, and
+  - I have already fixed that locally and will send the patch shortly.
+
+Still, I am not usre I understood your problem anyway, so can you
+explain in more details, and provide an easy reproducing sequence (based
+on the git master)?
+
+> > Compared to the rest of the build tree, those three files have very
+> > small sizes in fact, and if they eventually end up big enough to be a
+> > substantial part of the build tree, it's most probably time for a clean
+> > build from scratch anyway, no?
+> 
+> Having a big list would not a problem if nobody used the content of this
+> file, but some tools scans it and use it to check files. After many
+> recompiling, I remember having problems with one tool taking a
+> considerable amount of time for each build because of all the duplicates
+> in the list. But i don't remember which tool it was.
+
+Are you talking about a tool in Buildroot? Can you try to provide more
+details, please? Are you still able to reproduce the slowness on the
+current git master?
+
+The only two tools that make use of the packages-file-list.txt are
+check-uniq-files (which actually checks that files are not installed by
+two or more packages), and support/scripts/size-stats, which graphs a
+pie-chart representing the size contribution of each package to the
+content of target/. The former is always run at the end of the build, in
+the target-finalize step, while the latter is only run on-demand.
+
+They both are written in python, and check-uniq-files is pretty trivial
+and lightwieght, and in my experience, very fast.
+
+And in any case, if the list becomes *so big* that reading it takes an
+insane amount of time, then probably your host/ staging/ and target/
+directories are in a state that is so far from being clean that you
+probably should condider a rebuild from scratch at that point.
 
 Regards,
-Vadim Kochan
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
