@@ -1,109 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Jan 2019 17:14:04 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: add options to install
- more Mediatek firmwares.
-In-Reply-To: <20190104154951.21807-1-nicolas.cavallari@green-communications.fr>
-References: <20190104154951.21807-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20190104161404.GC19623@scaer>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 4 Jan 2019 19:10:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wine: Add gettext dependency
+ for host-wine only with NLS enabled
+In-Reply-To: <20190104140109.GB19623@scaer>
+References: <20190104114909.14166-1-vadim4j@gmail.com>
+ <20190104140109.GB19623@scaer>
+Message-ID: <CAMw6YJKDP03RM3FXkvQgA4OEdvvoQvJoiA28xRyRVexVCH1y3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, All,
+Yann, Thomas, All
 
-On 2019-01-04 16:49 +0100, Nicolas Cavallari spake thusly:
-> Add option to install the MT7650 bluetooth firmware and the
-> MT76x2e wifi firmware.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/linux-firmware/Config.in         | 10 ++++++++++
->  package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-> index dcc8d4bade..3efb3d9050 100644
-> --- a/package/linux-firmware/Config.in
-> +++ b/package/linux-firmware/Config.in
-> @@ -59,6 +59,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
->  	help
->  	  Firmware files for QCA Rome 6174A bluetooth support.
->  
-> +config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650
-> +	bool "MediaTek MT7650"
-> +	help
-> +	  Firmware files for MediaTek MT7650 bluetooth support
-> +
->  endmenu # Bluetooth
->  
->  menu "WiFi firmware"
-> @@ -242,6 +247,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
->  	help
->  	  MediaTek MT7601U
->  
-> +config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT76X2E
-> +	bool "MediaTek MT76x2e"
-> +	help
-> +	  MediaTek MT76x2e
+On Fri, Jan 4, 2019 at 4:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Vadim, All,
+>
+> On 2019-01-04 13:49 +0200, Vadim Kochan spake thusly:
+> > Checked that host-wine compiles ok without host-gettext, so no
+> > needs to specify this dependency.
+> >
+> > libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
+> > which allows to convert windows resources also to *.po format, which is
+> > not needed if NLS is disabled.
+> >
+> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> > ---
+> >  package/wine/wine.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> > index 78c8e6ab63..ef70b6276c 100644
+> > --- a/package/wine/wine.mk
+> > +++ b/package/wine/wine.mk
+> > @@ -307,8 +307,10 @@ WINE_CONF_OPTS += --without-zlib
+> >  endif
+> >
+> >  # host-gettext is essential for .po file support in host-wine wrc
+> > +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+> >  HOST_WINE_DEPENDENCIES += host-gettext
+> >  HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
+> > +endif
+>
+> At the beginning, I was failing to see how/why a target-related option,
+> BR2_SYSTEM_ENABLE_NLS, would affect a host package.
+>
+> But it truns out that the target wine needs the host wrc to buile the
+> .po stuff.
+>
+> However, we unconditionally compile the target wine with:
+>     --without-gettext --without-gettextpo
+>
+> So, why do we need a host wrc? And if we need it, why does it needs
+> gettext support?
+>
 
-We're trying to limit the number of options in each category, and given
-there already is a wifi mediatek entry above, can we just make it install
-all the mediatek wifi firmwares?
+So there are programs/*/ and dlls/*/ and there are 'tools/makedep.c' which
+generates programs/*/Makefile and dlls/*/Makefile for these
+sub-folders. This tool
+generates Makefile which calls 'wrc' from host to generate windows
+resource files,
+and if there was gettextpo enabled then it generates rules to create
+'pot' files by wrc (tools/makedep.c +3169).
+But if gettextpo was disabled then the '.pot' rules does nothing (as I
+understand), for example
+here are the programs/regedit/Makefile:
 
-You'll need to:
+------------------------------------8<--------------------------------------------
+regedit.pot: regedit.rc
+../.././../host-wine-3.0.4/tools/wrc/wrc -O pot -o $@ -b
+i586-buildroot-linux-musl --nostdinc -I. \
+  -I../../include -I../../include/msvcrt -D__WINESRC__ regedit.rc
+regedit.pot regedit.res: ../.././../host-wine-3.0.4/tools/wrc/wrc
+resource.h ../../include/windef.h \
+  ../../include/winnt.h ../../include/basetsd.h ../../include/guiddef.h \
+  ../../include/msvcrt/string.h ../../include/msvcrt/crtdefs.h
+../../include/msvcrt/ctype.h \
+  ../../include/msvcrt/stddef.h ../../include/winnt.rh
+../../include/pshpack2.h \
+  ../../include/poppack.h ../../include/pshpack8.h
+../../include/pshpack4.h ../../include/winuser.h \
+  ../../include/winuser.rh folderopen.ico folder.ico computer.ico
+string.ico bin.ico regedit.ico \
+  ../../include/wine/wine_common_ver.rc ../../include/winresrc.h
+../../include/commctrl.rh \
+  ../../include/dde.rh ../../include/dlgs.h ../../include/winver.h
+../../include/verrsrc.h
+----------------------->8------------------------------------------------------------------------
 
-  - rename the option to BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_WIFI_MT7xxx;
-    note that I added 'WIfI' in the option name, because we can forsee
-    we'll have the same issue with BT firmwares, as they too are named
-    mt7*;
-
-  - add the old BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U option to
-    Config.in.legacy, and select the new one;
-
-  - use the new option in linux-firmware.mk to install all the WiFi
-    firmware blobs.
-
-Thanks! :-)
+So, for me it looks like gettextpo might be disabled.
 
 Regards,
-Yann E. MORIN.
-
->  config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
->  	bool "Qualcomm Atheros 6174"
->  	help
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index ee02c7a030..c238d9f01b 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -243,6 +243,18 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
->  endif
->  
-> +# MT7650
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650),y)
-> +LINUX_FIRMWARE_FILES += mt7650.bin
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
-> +endif
-> +
-> +# MT76x2e
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT76X2E),y)
-> +LINUX_FIRMWARE_FILES += mt7662.bin mt7662_rom_patch.bin
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
-> +endif
-> +
->  # qca6174
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
->  LINUX_FIRMWARE_FILES += ath10k/QCA6174
-> -- 
-> 2.20.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vadim Kochan
