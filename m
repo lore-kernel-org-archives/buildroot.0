@@ -1,58 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Jan 2019 09:39:38 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gettext: Turn into virtual
- package
-In-Reply-To: <CAMw6YJLvioTwKbgAdYvtZqbVg1W-RAADT_umZkGMaw9MnVpHMw@mail.gmail.com>
-References: <20181223150448.21980-1-vadim4j@gmail.com>
- <20181223150448.21980-2-vadim4j@gmail.com>
- <20181230181026.3ce6aca3@windsurf>
- <CAMw6YJLfzWh+=5NVkjO=TPiZ75KdOw6x-qApgPUeV+mUMKYqOg@mail.gmail.com>
- <20181231160614.0f7e9f0b@windsurf>
- <CAMw6YJKfY_+pK=gDCb9QF=sbg+RXhJbgC=zJC8qXy_MxMwjsVg@mail.gmail.com>
- <20190103152834.3194d737@windsurf>
- <CAMw6YJ+xU9GiZ809dCQTmPEgtpu3iCOErT5w7fqoee09R-hpaQ@mail.gmail.com>
- <CAMw6YJLvioTwKbgAdYvtZqbVg1W-RAADT_umZkGMaw9MnVpHMw@mail.gmail.com>
-Message-ID: <20190104093938.00fb138b@windsurf>
+Date: Fri, 4 Jan 2019 09:58:11 +0100
+Subject: [Buildroot] [PATCH v3 1/3] package/waf: add a blind
+ Config.in.host
+In-Reply-To: <1870289102.225265.1546558443354.JavaMail.zimbra@datacom.com.br>
+References: <20181223171950.3979-1-casantos@datacom.com.br>
+ <20181226223005.71dca29a@windsurf> <20181226215521.GL14286@scaer>
+ <20190103225052.3feb76c6@windsurf> <20190103220652.GG5991@scaer>
+ <1870289102.225265.1546558443354.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20190104095811.33a189e4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Carlos,
 
-Please keep the mailing list in Cc, i.e use "Reply All" when replying
-to mailing list e-mails. Thanks!
+On Thu, 3 Jan 2019 21:34:03 -0200 (BRST), Carlos Santos wrote:
 
-I'm also adding Andr? and Yann in Cc, since they are involved in the
-host-gettext dependency in wine.
+> Well, I'm happy that my work helped you guys to analyze the pros and
+> cons of having Config.in.host for all host packages. Looks like it's
+> not a good idea, so I will mark the patches as refused in patchwork.
 
-On Fri, 4 Jan 2019 03:49:49 +0200, Vadim Kochan wrote:
+I don't think we can conclude yet "it's not a good idea". At this
+point, my feeling is more: the consequences are worse than I initially
+expected, which requires some more thoughts on how we want to handle
+that.
 
-> So the wine builds OK w/o host-gettext (tested with dockerfile), but
-> this libgettextpo is required by (optionally)
-> 'tools/wrc' which allows to convert window's resources into *.po files
-> (https://linux.die.net/man/1/wrc). And
-> looks like it might be needed on the host only if NLS=y.
-
-The dependency on host-gettext was added in commit
-164ac197fef763dfa61154ad41588b6701baca86, which says:
-
-""
-    wine: Add gettext dependency for host-wine
-    
-    Mostly based on a comment by Yann E. MORIN
-""
-
-I am not sure what "comment" Yann made about this, and especially if
-the dependency really needs to be mandatory.
-
-Andr?, Yann, do you remember ? Could you give more details about the
-host-gettext dependency in wine ?
-
-Do we need it unconditionally, or only when BR2_SYSTEM_ENABLE_NLS=y ?
-
-Best regards,
+Again, what was your motivation for adding those Config.in.host options
+in the first place, specifically for waf ? Was it just about getting
+this whole discussion started, and use waf just as a simple first
+example ?
 
 Thomas
 -- 
