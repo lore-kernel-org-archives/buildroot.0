@@ -1,34 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 04 Jan 2019 20:35:56 +0000
-Subject: [Buildroot] [Bug 10851] Patch to handle numpad Enter key properly
-In-Reply-To: <bug-10851-163@https.bugs.busybox.net/>
-References: <bug-10851-163@https.bugs.busybox.net/>
-Message-ID: <bug-10851-163-EDbEH0DVyl@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 04 Jan 2019 21:58:20 +0100
+Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 2.1.5
+In-Reply-To: <20190104141108.31551-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Fri, 4 Jan 2019 16:11:08 +0200")
+References: <20190104141108.31551-1-asafka7@gmail.com>
+Message-ID: <874laogmxf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10851
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
---- Comment #4 from Alexandre Esse <alexandre.esse.dev@gmail.com> ---
-Hello,
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-I have the same problem. And I use another workaround that doesn't involves
-patch on Buildroot.
+Please mention when version bumps fix security issues:
 
-Under X:
- - Return keycode is 36 (keysym 0xff0d, Return)
- - Enter (Keypad key) keycode is 104 (keysym 0xff8d, KP_Enter)
+https://www.djangoproject.com/weblog/2019/jan/04/security-releases/
 
-Then, I remap the Enter key with ~/.xmodmap.conf file containing one line:
-keycode 104 = Return
-
-And apply this configuration: xmodmap ~/.xmodmap.conf
-
-Then, launch: make menuconfig
+Committed with that fixed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
