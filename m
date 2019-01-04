@@ -1,63 +1,129 @@
-From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Fri, 4 Jan 2019 11:53:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/irqbalance: bump to version 1.5.0
-Message-ID: <20190104105341.25481-1-F.LaRoche@pilz.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 4 Jan 2019 12:06:07 +0100
+Subject: [Buildroot] [PATCH v3 1/3] package/waf: add a blind
+ Config.in.host
+In-Reply-To: <20190103220652.GG5991@scaer>
+References: <20181223171950.3979-1-casantos@datacom.com.br>
+ <20181226223005.71dca29a@windsurf> <20181226215521.GL14286@scaer>
+ <20190103225052.3feb76c6@windsurf> <20190103220652.GG5991@scaer>
+Message-ID: <1865313a-73fb-7fb2-9b1c-3918fc79b290@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the upstream changelog:
 
-New Features in irqbalance 1.5.0
-* file based socket ipc mechanism
-* support for multiple policy scripts
-* add some sandboxing support
-* enhanced debug output
-* Imroved irq type determination for ARM
-Bugs fixed:
-* Fixed xen event interrupt detection
-* Fix node parsing in sysfs
-* Covscan fixes
-* Fix use on systems without a pci bus
-* Various other cleanups
 
-Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
----
- package/irqbalance/irqbalance.hash | 2 +-
- package/irqbalance/irqbalance.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 03/01/2019 23:06, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2019-01-03 22:50 +0100, Thomas Petazzoni spake thusly:
+>> On Wed, 26 Dec 2018 22:55:21 +0100, Yann E. MORIN wrote:
+>>> Well, I am not really happy with that, though: do we really plan on
+>>> having packages really select all the host tools they need?
+>>>
+>>> If so, do we really envision autotools-based packages selecting
+>>> host-autoconf, host-automake, host-libtool? And then packages that use
+>>> host-pkgconf you should also select it...
+>>>
+>>> Also, what about host-cmake, which is conditionally built, but for which
+>>> we do not have the info in kconfig? (well, we can argue we'd have to do
+>>> like we do for host-gcc, but still). Oh, and host-tar, host-flex,
+>>> host-bison, and so on... :-/
+>>
+>> Meh, I hadn't thought of conditional packages like host-tar, host-cmake
+>> and so on.
 
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index 9bbbc7e4fb..dfe14c9003 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 62de71510a2496fcf027efb0b288dd48e53e9efc931fa573c95580cad6264d07  irqbalance-v1.4.0.tar.gz
-+sha256 3318eddc03782cfdad22b20eff18eaf378c498c5de286e8cbaa5521ddf4f810b  irqbalance-v1.5.0.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index c7676e13cf..063b02bb68 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRQBALANCE_VERSION = v1.4.0
-+IRQBALANCE_VERSION = v1.5.0
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
--- 
-2.17.1
+ I also hadn't thought of that. But it's not an unsurmountable problem.
 
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+>>
+>>> So, no, I'm not happy with that direction...
+>>>
+>>>     config BR2_PACKAGE_FOO
+>>>         bool "foo"
+>>>         select BR2_PACKAGE_HOST_AUTOCONF
+>>>         select BR2_PACKAGE_HOST_AUTOMAKE
+>>>         select BR2_PACKAGE_HOST_LIBTOOL
+>>>         select BR2_PACKAGE_MAYBE_HOST_TAR
+>>>         select BR2_PACKAGE_MAYBE_HOST_FLEX_FOR_KCONFIG
+>>>         select BR2_PACKAGE_MAYBE_HOST_BISON_FOR_KCONFIG
+>>>         select BR2_PACKAGE_HOST_PKGCONF
+>>>
+>>> Unles we're planning on hiding that away into meta-config, like:
+>>>
+>>>     config BR2_PACKAGE_FOO
+>>>         bool "foo"
+>>>         select BR2_AUTOTOOLS_PACKAGE # mimick $(eval $(autotools-package))
+>>>         select BR2_PACKAGE_HOST_PKGCONF_BECAUSE_IT_S_NOT_MANDATORY
+
+ This looks acceptable to me...
+
+
+>>> And still, the optionally-required host packages like tar, flex et al.
+>>> are not covered...
+
+ tar at least is rather easy to overcome: we can add environment variables that
+pass the results of dependencies.mk to Kconfig. And for things that are
+conditional like lzip we can use a combination of the two.
+
+>>>
+>>> Meh... :-(
+>>
+>> Indeed, I understand the "Meh" here. I hadn't really realized what it
+>> would mean to have Config.in.host options for all packages, and
+>> properly selected by all its users.
+> 
+> To be fait, I was initially also in favour of adding Config.in.host
+> options for all host packages. But this waf patch made me change my
+> mind, becasue of the above...
+
+ Note, however, that the only reason to require Config.in.host for *all*
+packages is that it allows us to have a (partial) check that for each make
+dependency, the Kconfig dependency exists as well (i.e., check that all
+dependencies are in PACKAGES). That's not a very strong reason. So I would be
+perfectly fine with making this a "soft" requirement (possibly verified with
+checkpackage).
+
+ The tricky thing is that when a package does have a Config.in.host option, we
+really want it to be selected in *all* cases that it is built. So ideally we
+should have a way to verify that...
+
+
+ Regards,
+ Arnout
+
+> 
+>> But still, there are a number of cases where it would really help, so
+>> that a given host package can be aware that another host package has
+>> been built with a given feature (or not). Or precisely to force that a
+>> certain host package is built with a given option. For example, in
+>> host-python, we had situations where only a given package needed
+>> host-python to be built with FOO support, and since we don't have any
+>> BR2_PACKAGE_HOST_PYTHON_FOO option, our only choice was to
+>> unconditionally enable FOO support in host-python, adding build time to
+>> everyone, even if FOO in host-python might only be needed for one
+>> obscure package.
+> 
+> In this case, maybe we could simply depart from the rule, and just have
+> python/Config.in.host contain just:
+> 
+>     # Select this if you need host-python to support 'stuff'
+>     config BR2_NEEDS_HOST_PYTHON_WITH_STUFF
+>         bool
+> 
+> And then, python/python.mk would have:
+> 
+>     ifeq ($(BR2_NEEDS_HOST_PYTHON_WITH_STUFF),y)
+>     HOST_PYTHON_CONF_OPTS += --with-stuff
+>     else
+>     HOST_PYTHON_CONF_OPTS += --without-stuff
+>     endif
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> It seems like we don't have a very conclusive decision on this topic at
+>> this point.
+> 
+> 
