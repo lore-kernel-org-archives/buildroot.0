@@ -1,50 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 05 Jan 2019 18:27:06 +0000
-Subject: [Buildroot] [Bug 11576] Unable to start apache with event MPM on
- raspberry pi 3
-In-Reply-To: <bug-11576-163@https.bugs.busybox.net/>
-References: <bug-11576-163@https.bugs.busybox.net/>
-Message-ID: <bug-11576-163-96ZtVpU379@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  5 Jan 2019 20:50:57 +0100
+Subject: [Buildroot] [PATCH v1 2/3] rpi-firmware: bump version to fbad6408c4
+In-Reply-To: <20190105195058.7322-1-ps.report@gmx.net>
+References: <20190105195058.7322-1-ps.report@gmx.net>
+Message-ID: <20190105195058.7322-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11576
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-Apache is based on apr and apr has some configure runtime checks for some
-features, e.g. epoll, failing for the cross compile.
-
-Quick test with the following (buildroot) patch enables successful apache
-startup again:
-
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 58b1d86b28..8f29e57c59 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -26,7 +26,12 @@ APR_CONF_ENV = \
-        ac_cv_sizeof_pid_t=4 \
-        ac_cv_struct_rlimit=yes \
-        ac_cv_o_nonblock_inherited=no \
--       apr_cv_mutex_recursive=yes
-+       apr_cv_mutex_recursive=yes \
-+       apr_cv_epoll=yes \
-+       apr_cv_epoll_create1=yes \
-+       apr_cv_dup3=yes \
-+       apr_cv_sock_cloexec=yes \
-+       apr_cv_accept4=yes
- APR_CONFIG_SCRIPTS = apr-1-config
-
- # Doesn't even try to guess when cross compiling
-
-Tested with raspberrypi3_qt5we_defconfig and the following two
-additional config options:
-
-BR2_PACKAGE_APACHE=y
-BR2_PACKAGE_APACHE_MPM_EVENT=y
-
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 728c53fe9a..b74991db78 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 57c56e9e41a2d9b1ce660aa7887db5c4b44f768fc63c6b6ef1d2fe460a090d85 rpi-firmware-fbad6408c4596d3d671736ee0571aae444f24e68.tar.gz
++sha256 58dc9d1080582964943b509ed9444602ce7fb50c1124199d3f06a5b121aa0706 rpi-firmware-e1bd9b0b8cda901ee9b23cbb8b3334cde71320a7.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index bb54904ae6..70985880e9 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = fbad6408c4596d3d671736ee0571aae444f24e68
++RPI_FIRMWARE_VERSION = e1bd9b0b8cda901ee9b23cbb8b3334cde71320a7
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
