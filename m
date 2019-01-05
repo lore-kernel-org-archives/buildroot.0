@@ -1,36 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  5 Jan 2019 20:50:55 +0100
-Subject: [Buildroot] [PATCH v1 0/3] Raspberry Pi update
-Message-ID: <20190105195058.7322-1-ps.report@gmx.net>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sat,  5 Jan 2019 22:00:44 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/wine: Add gettext dependency for
+ host-wine only with NLS enabled
+In-Reply-To: <20190105200046.31512-1-vadim4j@gmail.com>
+References: <20190105200046.31512-1-vadim4j@gmail.com>
+Message-ID: <20190105200046.31512-2-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update configs/raspberrypi*, rpi-firmware and  rpi-userland to
-latest versions.
+Checked that host-wine compiles ok without host-gettext, so no
+needs to specify this dependency.
 
-Tested on Raspberry Pi 3 Model B v1.2 hardware with
-raspberrypi3_qt5we_defconfig.
+libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
+which allows to convert windows resources also to *.po format, which is
+not needed if NLS is disabled.
 
-Peter Seiderer (3):
-  configs/raspberrypi*: bump kernel version to 4c5aec7827
-  rpi-firmware: bump version to fbad6408c4
-  rpi-userland: bump version to 7cbfbd38d9
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ package/wine/wine.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- configs/raspberrypi0_defconfig         | 2 +-
- configs/raspberrypi0w_defconfig        | 2 +-
- configs/raspberrypi2_defconfig         | 2 +-
- configs/raspberrypi3_64_defconfig      | 2 +-
- configs/raspberrypi3_defconfig         | 2 +-
- configs/raspberrypi3_qt5we_defconfig   | 2 +-
- configs/raspberrypi_defconfig          | 2 +-
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
-
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 78c8e6ab63..7e44e3c81d 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -307,8 +307,12 @@ WINE_CONF_OPTS += --without-zlib
+ endif
+ 
+ # host-gettext is essential for .po file support in host-wine wrc
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ HOST_WINE_DEPENDENCIES += host-gettext
+ HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
++else
++HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
++endif
+ 
+ # Wine needs to enable 64-bit build tools on 64-bit host
+ ifeq ($(HOSTARCH),x86_64)
 -- 
-2.20.1
+2.14.1
