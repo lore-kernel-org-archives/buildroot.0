@@ -1,71 +1,80 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 4 Jan 2019 15:44:36 -0800
-Subject: [Buildroot] Xtensa toolchain issue ?
-In-Reply-To: <20190104102735.52e7e733@windsurf>
-References: <20190102112130.0b8d32f8@windsurf>
- <CAMo8BfJR7vgLDONmKDX3S8RLyJBMYmXEKjjEr3JK5JOTHrd5hg@mail.gmail.com>
- <20190104102735.52e7e733@windsurf>
-Message-ID: <CAMo8BfLe2amCfDH2MdrQH+7PXx16P5BjGy1zMe5gxZ+YkYEtxQ@mail.gmail.com>
+From: Joel Carlson <JoelsonCarl@gmail.com>
+Date: Fri, 4 Jan 2019 17:53:04 -0700
+Subject: [Buildroot] [PATCH 1/2 v3] core: make symlinks relative when
+ preparing the SDK
+In-Reply-To: <20181226222135.4ef03363@windsurf>
+References: <cover.1545491919.git.yann.morin.1998@free.fr>
+ <9f4825baa7a475b4d8f262925e1ff652b31cd6fb.1545491919.git.yann.morin.1998@free.fr>
+ <20181226222135.4ef03363@windsurf>
+Message-ID: <CA+1k=2YqfmD2cYMHGTnFjW13A51Ki+2dMp96Y+9HGyo2z4qP+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 4, 2019 at 1:27 AM Thomas Petazzoni
+On Wed, Dec 26, 2018 at 2:21 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
-> On Thu, 3 Jan 2019 14:17:51 -0800, Max Filippov wrote:
-> > My understanding is that this is not something that could be fixed
-> > in a generic way, but requires support from the compiler backend.
-> > Specifically it needs a way to tail-call a variadic function from a
-> > thunk,
 >
-> This is intricate compiler stuff. If you have a bit of time to give a
-> few more details about this, I'd be interested. Of course, that's just
-> to satisfy my endless curiosity, so if you don't have time/interest,
-> you can skip this request :-)
-
-A thunk function is used to implement C++ virtual function calls with
-multiple inheritance. Probably the best explanation is a quote from
-the gccint:
-
-     These functions represent stub code that adjusts the 'this' pointer
-     and then jumps to another function.  When the jumped-to function
-     returns, control is transferred directly to the caller, without
-     returning to the thunk.  The first parameter to the thunk is always
-     the 'this' pointer; the thunk should add 'THUNK_DELTA' to this
-     value.  (The 'THUNK_DELTA' is an 'int', not an 'INTEGER_CST'.)
-
-     Then, if 'THUNK_VCALL_OFFSET' (an 'INTEGER_CST') is nonzero the
-     adjusted 'this' pointer must be adjusted again.  The complete
-     calculation is given by the following pseudo-code:
-
-          this += THUNK_DELTA
-          if (THUNK_VCALL_OFFSET)
-            this += (*((ptrdiff_t **) this))[THUNK_VCALL_OFFSET]
-
-     Finally, the thunk should jump to the location given by
-     'DECL_INITIAL'; this will always be an expression for the address
-     of a function.
-
-and then later, in the description of macro
-TARGET_ASM_OUTPUT_MI_THUNK:
-
-     If you do not define this macro, the target-independent code in the
-     C++ front end will generate a less efficient heavyweight thunk that
-     calls FUNCTION instead of jumping to it.  The generic approach does
-     not support varargs.
-
-> Since the issue also happens on OpenRISC, perhaps we need to have some
-> BR2_TOOLCHAIN_SUPPORTS_XYZ boolean that says whether the gcc version
-> supports this specific stuff. However, since I don't clearly understand
-> what the issue is, I wouldn't be able to find a good name for that
-> BR2_TOOLCHAIN_SUPPORTS_XYZ option.
+> Hello,
 >
-> BR2_TOOLCHAIN_SUPPORTS_TAIL_CALL_VARIADIC_FUNC_FROM_THUNK ? :-)
+> On Sat, 22 Dec 2018 16:18:51 +0100, Yann E. MORIN wrote:
+> > The SDK is supposed to be relocatable, so symlinks must not be
+> > absolute.
+> >
+> > Add a new helper script, that replaces all absolute symlinks with
+> > relative ones.
+>
+> This script is really not trivial. This additional complexity raises a
+> simple question: how many packages install such absolute symlinks?
 
-Maybe BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK?
+That was actually a good question.  I did a build where I turned on
+some 450+ random packages (estimated by counting the folders in build/
+other than host-* folders).  I encountered the following absolute
+links:
+iptables - 1 absolute symlink (sysroot/usr/bin/iptables-xml ->
+/usr/sbin/xtables-multi)
+ntfs-3g - 2 absolute symlinks (sysroot/sbin/mount.ntfs-3g ->
+/usr/bin/ntfs-3g  and  sysroot/sbin/mount.lowntfs-3g ->
+/usr/bin/lowntfs-3g)
+fontconfig - 16 absolute symlinks (sysroot/etc/fonts/conf.d/* ->
+/usr/share/fontconfig/conf.avail/*)
+And then not in my build, but pointed out by someone on a previous
+email thread, the eudev package produces 1 absolute symlink
 
--- 
-Thanks.
--- Max
+I could dump my actual config somewhere if desired.
+
+> Should we instead detect such absolute symlinks, and use that to fix
+> the problematic packages ?
+>
+> I am not saying at all that the approach of fixing all symlinks is
+> wrong, but I'd like to see a proper discussion on the balance between
+> fixing the problematic packages vs. taking the "brutal" approach of
+> this new fix-symlinks script.
+
+So with such a small amount of absolute symlinks so far, and all of
+them being for things we generally don't care about in the SDK, then
+perhaps just check for absolute symlinks in a whitelist of areas like
+/lib (or perhaps blacklist areas like /etc or /usr/bin).  Error out on
+an absolute symlink in the spots we care about, and fix that upstream?
+
+The thought behind the whitelist/blacklist as I understand it is
+because I tried fixing iptables and eudev, but did it incorrectly.
+The discussion on my eudev change [1] makes it sound a bit harder to
+solve (relies on ln command supporting "-r" which may not be
+everywhere), but being a link we don't care about in the SDK, we could
+just ignore it with a whitelist/blacklist.
+
+[1] https://github.com/gentoo/eudev/pull/165
+
+
+
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
