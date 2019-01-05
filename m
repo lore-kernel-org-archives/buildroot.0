@@ -1,88 +1,128 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sat, 5 Jan 2019 16:56:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wine: Add gettext dependency
- for host-wine only with NLS enabled
-In-Reply-To: <20190105151052.10295e2a@windsurf>
-References: <20190104114909.14166-1-vadim4j@gmail.com>
- <20190104140109.GB19623@scaer>
- <CAMw6YJKDP03RM3FXkvQgA4OEdvvoQvJoiA28xRyRVexVCH1y3Q@mail.gmail.com>
- <20190105151052.10295e2a@windsurf>
-Message-ID: <CAMw6YJLeS8k83r+BOj1yqPgRvivbfPL9bh-T1QUhXdX0CoTORA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 5 Jan 2019 16:17:26 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+In-Reply-To: <4e7dafcb-f16e-6ec2-d38e-4e3cac164229@flatmax.org>
+References: <20190103110036.14604-1-flatmax@flatmax.org>
+ <20190104204653.04489413@gmx.net>
+ <4e7dafcb-f16e-6ec2-d38e-4e3cac164229@flatmax.org>
+Message-ID: <20190105161706.7cba4bbd@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Matt,
 
-On Sat, Jan 5, 2019 at 4:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Fri, 4 Jan 2019 19:10:18 +0200, Vadim Kochan wrote:
-> > Yann, Thomas, All
-> >
-> > On Fri, Jan 4, 2019 at 4:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > >
-> > > Vadim, All,
-> > >
-> > > On 2019-01-04 13:49 +0200, Vadim Kochan spake thusly:
-> > > > Checked that host-wine compiles ok without host-gettext, so no
-> > > > needs to specify this dependency.
-> > > >
-> > > > libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
-> > > > which allows to convert windows resources also to *.po format, which is
-> > > > not needed if NLS is disabled.
-> > > >
-> > > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > > > ---
-> > > >  package/wine/wine.mk | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> > > > index 78c8e6ab63..ef70b6276c 100644
-> > > > --- a/package/wine/wine.mk
-> > > > +++ b/package/wine/wine.mk
-> > > > @@ -307,8 +307,10 @@ WINE_CONF_OPTS += --without-zlib
-> > > >  endif
-> > > >
-> > > >  # host-gettext is essential for .po file support in host-wine wrc
-> > > > +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-> > > >  HOST_WINE_DEPENDENCIES += host-gettext
-> > > >  HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-> > > > +endif
-> > >
-> > > At the beginning, I was failing to see how/why a target-related option,
-> > > BR2_SYSTEM_ENABLE_NLS, would affect a host package.
-> > >
-> > > But it truns out that the target wine needs the host wrc to buile the
-> > > .po stuff.
-> > >
-> > > However, we unconditionally compile the target wine with:
-> > >     --without-gettext --without-gettextpo
-> > >
-> > > So, why do we need a host wrc? And if we need it, why does it needs
-> > > gettext support?
-> > >
-> >
-> > So there are programs/*/ and dlls/*/ and there are 'tools/makedep.c' which
-> > generates programs/*/Makefile and dlls/*/Makefile for these
-> > sub-folders. This tool
-> > generates Makefile which calls 'wrc' from host to generate windows
-> > resource files,
-> > and if there was gettextpo enabled then it generates rules to create
-> > 'pot' files by wrc (tools/makedep.c +3169).
-> > But if gettextpo was disabled then the '.pot' rules does nothing (as I
-> > understand), for example
-> > here are the programs/regedit/Makefile:
->
-> But is this logic going away when --disable-nls is passed to the target
-> wine configure options ?
->
+On Sat, 5 Jan 2019 10:08:04 +1100, Matt Flax <flatmax@flatmax.org> wrote:
 
-Yes, wine compiles successfully w/o *.pot support in wrc with --disable-nls.
+> On 5/1/19 6:50 am, Peter Seiderer wrote:
+> > Hello Max,
+> >
+> > On Thu,  3 Jan 2019 22:00:36 +1100, Matt Flax <flatmax@flatmax.org> wrote:
+> >  
+> >> This patch enables the inclusion of the Pi's overlays. Previously
+> >> the overlays were not included in the genimage configuration.
+> >> This patch ensures overlays are included in the sdcard (when
+> >> enabled) by defaulting to the inclusion of an empty
+> >> output/images/rpi-firmware/overlays directory in genimage cfg.
+> >>
+> >> The Pi's overlays are built with the following config
+> >> variables:
+> >> BR2_PACKAGE_RPI_FIRMWARE=y
+> >> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> >> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+> >> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> >> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+> >> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
+> >>
+> >> After building, the dtbo files are present in the
+> >> output/images/rpi-firmware/overlays directory but not added
+> >> to the sdcard because they are missing from the genimage cfg
+> >> file.  
+> > Thanks for suggested patch, the reasoning for genimage-raspberrypi3-64.cfg not
+> > containing a overlays entry is it is not needed for the raspberrypi3_64_defconfig
+> > use case (mind the buildroot minimalistic defconfig approach) in contrast to the
+> > raspberrypi3_defconfig where the overlay is needed for the pi3-miniuart-bt one...
+> >
+> > Adding a (maybe) empty overlays directory to the sdcard image would violate
+> > the minimalistic approach...  
+> 
+> 
+> With or without this patch, I see no viable way to update the device 
+> tree. Is there a method ?
+
+See e.g. configs/raspberrypi3_defconfig for a specialized case:
+
+	BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+
+> 
+> What is a Raspberry Pi without a method to support the addons and hats ?
+
+A minimalistic starting point for a minimal system, each add-on/hat
+would surely need additional packages/software, each customized system
+needs a customized configuration....
+
+> 
+> Do you have a method for supporting any of the various addons/hats which 
+> would normally work with an overlay line added to /boot/config.txt ?
+> 
+
+Or take a look at  '[RFC] raspberrypi: post-image.sh arguments as config.txt properties ' [1]
+for a more general approach... 
 
 Regards,
-Vadim Kochan
+Peter
+
+[1] https://patchwork.ozlabs.org/patch/1007728/
+
+> Matt
+> 
+> 
+> > Regards,
+> > Peter
+> >
+> > [Skipped CC to 'Matt Flax <flatmax@flatmax.org>' - mail server answers with 'mailbox unavailable']
+> >  
+> >> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+> >> ---
+> >>   board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+> >>   package/rpi-firmware/rpi-firmware.mk           | 4 ++++
+> >>   2 files changed, 5 insertions(+)
+> >>
+> >> diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> >> index 0d0ca750a7..af1d17cde7 100644
+> >> --- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> >> +++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> >> @@ -9,6 +9,7 @@ image boot.vfat {
+> >>         "rpi-firmware/config.txt",
+> >>         "rpi-firmware/fixup.dat",
+> >>         "rpi-firmware/start.elf",
+> >> +      "rpi-firmware/overlays",
+> >>         "Image"
+> >>       }
+> >>     }
+> >> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> >> index bb54904ae6..0df7b17cbd 100644
+> >> --- a/package/rpi-firmware/rpi-firmware.mk
+> >> +++ b/package/rpi-firmware/rpi-firmware.mk
+> >> @@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> >>   		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+> >>   	done
+> >>   endef
+> >> +else
+> >> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> >> +		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
+> >> +endef
+> >>   endif
+> >>   
+> >>   ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)  
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot  
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
