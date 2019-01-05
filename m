@@ -1,56 +1,47 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat,  5 Jan 2019 11:59:09 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: add option to enable generation of
- DTBs symbols
-Message-ID: <20190105105909.31359-1-titouan.christophe@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Jan 2019 14:40:47 +0100
+Subject: [Buildroot] [PATCH] package/systemd: set vconsole support
+ option to default y
+In-Reply-To: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
+References: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
+Message-ID: <20190105144047.552d69d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to compile device trees in Linux with symbol generation
-such that device tree overlays can be loaded on the target system
+Hello David,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- linux/Config.in | 8 ++++++++
- linux/linux.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+Thanks for this contribution!
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9a4d46e534..6d695be6c3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -392,6 +392,14 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	  You can provide a list of dts paths to copy and
- 	  build, separated by spaces.
- 
-+config BR2_LINUX_KERNEL_DTB_WITH_SYMBOLS
-+	bool "Enable the generation of symbols in the linux device tree"
-+	default n
-+	help
-+	  If enabled, pass the "-@" option to the device tree compiler,
-+	  such that symbols in compiled device tree are visible.
-+	  Choose this option to support devicetree overlays
-+
- endif
- 
- config BR2_LINUX_KERNEL_INSTALL_TARGET
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6bf2b88038..59c7268e49 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -381,6 +381,10 @@ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- # reproducibility, we use our owns rather than the host ones.
- LINUX_DEPENDENCIES += host-bison host-flex
- 
-+ifeq ($(BR2_LINUX_KERNEL_DTB_WITH_SYMBOLS),y)
-+	LINUX_MAKE_ENV += DTC_FLAGS=-@
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
+On Fri, 4 Jan 2019 21:35:23 +0000, David J. Fogle wrote:
+> package/systemd:? set vconsole support option to default y
+
+There is no need to repeat the commit title twice.
+
+> Without this support option enabled, systemd does not allow vterm switching, and could possibly lead to user lockout on tty1. 
+> 
+> We prevent these scenarios by enabling the vconsole tool default y, as console login is much more prevalent than not.
+
+I am not sure why you say "much more prevalent than not". I would say
+quite the opposite: in embedded systems, either there is no screen at
+all, or when there is a screen, it is used to display an end-user
+application and not a console login.
+
+> This allows the option to disable the tool if needed, but as this is a
+> rare usage, it is better to let a user decide they do *not* need it
+> than to expect them to know they *do*.
+
+I'm a bit unconvinced. What is the size impact of having this option
+enabled by default ?
+
+Also, make sure your commit log is wrapped to 72 characters.
+
+Thanks!
+
+Thomas
 -- 
-2.19.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
