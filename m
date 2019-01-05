@@ -1,44 +1,79 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sat,  5 Jan 2019 22:00:44 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/wine: Add gettext dependency for
- host-wine only with NLS enabled
-In-Reply-To: <20190105200046.31512-1-vadim4j@gmail.com>
-References: <20190105200046.31512-1-vadim4j@gmail.com>
-Message-ID: <20190105200046.31512-2-vadim4j@gmail.com>
+Date: Sat,  5 Jan 2019 22:00:43 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Add gettext-tiny package
+Message-ID: <20190105200046.31512-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Checked that host-wine compiles ok without host-gettext, so no
-needs to specify this dependency.
+Add lightweight alternative for the GNU gettext package - gettext-tiny.
+The sources are used from sabotage-linux project. Some files are used
+from the original gettext gnu like po/*, gettextize and some m4 files.
 
-libgettextpo is required by tools/wrc (https://linux.die.net/man/1/wrc)
-which allows to convert windows resources also to *.po format, which is
-not needed if NLS is disabled.
+The original gettext package is renamed to gettext-gnu because now gettext is
+a virtual package and gettext-gnu and gettext-tiny became as gettext providers.
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- package/wine/wine.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+The main purpose of gettext-tiny is to be used only for the host if NLS
+is not enabled.
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 78c8e6ab63..7e44e3c81d 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -307,8 +307,12 @@ WINE_CONF_OPTS += --without-zlib
- endif
- 
- # host-gettext is essential for .po file support in host-wine wrc
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- HOST_WINE_DEPENDENCIES += host-gettext
- HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+else
-+HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
-+endif
- 
- # Wine needs to enable 64-bit build tools on 64-bit host
- ifeq ($(HOSTARCH),x86_64)
+There was issue with using gettext-tiny for "wine" because it requires
+libgettextpo for wrc tool to be able translate Windows's resource files
+to *.pot, but this option might be disabled if NLS is disabled (done in
+patch 0001.
+
+v2:
+    1) Add patch to disable gettext option for "wine" if NLS is disabled.
+
+    2) Fix build issue with libuio by adding config.rpath by separate package
+       patch:
+
+           0002-Add-config.rpath-from-gettext-gnu-distro-0.19.8.1.patch
+
+    3) Use gettext-tiny only as for HOST alternative and if NLS is disabled.
+       There is no option to manually select gettext-gnu or gettext-tiny which
+       is controlled by gettext virtual package.
+
+    4) Drop "files" folder with copied files from original gettext gnu, but
+       download them from:
+
+           https://git.savannah.gnu.org/cgit/gettext.git
+
+       Thanks to Yann E. Morin for help with this.
+
+    5) gettextize is preprocessed from the original gettextize.in
+
+    6) Use only host-generic-package for gettext-tiny, hence remove "target"
+       related stuff.
+
+Vadim Kochan (3):
+  package/wine: Add gettext dependency for host-wine only with NLS
+    enabled
+  package/gettext: Turn into virtual package
+  package/gettext-tiny: Add new package
+
+ DEVELOPERS                                         |   3 +
+ .../0001-error_print_progname.patch                |   0
+ .../0002-Update-after-gnulib-changed.patch         |   0
+ .../gettext.hash => gettext-gnu/gettext-gnu.hash}  |   0
+ package/gettext-gnu/gettext-gnu.mk                 | 103 +++
+ ...-format-not-a-string-literal-error-for-gc.patch |  55 ++
+ ...ig.rpath-from-gettext-gnu-distro-0.19.8.1.patch | 709 +++++++++++++++++++++
+ package/gettext-tiny/gettext-tiny.hash             |  14 +
+ package/gettext-tiny/gettext-tiny.mk               | 104 +++
+ package/gettext/Config.in                          |  27 +-
+ package/gettext/gettext.mk                         |  96 +--
+ package/wine/wine.mk                               |   4 +
+ 12 files changed, 1016 insertions(+), 99 deletions(-)
+ rename package/{gettext => gettext-gnu}/0001-error_print_progname.patch (100%)
+ rename package/{gettext => gettext-gnu}/0002-Update-after-gnulib-changed.patch (100%)
+ rename package/{gettext/gettext.hash => gettext-gnu/gettext-gnu.hash} (100%)
+ create mode 100644 package/gettext-gnu/gettext-gnu.mk
+ create mode 100644 package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
+ create mode 100644 package/gettext-tiny/0002-Add-config.rpath-from-gettext-gnu-distro-0.19.8.1.patch
+ create mode 100644 package/gettext-tiny/gettext-tiny.hash
+ create mode 100644 package/gettext-tiny/gettext-tiny.mk
+
 -- 
 2.14.1
