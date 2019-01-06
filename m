@@ -1,32 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jan 2019 21:25:56 +0100
-Subject: [Buildroot] [git commit] exempi: fix comment entry quote
-Message-ID: <20190106202616.EA9CE826B4@busybox.osuosl.org>
+Date: Sun, 6 Jan 2019 21:30:34 +0100
+Subject: [Buildroot] [git commit] Makefile, manual,
+ website: Bump copyright year
+Message-ID: <20190106203113.9D67D884B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=688ffc7ae1cae4f90f837256668458003394485f
+commit: https://git.buildroot.net/buildroot/commit/?id=8e928a8389d88e0f64f04ee1b3aa4985dcfd373f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following warning:
-package/exempi/Config.in:14:warning: multi-line strings not supported
+Happy 2019!
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exempi/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile                   | 2 +-
+ docs/manual/manual.txt     | 2 +-
+ docs/website/copyright.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/exempi/Config.in b/package/exempi/Config.in
-index 0fa4b473bc..ed71e0fb12 100644
---- a/package/exempi/Config.in
-+++ b/package/exempi/Config.in
-@@ -11,5 +11,5 @@ config BR2_PACKAGE_EXEMPI
+diff --git a/Makefile b/Makefile
+index 47df9e4842..9f4d037cca 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2018 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2019 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 9d5076047f..4eb4ba9bf0 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
+ file in the Buildroot sources for the full text of this license.
  
- 	  http://libopenraw.freedesktop.org/wiki/Exempi
+-Copyright (C) 2004-2018 The Buildroot developers
++Copyright (C) 2004-2019 The Buildroot developers
  
--comment "exempi needs a toolchain w/ C++, dynamic library, threads
-+comment "exempi needs a toolchain w/ C++, dynamic library, threads"
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ image::logo.png[]
+ 
+diff --git a/docs/website/copyright.txt b/docs/website/copyright.txt
+index b8ad36af99..600bf7df77 100644
+--- a/docs/website/copyright.txt
++++ b/docs/website/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2018 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2019 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
