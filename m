@@ -1,31 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Jan 2019 21:08:48 +0100
-Subject: [Buildroot] [PATCH] package/solarus: update license.txt file
- hash and remove license_gpl.txt hash.
-In-Reply-To: <20190102231026.8189-1-romain.naour@gmail.com> (Romain Naour's
- message of "Thu, 3 Jan 2019 00:10:25 +0100")
-References: <20190102231026.8189-1-romain.naour@gmail.com>
-Message-ID: <87k1jhft0v.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2019 21:09:32 +0100
+Subject: [Buildroot] [PATCH] package/ed: bump to version 1.15
+In-Reply-To: <fbc76c727c1fe7defcf8dd28728b700d4b4122ed.1546797456.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 6 Jan 2019 19:57:36 +0200")
+References: <fbc76c727c1fe7defcf8dd28728b700d4b4122ed.1546797456.git.baruch@tkos.co.il>
+Message-ID: <87ftu5fszn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The license.txt file has been updated with Solarus Free Resource Pack URL.
- > Before version 1.6.0, the archive was downloaded from github and license_gpl.txt
- > file which is present in the git repository.
- > Since version 1.6.0, the archive is downloaded from [1] but the license_gpl.txt
- > file is missing.
+ > Drop ED_CONF_OPTS; unused since commit 2a37b625e2 ("ed: Convert to
+ > generic package infrastructure").
 
- > This has been reported upstream [2].
+ > Add license file hash.
 
- > [1] http://www.solarus-games.org
- > [2] https://gitlab.com/solarus-games/solarus/issues/1328
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
