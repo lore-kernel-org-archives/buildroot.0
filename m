@@ -1,34 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Jan 2019 20:58:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/irqbalance: bump to version
- 1.5.0
-In-Reply-To: <20190104105341.25481-1-F.LaRoche@pilz.de> (Florian La Roche's
- message of "Fri, 4 Jan 2019 11:53:41 +0100")
-References: <20190104105341.25481-1-F.LaRoche@pilz.de>
-Message-ID: <87sgy5fthp.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2019 21:01:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php_zmq: fix build with php
+ 7.3.0
+In-Reply-To: <20190104044716.34134-1-fhunleth@troodon-software.com> (Frank
+ Hunleth's message of "Thu, 3 Jan 2019 23:47:16 -0500")
+References: <20190104044716.34134-1-fhunleth@troodon-software.com>
+Message-ID: <87o98tftds.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Florian" == Florian La Roche <F.LaRoche@pilz.de> writes:
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- > From the upstream changelog:
- > New Features in irqbalance 1.5.0
- > * file based socket ipc mechanism
- > * support for multiple policy scripts
- > * add some sandboxing support
- > * enhanced debug output
- > * Imroved irq type determination for ARM
- > Bugs fixed:
- > * Fixed xen event interrupt detection
- > * Fix node parsing in sysfs
- > * Covscan fixes
- > * Fix use on systems without a pci bus
- > * Various other cleanups
+ > This includes an patch that fixes the following error:
+ > ```
+ > /home/buildroot/build/instance-0/output/build/php-zmq-1.1.3/zmq.c: In function 'php_zmq_context_get':
+ > /home/buildroot/build/instance-0/output/build/php-zmq-1.1.3/zmq.c:238:20: error: lvalue required as left operand of assignment
+ >    GC_REFCOUNT(&le) = 1;
+ >                     ^
+ > /home/buildroot/build/instance-0/output/build/php-zmq-1.1.3/zmq.c: In function 'php_zmq_socket_store':
+ > /home/buildroot/build/instance-0/output/build/php-zmq-1.1.3/zmq.c:538:19: error: lvalue required as left operand of assignment
+ >   GC_REFCOUNT(&le) = 1;
+ > ```
 
- > Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+ > The patch was created from the PR at:
+
+ > https://github.com/mkoppanen/php-zmq/pull/195
+
+ > Upstream has not merged the PR. Fixes:
+
+ > http://autobuild.buildroot.org/results/3f2/3f258fbc7352c3d7205bc6402145be1102d69683
+
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
 Committed, thanks.
 
