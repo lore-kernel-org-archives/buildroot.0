@@ -1,31 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Jan 2019 20:58:05 +0100
-Subject: [Buildroot] [PATCH 1/1] strace: bump to version 4.26
-In-Reply-To: <20190104154627.9472-1-nicolas.cavallari@green-communications.fr>
- (Nicolas Cavallari's message of "Fri, 4 Jan 2019 16:46:27 +0100")
-References: <20190104154627.9472-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <87wonhftiq.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2019 20:58:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/irqbalance: bump to version
+ 1.5.0
+In-Reply-To: <20190104105341.25481-1-F.LaRoche@pilz.de> (Florian La Roche's
+ message of "Fri, 4 Jan 2019 11:53:41 +0100")
+References: <20190104105341.25481-1-F.LaRoche@pilz.de>
+Message-ID: <87sgy5fthp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+>>>>> "Florian" == Florian La Roche <F.LaRoche@pilz.de> writes:
 
- > The licence changed from BSD to LGPL 2.1 or later, update this
- > accordingly.
+ > From the upstream changelog:
+ > New Features in irqbalance 1.5.0
+ > * file based socket ipc mechanism
+ > * support for multiple policy scripts
+ > * add some sandboxing support
+ > * enhanced debug output
+ > * Imroved irq type determination for ARM
+ > Bugs fixed:
+ > * Fixed xen event interrupt detection
+ > * Fix node parsing in sysfs
+ > * Covscan fixes
+ > * Fix use on systems without a pci bus
+ > * Various other cleanups
 
- > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- > ---
- >  package/strace/strace.hash | 7 ++++---
- >  package/strace/strace.mk   | 6 +++---
- >  2 files changed, 7 insertions(+), 6 deletions(-)
-
- > runtime-tested on an arm with uclibc.
-
- > diff --git a/package/strace/strace.hash b/package/strace/strace.hash
- > index f7d652faaa..fe58f2391a 100644
+ > Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 
 Committed, thanks.
 
