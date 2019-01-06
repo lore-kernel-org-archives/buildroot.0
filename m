@@ -1,54 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jan 2019 21:09:12 +0100
-Subject: [Buildroot] [git commit] package/ed: bump to version 1.15
-Message-ID: <20190106200957.131D389104@busybox.osuosl.org>
+Date: Sun, 6 Jan 2019 21:05:48 +0100
+Subject: [Buildroot] [git commit] package/solarus: update license.txt file
+ hash and remove license_gpl.txt hash.
+Message-ID: <20190106200957.0BA0C838F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8adb680dd4b66078e1ecf3faa34c85f62c0190cf
+commit: https://git.buildroot.net/buildroot/commit/?id=3acbb51e6b7835d524274fdb791ba3f3f0219500
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop ED_CONF_OPTS; unused since commit 2a37b625e2 ("ed: Convert to
-generic package infrastructure").
+The license.txt file has been updated with Solarus Free Resource Pack URL.
 
-Add license file hash.
+Before version 1.6.0, the archive was downloaded from github and license_gpl.txt
+file which is present in the git repository.
+Since version 1.6.0, the archive is downloaded from [1] but the license_gpl.txt
+file is missing.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This has been reported upstream [2].
+
+[1] http://www.solarus-games.org
+[2] https://gitlab.com/solarus-games/solarus/issues/1328
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ed/ed.hash | 6 ++++--
- package/ed/ed.mk   | 5 +----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/solarus/solarus.hash | 3 +--
+ package/solarus/solarus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/ed/ed.hash b/package/ed/ed.hash
-index 1aa00c0486..96c814d3c2 100644
---- a/package/ed/ed.hash
-+++ b/package/ed/ed.hash
-@@ -1,2 +1,4 @@
--# From http://lists.gnu.org/archive/html/bug-ed/2017-02/msg00005.html
--sha256	f57962ba930d70d02fc71d6be5c5f2346b16992a455ab9c43be7061dec9810db	ed-1.14.2.tar.lz
-+# From http://lists.gnu.org/archive/html/bug-ed/2019-01/msg00010.html
-+sha256	ad4489c0ad7a108c514262da28e6c2a426946fb408a3977ef1ed34308bdfd174	ed-1.15.tar.lz
-+# Locally calculated
-+sha256	f03a12bef9dfb7281864a0dd965166d4f4ec7a66633df2bc72fa4363e57de02c	COPYING
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index ada0316a27..6ef8f951cf 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,12 +4,9 @@
- #
- ################################################################################
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+index e4a7a3a6b6..dab8d1a1fa 100644
+--- a/package/solarus/solarus.hash
++++ b/package/solarus/solarus.hash
+@@ -1,5 +1,4 @@
+ # Locally calculated
+ sha256 d800fdf388f860732f2d40c8dd635c34fd1c452857f75bf9b3a421e3ef5ee751  solarus-1.6.0-src.tar.gz
  
--ED_VERSION = 1.14.2
-+ED_VERSION = 1.15
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_SOURCE = ed-$(ED_VERSION).tar.lz
--ED_CONF_OPTS = \
--	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--	LDFLAGS="$(TARGET_LDFLAGS)"
- ED_LICENSE = GPL-3.0+
- ED_LICENSE_FILES = COPYING
+-sha256 09cb24006b6a3f2698d8851dc5df4f413c1a98e20d4008bffd76ec236f14244d  license.txt
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  license_gpl.txt
++sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+index d43527691e..fd7bbea2c7 100644
+--- a/package/solarus/solarus.mk
++++ b/package/solarus/solarus.mk
+@@ -10,7 +10,7 @@ SOLARUS_SOURCE = solarus-$(SOLARUS_VERSION)-src.tar.gz
  
+ SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
+ 	CC-BY-SA-3.0 (GUI icons)
+-SOLARUS_LICENSE_FILES = license.txt license_gpl.txt
++SOLARUS_LICENSE_FILES = license.txt
+ 
+ # Install libsolarus.so
+ SOLARUS_INSTALL_STAGING = YES
