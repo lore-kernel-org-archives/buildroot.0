@@ -1,7 +1,7 @@
-From: David Picard <dplamp@gmx.com>
-Date: Mon, 7 Jan 2019 10:36:15 +0100
-Subject: [Buildroot] Grub2 can't find /dev/sda1
-Message-ID: <702b67a9-8725-8fd8-5642-8a6d896e388a@gmx.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 7 Jan 2019 10:38:27 +0100
+Subject: [Buildroot] Package definition for gst-shark
+Message-ID: <872f55f9-bcb8-f41d-16d6-ee43f01ff334@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +10,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-Platform : i386 with BIOS, PC/104, CompactFlash card
+I'm trying to implement a Buildroot package for gst-shark [1]. For
+"autogen.sh", it clones
 
-I generated an image to boot with Grub2. I used the genimage config in 
-buildroot/board/pc. I could test it successfully with QEMU (I just 
-change /dev/sda1 to /dev/vda1 at boot prompt).
+  git://anongit.freedesktop.org/gstreamer/common
 
-However, I can't boot on the real board. The boot process hang with 
-"Waiting for root device /dev/sda1". When I type "set" in the grub 
-shell, I get (among other things) :
-grub_cpu=i386
-grub_platform=pc
-prefix=(hd0,msdos1)/boot/grub
-root=hd0,msdos1
+into it's source tree using "git submodule init/update". I think copying
+that directory from the build directory of BR2_PACKAGE_GSTREAMER1 would
+do the job. Is there an environment variable pointing to that build
+directory? Or how can I construct the path?
 
-Any idea ?
+Any other ideas?
+
+[1] https://developer.ridgerun.com/wiki/index.php?title=GstShark
+
+Wolfgang.
