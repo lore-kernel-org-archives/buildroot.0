@@ -1,54 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  7 Jan 2019 23:05:23 +0100
-Subject: [Buildroot] [PATCH 01/19] infra/pkg-generic: display MESSAGE before
+Date: Mon,  7 Jan 2019 23:05:24 +0100
+Subject: [Buildroot] [PATCH 02/19] infra/pkg-generic: create $(@D) before
  running PRE_HOOKS
 In-Reply-To: <cover.1546898693.git.yann.morin.1998@free.fr>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
-Message-ID: <ae12267ba7e9adc1dd34cffb99de6fc2ed4b8fcb.1546898693.git.yann.morin.1998@free.fr>
+Message-ID: <bc9beba1e5a9552273015d7f29f55a4aa249f73f.1546898693.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... so that we have a consistent behaviour throughout all steps.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f5cab2b9c2..7602765139 100644
+index 7602765139..6581ffa5e8 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -133,7 +133,6 @@ endif
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
- 	@$(call step_start,download)
--	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- # Only show the download message if it isn't already downloaded
- 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
- 		if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
-@@ -141,6 +140,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+@@ -140,18 +140,18 @@ $(BUILD_DIR)/%/.stamp_downloaded:
  			break ; \
  		fi ; \
  	done
-+	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
++	$(Q)mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
  	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
-@@ -302,9 +302,9 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
-+	@$(call MESSAGE,"Installing to images directory")
- 	@mkdir -p $(BINARIES_DIR)
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
--	@$(call MESSAGE,"Installing to images directory")
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call step_end,install-image)
+-	$(Q)mkdir -p $(@D)
+ 	@$(call step_end,download)
+ 	$(Q)touch $@
+ 
+ # Retrieve actual source archive, e.g. for prebuilt external toolchains
+ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+ 	@$(call step_start,actual-download)
++	$(Q)mkdir -p $(@D)
+ 	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
+-	$(Q)mkdir -p $(@D)
+ 	@$(call step_end,actual-download)
+ 	$(Q)touch $@
+ 
+@@ -159,8 +159,8 @@ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call step_start,extract)
+ 	@$(call MESSAGE,"Extracting")
++	$(Q)mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+-	$(Q)mkdir -p $(@D)
+ 	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+ 	$(Q)chmod -R +rw $(@D)
 -- 
 2.14.1
