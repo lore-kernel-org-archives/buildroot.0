@@ -1,386 +1,200 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon,  7 Jan 2019 11:24:55 +0100
-Subject: [Buildroot] [PATCH v3 4/7] optee-test: new package
+Date: Mon,  7 Jan 2019 11:24:58 +0100
+Subject: [Buildroot] [PATCH v3 7/7] configs/qemu_aarch64_tz_virt: AArch64
+ emulation with TrustZone services
 In-Reply-To: <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
 References: <1542996547-5003-1-git-send-email-etienne.carriere@linaro.org>
  <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1546856698-20032-4-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1546856698-20032-7-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OP-TEE test package provide test materials as part of the OP-TEE
-project helping platforms to verify their OP-TEE components
-against a set of regression and performance tests.
+This change introduces a Qemu board for an AArch64 target executing
+with OP-TEE secure world services.
 
-Package is added in the BR package configuration next to the
-OP-TEE client package.
+The target Linux based normal world embeds the standard minimal
+filesystem with OP-TEE non-secure components embedded files from
+OP-TEE client, test, examples and benchmark packages.
 
-This change references in Buildroot the today's latest OP-TEE
-revision release tagged 3.3.0 with few added patches:
-- fix an issue with the CMake files,
-- fix few issues with recent GCC releases (8.x)
+The Linux custom configuration is dumped from the qemu/aarch64-virt board
+with few added fragments: OP-TEE driver and 9p for virtual filesystem to
+ease file manipulation and exchanges through Qemu virtfs support.
+
+The standard way for booting OP-TEE with a non-secure world companion
+use the Arm Trusted Firmware-A as bootloader. OP-TEE OS provides the
+BL32 image and U-boot the BL33 image. The proposed board enables OP-TEE
+and U-boot build for this. However package boot/arm-trusted-firmware
+needs few changes to build OP-TEE compliant TF-A images.
+
+Therefore the proposed board allows one to build the images but not
+yet to run the target with the built Qemu host tool.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
-Changes v2 -> v3:
-  - Add an entry in file DEVELOPERS.
-  - Clean Config.in layout and description sections.
-  - Drop BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION.
-  - Clean optee-test.mk layout.
-  - Replace common optee-test.hash with per-version .hash files.
-  - Patch optee_benchmark 3.3.0 against an issue reported by GCC warns.
-  - Remove dependency of BR2_PACKAGE_OPTEE_EXAMPLES and Arm architecture.
-    As the package depends on BR2_TARGET_OPTEE_OS, leave it to optee-os
-    to define the supported architectures.
-
-Changes v1 -> v2:
-  - Replace BR2_arm with BR2_ARM_CPU_ARMV7 as OP-TEE supports only
-    BR2_ARM_CPU_ARMV7 architectures among the 32bit Arm machines.
-  - Add missing dependency on BR2_TARGET_OPTEE_OS and select
-    BR2_PACKAGE_OPTEE_CLIENT when enabled.
-  - Add option BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION to ensure
-    OP-TEE test version is synced with OP-TEE OS version.
-  - Fix official repo URL in Config.in package description.
-  - Remove useless OPTEE_TEST_INSTALL_STAGING=YES.
-  - Do not force output build directory and rely on native one: out/.
+Changes v2 -> v3
+  - New change to introduce a board that at least builds Aarch64 OP-TEE.
 
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../optee-test/3.3.0/0001-cmake-rely-on-C.patch    | 32 +++++++++++
- ...ent-unexpected-build-warning-with-strncpy.patch | 54 +++++++++++++++++++
- ...egression-4011-correct-potential-overflow.patch | 60 +++++++++++++++++++++
- package/optee-test/3.3.0/optee-test.hash           |  4 ++
- package/optee-test/Config.in                       | 63 ++++++++++++++++++++++
- package/optee-test/optee-test.mk                   | 45 ++++++++++++++++
- 8 files changed, 260 insertions(+)
- create mode 100644 package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
- create mode 100644 package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
- create mode 100644 package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
- create mode 100644 package/optee-test/3.3.0/optee-test.hash
- create mode 100644 package/optee-test/Config.in
- create mode 100644 package/optee-test/optee-test.mk
+ board/qemu/aarch64-tz-virt/linux.config  | 63 ++++++++++++++++++++++++++++++++
+ board/qemu/aarch64-tz-virt/readme.txt    | 11 ++++++
+ board/qemu/aarch64-tz-virt/u-boot.config |  3 ++
+ configs/qemu_aarch64_tz_virt_defconfig   | 47 ++++++++++++++++++++++++
+ 4 files changed, 124 insertions(+)
+ create mode 100644 board/qemu/aarch64-tz-virt/linux.config
+ create mode 100644 board/qemu/aarch64-tz-virt/readme.txt
+ create mode 100644 board/qemu/aarch64-tz-virt/u-boot.config
+ create mode 100644 configs/qemu_aarch64_tz_virt_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c9f2e00..28ba658 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -685,6 +685,7 @@ N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
- F:	package/optee-client/
- F:	package/optee-examples/
-+F:	package/optee-test/
- 
- N:	Eugene Tarassov <eugene@largest.net>
- F:	package/tcf-agent/
-diff --git a/package/Config.in b/package/Config.in
-index b76db17..e5b6dad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2078,6 +2078,7 @@ menu "Security"
- 	source "package/checkpolicy/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
-+	source "package/optee-test/Config.in"
- 	source "package/paxtest/Config.in"
- 	source "package/policycoreutils/Config.in"
- 	source "package/refpolicy/Config.in"
-diff --git a/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
+diff --git a/board/qemu/aarch64-tz-virt/linux.config b/board/qemu/aarch64-tz-virt/linux.config
 new file mode 100644
-index 0000000..ea7b966
+index 0000000..49b7ac6
 --- /dev/null
-+++ b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
-@@ -0,0 +1,32 @@
-+cmake: component rely on C support
-+
-+Without specifing optee_client source expects only C source file
-+support cmake may attempt to look for resources as g++. When
-+building with environments that do not provide such tools as when
-+building from native buildroot ofr a qemu target, optee_client
-+fails to build. This change ensure a minimal C support allows to
-+build optee_client with cmake.
-+
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0290205..a3fd269 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,5 @@
-+ cmake_minimum_required (VERSION 3.2)
-++project (optee_test C)
-+ 
-+ # Default cross compile settings
-+ set (CMAKE_TOOLCHAIN_FILE CMakeToolchain.txt)
-+diff --git a/ta/CMakeLists.txt b/ta/CMakeLists.txt
-+index 22d7727..795237e 100644
-+--- a/ta/CMakeLists.txt
-++++ b/ta/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-project (xtest-ta-headers)
-++project (xtest-ta-headers C)
-+ 
-+ add_library(${PROJECT_NAME} INTERFACE)
-+ 
-diff --git a/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch b/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
-new file mode 100644
-index 0000000..55e796b
---- /dev/null
-+++ b/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
-@@ -0,0 +1,54 @@
-+commit 30db8e0261fabe83bea6eb1922d9581e140125b6
-+Author: Etienne Carriere <etienne.carriere@linaro.org>
-+Date:   Fri Dec 21 15:36:00 2018 +0100
-+
-+    xtest: prevent unexpected build warning with strncpy
-+    
-+    This change modifies adbg_run.c to prevent a false positive
-+    warning reported by GCC 8.2 on usage of strncpy():
-+    
-+        build/optee_test/host/xtest/adbg/src/adbg_run.c: In function 'Do_ADBG_AppendToSuite':
-+        build/optee_test/host/xtest/adbg/src/adbg_run.c:103:3: error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
-+           strncpy(p, Source_p->SuiteID_p, size);
-+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+        build/optee_test/host/xtest/adbg/src/adbg_run.c:88:9: note: length computed here
-+          size = strlen(Source_p->SuiteID_p);
-+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-+        cc1: all warnings being treated as errors
-+    
-+    From [1]:
-+      Using strncpy Safely
-+      In general, it is not possible to avoid string truncation by strncpy
-+      except by sizing the destination to be at least a byte larger than
-+      the length of the source string. With that approach, however, using
-+      strncpy becomes unnecessary and the function can be avoided in favor
-+      of other APIs such as strcpy or (less preferably) memcpy. Much has
-+      been written about the problems with strncpy and we recommend to
-+      avoid it whenever possible. It is, however, worth keeping in mind
-+      that unlike other standard string-handling functions, strncpy always
-+      writes exactly as many characters as specified by the third argument;
-+      if the source string is shorter, the function fills the remaining
-+      bytes with NULs.
-+    
-+    This change prefers using a snprintf() as used in the alternate
-+    instruction block of the strncpy() call.
-+    
-+    [1] https://developers.redhat.com/blog/2018/05/24/detecting-string-truncation-with-gcc-8/
-+    
-+    Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+    Signed-off-by: Simon Hughes <simon.hughes@arm.com>
-+    Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
-+
-+diff --git a/host/xtest/adbg/src/adbg_run.c b/host/xtest/adbg/src/adbg_run.c
-+index 406e429..2739db5 100644
-+--- a/host/xtest/adbg/src/adbg_run.c
-++++ b/host/xtest/adbg/src/adbg_run.c
-+@@ -100,7 +100,7 @@ int Do_ADBG_AppendToSuite(
-+ 		snprintf(p, size, "%s+%s", Dest_p->SuiteID_p,
-+ 			 Source_p->SuiteID_p);
-+ 	else
-+-		strncpy(p, Source_p->SuiteID_p, size);
-++		snprintf(p, size, "%s", Source_p->SuiteID_p);
-+ 	free((void *)Dest_p->SuiteID_p);
-+ 	Dest_p->SuiteID_p = p;
-+ 
-diff --git a/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch b/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
-new file mode 100644
-index 0000000..77b7cd7
---- /dev/null
-+++ b/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
-@@ -0,0 +1,60 @@
-+commit 4e352aad0cfceeec1d9adde879a034039a0cf267
-+Author: Etienne Carriere <etienne.carriere@linaro.org>
-+Date:   Fri Dec 21 15:36:25 2018 +0100
-+
-+    regression 4011: correct potential overflow
-+    
-+    Fix issues reported by GCC 8.2.0.
-+    
-+    build/optee_test/host/xtest/regression_4000.c: In function 'xtest_tee_test_4011':
-+    build/optee_test/host/xtest/regression_4000.c:5029:3: error: 'memmove' pointer overflow between offset [0, 8] and size [4294967295, 2147483647] accessing array 'tmp' with type 'uint8_t[1024]' {aka 'unsigned char[1024]'} [-Werror=array-bounds]
-+       memmove(tmp + n + i, tmp + m, tmp_size - m);
-+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    build/optee_test/host/xtest/regression_4000.c:4927:10: note: array 'tmp' declared here
-+      uint8_t tmp[1024];
-+              ^~~
-+    build/optee_test/host/xtest/regression_4000.c:5029:3: error: 'memmove' specified size 4294967295 exceeds maximum object size 2147483647 [-Werror=stringop-overflow=]
-+       memmove(tmp + n + i, tmp + m, tmp_size - m);
-+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+    cc1: all warnings being treated as errors
-+    
-+    Reported-by: Simon Hughes <simon.hughes@arm.com>
-+    Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+    Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
-+
-+diff --git a/host/xtest/regression_4000.c b/host/xtest/regression_4000.c
-+index 766aad2..205a226 100644
-+--- a/host/xtest/regression_4000.c
-++++ b/host/xtest/regression_4000.c
-+@@ -5018,18 +5018,28 @@ static void xtest_tee_test_4011(ADBG_Case_t *c)
-+ 				out, out_size, tmp, &tmp_size)))
-+ 			goto out;
-+ 
-++		if (!ADBG_EXPECT_COMPARE_UNSIGNED(c, tmp_size, <=, sizeof(tmp)))
-++			goto out;
-++
-+ 		/* 4.1 */
-+-		for (n = 0; n < tmp_size; n++)
-++		for (n = 0; n < tmp_size - i; n++)
-+ 			if (tmp[n] == 0xff)
-+ 				break;
-++
-++		/* Shall find@least a padding start before buffer end */
-++	        if (!ADBG_EXPECT_COMPARE_UNSIGNED(c, n, <, tmp_size - i - 1))
-++			goto out;
-++
-+ 		for (m = n + 1; m < tmp_size; m++)
-+ 			if (tmp[m] != 0xff)
-+ 				break;
-++
-+ 		/* 4.2 */
-+ 		memmove(tmp + n + i, tmp + m, tmp_size - m);
-++
-+ 		/* 4.3 */
-+-		for (n = n + tmp_size - m + i; n < tmp_size; n++)
-+-			tmp[n] = 0;
-++		n = n + i + tmp_size - m;
-++		memset(tmp + n, 0, tmp_size - n);
-+ 
-+ 		/* 5 */
-+ 		out_size = sizeof(out);
-diff --git a/package/optee-test/3.3.0/optee-test.hash b/package/optee-test/3.3.0/optee-test.hash
-new file mode 100644
-index 0000000..0da2212
---- /dev/null
-+++ b/package/optee-test/3.3.0/optee-test.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/OP-TEE/optee_test/archive/3.3.0.tar.gz
-+sha256 9651d5db0d28856e45d6bc25ce603bfcf641435bd3264d95b449f093665c8521  optee-test-3.3.0.tar.gz
-+# Locally computed
-+sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
-new file mode 100644
-index 0000000..40ac8e8
---- /dev/null
-+++ b/package/optee-test/Config.in
++++ b/board/qemu/aarch64-tz-virt/linux.config
 @@ -0,0 +1,63 @@
-+config BR2_PACKAGE_OPTEE_TEST
-+	bool "optee-test"
-+	depends on BR2_TARGET_OPTEE_OS
-+	select BR2_PACKAGE_OPTEE_CLIENT
-+	help
-+	  This build option enables OP-TEE test package from the
-+	  OP-TEE project. It helps platforms to verify the OP-TEE
-+	  installation against a set of regression and performance
-+	  tests.
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_TASKSTATS=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_PROFILING=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_ARCH_VEXPRESS=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_BINFMT_MISC=y
++CONFIG_COMPAT=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_PACKET_DIAG=y
++CONFIG_UNIX=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_BRIDGE=m
++CONFIG_NET_SCHED=y
++CONFIG_VSOCKETS=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_VIRTIO=y
++CONFIG_ATA=y
++CONFIG_NETDEVICES=y
++CONFIG_DUMMY=y
++CONFIG_MACVLAN=y
++CONFIG_VIRTIO_NET=y
++CONFIG_NLMON=y
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_RTC_CLASS=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_MAILBOX=y
++CONFIG_PL320_MBOX=y
++CONFIG_EXT4_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++### Enable OP-TEE
++CONFIG_TEE=y
++CONFIG_OPTEE=y
++### Enable 9P VFS
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_9P_FS=y
++CONFIG_9P_FS_POSIX_ACL=y
 +
-+	  The package generates userspace test applications and
-+	  data files for the Linux userland. It also generates
-+	  OP-TEE trusted applications.
-+
-+	  Trusted application binary files are installed in the target
-+	  directory /lib/optee_armtz as other trusted applications.
-+	  At runtime OP-TEE OS can load trusted applications from this
-+	  non-secure filesystem/directory into the secure world for
-+	  execution.
-+
-+	  http://github.com/OP-TEE/optee_test
-+
-+if BR2_PACKAGE_OPTEE_TEST
-+
-+choice
-+	prompt "version"
-+	default BR2_PACKAGE_OPTEE_TEST_LATEST
-+	help
-+	  Select the version of OP-TEE test you want to use
-+
-+config BR2_PACKAGE_OPTEE_TEST_LATEST
-+	bool "3.3.0"
-+	help
-+	  This fetches the registered release tag from the
-+	  OP-TEE official Git repository.
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  Sync with a specific OP-TEE Git repository.
-+
-+endchoice
-+
-+if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by
-+	  Git E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
-+config BR2_PACKAGE_OPTEE_TEST_VERSION
-+	string
-+	default "3.3.0"	if BR2_PACKAGE_OPTEE_TEST_LATEST
-+	default BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION \
-+			if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
-+
-+endif #BR2_PACKAGE_OPTEE_TEST
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+diff --git a/board/qemu/aarch64-tz-virt/readme.txt b/board/qemu/aarch64-tz-virt/readme.txt
 new file mode 100644
-index 0000000..0ec7238
+index 0000000..ec91d2e
 --- /dev/null
-+++ b/package/optee-test/optee-test.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# optee-test
-+#
-+################################################################################
++++ b/board/qemu/aarch64-tz-virt/readme.txt
+@@ -0,0 +1,11 @@
++Board qemu_aarch64_tz_virt builds a Qemu Armv8-A target with
++OP-TEE running in the TrustZone secure wolrd setup and a Linux based
++OS running in the non-secure wolrd.
 +
-+OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
-+OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
-+OPTEE_TEST_LICENSE_FILES = LICENSE.md
++This setup is usually booted with the Arm Trsuted Firmware-A (TF-A from
++package boot/arm-trusted-firmware). However the current Buildroot package
++needs few changes to build TF-A for OP-TEE support.
 +
-+OPTEE_TEST_DEPENDENCIES = optee-client optee-os
++Until BR arm-trusted-firmware is updated this board allows one to only
++build the secure and non-secure boot images if not the BIOS for the Qemu
++host.
+diff --git a/board/qemu/aarch64-tz-virt/u-boot.config b/board/qemu/aarch64-tz-virt/u-boot.config
+new file mode 100644
+index 0000000..5588008
+--- /dev/null
++++ b/board/qemu/aarch64-tz-virt/u-boot.config
+@@ -0,0 +1,3 @@
++CONFIG_SYS_TEXT_BASE=0x60000000
++CONFIG_BOOTCOMMAND="fdt addr ${fdt_addr} && fdt resize 1000 && smhload zImage ${kernel_addr_r} && smhload rootfs.cpio.gz ${ramdisk_addr_r} ramdisk_addr_end &&  setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && fdt chosen ${ramdisk_addr_r} ${ramdisk_addr_end} && bootz ${kernel_addr_r} - ${fdt_addr}"
++CONFIG_SEMIHOSTING=y
+diff --git a/configs/qemu_aarch64_tz_virt_defconfig b/configs/qemu_aarch64_tz_virt_defconfig
+new file mode 100644
+index 0000000..9286d15
+--- /dev/null
++++ b/configs/qemu_aarch64_tz_virt_defconfig
+@@ -0,0 +1,47 @@
++# Architecture
++BR2_aarch64=y
 +
-+ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT),y)
-+OPTEE_TEST_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL))
-+OPTEE_TEST_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(OPTEE_TEST_SOURCE)
-+else
-+OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
-+endif
++# System
++BR2_SYSTEM_DHCP="eth0"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 +
-+ifeq ($(BR2_aarch64),y)
-+OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
-+endif
-+ifeq ($(BR2_arm),y)
-+OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
-+endif
-+OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_TEST_SDK)
++# Filesystem
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
 +
-+# Trusted Application are not built from CMake due to ta_dev_kit dependencies.
-+# We must build and install them on target.
-+define OPTEE_TEST_BUILD_TAS
-+	@$(foreach f,$(wildcard $(@D)/ta/*/Makefile), \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+			TA_DEV_KIT_DIR=$(OPTEE_TEST_SDK) \
-+			-C $(dir $f) all &&) true
-+endef
-+define OPTEE_TEST_INSTALL_TAS
-+	@mkdir -p $(TARGET_DIR)/lib/optee_armtz
-+	@$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz $(@D)/ta/*/*.ta
-+endef
-+OPTEE_TEST_POST_BUILD_HOOKS += OPTEE_TEST_BUILD_TAS
-+OPTEE_TEST_POST_INSTALL_TARGET_HOOKS += OPTEE_TEST_INSTALL_TAS
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
 +
-+$(eval $(cmake-package))
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-tz-virt/linux.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# TF-A for booting OP-TEE secure and uboot/linux non secure
++# POSTPONED: depends on boot/arm-trusted-firmware support for Armv7-A
++
++# OP-TEE components
++BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_armv8a"
++BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_TEE_CORE_DEBUG=n CFG_UNWIND=n CFG_TEE_CORE_LOG_LEVEL=2"
++BR2_PACKAGE_OPTEE_CLIENT=y
++BR2_PACKAGE_OPTEE_TEST=y
++BR2_PACKAGE_OPTEE_EXAMPLES=y
++BR2_PACKAGE_OPTEE_BENCHMARK=y
++
++# Need a non-secure bootloader for the dear Linux kernel: U-boot? UEFI?
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm64"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-tz-virt/u-boot.config"
++
++# Qemu emulator for the Arm target
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
++BR2_PACKAGE_HOST_QEMU_VIRTFS=y
 -- 
 1.9.1
