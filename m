@@ -1,158 +1,286 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon,  7 Jan 2019 11:24:54 +0100
-Subject: [Buildroot] [PATCH v3 3/7] optee-examples: new package
+Date: Mon,  7 Jan 2019 11:24:55 +0100
+Subject: [Buildroot] [PATCH v3 4/7] optee-test: new package
 In-Reply-To: <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
 References: <1542996547-5003-1-git-send-email-etienne.carriere@linaro.org>
  <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1546856698-20032-3-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1546856698-20032-4-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package generates embedded Linux based OS userland client
-applications and OP-TEE OS trusted applications all embedded in
-the file system. These applications shows how to use the APIs
-OP-TEE OS is based on, both in the non secure and secure worlds.
+OP-TEE test package provide test materials as part of the OP-TEE
+project helping platforms to verify their OP-TEE components
+against a set of regression and performance tests.
 
-Package is added next to the OP-TEE client package in the BR
-package configuration.
+Package is added in the BR package configuration next to the
+OP-TEE client package.
 
 This change references in Buildroot the today's latest OP-TEE
-revision release tagged 3.3.0 with an added patch to fix an issue
-reported by recent GCC toolchains.
+revision release tagged 3.3.0 with few added patches:
+- fix an issue with the CMake files,
+- fix few issues with recent GCC releases (8.x)
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v2 -> v3:
   - Add an entry in file DEVELOPERS.
   - Clean Config.in layout and description sections.
-  - Drop BR2_PACKAGE_OPTEE_EXAMPLES_SYNCED_VERSION.
-  - Clean optee-examples.mk layout.
-  - Replace common optee-examples.hash with per-version .hash files.
-  - Simplify install command in iotee-test.mk
-  - Patch optee_test 3.3.0 against an issue in the CMake files.
-  - Remove dependency of BR2_PACKAGE_OPTEE_EXAMPLES. As the package
-    depends on BR2_TARGET_OPTEE_OS, leave it to optee-os to define
-    the supported architectures.
+  - Drop BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION.
+  - Clean optee-test.mk layout.
+  - Replace common optee-test.hash with per-version .hash files.
+  - Patch optee_benchmark 3.3.0 against an issue reported by GCC warns.
+  - Remove dependency of BR2_PACKAGE_OPTEE_EXAMPLES and Arm architecture.
+    As the package depends on BR2_TARGET_OPTEE_OS, leave it to optee-os
+    to define the supported architectures.
 
 Changes v1 -> v2:
   - Replace BR2_arm with BR2_ARM_CPU_ARMV7 as OP-TEE supports only
     BR2_ARM_CPU_ARMV7 architectures among the 32bit Arm machines.
-  - Select OP-TEE client and add dependency on OP-TEE OS.
-  - Add option BR2_PACKAGE_OPTEE_EXAMPLES_SYNCED_VERSION to ensure
-    OP-TEE examples version is synced with OP-TEE OS version.
-  - Do not force output build directory, rely on native path: out/.
-  - Replace if/endif with depends on in Config.in.
-  - Remove useless OPTEE_EXAMPLES_INSTALL_STAGING=YES.
-  - Add package official URL in Config.in package description.
+  - Add missing dependency on BR2_TARGET_OPTEE_OS and select
+    BR2_PACKAGE_OPTEE_CLIENT when enabled.
+  - Add option BR2_PACKAGE_OPTEE_TEST_SYNCED_VERSION to ensure
+    OP-TEE test version is synced with OP-TEE OS version.
+  - Fix official repo URL in Config.in package description.
+  - Remove useless OPTEE_TEST_INSTALL_STAGING=YES.
+  - Do not force output build directory and rely on native one: out/.
 
 ---
  DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- .../0001-fix-deprecated-size_t-type-for-size.patch | 37 ++++++++++++++
- package/optee-examples/3.3.0/optee-examples.hash   |  4 ++
- package/optee-examples/Config.in                   | 59 ++++++++++++++++++++++
- package/optee-examples/optee-examples.mk           | 44 ++++++++++++++++
- 6 files changed, 146 insertions(+)
- create mode 100644 package/optee-examples/3.3.0/0001-fix-deprecated-size_t-type-for-size.patch
- create mode 100644 package/optee-examples/3.3.0/optee-examples.hash
- create mode 100644 package/optee-examples/Config.in
- create mode 100644 package/optee-examples/optee-examples.mk
+ .../optee-test/3.3.0/0001-cmake-rely-on-C.patch    | 32 +++++++++++
+ ...ent-unexpected-build-warning-with-strncpy.patch | 54 +++++++++++++++++++
+ ...egression-4011-correct-potential-overflow.patch | 60 +++++++++++++++++++++
+ package/optee-test/3.3.0/optee-test.hash           |  4 ++
+ package/optee-test/Config.in                       | 63 ++++++++++++++++++++++
+ package/optee-test/optee-test.mk                   | 45 ++++++++++++++++
+ 8 files changed, 260 insertions(+)
+ create mode 100644 package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
+ create mode 100644 package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
+ create mode 100644 package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
+ create mode 100644 package/optee-test/3.3.0/optee-test.hash
+ create mode 100644 package/optee-test/Config.in
+ create mode 100644 package/optee-test/optee-test.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0810e63..c9f2e00 100644
+index c9f2e00..28ba658 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -684,6 +684,7 @@ F:	package/szip/
- N:	Etienne Carriere <etienne.carriere@linaro.org>
+@@ -685,6 +685,7 @@ N:	Etienne Carriere <etienne.carriere@linaro.org>
  F:	boot/optee-os/
  F:	package/optee-client/
-+F:	package/optee-examples/
+ F:	package/optee-examples/
++F:	package/optee-test/
  
  N:	Eugene Tarassov <eugene@largest.net>
  F:	package/tcf-agent/
 diff --git a/package/Config.in b/package/Config.in
-index 277a855..b76db17 100644
+index b76db17..e5b6dad 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2077,6 +2077,7 @@ endmenu
- menu "Security"
+@@ -2078,6 +2078,7 @@ menu "Security"
  	source "package/checkpolicy/Config.in"
  	source "package/optee-client/Config.in"
-+	source "package/optee-examples/Config.in"
+ 	source "package/optee-examples/Config.in"
++	source "package/optee-test/Config.in"
  	source "package/paxtest/Config.in"
  	source "package/policycoreutils/Config.in"
  	source "package/refpolicy/Config.in"
-diff --git a/package/optee-examples/3.3.0/0001-fix-deprecated-size_t-type-for-size.patch b/package/optee-examples/3.3.0/0001-fix-deprecated-size_t-type-for-size.patch
+diff --git a/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
 new file mode 100644
-index 0000000..ba1716a
+index 0000000..ea7b966
 --- /dev/null
-+++ b/package/optee-examples/3.3.0/0001-fix-deprecated-size_t-type-for-size.patch
-@@ -0,0 +1,37 @@
-+commit fca0caba591f31f66325826c74acd26aefd52dee
-+Author: Etienne Carriere <etienne.carriere@linaro.org>
-+Date:   Tue Dec 18 22:35:16 2018 +0100
++++ b/package/optee-test/3.3.0/0001-cmake-rely-on-C.patch
+@@ -0,0 +1,32 @@
++cmake: component rely on C support
 +
-+    secure_storage: fix deprecated size_t type for size
++Without specifing optee_client source expects only C source file
++support cmake may attempt to look for resources as g++. When
++building with environments that do not provide such tools as when
++building from native buildroot ofr a qemu target, optee_client
++fails to build. This change ensure a minimal C support allows to
++build optee_client with cmake.
++
++Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++Acked-by: Jerome Forissier <jerome.forissier@linaro.org>
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0290205..a3fd269 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,4 +1,5 @@
++ cmake_minimum_required (VERSION 3.2)
+++project (optee_test C)
++ 
++ # Default cross compile settings
++ set (CMAKE_TOOLCHAIN_FILE CMakeToolchain.txt)
++diff --git a/ta/CMakeLists.txt b/ta/CMakeLists.txt
++index 22d7727..795237e 100644
++--- a/ta/CMakeLists.txt
+++++ b/ta/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-project (xtest-ta-headers)
+++project (xtest-ta-headers C)
++ 
++ add_library(${PROJECT_NAME} INTERFACE)
++ 
+diff --git a/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch b/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
+new file mode 100644
+index 0000000..55e796b
+--- /dev/null
++++ b/package/optee-test/3.3.0/0002-xtest-prevent-unexpected-build-warning-with-strncpy.patch
+@@ -0,0 +1,54 @@
++commit 30db8e0261fabe83bea6eb1922d9581e140125b6
++Author: Etienne Carriere <etienne.carriere@linaro.org>
++Date:   Fri Dec 21 15:36:00 2018 +0100
++
++    xtest: prevent unexpected build warning with strncpy
 +    
-+    size_t types is an deprecated type used in GPD API v1.0.
-+    Update
++    This change modifies adbg_run.c to prevent a false positive
++    warning reported by GCC 8.2 on usage of strncpy():
 +    
-+    Error reported by GCC 7.3-2018.05:
-+      secure_storage_ta.c:203:6: warning: passing argument 4 of 'TEE_ReadObjectData' from incompatible pointer type [-Wincompatible-pointer-types]
-+          &read_bytes);
++        build/optee_test/host/xtest/adbg/src/adbg_run.c: In function 'Do_ADBG_AppendToSuite':
++        build/optee_test/host/xtest/adbg/src/adbg_run.c:103:3: error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
++           strncpy(p, Source_p->SuiteID_p, size);
++           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++        build/optee_test/host/xtest/adbg/src/adbg_run.c:88:9: note: length computed here
++          size = strlen(Source_p->SuiteID_p);
++                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
++        cc1: all warnings being treated as errors
++    
++    From [1]:
++      Using strncpy Safely
++      In general, it is not possible to avoid string truncation by strncpy
++      except by sizing the destination to be at least a byte larger than
++      the length of the source string. With that approach, however, using
++      strncpy becomes unnecessary and the function can be avoided in favor
++      of other APIs such as strcpy or (less preferably) memcpy. Much has
++      been written about the problems with strncpy and we recommend to
++      avoid it whenever possible. It is, however, worth keeping in mind
++      that unlike other standard string-handling functions, strncpy always
++      writes exactly as many characters as specified by the third argument;
++      if the source string is shorter, the function fills the remaining
++      bytes with NULs.
++    
++    This change prefers using a snprintf() as used in the alternate
++    instruction block of the strncpy() call.
++    
++    [1] https://developers.redhat.com/blog/2018/05/24/detecting-string-truncation-with-gcc-8/
 +    
 +    Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++    Signed-off-by: Simon Hughes <simon.hughes@arm.com>
++    Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
 +
-+diff --git a/secure_storage/ta/secure_storage_ta.c b/secure_storage/ta/secure_storage_ta.c
-+index d120e47..3ccc12d 100644
-+--- a/secure_storage/ta/secure_storage_ta.c
-++++ b/secure_storage/ta/secure_storage_ta.c
-+@@ -146,7 +146,7 @@ static TEE_Result read_raw_object(uint32_t param_types, TEE_Param params[4])
-+ 	TEE_ObjectHandle object;
-+ 	TEE_ObjectInfo object_info;
-+ 	TEE_Result res;
-+-	size_t read_bytes;
-++	uint32_t read_bytes;
-+ 	char *obj_id;
-+ 	size_t obj_id_sz;
-+ 	char *data;
-+@@ -202,7 +202,7 @@ static TEE_Result read_raw_object(uint32_t param_types, TEE_Param params[4])
-+ 	res = TEE_ReadObjectData(object, data, object_info.dataSize,
-+ 				 &read_bytes);
-+ 	if (res != TEE_SUCCESS || read_bytes != object_info.dataSize) {
-+-		EMSG("TEE_ReadObjectData failed 0x%08x, read %u over %u",
-++		EMSG("TEE_ReadObjectData failed 0x%08x, read %" PRIu32 " over %u",
-+ 				res, read_bytes, object_info.dataSize);
-+ 		goto exit;
-+ 	}
-diff --git a/package/optee-examples/3.3.0/optee-examples.hash b/package/optee-examples/3.3.0/optee-examples.hash
++diff --git a/host/xtest/adbg/src/adbg_run.c b/host/xtest/adbg/src/adbg_run.c
++index 406e429..2739db5 100644
++--- a/host/xtest/adbg/src/adbg_run.c
+++++ b/host/xtest/adbg/src/adbg_run.c
++@@ -100,7 +100,7 @@ int Do_ADBG_AppendToSuite(
++ 		snprintf(p, size, "%s+%s", Dest_p->SuiteID_p,
++ 			 Source_p->SuiteID_p);
++ 	else
++-		strncpy(p, Source_p->SuiteID_p, size);
+++		snprintf(p, size, "%s", Source_p->SuiteID_p);
++ 	free((void *)Dest_p->SuiteID_p);
++ 	Dest_p->SuiteID_p = p;
++ 
+diff --git a/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch b/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
 new file mode 100644
-index 0000000..77b7466
+index 0000000..77b7cd7
 --- /dev/null
-+++ b/package/optee-examples/3.3.0/optee-examples.hash
++++ b/package/optee-test/3.3.0/0003-regression-4011-correct-potential-overflow.patch
+@@ -0,0 +1,60 @@
++commit 4e352aad0cfceeec1d9adde879a034039a0cf267
++Author: Etienne Carriere <etienne.carriere@linaro.org>
++Date:   Fri Dec 21 15:36:25 2018 +0100
++
++    regression 4011: correct potential overflow
++    
++    Fix issues reported by GCC 8.2.0.
++    
++    build/optee_test/host/xtest/regression_4000.c: In function 'xtest_tee_test_4011':
++    build/optee_test/host/xtest/regression_4000.c:5029:3: error: 'memmove' pointer overflow between offset [0, 8] and size [4294967295, 2147483647] accessing array 'tmp' with type 'uint8_t[1024]' {aka 'unsigned char[1024]'} [-Werror=array-bounds]
++       memmove(tmp + n + i, tmp + m, tmp_size - m);
++       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    build/optee_test/host/xtest/regression_4000.c:4927:10: note: array 'tmp' declared here
++      uint8_t tmp[1024];
++              ^~~
++    build/optee_test/host/xtest/regression_4000.c:5029:3: error: 'memmove' specified size 4294967295 exceeds maximum object size 2147483647 [-Werror=stringop-overflow=]
++       memmove(tmp + n + i, tmp + m, tmp_size - m);
++       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    cc1: all warnings being treated as errors
++    
++    Reported-by: Simon Hughes <simon.hughes@arm.com>
++    Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++    Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
++
++diff --git a/host/xtest/regression_4000.c b/host/xtest/regression_4000.c
++index 766aad2..205a226 100644
++--- a/host/xtest/regression_4000.c
+++++ b/host/xtest/regression_4000.c
++@@ -5018,18 +5018,28 @@ static void xtest_tee_test_4011(ADBG_Case_t *c)
++ 				out, out_size, tmp, &tmp_size)))
++ 			goto out;
++ 
+++		if (!ADBG_EXPECT_COMPARE_UNSIGNED(c, tmp_size, <=, sizeof(tmp)))
+++			goto out;
+++
++ 		/* 4.1 */
++-		for (n = 0; n < tmp_size; n++)
+++		for (n = 0; n < tmp_size - i; n++)
++ 			if (tmp[n] == 0xff)
++ 				break;
+++
+++		/* Shall find@least a padding start before buffer end */
+++	        if (!ADBG_EXPECT_COMPARE_UNSIGNED(c, n, <, tmp_size - i - 1))
+++			goto out;
+++
++ 		for (m = n + 1; m < tmp_size; m++)
++ 			if (tmp[m] != 0xff)
++ 				break;
+++
++ 		/* 4.2 */
++ 		memmove(tmp + n + i, tmp + m, tmp_size - m);
+++
++ 		/* 4.3 */
++-		for (n = n + tmp_size - m + i; n < tmp_size; n++)
++-			tmp[n] = 0;
+++		n = n + i + tmp_size - m;
+++		memset(tmp + n, 0, tmp_size - n);
++ 
++ 		/* 5 */
++ 		out_size = sizeof(out);
+diff --git a/package/optee-test/3.3.0/optee-test.hash b/package/optee-test/3.3.0/optee-test.hash
+new file mode 100644
+index 0000000..0da2212
+--- /dev/null
++++ b/package/optee-test/3.3.0/optee-test.hash
 @@ -0,0 +1,4 @@
-+# From https://github.com/linaro-swg/optee_examples/archive/3.3.0.tar.gz
-+sha256 504642edd1510562dcc213637d8869190dd581986daf938ed3e85088830e0ef9  optee-examples-3.3.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.3.0.tar.gz
++sha256 9651d5db0d28856e45d6bc25ce603bfcf641435bd3264d95b449f093665c8521  optee-test-3.3.0.tar.gz
 +# Locally computed
-+sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
++sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
 new file mode 100644
-index 0000000..9014c3f
+index 0000000..40ac8e8
 --- /dev/null
-+++ b/package/optee-examples/Config.in
-@@ -0,0 +1,59 @@
-+config BR2_PACKAGE_OPTEE_EXAMPLES
-+	bool "optee-examples"
++++ b/package/optee-test/Config.in
+@@ -0,0 +1,63 @@
++config BR2_PACKAGE_OPTEE_TEST
++	bool "optee-test"
 +	depends on BR2_TARGET_OPTEE_OS
 +	select BR2_PACKAGE_OPTEE_CLIENT
 +	help
-+	  Enable the OP-TEE examples package that brings examples of
-+	  implementation of OP-TEE non-secure client applications and
-+	  secure trusted applications. OP-TEE examples is a
-+	  component delivered by the OP-TEE project.
++	  This build option enables OP-TEE test package from the
++	  OP-TEE project. It helps platforms to verify the OP-TEE
++	  installation against a set of regression and performance
++	  tests.
++
++	  The package generates userspace test applications and
++	  data files for the Linux userland. It also generates
++	  OP-TEE trusted applications.
 +
 +	  Trusted application binary files are installed in the target
 +	  directory /lib/optee_armtz as other trusted applications.
@@ -160,35 +288,35 @@ index 0000000..9014c3f
 +	  non-secure filesystem/directory into the secure world for
 +	  execution.
 +
-+	  https://github.com/linaro-swg/optee_examples
++	  http://github.com/OP-TEE/optee_test
 +
-+if BR2_PACKAGE_OPTEE_EXAMPLES
++if BR2_PACKAGE_OPTEE_TEST
 +
 +choice
 +	prompt "version"
-+	default BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
++	default BR2_PACKAGE_OPTEE_TEST_LATEST
 +	help
-+	  Select the version of OP-TEE exmaples you want to use
++	  Select the version of OP-TEE test you want to use
 +
-+config BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
++config BR2_PACKAGE_OPTEE_TEST_LATEST
 +	bool "3.3.0"
 +	help
 +	  This fetches the registered release tag from the
 +	  OP-TEE official Git repository.
 +
-+config BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_GIT
++config BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
 +	bool "Custom Git repository"
 +	help
 +	  Sync with a specific OP-TEE Git repository.
 +
 +endchoice
 +
-+if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_GIT
++if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
 +
-+config BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_REPO_URL
++config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL
 +	string "URL of custom repository"
 +
-+config BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_REPO_VERSION
++config BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION
 +	string "Custom repository version"
 +	help
 +	  Revision to use in the typical format used by
@@ -196,61 +324,62 @@ index 0000000..9014c3f
 +
 +endif
 +
-+config BR2_PACKAGE_OPTEE_EXAMPLES_VERSION
++config BR2_PACKAGE_OPTEE_TEST_VERSION
 +	string
-+	default "3.3.0"	if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
-+	default BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_REPO_VERSION \
-+			if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_GIT
++	default "3.3.0"	if BR2_PACKAGE_OPTEE_TEST_LATEST
++	default BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_VERSION \
++			if BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT
 +
-+endif #BR2_PACKAGE_OPTEE_EXAMPLES
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
++endif #BR2_PACKAGE_OPTEE_TEST
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
 new file mode 100644
-index 0000000..38701d4
+index 0000000..0ec7238
 --- /dev/null
-+++ b/package/optee-examples/optee-examples.mk
-@@ -0,0 +1,44 @@
++++ b/package/optee-test/optee-test.mk
+@@ -0,0 +1,45 @@
 +################################################################################
 +#
-+# optee-examples
++# optee-test
 +#
 +################################################################################
 +
-+OPTEE_EXAMPLES_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_EXAMPLES_VERSION))
-+OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
-+OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
++OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
++OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
++OPTEE_TEST_LICENSE_FILES = LICENSE.md
 +
-+OPTEE_EXAMPLES_DEPENDENCIES = optee-client optee-os
++OPTEE_TEST_DEPENDENCIES = optee-client optee-os
 +
-+ifeq ($(BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_GIT),y)
-+OPTEE_EXAMPLES_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_REPO_URL))
-+OPTEE_EXAMPLES_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(OPTEE_EXAMPLES_SOURCE)
++ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_GIT),y)
++OPTEE_TEST_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_REPO_URL))
++OPTEE_TEST_SITE_METHOD = git
++BR_NO_CHECK_HASH_FOR += $(OPTEE_TEST_SOURCE)
 +else
-+OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
++OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
 +endif
 +
 +ifeq ($(BR2_aarch64),y)
-+OPTEE_EXAMPLES_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
++OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
 +endif
 +ifeq ($(BR2_arm),y)
-+OPTEE_EXAMPLES_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
++OPTEE_TEST_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
 +endif
++OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_TEST_SDK)
 +
 +# Trusted Application are not built from CMake due to ta_dev_kit dependencies.
 +# We must build and install them on target.
-+define OPTEE_EXAMPLES_BUILD_TAS
-+	@$(foreach f,$(wildcard $(@D)/*/ta/Makefile), \
++define OPTEE_TEST_BUILD_TAS
++	@$(foreach f,$(wildcard $(@D)/ta/*/Makefile), \
 +		$(TARGET_CONFIGURE_OPTS) \
 +		$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+			TA_DEV_KIT_DIR=$(OPTEE_EXAMPLES_SDK) \
-+			O=out -C $(dir $f) all &&) true
++			TA_DEV_KIT_DIR=$(OPTEE_TEST_SDK) \
++			-C $(dir $f) all &&) true
 +endef
-+define OPTEE_EXAMPLES_INSTALL_TAS
++define OPTEE_TEST_INSTALL_TAS
 +	@mkdir -p $(TARGET_DIR)/lib/optee_armtz
-+	@$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz $(@D)/*/ta/out/*.ta
++	@$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz $(@D)/ta/*/*.ta
 +endef
-+OPTEE_EXAMPLES_POST_BUILD_HOOKS += OPTEE_EXAMPLES_BUILD_TAS
-+OPTEE_EXAMPLES_POST_INSTALL_TARGET_HOOKS += OPTEE_EXAMPLES_INSTALL_TAS
++OPTEE_TEST_POST_BUILD_HOOKS += OPTEE_TEST_BUILD_TAS
++OPTEE_TEST_POST_INSTALL_TARGET_HOOKS += OPTEE_TEST_INSTALL_TAS
 +
 +$(eval $(cmake-package))
 -- 
