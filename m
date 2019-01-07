@@ -1,42 +1,46 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Mon,  7 Jan 2019 12:32:27 +0100
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.16
-Message-ID: <20190107113227.31452-1-martink@posteo.de>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Mon, 7 Jan 2019 14:36:58 +0000
+Subject: [Buildroot] [PATCH v4 1/3] arch: add support for RISC-V 32-bit
+ (riscv32) architecture
+In-Reply-To: <20190106141833.7a6ebc9e@windsurf>
+References: <20181021191203.2148-1-mark.corbin@embecosm.com>
+ <20190106141833.7a6ebc9e@windsurf>
+Message-ID: <130b09fa-6661-bb38-43b6-27c271e49c6d@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update x11vnc from 0.9.15 to 0.9.16. For the changes, see
-https://github.com/LibVNC/x11vnc/compare/0.9.15...0.9.16
+Hello Thomas
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
----
- package/x11vnc/x11vnc.hash | 2 +-
- package/x11vnc/x11vnc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 06/01/2019 13:18, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Sun, 21 Oct 2018 20:12:01 +0100, Mark Corbin wrote:
+>> This enables a riscv32 system to be built with a Buildroot generated
+>> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
+>>
+>> This requires a custom version of glibc 2.26 from the riscv-glibc
+>> repository. Note that there are no tags in this repository, so the
+>> glibc version just consists of the 40 character commit id string.
+>>
+>> Thanks to Fabrice Bellard for pointing me towards the 32-bit glibc
+>> repository and for providing the necessary patch to get it to build.
+>>
+>> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+>> ---
+>> Changes v3 -> v4:
+>>   - added choice for selecting 32-bit or 64-bit in Config.in.riscv
+>>     This provides a new variable BR2_RISCV_32
+> Applied to master, thanks.
+Will you be adding the riscv32 autobuilder configuration patch too?
 
-diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
-index 86f41044db..205a5dce4c 100644
---- a/package/x11vnc/x11vnc.hash
-+++ b/package/x11vnc/x11vnc.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  3e43bd875edc3c7f52a0d3676c4ec7de910fcd210240ee20b4522deb2bf84cff  x11vnc-0.9.15.tar.gz
-+sha256  885e5b5f5f25eec6f9e4a1e8be3d0ac71a686331ee1cfb442dba391111bd32bd  x11vnc-0.9.16.tar.gz
-diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
-index 0fa87d2d82..9daf490581 100644
---- a/package/x11vnc/x11vnc.mk
-+++ b/package/x11vnc/x11vnc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X11VNC_VERSION = 0.9.15
-+X11VNC_VERSION = 0.9.16
- X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
- # sdl support is not used in x11vnc, but host include / library search paths
- # leak in if host has sdl-config
+Thanks
+
+Mark
+
 -- 
-2.11.0
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
