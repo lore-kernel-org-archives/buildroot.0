@@ -1,200 +1,216 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon,  7 Jan 2019 11:24:58 +0100
-Subject: [Buildroot] [PATCH v3 7/7] configs/qemu_aarch64_tz_virt: AArch64
- emulation with TrustZone services
+Date: Mon,  7 Jan 2019 11:24:56 +0100
+Subject: [Buildroot] [PATCH v3 5/7] optee-benchmark: new package
 In-Reply-To: <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
 References: <1542996547-5003-1-git-send-email-etienne.carriere@linaro.org>
  <1546856698-20032-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1546856698-20032-7-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1546856698-20032-5-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change introduces a Qemu board for an AArch64 target executing
-with OP-TEE secure world services.
+OP-TEE performance benchmark tools for the OP-TEE project.
 
-The target Linux based normal world embeds the standard minimal
-filesystem with OP-TEE non-secure components embedded files from
-OP-TEE client, test, examples and benchmark packages.
+This packages generates embedded Linux based OS materials used
+to retrieve execution timing information on invocation of the
+OP-TEE secure services.
 
-The Linux custom configuration is dumped from the qemu/aarch64-virt board
-with few added fragments: OP-TEE driver and 9p for virtual filesystem to
-ease file manipulation and exchanges through Qemu virtfs support.
+It is added next to the OP-TEE client package in BR configuration.
 
-The standard way for booting OP-TEE with a non-secure world companion
-use the Arm Trusted Firmware-A as bootloader. OP-TEE OS provides the
-BL32 image and U-boot the BL33 image. The proposed board enables OP-TEE
-and U-boot build for this. However package boot/arm-trusted-firmware
-needs few changes to build OP-TEE compliant TF-A images.
-
-Therefore the proposed board allows one to build the images but not
-yet to run the target with the built Qemu host tool.
+This change references in Buildroot the today's latest OP-TEE
+revision release tagged 3.3.0 with an added patch to fix an issue
+reported by recent GCC toolchains.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
-Changes v2 -> v3
-  - New change to introduce a board that at least builds Aarch64 OP-TEE.
+Changes v2 -> v3:
+  - Add an entry in file DEVELOPERS.
+  - Clean Config.in layout and description sections.
+  - Drop BR2_PACKAGE_OPTEE_BENCHMARK_SYNCED_VERSION.
+  - Clean optee-benchmark.mk layout.
+  - Replace common optee-benchmark.hash with per-version .hash files.
+  - Add a patch on 3.3.0 to fix an issue reported through GCC warns.
+
+Changes v1 -> v2:
+  - Add dependency on OP-TEE client.
+  - Add option BR2_PACKAGE_OPTEE_BENCHMARK_SYNCED_VERSION to ensure
+    OP-TEE benchmark version is synced with OP-TEE client version.
+  - Remove useless OPTEE_BENCHMARK_INSTALL_STAGING and
+    OPTEE_BENCHMARK_INSTALL_IMAGES.
+  - Remove unused BR2_PACKAGE_OPTEE_BENCHMARK_GIT_REFERENCE.
+  - Remove useless _INSTALL_STAGING/_INSTALL_IMAGES=YES.
 
 ---
- board/qemu/aarch64-tz-virt/linux.config  | 63 ++++++++++++++++++++++++++++++++
- board/qemu/aarch64-tz-virt/readme.txt    | 11 ++++++
- board/qemu/aarch64-tz-virt/u-boot.config |  3 ++
- configs/qemu_aarch64_tz_virt_defconfig   | 47 ++++++++++++++++++++++++
- 4 files changed, 124 insertions(+)
- create mode 100644 board/qemu/aarch64-tz-virt/linux.config
- create mode 100644 board/qemu/aarch64-tz-virt/readme.txt
- create mode 100644 board/qemu/aarch64-tz-virt/u-boot.config
- create mode 100644 configs/qemu_aarch64_tz_virt_defconfig
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...ix-format-specifier-in-call-to-INFO-macro.patch | 30 ++++++++++++
+ package/optee-benchmark/3.3.0/optee-benchmark.hash |  2 +
+ package/optee-benchmark/Config.in                  | 55 ++++++++++++++++++++++
+ package/optee-benchmark/optee-benchmark.mk         | 22 +++++++++
+ 6 files changed, 111 insertions(+)
+ create mode 100644 package/optee-benchmark/3.3.0/0001-Fix-format-specifier-in-call-to-INFO-macro.patch
+ create mode 100644 package/optee-benchmark/3.3.0/optee-benchmark.hash
+ create mode 100644 package/optee-benchmark/Config.in
+ create mode 100644 package/optee-benchmark/optee-benchmark.mk
 
-diff --git a/board/qemu/aarch64-tz-virt/linux.config b/board/qemu/aarch64-tz-virt/linux.config
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 28ba658..4dd7f4a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -683,6 +683,7 @@ F:	package/szip/
+ 
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
++F:	package/optee-benchmark/
+ F:	package/optee-client/
+ F:	package/optee-examples/
+ F:	package/optee-test/
+diff --git a/package/Config.in b/package/Config.in
+index e5b6dad..cdee281 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2076,6 +2076,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
++	source "package/optee-benchmark/Config.in"
+ 	source "package/optee-client/Config.in"
+ 	source "package/optee-examples/Config.in"
+ 	source "package/optee-test/Config.in"
+diff --git a/package/optee-benchmark/3.3.0/0001-Fix-format-specifier-in-call-to-INFO-macro.patch b/package/optee-benchmark/3.3.0/0001-Fix-format-specifier-in-call-to-INFO-macro.patch
 new file mode 100644
-index 0000000..49b7ac6
+index 0000000..6a2cd37
 --- /dev/null
-+++ b/board/qemu/aarch64-tz-virt/linux.config
-@@ -0,0 +1,63 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_TASKSTATS=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_PROFILING=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_BLK_DEV_BSGLIB=y
-+CONFIG_ARCH_VEXPRESS=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_BINFMT_MISC=y
-+CONFIG_COMPAT=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
-+CONFIG_UNIX=y
-+CONFIG_NET_KEY=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_BRIDGE=m
-+CONFIG_NET_SCHED=y
-+CONFIG_VSOCKETS=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_SCSI_CONSTANTS=y
-+CONFIG_SCSI_LOGGING=y
-+CONFIG_SCSI_SCAN_ASYNC=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_ATA=y
-+CONFIG_NETDEVICES=y
-+CONFIG_DUMMY=y
-+CONFIG_MACVLAN=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_NLMON=y
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_MAILBOX=y
-+CONFIG_PL320_MBOX=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+### Enable OP-TEE
-+CONFIG_TEE=y
-+CONFIG_OPTEE=y
-+### Enable 9P VFS
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_9P_FS=y
-+CONFIG_9P_FS_POSIX_ACL=y
++++ b/package/optee-benchmark/3.3.0/0001-Fix-format-specifier-in-call-to-INFO-macro.patch
+@@ -0,0 +1,30 @@
++commit ecba70dd88f33f3c770a4c564b49d7e872eab34e
++Author: ChrisG55 <christian_g_55@msn.com>
++Date:   Thu Dec 6 11:52:29 2018 +0100
 +
-diff --git a/board/qemu/aarch64-tz-virt/readme.txt b/board/qemu/aarch64-tz-virt/readme.txt
++    Fix format specifier in call to INFO macro
++    
++    Improper use of format specifiers for arguments of type intptr_t and size_t
++    raises warnings at compile time. Compilation breaks when GCC's -Werror flag is
++    set, which is the default. By using the appropriate format specifiers, no
++    warnings are raised and compilation succeeds.
++    
++    Reported-by: ChrisG55 <christian_g_55@msn.com>
++    Tested-by: ChrisG55 <christian_g_55@msn.com>
++    Fixes: 55fcc4ae0de4b9a2f7253562f8083694e69a8e33
++    Signed-off-by: ChrisG55 <christian_g_55@msn.com>
++    Reviewed-by: Joakim Bech <joakim.bech@linaro.org>
++
++diff --git a/main.c b/main.c
++index 3d53dca..86225bd 100644
++--- a/main.c
+++++ b/main.c
++@@ -106,7 +106,7 @@ static void alloc_bench_buf(uint32_t cores)
++ 	paddr_ts_buf = op.params[0].value.a;
++ 	size = op.params[0].value.b;
++ 
++-	INFO("ts buffer paddr = %x, size = %d\n", paddr_ts_buf, size);
+++	INFO("ts buffer paddr = %" PRIiPTR ", size = %zu\n", paddr_ts_buf, size);
++ 	if (paddr_ts_buf) {
++ 
++ 		bench_ts_global = mmap_paddr(paddr_ts_buf, size);
+diff --git a/package/optee-benchmark/3.3.0/optee-benchmark.hash b/package/optee-benchmark/3.3.0/optee-benchmark.hash
 new file mode 100644
-index 0000000..ec91d2e
+index 0000000..d93c26c
 --- /dev/null
-+++ b/board/qemu/aarch64-tz-virt/readme.txt
-@@ -0,0 +1,11 @@
-+Board qemu_aarch64_tz_virt builds a Qemu Armv8-A target with
-+OP-TEE running in the TrustZone secure wolrd setup and a Linux based
-+OS running in the non-secure wolrd.
-+
-+This setup is usually booted with the Arm Trsuted Firmware-A (TF-A from
-+package boot/arm-trusted-firmware). However the current Buildroot package
-+needs few changes to build TF-A for OP-TEE support.
-+
-+Until BR arm-trusted-firmware is updated this board allows one to only
-+build the secure and non-secure boot images if not the BIOS for the Qemu
-+host.
-diff --git a/board/qemu/aarch64-tz-virt/u-boot.config b/board/qemu/aarch64-tz-virt/u-boot.config
++++ b/package/optee-benchmark/3.3.0/optee-benchmark.hash
+@@ -0,0 +1,2 @@
++# From https://github.com/linaro-swg/optee_benchmark/archive/3.3.0.tar.gz
++sha256 bfba3749ac8b37628550696f0625452ae8aef060eff5b3b1c4283a5dad8a3383 optee-benchmark-3.3.0.tar.gz
+diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
 new file mode 100644
-index 0000000..5588008
+index 0000000..99794c3
 --- /dev/null
-+++ b/board/qemu/aarch64-tz-virt/u-boot.config
-@@ -0,0 +1,3 @@
-+CONFIG_SYS_TEXT_BASE=0x60000000
-+CONFIG_BOOTCOMMAND="fdt addr ${fdt_addr} && fdt resize 1000 && smhload zImage ${kernel_addr_r} && smhload rootfs.cpio.gz ${ramdisk_addr_r} ramdisk_addr_end &&  setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && fdt chosen ${ramdisk_addr_r} ${ramdisk_addr_end} && bootz ${kernel_addr_r} - ${fdt_addr}"
-+CONFIG_SEMIHOSTING=y
-diff --git a/configs/qemu_aarch64_tz_virt_defconfig b/configs/qemu_aarch64_tz_virt_defconfig
++++ b/package/optee-benchmark/Config.in
+@@ -0,0 +1,55 @@
++config BR2_PACKAGE_OPTEE_BENCHMARK
++	bool "optee-benchmark"
++	select BR2_PACKAGE_OPTEE_CLIENT
++	select BR2_PACKAGE_LIBYAML
++	help
++	  Enable the OP-TEE benchmark package that brings facilities
++	  for profiling traversal and execution timings when
++	  invoking OP-TEE. OP-TEE benchmark is a component delivered
++	  by the OP-TEE project.
++
++	  http://github.com/linaro-swg/optee_benchmark
++
++if BR2_PACKAGE_OPTEE_BENCHMARK
++
++choice
++	prompt "version"
++	default BR2_PACKAGE_OPTEE_BENCHMARK_LATEST
++	help
++	  Select the version of OP-TEE benchmark you want to use
++
++config BR2_PACKAGE_OPTEE_BENCHMARK_LATEST
++	bool "3.3.0"
++	help
++	  This fetches the registered release tag from the
++	  OP-TEE official Git repository.
++
++config BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  Sync with a specific OP-TEE Git repository.
++
++endchoice
++
++if BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_GIT
++
++config BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_REPO_URL
++	string "URL of custom repository"
++	help
++	  Specific location of the reference source tree Git repository.
++
++config BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by
++	  Git E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_PACKAGE_OPTEE_BENCHMARK_VERSION
++	string
++	default "3.3.0"	if BR2_PACKAGE_OPTEE_BENCHMARK_LATEST
++	default BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_REPO_VERSION \
++			if BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_GIT
++
++endif #BR2_PACKAGE_OPTEE_BENCHMARK
+diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
 new file mode 100644
-index 0000000..9286d15
+index 0000000..8eef0f6
 --- /dev/null
-+++ b/configs/qemu_aarch64_tz_virt_defconfig
-@@ -0,0 +1,47 @@
-+# Architecture
-+BR2_aarch64=y
++++ b/package/optee-benchmark/optee-benchmark.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# optee-benchmarch
++#
++################################################################################
 +
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++OPTEE_BENCHMARK_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_BENCHMARK_VERSION))
++OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
 +
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
++OPTEE_BENCHMARK_DEPENDENCIES = optee-client libyaml
 +
-+# Linux headers same as kernel, a 4.16 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++ifeq ($(BR2_PACKAGE_OPTEE_BENCHMARK_LATEST),y)
++OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
++endif
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-tz-virt/linux.config"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++ifeq ($(BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_GIT),y)
++OPTEE_BENCHMARK_SITE = $(call qstrip,$(BR2_PACKAGE_OPTEE_BENCHMARK_CUSTOM_REPO_URL))
++OPTEE_BENCHMARK_SITE_METHOD = git
++BR_NO_CHECK_HASH_FOR += $(OPTEE_BENCHMARK_SOURCE)
++endif
 +
-+# TF-A for booting OP-TEE secure and uboot/linux non secure
-+# POSTPONED: depends on boot/arm-trusted-firmware support for Armv7-A
-+
-+# OP-TEE components
-+BR2_TARGET_OPTEE_OS=y
-+BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_armv8a"
-+BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_TEE_CORE_DEBUG=n CFG_UNWIND=n CFG_TEE_CORE_LOG_LEVEL=2"
-+BR2_PACKAGE_OPTEE_CLIENT=y
-+BR2_PACKAGE_OPTEE_TEST=y
-+BR2_PACKAGE_OPTEE_EXAMPLES=y
-+BR2_PACKAGE_OPTEE_BENCHMARK=y
-+
-+# Need a non-secure bootloader for the dear Linux kernel: U-boot? UEFI?
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm64"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-tz-virt/u-boot.config"
-+
-+# Qemu emulator for the Arm target
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-+BR2_PACKAGE_HOST_QEMU_VIRTFS=y
++$(eval $(cmake-package))
 -- 
 1.9.1
