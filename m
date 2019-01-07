@@ -1,39 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  7 Jan 2019 09:57:02 +0100
-Subject: [Buildroot] [PATCH] efibootmgr: drop unneeded include path
- workaround
-Message-ID: <20190107085702.7771-1-peter@korsgaard.com>
+From: David Picard <dplamp@gmx.com>
+Date: Mon, 7 Jan 2019 10:36:15 +0100
+Subject: [Buildroot] Grub2 can't find /dev/sda1
+Message-ID: <702b67a9-8725-8fd8-5642-8a6d896e388a@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hard coded -I/usr/include/efivar has been dropped from the Makefile in
-commit 000eb0020c02 (Set pkg-config binary as variable) which is part of
-v13, so drop the unneeded (misnamed) EFIBOOTMSR_PATCH_HEADER_PATH workaround.
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/efibootmgr/efibootmgr.mk | 6 ------
- 1 file changed, 6 deletions(-)
+Platform : i386 with BIOS, PC/104, CompactFlash card
 
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index bdc0019d99..079a9b7281 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -12,12 +12,6 @@ EFIBOOTMGR_DEPENDENCIES = host-pkgconf efivar popt $(TARGET_NLS_DEPENDENCIES)
- EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- EFIBOOTMGR_MAKE_ARGS = EFIDIR=buildroot
- 
--define EFIBOOTMSR_PATCH_HEADER_PATH
--	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
--endef
--
--EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
--
- define EFIBOOTMGR_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D) \
--- 
-2.11.0
+I generated an image to boot with Grub2. I used the genimage config in 
+buildroot/board/pc. I could test it successfully with QEMU (I just 
+change /dev/sda1 to /dev/vda1 at boot prompt).
+
+However, I can't boot on the real board. The boot process hang with 
+"Waiting for root device /dev/sda1". When I type "set" in the grub 
+shell, I get (among other things) :
+grub_cpu=i386
+grub_platform=pc
+prefix=(hd0,msdos1)/boot/grub
+root=hd0,msdos1
+
+Any idea ?
