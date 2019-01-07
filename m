@@ -1,93 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  7 Jan 2019 23:05:40 +0100
-Subject: [Buildroot] [PATCH 18/19] core: ignore non-unique files that have
- disapeared
+Date: Mon,  7 Jan 2019 23:05:36 +0100
+Subject: [Buildroot] [PATCH 14/19] support/check-uniq-files: don't report
+ files of the same content
 In-Reply-To: <cover.1546898693.git.yann.morin.1998@free.fr>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
-Message-ID: <56125b7d30e7ebfc8c455d7cfb4f29528503c0af.1546898693.git.yann.morin.1998@free.fr>
+Message-ID: <18f69b9fb1e0277f26c40609c6fc16e25b9d689a.1546898693.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Packages that install info pages will update the info index when doing
-so. But we do not have that file in the target, so we do not care what
-content that file has, or whether it is modified by many packages.
+Currently, we check that no two packages write to the same files, as a
+sanity check. We do so by checking which files were touched since the
+end of the build (aka beginning of the installation).
 
-This is basically also valid for any file that we remove as part of our
-target-finalize cleanups: the files are not in target.
+However, when the packages do install the exact same file, i,e, the
+same content, we in fact do not really care what package had provided
+said file.
 
-Therefore, check that a file still exists before reporting it as being
-touched by more than one package.
+In the past, we avoided that situation because we were md5sum-inf every
+files before and after installation. Anything that changed was new or
+modified, and everything that did not change was not modified (but could
+have been reinstalled).
+
+However, since 7fb6e78254 (core/instrumentation: shave minutes off the
+build time), we're now using mtimes, and we're in the situation that the
+exact same file installed by two-or-more packages is reported.
+
+In such a situation, it is not very interesting to know what package
+installed the file, because whatever the ordering, or whatever the
+subset of said packages, we'd have ended up with the same file anyway.
+One prominent case where this happens, is the fftw family of packages,
+that all install different libraries, but install the same set of
+headers and some common utilities, and they are all identical across the
+family.
+
+As such, when the packages all installed the same content (same md5), do
+not report the file. Only report it if at least two packages installed a
+different content.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: John Keeping <john@metanate.com>
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile                         | 12 +++++++++---
- support/scripts/check-uniq-files |  6 ++++++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ support/scripts/check-uniq-files | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index aefbdd0e78..cc9ac91647 100644
---- a/Makefile
-+++ b/Makefile
-@@ -711,13 +711,17 @@ target-finalize: ROOTFS=
- .PHONY: staging-finalize
- host-finalize: $(HOST_DIR_SYMLINK)
- 	# Check files that are touched by more than one package
--	./support/scripts/check-uniq-files -t host $(BUILD_DIR)/packages-file-list-host.txt
-+	./support/scripts/check-uniq-files \
-+		-t host -d $(HOST_DIR) \
-+		$(BUILD_DIR)/packages-file-list-host.txt
- 
- .PHONY: staging-finalize
- staging-finalize:
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
- 	# Check files that are touched by more than one package
--	./support/scripts/check-uniq-files -t staging $(BUILD_DIR)/packages-file-list-staging.txt
-+	./support/scripts/check-uniq-files \
-+		-t staging -d $(STAGING_DIR) \
-+		$(BUILD_DIR)/packages-file-list-staging.txt
- 
- .PHONY: target-finalize
- target-finalize: $(PACKAGES) host-finalize
-@@ -785,7 +789,9 @@ endif
- 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
- 	# Check files that are touched by more than one package
--	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
-+	./support/scripts/check-uniq-files \
-+		-t target -d $(TARGET_DIR) \
-+		$(BUILD_DIR)/packages-file-list.txt
- 
- 	touch $(TARGET_DIR)/usr
- 
 diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
-index 2cee95d048..3b33626c73 100755
+index cf9ea292bc..f42edeb534 100755
 --- a/support/scripts/check-uniq-files
 +++ b/support/scripts/check-uniq-files
-@@ -2,6 +2,7 @@
+@@ -36,13 +36,18 @@ def main():
+         return False
  
- import sys
- import argparse
-+import os.path
- from collections import defaultdict
- from brpkgutil import parse_pkg_file_list as parse_pkg_file_list
+     file_to_pkg = defaultdict(set)
++    file_md5 = defaultdict(set)
+     for record in parse_pkg_file_list(args.packages_file_list[0]):
+         file_to_pkg[record['file']].add(record['pkg'])
++        file_md5[record['file']].add(record['md5'])
  
-@@ -24,6 +25,8 @@ def main():
-                         help='The packages-file-list to check from')
-     parser.add_argument('-t', '--type', metavar="TYPE", required=True,
-                         help='Report as a TYPE file (TYPE is either target, staging, or host)')
-+    parser.add_argument('-d', '--dir', metavar="DIR", required=True,
-+                        help='Directory used as base (target/, staging/ or host/))')
- 
-     args = parser.parse_args()
- 
-@@ -40,6 +43,9 @@ def main():
-         if len(file_md5[file]) == 1:
+     for file in file_to_pkg:
+         if len(file_to_pkg[file]) == 1:
              continue
  
-+        if not os.path.exists(os.path.join(args.dir, file)):
++        if len(file_md5[file]) == 1:
 +            continue
 +
          sys.stderr.write(warn.format(args.type, str_decode(file),
