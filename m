@@ -1,10 +1,10 @@
 From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Mon,  7 Jan 2019 19:14:35 +0100
-Subject: [Buildroot] [PATCH v2 3/6] package/imx-mkimage: Bump to
- rel_imx_4.14.78_1.0.0_ga
+Date: Mon,  7 Jan 2019 19:14:36 +0100
+Subject: [Buildroot] [PATCH v2 4/6] package/imx-mkimage: Add support for
+ both other SOC families (i.MX8 and i.MX8X)
 In-Reply-To: <20190107181438.23857-1-nerv@dawncrow.de>
 References: <20190107181438.23857-1-nerv@dawncrow.de>
-Message-ID: <20190107181438.23857-4-nerv@dawncrow.de>
+Message-ID: <20190107181438.23857-5-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/imx-mkimage/imx-mkimage.hash | 2 +-
- package/imx-mkimage/imx-mkimage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/imx-mkimage/imx-mkimage.mk | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index e1cbdd973c..c9dcd0fa1d 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 bc79e11cfbde303e200287fa6624028c8ce5344f8a35ed179b3fe217d74155da  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
-+sha256 d5d7afca6abef4fc6653a2f8b99545d62921a5ab8c44ff3481120232e2162dde  imx-mkimage-rel_imx_4.14.78_1.0.0_ga.tar.gz
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
 diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 6fd6aa39b0..ac22c974ac 100644
+index ac22c974ac..06d3157dc1 100644
 --- a/package/imx-mkimage/imx-mkimage.mk
 +++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -11,15 +11,23 @@ IMX_MKIMAGE_LICENSE = GPL-2.0+
+ IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
+ HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
  
--IMX_MKIMAGE_VERSION = rel_imx_4.9.51_8mq_ga
-+IMX_MKIMAGE_VERSION = rel_imx_4.14.78_1.0.0_ga
- IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
- IMX_MKIMAGE_SITE_METHOD = git
- IMX_MKIMAGE_LICENSE = GPL-2.0+
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
++# i.MX8M needs a different binary
+ define HOST_IMX_MKIMAGE_BUILD_CMDS
+-	# Currently this only supports iMX8M. When more hardware is available
+-	# this needs to be selectable based on iMX8-version (iMX8M,iMXQ etc).
+ 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
+ endef
+-
+ define HOST_IMX_MKIMAGE_INSTALL_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin/mkimage_fit_atf.sh
+ endef
++else
++# i.MX8 and i.MX8X
++define HOST_IMX_MKIMAGE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
++endef
++define HOST_IMX_MKIMAGE_INSTALL_CMDS
++	$(INSTALL) -D -m 755 $(@D)/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
++endef
++endif
+ 
+ $(eval $(host-generic-package))
 -- 
 2.17.1
