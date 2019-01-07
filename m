@@ -1,51 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  7 Jan 2019 23:05:28 +0100
-Subject: [Buildroot] [PATCH 06/19] infra/pkg-generic: only list files
- installed by the current package
+Date: Mon,  7 Jan 2019 23:05:29 +0100
+Subject: [Buildroot] [PATCH 07/19] infra/pkg-generic: offload same-package
+ filtering to check-uniq-file
 In-Reply-To: <cover.1546898693.git.yann.morin.1998@free.fr>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
-Message-ID: <8c891d4245028f97585d0e55ab5962e6ea337659.1546898693.git.yann.morin.1998@free.fr>
+Message-ID: <b46c2134e7b2851fc8623d0f0538bcfce1a5fa60.1546898693.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 7fb6e782542f (core/instrumentation: shave minutes off the build
-time), the built stampfile is used as a reference to detect files
-installed by a package.
+Commit d3dca1e9936b (core/pkg-generic: only save latest package list)
+added filtering so that, upon a "pkg-rebuild", the check-uniq-file test
+would not report the same package as installing the same file.
 
-However, this falls short during development, when a user may want to
-re-install a built-early package without rebuilding it (i.e. make
-foo-reinstall). In this case, the built stampfile is not touched, and is
-still dated from way back when the package was first built. As such,
-almost all files in target (or staging or host) are newer than that, and
-so those files are all now accounted for that package, when in fact only
-a minor subset may be accountable to it.
+Additionally, it also ensured that the file-list file did not grow with
+each rebuild, by removing all references of a package-installed files
+before listing them again.
 
-We fix that by limiting the search for files that have been actually
-touched during the install step, now that we have the proper timestamp
-for it.
+However, that second part also meant that the accounting may get wrong
+upon a rebuild, in case the new installation step installs less files
+than the previous, in which case previously installed files are no
+longer assigned to the package.
 
-Reported-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+It also hides the fact that the package has been re-installed.
+
+Furthermore, the combined size of those three files lists is almost
+negligible when compared to the rest of the build tree, so the growing
+argument does not hold.
+
+The only interesting feature of d3dca1e9936b, is thus to not report a
+package that re-installs the same file.
+
+So, we revert d3dca1e9936b but use a python set() instead of a list, to
+store the packages that installed each file. Adding to a set, an entry
+which is already in that set, does not create a new entry; it will be
+there only once.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: John Keeping <john@metanate.com>
 Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk           | 2 --
+ support/scripts/check-uniq-files | 4 ++--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3de8a99675..42aebeb49d 100644
+index 42aebeb49d..7daea190a6 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -67,7 +67,7 @@ define step_pkg_size_inner
- 	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+@@ -63,8 +63,6 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): base directory to search in
+ # $(3): suffix of file  (optional)
+ define step_pkg_size_inner
+-	@touch $(BUILD_DIR)/packages-file-list$(3).txt
+-	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
  	cd $(2); \
  	find . \( -type f -o -type l \) \
--		-newer $($(PKG)_DIR)/.stamp_built \
-+		-newer $@_before \
- 		-exec printf '$(1),%s\n' {} + \
- 		>> $(BUILD_DIR)/packages-file-list$(3).txt
- endef
+ 		-newer $@_before \
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index fbc6b5d6e7..eb92724e42 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -24,11 +24,11 @@ def main():
+         sys.stderr.write('No type was provided\n')
+         return False
+ 
+-    file_to_pkg = defaultdict(list)
++    file_to_pkg = defaultdict(set)
+     with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+         for line in pkg_file_list.readlines():
+             pkg, _, file = line.rstrip(b'\n').partition(b',')
+-            file_to_pkg[file].append(pkg)
++            file_to_pkg[file].add(pkg)
+ 
+     for file in file_to_pkg:
+         if len(file_to_pkg[file]) > 1:
 -- 
 2.14.1
