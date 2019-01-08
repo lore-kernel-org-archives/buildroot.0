@@ -1,100 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  8 Jan 2019 20:08:08 +0200
-Subject: [Buildroot] [PATCH] package/strace: fix build for mips
-Message-ID: <133b0ce8571112098cd9ff308d10326b32df24dc.1546970888.git.baruch@tkos.co.il>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Tue, 08 Jan 2019 19:02:56 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_v7_3/8=5D_core=3A_implement_?=
+ =?iso-8859-1?q?per-package_SDK_and_target?=
+In-Reply-To: <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
+Message-ID: <b92540ca-37ad-42ad-9bf3-eee8f6f6ed26@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream changes in mips specific code of the last release broke build
-for that target. Add a patch that restores build.
+On p?tek 28. prosince 2018 11:43:30 CET, Thomas Petazzoni wrote:
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> +# rsync the contents of per-package directories
+> +# $1: space-separated list of packages to rsync from
+> +# $2: 'host' or 'target'
+> +# $3: destination directory
+> +define per-package-rsync
+> +	mkdir -p $(3)
+> +	$(foreach pkg,$(1),\
+> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+> +		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+> +		$(3)$(sep))
+> +endef
 
-Fixes:
-http://autobuild.buildroot.net/results/858/8585e75df6462b6d07476a81982e88ec81655c8b/
-http://autobuild.buildroot.net/results/b2f/b2f24976ddda1adc9b9ba3d9bfb7167721814f78/
-http://autobuild.buildroot.net/results/031/0313245fe555e0c0890c3f475bf6586db23535ed/
+Hi Thomas,
+I gave this series (the ppsh-v7-work merged into master, actually, with a 
+revert of 51395b14ed1a23858eef5d7f2bcf3a03cca6dfb3). The only immediate 
+breakage I see so far on my config (ARM, systemd, glibc, linaro toolchain) 
+is related to systemd-networkd and its /etc/resolv.conf symlink handling, 
+but I am afraid that I see a bigger problem.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0002-Fix-build-for-mips-targets.patch     | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/strace/0002-Fix-build-for-mips-targets.patch
+The basic skeleton defines a symlink (it's in 
+system/skeleton/etc/resolv.conf) pointing to ../tmp/resolv.conf . This is 
+overwritten in package/systemd/systemd.mk through 
+SYSTEMD_INSTALL_RESOLVCONF_HOOK, and indeed it results in a correct symlink 
+in the systemd's per-package target dir:
 
-diff --git a/package/strace/0002-Fix-build-for-mips-targets.patch b/package/strace/0002-Fix-build-for-mips-targets.patch
-new file mode 100644
-index 000000000000..430d4071bb55
---- /dev/null
-+++ b/package/strace/0002-Fix-build-for-mips-targets.patch
-@@ -0,0 +1,68 @@
-+From 8150854b5dd030a47f601931daf827ca33bc9bd9 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 8 Jan 2019 19:52:21 +0200
-+Subject: [PATCH] Fix build for mips targets
-+
-+Commit 917c2ccf3a67 ("Refactor stack pointers") removed
-+linux/mips/arch_regs.h that defines mips_REG_* macros and struct
-+mips_regs. These symbols are referenced in mips code. Restore
-+arch_regs.h to fix the build failure:
-+
-+syscall.c: In function 'decode_syscall_subcall':
-+syscall.c:370:7: error: 'mips_REG_SP' undeclared (first use in this function)
-+       mips_REG_SP + MAX_ARGS * sizeof(tcp->u_arg[0]),
-+	   ^~~~~~~~~~~
-+
-+[ baruch: drop the Makefile.in hunk to avoid autoreconf ]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status:
-+https://lists.strace.io/pipermail/strace-devel/2019-January/008598.html
-+
-+ linux/mips/arch_regs.c |  4 +---
-+ linux/mips/arch_regs.h | 18 ++++++++++++++++++
-+ 3 files changed, 20 insertions(+), 3 deletions(-)
-+ create mode 100644 linux/mips/arch_regs.h
-+
-+diff --git a/linux/mips/arch_regs.c b/linux/mips/arch_regs.c
-+index 0874e31efea4..3ed841ee7c1a 100644
-+--- a/linux/mips/arch_regs.c
-++++ b/linux/mips/arch_regs.c
-+@@ -5,9 +5,7 @@
-+  * SPDX-License-Identifier: LGPL-2.1-or-later
-+  */
-+ 
-+-static struct {
-+-	uint64_t uregs[38];
-+-} mips_regs;
-++struct mips_regs mips_regs; /* not static */
-+ 
-+ #define REG_V0 2
-+ #define REG_A0 4
-+diff --git a/linux/mips/arch_regs.h b/linux/mips/arch_regs.h
-+new file mode 100644
-+index 000000000000..6372badce646
-+--- /dev/null
-++++ b/linux/mips/arch_regs.h
-+@@ -0,0 +1,18 @@
-++struct mips_regs {
-++	uint64_t uregs[38];
-++};
-++
-++extern struct mips_regs mips_regs;
-++
-++#define REG_V0 2
-++#define REG_A0 4
-++
-++#define mips_REG_V0 mips_regs.uregs[REG_V0]
-++#define mips_REG_A0 mips_regs.uregs[REG_A0 + 0]
-++#define mips_REG_A1 mips_regs.uregs[REG_A0 + 1]
-++#define mips_REG_A2 mips_regs.uregs[REG_A0 + 2]
-++#define mips_REG_A3 mips_regs.uregs[REG_A0 + 3]
-++#define mips_REG_A4 mips_regs.uregs[REG_A0 + 4]
-++#define mips_REG_A5 mips_regs.uregs[REG_A0 + 5]
-++#define mips_REG_SP mips_regs.uregs[29]
-++#define mips_REG_EPC mips_regs.uregs[34]
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+  per-package/systemd/target/etc/resolv.conf -> 
+../run/systemd/resolve/resolv.conf
+
+The problem is that at the rsync time, packages are processed in 
+alphabetical order. If the very last package to be rsynced (in my case, 
+this is zlib) does not transitively depend on systemd, then rsync will 
+update the /etc/resolv.conf symlink back to one obtained from the default 
+skeleton.
+
+I think that this is -- potentially -- also a problem for any package "P2" 
+which calls `ln -sf` from its *_INSTALL_TARGET_HOOKS to overwrite stuff 
+which belongs to another package "P1". If any other package "P3" depends on 
+"P1" and not on "P2", *and* if P3's name sorts after P2, then the P1's 
+symlink gets preserved via P3.
+
+This will not necessary be fixed by changing to do the rsync in a 
+dependency order because "P3" can still be rsynced after "P2".
+
+What is the cleanest fix here? Should this symlink overriding go to 
+*_TARGET_FINALIZE_HOOKS? If the `ln -sf` was just in TARGET_FINALIZE_HOOKS, 
+that would mean that the corresponding per-package/*/target would *not* 
+contain these fixes which would be quite confusing, IMHO... OTOH, two hooks 
+for overwriting would be ugly.
+
+With kind regards,
+Jan
