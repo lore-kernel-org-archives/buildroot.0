@@ -1,100 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 8 Jan 2019 21:46:38 +0100
-Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
- python
-In-Reply-To: <20190108203349.GE4022@scaer>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
- <20190108163752.GK19623@scaer>
- <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
- <20190108203349.GE4022@scaer>
-Message-ID: <CAAXf6LVB+OK8AoA_eWwG0oTz+iOYrGDJzWNGrkhc9RXrBFv=Lg@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 8 Jan 2019 20:48:22 +0000 (UTC)
+Subject: [Buildroot] popt build failing during autoreconf
+Message-ID: <q132am$sni$1@blaine.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 8 ene. 2019 a las 21:33, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Thomas DS, All,
->
-> On 2019-01-08 18:22 +0100, Thomas De Schampheleire spake thusly:
-> > El mar., 8 ene. 2019 a las 17:37, Yann E. MORIN
-> > (<yann.morin.1998@free.fr>) escribi?:
-> [--SNIP--]
-> > > > Note that I think that performance will be better with a list
-> > > > comprehension instead of explicit for's. Something like (untested):
-> > > >
-> > > > valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
-> > > >             if record['pkg'] == args.package
-> > > >             and not any(ignore_re.match(record['file']) for ignore_re
-> > > > in ignores_re) ]
-> > >
-> > > Sorry, but this is totally illegible to me.
-> >
-> > :-D
-> >
-> > Ok, I won't argue about the fact itself.
-> > Just, as a reference, small decomposition:
-> >
-> > list = [ f(x) for x in otherlist ]
-> >
-> > is a 'list comprehension' and is a performant way to generate a list
-> > without requiring a for loop.
-> > f(x) can be any action on x, e.g. x.strip() or more complex
-> > expressions involving x.
->
-> Yeah, I know what it is [0], and I can actually decipher the code above
-> with quite a bit of mental processing. But that is it: it's deciphering,
-> not reading.
->
-> [0] I even use them: https://patchwork.ozlabs.org/patch/1021622/
->
-> [--SNIP--]
-> > Here, any(x) is a function that takes an iterable (x) and returns True
-> > if any of the items in 'x' evaluate to True.
->
-> Ah, I did not know about any() (although I did infer its behaviour from
-> its name!) Thanks! :-)
->
-> > Similar to any(x) there is also all(x) which only returns True if
-> > _all_ items in x evaluate to True.
->
-> And is there none() ? ;-) I guess it's "not all()"...
+The popt package has recently started failing to build during the
+autoreconf step.  I've been using buildroot-2016.11.2, but I tried
+updating the popt package files to those from git-master, and it still
+fails the same way.  This appears to be an incompatibility between
+automake and perl 5.26:
 
-none() does not exist but if you intend what I understand by its name
-then it is:
-'not any()'
+  $ ./output/host/usr/bin/automake --version
+  Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/\${ <-- HERE ([^ \t=:+{}]+)}/@./output/host/usr/bin/automake line 3936.
 
->
-> > The value passed to 'any' is '(ignore_re.match(record['file']) for
-> > ignore_re in ignores_re)'
-> > which itself is a type of list comprehension, except that it actually
-> > is a generator comprehension. 'generator' is what you called an
-> > 'iterator' in another patch: a thing that 'yields' values one by one.
->
-> Yep, generator, not iterator.
->
-> [--SNIP--]
-> > I hope it makes things a bit more clear :)
->
-> As I said, I can actually decipher it (well, once the indentation if
-> fixed anyway! ;-) ), but still it is less readable for me...
->
-> And since I would have hard a time justifying it, or would have a hard
-> time maintaining it in the future, I prefer writing (and thus keeping)
-> code that I can work with later.
->
-> If others find the comprehensions easier to comprehend (pun), then fine,
-> but I would be much less at ease with that.
+It appears that buildroot-2016.11.2 is using automake 1.15, and the
+current git buildroot master branch is using version 1.15.1.  Should I
+be able to update the automake package without causing problems?
 
-By all means, keep your original code.
 
-At least by talking about it, we have learnt each other's views and
-shared some knowledge :-)
 
-Best regards,
-Thomas
+========================================== make output shown below ======================================
+
+umask 0022 && make -C /home/nextgen/buildroot/buildroot-2016.11.2 O=/home/nextgen/buildroot/output/. 
+>>> popt 1.16 Configuring
+>>> popt 1.16 Gettextizing
+[...]
+>>> popt 1.16 Autoreconfiguring
+Use of uninitialized value $args[0] in split at /home/nextgen/buildroot/output/host/usr/bin/autoreconf line 493, <GEN3> line 7.
+autoreconf: configure.ac: AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/\${ <-- HERE ([^ \t=:+{}]+)}/ at /home/nextgen/buildroot/output/host/usr/bin/automake line 3936.
+autoreconf: /home/nextgen/buildroot/output/host/usr/bin/automake failed with exit status: 255
+make[1]: *** [package/pkg-generic.mk:208: /home/nextgen/buildroot/output/build/popt-1.16/.stamp_configured] Error 1
+make: *** [Makefile:16: _all] Error 2
+
+
+-- 
+Grant Edwards               grant.b.edwards        Yow! Hmmm ... an arrogant
+                                 @              bouquet with a subtle
+                              gmail.com            suggestion of POLYVINYL
+                                                   CHLORIDE ...
