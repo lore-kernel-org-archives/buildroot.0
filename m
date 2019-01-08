@@ -1,48 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jan 2019 16:18:07 +0100
-Subject: [Buildroot] [git commit] python-pytz: bump to version 2018.9
-Message-ID: <20190108151828.BDC4C83668@busybox.osuosl.org>
+Date: Tue, 8 Jan 2019 16:17:40 +0100
+Subject: [Buildroot] [git commit] libinput: bump version to 1.12.5
+Message-ID: <20190108151828.B5BD483664@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d385dc403df5c485617e7f85291d0183bf5e915
+commit: https://git.buildroot.net/buildroot/commit/?id=de25d790134762b3257b08273d1bc8168b476808
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+For details see [1].
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2019-January/039804.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index 78234ace81..525d452584 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5	4b91594c440aa20c76ac92043efa75e1  pytz-2018.7.tar.gz
--sha256	31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca  pytz-2018.7.tar.gz
-+md5	0f57d76c64d0965e7429c9b871f6b711  pytz-2018.9.tar.gz
-+sha256	d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c  pytz-2018.9.tar.gz
- # Locally computed sha256 checksums
- sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index dc6046d037..a93a12c084 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 238ad13ece..3ca3fd6771 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# https://lists.freedesktop.org/archives/wayland-devel/2018-December/039782.html
+-md5 8d3c7a7467a45a3ba544d1a745267d38 libinput-1.12.4.tar.xz
+-sha1 9c1a7a2fead7f03eb21a5a0f5ac3bff6af00ebf8 libinput-1.12.4.tar.xz
+-sha256 a4f329641c2e2d98199840f99792f646a3041256a380d074e00200991fcb31e6 libinput-1.12.4.tar.xz
+-sha512 4e43ed5213059a481e5a73549c8325e5729d08512c4f580b924d4338a1b69dabd77fb612bec418f294c1da96c738ce26e45f8de8fbc222ab1af71a1535b3240f libinput-1.12.4.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-January/039804.html
++md5  40dcc044443c9314537f605b6f30bf17 libinput-1.12.5.tar.xz
++sha1 7c0b75e8cf2f1747fb8ae69300acabd46f7a7f0d libinput-1.12.5.tar.xz
++sha256 7d4b6831010ef3bf69df4b41170047fa4325edef8ff5d2d28e78281af0687123 libinput-1.12.5.tar.xz
++sha512 9365b91b3ac2c4ff0f9927913242afac7677979682dd7b541001b13d09d7982acd854f6d348101cfa4b0854c6a92b4c683f62593a97870e32ae3d607eaeae3ff libinput-1.12.5.tar.xz
+ 
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 89461bf494..bc4cc89825 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2018.7
-+PYTHON_PYTZ_VERSION = 2018.9
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/cd/71/ae99fc3df1b1c5267d37ef2c51b7d79c44ba8a5e37b48e3ca93b4d74d98b
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/af/be/6c59e30e208a5f28da85751b93ec7b97e4612268bb054d0dff396e758a90
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-LIBINPUT_VERSION = 1.12.4
++LIBINPUT_VERSION = 1.12.5
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
