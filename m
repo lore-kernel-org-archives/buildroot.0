@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 8 Jan 2019 16:22:47 +0100
-Subject: [Buildroot] [PATCH 14/19] support/check-uniq-files: don't
- report files of the same content
-In-Reply-To: <18f69b9fb1e0277f26c40609c6fc16e25b9d689a.1546898693.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Jan 2019 16:24:24 +0100
+Subject: [Buildroot] [PATCH 16/19] core: check unique files in the
+ corresponding finalize step
+In-Reply-To: <543d715864419720bee6d5d858cf4c2debd773f0.1546898693.git.yann.morin.1998@free.fr>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <18f69b9fb1e0277f26c40609c6fc16e25b9d689a.1546898693.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LXJpCUMwZNrwop-YG=gTMyox3yOCT-D8+ChUV=J8GRwCQ@mail.gmail.com>
+ <543d715864419720bee6d5d858cf4c2debd773f0.1546898693.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LVA1XOgkSGw6S=1d7+9Lxt4H-x3cJnRPn0nizu4WfQ1cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,32 @@ To: buildroot@busybox.net
 El lun., 7 ene. 2019 a las 23:07, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> Currently, we check that no two packages write to the same files, as a
-> sanity check. We do so by checking which files were touched since the
-> end of the build (aka beginning of the installation).
+> Currently, the check for uniq files is done all in one location, during
+> target-finalize. This is historical, back from when we had a single
+> finalize step.
 >
-> However, when the packages do install the exact same file, i,e, the
-> same content, we in fact do not really care what package had provided
-> said file.
+> But we now have one for each of target, staging, and host.
 >
-> In the past, we avoided that situation because we were md5sum-inf every
-> files before and after installation. Anything that changed was new or
+> So, mnove the check to the corresponding finalize steps.
+>
+> This will help, later, if/when we introduce actions specific to each
+> step, that would have an impact on the result of check-uniq-files.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  Makefile | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 9f4d037cca..dcc738a1b6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -708,19 +708,22 @@ $(TARGETS_ROOTFS): target-finalize
+>  # Avoid the rootfs name leaking down the dependency chain
+>  target-finalize: ROOTFS=
+>
+> +.PHONY: staging-finalize
 
-md5sum-ing
-'all files' or 'every file'
+This should be host-finalize.
+
+/Thomas
