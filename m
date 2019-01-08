@@ -1,86 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jan 2019 21:06:40 +0100
-Subject: [Buildroot] [git commit] tcpreplay: security bump to version 4.3.1
-Message-ID: <20190108200949.C725A8B45A@busybox.osuosl.org>
+Date: Tue, 8 Jan 2019 21:09:15 +0100
+Subject: [Buildroot] [git commit] package/strace: fix build for mips
+Message-ID: <20190108200949.D461E812A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5961ff56a8db95d0f34c640e0b7d7e7b07e540e
+commit: https://git.buildroot.net/buildroot/commit/?id=4a8c6e6c08bcd84c4aeeb4d39e0d15d5f6a7237b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream CHANGELOG entry for 4.3.0 lists these fixes:
+Upstream changes in mips specific code of the last release broke build
+for that target. Add a patch that restores build.
 
-    - CVE-2018-18408 use-after-free in post_args (#489)
-    - CVE-2018-18407 heap-buffer-overflow csum_replace4 (#488)
-    - CVE-2018-17974 heap-buffer-overflow dlt_en10mb_encode (#486)
-    - CVE-2018-17580 heap-buffer-overflow fast_edit_packet (#485)
-    - CVE-2018-17582 heap-buffer-overflow in get_next_packet (#484)
-    - CVE-2018-13112 heap-buffer-overflow in get_l2len (#477 dup #408)
-
-Drop tr_cv_libpcap_version and ac_cv_have_bpf; unused in current
-configure script.
-
-Make configure script use pcap-config to list library dependencies.
-Unfortunately, pcap-config is not entirely correct, so we still need to
-set the LIBS variable for static linking.
-
-Use the smaller tar.xz archive.
-
-Add license file hash.
+Fixes:
+http://autobuild.buildroot.net/results/858/8585e75df6462b6d07476a81982e88ec81655c8b/
+http://autobuild.buildroot.net/results/b2f/b2f24976ddda1adc9b9ba3d9bfb7167721814f78/
+http://autobuild.buildroot.net/results/031/0313245fe555e0c0890c3f475bf6586db23535ed/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpreplay/tcpreplay.hash |  5 ++++-
- package/tcpreplay/tcpreplay.mk   | 16 ++++++----------
- 2 files changed, 10 insertions(+), 11 deletions(-)
+ .../strace/0002-Fix-build-for-mips-targets.patch   | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index b033d3c3f1..31b3d3eb28 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 043756c532dab93e2be33a517ef46b1341f7239278a1045ae670041dd8a4531d  tcpreplay-4.2.6.tar.gz
-+# https://github.com/appneta/tcpreplay/releases/download/v4.3.1/tcpreplay-4.3.1.tar.xz.asc
-+# using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
-+sha256 108924a25e616e3465139410c49cae629c338df73443dfc8fc155ea9f099c659  tcpreplay-4.3.1.tar.xz
-+sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index adccde0eb0..71e57d5bd9 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,24 +4,20 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.2.6
-+TCPREPLAY_VERSION = 4.3.1
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
-+TCPREPLAY_SOURCE = tcpreplay-4.3.1.tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
- TCPREPLAY_CONF_ENV = \
--	tr_cv_libpcap_version=">= 0.7.0" \
--	ac_cv_have_bpf=no \
--	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(STAGING_DIR)/usr/include/pcap-netmap.c)=no
--TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr
-+	ac_cv_path_ac_pt_PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
-+TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
-+	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
- 
--# libpcap may depend on symbols in other libs
--TCPREPLAY_LIBS = $(STAGING_DIR)/usr/bin/pcap-config --static --libs
--TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close="`$(TCPREPLAY_LIBS)`" \
--	LIBS="`$(TCPREPLAY_LIBS)`"
--
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
-+TCPREPLAY_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`"
- endif
- 
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
+diff --git a/package/strace/0002-Fix-build-for-mips-targets.patch b/package/strace/0002-Fix-build-for-mips-targets.patch
+new file mode 100644
+index 0000000000..430d4071bb
+--- /dev/null
++++ b/package/strace/0002-Fix-build-for-mips-targets.patch
+@@ -0,0 +1,68 @@
++From 8150854b5dd030a47f601931daf827ca33bc9bd9 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 8 Jan 2019 19:52:21 +0200
++Subject: [PATCH] Fix build for mips targets
++
++Commit 917c2ccf3a67 ("Refactor stack pointers") removed
++linux/mips/arch_regs.h that defines mips_REG_* macros and struct
++mips_regs. These symbols are referenced in mips code. Restore
++arch_regs.h to fix the build failure:
++
++syscall.c: In function 'decode_syscall_subcall':
++syscall.c:370:7: error: 'mips_REG_SP' undeclared (first use in this function)
++       mips_REG_SP + MAX_ARGS * sizeof(tcp->u_arg[0]),
++	   ^~~~~~~~~~~
++
++[ baruch: drop the Makefile.in hunk to avoid autoreconf ]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status:
++https://lists.strace.io/pipermail/strace-devel/2019-January/008598.html
++
++ linux/mips/arch_regs.c |  4 +---
++ linux/mips/arch_regs.h | 18 ++++++++++++++++++
++ 3 files changed, 20 insertions(+), 3 deletions(-)
++ create mode 100644 linux/mips/arch_regs.h
++
++diff --git a/linux/mips/arch_regs.c b/linux/mips/arch_regs.c
++index 0874e31efea4..3ed841ee7c1a 100644
++--- a/linux/mips/arch_regs.c
+++++ b/linux/mips/arch_regs.c
++@@ -5,9 +5,7 @@
++  * SPDX-License-Identifier: LGPL-2.1-or-later
++  */
++ 
++-static struct {
++-	uint64_t uregs[38];
++-} mips_regs;
+++struct mips_regs mips_regs; /* not static */
++ 
++ #define REG_V0 2
++ #define REG_A0 4
++diff --git a/linux/mips/arch_regs.h b/linux/mips/arch_regs.h
++new file mode 100644
++index 000000000000..6372badce646
++--- /dev/null
+++++ b/linux/mips/arch_regs.h
++@@ -0,0 +1,18 @@
+++struct mips_regs {
+++	uint64_t uregs[38];
+++};
+++
+++extern struct mips_regs mips_regs;
+++
+++#define REG_V0 2
+++#define REG_A0 4
+++
+++#define mips_REG_V0 mips_regs.uregs[REG_V0]
+++#define mips_REG_A0 mips_regs.uregs[REG_A0 + 0]
+++#define mips_REG_A1 mips_regs.uregs[REG_A0 + 1]
+++#define mips_REG_A2 mips_regs.uregs[REG_A0 + 2]
+++#define mips_REG_A3 mips_regs.uregs[REG_A0 + 3]
+++#define mips_REG_A4 mips_regs.uregs[REG_A0 + 4]
+++#define mips_REG_A5 mips_regs.uregs[REG_A0 + 5]
+++#define mips_REG_SP mips_regs.uregs[29]
+++#define mips_REG_EPC mips_regs.uregs[34]
++-- 
++2.20.1
++
