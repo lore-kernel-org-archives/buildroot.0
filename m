@@ -1,83 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jan 2019 21:09:02 +0100
-Subject: [Buildroot] [git commit] package/strace: fix build for no-MMU
- targets
-Message-ID: <20190108200949.CE06E812A2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Jan 2019 21:33:49 +0100
+Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
+ python
+In-Reply-To: <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
+ <20190108163752.GK19623@scaer>
+ <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
+Message-ID: <20190108203349.GE4022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10f902368b2a484747e50a0f14a71f8b0c102b40
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas DS, All,
 
-The latest strace version bump added a call to fork() which breaks build
-for no-MMU. Add a patch that removes the unneeded fork() call on no-MMU.
+On 2019-01-08 18:22 +0100, Thomas De Schampheleire spake thusly:
+> El mar., 8 ene. 2019 a las 17:37, Yann E. MORIN
+> (<yann.morin.1998@free.fr>) escribi?:
+[--SNIP--]
+> > > Note that I think that performance will be better with a list
+> > > comprehension instead of explicit for's. Something like (untested):
+> > >
+> > > valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
+> > >             if record['pkg'] == args.package
+> > >             and not any(ignore_re.match(record['file']) for ignore_re
+> > > in ignores_re) ]
+> >
+> > Sorry, but this is totally illegible to me.
+> 
+> :-D
+> 
+> Ok, I won't argue about the fact itself.
+> Just, as a reference, small decomposition:
+> 
+> list = [ f(x) for x in otherlist ]
+> 
+> is a 'list comprehension' and is a performant way to generate a list
+> without requiring a for loop.
+> f(x) can be any action on x, e.g. x.strip() or more complex
+> expressions involving x.
 
-Fixes:
-http://autobuild.buildroot.net/results/4a0/4a0e2872b27be93f73137c7550eae1c1f479c160/
-http://autobuild.buildroot.net/results/747/74711084a54dfc17ad0d4d1e5faabf6d8a605dca/
+Yeah, I know what it is [0], and I can actually decipher the code above
+with quite a bit of mental processing. But that is it: it's deciphering,
+not reading.
 
-Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../strace/0001-Fix-build-for-no-MMU-targets.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+[0] I even use them: https://patchwork.ozlabs.org/patch/1021622/
 
-diff --git a/package/strace/0001-Fix-build-for-no-MMU-targets.patch b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
-new file mode 100644
-index 0000000000..1464fb697d
---- /dev/null
-+++ b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
-@@ -0,0 +1,49 @@
-+From 1b657bf8e2f4bf6f80b969b220900003d7ecbce6 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 8 Jan 2019 18:28:37 +0200
-+Subject: [PATCH] Fix build for no-MMU targets
-+
-+Commit 7488ce9e23f1 ("Check whether PTRACE_GET_SYSCALL_INFO is supported
-+by the kernel") added a fork() call in test_ptrace_get_syscall_info()
-+which is included in the main strace executable code. Although the
-+test_ptrace_get_syscall_info() routine is not called on no-MMU targets,
-+the compiler can't optimize it out because it is a global symbol. So
-+build for no-MMU targets currently fails:
-+
-+strace-ptrace_syscall_info.o: In function `test_ptrace_get_syscall_info':
-+ptrace_syscall_info.c:(.text+0x1c): undefined reference to `fork'
-+
-+Make the test_ptrace_get_syscall_info() definition depend on HAVE_FORK
-+to fix that.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status:
-+https://lists.strace.io/pipermail/strace-devel/2019-January/008596.html
-+
-+ ptrace_syscall_info.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
-+index 55eafddf7f71..cc6ce149649e 100644
-+--- a/ptrace_syscall_info.c
-++++ b/ptrace_syscall_info.c
-+@@ -40,6 +40,7 @@ static const unsigned int expected_seccomp_size =
-+  * Test that PTRACE_GET_SYSCALL_INFO API is supported by the kernel, and
-+  * that the semantics implemented in the kernel matches our expectations.
-+  */
-++#ifdef HAVE_FORK
-+ bool
-+ test_ptrace_get_syscall_info(void)
-+ {
-+@@ -255,6 +256,7 @@ done:
-+ 
-+ 	return ptrace_get_syscall_info_supported;
-+ }
-++#endif /* HAVE_FORK */
-+ 
-+ void
-+ print_ptrace_syscall_info(struct tcb *tcp, kernel_ulong_t addr,
-+-- 
-+2.20.1
-+
+[--SNIP--]
+> Here, any(x) is a function that takes an iterable (x) and returns True
+> if any of the items in 'x' evaluate to True.
+
+Ah, I did not know about any() (although I did infer its behaviour from
+its name!) Thanks! :-)
+
+> Similar to any(x) there is also all(x) which only returns True if
+> _all_ items in x evaluate to True.
+
+And is there none() ? ;-) I guess it's "not all()"...
+
+> The value passed to 'any' is '(ignore_re.match(record['file']) for
+> ignore_re in ignores_re)'
+> which itself is a type of list comprehension, except that it actually
+> is a generator comprehension. 'generator' is what you called an
+> 'iterator' in another patch: a thing that 'yields' values one by one.
+
+Yep, generator, not iterator.
+
+[--SNIP--]
+> I hope it makes things a bit more clear :)
+
+As I said, I can actually decipher it (well, once the indentation if
+fixed anyway! ;-) ), but still it is less readable for me...
+
+And since I would have hard a time justifying it, or would have a hard
+time maintaining it in the future, I prefer writing (and thus keeping)
+code that I can work with later.
+
+If others find the comprehensions easier to comprehend (pun), then fine,
+but I would be much less at ease with that.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
