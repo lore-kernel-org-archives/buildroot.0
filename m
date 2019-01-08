@@ -1,254 +1,143 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 8 Jan 2019 15:56:49 +0100
-Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
- python
-In-Reply-To: <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Jan 2019 16:07:31 +0100
+Subject: [Buildroot] [PATCH 11/19] support: introduce new format for
+ packages-file-list files
+In-Reply-To: <a6a18c80f4da8160fd36529a8a4bed22c39a96cb.1546898693.git.yann.morin.1998@free.fr>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
+ <a6a18c80f4da8160fd36529a8a4bed22c39a96cb.1546898693.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXJODkqEabq-kUm2b6gzR1dcYj1uai3y+C-YW94BFsudQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
+El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> The existing check-bin-arch script is written in shell, so it can't make
-> use of all the helpers we have in python, especially the parser for the
-> package-files lists.
+> The existing format for the packages-files lists has two drawbacks:
 >
-> Although this script is relatively clean as it is, it is not totally
-> fool-proof either, especially against weird filenames (e.g.
-> specially-crafted filenames with \n, or \b, etc...).
+>   - it is not very resilient against filenames with weird characters,
+>     like \n or \b or spaces...
 >
-> Also, shell scripts are often frowned upon but for the most mundane
-> processing, and this script is definitely not mundane.
+>   - it is not easily expandable, partly because of the above.
 >
-> Finally, shell scripts are slow, as all the processing the have to do is
-> more often than not done by spawning programs, and that is relatively
-> expensive.
+> AS such, introduce a new format for those files, that solves both
+> issues.
 >
-> Rewrite that script in python.
+> First, we must find a way that unambiguously separate fields. There is
+> one single byte that can never ever occur in filenames or package names,
+> i.e. the NULL character. So, we use that as a field separator.
 >
-> This allows to do cleaner processing and reuse the package-files list
-> parsuer.
+> Second, we must find a way to unambiguously separate records. Except for
+> \0, any character may occur in filenames, but the other existing field
+> we currently have is the package name, which we do know does not contain
+> any weird byte (e.g. it's basically limited to [[:alnum:]_-]). Thus, we
+> can't use a single character as record separator. A solution is to use
+> \0\n as the record separator.
 >
-> There's however a drawback: the script grows substantially, in part
-> because of spawning the actual readelf call (there is no ELF parser in
-> the standard python library), and because we want to keep backward
-> compatible with old pythons that lack proper abstractions like
-> subprocess.DEVNULL et al.
+> Thirdly, we must ensure that filenames never mess up with our
+> separators. By making the filename the first field, we can be sure that
+> it is properly terminated by a field separator, and that any leading \n
+> does not interfere with a previous field separator to form a spurious
+> record separator.
+>
+> So, the new format is now (without spaces):
+>
+>   filename \0 package-name \0\n
+>
+> Update the parser accordingly.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > ---
->  support/scripts/check-bin-arch | 205 +++++++++++++++++++++++------------------
->  1 file changed, 113 insertions(+), 92 deletions(-)
+>  package/pkg-generic.mk       |  8 ++++++--
+>  support/scripts/brpkgutil.py | 28 ++++++++++++++++++++++++----
+>  2 files changed, 30 insertions(+), 6 deletions(-)
 >
-> diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-> index 66b8d89932..d4902163e7 100755
-> --- a/support/scripts/check-bin-arch
-> +++ b/support/scripts/check-bin-arch
-> @@ -1,92 +1,113 @@
-> -#!/usr/bin/env bash
-> -
-> -# List of hardcoded paths that should be ignored, as they may
-> -# contain binaries for an architecture different from the
-> -# architecture of the target.
-> -declare -a IGNORES=(
-> -       # Skip firmware files, they could be ELF files for other
-> -       # architectures
-> -       "/lib/firmware"
-> -       "/usr/lib/firmware"
-> -
-> -       # Skip kernel modules
-> -       # When building a 32-bit userland on 64-bit architectures, the kernel
-> -       # and its modules may still be 64-bit. To keep the basic
-> -       # check-bin-arch logic simple, just skip this directory.
-> -       "/lib/modules"
-> -       "/usr/lib/modules"
-> -
-> -       # Skip files in /usr/share, several packages (qemu,
-> -       # pru-software-support) legitimately install ELF binaries that
-> -       # are not for the target architecture
-> -       "/usr/share"
-> -
-> -       # Skip files in /lib/grub, since it is possible to have it
-> -       # for a different architecture (e.g. i386 grub on x86_64).
-> -       "/lib/grub"
-> -)
-> -
-> -while getopts p:l:r:a:i: OPT ; do
-> -       case "${OPT}" in
-> -       p) package="${OPTARG}";;
-> -       l) pkg_list="${OPTARG}";;
-> -       r) readelf="${OPTARG}";;
-> -       a) arch_name="${OPTARG}";;
-> -       i)
-> -               # Ensure we do have single '/' as separators,
-> -               # and that we have a leading and a trailing one.
-> -               pattern="$(sed -r -e 's:/+:/:g; s:^/*:/:; s:/*$:/:;' <<<"${OPTARG}")"
-> -               IGNORES+=("${pattern}")
-> -               ;;
-> -       :) error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-> -       \?) error "unknown option '%s'\n" "${OPTARG}";;
-> -       esac
-> -done
-> -
-> -if test -z "${package}" -o -z "${pkg_list}" -o -z "${readelf}" -o -z "${arch_name}" ; then
-> -       echo "Usage: $0 -p <pkg> -l <pkg-file-list> -r <readelf> -a <arch name> [-i PATH ...]"
-> -       exit 1
-> -fi
-> -
-> -exitcode=0
-> -
-> -# Only split on new lines, for filenames-with-spaces
-> -IFS="
-> -"
-> -
-> -while read f; do
-> -       for ignore in "${IGNORES[@]}"; do
-> -               if [[ "${f}" =~ ^"${ignore}" ]]; then
-> -                       continue 2
-> -               fi
-> -       done
-> -
-> -       # Skip symlinks. Some symlinks may have absolute paths as
-> -       # target, pointing to host binaries while we're building.
-> -       if [[ -L "${TARGET_DIR}/${f}" ]]; then
-> -               continue
-> -       fi
-> -
-> -       # Get architecture using readelf. We pipe through 'head -1' so
-> -       # that when the file is a static library (.a), we only take
-> -       # into account the architecture of the first object file.
-> -       arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
-> -                      sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
-> -
-> -       # If no architecture found, assume it was not an ELF file
-> -       if test "${arch}" = "" ; then
-> -               continue
-> -       fi
-> -
-> -       # Architecture is correct
-> -       if test "${arch}" = "${arch_name}" ; then
-> -               continue
-> -       fi
-> -
-> -       printf 'ERROR: architecture for "%s" is "%s", should be "%s"\n' \
-> -              "${f}" "${arch}" "${arch_name}"
-> -
-> -       exitcode=1
-> -done < <( sed -r -e "/^${package},\.(.+)$/!d; s//\1/;" ${pkg_list} )
-> -
-> -exit ${exitcode}
-> +#!/usr/bin/env python
-> +
-> +import argparse
-> +import os
-> +import re
-> +import subprocess
-> +import sys
-> +from brpkgutil import parse_pkg_file_list as parse_pkg_file_list
-> +
-> +
-> +# List of hardcoded paths that should be ignored, as they may contain
-> +# binaries for an architecture different from the architecture of the
-> +# target
-> +IGNORES = {
-> +    # Skip firmware files
-> +    # They could be ELF files for other architectures.
-> +    '/lib/firmware',
-> +    '/usr/lib/firmware',
-> +
-> +    # Skip kernel modules
-> +    # When building a 32-bit userland on 64-bit architectures, the
-> +    # kernel and its modules may still be 64-bit. To keep the basic
-> +    # check-bin-arch logic simple, just skip these directories
-> +    '/lib/modules',
-> +    '/usr/lib/modules',
-> +
-> +    # Skip files in /usr/share
-> +    # Several packages (qemu, pru-software-support) legitimately install
-> +    # ELF binaries that are not for the target architecture
-> +    '/usr/share',
-> +
-> +    # Skip files in /lib/grub
-> +    # It is possible to have it for a different architecture (e.g. i386
-> +    # grub on x86_64)
-> +    '/lib/grub',
-> +}
-> +
-> +
-> +ERROR = 'ERROR: architecture for "%s" is "%s", should be "%s"\n'
-> +
-> +
-> +def main():
-> +    parser = argparse.ArgumentParser()
-> +    parser.add_argument('--package', '-p', metavar='PACKAGE', required=True)
-> +    parser.add_argument('--pkg-list', '-l', metavar='PKG_LIST', required=True)
-> +    parser.add_argument('--readelf', '-r', metavar='READELF', required=True)
-> +    parser.add_argument('--arch', '-a', metavar='ARCH', required=True)
-> +    parser.add_argument('--ignore', '-i', metavar='PATH', action='append')
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 7daea190a6..d261b5bf76 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -59,6 +59,10 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>
+>  # The suffix is typically empty for the target variant, for legacy backward
+>  # compatibility.
+> +# Files are record-formatted, with \0\n as record separator, and \0 as
+> +# field separator. A record is made of these fields:
+> +#  - file path
+> +#  - package name
+>  # $(1): package name
+>  # $(2): base directory to search in
+>  # $(3): suffix of file  (optional)
+> @@ -66,8 +70,8 @@ define step_pkg_size_inner
+>         cd $(2); \
+>         find . \( -type f -o -type l \) \
+>                 -newer $@_before \
+> -               -exec printf '$(1),%s\n' {} + \
+> -               >> $(BUILD_DIR)/packages-file-list$(3).txt
+> +       |sed -r -e 's/$$/\x00$(1)\x00/' \
+> +       >> $(BUILD_DIR)/packages-file-list$(3).txt
+>  endef
+>
+>  define step_pkg_size
+> diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+> index d15b18845b..f6ef4b3dca 100644
+> --- a/support/scripts/brpkgutil.py
+> +++ b/support/scripts/brpkgutil.py
+> @@ -5,6 +5,26 @@ import sys
+>  import subprocess
+>
+>
+> +# Read the binary-opened file object f with \0\n separated records (aka lines).
+> +# Highly inspired by:
+> +# https://stackoverflow.com/questions/19600475/how-to-read-records-terminated-by-custom-separator-from-file-in-python
+> +def _readlines0n(f):
+> +    buf = b''
+> +    while True:
+> +        newbuf = f.read(1048576)
 
-I think the above 'metavar' options are not necessary, as they are the
-default value.
+I would find 1024 * 1024 more readable.
 
-> +    args = parser.parse_args()
+> +        if not newbuf:
+> +            if buf:
+> +                yield buf
+> +            return
+> +        if buf is None:
+> +            buf = b''
+> +        buf += newbuf
+> +        lines = buf.split(b'\x00\n')
+> +        for line in lines[:-1]:
+> +            yield line
+> +        buf = lines[-1]
 > +
-> +    if args.ignore is not None:
-> +        # Ensure we do have single '/' as separators, and that we have a
-> +        # leading and a trailing one, then append to the global list.
-> +        for pattern in args.ignore:
-> +            IGNORES.add(re.sub('/+', '/', '/{0}/'.format(pattern)))
 > +
+>  # Iterate on all records of the packages-file-list file passed as filename
+>  # Returns an iterator over a list of dictionaries. Each dictionary contains
+>  # these keys (others maybe added in the future):
+> @@ -12,11 +32,11 @@ import subprocess
+>  # 'pkg':  the last package that installed that file
+>  def parse_pkg_file_list(path):
+>      with open(path, 'rb') as f:
 
-Note that the global list itself does not have trailing slashes. This
-seems inconsistent to me.
-
-> +    ignores_re = set()
-> +    for i in IGNORES:
-> +        ignores_re.add(re.compile(i))
-> +
-> +    arch_re = re.compile('^  Machine: +(.+)')
-> +
-> +    target_dir = os.environ['TARGET_DIR']
-> +
-> +    exit_code = 0
-> +    for record in parse_pkg_file_list(args.pkg_list):
-> +        if record['pkg'] != args.package:
-> +            continue
-> +
-> +        fpath = record['file']
-> +
-> +        ignored = False
-> +        for i in ignores_re:
-> +            if i.match(fpath):
-> +                ignored = True
-> +                break
-> +        if ignored:
-> +            continue
-
-We can never get into this if, right?, because there is already a
-break whenever ignored is set to True.
-
-Note that I think that performance will be better with a list
-comprehension instead of explicit for's. Something like (untested):
-
-valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
-            if record['pkg'] == args.package
-            and not any(ignore_re.match(record['file']) for ignore_re
-in ignores_re) ]
-for record in valid_records:
-    ...
+I now understand why you read as binary.
 
 
-You can normally swap the [ ] for ( ) to reduce memory consumption
-(generator iso list comprehension, yielding one entry at a time).
+> -        for rec in f.readlines():
+> -            l = rec.split(',0')
 
-You can argue about readability, but for me this is not less readable
-than the expanded version.
+I still think this ',0' was wrong.
+
+
+> +        for rec in _readlines0n(f):
+> +            srec = rec.split(b'\x00')
+>              d = {
+> -                  'file': l[0],
+> -                  'pkg':  l[1],
+> +                  'file': srec[0],
+> +                  'pkg':  srec[1],
+
+and I now see how the swap in a previous commit could go unnoticed in
+your testing :-)
+
 
 /Thomas
