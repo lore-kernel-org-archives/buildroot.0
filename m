@@ -1,90 +1,101 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  8 Jan 2019 00:50:24 +0100
-Subject: [Buildroot] [WIP] support/testing: add xserver + Mesa OpenGL (GLX)
- + glxinfo
-Message-ID: <20190107235024.6819-1-romain.naour@gmail.com>
+From: Mitchell Dokken <mitchell.dokken@gmail.com>
+Date: Mon,  7 Jan 2019 21:26:58 -0600
+Subject: [Buildroot] [PATCH 1/1] Provides puredata package
+Message-ID: <20190108032658.25220-1-Mitchell.Dokken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This test allow to check if the xserver with GLX is working properly.
-This is a basic test but it allow to trigger the current bug reported
-by [1].
-
-[1] https://bugs.buildroot.org/show_bug.cgi?id=11591
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mitchell Dokken <Mitchell.Dokken@gmail.com>
 ---
- support/testing/tests/package/test_glxinfo.py | 57 +++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 support/testing/tests/package/test_glxinfo.py
+ package/Config.in              |  1 +
+ package/puredata/Config.in     | 12 ++++++++++++
+ package/puredata/puredata.hash |  2 ++
+ package/puredata/puredata.mk   | 34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 package/puredata/Config.in
+ create mode 100644 package/puredata/puredata.hash
+ create mode 100644 package/puredata/puredata.mk
 
-diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
+diff --git a/package/Config.in b/package/Config.in
+index 0df9b73088..e029de53db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -45,6 +45,7 @@ menu "Audio and video applications"
+ 	source "package/on2-8170-libs/Config.in"
+ 	source "package/opus-tools/Config.in"
+ 	source "package/pulseaudio/Config.in"
++	source "package/puredata/Config.in"
+ 	source "package/sox/Config.in"
+ 	source "package/squeezelite/Config.in"
+ 	source "package/tovid/Config.in"
+diff --git a/package/puredata/Config.in b/package/puredata/Config.in
 new file mode 100644
-index 0000000000..d5d08f7a47
+index 0000000000..c8bafe8885
 --- /dev/null
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -0,0 +1,57 @@
-+import os
++++ b/package/puredata/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PUREDATA
++	bool "puredata"
++	select BR2_PACKAGE_TK
++	select BR2_PACKAGE_TCL
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_UTILS
++	select BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XAPP_XAUTH
 +
-+import infra.basetest
++	help
++		Graphic realtime audio programming language
++		http://msp.ucsd.edu/software.htm
+diff --git a/package/puredata/puredata.hash b/package/puredata/puredata.hash
+new file mode 100644
+index 0000000000..505dbe3679
+--- /dev/null
++++ b/package/puredata/puredata.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++d2e04e75d22b0e41f27daacc0cd6ec6b05ae0ef214cc7315d57e5bfbeec23fa3  pd-0.49-0.src.tar.gz
+diff --git a/package/puredata/puredata.mk b/package/puredata/puredata.mk
+new file mode 100644
+index 0000000000..842970b983
+--- /dev/null
++++ b/package/puredata/puredata.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# puredata
++#
++################################################################################
 +
-+GLXINFO_TIMEOUT = 120
++PUREDATA_VERSION =  0.49-0
++PUREDATA_SOURCE = pd-$(PUREDATA_VERSION).src.tar.gz
++PUREDATA_SITE = http://msp.ucsd.edu/Software
++PUREDATA_INSTALL_STAGING = YES
++PUREDATA_INSTALL_TARGET = YES
++PUREDATA_AUTORECONF = YES
++PUREDATA_CONF_OPTS = --no-recursion --disable-locales
 +
-+class TestGlxinfo(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_x86_core2=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-core2/tarballs/x86-core2--glibc--bleeding-edge-2018.11-1.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-+        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-+        BR2_PACKAGE_MESA3D_DEMOS=y
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-+        BR2_PACKAGE_XORG7=y
-+        BR2_PACKAGE_XSERVER_XORG_SERVER=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++PUREDATA_DEPENDENCIES = alsa-utils tcl tk
 +
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "bzImage")
-+        # glxinfo overallocate memory and the minimum that seemed to work was 512MB
-+        self.emulator.boot(arch="i386",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyS0"],
-+                           options=["-M", "pc", "-m", "512", "-drive", "file={},if=virtio,format=raw".format(img)])
-+        self.emulator.login()
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++PUREDATA_CONF_OPTS += --enable-portaudio
++else
++PUREDATA_CONF_OPTS += --disable-portaudio
++endif
 +
-+    def test_run(self):
-+        self.login()
++ifeq ($(BR2_PACKAGE_JACK2),y)
++PUREDATA_CONF_OPTS += --enable-jack
++else
++PUREDATA_CONF_OPTS += --disable-jack
++endif
 +
-+        # The test case verifies that the xserver with GLX is working
-+        cmd = "glxinfo -display :0 2>&1 >/dev/null | grep Error"
-+        # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
-+        _, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
-+        self.assertEqual(exit_code, 1)
++define PUREDATA_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++PUREDATA_PRE_CONFIGURE_HOOKS += PUREDATA_RUN_AUTOGEN
++
++$(eval $(autotools-package))
 -- 
-2.14.5
+2.11.0
