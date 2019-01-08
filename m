@@ -1,101 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jan 2019 21:09:15 +0100
-Subject: [Buildroot] [git commit] package/strace: fix build for mips
-Message-ID: <20190108200949.D461E812A2@busybox.osuosl.org>
+Date: Tue, 8 Jan 2019 21:09:02 +0100
+Subject: [Buildroot] [git commit] package/strace: fix build for no-MMU
+ targets
+Message-ID: <20190108200949.CE06E812A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a8c6e6c08bcd84c4aeeb4d39e0d15d5f6a7237b
+commit: https://git.buildroot.net/buildroot/commit/?id=10f902368b2a484747e50a0f14a71f8b0c102b40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream changes in mips specific code of the last release broke build
-for that target. Add a patch that restores build.
+The latest strace version bump added a call to fork() which breaks build
+for no-MMU. Add a patch that removes the unneeded fork() call on no-MMU.
 
 Fixes:
-http://autobuild.buildroot.net/results/858/8585e75df6462b6d07476a81982e88ec81655c8b/
-http://autobuild.buildroot.net/results/b2f/b2f24976ddda1adc9b9ba3d9bfb7167721814f78/
-http://autobuild.buildroot.net/results/031/0313245fe555e0c0890c3f475bf6586db23535ed/
+http://autobuild.buildroot.net/results/4a0/4a0e2872b27be93f73137c7550eae1c1f479c160/
+http://autobuild.buildroot.net/results/747/74711084a54dfc17ad0d4d1e5faabf6d8a605dca/
 
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../strace/0002-Fix-build-for-mips-targets.patch   | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ .../strace/0001-Fix-build-for-no-MMU-targets.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/strace/0002-Fix-build-for-mips-targets.patch b/package/strace/0002-Fix-build-for-mips-targets.patch
+diff --git a/package/strace/0001-Fix-build-for-no-MMU-targets.patch b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
 new file mode 100644
-index 0000000000..430d4071bb
+index 0000000000..1464fb697d
 --- /dev/null
-+++ b/package/strace/0002-Fix-build-for-mips-targets.patch
-@@ -0,0 +1,68 @@
-+From 8150854b5dd030a47f601931daf827ca33bc9bd9 Mon Sep 17 00:00:00 2001
++++ b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
+@@ -0,0 +1,49 @@
++From 1b657bf8e2f4bf6f80b969b220900003d7ecbce6 Mon Sep 17 00:00:00 2001
 +From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 8 Jan 2019 19:52:21 +0200
-+Subject: [PATCH] Fix build for mips targets
++Date: Tue, 8 Jan 2019 18:28:37 +0200
++Subject: [PATCH] Fix build for no-MMU targets
 +
-+Commit 917c2ccf3a67 ("Refactor stack pointers") removed
-+linux/mips/arch_regs.h that defines mips_REG_* macros and struct
-+mips_regs. These symbols are referenced in mips code. Restore
-+arch_regs.h to fix the build failure:
++Commit 7488ce9e23f1 ("Check whether PTRACE_GET_SYSCALL_INFO is supported
++by the kernel") added a fork() call in test_ptrace_get_syscall_info()
++which is included in the main strace executable code. Although the
++test_ptrace_get_syscall_info() routine is not called on no-MMU targets,
++the compiler can't optimize it out because it is a global symbol. So
++build for no-MMU targets currently fails:
 +
-+syscall.c: In function 'decode_syscall_subcall':
-+syscall.c:370:7: error: 'mips_REG_SP' undeclared (first use in this function)
-+       mips_REG_SP + MAX_ARGS * sizeof(tcp->u_arg[0]),
-+	   ^~~~~~~~~~~
++strace-ptrace_syscall_info.o: In function `test_ptrace_get_syscall_info':
++ptrace_syscall_info.c:(.text+0x1c): undefined reference to `fork'
 +
-+[ baruch: drop the Makefile.in hunk to avoid autoreconf ]
++Make the test_ptrace_get_syscall_info() definition depend on HAVE_FORK
++to fix that.
++
 +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
 +Upstream status:
-+https://lists.strace.io/pipermail/strace-devel/2019-January/008598.html
++https://lists.strace.io/pipermail/strace-devel/2019-January/008596.html
 +
-+ linux/mips/arch_regs.c |  4 +---
-+ linux/mips/arch_regs.h | 18 ++++++++++++++++++
-+ 3 files changed, 20 insertions(+), 3 deletions(-)
-+ create mode 100644 linux/mips/arch_regs.h
++ ptrace_syscall_info.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/linux/mips/arch_regs.c b/linux/mips/arch_regs.c
-+index 0874e31efea4..3ed841ee7c1a 100644
-+--- a/linux/mips/arch_regs.c
-++++ b/linux/mips/arch_regs.c
-+@@ -5,9 +5,7 @@
-+  * SPDX-License-Identifier: LGPL-2.1-or-later
++diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
++index 55eafddf7f71..cc6ce149649e 100644
++--- a/ptrace_syscall_info.c
+++++ b/ptrace_syscall_info.c
++@@ -40,6 +40,7 @@ static const unsigned int expected_seccomp_size =
++  * Test that PTRACE_GET_SYSCALL_INFO API is supported by the kernel, and
++  * that the semantics implemented in the kernel matches our expectations.
 +  */
+++#ifdef HAVE_FORK
++ bool
++ test_ptrace_get_syscall_info(void)
++ {
++@@ -255,6 +256,7 @@ done:
 + 
-+-static struct {
-+-	uint64_t uregs[38];
-+-} mips_regs;
-++struct mips_regs mips_regs; /* not static */
++ 	return ptrace_get_syscall_info_supported;
++ }
+++#endif /* HAVE_FORK */
 + 
-+ #define REG_V0 2
-+ #define REG_A0 4
-+diff --git a/linux/mips/arch_regs.h b/linux/mips/arch_regs.h
-+new file mode 100644
-+index 000000000000..6372badce646
-+--- /dev/null
-++++ b/linux/mips/arch_regs.h
-+@@ -0,0 +1,18 @@
-++struct mips_regs {
-++	uint64_t uregs[38];
-++};
-++
-++extern struct mips_regs mips_regs;
-++
-++#define REG_V0 2
-++#define REG_A0 4
-++
-++#define mips_REG_V0 mips_regs.uregs[REG_V0]
-++#define mips_REG_A0 mips_regs.uregs[REG_A0 + 0]
-++#define mips_REG_A1 mips_regs.uregs[REG_A0 + 1]
-++#define mips_REG_A2 mips_regs.uregs[REG_A0 + 2]
-++#define mips_REG_A3 mips_regs.uregs[REG_A0 + 3]
-++#define mips_REG_A4 mips_regs.uregs[REG_A0 + 4]
-++#define mips_REG_A5 mips_regs.uregs[REG_A0 + 5]
-++#define mips_REG_SP mips_regs.uregs[29]
-++#define mips_REG_EPC mips_regs.uregs[34]
++ void
++ print_ptrace_syscall_info(struct tcb *tcp, kernel_ulong_t addr,
 +-- 
 +2.20.1
 +
