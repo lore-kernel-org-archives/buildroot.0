@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 20:36:41 +0100
-Subject: [Buildroot] [PATCH 16/19] core: check unique files in the
- corresponding finalize step
-In-Reply-To: <CAAXf6LVA1XOgkSGw6S=1d7+9Lxt4H-x3cJnRPn0nizu4WfQ1cw@mail.gmail.com>
+Date: Tue, 8 Jan 2019 20:44:34 +0100
+Subject: [Buildroot] [PATCH 18/19] core: ignore non-unique files that
+ have disapeared
+In-Reply-To: <CAAXf6LU+G8Sfk6vxwRQ9+FcHsReDThUi0-yQRGprSOdXD9KU4Q@mail.gmail.com>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <543d715864419720bee6d5d858cf4c2debd773f0.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LVA1XOgkSGw6S=1d7+9Lxt4H-x3cJnRPn0nizu4WfQ1cw@mail.gmail.com>
-Message-ID: <20190108193641.GA4022@scaer>
+ <56125b7d30e7ebfc8c455d7cfb4f29528503c0af.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LU+G8Sfk6vxwRQ9+FcHsReDThUi0-yQRGprSOdXD9KU4Q@mail.gmail.com>
+Message-ID: <20190108194433.GB4022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +15,16 @@ To: buildroot@busybox.net
 
 Thomas DS, All,
 
-On 2019-01-08 16:24 +0100, Thomas De Schampheleire spake thusly:
+On 2019-01-08 16:29 +0100, Thomas De Schampheleire spake thusly:
 > El lun., 7 ene. 2019 a las 23:07, Yann E. MORIN
 > (<yann.morin.1998@free.fr>) escribi?:
-> > So, mnove the check to the corresponding finalize steps.
 [--SNIP--]
-> > +.PHONY: staging-finalize
-> This should be host-finalize.
+> > +    parser.add_argument('-d', '--dir', metavar="DIR", required=True,
+> > +                        help='Directory used as base (target/, staging/ or host/))')
+> Like commented elsewhere, metavar should be unnecessary.
 
-Fixed.
-
-I also did not reply to some other typoes or minor fixes, in which case
-consider I agree with your comments and fixed those here. Otherwise, I'd
-have bikeshedded on the list. ;-)
+And as I said elsewhere, I tested and indeed the default for metavar is
+already correct for our usecase, so I dropped it everywhere. Thanks!
 
 Regards,
 Yann E. MORIN.
