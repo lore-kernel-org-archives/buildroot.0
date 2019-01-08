@@ -1,258 +1,81 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue,  8 Jan 2019 11:40:16 -0500
-Subject: [Buildroot] [PATCH 1/1] Libcpprestsdk: remove use of align_union
-Message-ID: <20190108164016.50384-1-aduskett@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Jan 2019 18:47:03 +0200
+Subject: [Buildroot] [PATCH] package/strace: fix build for no-MMU targets
+Message-ID: <8492328072f7e89d827805005e17390ddd88b4ee.1546966023.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
-
-Taken from upstream commit 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff
+The latest strace version bump added a call to fork() which breaks build
+for no-MMU. Add a patch that removes the unneeded fork() call on no-MMU.
 
 Fixes:
-http://autobuild.buildroot.net/results/9085cbcc417aec1aeee7a317a32a0c4e5d7bb6d9
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- .../0002-remove-use-of-aligned-union.patch    | 228 ++++++++++++++++++
- 1 file changed, 228 insertions(+)
- create mode 100644 package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
+http://autobuild.buildroot.net/results/4a0/4a0e2872b27be93f73137c7550eae1c1f479c160/
+http://autobuild.buildroot.net/results/747/74711084a54dfc17ad0d4d1e5faabf6d8a605dca/
 
-diff --git a/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch b/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0001-Fix-build-for-no-MMU-targets.patch   | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/strace/0001-Fix-build-for-no-MMU-targets.patch
+
+diff --git a/package/strace/0001-Fix-build-for-no-MMU-targets.patch b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
 new file mode 100644
-index 0000000000..3cddac50df
+index 000000000000..1464fb697de8
 --- /dev/null
-+++ b/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
-@@ -0,0 +1,228 @@
-+From 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff Mon Sep 17 00:00:00 2001
-+From: Billy O'Neal <billy.oneal@gmail.com>
-+Date: Thu, 6 Dec 2018 23:57:00 -0800
-+Subject: [PATCH] Remove use of aligned_union that broke CentOS 7. (#987)
++++ b/package/strace/0001-Fix-build-for-no-MMU-targets.patch
+@@ -0,0 +1,49 @@
++From 1b657bf8e2f4bf6f80b969b220900003d7ecbce6 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 8 Jan 2019 18:28:37 +0200
++Subject: [PATCH] Fix build for no-MMU targets
 +
-+Fixes: http://autobuild.buildroot.net/results/9085cbcc417aec1aeee7a317a32a0c4e5d7bb6d9
++Commit 7488ce9e23f1 ("Check whether PTRACE_GET_SYSCALL_INFO is supported
++by the kernel") added a fork() call in test_ptrace_get_syscall_info()
++which is included in the main strace executable code. Although the
++test_ptrace_get_syscall_info() routine is not called on no-MMU targets,
++the compiler can't optimize it out because it is a global symbol. So
++build for no-MMU targets currently fails:
 +
-+Signed-off-by: Billy O'Neal <billy.oneal@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[Backport from upstream commit 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff]
++strace-ptrace_syscall_info.o: In function `test_ptrace_get_syscall_info':
++ptrace_syscall_info.c:(.text+0x1c): undefined reference to `fork'
 +
++Make the test_ptrace_get_syscall_info() definition depend on HAVE_FORK
++to fix that.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ Release/src/pplx/threadpool.cpp | 127 +++++++++++++++-----------------
-+ 1 file changed, 61 insertions(+), 66 deletions(-)
++Upstream status:
++https://lists.strace.io/pipermail/strace-devel/2019-January/008596.html
 +
-+diff --git a/Release/src/pplx/threadpool.cpp b/Release/src/pplx/threadpool.cpp
-+index 1c28cca8f..58920c025 100644
-+--- a/Release/src/pplx/threadpool.cpp
-++++ b/Release/src/pplx/threadpool.cpp
-+@@ -1,9 +1,7 @@
-+ /***
-+-* Copyright (C) Microsoft. All rights reserved.
-+-* Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
-+-*
-+-* =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-+-**/
-++ * Copyright (C) Microsoft. All rights reserved.
-++ * Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
-++ **/
-+ #include "stdafx.h"
-+ 
-+ #if !defined(CPPREST_EXCLUDE_WEBSOCKETS) || !defined(_WIN32)
-+@@ -11,8 +9,9 @@
-+ 
-+ #include <boost/asio/detail/thread.hpp>
-+ #include <new>
-+-#include <vector>
-+ #include <type_traits>
-++#include <utility>
-++#include <vector>
-+ 
-+ #if defined(__ANDROID__)
-+ #include <android/log.h>
-+@@ -29,9 +28,11 @@ static void abort_if_no_jvm()
++ ptrace_syscall_info.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
++index 55eafddf7f71..cc6ce149649e 100644
++--- a/ptrace_syscall_info.c
+++++ b/ptrace_syscall_info.c
++@@ -40,6 +40,7 @@ static const unsigned int expected_seccomp_size =
++  * Test that PTRACE_GET_SYSCALL_INFO API is supported by the kernel, and
++  * that the semantics implemented in the kernel matches our expectations.
++  */
+++#ifdef HAVE_FORK
++ bool
++ test_ptrace_get_syscall_info(void)
 + {
-+     if (JVM == nullptr)
-+     {
-+-        __android_log_print(ANDROID_LOG_ERROR, "CPPRESTSDK", "%s",
-+-            "The CppREST SDK must be initialized before first use on android: "
-+-            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
-++        __android_log_print(ANDROID_LOG_ERROR,
-++                            "CPPRESTSDK",
-++                            "%s",
-++                            "The CppREST SDK must be initialized before first use on android: "
-++                            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
-+         std::abort();
-+     }
++@@ -255,6 +256,7 @@ done:
++ 
++ 	return ptrace_get_syscall_info_supported;
 + }
-+@@ -52,9 +53,7 @@ JNIEnv* get_jvm_env()
+++#endif /* HAVE_FORK */
 + 
-+ struct threadpool_impl final : crossplat::threadpool
-+ {
-+-    threadpool_impl(size_t n)
-+-        : crossplat::threadpool(n)
-+-        , m_work(m_service)
-++    threadpool_impl(size_t n) : crossplat::threadpool(n), m_work(m_service)
-+     {
-+         for (size_t i = 0; i < n; i++)
-+             add_thread();
-+@@ -69,26 +68,20 @@ struct threadpool_impl final : crossplat::threadpool
-+         }
-+     }
-+ 
-+-    threadpool_impl& get_shared()
-+-    {
-+-        return *this;
-+-    }
-++    threadpool_impl& get_shared() { return *this; }
-+ 
-+ private:
-+     void add_thread()
-+     {
-+-        m_threads.push_back(std::unique_ptr<boost::asio::detail::thread>(
-+-            new boost::asio::detail::thread([&]{ thread_start(this); })));
-++        m_threads.push_back(
-++            std::unique_ptr<boost::asio::detail::thread>(new boost::asio::detail::thread([&] { thread_start(this); })));
-+     }
-+ 
-+ #if defined(__ANDROID__)
-+-    static void detach_from_java(void*)
-+-    {
-+-        JVM.load()->DetachCurrentThread();
-+-    }
-++    static void detach_from_java(void*) { JVM.load()->DetachCurrentThread(); }
-+ #endif // __ANDROID__
-+ 
-+-    static void* thread_start(void *arg) CPPREST_NOEXCEPT
-++    static void* thread_start(void* arg) CPPREST_NOEXCEPT
-+     {
-+ #if defined(__ANDROID__)
-+         // Calling get_jvm_env() here forces the thread to be attached.
-+@@ -110,17 +103,14 @@ struct threadpool_impl final : crossplat::threadpool
-+ #if defined(_WIN32)
-+ struct shared_threadpool
-+ {
-+-    std::aligned_union<0, threadpool_impl>::type shared_storage;
-++    union {
-++        threadpool_impl shared_storage;
-++    };
-+ 
-+-    threadpool_impl& get_shared()
-+-    {
-+-        return reinterpret_cast<threadpool_impl&>(shared_storage);
-+-    }
-++    threadpool_impl& get_shared() { return shared_storage; }
-++
-++    shared_threadpool(size_t n) : shared_storage(n) {}
-+ 
-+-    shared_threadpool(size_t n)
-+-    {
-+-        ::new (static_cast<void*>(&get_shared())) threadpool_impl(n);
-+-    }
-+     ~shared_threadpool()
-+     {
-+         // if linked into a DLL, the threadpool shared instance will be
-+@@ -138,52 +128,59 @@ typedef shared_threadpool platform_shared_threadpool;
-+ typedef threadpool_impl platform_shared_threadpool;
-+ #endif
-+ 
-+-std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
-++namespace
-+ {
-+-    static std::aligned_union<0, platform_shared_threadpool>::type storage;
-+-    platform_shared_threadpool* const ptr =
-+-        &reinterpret_cast<platform_shared_threadpool&>(storage);
-+-    bool initialized_this_time = false;
-+-#if defined(__ANDROID__)
-+-    // mutex based implementation due to paranoia about (lack of) call_once support on Android
-+-    // remove this if/when call_once is supported
-+-    static std::mutex mtx;
-+-    static std::atomic<bool> initialized;
-+-    abort_if_no_jvm();
-+-    if (!initialized.load())
-++template<class T>
-++struct uninitialized
-++{
-++    union {
-++        T storage;
-++    };
-++
-++    bool initialized;
-++
-++    uninitialized() CPPREST_NOEXCEPT : initialized(false) {}
-++    uninitialized(const uninitialized&) = delete;
-++    uninitialized& operator=(const uninitialized&) = delete;
-++    ~uninitialized()
-+     {
-+-        std::lock_guard<std::mutex> guard(mtx);
-+-        if (!initialized.load())
-++        if (initialized)
-+         {
-+-            ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
-+-            initialized.store(true);
-+-            initialized_this_time = true;
-++            storage.~T();
-+         }
-+-    }   // also unlock
-++    }
-++
-++    template<class... Args>
-++    void construct(Args&&... vals)
-++    {
-++        ::new (static_cast<void*>(&storage)) T(std::forward<Args>(vals)...);
-++        initialized = true;
-++    }
-++};
-++} // unnamed namespace
-+ 
-+-#else // ^^^ __ANDROID__ ^^^ // vvv !__ANDROID___ vvv //
-++std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
-++{
-++    static uninitialized<platform_shared_threadpool> uninit_threadpool;
-++    bool initialized_this_time = false;
-+     static std::once_flag of;
-+ 
-+-// #if defined(__ANDROID__) // if call_once can be used for android
-+-//     abort_if_no_jvm();
-+-// #endif // __ANDROID__
-+-    std::call_once(of, [num_threads, ptr, &initialized_this_time] {
-+-        ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
-++    #if defined(__ANDROID__)
-++        abort_if_no_jvm();
-++    #endif // __ANDROID__
-++
-++    std::call_once(of, [num_threads, &initialized_this_time] {
-++        uninit_threadpool.construct(num_threads);
-+         initialized_this_time = true;
-+     });
-+-#endif // __ANDROID__
-+ 
-+-    return {initialized_this_time, ptr};
-++    return {initialized_this_time, &uninit_threadpool.storage};
-+ }
-+ }
-+ 
-+ namespace crossplat
-+ {
-+-threadpool& threadpool::shared_instance()
-+-{
-+-    return initialize_shared_threadpool(40).second->get_shared();
-+-}
-+-
-++threadpool& threadpool::shared_instance() { return initialize_shared_threadpool(40).second->get_shared(); }
-+ 
-+ void threadpool::initialize_with_threads(size_t num_threads)
-+ {
-+@@ -196,9 +193,7 @@ void threadpool::initialize_with_threads(size_t num_threads)
-+ }
-+ 
-+ #if defined(__ANDROID__)
-+-void cpprest_init(JavaVM* vm) {
-+-    JVM = vm;
-+-}
-++void cpprest_init(JavaVM* vm) { JVM = vm; }
-+ #endif
-+ 
-+ std::unique_ptr<crossplat::threadpool> crossplat::threadpool::construct(size_t num_threads)
++ void
++ print_ptrace_syscall_info(struct tcb *tcp, kernel_ulong_t addr,
++-- 
++2.20.1
 +
 -- 
 2.20.1
