@@ -1,96 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 21:33:49 +0100
-Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
- python
-In-Reply-To: <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
- <20190108163752.GK19623@scaer>
- <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
-Message-ID: <20190108203349.GE4022@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 8 Jan 2019 21:34:11 +0100
+Subject: [Buildroot] [git commit] package/grpc: fix build on non-NPTL systems
+Message-ID: <20190108203451.22DBC88510@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d2810bdcf02cab877db77f827d72b4824181438
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-01-08 18:22 +0100, Thomas De Schampheleire spake thusly:
-> El mar., 8 ene. 2019 a las 17:37, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-[--SNIP--]
-> > > Note that I think that performance will be better with a list
-> > > comprehension instead of explicit for's. Something like (untested):
-> > >
-> > > valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
-> > >             if record['pkg'] == args.package
-> > >             and not any(ignore_re.match(record['file']) for ignore_re
-> > > in ignores_re) ]
-> >
-> > Sorry, but this is totally illegible to me.
-> 
-> :-D
-> 
-> Ok, I won't argue about the fact itself.
-> Just, as a reference, small decomposition:
-> 
-> list = [ f(x) for x in otherlist ]
-> 
-> is a 'list comprehension' and is a performant way to generate a list
-> without requiring a for loop.
-> f(x) can be any action on x, e.g. x.strip() or more complex
-> expressions involving x.
+uClibc-ng in non-NPTL configurations doesn't implement
+pthread_setname_np(). Unfortunately grpc assumes that as soon as
+__GLIBC__ is defined, pthread_setname_np() is available. It is
+particularly sad, because grpc build system uses CMake, so it is
+trivial to do such a check.
 
-Yeah, I know what it is [0], and I can actually decipher the code above
-with quite a bit of mental processing. But that is it: it's deciphering,
-not reading.
+This commit adds a patch that does just this: check for the
+availability of pthread_setname_np(), and use it only if
+available. The patch has been submitted upstream.
 
-[0] I even use them: https://patchwork.ozlabs.org/patch/1021622/
+Fixes:
 
-[--SNIP--]
-> Here, any(x) is a function that takes an iterable (x) and returns True
-> if any of the items in 'x' evaluate to True.
+  http://autobuild.buildroot.org/results/47991306abbcd80fb8e6baad0bd7490fa74f696c/
 
-Ah, I did not know about any() (although I did infer its behaviour from
-its name!) Thanks! :-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...tect-the-availability-of-pthread_setname_.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-> Similar to any(x) there is also all(x) which only returns True if
-> _all_ items in x evaluate to True.
-
-And is there none() ? ;-) I guess it's "not all()"...
-
-> The value passed to 'any' is '(ignore_re.match(record['file']) for
-> ignore_re in ignores_re)'
-> which itself is a type of list comprehension, except that it actually
-> is a generator comprehension. 'generator' is what you called an
-> 'iterator' in another patch: a thing that 'yields' values one by one.
-
-Yep, generator, not iterator.
-
-[--SNIP--]
-> I hope it makes things a bit more clear :)
-
-As I said, I can actually decipher it (well, once the indentation if
-fixed anyway! ;-) ), but still it is less readable for me...
-
-And since I would have hard a time justifying it, or would have a hard
-time maintaining it in the future, I prefer writing (and thus keeping)
-code that I can work with later.
-
-If others find the comprehensions easier to comprehend (pun), then fine,
-but I would be much less at ease with that.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+new file mode 100644
+index 0000000000..766f758172
+--- /dev/null
++++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -0,0 +1,52 @@
++From 0aeefca28104f86f14b511feee8d5711f2e8bcb5 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 31 Dec 2018 16:22:07 +0100
++Subject: [PATCH] Properly detect the availability of pthread_setname_np()
++
++This commit adds a CMake check for the availability of
++pthread_setname_np(), and only uses it on Linux when available.
++
++Indeed, some C libraries, such as uClibc, do not provide this
++non-POSIX function in all cases.
++
++Upstream: https://github.com/grpc/grpc/pull/17610
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt                            | 6 ++++++
++ include/grpc/impl/codegen/port_platform.h | 2 ++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index fc76cf50da..8dd457fb1a 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -94,6 +94,12 @@ endif()
++ 
++ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
++ 
+++include(CheckSymbolExists)
+++check_symbol_exists(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
+++if (HAVE_PTHREAD_SETNAME_NP)
+++  add_definitions(-DHAVE_PTHREAD_SETNAME_NP)
+++endif ()
+++
++ add_definitions(-DPB_FIELD_16BIT)
++ 
++ if (MSVC)
++diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
++index b2028a6305..dc89e6ed57 100644
++--- a/include/grpc/impl/codegen/port_platform.h
+++++ b/include/grpc/impl/codegen/port_platform.h
++@@ -173,7 +173,9 @@
++ #endif /* _LP64 */
++ #ifdef __GLIBC__
++ #define GPR_POSIX_CRASH_HANDLER 1
+++#if defined(HAVE_PTHREAD_SETNAME_NP)
++ #define GPR_LINUX_PTHREAD_NAME 1
+++#endif /* HAVE_PTHREAD_SETNAME_NP */
++ #include <linux/version.h>
++ #else /* musl libc */
++ #define GPR_MUSL_LIBC_COMPAT 1
++-- 
++2.20.1
++
