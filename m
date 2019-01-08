@@ -1,29 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Jan 2019 16:12:51 +0100
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.16
-In-Reply-To: <20190107113227.31452-1-martink@posteo.de> (Martin Kepplinger's
- message of "Mon, 7 Jan 2019 12:32:27 +0100")
-References: <20190107113227.31452-1-martink@posteo.de>
-Message-ID: <87lg3vdvyk.fsf@dell.be.48ers.dk>
+Date: Tue, 8 Jan 2019 16:04:46 +0100
+Subject: [Buildroot] [git commit] efibootmgr: drop unneeded include path
+ workaround
+Message-ID: <20190108151257.60BF0836D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d4c987980316129dfba59e770481147b0f399031
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update x11vnc from 0.9.15 to 0.9.16. For the changes, see
- > https://github.com/LibVNC/x11vnc/compare/0.9.15...0.9.16
+The hard coded -I/usr/include/efivar has been dropped from the Makefile in
+commit 000eb0020c02 (Set pkg-config binary as variable) which is part of
+v13, so drop the unneeded (misnamed) EFIBOOTMSR_PATCH_HEADER_PATH workaround.
 
- > Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/efibootmgr/efibootmgr.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Committed, thanks.
-
-Apparently 0.9.15 did not contain a COPYING file (so x11vnc-legal-info
-was broken).
-
-I have also added a hash for the COPYING file.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index bdc0019d99..079a9b7281 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -12,12 +12,6 @@ EFIBOOTMGR_DEPENDENCIES = host-pkgconf efivar popt $(TARGET_NLS_DEPENDENCIES)
+ EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ EFIBOOTMGR_MAKE_ARGS = EFIDIR=buildroot
+ 
+-define EFIBOOTMSR_PATCH_HEADER_PATH
+-	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
+-endef
+-
+-EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
+-
+ define EFIBOOTMGR_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ 		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D) \
