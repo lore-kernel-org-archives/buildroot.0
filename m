@@ -1,48 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 22:16:55 +0100
-Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
- python
-In-Reply-To: <CAAXf6LVB+OK8AoA_eWwG0oTz+iOYrGDJzWNGrkhc9RXrBFv=Lg@mail.gmail.com>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
- <20190108163752.GK19623@scaer>
- <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
- <20190108203349.GE4022@scaer>
- <CAAXf6LVB+OK8AoA_eWwG0oTz+iOYrGDJzWNGrkhc9RXrBFv=Lg@mail.gmail.com>
-Message-ID: <20190108211655.GG4022@scaer>
+Date: Tue, 8 Jan 2019 22:18:41 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/check-uniq-files: Only
+ report each package once
+In-Reply-To: <CABhNV21ZyEzEbj0oUy59Phn63_i0PKiu-NTr+ZFLmL-mRNT7Rw@mail.gmail.com>
+References: <1544537144-10197-1-git-send-email-tolvupostur@gmail.com>
+ <20181230220200.GB24224@scaer> <20190102121218.GH23435@scaer>
+ <CABhNV21ZyEzEbj0oUy59Phn63_i0PKiu-NTr+ZFLmL-mRNT7Rw@mail.gmail.com>
+Message-ID: <20190108211841.GH4022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Einar, All,
 
-On 2019-01-08 21:46 +0100, Thomas De Schampheleire spake thusly:
-> El mar., 8 ene. 2019 a las 21:33, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > And is there none() ? ;-) I guess it's "not all()"...
-> none() does not exist but if you intend what I understand by its name
-> then it is:
-> 'not any()'
+On 2019-01-08 11:06 +0100, Einar J?n spake thusly:
+> my bad. Not an issue on master.
 
-Dang right. "not all()" would mean at least one is not True, i.e.
-"not all(x)" ? "any(not x)"
+No problem! It at least made me look at it again and came up with an
+alternate solution. Thanks for the report! :-)
 
+> On Wed, 2 Jan 2019 at 13:12, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2018-12-30 23:02 +0100, Yann E. MORIN spake thusly:
+> > > On 2018-12-11 15:05 +0100, Einar Jon Gunnarsson spake thusly:
+> > > > Rebuilding the same package should not trigger
+> > > > a 'touched by more than one package' warning
+> >
+> > In fact, commit d3dca1e993 (core/pkg-generic: only save latest package
+> > list) should have already fixed that case, no?
 [--SNIP--]
-> > If others find the comprehensions easier to comprehend (pun), then fine,
-> > but I would be much less at ease with that.
-> 
-> By all means, keep your original code.
-> 
-> At least by talking about it, we have learnt each other's views and
-> shared some knowledge :-)
+> I was using 2018.02, but I tested this on the buildroot git repo
+> before submitting.
+> I must have had an older version checked out for the testing.
+> I've now updated to 2018.08 and this is no longer an issue.
+> Sorry about that.
 
-Yes, I guess with writing more python I'd get more used to reading it.
-And I certainly did appreciate the walkthrough, thanks. :-)
-
-BTW, do you intend to join after FOSDEM?
+No worries.
 
 Regards,
 Yann E. MORIN.
