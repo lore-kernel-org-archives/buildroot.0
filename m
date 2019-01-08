@@ -1,68 +1,86 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Tue, 08 Jan 2019 19:02:56 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_v7_3/8=5D_core=3A_implement_?=
- =?iso-8859-1?q?per-package_SDK_and_target?=
-In-Reply-To: <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228104335.22379-4-thomas.petazzoni@bootlin.com>
-Message-ID: <b92540ca-37ad-42ad-9bf3-eee8f6f6ed26@cesnet.cz>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Jan 2019 20:27:34 +0100
+Subject: [Buildroot] [PATCH 11/19] support: introduce new format for
+ packages-file-list files
+In-Reply-To: <CAAXf6LXJODkqEabq-kUm2b6gzR1dcYj1uai3y+C-YW94BFsudQ@mail.gmail.com>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <a6a18c80f4da8160fd36529a8a4bed22c39a96cb.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LXJODkqEabq-kUm2b6gzR1dcYj1uai3y+C-YW94BFsudQ@mail.gmail.com>
+Message-ID: <20190108192734.GL19623@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On p?tek 28. prosince 2018 11:43:30 CET, Thomas Petazzoni wrote:
-> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> +# rsync the contents of per-package directories
-> +# $1: space-separated list of packages to rsync from
-> +# $2: 'host' or 'target'
-> +# $3: destination directory
-> +define per-package-rsync
-> +	mkdir -p $(3)
-> +	$(foreach pkg,$(1),\
-> +		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
-> +		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
-> +		$(3)$(sep))
-> +endef
+Thomas, All,
 
-Hi Thomas,
-I gave this series (the ppsh-v7-work merged into master, actually, with a 
-revert of 51395b14ed1a23858eef5d7f2bcf3a03cca6dfb3). The only immediate 
-breakage I see so far on my config (ARM, systemd, glibc, linaro toolchain) 
-is related to systemd-networkd and its /etc/resolv.conf symlink handling, 
-but I am afraid that I see a bigger problem.
+On 2019-01-08 16:07 +0100, Thomas De Schampheleire spake thusly:
+> El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
+> (<yann.morin.1998@free.fr>) escribi?:
+> > The existing format for the packages-files lists has two drawbacks:
+[--SNIP--]
+> > AS such, introduce a new format for those files, that solves both
+> > issues.
+[--SNIP--]
+> > +# Read the binary-opened file object f with \0\n separated records (aka lines).
+> > +# Highly inspired by:
+> > +# https://stackoverflow.com/questions/19600475/how-to-read-records-terminated-by-custom-separator-from-file-in-python
+> > +def _readlines0n(f):
+> > +    buf = b''
+> > +    while True:
+> > +        newbuf = f.read(1048576)
+> I would find 1024 * 1024 more readable.
 
-The basic skeleton defines a symlink (it's in 
-system/skeleton/etc/resolv.conf) pointing to ../tmp/resolv.conf . This is 
-overwritten in package/systemd/systemd.mk through 
-SYSTEMD_INSTALL_RESOLVCONF_HOOK, and indeed it results in a correct symlink 
-in the systemd's per-package target dir:
+We definitely have a different eyesight, as I find this easier to grok! ;-)
 
-  per-package/systemd/target/etc/resolv.conf -> 
-../run/systemd/resolve/resolv.conf
+I should note that we absolutely do not care about the size we buffer.
+We could very well read it whole, or use smaller chunks (the original
+inspiration read 4kiB blocks).
 
-The problem is that at the rsync time, packages are processed in 
-alphabetical order. If the very last package to be rsynced (in my case, 
-this is zlib) does not transitively depend on systemd, then rsync will 
-update the /etc/resolv.conf symlink back to one obtained from the default 
-skeleton.
+But I can switch to 1024*1024.
 
-I think that this is -- potentially -- also a problem for any package "P2" 
-which calls `ln -sf` from its *_INSTALL_TARGET_HOOKS to overwrite stuff 
-which belongs to another package "P1". If any other package "P3" depends on 
-"P1" and not on "P2", *and* if P3's name sorts after P2, then the P1's 
-symlink gets preserved via P3.
+[--SNIP--]
+> >  # Iterate on all records of the packages-file-list file passed as filename
+> >  # Returns an iterator over a list of dictionaries. Each dictionary contains
+> >  # these keys (others maybe added in the future):
+> > @@ -12,11 +32,11 @@ import subprocess
+> >  # 'pkg':  the last package that installed that file
+> >  def parse_pkg_file_list(path):
+> >      with open(path, 'rb') as f:
+> I now understand why you read as binary.
 
-This will not necessary be fixed by changing to do the rsync in a 
-dependency order because "P3" can still be rsynced after "P2".
+Even though here we really want to read a binary file, we already wanted
+to in the previous patch, because filenames can be any binary sequence.
 
-What is the cleanest fix here? Should this symlink overriding go to 
-*_TARGET_FINALIZE_HOOKS? If the `ln -sf` was just in TARGET_FINALIZE_HOOKS, 
-that would mean that the corresponding per-package/*/target would *not* 
-contain these fixes which would be quite confusing, IMHO... OTOH, two hooks 
-for overwriting would be ugly.
+> > -        for rec in f.readlines():
+> > -            l = rec.split(',0')
+> I still think this ',0' was wrong.
 
-With kind regards,
-Jan
+Yes it was, I'll fix it (well, I already fixed it now).
+
+> > +        for rec in _readlines0n(f):
+> > +            srec = rec.split(b'\x00')
+> >              d = {
+> > -                  'file': l[0],
+> > -                  'pkg':  l[1],
+> > +                  'file': srec[0],
+> > +                  'pkg':  srec[1],
+> and I now see how the swap in a previous commit could go unnoticed in
+> your testing :-)
+
+Yeah. Thanks for spotting it. I'll still fix the interim patches to be
+consistent.
+
+Thank you! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
