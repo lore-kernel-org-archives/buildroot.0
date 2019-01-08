@@ -1,126 +1,258 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 17:37:52 +0100
-Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
- python
-In-Reply-To: <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
-Message-ID: <20190108163752.GK19623@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue,  8 Jan 2019 11:40:16 -0500
+Subject: [Buildroot] [PATCH 1/1] Libcpprestsdk: remove use of align_union
+Message-ID: <20190108164016.50384-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-01-08 15:56 +0100, Thomas De Schampheleire spake thusly:
-> El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-[--SNIP--]
-> > Rewrite that script in python.
-[--SNIP--]
-> > +def main():
-> > +    parser = argparse.ArgumentParser()
-> > +    parser.add_argument('--package', '-p', metavar='PACKAGE', required=True)
-> > +    parser.add_argument('--pkg-list', '-l', metavar='PKG_LIST', required=True)
-> > +    parser.add_argument('--readelf', '-r', metavar='READELF', required=True)
-> > +    parser.add_argument('--arch', '-a', metavar='ARCH', required=True)
-> > +    parser.add_argument('--ignore', '-i', metavar='PATH', action='append')
-> I think the above 'metavar' options are not necessary, as they are the
-> default value.
+From: Adam Duskett <Aduskett@gmail.com>
 
-I'll check and drop if they indeed are not.
+Taken from upstream commit 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff
 
-> > +    args = parser.parse_args()
-> > +
-> > +    if args.ignore is not None:
-> > +        # Ensure we do have single '/' as separators, and that we have a
-> > +        # leading and a trailing one, then append to the global list.
-> > +        for pattern in args.ignore:
-> > +            IGNORES.add(re.sub('/+', '/', '/{0}/'.format(pattern)))
-> Note that the global list itself does not have trailing slashes. This
-> seems inconsistent to me.
+Fixes:
+http://autobuild.buildroot.net/results/9085cbcc417aec1aeee7a317a32a0c4e5d7bb6d9
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ .../0002-remove-use-of-aligned-union.patch    | 228 ++++++++++++++++++
+ 1 file changed, 228 insertions(+)
+ create mode 100644 package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
 
-It is inconsistent, but I kept the existing behaviour intact as much as
-possible, so the python script is a drop-in replacement for the shjell
-script, with the same semantics.
-
-> > +    ignores_re = set()
-> > +    for i in IGNORES:
-> > +        ignores_re.add(re.compile(i))
-> > +
-> > +    arch_re = re.compile('^  Machine: +(.+)')
-> > +
-> > +    target_dir = os.environ['TARGET_DIR']
-> > +
-> > +    exit_code = 0
-> > +    for record in parse_pkg_file_list(args.pkg_list):
-> > +        if record['pkg'] != args.package:
-> > +            continue
-> > +
-> > +        fpath = record['file']
-> > +
-> > +        ignored = False
-> > +        for i in ignores_re:
-> > +            if i.match(fpath):
-> > +                ignored = True
-> > +                break
-> > +        if ignored:
-> > +            continue
-> 
-> We can never get into this if, right?, because there is already a
-> break whenever ignored is set to True.
-
-Yes we can, because the break only applied to the inner-most loop, which
-is the one that iterates over the ignores regexps.
-
-> Note that I think that performance will be better with a list
-> comprehension instead of explicit for's. Something like (untested):
-> 
-> valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
->             if record['pkg'] == args.package
->             and not any(ignore_re.match(record['file']) for ignore_re
-> in ignores_re) ]
-
-Sorry, but this is totally illegible to me.
-
-> for record in valid_records:
->     ...
-> 
-> 
-> You can normally swap the [ ] for ( ) to reduce memory consumption
-> (generator iso list comprehension, yielding one entry at a time).
-> 
-> You can argue about readability, but for me this is not less readable
-> than the expanded version.
-
-Well, for me your version is totally unredable, sorry... :-/
-
-The one I wrote at least clearly describes what it is doing:
-
-  - for each record in the list:
-
-    - check if the package is the one we're looking at, if not continue to
-      next record
-
-    - for each regecp to ignore, check if the filename matches it, and
-      if one is matched, memorizre the fact and break the loop (fast-path).
-
-    - if the file is to be ignored, continue to the next record
-
-and so on...
-
-The size argument is moot IMO, because we do not have thousands of
-regexps to ignore, and the parse_pkg_file_list() already yields its
-results.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch b/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
+new file mode 100644
+index 0000000000..3cddac50df
+--- /dev/null
++++ b/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
+@@ -0,0 +1,228 @@
++From 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff Mon Sep 17 00:00:00 2001
++From: Billy O'Neal <billy.oneal@gmail.com>
++Date: Thu, 6 Dec 2018 23:57:00 -0800
++Subject: [PATCH] Remove use of aligned_union that broke CentOS 7. (#987)
++
++Fixes: http://autobuild.buildroot.net/results/9085cbcc417aec1aeee7a317a32a0c4e5d7bb6d9
++
++Signed-off-by: Billy O'Neal <billy.oneal@gmail.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[Backport from upstream commit 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff]
++
++---
++ Release/src/pplx/threadpool.cpp | 127 +++++++++++++++-----------------
++ 1 file changed, 61 insertions(+), 66 deletions(-)
++
++diff --git a/Release/src/pplx/threadpool.cpp b/Release/src/pplx/threadpool.cpp
++index 1c28cca8f..58920c025 100644
++--- a/Release/src/pplx/threadpool.cpp
+++++ b/Release/src/pplx/threadpool.cpp
++@@ -1,9 +1,7 @@
++ /***
++-* Copyright (C) Microsoft. All rights reserved.
++-* Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
++-*
++-* =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
++-**/
+++ * Copyright (C) Microsoft. All rights reserved.
+++ * Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+++ **/
++ #include "stdafx.h"
++ 
++ #if !defined(CPPREST_EXCLUDE_WEBSOCKETS) || !defined(_WIN32)
++@@ -11,8 +9,9 @@
++ 
++ #include <boost/asio/detail/thread.hpp>
++ #include <new>
++-#include <vector>
++ #include <type_traits>
+++#include <utility>
+++#include <vector>
++ 
++ #if defined(__ANDROID__)
++ #include <android/log.h>
++@@ -29,9 +28,11 @@ static void abort_if_no_jvm()
++ {
++     if (JVM == nullptr)
++     {
++-        __android_log_print(ANDROID_LOG_ERROR, "CPPRESTSDK", "%s",
++-            "The CppREST SDK must be initialized before first use on android: "
++-            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
+++        __android_log_print(ANDROID_LOG_ERROR,
+++                            "CPPRESTSDK",
+++                            "%s",
+++                            "The CppREST SDK must be initialized before first use on android: "
+++                            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
++         std::abort();
++     }
++ }
++@@ -52,9 +53,7 @@ JNIEnv* get_jvm_env()
++ 
++ struct threadpool_impl final : crossplat::threadpool
++ {
++-    threadpool_impl(size_t n)
++-        : crossplat::threadpool(n)
++-        , m_work(m_service)
+++    threadpool_impl(size_t n) : crossplat::threadpool(n), m_work(m_service)
++     {
++         for (size_t i = 0; i < n; i++)
++             add_thread();
++@@ -69,26 +68,20 @@ struct threadpool_impl final : crossplat::threadpool
++         }
++     }
++ 
++-    threadpool_impl& get_shared()
++-    {
++-        return *this;
++-    }
+++    threadpool_impl& get_shared() { return *this; }
++ 
++ private:
++     void add_thread()
++     {
++-        m_threads.push_back(std::unique_ptr<boost::asio::detail::thread>(
++-            new boost::asio::detail::thread([&]{ thread_start(this); })));
+++        m_threads.push_back(
+++            std::unique_ptr<boost::asio::detail::thread>(new boost::asio::detail::thread([&] { thread_start(this); })));
++     }
++ 
++ #if defined(__ANDROID__)
++-    static void detach_from_java(void*)
++-    {
++-        JVM.load()->DetachCurrentThread();
++-    }
+++    static void detach_from_java(void*) { JVM.load()->DetachCurrentThread(); }
++ #endif // __ANDROID__
++ 
++-    static void* thread_start(void *arg) CPPREST_NOEXCEPT
+++    static void* thread_start(void* arg) CPPREST_NOEXCEPT
++     {
++ #if defined(__ANDROID__)
++         // Calling get_jvm_env() here forces the thread to be attached.
++@@ -110,17 +103,14 @@ struct threadpool_impl final : crossplat::threadpool
++ #if defined(_WIN32)
++ struct shared_threadpool
++ {
++-    std::aligned_union<0, threadpool_impl>::type shared_storage;
+++    union {
+++        threadpool_impl shared_storage;
+++    };
++ 
++-    threadpool_impl& get_shared()
++-    {
++-        return reinterpret_cast<threadpool_impl&>(shared_storage);
++-    }
+++    threadpool_impl& get_shared() { return shared_storage; }
+++
+++    shared_threadpool(size_t n) : shared_storage(n) {}
++ 
++-    shared_threadpool(size_t n)
++-    {
++-        ::new (static_cast<void*>(&get_shared())) threadpool_impl(n);
++-    }
++     ~shared_threadpool()
++     {
++         // if linked into a DLL, the threadpool shared instance will be
++@@ -138,52 +128,59 @@ typedef shared_threadpool platform_shared_threadpool;
++ typedef threadpool_impl platform_shared_threadpool;
++ #endif
++ 
++-std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
+++namespace
++ {
++-    static std::aligned_union<0, platform_shared_threadpool>::type storage;
++-    platform_shared_threadpool* const ptr =
++-        &reinterpret_cast<platform_shared_threadpool&>(storage);
++-    bool initialized_this_time = false;
++-#if defined(__ANDROID__)
++-    // mutex based implementation due to paranoia about (lack of) call_once support on Android
++-    // remove this if/when call_once is supported
++-    static std::mutex mtx;
++-    static std::atomic<bool> initialized;
++-    abort_if_no_jvm();
++-    if (!initialized.load())
+++template<class T>
+++struct uninitialized
+++{
+++    union {
+++        T storage;
+++    };
+++
+++    bool initialized;
+++
+++    uninitialized() CPPREST_NOEXCEPT : initialized(false) {}
+++    uninitialized(const uninitialized&) = delete;
+++    uninitialized& operator=(const uninitialized&) = delete;
+++    ~uninitialized()
++     {
++-        std::lock_guard<std::mutex> guard(mtx);
++-        if (!initialized.load())
+++        if (initialized)
++         {
++-            ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
++-            initialized.store(true);
++-            initialized_this_time = true;
+++            storage.~T();
++         }
++-    }   // also unlock
+++    }
+++
+++    template<class... Args>
+++    void construct(Args&&... vals)
+++    {
+++        ::new (static_cast<void*>(&storage)) T(std::forward<Args>(vals)...);
+++        initialized = true;
+++    }
+++};
+++} // unnamed namespace
++ 
++-#else // ^^^ __ANDROID__ ^^^ // vvv !__ANDROID___ vvv //
+++std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
+++{
+++    static uninitialized<platform_shared_threadpool> uninit_threadpool;
+++    bool initialized_this_time = false;
++     static std::once_flag of;
++ 
++-// #if defined(__ANDROID__) // if call_once can be used for android
++-//     abort_if_no_jvm();
++-// #endif // __ANDROID__
++-    std::call_once(of, [num_threads, ptr, &initialized_this_time] {
++-        ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
+++    #if defined(__ANDROID__)
+++        abort_if_no_jvm();
+++    #endif // __ANDROID__
+++
+++    std::call_once(of, [num_threads, &initialized_this_time] {
+++        uninit_threadpool.construct(num_threads);
++         initialized_this_time = true;
++     });
++-#endif // __ANDROID__
++ 
++-    return {initialized_this_time, ptr};
+++    return {initialized_this_time, &uninit_threadpool.storage};
++ }
++ }
++ 
++ namespace crossplat
++ {
++-threadpool& threadpool::shared_instance()
++-{
++-    return initialize_shared_threadpool(40).second->get_shared();
++-}
++-
+++threadpool& threadpool::shared_instance() { return initialize_shared_threadpool(40).second->get_shared(); }
++ 
++ void threadpool::initialize_with_threads(size_t num_threads)
++ {
++@@ -196,9 +193,7 @@ void threadpool::initialize_with_threads(size_t num_threads)
++ }
++ 
++ #if defined(__ANDROID__)
++-void cpprest_init(JavaVM* vm) {
++-    JVM = vm;
++-}
+++void cpprest_init(JavaVM* vm) { JVM = vm; }
++ #endif
++ 
++ std::unique_ptr<crossplat::threadpool> crossplat::threadpool::construct(size_t num_threads)
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
