@@ -1,38 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jan 2019 22:40:51 +0100
-Subject: [Buildroot] [git commit] xenomai: remove unnecessary autoreconf
-Message-ID: <20190108214113.E216F814C1@busybox.osuosl.org>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 8 Jan 2019 21:53:54 +0000 (UTC)
+Subject: [Buildroot] popt build failing during autoreconf
+References: <q132am$sni$1@blaine.gmane.org>
+Message-ID: <q1365i$164$1@blaine.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4219c58c386fdd351eb75185fa851addd63a75ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2019-01-08, Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-As xenomai release tarballs ship with a configure script, there is only a
-need for autoreconfiguring when patches are applied.
+> The popt package has recently started failing to build during the
+> autoreconf step. [...] This appears to be an incompatibility between
+> automake and perl 5.26:
+>
+>   $ ./output/host/usr/bin/automake --version
+>   Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/\${ <-- HERE ([^ \t=:+{}]+)}/@./output/host/usr/bin/automake line 3936.
+>
+> It appears that buildroot-2016.11.2 is using automake 1.15, and the
+> current git buildroot master branch is using version 1.15.1.  Should I
+> be able to update the automake package without causing problems?
 
-The last patch was removed with git commit
-de993bc23aab100e16026cb4cabebed48b9e1989 but the AUTORECONF line remained.
+It is indeed an incompatiblity between automake 1.15 and perl 5.26.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xenomai/xenomai.mk | 2 --
- 1 file changed, 2 deletions(-)
+Changing the automake version to 1.15.1 in the buildroot-2016.11.2
+automake.mk file fixes the problem.  You can't, however, just use the
+automake.mk file from git master, because the newer autotools host
+paths are not what other packages expect.
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 6bf08edfbc..d88e969adb 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -24,8 +24,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
- 
- XENOMAI_DEPENDENCIES = host-pkgconf
- 
--# 0002-boilerplate-build-obstack-support-conditionally.patch
--XENOMAI_AUTORECONF = YES
- 
- XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+-- 
+Grant Edwards               grant.b.edwards        Yow! Here we are in America
+                                  at               ... when do we collect
+                              gmail.com            unemployment?
