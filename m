@@ -1,134 +1,121 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 17:29:32 +0100
-Subject: [Buildroot] [PATCH 09/19] support: add parser in python for
- packages-file-list files
-In-Reply-To: <CAAXf6LUTE+HoEqZPAvSLgo4MEUjAX8TJPWV3Nku5+CRbS+Ookg@mail.gmail.com>
+Date: Tue, 8 Jan 2019 17:37:52 +0100
+Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
+ python
+In-Reply-To: <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <e7e1c2fbfe91efe150ea94270b60f477d131fa09.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LUTE+HoEqZPAvSLgo4MEUjAX8TJPWV3Nku5+CRbS+Ookg@mail.gmail.com>
-Message-ID: <20190108162932.GJ19623@scaer>
+ <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
+Message-ID: <20190108163752.GK19623@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
-
-On 2019-01-08 14:35 +0100, Thomas De Schampheleire spake thusly:
-> El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
+On 2019-01-08 15:56 +0100, Thomas De Schampheleire spake thusly:
+> El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
 > (<yann.morin.1998@free.fr>) escribi?:
 [--SNIP--]
-> > Furthermore, that format is not easily extensible.
-> >
-> > So, introduce a parser, in python, that abstracts the format of these
-> > files, and returns a dictionaries. Using dictionaries makes it easy for
-> returns a dictionary.
+> > Rewrite that script in python.
+[--SNIP--]
+> > +def main():
+> > +    parser = argparse.ArgumentParser()
+> > +    parser.add_argument('--package', '-p', metavar='PACKAGE', required=True)
+> > +    parser.add_argument('--pkg-list', '-l', metavar='PKG_LIST', required=True)
+> > +    parser.add_argument('--readelf', '-r', metavar='READELF', required=True)
+> > +    parser.add_argument('--arch', '-a', metavar='ARCH', required=True)
+> > +    parser.add_argument('--ignore', '-i', metavar='PATH', action='append')
+> I think the above 'metavar' options are not necessary, as they are the
+> default value.
 
-Actually, a call to the function will return a list of dictionarries,
-one for each file in the list. They are yielded, so returned one by one
-to iterate over easily, but many dictionaries are returned.
+I'll check and drop if they indeed are not.
 
-So:   s/a /an iterator to a list of /
+> > +    args = parser.parse_args()
+> > +
+> > +    if args.ignore is not None:
+> > +        # Ensure we do have single '/' as separators, and that we have a
+> > +        # leading and a trailing one, then append to the global list.
+> > +        for pattern in args.ignore:
+> > +            IGNORES.add(re.sub('/+', '/', '/{0}/'.format(pattern)))
+> Note that the global list itself does not have trailing slashes. This
+> seems inconsistent to me.
 
-(I believe this to be an iterator, right?)
+It is inconsistent, but I kept the existing behaviour intact as much as
+possible, so the python script is a drop-in replacement for the shjell
+script, with the same semantics.
 
-> > +def parse_pkg_file_list(path):
-> > +    with open(path, 'rb') as f:
+> > +    ignores_re = set()
+> > +    for i in IGNORES:
+> > +        ignores_re.add(re.compile(i))
+> > +
+> > +    arch_re = re.compile('^  Machine: +(.+)')
+> > +
+> > +    target_dir = os.environ['TARGET_DIR']
+> > +
+> > +    exit_code = 0
+> > +    for record in parse_pkg_file_list(args.pkg_list):
+> > +        if record['pkg'] != args.package:
+> > +            continue
+> > +
+> > +        fpath = record['file']
+> > +
+> > +        ignored = False
+> > +        for i in ignores_re:
+> > +            if i.match(fpath):
+> > +                ignored = True
+> > +                break
+> > +        if ignored:
+> > +            continue
 > 
-> Why exactly do you open as binary?
+> We can never get into this if, right?, because there is already a
+> break whenever ignored is set to True.
 
-Because it contains filenames, and filenames are a sequence of bytes,
-not encioded in any way. Filenames can contain 0xbd (? in iso8859-15)
-or it may contain 0x6f65 which is U+0153 encoded in UTF-8. It may even
-contain both. It is not a hypotetical situation, as already encountered
-it more than once.
+Yes we can, because the break only applied to the inner-most loop, which
+is the one that iterates over the ignores regexps.
 
-There is no way we can know the encoding of a filename, so we treat them
-for what they are: sequence of bytes.
-
-> IIRC this will cause the need for decoding the strings on Python 3,
-> which you don't seem to do. This was also the reason why the orginal
-> check-uniq-files needed 'b' markers in front of some strings like
-> b','.
-
-Exactly, and hence the reason that check-uniq-files will try to decide
-those strings.
-
-There might be a gap in the transition, though, as size-stat may need to
-represent those strings when generating the graphs, or generating the
-CVS files... Damned...
-
-> > +        for rec in f.readlines():
-> > +            l = rec.split(',0')
+> Note that I think that performance will be better with a list
+> comprehension instead of explicit for's. Something like (untested):
 > 
-> This looks wrong to me, there is no text ',0' in the input.
-> I think you meant rec.split(',', 1), no, like in the original code?
+> valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
+>             if record['pkg'] == args.package
+>             and not any(ignore_re.match(record['file']) for ignore_re
+> in ignores_re) ]
 
-Yeah, I borked a rebase at some point...
+Sorry, but this is totally illegible to me.
 
-> > +            d = {
-> > +                  'file': l[0],
-> > +                  'pkg':  l[1],
+> for record in valid_records:
+>     ...
 > 
-> This seems also wrong, 0 and 1 are swapped.
-
-Yeah, I borked a rebase at some point.
-
-> Example input is:
 > 
-> busybox,./usr/bin/eject
-> busybox,./usr/bin/basename
-> busybox,./usr/bin/hexedit
-> busybox,./usr/bin/readlink
-> busybox,./usr/bin/cmp
+> You can normally swap the [ ] for ( ) to reduce memory consumption
+> (generator iso list comprehension, yielding one entry at a time).
 > 
-> so I would expect 'pkg' to be l[0] and 'file' to be l[1].
-> 
-> Note that 'l' could perhaps become a more meaningful variable name. I
-> also think that one of the python rules is that variable names should
-> be minimum 3 characters.
+> You can argue about readability, but for me this is not less readable
+> than the expanded version.
 
-So, flake8 does whine about 'l' but not about 'd'. And I borked a rebase
-at some point, where I renamed 'l' and it ended up in a later commit.
+Well, for me your version is totally unredable, sorry... :-/
 
-I'll fix that here.
+The one I wrote at least clearly describes what it is doing:
 
-> > -    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-> > -        for line in pkg_file_list.readlines():
-> > -            pkg, _, file = line.rstrip(b'\n').partition(b',')
-> Note that the rstrip of newlines is no longer present in parse_pkg_file_list.
+  - for each record in the list:
 
-Good catch. I'll fix.
+    - check if the package is the one we're looking at, if not continue to
+      next record
 
-> > +    fname = os.path.join(builddir, "build", "packages-file-list.txt")
-> > +    for record in parse_pkg_file_list(fname):
-> > +        # remove the initial './' in each file path
-> > +        fpath = record['file'].strip()[2:]
-> 
-> The stripping here and the rstrip in check-uniq-files could perhaps
-> all be moved to parse_pkg_file_list.
+    - for each regecp to ignore, check if the filename matches it, and
+      if one is matched, memorizre the fact and break the loop (fast-path).
 
-So, I am not sure about this one. I'm not even sure why we don't keep
-the '/' either. After all, they are target files, so they should be
-representable as they appear on the target, i.e. with a leading '/'
+    - if the file is to be ignored, continue to the next record
 
-In any case, I wanted the introduction of the parser to be a drop-in
-replacement for the existing ad-hoc parsers, as much as possible.
+and so on...
 
-The seamantic of stripping the leading './' can be commonalised (or
-fixed, or dropped) in a later patch, when this series is already big
-enough as it is, and already touching (pun!) touchy (re-pun!) topics.
+The size argument is moot IMO, because we do not have thousands of
+regexps to ignore, and the parse_pkg_file_list() already yields its
+results.
 
 Regards,
 Yann E. MORIN.
-
-> > +        fullpath = os.path.join(builddir, "target", fpath)
-> > +        add_file(filesdict, fpath, fullpath, record['pkg'])
-> >      return filesdict
-> >
-> 
-> /Thomas
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
