@@ -1,84 +1,139 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  8 Jan 2019 18:13:58 +0200
-Subject: [Buildroot] [PATCH] tcpreplay: security bump to version 4.3.1
-Message-ID: <a85a18e1c92657beb563b238ffdd8548c3408b6b.1546964038.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Jan 2019 17:29:32 +0100
+Subject: [Buildroot] [PATCH 09/19] support: add parser in python for
+ packages-file-list files
+In-Reply-To: <CAAXf6LUTE+HoEqZPAvSLgo4MEUjAX8TJPWV3Nku5+CRbS+Ookg@mail.gmail.com>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <e7e1c2fbfe91efe150ea94270b60f477d131fa09.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LUTE+HoEqZPAvSLgo4MEUjAX8TJPWV3Nku5+CRbS+Ookg@mail.gmail.com>
+Message-ID: <20190108162932.GJ19623@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream CHANGELOG entry for 4.3.0 lists these fixes:
+Thomas DS, All,
 
-    - CVE-2018-18408 use-after-free in post_args (#489)
-    - CVE-2018-18407 heap-buffer-overflow csum_replace4 (#488)
-    - CVE-2018-17974 heap-buffer-overflow dlt_en10mb_encode (#486)
-    - CVE-2018-17580 heap-buffer-overflow fast_edit_packet (#485)
-    - CVE-2018-17582 heap-buffer-overflow in get_next_packet (#484)
-	- CVE-2018-13112 heap-buffer-overflow in get_l2len (#477 dup #408)
+On 2019-01-08 14:35 +0100, Thomas De Schampheleire spake thusly:
+> El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
+> (<yann.morin.1998@free.fr>) escribi?:
+[--SNIP--]
+> > Furthermore, that format is not easily extensible.
+> >
+> > So, introduce a parser, in python, that abstracts the format of these
+> > files, and returns a dictionaries. Using dictionaries makes it easy for
+> returns a dictionary.
 
-Drop tr_cv_libpcap_version and ac_cv_have_bpf; unused in current
-configure script.
+Actually, a call to the function will return a list of dictionarries,
+one for each file in the list. They are yielded, so returned one by one
+to iterate over easily, but many dictionaries are returned.
 
-Make configure script use pcap-config to list library dependencies.
-Unfortunately, pcap-config is not entirely correct, so we still need to
-set the LIBS variable for static linking.
+So:   s/a /an iterator to a list of /
 
-Use the smaller tar.xz archive.
+(I believe this to be an iterator, right?)
 
-Add license file hash.
+> > +def parse_pkg_file_list(path):
+> > +    with open(path, 'rb') as f:
+> 
+> Why exactly do you open as binary?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/tcpreplay/tcpreplay.hash |  5 ++++-
- package/tcpreplay/tcpreplay.mk   | 16 ++++++----------
- 2 files changed, 10 insertions(+), 11 deletions(-)
+Because it contains filenames, and filenames are a sequence of bytes,
+not encioded in any way. Filenames can contain 0xbd (? in iso8859-15)
+or it may contain 0x6f65 which is U+0153 encoded in UTF-8. It may even
+contain both. It is not a hypotetical situation, as already encountered
+it more than once.
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index b033d3c3f14d..31b3d3eb2867 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 043756c532dab93e2be33a517ef46b1341f7239278a1045ae670041dd8a4531d  tcpreplay-4.2.6.tar.gz
-+# https://github.com/appneta/tcpreplay/releases/download/v4.3.1/tcpreplay-4.3.1.tar.xz.asc
-+# using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
-+sha256 108924a25e616e3465139410c49cae629c338df73443dfc8fc155ea9f099c659  tcpreplay-4.3.1.tar.xz
-+sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index adccde0eb0e1..71e57d5bd9cd 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,24 +4,20 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.2.6
-+TCPREPLAY_VERSION = 4.3.1
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
-+TCPREPLAY_SOURCE = tcpreplay-4.3.1.tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
- TCPREPLAY_CONF_ENV = \
--	tr_cv_libpcap_version=">= 0.7.0" \
--	ac_cv_have_bpf=no \
--	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(STAGING_DIR)/usr/include/pcap-netmap.c)=no
--TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr
-+	ac_cv_path_ac_pt_PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
-+TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
-+	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
- 
--# libpcap may depend on symbols in other libs
--TCPREPLAY_LIBS = $(STAGING_DIR)/usr/bin/pcap-config --static --libs
--TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close="`$(TCPREPLAY_LIBS)`" \
--	LIBS="`$(TCPREPLAY_LIBS)`"
--
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
-+TCPREPLAY_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`"
- endif
- 
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
+There is no way we can know the encoding of a filename, so we treat them
+for what they are: sequence of bytes.
+
+> IIRC this will cause the need for decoding the strings on Python 3,
+> which you don't seem to do. This was also the reason why the orginal
+> check-uniq-files needed 'b' markers in front of some strings like
+> b','.
+
+Exactly, and hence the reason that check-uniq-files will try to decide
+those strings.
+
+There might be a gap in the transition, though, as size-stat may need to
+represent those strings when generating the graphs, or generating the
+CVS files... Damned...
+
+> > +        for rec in f.readlines():
+> > +            l = rec.split(',0')
+> 
+> This looks wrong to me, there is no text ',0' in the input.
+> I think you meant rec.split(',', 1), no, like in the original code?
+
+Yeah, I borked a rebase at some point...
+
+> > +            d = {
+> > +                  'file': l[0],
+> > +                  'pkg':  l[1],
+> 
+> This seems also wrong, 0 and 1 are swapped.
+
+Yeah, I borked a rebase at some point.
+
+> Example input is:
+> 
+> busybox,./usr/bin/eject
+> busybox,./usr/bin/basename
+> busybox,./usr/bin/hexedit
+> busybox,./usr/bin/readlink
+> busybox,./usr/bin/cmp
+> 
+> so I would expect 'pkg' to be l[0] and 'file' to be l[1].
+> 
+> Note that 'l' could perhaps become a more meaningful variable name. I
+> also think that one of the python rules is that variable names should
+> be minimum 3 characters.
+
+So, flake8 does whine about 'l' but not about 'd'. And I borked a rebase
+at some point, where I renamed 'l' and it ended up in a later commit.
+
+I'll fix that here.
+
+> > -    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+> > -        for line in pkg_file_list.readlines():
+> > -            pkg, _, file = line.rstrip(b'\n').partition(b',')
+> Note that the rstrip of newlines is no longer present in parse_pkg_file_list.
+
+Good catch. I'll fix.
+
+> > +    fname = os.path.join(builddir, "build", "packages-file-list.txt")
+> > +    for record in parse_pkg_file_list(fname):
+> > +        # remove the initial './' in each file path
+> > +        fpath = record['file'].strip()[2:]
+> 
+> The stripping here and the rstrip in check-uniq-files could perhaps
+> all be moved to parse_pkg_file_list.
+
+So, I am not sure about this one. I'm not even sure why we don't keep
+the '/' either. After all, they are target files, so they should be
+representable as they appear on the target, i.e. with a leading '/'
+
+In any case, I wanted the introduction of the parser to be a drop-in
+replacement for the existing ad-hoc parsers, as much as possible.
+
+The seamantic of stripping the leading './' can be commonalised (or
+fixed, or dropped) in a later patch, when this series is already big
+enough as it is, and already touching (pun!) touchy (re-pun!) topics.
+
+Regards,
+Yann E. MORIN.
+
+> > +        fullpath = os.path.join(builddir, "target", fpath)
+> > +        add_file(filesdict, fpath, fullpath, record['pkg'])
+> >      return filesdict
+> >
+> 
+> /Thomas
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
