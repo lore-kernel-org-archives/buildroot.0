@@ -1,67 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 17:08:20 +0100
-Subject: [Buildroot] [PATCH 06/19] infra/pkg-generic: only list files
- installed by the current package
-In-Reply-To: <CAAXf6LUYuoi3Ws=kCvf-Yj-r+eWLFY217tuEHRbY_+YgJ_zbqA@mail.gmail.com>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <8c891d4245028f97585d0e55ab5962e6ea337659.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LUYuoi3Ws=kCvf-Yj-r+eWLFY217tuEHRbY_+YgJ_zbqA@mail.gmail.com>
-Message-ID: <20190108160820.GI19623@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Jan 2019 18:13:58 +0200
+Subject: [Buildroot] [PATCH] tcpreplay: security bump to version 4.3.1
+Message-ID: <a85a18e1c92657beb563b238ffdd8548c3408b6b.1546964038.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+Upstream CHANGELOG entry for 4.3.0 lists these fixes:
 
-Thanks for the review! :-)
+    - CVE-2018-18408 use-after-free in post_args (#489)
+    - CVE-2018-18407 heap-buffer-overflow csum_replace4 (#488)
+    - CVE-2018-17974 heap-buffer-overflow dlt_en10mb_encode (#486)
+    - CVE-2018-17580 heap-buffer-overflow fast_edit_packet (#485)
+    - CVE-2018-17582 heap-buffer-overflow in get_next_packet (#484)
+	- CVE-2018-13112 heap-buffer-overflow in get_l2len (#477 dup #408)
 
-On 2019-01-08 14:07 +0100, Thomas De Schampheleire spake thusly:
-> El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-snip
-> > We fix that by limiting the search for files that have been actually
-> > touched during the install step, now that we have the proper timestamp
-> > for it.
-[--SNIP--]
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 3de8a99675..42aebeb49d 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -67,7 +67,7 @@ define step_pkg_size_inner
-> >         $(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
-> >         cd $(2); \
-> >         find . \( -type f -o -type l \) \
-> > -               -newer $($(PKG)_DIR)/.stamp_built \
-> > +               -newer $@_before \
-> While it is probably not important, just noting here that if package A
-> installs a file with a modification time in the future, then package B
-> installed after A would still get that future file in its list. In
-> fact, every package built after pkg A would then get that file into
-> 'its' list.
+Drop tr_cv_libpcap_version and ac_cv_have_bpf; unused in current
+configure script.
 
-How is this different from the current situation?
+Make configure script use pcap-config to list library dependencies.
+Unfortunately, pcap-config is not entirely correct, so we still need to
+set the LIBS variable for static linking.
 
-Maybe in that case, it would make sense that we touch all files after a
-package installation (limited to that package's files, of course)?
+Use the smaller tar.xz archive.
 
-My position is that, if a package voluntarily install stuff in the
-future, it is borked. I.e. either it uses an absolute time, in which
-case that time will be in the past some time in the future, or it uses
-a delta, in which case it is not reproducible.
+Add license file hash.
 
-Furthermore when we do an actual reproducible build, we actually touch
-all files at the end of the build, so a package that relies on file's
-timestamp is not reproducible.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/tcpreplay/tcpreplay.hash |  5 ++++-
+ package/tcpreplay/tcpreplay.mk   | 16 ++++++----------
+ 2 files changed, 10 insertions(+), 11 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index b033d3c3f14d..31b3d3eb2867 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 043756c532dab93e2be33a517ef46b1341f7239278a1045ae670041dd8a4531d  tcpreplay-4.2.6.tar.gz
++# https://github.com/appneta/tcpreplay/releases/download/v4.3.1/tcpreplay-4.3.1.tar.xz.asc
++# using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
++sha256 108924a25e616e3465139410c49cae629c338df73443dfc8fc155ea9f099c659  tcpreplay-4.3.1.tar.xz
++sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index adccde0eb0e1..71e57d5bd9cd 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,24 +4,20 @@
+ #
+ ################################################################################
+ 
+-TCPREPLAY_VERSION = 4.2.6
++TCPREPLAY_VERSION = 4.3.1
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
++TCPREPLAY_SOURCE = tcpreplay-4.3.1.tar.xz
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+ TCPREPLAY_CONF_ENV = \
+-	tr_cv_libpcap_version=">= 0.7.0" \
+-	ac_cv_have_bpf=no \
+-	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(STAGING_DIR)/usr/include/pcap-netmap.c)=no
+-TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr
++	ac_cv_path_ac_pt_PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config"
++TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
++	--enable-pcapconfig
+ TCPREPLAY_DEPENDENCIES = libpcap
+ 
+-# libpcap may depend on symbols in other libs
+-TCPREPLAY_LIBS = $(STAGING_DIR)/usr/bin/pcap-config --static --libs
+-TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close="`$(TCPREPLAY_LIBS)`" \
+-	LIBS="`$(TCPREPLAY_LIBS)`"
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
++TCPREPLAY_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`"
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TCPDUMP),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
