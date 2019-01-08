@@ -1,84 +1,151 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 8 Jan 2019 17:55:27 +0100
-Subject: [Buildroot] [PATCH 06/19] infra/pkg-generic: only list files
- installed by the current package
-In-Reply-To: <20190108160820.GI19623@scaer>
+Date: Tue, 8 Jan 2019 18:22:47 +0100
+Subject: [Buildroot] [PATCH 10/19] support: rewrite check-bin-arch in
+ python
+In-Reply-To: <20190108163752.GK19623@scaer>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <8c891d4245028f97585d0e55ab5962e6ea337659.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LUYuoi3Ws=kCvf-Yj-r+eWLFY217tuEHRbY_+YgJ_zbqA@mail.gmail.com>
- <20190108160820.GI19623@scaer>
-Message-ID: <CAAXf6LVrVZqrCH+bwYYbAGxhDeDnYXXE8MLfFKCH75EOdz3ZVA@mail.gmail.com>
+ <638ba4cafb8ab013365ae54a393b49f459bc6e74.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LWfY8QkcveMUUgBKjBa+2TnRDoG-nHUXo7eiSZ=R7cfyQ@mail.gmail.com>
+ <20190108163752.GK19623@scaer>
+Message-ID: <CAAXf6LXRLz7OO3-O7vByjodXF3DBO7DhAEqjaZdJ6jv-DuUAfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 8 ene. 2019 a las 17:08, Yann E. MORIN
+El mar., 8 ene. 2019 a las 17:37, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> Thomas DS, All,
->
-> Thanks for the review! :-)
->
-> On 2019-01-08 14:07 +0100, Thomas De Schampheleire spake thusly:
+> On 2019-01-08 15:56 +0100, Thomas De Schampheleire spake thusly:
 > > El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
 > > (<yann.morin.1998@free.fr>) escribi?:
-> snip
-> > > We fix that by limiting the search for files that have been actually
-> > > touched during the install step, now that we have the proper timestamp
-> > > for it.
 > [--SNIP--]
-> > > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > > index 3de8a99675..42aebeb49d 100644
-> > > --- a/package/pkg-generic.mk
-> > > +++ b/package/pkg-generic.mk
-> > > @@ -67,7 +67,7 @@ define step_pkg_size_inner
-> > >         $(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
-> > >         cd $(2); \
-> > >         find . \( -type f -o -type l \) \
-> > > -               -newer $($(PKG)_DIR)/.stamp_built \
-> > > +               -newer $@_before \
-> > While it is probably not important, just noting here that if package A
-> > installs a file with a modification time in the future, then package B
-> > installed after A would still get that future file in its list. In
-> > fact, every package built after pkg A would then get that file into
-> > 'its' list.
+> > > Rewrite that script in python.
+> [--SNIP--]
+> > > +def main():
+> > > +    parser = argparse.ArgumentParser()
+> > > +    parser.add_argument('--package', '-p', metavar='PACKAGE', required=True)
+> > > +    parser.add_argument('--pkg-list', '-l', metavar='PKG_LIST', required=True)
+> > > +    parser.add_argument('--readelf', '-r', metavar='READELF', required=True)
+> > > +    parser.add_argument('--arch', '-a', metavar='ARCH', required=True)
+> > > +    parser.add_argument('--ignore', '-i', metavar='PATH', action='append')
+> > I think the above 'metavar' options are not necessary, as they are the
+> > default value.
 >
-> How is this different from the current situation?
+> I'll check and drop if they indeed are not.
+>
+> > > +    args = parser.parse_args()
+> > > +
+> > > +    if args.ignore is not None:
+> > > +        # Ensure we do have single '/' as separators, and that we have a
+> > > +        # leading and a trailing one, then append to the global list.
+> > > +        for pattern in args.ignore:
+> > > +            IGNORES.add(re.sub('/+', '/', '/{0}/'.format(pattern)))
+> > Note that the global list itself does not have trailing slashes. This
+> > seems inconsistent to me.
+>
+> It is inconsistent, but I kept the existing behaviour intact as much as
+> possible, so the python script is a drop-in replacement for the shjell
+> script, with the same semantics.
+>
+> > > +    ignores_re = set()
+> > > +    for i in IGNORES:
+> > > +        ignores_re.add(re.compile(i))
+> > > +
+> > > +    arch_re = re.compile('^  Machine: +(.+)')
+> > > +
+> > > +    target_dir = os.environ['TARGET_DIR']
+> > > +
+> > > +    exit_code = 0
+> > > +    for record in parse_pkg_file_list(args.pkg_list):
+> > > +        if record['pkg'] != args.package:
+> > > +            continue
+> > > +
+> > > +        fpath = record['file']
+> > > +
+> > > +        ignored = False
+> > > +        for i in ignores_re:
+> > > +            if i.match(fpath):
+> > > +                ignored = True
+> > > +                break
+> > > +        if ignored:
+> > > +            continue
+> >
+> > We can never get into this if, right?, because there is already a
+> > break whenever ignored is set to True.
+>
+> Yes we can, because the break only applied to the inner-most loop, which
+> is the one that iterates over the ignores regexps.
 
-Yes, it's the same as in the current situation, but not in 'my'
-current situation where I'm still relying on md5sum :-)
-Part of my interest in reviewing these changes is the hope that they
-could remove the need for my revert of the 'shave off' commit that
-switches to mtime instead of md5sum, and thus following upstream
-Buildroot in this respect.
+Ok, I see.
 
 >
-> Maybe in that case, it would make sense that we touch all files after a
-> package installation (limited to that package's files, of course)?
-
-But it could be that the package has good reasons to expect a specific
-timestamp, or more probably a relative time order between certain
-files.
-I'm not sure if it is common, like I said I'd need to check in my own case.
-
+> > Note that I think that performance will be better with a list
+> > comprehension instead of explicit for's. Something like (untested):
+> >
+> > valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
+> >             if record['pkg'] == args.package
+> >             and not any(ignore_re.match(record['file']) for ignore_re
+> > in ignores_re) ]
 >
-> My position is that, if a package voluntarily install stuff in the
-> future, it is borked. I.e. either it uses an absolute time, in which
-> case that time will be in the past some time in the future, or it uses
-> a delta, in which case it is not reproducible.
+> Sorry, but this is totally illegible to me.
 
-A time delta expected between two files is not irreproducible if both
-files come from the same package.
+:-D
 
->
-> Furthermore when we do an actual reproducible build, we actually touch
-> all files at the end of the build, so a package that relies on file's
-> timestamp is not reproducible.
+Ok, I won't argue about the fact itself.
+Just, as a reference, small decomposition:
 
-I was not aware of this. That changes things, of course.
-Can you point me to the exact place in the code?
+list = [ f(x) for x in otherlist ]
 
-Thanks,
-Thomas
+is a 'list comprehension' and is a performant way to generate a list
+without requiring a for loop.
+f(x) can be any action on x, e.g. x.strip() or more complex
+expressions involving x.
+
+The 'for x in otherlist' can be restricted further with 'if' clauses.
+In the code I gave above, the base list is the return value of
+'parse_pkg_file_list(..)' and it is filtered by two clauses.
+The first one:
+    record['pkg'] == args.package
+only preserves entries in the base list that match the package we are
+interested in.
+This is the equivalent of:
+       if record['pkg'] != args.package:
+           continue
+
+and the second clause:
+    not any(ignore_re.match(record['file']) for ignore_re in ignores_re)
+
+Here, any(x) is a function that takes an iterable (x) and returns True
+if any of the items in 'x' evaluate to True.
+Similar to any(x) there is also all(x) which only returns True if
+_all_ items in x evaluate to True.
+
+The value passed to 'any' is '(ignore_re.match(record['file']) for
+ignore_re in ignores_re)'
+which itself is a type of list comprehension, except that it actually
+is a generator comprehension. 'generator' is what you called an
+'iterator' in another patch: a thing that 'yields' values one by one.
+The difference does not really matter for this discussion, so the base
+format is still:
+
+f(x) for x in some_iterable
+
+Here f(x) is ignore_re.match(..) and x is 'ignore_re' itself.
+
+So the following code:
+    valid_records = [ record for record in parse_pkg_file_list(args.pkg_list)
+                      if record['pkg'] == args.package
+                      and not any(ignore_re.match(record['file']) for
+ignore_re in ignores_re) ]
+
+naturally reads as:
+
+valid_records  is the list of records returned by parse_pkg_file_list
+for which the 'pkg' field is the one we want, and not any of our
+ignore expression matches the 'file' field of the record.
+
+I hope it makes things a bit more clear :)
+
+/Thomas
