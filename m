@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2019 20:31:05 +0100
-Subject: [Buildroot] [PATCH 12/19] infra/pkg-generic: store md5 of
- just-installed files
-In-Reply-To: <CAAXf6LV8aKmuieFi2eUo5Zv5ucOCVAjCJwnVftnpXiPrTUo2tg@mail.gmail.com>
+Date: Tue, 8 Jan 2019 20:36:41 +0100
+Subject: [Buildroot] [PATCH 16/19] core: check unique files in the
+ corresponding finalize step
+In-Reply-To: <CAAXf6LVA1XOgkSGw6S=1d7+9Lxt4H-x3cJnRPn0nizu4WfQ1cw@mail.gmail.com>
 References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <4ccf7565614332a1435f3729936dea4a73d5c4e9.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LV8aKmuieFi2eUo5Zv5ucOCVAjCJwnVftnpXiPrTUo2tg@mail.gmail.com>
-Message-ID: <20190108193105.GM19623@scaer>
+ <543d715864419720bee6d5d858cf4c2debd773f0.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LVA1XOgkSGw6S=1d7+9Lxt4H-x3cJnRPn0nizu4WfQ1cw@mail.gmail.com>
+Message-ID: <20190108193641.GA4022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,27 +15,19 @@ To: buildroot@busybox.net
 
 Thomas DS, All,
 
-On 2019-01-08 16:13 +0100, Thomas De Schampheleire spake thusly:
-> El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
+On 2019-01-08 16:24 +0100, Thomas De Schampheleire spake thusly:
+> El lun., 7 ene. 2019 a las 23:07, Yann E. MORIN
 > (<yann.morin.1998@free.fr>) escribi?:
+> > So, mnove the check to the corresponding finalize steps.
 [--SNIP--]
-> >  define step_pkg_size_inner
-> >         cd $(2); \
-> > -       find . \( -type f -o -type l \) \
-> > -               -newer $@_before \
-> > -       |sed -r -e 's/$$/\x00$(1)\x00/' \
-> > +       { \
-> > +               find . -type d -newer $@_before -printf 'directory  %p\n'; \
-> > +               find . -xtype f -newer $@_before -print0 \
-> Note that the original implementation also used '-xtype' on the
-> directory case, I think it's important.
+> > +.PHONY: staging-finalize
+> This should be host-finalize.
 
-I pondered whether we wanted to restore it for directories too, but
-completely messed the conditions in my head, and I missed the whole
-picture. If I can recall why I did not do so, I shall write it in the
-commit log.
+Fixed.
 
-Otherwise, yes, we also want to use -xtype for directories too.
+I also did not reply to some other typoes or minor fixes, in which case
+consider I agree with your comments and fixed those here. Otherwise, I'd
+have bikeshedded on the list. ;-)
 
 Regards,
 Yann E. MORIN.
