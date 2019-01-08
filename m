@@ -1,138 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 8 Jan 2019 18:30:08 +0100
-Subject: [Buildroot] [PATCH 09/19] support: add parser in python for
- packages-file-list files
-In-Reply-To: <20190108162932.GJ19623@scaer>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <e7e1c2fbfe91efe150ea94270b60f477d131fa09.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LUTE+HoEqZPAvSLgo4MEUjAX8TJPWV3Nku5+CRbS+Ookg@mail.gmail.com>
- <20190108162932.GJ19623@scaer>
-Message-ID: <CAAXf6LUGXZdktzOyxFK6FKNhALWXj6U44M9JM18d3mxBVej+Mw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Jan 2019 20:08:08 +0200
+Subject: [Buildroot] [PATCH] package/strace: fix build for mips
+Message-ID: <133b0ce8571112098cd9ff308d10326b32df24dc.1546970888.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 8 ene. 2019 a las 17:29, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Thomas DS, All,
->
-> On 2019-01-08 14:35 +0100, Thomas De Schampheleire spake thusly:
-> > El lun., 7 ene. 2019 a las 23:06, Yann E. MORIN
-> > (<yann.morin.1998@free.fr>) escribi?:
-> [--SNIP--]
-> > > Furthermore, that format is not easily extensible.
-> > >
-> > > So, introduce a parser, in python, that abstracts the format of these
-> > > files, and returns a dictionaries. Using dictionaries makes it easy for
-> > returns a dictionary.
->
-> Actually, a call to the function will return a list of dictionarries,
-> one for each file in the list. They are yielded, so returned one by one
-> to iterate over easily, but many dictionaries are returned.
->
-> So:   s/a /an iterator to a list of /
->
-> (I believe this to be an iterator, right?)
+Upstream changes in mips specific code of the last release broke build
+for that target. Add a patch that restores build.
 
-I think it should be 'generator' in Python-terms.
+Fixes:
+http://autobuild.buildroot.net/results/858/8585e75df6462b6d07476a81982e88ec81655c8b/
+http://autobuild.buildroot.net/results/b2f/b2f24976ddda1adc9b9ba3d9bfb7167721814f78/
+http://autobuild.buildroot.net/results/031/0313245fe555e0c0890c3f475bf6586db23535ed/
 
->
-> > > +def parse_pkg_file_list(path):
-> > > +    with open(path, 'rb') as f:
-> >
-> > Why exactly do you open as binary?
->
-> Because it contains filenames, and filenames are a sequence of bytes,
-> not encioded in any way. Filenames can contain 0xbd (? in iso8859-15)
-> or it may contain 0x6f65 which is U+0153 encoded in UTF-8. It may even
-> contain both. It is not a hypotetical situation, as already encountered
-> it more than once.
->
-> There is no way we can know the encoding of a filename, so we treat them
-> for what they are: sequence of bytes.
->
-> > IIRC this will cause the need for decoding the strings on Python 3,
-> > which you don't seem to do. This was also the reason why the orginal
-> > check-uniq-files needed 'b' markers in front of some strings like
-> > b','.
->
-> Exactly, and hence the reason that check-uniq-files will try to decide
-> those strings.
->
-> There might be a gap in the transition, though, as size-stat may need to
-> represent those strings when generating the graphs, or generating the
-> CVS files... Damned...
->
-> > > +        for rec in f.readlines():
-> > > +            l = rec.split(',0')
-> >
-> > This looks wrong to me, there is no text ',0' in the input.
-> > I think you meant rec.split(',', 1), no, like in the original code?
->
-> Yeah, I borked a rebase at some point...
->
-> > > +            d = {
-> > > +                  'file': l[0],
-> > > +                  'pkg':  l[1],
-> >
-> > This seems also wrong, 0 and 1 are swapped.
->
-> Yeah, I borked a rebase at some point.
->
-> > Example input is:
-> >
-> > busybox,./usr/bin/eject
-> > busybox,./usr/bin/basename
-> > busybox,./usr/bin/hexedit
-> > busybox,./usr/bin/readlink
-> > busybox,./usr/bin/cmp
-> >
-> > so I would expect 'pkg' to be l[0] and 'file' to be l[1].
-> >
-> > Note that 'l' could perhaps become a more meaningful variable name. I
-> > also think that one of the python rules is that variable names should
-> > be minimum 3 characters.
->
-> So, flake8 does whine about 'l' but not about 'd'. And I borked a rebase
-> at some point, where I renamed 'l' and it ended up in a later commit.
->
-> I'll fix that here.
->
-> > > -    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-> > > -        for line in pkg_file_list.readlines():
-> > > -            pkg, _, file = line.rstrip(b'\n').partition(b',')
-> > Note that the rstrip of newlines is no longer present in parse_pkg_file_list.
->
-> Good catch. I'll fix.
->
-> > > +    fname = os.path.join(builddir, "build", "packages-file-list.txt")
-> > > +    for record in parse_pkg_file_list(fname):
-> > > +        # remove the initial './' in each file path
-> > > +        fpath = record['file'].strip()[2:]
-> >
-> > The stripping here and the rstrip in check-uniq-files could perhaps
-> > all be moved to parse_pkg_file_list.
->
-> So, I am not sure about this one. I'm not even sure why we don't keep
-> the '/' either. After all, they are target files, so they should be
-> representable as they appear on the target, i.e. with a leading '/'
->
-> In any case, I wanted the introduction of the parser to be a drop-in
-> replacement for the existing ad-hoc parsers, as much as possible.
->
-> The seamantic of stripping the leading './' can be commonalised (or
-> fixed, or dropped) in a later patch, when this series is already big
-> enough as it is, and already touching (pun!) touchy (re-pun!) topics.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0002-Fix-build-for-mips-targets.patch     | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/strace/0002-Fix-build-for-mips-targets.patch
 
-Note that I only wanted to refer to the strip() call which only strips
-whitespace.
-The removal of './' is done with '[2:]' which is called 'slicing'.
-
-But, if you are concerned about special filenames, including those
-with spaces, then we should not do any stripping on them.
-
-Best regards,
-Thomas
+diff --git a/package/strace/0002-Fix-build-for-mips-targets.patch b/package/strace/0002-Fix-build-for-mips-targets.patch
+new file mode 100644
+index 000000000000..430d4071bb55
+--- /dev/null
++++ b/package/strace/0002-Fix-build-for-mips-targets.patch
+@@ -0,0 +1,68 @@
++From 8150854b5dd030a47f601931daf827ca33bc9bd9 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 8 Jan 2019 19:52:21 +0200
++Subject: [PATCH] Fix build for mips targets
++
++Commit 917c2ccf3a67 ("Refactor stack pointers") removed
++linux/mips/arch_regs.h that defines mips_REG_* macros and struct
++mips_regs. These symbols are referenced in mips code. Restore
++arch_regs.h to fix the build failure:
++
++syscall.c: In function 'decode_syscall_subcall':
++syscall.c:370:7: error: 'mips_REG_SP' undeclared (first use in this function)
++       mips_REG_SP + MAX_ARGS * sizeof(tcp->u_arg[0]),
++	   ^~~~~~~~~~~
++
++[ baruch: drop the Makefile.in hunk to avoid autoreconf ]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status:
++https://lists.strace.io/pipermail/strace-devel/2019-January/008598.html
++
++ linux/mips/arch_regs.c |  4 +---
++ linux/mips/arch_regs.h | 18 ++++++++++++++++++
++ 3 files changed, 20 insertions(+), 3 deletions(-)
++ create mode 100644 linux/mips/arch_regs.h
++
++diff --git a/linux/mips/arch_regs.c b/linux/mips/arch_regs.c
++index 0874e31efea4..3ed841ee7c1a 100644
++--- a/linux/mips/arch_regs.c
+++++ b/linux/mips/arch_regs.c
++@@ -5,9 +5,7 @@
++  * SPDX-License-Identifier: LGPL-2.1-or-later
++  */
++ 
++-static struct {
++-	uint64_t uregs[38];
++-} mips_regs;
+++struct mips_regs mips_regs; /* not static */
++ 
++ #define REG_V0 2
++ #define REG_A0 4
++diff --git a/linux/mips/arch_regs.h b/linux/mips/arch_regs.h
++new file mode 100644
++index 000000000000..6372badce646
++--- /dev/null
+++++ b/linux/mips/arch_regs.h
++@@ -0,0 +1,18 @@
+++struct mips_regs {
+++	uint64_t uregs[38];
+++};
+++
+++extern struct mips_regs mips_regs;
+++
+++#define REG_V0 2
+++#define REG_A0 4
+++
+++#define mips_REG_V0 mips_regs.uregs[REG_V0]
+++#define mips_REG_A0 mips_regs.uregs[REG_A0 + 0]
+++#define mips_REG_A1 mips_regs.uregs[REG_A0 + 1]
+++#define mips_REG_A2 mips_regs.uregs[REG_A0 + 2]
+++#define mips_REG_A3 mips_regs.uregs[REG_A0 + 3]
+++#define mips_REG_A4 mips_regs.uregs[REG_A0 + 4]
+++#define mips_REG_A5 mips_regs.uregs[REG_A0 + 5]
+++#define mips_REG_SP mips_regs.uregs[29]
+++#define mips_REG_EPC mips_regs.uregs[34]
++-- 
++2.20.1
++
+-- 
+2.20.1
