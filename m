@@ -1,46 +1,67 @@
-From: David Picard <dplamp@gmx.com>
-Date: Wed, 9 Jan 2019 09:00:32 +0100
-Subject: [Buildroot] linux-firmware package : files not copied to
- TARGET_DIR
-In-Reply-To: <20190108153907.2b18149f@windsurf>
-References: <c5319275-53e0-f7df-3fdb-a9699160bd1f@gmx.com>
- <20190108134921.26e793a6@windsurf>
- <6de3a002-7c43-9658-507b-5a44f57386d0@gmx.com>
- <20190108153907.2b18149f@windsurf>
-Message-ID: <402abc51-ddd3-b3ec-206f-5960e9249f54@gmx.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 9 Jan 2019 14:27:33 +0100
+Subject: [Buildroot] [PATCH 1/2 v3] core: make symlinks relative when
+ preparing the SDK
+In-Reply-To: <CA+1k=2YqfmD2cYMHGTnFjW13A51Ki+2dMp96Y+9HGyo2z4qP+w@mail.gmail.com>
+References: <cover.1545491919.git.yann.morin.1998@free.fr>
+ <9f4825baa7a475b4d8f262925e1ff652b31cd6fb.1545491919.git.yann.morin.1998@free.fr>
+ <20181226222135.4ef03363@windsurf>
+ <CA+1k=2YqfmD2cYMHGTnFjW13A51Ki+2dMp96Y+9HGyo2z4qP+w@mail.gmail.com>
+Message-ID: <5d63c254-1e80-bd9e-7ec1-b866fce178ab@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK, if I can solve the issue with my video driver, I'll certainly do it.
+Hi,
 
-Le 08/01/2019 ? 15:39, Thomas Petazzoni a ?crit?:
-> Hello,
->
-> On Tue, 8 Jan 2019 14:17:24 +0100, David Picard wrote:
->
->> I am using the CONFIG_E100 kernel driver, which needs
->> e100/d102e_ucode.bin from package linux-firmware for chipset Intel
->> 82551IT Fast Ethernet Controller.
->> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/e100
+Am 05.01.19 um 01:53 schrieb Joel Carlson:
+> On Wed, Dec 26, 2018 at 2:21 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
 >>
->> I selected BR2_PACKAGE_LINUX_FIRMWARE in Buildroot, but none of the
->> options in the submenu. The file I need is actually present in the
->> package build directory, but is not installed.
-> Well, if you don't enable any of the options in the linux-firmware
-> submenu, then no firmware gets installed.
->
->> I was thinking of making a custom patch for linux-firmware.mk to copy
->> just the one file I need. What do you think ?
-> That's what you need to do: add an option in
-> package/linux-firmware/Config.in for your firmware, and add the
-> necessary code in package/linux-firmware/linux-firmware.mk to add the
-> firmware to the LINUX_FIRMWARE_FILES variable when the option is
-> enabled. Don't forget to update LINUX_FIRMWARE_ALL_LICENSE_FILES
-> accordingly if needed. And to submit the resulting patch!
->
-> Best regards,
->
-> Thomas
+>> Hello,
+>>
+>> On Sat, 22 Dec 2018 16:18:51 +0100, Yann E. MORIN wrote:
+>>> The SDK is supposed to be relocatable, so symlinks must not be
+>>> absolute.
+>>>
+>>> Add a new helper script, that replaces all absolute symlinks with
+>>> relative ones.
+>>
+>> This script is really not trivial. This additional complexity raises a
+>> simple question: how many packages install such absolute symlinks?
+> 
+> That was actually a good question.  I did a build where I turned on
+> some 450+ random packages (estimated by counting the folders in build/
+> other than host-* folders).  I encountered the following absolute
+> links:
+> iptables - 1 absolute symlink (sysroot/usr/bin/iptables-xml ->
+> /usr/sbin/xtables-multi)
+> ntfs-3g - 2 absolute symlinks (sysroot/sbin/mount.ntfs-3g ->
+> /usr/bin/ntfs-3g  and  sysroot/sbin/mount.lowntfs-3g ->
+> /usr/bin/lowntfs-3g)
+> fontconfig - 16 absolute symlinks (sysroot/etc/fonts/conf.d/* ->
+> /usr/share/fontconfig/conf.avail/*)
+> And then not in my build, but pointed out by someone on a previous
+> email thread, the eudev package produces 1 absolute symlink
+
+I've been toying with this patch as well and among ~100 packages also 
+found the absolute symlinks in iptables and eudev (only). Short of time 
+and knowledge of how to suppress them being created I made two patches 
+in the form:
+
++define EUDEV_REMOVE_BROKEN_SYMLINK
++	$(RM) $(STAGING_DIR)/sbin/udevadm
++endef
++
++EUDEV_POST_INSTALL_STAGING_HOOKS += EUDEV_REMOVE_BROKEN_SYMLINK
++
+
+However, I don't propose this as a solution as I think a blacklist would 
+concentrate the issue in one place rather than spreading exceptions all 
+over the place.
+
+
+regards,
+Andreas
