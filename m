@@ -1,85 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 9 Jan 2019 14:39:28 +0100
-Subject: [Buildroot] [PATCH 00/19] support: limit install-time
- instrumentation to current package's files (branch yem/files-list-2)
-In-Reply-To: <20190108213037.GI4022@scaer>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWsWTntZdve0sGs8HDJSS9=RKeupaYTYO2TuG3oEHdf+A@mail.gmail.com>
- <CAAXf6LXj1_YNqd4N9Jr=ygi2YgN3fYYCEjkhzD=xaH5Lco6Pqg@mail.gmail.com>
- <20190108213037.GI4022@scaer>
-Message-ID: <CAAXf6LUZ6OouT40zROoSZ6h-ws2u4b8zY0+OwQmyvUgT9Kz9HQ@mail.gmail.com>
+From: Pampolini Matteo <matteo.pampolini@leonardocompany.com>
+Date: Wed, 9 Jan 2019 14:19:46 +0000
+Subject: [Buildroot] Linux kernel module compilation with Buildroot
+ generated toolchain
+Message-ID: <1547043586247.60355@leonardocompany.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 8 ene. 2019 a las 22:30, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Thomas, All,
->
-> On 2019-01-08 16:53 +0100, Thomas De Schampheleire spake thusly:
-> > El mar., 8 ene. 2019 a las 13:51, Thomas De Schampheleire
-> > (<patrickdepinguin@gmail.com>) escribi?:
-> > > El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
-> > > (<yann.morin.1998@free.fr>) escribi?:
-> > > > Currently, the instrumentation steps, that we run after a package is
-> > > > installed, get confused about the files that package may have be
-> > > > responsible for.
-> [--SNIP--]
-> > > > This series is thus an attempt at fixing all those issues.
-> [--SNIP--]
-> > > For reference, the discussion thread when commit 7fb6e782542f was submitted:
-> > > http://lists.busybox.net/pipermail/buildroot/2018-March/215979.html
-> > > and my comments on moving away from the md5sum to the mtime approach:
-> > > http://lists.busybox.net/pipermail/buildroot/2018-March/216331.html
->
-> I do realise today that I did not reply to you back at that time.
-> Apologies.
->
-> Still I have no idea on how we could have _easily_ fixed the issue
-> anyway. The solution proposed by Trent would have been way too
-> complicated to come up with in a timely manner, no md5sum-ing staging/
-> and host/ would prevent PPD, and thus TLPB, to eventually land.
->
-> > > I will be cross-checking this series against these comments, as an
-> > > accurate list in packages-file-list.txt is important for me. In my
-> > > current tree, I reverted commit 7fb6e782542f and disabled
-> > > check-uniq-files on staging and host, to alleviate the time impact but
-> > > still have an accurate list.
-> >
-> > I finished reviewing, thanks for this interesting series and clear commits.
-> >
-> > Regarding my old comments linked above, I think the packages-file-list
-> > will still be off if a package installs a file with a fixed timestamp,
-> > typically a timestamp in the past. I should test this series against
-> > our use case to see if we actually have such a case, but I'd need to
-> > do some preparatory work first so it may take some time.
->
-> As I already said, we already have the issue with our skeleton, anyway.
->
-> For our skeleton, we can probably fix it quite easily with some rsync
-> trickery (but I could not find how, so far).
->
-> But for a more generic solution, we'd need a way to detect files that
-> were not previously present but now are.
->
-> So we'd need to maintain a list of files from before the installation
-> and another for after the installation. And oh wait, isn't that
-> basically what we previously did (modulo the md5)? ;-)
+Hi all,
 
-Without md5sum, there is only a find before and after each package
-installation, which shouldn't take long.
 
-The md5 is only necessary if you care about changing existing files.
-And normally, if you change existing files, their timestamp will be
-updated, so your solution with '-newer-than foo_before' should be
-fine. Only when you change files and still keep their old timestamps,
-would something be missed.
+my name is Matteo, I'm writing from Italy, I'm new to this mailing list but I've been using Buildroot for more than one year now,
 
-So, a possible solution could be a combination of the original 'find
-before+after' solution and your new 'newer-than foo_before' solution.
-Am I talking gibberish?
+it's a great framework!
 
-/Thomas
+
+I have a Linux kernel module that, for some reasons, cannot be integrated into Buildroot build chain as suggested by the user manual, then I need to compile it separately. As for all modules I need to point at kernel directory, but this cannot be found in
+
+output/host directory, so as a temporary hack I used output/build/linux-* one.
+
+
+However this implies that the generated toolchain cannot be used in a standalone way for such a build, while it would be nice
+
+to have such a feature, just as Yocto generated SDK does.
+
+
+What do you think about this? Is it possible to include the "devel" part of Linux kernel in a simple way? Moreover I was able to
+
+generate a self-extracting toolchain, starting from output/host, through makeself package, to be distributed across my team,
+
+that's why Linux kernel module compilation without the complete Buildroot tree would be very useful.
+
+
+Many thanks in advance for your kind answers,
+
+
+Matteo
+
+
+
+Il presente messaggio e-mail e ogni suo allegato devono intendersi indirizzati esclusivamente al destinatario indicato e considerarsi dal contenuto strettamente riservato e confidenziale. Se non siete l'effettivo destinatario o avete ricevuto il messaggio e-mail per errore, siete pregati di avvertire immediatamente il mittente e di cancellare il suddetto messaggio e ogni suo allegato dal vostro sistema informatico. Qualsiasi utilizzo, diffusione, copia o archiviazione del presente messaggio da parte di chi non ne ? il destinatario ? strettamente proibito e pu? dar luogo a responsabilit? di carattere civile e penale punibili ai sensi di legge.
+Questa e-mail ha valore legale solo se firmata digitalmente ai sensi della normativa vigente.
+________________________________
+The contents of this email message and any attachments are intended solely for the addressee(s) and contain confidential and/or privileged information.
+If you are not the intended recipient of this message, or if this message has been addressed to you in error, please immediately notify the sender and then delete this message and any attachments from your system. If you are not the intended recipient, you are hereby notified that any use, dissemination, copying, or storage of this message or its attachments is strictly prohibited. Unauthorized disclosure and/or use of information contained in this email message may result in civil and criminal liability. ?
+This e-mail has legal value according to the applicable laws only if it is digitally signed by the sender
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190109/d347eaa4/attachment.html>
