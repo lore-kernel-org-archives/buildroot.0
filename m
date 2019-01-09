@@ -1,67 +1,85 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 9 Jan 2019 14:27:33 +0100
-Subject: [Buildroot] [PATCH 1/2 v3] core: make symlinks relative when
- preparing the SDK
-In-Reply-To: <CA+1k=2YqfmD2cYMHGTnFjW13A51Ki+2dMp96Y+9HGyo2z4qP+w@mail.gmail.com>
-References: <cover.1545491919.git.yann.morin.1998@free.fr>
- <9f4825baa7a475b4d8f262925e1ff652b31cd6fb.1545491919.git.yann.morin.1998@free.fr>
- <20181226222135.4ef03363@windsurf>
- <CA+1k=2YqfmD2cYMHGTnFjW13A51Ki+2dMp96Y+9HGyo2z4qP+w@mail.gmail.com>
-Message-ID: <5d63c254-1e80-bd9e-7ec1-b866fce178ab@andin.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 9 Jan 2019 14:39:28 +0100
+Subject: [Buildroot] [PATCH 00/19] support: limit install-time
+ instrumentation to current package's files (branch yem/files-list-2)
+In-Reply-To: <20190108213037.GI4022@scaer>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <CAAXf6LWsWTntZdve0sGs8HDJSS9=RKeupaYTYO2TuG3oEHdf+A@mail.gmail.com>
+ <CAAXf6LXj1_YNqd4N9Jr=ygi2YgN3fYYCEjkhzD=xaH5Lco6Pqg@mail.gmail.com>
+ <20190108213037.GI4022@scaer>
+Message-ID: <CAAXf6LUZ6OouT40zROoSZ6h-ws2u4b8zY0+OwQmyvUgT9Kz9HQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+El mar., 8 ene. 2019 a las 22:30, Yann E. MORIN
+(<yann.morin.1998@free.fr>) escribi?:
+>
+> Thomas, All,
+>
+> On 2019-01-08 16:53 +0100, Thomas De Schampheleire spake thusly:
+> > El mar., 8 ene. 2019 a las 13:51, Thomas De Schampheleire
+> > (<patrickdepinguin@gmail.com>) escribi?:
+> > > El lun., 7 ene. 2019 a las 23:05, Yann E. MORIN
+> > > (<yann.morin.1998@free.fr>) escribi?:
+> > > > Currently, the instrumentation steps, that we run after a package is
+> > > > installed, get confused about the files that package may have be
+> > > > responsible for.
+> [--SNIP--]
+> > > > This series is thus an attempt at fixing all those issues.
+> [--SNIP--]
+> > > For reference, the discussion thread when commit 7fb6e782542f was submitted:
+> > > http://lists.busybox.net/pipermail/buildroot/2018-March/215979.html
+> > > and my comments on moving away from the md5sum to the mtime approach:
+> > > http://lists.busybox.net/pipermail/buildroot/2018-March/216331.html
+>
+> I do realise today that I did not reply to you back at that time.
+> Apologies.
+>
+> Still I have no idea on how we could have _easily_ fixed the issue
+> anyway. The solution proposed by Trent would have been way too
+> complicated to come up with in a timely manner, no md5sum-ing staging/
+> and host/ would prevent PPD, and thus TLPB, to eventually land.
+>
+> > > I will be cross-checking this series against these comments, as an
+> > > accurate list in packages-file-list.txt is important for me. In my
+> > > current tree, I reverted commit 7fb6e782542f and disabled
+> > > check-uniq-files on staging and host, to alleviate the time impact but
+> > > still have an accurate list.
+> >
+> > I finished reviewing, thanks for this interesting series and clear commits.
+> >
+> > Regarding my old comments linked above, I think the packages-file-list
+> > will still be off if a package installs a file with a fixed timestamp,
+> > typically a timestamp in the past. I should test this series against
+> > our use case to see if we actually have such a case, but I'd need to
+> > do some preparatory work first so it may take some time.
+>
+> As I already said, we already have the issue with our skeleton, anyway.
+>
+> For our skeleton, we can probably fix it quite easily with some rsync
+> trickery (but I could not find how, so far).
+>
+> But for a more generic solution, we'd need a way to detect files that
+> were not previously present but now are.
+>
+> So we'd need to maintain a list of files from before the installation
+> and another for after the installation. And oh wait, isn't that
+> basically what we previously did (modulo the md5)? ;-)
 
-Am 05.01.19 um 01:53 schrieb Joel Carlson:
-> On Wed, Dec 26, 2018 at 2:21 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> On Sat, 22 Dec 2018 16:18:51 +0100, Yann E. MORIN wrote:
->>> The SDK is supposed to be relocatable, so symlinks must not be
->>> absolute.
->>>
->>> Add a new helper script, that replaces all absolute symlinks with
->>> relative ones.
->>
->> This script is really not trivial. This additional complexity raises a
->> simple question: how many packages install such absolute symlinks?
-> 
-> That was actually a good question.  I did a build where I turned on
-> some 450+ random packages (estimated by counting the folders in build/
-> other than host-* folders).  I encountered the following absolute
-> links:
-> iptables - 1 absolute symlink (sysroot/usr/bin/iptables-xml ->
-> /usr/sbin/xtables-multi)
-> ntfs-3g - 2 absolute symlinks (sysroot/sbin/mount.ntfs-3g ->
-> /usr/bin/ntfs-3g  and  sysroot/sbin/mount.lowntfs-3g ->
-> /usr/bin/lowntfs-3g)
-> fontconfig - 16 absolute symlinks (sysroot/etc/fonts/conf.d/* ->
-> /usr/share/fontconfig/conf.avail/*)
-> And then not in my build, but pointed out by someone on a previous
-> email thread, the eudev package produces 1 absolute symlink
+Without md5sum, there is only a find before and after each package
+installation, which shouldn't take long.
 
-I've been toying with this patch as well and among ~100 packages also 
-found the absolute symlinks in iptables and eudev (only). Short of time 
-and knowledge of how to suppress them being created I made two patches 
-in the form:
+The md5 is only necessary if you care about changing existing files.
+And normally, if you change existing files, their timestamp will be
+updated, so your solution with '-newer-than foo_before' should be
+fine. Only when you change files and still keep their old timestamps,
+would something be missed.
 
-+define EUDEV_REMOVE_BROKEN_SYMLINK
-+	$(RM) $(STAGING_DIR)/sbin/udevadm
-+endef
-+
-+EUDEV_POST_INSTALL_STAGING_HOOKS += EUDEV_REMOVE_BROKEN_SYMLINK
-+
+So, a possible solution could be a combination of the original 'find
+before+after' solution and your new 'newer-than foo_before' solution.
+Am I talking gibberish?
 
-However, I don't propose this as a solution as I think a blacklist would 
-concentrate the issue in one place rather than spreading exceptions all 
-over the place.
-
-
-regards,
-Andreas
+/Thomas
