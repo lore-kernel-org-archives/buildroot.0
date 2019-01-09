@@ -1,71 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Jan 2019 19:10:01 +0100
-Subject: [Buildroot] [PATCH 00/19] support: limit install-time
- instrumentation to current package's files (branch yem/files-list-2)
-In-Reply-To: <CAAXf6LUZ6OouT40zROoSZ6h-ws2u4b8zY0+OwQmyvUgT9Kz9HQ@mail.gmail.com>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <CAAXf6LWsWTntZdve0sGs8HDJSS9=RKeupaYTYO2TuG3oEHdf+A@mail.gmail.com>
- <CAAXf6LXj1_YNqd4N9Jr=ygi2YgN3fYYCEjkhzD=xaH5Lco6Pqg@mail.gmail.com>
- <20190108213037.GI4022@scaer>
- <CAAXf6LUZ6OouT40zROoSZ6h-ws2u4b8zY0+OwQmyvUgT9Kz9HQ@mail.gmail.com>
-Message-ID: <20190109181001.GL4022@scaer>
+Date: Wed, 9 Jan 2019 21:33:32 +0100
+Subject: [Buildroot] [PATCH 1/2] xenomai: remove unnecessary autoreconf
+In-Reply-To: <20190108203854.28015-1-patrickdepinguin@gmail.com>
+References: <20190108203854.28015-1-patrickdepinguin@gmail.com>
+Message-ID: <20190109203332.GM4022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas DS, All,
 
-On 2019-01-09 14:39 +0100, Thomas De Schampheleire spake thusly:
-> El mar., 8 ene. 2019 a las 22:30, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-[--SNIP--]
-> > But for a more generic solution, we'd need a way to detect files that
-> > were not previously present but now are.
-> >
-> > So we'd need to maintain a list of files from before the installation
-> > and another for after the installation. And oh wait, isn't that
-> > basically what we previously did (modulo the md5)? ;-)
+On 2019-01-08 21:38 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Without md5sum, there is only a find before and after each package
-> installation, which shouldn't take long.
+> As xenomai release tarballs ship with a configure script, there is only a
+> need for autoreconfiguring when patches are applied.
 > 
-> The md5 is only necessary if you care about changing existing files.
-> And normally, if you change existing files, their timestamp will be
-> updated, so your solution with '-newer-than foo_before' should be
-> fine. Only when you change files and still keep their old timestamps,
-> would something be missed.
+> The last patch was removed with git commit
+> de993bc23aab100e16026cb4cabebed48b9e1989 but the AUTORECONF line remained.
 > 
-> So, a possible solution could be a combination of the original 'find
-> before+after' solution and your new 'newer-than foo_before' solution.
-> Am I talking gibberish?
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  package/xenomai/xenomai.mk | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index 6bf08edfbc..d88e969adb 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -24,8 +24,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
+>  
+>  XENOMAI_DEPENDENCIES = host-pkgconf
+>  
+> -# 0002-boilerplate-build-obstack-support-conditionally.patch
+> -XENOMAI_AUTORECONF = YES
+>  
 
-Now that I slept on it, detecting and fixing this problem appropriately
-is impossible, unless we re-instate the leading md5sum as well.
+This is causing failures in the CI:
 
-If you allow for a package to install a file in the past, how do you
-know that the file indeed did not previously exist?
+    https://gitlab.com/buildroot.org/buildroot/pipelines/42622285
 
-That is, if the file did not previously exist, then comparing the list
-before/after would indeed detect it. However, if the file did previously
-exist, then your package would overwrite it *and* set it in the past,
-and then comparing the list before/after would not detect it.
-
-And in either case, our find -newer would not detect it either.
-
-So, the only way to properly account for this situation would be, guess
-what, to reinstate an md5sum before and after the installation and
-compare them file by file.
-
-However, as we've seen, this is totally unacceptable.
-
-So, I hereby declare that I think that I believe that in my opinion I
-can only think that a package which installs a file in the past is
-broken (or borked, as you may prefer). ;-)
+because there are now two consecutive empty lines.
 
 Regards,
 Yann E. MORIN.
+
+>  XENOMAI_INSTALL_STAGING = YES
+>  XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+> -- 
+> 2.18.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
