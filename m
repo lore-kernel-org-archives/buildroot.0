@@ -1,36 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jan 2019 21:41:09 +0100
-Subject: [Buildroot] [PATCH 1/3] gnuchess: fix license
-In-Reply-To: <20190110175955.31565-1-fontaine.fabrice@gmail.com>
-References: <20190110175955.31565-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190110214110.461a9e12@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 10 Jan 2019 21:37:44 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump version
+Message-ID: <20190110203744.2848-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For 4.20 support.
 
-On Thu, 10 Jan 2019 18:59:53 +0100, Fabrice Fontaine wrote:
-> gnuchess is licensed under GPL-3.0+ not GPL-2.0+, also add hash for
-> license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gnuchess/gnuchess.hash | 1 +
->  package/gnuchess/gnuchess.mk   | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+git shortlog --invert-grep --grep travis --no-merges 143ff2b17de63ce931c4f758771969e75c09a4c7..
+Roman Stratiienko (1):
+      mali: support building against 4.20
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Peter: I checked, and the gnuchess version in 2018.02.x is also under
-GPL-3.0+, so the patch should be backported to 2018.02.x.
-
-Thanks,
-
-Thomas
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index c7f294cbf4..a77ee91f7e 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
