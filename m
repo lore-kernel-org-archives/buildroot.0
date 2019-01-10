@@ -1,53 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Jan 2019 23:06:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: fix building pcre extension
-In-Reply-To: <20181228165634.63387-1-aduskett@gmail.com>
-References: <20181228165634.63387-1-aduskett@gmail.com>
-Message-ID: <28fe8df2-8077-3ea1-08c6-f90d92d30ce2@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 10 Jan 2019 23:42:35 +0100
+Subject: [Buildroot] [PATCH v2] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20190110221615.6dc304bf@windsurf>
+References: <20190110221615.6dc304bf@windsurf>
+Message-ID: <20190110224235.125936-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For 4.20 support.
 
+git shortlog --invert-grep --grep travis --no-merges 143ff2b17de63ce931c4f758771969e75c09a4c7..
+Roman Stratiienko (1):
+      mali: support building against 4.20
 
-On 28/12/2018 17:56, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> The configure option "--with-pcre-regex=$(STAGING_DIR)/usr" is broken.
-> PHP will  prepend $(STAGING_DIR)/usr to the paths, which will cause a
-> failure because it won't be able to find pcre, and will then fallback to
-> searching for pcre2, which won't be installed.
-> 
-> Removing "=$(STAGING_DIR)/usr" from --with-pcre-regex fixes the issue.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/586/586f56e8fcf2d2bbbd3bdf69b1c3befff7ce8bbf
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+V1->V2:
+* update hash file with new tarball sha256
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 +-
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Applied to master, thanks.
-
- Care to add yourself as a developer for php?
-
- Regards,
- Arnout
-
-> ---
->  package/php/php.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index fd428e192a..7d7d78353b 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -244,7 +244,7 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
->  
->  ### Use external PCRE if it's available
->  ifeq ($(BR2_PACKAGE_PCRE),y)
-> -PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
-> +PHP_CONF_OPTS += --with-pcre-regex
->  PHP_DEPENDENCIES += pcre
->  else
->  # The bundled pcre library is not configurable through ./configure options,
-> 
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+index 8a89d80d84..f2b18926de 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5e3bf2007c9b5201207f436f37c96f1386b81798288b8fef0ee35c71a1cadb5b  sunxi-mali-mainline-driver-143ff2b17de63ce931c4f758771969e75c09a4c7.tar.gz
++sha256 c5f787cc498cc3e156efa70acc3fbf8dc636fba0f677aac66bdded2fda4a529d  sunxi-mali-mainline-driver-e28c274f85c65ebec82cdf0f8d021895e105d917.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index c7f294cbf4..a77ee91f7e 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
+-- 
+2.17.1
