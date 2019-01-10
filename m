@@ -1,38 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jan 2019 21:32:15 +0100
-Subject: [Buildroot] [PATCH v4 3/3] support/config-fragments: add RISC-V
- 32-bit to autobuild configs
-In-Reply-To: <20181021191203.2148-3-mark.corbin@embecosm.com>
-References: <20181021191203.2148-1-mark.corbin@embecosm.com>
- <20181021191203.2148-3-mark.corbin@embecosm.com>
-Message-ID: <20190110213215.17b8de76@windsurf>
+Date: Thu, 10 Jan 2019 21:35:52 +0100
+Subject: [Buildroot] [git commit] package/gnuchess: license is GPL-3.0+,
+ not GPL-2.0+
+Message-ID: <20190110204020.A55DD8B69C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef25d13fc7c9769de6a5ea0f45e83510821fe3e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Oct 2018 20:12:03 +0100, Mark Corbin wrote:
-> Add a minimal RISC-V 32-bit autobuild configuration for the
-> internal toolchain with glibc.
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> 
-> ---
-> Changes v3 -> v4:
->   - set new variable BR2_RISCV_32 in br-riscv32-internal-glibc.config
-> ---
->  .../autobuild/br-riscv32-internal-glibc.config                 | 3 +++
->  support/config-fragments/autobuild/toolchain-configs.csv       | 1 +
->  2 files changed, 4 insertions(+)
->  create mode 100644 support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+gnuchess is licensed under GPL-3.0+ not GPL-2.0+, also add hash for
+license file
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gnuchess/gnuchess.hash | 1 +
+ package/gnuchess/gnuchess.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
+index 064a845eda..e0a1c4c418 100644
+--- a/package/gnuchess/gnuchess.hash
++++ b/package/gnuchess/gnuchess.hash
+@@ -1,2 +1,3 @@
+ # sha256 locally computed
+ sha256 3c425c0264f253fc5cc2ba969abe667d77703c728770bd4b23c456cbe5e082ef  gnuchess-6.2.4.tar.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index 1465ab0a00..0abdab5ba5 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -6,7 +6,7 @@
+ 
+ GNUCHESS_VERSION = 6.2.4
+ GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
+-GNUCHESS_LICENSE = GPL-2.0+
++GNUCHESS_LICENSE = GPL-3.0+
+ GNUCHESS_LICENSE_FILES = COPYING
+ 
+ GNUCHESS_DEPENDENCIES = host-flex flex
