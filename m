@@ -1,59 +1,42 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 10 Jan 2019 22:27:31 +0100
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
- version
-In-Reply-To: <20190110221615.6dc304bf@windsurf>
-References: <20190110203744.2848-1-giulio.benetti@micronovasrl.com>
- <20190110221615.6dc304bf@windsurf>
-Message-ID: <59086ec6-2fb3-0bf1-de67-3c9fd269a45d@micronovasrl.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Jan 2019 23:03:38 +0100
+Subject: [Buildroot] [git commit] package/php: fix building pcre extension
+Message-ID: <20190110220522.958FF884B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=745f884e41b5f350296e8448f5fc31d20f67a077
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Il 10/01/2019 22:16, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Thu, 10 Jan 2019 21:37:44 +0100, Giulio Benetti wrote:
->> For 4.20 support.
->>
->> git shortlog --invert-grep --grep travis --no-merges 143ff2b17de63ce931c4f758771969e75c09a4c7..
->> Roman Stratiienko (1):
->>        mali: support building against 4.20
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
->> index c7f294cbf4..a77ee91f7e 100644
->> --- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
->> +++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>   
->> -SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
->> +SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
-> 
-> How can this work without updating the .hash file ?
+The configure option "--with-pcre-regex=$(STAGING_DIR)/usr" is broken.
+PHP will  prepend $(STAGING_DIR)/usr to the paths, which will cause a
+failure because it won't be able to find pcre, and will then fallback to
+searching for pcre2, which won't be installed.
 
-It won't, you're right.
-I'm going to send v2 patch with hash calculated.
+Removing "=$(STAGING_DIR)/usr" from --with-pcre-regex fixes the issue.
 
-Best regards
--- 
-Giulio Benetti
-CTO
+Fixes:
+  http://autobuild.buildroot.net/results/586/586f56e8fcf2d2bbbd3bdf69b1c3befff7ce8bbf
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Tested-by: Mark Corbin <mark.corbin@embecosm.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+diff --git a/package/php/php.mk b/package/php/php.mk
+index fd428e192a..7d7d78353b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -244,7 +244,7 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+ 
+ ### Use external PCRE if it's available
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+-PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
++PHP_CONF_OPTS += --with-pcre-regex
+ PHP_DEPENDENCIES += pcre
+ else
+ # The bundled pcre library is not configurable through ./configure options,
