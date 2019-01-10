@@ -1,62 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Jan 2019 23:50:05 +0100
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2018-12-13
-In-Reply-To: <20181230224112.7884333e@windsurf>
-References: <20181221173729.41870-1-Nikita.Sobolev@synopsys.com>
- <20181230224112.7884333e@windsurf>
-Message-ID: <d529f821-6aa9-ee9d-af7e-e692965bef91@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 11 Jan 2019 00:05:28 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-cmake: add CMAKE_SYSTEM_VERSION to
+ toolchainfile.cmake
+Message-ID: <20190110230529.29852-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quoting the CMake documentation:
 
+  When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
+  compiling then the value of CMAKE_SYSTEM_VERSION must also be set
+  explicitly to specify the target system version.
 
-On 30/12/2018 22:41, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 21 Dec 2018 20:37:29 +0300, Nikita Sobolev wrote:
->> From: NikitaSobolev <Nikita.Sobolev@synopsys.com>
->>
->> Bump azure-iot-sdk-c to 2018-12-13 release.
->> Add patch, that removes Windows specified variables from
->> azure-iot-sdk-c-2018-12-13 release. That variables cause
->> build errors.
->>
->> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-> 
-> So, I looked into this. Indeed, without the patch, the build fails with:
-> 
-> CMake Error at c-utility/CMakeLists.txt:267 (if):
->   if given arguments:
-> 
->     "WIN32" "AND" "(" "VERSION_EQUAL" "10.0.17763.0" "OR" "VERSION_GREATER" "10.0.17763.0" ")"
-> 
->   Unknown arguments specified
-> 
-> The problem comes from the fact that ${CMAKE_SYSTEM_VERSION} is empty.
-> And the CMake documentation
-> (https://cmake.org/cmake/help/v3.4/variable/CMAKE_SYSTEM_VERSION.html)
-> explains why:
-> 
->   When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
->   compiling then the value of CMAKE_SYSTEM_VERSION must also be set
->   explicitly to specify the target system version.
-> 
-> We are defining CMAKE_SYSTEM_NAME in our toolchain file, but not
-> CMAKE_SYSTEM_VERSION.
-> 
-> So for now, I simply defined CMAKE_SYSTEM_VERSION locally in
-> azure-iot-sdk-c, and dropped the patch. Long term, perhaps we should
-> define CMAKE_SYSTEM_VERSION in our toolchain file. I'm not sure who is
-> maintaining our CMake infrastructure these days, Samuel Martin used to
-> do it, but he is no longer very active.
+Thus, we should also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake. It
+is supposed to be set to the value of `uname -r` on the target. We don't
+have that exact value available (unless we build the kernel), but the
+value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
+of the kernel it will run on, so it should be OK for all practical
+purposes.
 
- Indeed, it should be set in the toolchain file. CMAKE_SYSTEM_VERSION is the
-output of `uname -r` of the target system, i.e. the kernel version. We don't
-have that, but we do have BR2_TOOLCHAIN_HEADERS_AT_LEAST which should be good
-enough.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ package/pkg-cmake.mk                | 1 +
+ support/misc/toolchainfile.cmake.in | 1 +
+ 2 files changed, 2 insertions(+)
 
- Regards,
- Arnout
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 51a1929ebb..dd048b0949 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -264,6 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
+ 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+ 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
++		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 6f3c8ca971..276b36629f 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -15,6 +15,7 @@ string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+ 
+ set(CMAKE_SYSTEM_NAME Buildroot)
++set(CMAKE_SYSTEM_VERSION @@CMAKE_SYSTEM_VERSION@@)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
+ # Set the {C,CXX}FLAGS appended by CMake depending on the build type
+-- 
+2.20.1
