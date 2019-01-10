@@ -1,33 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 10 Jan 2019 17:33:41 +0000
-Subject: [Buildroot] [Bug 11606] New: libjpeg has no Config.in
-Message-ID: <bug-11606-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Jan 2019 18:59:53 +0100
+Subject: [Buildroot] [PATCH 1/3] gnuchess: fix license
+Message-ID: <20190110175955.31565-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11606
+gnuchess is licensed under GPL-3.0+ not GPL-2.0+, also add hash for
+license file
 
-            Bug ID: 11606
-           Summary: libjpeg has no Config.in
-           Product: buildroot
-           Version: 2018.11.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: tapio.tallgren at nokia.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gnuchess/gnuchess.hash | 1 +
+ package/gnuchess/gnuchess.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-The package libjpeg has no Config.in file. This causes problems when another
-package depends on libjpeg
-
+diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
+index 064a845eda..e0a1c4c418 100644
+--- a/package/gnuchess/gnuchess.hash
++++ b/package/gnuchess/gnuchess.hash
+@@ -1,2 +1,3 @@
+ # sha256 locally computed
+ sha256 3c425c0264f253fc5cc2ba969abe667d77703c728770bd4b23c456cbe5e082ef  gnuchess-6.2.4.tar.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index 1465ab0a00..0abdab5ba5 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -6,7 +6,7 @@
+ 
+ GNUCHESS_VERSION = 6.2.4
+ GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
+-GNUCHESS_LICENSE = GPL-2.0+
++GNUCHESS_LICENSE = GPL-3.0+
+ GNUCHESS_LICENSE_FILES = COPYING
+ 
+ GNUCHESS_DEPENDENCIES = host-flex flex
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
