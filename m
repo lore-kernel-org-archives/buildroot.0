@@ -1,29 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 10 Jan 2019 18:56:19 +0000
-Subject: [Buildroot] [Bug 11606] libjpeg has no Config.in
-In-Reply-To: <bug-11606-163@https.bugs.busybox.net/>
-References: <bug-11606-163@https.bugs.busybox.net/>
-Message-ID: <bug-11606-163-2EIoQlNKdn@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Jan 2019 20:59:37 +0100
+Subject: [Buildroot] [PATCH 2/3] gnuchess: disable -O2 and -O3 for ARM
+ cortex-M cpus
+In-Reply-To: <20190110175955.31565-2-fontaine.fabrice@gmail.com>
+References: <20190110175955.31565-1-fontaine.fabrice@gmail.com>
+ <20190110175955.31565-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190110205937.291e10d8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11606
+Hello,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+On Thu, 10 Jan 2019 18:59:54 +0100, Fabrice Fontaine wrote:
+> When building with -O2 (or -O3), link fails on:
+> 
+> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/arm-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -Wl,-elf2flt -static  -Wl,-elf2flt -static   -Wl,-elf2flt -static -o gnuchess main.o components.o  frontend/libfrontend.a adapter/libadapter.a engine/libengine.a -lreadline -lncurses
+> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+Interesting. In commit
+https://git.buildroot.net/buildroot/commit/?id=49f574237983ae2e69e4a4c43df7be98902a63be,
+we are doing exactly the opposite: when -Os is used, we pass -O2.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-jpeg is a virtual package (provided either by libjpeg or libjpeg-turbo). Use
-BR2_PACKAGE_JPEG / jpeg to ensure libjpeg or libjpeg-turbo is available. See
-the many packages with a 'select BR2_PACKAGE_JPEG'
+Romain reported the issue at
+https://sourceware.org/bugzilla/show_bug.cgi?id=20552, and as you can
+see, we got a tremendous amount of feedback from the binutils
+developers :-)
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
