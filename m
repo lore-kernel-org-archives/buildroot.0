@@ -1,32 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jan 2019 11:06:43 +0100
-Subject: [Buildroot] [git commit] package/lighttpd: adjust hash comment
- after 1.4.52 bump
-Message-ID: <20190110100852.EB1D5836A3@busybox.osuosl.org>
+From: =?UTF-8?Q?=C5=81ukasz_Przenios=C5=82o?= <bremenpl@gmail.com>
+Date: Thu, 10 Jan 2019 12:02:32 +0100
+Subject: [Buildroot] Building modules during kernel compilation
+Message-ID: <CA+OsCCRA3tD-BkzWi28Ld5ERJkdfGr8gp7ixMg=n5mQLQdL0KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b99b09caee8b9857ebfd229d8ff97e893c11ec83
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello there,
+I am new to buildroot. I am trying to develop a driver that will amke use
+of the I2C peripheral. So far I was compiling the module as an externally
+loadable one (after the buildroot was compiled already). When started to
+deal with I2C topics, I noticed that the i2c_register_board_info is
+undefined:
 
-Commit ec69d3820f (package/lighttpd: bump to version 1.4.52) bumped the
-lighttpd version but forgot to adjust the upstream hash comment.
+WARNING: "i2c_register_board_info"
+[/home/lukasz/eclipse-workspace/PowerManagerDriver/PowerManagerDriver.ko]
+undefined!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lighttpd/lighttpd.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Asking around on stack overflow (
+https://stackoverflow.com/questions/54092530/i2c-register-board-info-symbol-is-undefined
+) I came to a conclusion (please correct me if wrong one) that this symbol
+will be visible only if I will compile my module during buildroot image
+compilation. This would be a bit problematic for further development, since
+each time I would have to reflash the image on my targets (Beaglebone
+black) SD card.
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 0fb00bf568..93581a9abb 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,4 +1,4 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.51.sha256sum
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.52.sha256sum
- sha256 27bc0991c530b7c6335e6efff2181934d3c1a1c516f7401ea71d8302cefda764  lighttpd-1.4.52.tar.xz
- # Locally calculated
- sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+If this is the case, could you please point me any easy to use resources on
+how to compile my module within buildroot compilation? The info I found was
+not understandable enough for me.
+I would appreciate all help.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190110/96d36405/attachment.html>
