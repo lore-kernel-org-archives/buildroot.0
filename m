@@ -1,39 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jan 2019 15:47:22 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Support Linux 4.20
-In-Reply-To: <877efnpa7x.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 02 Jan 2019 12:31:14 +0100")
-References: <20181231175234.14572-1-thomas.petazzoni@bootlin.com>
- <87sgycox9n.fsf@dell.be.48ers.dk> <20190102091647.319e2c96@windsurf>
- <877efnpa7x.fsf@dell.be.48ers.dk>
-Message-ID: <87woncr2md.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Jan 2019 15:56:49 +0100
+Subject: [Buildroot] Xtensa toolchain issue ?
+In-Reply-To: <CAMo8BfLe2amCfDH2MdrQH+7PXx16P5BjGy1zMe5gxZ+YkYEtxQ@mail.gmail.com>
+References: <20190102112130.0b8d32f8@windsurf>
+ <CAMo8BfJR7vgLDONmKDX3S8RLyJBMYmXEKjjEr3JK5JOTHrd5hg@mail.gmail.com>
+ <20190104102735.52e7e733@windsurf>
+ <CAMo8BfLe2amCfDH2MdrQH+7PXx16P5BjGy1zMe5gxZ+YkYEtxQ@mail.gmail.com>
+Message-ID: <20190110155649.2e5654cd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello Max,
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
- >> Hello,
- >> On Tue, 01 Jan 2019 22:58:44 +0100, Peter Korsgaard wrote:
+On Fri, 4 Jan 2019 15:44:36 -0800, Max Filippov wrote:
 
- >>> With 2019.02 becoming our next LTS and 4.20 NOT a LTS release, I wonder
- >>> if it would make sense to still default to 4.19.x instead of 4.20.x?
+> A thunk function is used to implement C++ virtual function calls with
+> multiple inheritance. Probably the best explanation is a quote from
+> the gccint:
+> 
+>      These functions represent stub code that adjusts the 'this' pointer
+>      and then jumps to another function.  When the jumped-to function
+>      returns, control is transferred directly to the caller, without
+>      returning to the thunk.  The first parameter to the thunk is always
+>      the 'this' pointer; the thunk should add 'THUNK_DELTA' to this
+>      value.  (The 'THUNK_DELTA' is an 'int', not an 'INTEGER_CST'.)
+> 
+>      Then, if 'THUNK_VCALL_OFFSET' (an 'INTEGER_CST') is nonzero the
+>      adjusted 'this' pointer must be adjusted again.  The complete
+>      calculation is given by the following pseudo-code:
+> 
+>           this += THUNK_DELTA
+>           if (THUNK_VCALL_OFFSET)
+>             this += (*((ptrdiff_t **) this))[THUNK_VCALL_OFFSET]
+> 
+>      Finally, the thunk should jump to the location given by
+>      'DECL_INITIAL'; this will always be an expression for the address
+>      of a function.
+> 
+> and then later, in the description of macro
+> TARGET_ASM_OUTPUT_MI_THUNK:
+> 
+>      If you do not define this macro, the target-independent code in the
+>      C++ front end will generate a less efficient heavyweight thunk that
+>      calls FUNCTION instead of jumping to it.  The generic approach does
+>      not support varargs.
 
- >> Yes, that probably make sense. But in this case, we would need to get
- >> in touch with the kernel folks to get the net_tstamp.h fix in -stable.
- >> It has the Fixes: tag, but it still hasn't been backported to
- >> 4.19-stable.
+Thanks for the additional explanation, very useful!
 
- > Ok. The last few 4.19.x releases did not contain any net/ fixes, perhaps
- > that will fixed now the holidays are over.
+> > Since the issue also happens on OpenRISC, perhaps we need to have some
+> > BR2_TOOLCHAIN_SUPPORTS_XYZ boolean that says whether the gcc version
+> > supports this specific stuff. However, since I don't clearly understand
+> > what the issue is, I wouldn't be able to find a good name for that
+> > BR2_TOOLCHAIN_SUPPORTS_XYZ option.
+> >
+> > BR2_TOOLCHAIN_SUPPORTS_TAIL_CALL_VARIADIC_FUNC_FROM_THUNK ? :-)  
+> 
+> Maybe BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK?
 
-This has indeed been fixed in 4.19.14. I have sent a patch to change our
-default linux / linux-headers version back to 4.19.x:
+Sounds like a good name. Do you want to cook a patch for this, or
+should I do so ?
 
-https://patchwork.ozlabs.org/patch/1022974/
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
