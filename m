@@ -1,65 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Jan 2019 22:25:25 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <CAAXf6LVJ6-H-pBA8C9i8LJxmQ=8ufdvOC3uHG5-cqz-WPyt=sg@mail.gmail.com>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
- <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
- <20181205173103.1eb30a7b@windsurf>
- <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
- <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
- <20181226183422.76c6ff6c@windsurf.home>
- <CAAXf6LVJ6-H-pBA8C9i8LJxmQ=8ufdvOC3uHG5-cqz-WPyt=sg@mail.gmail.com>
-Message-ID: <30afb67d-f31d-4986-8490-2e97f5808eda@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 10 Jan 2019 22:27:31 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20190110221615.6dc304bf@windsurf>
+References: <20190110203744.2848-1-giulio.benetti@micronovasrl.com>
+ <20190110221615.6dc304bf@windsurf>
+Message-ID: <59086ec6-2fb3-0bf1-de67-3c9fd269a45d@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 26/12/2018 19:33, Thomas De Schampheleire wrote:
-> In a similar context I once had following problem:
-> http://lists.busybox.net/pipermail/buildroot/2018-August/226955.html
-> This was for target binaries, rather than host, but for the below
-> discussion it does not matter.
-
- I don't think you ever replied to my question in that thread:
-
- Let's first find out why it is cleared. patchelf should check for each
-directory in rpath if it is actually needed, and only remove it if it is not
-needed. So, what library do you have in /opt/foobar/lib, and is it really linked
-with the program?
-
- Hm, I realize that we never thought about dlopen()ed libraries. Could that be
-the cause? I guess that hasn't been a problem up to now because usually programs
-using dlopen() will use an absolute path (to a build-time or run-time configured
-plugin directory) rather than relying on RPATH.
-
-
-
-> Looking back at this problem, taking into account the above comment
-> from the patchelf patch, I would say that my problem would have been
-> fixed if case (4) above would not discard the path.
-
- I think one motivation for removing redundant rpaths is to avoid having build
-directories leaking into target binaries. Especially for reproducible builds
-this is important.
-
-
-> If that change would be adopted, then it would also preserve the rpath
-> '/home/thomas/projets/buildroot/output/per-package/host-e2fsprogs/host/lib'.
+Il 10/01/2019 22:16, Thomas Petazzoni ha scritto:
+> Hello,
 > 
-> Of course, in your case you might actually want a different final
-> rpath, i.e. rewrite it to the consolidated host directory. I think
-> that in this case it would be better to read the rpath via patchelf,
-> calculate the transformed rpath from our own script, then writing it
-> back via patchelf,  rather than adding more options into patchelf with
-> e.g. transformation rules.
+> On Thu, 10 Jan 2019 21:37:44 +0100, Giulio Benetti wrote:
+>> For 4.20 support.
+>>
+>> git shortlog --invert-grep --grep travis --no-merges 143ff2b17de63ce931c4f758771969e75c09a4c7..
+>> Roman Stratiienko (1):
+>>        mali: support building against 4.20
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>>   .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+>> index c7f294cbf4..a77ee91f7e 100644
+>> --- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+>> +++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+>> @@ -4,7 +4,7 @@
+>>   #
+>>   ################################################################################
+>>   
+>> -SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
+>> +SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
+> 
+> How can this work without updating the .hash file ?
 
- The problem is that patchelf is rather slow, so running it twice is even slower...
+It won't, you're right.
+I'm going to send v2 patch with hash calculated.
 
- Regards,
- Arnout
+Best regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
