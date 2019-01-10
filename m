@@ -1,41 +1,71 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 11 Jan 2019 00:05:29 +0100
-Subject: [Buildroot] [PATCH 2/2] azure-iot-sdk-c: remove dummy value of
- CMAKE_SYSTEM_VERSION
-In-Reply-To: <20190110230529.29852-1-arnout@mind.be>
-References: <20190110230529.29852-1-arnout@mind.be>
-Message-ID: <20190110230529.29852-2-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Jan 2019 00:47:10 +0100
+Subject: [Buildroot] [PATCH 5/5 v5] boot/systemd-boot: new package
+In-Reply-To: <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+References: <cover.1545814334.git.yann.morin.1998@free.fr>
+ <d38239f86f99924e87dcb6e045b2de3ac0cb435f.1545814334.git.yann.morin.1998@free.fr>
+Message-ID: <6c1edf5d-e6b3-9453-96a3-4f7aa9480a44@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now CMAKE_SYSTEM_VERSION is properly set in toolchainfile.cmake, it is
-no longer necessary to set a dummy value in azure-iot-sdk-c.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Cc: Andr? Hentschel <nerv@dawncrow.de>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 5 -----
- 1 file changed, 5 deletions(-)
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 3618e591a9..8b3f670399 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -14,11 +14,6 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
- AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
- AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
- 
--# When cross-compiling, CMake doesn't internally pass any
--# CMAKE_SYSTEM_VERSION, so pass a dummy version to make the c-utility
--# WIN32 test happy.
--AZURE_IOT_SDK_C_CONF_OPTS += -DCMAKE_SYSTEM_VERSION=1.0
--
- # The project only supports building one kind of library.
- # Further the install target installs the wrong files, so we do it here:
- ifeq ($(BR2_STATIC_LIBS),y)
--- 
-2.20.1
+On 26/12/2018 09:52, Yann E. MORIN wrote:
+> Since systemd-boot is really part of systemd, when systemd is enabled
+> (as an init system), we rely on it to build the boot blobs, and
+> systemd-boot (this package) is not available.
+> 
+> Now, when systemd is not enabled, systemd-boot (this package) will
+> actually build the boot blobs, and only that. No userspace tool is
+> built.
+
+ I really don't like this approach of copying systemd.
+
+ I would instead try harder to keep the standalone version part of the systemd
+package itself. Yes, I realize that I'm coming very late with this... The only
+reason we got here is this statement from Yann:
+
+>> What is wrong is that it makes the systemd package *and* the init
+>> selectionmuch more copmplex, and this is not acceptable (IMHO).
+>> 
+>> I'd rather have a second package that is trivial, with mimimum, if at
+>> all, changes in the main systemd package.
+
+ The second package turns out not to be trivial at all...
+
+ So, looking back to James's original v2 patch, I'd structure the Config.in
+something like this:
+
+config BR2_PACKAGE_SYSTEMD
+	bool
+	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+	depends on ...
+	# select any dependency that is relevant for system-boot
+
+config BR2_PACKAGE_SYSTEMD_BOOT
+	bool
+
+menuconfig BR2_PACKAGE_SYSTEMD_SYSTEMD
+	depends on BR2_PACKAGE_SYSTEMD
+	# addition depends/selects that are relevant for full systemd
+
+# rest of the file stays the same
+
+
+ Note that BR2_PACKAGE_SYSTEMD was never user-selectable because it was always
+implicit from BR2_INIT_SYSTEMD, so it's OK to turn it into a blind option.
+
+ Note that we will need to declare the symbol BR2_PACKAGE_SYSTEMD_BOOT option
+twice: in the standalone systemd-boot case, we need the symbol declared
+somewhere so it can be selected by BR2_TARGET_SYSTEMD_BOOT.
+
+ Finally note that I fully agree that we should not even start support for
+standalone systemd-boot until upstream progresses into making it buildable
+standalone. I really don't want that huge patch either. But that's independent
+of how standalone systemd-boot is implemented.
+
+ Regards,
+ Arnout
