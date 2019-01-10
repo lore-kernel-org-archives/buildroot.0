@@ -1,36 +1,35 @@
-From: =?UTF-8?Q?=C5=81ukasz_Przenios=C5=82o?= <bremenpl@gmail.com>
-Date: Thu, 10 Jan 2019 12:02:32 +0100
-Subject: [Buildroot] Building modules during kernel compilation
-Message-ID: <CA+OsCCRA3tD-BkzWi28Ld5ERJkdfGr8gp7ixMg=n5mQLQdL0KQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 10 Jan 2019 13:31:46 +0100
+Subject: [Buildroot] [PATCH] patchelf: update _SITE to new location
+Message-ID: <20190110123146.554-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello there,
-I am new to buildroot. I am trying to develop a driver that will amke use
-of the I2C peripheral. So far I was compiling the module as an externally
-loadable one (after the buildroot was compiled already). When started to
-deal with I2C topics, I noticed that the i2c_register_board_info is
-undefined:
+releases.nixos.org gives some weird XML pages. The upstream location is
+nixos.org/releases.
 
-WARNING: "i2c_register_board_info"
-[/home/lukasz/eclipse-workspace/PowerManagerDriver/PowerManagerDriver.ko]
-undefined!
+This side uses HSTS, so switch to https to avoid a needless redirect.
 
-Asking around on stack overflow (
-https://stackoverflow.com/questions/54092530/i2c-register-board-info-symbol-is-undefined
-) I came to a conclusion (please correct me if wrong one) that this symbol
-will be visible only if I will compile my module during buildroot image
-compilation. This would be a bit problematic for further development, since
-each time I would have to reflash the image on my targets (Beaglebone
-black) SD card.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/patchelf/patchelf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If this is the case, could you please point me any easy to use resources on
-how to compile my module within buildroot compilation? The info I found was
-not understandable enough for me.
-I would appreciate all help.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190110/96d36405/attachment.html>
+diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
+index 74e6cccdbe..52912e295b 100644
+--- a/package/patchelf/patchelf.mk
++++ b/package/patchelf/patchelf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PATCHELF_VERSION = 0.9
+-PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-$(PATCHELF_VERSION)
++PATCHELF_SITE = https://nixos.org/releases/patchelf/patchelf-$(PATCHELF_VERSION)
+ PATCHELF_SOURCE = patchelf-$(PATCHELF_VERSION).tar.bz2
+ PATCHELF_LICENSE = GPL-3.0+
+ PATCHELF_LICENSE_FILES = COPYING
+-- 
+2.20.1
