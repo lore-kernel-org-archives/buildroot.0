@@ -1,38 +1,50 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 10 Jan 2019 21:56:42 +0100
-Subject: [Buildroot] [PATCH 1/2] xenomai: remove unnecessary autoreconf
-In-Reply-To: <875zuwsvvf.fsf@dell.be.48ers.dk>
-References: <20190108203854.28015-1-patrickdepinguin@gmail.com>
- <20190109203332.GM4022@scaer> <87imyxrmk3.fsf@dell.be.48ers.dk>
- <CAAXf6LUTcDwSrhpnWo9N+d1APrjVP-KBAp1fX5z0DNaEBRdq5w@mail.gmail.com>
- <875zuwsvvf.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWf7ss+BmUMcOewjbJDJTFMk_nUz1xtUuqoGMub8kzhjg@mail.gmail.com>
+Date: Thu, 10 Jan 2019 22:13:48 +0100
+Subject: [Buildroot] [PATCH] checkpackagelib: fix Python3 execution
+In-Reply-To: <20190110205539.10468-1-patrickdepinguin@gmail.com>
+References: <20190110205539.10468-1-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LWeDp8v3SSzLkj+CMdbiPfzRm9ZYCjWsL_4en1imDOhqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El jue., 10 ene. 2019 a las 10:30, Peter Korsgaard
-(<peter@korsgaard.com>) escribi?:
+El jue., 10 ene. 2019 a las 21:52, Thomas De Schampheleire
+(<patrickdepinguin@gmail.com>) escribi?:
 >
-> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >
->  >> Fixed, thanks. Odd that my check-package post-commit hook didn't catch
->  >> it.
+> The relative imports do not work in Python 3. Adding the leading dot works
+> both in Python2 and Python3.
 >
->  > Oops, sorry.
->  > Could you show me how to enable this as hook, then I'll add it locally too.
+> This may cause problems if ever you would try to call the helper .py files
+> directly, but this is not currently needed/supported.
 >
-> I have in .git/hooks/post-commit:
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  utils/checkpackagelib/lib.py        |  2 +-
+>  utils/checkpackagelib/lib_config.py | 10 +++++-----
+>  utils/checkpackagelib/lib_hash.py   | 10 +++++-----
+>  utils/checkpackagelib/lib_mk.py     | 10 +++++-----
+>  utils/checkpackagelib/lib_patch.py  |  4 ++--
+>  5 files changed, 18 insertions(+), 18 deletions(-)
 >
-> #!/bin/sh
+> diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
+> index 91f4ad49b7..06b147a470 100644
+> --- a/utils/checkpackagelib/lib.py
+> +++ b/utils/checkpackagelib/lib.py
+> @@ -1,6 +1,6 @@
+>  # See utils/checkpackagelib/readme.txt before editing this file.
 >
-> # check-package on added/changed files
-> git show --no-renames HEAD | \
->         lsdiff -s | \
->         awk '{ if ($1 != "-") print substr($2, 3) }' | \
->         xargs -r ./utils/check-package
+> -from base import _CheckFunction
+> +from .base import _CheckFunction
+
+It's also possible to replace all these imports with:
+
+from checkpackagelib.base import ...
+
+I.e. use an absolute import. If you like it better...
 
 
-Thanks!
+/Thomas
