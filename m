@@ -1,60 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jan 2019 22:15:00 +0100
-Subject: [Buildroot] [PATCH 3/3] linux: use HOSTCC_NOCCACHE as kconfig HOSTCC
-In-Reply-To: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
-References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190110211500.14368-4-thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Jan 2019 22:16:15 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20190110203744.2848-1-giulio.benetti@micronovasrl.com>
+References: <20190110203744.2848-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190110221615.6dc304bf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linux is a bit different than other kconfig-package, because it has
-"toolchain" in KCONFIG_DEPENDENCIES. Thanks to this, host-ccache *is*
-ready by the time kconfig invocations are made, so we could use
-$(HOSTCC) as the host compiler for kconfig related operations.
+Hello,
 
-However, for consistency with other kconfig-package packages, we chose
-to use $(HOSTCC_NOCCACHE) as well.
+On Thu, 10 Jan 2019 21:37:44 +0100, Giulio Benetti wrote:
+> For 4.20 support.
+> 
+> git shortlog --invert-grep --grep travis --no-merges 143ff2b17de63ce931c4f758771969e75c09a4c7..
+> Roman Stratiienko (1):
+>       mali: support building against 4.20
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+> index c7f294cbf4..a77ee91f7e 100644
+> --- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+> +++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SUNXI_MALI_MAINLINE_DRIVER_VERSION = 143ff2b17de63ce931c4f758771969e75c09a4c7
+> +SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
 
-We cannot rely on the default value of HOSTCC passed by the
-kconfig-package infrastructure, because $(LINUX_MAKE_FLAGS) also
-contains a HOSTCC definition that would override the one passed by the
-kconfig-package infrastructure.
+How can this work without updating the .hash file ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/linux.mk | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Best regards,
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6bf2b88038..02def89113 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -269,13 +269,16 @@ endif
- LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- 
--# LINUX_MAKE_FLAGS overrides HOSTCC to allow the kernel build to find our
--# host-openssl and host-libelf. However, this triggers a bug in the kconfig
--# build script that causes it to build with /usr/include/ncurses.h (which is
--# typically wchar) but link with $(HOST_DIR)/lib/libncurses.so (which is not).
--# We don't actually need any host-package for kconfig, so remove the HOSTCC
--# override again.
--LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC)"
-+# LINUX_MAKE_FLAGS overrides HOSTCC to allow the kernel build to find
-+# our host-openssl and host-libelf. However, this triggers a bug in
-+# the kconfig build script that causes it to build with
-+# /usr/include/ncurses.h (which is typically wchar) but link with
-+# $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
-+# need any host-package for kconfig, so remove the HOSTCC override
-+# again. In addition, even though linux depends on the toolchain and
-+# therefore host-ccache would be ready, we use HOSTCC_NOCCACHE for
-+# consistency with other kconfig packages.
-+LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC_NOCCACHE)"
- 
- # If no package has yet set it, set it from the Kconfig option
- LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
