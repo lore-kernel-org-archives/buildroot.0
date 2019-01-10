@@ -1,67 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  9 Jan 2019 22:38:59 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14, 19,
- 20}.x series
-Message-ID: <20190109213900.22351-1-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Jan 2019 07:56:00 +0200
+Subject: [Buildroot] openocd CMSIS-DAP support
+In-Reply-To: <CADjezmZq4MSvxbGm9HAHxAGN2O5F1XZrVRRoGw9ehV-i=CUSyg@mail.gmail.com>
+References: <CADjezmZq4MSvxbGm9HAHxAGN2O5F1XZrVRRoGw9ehV-i=CUSyg@mail.gmail.com>
+Message-ID: <87a7k9hx8v.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Hi Matt,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9a4d46e534..932aa62991 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.20" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.20.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6467d8abca..c8401d4ec6 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 ad0823183522e743972382df0aa08fb5ae3077f662b125f1e599b0b2aaa12438  linux-4.20.tar.xz
--sha256 f50a77fc40e13fc406791346fa91926394205874cd50246c7c2374006bacc0c2  linux-4.19.13.tar.xz
--sha256 6a587c8b4160918efa082b0c2eda8c2db0f50d8814ad1d1ac94be1edf66ca6a9  linux-4.14.91.tar.xz
--sha256 6067151b0225a8de1ab79abc9be7bae237eaca0cd838eb26684169560d88a994  linux-4.9.148.tar.xz
-+sha256 45096f1ffbfbb4cdeef6eecfa6ca7eabbf534f04645fd0d849564a58ddd2198f  linux-4.20.1.tar.xz
-+sha256 24326849dd5120186d8db165ad4410bf0eb28ef07a20141acbad49f125f71c46  linux-4.19.14.tar.xz
-+sha256 5f9f1faba9a47e406de9b207d45a00d41d45e11615971ec9ef9493654cd745ad  linux-4.14.92.tar.xz
-+sha256 165bd3b42e8f99e62238f711d2c0100ad411bc69588c65fb3a22c190dc35d783  linux-4.9.149.tar.xz
- sha256 06f1b080332251628727e42d21b4530035f03f00d75432199b2548172b1650a9  linux-4.4.169.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 907725093d..e94d28419a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -286,10 +286,10 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.169"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.148"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.91"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.13"	if BR2_KERNEL_HEADERS_4_19
--	default "4.20"		if BR2_KERNEL_HEADERS_4_20
-+	default "4.9.149"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.92"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.14"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.20.1"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.11.0
+On Mon, Jan 07 2019, mattwood wrote:
+> I need CMSIS-DAP support in openOCD on my target build.  I noticed the
+> comment in openocd.mk explaining that CMSIS-DAP support is disabled for the
+> host build because HIDAPI is not supported in buildroot.
+>
+> However, I see cmsis-dap support in the target options of openocd as well
+> as HIDAPI support for target buids.
+>
+> I was able to add cmsis-dap support for the target easily with the patch
+> below.
+>
+> Is there a reason why the CMSIS-DAP Adapter option in Config.in was removed
+> or never added for the target build?  If not I'll submit this but wanted to
+> make sure I wasn't missing something.
+
+This patch looks correct to me.
+
+Confusingly, commit aa441aa84c38 notes that CMSIS_DAP requires hidapi
+which was not packaged in Buildroot at the time (Dec 2014). Still that
+commit added a dangling --enable-cmsis-dap that could never be enabled
+because BR2_PACKAGE_OPENOCD_CMSIS_DAP is not defined. Your patch fixes
+that.
+
+One more comment below.
+
+> diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+> index 6cba7a04c8..2145ac72eb 100644
+> --- a/package/openocd/Config.in
+> +++ b/package/openocd/Config.in
+> @@ -9,6 +9,16 @@ if BR2_PACKAGE_OPENOCD
+>
+>  comment "Adapters"
+>
+> +config BR2_PACKAGE_OPENOCD_CMSIS_DAP
+> +
+> +       bool "CMSIS-DAP compliant debuggers"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+> +       select BR2_PACKAGE_LIBUSB
+> +       select BR2_PACKAGE_HIDAPI
+
+You forgot the BR2_PACKAGE_HIDAPI dependencies:
+
+	depends on BR2_PACKAGE_HAS_UDEV
+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+
+Actually the NPTL dependency is stronger than plain threads
+dependency. So you can drop the latter.
+
+baruch
+
+> +       help
+> +         Enable support for CMSIS-DAP compliant
+> +         debuggers (i.e Atmel/Microchip EDBG, etc.)
+> +
+>  config BR2_PACKAGE_OPENOCD_FTDI
+>         bool "MPSSE mode of FTDI based devices"
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+> diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+> index 9d2576ceeb..a4e7a26921 100644
+> --- a/package/openocd/openocd.mk
+> +++ b/package/openocd/openocd.mk
+> @@ -29,7 +29,8 @@ OPENOCD_DEPENDENCIES = \
+>         $(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
+>         $(if $(BR2_PACKAGE_LIBUSB),libusb) \
+>         $(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
+> -       $(if $(BR2_PACKAGE_LIBHID),libhid)
+> +       $(if $(BR2_PACKAGE_LIBHID),libhid) \
+> +       $(if $(BR2_PACKAGE_HIDAPI),hidapi)
+>
+>  # Adapters
+>  OPENOCD_CONF_OPTS += \
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
