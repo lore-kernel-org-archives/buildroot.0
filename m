@@ -1,82 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Jan 2019 21:30:04 +0100
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches: use "git apply"
- as a fallback when applying patches
-Message-ID: <20190110203004.9812-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Jan 2019 21:30:21 +0100
+Subject: [Buildroot] [git commit] support/config-fragments: add RISC-V
+ 32-bit to autobuild configs
+Message-ID: <20190110203021.A85908B51A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently use plain old "patch" to apply patches. While this works
-fine in most situations, it doesn't work well for patches generated
-with git format-patch that:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a389a6ec867e89a47b1a7109ddded72e9f01de2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- - Contain changes to binary files
+Add a minimal RISC-V 32-bit autobuild configuration for the
+internal toolchain with glibc.
 
- - Or contain changes to files in directories that were symlinks to
-   other directories, with the symlink being removed as part of the
-   same patch.
-
-We encountered such issues with a large stack of patches to be applied
-on top of arm-trusted-firmware. Such patches apply perfectly fine with
-"git apply".
-
-Switching everybody to unconditionally use "git apply" seems a bit
-risky, so instead we take a different route: if applying the patch
-with "patch" fails, then we try with "git apply".
-
-A few implementation notes:
-
- - The script has "set -e" so for the "patch --dry-run" command, we
-   have to take special precautions to not bail out of the script on
-   error.
-
- - Also due to "set -e", the check on the return value of "patch" is
-   no longer needed, and we also don't need to check the return value
-   of "git apply".
-
- - We need to pass "--git-dir=/dev/null", otherwise "git apply"
-   travels up the directory hierarchy until it finds a .git folder. If
-   it finds one, but the files being patched are not under version
-   control, it skips patching those files. Obviously, the files in
-   output/build/foo/ are not under version control, so this behavior
-   is not desirable. Simply making "git apply" believe it is not
-   running from inside a Git repository disables this check.
-
-Cc: Kostya Porotchkin <kostap@marvell.com>
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/apply-patches.sh | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ support/config-fragments/autobuild/br-riscv32-internal-glibc.config | 3 +++
+ support/config-fragments/autobuild/toolchain-configs.csv            | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 66fef262ee..0fd336968e 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -119,11 +119,18 @@ function apply_patch {
-         exit 1
-     fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
--    if [ $? != 0 ] ; then
--        echo "Patch failed!  Please fix ${patch}!"
--        exit 1
-+
-+    # We don't want this to abort the script on failure (script is run
-+    # with set -e)
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" --dry-run -t -N -s && retval=0 || retval=$?
-+    if [ $retval -eq 0 ] ; then
-+	    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-+	    # Due to set -e, if we reach here, applying the patch was successful
-+	    return
-     fi
-+
-+    [ -z "${silent}" ] && gitopts=-v
-+    (cd ${builddir}; ${uncomp} "${path}/$patch" | git --git-dir=/dev/null apply -p1 ${gitopts})
- }
- 
- function scan_patchdir {
--- 
-2.20.1
+diff --git a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+new file mode 100644
+index 0000000000..c5348a28da
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+@@ -0,0 +1,3 @@
++BR2_riscv=y
++BR2_RISCV_32=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index f24ec9ced0..3681bc519f 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -51,6 +51,7 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
++support/config-fragments/autobuild/br-riscv32-internal-glibc.config,any
+ support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
