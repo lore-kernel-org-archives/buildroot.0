@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jan 2019 15:26:28 +0100
-Subject: [Buildroot] [PATCH] patchelf: update _SITE to new location
-In-Reply-To: <20190110123146.554-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Thu, 10 Jan 2019 13:31:46 +0100")
-References: <20190110123146.554-1-arnout@mind.be>
-Message-ID: <871s5ksi5n.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Jan 2019 15:26:09 +0100
+Subject: [Buildroot] [git commit] patchelf: update _SITE to new location
+Message-ID: <20190110142619.5984C86DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e2fa462426bbcc3b4d443f64139a039f1945d4f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > releases.nixos.org gives some weird XML pages. The upstream location is
- > nixos.org/releases.
+releases.nixos.org gives some weird XML pages. The upstream location is
+nixos.org/releases.
 
- > This side uses HSTS, so switch to https to avoid a needless redirect.
+This side uses HSTS, so switch to https to avoid a needless redirect.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/patchelf/patchelf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
+index 74e6cccdbe..52912e295b 100644
+--- a/package/patchelf/patchelf.mk
++++ b/package/patchelf/patchelf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PATCHELF_VERSION = 0.9
+-PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-$(PATCHELF_VERSION)
++PATCHELF_SITE = https://nixos.org/releases/patchelf/patchelf-$(PATCHELF_VERSION)
+ PATCHELF_SOURCE = patchelf-$(PATCHELF_VERSION).tar.bz2
+ PATCHELF_LICENSE = GPL-3.0+
+ PATCHELF_LICENSE_FILES = COPYING
