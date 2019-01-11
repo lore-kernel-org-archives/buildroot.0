@@ -1,63 +1,51 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 11 Jan 2019 12:44:26 +0100
-Subject: [Buildroot] [v2] linux: add option to enable support for Device
- Tree overlays
-In-Reply-To: <20190105105909.31359-1-titouan.christophe@railnova.eu>
-References: <20190105105909.31359-1-titouan.christophe@railnova.eu>
-Message-ID: <20190111114426.9888-1-titouan.christophe@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jan 2019 12:53:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream fix for
+ CVE-2018-16864
+In-Reply-To: <CADvTj4pRcw-bWji5Crcr7o69tg+T-iD4wDcg5zDOjRRT7DXfWQ@mail.gmail.com>
+ (James Hilliard's message of "Fri, 11 Jan 2019 04:48:19 -0700")
+References: <1547193242-29882-1-git-send-email-james.hilliard1@gmail.com>
+ <87sgxzqxny.fsf@dell.be.48ers.dk>
+ <CADvTj4oX2kY5WepFYp7FY4UQJjUujpQ4+SeyWKiu4CvyFBMuWQ@mail.gmail.com>
+ <87k1jbqvfv.fsf@dell.be.48ers.dk>
+ <CADvTj4oap98Gc9F4-47AOp9Gccpk7ZufqMoHcNPwr=4+hGkp1Q@mail.gmail.com>
+ <87fttzqux5.fsf@dell.be.48ers.dk>
+ <CADvTj4pRcw-bWji5Crcr7o69tg+T-iD4wDcg5zDOjRRT7DXfWQ@mail.gmail.com>
+Message-ID: <87bm4nqukr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to compile device trees in Linux with symbol generation
-such that device tree overlays can be loaded on the target system
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
-Changes v1->v2:
-* Make the option more specific about DT Overlays
-  (rather than simply describing DT symbols generation)
-* Remove indentation in linux.mk to fit code style
----
- linux/Config.in | 8 ++++++++
- linux/linux.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+Hi,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 932aa62991..bf21d80368 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -392,6 +392,14 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	  You can provide a list of dts paths to copy and
- 	  build, separated by spaces.
- 
-+config BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT
-+	bool "Build Device Tree with overlay support"
-+	default n
-+	help
-+	  If enabled, pass the "-@" option to the device tree compiler,
-+	  such that symbols are generated in the compiled Device Tree.
-+	  Choose this option to support Device Tree overlays on the target system.
-+
- endif
- 
- config BR2_LINUX_KERNEL_INSTALL_TARGET
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6bf2b88038..950698f336 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -381,6 +381,10 @@ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- # reproducibility, we use our owns rather than the host ones.
- LINUX_DEPENDENCIES += host-bison host-flex
- 
-+ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
-+LINUX_MAKE_ENV += DTC_FLAGS=-@
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
+ > On Fri, Jan 11, 2019 at 4:46 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ >> >> >> What about CVE-2018-16865, E.G. commit 052c57f132f04a / ef4d6abe7c7fa?
+ >> >> >> Do those not apply to 240?
+ >> >> > So here https://www.qualys.com/2019/01/09/system-down/system-down.txt it says:
+ >> >> > "CVE-2018-16865 was introduced in December 2011 (systemd v38) and became
+ >> >> > exploitable in April 2013 (systemd v201). CVE-2018-16866 was introduced
+ >> >> > in June 2015 (systemd v221) and was inadvertently fixed in August 2018."
+ >> >> > So my assumption was that we didn't need patches for CVE-2018-16865
+ >> >> > since systemd 240 was released in Dec 2018.
+ >> >>
+ >> >> We don't need a fix for 16866, but we do need for 16865, right?
+ >> > That is not entirely clear to me as there seems to be contradictory info.
+ >> 
+ >> Sorry, what is unclear about "CVE-2018-16865 was introduced in December
+ >> 2011 (systemd v38) and became exploitable in April 2013 (systemd v201)"?
+ > The part that is unclear is that it supposedly "was inadvertently
+ > fixed in August 2018".
+
+But that refers to 18666 and NOT 18665?
+
 -- 
-2.19.2
+Bye, Peter Korsgaard
