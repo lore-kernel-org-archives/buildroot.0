@@ -1,28 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 11 Jan 2019 14:16:52 +0000
-Subject: [Buildroot] [Bug 11616] 2018.02.09 fails to build libzlib with full
- RELRO protection
-In-Reply-To: <bug-11616-163@https.bugs.busybox.net/>
-References: <bug-11616-163@https.bugs.busybox.net/>
-Message-ID: <bug-11616-163-IDUXGUWZXH@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jan 2019 15:18:53 +0100
+Subject: [Buildroot] [PATCH] package/syslog-ng: bump to version 3.19.1
+In-Reply-To: <20190111130307.7005-1-casantos@datacom.com.br> (Carlos Santos's
+ message of "Fri, 11 Jan 2019 11:03:07 -0200")
+References: <20190111130307.7005-1-casantos@datacom.com.br>
+Message-ID: <877efbqnua.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11616
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
---- Comment #3 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Could you do a build with this stock config in Buildroot and verify the issue
-is repeatable?
+ > Brings lots improvements and bug fixes, especially bug #1720[1], which
+ > causes problems on some of our (DATACOM) products.
 
-qemu_ppc64_e5500_defconfig
+ > 1. https://github.com/balabit/syslog-ng/issues/1720
 
+ > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
-This doesn't isolate the issue to the specific architecture but should simplify
-your defconfig so I can help further.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
