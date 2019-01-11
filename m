@@ -1,30 +1,39 @@
-From: Juan A. Rubio <jarubio2001@gmail.com>
-Date: Fri, 11 Jan 2019 11:39:30 +0000
-Subject: [Buildroot] imx6 solo VPU support in Buildroot
-Message-ID: <CAE58QoON4RUMgNdtUjBQDpYrmUSqTzjTyxJ+3LGPa=V=Q8kTRw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Jan 2019 12:45:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream fix for
+ CVE-2018-16864
+In-Reply-To: <CADvTj4oap98Gc9F4-47AOp9Gccpk7ZufqMoHcNPwr=4+hGkp1Q@mail.gmail.com>
+ (James Hilliard's message of "Fri, 11 Jan 2019 04:36:55 -0700")
+References: <1547193242-29882-1-git-send-email-james.hilliard1@gmail.com>
+ <87sgxzqxny.fsf@dell.be.48ers.dk>
+ <CADvTj4oX2kY5WepFYp7FY4UQJjUujpQ4+SeyWKiu4CvyFBMuWQ@mail.gmail.com>
+ <87k1jbqvfv.fsf@dell.be.48ers.dk>
+ <CADvTj4oap98Gc9F4-47AOp9Gccpk7ZufqMoHcNPwr=4+hGkp1Q@mail.gmail.com>
+Message-ID: <87fttzqux5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+
 Hi,
 
-I've noticed that the imx6 solo VPU is not supported in Buildroot
-starting from 2018.02.x
+ >> >> What about CVE-2018-16865, E.G. commit 052c57f132f04a / ef4d6abe7c7fa?
+ >> >> Do those not apply to 240?
+ >> > So here https://www.qualys.com/2019/01/09/system-down/system-down.txt it says:
+ >> > "CVE-2018-16865 was introduced in December 2011 (systemd v38) and became
+ >> > exploitable in April 2013 (systemd v201). CVE-2018-16866 was introduced
+ >> > in June 2015 (systemd v221) and was inadvertently fixed in August 2018."
+ >> > So my assumption was that we didn't need patches for CVE-2018-16865
+ >> > since systemd 240 was released in Dec 2018.
+ >> 
+ >> We don't need a fix for 16866, but we do need for 16865, right?
+ > That is not entirely clear to me as there seems to be contradictory info.
 
-There is some information about this in this commit:
-https://github.com/buildroot/buildroot/commit/b86b227fda97ef439a3cc0da03da0ebcad5c203a
+Sorry, what is unclear about "CVE-2018-16865 was introduced in December
+2011 (systemd v38) and became exploitable in April 2013 (systemd v201)"?
 
-Has anyone come up with a solution to successfully enable the VPU
-libraries on imx6 solo with Buildroot?. Is there any more information
-about this that might help to get this to work somehow?
-
-(my use case: hw-accelerated mpeg2 video decoding, through qt-multimedia)
-
-Thanks!
-
-P.S.: I was asking this question on #buildroot earlier today and
-'kos_tom' mentioned that this Yocto commit may contiain some clues
-about what is going on:
-https://lists.yoctoproject.org/pipermail/meta-freescale/2017-September/021137.html
+-- 
+Bye, Peter Korsgaard
