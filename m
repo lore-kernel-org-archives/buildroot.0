@@ -1,232 +1,55 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Fri, 11 Jan 2019 15:54:02 +0800
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream fix for
- CVE-2018-16864
-Message-ID: <1547193242-29882-1-git-send-email-james.hilliard1@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 11 Jan 2019 01:01:11 -0700
+Subject: [Buildroot] swupdate: requires shared library support
+In-Reply-To: <4e138ec5f0641da3b17aa6e8ab35e326d040cf21.1547189095.git.baruch@tkos.co.il>
+References: <4e138ec5f0641da3b17aa6e8ab35e326d040cf21.1547189095.git.baruch@tkos.co.il>
+Message-ID: <CADvTj4qVV_137wwjd0uysfKp=St9tWK1giZKr_0hZdYqXpDoBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...-not-store-the-iovec-entry-for-process-co.patch | 205 +++++++++++++++++++++
- 1 file changed, 205 insertions(+)
- create mode 100644 package/systemd/0004-journald-do-not-store-the-iovec-entry-for-process-co.patch
-
-diff --git a/package/systemd/0004-journald-do-not-store-the-iovec-entry-for-process-co.patch b/package/systemd/0004-journald-do-not-store-the-iovec-entry-for-process-co.patch
-new file mode 100644
-index 0000000..dbf9bb5
---- /dev/null
-+++ b/package/systemd/0004-journald-do-not-store-the-iovec-entry-for-process-co.patch
-@@ -0,0 +1,205 @@
-+From 084eeb865ca63887098e0945fb4e93c852b91b0f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-+Date: Wed, 5 Dec 2018 18:38:39 +0100
-+Subject: [PATCH] journald: do not store the iovec entry for process
-+ commandline on stack
-+
-+This fixes a crash where we would read the commandline, whose length is under
-+control of the sending program, and then crash when trying to create a stack
-+allocation for it.
-+
-+CVE-2018-16864
-+https://bugzilla.redhat.com/show_bug.cgi?id=1653855
-+
-+The message actually doesn't get written to disk, because
-+journal_file_append_entry() returns -E2BIG.
-+
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+084eeb865ca63887098e0945fb4e93c852b91b0f]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ src/basic/io-util.c           | 10 ++++++++++
-+ src/basic/io-util.h           |  2 ++
-+ src/coredump/coredump.c       | 31 +++++++++++--------------------
-+ src/journal/journald-server.c | 25 +++++++++++++++----------
-+ 4 files changed, 38 insertions(+), 30 deletions(-)
-+
-+diff --git a/src/basic/io-util.c b/src/basic/io-util.c
-+index 1f64cc9..575398f 100644
-+--- a/src/basic/io-util.c
-++++ b/src/basic/io-util.c
-+@@ -8,6 +8,7 @@
-+ #include <unistd.h>
-+ 
-+ #include "io-util.h"
-++#include "string-util.h"
-+ #include "time-util.h"
-+ 
-+ int flush_fd(int fd) {
-+@@ -252,3 +253,12 @@ ssize_t sparse_write(int fd, const void *p, size_t sz, size_t run_length) {
-+ 
-+         return q - (const uint8_t*) p;
-+ }
-++
-++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
-++        char *x;
-++
-++        x = strappend(field, value);
-++        if (x)
-++                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
-++        return x;
-++}
-+diff --git a/src/basic/io-util.h b/src/basic/io-util.h
-+index ed189b5..792a64a 100644
-+--- a/src/basic/io-util.h
-++++ b/src/basic/io-util.h
-+@@ -71,3 +71,5 @@ static inline bool FILE_SIZE_VALID_OR_INFINITY(uint64_t l) {
-+ #define IOVEC_MAKE(base, len) (struct iovec) IOVEC_INIT(base, len)
-+ #define IOVEC_INIT_STRING(string) IOVEC_INIT((char*) string, strlen(string))
-+ #define IOVEC_MAKE_STRING(string) (struct iovec) IOVEC_INIT_STRING(string)
-++
-++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value);
-+diff --git a/src/coredump/coredump.c b/src/coredump/coredump.c
-+index 20c1fb0..db2cf64 100644
-+--- a/src/coredump/coredump.c
-++++ b/src/coredump/coredump.c
-+@@ -1063,19 +1063,10 @@ static int send_iovec(const struct iovec iovec[], size_t n_iovec, int input_fd)
-+         return 0;
-+ }
-+ 
-+-static char* set_iovec_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
-+-        char *x;
-+-
-+-        x = strappend(field, value);
-+-        if (x)
-+-                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
-+-        return x;
-+-}
-+-
-+ static char* set_iovec_field_free(struct iovec *iovec, size_t *n_iovec, const char *field, char *value) {
-+         char *x;
-+ 
-+-        x = set_iovec_field(iovec, n_iovec, field, value);
-++        x = set_iovec_string_field(iovec, n_iovec, field, value);
-+         free(value);
-+         return x;
-+ }
-+@@ -1125,36 +1116,36 @@ static int gather_pid_metadata(
-+                         disable_coredumps();
-+                 }
-+ 
-+-                set_iovec_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
-++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
-+         }
-+ 
-+         if (cg_pid_get_user_unit(pid, &t) >= 0)
-+                 set_iovec_field_free(iovec, n_iovec, "COREDUMP_USER_UNIT=", t);
-+ 
-+         /* The next few are mandatory */
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
-+                 return log_oom();
-+ 
-+         if (context[CONTEXT_EXE] &&
-+-            !set_iovec_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
-++            !set_iovec_string_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
-+                 return log_oom();
-+ 
-+         if (sd_pid_get_session(pid, &t) >= 0)
-+@@ -1222,7 +1213,7 @@ static int gather_pid_metadata(
-+                 iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(t);
-+ 
-+         if (safe_atoi(context[CONTEXT_SIGNAL], &signo) >= 0 && SIGNAL_VALID(signo))
-+-                set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
-++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
-+ 
-+         return 0; /* we successfully acquired all metadata */
-+ }
-+diff --git a/src/journal/journald-server.c b/src/journal/journald-server.c
-+index f096725..2a960eb 100644
-+--- a/src/journal/journald-server.c
-++++ b/src/journal/journald-server.c
-+@@ -905,6 +905,7 @@ static void dispatch_message_real(
-+                 pid_t object_pid) {
-+ 
-+         char source_time[sizeof("_SOURCE_REALTIME_TIMESTAMP=") + DECIMAL_STR_MAX(usec_t)];
-++        _cleanup_free_ char *cmdline1 = NULL, *cmdline2 = NULL;
-+         uid_t journal_uid;
-+         ClientContext *o;
-+ 
-+@@ -921,20 +922,23 @@ static void dispatch_message_real(
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->uid, uid_t, uid_is_valid, UID_FMT, "_UID");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->gid, gid_t, gid_is_valid, GID_FMT, "_GID");
-+ 
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cmdline, "_CMDLINE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM"); /* At most TASK_COMM_LENGTH (16 bytes) */
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE"); /* A path, so at most PATH_MAX (4096 bytes) */
-+ 
-+-                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
-++                if (c->cmdline)
-++                        /* At most _SC_ARG_MAX (2MB usually), which is too much to put on stack.
-++                         * Let's use a heap allocation for this one. */
-++                        cmdline1 = set_iovec_string_field(iovec, &n, "_CMDLINE=", c->cmdline);
-+ 
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE"); /* Read from /proc/.../status */
-++                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "_AUDIT_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->loginuid, uid_t, uid_is_valid, UID_FMT, "_AUDIT_LOGINUID");
-+ 
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP"); /* A path */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->session, "_SYSTEMD_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->owner_uid, uid_t, uid_is_valid, UID_FMT, "_SYSTEMD_OWNER_UID");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT"); /* Unit names are bounded by UNIT_NAME_MAX */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_unit, "_SYSTEMD_USER_UNIT");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->slice, "_SYSTEMD_SLICE");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_slice, "_SYSTEMD_USER_SLICE");
-+@@ -955,13 +959,14 @@ static void dispatch_message_real(
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->uid, uid_t, uid_is_valid, UID_FMT, "OBJECT_UID");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->gid, gid_t, gid_is_valid, GID_FMT, "OBJECT_GID");
-+ 
-++                /* See above for size limits, only ->cmdline may be large, so use a heap allocation for it. */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, o->comm, "OBJECT_COMM");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, o->exe, "OBJECT_EXE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, o->cmdline, "OBJECT_CMDLINE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
-++                if (o->cmdline)
-++                        cmdline2 = set_iovec_string_field(iovec, &n, "OBJECT_CMDLINE=", o->cmdline);
-+ 
-++                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
-+                 IOVEC_ADD_SIZED_FIELD(iovec, n, o->label, o->label_size, "OBJECT_SELINUX_CONTEXT");
-+-
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "OBJECT_AUDIT_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->loginuid, uid_t, uid_is_valid, UID_FMT, "OBJECT_AUDIT_LOGINUID");
-+ 
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+On Thu, Jan 10, 2019 at 11:44 PM Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Since version 2018.11 swupdate builds its lua binding as a shared
+> library unconditionally.
+swupdate doesn't require lua so requiring static libs to build
+swupdate doesn't seem to make sense.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/557/55767e58c211656558af7916a4e0975089a2785b/
+> http://autobuild.buildroot.net/results/073/07391b074a2fb16d2925320e16535e177a923089/
+> http://autobuild.buildroot.net/results/9e2/9e2b90b557576fd0b633a19b335ff1a7ee64ce69/
+>
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/swupdate/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+> index ca2eaf294013..f208bd412095 100644
+> --- a/package/swupdate/Config.in
+> +++ b/package/swupdate/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_SWUPDATE
+>         bool "swupdate"
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_STATIC_LIBS
+This needs to only be required when swupdate is built with LUA enabled
+in the swupdate config.
+>         depends on BR2_USE_MMU # fork()
+>         # swupdate requires a parser and uses libconfig as default
+>         select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
+> @@ -59,6 +60,6 @@ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+>           installed to /var/www/swupdate.
+>  endif
+>
+> -comment "swupdate needs a toolchain w/ threads"
+> +comment "swupdate needs a toolchain w/ threads, dynamic library"
+>         depends on BR2_USE_MMU
+> -       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>
+>
