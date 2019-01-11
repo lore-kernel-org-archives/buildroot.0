@@ -1,120 +1,79 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 11 Jan 2019 11:03:07 -0200
-Subject: [Buildroot] [PATCH] package/syslog-ng: bump to version 3.19.1
-Message-ID: <20190111130307.7005-1-casantos@datacom.com.br>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 11 Jan 2019 15:00:15 +0100
+Subject: [Buildroot] [PATCH v2 1/1] check-package: fix Python3 support
+In-Reply-To: <20180811034827.14504-1-ricardo.martincoski@gmail.com>
+References: <20180723004107.20985-1-ricardo.martincoski@gmail.com>
+ <20180811034827.14504-1-ricardo.martincoski@gmail.com>
+Message-ID: <CAAXf6LXygz85p7LCfbrM-Yq3BCubxkSBE+x2MewxnJWzT3pQ-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brings lots improvements and bug fixes, especially bug #1720[1], which
-causes problems on some of our (DATACOM) products.
+El s?b., 11 ago. 2018 a las 5:49, Ricardo Martincoski
+(<ricardo.martincoski@gmail.com>) escribi?:
+>
+> This script currently uses "/usr/bin/env python" as shebang but it does
+> not really support Python3. Instead of limiting the script to Python2,
+> fix it to support both versions.
+>
+> So change all imports to absolute imports because Python3 follows PEP328
+> and dropped implicit relative imports.
+>
+> In order to avoid errors when decoding files with the default 'utf-8'
+> codec, use errors="surrogateescape" when opening files, the docs for
+> open() states: "This is useful for processing files in an unknown
+> encoding.". This argument is not compatible with Python2 open() so
+> import 'six' to use it only when running in Python3.
+> As a consequence the file handler becomes explicit, so use it to close()
+> the file after it got processed.
+>
+> This "surrogateescape" is a simple alternative to the complete solution
+> of opening files with "rb" and changing all functions in the lib*.py
+> files to use bytes objects instead of strings. The only case we can have
+> non-ascii/non-utf-8 files being checked by the script are for patch
+> files when the upstream file to be patched is not ascii or utf-8. There
+> is currently one case in the tree:
+> package/urg/0002-urg-gcc6-fix-narrowing-conversion.patch.
+>
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+> Changes v1 -> v2:
+>   - do not use an automated tool (modernize);
+>   - use absolute import;
+>   - drop list() added to .keys(), it's not needed (Arnout);
+>   - drop 'from __future__ import absolute_import' everywhere;
+>   - list the (not used) approach of opening files in binary mode in the
+>     commit message;
+>
+> Using the default docker (debian) image which uses Python2:
+> before this patch:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/88548503
+> after this patch:
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561994
+>
+> Using an arch docker image which uses Python3:
+> before this patch:
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561488
+> after this patch:
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561704
+> The arch image for docker was generated using:
+> http://patchwork.ozlabs.org/patch/943301/
+> ---
+>  utils/check-package                 |  8 +++++++-
+>  utils/checkpackagelib/lib.py        |  2 +-
+>  utils/checkpackagelib/lib_config.py | 10 +++++-----
+>  utils/checkpackagelib/lib_hash.py   | 10 +++++-----
+>  utils/checkpackagelib/lib_mk.py     | 10 +++++-----
+>  utils/checkpackagelib/lib_patch.py  |  4 ++--
+>  6 files changed, 25 insertions(+), 19 deletions(-)
+>
 
-1. https://github.com/balabit/syslog-ng/issues/1720
+This patch looks good to me. I don't really know anything about
+surrogateescape, but the script works on the urg package so seems ok.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- ...1-modules-json-Adaptions-for-json-c-v0.13.patch | 39 ----------------------
- package/syslog-ng/syslog-ng.conf                   |  2 +-
- package/syslog-ng/syslog-ng.hash                   |  5 ++-
- package/syslog-ng/syslog-ng.mk                     |  8 ++---
- 4 files changed, 8 insertions(+), 46 deletions(-)
- delete mode 100644 package/syslog-ng/0001-modules-json-Adaptions-for-json-c-v0.13.patch
-
-diff --git a/package/syslog-ng/0001-modules-json-Adaptions-for-json-c-v0.13.patch b/package/syslog-ng/0001-modules-json-Adaptions-for-json-c-v0.13.patch
-deleted file mode 100644
-index b307ab5acf..0000000000
---- a/package/syslog-ng/0001-modules-json-Adaptions-for-json-c-v0.13.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 1b824dd6389e209eab752d5a698c6093f311e3e3 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
--Date: Mon, 11 Dec 2017 15:46:06 +0100
--Subject: [PATCH] modules/json: Adaptions for json-c v0.13
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit 1b824dd6389e
--
-- modules/json/json-parser.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/modules/json/json-parser.c b/modules/json/json-parser.c
--index 0368ed8f7ffe..356df48b9fc7 100644
----- a/modules/json/json-parser.c
--+++ b/modules/json/json-parser.c
--@@ -20,6 +20,8 @@
--  * COPYING for details.
--  */
-- 
--+#define JSON_C_VER_013 (13 << 8)
--+
-- #include "json-parser.h"
-- #include "dot-notation.h"
-- #include "scratch-buffers.h"
--@@ -28,7 +30,10 @@
-- #include <ctype.h>
-- 
-- #include <json.h>
--+
--+#if (!defined(JSON_C_VERSION_NUM)) || (JSON_C_VERSION_NUM < JSON_C_VER_013)
-- #include <json_object_private.h>
--+#endif
-- 
-- typedef struct _JSONParser
-- {
---- 
--2.15.1
--
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index e767255d71..9a56a1302d 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
-- at version: 3.10
-+ at version: 3.19
- 
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index d9c51e9f1c..1f83e39ff0 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,2 +1,5 @@
- # Locally computed
--sha256 a905fe7bad09dcf40bf03650ef1c287b511bf262d004464b8993a28ce58c9136  syslog-ng-3.10.1.tar.gz
-+sha256 5cf931a9d7bead0e6d9a2c65eee8f6005a005878f59aa280f3c4294257ed5178  syslog-ng-3.19.1.tar.gz
-+sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
-+sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 29e284a4bf..4316382153 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,10 +6,10 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 3.10.1
-+SYSLOG_NG_VERSION = 3.19.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
--SYSLOG_NG_LICENSE_FILES = COPYING
-+SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
- # rabbit-mq needs -lrt
-@@ -42,9 +42,7 @@ SYSLOG_NG_CONF_OPTS += \
- 	--enable-python \
- 	--with-python=$(PYTHON3_VERSION_MAJOR)
- else
--SYSLOG_NG_CONF_OPTS += \
--	--disable-python \
--	--without-python
-+SYSLOG_NG_CONF_OPTS += --disable-python
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBESMTP),y)
--- 
-2.14.5
+Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[Tested with Python 2.7.x and Python 3.5.x]
