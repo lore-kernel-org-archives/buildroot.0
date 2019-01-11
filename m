@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Jan 2019 09:15:52 +0100
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches: use "git
- apply" as a fallback when applying patches
-In-Reply-To: <87wonbhnny.fsf@tarshish>
-References: <20190110203004.9812-1-thomas.petazzoni@bootlin.com>
- <87wonbhnny.fsf@tarshish>
-Message-ID: <20190111091552.72fba6ad@windsurf>
+Date: Fri, 11 Jan 2019 09:33:05 +0100
+Subject: [Buildroot] [PATCH 1/1] atk: fix static build
+In-Reply-To: <20190110164044.9361-1-fontaine.fabrice@gmail.com>
+References: <20190110164044.9361-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190111093305.30c6bfcc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 Jan 2019 05:35:13 +0200, Baruch Siach wrote:
-
-> > Switching everybody to unconditionally use "git apply" seems a bit
-> > risky, so instead we take a different route: if applying the patch
-> > with "patch" fails, then we try with "git apply".  
+On Thu, 10 Jan 2019 17:40:44 +0100, Fabrice Fontaine wrote:
+> Use library instead of shared_library to allow the user to build a
+> static libatk library
 > 
-> This makes git a host dependency. Should we add host-git, or list git
-> with host requirements?
+> Fixes:
+>  - http://autobuild.buildroot.org/results/347a37dd2585974bdbf3bf99158e8ee9127d1202
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-It does not really make git a mandatory dependency. Indeed, "git apply"
-is only tried if "patch" fails.
-
-So, before my patch, if a patch failed to apply because "patch" failed,
-then it aborted the build.
-
-With my patch, if a patch fails to apply because "patch" failed, then
-we will try "git apply". If "git apply" is not available, it will fail,
-just like it used to be.
-
-So my proposal doesn't *require* git, it only tries harder to apply
-patches by using "git apply" if available.
-
-Setups that used to work today without "git" installed will continue to
-work with no change.
+Thanks! Does this work properly when BR2_STATIC_SHARED_LIBS=y, i.e when
+we want both a shared and a static variant of the library to be
+generated ?
 
 Best regards,
 
