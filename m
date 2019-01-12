@@ -1,61 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jan 2019 08:33:21 +0100
-Subject: [Buildroot] [PATCH v1] libinput: drop C++ dependency
-In-Reply-To: <20190111230158.5283-1-ps.report@gmx.net>
-References: <20190111230158.5283-1-ps.report@gmx.net>
-Message-ID: <20190112073321.GE2428@scaer>
+Date: Sat, 12 Jan 2019 08:43:58 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/linux-firmware : Install
+ binary blobs for e100 ethernet driver
+In-Reply-To: <20190111075009.5274-1-dplamp@gmx.com>
+References: <20190111075009.5274-1-dplamp@gmx.com>
+Message-ID: <20190112074358.GF2428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+David, All,
 
-On 2019-01-12 00:01 +0100, Peter Seiderer spake thusly:
-> The meson C++ dependency is only used for a build-time header
-> include test, so drop both.
-[--SNIP--]
-> [1] http://autobuild.buildroot.net/results/bf4d3d360f635c3524a52b84a72d558770596ed0
+On 2019-01-11 08:50 +0100, dplamp at gmx.com spake thusly:
+> From: David Picard <dplamp@gmx.com>
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Add an option in the menuconfig  submenu of linux-firmware package. Install
+> the firmware binary files to the target directory if the option is selected.
+> 
 > ---
-> Note:
->   - alternative solution would be to add a c++ dependency for libinput
->   - patch could be improved to optional C++ dependency/compile (but did
->     not know how to express this in meson)
+> Changes v1 -> v2
+> - change BR2_PACKAGE_LINUX_FIRMWARE_E100 to BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
+> - change menu caption from "e100 / Intel 825xx" to "Intel e100 825xx"
+> 
+> Signed-off-by: David Picard <dplamp@gmx.com>
+
+Your SoB line should go before the first '---'.
+
 [--SNIP--]
-> +@@ -641,12 +641,6 @@ executable('test-build-linker',
-> + 	   include_directories : [includes_src, includes_include],
-> + 	   dependencies : [ dep_libinput, dep_libinput_util ],
-> + 	   install : false)
-> +-# test including from C++
-> +-executable('test-build-cxx',
-> +-	   'test/build-cxx.cc',
-> +-	   dependencies : [dep_udev],
-> +-	   include_directories : [includes_src, includes_include],
-> +-	   install : false)
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index ee02c7a030..86e1d1e750 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -389,6 +389,11 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100),y)
+> +LINUX_FIRMWARE_FILES += e100/*.bin
+> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
 
-You may want to test something like that:
-
-    if add_languages('cpp')
-        executable('test-build-cxx',
-            blablabla)
-    endif
-
-If that works, then I think I'd prefer we use this patch, because it is
-upstreamable, which you should try to do btw.
+Please, also add the hash for the license file in
+package/linux-firmware/linux-firmware.hash
 
 Regards,
 Yann E. MORIN.
 
-> + # This is the test suite runner, we allow disabling that one because of
-> + # dependencies
-> +-- 
-> +2.20.1
+> +endif
 > +
+>  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
+>  LINUX_FIRMWARE_FILES += \
+>  	qed/qed_init_values_zipped-*.bin
 > -- 
-> 2.20.1
+> 2.17.1
 > 
 
 -- 
