@@ -1,43 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jan 2019 16:49:40 +0100
-Subject: [Buildroot] [PATCH 1/1] sunxi-cedarx: needs -fPIC
-In-Reply-To: <20190112145541.316d0b60@windsurf.home>
-References: <20190112092459.21382-1-fontaine.fabrice@gmail.com>
- <20190112145541.316d0b60@windsurf.home>
-Message-ID: <CAPi7W81_Kxh=51Te+FSNjMM7PmHnQxh=S6inubTD1jVauv9MPQ@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sat, 12 Jan 2019 18:01:20 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-01-11
+In-Reply-To: <20190112070027.D3C1E20898@mail.bootlin.com>
+References: <20190112070027.D3C1E20898@mail.bootlin.com>
+Message-ID: <20190112180120.GB16565@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello all,
 
-Le sam. 12 janv. 2019 ? 14:55, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Sat, 12 Jan 2019 10:24:59 +0100, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Could you explain why we are seeing such build errors since December
-> 5th, 2018, while the package hasn't been touched since 2016 ? What
-> changed that makes those errors visible now ?
-Yes, the issue is raised only when BR2_OPTIMIZE_2 is set and
-autobuilders test -O2 only since December 3rd:
-https://git.buildroot.net/buildroot/commit/?id=aa556e2035c023d4328185a46e15df532e566067.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+On Sat, 12 Jan 2019 08:00:27 +0100 (CET), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Fabrice
+> [...]
+>
+> Results for branch '2018.11.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                 host-libsodium | 1 
+>                 libmpeg2-0.5.1 | 1 
+>               webkitgtk-2.22.5 | 1 
+> 
+> 
+> Detail of failures
+> ------------------
+> 
+>          sh4 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/93b41bf4373c40ffa0efa90b6b767de0aceb3ce7 |     
+>      powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/29b896b63832382523f8df8eca67a199ec5a005b | ORPH
+>       mipsel |               webkitgtk-2.22.5 | NOK | http://autobuild.buildroot.net/results/dd89d219efb711ecaa71a268bd6b36b06b035c80 |     
+
+The WebKitGTK+ build failure is triggered when OpenGL support is disabled, due
+to a bug that slipped in an internal header in the 2.22.x releases. I have
+filed a bug upstream, hoping that it will be fixed for a 2.22.6 release:
+
+  https://bugs.webkit.org/show_bug.cgi?id=193380
+
+I am going to submit a patch for it later on, and make a patch for Buildroot
+as well.
+
+Cheers,
+
+
+-Adri?n
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190112/ae9c79b7/attachment.asc>
