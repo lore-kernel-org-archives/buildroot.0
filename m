@@ -1,60 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 15:35:37 +0100
-Subject: [Buildroot] [git commit] package/libsquish: re-enable for
- BR2_STATIC_LIBS configuration
-Message-ID: <20190112144734.EB9BA88CB4@busybox.osuosl.org>
+Date: Sat, 12 Jan 2019 14:55:53 +0100
+Subject: [Buildroot] [git commit] package/libsquish: add license file hash
+Message-ID: <20190112144734.DD65F88C83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae4b9e4afbbd92e2303507651982d477fd734e68
+commit: https://git.buildroot.net/buildroot/commit/?id=9b377e9dcfbad9025cfcc87d95735a61bd8722ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump to version 1.15, libsquish can conditionally
-build/install its shared library, which makes it possible to re-enable
-this package for BR2_STATIC_LIBS configurations.
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsquish/Config.in    | 5 ++---
- package/libsquish/libsquish.mk | 4 ++++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libsquish/libsquish.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libsquish/Config.in b/package/libsquish/Config.in
-index eabe6c54a8..e93e97e578 100644
---- a/package/libsquish/Config.in
-+++ b/package/libsquish/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBSQUISH
- 	bool "libsquish"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  The libSquish library compresses images with the DXT standard
- 	  (also known as S3TC). This standard is mainly used by OpenGL
-@@ -9,5 +8,5 @@ config BR2_PACKAGE_LIBSQUISH
- 
- 	  http://sourceforge.net/projects/libsquish
- 
--comment "libsquish needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "libsquish needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
-index b1a80e5b60..75d2cbd16a 100644
---- a/package/libsquish/libsquish.mk
-+++ b/package/libsquish/libsquish.mk
-@@ -12,7 +12,11 @@ LIBSQUISH_STRIP_COMPONENTS = 0
- LIBSQUISH_LICENSE = MIT
- LIBSQUISH_LICENSE_FILES = LICENSE.txt
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBSQUISH_MAKE_ENV = USE_SHARED=0
-+else
- LIBSQUISH_MAKE_ENV = USE_SHARED=1
-+endif
- 
- define LIBSQUISH_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(LIBSQUISH_MAKE_ENV) $(MAKE) -C $(@D)
+diff --git a/package/libsquish/libsquish.hash b/package/libsquish/libsquish.hash
+index e68d28d66f..06c96e977b 100644
+--- a/package/libsquish/libsquish.hash
++++ b/package/libsquish/libsquish.hash
+@@ -1,3 +1,5 @@
+ # From http://sourceforge.net/projects/libsquish/files
+ sha1 51844b9a8bc815a27e2cc0ffbede5fee3ef75110 libsquish-1.15.tgz
+ md5 c02645800131e55b519ff8dbe7284f93 libsquish-1.15.tgz
++# Locally calculated
++sha256 a6b8c383bf3ab28460d6507484d605dd722e03971606f0cd3032a3af682b63a5  LICENSE.txt
