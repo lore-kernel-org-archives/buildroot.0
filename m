@@ -1,32 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 12 Jan 2019 21:50:25 +0100
-Subject: [Buildroot] [PATCH 1/2] cc-tool: drop BR2_PACKAGE_BOOST_SIGNALS
- select
-Message-ID: <20190112205026.6173-1-fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jan 2019 22:08:43 +0100
+Subject: [Buildroot] [PATCH 1/2] lxc: add optional dependency to
+ bash-completion
+Message-ID: <20190112210844.4021-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cc-tool depends on signals2 not signals
+lxc uses the completionsdir variable from bash-completions.pc to decide
+where to install things.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cc-tool/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/lxc/lxc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
-index 32250db3af..67c67a3992 100644
---- a/package/cc-tool/Config.in
-+++ b/package/cc-tool/Config.in
-@@ -10,7 +10,6 @@ config BR2_PACKAGE_CC_TOOL
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
--	select BR2_PACKAGE_BOOST_SIGNALS
- 	help
- 	  cc-tool provides support for Texas Instruments CC Debugger
- 	  for Linux OS in order to program 8051-based System-On-Chip
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index c9838fb229..c758a15b9d 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -17,6 +17,10 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++LXC_DEPENDENCIES += bash-completion
++endif
++
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LXC_CONF_OPTS += --enable-gnutls
+ LXC_DEPENDENCIES += gnutls
 -- 
 2.14.1
