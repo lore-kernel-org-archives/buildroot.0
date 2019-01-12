@@ -1,31 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 12 Jan 2019 13:59:11 +0000
-Subject: [Buildroot] [Bug 11616] 2018.02.09 fails to build libzlib with full
- RELRO protection
-In-Reply-To: <bug-11616-163@https.bugs.busybox.net/>
-References: <bug-11616-163@https.bugs.busybox.net/>
-Message-ID: <bug-11616-163-CVWQdkd4YZ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 12 Jan 2019 15:35:37 +0100
+Subject: [Buildroot] [git commit] package/libsquish: re-enable for
+ BR2_STATIC_LIBS configuration
+Message-ID: <20190112144734.EB9BA88CB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11616
+commit: https://git.buildroot.net/buildroot/commit/?id=ae4b9e4afbbd92e2303507651982d477fd734e68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #5 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Tho(In reply to Thomas Petazzoni from comment #4)
+Since the bump to version 1.15, libsquish can conditionally
+build/install its shared library, which makes it possible to re-enable
+this package for BR2_STATIC_LIBS configurations.
 
-Oh right.  So then for this failure case it is a known issue that the ordering
-of linker steps in most packages are not correct to support RELRO full.  Which
-is what lead to using the toolchain wrapper to adjust ordering as the current
-solution.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libsquish/Config.in    | 5 ++---
+ package/libsquish/libsquish.mk | 4 ++++
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Karl, are you able to bump versions to 2018.11 or next month to the new LTS? 
-If not I can help you find the series of commits to add to your LTS that enable
-the toolchain wrapper method, however you'd have to carry your own LTS branch
-locally for this to work.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/libsquish/Config.in b/package/libsquish/Config.in
+index eabe6c54a8..e93e97e578 100644
+--- a/package/libsquish/Config.in
++++ b/package/libsquish/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBSQUISH
+ 	bool "libsquish"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  The libSquish library compresses images with the DXT standard
+ 	  (also known as S3TC). This standard is mainly used by OpenGL
+@@ -9,5 +8,5 @@ config BR2_PACKAGE_LIBSQUISH
+ 
+ 	  http://sourceforge.net/projects/libsquish
+ 
+-comment "libsquish needs a toolchain w/ C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++comment "libsquish needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+index b1a80e5b60..75d2cbd16a 100644
+--- a/package/libsquish/libsquish.mk
++++ b/package/libsquish/libsquish.mk
+@@ -12,7 +12,11 @@ LIBSQUISH_STRIP_COMPONENTS = 0
+ LIBSQUISH_LICENSE = MIT
+ LIBSQUISH_LICENSE_FILES = LICENSE.txt
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBSQUISH_MAKE_ENV = USE_SHARED=0
++else
+ LIBSQUISH_MAKE_ENV = USE_SHARED=1
++endif
+ 
+ define LIBSQUISH_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(LIBSQUISH_MAKE_ENV) $(MAKE) -C $(@D)
