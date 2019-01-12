@@ -1,56 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 16:06:29 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-cmake: add CMAKE_SYSTEM_VERSION to
- toolchainfile.cmake
-In-Reply-To: <20190111211626.GD2428@scaer>
-References: <20190110230529.29852-1-arnout@mind.be>
- <20190111211626.GD2428@scaer>
-Message-ID: <20190112160629.5a85748b@windsurf.home>
+Date: Sat, 12 Jan 2019 16:06:51 +0100
+Subject: [Buildroot] [git commit] package/pkg-cmake: add
+ CMAKE_SYSTEM_VERSION to toolchainfile.cmake
+Message-ID: <20190112150648.10758815AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=36568732e40923d19274f1c997e278a1c4e6c99e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Jan 2019 22:16:26 +0100, Yann E. MORIN wrote:
+Quoting the CMake documentation:
 
-> > the
-> > value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
-> > of the kernel it will run on,  
-> 
-> That is not true.
-> 
-> glibc for example will by default carry fallback mechanisms to emulate
-> some features when it is running on a kernel older than the headers it
-> was compiled against. In Buildroot we explictly disable that feature by
-> passing --enable-kernel=$(BR2_TOOLCHAIN_HEADERS_AT_LEAST).
-> 
-> But for external toolchains, we don't know (and can't know) iw they did
-> pass that option or not, and if they did, what version they requested,
-> and if they did not, what version glibc uses.
-> 
-> This backward compatibility of glibc can extend quite a bit in the past,
-> so kernels we would consider pretty old might still be usable with such
-> toolchains. For example, on glibc-2.24, the minimum required headers
-> were 3.2, but the runtime could be 2.6.32 on x86_64.
-> 
-> So, we could very well end up building a Buildroot system that runs on a
-> kernel older than the headers of the toolchain.
+  When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
+  compiling then the value of CMAKE_SYSTEM_VERSION must also be set
+  explicitly to specify the target system version.
 
-While this is true, what can we do in practice ? We have no way to know
-what will be the version of the kernel running on the target when we're
-not building it, and still we have to provide this CMAKE_SYSTEM_VERSION
-value. I am not really sure what packages are doing with
-CMAKE_SYSTEM_VERSION. For example, azure-iot-sdk was simply testing
-whether it was empty or not.
+Thus, we should also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake. It
+is supposed to be set to the value of `uname -r` on the target. We don't
+have that exact value available (unless we build the kernel), but the
+value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
+of the kernel it will run on, so it should be OK for all practical
+purposes.
 
-So for the time being, it seems like using the kernel headers version
-is a good enough solution, even if not perfect.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-cmake.mk                | 1 +
+ support/misc/toolchainfile.cmake.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 51a1929ebb..dd048b0949 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -264,6 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
+ 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+ 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
++		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 6f3c8ca971..276b36629f 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -15,6 +15,7 @@ string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+ 
+ set(CMAKE_SYSTEM_NAME Buildroot)
++set(CMAKE_SYSTEM_VERSION @@CMAKE_SYSTEM_VERSION@@)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
+ # Set the {C,CXX}FLAGS appended by CMake depending on the build type
