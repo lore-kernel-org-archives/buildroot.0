@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 14:55:41 +0100
-Subject: [Buildroot] [PATCH 1/1] sunxi-cedarx: needs -fPIC
-In-Reply-To: <20190112092459.21382-1-fontaine.fabrice@gmail.com>
-References: <20190112092459.21382-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190112145541.316d0b60@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 12 Jan 2019 13:59:11 +0000
+Subject: [Buildroot] [Bug 11616] 2018.02.09 fails to build libzlib with full
+ RELRO protection
+In-Reply-To: <bug-11616-163@https.bugs.busybox.net/>
+References: <bug-11616-163@https.bugs.busybox.net/>
+Message-ID: <bug-11616-163-CVWQdkd4YZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11616
 
-On Sat, 12 Jan 2019 10:24:59 +0100, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+--- Comment #5 from Matt Weber <matthew.weber@rockwellcollins.com> ---
+Tho(In reply to Thomas Petazzoni from comment #4)
 
-Could you explain why we are seeing such build errors since December
-5th, 2018, while the package hasn't been touched since 2016 ? What
-changed that makes those errors visible now ?
+Oh right.  So then for this failure case it is a known issue that the ordering
+of linker steps in most packages are not correct to support RELRO full.  Which
+is what lead to using the toolchain wrapper to adjust ordering as the current
+solution.
 
-Thanks,
+Karl, are you able to bump versions to 2018.11 or next month to the new LTS? 
+If not I can help you find the series of commits to add to your LTS that enable
+the toolchain wrapper method, however you'd have to carry your own LTS branch
+locally for this to work.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
