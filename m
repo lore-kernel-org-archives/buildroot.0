@@ -1,64 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 18:08:12 +0100
-Subject: [Buildroot] [git commit] package/atk: fix static build
-Message-ID: <20190112170809.0598E8677B@busybox.osuosl.org>
+Date: Sat, 12 Jan 2019 18:19:47 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: default to 4.19.x
+Message-ID: <20190112172009.ADE5D8A6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aecdbea4c951a09b74cdfc911e636a123973419e
+commit: https://git.buildroot.net/buildroot/commit/?id=790d366a8361c4440e65af778079eadb424dcbca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use library instead of shared_library to allow the user to build a
-static libatk library
+4.20.x is not a long term support kernel, but 4.19.x is (supported until end
+2020):
+https://www.kernel.org/category/releases.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/347a37dd2585974bdbf3bf99158e8ee9127d1202
+With the upcoming Buildroot 2019.02 release being a LTS release, default to
+4.19.x instead.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Notice: The userspace API breakage in net_stamp.h causing build failures has
+now been fixed in 4.19.14 by commit e4a2ffe9029fd (net: Use
+__kernel_clockid_t in uapi net_stamp.h)
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: add comment in linux/Config.in and
+package/linux-headers/Config.in.host so that we don't mistakenly bump
+to 4.20+.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...n.build-replace-shared_library-by-library.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ linux/Config.in                      | 6 ++++--
+ package/linux-headers/Config.in.host | 4 +++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/atk/0001-atk-meson.build-replace-shared_library-by-library.patch b/package/atk/0001-atk-meson.build-replace-shared_library-by-library.patch
-new file mode 100644
-index 0000000000..6260cca89f
---- /dev/null
-+++ b/package/atk/0001-atk-meson.build-replace-shared_library-by-library.patch
-@@ -0,0 +1,33 @@
-+From da08587d9a57b45cc8a76cb31390c79c1199959b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 10 Jan 2019 10:13:03 +0100
-+Subject: [PATCH] atk/meson.build: replace shared_library by library
-+
-+Use library instead of shared_library to allow the user to build a
-+static libatk library
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/347a37dd2585974bdbf3bf99158e8ee9127d1202
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://gitlab.gnome.org/GNOME/atk/merge_requests/11]
-+---
-+ atk/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/atk/meson.build b/atk/meson.build
-+index 69ba6c5..0ad67e5 100644
-+--- a/atk/meson.build
-++++ b/atk/meson.build
-+@@ -122,7 +122,7 @@ endif
-+ 
-+ atk_inc = include_directories('.')
-+ 
-+-libatk = shared_library('atk- at 0@'.format(atk_api_version),
-++libatk = library('atk- at 0@'.format(atk_api_version),
-+                         sources: atk_sources + atk_enums + atk_marshals,
-+                         soversion: atk_soversion,
-+                         version: atk_libversion,
-+-- 
-+2.14.1
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 932aa62991..8aeb4bdec3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,8 +29,10 @@ config BR2_LINUX_NEEDS_MODULES
+ choice
+ 	prompt "Kernel version"
+ 
++# We are intentionally staying at 4.19 for the next Buildroot LTS
++# release (2019.02)
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.20)"
++	bool "Latest version (4.19)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.154-cip28)"
+@@ -120,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.20.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e94d28419a..494d52662d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,9 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_20
++	# We are intentionally staying at 4.19 for the next Buildroot
++	# LTS release (2019.02)
++	default BR2_KERNEL_HEADERS_4_19
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
