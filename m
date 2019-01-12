@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 18:40:10 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: fix build with older kernels
-In-Reply-To: <20190111165018.17900-1-fontaine.fabrice@gmail.com>
-References: <20190111165018.17900-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190112184010.5cccfad4@windsurf.home>
+Date: Sat, 12 Jan 2019 18:40:41 +0100
+Subject: [Buildroot] [git commit] package/asterisk: needs threads
+Message-ID: <20190112174025.A5CFD8B8A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a4c30b548de9f7ce284d768d431816313b74d7a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Jan 2019 17:50:18 +0100, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/699c078aa078240c6741da4dbd0871450ceeca92
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...pability-fix-build-without-PR_CAP_AMBIENT.patch | 61 ++++++++++++++++++++++
->  ...mpfile-util.c-fix-build-without-O_TMPFILE.patch | 34 ++++++++++++
->  ...0006-missing_if_link.h-add-IFLA_BOND_MODE.patch | 49 +++++++++++++++++
->  .../0007-missing_syscall.h-include-errno.h.patch   | 28 ++++++++++
->  ...file-util.c-fix-build-without-F_OFD_SETLK.patch | 34 ++++++++++++
->  5 files changed, 206 insertions(+)
->  create mode 100644 package/systemd/0004-capability-fix-build-without-PR_CAP_AMBIENT.patch
->  create mode 100644 package/systemd/0005-basic-tmpfile-util.c-fix-build-without-O_TMPFILE.patch
->  create mode 100644 package/systemd/0006-missing_if_link.h-add-IFLA_BOND_MODE.patch
->  create mode 100644 package/systemd/0007-missing_syscall.h-include-errno.h.patch
->  create mode 100644 package/systemd/0008-lockfile-util.c-fix-build-without-F_OFD_SETLK.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/85d30a4f94efa868a9155f7dda593ba8079063b5
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/asterisk/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index b55bc0174d..c52456f8fc 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_ASTERISK
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # libedit
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR # libedit
+ 	select BR2_PACKAGE_JANSSON
+ 	select BR2_PACKAGE_LIBCURL
+@@ -24,7 +25,8 @@ config BR2_PACKAGE_ASTERISK
+ 
+ 	  http://www.asterisk.org/
+ 
+-comment "asterisk needs a glibc or uClibc toolchain w/ C++, dynamic library, wchar"
++comment "asterisk needs a glibc or uClibc toolchain w/ C++, dynamic library, threads, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_USE_WCHAR
