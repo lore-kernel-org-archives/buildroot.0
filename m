@@ -1,75 +1,109 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 12 Jan 2019 10:44:41 +0100
-Subject: [Buildroot] [PATCH v1] libinput: drop C++ dependency
-In-Reply-To: <20190112073321.GE2428@scaer>
-References: <20190111230158.5283-1-ps.report@gmx.net>
- <20190112073321.GE2428@scaer>
-Message-ID: <20190112104441.370c8423@gmx.net>
+Date: Sat, 12 Jan 2019 11:13:40 +0100
+Subject: [Buildroot] [PATCH v2] libinput: drop C++ dependency
+In-Reply-To: <20190112094153.9168-1-ps.report@gmx.net>
+References: <20190112094153.9168-1-ps.report@gmx.net>
+Message-ID: <20190112111340.5d53379a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+...and suggested upstream:
 
-On Sat, 12 Jan 2019 08:33:21 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> Peter, All,
-> 
-> On 2019-01-12 00:01 +0100, Peter Seiderer spake thusly:
-> > The meson C++ dependency is only used for a build-time header
-> > include test, so drop both.  
-> [--SNIP--]
-> > [1] http://autobuild.buildroot.net/results/bf4d3d360f6Drop hard meson C++/CPP dependency35c3524a52b84a72d558770596ed0
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Note:
-> >   - alternative solution would be to add a c++ dependency for libinput
-> >   - patch could be improved to optional C++ dependency/compile (but did
-> >     not know how to express this in meson)  
-> [--SNIP--]
-> > +@@ -641,12 +641,6 @@ executable('test-build-linker',
-> > + 	   include_directories : [includes_src, includes_include],
-> > + 	   dependencies : [ dep_libinput, dep_libinput_util ],
-> > + 	   install : false)
-> > +-# test including from C++
-> > +-executable('test-build-cxx',
-> > +-	   'test/build-cxx.cc',
-> > +-	   dependencies : [dep_udev],
-> > +-	   include_directories : [includes_src, includes_include],
-> > +-	   install : false)  
-> 
-> You may want to test something like that:
-> 
->     if add_languages('cpp')
->         executable('test-build-cxx',
->             blablabla)
->     endif
-
-Thanks for the hint, works with:
-
-	if add_languages('cpp', required: false)
-
-Updated patch is on the way....
+	https://lists.freedesktop.org/archives/wayland-devel/2019-January/039813.html
 
 Regards,
 Peter
 
+On Sat, 12 Jan 2019 10:41:53 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> The meson C++ dependency is only used for a build-time header
+> inclusion test, add patch dropping hard meson C++ dependency
+> and build the header inclusion test only in case C++ compiler
+> is available.
 > 
-> If that works, then I think I'd prefer we use this patch, because it is
-> upstreamable, which you should try to do btw.
+> Fixes [1]:
 > 
-> Regards,
-> Yann E. MORIN.
+>   The Meson build system
+>   Version: 0.49.0
+>   Source dir: .../build/libinput-1.12.5
+>   Build dir: .../build/libinput-1.12.5/build
+>   Build type: cross build
+>   Project name: libinput
+>   Project version: 1.12.5
+>   Native C compiler: cc (gcc 4.8.4 "cc (Ubuntu 4.8.4-2ubuntu1~14.04.4) 4.8.4")
+>   Cross C compiler: .../host/bin/riscv64-buildroot-linux-gnu-gcc (gcc 7.4.0)
 > 
-> > + # This is the test suite runner, we allow disabling that one because of
-> > + # dependencies
-> > +-- 
-> > +2.20.1
-> > +
-> > -- 
-> > 2.20.1
-> >   
+>   meson.build:1:0: ERROR:  Unknown compiler(s): [['.../host/bin/riscv64-buildroot-linux-gnu-g++']]
+>   The follow exceptions were encountered:
+>   Running ".../host/bin/riscv64-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '.../host/bin/riscv64-buildroot-linux-gnu-g++': '.../host/bin/riscv64-buildroot-linux-gnu-g++'"
 > 
+> [1] http://autobuild.buildroot.net/results/bf4d3d360f635c3524a52b84a72d558770596ed0
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - change patch to disable c++ header inclusion teste only in case
+>     no c++ compiler is available (suggested by Yann E. MORIN)
+> ---
+>  ...le-CPP-include-check-only-in-case-CP.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
+> 
+> diff --git a/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
+> new file mode 100644
+> index 0000000000..c9a0652e40
+> --- /dev/null
+> +++ b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
+> @@ -0,0 +1,49 @@
+> +From 57383dc900e76e65ce5e5dc95f776e086100344d Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sat, 12 Jan 2019 10:22:38 +0100
+> +Subject: [PATCH] meson.build: enable CPP include check only in case CPP
+> + compiler is available
+> +
+> +Drop hard meson C++/CPP dependency, only needed for the build-time
+> +header inclusion test, build the test only in case C++/CPP compiler
+> +is available.
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + meson.build | 16 +++++++++-------
+> + 1 file changed, 9 insertions(+), 7 deletions(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index a9c7c185..8183822e 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -1,4 +1,4 @@
+> +-project('libinput', 'c', 'cpp',
+> ++project('libinput', 'c',
+> + 	version : '1.12.5',
+> + 	license : 'MIT/Expat',
+> + 	default_options : [ 'c_std=gnu99', 'warning_level=2' ],
+> +@@ -641,12 +641,14 @@ executable('test-build-linker',
+> + 	   include_directories : [includes_src, includes_include],
+> + 	   dependencies : [ dep_libinput, dep_libinput_util ],
+> + 	   install : false)
+> +-# test including from C++
+> +-executable('test-build-cxx',
+> +-	   'test/build-cxx.cc',
+> +-	   dependencies : [dep_udev],
+> +-	   include_directories : [includes_src, includes_include],
+> +-	   install : false)
+> ++# test including from C++ (in case CPP compiler is available)
+> ++if add_languages('cpp', required: false)
+> ++	executable('test-build-cxx',
+> ++		   'test/build-cxx.cc',
+> ++		   dependencies : [dep_udev],
+> ++		   include_directories : [includes_src, includes_include],
+> ++		   install : false)
+> ++endif
+> + 
+> + # This is the test suite runner, we allow disabling that one because of
+> + # dependencies
+> +-- 
+> +2.20.1
+> +
