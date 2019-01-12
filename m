@@ -1,47 +1,49 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 12 Jan 2019 19:42:26 +0200
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 3.2.3
+Date: Sat, 12 Jan 2019 19:42:27 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyyaml: security bump to 4.2b4
 In-Reply-To: <20190112174227.6228-1-asafka7@gmail.com>
 References: <20190112174227.6228-1-asafka7@gmail.com>
-Message-ID: <20190112174227.6228-3-asafka7@gmail.com>
+Message-ID: <20190112174227.6228-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes CVE-2017-18342: In PyYAML before 4.1, the yaml.load() API
+could execute arbitrary code.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
+ package/python-pyyaml/python-pyyaml.hash | 4 ++--
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index b92b908a64..3b16d7ef61 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	203f9b530086c83b6948d750c080d14e  python-engineio-3.1.1.tar.gz
--sha256	3ec885307c404ff97d14dbdbf1461ede14c70c5adb015b2c97666819edbeef81  python-engineio-3.1.1.tar.gz
-+md5	ba0fd43c77028bd6fed4ee1004f37c71  python-engineio-3.2.3.tar.gz
-+sha256	401458bb0046d950c429dac3ef82ce12e3ff1236f63b4bbb344d60a1b51c4e94  python-engineio-3.2.3.tar.gz
- # Locally computed sha256 checksums
- sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index de9070a55d..8d4e344247 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 47a379ce6a..256742feb6 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
+-md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
+-sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
++md5 a842bc7391e145bbe4e7fd0d32da1132 PyYAML-4.2b4.tar.gz
++sha256 3c17fb92c8ba2f525e4b5f7941d850e7a48c3a59b32d331e2502a3cdc6648e76 PyYAML-4.2b4.tar.gz
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index cbf8df7b2d..95f0f0bb9e 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ENGINEIO_VERSION = 3.1.1
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/c7/fd/9dad6c1794be838c05610c04e869bca9a3e0d94145ac71e57a9345a784b9
-+PYTHON_ENGINEIO_VERSION = 3.2.3
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e6/1e/64fd629f8215b81bf0e5682504ebbbd10d1d48e52ee30d053484b6e91421
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+-PYTHON_PYYAML_VERSION = 3.13
++PYTHON_PYYAML_VERSION = 4.2b4
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a8/c6/a8d1555e795dbd0375c3c93b576ca13bbf139db51ea604afa19a2c35fc03
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
 -- 
 2.19.1
