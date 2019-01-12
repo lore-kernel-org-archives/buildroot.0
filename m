@@ -1,54 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jan 2019 16:26:05 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-cmake: add CMAKE_SYSTEM_VERSION to
- toolchainfile.cmake
-In-Reply-To: <20190112160727.43c0f7c0@windsurf.home>
-References: <20190110230529.29852-1-arnout@mind.be>
- <20190112160727.43c0f7c0@windsurf.home>
-Message-ID: <20190112152605.GH2428@scaer>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 12 Jan 2019 16:36:32 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libsquash: really install
+ shared library
+In-Reply-To: <20190112121024.27896-2-romain.naour@gmail.com>
+References: <20190112121024.27896-1-romain.naour@gmail.com>
+ <20190112121024.27896-2-romain.naour@gmail.com>
+Message-ID: <CAAXf6LW+nzbMW1UjZ=uSjdibZ7O-wvOqaeoJbOLUi46WHVZi8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sat, Jan 12, 2019, 13:11 Romain Naour <romain.naour@gmail.com wrote:
 
-On 2019-01-12 16:07 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 11 Jan 2019 00:05:28 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> > Quoting the CMake documentation:
-> > 
-> >   When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
-> >   compiling then the value of CMAKE_SYSTEM_VERSION must also be set
-> >   explicitly to specify the target system version.
-> > 
-> > Thus, we should also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake. It
-> > is supposed to be set to the value of `uname -r` on the target. We don't
-> > have that exact value available (unless we build the kernel), but the
-> > value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
-> > of the kernel it will run on, so it should be OK for all practical
-> > purposes.
-> > 
-> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > Cc: Samuel Martin <s.martin49@gmail.com>
-> > ---
-> >  package/pkg-cmake.mk                | 1 +
-> >  support/misc/toolchainfile.cmake.in | 1 +
-> >  2 files changed, 2 insertions(+)
-> 
-> Both applied, thanks!
+> While testing the new supertuxkart 0.10-beta1 version, the build failed
+> due to missing libsquash shared library.
+>
 
-Well, you did not give me the opportunity to reply to your question
-about the first patch...
+Libsquish (also in commit title)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190112/f6c9b2d4/attachment.html>
