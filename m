@@ -1,68 +1,46 @@
-From: David J. Fogle <Dave@exitstrategytech.com>
-Date: Sat, 12 Jan 2019 17:39:17 +0000
-Subject: [Buildroot] [PATCH] package/rauc: version bump to 1.0
-In-Reply-To: <20190112183941.233b8b85@windsurf.home>
-References: <2dcda5ba55a548c5a61cb30db7686ba9@exitstrategytech.com>,
- <20190112183941.233b8b85@windsurf.home>
-Message-ID: <2045c659b0da41f8a508dae6666185e1@exitstrategytech.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 12 Jan 2019 19:42:24 +0200
+Subject: [Buildroot] [PATCH 1/1] python-autobahn: bump to version 19.1.1
+Message-ID: <20190112174227.6228-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Awesome! Thank you kindly, I will let the RAUC guys know the patch is in. Have a great weekend!
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-
-David Fogle
-
-CTO - Exit Strategy
-
-
--------- Original message --------
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: 1/12/19 11:37 AM (GMT-06:00)
-To: "David J. Fogle" <Dave@exitstrategytech.com>
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] [PATCH] package/rauc: version bump to 1.0
-
-Hello,
-
-On Mon, 7 Jan 2019 22:44:07 +0000, David J. Fogle wrote:
-> For details see [1]
->
-> This bump also deleted the two patch files for the RAUC package. These
-> were related to eMMC support being made optional, and workaround for
-> olde kernel. Both of these patch sets have been merged into upsteam in
-> the rauc git repos.
->
-> Older kernel workaound:
-> https://github.com/rauc/rauc/commit/993b698c48789baea51f8b7c47b1e057ba328033#diff-b3a0044e6a3b6a8b16933e72f416c8f1
->
-> Make eMMC selectable:
-> https://github.com/rauc/rauc/commit/f85d1cab07376c7680ef4d9e45a6baf345e24e37#diff-365367c8cde56aafd5cbad767e1c9738
->
-> [1] https://github.com/rauc/rauc/releases/tag/v1.0
->
-> Signed-off-by: David J Fogle dave at exitstrategytech.com
-> ---
->  ...mmc-add-workaround-for-older-kernels.patch |  33 -----
->  ...eMMC-boot-partition-support-optional.patch | 116 ------------------
->  package/rauc/rauc.hash                        |   2 +-
->  package/rauc/rauc.mk                          |   3 +-
->  4 files changed, 2 insertions(+), 152 deletions(-)
->  delete mode 100644 package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
->  delete mode 100644 package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch
-
-Applied to master after dropping AUTORECONF = YES, as noticed by
-Baruch. Thanks!
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190112/94039afd/attachment.html>
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index f6023ab2ee..dce40f160e 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5	51b416c5503127911d9d8f1254967d44  autobahn-18.12.1.tar.gz
+-sha256	bec9e04c97536a6c0044965db4a478672a01c4adee0aa84d9c4a0945b2adc879  autobahn-18.12.1.tar.gz
++md5	b296b8ae0f42e7df8052b28d574ede82  autobahn-19.1.1.tar.gz
++sha256	aebbadb700c13792a2967c79002855d1153b9ec8f2949d169e908388699596ff  autobahn-19.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 6d51ede723..213e0314c9 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 18.12.1
++PYTHON_AUTOBAHN_VERSION = 19.1.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/76/5b/ab59e271a11a08d02b1a3a3b777f7dde442cf89b169bbc67219016a84e7e
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/66/cc/1e2b20dc6654d9a87fc30da36bfae687ec65428814378c44257a26fe5f2f
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-- 
+2.19.1
