@@ -1,59 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 16:06:51 +0100
-Subject: [Buildroot] [git commit] package/pkg-cmake: add
- CMAKE_SYSTEM_VERSION to toolchainfile.cmake
-Message-ID: <20190112150648.10758815AC@busybox.osuosl.org>
+Date: Sat, 12 Jan 2019 16:07:00 +0100
+Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: remove dummy
+ value of CMAKE_SYSTEM_VERSION
+Message-ID: <20190112150648.2E76881017@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36568732e40923d19274f1c997e278a1c4e6c99e
+commit: https://git.buildroot.net/buildroot/commit/?id=d300b1d3b1267bbdf92ae128150a1cce137ae89e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting the CMake documentation:
-
-  When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
-  compiling then the value of CMAKE_SYSTEM_VERSION must also be set
-  explicitly to specify the target system version.
-
-Thus, we should also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake. It
-is supposed to be set to the value of `uname -r` on the target. We don't
-have that exact value available (unless we build the kernel), but the
-value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
-of the kernel it will run on, so it should be OK for all practical
-purposes.
+Now CMAKE_SYSTEM_VERSION is properly set in toolchainfile.cmake, it is
+no longer necessary to set a dummy value in azure-iot-sdk-c.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Cc: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-cmake.mk                | 1 +
- support/misc/toolchainfile.cmake.in | 1 +
- 2 files changed, 2 insertions(+)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 51a1929ebb..dd048b0949 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -264,6 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
- 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
- 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
- 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
-+		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 6f3c8ca971..276b36629f 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -15,6 +15,7 @@ string(REPLACE "/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR
- list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index 3618e591a9..8b3f670399 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -14,11 +14,6 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
+ AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
+ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
  
- set(CMAKE_SYSTEM_NAME Buildroot)
-+set(CMAKE_SYSTEM_VERSION @@CMAKE_SYSTEM_VERSION@@)
- set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
- 
- # Set the {C,CXX}FLAGS appended by CMake depending on the build type
+-# When cross-compiling, CMake doesn't internally pass any
+-# CMAKE_SYSTEM_VERSION, so pass a dummy version to make the c-utility
+-# WIN32 test happy.
+-AZURE_IOT_SDK_C_CONF_OPTS += -DCMAKE_SYSTEM_VERSION=1.0
+-
+ # The project only supports building one kind of library.
+ # Further the install target installs the wrong files, so we do it here:
+ ifeq ($(BR2_STATIC_LIBS),y)
