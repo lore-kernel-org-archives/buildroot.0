@@ -1,72 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 17:34:22 +0100
-Subject: [Buildroot] [git commit] package/gnu-efi: introduce
- BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS option
-Message-ID: <20190112164856.3E5248B8A7@busybox.osuosl.org>
+Date: Sat, 12 Jan 2019 17:32:01 +0100
+Subject: [Buildroot] [git commit] package/gnu-efi: bump version to 3.0.9
+Message-ID: <20190112164856.3799C8B8A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8064b12ff9d0a28091513e338d0f5b59a95d1396
+commit: https://git.buildroot.net/buildroot/commit/?id=1a437fd22f4fc357afafa1eb06f4bd17b9540491
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will be used in packages that depend on gnu-efi, and we take this
-opportunity to propagate this dependency where it was missing in
-gummiboot and syslinux. In practice, it was not a problem because
-gummiboot and syslinux are only available on i386 and x86-64, which is
-a subset of the architectures supported by gnu-efi.
+Adds support for StrnCat, needed by shim.
 
+Also add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/gummiboot/Config.in  |  1 +
- boot/syslinux/Config.in   |  1 +
- package/gnu-efi/Config.in | 11 +++++++++--
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ package/gnu-efi/gnu-efi.hash | 7 ++++---
+ package/gnu-efi/gnu-efi.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
-index 11dbc4f6b7..1b5c4279f7 100644
---- a/boot/gummiboot/Config.in
-+++ b/boot/gummiboot/Config.in
-@@ -1,6 +1,7 @@
- config BR2_TARGET_GUMMIBOOT
- 	bool "gummiboot"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
- 	select BR2_PACKAGE_GNU_EFI
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index e969d53fd0..339a97f0e4 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -44,6 +44,7 @@ config BR2_TARGET_SYSLINUX_MBR
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index 1bd0f8c5dc..9ac2b51fe3 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,5 +1,6 @@
+ # From http://sourceforge.net/projects/gnu-efi/files
+-md5 46f633758a8a37db9fd6909fe270c26b gnu-efi-3.0.6.tar.bz2
+-sha1 9f0f75b64c84423f3386da6f3200f5ed7471d9cb gnu-efi-3.0.6.tar.bz2
++md5 32af17b917545a693e549af2439c4a99 gnu-efi-3.0.9.tar.bz2
++sha1 9b39e06206e63eba56d59a648a7e4f20aead6962 gnu-efi-3.0.9.tar.bz2
+ # Locally computed
+-sha256 21515902d80fbea23328a61d70d3d51a47204abd1507ebfa27550a7b9bf22c91 gnu-efi-3.0.6.tar.bz2
++sha256 6715ea7eae1c7e4fc5041034bd3f107ec2911962ed284a081e491646b12277f0  gnu-efi-3.0.9.tar.bz2
++sha256 42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index b83a5a9eb4..fe3c8ac343 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_SYSLINUX_EFI
- 	bool "install efi"
-+	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
- 	select BR2_PACKAGE_GNU_EFI
- 	help
- 	  Install the 'efi' image, to boot from an EFI environment.
-diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
-index d8d92c2c17..d456a23837 100644
---- a/package/gnu-efi/Config.in
-+++ b/package/gnu-efi/Config.in
-@@ -1,7 +1,14 @@
-+config BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_ARM_CPU_HAS_ARM
-+	default y if BR2_aarch64
-+	default y if BR2_aarch64_be
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+
- config BR2_PACKAGE_GNU_EFI
- 	bool "gnu-efi"
--	depends on BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || \
--		BR2_aarch64_be || BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
- 	help
- 	  Develop EFI applications for ARM-64, ARM-32, x86_64, IA-64
- 	  (IPF), IA-32 (x86), and MIPS platforms using the GNU toolchain
+-GNU_EFI_VERSION = 3.0.6
++GNU_EFI_VERSION = 3.0.9
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
