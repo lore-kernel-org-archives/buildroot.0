@@ -1,35 +1,57 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 12 Jan 2019 17:04:56 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libsquash: really install
- shared library
-In-Reply-To: <CAAXf6LW+nzbMW1UjZ=uSjdibZ7O-wvOqaeoJbOLUi46WHVZi8g@mail.gmail.com>
-References: <20190112121024.27896-1-romain.naour@gmail.com>
- <20190112121024.27896-2-romain.naour@gmail.com>
- <CAAXf6LW+nzbMW1UjZ=uSjdibZ7O-wvOqaeoJbOLUi46WHVZi8g@mail.gmail.com>
-Message-ID: <CAAXf6LVEiT08PvsQ9+KWX3hERrTPFPTzF+G-DsRmfvvv926m8A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 12 Jan 2019 17:07:13 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-cmake: add CMAKE_SYSTEM_VERSION to
+ toolchainfile.cmake
+In-Reply-To: <20190112152343.GG2428@scaer>
+References: <20190110230529.29852-1-arnout@mind.be>
+ <20190111211626.GD2428@scaer>
+ <20190112160629.5a85748b@windsurf.home>
+ <20190112152343.GG2428@scaer>
+Message-ID: <20190112170713.69ed8138@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 12, 2019, 16:36 Thomas De Schampheleire <
-patrickdepinguin@gmail.com wrote:
+Hello,
 
->
->
-> On Sat, Jan 12, 2019, 13:11 Romain Naour <romain.naour@gmail.com wrote:
->
->> While testing the new supertuxkart 0.10-beta1 version, the build failed
->> due to missing libsquash shared library.
->>
->
-> Libsquish (also in commit title)
->
+On Sat, 12 Jan 2019 16:23:43 +0100, Yann E. MORIN wrote:
 
-(Sorry, I hadn't seen your follow up mail)
+> Well, random lookups on the internet for CMAKE_SYSTEM_VERSION mostly
+> tuen up windows- or mac-related questions, so irrelevant to us. The
+> only seemingly-relevant ones are dealing with android.
+> 
+> There are various pieces of crap here and there that just set the thing
+> to 1., or some variants of 1, like 1.0 or 1.0.0.
+> 
+> Even the official cmake wiki [0] states:
+> 
+>     CMAKE_SYSTEM_VERSION : optional, version of your target system, not
+>     used very much.
+> 
+>     [...]
+> 
+>     * CMAKE_TOOLCHAIN_FILE : absolute or relative path to a cmake script
+>     which sets up all the toolchain related variables mentioned above
+> 
+>     For instance for crosscompiling from Linux to Embedded Linux on
+>     PowerPC this file could look like this:
+> 
+>         # this one is important
+>         SET(CMAKE_SYSTEM_NAME Linux)
+>         #this one not so much
+>         SET(CMAKE_SYSTEM_VERSION 1)
+>         [...]
+> 
+> So my opinion would be that we do exactly what is done in the wiki: set
+> it to 1 (and add a pointer to the wiki) and be done with it.
 
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190112/34e4957d/attachment.html>
+That would be fine for me as well. If Arnout agrees, I'll happily take
+a patch changing to just "1".
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
