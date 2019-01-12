@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Jan 2019 16:07:00 +0100
-Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: remove dummy
- value of CMAKE_SYSTEM_VERSION
-Message-ID: <20190112150648.2E76881017@busybox.osuosl.org>
+Date: Sat, 12 Jan 2019 16:07:27 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-cmake: add CMAKE_SYSTEM_VERSION to
+ toolchainfile.cmake
+In-Reply-To: <20190110230529.29852-1-arnout@mind.be>
+References: <20190110230529.29852-1-arnout@mind.be>
+Message-ID: <20190112160727.43c0f7c0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d300b1d3b1267bbdf92ae128150a1cce137ae89e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Now CMAKE_SYSTEM_VERSION is properly set in toolchainfile.cmake, it is
-no longer necessary to set a dummy value in azure-iot-sdk-c.
+On Fri, 11 Jan 2019 00:05:28 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Quoting the CMake documentation:
+> 
+>   When the CMAKE_SYSTEM_NAME variable is set explicitly to enable cross
+>   compiling then the value of CMAKE_SYSTEM_VERSION must also be set
+>   explicitly to specify the target system version.
+> 
+> Thus, we should also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake. It
+> is supposed to be set to the value of `uname -r` on the target. We don't
+> have that exact value available (unless we build the kernel), but the
+> value of BR2_TOOLCHAIN_HEADERS_AT_LEAST contains the (minimum) version
+> of the kernel it will run on, so it should be OK for all practical
+> purposes.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/pkg-cmake.mk                | 1 +
+>  support/misc/toolchainfile.cmake.in | 1 +
+>  2 files changed, 2 insertions(+)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Cc: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 5 -----
- 1 file changed, 5 deletions(-)
+Both applied, thanks!
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 3618e591a9..8b3f670399 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -14,11 +14,6 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
- AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
- AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
- 
--# When cross-compiling, CMake doesn't internally pass any
--# CMAKE_SYSTEM_VERSION, so pass a dummy version to make the c-utility
--# WIN32 test happy.
--AZURE_IOT_SDK_C_CONF_OPTS += -DCMAKE_SYSTEM_VERSION=1.0
--
- # The project only supports building one kind of library.
- # Further the install target installs the wrong files, so we do it here:
- ifeq ($(BR2_STATIC_LIBS),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
