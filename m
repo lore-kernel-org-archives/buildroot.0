@@ -1,49 +1,54 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 12 Jan 2019 19:42:27 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pyyaml: security bump to 4.2b4
-In-Reply-To: <20190112174227.6228-1-asafka7@gmail.com>
-References: <20190112174227.6228-1-asafka7@gmail.com>
-Message-ID: <20190112174227.6228-4-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 12 Jan 2019 18:53:45 +0100
+Subject: [Buildroot] [PATCH 2/3] gnuchess: disable -O2 and -O3 for ARM
+ cortex-M cpus
+In-Reply-To: <20190110205937.291e10d8@windsurf>
+References: <20190110175955.31565-1-fontaine.fabrice@gmail.com>
+ <20190110175955.31565-2-fontaine.fabrice@gmail.com>
+ <20190110205937.291e10d8@windsurf>
+Message-ID: <CAPi7W833zKFRP+tG-Mrs=XG4BooSaD6trNq4=1cmtnb1+EycnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-18342: In PyYAML before 4.1, the yaml.load() API
-could execute arbitrary code.
+Dear Thomas,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pyyaml/python-pyyaml.hash | 4 ++--
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Le jeu. 10 janv. 2019 ? 20:59, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Thu, 10 Jan 2019 18:59:54 +0100, Fabrice Fontaine wrote:
+> > When building with -O2 (or -O3), link fails on:
+> >
+> > /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/arm-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -Wl,-elf2flt -static  -Wl,-elf2flt -static   -Wl,-elf2flt -static -o gnuchess main.o components.o  frontend/libfrontend.a adapter/libadapter.a engine/libengine.a -lreadline -lncurses
+> > ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> > ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+>
+> Interesting. In commit
+> https://git.buildroot.net/buildroot/commit/?id=49f574237983ae2e69e4a4c43df7be98902a63be,
+> we are doing exactly the opposite: when -Os is used, we pass -O2.
+>
+> Romain reported the issue at
+> https://sourceware.org/bugzilla/show_bug.cgi?id=20552, and as you can
+> see, we got a tremendous amount of feedback from the binutils
+> developers :-)
+After fixing sunxi-cedarx, I found a better solution for gnuchess,
+passing -fPIC in addition to -O2 fix the build failure. I'll send a
+v2.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index 47a379ce6a..256742feb6 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
--md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
--sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
-+md5 a842bc7391e145bbe4e7fd0d32da1132 PyYAML-4.2b4.tar.gz
-+sha256 3c17fb92c8ba2f525e4b5f7941d850e7a48c3a59b32d331e2502a3cdc6648e76 PyYAML-4.2b4.tar.gz
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index cbf8df7b2d..95f0f0bb9e 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYYAML_VERSION = 3.13
-+PYTHON_PYYAML_VERSION = 4.2b4
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a8/c6/a8d1555e795dbd0375c3c93b576ca13bbf139db51ea604afa19a2c35fc03
- PYTHON_PYYAML_SETUP_TYPE = distutils
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
--- 
-2.19.1
+Fabrice
