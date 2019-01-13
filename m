@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:15:07 +0100
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 3.2.3
-In-Reply-To: <20190112174227.6228-3-asafka7@gmail.com>
-References: <20190112174227.6228-1-asafka7@gmail.com>
- <20190112174227.6228-3-asafka7@gmail.com>
-Message-ID: <20190113141507.5547ec7d@windsurf.home>
+Date: Sun, 13 Jan 2019 14:15:41 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.10
+In-Reply-To: <20190112180135.18557-1-fontaine.fabrice@gmail.com>
+References: <20190112180135.18557-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190113141541.70ce3d27@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 12 Jan 2019 19:42:26 +0200, Asaf Kahlon wrote:
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+On Sat, 12 Jan 2019 19:01:35 +0100, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-engineio/python-engineio.hash | 4 ++--
->  package/python-engineio/python-engineio.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/cjson/cjson.hash | 2 +-
+>  package/cjson/cjson.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
