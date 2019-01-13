@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:29:02 +0100
-Subject: [Buildroot] [git commit] package/lxc: add optional dependency to
+Date: Sun, 13 Jan 2019 14:29:18 +0100
+Subject: [Buildroot] [PATCH 1/2] lxc: add optional dependency to
  bash-completion
-Message-ID: <20190113132852.3026580F82@busybox.osuosl.org>
+In-Reply-To: <20190112210844.4021-1-fontaine.fabrice@gmail.com>
+References: <20190112210844.4021-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190113142918.30efd3f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61a425590a71d232480181431eb0073ad0c420a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-lxc uses the completionsdir variable from bash-completions.pc to decide
-where to install things.
+On Sat, 12 Jan 2019 22:08:43 +0100, Fabrice Fontaine wrote:
+> lxc uses the completionsdir variable from bash-completions.pc to decide
+> where to install things.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lxc/lxc.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lxc/lxc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index c9838fb229..c758a15b9d 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -17,6 +17,10 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+LXC_DEPENDENCIES += bash-completion
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LXC_CONF_OPTS += --enable-gnutls
- LXC_DEPENDENCIES += gnutls
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
