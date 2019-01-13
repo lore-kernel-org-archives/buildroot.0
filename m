@@ -1,46 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Jan 2019 08:48:53 +0100
-Subject: [Buildroot] [git commit] docs/website/sponsors.html: add
- Zillabit as sponsor of the buildroot.org domain
-In-Reply-To: <877ef9vyae.fsf@tarshish> (Baruch Siach's message of "Sun, 13 Jan
- 2019 08:58:49 +0200")
-References: <20190112230021.E5BB382790@busybox.osuosl.org>
- <877ef9vyae.fsf@tarshish>
-Message-ID: <87va2t6lqy.fsf@dell.be.48ers.dk>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 13 Jan 2019 20:54:20 +1300
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-01-12
+In-Reply-To: <20190113070028.D7DD3209C2@mail.bootlin.com>
+References: <20190113070028.D7DD3209C2@mail.bootlin.com>
+Message-ID: <CAFOYHZDq3hCZYd_NgN-nFdk9+J==1Tmsx=cNTCs7TdKB3deMRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Sun, Jan 13, 2019 at 8:00 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2019-01-12, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>          arm |               syslog-ng-3.19.1 | http://autobuild.buildroot.net/results/c0bca852e053cd0e021205b3a949e750ae602333
+>
 
-Hi,
+The problem is this
 
- >> +	<p>The Buildroot community would like to thank
- >> +          <a href="https://www.zillabit.com/">Zillabit</a> for
+lib/signal-handler.c:30:19: fatal error: dlfcn.h: No such file or directory
+ #include <dlfcn.h>
 
- > This link gives TCP connect timeout.
-
-Argh, it should have been http:// and not http://. I'll fix that.
-
-
->> +	  donating the <b>buildroot.org</b> domain name and sponsoring
- >> +	  the registration fees 2009 - 2019.</p>
- >> +       </div>
- >> +      <div class="col-sm-6">
- >> +	<a href="http://www.zillabit.com">
-
- > This one says: "zillabit.com - under perpetual construction".
-
-Yes, it isn't a very fancy company website / logo ;)
-
-The story is that Earl from Zillabit had registered the domain back in
-2004 or so. When I started maintaining it in 2009 he contacted me about
-it and we agreed that he kept on paying for it but point to DNS servers
-I control. As we discussed in Edinburgh, it is not really optimal that
-we don't have it under our control, so I have recently been in contact
-with him again, and the domain is now transferred to me.
-
--- 
-Bye, Peter Korsgaard
+Which seems to be new in 3.19.1. I suspect (but have not yet
+confirmed) that dlfcn.h is not available because the build in question
+defines BR2_STATIC_LIBS. But syslog-ng has had a plugin architecture
+for a while so I'm not sure static linking even makes sense for it.
