@@ -1,19 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Jan 2019 23:10:53 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <CAAXf6LVho4978cn=nkFMReanH4o5Z0D81OW5a-k_xWHRP77DQg@mail.gmail.com>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
- <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
- <20181205173103.1eb30a7b@windsurf>
- <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
- <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
- <20181226183422.76c6ff6c@windsurf.home>
- <CAAXf6LVJ6-H-pBA8C9i8LJxmQ=8ufdvOC3uHG5-cqz-WPyt=sg@mail.gmail.com>
- <30afb67d-f31d-4986-8490-2e97f5808eda@mind.be>
- <CAAXf6LVho4978cn=nkFMReanH4o5Z0D81OW5a-k_xWHRP77DQg@mail.gmail.com>
-Message-ID: <7c0307f9-5370-215b-7230-0f83da461c82@mind.be>
+Date: Sun, 13 Jan 2019 23:29:43 +0100
+Subject: [Buildroot] [PATCH] infra/pkg-cmake: use an obviously-invalid
+ value for CMAKE_SYSTEM_VERSION
+In-Reply-To: <20190113095219.31874-1-yann.morin.1998@free.fr>
+References: <20190113095219.31874-1-yann.morin.1998@free.fr>
+Message-ID: <2cd55490-15fb-4577-a2d3-c2e4059a6ec1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,95 +13,106 @@ To: buildroot@busybox.net
 
 
 
-On 11/01/2019 21:09, Thomas De Schampheleire wrote:
-> El jue., 10 ene. 2019 a las 22:25, Arnout Vandecappelle
-> (<arnout@mind.be>) escribi?:
->>
->>
->>
->> On 26/12/2018 19:33, Thomas De Schampheleire wrote:
->>> In a similar context I once had following problem:
->>> http://lists.busybox.net/pipermail/buildroot/2018-August/226955.html
->>> This was for target binaries, rather than host, but for the below
->>> discussion it does not matter.
->>
->>  I don't think you ever replied to my question in that thread:
->>
->>  Let's first find out why it is cleared. patchelf should check for each
->> directory in rpath if it is actually needed, and only remove it if it is not
->> needed. So, what library do you have in /opt/foobar/lib, and is it really linked
->> with the program?
->>
->>  Hm, I realize that we never thought about dlopen()ed libraries. Could that be
->> the cause? I guess that hasn't been a problem up to now because usually programs
->> using dlopen() will use an absolute path (to a build-time or run-time configured
->> plugin directory) rather than relying on RPATH.
+On 13/01/2019 10:52, Yann E. MORIN wrote:
+> In 36568732e4, we expanded toolchain.cmake to also define the value for
+> CMAKE_SYSTEM_VERSION, as the cmake documentation states that it must be
+> manually defined when doing cross-compilation [0]:
 > 
-> Sorry that I did not seem to have replied on that question.
+>     When the CMAKE_SYSTEM_NAME variable is set explicitly to enable
+>     cross compiling then the value of CMAKE_SYSTEM_VERSION must also
+>     be set explicitly to specify the target system version.
 > 
-> The binary in question did in fact link with the library, there is no
-> dlopen used.
-> Some redacted output showing the initial rpath, which disappears after
-> fix-rpath.
+> However, the fix in 36568732e4 uses the version of the kernel headers,
+> assuming that would be the oldest kernel we could run on. Yet, this is
+> not the case, because glibc (for example) has fallbacks to support
+> running on kernels older than the headers it was built against.
+
+ Not a convincing argument, since "1" is definitely further away from the truth.
+
 > 
-> $ readelf -d output/target/opt/foobar/bin/fooprogram | rg 'NEEDED|RPATH'
-> ...
->  0x00000001 (NEEDED)                     Shared library: [libfoo.so.1]
-> ...
->  0x0000000f (RPATH)                      Library rpath:
-> [/../lib:/opt/foobar/lib:/home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib]
+> The cmake official wiki [1] additionally states:
 > 
-> $ find output/target/ -name libfoo.so.1
-> output/target/opt/foobar/lib/libfoo.so.1
+>   * CMAKE_SYSTEM_VERSION : optional, version of your target system, not
+>     used very much.
+
+ Goes to show that the official wiki isn't worth much, because elsewhere it says
+that it is mandatory...
+
 > 
-> $ env HOST_DIR=output/host STAGING_DIR=output/staging
-> TARGET_DIR=output/target support/scripts/fix-rpath target
+> Folllowed a little bit below, by:
 > 
-> $ readelf -d output/target/opt/foobar/bin/fooprogram | rg 'NEEDED|RPATH'
-> ...
->  0x00000001 (NEEDED)                     Shared library: [libfoo.so.1]
-> ...
-
- OK, so that's a bug in our patchelf modification... At least, if libfoo.so.1
-doesn't exist in output/target/lib or output/target/usr/lib.
-
- If you run patchelf with --debug, it should tell you why the rpath got removed.
-
-
->>> Looking back at this problem, taking into account the above comment
->>> from the patchelf patch, I would say that my problem would have been
->>> fixed if case (4) above would not discard the path.
->>
->>  I think one motivation for removing redundant rpaths is to avoid having build
->> directories leaking into target binaries. Especially for reproducible builds
->> this is important.
+>   * CMAKE_TOOLCHAIN_FILE : absolute or relative path to a cmake script
+>     which sets up all the toolchain related variables mentioned above
 > 
-> Ok, I can understand that.
-> But it should only remove directories which are not present in the
-> target directory, e.g. if rpath contains /opt/foobar/lib then the
-> script should check if output/target/opt/foobar/lib exists. If it
-> does, then the rpath can remain, if it does not then it could be
-> removed.
-
- Indeed, and that's what patchelf is supposed to do. Well, it also checks that
-the library exists.
-
-
->>> If that change would be adopted, then it would also preserve the rpath
->>> '/home/thomas/projets/buildroot/output/per-package/host-e2fsprogs/host/lib'.
->>>
->>> Of course, in your case you might actually want a different final
->>> rpath, i.e. rewrite it to the consolidated host directory. I think
->>> that in this case it would be better to read the rpath via patchelf,
->>> calculate the transformed rpath from our own script, then writing it
->>> back via patchelf,  rather than adding more options into patchelf with
->>> e.g. transformation rules.
->>
->>  The problem is that patchelf is rather slow, so running it twice is even slower...
+>     For instance for crosscompiling from Linux to Embedded Linux on PowerPC
+>     this file could look like this:
 > 
-> How so is it slow, can you clarify? Which times are you talking about?
+>         # this one is important
+>         SET(CMAKE_SYSTEM_NAME Linux)
+>         #this one not so much
+>         SET(CMAKE_SYSTEM_VERSION 1)
+> 
+>     [...]
+> 
+> Furthermore, using the kernel headers version can be a bit misleading (as
+> it really looks like is is the correct version to use when it is not),
+> while it is obvious that 1 is not really the output of `uname -r` and
+> thus is definitely not misleading.
 
- I don't remember, but someone did measurements in 2017 and it was slow.
+ OK, looking at it like that, it *is* a convincing argument.
+
+> 
+> Finally, random searches [2] about CMAKE_SYSTEM_VERSION, mostly only
+> turns up issues related with Windows, Mac-OS, and to a lesser extent,
+> Android (where it is forcibly set to 1), with issues realted to running
+> under just Linux (as opposed to Adnroid) mostly non-existent.
+> 
+> Consequently, we revert to using the value that is suggested in the
+> cmake WiKi, i.e. 1, and which is basically what we also used as a
+> workaround in the azure-iot-sdk-c paclkage up until d300b1d3b1.
+> 
+> A case were we will need to have a real kernel version, is if we one day
+> have a cmake-based pacakge that builds and installs a kernel module [3],
+
+ Not a great example; trying to install kernel modules with anything else than
+'make modules_install M=...' is a recipe for disaster...
+
+ Which actually makes it a good example! Indeed, a case like that we *want* to
+break (so that it gets patched to use 'make modules_install M=...). Therefore:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> because it will need the _running_ kernel version to install it in
+> /lib/modules/VERSION/, but in that case it will anyway most probably
+> not be the headers version.
+> 
+> [0] https://cmake.org/cmake/help/v3.8/variable/CMAKE_SYSTEM_VERSION.html
+> [1] https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/CrossCompiling
+> [2] https://duckduckgo.com/?q=CMAKE_SYSTEM_VERSION
+> [3] https://stackoverflow.com/questions/38205745/cmake-system-version-not-updated-for-new-kernel
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index dd048b0949..50ae2b982a 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -264,7 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+>  		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
+>  		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+>  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+> -		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
+> +		-e 's#@@CMAKE_SYSTEM_VERSION@@#1#' \
+>  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+>  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+>  		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+> 
