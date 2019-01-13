@@ -1,44 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:23:21 +0100
-Subject: [Buildroot] [git commit] package/geoip: bump to version 1.6.12
-Message-ID: <20190113132303.391AC884F5@busybox.osuosl.org>
+Date: Sun, 13 Jan 2019 14:23:07 +0100
+Subject: [Buildroot] [PATCH 1/1] Makefile.in: set -fno-dwarf2-cfi-asm
+ for m68k_cf
+In-Reply-To: <20190112195039.24984-1-fontaine.fabrice@gmail.com>
+References: <20190112195039.24984-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190113142307.55b7cd45@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c37ee85639b03b7b34342c0a836f52b1a1355ad3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add hash for license file
+On Sat, 12 Jan 2019 20:50:39 +0100, Fabrice Fontaine wrote:
+> Another package (libsquish) is affected by the
+> "Internal error in emit_expr_encoded at dw2gencfi.c:215".
+> 
+> This error already affects 5 packages and is due to binutils, see:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
+> 
+> No report has been made to binutils yet however as suggested by Yann
+> during review of woff2 workaround
+> (https://patchwork.ozlabs.org/patch/911344/), remove the workarounds
+> from all these packages and put it in package/Makefile.in
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/77e06c092f4e7804dc166e259b25e779e5f1e83a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/Makefile.in              | 6 ++++++
+>  package/berkeleydb/berkeleydb.mk | 7 -------
+>  package/kmsxx/kmsxx.mk           | 6 ------
+>  package/lcdapi/lcdapi.mk         | 6 ------
+>  package/libasplib/libasplib.mk   | 8 --------
+>  package/woff2/woff2.mk           | 6 ------
+>  6 files changed, 6 insertions(+), 33 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/geoip/geoip.hash | 3 ++-
- package/geoip/geoip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Applied to master, thanks. Let's see if it breaks some packages or
+not :)
 
-diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
-index 2b1f7433c9..c2ddf390e6 100644
---- a/package/geoip/geoip.hash
-+++ b/package/geoip/geoip.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 b0e5a92200b5ab540d118983f7b7191caf4faf1ae879c44afa3ff2a2abcdb0f5  GeoIP-1.6.11.tar.gz
-+sha256 1dfb748003c5e4b7fd56ba8c4cd786633d5d6f409547584f6910398389636f80  GeoIP-1.6.12.tar.gz
-+sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
-index 030c7b3683..cbd4282321 100644
---- a/package/geoip/geoip.mk
-+++ b/package/geoip/geoip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GEOIP_VERSION = 1.6.11
-+GEOIP_VERSION = 1.6.12
- GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
- GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)
- GEOIP_INSTALL_STAGING = YES
+It would be nice to make a proper bug report to upstream binutils,
+though.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
