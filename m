@@ -1,90 +1,79 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Jan 2019 22:47:22 +0100
-Subject: [Buildroot] [PATCH v1] libcdaudio: fix compile on host systems
- without C++ support
-Message-ID: <20190113214722.15104-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Jan 2019 22:47:39 +0100
+Subject: [Buildroot] [PATCH 2/3] boot/uboot: use HOSTCC_NOCCACHE as
+ kconfig HOSTCC
+In-Reply-To: <20190110211500.14368-3-thomas.petazzoni@bootlin.com>
+References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
+ <20190110211500.14368-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20190113214739.GL2428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Delivered libcdaudio configure tries to run a C++ check with the
-host C preprocessor. Fix it by enabling autoreconf  (needs
-a patch for configure.ac/Makefile.am removing ancient lines).
+Thomas, All,
 
-Fixes [1]:
+On 2019-01-10 22:14 +0100, Thomas Petazzoni spake thusly:
+> At kconfig time, dependencies are not built, and therefore host-ccache
+> is not ready. Due to this, using $(HOSTCC) as the host compiler in
+> KCONFIG_OPTS does not work: a "make uboot-menuconfig" invocation from
+> a clean tree with ccache enabled fails.
+> 
+> This commit fixes this by using $(HOSTCC_NOCCACHE). We cannot rely on
+> the default value of HOSTCC passed by the kconfig-package
+> infrastructure, because $(UBOOT_MAKE_OPTS) also contains a HOSTCC
+> definition that would override the one passed by the kconfig-package
+> infrastructure.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  boot/uboot/uboot.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index cbdfee6ac3..6977bcc064 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -227,8 +227,9 @@ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+>  # (which is typically wchar) but link with
+>  # $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
+>  # need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
+> -# override again.
+> -UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
+> +# override again. In addition, host-ccache is not ready at kconfig
+> +# time, so use HOSTCC_NOCCACHE.
+> +UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTLDFLAGS=""
 
-  checking how to run the C++ preprocessor... /lib/cpp
-  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+Since you're just switching over to the no-ccache variant:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../0001-libcdaudio-enable-autoreconf.patch   | 43 +++++++++++++++++++
- package/libcdaudio/libcdaudio.mk              |  3 ++
- 2 files changed, 46 insertions(+)
- create mode 100644 package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
-new file mode 100644
-index 0000000000..ab2296c042
---- /dev/null
-+++ b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
-@@ -0,0 +1,43 @@
-+From 9c2873b1d9292bcf43c862b6777d41c40521424c Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 13 Jan 2019 22:27:42 +0100
-+Subject: [PATCH] libcdaudio: enable autoreconf
-+
-+Fixes the following two autoreconf errors (by simple removing of the
-+two offending lines):
-+
-+  configure.ac:20: error: automatic de-ANSI-fication support has been removed
-+
-+  Makefile.am:2: error: automatic de-ANSI-fication support has been removed
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Makefile.am  | 1 -
-+ configure.ac | 1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index f639dd8..a32cfe6 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,5 +1,4 @@
-+ ## Process this file with automake to produce Makefile.in
-+-AUTOMAKE_OPTIONS = ansi2knr
-+ SUBDIRS = src
-+ 
-+ bin_SCRIPTS = libcdaudio-config
-+diff --git a/configure.ac b/configure.ac
-+index bbdd42d..6699ceb 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -17,7 +17,6 @@ AM_CONFIG_HEADER(config.h)
-+ AC_PROG_AWK
-+ AC_PROG_CC
-+ AC_PROG_CPP
-+-AM_C_PROTOTYPES
-+ AM_PROG_CC_STDC
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-+-- 
-+2.20.1
-+
-diff --git a/package/libcdaudio/libcdaudio.mk b/package/libcdaudio/libcdaudio.mk
-index 5d421eba7a..e2c1496287 100644
---- a/package/libcdaudio/libcdaudio.mk
-+++ b/package/libcdaudio/libcdaudio.mk
-@@ -11,4 +11,7 @@ LIBCDAUDIO_CONFIG_SCRIPTS = libcdaudio-config
- LIBCDAUDIO_LICENSE = GPL-2.0+
- LIBCDAUDIO_LICENSE_FILES = COPYING
- 
-+# fix configure failure on host systems without C++ support
-+LIBCDAUDIO_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+However, I wonder if we would not be better off if we had written
+something like;
+
+    UBOOT_KCONFIG_OPTS = $(filter-out HOSTCC=% HOSTLDFLAGS=%, $(UBOOT_MAKE_OPTS))
+
+But this is another story. ;-)
+
+Regards,
+Yann E. MORIN.
+
+>  define UBOOT_HELP_CMDS
+>  	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
+>  	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
