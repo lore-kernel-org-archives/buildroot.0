@@ -1,48 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:14:04 +0100
-Subject: [Buildroot] [git commit] package/python-engineio: bump to version
- 3.2.3
-Message-ID: <20190113131422.757F9884F5@busybox.osuosl.org>
+Date: Sun, 13 Jan 2019 13:55:42 +0100
+Subject: [Buildroot] [git commit] package/keepalived: fix if.h namespace
+ collision
+Message-ID: <20190113131422.5DDB1884F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cff057eae53bbce54ef708dda43c76eb3cf8b5d3
+commit: https://git.buildroot.net/buildroot/commit/?id=3fb3de58fde4a057393eb86ec00361a2895eb160
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/d229602f2e477499c86567e0e8a3535513d322e8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...include-files-in-configure-COLLISION-test.patch | 38 ++++++++++++++++++++++
+ package/keepalived/keepalived.mk                   |  2 ++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index b92b908a64..3b16d7ef61 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	203f9b530086c83b6948d750c080d14e  python-engineio-3.1.1.tar.gz
--sha256	3ec885307c404ff97d14dbdbf1461ede14c70c5adb015b2c97666819edbeef81  python-engineio-3.1.1.tar.gz
-+md5	ba0fd43c77028bd6fed4ee1004f37c71  python-engineio-3.2.3.tar.gz
-+sha256	401458bb0046d950c429dac3ef82ce12e3ff1236f63b4bbb344d60a1b51c4e94  python-engineio-3.2.3.tar.gz
- # Locally computed sha256 checksums
- sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index de9070a55d..8d4e344247 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch b/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch
+new file mode 100644
+index 0000000000..76c88a76bf
+--- /dev/null
++++ b/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch
+@@ -0,0 +1,38 @@
++From e4dd33f16fe56d09c8d59d1254a4ed1d8e9bb29c Mon Sep 17 00:00:00 2001
++From: Quentin Armitage <quentin@armitage.org.uk>
++Date: Thu, 6 Dec 2018 12:16:08 +0000
++Subject: [PATCH] Fix order of include files in configure COLLISION test
++
++Since Linux 4.4.11 (commit 1575c09) including linux/if.h after
++net/if.h works, whereas until glibc fix their headers including
++net/if.h after linux/if.h causes compiler redefinition errors.
++
++Unfortunately the test for the collision was done the wrong way
++round, as identified in issue #1079. The patch included in the
++issue report corrects the order of inclusion of the header files.
++
++What we should do is ensure that glibc header files are included
++before Linux header files, so that at least if kernel headers from
++4.4.11 onwards are used, the conflict will not occur.
++
++Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://github.com/acassen/keepalived/commit/e4dd33f16fe56d09c8d59d1254a4ed1d8e9bb29c]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7a2e8ce1..9badcc62 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1349,8 +1349,8 @@ AC_MSG_CHECKING([for linux/if.h and net/if.h namespace collision])
++ SAV_CPPFLAGS="$CPPFLAGS"
++ CPPFLAGS="$CPPFLAGS $kernelinc"
++ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
++-    #include <net/if.h>
++     #include <linux/if.h>
+++    #include <net/if.h>
++   ]])],
++   [
++     AC_MSG_RESULT([no])
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index 584da6bb48..4f6db01722 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -10,6 +10,8 @@ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
+ KEEPALIVED_LICENSE = GPL-2.0+
+ KEEPALIVED_LICENSE_FILES = COPYING
+ KEEPALIVED_CONF_OPTS = --disable-hardening
++# We're patching configure.ac
++KEEPALIVED_AUTORECONF = YES
  
--PYTHON_ENGINEIO_VERSION = 3.1.1
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/c7/fd/9dad6c1794be838c05610c04e869bca9a3e0d94145ac71e57a9345a784b9
-+PYTHON_ENGINEIO_VERSION = 3.2.3
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e6/1e/64fd629f8215b81bf0e5682504ebbbd10d1d48e52ee30d053484b6e91421
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ KEEPALIVED_DEPENDENCIES += json-c
