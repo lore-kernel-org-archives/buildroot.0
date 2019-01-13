@@ -1,30 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:28:52 +0100
-Subject: [Buildroot] [PATCH 2/2] lxc: bump to version 3.1.0
-In-Reply-To: <20190112210844.4021-2-fontaine.fabrice@gmail.com>
-References: <20190112210844.4021-1-fontaine.fabrice@gmail.com>
- <20190112210844.4021-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190113142852.41e5fdd6@windsurf.home>
+Date: Sun, 13 Jan 2019 14:29:02 +0100
+Subject: [Buildroot] [git commit] package/lxc: add optional dependency to
+ bash-completion
+Message-ID: <20190113132852.3026580F82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61a425590a71d232480181431eb0073ad0c420a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Jan 2019 22:08:44 +0100, Fabrice Fontaine wrote:
-> Remove both patchrs (already in version)
+lxc uses the completionsdir variable from bash-completions.pc to decide
+where to install things.
 
-patchrs -> patches
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lxc/lxc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Since you're removing both patches, we no longer have any patch
-touching configure.ac. Is AUTORECONF = YES still needed ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index c9838fb229..c758a15b9d 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -17,6 +17,10 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++LXC_DEPENDENCIES += bash-completion
++endif
++
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LXC_CONF_OPTS += --enable-gnutls
+ LXC_DEPENDENCIES += gnutls
