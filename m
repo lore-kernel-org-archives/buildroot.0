@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 13 Jan 2019 13:37:48 +0100
-Subject: [Buildroot] [PATCH 4/7] leptonica: bump to version 1.77.0
+Date: Sun, 13 Jan 2019 13:37:49 +0100
+Subject: [Buildroot] [PATCH 5/7] webp: bump to version 1.0.1
 In-Reply-To: <1547383071-11783-1-git-send-email-gilles.talis@gmail.com>
 References: <1547383071-11783-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1547383071-11783-5-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1547383071-11783-6-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/leptonica/leptonica.hash | 2 +-
- package/leptonica/leptonica.mk   | 2 +-
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 54fe878..14c750c 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index 7dd954e..ed4b127 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
 @@ -1,3 +1,3 @@
- # locally computed hash
--sha256 5e9a33b7ce33ab39fb03cee5a7ec353b044670176303265d7c64d51539616857  leptonica-1.76.0.tar.gz
-+sha256 dd7990ab6b6824b0cfed70920824d37b47184240f98db4085f7dbf1250cd4899  leptonica-1.77.0.tar.gz
- sha256 ca0ac11c7c0acad9599d54990942cc11c9f6d9b569f1a360d774a628819c3518  leptonica-license.txt
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 5e37f93..7c6fa12 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
+ # Locally calculated
+-sha256	84259c4388f18637af3c5a6361536d754a5394492f91be1abc2e981d4983225b	libwebp-1.0.0.tar.gz
++sha256	8c744a5422dbffa0d1f92e90b34186fb8ed44db93fbacb55abd751ac8808d922	libwebp-1.0.1.tar.gz
+ sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 3036474..1aa81a0 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEPTONICA_VERSION = 1.76.0
-+LEPTONICA_VERSION = 1.77.0
- LEPTONICA_SITE = http://www.leptonica.org/source
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
+-WEBP_VERSION = 1.0.0
++WEBP_VERSION = 1.0.1
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
 -- 
 2.7.4
