@@ -1,52 +1,190 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 14:15:32 +0100
-Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
- 3.5.4
-Message-ID: <20190113131623.1B6268122E@busybox.osuosl.org>
+Date: Sun, 13 Jan 2019 14:16:33 +0100
+Subject: [Buildroot] [git commit] package/zeromq: bump to version 4.3.1
+Message-ID: <20190113131623.238258122E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05840cee7c2cb34ba2ae5a98fd9bf6f5829b585f
+commit: https://git.buildroot.net/buildroot/commit/?id=aa178bd6597ff53fdbb89c8b8deb9a701ac33727
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License change - a year bump.
+Remove the patches as they're already on upstream.
+As a consequence, no need to autoreconf anymore.
+Also added license hashes.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiohttp/python-aiohttp.hash | 6 +++---
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...re.ac-serach-for-dladdr-only-on-libunwind.patch | 45 --------------
+ ...2-acinclude.m4-check-if-latomic-is-needed.patch | 71 ----------------------
+ package/zeromq/zeromq.hash                         |  8 ++-
+ package/zeromq/zeromq.mk                           |  4 +-
+ 4 files changed, 6 insertions(+), 122 deletions(-)
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index c76f49b4a4..bd9e2d7a62 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5	b692d5c602458957a0ef2df92ac48705  aiohttp-3.5.0.tar.gz
--sha256	1d00d58cf2665ce61bd637790988accca609aa3a898bb45747b6369830c0de28  aiohttp-3.5.0.tar.gz
-+md5	85fe5c9037256c58d4678148bd91b3f3  aiohttp-3.5.4.tar.gz
-+sha256	9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf  aiohttp-3.5.4.tar.gz
- # Locally computed sha256 checksums
--sha256	bb0c0eeae85492ebfa03442b7784d4c42a623e15346df54ae85f55df972a82af  LICENSE.txt
-+sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index c17daf6a27..7a142a6550 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch b/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch
+deleted file mode 100644
+index 1037a67fe2..0000000000
+--- a/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 194b3836c87f77aca34581656ff99da49813d8c3 Mon Sep 17 00:00:00 2001
+-From: Asaf Kahlon <asafka7@gmail.com>
+-Date: Fri, 13 Apr 2018 11:56:46 +0300
+-Subject: [PATCH] configure.ac: search for dladdr only on libunwind
+-
+-The original configure.ac tries to check for dladdr, but it actually needs
+-it only in case we have libunwind (which has a another section and checks for it
+-too).
+-This can fail the build on systems without dynamic linking support.
+-Therefore, the dladdr check has to be performed only when checking libunwind.
+-
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+-Upstream-status: https://github.com/zeromq/libzmq/commit/c971445025535b9f989ab0b78f5ddd1c026f1878
+----
+- configure.ac | 7 +------
+- 1 file changed, 1 insertion(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 216b2bc4..0858a6c1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -174,11 +174,6 @@ case "${host_os}" in
+-         AC_DEFINE(ZMQ_HAVE_LINUX, 1, [Have Linux OS])
+-         libzmq_on_linux="yes"
+- 
+--        # dladdr/dlopen is in libdl on glibc
+--        AC_SEARCH_LIBS([dladdr], [dl dld], [], [
+--          AC_MSG_ERROR([unable to find the dladdr() function])
+--        ])
+--
+-         if test "x$libzmq_tipc_support" = "xyes"; then
+-             AC_DEFINE(ZMQ_HAVE_TIPC, 1, [Have TIPC support])
+-         fi
+-@@ -783,7 +778,7 @@ if test "x$enable_libunwind" != "xno"; then
+-             AC_DEFINE(HAVE_LIBUNWIND, 1, [The libunwind library is to be used])
+-             AC_SUBST([LIBUNWIND_CFLAGS])
+-             AC_SUBST([LIBUNWIND_LIBS])
+--            AC_CHECK_LIB([dl], [dladdr])
+-+            AC_SEARCH_LIBS([dladdr], [dl dld])
+-         ],
+-         [
+-             if test "x$enable_libunwind" = "xyes"; then
+--- 
+-2.17.0
+-
+diff --git a/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch b/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
+deleted file mode 100644
+index 233b364662..0000000000
+--- a/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 9f4ca582555b208d065f730b5ce3b1901136b275 Mon Sep 17 00:00:00 2001
+-From: Asaf Kahlon <asafka7@gmail.com>
+-Date: Mon, 7 May 2018 23:19:09 +0300
+-Subject: [PATCH] acinclude.m4: check if -latomic is needed
+-
+-On some cases, -latomic is needed for linking, and since the current
+-acinclude.m4 checks only compilation we can sometimes miss the need for -latomic
+-and the linking process will fail.
+-Therefore, the AC_CHECK_IFELSE was replaced with AC_LINK_IFELSE. If the first
+-try fails, we try to link again with -latomic and add LIBS="-latomic" in case we
+-succeeded.
+-
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Update to use LIBS: https://github.com/zeromq/libzmq/pull/3250]
+----
+- acinclude.m4 | 31 +++++++++++++++++++++++++++----
+- 1 file changed, 27 insertions(+), 4 deletions(-)
+-
+-diff --git a/acinclude.m4 b/acinclude.m4
+-index f648ed0f..aa35195f 100644
+---- a/acinclude.m4
+-+++ b/acinclude.m4
+-@@ -668,7 +668,7 @@ dnl # Check if compiler supoorts __atomic_Xxx intrinsics
+- dnl ################################################################################
+- AC_DEFUN([LIBZMQ_CHECK_ATOMIC_INTRINSICS], [{
+-     AC_MSG_CHECKING(whether compiler supports __atomic_Xxx intrinsics)
+--    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+-+    AC_LINK_IFELSE([AC_LANG_SOURCE([
+- /* atomic intrinsics test */
+- int v = 0;
+- int main (int, char **)
+-@@ -677,9 +677,32 @@ int main (int, char **)
+-     return t;
+- }
+-     ])],
+--    [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
+--    [AC_MSG_RESULT(no)  ; libzmq_cv_has_atomic_instrisics="no"  ; $2]
+--    )
+-+    [libzmq_cv_has_atomic_instrisics="yes"],
+-+    [libzmq_cv_has_atomic_instrisics="no"])
+-+
+-+    if test "x$libzmq_cv_has_atomic_instrisics" = "xno"; then
+-+        save_LIBS=$LIBS
+-+        LIBS="$LIBS -latomic"
+-+        AC_LINK_IFELSE([AC_LANG_SOURCE([
+-+        /* atomic intrinsics test */
+-+        int v = 0;
+-+        int main (int, char **)
+-+        {
+-+            int t = __atomic_add_fetch (&v, 1, __ATOMIC_ACQ_REL);
+-+            return t;
+-+        }
+-+        ])],
+-+        [libzmq_cv_has_atomic_instrisics="yes"],
+-+        [libzmq_cv_has_atomic_instrisics="no" LIBS=$save_LIBS])
+-+    fi
+-+
+-+    if test "x$libzmq_cv_has_atomic_instrisics" = "xyes"; then
+-+        AC_MSG_RESULT(yes)
+-+        $1
+-+    else
+-+        AC_MSG_RESULT(no)
+-+        $2
+-+    fi
+- }])
+- 
+- dnl ################################################################################
+--- 
+-2.17.0
+-
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index 86380c0295..5af6a3ff8d 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,5 +1,7 @@
+ # From https://github.com/zeromq/libzmq/releases
+-md5  a1c95b34384257e986842f4d006957b8  zeromq-4.2.5.tar.gz
+-sha1 1132f839d703486c4ee1cf22f056585dfbb329c2  zeromq-4.2.5.tar.gz
++md5  64cbf3577afdbfda30358bc757a6ac83  zeromq-4.3.1.tar.gz
++sha1 6cce22d830eaf95feff7cab00744df13ad7ab7f3  zeromq-4.3.1.tar.gz
+ # Locally computed
+-sha256 cc9090ba35713d59bb2f7d7965f877036c49c5558ea0c290b0dcc6f2a17e489f  zeromq-4.2.5.tar.gz
++sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
++sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
++sha256 83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 4b25c7d678..da57f8745c 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.5.0
-+PYTHON_AIOHTTP_VERSION = 3.5.4
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e4/a4/48e455139e03dc1555f904cf3843c9228c2a922f61512eb4d2482e04135c
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/0f/58/c8b83f999da3b13e66249ea32f325be923791c0c10aee6cf16002a3effc1
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-ZEROMQ_VERSION = 4.2.5
++ZEROMQ_VERSION = 4.3.1
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+-# 0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch touches configure.ac
+-ZEROMQ_AUTORECONF = YES
+ 
+ # Assume these flags are always available. It is true, at least for
+ # SOCK_CLOEXEC, since linux v2.6.27.
