@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 13 Jan 2019 13:37:49 +0100
-Subject: [Buildroot] [PATCH 5/7] webp: bump to version 1.0.1
+Date: Sun, 13 Jan 2019 13:37:50 +0100
+Subject: [Buildroot] [PATCH 6/7] xapian: bump to version 1.4.9
 In-Reply-To: <1547383071-11783-1-git-send-email-gilles.talis@gmail.com>
 References: <1547383071-11783-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1547383071-11783-6-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1547383071-11783-7-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
+ package/xapian/xapian.hash | 2 +-
+ package/xapian/xapian.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index 7dd954e..ed4b127 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
+diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
+index 4fd0dd1..4e41402 100644
+--- a/package/xapian/xapian.hash
++++ b/package/xapian/xapian.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	84259c4388f18637af3c5a6361536d754a5394492f91be1abc2e981d4983225b	libwebp-1.0.0.tar.gz
-+sha256	8c744a5422dbffa0d1f92e90b34186fb8ed44db93fbacb55abd751ac8808d922	libwebp-1.0.1.tar.gz
- sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 3036474..1aa81a0 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
+ # locally computed
+-sha256 13f08a0b649c7afa804fa0e85678d693fd6069dd394c9b9e7d41973d74a3b5d3 xapian-core-1.4.7.tar.xz
++sha256 cde9c39d014f04c09b59d9c21551db9794c10617dc69ab4c9826352a533df5cc xapian-core-1.4.9.tar.xz
+ sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+index 241f37b..df039d4 100644
+--- a/package/xapian/xapian.mk
++++ b/package/xapian/xapian.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBP_VERSION = 1.0.0
-+WEBP_VERSION = 1.0.1
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
+-XAPIAN_VERSION = 1.4.7
++XAPIAN_VERSION = 1.4.9
+ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+ XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+ XAPIAN_LICENSE = GPL-2.0+
 -- 
 2.7.4
