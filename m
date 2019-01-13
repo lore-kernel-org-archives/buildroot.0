@@ -1,221 +1,192 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Jan 2019 21:14:19 +0100
-Subject: [Buildroot] [PATCH 1/1] libserial: bump to version 1.0.0
-Message-ID: <20190113201419.4250-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 Jan 2019 21:45:43 +0100
+Subject: [Buildroot] [git commit] package/boost: bump to version 1.69.0
+Message-ID: <20190113204525.D215181056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Move site to github
-- Remove first patch and use --without-python instead
-- Remove second patch (patch has been merged in 2015:
-  https://github.com/crayzeewulf/libserial/commit/47ca0621ccd2100e4ba0d7f4e2a861d14f05f63c)
-- Add a new patch to fix build when size_t is an unsigned int
-- Use new --disable-tests option
-- Update license to BSD-3-Clause and replace COPYING by LICENSE.txt:
-  https://github.com/crayzeewulf/libserial/commit/3f12abc045aae34a40a6fc9a9b5ed0a1bc6b2049
-- Add hash for license file
+commit: https://git.buildroot.net/buildroot/commit/?id=428ed39414ee287fb2d968e7908a39b799fb2787
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Remove fifth patch (already in version)
+- Remove BR2_PACKAGE_BOOST_SIGNALS as signals is now removed. Its
+  removal was announced in 1.68 and its deprecation was announced in
+  1.54. Users are encouraged to use Signals2 instead.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...cpp-fix-build-when-size_t-is-an-unsigned-.patch | 39 +++++++++++++
- .../libserial/0001-disable-python-bindings.patch   | 26 ---------
- ...n-t-use-high-baudrates-when-not-available.patch | 65 ----------------------
- package/libserial/libserial.hash                   |  6 +-
- package/libserial/libserial.mk                     | 13 +++--
- 5 files changed, 50 insertions(+), 99 deletions(-)
- create mode 100644 package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch
- delete mode 100644 package/libserial/0001-disable-python-bindings.patch
- delete mode 100644 package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
+ Config.in.legacy                                   |  8 +++
+ ...static-detection-of-lock-free-atomic-ints.patch | 80 ----------------------
+ package/boost/Config.in                            |  5 --
+ package/boost/boost.hash                           |  4 +-
+ package/boost/boost.mk                             |  6 +-
+ 5 files changed, 12 insertions(+), 91 deletions(-)
 
-diff --git a/package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch b/package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch
-new file mode 100644
-index 0000000000..a01da53adb
---- /dev/null
-+++ b/package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch
-@@ -0,0 +1,39 @@
-+From 2e4cf095afdcf843e93d1bdea9dbd961558f09bd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 13 Jan 2019 21:01:19 +0100
-+Subject: [PATCH] SerialPort.cpp: fix build when size_t is an unsigned int
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6f1e3eef2b..ef460752f3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2019.02"
+ 
++config BR2_PACKAGE_BOOST_SIGNALS
++	bool "Boost signals removed"
++	select BR2_LEGACY
++	help
++	  Its removal was announced in boost 1.68 and its deprecation
++	  was announced in 1.54. Users are encouraged to use Signals2
++	  instead.
 +
-+size_t can be defined as an unsigned int instead of long unsigned int so
-+replace 1UL to (size_t)1 when calling max function
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/crayzeewulf/libserial/pull/126]
-+---
-+ src/SerialPort.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/SerialPort.cpp b/src/SerialPort.cpp
-+index e354fcb..75e762e 100644
-+--- a/src/SerialPort.cpp
-++++ b/src/SerialPort.cpp
-+@@ -2208,7 +2208,7 @@ namespace LibSerial
-+ 
-+         // Local variables.
-+         size_t number_of_bytes_read = 0 ;
-+-        size_t number_of_bytes_remaining = std::max(numberOfBytes, 1UL) ;
-++        size_t number_of_bytes_remaining = std::max(numberOfBytes, (size_t)1) ;
-+         size_t maximum_number_of_bytes = dataBuffer.max_size() ;
-+         
-+         // Clear the data buffer and reserve enough space in the buffer to store the incoming data.
-+@@ -2302,7 +2302,7 @@ namespace LibSerial
-+ 
-+         // Local variables.
-+         size_t number_of_bytes_read = 0 ;
-+-        size_t number_of_bytes_remaining = std::max(numberOfBytes, 1UL) ;
-++        size_t number_of_bytes_remaining = std::max(numberOfBytes, (size_t)1) ;
-+         size_t maximum_number_of_bytes = dataString.max_size() ;
-+         
-+         // Clear the data buffer and reserve enough space in the buffer to store the incoming data.
-+-- 
-+2.14.1
-+
-diff --git a/package/libserial/0001-disable-python-bindings.patch b/package/libserial/0001-disable-python-bindings.patch
+ config BR2_PACKAGE_LUA_5_2
+ 	bool "Lua 5.2.x version removed"
+ 	select BR2_LEGACY
+diff --git a/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch b/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch
 deleted file mode 100644
-index 1f2f5ed7df..0000000000
---- a/package/libserial/0001-disable-python-bindings.patch
+index 9e87aaedf0..0000000000
+--- a/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--Disable build of Python bindings, which requires the sipconfig module.
+@@ -1,80 +0,0 @@
+-From 48be99d20753ecab8817b030b95a7f1260aa777f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 5 Sep 2018 12:04:15 +0200
+-Subject: [PATCH 17/17] fix static detection of lock-free atomic ints
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+-When build statically, boost is unable to detect lock-free atomics ints
+-because it tries to link dynamically with boost_system, see
+-output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
 -
--diff -purN libserial-0.6.0rc2.orig/Makefile.am libserial-0.6.0rc2/Makefile.am
----- libserial-0.6.0rc2.orig/Makefile.am	2014-06-05 18:37:25.000000000 +0200
--+++ libserial-0.6.0rc2/Makefile.am	2015-07-30 20:59:28.828429011 +0200
--@@ -1,4 +1,4 @@
---SUBDIRS=src doc examples sip
--+SUBDIRS=src doc examples
-- ACLOCAL_AMFLAGS=-I m4
-- 
-- EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
--diff -purN libserial-0.6.0rc2.orig/Makefile.in libserial-0.6.0rc2/Makefile.in
----- libserial-0.6.0rc2.orig/Makefile.in	2014-06-05 18:40:09.000000000 +0200
--+++ libserial-0.6.0rc2/Makefile.in	2015-07-30 21:00:09.215188376 +0200
--@@ -348,7 +348,7 @@ target_alias = @target_alias@
-- top_build_prefix = @top_build_prefix@
-- top_builddir = @top_builddir@
-- top_srcdir = @top_srcdir@
---SUBDIRS = src doc examples sip
--+SUBDIRS = src doc examples
-- ACLOCAL_AMFLAGS = -I m4
-- EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
-- pkgconfigdir = $(libdir)/pkgconfig
-diff --git a/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch b/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
-deleted file mode 100644
-index f2ad61ae7d..0000000000
---- a/package/libserial/0002-Don-t-use-high-baudrates-when-not-available.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 47ca0621ccd2100e4ba0d7f4e2a861d14f05f63c Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 17 Nov 2015 23:50:14 +0100
--Subject: [PATCH] Don't use high baudrates when not available
+-Using shell: /bin/sh -c
+-    argv[0] = '/bin/sh'
+-    argv[1] = '-c'
+-    argv[2] = '
+-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
+-'
+-gcc.compile.c++ bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
 -
--On certain architectures (namely Sparc), the maximum baud rate exposed
--by the kernel headers is B2000000. Therefore, the current libserial
--code doesn't build for the Sparc and Sparc64 architectures due to
--this.
+-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
 -
--In order to address this problem, this patch tests the value of
--__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
--architecture that supports all baud rates up to B4000000. Otherwise,
--we simply don't support the baud rates above B2000000.
+-0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
+-gcc.compile.c++ bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
 -
--Fixes build failures such as:
+-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"." -c -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o" "libs/system/src/error_code.cpp"
 -
--./SerialPort.h:88:24: error: 'B2500000' was not declared in this scope
--         BAUD_2500000 = B2500000,
+-0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
+-SEM: <s>gcc-link-semaphore now used by <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
+-Using shell: /bin/sh -c
+-    argv[0] = '/bin/sh'
+-    argv[1] = '-c'
+-    argv[2] = '
+-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
+-'
+-gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
+-
+-ld (ld-elf2flt): -shared used without passing a shared library ID
+-collect2: error: ld a retourn?? le statut de sortie 1
+-0.003123 sec system; 0.004732 sec user; 15.646509 sec clock
+-...failed gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0...
+-
+-To fix this, move the exe statement before the boost/thread project
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/f46d38991385cbc2a4fa14eb31074e770cd79803
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/boostorg/thread/commit/f7581a366294c6f5381e0371c242af327c6da655]
 ----
-- src/SerialPort.h      | 2 ++
-- src/SerialStreamBuf.h | 2 ++
-- 2 files changed, 4 insertions(+)
+- build/Jamfile.v2 | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
 -
--diff --git a/src/SerialPort.h b/src/SerialPort.h
--index 6c0baaa..0b1af4c 100644
----- a/src/SerialPort.h
--+++ b/src/SerialPort.h
--@@ -85,11 +85,13 @@ public:
--         BAUD_1152000 = B1152000, 
--         BAUD_1500000 = B1500000,
--         BAUD_2000000 = B2000000,
--+#if __MAX_BAUD > B2000000
--         BAUD_2500000 = B2500000,
--         BAUD_3000000 = B3000000,
--         BAUD_3500000 = B3500000,
--         BAUD_4000000 = B4000000,
-- #endif
--+#endif /* __linux__ */
--         BAUD_DEFAULT = BAUD_57600
--     } ;
+-diff --git a/libs/thread/build/Jamfile.v2 b/build/Jamfile.v2
+-index ce8c7f47..26d8b9c3 100644
+---- a/libs/thread/build/Jamfile.v2
+-+++ b/libs/thread/build/Jamfile.v2
+-@@ -38,6 +38,8 @@ import path ;
+- import configure ; 
+- import threadapi-feature ;
 - 
--diff --git a/src/SerialStreamBuf.h b/src/SerialStreamBuf.h
--index ccbb996..174f31c 100644
----- a/src/SerialStreamBuf.h
--+++ b/src/SerialStreamBuf.h
--@@ -85,11 +85,13 @@ extern "C++"
--                 BAUD_1152000 = SerialPort::BAUD_1152000, 
--                 BAUD_1500000 = SerialPort::BAUD_1500000, 
--                 BAUD_2000000 = SerialPort::BAUD_2000000, 
--+#if __MAX_BAUD > B2000000
--                 BAUD_2500000 = SerialPort::BAUD_2500000, 
--                 BAUD_3000000 = SerialPort::BAUD_3000000, 
--                 BAUD_3500000 = SerialPort::BAUD_3500000, 
--                 BAUD_4000000 = SerialPort::BAUD_4000000, 
-- #endif
--+#endif /* __linux__ */
--                 BAUD_DEFAULT = SerialPort::BAUD_DEFAULT,
--                 BAUD_INVALID = -1
--             } ;
+-+exe has_atomic_flag_lockfree : ../build/has_atomic_flag_lockfree_test.cpp ;
+-+
+- project boost/thread
+-     : source-location ../src
+-     : requirements <threading>multi
+-@@ -141,8 +143,6 @@ project boost/thread
+-       <library>/boost/system//boost_system
+-     ;
+- 
+--exe has_atomic_flag_lockfree : ../build/has_atomic_flag_lockfree_test.cpp ; 
+--
+- rule tag ( name : type ? : property-set )
+- {
+-     local result = $(name) ;
 --- 
--2.6.3
+-2.17.1
 -
-diff --git a/package/libserial/libserial.hash b/package/libserial/libserial.hash
-index bca647ae3f..e82809c71b 100644
---- a/package/libserial/libserial.hash
-+++ b/package/libserial/libserial.hash
-@@ -1,5 +1,3 @@
--# From http://sourceforge.net/projects/libserial/files/libserial/0.6.0rc2/
--sha1  e09113be3ba595135e95e853003ff96feea0da63  libserial-0.6.0rc2.tar.gz
--md5  7787679b22901e4810bc53ecccdf8266  libserial-0.6.0rc2.tar.gz
- # Locally calculated
--sha256 35ee29eb1369d52ffb8658237577692f991eb508320d0abbb71c53e6494a1c23 libserial-0.6.0rc2.tar.gz
-+sha256 063142d6bfe08898316e9a6055f2ddeedef56de06f7cfc8dcdfecc6efabf4bdd libserial-v1.0.0.tar.gz
-+sha256 c42fdfe17c192cfdb900e22d40ef246db1b473f99165e405eda62b41be27f4bf LICENSE.txt
-diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
-index b73d4c76cd..8da7d1cddd 100644
---- a/package/libserial/libserial.mk
-+++ b/package/libserial/libserial.mk
-@@ -4,13 +4,18 @@
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 0fe2422e5f..4e6bbff6df 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -279,11 +279,6 @@ config BR2_PACKAGE_BOOST_SERIALIZATION
+ 	help
+ 	  Serialization for persistence and marshalling.
+ 
+-config BR2_PACKAGE_BOOST_SIGNALS
+-	bool "boost-signals"
+-	help
+-	  Managed signals & slots callback implementation.
+-
+ config BR2_PACKAGE_BOOST_STACKTRACE
+ 	bool "boost-stacktrace"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index f3322aed98..c67c3f4a54 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From http://www.boost.org/users/history/version_1_68_0.html
+-sha256 7f6130bc3cf65f56a618888ce9d5ea704fa10b462be126ad053e80e553d6d8b7  boost_1_68_0.tar.bz2
++# From http://www.boost.org/users/history/version_1_69_0.html
++sha256 8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406  boost_1_69_0.tar.bz2
+ 
+ # Locally computed
+ sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 0adad89297..432730901a 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSERIAL_VERSION = 0.6.0rc2
--LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
-+LIBSERIAL_VERSION = v1.0.0
-+LIBSERIAL_SITE = $(call github,crayzeewulf,libserial,$(LIBSERIAL_VERSION))
- LIBSERIAL_INSTALL_STAGING = YES
--LIBSERIAL_LICENSE = GPL-2.0+
--LIBSERIAL_LICENSE_FILES = COPYING
-+LIBSERIAL_LICENSE = BSD-3-Clause
-+LIBSERIAL_LICENSE_FILES = LICENSE.txt
- LIBSERIAL_DEPENDENCIES = boost
-+# From git
-+LIBSERIAL_AUTORECONF = YES
+-BOOST_VERSION = 1.68.0
++BOOST_VERSION = 1.69.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
+@@ -16,8 +16,7 @@ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+ 	contract coroutine date_time exception filesystem graph graph_parallel \
+ 	iostreams locale log math mpi program_options python random regex \
+-	serialization signals system test thread timer type_erasure \
+-	wave)
++	serialization system test thread timer type_erasure wave)
  
- LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
-+LIBSERIAL_CONF_OPTS = \
-+	--disable-tests \
-+	--without-python
- 
- $(eval $(autotools-package))
--- 
-2.14.1
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+@@ -41,7 +40,6 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SIGNALS),,signals)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_STACKTRACE),,stacktrace)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
