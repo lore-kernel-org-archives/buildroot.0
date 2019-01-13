@@ -1,211 +1,115 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 13 Jan 2019 22:21:18 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
-In-Reply-To: <20190113212118.14512-1-romain.naour@gmail.com>
-References: <20190113212118.14512-1-romain.naour@gmail.com>
-Message-ID: <20190113212118.14512-2-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Jan 2019 22:43:24 +0100
+Subject: [Buildroot] [PATCH 1/3] package/pkg-kconfig: pass HOSTCC during
+ kconfig steps
+In-Reply-To: <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
+References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
+ <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190113214324.GK2428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
+Thomas, All,
 
-Before using bcc, you need to copy the kernel source code to
-"/lib/module/<kernel version>/build" on the target.
-That's because the clang frontend build eBPF code at runtime.
+On 2019-01-10 22:14 +0100, Thomas Petazzoni spake thusly:
+> The kconfig build logic uses the HOSTCC variable to find the host
+> compiler. It makes sense to explicitly pass a value to this variable,
+> pointing to the host compiler used by Buildroot.
+> 
+> During the kconfig step, host-ccache is not ready (host-ccache is only
+> a dependency to the configure step of packages), so we use
+> $(HOSTCC_NOCCACHE).
+> 
+> Packages currently using the kconfig-package fell into two categories:
+> 
+>  - Those not passing any HOSTCC value. For such packages, it was the
+>    default host compiler detected by the kconfig build logic that was
+>    used. ccache was therefore never used. With this commit, those
+>    packages will now be using the host compiler detected by
+>    Buildroot. Packages in this situation: at91bootstrap3, barebox,
+>    busybox, swupdate, uclibc, xvisor.
+> 
+>  - Those passing a HOSTCC value. Such packages were passing $(HOSTCC),
+>    which doesn't work as host-ccache will not be ready. This commit
+>    does not fix them, as they still override HOSTCC. It will be fixed
+>    in followup commits. Packages in this situation: uboot and
+>    linux. Note that linux was a bit special, because it has a
+>    KCONFIG_DEPENDENCIES on the toolchain package, so in fact
+>    host-ccache was ready.
+> 
+> So practically speaking, this commit does not fix anything, as the two
+> only problematic packages that use $(HOSTCC) are not fixed. However,
+> it makes things more correct by explicitly telling kconfig which
+> compiler to use.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-There are some issues with this frontend due to the hardcoded
-architecture support and the use of GNU tuple (x86_64-unknown-linux-gnu).
-That's why the bcc package dependency is limited to Glibc toolchain.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-bcc needs tracing support, at least CONFIG_KPROBES, CONFIG_BPFILTER
-and CONFIG_BPF_JIT. See [1] for details.
+Regards,
+Yann E. MORIN.
 
-bcc needs BPF target support in llvm libraries.
-Add a patch disabling man pages.
+> ---
+>  package/pkg-kconfig.mk | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index d6c95b897e..ce11e14824 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -27,6 +27,9 @@ define kconfig-package-update-config
+>  	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
+>  endef
+>  
+> +PKG_KCONFIG_COMMON_OPTS = \
+> +	HOSTCC=$(HOSTCC_NOCCACHE)
+> +
+>  ################################################################################
+>  # inner-kconfig-package -- generates the make targets needed to support a
+>  # kconfig package
+> @@ -79,7 +82,8 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  	done
+>  
+>  $(2)_KCONFIG_MAKE = \
+> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+> +	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
+>  
+>  # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
+>  # of the shell conflicts with Make's own syntax, this means that backticks
+> @@ -195,7 +199,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
+>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
+>  $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> -		$$($(2)_KCONFIG_OPTS) $$(*)
+> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
+>  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+>  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+>  	$$($(2)_FIXUP_DOT_CONFIG)
+> @@ -224,7 +228,7 @@ $(1)-check-configuration-done:
+>  
+>  $(1)-savedefconfig: $(1)-check-configuration-done
+>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> -		$$($(2)_KCONFIG_OPTS) savedefconfig
+> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) savedefconfig
+>  
+>  # Target to copy back the configuration to the source configuration file
+>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-[1] https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
-The needs of kernel sources on the target is anoying for small devices.
-At least, I'm able to complete the bcc tutorial [1] on my x86_64 target.
-
-[1] https://github.com/iovisor/bcc/blob/master/docs/tutorial.md
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...CMake-Allow-to-disable-building-man-pages.patch | 35 +++++++++++++++
- package/bcc/Config.in                              | 50 ++++++++++++++++++++++
- package/bcc/bcc.hash                               |  3 ++
- package/bcc/bcc.mk                                 | 23 ++++++++++
- 6 files changed, 113 insertions(+)
- create mode 100644 package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.hash
- create mode 100644 package/bcc/bcc.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0d4c4f1d60..f5dc078c69 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1831,6 +1831,7 @@ F:	package/vnstat/
- 
- N:	Romain Naour <romain.naour@gmail.com>
- F:	package/aubio/
-+F:	package/bcc/
- F:	package/bullet/
- F:	package/darktable/
- F:	package/efl/
-diff --git a/package/Config.in b/package/Config.in
-index 8d05303472..434427f455 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -79,6 +79,7 @@ menu "Compressors and decompressors"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/bcc/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch b/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
-new file mode 100644
-index 0000000000..c5c87d52e9
---- /dev/null
-+++ b/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
-@@ -0,0 +1,35 @@
-+From a99f097aedbf964356e62c0c4bba1257f108c3eb Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 7 Dec 2018 22:36:21 +0100
-+Subject: [PATCH] CMake: Allow to disable building man pages
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ CMakeLists.txt | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index bb3f53b9..5e95d555 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -19,6 +19,7 @@ include(cmake/FindCompilerFlag.cmake)
-+ option(ENABLE_LLVM_SHARED "Enable linking LLVM as a shared library" OFF)
-+ option(ENABLE_CLANG_JIT "Enable Loading BPF through Clang Frontend" ON)
-+ option(ENABLE_USDT "Enable User-level Statically Defined Tracing" ON)
-++option(ENABLE_MAN "Build man pages" ON)
-+ CMAKE_DEPENDENT_OPTION(ENABLE_CPP_API "Enable C++ API" ON "ENABLE_USDT" OFF)
-+ 
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-+@@ -88,7 +89,9 @@ add_subdirectory(src)
-+ add_subdirectory(introspection)
-+ if(ENABLE_CLANG_JIT)
-+ add_subdirectory(examples)
-++if(ENABLE_MAN)
-+ add_subdirectory(man)
-++endif(ENABLE_MAN)
-+ add_subdirectory(tests)
-+ add_subdirectory(tools)
-+ endif(ENABLE_CLANG_JIT)
-+-- 
-+2.14.5
-+
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
-new file mode 100644
-index 0000000000..7bc681e639
---- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,50 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # clang
-+	depends on !BR2_STATIC_LIBS # clang, luajit
-+	depends on BR2_USE_WCHAR # clang
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_LUAJIT
-+	help
-+	  BPF Compiler Collection (BCC)
-+
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
-+
-+	  Note: Before using bcc, you need to copy the kernel source
-+	  code to the target. By default bcc use:
-+	  "/lib/module/<kernel version>/build". That's because the
-+	  clang frontend build eBPF code at runtime.
-+
-+	  https://github.com/iovisor/bcc
-+
-+comment "bcc needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "bcc needs a glibc toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_4_8 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
-+		|| !BR2_USE_WCHAR
-+
-+comment "bcc needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
-new file mode 100644
-index 0000000000..19eccb37ca
---- /dev/null
-+++ b/package/bcc/bcc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 269949a47f9ed2ff01b5ebca20ec4a52341f7ff14b033b9dc1669b72a87af042  bcc-v0.8.0.tar.gz
-+sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-new file mode 100644
-index 0000000000..401727c68a
---- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# bcc
-+#
-+################################################################################
-+
-+BCC_VERSION = v0.8.0
-+BCC_SITE = $(call github,iovisor,bcc,$(BCC_VERSION))
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+# libbcc.so and libbpf.so
-+BCC_INSTALL_STAGING = YES
-+
-+BCC_DEPENDENCIES = host-bison host-flex clang elfutils flex llvm luajit
-+
-+# ENABLE_LLVM_SHARED=ON to use llvm.so.
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
-+	-DREVISION=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT=ON \
-+	-DENABLE_MAN=OFF
-+
-+$(eval $(cmake-package))
 -- 
-2.14.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
