@@ -1,115 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jan 2019 22:43:24 +0100
-Subject: [Buildroot] [PATCH 1/3] package/pkg-kconfig: pass HOSTCC during
- kconfig steps
-In-Reply-To: <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
-References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
- <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20190113214324.GK2428@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 Jan 2019 22:31:23 +0100
+Subject: [Buildroot] [git commit] package/fdk-aac: bump to version 2.0.0
+Message-ID: <20190113214626.E520D8D3BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=31ff32824a4f3d09351367c3418b5605f9c40521
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-01-10 22:14 +0100, Thomas Petazzoni spake thusly:
-> The kconfig build logic uses the HOSTCC variable to find the host
-> compiler. It makes sense to explicitly pass a value to this variable,
-> pointing to the host compiler used by Buildroot.
-> 
-> During the kconfig step, host-ccache is not ready (host-ccache is only
-> a dependency to the configure step of packages), so we use
-> $(HOSTCC_NOCCACHE).
-> 
-> Packages currently using the kconfig-package fell into two categories:
-> 
->  - Those not passing any HOSTCC value. For such packages, it was the
->    default host compiler detected by the kconfig build logic that was
->    used. ccache was therefore never used. With this commit, those
->    packages will now be using the host compiler detected by
->    Buildroot. Packages in this situation: at91bootstrap3, barebox,
->    busybox, swupdate, uclibc, xvisor.
-> 
->  - Those passing a HOSTCC value. Such packages were passing $(HOSTCC),
->    which doesn't work as host-ccache will not be ready. This commit
->    does not fix them, as they still override HOSTCC. It will be fixed
->    in followup commits. Packages in this situation: uboot and
->    linux. Note that linux was a bit special, because it has a
->    KCONFIG_DEPENDENCIES on the toolchain package, so in fact
->    host-ccache was ready.
-> 
-> So practically speaking, this commit does not fix anything, as the two
-> only problematic packages that use $(HOSTCC) are not fixed. However,
-> it makes things more correct by explicitly telling kconfig which
-> compiler to use.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fdk-aac/fdk-aac.hash | 8 ++++----
+ package/fdk-aac/fdk-aac.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-kconfig.mk | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index d6c95b897e..ce11e14824 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -27,6 +27,9 @@ define kconfig-package-update-config
->  	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
->  endef
->  
-> +PKG_KCONFIG_COMMON_OPTS = \
-> +	HOSTCC=$(HOSTCC_NOCCACHE)
-> +
->  ################################################################################
->  # inner-kconfig-package -- generates the make targets needed to support a
->  # kconfig package
-> @@ -79,7 +82,8 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
->  	done
->  
->  $(2)_KCONFIG_MAKE = \
-> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
-> +	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
->  
->  # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
->  # of the shell conflicts with Make's own syntax, this means that backticks
-> @@ -195,7 +199,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
->  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
->  $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> -		$$($(2)_KCONFIG_OPTS) $$(*)
-> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
->  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
->  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
->  	$$($(2)_FIXUP_DOT_CONFIG)
-> @@ -224,7 +228,7 @@ $(1)-check-configuration-done:
->  
->  $(1)-savedefconfig: $(1)-check-configuration-done
->  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> -		$$($(2)_KCONFIG_OPTS) savedefconfig
-> +		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) savedefconfig
->  
->  # Target to copy back the configuration to the source configuration file
->  # Even though we could use 'cp --preserve-timestamps' here, the separate
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
+index db0f0d535c..a8f380c932 100644
+--- a/package/fdk-aac/fdk-aac.hash
++++ b/package/fdk-aac/fdk-aac.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
+-sha1 574103e24fe45b3b89a92cc6a7a9d260c483b9e0  fdk-aac-0.1.6.tar.gz
+-md5 13c04c5f4f13f4c7414c95d7fcdea50f  fdk-aac-0.1.6.tar.gz
++sha1 30439757fe5bbc8bccedcc8e51668b74db7322c7  fdk-aac-2.0.0.tar.gz
++md5 8ccebea4fc5c9d40fff8f72bf68a6e50  fdk-aac-2.0.0.tar.gz
+ # Locally computed:
+-sha256 aab61b42ac6b5953e94924c73c194f08a86172d63d39c5717f526ca016bed3ad  fdk-aac-0.1.6.tar.gz
+-sha256 40b9ad8a1c630853bffc51bb5a46adf5c457afcc7c70d66d2ef919b1f14ccb4e  NOTICE
++sha256 f7d6e60f978ff1db952f7d5c3e96751816f5aef238ecf1d876972697b85fd96c  fdk-aac-2.0.0.tar.gz
++sha256 95ec80da40b4af12ad4c4f3158c9cfb80f2479f3246e4260cb600827cc8c7836  NOTICE
+diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+index 72ae553c26..3904a41b92 100644
+--- a/package/fdk-aac/fdk-aac.mk
++++ b/package/fdk-aac/fdk-aac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FDK_AAC_VERSION = 0.1.6
++FDK_AAC_VERSION = 2.0.0
+ FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
+ FDK_AAC_LICENSE = fdk-aac license
+ FDK_AAC_LICENSE_FILES = NOTICE
