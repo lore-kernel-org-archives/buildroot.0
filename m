@@ -1,69 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Jan 2019 14:59:36 +0100
-Subject: [Buildroot] [PATCH 1/2] cc-tool: drop BR2_PACKAGE_BOOST_SIGNALS
- select
-In-Reply-To: <20190113142747.1e8ca78b@windsurf.home>
-References: <20190112205026.6173-1-fontaine.fabrice@gmail.com>
- <20190113142747.1e8ca78b@windsurf.home>
-Message-ID: <CAPi7W80j8n0kynZUsc5=Hir0PjLd3Z6vp8j57LkUAPx_j1tSrg@mail.gmail.com>
+Date: Sun, 13 Jan 2019 15:01:47 +0100
+Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.14.2
+Message-ID: <20190113140147.24830-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le dim. 13 janv. 2019 ? 14:27, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Sat, 12 Jan 2019 21:50:25 +0100, Fabrice Fontaine wrote:
-> > cc-tool depends on signals2 not signals
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> This commit message is a bit terse:
->
->  - Where do you see that cc-tool depends on signals2 not signals?
->
->  - Why it doesn't need to select some BOOST_SIGNALS2 option ?
->
-> in cc-tool/boost.m4, I see:
->
-> # Look for Boost.Signals.  For the documentation of PREFERRED-RT-OPT, see the
-> # documentation of BOOST_FIND_LIB above.
-> BOOST_DEFUN([Signals],
-> [BOOST_FIND_LIB([signals], [$1],
->                 [boost/signal.hpp],
->                 [boost::signal<void ()> s;])
-> ])# BOOST_SIGNALS
->
-> # BOOST_SIGNALS2()
-> # -----------------
-> # Look for Boost.Signals2
-> BOOST_DEFUN([Signals2],
-> [BOOST_FIND_HEADER([boost/signals2.hpp])])
->
-> So it's not that clear cut that it uses *only* signals2. A bit of
-> clarification would be nice. Though indeed, grepping for "signals"
-> through the code only shows:
->
-> src/data/progress_watcher.h:#include <boost/signals2.hpp>
-> src/data/progress_watcher.h:    typedef boost::signals2::signal<void (uint_t done_size, uint_t full_size)> OnProgress;
->
-> So is the check for "Signals" in m4/boost.m4 some dead code ?
-Yes, this is dead code and we don't need to select signals2 as this is
-a header-only boost library. I'll send a v2 with those clarifications.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index 289a3abf23..eeaaf68edd 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 8fcfa84d2c1c90f65b0f1a5b0edf8353341f0211acfaa7538428845d9817e2d7  boinc-7.12.1.tar.gz
++sha256 970aedb9e25afa20be67f125ab05435df8eb2e66a3ac30ad316c54085e397c88  boinc-7.14.2.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 1a34c71867..dd468c7678 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-BOINC_VERSION_MAJOR = 7.12
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
++BOINC_VERSION_MAJOR = 7.14
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).2
+ # client_release can be used to build the Client and Manager but not the Server
+ # part. The Server currently has no versioning (see
+ # https://github.com/BOINC/boinc/pull/1798).
+-- 
+2.14.1
