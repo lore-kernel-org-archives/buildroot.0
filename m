@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Jan 2019 22:31:23 +0100
-Subject: [Buildroot] [git commit] package/fdk-aac: bump to version 2.0.0
-Message-ID: <20190113214626.E520D8D3BD@busybox.osuosl.org>
+Date: Sun, 13 Jan 2019 22:27:26 +0100
+Subject: [Buildroot] [git commit] packag/fdk-aac: enable for aarch64
+Message-ID: <20190113214626.DD69B8CA73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31ff32824a4f3d09351367c3418b5605f9c40521
+commit: https://git.buildroot.net/buildroot/commit/?id=cb6bbdb39673862dc34458b9849b1765f6c94b54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Support for this architecture was added in upstream commit
+1d686c3a23f3ae286ef964ab62199be96e4ad1dc.
+
+Take this opportunity to reformat how the
+BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS option is described.
+
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+[Thomas: reformat BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS option.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fdk-aac/fdk-aac.hash | 8 ++++----
- package/fdk-aac/fdk-aac.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fdk-aac/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index db0f0d535c..a8f380c932 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
--sha1 574103e24fe45b3b89a92cc6a7a9d260c483b9e0  fdk-aac-0.1.6.tar.gz
--md5 13c04c5f4f13f4c7414c95d7fcdea50f  fdk-aac-0.1.6.tar.gz
-+sha1 30439757fe5bbc8bccedcc8e51668b74db7322c7  fdk-aac-2.0.0.tar.gz
-+md5 8ccebea4fc5c9d40fff8f72bf68a6e50  fdk-aac-2.0.0.tar.gz
- # Locally computed:
--sha256 aab61b42ac6b5953e94924c73c194f08a86172d63d39c5717f526ca016bed3ad  fdk-aac-0.1.6.tar.gz
--sha256 40b9ad8a1c630853bffc51bb5a46adf5c457afcc7c70d66d2ef919b1f14ccb4e  NOTICE
-+sha256 f7d6e60f978ff1db952f7d5c3e96751816f5aef238ecf1d876972697b85fd96c  fdk-aac-2.0.0.tar.gz
-+sha256 95ec80da40b4af12ad4c4f3158c9cfb80f2479f3246e4260cb600827cc8c7836  NOTICE
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index 72ae553c26..3904a41b92 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+index 111de41ca4..26e060b93d 100644
+--- a/package/fdk-aac/Config.in
++++ b/package/fdk-aac/Config.in
+@@ -1,9 +1,12 @@
+ # These are the architectures supported by FDK AAC
+ config BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+-		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		BR2_powerpc || BR2_sh
++	default y if BR2_aarch64
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc
++	default y if BR2_sh
  
--FDK_AAC_VERSION = 0.1.6
-+FDK_AAC_VERSION = 2.0.0
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
+ config BR2_PACKAGE_FDK_AAC
+ 	bool "fdk-aac"
