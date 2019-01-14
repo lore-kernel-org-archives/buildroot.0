@@ -1,91 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 14 Jan 2019 22:00:04 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
-In-Reply-To: <CANQCQpbETXs2W10sKBkJtqzcs1trhCSLf+1x7C7eOQW+TZMaSg@mail.gmail.com>
-References: <20190113212118.14512-1-romain.naour@gmail.com>
- <20190113212118.14512-2-romain.naour@gmail.com>
- <CANQCQpbETXs2W10sKBkJtqzcs1trhCSLf+1x7C7eOQW+TZMaSg@mail.gmail.com>
-Message-ID: <f8ce25c9-d492-a723-8aff-8cdb8ad1c9a0@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Jan 2019 21:58:38 +0100
+Subject: [Buildroot] [git commit] package/leptonica: bump to version 1.77.0
+Message-ID: <20190114210500.231328CA67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=1307c76d47c070fbe3ba64ab68b46464cfeec939
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 14/01/2019 ? 21:43, Matthew Weber a ?crit?:
-> Romain,
-> 
-> 
-> On Sun, Jan 13, 2019 at 3:21 PM Romain Naour <romain.naour@gmail.com> wrote:
->>
->> From: Romain Naour <romain.naour@smile.fr>
->>
->> Before using bcc, you need to copy the kernel source code to
->> "/lib/module/<kernel version>/build" on the target.
->> That's because the clang frontend build eBPF code at runtime.
->>
->> There are some issues with this frontend due to the hardcoded
->> architecture support and the use of GNU tuple (x86_64-unknown-linux-gnu).
->> That's why the bcc package dependency is limited to Glibc toolchain.
->>
->> bcc needs tracing support, at least CONFIG_KPROBES, CONFIG_BPFILTER
->> and CONFIG_BPF_JIT. See [1] for details.
->>
->> bcc needs BPF target support in llvm libraries.
->> Add a patch disabling man pages.
->>
->> [1] https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md
->>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->> ---
->> The needs of kernel sources on the target is anoying for small devices.
->> At least, I'm able to complete the bcc tutorial [1] on my x86_64 target.
-> 
-> Suggest updating LINUX_KCONFIG_FIXUP_CMDS to include enabling of the
-> BPF features when this package is selected.
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Indeed, I thought about it but I need to double check the kernel options that
-are mandatory.
-
-> 
->>
->> [1] https://github.com/iovisor/bcc/blob/master/docs/tutorial.md
->> ---
-
-[...]
-
->> +       help
->> +         BPF Compiler Collection (BCC)
->> +
->> +         BCC is a toolkit for creating efficient kernel tracing and
->> +         manipulation programs, and includes several useful tools and
->> +         examples. It makes use of extended BPF (Berkeley Packet
->> +         Filters), formally known as eBPF, a new feature that was
->> +         first added to Linux 3.15. Much of what BCC uses requires
->> +         Linux 4.1 and above.
->> +
->> +         Note: Before using bcc, you need to copy the kernel source
->> +         code to the target. By default bcc use:
->> +         "/lib/module/<kernel version>/build". That's because the
->> +         clang frontend build eBPF code at runtime.
-> 
-> Very interesting patch and package.  Thanks for sending it in.  I know
-> I've added it to my list to tinker with.
-
-You're welcome :)
-
-My colleague Jugurtha was working on debugging tools like bcc during his
-internship. We are experimenting bcc in the context of Buildroot.
-
-Also, it allow to have (yet) another use case for llvm/clang merged this year
-thanks to Valentin's work.
-
-Best regards,
-Romain
-
-> 
-> Matt
-> 
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 54fe8785dc..14c750c2c2 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256 5e9a33b7ce33ab39fb03cee5a7ec353b044670176303265d7c64d51539616857  leptonica-1.76.0.tar.gz
++sha256 dd7990ab6b6824b0cfed70920824d37b47184240f98db4085f7dbf1250cd4899  leptonica-1.77.0.tar.gz
+ sha256 ca0ac11c7c0acad9599d54990942cc11c9f6d9b569f1a360d774a628819c3518  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 5e37f939b9..7c6fa12bbe 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LEPTONICA_VERSION = 1.76.0
++LEPTONICA_VERSION = 1.77.0
+ LEPTONICA_SITE = http://www.leptonica.org/source
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
