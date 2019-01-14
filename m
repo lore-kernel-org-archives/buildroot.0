@@ -1,35 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jan 2019 21:54:11 +0100
-Subject: [Buildroot] [PATCH v2,1/1] mutt: bump to version 1.11.2
-In-Reply-To: <20190114202541.26823-1-fontaine.fabrice@gmail.com>
-References: <20190114202541.26823-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190114215411.61a4e3ad@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 14 Jan 2019 22:00:04 +0100
+Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
+In-Reply-To: <CANQCQpbETXs2W10sKBkJtqzcs1trhCSLf+1x7C7eOQW+TZMaSg@mail.gmail.com>
+References: <20190113212118.14512-1-romain.naour@gmail.com>
+ <20190113212118.14512-2-romain.naour@gmail.com>
+ <CANQCQpbETXs2W10sKBkJtqzcs1trhCSLf+1x7C7eOQW+TZMaSg@mail.gmail.com>
+Message-ID: <f8ce25c9-d492-a723-8aff-8cdb8ad1c9a0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Matt,
 
-On Mon, 14 Jan 2019 21:25:41 +0100, Fabrice Fontaine wrote:
-> Remove patch (rejected upstream:
-> https://gitlab.com/muttmua/mutt/merge_requests/25), an other solution
-> has been preferred:
-> https://gitlab.com/muttmua/mutt/commit/78db40f25c6479b14da5a73adf7207bfbec5ccc5)
+Le 14/01/2019 ? 21:43, Matthew Weber a ?crit?:
+> Romain,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Ryan Barnett):
->  - Remove host-pkgconf dependency
+> 
+> On Sun, Jan 13, 2019 at 3:21 PM Romain Naour <romain.naour@gmail.com> wrote:
+>>
+>> From: Romain Naour <romain.naour@smile.fr>
+>>
+>> Before using bcc, you need to copy the kernel source code to
+>> "/lib/module/<kernel version>/build" on the target.
+>> That's because the clang frontend build eBPF code at runtime.
+>>
+>> There are some issues with this frontend due to the hardcoded
+>> architecture support and the use of GNU tuple (x86_64-unknown-linux-gnu).
+>> That's why the bcc package dependency is limited to Glibc toolchain.
+>>
+>> bcc needs tracing support, at least CONFIG_KPROBES, CONFIG_BPFILTER
+>> and CONFIG_BPF_JIT. See [1] for details.
+>>
+>> bcc needs BPF target support in llvm libraries.
+>> Add a patch disabling man pages.
+>>
+>> [1] https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> ---
+>> The needs of kernel sources on the target is anoying for small devices.
+>> At least, I'm able to complete the bcc tutorial [1] on my x86_64 target.
+> 
+> Suggest updating LINUX_KCONFIG_FIXUP_CMDS to include enabling of the
+> BPF features when this package is selected.
 
-Applied to master after adjusting the commit log to explain why the
-host-pkgconf dependency is dropped.
+Indeed, I thought about it but I need to double check the kernel options that
+are mandatory.
 
-Thanks,
+> 
+>>
+>> [1] https://github.com/iovisor/bcc/blob/master/docs/tutorial.md
+>> ---
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[...]
+
+>> +       help
+>> +         BPF Compiler Collection (BCC)
+>> +
+>> +         BCC is a toolkit for creating efficient kernel tracing and
+>> +         manipulation programs, and includes several useful tools and
+>> +         examples. It makes use of extended BPF (Berkeley Packet
+>> +         Filters), formally known as eBPF, a new feature that was
+>> +         first added to Linux 3.15. Much of what BCC uses requires
+>> +         Linux 4.1 and above.
+>> +
+>> +         Note: Before using bcc, you need to copy the kernel source
+>> +         code to the target. By default bcc use:
+>> +         "/lib/module/<kernel version>/build". That's because the
+>> +         clang frontend build eBPF code at runtime.
+> 
+> Very interesting patch and package.  Thanks for sending it in.  I know
+> I've added it to my list to tinker with.
+
+You're welcome :)
+
+My colleague Jugurtha was working on debugging tools like bcc during his
+internship. We are experimenting bcc in the context of Buildroot.
+
+Also, it allow to have (yet) another use case for llvm/clang merged this year
+thanks to Valentin's work.
+
+Best regards,
+Romain
+
+> 
+> Matt
+> 
