@@ -1,83 +1,101 @@
-From: Denis OSTERLAND <denis.osterland@diehl.com>
-Date: Mon, 14 Jan 2019 15:28:19 +0000
-Subject: [Buildroot] [PATCH v2] u-boot: add option to generate env image
- from default env
-In-Reply-To: <20181002053526.11374-1-Denis.Osterland@diehl.com>
-References: <20181002053526.11374-1-Denis.Osterland@diehl.com>
-Message-ID: <20181112101748.24707-1-Denis.Osterland@diehl.com>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 14 Jan 2019 18:43:16 +0300
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix fenv build failure
+ on ARC with glibc
+Message-ID: <20190114154316.47795-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Denis Osterland <Denis.Osterland@diehl.com>
+Building python-numpy on ARC with glibc fails due to missing FE_*
+definitions in <fenv.h>. These exceptions are not supported by
+ARC architecture. Let's add patch, which disables compilation
+of a part of the code in which FE_* errors occur for ARC.
 
-This patch adds support to extract compiled in default env
-via u-boots get_default_envs script and generate env image from it.
+ARCompact toolchain issues are already fixed in the latest toolchain.
+Also since commit "311af5e8c2db887800639bc803c8201b6b70e9ce"
+("toolchain/toolchain-buildroot: enable glibc for all little-endian
+ARCs with atomic ops") glibc is available for ARCompact.
+That is why in Config.in we are leaving only "BR_arc" and
+removing comments, which are not actual.
 
-Signed-off-by: Denis Osterland <Denis.Osterland@diehl.com>
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 ---
-v1 -> v2: use compiled in env if sources list is empty,
-          as suggested by Arnout Vandecappelle
+Changes since v1:
+-Modify patch according to uClibc patch
+-Remove irrelevant comments in Config.in
+-Update commit message and title
+ .../0003-no-FPU-exceptions-bits-on-ARC-glibc.patch | 42 ++++++++++++++++++++++
+ package/python-numpy/Config.in                     |  4 +--
+ 2 files changed, 43 insertions(+), 3 deletions(-)
+ create mode 100644 package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
 
- boot/uboot/Config.in | 2 ++
- boot/uboot/uboot.mk  | 8 ++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index ac6f8bc8c1..2e3a112874 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -466,6 +466,8 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 
- 	  The environment image will be called uboot-env.bin.
- 
-+	  Leave empty to generate image from compiled-in env.
+diff --git a/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+new file mode 100644
+index 0000000000..f2ed4f6f98
+--- /dev/null
++++ b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+@@ -0,0 +1,42 @@
++From ae217b0e77a52f08f46ef66fa88820946984507a Mon Sep 17 00:00:00 2001
++From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++Date: Tue, 6 Feb 2018 15:59:22 +0300
++Subject: [PATCH] FIX: no FPU exceptions bits on ARC glibc
 +
- if BR2_TARGET_UBOOT_ENVIMAGE
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index cbdfee6ac3..693fe69508 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -262,8 +262,11 @@ define UBOOT_BUILD_OMAP_IFT
- endef
- 
- ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
-+UBOOT_GENERATE_ENV_FILE=$(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
- define UBOOT_GENERATE_ENV_IMAGE
--	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-+	$(if $(UBOOT_GENERATE_ENV_FILE), \
-+	cat $(UBOOT_GENERATE_ENV_FILE), \
-+	CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D)) \
- 		>$(@D)/buildroot-env.txt
- 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-@@ -376,9 +379,6 @@ endef
- 
- ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
- ifeq ($(BR_BUILDING),y)
--ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
--$(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
--endif
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
- $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
- endif
++The FPU exceptions bits are missing in fenv.h in glibc for ARC architecture.
++
++Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++---
++ numpy/core/include/numpy/ufuncobject.h | 2 +-
++ numpy/core/src/npymath/ieee754.c.src   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/numpy/core/include/numpy/ufuncobject.h b/numpy/core/include/numpy/ufuncobject.h
++index 89f72fcea..29e05b179 100644
++--- a/numpy/core/include/numpy/ufuncobject.h
+++++ b/numpy/core/include/numpy/ufuncobject.h
++@@ -319,7 +319,7 @@ typedef struct _loop1d_info {
++ #if defined(sun) || defined(__BSD__) || defined(__OpenBSD__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version < 502114)) || \
++       defined(__NetBSD__) || \
++-      (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+++      (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
++       defined(__CYGWIN__) || defined(__MINGW32__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114)) || \
++       defined(_AIX) || \
++diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
++index 8dc4d77ef..78e646470 100644
++--- a/numpy/core/src/npymath/ieee754.c.src
+++++ b/numpy/core/src/npymath/ieee754.c.src
++@@ -627,7 +627,7 @@ void npy_set_floatstatus_invalid(void)
++ }
++ 
++ 
++-#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+++#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
++       defined(__CYGWIN__) || defined(__MINGW32__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
++ #  include <fenv.h>
++-- 
++2.16.2
++
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 067085bf41..c337675ceb 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	bool
+ 	# Numpy has some CPU specific code
+-	# ARCompact build fails due to toolchain issue
+-	# ARC HS38 build fails on glibc due to missing FE_* definitions
+-	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_arc
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm
+ 	default y if BR2_armeb
 -- 
-2.19.1
-
-
-
-Diehl Connectivity Solutions GmbH
-Gesch?ftsf?hrung: Horst Leonberger
-Sitz der Gesellschaft: N?rnberg - Registergericht: Amtsgericht
-N?rnberg: HRB 32315
-___________________________________________________________________________________________________
-
-Der Inhalt der vorstehenden E-Mail ist nicht rechtlich bindend. Diese E-Mail enthaelt vertrauliche und/oder rechtlich geschuetzte Informationen.
-Informieren Sie uns bitte, wenn Sie diese E-Mail faelschlicherweise erhalten haben. Bitte loeschen Sie in diesem Fall die Nachricht.
-Jede unerlaubte Form der Reproduktion, Bekanntgabe, Aenderung, Verteilung und/oder Publikation dieser E-Mail ist strengstens untersagt.
-The contents of the above mentioned e-mail is not legally binding. This e-mail contains confidential and/or legally protected information. Please inform us if you have received this e-mail by
-mistake and delete it in such a case. Each unauthorized reproduction, disclosure, alteration, distribution and/or publication of this e-mail is strictly prohibited. 
+2.16.2
