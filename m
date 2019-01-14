@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jan 2019 22:22:54 +0100
-Subject: [Buildroot] [PATCH] infra/pkg-cmake: use an obviously-invalid
- value for CMAKE_SYSTEM_VERSION
-In-Reply-To: <20190113095219.31874-1-yann.morin.1998@free.fr>
-References: <20190113095219.31874-1-yann.morin.1998@free.fr>
-Message-ID: <20190114222254.1241e765@windsurf>
+Date: Mon, 14 Jan 2019 22:31:33 +0100
+Subject: [Buildroot] [PATCH] package/mesa3d: override dri path
+In-Reply-To: <20190112190743.7780-1-romain.naour@gmail.com>
+References: <20190112190743.7780-1-romain.naour@gmail.com>
+Message-ID: <20190114223133.20e32e04@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 13 Jan 2019 10:52:19 +0100, Yann E. MORIN wrote:
+On Sat, 12 Jan 2019 20:07:43 +0100, Romain Naour wrote:
+> Since the bump to 1.5.3, pkgconf prepends the sysroot to all absolute
+> paths found in the .pc file. This is correct when the paths refer to
+> something in STAGING_DIR (e.g. libdir, includedir), but not when it
+> refers to something used for the target.
+> 
+> As reported by #11591, the xerver fail to load dri modules (r600_dri.so):
+> 
+> From Xorg.0.log:
+> (EE) AIGLX error: dlopen of /full/path/to/sysroot/usr/lib/dri/r600_dri.so failed (/full/path/to/sysroot/usr/lib/dri/r600_dri.so: cannot open shared object file: No such file or directory)
+> (II) GLX: no usable GL providers found for screen 0
+> 
+> That's because the xserver hardcode the dri divers directory path in
+> DRI_DRIVER_PATH which come from
+> dridriverdir=`$PKG_CONFIG --variable=dridriverdir dri`
+> 
+> We can see in dri.pc that dridriverdir use libdir which is now prefixed
+> by the sysroot by pkgconf 1.5.3:
+> 
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=${exec_prefix}/lib
+> includedir=${prefix}/include
+> dridriverdir=${libdir}/dri
+> 
+> Since we can't rely on pkgconf anymore, use --with-dri-driverdir="/usr/lib/dri"
+> to use explicitly "/usr/lib/dri" instead of relying on dri.pc.
+> 
+> Tested using TestGlxinfo test from:
+> http://patchwork.ozlabs.org/patch/1021669/
+> 
+> Fixes:
+> https://bugs.buildroot.org/show_bug.cgi?id=11591
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index dd048b0949..50ae2b982a 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -264,7 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
->  		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
->  		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
->  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
-> -		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
-> +		-e 's#@@CMAKE_SYSTEM_VERSION@@#1#' \
+I've applied after fixing the commit log, as I explained in my previous
+reply.
 
-Using a 'sed' replacement just to encode a hardcoded value in the
-destination file seems a bit useless.
+> +	--with-dri-driverdir="/usr/lib/dri" \
 
-What about:
+I also dropped the double quotes around /usr/lib/dri.
 
-set(CMAKE_SYSTEM_VERSION 1)
-
-in ./support/misc/toolchainfile.cmake.in instead ?
-
-Thanks,
+Thanks a lot!
 
 Thomas
 -- 
