@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Jan 2019 07:50:58 +0100
-Subject: [Buildroot] [PATCH 1/1] i2pd: bump to version 2.22.0
-Message-ID: <20190114065058.13302-1-fontaine.fabrice@gmail.com>
+Date: Mon, 14 Jan 2019 07:52:10 +0100
+Subject: [Buildroot] [PATCH 1/1] hiredis: bump to version 0.14.0
+Message-ID: <20190114065210.13406-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/i2pd/i2pd.hash | 2 +-
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hiredis/hiredis.hash | 2 +-
+ package/hiredis/hiredis.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index 451ee006a4..c3c9a48ec5 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+index 682ec6d2b0..7478ae0f24 100644
+--- a/package/hiredis/hiredis.hash
++++ b/package/hiredis/hiredis.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256	e424c368f92be5050f3dd5e98ed9ce2ea8d6076e36444c99b96e3b10f69420b1	i2pd-2.20.0.tar.gz
-+sha256	6547d7a560482c5eda9106ae19267bc8afbb6af48fed3bebf423ade28103e173	i2pd-2.22.0.tar.gz
- sha256	d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c	LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 8447f3e06b..a92d513159 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
+-sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
++sha256	042f965e182b80693015839a9d0278ae73fae5d5d09d8bf6d0e6a39a8c4393bd	hiredis-v0.14.0.tar.gz
+ sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb	COPYING
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index dd75742229..e187aed52c 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--I2PD_VERSION = 2.20.0
-+I2PD_VERSION = 2.22.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+-HIREDIS_VERSION_MAJOR = 0.13
+-HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).3
++HIREDIS_VERSION_MAJOR = 0.14
++HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).0
+ HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
 -- 
 2.14.1
