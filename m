@@ -1,145 +1,98 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jan 2019 21:43:28 +0100
-Subject: [Buildroot] [PATCH next v6 07/10] core: implement per-package
- SDK and target
-In-Reply-To: <CAAXf6LUSeC7bA7S59BwXd72uOZdf3g7vs0e_t5axFt+zLULvDw@mail.gmail.com>
-References: <20181123145815.13008-1-thomas.petazzoni@bootlin.com>
- <20181123145815.13008-8-thomas.petazzoni@bootlin.com>
- <1f520844-5501-a60b-cf66-5bae57b9f420@andin.de>
- <20181205173103.1eb30a7b@windsurf>
- <672791f3-4383-cad2-f31c-5362b94b94fb@andin.de>
- <8a886731-26ee-ba33-f303-81d5bd0e7954@andin.de>
- <20181226183422.76c6ff6c@windsurf.home>
- <CAAXf6LVJ6-H-pBA8C9i8LJxmQ=8ufdvOC3uHG5-cqz-WPyt=sg@mail.gmail.com>
- <30afb67d-f31d-4986-8490-2e97f5808eda@mind.be>
- <CAAXf6LVho4978cn=nkFMReanH4o5Z0D81OW5a-k_xWHRP77DQg@mail.gmail.com>
- <7c0307f9-5370-215b-7230-0f83da461c82@mind.be>
- <CAAXf6LXy7kQN4SGVx8LjSKxzBTwwzeDKKfo86dO12FZn8FEkdQ@mail.gmail.com>
- <CAAXf6LUSeC7bA7S59BwXd72uOZdf3g7vs0e_t5axFt+zLULvDw@mail.gmail.com>
-Message-ID: <CAAXf6LWGjjVcU3GW9YY2AaEtQzOwyWmcgeWQCP8s=SmFV5h7FQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Jan 2019 21:40:04 +0100
+Subject: [Buildroot] [git commit] package/python-numpy: fix fenv build
+ failure on ARC with glibc
+Message-ID: <20190114203949.31E978677B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 14 ene. 2019 a las 21:19, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
->
-> El lun., 14 ene. 2019 a las 17:01, Thomas De Schampheleire
-> (<patrickdepinguin@gmail.com>) escribi?:
-> >
-> > El dom., 13 ene. 2019 a las 23:10, Arnout Vandecappelle
-> > (<arnout@mind.be>) escribi?:
-> > >
-> > >
-> > >
-> > > On 11/01/2019 21:09, Thomas De Schampheleire wrote:
-> > > > El jue., 10 ene. 2019 a las 22:25, Arnout Vandecappelle
-> > > > (<arnout@mind.be>) escribi?:
-> > > >>
-> > > >>
-> > > >>
-> > > >> On 26/12/2018 19:33, Thomas De Schampheleire wrote:
-> > > >>> In a similar context I once had following problem:
-> > > >>> http://lists.busybox.net/pipermail/buildroot/2018-August/226955.html
-> > > >>> This was for target binaries, rather than host, but for the below
-> > > >>> discussion it does not matter.
-> > > >>
-> > > >>  I don't think you ever replied to my question in that thread:
-> > > >>
-> > > >>  Let's first find out why it is cleared. patchelf should check for each
-> > > >> directory in rpath if it is actually needed, and only remove it if it is not
-> > > >> needed. So, what library do you have in /opt/foobar/lib, and is it really linked
-> > > >> with the program?
-> > > >>
-> > > >>  Hm, I realize that we never thought about dlopen()ed libraries. Could that be
-> > > >> the cause? I guess that hasn't been a problem up to now because usually programs
-> > > >> using dlopen() will use an absolute path (to a build-time or run-time configured
-> > > >> plugin directory) rather than relying on RPATH.
-> > > >
-> > > > Sorry that I did not seem to have replied on that question.
-> > > >
-> > > > The binary in question did in fact link with the library, there is no
-> > > > dlopen used.
-> > > > Some redacted output showing the initial rpath, which disappears after
-> > > > fix-rpath.
-> > > >
-> > > > $ readelf -d output/target/opt/foobar/bin/fooprogram | rg 'NEEDED|RPATH'
-> > > > ...
-> > > >  0x00000001 (NEEDED)                     Shared library: [libfoo.so.1]
-> > > > ...
-> > > >  0x0000000f (RPATH)                      Library rpath:
-> > > > [/../lib:/opt/foobar/lib:/home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib]
-> > > >
-> > > > $ find output/target/ -name libfoo.so.1
-> > > > output/target/opt/foobar/lib/libfoo.so.1
-> > > >
-> > > > $ env HOST_DIR=output/host STAGING_DIR=output/staging
-> > > > TARGET_DIR=output/target support/scripts/fix-rpath target
-> > > >
-> > > > $ readelf -d output/target/opt/foobar/bin/fooprogram | rg 'NEEDED|RPATH'
-> > > > ...
-> > > >  0x00000001 (NEEDED)                     Shared library: [libfoo.so.1]
-> > > > ...
-> > >
-> > >  OK, so that's a bug in our patchelf modification... At least, if libfoo.so.1
-> > > doesn't exist in output/target/lib or output/target/usr/lib.
-> > >
-> > >  If you run patchelf with --debug, it should tell you why the rpath got removed.
-> >
-> > Part of the debug output for fooprogram:
-> >
-> > patching ELF file `output/target/opt/foobar/bin/fooprogram'
-> > Kernel page size is 4096 bytes
-> > removing directory '/../lib' from RPATH because it's not in rootdir
-> > keeping relative path of
-> > /home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib
-> > removing directory
-> > '/home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib' from
-> > RPATH because it's not in rootdir
-> > new rpath is `m/repo/isam/buildroot/output/target/opt/foobar/lib'
-> >
-> > The last line seems odd with the leading 'm'. I don't know if that is
-> > the problem, I will check it further.
-> > Thanks for pointing to the --debug option.
->
-> Sorry for the confusion, this specific problem is caused by my calling
-> fix-rpath with relative reference to the target directory.
-> (the code in patchelf could perhaps be made more robust by resolving
-> the input 'rootdir' with realpath as well.)
->
-> The actual output after fixing that parameter problem is:
->
-> output/host/bin/patchelf --debug --make-rpath-relative
-> /home/tdescham/repo/isam/buildroot/output/target
-> --no-standard-lib-dirs
-> /home/tdescham/repo/isam/buildroot/output/target/opt/foobar/bin/fooprogram
->
-> patching ELF file
-> `/home/tdescham/repo/isam/buildroot/output/target/opt/foobar/bin/fooprogram'
-> Kernel page size is 4096 bytes
-> removing directory '/../lib' from RPATH because it's not in rootdir
-> keeping relative path of
-> /home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib
-> removing directory
-> '/home/tdescham/repo/isam/buildroot/output/target/opt/foobar/lib' from
-> RPATH because it does not contain needed libs
-> new rpath is `/opt/foobar/lib'
->
-> So the logic above seems correct, but it is not correctly stored in
-> the binary. After running patchelf, the rpath is cleared. I will
-> investigate that further.
+commit: https://git.buildroot.net/buildroot/commit/?id=b1056f16f448f30b8642f83c7500d6d809ab9ac3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-and now I see that patchelf does not fill in the RPATH field but
-RUNPATH, which my grep did not catch :-S
+Building python-numpy on ARC with glibc fails due to missing FE_*
+definitions in <fenv.h>. These exceptions are not supported by
+ARC architecture. Let's add patch, which disables compilation
+of a part of the code in which FE_* errors occur for ARC.
 
-So conclusion seems to be that fix-rpath does work correctly for
-absolute intentional paths.
-In the original issue there _was_ a problem, but likely it was only
-the endianness problem fixed by Bryce. And during my analysis I
-probably did not correctly verify the RUNPATH field.
+ARCompact toolchain issues are already fixed in the latest toolchain.
+Also since commit "311af5e8c2db887800639bc803c8201b6b70e9ce"
+("toolchain/toolchain-buildroot: enable glibc for all little-endian
+ARCs with atomic ops") glibc is available for ARCompact.
+That is why in Config.in we are leaving only "BR_arc" and
+removing comments, which are not actual.
 
-Sorry for the confusion :-)
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0003-no-FPU-exceptions-bits-on-ARC-glibc.patch | 42 ++++++++++++++++++++++
+ package/python-numpy/Config.in                     |  4 +--
+ 2 files changed, 43 insertions(+), 3 deletions(-)
 
-/Thomas
+diff --git a/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+new file mode 100644
+index 0000000000..f2ed4f6f98
+--- /dev/null
++++ b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+@@ -0,0 +1,42 @@
++From ae217b0e77a52f08f46ef66fa88820946984507a Mon Sep 17 00:00:00 2001
++From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++Date: Tue, 6 Feb 2018 15:59:22 +0300
++Subject: [PATCH] FIX: no FPU exceptions bits on ARC glibc
++
++The FPU exceptions bits are missing in fenv.h in glibc for ARC architecture.
++
++Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++---
++ numpy/core/include/numpy/ufuncobject.h | 2 +-
++ numpy/core/src/npymath/ieee754.c.src   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/numpy/core/include/numpy/ufuncobject.h b/numpy/core/include/numpy/ufuncobject.h
++index 89f72fcea..29e05b179 100644
++--- a/numpy/core/include/numpy/ufuncobject.h
+++++ b/numpy/core/include/numpy/ufuncobject.h
++@@ -319,7 +319,7 @@ typedef struct _loop1d_info {
++ #if defined(sun) || defined(__BSD__) || defined(__OpenBSD__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version < 502114)) || \
++       defined(__NetBSD__) || \
++-      (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+++      (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
++       defined(__CYGWIN__) || defined(__MINGW32__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114)) || \
++       defined(_AIX) || \
++diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
++index 8dc4d77ef..78e646470 100644
++--- a/numpy/core/src/npymath/ieee754.c.src
+++++ b/numpy/core/src/npymath/ieee754.c.src
++@@ -627,7 +627,7 @@ void npy_set_floatstatus_invalid(void)
++ }
++ 
++ 
++-#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+++#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
++       defined(__CYGWIN__) || defined(__MINGW32__) || \
++       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
++ #  include <fenv.h>
++-- 
++2.16.2
++
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 067085bf41..c337675ceb 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	bool
+ 	# Numpy has some CPU specific code
+-	# ARCompact build fails due to toolchain issue
+-	# ARC HS38 build fails on glibc due to missing FE_* definitions
+-	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_arc
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm
+ 	default y if BR2_armeb
