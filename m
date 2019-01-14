@@ -1,30 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 14 Jan 2019 21:33:23 +0000
-Subject: [Buildroot] [Bug 11616] 2018.02.09 fails to build libzlib with full
- RELRO protection
-In-Reply-To: <bug-11616-163@https.bugs.busybox.net/>
-References: <bug-11616-163@https.bugs.busybox.net/>
-Message-ID: <bug-11616-163-5B7wppbTcZ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Jan 2019 22:34:51 +0100
+Subject: [Buildroot] swupdate: requires shared library support
+In-Reply-To: <CADvTj4qVV_137wwjd0uysfKp=St9tWK1giZKr_0hZdYqXpDoBA@mail.gmail.com>
+References: <4e138ec5f0641da3b17aa6e8ab35e326d040cf21.1547189095.git.baruch@tkos.co.il>
+ <CADvTj4qVV_137wwjd0uysfKp=St9tWK1giZKr_0hZdYqXpDoBA@mail.gmail.com>
+Message-ID: <20190114223451.7aa3a17e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11616
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Fri, 11 Jan 2019 01:01:11 -0700, James Hilliard wrote:
+> On Thu, Jan 10, 2019 at 11:44 PM Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> > Since version 2018.11 swupdate builds its lua binding as a shared
+> > library unconditionally.  
+> swupdate doesn't require lua so requiring static libs to build
+> swupdate doesn't seem to make sense.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+I guess this issue has been fixed by
+https://git.buildroot.org/buildroot/commit/package/swupdate?id=b898b67209ff5c28f06d29b4e15ee671d6b64b0b.
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Full RELRO has been fixed post-2018.02 by changing the toolchain-wrapper. This
-is too invasive to backport in 2018.02, so only later Buildroot versions will
-have proper full RELRO support.
+Thanks,
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
