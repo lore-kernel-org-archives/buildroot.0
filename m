@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jan 2019 22:21:21 +0100
-Subject: [Buildroot] [PATCH v2,1/1] libserial: bump to version 1.0.0
-In-Reply-To: <20190114063529.12178-1-fontaine.fabrice@gmail.com>
-References: <20190114063529.12178-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190114222121.6c01f215@windsurf>
+Date: Mon, 14 Jan 2019 22:22:54 +0100
+Subject: [Buildroot] [PATCH] infra/pkg-cmake: use an obviously-invalid
+ value for CMAKE_SYSTEM_VERSION
+In-Reply-To: <20190113095219.31874-1-yann.morin.1998@free.fr>
+References: <20190113095219.31874-1-yann.morin.1998@free.fr>
+Message-ID: <20190114222254.1241e765@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 14 Jan 2019 07:35:29 +0100, Fabrice Fontaine wrote:
-> - Move site to github
-> - Add gcc >= 5 dependency for C++14:
->   https://github.com/crayzeewulf/libserial/commit/cafeffaa60f23012675d908b1e13b89aad3b56b2
-> - Remove first patch and use --without-python instead
-> - Remove second patch (patch has been merged in 2015:
->   https://github.com/crayzeewulf/libserial/commit/47ca0621ccd2100e4ba0d7f4e2a861d14f05f63c)
-> - Add a new patch to fix build when size_t is an unsigned int
-> - Use new --disable-tests option
-> - Update license to BSD-3-Clause and replace COPYING by LICENSE.txt:
->   https://github.com/crayzeewulf/libserial/commit/3f12abc045aae34a40a6fc9a9b5ed0a1bc6b2049
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Add gcc >= 5 dependency for C++14
+On Sun, 13 Jan 2019 10:52:19 +0100, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index dd048b0949..50ae2b982a 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -264,7 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+>  		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
+>  		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+>  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+> -		-e 's#@@CMAKE_SYSTEM_VERSION@@#$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))#' \
+> +		-e 's#@@CMAKE_SYSTEM_VERSION@@#1#' \
+
+Using a 'sed' replacement just to encode a hardcoded value in the
+destination file seems a bit useless.
+
+What about:
+
+set(CMAKE_SYSTEM_VERSION 1)
+
+in ./support/misc/toolchainfile.cmake.in instead ?
+
+Thanks,
 
 Thomas
 -- 
