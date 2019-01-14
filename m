@@ -1,31 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Jan 2019 20:59:59 +0100
-Subject: [Buildroot] [PATCH 1/3] package/python3-setuptools: new package
-In-Reply-To: <eeadf2d8-96fd-a183-fb00-45fe67af51e2@mind.be>
-References: <20181228170132.13049-1-thomas.petazzoni@bootlin.com>
- <20181228170132.13049-2-thomas.petazzoni@bootlin.com>
- <eeadf2d8-96fd-a183-fb00-45fe67af51e2@mind.be>
-Message-ID: <20190114205959.627d6fd2@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 14 Jan 2019 12:09:13 -0800
+Subject: [Buildroot] Xtensa toolchain issue ?
+In-Reply-To: <20190110155649.2e5654cd@windsurf>
+References: <20190102112130.0b8d32f8@windsurf>
+ <CAMo8BfJR7vgLDONmKDX3S8RLyJBMYmXEKjjEr3JK5JOTHrd5hg@mail.gmail.com>
+ <20190104102735.52e7e733@windsurf>
+ <CAMo8BfLe2amCfDH2MdrQH+7PXx16P5BjGy1zMe5gxZ+YkYEtxQ@mail.gmail.com>
+ <20190110155649.2e5654cd@windsurf>
+Message-ID: <CAMo8BfJG5JzwEiSXPRpQ3nEBMPeDC-Yw6W4_oBFz-JiAioqjjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Jan 10, 2019 at 6:57 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> > > Since the issue also happens on OpenRISC, perhaps we need to have some
+> > > BR2_TOOLCHAIN_SUPPORTS_XYZ boolean that says whether the gcc version
+> > > supports this specific stuff. However, since I don't clearly understand
+> > > what the issue is, I wouldn't be able to find a good name for that
+> > > BR2_TOOLCHAIN_SUPPORTS_XYZ option.
+> > >
+> > > BR2_TOOLCHAIN_SUPPORTS_TAIL_CALL_VARIADIC_FUNC_FROM_THUNK ? :-)
+> >
+> > Maybe BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK?
+>
+> Sounds like a good name. Do you want to cook a patch for this, or
+> should I do so ?
 
-On Mon, 14 Jan 2019 19:31:05 +0100, Arnout Vandecappelle wrote:
-> On 28/12/2018 18:01, Thomas Petazzoni wrote:
-> > +# Please keep in sync with
-> > +# package/python-setuptools/python-setuptools.mk  
-> 
->  It is in fact more important to have this comment in python-setuptools.mk,
-> because that is the one that most likely will be bumped...
+Let me try to come up with a patch.
 
-I just submitted a patch doing this, you're Cc'ed. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks.
+-- Max
