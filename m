@@ -1,36 +1,44 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 14 Jan 2019 12:09:13 -0800
-Subject: [Buildroot] Xtensa toolchain issue ?
-In-Reply-To: <20190110155649.2e5654cd@windsurf>
-References: <20190102112130.0b8d32f8@windsurf>
- <CAMo8BfJR7vgLDONmKDX3S8RLyJBMYmXEKjjEr3JK5JOTHrd5hg@mail.gmail.com>
- <20190104102735.52e7e733@windsurf>
- <CAMo8BfLe2amCfDH2MdrQH+7PXx16P5BjGy1zMe5gxZ+YkYEtxQ@mail.gmail.com>
- <20190110155649.2e5654cd@windsurf>
-Message-ID: <CAMo8BfJG5JzwEiSXPRpQ3nEBMPeDC-Yw6W4_oBFz-JiAioqjjA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Jan 2019 21:11:13 +0100
+Subject: [Buildroot] [git commit] package/hiredis: bump to version 0.14.0
+Message-ID: <20190114201305.461F58B6A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 10, 2019 at 6:57 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> > > Since the issue also happens on OpenRISC, perhaps we need to have some
-> > > BR2_TOOLCHAIN_SUPPORTS_XYZ boolean that says whether the gcc version
-> > > supports this specific stuff. However, since I don't clearly understand
-> > > what the issue is, I wouldn't be able to find a good name for that
-> > > BR2_TOOLCHAIN_SUPPORTS_XYZ option.
-> > >
-> > > BR2_TOOLCHAIN_SUPPORTS_TAIL_CALL_VARIADIC_FUNC_FROM_THUNK ? :-)
-> >
-> > Maybe BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK?
->
-> Sounds like a good name. Do you want to cook a patch for this, or
-> should I do so ?
+commit: https://git.buildroot.net/buildroot/commit/?id=cb9d7412453e6f7ce9742df2dd0880e1248cb753
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let me try to come up with a patch.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hiredis/hiredis.hash | 2 +-
+ package/hiredis/hiredis.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Thanks.
--- Max
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+index 682ec6d2b0..7478ae0f24 100644
+--- a/package/hiredis/hiredis.hash
++++ b/package/hiredis/hiredis.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
++sha256	042f965e182b80693015839a9d0278ae73fae5d5d09d8bf6d0e6a39a8c4393bd	hiredis-v0.14.0.tar.gz
+ sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb	COPYING
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index dd75742229..e187aed52c 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HIREDIS_VERSION_MAJOR = 0.13
+-HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).3
++HIREDIS_VERSION_MAJOR = 0.14
++HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).0
+ HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
