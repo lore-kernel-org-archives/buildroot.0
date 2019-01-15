@@ -1,85 +1,121 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 14 Jan 2019 22:22:11 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-01-13
-In-Reply-To: <20190114070059.9F75420A85@mail.bootlin.com>
-References: <20190114070059.9F75420A85@mail.bootlin.com>
-Message-ID: <CANQCQpYdJXCwVSF5PmtFp7FwrWxTFpU0C4Lr5+D51oCnHDjOdw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Jan 2019 08:00:29 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-14
+Message-ID: <20190115070029.2538D20898@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Mon, Jan 14, 2019 at 1:01 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Build statistics for 2019-01-13
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  23 |   0 |   0 |  23 |
->    2018.11.x |  26 |   2 |   0 |  28 |
->       master | 241 |  50 |   0 | 291 |
->
-> Results for branch '2018.11.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                 openmpi-1.10.7 | 1
->                qt5webkit-5.9.1 | 1
->
->
-> Detail of failures
-> ------------------
->
-> microblazeel |                 openmpi-1.10.7 | NOK | http://autobuild.buildroot.net/results/1b855387bfb68233b821f588ec4376bfd24ba634 | ORPH
->       mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/b26a1a9c603a46d05e16aaf04c97d7edb1b5ec86 |
->
-> Results for branch 'master'
-> ===========================
->
+Build statistics for 2019-01-14
+===============================
 
->      powerpc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/97ca21878d36c0d56dc94c5e126b87529cc63f0f |
->     mips64el |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/f4c9902e50668d3e1009d22f4e47784965d951db |
->       mipsel |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/ebeb6be1be1a5f46d30df62b0e17e52492722a68 |
->          arm |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/c7851b6d72c914b3f805650355973b2dae5c96fc |
->         m68k |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/a0352ac5e02da778670da6053d49b7948765295a |
->         i686 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/e0fbd62faf7df2edaf83672c7d998a9b263a9f00 |
->       mipsel |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/0ccaa03babc54b3595b4da71447813c6ec8f60a3 |
->       x86_64 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/5c56d33733c98fae536998fcc669c069457ad0ce |
->          arm |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/dc94056643c6efc4e1b29371bcac0d387e511d15 |
->       mipsel |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/09ce2709d645a59a67c5f28cc53ef60ce8515193 |
->      riscv32 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/9e295ed2447a3561f55dbcfb662583ecbb5d10be |
->      aarch64 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/c649494027484fb71b4916ddb049bbefe45db2ce |
->     mips64el |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/e60ad0625c7f05d109e4eabaee594e6741e5c5aa |
->     mips64el |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/a88f37e03982ef3f189fb3758c23237d60966907 |
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  29 |   0 |   0 |  29 |
+   2018.11.x |  22 |   0 |   0 |  22 |
+      master | 208 |  63 |   1 | 272 |
 
-The bump to 2.58.0 built Ok
-2019-01-15T04:07:32 >>> glib-networking 2.58.0 Fixing libtool files
-2019-01-15T04:07:32 >>> glib-networking 2.58.0 Installing to target
-Done in 20min 55s
+Results for branch 'master'
+===========================
 
-Original build of 2.56.1 failed as expected.
-2019-01-15T04:20:29 Compiler for C supports arguments
--Wl,--version-script,/accts/mlweber1/rclinux/br-reproduce/96b287a6de9f8bae48d75ff6652f3c909e0181b0glibnetworking/buildroot/output/build/glib-networking-2.56.1/glib-networking.map:
-YES
-2019-01-15T04:20:30 Cross dependency glib-2.0 found: YES 2.56.3
-2019-01-15T04:20:30 Cross dependency gio-2.0 found: YES 2.56.3
-2019-01-15T04:20:30 Cross dependency gnutls found: YES 3.5.19
-2019-01-15T04:20:30
-2019-01-15T04:20:30 meson.build:70:0: ERROR:  Assert failed: location
-of system Certificate Authority list:  could not find any CA
-certificate store. Use -Dca_certificates_path=PATH to set
-2019-01-15T04:20:30
-2019-01-15T04:20:30 A full log can be found at
-/accts/mlweber1/rclinux/br-reproduce/96b287a6de9f8bae48d75ff6652f3c909e0181b0glibnetworking/buildroot/output/build/glib-networking-2.56.1/build/meson-logs/meson-log.txt
-2019-01-15T04:20:30 make: ***
-[/accts/mlweber1/rclinux/br-reproduce/96b287a6de9f8bae48d75ff6652f3c909e0181b0glibnetworking/buildroot/output/build/glib-networking-2.56.1/.stamp_configured]
-Error 1
+Classification of failures by reason
+------------------------------------
+
+        glib-networking-2.56.1 | 13
+                     php-7.3.0 | 11
+             host-grpc-v1.16.1 | 5 
+                  daemon-0.6.4 | 3 
+       gst1-plugins-bad-1.14.4 | 3 
+                   netsurf-3.8 | 3 
+               skalibs-2.6.4.0 | 3 
+             stress-ng-0.09.47 | 3 
+                  ffmpeg-3.4.5 | 2 
+                 gnu-efi-3.0.9 | 2 
+                  libssh-0.8.6 | 2 
+   libtorrent-rasterbar-1.1.11 | 2 
+                     pcre-8.42 | 2 
+              swupdate-2018.11 | 2 
+                 dmalloc-5.5.2 | 1 
+       gst-plugins-bad-0.10.23 | 1 
+          host-libgtk3-3.22.30 | 1 
+                host-libsodium | 1 
+          libcdaudio-0.99.12p2 | 1 
+                  libnfc-1.7.1 | 1 
+                qt5base-5.11.3 | 1 
+                   systemd-240 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv32 |                   daemon-0.6.4 | NOK | http://autobuild.buildroot.net/results/f641a07c4139cb44d69527ed00c1c66226b37a7d |     
+     riscv32 |                   daemon-0.6.4 | NOK | http://autobuild.buildroot.net/results/90e1b0db898533ea666516cd53683de7950f43b0 |     
+     riscv32 |                   daemon-0.6.4 | NOK | http://autobuild.buildroot.net/results/1c6f5789e4f108c861029075db35fa52b3b9b491 |     
+    mips64el |                  dmalloc-5.5.2 | NOK | http://autobuild.buildroot.net/results/239ff5d9946f85870fec9c943b16ed08fdb5ae2b | ORPH
+      x86_64 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/2b76c1de63219da0d300fe62e454c24684890eeb |     
+     aarch64 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/0be4195f119383775c1808a2469e4890dc5d2ec7 |     
+         arm |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/54a9d1642c7e1d1ec305db928c80e85776fe85b6 |     
+        i686 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/2f64da787ae3c6ffa6b8850bada780427722a5fb |     
+       sparc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/d0ae162330c37eeb6ea248e6a99391fae789ea69 |     
+       sparc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/6dcfd276dc35694e8d62adb0b26ac691de828389 |     
+      mipsel |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/8f83be0c21c21c07d5a7330f3626b739b1970625 |     
+  aarch64_be |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/4d1af7b43baa1ed611a57fbdbeb58a5cdc868110 |     
+     aarch64 |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/96b287a6de9f8bae48d75ff6652f3c909e0181b0 |     
+    mips64el |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/30804d03374be9382dab540bb2c1cfb5ebb3f2a1 |     
+    mips64el |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/59a89cbe66155bcbeda1d287af26da5a39756b4c |     
+        or1k |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/f24065c0c3641c087b3fc4301edbea2a13c446cc |     
+         arm |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/ade1139881fb661726d0e6b3bdb8fb8c0f755701 |     
+     powerpc |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/8b464a8259251597244285d0b51d39c1c6a09e67 |     
+        or1k |         glib-networking-2.56.1 | NOK | http://autobuild.buildroot.net/results/6a96b09e791fceb93971c2a3a226ca817f59f3c4 |     
+        i686 |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/34dba582cd98c65875fc32668f7ccb1cd4054614 |     
+  aarch64_be |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/946deaaaea4ab9007daa92611aad07042eeff2ee |     
+ powerpc64le |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/39fd5672518d294c9e2895ef69c1d4d94d2f0c83 | ORPH
+         arm |        gst1-plugins-bad-1.14.4 | NOK | http://autobuild.buildroot.net/results/57d3e033b8c7280558e549a9a70f4861e4bd80e4 |     
+         arm |        gst1-plugins-bad-1.14.4 | NOK | http://autobuild.buildroot.net/results/7570303ba6cfa692f55fd16c0ee4dd25e9f6fb9b |     
+         arm |        gst1-plugins-bad-1.14.4 | NOK | http://autobuild.buildroot.net/results/4b32eefc4be052138721b6b4c09cc9a9251e85f6 |     
+         arm |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/fbbafc12d67f1765caef393f87d0374cd43c427e |     
+        i686 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/88aeb9ae6b07f3c8fa36d6c22be313a58ed80b36 |     
+    mips64el |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/b6319f9cc1df217e6b2fbf263ed5f0016fee3356 |     
+     powerpc |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/ac91955d8581aeb1e840c2fa436b917c0961e3ef |     
+    mips64el |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/9d7d7fd734670be059e8cd4372937706e23ddde6 |     
+       nios2 |           host-libgtk3-3.22.30 | NOK | http://autobuild.buildroot.net/results/9175a150bd8c9be6699c1eaf7586fc2153a3295e |     
+      mipsel |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/0fd69497dfb4337b8599e13cfd458d0d3a270c82 |     
+microblazeel |           libcdaudio-0.99.12p2 | NOK | http://autobuild.buildroot.net/results/fbebd4a7c9b4a3fdd308bed93c978e5cf50c7aa7 | ORPH
+     riscv32 |                   libnfc-1.7.1 | NOK | http://autobuild.buildroot.net/results/1df8dcc3ca204b2f53685a83e0134c428df8331f |     
+     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/8a83b8121babfb4e653036e696297760b88b7c90 |     
+     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/7d70dfd4764570d27e2061d925236ec185ab78e0 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/74797d5cf72ce69ba3fd62e156071a514976f453 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/388d10241b702b663e22bb1e233be540b9150b63 |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/fcd7bd8df1877796ffa06d585516abb5edc629ae |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/1683d8215fd20d2f00b10d5ddf7dccd1af7b14c8 |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0a3c210dcfbe7c97a7bcde1577f24047fee2466e |     
+      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/b0a12c0bae756d9a4fe054b33ec339559496e945 | ORPH
+      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/43e8e7accf8aeadf35b5865646abc011ec96e887 | ORPH
+        m68k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/41d5dc9320782c91ba8bb088f8b5fbefd8197163 | ORPH
+     riscv64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/f6740dfc294f6a9267ffc1cfbf86eb3cb51840ab | ORPH
+         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/0698153d328fb03bc7852ab7d80d0abb088c17c3 | ORPH
+       nios2 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/950a129754aa9eed452a63869b71da3bb3663d49 | ORPH
+         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/741df82f8058b8b8423046d9e6deba8d57d44852 | ORPH
+      xtensa |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/ede76826ad29a7ecd14e5231b95e00a11934c075 | ORPH
+     riscv64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/2e27094e42ca9dd0f4e3b7ca052ba04027213702 | ORPH
+        m68k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/8585d864640d15de921863db235d43f62c3af1c6 | ORPH
+     riscv64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/6c99ebb78f12931b3e7c9750439891da401d30af | ORPH
+        m68k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/470a25168adf5bc20f45dec64e5c855d1c11dbe3 | ORPH
+     riscv64 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/2586b96674344d51f9aa8c398a9a5abc8f31c348 | ORPH
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/8885445115e9f5debbd49a8bafd331851df3758e |     
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/58209f986211ca44e8b91eabb9b428a8cfc660f2 |     
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/5a0acdee861043d69dfb09400d771111752a258d |     
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/3dd15f4fd184e33d8d47f19642ef48ef49e8c326 |     
+     powerpc |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/095cae65023a2c7850d2a3f362c24a508d8d0645 |     
+        or1k |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/400495f08256e5aad6edff4de24843cd22fcd53c |     
+    mips64el |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/5f4d2518ca3a4bdeb61622726afa859355359dce |     
+         arc |               swupdate-2018.11 | NOK | http://autobuild.buildroot.net/results/4f452f1b44dcccb1221a9f808ddacea1605af96f |     
+         arc |               swupdate-2018.11 | NOK | http://autobuild.buildroot.net/results/fefa97814d62621deeffc3167a1d45debca988be |     
+      mipsel |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/536d585f6c94850390a1faad131f0b4cf7811e7d |     
+
+
+-- 
+http://autobuild.buildroot.net
