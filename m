@@ -1,49 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/libassuan: bump to version 2.5.2
-Message-ID: <20190115203417.4B5A08D5D8@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Jan 2019 21:43:08 +0100
+Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce
+ dependency on tpm2-abrmd
+In-Reply-To: <20190115101522.21042-6-peter@korsgaard.com>
+References: <20190115101522.21042-1-peter@korsgaard.com>
+ <20190115101522.21042-6-peter@korsgaard.com>
+Message-ID: <20190115204308.GB2556@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b905370c098d1266acfae6fa9678ea40953aaa8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libassuan/libassuan.hash | 7 ++++---
- package/libassuan/libassuan.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+On 2019-01-15 11:15 +0100, Peter Korsgaard spake thusly:
+> tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
+> CAN be used without, E.G.  by setting the TPM2TOOLS_TCTI_NAME environment
+> variable to communicate directly with the kernel driver:
+> 
+> export TPM2TOOLS_TCTI_NAME=device
+> 
+> For some use cases (E.G.  initramfs) it makes sense to use tpm2-tools
+> without abrmd, so downgrade the dependency from select to imply, so abrmd is
+> enabled by default but can be explicitly disabled.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/tpm2-tools/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+> index cc87e2a1bf..f4622b4ec9 100644
+> --- a/package/tpm2-tools/Config.in
+> +++ b/package/tpm2-tools/Config.in
+> @@ -8,7 +8,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+>  	select BR2_PACKAGE_LIBCURL
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	select BR2_PACKAGE_OPENSSL
+> -	select BR2_PACKAGE_TPM2_ABRMD # run-time
+> +	imply BR2_PACKAGE_TPM2_ABRMD # run-time
 
-diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-index 2e80cfa4e1..4878a692cf 100644
---- a/package/libassuan/libassuan.hash
-+++ b/package/libassuan/libassuan.hash
-@@ -1,7 +1,8 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
-+sha1 fb66bc1e8971d48ac9dbacd1cdaf6487a3e77375  libassuan-2.5.2.tar.bz2
- # Locally calculated after checking signature
--# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
--sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
-+# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.2.tar.bz2.sig
-+# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
-+sha256 986b1bf277e375f7a960450fbb8ffbd45294d06598916ad4ebf79aee0cb788e7  libassuan-2.5.2.tar.bz2
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index 4dc8f70d1f..1e4467b36d 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBASSUAN_VERSION = 2.5.1
-+LIBASSUAN_VERSION = 2.5.2
- LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
- LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
- LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+Sorry, but I reiterate my position: I don't like the use of 'imply'.
+
+Either the thing is mandatory, in which case we select it or depend on
+it, or the thing is optional, in which case we elt the user enable it.
+
+Use of imply does not sound nice to me, because it is not authoritative.
+I'm afraid we get reports of users complaining that "sometimes the stuff
+is enabled when I do X, while sometmes it is not enabled when I do the
+same X.'
+
+The coutner argument has been that we were now trying to make sensible
+choices for the user, so that things "work out of the box". My position
+is that it is an illusion, because making things "just work" is more
+often than not more involving than just enabling a package.
+
+For example, when dealing with TPM and such: keys and certs provisionning
+and checking the chain of trust and such is only scratching the surface.
+People that want to deal with this topic better know what they *are* doing,
+as it is a sensible topic. Those people will have to understand what they
+need if they do not already know.
+
+Regards,
+Yann E. MORIN.
+
+>  	select BR2_PACKAGE_TPM2_TSS
+>  	help
+>  	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
