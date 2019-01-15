@@ -1,50 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 11:15:20 +0100
-Subject: [Buildroot] [PATCH v2 5/7] tpm2-abrmd: fix build with
- BR2_FORTIFY_SOURCE_1
-In-Reply-To: <20190115101522.21042-1-peter@korsgaard.com>
-References: <20190115101522.21042-1-peter@korsgaard.com>
-Message-ID: <20190115101522.21042-5-peter@korsgaard.com>
+Date: Tue, 15 Jan 2019 11:15:16 +0100
+Subject: [Buildroot] [PATCH v2 1/7] tpm2-tss: do not enforce
+ -fstack-protector-all
+Message-ID: <20190115101522.21042-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script passes -U FORTIFY_SOURCE -D FORTIFY_SOURCE=2 by
-default, which conflicts with BR2_FORTIFY_SOURCE_1 as -Werror is used:
-
-<cross>-gcc ..  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 .. -D_FORTIFY_SOURCE=1
-<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
-
-Disable this so the FORTIFY_SOURCE flags in TARGET_CFLAGS (if any) is used
-instead.
+Stack protection is now controlled buildroot wide with the BR2_SSP_*
+options, so disable the explicit -fstack-protector-all so the SSP logic in
+the toolchain wrapper is used instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-abrmd/tpm2-abrmd.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/tpm2-tss/tpm2-tss.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index 2834615ac3..31f19f5d01 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -11,10 +11,13 @@ TPM2_ABRMD_LICENSE_FILES = LICENSE
- TPM2_ABRMD_INSTALL_STAGING = YES
- TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index f005e5d6b8..e2e58a092d 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -12,8 +12,9 @@ TPM2_TSS_INSTALL_STAGING = YES
+ TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
+ TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
  
--# -fstack-protector-all is used by default. Disable that so the
--# BR2_SSP_* options in the toolchain wrapper are used instead
-+# -fstack-protector-all and FORTIFY_SOURCE=2 is used by
-+# default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
-+# in the toolchain wrapper and CFLAGS are used instead
- TPM2_ABRMD_CONF_ENV = \
--	ax_cv_check_cflags___________Werror_______fstack_protector_all=no
-+	ax_cv_check_cflags___________Werror_______fstack_protector_all=no \
-+	ax_cv_check_ccppflags___________Werror_______U_FORTIFY_SOURCE=no \
-+	ax_cv_check_ccppflags___________Werror_______D_FORTIFY_SOURCE_2=no
+-# configure.ac doesn't contain a link test, so it doesn't detect when
+-# libssp is missing.
+-TPM2_TSS_CONF_ENV = ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++# -fstack-protector-all is used by default. Disable that so the
++# BR2_SSP_* options in the toolchain wrapper are used instead
++TPM2_TSS_CONF_ENV = \
++	ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=no
  
- TPM2_ABRMD_CONF_OPTS += \
- 	--with-systemdsystemunitdir=$(if $(BR2_INIT_SYSTEMD),/usr/lib/systemd/system,no) \
+ $(eval $(autotools-package))
 -- 
 2.11.0
