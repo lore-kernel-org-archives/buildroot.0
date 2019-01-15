@@ -1,85 +1,93 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 15 Jan 2019 20:18:14 +0100
-Subject: [Buildroot] [PATCH 1/1] ltp: Bump version 20190115
-Message-ID: <20190115191814.21480-1-petr.vorel@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 15 Jan 2019 20:36:25 +0100
+Subject: [Buildroot] [PATCH] package/openpowerlink: bump to version 2.7.1
+Message-ID: <20190115193625.19765-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop statx patch as it's included in this release.
+Remove upstream patch.
+While at it, switch to https.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../0002-statx-fix-compile-errors.patch       | 35 -------------------
- package/ltp-testsuite/ltp-testsuite.hash      |  4 +--
- package/ltp-testsuite/ltp-testsuite.mk        |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
- delete mode 100644 package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+ ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ----------------------
+ package/openpowerlink/openpowerlink.hash           |  8 ++---
+ package/openpowerlink/openpowerlink.mk             |  4 +--
+ 3 files changed, 6 insertions(+), 41 deletions(-)
+ delete mode 100644 package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
 
-diff --git a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
 deleted file mode 100644
-index 6ddd2c9054..0000000000
---- a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+index 4e00ecdb67..0000000000
+--- a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
 +++ /dev/null
 @@ -1,35 +0,0 @@
--From a945304b6a2286d0665c70250cc5475eb07fd21e Mon Sep 17 00:00:00 2001
--From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
--Date: Wed, 26 Sep 2018 11:15:45 -0300
--Subject: [PATCH] statx: fix compile errors
+-From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 25 Aug 2018 23:36:39 +0200
+-Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
+- <sys/types.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--struct statx is only defined in sys/stat.h when _GNU_SOURCE is defined.
--The testcases do define _GNU_SOURCE, but not the m4 struct check.
+-This is necessary to get the definition of the u_char type, otherwise
+-the build fails with the musl C library with:
 -
--Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
--Acked-by: Cyril Hrubis <chrubis@suse.cz>
+-stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ???u_char??? undeclared (first use in this function)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
 ----
-- m4/ltp-statx.m4 | 9 +++++++--
-- 1 file changed, 7 insertions(+), 2 deletions(-)
+- stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/m4/ltp-statx.m4 b/m4/ltp-statx.m4
--index 44303d30c..5f79a94cd 100644
----- a/m4/ltp-statx.m4
--+++ b/m4/ltp-statx.m4
--@@ -23,6 +23,11 @@ dnl
-- AC_DEFUN([LTP_CHECK_STATX],[
-- AC_CHECK_FUNCS(statx,,,[[#include <sys/stat.h>]])
-- AC_CHECK_HEADER(linux/fs.h,,,)
---AC_CHECK_TYPES([struct statx],,,[[#include <sys/stat.h>]])
---AC_CHECK_TYPES([struct statx_timestamp],,,[[#include <sys/stat.h>]])
--+AC_CHECK_TYPES([struct statx],,,[[
--+	#define _GNU_SOURCE
--+	#include <sys/stat.h>
--+]])
--+AC_CHECK_TYPES([struct statx_timestamp],,,[[
--+	#define _GNU_SOURCE
--+	#include <sys/stat.h>]])
-- ])
+-diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-index f8e0216f..e5230a52 100644
+---- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-+++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include <arpa/inet.h>
+- #include <ifaddrs.h>
+- #include <linux/if_packet.h>
+-+#include <sys/types.h>
+- 
+- //============================================================================//
+- //            G L O B A L   D E F I N I T I O N S                             //
 --- 
--2.19.0
+-2.14.4
 -
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 1f04aee482..ba0dcbe7e8 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20180926/ltp-full-20180926.tar.xz.sha1
--sha1 da5c8e847ed909dbd0b859c6918bc526cf6c2695  ltp-full-20180926.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20190115/ltp-full-20190115.tar.xz.sha1
-+sha1 d87e2f96dc628f927e98ecba2e9dae581fc115b4  ltp-full-20190115.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 9001316fbd..ecd822b4d6 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index da9bdd2a72..13b5e9351e 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.0/
+-md5	4843f857b8334c984827435fa9e1ab96	openPOWERLINK_V2.7.0.tar.gz
+-sha1	a256e05d187b334651764ab21a827b3a4fa64e2f	openPOWERLINK_V2.7.0.tar.gz
++# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.1/
++md5	04524d1b1f9946176dce0ccb0eecf537	openPOWERLINK_V2.7.1.tar.gz
++sha1	4ee9c6e26bbc729fdbbb272155b093ffa0d9cefd	openPOWERLINK_V2.7.1.tar.gz
+ # sha256 locally computed
+-sha256	64c23ee42e3852bf2316fd99c59eae9cdd634219f92b3ea70ce747dad1e05354	openPOWERLINK_V2.7.0.tar.gz
++sha256	d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd	openPOWERLINK_V2.7.1.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 90088cef56..f869780822 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LTP_TESTSUITE_VERSION = 20180926
-+LTP_TESTSUITE_VERSION = 20190115
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+-OPENPOWERLINK_VERSION = V2.7.0
+-OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
++OPENPOWERLINK_VERSION = V2.7.1
++OPENPOWERLINK_SITE = https://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+ OPENPOWERLINK_LICENSE_FILES = license.md
 -- 
-2.19.2
+2.14.5
