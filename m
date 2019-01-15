@@ -1,93 +1,96 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 15 Jan 2019 20:36:25 +0100
-Subject: [Buildroot] [PATCH] package/openpowerlink: bump to version 2.7.1
-Message-ID: <20190115193625.19765-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 Jan 2019 20:38:20 +0100
+Subject: [Buildroot] [PATCH 1/1] libserial: fix build on sparc
+Message-ID: <20190115193820.19478-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstream patch.
-While at it, switch to https.
+On certain architectures (namely Sparc), the maximum baud rate exposed
+by the kernel headers is B2000000. Therefore, the current libserial
+code doesn't build for the Sparc and Sparc64 architectures due to
+this.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+In order to address this problem, this patch tests the value of
+__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
+architecture that supports all baud rates up to B4000000. Otherwise,
+we simply don't support the baud rates above B2000000.
+
+Fixes build failures such as:
+
+SerialPort.cpp: In member function 'int LibSerial::SerialPort::Implementation::GetBitRate(const LibSerial::BaudRate&) const':
+SerialPort.cpp:1226:14: error: 'BAUD_2000000' is not a member of 'LibSerial::BaudRate'
+         case BaudRate::BAUD_2000000:
+
+Fixes:
+ - http://autobuild.buildroot.org/results/63ba95b6786464fa8e75af64593010df84530079
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ----------------------
- package/openpowerlink/openpowerlink.hash           |  8 ++---
- package/openpowerlink/openpowerlink.mk             |  4 +--
- 3 files changed, 6 insertions(+), 41 deletions(-)
- delete mode 100644 package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+ ...cpp-don-t-use-high-baudrates-when-not-ava.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
 
-diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
-deleted file mode 100644
-index 4e00ecdb67..0000000000
---- a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sat, 25 Aug 2018 23:36:39 +0200
--Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
-- <sys/types.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This is necessary to get the definition of the u_char type, otherwise
--the build fails with the musl C library with:
--
--stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ???u_char??? undeclared (first use in this function)
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
-----
-- stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
--index f8e0216f..e5230a52 100644
----- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
--+++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
--@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- #include <arpa/inet.h>
-- #include <ifaddrs.h>
-- #include <linux/if_packet.h>
--+#include <sys/types.h>
-- 
-- //============================================================================//
-- //            G L O B A L   D E F I N I T I O N S                             //
---- 
--2.14.4
--
-diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
-index da9bdd2a72..13b5e9351e 100644
---- a/package/openpowerlink/openpowerlink.hash
-+++ b/package/openpowerlink/openpowerlink.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.0/
--md5	4843f857b8334c984827435fa9e1ab96	openPOWERLINK_V2.7.0.tar.gz
--sha1	a256e05d187b334651764ab21a827b3a4fa64e2f	openPOWERLINK_V2.7.0.tar.gz
-+# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.1/
-+md5	04524d1b1f9946176dce0ccb0eecf537	openPOWERLINK_V2.7.1.tar.gz
-+sha1	4ee9c6e26bbc729fdbbb272155b093ffa0d9cefd	openPOWERLINK_V2.7.1.tar.gz
- # sha256 locally computed
--sha256	64c23ee42e3852bf2316fd99c59eae9cdd634219f92b3ea70ce747dad1e05354	openPOWERLINK_V2.7.0.tar.gz
-+sha256	d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd	openPOWERLINK_V2.7.1.tar.gz
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 90088cef56..f869780822 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENPOWERLINK_VERSION = V2.7.0
--OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
-+OPENPOWERLINK_VERSION = V2.7.1
-+OPENPOWERLINK_SITE = https://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
- OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
- OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
- OPENPOWERLINK_LICENSE_FILES = license.md
+diff --git a/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch b/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
+new file mode 100644
+index 0000000000..4f97f598c4
+--- /dev/null
++++ b/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
+@@ -0,0 +1,53 @@
++From fc0f031563146b91d255c752a61624f6dd3c14d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 15 Jan 2019 08:33:27 +0100
++Subject: [PATCH] SerialPort.cpp: don't use high baudrates when not available
++
++On certain architectures (namely Sparc), the maximum baud rate exposed
++by the kernel headers is B2000000. Therefore, the current libserial
++code doesn't build for the Sparc and Sparc64 architectures due to
++this.
++
++In order to address this problem, this patch tests the value of
++__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
++architecture that supports all baud rates up to B4000000. Otherwise,
++we simply don't support the baud rates above B2000000.
++
++Fixes build failures such as:
++
++SerialPort.cpp: In member function 'int LibSerial::SerialPort::Implementation::GetBitRate(const LibSerial::BaudRate&) const':
++SerialPort.cpp:1226:14: error: 'BAUD_2000000' is not a member of 'LibSerial::BaudRate'
++         case BaudRate::BAUD_2000000:
++
++Fixes:
++ - http://autobuild.buildroot.org/results/63ba95b6786464fa8e75af64593010df84530079
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/crayzeewulf/libserial/pull/127]
++---
++ src/SerialPort.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/SerialPort.cpp b/src/SerialPort.cpp
++index e3240eb..18daac0 100644
++--- a/src/SerialPort.cpp
+++++ b/src/SerialPort.cpp
++@@ -1223,6 +1223,7 @@ namespace LibSerial
++             baud_rate_as_int = 1500000 ;
++             break ;
++ 
+++#if __MAX_BAUD > B2000000
++         case BaudRate::BAUD_2000000:
++             baud_rate_as_int = 2000000 ;
++             break ;
++@@ -1242,6 +1243,7 @@ namespace LibSerial
++         case BaudRate::BAUD_4000000:
++             baud_rate_as_int = 4000000 ;
++             break ;
+++#endif /* __MAX_BAUD */
++         default:
++             // If an incorrect baud rate was specified, throw an exception.
++             throw std::runtime_error(ERR_MSG_INVALID_BAUD_RATE) ;
++-- 
++2.14.1
++
 -- 
-2.14.5
+2.14.1
