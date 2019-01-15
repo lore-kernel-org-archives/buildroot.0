@@ -1,47 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 21:22:02 +0100
-Subject: [Buildroot] [git commit] whois: bump to version 5.4.0
-Message-ID: <20190115202334.24C8F8D3C8@busybox.osuosl.org>
+Date: Tue, 15 Jan 2019 21:21:25 +0100
+Subject: [Buildroot] [git commit] ccache: bump to version 3.6
+Message-ID: <20190115202334.16A0880676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6e4733aa775c8fb3a1131210cc184a9d9850158
+commit: https://git.buildroot.net/buildroot/commit/?id=1fb7b6b2be51a145ee934698937756eba6ce2d2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+License update - a year bump.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 4fdfebce0f..41ef935c1d 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20180715T153200Z/pool/main/w/whois/whois_5.3.2.dsc
--sha256	79714ba89172bca08a2443f59885daa4af0c5f8d6a49bc9e7f2a83559a286354	whois_5.3.2.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois/whois_5.4.0.dsc
-+sha256	3775ae0cfaa6dd8d886e5233c4826225cddcb88c99c2a08130d14e15fe58e378	whois_5.4.0.tar.xz
- 
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index c162f1cf38..712ad911d8 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 4ea2305a88..779a2abc7e 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  bdd44b72ae4506a2e2deef9fefb15c606a474bbca7658cd2be26105155eec012  ccache-3.5.tar.xz
++sha256  a6b129576328fcefad00cb72035bc87bc98b6a76aec0f4b59bed76d67a399b1f  ccache-3.6.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+-sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
++sha256  2af7b3ec0ea737e1542e58db016122f6d75df9ea3b4f00c8151ecfef7040b39b  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 76ae029eae..4d9de0a074 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WHOIS_VERSION = 5.3.2
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180715T153200Z/pool/main/w/whois
-+WHOIS_VERSION = 5.4.0
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+-CCACHE_VERSION = 3.5
++CCACHE_VERSION = 3.6
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
