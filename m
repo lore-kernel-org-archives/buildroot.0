@@ -1,49 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 08:52:16 +0100
-Subject: [Buildroot] [PATCH] tpm2-tss: fix build with
- BR2_FORTIFY_SOURCE_1
-In-Reply-To: <20190114223349.7071-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 14 Jan 2019 23:33:49 +0100")
-References: <20190114223349.7071-1-peter@korsgaard.com>
-Message-ID: <87imyqs6hb.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Jan 2019 10:32:29 +0100
+Subject: [Buildroot] [PATCH] package/rtc-tools: new package
+Message-ID: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+This package contains a set of tools to manipulate RTC devices. They
+are written and maintained by the RTC subsystem Linux kernel
+maintainer, Alexandre Belloni.
 
- > The configure script passes -U FORTIFY_SOURCE -D FORTIFY_SOURCE=2 by
- > default, which conflicts with BR2_FORTIFY_SOURCE_1 as -Werror is used:
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/rtc-tools/Config.in      |  7 +++++++
+ package/rtc-tools/rtc-tools.hash |  3 +++
+ package/rtc-tools/rtc-tools.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/rtc-tools/Config.in
+ create mode 100644 package/rtc-tools/rtc-tools.hash
+ create mode 100644 package/rtc-tools/rtc-tools.mk
 
- > <cross>-gcc ..  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 .. -D_FORTIFY_SOURCE=1
- > <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
-
- > Disable this so the FORTIFY_SOURCE flags in TARGET_CFLAGS (if any) are used
- > instead.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  package/tpm2-tss/tpm2-tss.mk | 6 ++++++
- >  1 file changed, 6 insertions(+)
-
- > diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
- > index f005e5d6b8..5b57973c6e 100644
- > --- a/package/tpm2-tss/tpm2-tss.mk
- > +++ b/package/tpm2-tss/tpm2-tss.mk
- > @@ -16,4 +16,10 @@ TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
- >  # libssp is missing.
- >  TPM2_TSS_CONF_ENV =
- > ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=$(if
- > $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
- > +# configure.ac uses FORTIFY_SOURCE=2 by default. Disable that so the
- > +# BR2_FORTIFY_SOURCE_* options in CFLAGS are used instead
- > +sTPM2_TSS_CONF_ENV += \
-
-Ehh, there's naturally a typo here in the variable name. I'll send an
-updated patch.
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index aa1bf325cb..c1950bb0f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2130,6 +2130,7 @@ F:	package/python-serial/
+ F:	package/qextserialport/
+ F:	package/rpcbind/
+ F:	package/rt-tests/
++F:	package/rtc-tools/
+ F:	package/sam-ba/
+ F:	package/scons/
+ F:	package/squashfs/
+diff --git a/package/Config.in b/package/Config.in
+index 0df9b73088..5036421a73 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -500,6 +500,7 @@ endmenu
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rs485conf/Config.in"
++	source "package/rtc-tools/Config.in"
+ 	source "package/rtl8188eu/Config.in"
+ 	source "package/rtl8189fs/Config.in"
+ 	source "package/rtl8723bs/Config.in"
+diff --git a/package/rtc-tools/Config.in b/package/rtc-tools/Config.in
+new file mode 100644
+index 0000000000..78f5c06049
+--- /dev/null
++++ b/package/rtc-tools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RTC_TOOLS
++	bool "rtc-tools"
++	help
++	  This package provide a set of user-space tools that can be
++	  used to manipulate Real Time Clock Devices.
++
++	  https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
+diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
+new file mode 100644
+index 0000000000..81be1afe4e
+--- /dev/null
++++ b/package/rtc-tools/rtc-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 152d8455bae5ad672e99bb91dfbed5b8b4bd8b0325146d1cf1c4d80b6e0d8a16 rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7.tar.gz
++sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a COPYING
+diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
+new file mode 100644
+index 0000000000..5e9d040b27
+--- /dev/null
++++ b/package/rtc-tools/rtc-tools.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# rtc-tools
++#
++################################################################################
++
++RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
++RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
++RTC_TOOLS_LICENSE = GPL-2.0
++RTC_TOOLS_LICENSE_FILES = COPYING
++
++RTC_TOOLS_BINARIES = rtc rtc-sync rtc-range
++
++define RTC_TOOLS_BUILD_CMDS
++	$(foreach bin,$(RTC_TOOLS_BINARIES),\
++		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$(bin) $(@D)/$(bin).c
++	)
++endef
++
++define RTC_TOOLS_INSTALL_TARGET_CMDS
++	$(foreach bin,$(RTC_TOOLS_BINARIES),\
++		$(INSTALL) -D -m0755 $(@D)/$(bin) $(TARGET_DIR)/usr/bin/$(bin)
++	)
++endef
++
++$(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+2.20.1
