@@ -1,46 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 21:21:25 +0100
-Subject: [Buildroot] [git commit] ccache: bump to version 3.6
-Message-ID: <20190115202334.16A0880676@busybox.osuosl.org>
+Date: Tue, 15 Jan 2019 21:20:03 +0100
+Subject: [Buildroot] [git commit] package/openpowerlink: bump to version
+ 2.7.1
+Message-ID: <20190115202334.0681B8D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fb7b6b2be51a145ee934698937756eba6ce2d2d
+commit: https://git.buildroot.net/buildroot/commit/?id=736f4ea5e3a537924d007563f5dbffcf63b31c17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License update - a year bump.
+Remove upstream patch.
+While at it, switch to https.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ----------------------
+ package/openpowerlink/openpowerlink.hash           |  8 ++---
+ package/openpowerlink/openpowerlink.mk             |  4 +--
+ 3 files changed, 6 insertions(+), 41 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 4ea2305a88..779a2abc7e 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  bdd44b72ae4506a2e2deef9fefb15c606a474bbca7658cd2be26105155eec012  ccache-3.5.tar.xz
-+sha256  a6b129576328fcefad00cb72035bc87bc98b6a76aec0f4b59bed76d67a399b1f  ccache-3.6.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
--sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
-+sha256  2af7b3ec0ea737e1542e58db016122f6d75df9ea3b4f00c8151ecfef7040b39b  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 76ae029eae..4d9de0a074 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+deleted file mode 100644
+index 4e00ecdb67..0000000000
+--- a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 25 Aug 2018 23:36:39 +0200
+-Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
+- <sys/types.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-This is necessary to get the definition of the u_char type, otherwise
+-the build fails with the musl C library with:
+-
+-stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ???u_char??? undeclared (first use in this function)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
+----
+- stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-index f8e0216f..e5230a52 100644
+---- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-+++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
+-@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include <arpa/inet.h>
+- #include <ifaddrs.h>
+- #include <linux/if_packet.h>
+-+#include <sys/types.h>
+- 
+- //============================================================================//
+- //            G L O B A L   D E F I N I T I O N S                             //
+--- 
+-2.14.4
+-
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index da9bdd2a72..13b5e9351e 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.0/
+-md5	4843f857b8334c984827435fa9e1ab96	openPOWERLINK_V2.7.0.tar.gz
+-sha1	a256e05d187b334651764ab21a827b3a4fa64e2f	openPOWERLINK_V2.7.0.tar.gz
++# From https://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.1/
++md5	04524d1b1f9946176dce0ccb0eecf537	openPOWERLINK_V2.7.1.tar.gz
++sha1	4ee9c6e26bbc729fdbbb272155b093ffa0d9cefd	openPOWERLINK_V2.7.1.tar.gz
+ # sha256 locally computed
+-sha256	64c23ee42e3852bf2316fd99c59eae9cdd634219f92b3ea70ce747dad1e05354	openPOWERLINK_V2.7.0.tar.gz
++sha256	d0d65f4fb8f2ad209cf9575714f88f33168a1cf71e8f1801e1e1ac4df6a37ffd	openPOWERLINK_V2.7.1.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 90088cef56..f869780822 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 3.5
-+CCACHE_VERSION = 3.6
- CCACHE_SITE = https://www.samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+-OPENPOWERLINK_VERSION = V2.7.0
+-OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
++OPENPOWERLINK_VERSION = V2.7.1
++OPENPOWERLINK_SITE = https://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+ OPENPOWERLINK_LICENSE_FILES = license.md
