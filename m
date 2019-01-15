@@ -1,121 +1,46 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 15 Jan 2019 18:15:45 +0100
-Subject: [Buildroot] [PATCH] utils/check-package: use explicit relative
- imports
-Message-ID: <20190115171545.8337-1-titouan.christophe@railnova.eu>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 15 Jan 2019 20:16:25 +0200
+Subject: [Buildroot] [PATCH] package/grep: bump to version 3.3
+Message-ID: <8ff37cd4ff30e97b778427a805dca6797fd8597b.1547576185.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The syntax for explicit relative imports was introduced in
-Python2.6, and the implicit relative imports were removed
-in Python3.
+Update license file hash; URLs changed from http to https.
 
-According to PEP394, Python source files that use the `python`
-shebang line should be compatible with both Python2 and Python3.
-With this patch, users of distros where Python3 is the default
-are able to use check-package
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- utils/checkpackagelib/lib.py        |  2 +-
- utils/checkpackagelib/lib_config.py | 10 +++++-----
- utils/checkpackagelib/lib_hash.py   | 10 +++++-----
- utils/checkpackagelib/lib_mk.py     | 10 +++++-----
- utils/checkpackagelib/lib_patch.py  |  4 ++--
- 5 files changed, 18 insertions(+), 18 deletions(-)
+ package/grep/grep.hash | 7 ++++---
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-index 91f4ad49b7..06b147a470 100644
---- a/utils/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -1,6 +1,6 @@
- # See utils/checkpackagelib/readme.txt before editing this file.
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 10a5e320e410..4aa7b4ecb834 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated after checking signature
+-# http://ftp.gnu.org/gnu/grep/grep-3.1.tar.xz.sig
+-sha256 db625c7ab3bb3ee757b3926a5cfa8d9e1c3991ad24707a83dde8a5ef2bf7a07e  grep-3.1.tar.xz
+-sha256 ca372a7d92560b1fa9f6d832b440e8bcd62d9adfa8870c98287deab66d98310e  COPYING
++# http://ftp.gnu.org/gnu/grep/grep-3.3.tar.xz.sig
++# using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
++sha256 b960541c499619efd6afe1fa795402e4733c8e11ebf9fafccc0bb4bccdc5b514  grep-3.3.tar.xz
++sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 730f36a344f5..96685b0276c9 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--from base import _CheckFunction
-+from .base import _CheckFunction
- 
- 
- class ConsecutiveEmptyLines(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 1d273f1c5f..f6dc583a08 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -5,11 +5,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 6d4cc9fd62..3ddd88bae9 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -5,11 +5,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_line_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 0e430a2f12..857d7b16ad 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -6,11 +6,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- class Indent(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-index 555621afa1..4b1b48e6ca 100644
---- a/utils/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -5,8 +5,8 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import NewlineAtEof           # noqa: F401
-+from .base import _CheckFunction
-+from .lib import NewlineAtEof           # noqa: F401
- 
- 
- class ApplyOrder(_CheckFunction):
+-GREP_VERSION = 3.1
++GREP_VERSION = 3.3
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
 -- 
-2.19.2
+2.20.1
