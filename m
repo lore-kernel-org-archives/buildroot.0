@@ -1,55 +1,81 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 15 Jan 2019 07:59:32 -0600
-Subject: [Buildroot] [PATCH] package/glib-networking: bump to 2.58.0
-Message-ID: <1547560772-53599-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 15 Jan 2019 15:11:31 +0100
+Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
+Message-ID: <20190115141131.22754-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 2.56.1 (when tested in a namespace sandbox that restricted what
-the build could see on the host system), it was discovered that the
-glib-networking build would check in /etc for the Certificate Authority
-files. The newer version of this package no longer tests the build time
-location of the Certificate Authority and resolves these build failures.
+From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/8f8/8f83be0c21c21c07d5a7330f3626b739b1970625
-(and others http://autobuild.buildroot.net/?reason=glib-networking-2.56.1)
+The autobuild-run script will retrieve the list of branches to test
+from autobuild.buildroot.org. However, it the autobuild script is used
+to test some local configuration, this is probably not appropriate. The
+new --branches option allows to override the URL of the branches CSV
+file. A file:/// URL can be used for a local file.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
 ---
- package/glib-networking/glib-networking.hash | 6 +++---
- package/glib-networking/glib-networking.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ scripts/autobuild-run | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
-index 59e3fa4..d959175 100644
---- a/package/glib-networking/glib-networking.hash
-+++ b/package/glib-networking/glib-networking.hash
-@@ -1,3 +1,3 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.56/glib-networking-2.56.1.sha256sum
--sha256	df47b0e0a037d2dcf6b1846cbdf68dd4b3cc055e026bb40c4a55f19f29f635c8	glib-networking-2.56.1.tar.xz
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-+# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.58/glib-networking-2.58.0.sha256sum
-+sha256  bdfa0255e031b8ee003cc283002536b77ee76450105f1dc6ab066b9bf4330068 glib-networking-2.58.0.tar.xz
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index 2852f90..325cbcf 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 3d2e99a..77272f5 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -69,6 +69,7 @@ defaults = {
+     '--http-url': 'http://autobuild.buildroot.org/submit/',
+     '--toolchains-csv': 'support/config-fragments/autobuild/toolchain-configs.csv',
+     '--repo': 'https://github.com/buildroot/buildroot.git',
++    '--branches': 'http://autobuild.buildroot.org/branches',
+ }
  
--GLIB_NETWORKING_VERSION_MAJOR = 2.56
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
-+GLIB_NETWORKING_VERSION_MAJOR = 2.58
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
+ doc = """autobuild-run - run Buildroot autobuilder
+@@ -106,6 +107,8 @@ Options:
+   --toolchains-csv CSVFILE       Toolchain configuration file
+   -r, --repo URL                 URL of Buildroot repository to clone
+                                  Defaults to %(--repo)s
++  --branches URL                 URL of CSV file with branches to test
++                                 Defaults to %(--branches)s
+ 
+ Format of the configuration file:
+ 
+@@ -185,7 +188,7 @@ def check_version():
+         print("ERROR: script version too old, please upgrade.")
+         sys.exit(1)
+ 
+-def get_branch():
++def get_branch(url):
+     """Returns the branch that should be built. It fetches a CSV file from
+     autobuild.buildroot.org that provides the list of branches to test
+     (first field) and their weight (second field). We build a list of
+@@ -194,7 +197,7 @@ def get_branch():
+     list. This way, branches with a higher weight are more likely to
+     be selected.
+     """
+-    with urlopen_closing('http://autobuild.buildroot.org/branches') as r:
++    with urlopen_closing(url) as r:
+         csv_branches = r.readlines()
+     branches = []
+     for branch in csv.reader(csv_branches):
+@@ -314,7 +317,7 @@ def prepare_build(**kwargs):
+                   os.path.relpath(f, dldir))
+         os.remove(f)
+ 
+-    branch = get_branch()
++    branch = get_branch(kwargs['branches'])
+     log_write(log, "INFO: testing branch '%s'" % branch)
+ 
+     # Clone Buildroot. This only happens if the source directory
+@@ -764,6 +767,7 @@ def main():
+                 nice = (args['--nice'] or 0),
+                 toolchains_csv = args['--toolchains-csv'],
+                 repo = args['--repo'],
++                branches = args['--branches'],
+                 upload = upload,
+                 buildpid = buildpid,
+                 debug = args['--debug']
 -- 
-1.9.1
+2.20.1
