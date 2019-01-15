@@ -1,54 +1,33 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 15 Jan 2019 10:19:07 +0000
-Subject: [Buildroot] [PATCH v4 1/3] arch: add support for RISC-V 32-bit
- (riscv32) architecture
-In-Reply-To: <20190114214408.77e95ac8@windsurf>
-References: <20181021191203.2148-1-mark.corbin@embecosm.com>
- <20190114214408.77e95ac8@windsurf>
-Message-ID: <16304021-961d-8211-c988-3cf230900a1a@embecosm.com>
+From: Marcel Patzlaff <M.Patzlaff@pilz.de>
+Date: Tue, 15 Jan 2019 11:19:45 +0100
+Subject: [Buildroot] Migration to OpenSSL 1.1.1?
+Message-ID: <OFCE363AB5.EB39827A-ONC1258383.0037AF48-C1258383.0038BD5C@local-dmz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
+Hello,
 
-On 14/01/2019 20:44, Thomas Petazzoni wrote:
-> Hello Mark,
->
-> On Sun, 21 Oct 2018 20:12:01 +0100, Mark Corbin wrote:
->> This enables a riscv32 system to be built with a Buildroot generated
->> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
->>
->> This requires a custom version of glibc 2.26 from the riscv-glibc
->> repository. Note that there are no tags in this repository, so the
->> glibc version just consists of the 40 character commit id string.
->>
->> Thanks to Fabrice Bellard for pointing me towards the 32-bit glibc
->> repository and for providing the necessary patch to get it to build.
->>
->> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
->> ---
->> Changes v3 -> v4:
->>   - added choice for selecting 32-bit or 64-bit in Config.in.riscv
->>     This provides a new variable BR2_RISCV_32
-> I'm sure you noticed through the autobuilder e-mails, but I wanted to
-> point out that riscv32 is causing a number of build issues:
->
->   http://autobuild.buildroot.net/?arch=riscv32
-Yes, I've seen these. I have re-checked the default qemu build and that
-still seems to work without any problems.
->
-> Most of the ones I looked at are due to missing mcontext_t definition
-> in glibc. Is this something you could have a look at ?
-I'll take a look as soon as I can.
+after reading https://www.openssl.org/source/ (especially the part where 
+the version support is stated), the following question pops up:
+Are there plans to migrate the openssl package to 1.1.1?
+Not long ago, a switch was introduced to drop-in replace openssl with 
+libressl (which has OpenSSL 1.0.1 API compatibility).
+Are there reasons for this?
+Or are there problems with OpenSSL 1.1.1 which I do not know about yet?
 
-Regards
-
-Mark
+Kind regards,
+Marcel
 
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+
+
+Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+We do care about the environment! - Please consider the environment before printing this e-mail.
