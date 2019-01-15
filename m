@@ -1,97 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 19:53:18 +0100
-Subject: [Buildroot] [git commit] libinput: drop C++ dependency
-Message-ID: <20190115185919.41C2E7FC8F@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 15 Jan 2019 20:18:14 +0100
+Subject: [Buildroot] [PATCH 1/1] ltp: Bump version 20190115
+Message-ID: <20190115191814.21480-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371113470c10f0ce327f485a70546329dbbc1371
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop statx patch as it's included in this release.
 
-The meson C++ dependency is only used for a build-time header
-inclusion test, add patch dropping hard meson C++ dependency
-and build the header inclusion test only in case C++ compiler
-is available.
-
-Fixes [1]:
-
-  The Meson build system
-  Version: 0.49.0
-  Source dir: .../build/libinput-1.12.5
-  Build dir: .../build/libinput-1.12.5/build
-  Build type: cross build
-  Project name: libinput
-  Project version: 1.12.5
-  Native C compiler: cc (gcc 4.8.4 "cc (Ubuntu 4.8.4-2ubuntu1~14.04.4) 4.8.4")
-  Cross C compiler: .../host/bin/riscv64-buildroot-linux-gnu-gcc (gcc 7.4.0)
-
-  meson.build:1:0: ERROR:  Unknown compiler(s): [['.../host/bin/riscv64-buildroot-linux-gnu-g++']]
-  The follow exceptions were encountered:
-  Running ".../host/bin/riscv64-buildroot-linux-gnu-g++ --version" gave "[Errno 2] No such file or directory: '.../host/bin/riscv64-buildroot-linux-gnu-g++': '.../host/bin/riscv64-buildroot-linux-gnu-g++'"
-
-[1] http://autobuild.buildroot.net/results/bf4d3d360f635c3524a52b84a72d558770596ed0
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...-enable-CPP-include-check-only-in-case-CP.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ .../0002-statx-fix-compile-errors.patch       | 35 -------------------
+ package/ltp-testsuite/ltp-testsuite.hash      |  4 +--
+ package/ltp-testsuite/ltp-testsuite.mk        |  2 +-
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 package/ltp-testsuite/0002-statx-fix-compile-errors.patch
 
-diff --git a/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
-new file mode 100644
-index 0000000000..c9a0652e40
---- /dev/null
-+++ b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
-@@ -0,0 +1,49 @@
-+From 57383dc900e76e65ce5e5dc95f776e086100344d Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 12 Jan 2019 10:22:38 +0100
-+Subject: [PATCH] meson.build: enable CPP include check only in case CPP
-+ compiler is available
-+
-+Drop hard meson C++/CPP dependency, only needed for the build-time
-+header inclusion test, build the test only in case C++/CPP compiler
-+is available.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ meson.build | 16 +++++++++-------
-+ 1 file changed, 9 insertions(+), 7 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index a9c7c185..8183822e 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1,4 +1,4 @@
-+-project('libinput', 'c', 'cpp',
-++project('libinput', 'c',
-+ 	version : '1.12.5',
-+ 	license : 'MIT/Expat',
-+ 	default_options : [ 'c_std=gnu99', 'warning_level=2' ],
-+@@ -641,12 +641,14 @@ executable('test-build-linker',
-+ 	   include_directories : [includes_src, includes_include],
-+ 	   dependencies : [ dep_libinput, dep_libinput_util ],
-+ 	   install : false)
-+-# test including from C++
-+-executable('test-build-cxx',
-+-	   'test/build-cxx.cc',
-+-	   dependencies : [dep_udev],
-+-	   include_directories : [includes_src, includes_include],
-+-	   install : false)
-++# test including from C++ (in case CPP compiler is available)
-++if add_languages('cpp', required: false)
-++	executable('test-build-cxx',
-++		   'test/build-cxx.cc',
-++		   dependencies : [dep_udev],
-++		   include_directories : [includes_src, includes_include],
-++		   install : false)
-++endif
-+ 
-+ # This is the test suite runner, we allow disabling that one because of
-+ # dependencies
-+-- 
-+2.20.1
-+
+diff --git a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch b/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
+deleted file mode 100644
+index 6ddd2c9054..0000000000
+--- a/package/ltp-testsuite/0002-statx-fix-compile-errors.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From a945304b6a2286d0665c70250cc5475eb07fd21e Mon Sep 17 00:00:00 2001
+-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+-Date: Wed, 26 Sep 2018 11:15:45 -0300
+-Subject: [PATCH] statx: fix compile errors
+-
+-struct statx is only defined in sys/stat.h when _GNU_SOURCE is defined.
+-The testcases do define _GNU_SOURCE, but not the m4 struct check.
+-
+-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+-Acked-by: Cyril Hrubis <chrubis@suse.cz>
+----
+- m4/ltp-statx.m4 | 9 +++++++--
+- 1 file changed, 7 insertions(+), 2 deletions(-)
+-
+-diff --git a/m4/ltp-statx.m4 b/m4/ltp-statx.m4
+-index 44303d30c..5f79a94cd 100644
+---- a/m4/ltp-statx.m4
+-+++ b/m4/ltp-statx.m4
+-@@ -23,6 +23,11 @@ dnl
+- AC_DEFUN([LTP_CHECK_STATX],[
+- AC_CHECK_FUNCS(statx,,,[[#include <sys/stat.h>]])
+- AC_CHECK_HEADER(linux/fs.h,,,)
+--AC_CHECK_TYPES([struct statx],,,[[#include <sys/stat.h>]])
+--AC_CHECK_TYPES([struct statx_timestamp],,,[[#include <sys/stat.h>]])
+-+AC_CHECK_TYPES([struct statx],,,[[
+-+	#define _GNU_SOURCE
+-+	#include <sys/stat.h>
+-+]])
+-+AC_CHECK_TYPES([struct statx_timestamp],,,[[
+-+	#define _GNU_SOURCE
+-+	#include <sys/stat.h>]])
+- ])
+--- 
+-2.19.0
+-
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 1f04aee482..ba0dcbe7e8 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20180926/ltp-full-20180926.tar.xz.sha1
+-sha1 da5c8e847ed909dbd0b859c6918bc526cf6c2695  ltp-full-20180926.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20190115/ltp-full-20190115.tar.xz.sha1
++sha1 d87e2f96dc628f927e98ecba2e9dae581fc115b4  ltp-full-20190115.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 9001316fbd..ecd822b4d6 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20180926
++LTP_TESTSUITE_VERSION = 20190115
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+-- 
+2.19.2
