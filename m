@@ -1,115 +1,67 @@
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Tue, 15 Jan 2019 15:15:00 +0100
-Subject: [Buildroot] [PATCH] package/rtc-tools: new package
-In-Reply-To: <CANQCQpYiqiF7bE7yU=Lkhk79xTGJS2G_SMNYQ7r5RvDoN3OBkw@mail.gmail.com>
-References: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
- <CANQCQpYiqiF7bE7yU=Lkhk79xTGJS2G_SMNYQ7r5RvDoN3OBkw@mail.gmail.com>
-Message-ID: <20190115141500.GE2572@piout.net>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue, 15 Jan 2019 15:15:48 +0100
+Subject: [Buildroot] [v3] linux: add option to enable support for Device
+ Tree overlays
+In-Reply-To: <20190111114426.9888-1-titouan.christophe@railnova.eu>
+References: <20190111114426.9888-1-titouan.christophe@railnova.eu>
+Message-ID: <20190115141548.8434-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/01/2019 06:24:10-0600, Matthew Weber wrote:
-> Alexandre,
-> 
-> On Tue, Jan 15, 2019 at 3:32 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > This package contains a set of tools to manipulate RTC devices. They
-> > are written and maintained by the RTC subsystem Linux kernel
-> > maintainer, Alexandre Belloni.
-> >
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  DEVELOPERS                       |  1 +
-> >  package/Config.in                |  1 +
-> >  package/rtc-tools/Config.in      |  7 +++++++
-> >  package/rtc-tools/rtc-tools.hash |  3 +++
-> >  package/rtc-tools/rtc-tools.mk   | 26 ++++++++++++++++++++++++++
-> >  5 files changed, 38 insertions(+)
-> >  create mode 100644 package/rtc-tools/Config.in
-> >  create mode 100644 package/rtc-tools/rtc-tools.hash
-> >  create mode 100644 package/rtc-tools/rtc-tools.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index aa1bf325cb..c1950bb0f4 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -2130,6 +2130,7 @@ F:        package/python-serial/
-> >  F:     package/qextserialport/
-> >  F:     package/rpcbind/
-> >  F:     package/rt-tests/
-> > +F:     package/rtc-tools/
-> >  F:     package/sam-ba/
-> >  F:     package/scons/
-> >  F:     package/squashfs/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 0df9b73088..5036421a73 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -500,6 +500,7 @@ endmenu
-> >         source "package/rng-tools/Config.in"
-> >         source "package/rpi-userland/Config.in"
-> >         source "package/rs485conf/Config.in"
-> > +       source "package/rtc-tools/Config.in"
-> >         source "package/rtl8188eu/Config.in"
-> >         source "package/rtl8189fs/Config.in"
-> >         source "package/rtl8723bs/Config.in"
-> > diff --git a/package/rtc-tools/Config.in b/package/rtc-tools/Config.in
-> > new file mode 100644
-> > index 0000000000..78f5c06049
-> > --- /dev/null
-> > +++ b/package/rtc-tools/Config.in
-> > @@ -0,0 +1,7 @@
-> > +config BR2_PACKAGE_RTC_TOOLS
-> > +       bool "rtc-tools"
-> > +       help
-> > +         This package provide a set of user-space tools that can be
-> > +         used to manipulate Real Time Clock Devices.
-> > +
-> > +         https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
-> > diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
-> > new file mode 100644
-> > index 0000000000..81be1afe4e
-> > --- /dev/null
-> > +++ b/package/rtc-tools/rtc-tools.hash
-> > @@ -0,0 +1,3 @@
-> > +# Locally calculated
-> > +sha256 152d8455bae5ad672e99bb91dfbed5b8b4bd8b0325146d1cf1c4d80b6e0d8a16 rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7.tar.gz
-> > +sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a COPYING
-> > diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
-> > new file mode 100644
-> > index 0000000000..5e9d040b27
-> > --- /dev/null
-> > +++ b/package/rtc-tools/rtc-tools.mk
-> > @@ -0,0 +1,26 @@
-> > +################################################################################
-> > +#
-> > +# rtc-tools
-> > +#
-> > +################################################################################
-> > +
-> > +RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
-> > +RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
-> > +RTC_TOOLS_LICENSE = GPL-2.0
-> > +RTC_TOOLS_LICENSE_FILES = COPYING
-> > +
-> > +RTC_TOOLS_BINARIES = rtc rtc-sync rtc-range
-> > +
-> > +define RTC_TOOLS_BUILD_CMDS
-> > +       $(foreach bin,$(RTC_TOOLS_BINARIES),\
-> > +               $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$(bin) $(@D)/$(bin).c
-> 
-> Is there a minimum Linux version required for the headers this tool needs?
-> 
+Add an option to compile device trees in Linux with symbol generation
+such that device tree overlays can be loaded on the target system
 
-Yes, you need at least 2.3.99pre6-4 ;)
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+Changes v1->v2:
+* Make the option more specific about DT Overlays
+  (rather than simply describing DT symbols generation)
+* Remove indentation in linux.mk to fit code style
 
+Changes V2->v3:
+* Fix formatting of the Config.in help section to fit code style
+---
+ linux/Config.in | 9 +++++++++
+ linux/linux.mk  | 4 ++++
+ 2 files changed, 13 insertions(+)
 
+diff --git a/linux/Config.in b/linux/Config.in
+index 8aeb4bdec3..19389fd0e3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -394,6 +394,15 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	  You can provide a list of dts paths to copy and
+ 	  build, separated by spaces.
+ 
++config BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT
++	bool "Build Device Tree with overlay support"
++	default n
++	help
++	  If enabled, pass the "-@" option to dtc, such that
++	  symbols are generated in the compiled Device Tree.
++	  Choose this option to support Device Tree overlays
++	  on the target system.
++
+ endif
+ 
+ config BR2_LINUX_KERNEL_INSTALL_TARGET
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6bf2b88038..950698f336 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -381,6 +381,10 @@ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+ # reproducibility, we use our owns rather than the host ones.
+ LINUX_DEPENDENCIES += host-bison host-flex
+ 
++ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
++LINUX_MAKE_ENV += DTC_FLAGS=-@
++endif
++
+ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
