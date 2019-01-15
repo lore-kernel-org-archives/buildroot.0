@@ -1,96 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Jan 2019 20:38:20 +0100
-Subject: [Buildroot] [PATCH 1/1] libserial: fix build on sparc
-Message-ID: <20190115193820.19478-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 15 Jan 2019 21:43:34 +0200
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.6
+Message-ID: <20190115194334.28223-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On certain architectures (namely Sparc), the maximum baud rate exposed
-by the kernel headers is B2000000. Therefore, the current libserial
-code doesn't build for the Sparc and Sparc64 architectures due to
-this.
+License update - a year bump.
 
-In order to address this problem, this patch tests the value of
-__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
-architecture that supports all baud rates up to B4000000. Otherwise,
-we simply don't support the baud rates above B2000000.
-
-Fixes build failures such as:
-
-SerialPort.cpp: In member function 'int LibSerial::SerialPort::Implementation::GetBitRate(const LibSerial::BaudRate&) const':
-SerialPort.cpp:1226:14: error: 'BAUD_2000000' is not a member of 'LibSerial::BaudRate'
-         case BaudRate::BAUD_2000000:
-
-Fixes:
- - http://autobuild.buildroot.org/results/63ba95b6786464fa8e75af64593010df84530079
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...cpp-don-t-use-high-baudrates-when-not-ava.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch b/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
-new file mode 100644
-index 0000000000..4f97f598c4
---- /dev/null
-+++ b/package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch
-@@ -0,0 +1,53 @@
-+From fc0f031563146b91d255c752a61624f6dd3c14d4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 15 Jan 2019 08:33:27 +0100
-+Subject: [PATCH] SerialPort.cpp: don't use high baudrates when not available
-+
-+On certain architectures (namely Sparc), the maximum baud rate exposed
-+by the kernel headers is B2000000. Therefore, the current libserial
-+code doesn't build for the Sparc and Sparc64 architectures due to
-+this.
-+
-+In order to address this problem, this patch tests the value of
-+__MAX_BAUD. If it's higher than B2000000 then we assume we're on an
-+architecture that supports all baud rates up to B4000000. Otherwise,
-+we simply don't support the baud rates above B2000000.
-+
-+Fixes build failures such as:
-+
-+SerialPort.cpp: In member function 'int LibSerial::SerialPort::Implementation::GetBitRate(const LibSerial::BaudRate&) const':
-+SerialPort.cpp:1226:14: error: 'BAUD_2000000' is not a member of 'LibSerial::BaudRate'
-+         case BaudRate::BAUD_2000000:
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/63ba95b6786464fa8e75af64593010df84530079
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/crayzeewulf/libserial/pull/127]
-+---
-+ src/SerialPort.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/SerialPort.cpp b/src/SerialPort.cpp
-+index e3240eb..18daac0 100644
-+--- a/src/SerialPort.cpp
-++++ b/src/SerialPort.cpp
-+@@ -1223,6 +1223,7 @@ namespace LibSerial
-+             baud_rate_as_int = 1500000 ;
-+             break ;
-+ 
-++#if __MAX_BAUD > B2000000
-+         case BaudRate::BAUD_2000000:
-+             baud_rate_as_int = 2000000 ;
-+             break ;
-+@@ -1242,6 +1243,7 @@ namespace LibSerial
-+         case BaudRate::BAUD_4000000:
-+             baud_rate_as_int = 4000000 ;
-+             break ;
-++#endif /* __MAX_BAUD */
-+         default:
-+             // If an incorrect baud rate was specified, throw an exception.
-+             throw std::runtime_error(ERR_MSG_INVALID_BAUD_RATE) ;
-+-- 
-+2.14.1
-+
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 4ea2305a88..779a2abc7e 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  bdd44b72ae4506a2e2deef9fefb15c606a474bbca7658cd2be26105155eec012  ccache-3.5.tar.xz
++sha256  a6b129576328fcefad00cb72035bc87bc98b6a76aec0f4b59bed76d67a399b1f  ccache-3.6.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+-sha256  449995742c9358c55b40cefbea5d2c7f05280454d562b6e17a75f46d2c2f6e85  LICENSE.adoc
++sha256  2af7b3ec0ea737e1542e58db016122f6d75df9ea3b4f00c8151ecfef7040b39b  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 76ae029eae..4d9de0a074 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.5
++CCACHE_VERSION = 3.6
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
 -- 
-2.14.1
+2.19.1
