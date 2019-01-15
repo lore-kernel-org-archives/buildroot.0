@@ -1,72 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 15 Jan 2019 13:17:53 +0200
-Subject: [Buildroot] [PATCH] package/openssh: add upstream security fix
-Message-ID: <032192ec20e9352fd72418814e51cda13114ef8f.1547551073.git.baruch@tkos.co.il>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 15 Jan 2019 06:17:28 -0600
+Subject: [Buildroot] Migration to OpenSSL 1.1.1?
+In-Reply-To: <OFCE363AB5.EB39827A-ONC1258383.0037AF48-C1258383.0038BD5C@local-dmz.de>
+References: <OFCE363AB5.EB39827A-ONC1258383.0037AF48-C1258383.0038BD5C@local-dmz.de>
+Message-ID: <CANQCQpYePwq3HHJxOjE3F=EFzp0=-AfPUL+KX0gtXyOrHU5p4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-20685: The scp client allows server to modify permissions
-of the target directory by using empty ("D0777 0 \n") or dot ("D0777 0
-.\n") directory name.
+Marcel,
 
-The bug reporter lists a number of related vulnerabilities that are not
-fixed yet:
+On Tue, Jan 15, 2019 at 4:30 AM Marcel Patzlaff <M.Patzlaff@pilz.de> wrote:
+>
+> Hello,
+>
+> after reading https://www.openssl.org/source/ (especially the part where
+> the version support is stated), the following question pops up:
+> Are there plans to migrate the openssl package to 1.1.1?
 
-  https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
+There are some efforts starting to bump to the latest stable 1.1.1.
+We're hoping we can get things bumped before things freeze for the
+next release.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...w-empty-incoming-filename-or-ones-th.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
+> Not long ago, a switch was introduced to drop-in replace openssl with
+> libressl (which has OpenSSL 1.0.1 API compatibility).
+> Are there reasons for this?
+> Or are there problems with OpenSSL 1.1.1 which I do not know about yet?
 
-diff --git a/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch b/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
-new file mode 100644
-index 000000000000..2b5a958d13b9
---- /dev/null
-+++ b/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
-@@ -0,0 +1,39 @@
-+From 6010c0303a422a9c5fa8860c061bf7105eb7f8b2 Mon Sep 17 00:00:00 2001
-+From: "djm at openbsd.org" <djm@openbsd.org>
-+Date: Fri, 16 Nov 2018 03:03:10 +0000
-+Subject: [PATCH] upstream: disallow empty incoming filename or ones that refer
-+ to the
-+
-+current directory; based on report/patch from Harry Sintonen
-+
-+OpenBSD-Commit-ID: f27651b30eaee2df49540ab68d030865c04f6de9
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status (openssh-portable): commit 6010c0303a422
-+
-+ scp.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/scp.c b/scp.c
-+index 60682c68769b..4f3fdcd3db89 100644
-+--- a/scp.c
-++++ b/scp.c
-+@@ -1,4 +1,4 @@
-+-/* $OpenBSD: scp.c,v 1.197 2018/06/01 04:31:48 dtucker Exp $ */
-++/* $OpenBSD: scp.c,v 1.198 2018/11/16 03:03:10 djm Exp $ */
-+ /*
-+  * scp - secure remote copy.  This is basically patched BSD rcp which
-+  * uses ssh to do the data transfer (instead of using rcmd).
-+@@ -1106,7 +1106,8 @@ sink(int argc, char **argv)
-+ 			SCREWUP("size out of range");
-+ 		size = (off_t)ull;
-+ 
-+-		if ((strchr(cp, '/') != NULL) || (strcmp(cp, "..") == 0)) {
-++		if (*cp == '\0' || strchr(cp, '/') != NULL ||
-++		    strcmp(cp, ".") == 0 || strcmp(cp, "..") == 0) {
-+ 			run_err("error: unexpected filename: %s", cp);
-+ 			exit(1);
-+ 		}
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+I'm not familiar enough with the differences.  My reason for the bump
+is to get some buffer performance rewrites in the latest 1.1.1 which
+improve cryptography performance when a hardware engine is used.
+
+Matt
