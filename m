@@ -1,81 +1,115 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Jan 2019 15:11:31 +0100
-Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
-Message-ID: <20190115141131.22754-1-arnout@mind.be>
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Date: Tue, 15 Jan 2019 15:15:00 +0100
+Subject: [Buildroot] [PATCH] package/rtc-tools: new package
+In-Reply-To: <CANQCQpYiqiF7bE7yU=Lkhk79xTGJS2G_SMNYQ7r5RvDoN3OBkw@mail.gmail.com>
+References: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
+ <CANQCQpYiqiF7bE7yU=Lkhk79xTGJS2G_SMNYQ7r5RvDoN3OBkw@mail.gmail.com>
+Message-ID: <20190115141500.GE2572@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+On 15/01/2019 06:24:10-0600, Matthew Weber wrote:
+> Alexandre,
+> 
+> On Tue, Jan 15, 2019 at 3:32 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > This package contains a set of tools to manipulate RTC devices. They
+> > are written and maintained by the RTC subsystem Linux kernel
+> > maintainer, Alexandre Belloni.
+> >
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > ---
+> >  DEVELOPERS                       |  1 +
+> >  package/Config.in                |  1 +
+> >  package/rtc-tools/Config.in      |  7 +++++++
+> >  package/rtc-tools/rtc-tools.hash |  3 +++
+> >  package/rtc-tools/rtc-tools.mk   | 26 ++++++++++++++++++++++++++
+> >  5 files changed, 38 insertions(+)
+> >  create mode 100644 package/rtc-tools/Config.in
+> >  create mode 100644 package/rtc-tools/rtc-tools.hash
+> >  create mode 100644 package/rtc-tools/rtc-tools.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index aa1bf325cb..c1950bb0f4 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -2130,6 +2130,7 @@ F:        package/python-serial/
+> >  F:     package/qextserialport/
+> >  F:     package/rpcbind/
+> >  F:     package/rt-tests/
+> > +F:     package/rtc-tools/
+> >  F:     package/sam-ba/
+> >  F:     package/scons/
+> >  F:     package/squashfs/
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 0df9b73088..5036421a73 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -500,6 +500,7 @@ endmenu
+> >         source "package/rng-tools/Config.in"
+> >         source "package/rpi-userland/Config.in"
+> >         source "package/rs485conf/Config.in"
+> > +       source "package/rtc-tools/Config.in"
+> >         source "package/rtl8188eu/Config.in"
+> >         source "package/rtl8189fs/Config.in"
+> >         source "package/rtl8723bs/Config.in"
+> > diff --git a/package/rtc-tools/Config.in b/package/rtc-tools/Config.in
+> > new file mode 100644
+> > index 0000000000..78f5c06049
+> > --- /dev/null
+> > +++ b/package/rtc-tools/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_RTC_TOOLS
+> > +       bool "rtc-tools"
+> > +       help
+> > +         This package provide a set of user-space tools that can be
+> > +         used to manipulate Real Time Clock Devices.
+> > +
+> > +         https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
+> > diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
+> > new file mode 100644
+> > index 0000000000..81be1afe4e
+> > --- /dev/null
+> > +++ b/package/rtc-tools/rtc-tools.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally calculated
+> > +sha256 152d8455bae5ad672e99bb91dfbed5b8b4bd8b0325146d1cf1c4d80b6e0d8a16 rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7.tar.gz
+> > +sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a COPYING
+> > diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
+> > new file mode 100644
+> > index 0000000000..5e9d040b27
+> > --- /dev/null
+> > +++ b/package/rtc-tools/rtc-tools.mk
+> > @@ -0,0 +1,26 @@
+> > +################################################################################
+> > +#
+> > +# rtc-tools
+> > +#
+> > +################################################################################
+> > +
+> > +RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
+> > +RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
+> > +RTC_TOOLS_LICENSE = GPL-2.0
+> > +RTC_TOOLS_LICENSE_FILES = COPYING
+> > +
+> > +RTC_TOOLS_BINARIES = rtc rtc-sync rtc-range
+> > +
+> > +define RTC_TOOLS_BUILD_CMDS
+> > +       $(foreach bin,$(RTC_TOOLS_BINARIES),\
+> > +               $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$(bin) $(@D)/$(bin).c
+> 
+> Is there a minimum Linux version required for the headers this tool needs?
+> 
 
-The autobuild-run script will retrieve the list of branches to test
-from autobuild.buildroot.org. However, it the autobuild script is used
-to test some local configuration, this is probably not appropriate. The
-new --branches option allows to override the URL of the branches CSV
-file. A file:/// URL can be used for a local file.
+Yes, you need at least 2.3.99pre6-4 ;)
 
-Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
----
- scripts/autobuild-run | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 3d2e99a..77272f5 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -69,6 +69,7 @@ defaults = {
-     '--http-url': 'http://autobuild.buildroot.org/submit/',
-     '--toolchains-csv': 'support/config-fragments/autobuild/toolchain-configs.csv',
-     '--repo': 'https://github.com/buildroot/buildroot.git',
-+    '--branches': 'http://autobuild.buildroot.org/branches',
- }
- 
- doc = """autobuild-run - run Buildroot autobuilder
-@@ -106,6 +107,8 @@ Options:
-   --toolchains-csv CSVFILE       Toolchain configuration file
-   -r, --repo URL                 URL of Buildroot repository to clone
-                                  Defaults to %(--repo)s
-+  --branches URL                 URL of CSV file with branches to test
-+                                 Defaults to %(--branches)s
- 
- Format of the configuration file:
- 
-@@ -185,7 +188,7 @@ def check_version():
-         print("ERROR: script version too old, please upgrade.")
-         sys.exit(1)
- 
--def get_branch():
-+def get_branch(url):
-     """Returns the branch that should be built. It fetches a CSV file from
-     autobuild.buildroot.org that provides the list of branches to test
-     (first field) and their weight (second field). We build a list of
-@@ -194,7 +197,7 @@ def get_branch():
-     list. This way, branches with a higher weight are more likely to
-     be selected.
-     """
--    with urlopen_closing('http://autobuild.buildroot.org/branches') as r:
-+    with urlopen_closing(url) as r:
-         csv_branches = r.readlines()
-     branches = []
-     for branch in csv.reader(csv_branches):
-@@ -314,7 +317,7 @@ def prepare_build(**kwargs):
-                   os.path.relpath(f, dldir))
-         os.remove(f)
- 
--    branch = get_branch()
-+    branch = get_branch(kwargs['branches'])
-     log_write(log, "INFO: testing branch '%s'" % branch)
- 
-     # Clone Buildroot. This only happens if the source directory
-@@ -764,6 +767,7 @@ def main():
-                 nice = (args['--nice'] or 0),
-                 toolchains_csv = args['--toolchains-csv'],
-                 repo = args['--repo'],
-+                branches = args['--branches'],
-                 upload = upload,
-                 buildpid = buildpid,
-                 debug = args['--debug']
 -- 
-2.20.1
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
