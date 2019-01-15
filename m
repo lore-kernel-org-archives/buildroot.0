@@ -1,96 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 20:12:21 +0100
-Subject: [Buildroot] [git commit] syslog-ng: fix build on m68k with uclibc
-Message-ID: <20190115200901.C6BEB817B6@busybox.osuosl.org>
+Date: Tue, 15 Jan 2019 21:15:50 +0100
+Subject: [Buildroot] [git commit] package/grep: bump to version 3.3
+Message-ID: <20190115201534.6412B8D4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8a585d4eecbf966d93650f3a7f4c0316e24d85e
+commit: https://git.buildroot.net/buildroot/commit/?id=a6beef16b63094ebf8fab56c80f83e9b3535df04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uclibc on m68k defines pthread_spinlock_t but does not define
-pthread_spin_trylock so check for this function before using it
+Update license file hash; URLs changed from http to https.
 
-Fixes:
- - http://autobuild.buildroot.org/results/0a6de11c030a4f39e402917809fc6d33fb463d1b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/syslog-ng/0001-fix-build-on-uclibc.patch | 51 ++++++++++++++++++++++++
- package/syslog-ng/syslog-ng.mk                   |  2 +
- 2 files changed, 53 insertions(+)
+ package/grep/grep.hash | 7 ++++---
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/syslog-ng/0001-fix-build-on-uclibc.patch b/package/syslog-ng/0001-fix-build-on-uclibc.patch
-new file mode 100644
-index 0000000000..dbb9b66b5c
---- /dev/null
-+++ b/package/syslog-ng/0001-fix-build-on-uclibc.patch
-@@ -0,0 +1,51 @@
-+From 98bd6106f8c48bc8f0a27bd712ed4ba6249e9a5f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 13 Jan 2019 11:03:51 +0100
-+Subject: [PATCH] fix build on m68k with uclibc
-+
-+uclibc on m68k defines pthread_spinlock_t but does not define
-+pthread_spin_trylock so check for this function before using it
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0a6de11c030a4f39e402917809fc6d33fb463d1b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/buytenh/ivykis/pull/17]
-+---
-+ configure.ac   | 3 +++
-+ src/spinlock.h | 4 ++++
-+ 2 files changed, 7 insertions(+)
-+
-+diff --git a/lib/ivykis/configure.ac b/lib/ivykis/configure.ac
-+index e9b10c0..24152a9 100644
-+--- a/lib/ivykis/configure.ac
-++++ b/lib/ivykis/configure.ac
-+@@ -110,6 +110,9 @@ AC_CACHE_CHECK(for linux/netfilter_ipv4.h, ac_cv_header_linux_netfilter_ipv4_h,
-+ # Check for pthread_spinlock_t.
-+ AC_CHECK_TYPES([pthread_spinlock_t], [], [], [[#include <pthread.h>]])
-+ 
-++# Check for pthread_spin_trylock
-++AC_CHECK_FUNCS([pthread_spin_trylock])
-++
-+ # Check which header file defines 'struct timespec'.
-+ for hdr in sys/time.h sys/timers.h time.h pthread.h
-+ do
-+diff --git a/lib/ivykis/src/spinlock.h b/lib/ivykis/src/spinlock.h
-+index ebcdbec..d837df8 100644
-+--- a/lib/ivykis/src/spinlock.h
-++++ b/lib/ivykis/src/spinlock.h
-+@@ -76,7 +76,11 @@ static inline void fallback_spin_unlock(fallback_spinlock_t *lock)
-+ 
-+ static inline int pthread_spinlocks_available(void)
-+ {
-++#ifdef HAVE_PTHREAD_SPIN_TRYLOCK
-+ 	return !!(pthread_spin_trylock != NULL);
-++#else
-++	return 0;
-++#endif
-+ }
-+ 
-+ 
-+-- 
-+2.14.1
-+
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 4316382153..ecde9e8181 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -12,6 +12,8 @@ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
-+# We're patching configure.ac
-+SYSLOG_NG_AUTORECONF = YES
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 10a5e320e4..4aa7b4ecb8 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated after checking signature
+-# http://ftp.gnu.org/gnu/grep/grep-3.1.tar.xz.sig
+-sha256 db625c7ab3bb3ee757b3926a5cfa8d9e1c3991ad24707a83dde8a5ef2bf7a07e  grep-3.1.tar.xz
+-sha256 ca372a7d92560b1fa9f6d832b440e8bcd62d9adfa8870c98287deab66d98310e  COPYING
++# http://ftp.gnu.org/gnu/grep/grep-3.3.tar.xz.sig
++# using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
++sha256 b960541c499619efd6afe1fa795402e4733c8e11ebf9fafccc0bb4bccdc5b514  grep-3.3.tar.xz
++sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 730f36a344..96685b0276 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 3.1
++GREP_VERSION = 3.3
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
