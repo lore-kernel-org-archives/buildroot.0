@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Jan 2019 11:15:17 +0100
-Subject: [Buildroot] [PATCH v2 2/7] tpm2-tss: fix build with
- BR2_FORTIFY_SOURCE_1
+Date: Tue, 15 Jan 2019 11:15:21 +0100
+Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce dependency on
+ tpm2-abrmd
 In-Reply-To: <20190115101522.21042-1-peter@korsgaard.com>
 References: <20190115101522.21042-1-peter@korsgaard.com>
-Message-ID: <20190115101522.21042-2-peter@korsgaard.com>
+Message-ID: <20190115101522.21042-6-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script passes -U FORTIFY_SOURCE -D FORTIFY_SOURCE=2 by
-default, which conflicts with BR2_FORTIFY_SOURCE_1 as -Werror is used:
+tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
+CAN be used without, E.G.  by setting the TPM2TOOLS_TCTI_NAME environment
+variable to communicate directly with the kernel driver:
 
-<cross>-gcc ..  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 .. -D_FORTIFY_SOURCE=1
-<command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+export TPM2TOOLS_TCTI_NAME=device
 
-Disable this so the FORTIFY_SOURCE flags in TARGET_CFLAGS (if any) is used
-instead.
+For some use cases (E.G.  initramfs) it makes sense to use tpm2-tools
+without abrmd, so downgrade the dependency from select to imply, so abrmd is
+enabled by default but can be explicitly disabled.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tss/tpm2-tss.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/tpm2-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index e2e58a092d..ecd9db11fa 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -12,9 +12,12 @@ TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
- TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc
- 
--# -fstack-protector-all is used by default. Disable that so the
--# BR2_SSP_* options in the toolchain wrapper are used instead
-+# -fstack-protector-all and FORTIFY_SOURCE=2 is used by
-+# default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
-+# in the toolchain wrapper and CFLAGS are used instead
- TPM2_TSS_CONF_ENV = \
--	ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=no
-+	ax_cv_check_cflags___________Wall__Werror_______fstack_protector_all=no \
-+	ax_cv_check_ccppflags___________Wall__Werror_______U_FORTIFY_SOURCE=no \
-+	ax_cv_check_ccppflags___________Wall__Werror_______D_FORTIFY_SOURCE_2=no
- 
- $(eval $(autotools-package))
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index cc87e2a1bf..f4622b4ec9 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_TPM2_ABRMD # run-time
++	imply BR2_PACKAGE_TPM2_ABRMD # run-time
+ 	select BR2_PACKAGE_TPM2_TSS
+ 	help
+ 	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
 -- 
 2.11.0
