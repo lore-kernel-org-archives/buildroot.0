@@ -1,36 +1,106 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 15 Jan 2019 06:17:28 -0600
-Subject: [Buildroot] Migration to OpenSSL 1.1.1?
-In-Reply-To: <OFCE363AB5.EB39827A-ONC1258383.0037AF48-C1258383.0038BD5C@local-dmz.de>
-References: <OFCE363AB5.EB39827A-ONC1258383.0037AF48-C1258383.0038BD5C@local-dmz.de>
-Message-ID: <CANQCQpYePwq3HHJxOjE3F=EFzp0=-AfPUL+KX0gtXyOrHU5p4A@mail.gmail.com>
+Date: Tue, 15 Jan 2019 06:24:10 -0600
+Subject: [Buildroot] [PATCH] package/rtc-tools: new package
+In-Reply-To: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
+References: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpYiqiF7bE7yU=Lkhk79xTGJS2G_SMNYQ7r5RvDoN3OBkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcel,
+Alexandre,
 
-On Tue, Jan 15, 2019 at 4:30 AM Marcel Patzlaff <M.Patzlaff@pilz.de> wrote:
+On Tue, Jan 15, 2019 at 3:32 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> This package contains a set of tools to manipulate RTC devices. They
+> are written and maintained by the RTC subsystem Linux kernel
+> maintainer, Alexandre Belloni.
 >
-> after reading https://www.openssl.org/source/ (especially the part where
-> the version support is stated), the following question pops up:
-> Are there plans to migrate the openssl package to 1.1.1?
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  DEVELOPERS                       |  1 +
+>  package/Config.in                |  1 +
+>  package/rtc-tools/Config.in      |  7 +++++++
+>  package/rtc-tools/rtc-tools.hash |  3 +++
+>  package/rtc-tools/rtc-tools.mk   | 26 ++++++++++++++++++++++++++
+>  5 files changed, 38 insertions(+)
+>  create mode 100644 package/rtc-tools/Config.in
+>  create mode 100644 package/rtc-tools/rtc-tools.hash
+>  create mode 100644 package/rtc-tools/rtc-tools.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index aa1bf325cb..c1950bb0f4 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2130,6 +2130,7 @@ F:        package/python-serial/
+>  F:     package/qextserialport/
+>  F:     package/rpcbind/
+>  F:     package/rt-tests/
+> +F:     package/rtc-tools/
+>  F:     package/sam-ba/
+>  F:     package/scons/
+>  F:     package/squashfs/
+> diff --git a/package/Config.in b/package/Config.in
+> index 0df9b73088..5036421a73 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -500,6 +500,7 @@ endmenu
+>         source "package/rng-tools/Config.in"
+>         source "package/rpi-userland/Config.in"
+>         source "package/rs485conf/Config.in"
+> +       source "package/rtc-tools/Config.in"
+>         source "package/rtl8188eu/Config.in"
+>         source "package/rtl8189fs/Config.in"
+>         source "package/rtl8723bs/Config.in"
+> diff --git a/package/rtc-tools/Config.in b/package/rtc-tools/Config.in
+> new file mode 100644
+> index 0000000000..78f5c06049
+> --- /dev/null
+> +++ b/package/rtc-tools/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_RTC_TOOLS
+> +       bool "rtc-tools"
+> +       help
+> +         This package provide a set of user-space tools that can be
+> +         used to manipulate Real Time Clock Devices.
+> +
+> +         https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
+> diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
+> new file mode 100644
+> index 0000000000..81be1afe4e
+> --- /dev/null
+> +++ b/package/rtc-tools/rtc-tools.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 152d8455bae5ad672e99bb91dfbed5b8b4bd8b0325146d1cf1c4d80b6e0d8a16 rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7.tar.gz
+> +sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a COPYING
+> diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
+> new file mode 100644
+> index 0000000000..5e9d040b27
+> --- /dev/null
+> +++ b/package/rtc-tools/rtc-tools.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# rtc-tools
+> +#
+> +################################################################################
+> +
+> +RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
+> +RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
+> +RTC_TOOLS_LICENSE = GPL-2.0
+> +RTC_TOOLS_LICENSE_FILES = COPYING
+> +
+> +RTC_TOOLS_BINARIES = rtc rtc-sync rtc-range
+> +
+> +define RTC_TOOLS_BUILD_CMDS
+> +       $(foreach bin,$(RTC_TOOLS_BINARIES),\
+> +               $(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$(bin) $(@D)/$(bin).c
 
-There are some efforts starting to bump to the latest stable 1.1.1.
-We're hoping we can get things bumped before things freeze for the
-next release.
-
-> Not long ago, a switch was introduced to drop-in replace openssl with
-> libressl (which has OpenSSL 1.0.1 API compatibility).
-> Are there reasons for this?
-> Or are there problems with OpenSSL 1.1.1 which I do not know about yet?
-
-I'm not familiar enough with the differences.  My reason for the bump
-is to get some buffer performance rewrites in the latest 1.1.1 which
-improve cryptography performance when a hardware engine is used.
+Is there a minimum Linux version required for the headers this tool needs?
 
 Matt
