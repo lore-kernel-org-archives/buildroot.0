@@ -1,98 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Jan 2019 22:09:40 +0100
-Subject: [Buildroot] [PATCH 1/1] nettle: fix build with gcc 4.7
-Message-ID: <20190116210940.25410-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 16 Jan 2019 22:15:10 +0100
+Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.9.0
+Message-ID: <20190116211510.32049-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/69226d42e9a483aaff44fb3f468b4724415e71f6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- .../0001-Fix-accidental-use-of-C99-for-loop.patch  | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
+ package/wavemon/wavemon.hash | 2 +-
+ package/wavemon/wavemon.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch b/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
-new file mode 100644
-index 0000000000..e03af7a45a
---- /dev/null
-+++ b/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
-@@ -0,0 +1,71 @@
-+From f5a3a224bf00bef5669366d2ae23c2b2b13b8016 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Niels=20M=C3=B6ller?= <nisse@lysator.liu.se>
-+Date: Wed, 26 Dec 2018 11:04:31 +0100
-+Subject: [PATCH] Fix accidental use of C99 for loop.
-+
-+* rsa-sign-tr.c (sec_equal): Fix accidental use of C99 for loop.
-+Reported by Andreas Gustafsson.
-+* testsuite/rsa-sec-decrypt-test.c (test_main): Likewise.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://git.lysator.liu.se/nettle/nettle/commit/f5a3a224bf00bef5669366d2ae23c2b2b13b8016]
-+---
-+ ChangeLog                        | 6 ++++++
-+ rsa-sign-tr.c                    | 3 ++-
-+ testsuite/rsa-sec-decrypt-test.c | 3 ++-
-+ 3 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index 4c7338a1..079d0153 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -1,3 +1,9 @@
-++2018-12-26  Niels M?ller  <nisse@lysator.liu.se>
-++
-++	* rsa-sign-tr.c (sec_equal): Fix accidental use of C99 for loop.
-++	Reported by Andreas Gustafsson.
-++	* testsuite/rsa-sec-decrypt-test.c (test_main): Likewise.
-++
-+ 2018-12-04  Niels M?ller  <nisse@lysator.liu.se>
-+ 
-+ 	* Released nettle-3.4.1.
-+diff --git a/rsa-sign-tr.c b/rsa-sign-tr.c
-+index 59c9bd07..f824c4ca 100644
-+--- a/rsa-sign-tr.c
-++++ b/rsa-sign-tr.c
-+@@ -239,8 +239,9 @@ static int
-+ sec_equal(const mp_limb_t *a, const mp_limb_t *b, size_t limbs)
-+ {
-+   volatile mp_limb_t z = 0;
-++  size_t i;
-+ 
-+-  for (size_t i = 0; i < limbs; i++)
-++  for (i = 0; i < limbs; i++)
-+     {
-+       z |= (a[i] ^ b[i]);
-+     }
-+diff --git a/testsuite/rsa-sec-decrypt-test.c b/testsuite/rsa-sec-decrypt-test.c
-+index 64f0b13c..fb0ed3a1 100644
-+--- a/testsuite/rsa-sec-decrypt-test.c
-++++ b/testsuite/rsa-sec-decrypt-test.c
-+@@ -68,6 +68,7 @@ test_main(void)
-+   unsigned n_size = 1024;
-+   mpz_t gibberish;
-+   mpz_t garbage;
-++  size_t size;
-+ 
-+   rsa_private_key_init(&key);
-+   rsa_public_key_init(&pub);
-+@@ -78,7 +79,7 @@ test_main(void)
-+ 
-+   memset(verifybad, 'A', PAYLOAD_SIZE);
-+ 
-+-  for (size_t size = 1; size < 51; size++)
-++  for (size = 1; size < 51; size++)
-+     {
-+       ASSERT (rsa_generate_keypair(&pub, &key, &random_ctx,
-+ 			           (nettle_random_func *) knuth_lfib_random,
-+-- 
-+2.18.1
-+
+diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+index 99d7382450..798e2973ce 100644
+--- a/package/wavemon/wavemon.hash
++++ b/package/wavemon/wavemon.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4199e2ad11a036f4289f5ad42a8b0fe518f2b5ff77447f4c366dbcf3f23e91d5  wavemon-v0.8.2.tar.gz
++sha256  5823ef9459d6147a457b390b6744a77465584e93d37c2809fa7a0be557070166  wavemon-v0.9.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+index 0639c3450e..864e0709d1 100644
+--- a/package/wavemon/wavemon.mk
++++ b/package/wavemon/wavemon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAVEMON_VERSION = v0.8.2
++WAVEMON_VERSION = v0.9.0
+ WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
+ WAVEMON_LICENSE = GPL-3.0+
+ WAVEMON_LICENSE_FILES = COPYING
 -- 
-2.14.1
+2.20.1
