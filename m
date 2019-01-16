@@ -1,24 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 13:09:26 +0100
-Subject: [Buildroot] [PATCH 1/1] sunxi-cedarx: needs -fPIC
-In-Reply-To: <20190112092459.21382-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 12 Jan 2019 10:24:59 +0100")
-References: <20190112092459.21382-1-fontaine.fabrice@gmail.com>
-Message-ID: <871s5cg5xl.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Jan 2019 13:13:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dash: Create $(TARGET_DIR)/bin
+ before install
+In-Reply-To: <20190114035532.23010-1-vadim4j@gmail.com> (Vadim Kochan's
+ message of "Mon, 14 Jan 2019 05:55:32 +0200")
+References: <20190114035532.23010-1-vadim4j@gmail.com>
+Message-ID: <87won4er70.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
+ > The build fails because $(TARGET_DIR)/bin folder may not exist if for
+ > example to use the following defconfig:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > 	BR2_x86_64=y
+ > 	BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ > 	BR2_SYSTEM_BIN_SH_DASH=y
+ > 	BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ > 	BR2_LINUX_KERNEL=y
+ > 	BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ > 	BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+ > 	BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ > 	BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+ > 	BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+ > 	BR2_PACKAGE_S6_LINUX_INIT=y
+ > 	BR2_TARGET_ROOTFS_EXT2=y
 
-Committed, thanks.
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+
+Committed after chaning it to use install -D instead, thanks.
 
 -- 
 Bye, Peter Korsgaard
