@@ -1,100 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 12:43:41 +0100
-Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce
- dependency on tpm2-abrmd
-In-Reply-To: <20190115204308.GB2556@scaer> (Yann E. MORIN's message of "Tue,
- 15 Jan 2019 21:43:08 +0100")
-References: <20190115101522.21042-1-peter@korsgaard.com>
- <20190115101522.21042-6-peter@korsgaard.com>
- <20190115204308.GB2556@scaer>
-Message-ID: <875zuog74i.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Jan 2019 12:46:54 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <f0836ac8-ad36-b0f7-a6e1-8f9eef1fe7cd@gmail.com>
+References: <20190115224239.26125-1-ps.report@gmx.net>
+ <f0836ac8-ad36-b0f7-a6e1-8f9eef1fe7cd@gmail.com>
+Message-ID: <0f76e938-4bda-3168-2699-52727529c04a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-
- > Peter, All,
- > On 2019-01-15 11:15 +0100, Peter Korsgaard spake thusly:
- >> tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
- >> CAN be used without, E.G.  by setting the TPM2TOOLS_TCTI_NAME environment
- >> variable to communicate directly with the kernel driver:
- >> 
- >> export TPM2TOOLS_TCTI_NAME=device
- >> 
- >> For some use cases (E.G.  initramfs) it makes sense to use tpm2-tools
- >> without abrmd, so downgrade the dependency from select to imply, so abrmd is
- >> enabled by default but can be explicitly disabled.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> package/tpm2-tools/Config.in | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
- >> 
- >> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
- >> index cc87e2a1bf..f4622b4ec9 100644
- >> --- a/package/tpm2-tools/Config.in
- >> +++ b/package/tpm2-tools/Config.in
- >> @@ -8,7 +8,7 @@ config BR2_PACKAGE_TPM2_TOOLS
- >> select BR2_PACKAGE_LIBCURL
- >> select BR2_PACKAGE_LIBGLIB2
- >> select BR2_PACKAGE_OPENSSL
- >> -	select BR2_PACKAGE_TPM2_ABRMD # run-time
- >> +	imply BR2_PACKAGE_TPM2_ABRMD # run-time
-
- > Sorry, but I reiterate my position: I don't like the use of 'imply'.
-
- > Either the thing is mandatory, in which case we select it or depend on
- > it, or the thing is optional, in which case we elt the user enable it.
-
-I understand you don't like it, but what is the alternative? Just
-mention the optional-but-likely-to-be-needed dependency in the help
-text? That is IMHO worse than imply.
-
-For this specific case, tpm2-tools fails with a somewhat confusing error
-message if tpm2-abrmd isn't available unless a specific command line
-option / environment variable is used:
-
-# tpm2_pcrlist
-
-** (process:8628): WARNING **: 11:38:39.606: Failed to create connection with service: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name com.intel.tss2.Tabrmd was not provided by any .service files
-ERROR: Failed to initialize TABRMD TCTI context: 0xa0008
-
-The solution is to set the TCTI name to device, either through the
-TPM2TOOLS_TCTI_NAME environment variable or the --tcti option.
-
-This is imho exactly the kind of use cases imply has been made for.
 
 
- > Use of imply does not sound nice to me, because it is not authoritative.
- > I'm afraid we get reports of users complaining that "sometimes the stuff
- > is enabled when I do X, while sometmes it is not enabled when I do the
- > same X.'
+On 16/01/2019 02:40, Ryan Coe wrote:
+> I'm getting a build failure in wget with the patch.? The failure is:
+> 
+> checking for library containing psl_builtin... no
+> configure: WARNING: *** libpsl was not found. Fallback to builtin cookie checking.
+> checking for ZLIB... yes
+> checking for OPENSSL... no
+> configure: error: Package requirements (openssl) were not met:
+> 
+> Package 'openssl', required by 'virtual:world', not found
+> 
+> Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> installed software in a non-standard prefix.
+> 
+> Alternatively, you may set the environment variables OPENSSL_CFLAGS
+> and OPENSSL_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
+> make: *** [package/pkg-generic.mk:223:
+> /home/ryan/devel/buildroot/output/build/wget-1.20.1/.stamp_configured] Error 1
+> 
+> 
+> The following tweak makes things build again for me:
+> 
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index e461e08126..8046995720 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -74,7 +74,7 @@ define HOST_LIBOPENSSL_CONFIGURE_CMDS
+> ???? ??? ./config \
+> ???? ??? --prefix=$(HOST_DIR) \
+> ???? ??? --openssldir=$(HOST_DIR)/etc/ssl \
+> -??? ??? --libdir=$(HOST_DIR)/lib \
+> +??? ??? --libdir=lib \
+> ???? ??? -Wl,-rpath,'$(HOST_DIR)/lib' \
+> ???? ??? shared \
+> ???? ??? zlib-dynamic \
+> @@ -90,7 +90,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+> ???? ??? ??? linux-$(LIBOPENSSL_TARGET_ARCH) \
+> ???? ??? ??? --prefix=/usr \
+> ???? ??? ??? --openssldir=/etc/ssl \
+> -??? ??? ??? --libdir=/lib \
+> +??? ??? ??? --libdir=lib \
+> ???? ??? ??? $(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+> ???? ??? ??? $(if $(BR2_STATIC_LIBS),no-shared,shared) \
+> ???? ??? ??? no-rc5 \
 
-Is that any different than changing toolchain options or toggling
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
+ That is definitely not good, because it breaks things in other places.
 
+ I think it's worth a try to remove the --libdir entirely instead, upstream is
+supposed to have fixed the libdir handling to correspond to autotools
+conventions. And if it doesn't work, we should fix it with an upstreamable patch.
 
- > The coutner argument has been that we were now trying to make sensible
- > choices for the user, so that things "work out of the box". My position
- > is that it is an illusion, because making things "just work" is more
- > often than not more involving than just enabling a package.
-
-I agree that we probably cannot do this perfectly, but a solution for
-E.G. 80% of the use cases is still an improvement, as long as the
-remaining 20% can still change things.
-
- > For example, when dealing with TPM and such: keys and certs provisionning
- > and checking the chain of trust and such is only scratching the surface.
- > People that want to deal with this topic better know what they *are* doing,
- > as it is a sensible topic. Those people will have to understand what they
- > need if they do not already know.
-
-Sure, but we can atleast ensure that the tpm2-tools utilites do not fail
-out of the box because of a missing obscure dependency and that fairly
-common use cases are possible.
-
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
