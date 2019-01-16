@@ -1,107 +1,47 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 16 Jan 2019 23:51:35 +0200
-Subject: [Buildroot] [RFC 3/3] package/s6-rc: Allow to integrate s6-rc
- services
-In-Reply-To: <20190116215135.32142-1-vadim4j@gmail.com>
-References: <20190116215135.32142-1-vadim4j@gmail.com>
-Message-ID: <20190116215135.32142-4-vadim4j@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 16 Jan 2019 22:46:18 +0100
+Subject: [Buildroot] [PATCH 1/1] exempi: fix libiconv dependency
+Message-ID: <20190116214618.7467-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It allows to install s6-rc services by board or package into
-/etc/s6-rc/service which will be compiled as s6-rc db as
-/etc/s6-rc/compiled-initial. Services are compiled on stage
-when rootfs overlay & post-build already performed.
+Fixes:
+ - http://autobuild.buildroot.org/results/a77a891683ae9a135dc31be1b419061922d0e1ba
 
-Added rc.init & rc.shutdown scripts which are needed to run s6-rc
-services.
-
-This is very basic s6-rc system support which even does not have the
-basic stuff like /proc /sys /dev setup, but this might be added in
-future work.
-
-All above is only possible if BR2_INIT_S6 is selected.
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/s6-rc/rc.init     |  4 ++++
- package/s6-rc/rc.shutdown |  3 +++
- package/s6-rc/s6-rc.mk    | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 package/s6-rc/rc.init
- create mode 100644 package/s6-rc/rc.shutdown
+ package/exempi/Config.in | 1 +
+ package/exempi/exempi.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/s6-rc/rc.init b/package/s6-rc/rc.init
-new file mode 100644
-index 0000000000..6709c6488b
---- /dev/null
-+++ b/package/s6-rc/rc.init
-@@ -0,0 +1,4 @@
-+#! /usr/bin/execlineb -P
-+
-+if { s6-rc-init /run/service }
-+if { s6-rc -t 600000 -- change default }
-diff --git a/package/s6-rc/rc.shutdown b/package/s6-rc/rc.shutdown
-new file mode 100644
-index 0000000000..58d49b5cfd
---- /dev/null
-+++ b/package/s6-rc/rc.shutdown
-@@ -0,0 +1,3 @@
-+#! /usr/bin/execlineb -P
-+
-+s6-rc -da change
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 222ba139c6..007e7d9e1b 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -11,6 +11,13 @@ S6_RC_LICENSE_FILES = COPYING
- S6_RC_INSTALL_STAGING = YES
- S6_RC_DEPENDENCIES = s6
+diff --git a/package/exempi/Config.in b/package/exempi/Config.in
+index ed71e0fb12..c9af219a20 100644
+--- a/package/exempi/Config.in
++++ b/package/exempi/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_EXEMPI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Exempi is an implementation of XMP (Extensible Metadata
+diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
+index e7b297ffe1..600ac3a1f2 100644
+--- a/package/exempi/exempi.mk
++++ b/package/exempi/exempi.mk
+@@ -9,7 +9,8 @@ EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
+ EXEMPI_SITE = https://libopenraw.freedesktop.org/download
+ EXEMPI_INSTALL_STAGING = YES
+ EXEMPI_CONF_OPTS = --disable-unittest
+-EXEMPI_DEPENDENCIES = host-pkgconf expat zlib
++EXEMPI_DEPENDENCIES = host-pkgconf expat zlib \
++	$(if $(BR2_PACKAGE_LIBICONV), libiconv)
+ EXEMPI_LICENSE = BSD-3-Clause
+ EXEMPI_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_INIT_S6),y)
-+# Needs s6-rc-compile to create initial rc db, also
-+# build after s6-linux-init to rewrite rc.init for run
-+# s6-rc services.
-+S6_RC_DEPENDENCIES += host-s6-rc s6-linux-init
-+endif
-+
- S6_RC_CONF_OPTS = \
- 	--prefix=/usr \
- 	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-@@ -44,6 +51,31 @@ define S6_RC_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
- endef
- 
-+ifeq ($(BR2_INIT_S6),y)
-+
-+define S6_RC_PREPARE_INIT_RC
-+	mkdir -p $(TARGET_DIR)/etc/s6-rc/service/default
-+	echo bundle > $(TARGET_DIR)/etc/s6-rc/service/default/type
-+	touch $(TARGET_DIR)/etc/s6-rc/service/default/contents
-+
-+	mkdir -p $(TARGET_DIR)/etc/s6-rc/compiled-initial
-+	ln -sf compiled-initial $(TARGET_DIR)/etc/s6-rc/compiled
-+
-+	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.init $(TARGET_DIR)/etc/rc.init
-+	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.shutdown $(TARGET_DIR)/etc/rc.shutdown
-+endef
-+S6_RC_POST_INSTALL_TARGET_HOOKS += S6_RC_PREPARE_INIT_RC
-+
-+define S6_RC_FINALIZE_INIT_RC
-+	rm -rf $(TARGET_DIR)/etc/s6-rc/compiled-initial
-+	$(HOST_DIR)/bin/s6-rc-compile -v 1 \
-+		$(TARGET_DIR)/etc/s6-rc/compiled-initial \
-+		$(TARGET_DIR)/etc/s6-rc/service
-+endef
-+S6_RC_ROOTFS_PRE_CMD_HOOKS += S6_RC_FINALIZE_INIT_RC
-+
-+endif # BR2_INIT_S6
-+
- HOST_S6_RC_DEPENDENCIES = host-s6
- 
- HOST_S6_RC_CONF_OPTS = \
 -- 
 2.14.1
