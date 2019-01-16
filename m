@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 20:35:02 +0100
-Subject: [Buildroot] [PATCH 1/3] gnutls: remove unrecognized
- --with-libnettle-prefix
-In-Reply-To: <20190116185902.5076-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 16 Jan 2019 19:59:00 +0100")
+Date: Wed, 16 Jan 2019 20:35:07 +0100
+Subject: [Buildroot] [PATCH 2/3] nettle: bump to version 3.4.1
+In-Reply-To: <20190116185902.5076-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Jan 2019 19:59:01 +0100")
 References: <20190116185902.5076-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y37kbdll.fsf@dell.be.48ers.dk>
+ <20190116185902.5076-2-fontaine.fabrice@gmail.com>
+Message-ID: <87tvi8bdlg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,7 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > configure: WARNING: unrecognized options: --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --with-libnettle-prefix
+ > nettle 3.4.1 is a requirement for gnutls 3.6.5
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
