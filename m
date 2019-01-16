@@ -1,36 +1,53 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 16 Jan 2019 12:43:30 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
-Message-ID: <CAKKE0ZGrgnuVRzqeMvGvQfdn8mYyrGuPr_A64x6cO9LDnzqjRA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Jan 2019 12:58:01 +0100
+Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
+In-Reply-To: <20190116095504.434690f6@windsurf>
+References: <20190115141131.22754-1-arnout@mind.be>
+ <20190116095504.434690f6@windsurf>
+Message-ID: <c739fa06-839f-927c-7189-6361c281f70c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-First sorry for not replying properly, I was not subscribed to the ML yet.
-About the breakage of wget, it is indeed because openssl got installed
-in /lib instead of /usr/lib/
 
-So I think only the second part of the patch of Ryan Coe is needed, ie :
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index e461e08..c3cb98a 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -90,7 +90,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
-                        linux-$(LIBOPENSSL_TARGET_ARCH) \
-                        --prefix=/usr \
-                        --openssldir=/etc/ssl \
--                       --libdir=/lib \
-+                       --libdir=lib \
-                        $(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
-                        $(if $(BR2_STATIC_LIBS),no-shared,shared) \
-                        no-rc5 \
+On 16/01/2019 09:55, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 15 Jan 2019 15:11:31 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+>>
+>> The autobuild-run script will retrieve the list of branches to test
+>> from autobuild.buildroot.org. However, it the autobuild script is used
+>> to test some local configuration, this is probably not appropriate. The
+>> new --branches option allows to override the URL of the branches CSV
+>> file. A file:/// URL can be used for a local file.
+>>
+>> Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+> 
+> I had an alternate patch ready for this, which consists in changing
+> http-url to be the base URL, and not the submission URL.
+> 
+> I.e:
+> 
+>    '--http-url': 'http://autobuild.buildroot.org/submit/',
+> 
+> would become:
+> 
+>    '--http-url': 'http://autobuild.buildroot.org/',
+> 
+> And so the branches file would be retrieved from $(--http-url)/branches.
+> 
+> Would this work for you, or do you have a set up where the branches
+> file is not located at the same place as the submission URL ?
 
-I got the same issue with the axel package and it was enough to fix it.
+ Yes, that would work as well.
 
-BR,
+ Note that I'm not actually using the upload option, but since that is gated on
+the presence of http-login and http-password, that's fine.
 
-Patrick Havelange
+ Regards,
+ Arnout
