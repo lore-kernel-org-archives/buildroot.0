@@ -1,120 +1,165 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 22:48:49 +0100
-Subject: [Buildroot] [PATCH] package/gst1-plugins-bad: fix build with
- fdk-aac 2.0
-Message-ID: <20190116214849.13417-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 16 Jan 2019 22:59:46 +0100
+Subject: [Buildroot] [PATCH v6 1/7] package/compiler-rt: new package
+In-Reply-To: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <987334a5-7b11-8f24-daf9-4c77dc7466b4@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/343/343249ab34ab77be3b8077f544b9d1e2d4852796/
-http://autobuild.buildroot.net/results/edc/edca961f2c4d1946385ac86a756308caaf22d79d/
+Hi Matt,
 
-Fdk-aac 2.0 dropped some legacy APIs, breaking the build of the fdk-aac
-plugin.  Add two upstream upstream patches to fix building against fdk-aac
-2.0.
+Le 03/01/2019 ? 22:52, Matt Weber a ?crit?:
+> This patch adds support for the compiler-rt (CLANG runtime) library.
+> It builds a set of static libraries and installs them into the
+> CLANG/LLVM toolchain resource folder.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Romain Naour <romain.naour@smile.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+> ---
+> Changes
+> v1 -> v2
+> [Romain
+>  - Removed unnecessary host-cmake dependency
+> 
+> v2 -> v3
+> [Romain
+>  - Update to use COMPILER_RT_INSTALL_PATH for library install
+> [Ricardo
+>  - Fixed check-package extra line
+>  - Spelling in commit message
+> 
+> v3 -> v4
+> [Valentin
+>  - Pointed out that non-glibc libraries won't build. Further
+>    investigation shows that the lib asan support in compiler-rt
+>    doesn't have the libc checks yet to support multiple libraries.
+>    (https://patchwork.ozlabs.org/patch/339938/ was the best example
+>     I could find and it doesn't look like anything has changed in the
+>     recent codebase)
+> 
+> v4 -> v5
+> [Thomas P
+>  - Revisited staging install step and found a cleaner way to use the
+>    default and then a hook to setup the runtime library path
+> 
+> v6
+>  - Bumped to 7.0.1 to match current LLVM/Clang version
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/compiler-rt/Config.in        | 14 ++++++++++++++
+>  package/compiler-rt/compiler-rt.hash |  3 +++
+>  package/compiler-rt/compiler-rt.mk   | 36 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 55 insertions(+)
+>  create mode 100644 package/compiler-rt/Config.in
+>  create mode 100644 package/compiler-rt/compiler-rt.hash
+>  create mode 100644 package/compiler-rt/compiler-rt.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9654fcf..93d62a3 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1399,6 +1399,7 @@ F:	package/bridge-utils/
+>  F:	package/checkpolicy/
+>  F:	package/checksec/
+>  F:	package/cgroupfs-mount/
+> +F:	package/compiler-rt/
+>  F:	package/crda/
+>  F:	package/cunit/
+>  F:	package/devmem2/
+> diff --git a/package/Config.in b/package/Config.in
+> index a2f3fc6..baabc8a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1629,6 +1629,7 @@ menu "Other"
+>  	source "package/clapack/Config.in"
+>  	source "package/classpath/Config.in"
+>  	source "package/cmocka/Config.in"
+> +	source "package/compiler-rt/Config.in"
+>  	source "package/cppcms/Config.in"
+>  	source "package/cracklib/Config.in"
+>  	source "package/dawgdic/Config.in"
+> diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
+> new file mode 100644
+> index 0000000..9afc0d9
+> --- /dev/null
+> +++ b/package/compiler-rt/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_COMPILER_RT
+> +	bool "compiler-rt"
+> +	depends on BR2_PACKAGE_LLVM> +	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
+> +	help
+> +	  A collection of runtime libraries primarily used by clang and
+> +	  llvm to provide builtins, sanitizer runtimes, and profiling
+> +	  at runtime.
+> +
+> +	  https://compiler-rt.llvm.org/
+> +
+> +comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
+> +	depends on !BR2_PACKAGE_LLVM
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
+> new file mode 100644
+> index 0000000..4b6bd1a
+> --- /dev/null
+> +++ b/package/compiler-rt/compiler-rt.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 782edfc119ee172f169c91dd79f2c964fb6b248bd9b73523149030ed505bbe18  compiler-rt-7.0.1.src.tar.xz
+> +sha256 417541d990edb3f96327ac03cb67e52eac80fc5c3e7afc69213cd04d7c3b9b27  LICENSE.TXT
+> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
+> new file mode 100644
+> index 0000000..7b5c95a
+> --- /dev/null
+> +++ b/package/compiler-rt/compiler-rt.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# compiler-rt
+> +#
+> +################################################################################
+> +
+> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
+> +# tied to the version of those tools
+> +COMPILER_RT_VERSION = 7.0.1
+> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
+> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
+> +COMPILER_RT_LICENSE = NCSA MIT
+> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+> +COMPILER_RT_DEPENDENCIES = host-clang llvm
+> +
+> +COMPILER_RT_INSTALL_STAGING = YES
+> +COMPILER_RT_INSTALL_TARGET = NO
+> +
+> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_INCLUDE_TESTS=ON \
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-fdkaacenc-Remove-MODE_2_1.patch           | 32 +++++++++++++++
- ...se-WAV-channel-mapping-instead-of-interle.patch | 47 ++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
- create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
- create mode 100644 package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
+Why building the testsuite and tests ?
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch b/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-new file mode 100644
-index 0000000000..a9c5d44d92
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-@@ -0,0 +1,32 @@
-+From f4fdb9770c76113f38515245fecc5f11b3ace20d Mon Sep 17 00:00:00 2001
-+From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
-+Date: Tue, 4 Dec 2018 17:54:42 +0100
-+Subject: [PATCH] fdkaacenc: Remove MODE_2_1
-+
-+This is not a standard mode and no longer supported by fdk-aac 2.0.0.
-+
-+For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ ext/fdkaac/gstfdkaacenc.c | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/ext/fdkaac/gstfdkaacenc.c b/ext/fdkaac/gstfdkaacenc.c
-+index ad2bcb492..8410e684c 100644
-+--- a/ext/fdkaac/gstfdkaacenc.c
-++++ b/ext/fdkaac/gstfdkaacenc.c
-+@@ -71,10 +71,6 @@ static const struct
-+   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
-+           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-+           GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT}}, {
-+-    3, MODE_2_1, {
-+-  GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-+-          GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
-+-          GST_AUDIO_CHANNEL_POSITION_LFE1}}, {
-+     4, MODE_1_2_1, {
-+   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
-+           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-+-- 
-+2.11.0
-+
-diff --git a/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-new file mode 100644
-index 0000000000..a5bc18a2d3
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-@@ -0,0 +1,47 @@
-+From 19d34f6b5e1633d5ec4bb2832c58470f0c829cab Mon Sep 17 00:00:00 2001
-+From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
-+Date: Wed, 5 Dec 2018 10:10:39 +0100
-+Subject: [PATCH] fdkaacdec: Use WAV channel mapping instead of interleave
-+ setting
-+
-+The latter is going away in libfdk-aac 2.0.0. Instead, MPEG-style output
-+is always non-interleaved and WAV-style output is always interleaved.
-+Earlier libfdk-aac also defaults interleaving accordingly.
-+
-+Since our reordering looks at the associated PCE indices instead of the
-+actual channel order, we're agnostic to the mapping.
-+
-+For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
-+---
-+ ext/fdkaac/gstfdkaacdec.c | 12 ++++--------
-+ 1 file changed, 4 insertions(+), 8 deletions(-)
-+
-+diff --git a/ext/fdkaac/gstfdkaacdec.c b/ext/fdkaac/gstfdkaacdec.c
-+index c27183752..f5136b334 100644
-+--- a/ext/fdkaac/gstfdkaacdec.c
-++++ b/ext/fdkaac/gstfdkaacdec.c
-+@@ -151,17 +151,13 @@ gst_fdkaacdec_set_format (GstAudioDecoder * dec, GstCaps * caps)
-+     gst_buffer_unref (codec_data);
-+   }
-+ 
-++  /* Choose WAV channel mapping to get interleaving even with libfdk-aac 2.0.0
-++   * The pChannelIndices retain the indices from the standard MPEG mapping so
-++   * we're agnostic to the actual order. */
-+   if ((err =
-+           aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_CHANNEL_MAPPING,
-+-              0)) != AAC_DEC_OK) {
-+-    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
-+-    return FALSE;
-+-  }
-+-
-+-  if ((err =
-+-          aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_INTERLEAVED,
-+               1)) != AAC_DEC_OK) {
-+-    GST_ERROR_OBJECT (self, "Failed to set interleaved output: %d", err);
-++    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
-+     return FALSE;
-+   }
-+ 
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Otherwise, the patch looks good.
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Build tested on x86_64.
+
+> +	-DCOMPILER_RT_STANDALONE_BUILD=ON \
+> +	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
+> +	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
+> +
+> +# The installation of the target runtime libraries defaults to DESTDIR, however
+> +# host-clang resources directory needs a link so Clang can find the runtime
+> +# libraries in the same location they would be if built as part of the Clang
+> +# build. The "resources" directory is loosely documented and seems to be
+> +# assumed, as compiler-rt is usually build at the same time as Clang and not
+> +# standalone.
+> +define COMPILER_RT_SETUP_RUNTIME_LIBS
+> +	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
+> +	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
+> +endef
+> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
+> +
+> +$(eval $(cmake-package))
+> 
