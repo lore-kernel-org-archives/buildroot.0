@@ -1,49 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Jan 2019 09:55:04 +0100
-Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
-In-Reply-To: <20190115141131.22754-1-arnout@mind.be>
-References: <20190115141131.22754-1-arnout@mind.be>
-Message-ID: <20190116095504.434690f6@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Jan 2019 10:42:28 +0100
+Subject: [Buildroot] [PATCH] package/python-setuptools: add comment
+ about python3-setuptools
+In-Reply-To: <20190114195934.20025-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 14 Jan 2019 20:59:33 +0100")
+References: <20190114195934.20025-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87k1j5ey63.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, 15 Jan 2019 15:11:31 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
-> 
-> The autobuild-run script will retrieve the list of branches to test
-> from autobuild.buildroot.org. However, it the autobuild script is used
-> to test some local configuration, this is probably not appropriate. The
-> new --branches option allows to override the URL of the branches CSV
-> file. A file:/// URL can be used for a local file.
-> 
-> Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+ > As suggested by Arnout, add a comment to indicate that the version of
+ > python-setuptools must be kept in sync with python3-setuptools.
 
-I had an alternate patch ready for this, which consists in changing
-http-url to be the base URL, and not the submission URL.
+ > Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I.e:
+Committed, thanks.
 
-   '--http-url': 'http://autobuild.buildroot.org/submit/',
-
-would become:
-
-   '--http-url': 'http://autobuild.buildroot.org/',
-
-And so the branches file would be retrieved from $(--http-url)/branches.
-
-Would this work for you, or do you have a set up where the branches
-file is not located at the same place as the submission URL ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
