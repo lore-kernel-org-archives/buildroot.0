@@ -1,48 +1,109 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Jan 2019 19:59:01 +0100
-Subject: [Buildroot] [PATCH 2/3] nettle: bump to version 3.4.1
+Date: Wed, 16 Jan 2019 19:59:02 +0100
+Subject: [Buildroot] [PATCH 3/3] gnutls: bump to version 3.6.5
 In-Reply-To: <20190116185902.5076-1-fontaine.fabrice@gmail.com>
 References: <20190116185902.5076-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190116185902.5076-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190116185902.5076-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nettle 3.4.1 is a requirement for gnutls 3.6.5
+- libidn1 support removed since version 3.6.0 and
+  https://github.com/gnutls/gnutls/commit/abe6a12b9766219163f99d7807a0b07fbe5f590c
+- libz support has been removed since version 3.6.0 and
+  https://github.com/gnutls/gnutls/commit/1b3ece44acaa25c149659a6878d2be807a282f02
+
+This bump also fix build issues of gnutls tests and applications such
+as ffmpeg or cups due to the fact that _idn2_punycode_* functions are
+not exposed anymore since libidn2 bump to version 2.1.0 and:
+https://github.com/libidn/libidn2/commit/1d1f2e5babe6032eb0fe4d451afee2e277b8419f
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f8c38ea6ebbb78269d620d19d760a0566f742640
+ - http://autobuild.buildroot.org/results/8dc5b4212b1d8d0bf5bd5e8a27eb02753dc678e4
+ - http://autobuild.buildroot.org/results/53f5bcd9010c841838f51d65427d9a97ef35e08c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nettle/nettle.hash | 4 ++--
- package/nettle/nettle.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.hash |  4 ++--
+ package/gnutls/gnutls.mk   | 25 +++++--------------------
+ 2 files changed, 7 insertions(+), 22 deletions(-)
 
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index 473be1c2df..32ed22c6c7 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index bbcd5bd4de..89e8b14597 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/nettle/nettle-3.4.tar.gz.sig
--sha256	ae7a42df026550b85daca8389b6a60ba6313b0567f374392e54918588a411e94	nettle-3.4.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.4.1.tar.gz.sig
-+sha256	f941cf1535cd5d1819be5ccae5babef01f6db611f9b5a777bae9c7604b8a92ad	nettle-3.4.1.tar.gz
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.19.tar.xz.sig
+-sha256	1936eb64f03aaefd6eb16cef0567457777618573826b94d03376bb6a4afadc44	gnutls-3.5.19.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.5.tar.xz.sig
++sha256	073eced3acef49a3883e69ffd5f0f0b5f46e2760ad86eddc6c0866df4e7abb35	gnutls-3.6.5.tar.xz
  # Locally calculated
- sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index 9582815048..6a1144ed39 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -4,7 +4,7 @@
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 2d670d32d7..e6ddc3dbec 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NETTLE_VERSION = 3.4
-+NETTLE_VERSION = 3.4.1
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+-GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
++GNUTLS_VERSION_MAJOR = 3.6
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).5
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+@@ -28,9 +28,8 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	gl_cv_func_gettimeofday_clobber=no
+ GNUTLS_INSTALL_STAGING = YES
+ 
+-# libpthread and libz autodetection poison the linkpath
++# libpthread autodetection poison the linkpath
+ GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
+-GNUTLS_CONF_OPTS += $(if $(BR2_PACKAGE_ZLIB),--with-libz-prefix=$(STAGING_DIR)/usr)
+ 
+ # gnutls needs libregex, but pcre can be used too
+ # The check isn't cross-compile friendly
+@@ -59,18 +58,11 @@ GNUTLS_CONF_OPTS += --enable-cryptodev
+ GNUTLS_DEPENDENCIES += cryptodev-linux
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBIDN),y)
+-GNUTLS_CONF_OPTS += --with-idn
+-GNUTLS_DEPENDENCIES += libidn
+-else
+-GNUTLS_CONF_OPTS += --without-idn
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+-GNUTLS_CONF_OPTS += --with-libidn2
++GNUTLS_CONF_OPTS += --with-idn
+ GNUTLS_DEPENDENCIES += libidn2
+ else
+-GNUTLS_CONF_OPTS += --without-libidn2
++GNUTLS_CONF_OPTS += --without-idn
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+@@ -87,13 +79,6 @@ else
+ GNUTLS_CONF_OPTS += --with-included-unistring
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GNUTLS_CONF_OPTS += --with-zlib
+-GNUTLS_DEPENDENCIES += zlib
+-else
+-GNUTLS_CONF_OPTS += --without-zlib
+-endif
+-
+ # Provide a default CA cert location
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+ GNUTLS_CONF_OPTS += --with-default-trust-store-pkcs11=pkcs11:model=p11-kit-trust
 -- 
 2.14.1
