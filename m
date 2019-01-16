@@ -1,114 +1,63 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 16 Jan 2019 20:57:22 -0200
-Subject: [Buildroot] [PATCH 3/3] .gitlab-ci.yml: add trigger per job
-References: <20181209215921.3a29dc23@windsurf>
-Message-ID: <5c3fb6d223d4b_495f3fecb604d3a424cc@ultri5.mail>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 16 Jan 2019 17:08:43 -0600
+Subject: [Buildroot] [PATCH] package/gst1-plugins-bad: fix build with
+ fdk-aac 2.0
+In-Reply-To: <87d0ow9r9y.fsf@dell.be.48ers.dk>
+References: <20190116214849.13417-1-peter@korsgaard.com>
+ <CAMQcK5Jdu8rob8AjStcjdW4V3vJ8jY+7JzSvxVXvgMY7b10now@mail.gmail.com>
+ <87d0ow9r9y.fsf@dell.be.48ers.dk>
+Message-ID: <CAMQcK5KdCYknWemFYDmzJavLh=u3aaPdGu-iX3zK5zT04FrBVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Jan 16, 2019 at 4:22 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Ryan" == Ryan Barnett <ryan.barnett@rockwellcollins.com> writes:
+>
+>  > Peter,
+>  > On Wed, Jan 16, 2019 at 3:49 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>  >>
+>  >> Fixes:
+>  >> http://autobuild.buildroot.net/results/343/343249ab34ab77be3b8077f544b9d1e2d4852796/
+>  >> http://autobuild.buildroot.net/results/edc/edca961f2c4d1946385ac86a756308caaf22d79d/
+>  >>
+>  >> Fdk-aac 2.0 dropped some legacy APIs, breaking the build of the fdk-aac
+>  >> plugin.  Add two upstream upstream patches to fix building against fdk-aac
+>  >> 2.0.
+>  >>
+>  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  >>
+>  >> +++ b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
+>  >> @@ -0,0 +1,47 @@
+>  >> +From 19d34f6b5e1633d5ec4bb2832c58470f0c829cab Mon Sep 17 00:00:00 2001
+>  >> +From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
+>  >> +Date: Wed, 5 Dec 2018 10:10:39 +0100
+>  >> +Subject: [PATCH] fdkaacdec: Use WAV channel mapping instead of interleave
+>  >> + setting
+>  >> +
+>  >> +The latter is going away in libfdk-aac 2.0.0. Instead, MPEG-style output
+>  >> +is always non-interleaved and WAV-style output is always interleaved.
+>  >> +Earlier libfdk-aac also defaults interleaving accordingly.
+>  >> +
+>  >> +Since our reordering looks at the associated PCE indices instead of the
+>  >> +actual channel order, we're agnostic to the mapping.
+>  >> +
+>  >> +For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
+>
+>  > Minor nit - missing your "Signed-off-by" line here.
+>
+> Ups, indeed - I'll fix that when applying, thanks.
+>
+> I also didn't see your Reviewed-by in your reply :P
 
-On Sun, Dec 09, 2018 at 06:59 PM, Thomas Petazzoni wrote:
+Here you go :)
 
-> On Sun, 28 Oct 2018 20:58:39 -0300, Ricardo Martincoski wrote:
-> 
->> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
->> index d824f669b5..9efa775f88 100755
->> --- a/support/scripts/generate-gitlab-ci-yml
->> +++ b/support/scripts/generate-gitlab-ci-yml
->> @@ -7,14 +7,31 @@ output="${2}"
->>  
->>  cp "${input}" "${output}"
->>  
->> +d_only_in=$(
->> +    awk '/^\.defconfig:/{x=1;next}/^[^ ]/{x=0}x' "${input}" \
->> +        | awk '/^    only/{x=1;next}/^    [^ ]/{x=0}x'
->> +)
->> +d_only=$( \
->> +    printf ":\n    <<: *defconfig\n    only:\n%s\n        - /-" "$d_only_in"
->> +)
->> +
->>  (
->>      cd configs
->>      LC_ALL=C ls -1 *_defconfig
->>  ) \
->> -    | sed 's/$/: *defconfig/' \
->> +    | awk -v o="$d_only" '{i=$0; gsub(/\./,"\\.",i); print $0 o i "$/"}' \
->>      >> "${output}"  
->>  
->> +r_only_in=$(
->> +    awk '/^\.runtime_test:/{x=1;next}/^[^ ]/{x=0}x' "${input}" \
->> +        | awk '/^    only/{x=1;next}/^    [^ ]/{x=0}x'
->> +)
->> +r_only=$(
->> +    printf ":\n    <<: *runtime_test\n    only:\n%s\n        - /-" "$r_only_in"
->> +)
->> +
->>  ./support/testing/run-tests -l 2>&1 \
->> -    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: *runtime_test/' \
->> +    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/' \
->>      | LC_ALL=C sort \
->> +    | awk -v o="$r_only" '{i=$0; gsub(/\./,"\\.",i); print $0 o i "$/"}' \
->>      >> "${output}"  
-> 
-> I'm very confused by all this awk sorcery, and looking at the output, I
-> wonder if something simpler like this wouldn't be better:
-> 
-> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-> index 431911d370..110de0b207 100755
-> --- a/support/scripts/generate-gitlab-ci-yml
-> +++ b/support/scripts/generate-gitlab-ci-yml
-> @@ -10,8 +10,29 @@ cat "${input}"
->      cd configs
->      LC_ALL=C ls -1 *_defconfig
->  ) \
-> -    | sed 's/$/: *defconfig/'
-> +    | while read defconfig; do
-> +       cat <<EOF
-> +${defconfig}:
-> +    <<: *defconfig
-> +    only:
-> +        - triggers
-> +        - tags
-> +        - /-defconfigs\$/
-> +        - /-${defconfig}\$/
-> +EOF
-> +       done
->  
->  ./support/testing/run-tests -l 2>&1 \
-> -    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: *runtime_test/' \
-> -    | LC_ALL=C sort
-> +    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/' \
-> +    | LC_ALL=C sort \
-> +    | while read runtest; do
-> +       cat <<EOF
-> +${runtest}:
-> +    <<: *runtime_test
-> +    only:
-> +        - triggers
-> +        - tags
-> +        - /-runtime-tests\$/
-> +        - /-${runtest//./\\.}\$/
-> +EOF
-> +done
-> 
-> This produces an output that is exactly identical to the one done by
-> your awk magic, and I personally find this shell based implementation a
-> lot simpler and easier to read. What do you think ?
-
-Sure. Easier to read.
-
-The only thing we lose this way is that v1 gets the template from
-.gitlab-ci.yml.in and adds new values; v2 has the values hardcoded in the
-script.
-But probably we will never change those values anyway. And any change can be
-done on both. I added a comment on .gitlab-ci.yml.in about this and sent a v2.
-I guess we could even remove completely the 'only' key from the
-.gitlab-ci.yml.in as it is now hardcoded in the script. But I didn't tested it.
+Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
 
-Regards,
-Ricardo
+>
+> --
+> Bye, Peter Korsgaard
