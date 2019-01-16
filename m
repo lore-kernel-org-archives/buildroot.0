@@ -1,50 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 13:11:53 +0100
-Subject: [Buildroot] [git commit] package/dash: Create $(TARGET_DIR)/bin
- before install
-Message-ID: <20190116121258.86700801D6@busybox.osuosl.org>
+Date: Wed, 16 Jan 2019 13:09:21 +0100
+Subject: [Buildroot] [git commit] sunxi-cedarx: needs -fPIC
+Message-ID: <20190116121258.7D5F28D712@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89fdf21d58c44b58f566d14056a13598e99cd538
+commit: https://git.buildroot.net/buildroot/commit/?id=838b9b6979496d297b1f6c64d9942cc3e9cfcef4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build fails because $(TARGET_DIR)/bin folder may not exist if for
-example to use the following defconfig:
+Fixes:
+ - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
 
-	BR2_x86_64=y
-	BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-	BR2_SYSTEM_BIN_SH_DASH=y
-	BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-	BR2_LINUX_KERNEL=y
-	BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-	BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-	BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-	BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-	BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-	BR2_PACKAGE_S6_LINUX_INIT=y
-	BR2_TARGET_ROOTFS_EXT2=y
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-[Peter: use install -D]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dash/dash.mk | 2 +-
+ package/sunxi-cedarx/sunxi-cedarx.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index f699f40686..3014aafe92 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -28,7 +28,7 @@ DASH_CONF_OPTS += --without-libedit
+diff --git a/package/sunxi-cedarx/sunxi-cedarx.mk b/package/sunxi-cedarx/sunxi-cedarx.mk
+index 219f1bc74b..5b99f04181 100644
+--- a/package/sunxi-cedarx/sunxi-cedarx.mk
++++ b/package/sunxi-cedarx/sunxi-cedarx.mk
+@@ -19,7 +19,7 @@ SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
  endif
  
- define DASH_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
-+	$(INSTALL) -m 0755 -D $(@D)/src/dash $(TARGET_DIR)/bin/dash
- endef
- 
- # Add /bin/dash to /etc/shells otherwise some login tools like dropbear
+ define SUNXI_CEDARX_BUILD_AVHEAP
+-	$(TARGET_CC) $(TARGET_CFLAGS) \
++	$(TARGET_CC) $(TARGET_CFLAGS) -fPIC \
+ 		-c $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.c \
+ 		-o $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.o \
+ 		-I $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap \
