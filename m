@@ -1,49 +1,36 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 16 Jan 2019 22:39:21 +0100
-Subject: [Buildroot] [PATCH] package/llvm: set the path to llvm-config
-Message-ID: <20190116213921.2280-1-romain.naour@smile.fr>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 16 Jan 2019 23:51:32 +0200
+Subject: [Buildroot] [RFC 0/3] init: Add s6 as init system
+Message-ID: <20190116215135.32142-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While building llvm for the target (x86_64), the build failded due to
-path poisoning (-I/usr/include/libxml2) while building NATIVE tools
-(i.e for the host). The llvm package try to build a tool for the host
-with the cross-compiler which doesn't work when the paranoid toolchain
-wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
+Add new system init support (BR2_INIT_S6) based on s6 suite. This is very-very
+basic support which does not have any setup automation logic (but only getty)
+but it allows to install custom s6-rc services in a bit easier way by the
+board. All s6-rc services which were copied by rootfs-overlay or post-build
+will be compiled as s6-rc db into /etc/s6-rc/compiled-initial, which also has
+/etc/s6-rc/compiled link to easy replace it in runtime.
 
-We know that llvm (target) needs llvm-tablegen and llvm-config build by
-host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
-LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
-fixes the path poisoining issue since llvm doesn't build the NATIVE
-variant.
+In case if such kind of change will be merged, then may be it would be good to
+think about of some packages integration into s6-rc system.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Valentin, I'm not sure why we don't set LLVM_CONFIG_PATH in llvm.mk for
-the target variant? We provide it for clang and libclc, why not for
-llvm ?
----
- package/llvm/llvm.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Vadim Kochan (3):
+  package/s6-linux-init: Build also for the host
+  package/s6-linux-init: Allow to install as init system
+  package/s6-rc: Allow to integrate s6-rc services
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index f33ec11fbf..952f678eee 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -57,6 +57,9 @@ endif
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
-+# Use native llvm-config from host-llvm (needed for cross-compilation)
-+LLVM_CONF_OPTS += -DLLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config
-+
- # BUILD_SHARED_LIBS has a misleading name. It is in fact an option for
- # LLVM developers to build all LLVM libraries as separate shared libraries.
- # For normal use of LLVM, it is recommended to build a single
+ package/s6-linux-init/s6-linux-init.mk | 69 +++++++++++++++++++++++++++++++++-
+ package/s6-rc/rc.init                  |  4 ++
+ package/s6-rc/rc.shutdown              |  3 ++
+ package/s6-rc/s6-rc.mk                 | 32 ++++++++++++++++
+ system/Config.in                       |  9 ++++-
+ 5 files changed, 114 insertions(+), 3 deletions(-)
+ create mode 100644 package/s6-rc/rc.init
+ create mode 100644 package/s6-rc/rc.shutdown
+
 -- 
-2.20.1
+2.14.1
