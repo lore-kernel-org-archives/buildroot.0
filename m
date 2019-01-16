@@ -1,101 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 21:06:45 +0100
-Subject: [Buildroot] [git commit] package/libva: backport Add pointer to
- struct wl_interface for driver to use
-Message-ID: <20190116200933.1AC478D714@busybox.osuosl.org>
+Date: Wed, 16 Jan 2019 21:09:46 +0100
+Subject: [Buildroot] [git commit] package/libva-utils: bump to version 2.3.0
+Message-ID: <20190116200933.2A6068D714@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=153788ba05a48bbdb4baa43235ce438604f4ad11
+commit: https://git.buildroot.net/buildroot/commit/?id=b0907949261ef5e8179c027c086903f30417dd66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is needed by libva-intel-driver when using wayland.
+Have to add a workaround since upstream didn't package this release
+properly.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-to-struct-wl_interface-for-driver-to-use.patch | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ package/libva-utils/libva-utils.hash |  4 ++--
+ package/libva-utils/libva-utils.mk   | 12 +++++++++---
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/libva/0001-Add-pointer-to-struct-wl_interface-for-driver-to-use.patch b/package/libva/0001-Add-pointer-to-struct-wl_interface-for-driver-to-use.patch
-new file mode 100644
-index 0000000000..d6701d1a25
---- /dev/null
-+++ b/package/libva/0001-Add-pointer-to-struct-wl_interface-for-driver-to-use.patch
-@@ -0,0 +1,73 @@
-+From 62bad1239d8ea1bb269ca69d3469aa267f57cdec Mon Sep 17 00:00:00 2001
-+From: Haihao Xiang <haihao.xiang@intel.com>
-+Date: Fri, 7 Dec 2018 13:25:41 +0800
-+Subject: [PATCH] Add pointer to struct wl_interface for driver to use
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index e86cb6e09c..1c2dc5df01 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/intel/libva-utils/releases
+-sha1 ef15d40d6bec847c74f21ee3431b7e7b06fec3b4  libva-utils-2.2.0.tar.bz2
++sha1 91e470d0755ec7a102a4e4ce694190e5e95b9c7f  libva-utils-2.3.0.tar.gz
+ # Locally computed
+-sha256 ed7a6ed1fab657df4e83ea11f90310efcf31c27828f32d65351a28ca3c404dc0  libva-utils-2.2.0.tar.bz2
++sha256 f338497b867bbc9bf008e4892eaebda08955785dc7eb2005855bba5f1a20b037  libva-utils-2.3.0.tar.gz
+ sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 348d419745..f08ffebb23 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -4,13 +4,19 @@
+ #
+ ################################################################################
+ 
+-LIBVA_UTILS_VERSION = 2.2.0
+-LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+-LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
++LIBVA_UTILS_VERSION = 2.3.0
++LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.gz
++LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/archive/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
+ # 0001-check-ssp.patch
+ LIBVA_UTILS_AUTORECONF = YES
+ LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
+ 
++define LIBVA_UTILS_CREATE_M4_DIR
++	@mkdir -p $(@D)/m4
++endef
 +
-+See https://github.com/intel/intel-vaapi-driver/issues/419 for the
-+information
++LIBVA_UTILS_POST_EXTRACT_HOOKS += LIBVA_UTILS_CREATE_M4_DIR
 +
-+Note: don't export the interface symbol in case others may reuse it.
-+
-+Signed-off-by: Haihao Xiang <haihao.xiang@intel.com>
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+62bad1239d8ea1bb269ca69d3469aa267f57cdec]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ va/wayland/va_backend_wayland.h | 10 +++++++++-
-+ va/wayland/va_wayland_drm.c     |  4 ++++
-+ 2 files changed, 13 insertions(+), 1 deletion(-)
-+
-+diff --git a/va/wayland/va_backend_wayland.h b/va/wayland/va_backend_wayland.h
-+index 9e5740a..906d4bf 100644
-+--- a/va/wayland/va_backend_wayland.h
-++++ b/va/wayland/va_backend_wayland.h
-+@@ -64,8 +64,16 @@ struct VADriverVTableWayland {
-+     /** \brief Indicate whether buffer sharing with prime fd is supported. */
-+     unsigned int has_prime_sharing;
-+ 
-++    /**
-++     * Pointer to an implementation of struct wl_interface
-++     *
-++     * It is set by libva-wayland when a context is created, then the backend
-++     * driver may reuse it.
-++     */
-++    const void *wl_interface;
-++
-+     /** \brief Reserved bytes for future use, must be zero */
-+-    unsigned long reserved[8];
-++    unsigned long reserved[7];
-+ };
-+ 
-+ #endif /* VA_BACKEND_WAYLAND_H */
-+diff --git a/va/wayland/va_wayland_drm.c b/va/wayland/va_wayland_drm.c
-+index 8e22695..4cd3f6c 100644
-+--- a/va/wayland/va_wayland_drm.c
-++++ b/va/wayland/va_wayland_drm.c
-+@@ -136,6 +136,7 @@ va_wayland_drm_destroy(VADisplayContextP pDisplayContext)
-+     struct VADriverVTableWayland *vtable = ctx->vtable_wayland;
-+ 
-+     vtable->has_prime_sharing = 0;
-++    vtable->wl_interface = NULL;
-+ 
-+     wl_drm_ctx->is_authenticated = 0;
-+ 
-+@@ -222,6 +223,8 @@ va_wayland_drm_create(VADisplayContextP pDisplayContext)
-+     struct VADriverVTableWayland *vtable = ctx->vtable_wayland;
-+     struct wl_display *wrapped_display = NULL;
-+ 
-++    vtable->wl_interface = NULL;
-++
-+     wl_drm_ctx = malloc(sizeof(*wl_drm_ctx));
-+     if (!wl_drm_ctx) {
-+         va_wayland_error("could not allocate wl_drm_ctx");
-+@@ -300,6 +303,7 @@ va_wayland_drm_create(VADisplayContextP pDisplayContext)
-+         goto end;
-+     }
-+ 
-++    vtable->wl_interface = &wl_drm_interface;
-+     result = true;
-+ 
-+ end:
-+-- 
-+2.7.4
-+
+ $(eval $(autotools-package))
