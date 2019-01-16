@@ -1,46 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Jan 2019 22:00:16 +0100
-Subject: [Buildroot] [PATCH 2/2] php: switch to pcre2
-In-Reply-To: <20190116210016.22121-1-fontaine.fabrice@gmail.com>
-References: <20190116210016.22121-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190116210016.22121-2-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 16 Jan 2019 22:02:29 +0100
+Subject: [Buildroot] [PATCH 2/2] package/upmpdcli: bump to version 1.4.0
+In-Reply-To: <20190116210229.4992-1-joerg.krause@embedded.rocks>
+References: <20190116210229.4992-1-joerg.krause@embedded.rocks>
+Message-ID: <20190116210229.4992-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-php moved from pcre to pcre2 since bump to version 7.3 and
-http://github.com/php/php-src/commit/a5bc5aed71f7a15f14f33bb31b8e17bf5f327e2d
+upmpdcli switched license from GPL-2.0+ to LGPL-2.1+, therefore update
+the hash file for the license file "COPYING".
 
-This fixes a build failure: without this change, if BR2_PACKAGE_PCRE is
-set, external pcre support in php is (wrongly) enabled with
---with-pcre-regex but because pcre2 was not found, php fallbacks on
-built-in pcre2 without the "SLJIT_SINGLE_THREADED hack"
+Note, that upmpdcli depends on libupnpp 0.17.0.
 
-Fixes:
- - http://autobuild.buildroot.org/results/40ef339019203d2cc49d388e222cf17c3ca37944
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/php/php.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 6 +++---
+ package/upmpdcli/upmpdcli.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index fd428e192a..b6b17a1562 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -243,9 +243,9 @@ endef
- PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index c59655c9fe..cbd12fe293 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.16.tar.gz.sha256:
+-sha256  b0dfd33cd5c1c2e4f770660c12d7303b6d8b3fdca4f63530c6a235ce279a9d98  upmpdcli-1.2.16.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.0.tar.gz.sha256:
++sha256  28742910fa16b72f0c4e5b7dc561f59aa7f1a5fdd3e8e4f72f359d2e4af90d35  upmpdcli-1.4.0.tar.gz
  
- ### Use external PCRE if it's available
--ifeq ($(BR2_PACKAGE_PCRE),y)
-+ifeq ($(BR2_PACKAGE_PCRE2),y)
- PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += pcre
-+PHP_DEPENDENCIES += pcre2
- else
- # The bundled pcre library is not configurable through ./configure options,
- # and by default is configured to be thread-safe, so it wants pthreads. So
+ # Hash for license file:
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 069b143998..d88caac78b 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.2.16
++UPMPDCLI_VERSION = 1.4.0
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+-UPMPDCLI_LICENSE = GPL-2.0+
++UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
+ UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+ 
 -- 
-2.14.1
+2.20.1
