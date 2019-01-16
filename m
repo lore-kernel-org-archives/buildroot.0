@@ -1,53 +1,24 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Jan 2019 12:58:01 +0100
-Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
-In-Reply-To: <20190116095504.434690f6@windsurf>
-References: <20190115141131.22754-1-arnout@mind.be>
- <20190116095504.434690f6@windsurf>
-Message-ID: <c739fa06-839f-927c-7189-6361c281f70c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Jan 2019 13:09:26 +0100
+Subject: [Buildroot] [PATCH 1/1] sunxi-cedarx: needs -fPIC
+In-Reply-To: <20190112092459.21382-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 12 Jan 2019 10:24:59 +0100")
+References: <20190112092459.21382-1-fontaine.fabrice@gmail.com>
+Message-ID: <871s5cg5xl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
 
-On 16/01/2019 09:55, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 15 Jan 2019 15:11:31 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
->>
->> The autobuild-run script will retrieve the list of branches to test
->> from autobuild.buildroot.org. However, it the autobuild script is used
->> to test some local configuration, this is probably not appropriate. The
->> new --branches option allows to override the URL of the branches CSV
->> file. A file:/// URL can be used for a local file.
->>
->> Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
-> 
-> I had an alternate patch ready for this, which consists in changing
-> http-url to be the base URL, and not the submission URL.
-> 
-> I.e:
-> 
->    '--http-url': 'http://autobuild.buildroot.org/submit/',
-> 
-> would become:
-> 
->    '--http-url': 'http://autobuild.buildroot.org/',
-> 
-> And so the branches file would be retrieved from $(--http-url)/branches.
-> 
-> Would this work for you, or do you have a set up where the branches
-> file is not located at the same place as the submission URL ?
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Yes, that would work as well.
+Committed, thanks.
 
- Note that I'm not actually using the upload option, but since that is gated on
-the presence of http-login and http-password, that's fine.
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
