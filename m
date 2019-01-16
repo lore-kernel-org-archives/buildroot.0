@@ -1,63 +1,57 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 16 Jan 2019 15:15:15 +0100
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot versions
-Message-ID: <20190116141515.5825-1-francois.perrad@gadz.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 16 Jan 2019 15:24:28 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <CAKKE0ZGrgnuVRzqeMvGvQfdn8mYyrGuPr_A64x6cO9LDnzqjRA@mail.gmail.com>
+References: <CAKKE0ZGrgnuVRzqeMvGvQfdn8mYyrGuPr_A64x6cO9LDnzqjRA@mail.gmail.com>
+Message-ID: <20190116152428.72a0888c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Patrick,
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 7851314a2..b61d56f42 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.15"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index be09c5d46..5677b0312 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.15"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.17.1
+On Wed, 16 Jan 2019 12:43:30 +0100, Patrick Havelange <patrick.havelange@essensium.com> wrote:
+
+> Hello all,
+> First sorry for not replying properly, I was not subscribed to the ML yet.
+
+No problem (and every feedback/test is valuable ;-) )....
+  
+> About the breakage of wget, it is indeed because openssl got installed
+> in /lib instead of /usr/lib/
+> 
+> So I think only the second part of the patch of Ryan Coe is needed, ie :
+
+I tested the suggestion by Arnout and removing both libdir lines works fines
+(and fixes the installation path of the openssl.pc file which fixes the wget
+compile problem)...
+
+Regards,
+Peter
+
+> 
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index e461e08..c3cb98a 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -90,7 +90,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+>                         linux-$(LIBOPENSSL_TARGET_ARCH) \
+>                         --prefix=/usr \
+>                         --openssldir=/etc/ssl \
+> -                       --libdir=/lib \
+> +                       --libdir=lib \
+>                         $(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+>                         $(if $(BR2_STATIC_LIBS),no-shared,shared) \
+>                         no-rc5 \
+> 
+> I got the same issue with the axel package and it was enough to fix it.
+> 
+> BR,
+> 
+> Patrick Havelange
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
