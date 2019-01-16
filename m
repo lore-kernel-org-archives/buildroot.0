@@ -1,68 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 09:23:44 +0100
-Subject: [Buildroot] [git commit] docs/manual: standardize a bit more the
- formatting of commit titles
-Message-ID: <20190116083042.EA71E86485@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 16 Jan 2019 09:55:04 +0100
+Subject: [Buildroot] [PATCH] scripts/autobuild-run: add --branches option
+In-Reply-To: <20190115141131.22754-1-arnout@mind.be>
+References: <20190115141131.22754-1-arnout@mind.be>
+Message-ID: <20190116095504.434690f6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74fc5dce223a2688b22e33961ccc28b7b3c43468
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Currently, our commit titles are not very well standardized, and it
-would be great to standardize them a little bit more. A number of
-people use "<pkg>: " as prefix, others use "package/<pkg>: ". Some
-people start the rest of the commit title (after the prefix) with an
-upper-case letter, some with a lower-case letter.
+On Tue, 15 Jan 2019 15:11:31 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> From: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
+> 
+> The autobuild-run script will retrieve the list of branches to test
+> from autobuild.buildroot.org. However, it the autobuild script is used
+> to test some local configuration, this is probably not appropriate. The
+> new --branches option allows to override the URL of the branches CSV
+> file. A file:/// URL can be used for a local file.
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout.vandecappelle@essensium.com>
 
-In an attempt to standardize this, this commit updates the manual with
-some examples of good commit titles.
+I had an alternate patch ready for this, which consists in changing
+http-url to be the base URL, and not the submission URL.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Carlos Santos <casantos@datacom.com.br>
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/contribute.txt | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+I.e:
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 60bfb961f0..5530ce1546 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -194,14 +194,29 @@ bisect+ to locate the origin of a problem.
- 
- First of all, it is essential that the patch has a good commit
- message. The commit message should start with a separate line with a
--brief summary of the change, starting with the name of the affected
--package. The body of the commit message should describe _why_ this
-+brief summary of the change, prefixed by the area touched by the
-+patch. A few examples of good commit titles:
-+
-+* +package/linuxptp: bump version to 2.0+
-+
-+* +configs/imx23evk: bump Linux version to 4.19+
-+
-+* +package/pkg-generic: postpone evaluation of dependency conditions+
-+
-+* +boot/uboot: needs host-{flex,bison}+
-+
-+* +support/testing: add python-ubjson tests+
-+
-+The description that follows the prefix should start with a lower case
-+letter (i.e "bump", "needs", "postpone", "add" in the above examples).
-+
-+Second, the body of the commit message should describe _why_ this
- change is needed, and if necessary also give details about _how_ it
- was done. When writing the commit message, think of how the reviewers
- will read it, but also think about how you will read it when you look
- at this change again a few years down the line.
- 
--Second, the patch itself should do only one change, but do it
-+Third, the patch itself should do only one change, but do it
- completely. Two unrelated or weakly related changes should usually be
- done in two separate patches. This usually means that a patch affects
- only a single package. If several changes are related, it is often
+   '--http-url': 'http://autobuild.buildroot.org/submit/',
+
+would become:
+
+   '--http-url': 'http://autobuild.buildroot.org/',
+
+And so the branches file would be retrieved from $(--http-url)/branches.
+
+Would this work for you, or do you have a set up where the branches
+file is not located at the same place as the submission URL ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
