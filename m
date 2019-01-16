@@ -1,40 +1,49 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 16 Jan 2019 22:15:10 +0100
-Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.9.0
-Message-ID: <20190116211510.32049-1-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 16 Jan 2019 22:39:21 +0100
+Subject: [Buildroot] [PATCH] package/llvm: set the path to llvm-config
+Message-ID: <20190116213921.2280-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/wavemon/wavemon.hash | 2 +-
- package/wavemon/wavemon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+While building llvm for the target (x86_64), the build failded due to
+path poisoning (-I/usr/include/libxml2) while building NATIVE tools
+(i.e for the host). The llvm package try to build a tool for the host
+with the cross-compiler which doesn't work when the paranoid toolchain
+wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
 
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-index 99d7382450..798e2973ce 100644
---- a/package/wavemon/wavemon.hash
-+++ b/package/wavemon/wavemon.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4199e2ad11a036f4289f5ad42a8b0fe518f2b5ff77447f4c366dbcf3f23e91d5  wavemon-v0.8.2.tar.gz
-+sha256  5823ef9459d6147a457b390b6744a77465584e93d37c2809fa7a0be557070166  wavemon-v0.9.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-index 0639c3450e..864e0709d1 100644
---- a/package/wavemon/wavemon.mk
-+++ b/package/wavemon/wavemon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+We know that llvm (target) needs llvm-tablegen and llvm-config build by
+host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
+LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
+fixes the path poisoining issue since llvm doesn't build the NATIVE
+variant.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Valentin, I'm not sure why we don't set LLVM_CONFIG_PATH in llvm.mk for
+the target variant? We provide it for clang and libclc, why not for
+llvm ?
+---
+ package/llvm/llvm.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index f33ec11fbf..952f678eee 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -57,6 +57,9 @@ endif
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
  
--WAVEMON_VERSION = v0.8.2
-+WAVEMON_VERSION = v0.9.0
- WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
- WAVEMON_LICENSE = GPL-3.0+
- WAVEMON_LICENSE_FILES = COPYING
++# Use native llvm-config from host-llvm (needed for cross-compilation)
++LLVM_CONF_OPTS += -DLLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config
++
+ # BUILD_SHARED_LIBS has a misleading name. It is in fact an option for
+ # LLVM developers to build all LLVM libraries as separate shared libraries.
+ # For normal use of LLVM, it is recommended to build a single
 -- 
 2.20.1
