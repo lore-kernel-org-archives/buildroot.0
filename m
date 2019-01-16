@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 14:23:57 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/systemd: add upstream fix
- for CVE-2018-16864
-In-Reply-To: <1547380870-9338-1-git-send-email-james.hilliard1@gmail.com>
- (james's message of "Sun, 13 Jan 2019 20:01:09 +0800")
+Date: Wed, 16 Jan 2019 14:24:01 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/systemd: add upstream fix
+ for CVE-2018-16865
+In-Reply-To: <1547380870-9338-2-git-send-email-james.hilliard1@gmail.com>
+ (james's message of "Sun, 13 Jan 2019 20:01:10 +0800")
 References: <1547380870-9338-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <87muo0enwy.fsf@dell.be.48ers.dk>
+ <1547380870-9338-2-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <87imyoenwu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
