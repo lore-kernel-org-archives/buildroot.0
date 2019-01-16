@@ -1,53 +1,41 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Wed, 16 Jan 2019 14:00:00 -0200 (BRST)
-Subject: [Buildroot] /etc/init.d init script question
-In-Reply-To: <SN6PR01MB50378585F4037C76C9DD6376CC870@SN6PR01MB5037.prod.exchangelabs.com>
-References: <SN6PR01MB50378585F4037C76C9DD6376CC870@SN6PR01MB5037.prod.exchangelabs.com>
-Message-ID: <1169191239.2324717.1547654399994.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Jan 2019 20:54:36 +0200
+Subject: [Buildroot] [PATCH] package/lz4: bump to version 1.8.3
+Message-ID: <ca3f2496a6d96210866bd39a5eee5978450577c6.1547664876.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Enoch W." <ixew@hotmail.com>
-> To: "buildroot" <buildroot@busybox.net>
-> Sent: Domingo, 13 de janeiro de 2019 20:57:48
-> Subject: [Buildroot] /etc/init.d init script question
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lz4/lz4.hash | 2 +-
+ package/lz4/lz4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hi,
-
-> I'm using a recent buildroot tag 2018.11 (651).
-
-> Can anyone suggest how to debug a python script that starts well from a command
-> line:
-
-> # /etc/init.d/S53myscript start
-> Starting myscript: OK
-
-> but fails to start on boot via /etc/init.d/rcS
-
-> It's a python script that is launched as follows:
-
-> printf "Starting $DAEMON: "
-> start-stop-daemon -S -b -m -q -p "$PIDFILE" -x "/usr/bin/python" --
-> "/root/myscript.py"
-
-> Since the $PIDFILE is well created rcS must have ended well and it's my python
-> script to blame, but how can I see what exception it throws...
-
-I suspect that your script fails because it needs something that is
-initialized later.
-
-> PS1. I've tried adding a long sleep in case "something" isn't ready.
-
-> PS2. How can one simulate /etc/init.d/rcS environment ...
-
-Init scripts run with stdin redirected to /dev/null so run it with
-
-    # /etc/init.d/S53myscript start < /dev/null
-
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+index 90bd217cdf0e..691ec6c42a37 100644
+--- a/package/lz4/lz4.hash
++++ b/package/lz4/lz4.hash
+@@ -1,4 +1,4 @@
+ # sha256 locally computed
+-sha256 0963fbe9ee90acd1d15e9f09e826eaaf8ea0312e854803caf2db0a6dd40f4464  lz4-v1.8.2.tar.gz
++sha256 33af5936ac06536805f9745e0b6d61da606a1f8b4cc5c04dd3cbaca3b9b4fc43  lz4-v1.8.3.tar.gz
+ sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 183df456496e..a7152cb5319c 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = v1.8.2
++LZ4_VERSION = v1.8.3
+ LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.20.1
