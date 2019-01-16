@@ -1,136 +1,70 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 16 Jan 2019 16:10:00 -0600
-Subject: [Buildroot] [PATCH] package/gst1-plugins-bad: fix build with
- fdk-aac 2.0
-In-Reply-To: <20190116214849.13417-1-peter@korsgaard.com>
-References: <20190116214849.13417-1-peter@korsgaard.com>
-Message-ID: <CAMQcK5Jdu8rob8AjStcjdW4V3vJ8jY+7JzSvxVXvgMY7b10now@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 16 Jan 2019 23:15:12 +0100
+Subject: [Buildroot] [PATCH v6 7/7] package/llvm: disable libxml2
+In-Reply-To: <1546552368-50707-7-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1546552368-50707-7-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <10f3bc49-5150-1314-b625-67e41b3edb5a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Matt,
 
-On Wed, Jan 16, 2019 at 3:49 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Fixes:
-> http://autobuild.buildroot.net/results/343/343249ab34ab77be3b8077f544b9d1e2d4852796/
-> http://autobuild.buildroot.net/results/edc/edca961f2c4d1946385ac86a756308caaf22d79d/
->
-> Fdk-aac 2.0 dropped some legacy APIs, breaking the build of the fdk-aac
-> plugin.  Add two upstream upstream patches to fix building against fdk-aac
-> 2.0.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Le 03/01/2019 ? 22:52, Matt Weber a ?crit?:
+> libxml2 is needed during Windows builds to populate the COFF
+> file manifest info
+> 
+> If left enabled, a dependency would need to be added and paths
+> set for libxml2 include and library paths. This isn't require at
+> this point for Linux builds.
+
+It seems not really useful to add these options if it's only used for Windows build.
+
+> 
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  .../0001-fdkaacenc-Remove-MODE_2_1.patch           | 32 +++++++++++++++
->  ...se-WAV-channel-mapping-instead-of-interle.patch | 47 ++++++++++++++++++++++
->  2 files changed, 79 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
->  create mode 100644 package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
->
-> diff --git a/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch b/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-> new file mode 100644
-> index 0000000000..a9c5d44d92
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-> @@ -0,0 +1,32 @@
-> +From f4fdb9770c76113f38515245fecc5f11b3ace20d Mon Sep 17 00:00:00 2001
-> +From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
-> +Date: Tue, 4 Dec 2018 17:54:42 +0100
-> +Subject: [PATCH] fdkaacenc: Remove MODE_2_1
-> +
-> +This is not a standard mode and no longer supported by fdk-aac 2.0.0.
-> +
-> +For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + ext/fdkaac/gstfdkaacenc.c | 4 ----
-> + 1 file changed, 4 deletions(-)
-> +
-> +diff --git a/ext/fdkaac/gstfdkaacenc.c b/ext/fdkaac/gstfdkaacenc.c
-> +index ad2bcb492..8410e684c 100644
-> +--- a/ext/fdkaac/gstfdkaacenc.c
-> ++++ b/ext/fdkaac/gstfdkaacenc.c
-> +@@ -71,10 +71,6 @@ static const struct
-> +   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
-> +           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-> +           GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT}}, {
-> +-    3, MODE_2_1, {
-> +-  GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-> +-          GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
-> +-          GST_AUDIO_CHANNEL_POSITION_LFE1}}, {
-> +     4, MODE_1_2_1, {
-> +   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
-> +           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-> +--
-> +2.11.0
-> +
-> diff --git a/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-> new file mode 100644
-> index 0000000000..a5bc18a2d3
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-> @@ -0,0 +1,47 @@
-> +From 19d34f6b5e1633d5ec4bb2832c58470f0c829cab Mon Sep 17 00:00:00 2001
-> +From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
-> +Date: Wed, 5 Dec 2018 10:10:39 +0100
-> +Subject: [PATCH] fdkaacdec: Use WAV channel mapping instead of interleave
-> + setting
-> +
-> +The latter is going away in libfdk-aac 2.0.0. Instead, MPEG-style output
-> +is always non-interleaved and WAV-style output is always interleaved.
-> +Earlier libfdk-aac also defaults interleaving accordingly.
-> +
-> +Since our reordering looks at the associated PCE indices instead of the
-> +actual channel order, we're agnostic to the mapping.
-> +
-> +For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
+> This change was discovered during testing of compiler-rt
+> patchset.  This patch could be independently applied.
+> 
+> Romain, hopefully you are able to verify this resolves the path
+> posioning you observed with the target build and libxml2.
 
-Minor nit - missing your "Signed-off-by" line here.
+Sorry but this patch is not enough to fix the path poisoning issue.
+Hopefully my patch [1] will do it.
 
-> +---
-> + ext/fdkaac/gstfdkaacdec.c | 12 ++++--------
-> + 1 file changed, 4 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/ext/fdkaac/gstfdkaacdec.c b/ext/fdkaac/gstfdkaacdec.c
-> +index c27183752..f5136b334 100644
-> +--- a/ext/fdkaac/gstfdkaacdec.c
-> ++++ b/ext/fdkaac/gstfdkaacdec.c
-> +@@ -151,17 +151,13 @@ gst_fdkaacdec_set_format (GstAudioDecoder * dec, GstCaps * caps)
-> +     gst_buffer_unref (codec_data);
-> +   }
-> +
-> ++  /* Choose WAV channel mapping to get interleaving even with libfdk-aac 2.0.0
-> ++   * The pChannelIndices retain the indices from the standard MPEG mapping so
-> ++   * we're agnostic to the actual order. */
-> +   if ((err =
-> +           aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_CHANNEL_MAPPING,
-> +-              0)) != AAC_DEC_OK) {
-> +-    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
-> +-    return FALSE;
-> +-  }
-> +-
-> +-  if ((err =
-> +-          aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_INTERLEAVED,
-> +               1)) != AAC_DEC_OK) {
-> +-    GST_ERROR_OBJECT (self, "Failed to set interleaved output: %d", err);
-> ++    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
-> +     return FALSE;
-> +   }
-> +
-> +--
-> +2.11.0
-> +
+[1] http://patchwork.ozlabs.org/patch/1026229/
 
-Thanks,
--Ryan
+Best regards,
+Romain
 
- ---
-Ryan Barnett | Sr Systems Engineer | Commercial Avionics
-COLLINS AEROSPACE
-400 Collins Rd NE, Cedar Rapids, IA 52498 USA
-ryan.barnett at collins.com | collinsaerospace.com
+> 
+> v4
+>  - New patch
+> 
+> v5
+>  - Rebased post 2018.11 on master
+> ---
+>  package/llvm/llvm.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 2973689..5174be3 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -123,6 +123,11 @@ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_ZLIB=ON
+>  HOST_LLVM_DEPENDENCIES += host-zlib
+>  LLVM_CONF_OPTS += -DLLVM_ENABLE_ZLIB=OFF
+>  
+> +# libxml2 can be disabled as it is used for LLVM Windows builds where COFF
+> +# files include manifest info
+> +HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_LIBXML2=OFF
+> +
+>  # We don't use llvm for static only build, so enable PIC
+>  HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
+>  LLVM_CONF_OPTS += -DLLVM_ENABLE_PIC=ON
+> 
