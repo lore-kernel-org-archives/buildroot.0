@@ -1,204 +1,104 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 16 Jan 2019 06:43:12 -0600
-Subject: [Buildroot] [PATCH v5] package/ntp: sntp time sync script
-In-Reply-To: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpbaxHc6+T7sA-mZs_zobb_ALcgyPafuYq0MexQDFmmbAA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Jan 2019 13:45:21 +0100
+Subject: [Buildroot] [PATCH] package/wolfssl: security bump to version 3.5.17
+Message-ID: <20190116124521.17109-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout / Oscar,
+From the release notes:
 
+This release of wolfSSL includes a fix for 1 security vulnerability.
 
-On Tue, Dec 11, 2018 at 9:45 PM Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> This patch adds the installation of a startup script if the sntp
-> utility is selected as an option. The utility is design to do a
-> one time step/slew adjustment of the system time (similar to the
-> ntpdate tool http://support.ntp.org/bin/view/Dev/DeprecatingNtpdate).
-> One nice benefit over ntpdate is that sntp can run while ntpd is still
-> running. However, ntpd may still need to be restarted if the time
-> step was large enough.
->
-> The script provides the ability to override the arguments as part of a
-> /etc/defaults/sntp file.
->
-> On a local LAN, the initial large step adjustment took less then
-> one second to be retrieved and system time updated. If a user already
-> has a RTC maintaining the time and the system was powered off for
-> a long period of time, the script assumes a slew adjustment when
-> +/- 128ms, rather then a time step(jump). This could be further
-> tuned by a user with the /etc/defaults/sntp configuration file.
->
-> One NTP pool server is being set as sntp uses all of the servers
-> provided when the DNS is resolved as servers to attempt to retrieve
-> time from before timing out. It looks like currently that is 4 servers
-> per *pool.ntp.org hostname.
->
-> Cc: Oscar Gomez Fuente <oscargomezf@gmail.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Medium level fix for potential cache attack with a variant of
+Bleichenbacher?s attack.  Earlier versions of wolfSSL leaked PKCS #1 v1.5
+padding information during private key decryption that could lead to a
+potential padding oracle attack.  It is recommended that users update to the
+latest version of wolfSSL if they have RSA cipher suites enabled and have
+the potential for malicious software to be ran on the same system that is
+performing RSA operations.  Users that have only ECC cipher suites enabled
+and are not performing RSA PKCS #1 v1.5 Decryption operations are not
+vulnerable.  Also users with TLS 1.3 only connections are not vulnerable to
+this attack.  Thanks to Eyal Ronen (Weizmann Institute), Robert Gillham
+(University of Adelaide), Daniel Genkin (University of Michigan), Adi Shamir
+(Weizmann Institute), David Wong (NCC Group), and Yuval Yarom (University of
+Adelaide and Data61) for the report.
 
-Arnout, merge?  Oscar tested the v4 before I did the changes for
-Carlos's style of script so I didn't carry over his reviewed-by as
-enough was touched....
+The paper for further reading on the attack details can be found at
+http://cat.eyalro.net/cat.pdf
 
-> ---
-> Changes
-> v4 -> v5
->  - Fixed permissions on S48sntp and S49ntp scripts
->
-> [Arnout
->  - Updated script to follow Carlos's recently merged syslog script
->    refresh
->  - Added kconfig help comment about the script
->  - Added notes in S49sntp about behavior of the tool
->  - shellcheck fixes
->  - Moved touch of key database file into start function
->
-> v3 -> v4
->  - Updated S48sntp script to just use a single pool host which provides
->    4 NTP servers sntp will query before timing out
->
-> v2 -> v3
->  - Moved initial time set to a S48sntp script as originally suggested
->    by Oscar and preferred by Arnout
->  - Switched to sntp tool as it simplified the logic around when and
->    how do we call the tool to perform this time sync (it handles
->    when to slew/step and multiple servers at once)
->
-> v1 -> v2
-> [Arnout
->  - Moved NTP_WAIT_DELAY above sourcing of configuration file
->  - Switched to using unix time for current time check
->  - Added comment on why redirection of stdout and stderr
->  - Attempted to use the pid file but found it added more calls
->    to the shell then using a variable, so switched back
->  - Adjusted printout so the actual ntpd service start was aligned
->    with the respecting Ok/Fail.
->  - Dropped -g from the main service call as the "big" time jump
->    should have already occurred with the one-shot ntpd -gq.
->
-> v1
-> Based on Oscar's v1 patch to add a ntpdate startup script.
-> http://patchwork.ozlabs.org/patch/986852/
-> ---
->  package/ntp/Config.in |  7 ++++++-
->  package/ntp/S48sntp   | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  package/ntp/S49ntp    |  0
->  package/ntp/ntp.mk    |  9 +++++++++
->  4 files changed, 70 insertions(+), 1 deletion(-)
->  create mode 100644 package/ntp/S48sntp
->  mode change 100755 => 100644 package/ntp/S49ntp
->
-> diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-> index efd47e1..97d933b 100644
-> --- a/package/ntp/Config.in
-> +++ b/package/ntp/Config.in
-> @@ -12,7 +12,12 @@ if BR2_PACKAGE_NTP
->  config BR2_PACKAGE_NTP_SNTP
->         bool "sntp"
->         help
-> -         Simple network time protocol program
-> +         Simple network time protocol program (a replacement
-> +         for the ntpdate tool)
-> +
-> +         A script is installed as S48sntp which will retrieve and
-> +         step the time if there is a large difference before ntpd
-> +         takes over the necessary slew adjustments in S49ntp.
->
->  config BR2_PACKAGE_NTP_NTP_KEYGEN
->         bool "ntp-keygen"
-> diff --git a/package/ntp/S48sntp b/package/ntp/S48sntp
-> new file mode 100644
-> index 0000000..96d8d50
-> --- /dev/null
-> +++ b/package/ntp/S48sntp
-> @@ -0,0 +1,55 @@
-> +#!/bin/sh
-> +
-> +DAEMON="sntp"
-> +# sntp uses all the IPs resolved for the hostname (i.e. pool.ntp.org has 4).
-> +# It will try each until they either all timeout or time has been set. Thus
-> +# default to only providing one NTP pool host.
-> +SNTP_SERVERS="pool.ntp.org"
-> +# Step if time delta is greater then 128ms, otherwise slew
-> +SNTP_ARGS="-Ss -M 128"
-> +SNTP_KEY_CACHE="/tmp/kod"
-> +
-> +# shellcheck source=/dev/null
-> +[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-> +
-> +start() {
-> +       printf 'Starting %s: ' "$DAEMON"
-> +       # Create key cache file to prevents warning that file is missing
-> +       touch $SNTP_KEY_CACHE
-> +       # shellcheck disable=SC2086 # we need the word splitting
-> +       /usr/bin/$DAEMON $SNTP_ARGS -K $SNTP_KEY_CACHE $SNTP_SERVERS
-> +       # sntp behavior
-> +       # - Does not background
-> +       # - Does not infinitely block
-> +       # - Time-out w/o network = ~2 sec
-> +       # - Time-out w/ network = ~5sec * # of servers
-> +       status=$?
-> +       if [ "$status" -eq 0 ]; then
-> +               echo "OK"
-> +       else
-> +               echo "FAIL"
-> +       fi
-> +       return "$status"
-> +}
-> +
-> +stop() {
-> +       echo "Nothing to do, $DAEMON is not a daemon."
-> +}
-> +
-> +restart() {
-> +       stop
-> +       sleep 1
-> +       start
-> +}
-> +
-> +reload() {
-> +       echo "Nothing to do, $DAEMON does not support reload."
-> +}
-> +
-> +case "$1" in
-> +       start|stop|restart|reload)
-> +               "$1";;
-> +       *)
-> +               echo "Usage: $0 {start|stop|restart|reload}"
-> +               exit 1
-> +esac
-> diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-> old mode 100755
-> new mode 100644
-> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-> index af3c1aa..aad1cdd 100644
-> --- a/package/ntp/ntp.mk
-> +++ b/package/ntp/ntp.mk
-> @@ -93,9 +93,18 @@ define NTP_INSTALL_TARGET_CMDS
->         $(INSTALL) -m 644 package/ntp/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
->  endef
->
-> +# This script will step the time if there is a large difference
-> +# before ntpd takes over the necessary slew adjustments
-> +ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-> +define NTP_INSTALL_INIT_SYSV_SNTP
-> +       $(INSTALL) -D -m 755 package/ntp/S48sntp $(TARGET_DIR)/etc/init.d/S48sntp
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
->  define NTP_INSTALL_INIT_SYSV
->         $(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-> +       $(NTP_INSTALL_INIT_SYSV_SNTP)
->  endef
->
->  define NTP_INSTALL_INIT_SYSTEMD
-> --
-> 1.9.1
->
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-with-the-creation-of-dummy-fips.h-header.patch | 33 ----------------------
+ package/wolfssl/wolfssl.hash                       |  2 +-
+ package/wolfssl/wolfssl.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/wolfssl/0001-Fix-issue-with-the-creation-of-dummy-fips.h-header.patch
+
+diff --git a/package/wolfssl/0001-Fix-issue-with-the-creation-of-dummy-fips.h-header.patch b/package/wolfssl/0001-Fix-issue-with-the-creation-of-dummy-fips.h-header.patch
+deleted file mode 100644
+index 0e9dec751d..0000000000
+--- a/package/wolfssl/0001-Fix-issue-with-the-creation-of-dummy-fips.h-header.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From a7fe5e35025227e348eaef5a15fd55f591d77206 Mon Sep 17 00:00:00 2001
+-From: John Safranek <john@wolfssl.com>
+-Date: Tue, 6 Mar 2018 13:15:35 -0800
+-Subject: [PATCH] Fix issue with the creation of dummy fips.h header.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- wolfssl/wolfcrypt/include.am | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/wolfssl/wolfcrypt/include.am b/wolfssl/wolfcrypt/include.am
+-index c81bdd13..6e84ed9d 100644
+---- a/wolfssl/wolfcrypt/include.am
+-+++ b/wolfssl/wolfcrypt/include.am
+-@@ -20,7 +20,6 @@ nobase_include_HEADERS+= \
+-                          wolfssl/wolfcrypt/fe_operations.h \
+-                          wolfssl/wolfcrypt/ge_operations.h \
+-                          wolfssl/wolfcrypt/error-crypt.h \
+--                         wolfssl/wolfcrypt/fips.h \
+-                          wolfssl/wolfcrypt/fips_test.h \
+-                          wolfssl/wolfcrypt/hash.h \
+-                          wolfssl/wolfcrypt/hc128.h \
+-@@ -99,3 +98,7 @@ if BUILD_SELFTEST
+- nobase_include_HEADERS+= wolfssl/wolfcrypt/selftest.h
+- endif
+- 
+-+if BUILD_FIPS_V2
+-+nobase_include_HEADERS+= wolfssl/wolfcrypt/fips.h
+-+endif
+-+
+--- 
+-2.11.0
+-
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 2fdaa5762b..1ff9fc61d8 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 4e15f494604e41725499f8b708798f8ddc2fcaa8f39b4369bcd000b3cab482d8  v3.15.5-stable.tar.gz
++sha256 70e4fbeb91284a269b25a84fc526755c670475aee4034a6f237b1f754d108af3  v3.15.7-stable.tar.gz
+ 
+ # Hash for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index aefcea33d0..42198cb817 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 3.15.5
++WOLFSSL_VERSION = 3.15.7
+ WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
+ WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
+ WOLFSSL_INSTALL_STAGING = YES
+-- 
+2.11.0
