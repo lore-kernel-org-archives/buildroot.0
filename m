@@ -1,109 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 20:34:56 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.6.5
-Message-ID: <20190116193531.B558E8677B@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Jan 2019 21:40:06 +0200
+Subject: [Buildroot] [PATCH] package/cryptsetup: bump to version 2.0.6
+Message-ID: <39edea07ec5f17c6b3056a5f741a6dee1b20b76b.1547667606.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cd4cb015690078965faa4965e51779611f7e603
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- libidn1 support removed since version 3.6.0 and
-  https://github.com/gnutls/gnutls/commit/abe6a12b9766219163f99d7807a0b07fbe5f590c
-- libz support has been removed since version 3.6.0 and
-  https://github.com/gnutls/gnutls/commit/1b3ece44acaa25c149659a6878d2be807a282f02
-
-This bump also fix build issues of gnutls tests and applications such
-as ffmpeg or cups due to the fact that _idn2_punycode_* functions are
-not exposed anymore since libidn2 bump to version 2.1.0 and:
-https://github.com/libidn/libidn2/commit/1d1f2e5babe6032eb0fe4d451afee2e277b8419f
-
-Fixes:
- - http://autobuild.buildroot.org/results/f8c38ea6ebbb78269d620d19d760a0566f742640
- - http://autobuild.buildroot.org/results/8dc5b4212b1d8d0bf5bd5e8a27eb02753dc678e4
- - http://autobuild.buildroot.org/results/53f5bcd9010c841838f51d65427d9a97ef35e08c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/gnutls/gnutls.hash |  4 ++--
- package/gnutls/gnutls.mk   | 25 +++++--------------------
- 2 files changed, 7 insertions(+), 22 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index bbcd5bd4de..89e8b14597 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.19.tar.xz.sig
--sha256	1936eb64f03aaefd6eb16cef0567457777618573826b94d03376bb6a4afadc44	gnutls-3.5.19.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.5.tar.xz.sig
-+sha256	073eced3acef49a3883e69ffd5f0f0b5f46e2760ad86eddc6c0866df4e7abb35	gnutls-3.6.5.tar.xz
- # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 2d670d32d7..e6ddc3dbec 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,8 +4,8 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 38e8ff9a8aa3..748ea0eafb15 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
+-sha256 9d3a3c7033293e0c97f0ad0501fd5b4d4913ae497cbf70cca06633ccc54b5734  cryptsetup-2.0.4.tar.xz
++sha256 7c51fae0f0e7ea9af0f515b2ac77009fb2969a6619ebab47d097dca38b083d30  cryptsetup-2.0.6.tar.xz
+ sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index dd1ef2e9e00c..7788bfb60bba 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
-+GNUTLS_VERSION_MAJOR = 3.6
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).5
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
-@@ -28,9 +28,8 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
- 	gl_cv_func_gettimeofday_clobber=no
- GNUTLS_INSTALL_STAGING = YES
- 
--# libpthread and libz autodetection poison the linkpath
-+# libpthread autodetection poison the linkpath
- GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
--GNUTLS_CONF_OPTS += $(if $(BR2_PACKAGE_ZLIB),--with-libz-prefix=$(STAGING_DIR)/usr)
- 
- # gnutls needs libregex, but pcre can be used too
- # The check isn't cross-compile friendly
-@@ -59,18 +58,11 @@ GNUTLS_CONF_OPTS += --enable-cryptodev
- GNUTLS_DEPENDENCIES += cryptodev-linux
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBIDN),y)
--GNUTLS_CONF_OPTS += --with-idn
--GNUTLS_DEPENDENCIES += libidn
--else
--GNUTLS_CONF_OPTS += --without-idn
--endif
--
- ifeq ($(BR2_PACKAGE_LIBIDN2),y)
--GNUTLS_CONF_OPTS += --with-libidn2
-+GNUTLS_CONF_OPTS += --with-idn
- GNUTLS_DEPENDENCIES += libidn2
- else
--GNUTLS_CONF_OPTS += --without-libidn2
-+GNUTLS_CONF_OPTS += --without-idn
- endif
- 
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
-@@ -87,13 +79,6 @@ else
- GNUTLS_CONF_OPTS += --with-included-unistring
- endif
- 
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--GNUTLS_CONF_OPTS += --with-zlib
--GNUTLS_DEPENDENCIES += zlib
--else
--GNUTLS_CONF_OPTS += --without-zlib
--endif
--
- # Provide a default CA cert location
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
- GNUTLS_CONF_OPTS += --with-default-trust-store-pkcs11=pkcs11:model=p11-kit-trust
+ CRYPTSETUP_VERSION_MAJOR = 2.0
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
+-- 
+2.20.1
