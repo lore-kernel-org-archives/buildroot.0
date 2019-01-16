@@ -1,107 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 10:56:25 +0100
-Subject: [Buildroot] [git commit] package/rtc-tools: new package
-Message-ID: <20190116095607.13AEC8229B@busybox.osuosl.org>
+Date: Wed, 16 Jan 2019 12:43:41 +0100
+Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce
+ dependency on tpm2-abrmd
+In-Reply-To: <20190115204308.GB2556@scaer> (Yann E. MORIN's message of "Tue,
+ 15 Jan 2019 21:43:08 +0100")
+References: <20190115101522.21042-1-peter@korsgaard.com>
+ <20190115101522.21042-6-peter@korsgaard.com>
+ <20190115204308.GB2556@scaer>
+Message-ID: <875zuog74i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=582ceee3f1ed550125b51b8d2ebb242caa09ac68
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This package contains a set of tools to manipulate RTC devices. They
-are written and maintained by the RTC subsystem Linux kernel
-maintainer, Alexandre Belloni.
+ > Peter, All,
+ > On 2019-01-15 11:15 +0100, Peter Korsgaard spake thusly:
+ >> tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
+ >> CAN be used without, E.G.  by setting the TPM2TOOLS_TCTI_NAME environment
+ >> variable to communicate directly with the kernel driver:
+ >> 
+ >> export TPM2TOOLS_TCTI_NAME=device
+ >> 
+ >> For some use cases (E.G.  initramfs) it makes sense to use tpm2-tools
+ >> without abrmd, so downgrade the dependency from select to imply, so abrmd is
+ >> enabled by default but can be explicitly disabled.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/tpm2-tools/Config.in | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> 
+ >> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+ >> index cc87e2a1bf..f4622b4ec9 100644
+ >> --- a/package/tpm2-tools/Config.in
+ >> +++ b/package/tpm2-tools/Config.in
+ >> @@ -8,7 +8,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ >> select BR2_PACKAGE_LIBCURL
+ >> select BR2_PACKAGE_LIBGLIB2
+ >> select BR2_PACKAGE_OPENSSL
+ >> -	select BR2_PACKAGE_TPM2_ABRMD # run-time
+ >> +	imply BR2_PACKAGE_TPM2_ABRMD # run-time
 
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/rtc-tools/Config.in      |  7 +++++++
- package/rtc-tools/rtc-tools.hash |  3 +++
- package/rtc-tools/rtc-tools.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 38 insertions(+)
+ > Sorry, but I reiterate my position: I don't like the use of 'imply'.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index aa1bf325cb..c1950bb0f4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2130,6 +2130,7 @@ F:	package/python-serial/
- F:	package/qextserialport/
- F:	package/rpcbind/
- F:	package/rt-tests/
-+F:	package/rtc-tools/
- F:	package/sam-ba/
- F:	package/scons/
- F:	package/squashfs/
-diff --git a/package/Config.in b/package/Config.in
-index 0df9b73088..5036421a73 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -500,6 +500,7 @@ endmenu
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
- 	source "package/rs485conf/Config.in"
-+	source "package/rtc-tools/Config.in"
- 	source "package/rtl8188eu/Config.in"
- 	source "package/rtl8189fs/Config.in"
- 	source "package/rtl8723bs/Config.in"
-diff --git a/package/rtc-tools/Config.in b/package/rtc-tools/Config.in
-new file mode 100644
-index 0000000000..78f5c06049
---- /dev/null
-+++ b/package/rtc-tools/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_RTC_TOOLS
-+	bool "rtc-tools"
-+	help
-+	  This package provide a set of user-space tools that can be
-+	  used to manipulate Real Time Clock Devices.
-+
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
-diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
-new file mode 100644
-index 0000000000..81be1afe4e
---- /dev/null
-+++ b/package/rtc-tools/rtc-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 152d8455bae5ad672e99bb91dfbed5b8b4bd8b0325146d1cf1c4d80b6e0d8a16 rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7.tar.gz
-+sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a COPYING
-diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
-new file mode 100644
-index 0000000000..fa187a84c2
---- /dev/null
-+++ b/package/rtc-tools/rtc-tools.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# rtc-tools
-+#
-+################################################################################
-+
-+RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
-+RTC_TOOLS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
-+RTC_TOOLS_LICENSE = GPL-2.0
-+RTC_TOOLS_LICENSE_FILES = COPYING
-+
-+RTC_TOOLS_BINARIES = rtc rtc-sync rtc-range
-+
-+define RTC_TOOLS_BUILD_CMDS
-+	$(foreach bin,$(RTC_TOOLS_BINARIES),\
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$(bin) $(@D)/$(bin).c
-+	)
-+endef
-+
-+define RTC_TOOLS_INSTALL_TARGET_CMDS
-+	$(foreach bin,$(RTC_TOOLS_BINARIES),\
-+		$(INSTALL) -D -m 0755 $(@D)/$(bin) $(TARGET_DIR)/usr/bin/$(bin)
-+	)
-+endef
-+
-+$(eval $(generic-package))
+ > Either the thing is mandatory, in which case we select it or depend on
+ > it, or the thing is optional, in which case we elt the user enable it.
+
+I understand you don't like it, but what is the alternative? Just
+mention the optional-but-likely-to-be-needed dependency in the help
+text? That is IMHO worse than imply.
+
+For this specific case, tpm2-tools fails with a somewhat confusing error
+message if tpm2-abrmd isn't available unless a specific command line
+option / environment variable is used:
+
+# tpm2_pcrlist
+
+** (process:8628): WARNING **: 11:38:39.606: Failed to create connection with service: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name com.intel.tss2.Tabrmd was not provided by any .service files
+ERROR: Failed to initialize TABRMD TCTI context: 0xa0008
+
+The solution is to set the TCTI name to device, either through the
+TPM2TOOLS_TCTI_NAME environment variable or the --tcti option.
+
+This is imho exactly the kind of use cases imply has been made for.
+
+
+ > Use of imply does not sound nice to me, because it is not authoritative.
+ > I'm afraid we get reports of users complaining that "sometimes the stuff
+ > is enabled when I do X, while sometmes it is not enabled when I do the
+ > same X.'
+
+Is that any different than changing toolchain options or toggling
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
+
+
+ > The coutner argument has been that we were now trying to make sensible
+ > choices for the user, so that things "work out of the box". My position
+ > is that it is an illusion, because making things "just work" is more
+ > often than not more involving than just enabling a package.
+
+I agree that we probably cannot do this perfectly, but a solution for
+E.G. 80% of the use cases is still an improvement, as long as the
+remaining 20% can still change things.
+
+ > For example, when dealing with TPM and such: keys and certs provisionning
+ > and checking the chain of trust and such is only scratching the surface.
+ > People that want to deal with this topic better know what they *are* doing,
+ > as it is a sensible topic. Those people will have to understand what they
+ > need if they do not already know.
+
+Sure, but we can atleast ensure that the tpm2-tools utilites do not fail
+out of the box because of a missing obscure dependency and that fairly
+common use cases are possible.
+
+-- 
+Bye, Peter Korsgaard
