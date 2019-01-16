@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Jan 2019 10:46:32 +0100
+Date: Wed, 16 Jan 2019 10:46:54 +0100
 Subject: [Buildroot] [PATCH] package/rtc-tools: new package
-In-Reply-To: <20190115144901.GA28293@piout.net> (Alexandre Belloni's message
- of "Tue, 15 Jan 2019 15:49:01 +0100")
+In-Reply-To: <20190115093229.8772-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 15 Jan 2019 10:32:29 +0100")
 References: <20190115093229.8772-1-thomas.petazzoni@bootlin.com>
- <20190115144901.GA28293@piout.net>
-Message-ID: <87ef9dexzb.fsf@dell.be.48ers.dk>
+Message-ID: <87a7k1exyp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > This package contains a set of tools to manipulate RTC devices. They
+ > are written and maintained by the RTC subsystem Linux kernel
+ > maintainer, Alexandre Belloni.
 
- >> +RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
+ > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > Should I tag a release or are you fine with the git hash?
 
-A release is always nicer, but just using the git hash is IMHO OK for
-now.
-
-If you are not planning any other changes in the near future, then I
-would suggest you make a release.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
