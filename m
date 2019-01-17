@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 23:13:06 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: bump version to 10.3.5
-In-Reply-To: <20190117191322.6409-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 17 Jan 2019 20:13:22 +0100")
-References: <20190117191322.6409-1-peter@korsgaard.com>
-Message-ID: <875zun6ih9.fsf@dell.be.48ers.dk>
+Date: Thu, 17 Jan 2019 23:13:12 +0100
+Subject: [Buildroot] [PATCH 1/1] libmad: needs autoreconf
+In-Reply-To: <20190117203605.7325-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 17 Jan 2019 21:36:05 +0100")
+References: <20190117203605.7325-1-fontaine.fabrice@gmail.com>
+Message-ID: <871s5b6ih3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes build against glibc 2.28: closes #11546
- > http://autobuild.buildroot.net/results/f2c/f2c73480b5a1060bb17ac260ef82c3e641fad085/
- > http://autobuild.buildroot.net/results/e21/e219b8bacb52bb661eb6663b82f549ed941f26fe/
+ > libmad uses a very old configure script.
+ > When the toolchain lacks C++ and the build machine lacks /lib/cpp, this
+ > old configure script fails because it can't find a C++ preprocessor that
+ > is valid:
 
- > Use released tarball rather than github helper.  The tarball does not
- > contain the open-vm-tools sub directory, so adjust the paths in the patches
- > to match and drop OPENVMTOOLS_SUBDIR.
+ >     checking for arm-buildroot-linux-uclibcgnueabi-g++... no
+ >     checking whether we are using the GNU C++ compiler... no
+ >     checking whether no accepts -g... no
+ >     checking dependency style of no... none
+ >     checking how to run the C++ preprocessor... /lib/cpp
+ >     configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+ >     See `config.log' for more details.
 
- > Drop 0001-has_bsd_printf.patch: msgList.c has been removed upstream since:
- > https://github.com/vmware/open-vm-tools/commit/dc81979e78e1b8f42639aeb7aaec69f7ea49eb79
+ > This is yet another case that was tentatively fixed by bd39d11d2e
+ > (core/infra: fix build on toolchain without C++), further amended by
+ > 4cd1ab15886 (core: alternate solution to disable C++).
 
- > Drop 0004-uclibc_secure_getenv.sh: uClibc-ng provides secure_getenv() since
- > 1.0.22.
+ > However, this only works on libtool scripts that are recent enough, and
+ > thus we need to autoreconf to get it.
 
- > Renumber remaining patches.
+ > We also need to patch configure.ac so that it does not fail on the
+ > missing, GNU-specific files: NEWS, AUTHORS, and Changelog.
 
- > Add hash for license file.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6a6aa29295bd70679c3a22a149e79010fa20c1bf
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
