@@ -1,57 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 22:38:52 +0100
-Subject: [Buildroot] [git commit] Makefile: move definition of TARGET_DIR
- inside .config condition
-Message-ID: <20190117213835.817A18434C@busybox.osuosl.org>
+Date: Thu, 17 Jan 2019 22:38:34 +0100
+Subject: [Buildroot] [git commit] support/scripts/check-host-rpath: document
+ existing functions
+Message-ID: <20190117213835.7AD9F8434C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a86b626b5b0e3416f2b84c666adf9cb2d00e6596
+commit: https://git.buildroot.net/buildroot/commit/?id=b1e294cc15e42929b87c2ac184d368df66a701d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In a follow-up commit introducing per-package directory support, we
-will need to define TARGET_DIR in a different way depending on the
-value of a Config.in option. To make this possible, the definition of
-TARGET_DIR should be moved inside the BR2_HAVE_DOT_CONFIG condition.
-
-We have verified that $(TARGET_DIR) is only used within the
-BR2_HAVE_DOT_CONFIG condition. Outside of this condition, such as in
-the "clean" target, $(BASE_TARGET_DIR) is used.
+As suggested by Arnout Vandecappelle, let's document the
+elf_needs_rpath() and check_elf_has_rpath() functions, before we make
+them a bit more complicated with per-package directory support.
 
 Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ support/scripts/check-host-rpath | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 9f4d037cca..a382a5defb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -204,10 +204,7 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 6c5767da05..c8939569e2 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -39,6 +39,11 @@ is_elf() {
+     |grep -E 'Requesting program interpreter:' >/dev/null 2>&1
+ }
  
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
--# The target directory is common to all packages,
--# but there is one that is specific to each filesystem.
- BASE_TARGET_DIR := $(BASE_DIR)/target
--TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
-@@ -457,6 +454,10 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- # packages compiled for the host go here
- HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
++# This function tells whether a given ELF executable (first argument)
++# needs a RPATH pointing to the host library directory or not. It
++# needs such an RPATH if at least of the libraries used by the ELF
++# executable is available in the host library directory. This function
++# returns 0 when a RPATH is needed, 1 otherwise.
+ elf_needs_rpath() {
+     local file="${1}"
+     local hostdir="${2}"
+@@ -54,6 +59,13 @@ elf_needs_rpath() {
+     return 1
+ }
  
-+# The target directory is common to all packages,
-+# but there is one that is specific to each filesystem.
-+TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
-+
- ifneq ($(HOST_DIR),$(BASE_DIR)/host)
- HOST_DIR_SYMLINK = $(BASE_DIR)/host
- $(HOST_DIR_SYMLINK): $(BASE_DIR)
++# This function checks whether at least one of the RPATH of the given
++# ELF executable (first argument) properly points to the host library
++# directory (second argument), either through an absolute RPATH or a
++# relative RPATH. Having such a RPATH will make sure the ELF
++# executable will find at runtime the shared libraries it depends
++# on. This function returns 0 when a proper RPATH was found, or 1
++# otherwise.
+ check_elf_has_rpath() {
+     local file="${1}"
+     local hostdir="${2}"
