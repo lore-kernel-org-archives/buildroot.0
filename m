@@ -1,56 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 22:38:34 +0100
-Subject: [Buildroot] [git commit] support/scripts/check-host-rpath: document
- existing functions
-Message-ID: <20190117213835.7AD9F8434C@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Thu, 17 Jan 2019 22:14:22 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] package/googlefontdirectory: change to
+ google repo
+Message-ID: <20190117211422.14576-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e294cc15e42929b87c2ac184d368df66a701d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As because the current repository doesn't support new fonts
+we need to change it to the new one official google github repository
+which contains a lot of new available fonts.
 
-As suggested by Arnout Vandecappelle, let's document the
-elf_needs_rpath() and check_elf_has_rpath() functions, before we make
-them a bit more complicated with per-package directory support.
+Note: There are some things to improve like license files
+because in the new repository every directory with font
+contains separate license file however I have no idea
+how to do it in proper way.
 
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- support/scripts/check-host-rpath | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../googlefontdirectory.hash                  |  2 +-
+ .../googlefontdirectory.mk                    | 23 +++++++++++--------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 6c5767da05..c8939569e2 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -39,6 +39,11 @@ is_elf() {
-     |grep -E 'Requesting program interpreter:' >/dev/null 2>&1
- }
+diff --git a/package/googlefontdirectory/googlefontdirectory.hash b/package/googlefontdirectory/googlefontdirectory.hash
+index 6b15b2b8b7..e77ee3d7cb 100644
+--- a/package/googlefontdirectory/googlefontdirectory.hash
++++ b/package/googlefontdirectory/googlefontdirectory.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 8a7d04feef21fdfc09d90cd3e2c0c05dcb2fdd4e15f971e8ceaf4d90c1c123cd googlewebfonts.tgz
++sha256 ec2ddbeee673cce1b0796e3b20fbff5fd836ce9ba6d88deed8b59154fa255f06  googlefontdirectory-94dff3eaa9301b6640cccc63c56d6ff33d82882c.tar.gz
+diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
+index c34de3b0fe..3a78b0588b 100644
+--- a/package/googlefontdirectory/googlefontdirectory.mk
++++ b/package/googlefontdirectory/googlefontdirectory.mk
+@@ -4,20 +4,25 @@
+ #
+ ################################################################################
  
-+# This function tells whether a given ELF executable (first argument)
-+# needs a RPATH pointing to the host library directory or not. It
-+# needs such an RPATH if at least of the libraries used by the ELF
-+# executable is available in the host library directory. This function
-+# returns 0 when a RPATH is needed, 1 otherwise.
- elf_needs_rpath() {
-     local file="${1}"
-     local hostdir="${2}"
-@@ -54,6 +59,13 @@ elf_needs_rpath() {
-     return 1
- }
+-GOOGLEFONTDIRECTORY_SITE = \
+-	https://s3.amazonaws.com/joemaller_google_webfonts
+-GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
+-GOOGLEFONTDIRECTORY_LICENSE = OFL-1.1
++GOOGLEFONTDIRECTORY_VERSION = 94dff3eaa9301b6640cccc63c56d6ff33d82882c
++GOOGLEFONTDIRECTORY_SITE = $(call github,google,fonts,$(GOOGLEFONTDIRECTORY_VERSION))
++GOOGLEFONTDIRECTORY_LICENSE = OFL-1.1 (ofl) Apache-2.0 (apache) UFL-1.0 (ufl)
++GOOGLEFONTDIRECTORY_LICENSE_FILES = LICENCE OFL
++GOOGLEFONTDIRECTORY_DIRECTORIES_LIST = apache ofl ufl
  
-+# This function checks whether at least one of the RPATH of the given
-+# ELF executable (first argument) properly points to the host library
-+# directory (second argument), either through an absolute RPATH or a
-+# relative RPATH. Having such a RPATH will make sure the ELF
-+# executable will find at runtime the shared libraries it depends
-+# on. This function returns 0 when a proper RPATH was found, or 1
-+# otherwise.
- check_elf_has_rpath() {
-     local file="${1}"
-     local hostdir="${2}"
+ GOOGLEFONTDIRECTORY_FONTS = \
+ 	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
+ 
+ define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
+-	for i in $(GOOGLEFONTDIRECTORY_FONTS); \
+-	do \
+-		$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$$i && \
+-		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/fonts/$$i $(@D)/$$i/*.ttf || exit 1; \
+-	done
++	$(foreach d,$(GOOGLEFONTDIRECTORY_DIRECTORIES_LIST),\
++		for i in $(GOOGLEFONTDIRECTORY_FONTS); \
++		do \
++			if font -d $(@D)/$(d)/$$i ; then \
++				$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$$i && \
++				$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/fonts/$$i $(@D)/$(d)/$$i/*.ttf ; \
++			fi  \
++		done
++	)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.20.1
