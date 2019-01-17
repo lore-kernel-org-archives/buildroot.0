@@ -1,53 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 23:04:23 +0100
-Subject: [Buildroot] [PATCH] package/cargo: pass appropriate library
- path to the linker
-In-Reply-To: <20181228132551.29819-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 28 Dec 2018 14:25:50 +0100")
-References: <20181228132551.29819-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87a7jz6ivs.fsf@dell.be.48ers.dk>
+Date: Thu, 17 Jan 2019 23:13:06 +0100
+Subject: [Buildroot] [PATCH] package/openvmtools: bump version to 10.3.5
+In-Reply-To: <20190117191322.6409-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 17 Jan 2019 20:13:22 +0100")
+References: <20190117191322.6409-1-peter@korsgaard.com>
+Message-ID: <875zun6ih9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > When linking the host cargo binary, the linker should be told to find
- > libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
+ > Fixes build against glibc 2.28: closes #11546
+ > http://autobuild.buildroot.net/results/f2c/f2c73480b5a1060bb17ac260ef82c3e641fad085/
+ > http://autobuild.buildroot.net/results/e21/e219b8bacb52bb661eb6663b82f549ed941f26fe/
 
-s/work/find/
+ > Use released tarball rather than github helper.  The tarball does not
+ > contain the open-vm-tools sub directory, so adjust the paths in the patches
+ > to match and drop OPENVMTOOLS_SUBDIR.
 
-> such as libhttp_parser. This was found with per-package directory
- > support, where the build failed with:
+ > Drop 0001-has_bsd_printf.patch: msgList.c has been removed upstream since:
+ > https://github.com/vmware/open-vm-tools/commit/dc81979e78e1b8f42639aeb7aaec69f7ea49eb79
 
- >   = note: /usr/bin/ld: cannot find -lhttp_parser
- >           collect2: error: ld returned 1 exit status
+ > Drop 0004-uclibc_secure_getenv.sh: uClibc-ng provides secure_getenv() since
+ > 1.0.22.
 
- > In order to fix this, instead of passing -L$(HOST_DIR)/lib during the
- > build of Cargo, we make sure all flags in $(HOST_LDFLAGS) are passed.
+ > Renumber remaining patches.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  package/cargo/cargo.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add hash for license file.
 
- > diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
- > index 1b1053ba41..a387281b4c 100644
- > --- a/package/cargo/cargo.mk
- > +++ b/package/cargo/cargo.mk
- > @@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
- >  	$(if $(VERBOSE),--verbose)
- 
- >  HOST_CARGO_ENV = \
- > -	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
- > +	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
-
-The -Clink-arg= thing looked odd to me, but is apparently how linker
-flags are passed:
-
-https://github.com/rust-lang/rust/pull/36574
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
