@@ -1,44 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 23:01:11 +0100
-Subject: [Buildroot] [git commit] package/cargo: pass appropriate library
+Date: Thu, 17 Jan 2019 23:04:23 +0100
+Subject: [Buildroot] [PATCH] package/cargo: pass appropriate library
  path to the linker
-Message-ID: <20190117220056.C55AE840B7@busybox.osuosl.org>
+In-Reply-To: <20181228132551.29819-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 28 Dec 2018 14:25:50 +0100")
+References: <20181228132551.29819-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87a7jz6ivs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e1b51dd1ee68ee342a3340c9c947c083861eb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-When linking the host cargo binary, the linker should be told to find
-libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
-such as libhttp_parser. This was found with per-package directory
-support, where the build failed with:
+ > When linking the host cargo binary, the linker should be told to find
+ > libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
 
-  = note: /usr/bin/ld: cannot find -lhttp_parser
-          collect2: error: ld returned 1 exit status
+s/work/find/
 
-In order to fix this, instead of passing -L$(HOST_DIR)/lib during the
-build of Cargo, we make sure all flags in $(HOST_LDFLAGS) are passed.
+> such as libhttp_parser. This was found with per-package directory
+ > support, where the build failed with:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cargo/cargo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >   = note: /usr/bin/ld: cannot find -lhttp_parser
+ >           collect2: error: ld returned 1 exit status
 
-diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-index 1b1053ba41..a387281b4c 100644
---- a/package/cargo/cargo.mk
-+++ b/package/cargo/cargo.mk
-@@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
- 	$(if $(VERBOSE),--verbose)
+ > In order to fix this, instead of passing -L$(HOST_DIR)/lib during the
+ > build of Cargo, we make sure all flags in $(HOST_LDFLAGS) are passed.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  package/cargo/cargo.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+ > index 1b1053ba41..a387281b4c 100644
+ > --- a/package/cargo/cargo.mk
+ > +++ b/package/cargo/cargo.mk
+ > @@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
+ >  	$(if $(VERBOSE),--verbose)
  
- HOST_CARGO_ENV = \
--	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-+	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
- 	CARGO_HOME=$(HOST_CARGO_HOME)
- 
- define HOST_CARGO_BUILD_CMDS
+ >  HOST_CARGO_ENV = \
+ > -	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
+ > +	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
+
+The -Clink-arg= thing looked odd to me, but is apparently how linker
+flags are passed:
+
+https://github.com/rust-lang/rust/pull/36574
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
