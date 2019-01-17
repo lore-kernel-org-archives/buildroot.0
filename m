@@ -1,35 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 09:55:20 +0100
-Subject: [Buildroot] [PATCH] package/llvm: set the path to llvm-config
-In-Reply-To: <20190116213921.2280-1-romain.naour@smile.fr> (Romain Naour's
- message of "Wed, 16 Jan 2019 22:39:21 +0100")
-References: <20190116213921.2280-1-romain.naour@smile.fr>
-Message-ID: <87o98f8xzb.fsf@dell.be.48ers.dk>
+Date: Thu, 17 Jan 2019 09:56:35 +0100
+Subject: [Buildroot] [PATCH] package/gst1-plugins-bad: fix build with
+ fdk-aac 2.0
+In-Reply-To: <20190116214849.13417-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 16 Jan 2019 22:48:49 +0100")
+References: <20190116214849.13417-1-peter@korsgaard.com>
+Message-ID: <87k1j38xx8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > While building llvm for the target (x86_64), the build failded due to
- > path poisoning (-I/usr/include/libxml2) while building NATIVE tools
- > (i.e for the host). The llvm package try to build a tool for the host
- > with the cross-compiler which doesn't work when the paranoid toolchain
- > wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/343/343249ab34ab77be3b8077f544b9d1e2d4852796/
+ > http://autobuild.buildroot.net/results/edc/edca961f2c4d1946385ac86a756308caaf22d79d/
 
- > We know that llvm (target) needs llvm-tablegen and llvm-config build by
- > host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
- > LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
- > fixes the path poisoining issue since llvm doesn't build the NATIVE
- > variant.
+ > Fdk-aac 2.0 dropped some legacy APIs, breaking the build of the fdk-aac
+ > plugin.  Add two upstream upstream patches to fix building against fdk-aac
+ > 2.0.
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
- > Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
- > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed, thanks.
+Committed after fixing the missing signed-off-by, thanks.
 
 -- 
 Bye, Peter Korsgaard
