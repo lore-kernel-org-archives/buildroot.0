@@ -1,169 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 20:13:22 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: bump version to 10.3.5
-Message-ID: <20190117191322.6409-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 17 Jan 2019 20:36:30 +0100
+Subject: [Buildroot] [PATCH v1] apr: fix runtime tests for cross compile
+Message-ID: <20190117193630.18533-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build against glibc 2.28: closes #11546
-http://autobuild.buildroot.net/results/f2c/f2c73480b5a1060bb17ac260ef82c3e641fad085/
-http://autobuild.buildroot.net/results/e21/e219b8bacb52bb661eb6663b82f549ed941f26fe/
+ - epoll supported since linux-2.5.44/glibc-2.3.2 (see [1])
+ - dup3 supported since linux-2.6.27/glibc-2.9 (see [2])
+ - SOCK_CLOEXEC supported on linux (see [3])
+ - accept4 suppported since linux-2.6.28/glibc-2.10 (see [4])
 
-Use released tarball rather than github helper.  The tarball does not
-contain the open-vm-tools sub directory, so adjust the paths in the patches
-to match and drop OPENVMTOOLS_SUBDIR.
+Fixes [5] apache runtime failure:
 
-Drop 0001-has_bsd_printf.patch: msgList.c has been removed upstream since:
-https://github.com/vmware/open-vm-tools/commit/dc81979e78e1b8f42639aeb7aaec69f7ea49eb79
+  [mpm_event:crit] [pid 173:tid 1996214272] (70023)This function has not been
+      implemented on this platform: AH00495: Couldn't create a Thread Safe Pollset.
+      Is it supported on your platform?Also check system or user limits!
+  [:emerg] [pid 173:tid 1996214272] AH00017: Pre-configuration failed, exiting
 
-Drop 0004-uclibc_secure_getenv.sh: uClibc-ng provides secure_getenv() since
-1.0.22.
+[1] http://man7.org/linux/man-pages/man7/epoll.7.html
+[2] https://linux.die.net/man/2/dup3
+[4] https://linux.die.net/man/2/accept4
+[5] https://bugs.busybox.net/show_bug.cgi?id=11576
 
-Renumber remaining patches.
-
-Add hash for license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/openvmtools/0001-has_bsd_printf.patch      | 26 ----------------------
- ...gs_werror.patch => 0001-no_cflags_werror.patch} |  4 ++--
- ...pflags.patch => 0002-dont-force-cppflags.patch} |  4 ++--
- .../openvmtools/0004-uclibc_secure_getenv.patch    | 18 ---------------
- package/openvmtools/openvmtools.hash               |  3 ++-
- package/openvmtools/openvmtools.mk                 | 11 ++++-----
- 6 files changed, 12 insertions(+), 54 deletions(-)
- delete mode 100644 package/openvmtools/0001-has_bsd_printf.patch
- rename package/openvmtools/{0002-no_cflags_werror.patch => 0001-no_cflags_werror.patch} (65%)
- rename package/openvmtools/{0003-dont-force-cppflags.patch => 0002-dont-force-cppflags.patch} (73%)
- delete mode 100644 package/openvmtools/0004-uclibc_secure_getenv.patch
+Note:
+  - one more option checked via AC_TRY_RUN
+	ac_cv_func_sem_open
+---
+ package/apr/apr.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/openvmtools/0001-has_bsd_printf.patch b/package/openvmtools/0001-has_bsd_printf.patch
-deleted file mode 100644
-index df23f00414..0000000000
---- a/package/openvmtools/0001-has_bsd_printf.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--lib/misc/msgList.c: missing #ifdef
--
--This macro checks for BSD style printf(), which is not present
--when compiling for uClibc. The linked functions are unnecessary in
--this case, and they break compilation.
--
--Signed-off-by: Karoly Kasza <kaszak@gmail.com>
--
----- openvmtools-stable-9.10.0.orig/open-vm-tools/lib/misc/msgList.c	2015-06-17 10:01:00.000000000 +0200
--+++ openvmtools-stable-9.10.0/open-vm-tools/lib/misc/msgList.c		2015-06-17 10:01:00.000000000 +0200
--@@ -487,6 +487,7 @@
--    return messages->id;
-- }
-- 
--+#ifdef HAS_BSD_PRINTF
-- 
-- /*
--  *----------------------------------------------------------------------
--@@ -566,6 +567,7 @@
--    }
-- }
-- 
--+#endif
-- 
-- /*
--  *----------------------------------------------------------------------
-diff --git a/package/openvmtools/0002-no_cflags_werror.patch b/package/openvmtools/0001-no_cflags_werror.patch
-similarity index 65%
-rename from package/openvmtools/0002-no_cflags_werror.patch
-rename to package/openvmtools/0001-no_cflags_werror.patch
-index 1621574f81..3378cb8e7d 100644
---- a/package/openvmtools/0002-no_cflags_werror.patch
-+++ b/package/openvmtools/0001-no_cflags_werror.patch
-@@ -4,8 +4,8 @@ Disable the mandatory flag -Werror in configure.ac.
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 58b1d86b28..8f29e57c59 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -26,7 +26,12 @@ APR_CONF_ENV = \
+ 	ac_cv_sizeof_pid_t=4 \
+ 	ac_cv_struct_rlimit=yes \
+ 	ac_cv_o_nonblock_inherited=no \
+-	apr_cv_mutex_recursive=yes
++	apr_cv_mutex_recursive=yes \
++	apr_cv_epoll=yes \
++	apr_cv_epoll_create1=yes \
++	apr_cv_dup3=yes \
++	apr_cv_sock_cloexec=yes \
++	apr_cv_accept4=yes
+ APR_CONFIG_SCRIPTS = apr-1-config
  
- Signed-off-by: Karoly Kasza <kaszak@gmail.com>
- 
----- openvmtools-stable-9.10.0.orig/open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
--+++ openvmtools-stable-9.10.0/open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
-+--- open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
-++++ open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
- @@ -935,7 +935,7 @@
-  
-  ### General flags / actions
-diff --git a/package/openvmtools/0003-dont-force-cppflags.patch b/package/openvmtools/0002-dont-force-cppflags.patch
-similarity index 73%
-rename from package/openvmtools/0003-dont-force-cppflags.patch
-rename to package/openvmtools/0002-dont-force-cppflags.patch
-index c8fa6b17c1..eb2fe16ba9 100644
---- a/package/openvmtools/0003-dont-force-cppflags.patch
-+++ b/package/openvmtools/0002-dont-force-cppflags.patch
-@@ -4,8 +4,8 @@ This is so horribly broken for cross-compilation. :-(
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- 
----- openvmtools-stable-9.10.0.orig/open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
--+++ openvmtools-stable-9.10.0/open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
-+--- open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
-++++ open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
- @@ -281,10 +281,10 @@
-        if test "$os" = freebsd; then
-           CUSTOM_$1_CPPFLAGS="-I/usr/local/include"
-diff --git a/package/openvmtools/0004-uclibc_secure_getenv.patch b/package/openvmtools/0004-uclibc_secure_getenv.patch
-deleted file mode 100644
-index 6fb9ebd723..0000000000
---- a/package/openvmtools/0004-uclibc_secure_getenv.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--lib/misc/idLinux.c: add uClibc support
--
--uClibc does not have a secure_getenv function, so we use the
--Android method.
--
--Signed-off-by: Karoly Kasza <kaszak@gmail.com>
--
----- openvmtools-stable-9.10.0.orig/open-vm-tools/lib/misc/idLinux.c	2015-06-17 10:04:00.000000000 +0200
--+++ openvmtools-stable-9.10.0/open-vm-tools/lib/misc/idLinux.c		2015-06-17 10:04:00.000000000 +0200
--@@ -997,7 +997,7 @@
-- static Bool
-- IdIsSetUGid(void)
-- {
---#if defined(__ANDROID__)
--+#if defined(__ANDROID__) || defined(__UCLIBC__)
--    /* Android does not have a secure_getenv, so be conservative. */
--    return TRUE;
-- #else
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-index bf344e506b..bd81d1f05c 100644
---- a/package/openvmtools/openvmtools.hash
-+++ b/package/openvmtools/openvmtools.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256  ff384ab0c11e19db0fd6ddab60e8ae48a4591b141fb3a8e8f1d4e1a489dd293f  openvmtools-5a9033ddfa95786d867e4d02bbb9a29bac8fb64f.tar.gz
-+sha256  364cd0fdfa5a05e872d08609659e6231ec99788669f7ebba24bfb8c94168daef  open-vm-tools-10.3.5-10430147.tar.gz
-+sha256  f734933bd7d49aef25aaf897ed7281ee822e8635056e69b895a7d2e668937fc5  COPYING
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 9501ef3361..0dc2956d02 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--OPENVMTOOLS_VERSION = 5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
--OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
--OPENVMTOOLS_SUBDIR = open-vm-tools
-+OPENVMTOOLS_VERSION_MAJOR = 10.3.5
-+OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-10430147
-+OPENVMTOOLS_SITE = https://github.com/vmware/open-vm-tools/releases/download/stable-$(OPENVMTOOLS_VERSION_MAJOR)
-+OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
- OPENVMTOOLS_LICENSE = LGPL-2.1
--OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
-+OPENVMTOOLS_LICENSE_FILES = COPYING
- 
--# Autoreconf needed or config/missing will run configure again at buildtime
-+# configure.ac is patched
- OPENVMTOOLS_AUTORECONF = YES
- OPENVMTOOLS_CONF_OPTS = --with-dnet \
- 	--without-icu --without-x --without-gtk2 \
+ # Doesn't even try to guess when cross compiling
 -- 
-2.11.0
+2.20.1
