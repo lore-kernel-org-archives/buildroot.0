@@ -1,40 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Jan 2019 09:27:11 +0100
-Subject: [Buildroot] [git commit] package/libva-utils: drop _SOURCE variable
- which has the default value
-Message-ID: <20190117082753.65D36882A8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Jan 2019 09:55:20 +0100
+Subject: [Buildroot] [PATCH] package/llvm: set the path to llvm-config
+In-Reply-To: <20190116213921.2280-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Wed, 16 Jan 2019 22:39:21 +0100")
+References: <20190116213921.2280-1-romain.naour@smile.fr>
+Message-ID: <87o98f8xzb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96d90ae4e782559c78ae48de5230a9e3a8a08964
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-Since commit b0907949261ef5e8179c027c086903f30417dd66
-("package/libva-utils: bump to version 2.3.0"), the LIBVA_UTILS_SOURCE
-variable has the default value of the <pkg>_SOURCE variable, so
-check-package complains:
+ > While building llvm for the target (x86_64), the build failded due to
+ > path poisoning (-I/usr/include/libxml2) while building NATIVE tools
+ > (i.e for the host). The llvm package try to build a tool for the host
+ > with the cross-compiler which doesn't work when the paranoid toolchain
+ > wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
 
-package/libva-utils/libva-utils.mk:8: remove default value of _SOURCE variable (http://nightly.buildroot.org/#generic-package-reference)
+ > We know that llvm (target) needs llvm-tablegen and llvm-config build by
+ > host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
+ > LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
+ > fixes the path poisoining issue since llvm doesn't build the NATIVE
+ > variant.
 
-Let's fix this by dropping the now unneeded variable assignment.
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libva-utils/libva-utils.mk | 1 -
- 1 file changed, 1 deletion(-)
+Committed, thanks.
 
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index f08ffebb23..ac341cd428 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -5,7 +5,6 @@
- ################################################################################
- 
- LIBVA_UTILS_VERSION = 2.3.0
--LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.gz
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/archive/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
