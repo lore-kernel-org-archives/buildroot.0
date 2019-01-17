@@ -1,42 +1,42 @@
-From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Thu, 17 Jan 2019 21:53:36 +0100
-Subject: [Buildroot] [PATCH] package/llvm: set the path to llvm-config
-In-Reply-To: <20190116213921.2280-1-romain.naour@smile.fr>
-References: <20190116213921.2280-1-romain.naour@smile.fr>
-Message-ID: <c025da98-8005-7eeb-bff1-9bc60b36803a@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Jan 2019 21:58:26 +0100
+Subject: [Buildroot] [PATCH v1] apr: fix runtime tests for cross compile
+In-Reply-To: <20190117193630.18533-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 17 Jan 2019 20:36:30 +0100")
+References: <20190117193630.18533-1-ps.report@gmx.net>
+Message-ID: <87zhrz6lxp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-> While building llvm for the target (x86_64), the build failded due to
-> path poisoning (-I/usr/include/libxml2) while building NATIVE tools
-> (i.e for the host). The llvm package try to build a tool for the host
-> with the cross-compiler which doesn't work when the paranoid toolchain
-> wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
->
-> We know that llvm (target) needs llvm-tablegen and llvm-config build by
-> host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
-> LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
-> fixes the path poisoining issue since llvm doesn't build the NATIVE
-> variant.
->
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Valentin, I'm not sure why we don't set LLVM_CONFIG_PATH in llvm.mk for
-> the target variant? We provide it for clang and libclc, why not for
-> llvm ?
+ >  - epoll supported since linux-2.5.44/glibc-2.3.2 (see [1])
+ >  - dup3 supported since linux-2.6.27/glibc-2.9 (see [2])
+ >  - SOCK_CLOEXEC supported on linux (see [3])
+ >  - accept4 suppported since linux-2.6.28/glibc-2.10 (see [4])
 
-It was not set because the only necessary tool to build target llvm
-was llvm-tblgen.
+ > Fixes [5] apache runtime failure:
 
-Valentin
+ >   [mpm_event:crit] [pid 173:tid 1996214272] (70023)This function has not been
+ >       implemented on this platform: AH00495: Couldn't create a Thread Safe Pollset.
+ >       Is it supported on your platform?Also check system or user limits!
+ >   [:emerg] [pid 173:tid 1996214272] AH00017: Pre-configuration failed, exiting
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190117/59eab66c/attachment.html>
+ > [1] http://man7.org/linux/man-pages/man7/epoll.7.html
+ > [2] https://linux.die.net/man/2/dup3
+ > [4] https://linux.die.net/man/2/accept4
+ > [5] https://bugs.busybox.net/show_bug.cgi?id=11576
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Note:
+ >   - one more option checked via AC_TRY_RUN
+ > 	ac_cv_func_sem_open
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
