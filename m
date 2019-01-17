@@ -1,75 +1,78 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu, 17 Jan 2019 22:14:22 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] package/googlefontdirectory: change to
- google repo
-Message-ID: <20190117211422.14576-1-b.bilas@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Jan 2019 22:54:19 +0100
+Subject: [Buildroot] [PATCH next v2] package/pkg-meson: support
+ per-package directories
+In-Reply-To: <20181130104003.32337-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 30 Nov 2018 11:40:03 +0100")
+References: <20181130104003.32337-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87fttr6jck.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As because the current repository doesn't support new fonts
-we need to change it to the new one official google github repository
-which contains a lot of new available fonts.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Note: There are some things to improve like license files
-because in the new repository every directory with font
-contains separate license file however I have no idea
-how to do it in proper way.
+ > From: Peter Seiderer <ps.report@gmx.net>
+ > Currently, package/meson/meson.mk generates a single global
+ > cross-compilation.conf file, with the path to the compiler, cflags,
+ > ldflags, and various other details. This file is then used when
+ > building all meson-based packages.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- .../googlefontdirectory.hash                  |  2 +-
- .../googlefontdirectory.mk                    | 23 +++++++++++--------
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ > This causes two problems:
 
-diff --git a/package/googlefontdirectory/googlefontdirectory.hash b/package/googlefontdirectory/googlefontdirectory.hash
-index 6b15b2b8b7..e77ee3d7cb 100644
---- a/package/googlefontdirectory/googlefontdirectory.hash
-+++ b/package/googlefontdirectory/googlefontdirectory.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 8a7d04feef21fdfc09d90cd3e2c0c05dcb2fdd4e15f971e8ceaf4d90c1c123cd googlewebfonts.tgz
-+sha256 ec2ddbeee673cce1b0796e3b20fbff5fd836ce9ba6d88deed8b59154fa255f06  googlefontdirectory-94dff3eaa9301b6640cccc63c56d6ff33d82882c.tar.gz
-diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
-index c34de3b0fe..3a78b0588b 100644
---- a/package/googlefontdirectory/googlefontdirectory.mk
-+++ b/package/googlefontdirectory/googlefontdirectory.mk
-@@ -4,20 +4,25 @@
- #
- ################################################################################
- 
--GOOGLEFONTDIRECTORY_SITE = \
--	https://s3.amazonaws.com/joemaller_google_webfonts
--GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
--GOOGLEFONTDIRECTORY_LICENSE = OFL-1.1
-+GOOGLEFONTDIRECTORY_VERSION = 94dff3eaa9301b6640cccc63c56d6ff33d82882c
-+GOOGLEFONTDIRECTORY_SITE = $(call github,google,fonts,$(GOOGLEFONTDIRECTORY_VERSION))
-+GOOGLEFONTDIRECTORY_LICENSE = OFL-1.1 (ofl) Apache-2.0 (apache) UFL-1.0 (ufl)
-+GOOGLEFONTDIRECTORY_LICENSE_FILES = LICENCE OFL
-+GOOGLEFONTDIRECTORY_DIRECTORIES_LIST = apache ofl ufl
- 
- GOOGLEFONTDIRECTORY_FONTS = \
- 	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
- 
- define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
--	for i in $(GOOGLEFONTDIRECTORY_FONTS); \
--	do \
--		$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$$i && \
--		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/fonts/$$i $(@D)/$$i/*.ttf || exit 1; \
--	done
-+	$(foreach d,$(GOOGLEFONTDIRECTORY_DIRECTORIES_LIST),\
-+		for i in $(GOOGLEFONTDIRECTORY_FONTS); \
-+		do \
-+			if font -d $(@D)/$(d)/$$i ; then \
-+				$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$$i && \
-+				$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/fonts/$$i $(@D)/$(d)/$$i/*.ttf ; \
-+			fi  \
-+		done
-+	)
- endef
- 
- $(eval $(generic-package))
+ >  - It is not compatible with per-package directories, because with
+ >    per-package folders, we need to use a different compiler, and
+ >    possibly CFLAGS/LDFLAGS for each package.
+
+ >  - It is not possible to define per package CFLAGS. Indeed, when
+ >    cross-compiling, meson doesn't support passing CFLAGS through the
+ >    environment, only the CFLAGS from cross-compilation.conf are taken
+ >    into account.
+
+ > For this reason, this commit:
+
+ >  - Introduces a per-package cross-compilation.conf, which is generated
+ >    by the pkg-meson infrastructure in the "configure" step right
+ >    before calling meson. The file is generated in $(@D)/build/, and
+ >    because it is generated within a given package "configure" step,
+ >    the compiler path is the one of this package.
+
+ >  - Keeps the global cross-compilation.conf in $(HOST_DIR)/etc/meson/,
+ >    for the SDK use-case of Buildroot. Since we want the final and
+ >    global values of the compiler path, CFLAGS and LDFLAGS, generating
+ >    this global cross-compilation.conf is moved to a
+ >    TARGET_FINALIZE_HOOKS. If we were keeping this as a
+ >    HOST_MESON_POST_INSTALL_HOOKS, it would contain values specific to
+ >    the host-meson package.
+
+ > For now, we don't yet support per-package CFLAGS/LDFLAGS, but having
+ > such per-package cross-compilation.conf is a necessary preparation to
+ > achieve this goal.
+
+ > This commit has been tested by building all Buildroot packages that
+ > use meson: json-glib, systemd, enlightenment, at-spi2-core, ncmpc,
+ > libmpdclient and ncmpc.
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > [Thomas:
+ >  - add extended commit log
+ >  - in pkg-meson.mk, re-use variables defined in meson.mk to do the
+ >    replacement of CFLAGS/LDFLAGS/CXXFLAGS
+ >  - move the generation of the global cross-compilation.conf to a
+ >    TARGET_FINALIZE_HOOKS
+ >  - testing with per-package folders]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > Changes since v1:
+ >  - Rework commit title and commit log. Indeed, we don't implement
+ >    per-package CFLAGS as part of this commit, contrary to what the
+ >    previous commit log was saying. However, having a per-package
+ >    cross-compilation.conf is a necessary preparation step to implement
+ >    per-package CFLAGS in the future.
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
