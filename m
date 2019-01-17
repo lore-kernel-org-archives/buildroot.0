@@ -1,60 +1,24 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 17 Jan 2019 15:07:19 +0100
-Subject: [Buildroot] [PATCH v6 1/7] package/compiler-rt: new package
-In-Reply-To: <CANQCQpYJ6SDxfnskWhAv2nt9JP8rJO2iyDHOtuK8Fqe_yactGQ@mail.gmail.com>
-References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
- <987334a5-7b11-8f24-daf9-4c77dc7466b4@smile.fr>
- <CANQCQpYJ6SDxfnskWhAv2nt9JP8rJO2iyDHOtuK8Fqe_yactGQ@mail.gmail.com>
-Message-ID: <4069fbca-d6c0-77a8-db66-75626ed81450@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Jan 2019 15:51:44 +0100
+Subject: [Buildroot] [PATCH 1/1] nettle: fix build with gcc 4.7
+In-Reply-To: <20190116210940.25410-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Jan 2019 22:09:40 +0100")
+References: <20190116210940.25410-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bm4f8hhb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le 17/01/2019 ? 00:36, Matthew Weber a ?crit?:
-> Romain,
-> 
-> 
-> On Wed, Jan 16, 2019 at 3:59 PM Romain Naour <romain.naour@smile.fr> wrote:
->>
->> Hi Matt,
->>
->> Le 03/01/2019 ? 22:52, Matt Weber a ?crit :
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/69226d42e9a483aaff44fb3f468b4724415e71f6
 
-[...]
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
->>> +
->>> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_INCLUDE_TESTS=ON \
->>
->> Why building the testsuite and tests ?
-> 
-> It has been awhile and I don't remember the specific reason.  After
-> glancing at the cmake files, I believe I was using the test builds as
-> a way to verify the libraries could be linked against.  I'll start a
-> test build with that option removed and see if the runtime test has
-> any issues.  I would keep the tests enabled though as it allows the
-> user to see if their llvm setup works for fuzzing without having to
-> debug a custom application too. (Maybe that should be a comment above
-> the conf opts :-)
-> 
+Committed, thanks.
 
-By default, Buildroot packages should disable tests and testsuite when possible
-in order to keep rootfs small as possible.
-
-That is why several options are set in the package infra (see pkg-cmake.mk):
-   -DBUILD_EXAMPLE=OFF
-   -DBUILD_EXAMPLES=OFF
-   -DBUILD_TEST=OFF
-   -DBUILD_TESTS=OFF
-   -DBUILD_TESTING=OFF
-
-But the question is, do we need a global option to enable building packages
-tests and testsuite?
-
-Otherwise, I'm fine to keep this option enabled if this is useful.
-
-Best regards,
-Romain
+-- 
+Bye, Peter Korsgaard
