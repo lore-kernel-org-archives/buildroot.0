@@ -1,27 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 17 Jan 2019 22:14:15 +0000
-Subject: [Buildroot] [Bug 11546] open-vm-tools with glibc 2.28
-In-Reply-To: <bug-11546-163@https.bugs.busybox.net/>
-References: <bug-11546-163@https.bugs.busybox.net/>
-Message-ID: <bug-11546-163-KDTYIkgUhW@https.bugs.busybox.net/>
+Date: Thu, 17 Jan 2019 22:14:56 +0000
+Subject: [Buildroot] [Bug 11576] Unable to start apache with event MPM on
+ raspberry pi 3
+In-Reply-To: <bug-11576-163@https.bugs.busybox.net/>
+References: <bug-11576-163@https.bugs.busybox.net/>
+Message-ID: <bug-11576-163-JFpnJ5YkpD@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11546
+https://bugs.busybox.net/show_bug.cgi?id=11576
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
          Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
 Fixed by
-https://git.buildroot.org/buildroot/commit/?id=5f0f0f7e4f3362a3695d5876d0f41125a2544285
+https://git.buildroot.org/buildroot/commit/?id=7a3b44f445ff82acdc7524e401148b16bfdd24ff
 - Thanks
 
 -- 
