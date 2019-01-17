@@ -1,22 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 10:07:21 +0100
-Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.9.0
-In-Reply-To: <20190116211510.32049-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 16 Jan 2019 22:15:10 +0100")
-References: <20190116211510.32049-1-joerg.krause@embedded.rocks>
-Message-ID: <87fttr8xfa.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 17 Jan 2019 15:07:19 +0100
+Subject: [Buildroot] [PATCH v6 1/7] package/compiler-rt: new package
+In-Reply-To: <CANQCQpYJ6SDxfnskWhAv2nt9JP8rJO2iyDHOtuK8Fqe_yactGQ@mail.gmail.com>
+References: <1546552368-50707-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <987334a5-7b11-8f24-daf9-4c77dc7466b4@smile.fr>
+ <CANQCQpYJ6SDxfnskWhAv2nt9JP8rJO2iyDHOtuK8Fqe_yactGQ@mail.gmail.com>
+Message-ID: <4069fbca-d6c0-77a8-db66-75626ed81450@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+Hi Matt,
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Le 17/01/2019 ? 00:36, Matthew Weber a ?crit?:
+> Romain,
+> 
+> 
+> On Wed, Jan 16, 2019 at 3:59 PM Romain Naour <romain.naour@smile.fr> wrote:
+>>
+>> Hi Matt,
+>>
+>> Le 03/01/2019 ? 22:52, Matt Weber a ?crit :
 
-Committed, thanks.
+[...]
 
--- 
-Bye, Peter Korsgaard
+>>> +
+>>> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_INCLUDE_TESTS=ON \
+>>
+>> Why building the testsuite and tests ?
+> 
+> It has been awhile and I don't remember the specific reason.  After
+> glancing at the cmake files, I believe I was using the test builds as
+> a way to verify the libraries could be linked against.  I'll start a
+> test build with that option removed and see if the runtime test has
+> any issues.  I would keep the tests enabled though as it allows the
+> user to see if their llvm setup works for fuzzing without having to
+> debug a custom application too. (Maybe that should be a comment above
+> the conf opts :-)
+> 
+
+By default, Buildroot packages should disable tests and testsuite when possible
+in order to keep rootfs small as possible.
+
+That is why several options are set in the package infra (see pkg-cmake.mk):
+   -DBUILD_EXAMPLE=OFF
+   -DBUILD_EXAMPLES=OFF
+   -DBUILD_TEST=OFF
+   -DBUILD_TESTS=OFF
+   -DBUILD_TESTING=OFF
+
+But the question is, do we need a global option to enable building packages
+tests and testsuite?
+
+Otherwise, I'm fine to keep this option enabled if this is useful.
+
+Best regards,
+Romain
