@@ -1,119 +1,118 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Jan 2019 20:01:21 +0100
-Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce
- dependency on tpm2-abrmd
-In-Reply-To: <20190117155827.GD2556@scaer> (Yann E. MORIN's message of "Thu,
- 17 Jan 2019 16:58:27 +0100")
-References: <20190115101522.21042-1-peter@korsgaard.com>
- <20190115101522.21042-6-peter@korsgaard.com>
- <20190115204308.GB2556@scaer> <875zuog74i.fsf@dell.be.48ers.dk>
- <20190117155827.GD2556@scaer>
-Message-ID: <874la785xa.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 17 Jan 2019 20:02:52 +0100
+Subject: [Buildroot] [PATCH 1/1] gnutls: fix build on sparc
+Message-ID: <20190117190252.32440-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+gnutls source code uses the C++11 <atomic> functionality since
+https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
+which internally is implemented using the __atomic_*() gcc built-ins
 
-Hi,
+On certain architectures, the __atomic_*() built-ins are implemented in
+the libatomic library that comes with the rest of the gcc runtime. Due
+to this, code using <atomic> might need to link against libatomic,
+otherwise one hits build issues such as:
 
- >> ** (process:8628): WARNING **: 11:38:39.606: Failed to create
- >> connection with service:
- >> GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name
- >> com.intel.tss2.Tabrmd was not provided by any .service files
- >> ERROR: Failed to initialize TABRMD TCTI context: 0xa0008
- >> 
- >> The solution is to set the TCTI name to device, either through the
- >> TPM2TOOLS_TCTI_NAME environment variable or the --tcti option.
+../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
 
- > Well, this is very clearly explained in the man page for tpm2_pcrlist. ;-)
+on an architecture like SPARC.
 
-Correct, but it is still not obvious.
+To solve this, a configure.ac check is added to know if we need to
+link against libatomic or not. The library is also added to gnutls.pc.
 
+Fixes:
+ - http://autobuild.buildroot.org/results/6c749bd592ceffeacadd2ab570d127936cce64b2
+ - http://autobuild.buildroot.org/results/30aa83d3cf3482af8a59250c196c85f4a278d343
 
- > And it turns out that the use of tpm2-abrmd is in fact totally unneeded,
- > even to get proper concurrent access, when using the in-kernel manager
- > exposed as /dev/tmprmN (so says the man page). So, in this case, a
- > userland daemon is not even needed to begin with.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...configure.ac-check-if-libatomic-is-needed.patch | 60 ++++++++++++++++++++++
+ package/gnutls/gnutls.mk                           |  2 +
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch
 
-Correct, but the in-kernel manager is relatively new (4.12). There is
-various tradeoffs between the in-kernel and user space managers. There
-was a presentation about it at Plumbers 2017:
-
-https://blog.linuxplumbersconf.org/2017/ocw//system/presentations/4818/original/TPM2-kernel-evnet-app_tricca-sakkinen.pdf
-
-
- > But since any person not completely insane would still want it, then it
- > should stay a select. The very minor minority who really, like
- > really-really, do not want tpm2-abrmd can still remove it with a
- > post-build script.
-
-Sorry, why do you think I am insane for not wanting tpm2-abrmd?
-
-Cleaning up with a post-build script is pretty horrible, especially as
-tpm2-abrmd pulls in dbus.
-
-
- >> This is imho exactly the kind of use cases imply has been made for.
-
- > I still think its semantics are much more fuzzy than select or depends-on,
- > and it can cause confusion.
-
-Yes, that is the entire point, E.G. a "weak" select. It behaves the same
-as 'default y if foo'.
-
- >> Is that any different than changing toolchain options or toggling
- >> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
-
- > Sorry, I don't follow you. When you toggle those options, they always do
- > the same thing.
-
- > But with imply, if you do something like:
-
- >     make distclean
- >     make menuconfig
- > --> enable tpm2-tools
-
- > Then tpm2-abrmd is enabled.
-
- > But if you now go with:
-
- >     make distclean
- >     make defconfig
- >     make menuconfig
- > --> enable tpm2-tools
-
- > Then tpm2-abrmd is not enabled, because it was already disabled in the
- > .config.
-
- > So, this is more confusing than anything else to me, because "sometimes
- > it works, sometimes it does not".
-
- > Whereas, the toolchain options or the busybox-show-others will always do
- > the same thing.
-
-The point is that they influence other "unrelated" options. Another
-example is the places where we have multiple backends where we do
-'select foo if !bar'. Here as well behaviour when you then go an enable
-bar depends on if you have already exited menuconfig or not (E.G. foo
-will stay enabled or not).
-
-
- >> Sure, but we can atleast ensure that the tpm2-tools utilites do not fail
- >> out of the box because of a missing obscure dependency and that fairly
- >> common use cases are possible.
-
- > If you go that route, then you must ensure that the kernel has TPM
- > support configured in. That is, for the kernel we build; we're leaving
- > out in the cold those who build their kernel out of Buildroot...
-
-And that we indeed do when it is possible / the needed kernel options
-aren't obvious.
-
-In this case the kernel has several different tpm drivers, so we cannot
-really do it.
-
+diff --git a/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch b/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch
+new file mode 100644
+index 0000000000..15c1893b01
+--- /dev/null
++++ b/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch
+@@ -0,0 +1,60 @@
++From cce372f10a755d59ccf09fb7dc6e87b416f63a6f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 17 Jan 2019 10:50:00 +0100
++Subject: [PATCH] configure.ac: check if libatomic is needed
++
++gnutls source code uses the C++11 <atomic> functionality since
++https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
++which internally is implemented using the __atomic_*() gcc built-ins
++
++On certain architectures, the __atomic_*() built-ins are implemented in
++the libatomic library that comes with the rest of the gcc runtime. Due
++to this, code using <atomic> might need to link against libatomic,
++otherwise one hits build issues such as:
++
++../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
++
++on an architecture like SPARC.
++
++To solve this, a configure.ac check is added to know if we need to
++link against libatomic or not. The library is also added to gnutls.pc.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6c749bd592ceffeacadd2ab570d127936cce64b2
++ - http://autobuild.buildroot.org/results/30aa83d3cf3482af8a59250c196c85f4a278d343
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://gitlab.com/gnutls/gnutls/merge_requests/878]
++---
++ configure.ac     | 2 ++
++ lib/gnutls.pc.in | 2 +-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index e81ff8970..b2c0c2b3d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -207,6 +207,8 @@ dnl Need netinet/tcp.h for TCP_FASTOPEN
++ AC_CHECK_HEADERS([netinet/tcp.h])
++ AC_CHECK_HEADERS([stdatomic.h])
++ 
+++AC_SEARCH_LIBS([__atomic_load_4], [atomic], [AC_SUBST([LIBATOMIC_LIBS], [-latomic])])
+++
++ dnl We use its presence to detect C11 threads
++ AC_CHECK_HEADERS([threads.h])
++ 
++diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
++index 9f26852cc..68be2d110 100644
++--- a/lib/gnutls.pc.in
+++++ b/lib/gnutls.pc.in
++@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
++ URL: http://www.gnutls.org/
++ Version: @VERSION@
++ Libs: -L${libdir} -lgnutls
++-Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@
+++Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@
++ @GNUTLS_REQUIRES_PRIVATE@
++ Cflags: -I${includedir}
++-- 
++2.14.1
++
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index e6ddc3dbec..d9befa1612 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -27,6 +27,8 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no) \
+ 	gl_cv_func_gettimeofday_clobber=no
+ GNUTLS_INSTALL_STAGING = YES
++# We're patching configure.ac
++GNUTLS_AUTORECONF = YES
+ 
+ # libpthread autodetection poison the linkpath
+ GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
 -- 
-Bye, Peter Korsgaard
+2.14.1
