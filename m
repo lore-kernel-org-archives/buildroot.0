@@ -1,44 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:27:53 +0100
-Subject: [Buildroot] [git commit] package/meson: fix CPU familly
-In-Reply-To: <20181228104954.662A981240@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 28 Dec 2018 11:52:58 +0100")
-References: <20181228104954.662A981240@busybox.osuosl.org>
-Message-ID: <87lg3i3xk6.fsf@dell.be.48ers.dk>
+Date: Fri, 18 Jan 2019 14:21:17 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/meson: never try
+ to run generated target binaries
+Message-ID: <20190118132725.651668140B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ae31ce3cde74db8c9e0fae6a7701036c49bfe7b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=f3bacda0c0e0adb2ac7f515476f6bb83d1385130
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As explained in [0], meson will try on its own to decide whether it can
+run what it builds. If it happens that the host and target CPUs are
+"compatible", that test may fail and meson may believe it can run what
+it builds.
 
- > As explained in [0], meson recognises a certain set of CPU famillies,
- > whose names slightly differ from those we know them as.
+Override that test by using needs_exe_wrapper=true, and not defining an
+actual exe_wrapper.
 
- > If we don't pass the proper cpu_familly, meson whines:
- >     WARNING: Unknown CPU family 'i686', please report this at [...]
+[0] https://mesonbuild.com/Cross-compilation.html
 
- > Subsequently, packages that use that to decide on what they should build
- > and how they should build it, fail to build. That is the case for the
- > upcoming systemd-boot, for example.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - split in its own patch
+  - improve commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > Fix that by using the list propvided by the meson documentation [0].
+(cherry picked from commit f112f2b991b47a7309116e132c969e3731a7e911)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/meson/cross-compilation.conf.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > [0] https://mesonbuild.com/Reference-tables.html#cpu-families
-
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- > [yann.morin.1998 at free.fr:
- >   - split in its own patch
- >   - imnprove commit log
- > ]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec74087b..fc8e27f7eb 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -11,6 +11,7 @@ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+ 
+ [properties]
++needs_exe_wrapper = true
+ c_args = [@TARGET_CFLAGS@]
+ c_link_args = [@TARGET_LDFLAGS@]
+ cpp_args = [@TARGET_CXXFLAGS@]
