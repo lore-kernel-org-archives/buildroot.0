@@ -1,40 +1,62 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Jan 2019 21:40:43 +0100
-Subject: [Buildroot] [PATCH 1/1] libgeotiff: bump to version 1.4.3
-Message-ID: <20190118204043.16039-1-fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jan 2019 22:17:56 +0100
+Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix build with gcc 4.8
+Message-ID: <20190118211756.22606-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libgeotiff/libgeotiff.hash | 2 +-
- package/libgeotiff/libgeotiff.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
 
-diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
-index a2b16ac0b2..08e8e06788 100644
---- a/package/libgeotiff/libgeotiff.hash
-+++ b/package/libgeotiff/libgeotiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 ad87048adb91167b07f34974a8e53e4ec356494c29f1748de95252e8f81a5e6e libgeotiff-1.4.2.tar.gz
-+sha256 b8510d9b968b5ee899282cdd5bef13fd02d5a4c19f664553f81e31127bc47265 libgeotiff-1.4.3.tar.gz
- sha256 16b83cf7c3bbfd20bffa768b9bfdb16506ca50f5c140a9f3431e740b155359c1 LICENSE
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
-index a1f234b33b..522802cc94 100644
---- a/package/libgeotiff/libgeotiff.mk
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGEOTIFF_VERSION = 1.4.2
-+LIBGEOTIFF_VERSION = 1.4.3
- LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
- LIBGEOTIFF_LICENSE = X11-style, public domain
- LIBGEOTIFF_LICENSE_FILES = LICENSE
+diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..57c78c9bd4
+--- /dev/null
++++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,35 @@
++From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 18 Jan 2019 22:05:37 +0100
++Subject: [PATCH] efilink: fix build with gcc 4.8
++
++intptr_t is undefined without an include on stdint.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
++---
++ inc/efilink.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/inc/efilink.h b/inc/efilink.h
++index cc5aa2d..b69a6fd 100644
++--- a/inc/efilink.h
+++++ b/inc/efilink.h
++@@ -1,6 +1,10 @@
++ #ifndef _EFI_LINK_H
++ #define _EFI_LINK_H
++ 
+++#if defined(__GNUC__)
+++#include <stdint.h>
+++#endif
+++
++ /*++
++ 
++ Copyright (c) 1998  Intel Corporation
++-- 
++2.14.1
++
 -- 
 2.14.1
