@@ -1,34 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:03:43 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] docs/manual: fix typo on
- Buildroot in adding-packages-waf.txt
-Message-ID: <20190118130311.DB6C28DB2F@busybox.osuosl.org>
+Date: Fri, 18 Jan 2019 14:04:04 +0100
+Subject: [Buildroot] [git commit] docs/manual: fix typo on Buildroot in
+ adding-packages-waf.txt
+In-Reply-To: <20181226212837.1EFB58379F@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 26 Dec 2018 22:32:46 +0100")
+References: <20181226212837.1EFB58379F@busybox.osuosl.org>
+Message-ID: <87o98e5d8b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a197c235ddcea17bde4ba2e2a17bbcd4a4cc9a95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e969f8254110018e2883b9a93b31e3ad29878430)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-waf.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e969f8254110018e2883b9a93b31e3ad29878430
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
-index 43b557c070..12e122fb87 100644
---- a/docs/manual/adding-packages-waf.txt
-+++ b/docs/manual/adding-packages-waf.txt
-@@ -63,7 +63,7 @@ also be defined.
- * +LIBFOO_NEEDS_EXTERNAL_WAF+ can be set to +YES+ or +NO+ to tell
-   Buildroot to use the bundled +waf+ executable. If set to +NO+, the
-   default, then Buildroot will use the waf executable provided in the
--  package source tree; if set to +YES+, then Buidlroot will download,
-+  package source tree; if set to +YES+, then Buildroot will download,
-   install waf as a host tool and use it to build the package.
- 
- * +LIBFOO_WAF_OPTS+, to specify additional options to pass to the
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
