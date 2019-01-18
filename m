@@ -1,87 +1,141 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 18 Jan 2019 02:10:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libshout: Add support for openssl
- 1.1.x
-Message-ID: <20190118001059.6045-1-vadim4j@gmail.com>
+Date: Fri, 18 Jan 2019 02:16:49 +0200
+Subject: [Buildroot] [PATCH v5 1/4] libopenssl: bump version to 1.1.1a
+In-Reply-To: <c02065cb-8c57-0f1f-e581-afd656de283a@gmail.com>
+References: <20190117181608.12644-1-ps.report@gmx.net>
+ <c02065cb-8c57-0f1f-e581-afd656de283a@gmail.com>
+Message-ID: <20190118001649.ukod4c4c3hks3txe@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added patch from Debian:
+Hi All,
 
-https://sources.debian.org/data/main/libs/libshout/2.4.1-2/debian/patches/01-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+On Thu, Jan 17, 2019 at 11:39:07AM -0800, Ryan Coe wrote:
+> Peter,
+> 
+> On 1/17/2019 10:16 AM, Peter Seiderer wrote:
+> > - remove all parallel build patches (openssl build-system changed)
+> > 
+> > - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+> >    to apply to Configurations/unix-Makefile.tmpl (Makefile template)
+> > 
+> > - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
+> >    (upstream applied)
+> > 
+> > - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
+> >    apply to crypto/build.info (Makefile template)
+> > 
+> > - fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
+> > 
+> > - remove legacy enable-tlsext configure option
+> > 
+> > - remove target/host libdir configure options, fixes openssl.pc installation
+> >    path, fixes wget compile
+> > 
+> > - change legacy INSTALL_PREFIX to DESTDIR
+> > 
+> > - remove 'libraries gets installed read only, so strip fails'
+> >    workaround (not needed anymore)
+> > 
+> > - change engine directory from /usr/lib/engines to
+> >    /usr/lib/engines-1.1
+> > 
+> > - change license file hash, no license change, only the following
+> >    hint was removed:
+> > 
+> >      Actually both licenses are BSD-style Open Source licenses.
+> >      In case of any license issues related to OpenSSL please
+> >      contact openssl-core at openssl.org.
+> > 
+> > - fix host-libopenssl compile setting rpath as decribed in
+> >    libopenssl-1.1.0h/NOTES.UNIX
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v4 -> v5:
+> >    - remove libdir config options (suggested by Arnout Vandecappelle)
+> > 
+> > Changes v3 -> v4:
+> >    - bump version to 1.1.1a
+> >    - remove all parallel build patches hash file entries
+> >    - re-remove 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+> >      (upstream applied)
+> >    - fix hist library install path
+> >    - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
+> >      (upstram applied)
+> >    - remove follow up patch for openssh (not longer needed since
+> >      version bump to 7.9p1, see https://www.openssh.com/releasenotes.html
+> >      Portability)
+> > 
+> > Changes v2 -> v3:
+> >    - no changes
+> > 
+> > Changes v1 -> v2:
+> >    - add OPENSSL_NO_ASYNC workaround for musl compile too
+> >      (suggested by Bernd Kuhls)
+> > 
+> >    - fix host-libopenssl compile (reported by Ryan Coe) by setting rpath
+> >      (suggested by Ryan Coe)
+> > 
+> >    - fix 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+> >      and 0003-Reproducible-build-do-not-leak-compiler-path.patch to apply
+> >      to the Makefile templates (instead of re-generated Makefile)
+> >      (reported by Ryan Coe)
+> > 
+> >    - add 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+> >      (suggested by Bernd Kuhls)
+> > 
+> > Notes:
+> > 
+> >   - There was a previous attempt to bump the openssl version by
+> >     David Mosberger <davidm@egauge.net>. I could not find the
+> >     corresponding patch in patchwork or on the mailing list,
+> >     only a reply by Arnout Vandecappelle (see [2]) and the
+> >     answer by David Mosberger (see [3]).
+> > 
+> >   - Compile checked packages (depending explicit on libopenssl or host-libopenssl):
+> >     O.k:
+> >       - hostapd
+> >       - libpjsip
+> >       - host-mariadb (with patch)
+> >       - mosquitto
+> >       - wpa_supplicant
+> > 
+> >      Failure:
+> >       - softether/host-softether
+> >       - mariadb (cmake configure error, maybe unrelated?)
+> > 
+> >   - Compile checked packages (depending on openssl or host-openssl):
+> >      O.k.:
+> >        - alljoyn-base
+> >        - apache
+> >        - apr
+> >        - apr-util
+> >        - freeswitch
+> >        - openssh
+> >        - pound (with patch https://patchwork.ozlabs.org/patch/962157 )
+> > 
+> >      Failure:
+> >        - android-tools
+> > 
+> > [2] http://lists.busybox.net/pipermail/buildroot/2017-August/200859.html
+> > [3] http://lists.busybox.net/pipermail/buildroot/2017-August/200898.html
+> 
+> [snip]
+> 
+> Tested-by: Ryan Coe <bluemrp9@gmail.com>
+> 
+> 
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- ...3-libshout-tls-compile-with-OpenSSL-1.1.0.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+I sent fix for libshout in:
 
-diff --git a/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
-new file mode 100644
-index 0000000000..befd16e384
---- /dev/null
-+++ b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
-@@ -0,0 +1,58 @@
-+From 01fafc449f0de56743d08e7976933c49e2915bfa Mon Sep 17 00:00:00 2001
-+From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-+Date: Wed, 15 Nov 2017 12:46:25 +0000
-+Subject: [PATCH] tls: compile with OpenSSL 1.1.0
-+
-+The init functions are not longer required in OpenSSL 1.1 so I dropped
-+them.
-+
-+TLSv1_client_method() should not be used because it enables only the
-+TLSv1.0 protocol. Better is to use SSLv23_client_method() which enable
-+all the protocols including TLSv1.2. With this functions SSLv2 and SSLv3
-+is theoretically possible but as of today those protocols are usually
-+build-time disabled.
-+To avoid all this OpenSSL 1.1 provides TLS_client_method() which is aim
-+to provide to highest TLS protocol version (same as
-+SSLv23_client_method() but it is deprecated in 1.1).
-+
-+Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-+---
-+ src/tls.c | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/tls.c b/src/tls.c
-+index 4562c7327077..e0e5c1a5f079 100644
-+--- a/src/tls.c
-++++ b/src/tls.c
-+@@ -24,6 +24,7 @@
-+ #endif
-+ 
-+ #include <shout/shout.h>
-++#include <string.h>
-+ #include "shout_private.h"
-+ 
-+ #ifndef XXX_HAVE_X509_check_host
-+@@ -61,14 +62,17 @@ shout_tls_t *shout_tls_new(shout_t *self, sock_t socket)
-+ 
-+ static inline int tls_setup(shout_tls_t *tls)
-+ {
-+-	SSL_METHOD *meth;
-+-
-++	const SSL_METHOD *meth;
-++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
-+ 	SSL_library_init();
-+ 	SSL_load_error_strings();
-+ 	SSLeay_add_all_algorithms();
-+- 	SSLeay_add_ssl_algorithms();
-++	SSLeay_add_ssl_algorithms();
-+ 
-+-	meth = TLSv1_client_method();
-++	meth = SSLv23_client_method();
-++#else
-++	meth = TLS_client_method();
-++#endif
-+ 	if (!meth)
-+ 		goto error;
-+ 
-+-- 
-+2.15.0
--- 
-2.14.1
+    https://patchwork.ozlabs.org/patch/1027055/
+
+I sent it separately because the fix supports both openssl versions,
+I really dont know if it is better to include it to this series ?
+
+Regards,
+Vadim Kochan
