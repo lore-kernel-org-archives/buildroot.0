@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:12:49 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/dhcpdump: fix
+Date: Fri, 18 Jan 2019 14:13:04 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/dhcpdump: fix
  build at -O2
-Message-ID: <20190118131221.058E883631@busybox.osuosl.org>
+Message-ID: <20190118131233.45E228D237@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=525054222d7519a5543460f9f8676b3524d1908e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=833689db55a4bdec6868f912b3c3300d26b6f371
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Since commit aa556e2035c023d4328185a46e15df532e566067
 ("utils/genrandconfig: test with BR2_OPTIMIZE_2=y"), we are doing
