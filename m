@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 15:54:19 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] arch/arm: restrict more
+Date: Fri, 18 Jan 2019 15:54:10 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] arch/arm: restrict more
  armv8a cores to aarch64
-Message-ID: <20190118145456.76BA783557@busybox.osuosl.org>
+Message-ID: <20190118145502.7089681732@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a18058f0ee706f30a394133000692d6fa92ceeba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=38d64b319fdb8db0fc45ddd51d12d96f9203cd14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Since gcc-8, falkor and qdf24xx have been available only as
 AArch64. Indeed, according to upstream commit [1], the released HW has
@@ -30,10 +30,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index b05e83e33c..e3b808279e 100644
+index f0488b4685..491cd4aeca 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -342,25 +342,19 @@ config BR2_exynos_m1
+@@ -376,25 +376,19 @@ config BR2_exynos_m1
  	select BR2_ARM_CPU_ARMV8A
  	select BR2_ARCH_HAS_MMU_OPTIONAL
  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
