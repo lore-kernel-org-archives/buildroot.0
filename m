@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:29:30 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/lm-sensors: make
+Date: Fri, 18 Jan 2019 14:29:24 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/lm-sensors: make
  ISA tools depend on x86
-Message-ID: <20190118132931.750128104B@busybox.osuosl.org>
+Message-ID: <20190118132935.B13CD814CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec23e6dbb6fbc6893f85e6557965e24df540a974
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a60172f6b6b3974e068d78c78ee95d005f424aba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The isadump and isaset tools are built for x86 targets only.
 
