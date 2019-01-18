@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:06:29 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
- board/freescale/common/imx: fix typo
-Message-ID: <20190118130619.03CDC8DFE6@busybox.osuosl.org>
+Date: Fri, 18 Jan 2019 14:08:46 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] board/lego/ev3: fix max
+ U-Boot flash size
+Message-ID: <20190118130821.36CFB815A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c6a3913a732ad001c48740fd0ce92cfd2a2c4c5
+commit: https://git.buildroot.net/buildroot/commit/?id=c7261302b49a5e4109cd10b45b496ff4fc91e28d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+The first stage bootloader on LEGO MINDSTORMS EV3 only loads the first
+256K of the flash memory (this is hard-coded in an EEPROM). So, the
+second stage bootloader (U-Boot) cannot exceed this size.
+
+Signed-off-by: David Lechner <david@lechnology.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f2c1e2e885c8182c452accbb7c9fb0404bcebafb)
+(cherry picked from commit b2e5014af5a4fe773b8bf1dd1a3fef31214eb4a7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
+ board/lego/ev3/genimage.cfg | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index fdb645014a..2f8842f8e0 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -3,7 +3,7 @@
- # We mimic the .sdcard Freescale's image format:
- # * the SD card must have 33 kB free space at the beginning,
- # * U-Boot is integrated into imx8-boot-sd.bin and is dumped as is,
--# * a FAT partition at offset 32MB is containing Image and DTB files
-+# * a FAT partition at offset 8MB is containing Image and DTB files
- # * a single root filesystem partition is required (ext2, ext3 or ext4)
- #
- 
+diff --git a/board/lego/ev3/genimage.cfg b/board/lego/ev3/genimage.cfg
+index 3da3048d8d..65d9714650 100644
+--- a/board/lego/ev3/genimage.cfg
++++ b/board/lego/ev3/genimage.cfg
+@@ -16,7 +16,7 @@ image flash.bin {
+ 	flashtype = "nor-16M-256"
+ 	partition uboot {
+ 		image = "u-boot.bin"
+-		size = 320K
++		size = 256K
+ 	}
+ 	partition uimage {
+ 		image = "uImage.da850-lego-ev3"
