@@ -1,9 +1,9 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Fri, 18 Jan 2019 21:10:40 +0100
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
+Date: Fri, 18 Jan 2019 21:10:41 +0100
+Subject: [Buildroot] [PATCH 2/6] intel-mediadriver: new package.
 In-Reply-To: <20190118201045.13947-1-lpdev@cordier.org>
 References: <20190118201045.13947-1-lpdev@cordier.org>
-Message-ID: <20190118201045.13947-2-lpdev@cordier.org>
+Message-ID: <20190118201045.13947-3-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +12,93 @@ To: buildroot@busybox.net
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
- package/Config.in                      |  1 +
- package/intel-gmmlib/Config.in         |  8 ++++++++
- package/intel-gmmlib/intel-gmmlib.hash |  2 ++
- package/intel-gmmlib/intel-gmmlib.mk   | 21 +++++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/intel-gmmlib/Config.in
- create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
- create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
+ package/Config.in                             |  1 +
+ package/intel-mediadriver/Config.in           | 15 ++++++++
+ .../intel-mediadriver/intel-mediadriver.hash  |  2 ++
+ .../intel-mediadriver/intel-mediadriver.mk    | 34 +++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/intel-mediadriver/Config.in
+ create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
+ create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5036421a73..9082ed9956 100644
+index 9082ed9956..f80d5b69d9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1265,6 +1265,7 @@ menu "Graphics"
- 	source "package/harfbuzz/Config.in"
+@@ -1266,6 +1266,7 @@ menu "Graphics"
  	source "package/ijs/Config.in"
  	source "package/imlib2/Config.in"
-+	source "package/intel-gmmlib/Config.in"
+ 	source "package/intel-gmmlib/Config.in"
++	source "package/intel-mediadriver/Config.in"
  	source "package/irrlicht/Config.in"
  	source "package/jasper/Config.in"
  	source "package/jpeg/Config.in"
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
 new file mode 100644
-index 0000000000..8d9fab7ce3
+index 0000000000..505ea43c7f
 --- /dev/null
-+++ b/package/intel-gmmlib/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_INTEL_GMMLIB
-+	bool "intel-gmmlib"
++++ b/package/intel-mediadriver/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_INTEL_MEDIADRIVER
++	bool "intel-mediadriver"
 +	depends on BR2_x86_64
++	depends on BR2_PACKAGE_LIBVA
++	depends on BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_LIBPCIACCESS
++	select BR2_PACKAGE_INTEL_GMMLIB
 +	help
-+	  The Intel(R) Graphics Memory Management Library provides
-+	  device specific and buffer management for the Intel(R)
-+	  Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
-+	  Media Driver for VAAPI.
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
++	  The Intel(R) Media Driver for VAAPI is a new VA-API (Video
++	  Acceleration API) user mode driver supporting hardware
++	  accelerated decoding, encoding, and video post processing for
++	  GEN based graphics hardware.
++
++comment "intel-mediadriver needs libx11"
++	  depends on !BR2_PACKAGE_XLIB_LIBX11
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
 new file mode 100644
-index 0000000000..7e3b3dfd3f
+index 0000000000..9068b40e07
 --- /dev/null
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1  intel-gmmlib-18.3.0.tar.gz
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
++sha256 df9af1cc796b4123508aacaf19d040cc5d8c5742c05199f45c9a3905ed8d1b52  intel-media-18.3.0.tar.gz
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
 new file mode 100644
-index 0000000000..206ea6db86
+index 0000000000..24f64a665b
 --- /dev/null
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -0,0 +1,21 @@
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# intel-gmmlib
++# intel-mediadriver
 +#
 +################################################################################
 +
-+INTEL_GMMLIB_VERSION = 18.3.0
-+INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-+INTEL_GMMLIB_LICENSE = MIT
-+INTEL_GMMLIB_LICENSE_FILES = COPYING
++# based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
 +
-+INTEL_GMMLIB_INSTALL_STAGING = YES
-+INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
++INTEL_MEDIADRIVER_VERSION = 18.3.0
++INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
++INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
++INTEL_MEDIADRIVER_LICENSE = MIT BSD-3-Clause
++INTEL_MEDIADRIVER_LICENSE_FILES = LICENSE.md
 +
-+INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
++INTEL_MEDIADRIVER_DEPENDENCIES += intel-gmmlib
++INTEL_MEDIADRIVER_DEPENDENCIES += libva
++INTEL_MEDIADRIVER_DEPENDENCIES += libpciaccess
 +
-+define INTEL_GMMLIB_INSTALL_TARGET_CMDS
-+	cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
++INTEL_MEDIADRIVER_SUBDIR = media_driver
++INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
++
++INTEL_MEDIADRIVER_CONF_OPTS += -DMEDIA_VERSION="2.0.0"\
++	-DBUILD_ALONG_WITH_CMRTLIB=1 \
++	-DBS_DIR_MEDIA=$(@D) \
++	-DINSTALL_DRIVERS_SYSCONF=OFF \
++	-DLIBVA_DRIVERS_PATH=$(STAGING_DIR)/lib/dri \
++	-DMEDIA_RUN_TEST_SUITE=OFF \
++	-DRUN_TEST_SUITE=OFF
++
++define INTEL_MEDIADRIVER_INSTALL_TARGET_CMDS
++	cp "$(INTEL_MEDIADRIVER_BUILDDIR)/iHD_drv_video.so" "$(TARGET_DIR)/lib/dri"
 +endef
 +
 +$(eval $(cmake-package))
