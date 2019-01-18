@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Jan 2019 22:17:56 +0100
-Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix build with gcc 4.8
-Message-ID: <20190118211756.22606-1-fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jan 2019 22:50:13 +0100
+Subject: [Buildroot] [PATCH 1/1] libcpprestdk: fix build with gcc 4.7
+Message-ID: <20190118215013.3743-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
+ - http://autobuild.buildroot.org/results/a080dbe2977cd35e4f8351d864bd71aaa8f9b743
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+ ...tp_compression.cpp-fix-build-with-gcc-4.7.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libcpprestsdk/0003-http_compression.cpp-fix-build-with-gcc-4.7.patch
 
-diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+diff --git a/package/libcpprestsdk/0003-http_compression.cpp-fix-build-with-gcc-4.7.patch b/package/libcpprestsdk/0003-http_compression.cpp-fix-build-with-gcc-4.7.patch
 new file mode 100644
-index 0000000000..57c78c9bd4
+index 0000000000..2b8e281001
 --- /dev/null
-+++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,35 @@
-+From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
++++ b/package/libcpprestsdk/0003-http_compression.cpp-fix-build-with-gcc-4.7.patch
+@@ -0,0 +1,41 @@
++From da7f3f07ecac1e8804bd190c6ea681efd70d3900 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 18 Jan 2019 22:05:37 +0100
-+Subject: [PATCH] efilink: fix build with gcc 4.8
++Date: Fri, 18 Jan 2019 19:30:01 +0100
++Subject: [PATCH] http_compression.cpp: fix build with gcc 4.7
 +
-+intptr_t is undefined without an include on stdint.h
++At GCC 4.7, C++11 rules for noexcept specification of implicit
++destructors (and default specification on explicit destructors without
++exception specifications) aren't perfectly implemented, see:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53613
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
++ - http://autobuild.buildroot.org/results/a080dbe2977cd35e4f8351d864bd71aaa8f9b743
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
 +---
-+ inc/efilink.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ Release/src/http/common/http_compression.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/inc/efilink.h b/inc/efilink.h
-+index cc5aa2d..b69a6fd 100644
-+--- a/inc/efilink.h
-++++ b/inc/efilink.h
-+@@ -1,6 +1,10 @@
-+ #ifndef _EFI_LINK_H
-+ #define _EFI_LINK_H
-+ 
-++#if defined(__GNUC__)
-++#include <stdint.h>
-++#endif
-++
-+ /*++
-+ 
-+ Copyright (c) 1998  Intel Corporation
++diff --git a/Release/src/http/common/http_compression.cpp b/Release/src/http/common/http_compression.cpp
++index 202a1b92..a9cbc86e 100644
++--- a/Release/src/http/common/http_compression.cpp
+++++ b/Release/src/http/common/http_compression.cpp
++@@ -600,6 +600,7 @@ private:
++ class generic_compress_factory : public compress_factory
++ {
++ public:
+++    ~generic_compress_factory() CPPREST_NOEXCEPT {}
++     generic_compress_factory(const utility::string_t& algorithm,
++                              std::function<std::unique_ptr<compress_provider>()> make_compressor)
++         : m_algorithm(algorithm), _make_compressor(make_compressor)
++@@ -619,6 +620,7 @@ private:
++ class generic_decompress_factory : public decompress_factory
++ {
++ public:
+++    ~generic_decompress_factory() CPPREST_NOEXCEPT {}
++     generic_decompress_factory(const utility::string_t& algorithm,
++                                uint16_t weight,
++                                std::function<std::unique_ptr<decompress_provider>()> make_decompressor)
 +-- 
 +2.14.1
 +
