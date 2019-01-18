@@ -1,21 +1,19 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 18 Jan 2019 12:01:02 +0100
-Subject: [Buildroot] [PATCH v3 11/17] package/httping: use the new
+Date: Fri, 18 Jan 2019 12:01:50 +0100
+Subject: [Buildroot] [PATCH v3 12/17] package/imagemagick: use the new
  fftw-double package
-In-Reply-To: <20190101181637.GA23435@scaer>
+In-Reply-To: <20190101210339.GB23435@scaer>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-12-thomas.petazzoni@bootlin.com>
- <20190101181637.GA23435@scaer>
-Message-ID: <20190118120102.6206e19c@x230>
+ <20181231133030.25991-13-thomas.petazzoni@bootlin.com>
+ <20190101210339.GB23435@scaer>
+Message-ID: <20190118120150.7efcd9a5@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue, 1 Jan 2019 19:16:37 +0100
+On Tue, 1 Jan 2019 22:03:39 +0100
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
 > Thomas, Gwenha?l, All,
@@ -26,35 +24,39 @@ On Tue, 1 Jan 2019 19:16:37 +0100
 > > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > > ---
-> >  package/httping/httping.mk | 4 ++--
+> >  package/imagemagick/imagemagick.mk | 4 ++--
 > >  1 file changed, 2 insertions(+), 2 deletions(-)
 > > 
-> > diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-> > index 955ee3131b..b3a625a8e1 100644
-> > --- a/package/httping/httping.mk
-> > +++ b/package/httping/httping.mk
-> > @@ -17,9 +17,9 @@ HTTPING_DEPENDENCIES = \
-> >  	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-> >  	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
-> >  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
-> > -	$(if $(BR2_PACKAGE_FFTW),fftw)
-> > +	$(if $(BR2_PACKAGE_FFTW_DOUBLE),fftw-double)  
+> > diff --git a/package/imagemagick/imagemagick.mk
+> > b/package/imagemagick/imagemagick.mk index 72482267ce..7678980582 100644
+> > --- a/package/imagemagick/imagemagick.mk
+> > +++ b/package/imagemagick/imagemagick.mk
+> > @@ -113,11 +113,11 @@ else
+> >  IMAGEMAGICK_CONF_OPTS += --without-lzma
+> >  endif
+> >  
+> > -ifeq ($(BR2_PACKAGE_FFTW),y)
+> > +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)  
 > 
-> How did we go from fftw (aka any variant thereof), to fftw-double only?
-My fault (again) I've missed to add detail in commit message. httping is only
-compatible with fftw-double.
-
+> Same as for hackrf: why do we restrict it from any fftwe variant, to
+> only fftw-double?
+>
+Lack on commit message... 
+ImageMagick use fftw_xx (aka default, aka double).
+This is the same situation for hackrf (with single), libvips, pulseaudio
 Gwen
-> 
+>
 > Regards,
 > Yann E. MORIN.
 > 
-> >  HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
-> > -	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
-> > +	FW=$(if $(BR2_PACKAGE_FFTW_DOUBLE),yes,no) \
-> >  	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
-> >  	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
-> >  	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
+> >  # configure script misdetects these leading to build errors
+> >  IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
+> >  IMAGEMAGICK_CONF_OPTS += --with-fftw
+> > -IMAGEMAGICK_DEPENDENCIES += fftw
+> > +IMAGEMAGICK_DEPENDENCIES += fftw-double
+> >  else
+> >  IMAGEMAGICK_CONF_OPTS += --without-fftw
+> >  endif
 > > -- 
 > > 2.20.1
 > >   
