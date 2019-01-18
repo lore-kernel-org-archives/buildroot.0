@@ -1,29 +1,32 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Jan 2019 20:32:23 +0100
-Subject: [Buildroot] Enable mount SquashFS
-In-Reply-To: <CAOqJNTc0j8hKGbugSyOqMKKymn8yB3UBSkvamLe9-cnK572UvA@mail.gmail.com>
-References: <CAOqJNTc0j8hKGbugSyOqMKKymn8yB3UBSkvamLe9-cnK572UvA@mail.gmail.com>
-Message-ID: <20190118203223.02765998@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jan 2019 20:56:41 +0100
+Subject: [Buildroot] [PATCH 1/1] tesseract-ocr: disable documentation
+Message-ID: <20190118195641.16087-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ??????,
+Fixes:
+ - http://autobuild.buildroot.org/results/a608e9bfb2b0161c45ae490e2866d96763593723
 
-On Fri, 18 Jan 2019 20:27:41 +0200, ?????? ????? <sergei.sakhno@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/tesseract-ocr/tesseract-ocr.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Good evening everyone. How to enable the ability to mount SquashFS? In the
-> menuconfig of busybox downloaded from the busybox site there is an item
-> [SquashFS filesystem] in the [Filesystem / Volume identification] section,
-> but in the menuconfig of busybox unpacked buildroot it is not.
-
-Busybox CONFIG_FEATURE_VOLUMEID_SQUASHFS depends on VOLUMEID && FEATURE_BLKID_TYPE,
-VOLUMEID is already enabled, FEATURE_BLKID_TYPE is Linux System Utilities -->
-blkid --> Print Filesystem type
-
-More important is enabled squashfs support in the linux kernel...
-
-Regards,
-Peter
+diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+index 0b92a1f3b5..74b344961f 100644
+--- a/package/tesseract-ocr/tesseract-ocr.mk
++++ b/package/tesseract-ocr/tesseract-ocr.mk
+@@ -19,6 +19,7 @@ TESSERACT_OCR_AUTORECONF = YES
+ TESSERACT_OCR_DEPENDENCIES = leptonica host-pkgconf
+ TESSERACT_OCR_INSTALL_STAGING = YES
+ TESSERACT_OCR_CONF_ENV = \
++	ac_cv_prog_have_asciidoc=false \
+ 	LIBLEPT_HEADERSDIR=$(STAGING_DIR)/usr/include/leptonica
+ TESSERACT_OCR_CONF_OPTS = \
+ 	--disable-opencl
+-- 
+2.14.1
