@@ -1,12 +1,12 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 18 Jan 2019 12:00:11 +0100
-Subject: [Buildroot] [PATCH v3 07/17] package/aubio: use the new
- fftw-double and fftw-single packages
-In-Reply-To: <20190101120242.GL26917@scaer>
+Date: Fri, 18 Jan 2019 12:00:25 +0100
+Subject: [Buildroot] [PATCH v3 08/17] package/gnuradio: use the new
+ fftw-single package
+In-Reply-To: <20190101121657.GN26917@scaer>
 References: <20181231133030.25991-1-thomas.petazzoni@bootlin.com>
- <20181231133030.25991-8-thomas.petazzoni@bootlin.com>
- <20190101120242.GL26917@scaer>
-Message-ID: <20190118120011.07708376@x230>
+ <20181231133030.25991-9-thomas.petazzoni@bootlin.com>
+ <20190101121657.GN26917@scaer>
+Message-ID: <20190118120025.175f2fa5@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,92 +15,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 1 Jan 2019 13:02:42 +0100
+On Tue, 1 Jan 2019 13:16:57 +0100
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
 > Thomas, Gwenha?l, All,
 > 
-> Gwenha?l, question for you below...
-> 
 > On 2018-12-31 14:30 +0100, Thomas Petazzoni spake thusly:
 > > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > > 
-> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > [Thomas: drop the condition on BR2_PACKAGE_FFTW]
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  package/aubio/aubio.mk | 13 ++++++-------
-> >  1 file changed, 6 insertions(+), 7 deletions(-)
+> > Thanks to the new fftw package organization, we can use a "select"
+> > instead of "depends on".
 > > 
-> > diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-> > index b0cc8b899e..dd2db2adb9 100644
-> > --- a/package/aubio/aubio.mk
-> > +++ b/package/aubio/aubio.mk
-> > @@ -27,7 +27,7 @@ AUBIO_CONF_OPTS += --disable-sndfile
+> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+> 
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+[SNIP]
 > >  endif
 > >  
-> >  # Could not compile aubio in double precision mode with libsamplerate
-> > -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
-> > +ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_SINGLE),yy)  
+> >  ifeq ($(BR2_PACKAGE_GNURADIO_FFT),y)
+> > -GNURADIO_DEPENDENCIES += fftw
+> > +GNURADIO_DEPENDENCIES += fftw-single  
 > 
-> Now, we can be in a situation where both single and double are enabled,
-> so the condi9tion here would be satisfied, i.e. we'd build with
-> libsamplerate, but...
+> ... here we only have fftw-single as a dependency. That's a bit weird.
 > 
-> >  AUBIO_DEPENDENCIES += libsamplerate
-> >  AUBIO_CONF_OPTS += --enable-samplerate
-> >  else
-> > @@ -41,15 +41,14 @@ else
-> >  AUBIO_CONF_OPTS += --disable-jack
-> >  endif
-> >  
-> > -ifeq ($(BR2_PACKAGE_FFTW),y)
-> > -AUBIO_DEPENDENCIES += fftw
-> >  # fftw3 require double otherwise it will look for fftw3f
-> > -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
-> > +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)  
-> 
-> ... here we'd be using the double variant, as it takes precedence over
-> the single one.
-> 
-> Thus we'd end up in the situation that the comment warns about: building
-> libsamplerate in double precision is not possible.
-> 
-> So, I'd suggest that we move the libsamplerate condition below, in the
-> fftw-single condition...
-> 
-> >  AUBIO_CONF_OPTS += --enable-fftw3 --enable-double
-> > -else ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-> > +AUBIO_DEPENDENCIES += fftw-double
-> > +else ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
-> >  AUBIO_CONF_OPTS += --enable-fftw3f --disable-double
-> > -endif
-> > -else  # !BR2_PACKAGE_FFTW
-> > +AUBIO_DEPENDENCIES += fftw-single  
-> 
-> ... here.
-> 
-> Of course, if the comment is now wrong and the libsamplerate can be
-> build with fftw-double, the fix is different, and the condition on
-> fftw-single should be dropped for libsamplerate.
-> 
-> Gwenha?l, care to share your thoughts on this? ;-)
+In fact this modification is not needed because GNURadio selects explicitly
+single precision and fftw-single is in FFTW_DEPENDENCIES build order will
+be respected.
 
-True, double can't be enabled if libsamplerate is set.
-It's seem mandatory to add a test about libsamplerate to avoid double if
-present (or add an option to let the user decide if libsamplerate support must
-be use or not).
-
+Regards,
 Gwen
 
+> But heck...
 > 
 > Regards,
 > Yann E. MORIN.
 > 
-> > +else
-> >  AUBIO_CONF_OPTS += --disable-fftw3
-> >  endif
-> >  
+> >  GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=ON
+> >  else
+> >  GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=OFF
 > > -- 
 > > 2.20.1
 > >   
