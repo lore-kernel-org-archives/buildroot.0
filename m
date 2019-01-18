@@ -1,9 +1,9 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Fri, 18 Jan 2019 21:10:41 +0100
-Subject: [Buildroot] [PATCH 2/6] intel-mediadriver: new package.
+Date: Fri, 18 Jan 2019 21:10:42 +0100
+Subject: [Buildroot] [PATCH 3/6] intel-mediasdk: new package.
 In-Reply-To: <20190118201045.13947-1-lpdev@cordier.org>
 References: <20190118201045.13947-1-lpdev@cordier.org>
-Message-ID: <20190118201045.13947-3-lpdev@cordier.org>
+Message-ID: <20190118201045.13947-4-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +12,139 @@ To: buildroot@busybox.net
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
- package/Config.in                             |  1 +
- package/intel-mediadriver/Config.in           | 15 ++++++++
- .../intel-mediadriver/intel-mediadriver.hash  |  2 ++
- .../intel-mediadriver/intel-mediadriver.mk    | 34 +++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/intel-mediadriver/Config.in
- create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
- create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
+ package/Config.in                          |  1 +
+ package/intel-mediasdk/Config.in           | 15 +++++++
+ package/intel-mediasdk/intel-mediasdk.hash |  2 +
+ package/intel-mediasdk/intel-mediasdk.mk   | 48 ++++++++++++++++++++++
+ package/intel-mediasdk/intel-mediasdk.sh   |  4 ++
+ package/intel-mediasdk/libmfx.pc           |  9 ++++
+ 6 files changed, 79 insertions(+)
+ create mode 100644 package/intel-mediasdk/Config.in
+ create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
+ create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
+ create mode 100755 package/intel-mediasdk/intel-mediasdk.sh
+ create mode 100644 package/intel-mediasdk/libmfx.pc
 
 diff --git a/package/Config.in b/package/Config.in
-index 9082ed9956..f80d5b69d9 100644
+index f80d5b69d9..51d272df55 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1266,6 +1266,7 @@ menu "Graphics"
- 	source "package/ijs/Config.in"
+@@ -1267,6 +1267,7 @@ menu "Graphics"
  	source "package/imlib2/Config.in"
  	source "package/intel-gmmlib/Config.in"
-+	source "package/intel-mediadriver/Config.in"
+ 	source "package/intel-mediadriver/Config.in"
++	source "package/intel-mediasdk/Config.in"
  	source "package/irrlicht/Config.in"
  	source "package/jasper/Config.in"
  	source "package/jpeg/Config.in"
-diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
+diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
 new file mode 100644
-index 0000000000..505ea43c7f
+index 0000000000..cfed061027
 --- /dev/null
-+++ b/package/intel-mediadriver/Config.in
++++ b/package/intel-mediasdk/Config.in
 @@ -0,0 +1,15 @@
-+config BR2_PACKAGE_INTEL_MEDIADRIVER
-+	bool "intel-mediadriver"
++config BR2_PACKAGE_INTEL_MEDIASDK
++	bool "intel-mediasdk"
 +	depends on BR2_x86_64
-+	depends on BR2_PACKAGE_LIBVA
-+	depends on BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_LIBPCIACCESS
-+	select BR2_PACKAGE_INTEL_GMMLIB
++	select BR2_PACKAGE_INTEL_MEDIADRIVER
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
 +	help
-+	  The Intel(R) Media Driver for VAAPI is a new VA-API (Video
-+	  Acceleration API) user mode driver supporting hardware
-+	  accelerated decoding, encoding, and video post processing for
-+	  GEN based graphics hardware.
++	  Intel(R) Media SDK provides an API to access
++	  hardware-accelerated video decode, encode and filtering on
++	  Intel? platforms with integrated graphics.
 +
-+comment "intel-mediadriver needs libx11"
-+	  depends on !BR2_PACKAGE_XLIB_LIBX11
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
++	  Supported video encoders: HEVC, AVC, MPEG-2, JPEG
++	  Supported Video decoders: HEVC, AVC, VP8, MPEG-2, VC1, JPEG
++	  Supported video pre-processing filters: Color Conversion,
++	  Deinterlace, Denoise, Resize, Rotate, Composition
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
 new file mode 100644
-index 0000000000..9068b40e07
+index 0000000000..e7081ae7d2
 --- /dev/null
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 df9af1cc796b4123508aacaf19d040cc5d8c5742c05199f45c9a3905ed8d1b52  intel-media-18.3.0.tar.gz
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
++sha256 46f54f22e5a9cf41f1a6ab55346a0513ed02b2e99d41f9d178c6820d378922e3  intel-mediasdk-18.3.1.tar.gz
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
 new file mode 100644
-index 0000000000..24f64a665b
+index 0000000000..ee9f05f852
 --- /dev/null
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -0,0 +1,34 @@
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -0,0 +1,48 @@
 +################################################################################
 +#
-+# intel-mediadriver
++# intel-mediasdk
 +#
 +################################################################################
 +
-+# based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
++# Resources for building the MediaSDK:
++# - https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
 +
-+INTEL_MEDIADRIVER_VERSION = 18.3.0
-+INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
-+INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
-+INTEL_MEDIADRIVER_LICENSE = MIT BSD-3-Clause
-+INTEL_MEDIADRIVER_LICENSE_FILES = LICENSE.md
++INTEL_MEDIASDK_VERSION = 18.3.1
++INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
++INTEL_MEDIASDK_LICENSE = MIT
++INTEL_MEDIASDK_LICENSE_FILES = COPYING
 +
-+INTEL_MEDIADRIVER_DEPENDENCIES += intel-gmmlib
-+INTEL_MEDIADRIVER_DEPENDENCIES += libva
-+INTEL_MEDIADRIVER_DEPENDENCIES += libpciaccess
++INTEL_MEDIASDK_INSTALL_STAGING = YES
++INTEL_MEDIASDK_DEPENDENCIES += intel-mediadriver
++INTEL_MEDIASDK_DEPENDENCIES += libdrm
 +
-+INTEL_MEDIADRIVER_SUBDIR = media_driver
-+INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+INTEL_MEDIADRIVER_CONF_OPTS += -DMEDIA_VERSION="2.0.0"\
-+	-DBUILD_ALONG_WITH_CMRTLIB=1 \
-+	-DBS_DIR_MEDIA=$(@D) \
-+	-DINSTALL_DRIVERS_SYSCONF=OFF \
-+	-DLIBVA_DRIVERS_PATH=$(STAGING_DIR)/lib/dri \
-+	-DMEDIA_RUN_TEST_SUITE=OFF \
-+	-DRUN_TEST_SUITE=OFF
-+
-+define INTEL_MEDIADRIVER_INSTALL_TARGET_CMDS
-+	cp "$(INTEL_MEDIADRIVER_BUILDDIR)/iHD_drv_video.so" "$(TARGET_DIR)/lib/dri"
++define INTEL_MEDIASDK_PRE_CONFIGURE_FIXUP
++	# We need to copy MFX headers into staging dir due to a bug into FindMFX.cmake.
++	cp $(@D)/api/include/* $(STAGING_DIR)/usr/include
 +endef
 +
++define INTEL_MEDIASDK_POST_INSTALL_STAGING_HEADERFIX
++	# Some programs need to have the MFX headers under usr/include/mfx folder (like FFMpeg).
++	mkdir -p $(STAGING_DIR)/usr/include/mfx
++	cp $(STAGING_DIR)/usr/include/mfx*.h $(STAGING_DIR)/usr/include/mfx/
++endef
++
++define INTEL_MEDIASDK_INSTALL_TARGET_CMDS
++    # Copy runtimes.
++	cp -a $(STAGING_DIR)/usr/lib/libmfx* $(TARGET_DIR)/lib
++
++    # Copy plugins.
++	cp -r $(STAGING_DIR)/usr/lib/mfx/ $(TARGET_DIR)/usr/lib/mfx/
++
++	# Copy plugin parameters & samples.
++	cp -r $(STAGING_DIR)/usr/share/mfx $(TARGET_DIR)/usr/share/
++
++	# Set environment configuration.
++	mkdir -p $(TARGET_DIR)/etc/profile.d
++	cp package/intel-mediasdk/intel-mediasdk.sh $(TARGET_DIR)/etc/profile.d/
++endef
++
++INTEL_MEDIASDK_PRE_CONFIGURE_HOOKS += INTEL_MEDIASDK_PRE_CONFIGURE_FIXUP
++INTEL_MEDIASDK_POST_INSTALL_STAGING_HOOKS += INTEL_MEDIASDK_POST_INSTALL_STAGING_HEADERFIX
++
 +$(eval $(cmake-package))
+diff --git a/package/intel-mediasdk/intel-mediasdk.sh b/package/intel-mediasdk/intel-mediasdk.sh
+new file mode 100755
+index 0000000000..06150f2eb9
+--- /dev/null
++++ b/package/intel-mediasdk/intel-mediasdk.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# add libva driver path/name exporting for intel media solution
++export LIBVA_DRIVERS_PATH=/lib/dri/
++export LIBVA_DRIVER_NAME=iHD
+diff --git a/package/intel-mediasdk/libmfx.pc b/package/intel-mediasdk/libmfx.pc
+new file mode 100644
+index 0000000000..963b15a496
+--- /dev/null
++++ b/package/intel-mediasdk/libmfx.pc
+@@ -0,0 +1,9 @@
++prefix=/opt/intel/mediasdk
++exec_prefix=${prefix}
++libdir=${prefix}/lib/lin_x64
++includedir=${prefix}/include
++Name: libmfx
++Description: Intel Media Server Studio SDK
++Version: 18.3.1
++Libs: -L${libdir} -lmfx -lva -lstdc++ -ldl -lva-drm -ldrm
++Cflags: -I${includedir} -I/usr/include/libdrm
+\ No newline at end of file
 -- 
 2.20.1
