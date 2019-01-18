@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:03:26 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: fix typo on
+Date: Fri, 18 Jan 2019 14:03:43 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] docs/manual: fix typo on
  Buildroot in adding-packages-waf.txt
-Message-ID: <20190118130304.43F098A69B@busybox.osuosl.org>
+Message-ID: <20190118130311.DB6C28DB2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d44a7a4f8c30992c320757ba99c39e638539c52f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a197c235ddcea17bde4ba2e2a17bbcd4a4cc9a95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit e969f8254110018e2883b9a93b31e3ad29878430)
