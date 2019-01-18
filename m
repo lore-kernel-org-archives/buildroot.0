@@ -1,73 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Jan 2019 21:20:34 +0100
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix static build with
- netfilter_conntrack
-Message-ID: <20190118202034.1534-1-fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jan 2019 21:40:43 +0100
+Subject: [Buildroot] [PATCH 1/1] libgeotiff: bump to version 1.4.3
+Message-ID: <20190118204043.16039-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/22a28e8fd8182e1c908541dbc5b0ee087c3803e6
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...c-fix-static-build-with-netfilter_conntra.patch | 31 ++++++++++++++++++++++
- package/shadowsocks-libev/shadowsocks-libev.mk     |  2 ++
- 2 files changed, 33 insertions(+)
- create mode 100644 package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
+ package/libgeotiff/libgeotiff.hash | 2 +-
+ package/libgeotiff/libgeotiff.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch b/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-new file mode 100644
-index 0000000000..7ddb140e8d
---- /dev/null
-+++ b/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-@@ -0,0 +1,31 @@
-+From 9b4aebc840f444e5aa83633838e3890cec523017 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 18 Jan 2019 21:05:34 +0100
-+Subject: [PATCH] configure.ac: fix static build with netfilter_conntrack
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/22a28e8fd8182e1c908541dbc5b0ee087c3803e6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/shadowsocks/shadowsocks-libev/pull/2270]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a706591..c6dab8b 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -256,7 +256,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
-+ 	        fi
-+-	        with_netfilter_conntrack=no])
-++	        with_netfilter_conntrack=no], [-lnfnetlink])
-+ 	    AC_CHECK_HEADERS([libnetfilter_conntrack/libnetfilter_conntrack.h \
-+ 	        libnetfilter_conntrack/libnetfilter_conntrack_tcp.h],,[
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+-- 
-+2.14.1
-+
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index e8ca161477..c2c33b7aa5 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
- SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
- SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+SHADOWSOCKS_LIBEV_AUTORECONF = YES
- SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
+diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
+index a2b16ac0b2..08e8e06788 100644
+--- a/package/libgeotiff/libgeotiff.hash
++++ b/package/libgeotiff/libgeotiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ad87048adb91167b07f34974a8e53e4ec356494c29f1748de95252e8f81a5e6e libgeotiff-1.4.2.tar.gz
++sha256 b8510d9b968b5ee899282cdd5bef13fd02d5a4c19f664553f81e31127bc47265 libgeotiff-1.4.3.tar.gz
+ sha256 16b83cf7c3bbfd20bffa768b9bfdb16506ca50f5c140a9f3431e740b155359c1 LICENSE
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index a1f234b33b..522802cc94 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOTIFF_VERSION = 1.4.2
++LIBGEOTIFF_VERSION = 1.4.3
+ LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
+ LIBGEOTIFF_LICENSE = X11-style, public domain
+ LIBGEOTIFF_LICENSE_FILES = LICENSE
 -- 
 2.14.1
