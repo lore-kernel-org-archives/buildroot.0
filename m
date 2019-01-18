@@ -1,141 +1,134 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 18 Jan 2019 02:16:49 +0200
-Subject: [Buildroot] [PATCH v5 1/4] libopenssl: bump version to 1.1.1a
-In-Reply-To: <c02065cb-8c57-0f1f-e581-afd656de283a@gmail.com>
-References: <20190117181608.12644-1-ps.report@gmx.net>
- <c02065cb-8c57-0f1f-e581-afd656de283a@gmail.com>
-Message-ID: <20190118001649.ukod4c4c3hks3txe@vkochan-ThinkPad-T470p>
+Date: Fri, 18 Jan 2019 03:00:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nut: Add support for openssl 1.1.x
+Message-ID: <20190118010011.22258-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Patches used from:
 
-On Thu, Jan 17, 2019 at 11:39:07AM -0800, Ryan Coe wrote:
-> Peter,
-> 
-> On 1/17/2019 10:16 AM, Peter Seiderer wrote:
-> > - remove all parallel build patches (openssl build-system changed)
-> > 
-> > - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-> >    to apply to Configurations/unix-Makefile.tmpl (Makefile template)
-> > 
-> > - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
-> >    (upstream applied)
-> > 
-> > - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
-> >    apply to crypto/build.info (Makefile template)
-> > 
-> > - fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
-> > 
-> > - remove legacy enable-tlsext configure option
-> > 
-> > - remove target/host libdir configure options, fixes openssl.pc installation
-> >    path, fixes wget compile
-> > 
-> > - change legacy INSTALL_PREFIX to DESTDIR
-> > 
-> > - remove 'libraries gets installed read only, so strip fails'
-> >    workaround (not needed anymore)
-> > 
-> > - change engine directory from /usr/lib/engines to
-> >    /usr/lib/engines-1.1
-> > 
-> > - change license file hash, no license change, only the following
-> >    hint was removed:
-> > 
-> >      Actually both licenses are BSD-style Open Source licenses.
-> >      In case of any license issues related to OpenSSL please
-> >      contact openssl-core at openssl.org.
-> > 
-> > - fix host-libopenssl compile setting rpath as decribed in
-> >    libopenssl-1.1.0h/NOTES.UNIX
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v4 -> v5:
-> >    - remove libdir config options (suggested by Arnout Vandecappelle)
-> > 
-> > Changes v3 -> v4:
-> >    - bump version to 1.1.1a
-> >    - remove all parallel build patches hash file entries
-> >    - re-remove 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
-> >      (upstream applied)
-> >    - fix hist library install path
-> >    - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
-> >      (upstram applied)
-> >    - remove follow up patch for openssh (not longer needed since
-> >      version bump to 7.9p1, see https://www.openssh.com/releasenotes.html
-> >      Portability)
-> > 
-> > Changes v2 -> v3:
-> >    - no changes
-> > 
-> > Changes v1 -> v2:
-> >    - add OPENSSL_NO_ASYNC workaround for musl compile too
-> >      (suggested by Bernd Kuhls)
-> > 
-> >    - fix host-libopenssl compile (reported by Ryan Coe) by setting rpath
-> >      (suggested by Ryan Coe)
-> > 
-> >    - fix 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-> >      and 0003-Reproducible-build-do-not-leak-compiler-path.patch to apply
-> >      to the Makefile templates (instead of re-generated Makefile)
-> >      (reported by Ryan Coe)
-> > 
-> >    - add 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
-> >      (suggested by Bernd Kuhls)
-> > 
-> > Notes:
-> > 
-> >   - There was a previous attempt to bump the openssl version by
-> >     David Mosberger <davidm@egauge.net>. I could not find the
-> >     corresponding patch in patchwork or on the mailing list,
-> >     only a reply by Arnout Vandecappelle (see [2]) and the
-> >     answer by David Mosberger (see [3]).
-> > 
-> >   - Compile checked packages (depending explicit on libopenssl or host-libopenssl):
-> >     O.k:
-> >       - hostapd
-> >       - libpjsip
-> >       - host-mariadb (with patch)
-> >       - mosquitto
-> >       - wpa_supplicant
-> > 
-> >      Failure:
-> >       - softether/host-softether
-> >       - mariadb (cmake configure error, maybe unrelated?)
-> > 
-> >   - Compile checked packages (depending on openssl or host-openssl):
-> >      O.k.:
-> >        - alljoyn-base
-> >        - apache
-> >        - apr
-> >        - apr-util
-> >        - freeswitch
-> >        - openssh
-> >        - pound (with patch https://patchwork.ozlabs.org/patch/962157 )
-> > 
-> >      Failure:
-> >        - android-tools
-> > 
-> > [2] http://lists.busybox.net/pipermail/buildroot/2017-August/200859.html
-> > [3] http://lists.busybox.net/pipermail/buildroot/2017-August/200898.html
-> 
-> [snip]
-> 
-> Tested-by: Ryan Coe <bluemrp9@gmail.com>
-> 
-> 
+    https://github.com/openwrt/packages/tree/master/net/nut/patches
 
-I sent fix for libshout in:
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ ...0003-Add-compatibility-with-openssl-1.1.0.patch | 73 ++++++++++++++++++++++
+ package/nut/0004-Fix-check-for-empty-string.patch  | 25 ++++++++
+ 2 files changed, 98 insertions(+)
+ create mode 100644 package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
+ create mode 100644 package/nut/0004-Fix-check-for-empty-string.patch
 
-    https://patchwork.ozlabs.org/patch/1027055/
-
-I sent it separately because the fix supports both openssl versions,
-I really dont know if it is better to include it to this series ?
-
-Regards,
-Vadim Kochan
+diff --git a/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch b/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
+new file mode 100644
+index 0000000000..f75f1322a1
+--- /dev/null
++++ b/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
+@@ -0,0 +1,73 @@
++From fcbf18c92918ce5e81d0aab62a7aed5c2245ea4d Mon Sep 17 00:00:00 2001
++From: Eneas U de Queiroz <cote2004-github@yahoo.com>
++Date: Fri, 1 Jun 2018 11:17:28 -0300
++Subject: [PATCH 1/2] Add compatibility with openssl 1.1.0
++
++Minor adjustments were needed:
++* Openssl 1.1 libs do not need to be initialized.
++* TLSv*_method became TLS_*_method.
++
++Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
++---
++ clients/upsclient.c        | 5 ++++-
++ m4/nut_check_libopenssl.m4 | 2 +-
++ server/netssl.c            | 7 +++++--
++ 3 files changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/clients/upsclient.c b/clients/upsclient.c
++index b90587b0..053d60fb 100644
++--- a/clients/upsclient.c
+++++ b/clients/upsclient.c
++@@ -316,10 +316,13 @@ int upscli_init(int certverify, const char *certpath,
++ 	
++ #ifdef WITH_OPENSSL
++ 	
+++# if OPENSSL_VERSION_NUMBER < 0x10100000L
++ 	SSL_library_init();
++ 	SSL_load_error_strings();
+++#  define TLS_client_method TLSv1_client_method
+++# endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
++ 
++-	ssl_method = TLSv1_client_method();
+++	ssl_method = TLS_client_method();
++ 
++ 	if (!ssl_method) {
++ 		return 0;
++diff --git a/m4/nut_check_libopenssl.m4 b/m4/nut_check_libopenssl.m4
++index 1b875077..7eb401cd 100644
++--- a/m4/nut_check_libopenssl.m4
+++++ b/m4/nut_check_libopenssl.m4
++@@ -58,7 +58,7 @@ if test -z "${nut_have_libopenssl_seen}"; then
++ 
++ 	dnl check if openssl is usable
++ 	AC_CHECK_HEADERS(openssl/ssl.h, [nut_have_openssl=yes], [nut_have_openssl=no], [AC_INCLUDES_DEFAULT])
++-	AC_CHECK_FUNCS(SSL_library_init, [], [nut_have_openssl=no])
+++	AC_CHECK_FUNCS(SSL_CTX_new, [], [nut_have_openssl=no])
++ 
++ 	if test "${nut_have_openssl}" = "yes"; then
++ 		nut_with_ssl="yes"
++diff --git a/server/netssl.c b/server/netssl.c
++index c2f40989..0289e296 100644
++--- a/server/netssl.c
+++++ b/server/netssl.c
++@@ -387,12 +387,15 @@ void ssl_init(void)
++ 
++ #ifdef WITH_OPENSSL
++ 
+++# if OPENSSL_VERSION_NUMBER < 0x10100000L
++ 	SSL_load_error_strings();
++ 	SSL_library_init();
+++#  define TLS_server_method TLSv1_server_method
+++# endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
++ 
++-	if ((ssl_method = TLSv1_server_method()) == NULL) {
+++	if ((ssl_method = TLS_server_method()) == NULL) {
++ 		ssl_debug();
++-		fatalx(EXIT_FAILURE, "TLSv1_server_method failed");
+++		fatalx(EXIT_FAILURE, "TLS_server_method failed");
++ 	}
++ 
++ 	if ((ssl_ctx = SSL_CTX_new(ssl_method)) == NULL) {
++-- 
++2.16.1
++
+diff --git a/package/nut/0004-Fix-check-for-empty-string.patch b/package/nut/0004-Fix-check-for-empty-string.patch
+new file mode 100644
+index 0000000000..2f4c72409d
+--- /dev/null
++++ b/package/nut/0004-Fix-check-for-empty-string.patch
+@@ -0,0 +1,25 @@
++From 2ef929da38232af63ba53074ca97e95ae4faf912 Mon Sep 17 00:00:00 2001
++From: Arjen de Korte <build+lede@de-korte.org>
++Date: Tue, 28 Nov 2017 22:01:41 +0100
++Subject: [PATCH 2/2] Fix check for empty string
++
++---
++ clients/upssched.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/clients/upssched.c b/clients/upssched.c
++index 97b3ed42..3fdf118e 100644
++--- a/clients/upssched.c
+++++ b/clients/upssched.c
++@@ -794,7 +794,7 @@ static void parse_at(const char *ntype, const char *un, const char *cmd,
++ 	}
++ 
++ 	if (!strcmp(cmd, "EXECUTE")) {
++-		if (ca1 == '\0') {
+++		if (ca1[0] == '\0') {
++ 			upslogx(LOG_ERR, "Empty EXECUTE command argument");
++ 			return;
++ 		}
++-- 
++2.16.1
++
+-- 
+2.14.1
