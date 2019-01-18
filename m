@@ -1,12 +1,12 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 18 Jan 2019 17:30:01 +0200
+Date: Fri, 18 Jan 2019 18:01:14 +0200
 Subject: [Buildroot] [PATCH v5 1/4] libopenssl: bump version to 1.1.1a
 In-Reply-To: <CAKKE0ZFNnbbDE8TQK_L8hSZ_PSpT+F0jYgTT-cAy58zRrq8vQQ@mail.gmail.com>
 References: <20190117181608.12644-1-ps.report@gmx.net>
  <CAKKE0ZG54aPrwtbCiPKogDTHJfgha_x1iR1bBnhVQ4H0bp4q5g@mail.gmail.com>
  <20190118114943.j5jdw7nzzl2cddnu@vkochan-ThinkPad-T470p>
  <CAKKE0ZFNnbbDE8TQK_L8hSZ_PSpT+F0jYgTT-cAy58zRrq8vQQ@mail.gmail.com>
-Message-ID: <20190118153001.7lreetddtfic33iq@vkochan-ThinkPad-T470p>
+Message-ID: <20190118160114.episx2qs7ohdawgm@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -64,10 +64,9 @@ On Fri, Jan 18, 2019 at 12:48:05PM +0100, Patrick Havelange wrote:
 > > Thanks,
 > > Vadim Kochan
 
-meanwhile for me it looks like the issue is caused because the toolchain
-which is used in this defconfig does not define
-__UCLIBC_HAS_CONTEXT_FUNCS__ , and ucontext.h checks this define before
-include sys/ucontext.h .
+I looked into uclibc-1.0.31/extra/Configs/Config.in and I see that
+UCLIBC_HAS_CONTEXT_FUNCS depends on ARCH_HAS_UCONTEXT which is not
+selected by extra/Configs/Config.xtensa .
 
 Regards,
 Vadim Kochan
