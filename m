@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Jan 2019 14:08:46 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] board/lego/ev3: fix max
+Date: Fri, 18 Jan 2019 14:09:00 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] board/lego/ev3: fix max
  U-Boot flash size
-Message-ID: <20190118130821.36CFB815A6@busybox.osuosl.org>
+Message-ID: <20190118130830.217828121B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7261302b49a5e4109cd10b45b496ff4fc91e28d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2e8e0ed9fba115e0126e8c9737bbdc01680d93ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The first stage bootloader on LEGO MINDSTORMS EV3 only loads the first
 256K of the flash memory (this is hard-coded in an EEPROM). So, the
