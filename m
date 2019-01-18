@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Jan 2019 22:50:13 +0100
-Subject: [Buildroot] [PATCH 1/1] libcpprestdk: fix build with gcc 4.7
-Message-ID: <20190118215013.3743-1-fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jan 2019 23:01:14 +0100
+Subject: [Buildroot] [PATCH v2,1/1] libcpprestsdk: fix build with gcc 4.7
+Message-ID: <20190118220114.10894-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix typo in package's name
+
  ...tp_compression.cpp-fix-build-with-gcc-4.7.patch | 41 ++++++++++++++++++++++
  1 file changed, 41 insertions(+)
  create mode 100644 package/libcpprestsdk/0003-http_compression.cpp-fix-build-with-gcc-4.7.patch
