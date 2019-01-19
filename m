@@ -1,49 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:37:17 +0100
-Subject: [Buildroot] [git commit] python-cython: bump to version 0.29.3
-Message-ID: <20190119153718.71B798CA66@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 16:33:49 +0100
+Subject: [Buildroot] [git commit] package/pango: add upstream security fix
+ for CVE-2018-15120
+Message-ID: <20190119153718.4A2528CA66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca70c77a880442e901e3ad6163a0f67d92075958
+commit: https://git.buildroot.net/buildroot/commit/?id=1574dd6d48e4b1deef1dc05764eb51687e699822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+libpango in Pango 1.40.8 through 1.42.3, as used in hexchat and other
+products, allows remote attackers to cause a denial of service (application
+crash) or possibly have unspecified other impact via crafted text with
+invalid Unicode sequences.
+
+https://nvd.nist.gov/vuln/detail/CVE-2018-15120
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-assertion-with-invalid-Unicode-sequences.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 1fdb7e19cf..0eeeecd4cb 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	175af2d64f9ae09d25f5cf8181388559  Cython-0.29.2.tar.gz
--sha256	2ac187ff998a95abb7fae452b5178f91e1a713698c9ced89836c94e6b1d3f41e  Cython-0.29.2.tar.gz
-+md5	14ef74e227f0b55e67a20f5459a7942e  Cython-0.29.3.tar.gz
-+sha256	d687fb1cd9df28c1515666174c62e54bd894a6a6d0862f89705063cd47739f83  Cython-0.29.3.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 8dd1469495..024364a48d 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 0.29.2
-+PYTHON_CYTHON_VERSION = 0.29.3
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/c1/f2/d1207fd0dfe5cb4dbb06a035eb127653821510d896ce952b5c66ca3dafa4
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/02/24/f73045afb049295b34ac55aaf6ea1592604cda3749632a22e563e66604a3
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+diff --git a/package/pango/0002-Prevent-an-assertion-with-invalid-Unicode-sequences.patch b/package/pango/0002-Prevent-an-assertion-with-invalid-Unicode-sequences.patch
+new file mode 100644
+index 0000000000..010981e8b4
+--- /dev/null
++++ b/package/pango/0002-Prevent-an-assertion-with-invalid-Unicode-sequences.patch
+@@ -0,0 +1,38 @@
++From 71aaeaf020340412b8d012fe23a556c0420eda5f Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Fri, 17 Aug 2018 22:29:36 -0400
++Subject: [PATCH] Prevent an assertion with invalid Unicode sequences
++
++Invalid Unicode sequences, such as 0x2665 0xfe0e 0xfe0f,
++can trick the Emoji iter code into returning an empty
++segment, which then triggers an assertion in the itemizer.
++
++Prevent this by ensuring that we make progress.
++
++This issue was reported by Jeffrey M.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ pango/pango-emoji.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/pango/pango-emoji.c b/pango/pango-emoji.c
++index 0e332dff..29472452 100644
++--- a/pango/pango-emoji.c
+++++ b/pango/pango-emoji.c
++@@ -253,6 +253,12 @@ _pango_emoji_iter_next (PangoEmojiIter *iter)
++     if (iter->is_emoji == PANGO_EMOJI_TYPE_IS_EMOJI (current_emoji_type))
++     {
++       iter->is_emoji = !PANGO_EMOJI_TYPE_IS_EMOJI (current_emoji_type);
+++
+++      /* Make sure we make progress.  Weird sequences, like a VC15 followed
+++       * by VC16, can trick us into stalling otherwise. */
+++      if (iter->start == iter->end)
+++        iter->end = g_utf8_next_char (iter->end);
+++
++       return TRUE;
++     }
++   }
++-- 
++2.11.0
++
