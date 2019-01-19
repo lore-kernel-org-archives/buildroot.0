@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:35:20 +0100
-Subject: [Buildroot] [git commit] libgeotiff: bump to version 1.4.3
-Message-ID: <20190119153718.5C6A881796@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 16:37:10 +0100
+Subject: [Buildroot] [git commit] python-crossbar: bump to version 19.1.2
+Message-ID: <20190119153718.6AA078CA66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99edc752c0a4f92e2b943e3be7274fb96cf3e76f
+commit: https://git.buildroot.net/buildroot/commit/?id=66fe69c6548c9371c114d47c98cfee54bdbf11b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeotiff/libgeotiff.hash | 2 +-
- package/libgeotiff/libgeotiff.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-crossbar/python-crossbar.hash | 4 ++--
+ package/python-crossbar/python-crossbar.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
-index a2b16ac0b2..08e8e06788 100644
---- a/package/libgeotiff/libgeotiff.hash
-+++ b/package/libgeotiff/libgeotiff.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index 665cc25d1f..f956dc27e1 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	83c025eb8f1406642503aa590edabaf2  crossbar-19.1.1.tar.gz
+-sha256	6b30970f8cbd6962581790444b19a0743f0c589bd441e727623e8a7004a8679b  crossbar-19.1.1.tar.gz
++md5	462a204da3c776cbb770b98f9047e8e7  crossbar-19.1.2.tar.gz
++sha256	269d534a65c136a5c952a6accccf256f457569f731ee65e201e5a14e69db471a  crossbar-19.1.2.tar.gz
  # Locally computed
--sha256 ad87048adb91167b07f34974a8e53e4ec356494c29f1748de95252e8f81a5e6e libgeotiff-1.4.2.tar.gz
-+sha256 b8510d9b968b5ee899282cdd5bef13fd02d5a4c19f664553f81e31127bc47265 libgeotiff-1.4.3.tar.gz
- sha256 16b83cf7c3bbfd20bffa768b9bfdb16506ca50f5c140a9f3431e740b155359c1 LICENSE
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
-index a1f234b33b..522802cc94 100644
---- a/package/libgeotiff/libgeotiff.mk
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -4,7 +4,7 @@
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index 787d0f9441..064d2d92b6 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBGEOTIFF_VERSION = 1.4.2
-+LIBGEOTIFF_VERSION = 1.4.3
- LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
- LIBGEOTIFF_LICENSE = X11-style, public domain
- LIBGEOTIFF_LICENSE_FILES = LICENSE
+-PYTHON_CROSSBAR_VERSION = 19.1.1
++PYTHON_CROSSBAR_VERSION = 19.1.2
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/38/55/54ac74ca6b4a3b0fe5919fd7ee787c444ce79d8dca58d561ea3f8e185782
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/86/19/54c7bd9da1ac70643b9ae7d3d4592a73391f62fcb376fcd30f8328c1c5ce
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
