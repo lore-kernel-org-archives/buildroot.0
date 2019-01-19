@@ -1,48 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 23:07:21 +0100
-Subject: [Buildroot] [git commit] python-txtorcon: bump to version 19.0.0
-Message-ID: <20190119220733.D5D7A8D465@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 23:07:05 +0100
+Subject: [Buildroot] [git commit] python-bcrypt: bump to version 3.1.6
+Message-ID: <20190119220733.C0F0B890FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31a5867ca11d0c3c83d4cfd07ca8241d38860560
+commit: https://git.buildroot.net/buildroot/commit/?id=f897d368c256b0ff43321b65021004ccb513542b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ package/python-bcrypt/python-bcrypt.hash | 4 ++--
+ package/python-bcrypt/python-bcrypt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index d46a7769dc..ffc4e8379c 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
+diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
+index 14933a6187..3e4c303a1f 100644
+--- a/package/python-bcrypt/python-bcrypt.hash
++++ b/package/python-bcrypt/python-bcrypt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5    31492e847973710f6533e9979a134ffa  txtorcon-18.3.0.tar.gz
--sha256 5601956b3a2452526cd1ea31662696a51ddbf8ed6452633ee464fc1ff275f8b0  txtorcon-18.3.0.tar.gz
-+md5	7e6ef4d29c2cc51e85614cd2d57bf8df  txtorcon-19.0.0.tar.gz
-+sha256	3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b  txtorcon-19.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bcrypt/json
+-md5	7b441a7cdabf6d6f8ad44af2c0a91ab6  bcrypt-3.1.5.tar.gz
+-sha256	136243dc44e5bab9b61206bd46fff3018bd80980b1a1dfbab64a22ff5745957f  bcrypt-3.1.5.tar.gz
++md5	4d8ab82e5e0c86b15f4ba5aff2bec6b5  bcrypt-3.1.6.tar.gz
++sha256	44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea  bcrypt-3.1.6.tar.gz
  # Locally computed sha256 checksums
- sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index 6ebcdb4f90..7bf1c252b9 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
+ sha256	8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
+diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
+index 8d25795656..71bf036fce 100644
+--- a/package/python-bcrypt/python-bcrypt.mk
++++ b/package/python-bcrypt/python-bcrypt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 18.3.0
-+PYTHON_TXTORCON_VERSION = 19.0.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/a2/71/2fe0c7d9350ff95cd22128f375dbf2b49438ca1a5d8ca0795311a964586b
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/b7/93/e16d8160bac3a19d13c9ead9ac6b38f837f2534d40884109a334be1f849c
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-PYTHON_BCRYPT_VERSION = 3.1.5
++PYTHON_BCRYPT_VERSION = 3.1.6
+ PYTHON_BCRYPT_SOURCE = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
+-PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/91/a5/fd19eac0252e56b4ce65ced937ae40024782c21108da7d830003b7f76cdb
++PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/ce/3a/3d540b9f5ee8d92ce757eebacf167b9deedb8e30aedec69a2a072b2399bb
+ PYTHON_BCRYPT_SETUP_TYPE = setuptools
+ PYTHON_BCRYPT_LICENSE = Apache-2.0
+ PYTHON_BCRYPT_LICENSE_FILES = LICENSE
