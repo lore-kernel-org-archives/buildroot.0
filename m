@@ -1,48 +1,67 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Jan 2019 10:44:54 +0200
-Subject: [Buildroot] [PATCH 1/1] python-txtorcon: bump to version 19.0.0
-In-Reply-To: <20190119084454.22687-1-asafka7@gmail.com>
-References: <20190119084454.22687-1-asafka7@gmail.com>
-Message-ID: <20190119084454.22687-4-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 19 Jan 2019 10:37:10 +0100
+Subject: [Buildroot] [PATCH 1/1] zbar: needs kernel headers >= 3.17
+Message-ID: <20190119093710.1337-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v4l2_query_ext_ctrl has been added in kernel 3.17:
+https://github.com/torvalds/linux/commit/5082c2417841e64df975789011e182ce99a9dacd
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index d46a7769dc..ffc4e8379c 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5    31492e847973710f6533e9979a134ffa  txtorcon-18.3.0.tar.gz
--sha256 5601956b3a2452526cd1ea31662696a51ddbf8ed6452633ee464fc1ff275f8b0  txtorcon-18.3.0.tar.gz
-+md5	7e6ef4d29c2cc51e85614cd2d57bf8df  txtorcon-19.0.0.tar.gz
-+sha256	3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b  txtorcon-19.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index 6ebcdb4f90..7bf1c252b9 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Fixes:
+ - http://autobuild.buildroot.org/results/d7b244cf9488eafb59ba8575f17884f4f8512db1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gstreamer/gst-plugins-bad/Config.in | 6 +++---
+ package/zbar/Config.in                      | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 7bbd56a602..f45981f6c8 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -326,12 +326,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ 	depends on BR2_USE_MMU # zbar-> libv4l
+ 	depends on !BR2_STATIC_LIBS # zbar-> libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
+ 	select BR2_PACKAGE_ZBAR
  
--PYTHON_TXTORCON_VERSION = 18.3.0
-+PYTHON_TXTORCON_VERSION = 19.0.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/a2/71/2fe0c7d9350ff95cd22128f375dbf2b49438ca1a5d8ca0795311a964586b
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/b7/93/e16d8160bac3a19d13c9ead9ac6b38f837f2534d40884109a334be1f849c
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
++comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
+ endif
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+index 0f4d115745..e850c1f02b 100644
+--- a/package/zbar/Config.in
++++ b/package/zbar/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZBAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+ 	depends on BR2_USE_MMU # libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBV4L
+ 	help
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_ZBAR
+ 
+ 	  https://git.linuxtv.org/zbar.git/about/
+ 
+-comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
++comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
 -- 
-2.19.1
+2.14.1
