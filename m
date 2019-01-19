@@ -1,80 +1,280 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Sun, 20 Jan 2019 00:15:36 +0800
-Subject: [Buildroot] Building host-python-2.7.15 Failed
-Message-ID: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 19 Jan 2019 17:24:11 +0100
+Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: bump to version 2.10.9
+Message-ID: <20190119162411.7202-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- Remove second patch (already in version)
+- Fix build with gcc 4.7:
+  https://github.com/Microsoft/cpprestsdk/commit/e6498b2f99cf20163d8224716d8127f9089b01ef
 
-This is buildroot-2018.11.1.    I found I cannot build some packages with
-buildroot, the problem seemed in the building of the host-python. Below is
-the log:
+Fixes:
+ - http://autobuild.buildroot.org/results/a080dbe2977cd35e4f8351d864bd71aaa8f9b743
 
->>> host-python 2.7.15 Building
-PATH="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/sbin:/opt/linaro/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf/bin:/home/woody/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
-PKG_CONFIG="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin/pkg-config"
-PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-PKG_CONFIG_LIBDIR="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib/pkgconfig:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/share/pkgconfig"
-/usr/bin/make -j1  -C
-/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/
-running build
-running build_ext
-INFO: Can't locate Tcl/Tk libs and/or headers
-building 'crypt' extension
-/usr/bin/gcc -pthread -fPIC -fno-strict-aliasing -O2
--I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
--DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I. -IInclude -I./Include
--I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
--I/usr/include/x86_64-linux-gnu -I/usr/local/include
--I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Include
--I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15
--c
-/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.c
--o
-build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
-/usr/bin/gcc -pthread -shared
--L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
--Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
--Wl,--enable-new-dtags
-build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
--L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
--L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
-build/lib.linux-x86_64-2.7/crypt.so
-/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o):
-relocation R_X86_64_PC32 against symbol `_ufc_foobar' can not be used when
-making a shared object; recompile with -fPIC
-/usr/bin/ld: final link failed: bad value
-collect2: error: ld returned 1 exit status
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-remove-use-of-aligned-union.patch         | 225 ---------------------
+ package/libcpprestsdk/libcpprestsdk.hash           |   2 +-
+ package/libcpprestsdk/libcpprestsdk.mk             |   2 +-
+ 3 files changed, 2 insertions(+), 227 deletions(-)
+ delete mode 100644 package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
 
-Python build finished, but the necessary bits to build these modules were
-not found:
-_bsddb             _sqlite3           _tkinter
-bsddb185           bz2                dbm
-dl                 gdbm               imageop
-readline           sunaudiodev
-To find the necessary bits, look in setup.py in detect_modules() for the
-module's name.
-
-Failed to build these modules:
-crypt
-=============
-
-Can someone have a look at it and give me a hint?
-
-Thanks!
-
-
+diff --git a/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch b/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
+deleted file mode 100644
+index c3f5bf56c6..0000000000
+--- a/package/libcpprestsdk/0002-remove-use-of-aligned-union.patch
++++ /dev/null
+@@ -1,225 +0,0 @@
+-From 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff Mon Sep 17 00:00:00 2001
+-From: Billy O'Neal <billy.oneal@gmail.com>
+-Date: Thu, 6 Dec 2018 23:57:00 -0800
+-Subject: [PATCH] Remove use of aligned_union that broke CentOS 7. (#987)
+-
+-Signed-off-by: Billy O'Neal <billy.oneal@gmail.com>
+-[Backport from upstream commit 65267c6e83e7e29ed3bdddde13d2c4bbb10e1bff]
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- Release/src/pplx/threadpool.cpp | 127 +++++++++++++++-----------------
+- 1 file changed, 61 insertions(+), 66 deletions(-)
+-
+-diff --git a/Release/src/pplx/threadpool.cpp b/Release/src/pplx/threadpool.cpp
+-index 1c28cca8f..58920c025 100644
+---- a/Release/src/pplx/threadpool.cpp
+-+++ b/Release/src/pplx/threadpool.cpp
+-@@ -1,9 +1,7 @@
+- /***
+--* Copyright (C) Microsoft. All rights reserved.
+--* Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+--*
+--* =+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+--**/
+-+ * Copyright (C) Microsoft. All rights reserved.
+-+ * Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
+-+ **/
+- #include "stdafx.h"
+- 
+- #if !defined(CPPREST_EXCLUDE_WEBSOCKETS) || !defined(_WIN32)
+-@@ -11,8 +9,9 @@
+- 
+- #include <boost/asio/detail/thread.hpp>
+- #include <new>
+--#include <vector>
+- #include <type_traits>
+-+#include <utility>
+-+#include <vector>
+- 
+- #if defined(__ANDROID__)
+- #include <android/log.h>
+-@@ -29,9 +28,11 @@ static void abort_if_no_jvm()
+- {
+-     if (JVM == nullptr)
+-     {
+--        __android_log_print(ANDROID_LOG_ERROR, "CPPRESTSDK", "%s",
+--            "The CppREST SDK must be initialized before first use on android: "
+--            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
+-+        __android_log_print(ANDROID_LOG_ERROR,
+-+                            "CPPRESTSDK",
+-+                            "%s",
+-+                            "The CppREST SDK must be initialized before first use on android: "
+-+                            "https://github.com/Microsoft/cpprestsdk/wiki/How-to-build-for-Android");
+-         std::abort();
+-     }
+- }
+-@@ -52,9 +53,7 @@ JNIEnv* get_jvm_env()
+- 
+- struct threadpool_impl final : crossplat::threadpool
+- {
+--    threadpool_impl(size_t n)
+--        : crossplat::threadpool(n)
+--        , m_work(m_service)
+-+    threadpool_impl(size_t n) : crossplat::threadpool(n), m_work(m_service)
+-     {
+-         for (size_t i = 0; i < n; i++)
+-             add_thread();
+-@@ -69,26 +68,20 @@ struct threadpool_impl final : crossplat::threadpool
+-         }
+-     }
+- 
+--    threadpool_impl& get_shared()
+--    {
+--        return *this;
+--    }
+-+    threadpool_impl& get_shared() { return *this; }
+- 
+- private:
+-     void add_thread()
+-     {
+--        m_threads.push_back(std::unique_ptr<boost::asio::detail::thread>(
+--            new boost::asio::detail::thread([&]{ thread_start(this); })));
+-+        m_threads.push_back(
+-+            std::unique_ptr<boost::asio::detail::thread>(new boost::asio::detail::thread([&] { thread_start(this); })));
+-     }
+- 
+- #if defined(__ANDROID__)
+--    static void detach_from_java(void*)
+--    {
+--        JVM.load()->DetachCurrentThread();
+--    }
+-+    static void detach_from_java(void*) { JVM.load()->DetachCurrentThread(); }
+- #endif // __ANDROID__
+- 
+--    static void* thread_start(void *arg) CPPREST_NOEXCEPT
+-+    static void* thread_start(void* arg) CPPREST_NOEXCEPT
+-     {
+- #if defined(__ANDROID__)
+-         // Calling get_jvm_env() here forces the thread to be attached.
+-@@ -110,17 +103,14 @@ struct threadpool_impl final : crossplat::threadpool
+- #if defined(_WIN32)
+- struct shared_threadpool
+- {
+--    std::aligned_union<0, threadpool_impl>::type shared_storage;
+-+    union {
+-+        threadpool_impl shared_storage;
+-+    };
+- 
+--    threadpool_impl& get_shared()
+--    {
+--        return reinterpret_cast<threadpool_impl&>(shared_storage);
+--    }
+-+    threadpool_impl& get_shared() { return shared_storage; }
+-+
+-+    shared_threadpool(size_t n) : shared_storage(n) {}
+- 
+--    shared_threadpool(size_t n)
+--    {
+--        ::new (static_cast<void*>(&get_shared())) threadpool_impl(n);
+--    }
+-     ~shared_threadpool()
+-     {
+-         // if linked into a DLL, the threadpool shared instance will be
+-@@ -138,52 +128,59 @@ typedef shared_threadpool platform_shared_threadpool;
+- typedef threadpool_impl platform_shared_threadpool;
+- #endif
+- 
+--std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
+-+namespace
+- {
+--    static std::aligned_union<0, platform_shared_threadpool>::type storage;
+--    platform_shared_threadpool* const ptr =
+--        &reinterpret_cast<platform_shared_threadpool&>(storage);
+--    bool initialized_this_time = false;
+--#if defined(__ANDROID__)
+--    // mutex based implementation due to paranoia about (lack of) call_once support on Android
+--    // remove this if/when call_once is supported
+--    static std::mutex mtx;
+--    static std::atomic<bool> initialized;
+--    abort_if_no_jvm();
+--    if (!initialized.load())
+-+template<class T>
+-+struct uninitialized
+-+{
+-+    union {
+-+        T storage;
+-+    };
+-+
+-+    bool initialized;
+-+
+-+    uninitialized() CPPREST_NOEXCEPT : initialized(false) {}
+-+    uninitialized(const uninitialized&) = delete;
+-+    uninitialized& operator=(const uninitialized&) = delete;
+-+    ~uninitialized()
+-     {
+--        std::lock_guard<std::mutex> guard(mtx);
+--        if (!initialized.load())
+-+        if (initialized)
+-         {
+--            ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
+--            initialized.store(true);
+--            initialized_this_time = true;
+-+            storage.~T();
+-         }
+--    }   // also unlock
+-+    }
+-+
+-+    template<class... Args>
+-+    void construct(Args&&... vals)
+-+    {
+-+        ::new (static_cast<void*>(&storage)) T(std::forward<Args>(vals)...);
+-+        initialized = true;
+-+    }
+-+};
+-+} // unnamed namespace
+- 
+--#else // ^^^ __ANDROID__ ^^^ // vvv !__ANDROID___ vvv //
+-+std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t num_threads)
+-+{
+-+    static uninitialized<platform_shared_threadpool> uninit_threadpool;
+-+    bool initialized_this_time = false;
+-     static std::once_flag of;
+- 
+--// #if defined(__ANDROID__) // if call_once can be used for android
+--//     abort_if_no_jvm();
+--// #endif // __ANDROID__
+--    std::call_once(of, [num_threads, ptr, &initialized_this_time] {
+--        ::new (static_cast<void*>(ptr)) platform_shared_threadpool(num_threads);
+-+    #if defined(__ANDROID__)
+-+        abort_if_no_jvm();
+-+    #endif // __ANDROID__
+-+
+-+    std::call_once(of, [num_threads, &initialized_this_time] {
+-+        uninit_threadpool.construct(num_threads);
+-         initialized_this_time = true;
+-     });
+--#endif // __ANDROID__
+- 
+--    return {initialized_this_time, ptr};
+-+    return {initialized_this_time, &uninit_threadpool.storage};
+- }
+- }
+- 
+- namespace crossplat
+- {
+--threadpool& threadpool::shared_instance()
+--{
+--    return initialize_shared_threadpool(40).second->get_shared();
+--}
+--
+-+threadpool& threadpool::shared_instance() { return initialize_shared_threadpool(40).second->get_shared(); }
+- 
+- void threadpool::initialize_with_threads(size_t num_threads)
+- {
+-@@ -196,9 +193,7 @@ void threadpool::initialize_with_threads(size_t num_threads)
+- }
+- 
+- #if defined(__ANDROID__)
+--void cpprest_init(JavaVM* vm) {
+--    JVM = vm;
+--}
+-+void cpprest_init(JavaVM* vm) { JVM = vm; }
+- #endif
+- 
+- std::unique_ptr<crossplat::threadpool> crossplat::threadpool::construct(size_t num_threads)
+-
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+index 9a8155f354..9d41f8145a 100644
+--- a/package/libcpprestsdk/libcpprestsdk.hash
++++ b/package/libcpprestsdk/libcpprestsdk.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 fd79d34b3fad4622ff58480f57ecdf374061c5bdbd83e317019422575c820443	libcpprestsdk-v2.10.8.tar.gz
++sha256 ad2b47577b2311efb9df5fccdac2c809456ab6dd9feab2f655c1e7c70fa31421	libcpprestsdk-v2.10.9.tar.gz
+ sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index e5500d8c7f..9b3dd95d07 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCPPRESTSDK_VERSION = v2.10.8
++LIBCPPRESTSDK_VERSION = v2.10.9
+ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
 -- 
-Life is the only flaw in an otherwise perfect nonexistence
-    -- Schopenhauer
-
-woody
-public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190120/a519bf0b/attachment.html>
+2.14.1
