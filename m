@@ -1,59 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:31:42 +0100
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 2.6.6
-Message-ID: <20190119153718.3700C8D3D8@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 16:35:26 +0100
+Subject: [Buildroot] [git commit] gnu-efi: fix build with gcc 4.8
+Message-ID: <20190119153718.6377881796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd232aefc9eedae43aff1e4a4abf86b64ef3bdfa
+commit: https://git.buildroot.net/buildroot/commit/?id=07f1feec2c5e25a9ea070ded316b610622c5428e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities:
+Fixes:
+ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
 
-- wnpa-sec-2019-01 The 6LoWPAN dissector could crash. Bug 15217. CVE-2019-5716
-  https://www.wireshark.org/security/wnpa-sec-2019-01
-
-- wnpa-sec-2019-02 The P_MUL dissector could crash. Bug 15337. CVE-2019-5717
-  https://www.wireshark.org/security/wnpa-sec-2019-02
-
-- wnpa-sec-2019-03 The RTSE dissector and other dissectors could crash.  Bug
-  15373.  CVE-2019-5718
-  https://www.wireshark.org/security/wnpa-sec-2019-03
-
-- wnpa-sec-2019-04 The ISAKMP dissector could crash. Bug 15374. CVE-2019-5719
-  https://www.wireshark.org/security/wnpa-sec-2019-04
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 7748dd8409..bad0a0fd45 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.5.txt
--sha256 93155b798544b2f07693920f4ac1b531c952965ee4eb1d98419961240177438a  wireshark-2.6.5.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.6.txt
-+sha256 487933ea075bdbb25d8df06017d9c4f49fc20eb7f6ec80af086718ed5550e863  wireshark-2.6.6.tar.xz
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 07c1ade24d..c01238826b 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.6.5
-+WIRESHARK_VERSION = 2.6.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..57c78c9bd4
+--- /dev/null
++++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,35 @@
++From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 18 Jan 2019 22:05:37 +0100
++Subject: [PATCH] efilink: fix build with gcc 4.8
++
++intptr_t is undefined without an include on stdint.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
++---
++ inc/efilink.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/inc/efilink.h b/inc/efilink.h
++index cc5aa2d..b69a6fd 100644
++--- a/inc/efilink.h
+++++ b/inc/efilink.h
++@@ -1,6 +1,10 @@
++ #ifndef _EFI_LINK_H
++ #define _EFI_LINK_H
++ 
+++#if defined(__GNUC__)
+++#include <stdint.h>
+++#endif
+++
++ /*++
++ 
++ Copyright (c) 1998  Intel Corporation
++-- 
++2.14.1
++
