@@ -1,63 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:35:26 +0100
-Subject: [Buildroot] [git commit] gnu-efi: fix build with gcc 4.8
-Message-ID: <20190119153718.6377881796@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 16:34:59 +0100
+Subject: [Buildroot] [git commit] tesseract-ocr: disable documentation
+Message-ID: <20190119153718.558F981796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f1feec2c5e25a9ea070ded316b610622c5428e
+commit: https://git.buildroot.net/buildroot/commit/?id=ebcb9103b6bf3f2408d5de38da33cac37da48441
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
+ - http://autobuild.buildroot.org/results/a608e9bfb2b0161c45ae490e2866d96763593723
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/tesseract-ocr/tesseract-ocr.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..57c78c9bd4
---- /dev/null
-+++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,35 @@
-+From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 18 Jan 2019 22:05:37 +0100
-+Subject: [PATCH] efilink: fix build with gcc 4.8
-+
-+intptr_t is undefined without an include on stdint.h
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
-+---
-+ inc/efilink.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/inc/efilink.h b/inc/efilink.h
-+index cc5aa2d..b69a6fd 100644
-+--- a/inc/efilink.h
-++++ b/inc/efilink.h
-+@@ -1,6 +1,10 @@
-+ #ifndef _EFI_LINK_H
-+ #define _EFI_LINK_H
-+ 
-++#if defined(__GNUC__)
-++#include <stdint.h>
-++#endif
-++
-+ /*++
-+ 
-+ Copyright (c) 1998  Intel Corporation
-+-- 
-+2.14.1
-+
+diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+index 0b92a1f3b5..74b344961f 100644
+--- a/package/tesseract-ocr/tesseract-ocr.mk
++++ b/package/tesseract-ocr/tesseract-ocr.mk
+@@ -19,6 +19,7 @@ TESSERACT_OCR_AUTORECONF = YES
+ TESSERACT_OCR_DEPENDENCIES = leptonica host-pkgconf
+ TESSERACT_OCR_INSTALL_STAGING = YES
+ TESSERACT_OCR_CONF_ENV = \
++	ac_cv_prog_have_asciidoc=false \
+ 	LIBLEPT_HEADERSDIR=$(STAGING_DIR)/usr/include/leptonica
+ TESSERACT_OCR_CONF_OPTS = \
+ 	--disable-opencl
