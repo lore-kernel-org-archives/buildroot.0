@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:37:19 +0100
-Subject: [Buildroot] [PATCH 1/1] python-crossbar: bump to version 19.1.2
-In-Reply-To: <20190119100148.18202-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Sat, 19 Jan 2019 12:01:47 +0200")
+Date: Sat, 19 Jan 2019 16:37:24 +0100
+Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.3
+In-Reply-To: <20190119100148.18202-2-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 19 Jan 2019 12:01:48 +0200")
 References: <20190119100148.18202-1-asafka7@gmail.com>
-Message-ID: <87zhrw1wwg.fsf@dell.be.48ers.dk>
+ <20190119100148.18202-2-asafka7@gmail.com>
+Message-ID: <87va2k1wwb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
