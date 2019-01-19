@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 23:06:09 +0100
-Subject: [Buildroot] [git commit] libuv: bump to version 1.25.0
-Message-ID: <20190119220733.BAA3F890FE@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 23:07:21 +0100
+Subject: [Buildroot] [git commit] python-txtorcon: bump to version 19.0.0
+Message-ID: <20190119220733.D5D7A8D465@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5885c7f6d8a492da0aa315e2dcc345e144526c87
+commit: https://git.buildroot.net/buildroot/commit/?id=31a5867ca11d0c3c83d4cfd07ca8241d38860560
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-txtorcon/python-txtorcon.hash | 4 ++--
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index f4e9d53a86..8f11743b5a 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0d026c8f68c4d7b7c59de8f485f262ac71c24e0f3a80d740a25d20edd2f2774e  libuv-v1.24.1.tar.gz
-+sha256  ce3036d444c3fb4f9a9e2994bec1f4fa07872b01456998b422ce918fdc55c254  libuv-v1.25.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 40e6bd26d6..fec6659ed9 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index d46a7769dc..ffc4e8379c 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5    31492e847973710f6533e9979a134ffa  txtorcon-18.3.0.tar.gz
+-sha256 5601956b3a2452526cd1ea31662696a51ddbf8ed6452633ee464fc1ff275f8b0  txtorcon-18.3.0.tar.gz
++md5	7e6ef4d29c2cc51e85614cd2d57bf8df  txtorcon-19.0.0.tar.gz
++sha256	3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b  txtorcon-19.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index 6ebcdb4f90..7bf1c252b9 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.24.1
-+LIBUV_VERSION = v1.25.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-PYTHON_TXTORCON_VERSION = 18.3.0
++PYTHON_TXTORCON_VERSION = 19.0.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/a2/71/2fe0c7d9350ff95cd22128f375dbf2b49438ca1a5d8ca0795311a964586b
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/b7/93/e16d8160bac3a19d13c9ead9ac6b38f837f2534d40884109a334be1f849c
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
