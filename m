@@ -1,25 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 16:34:45 +0100
-Subject: [Buildroot] [PATCH] package/syslog-ng: fix startup with systemd
-In-Reply-To: <20190118184625.11484-1-casantos@datacom.com.br> (Carlos Santos's
- message of "Fri, 18 Jan 2019 16:46:25 -0200")
-References: <20190118184625.11484-1-casantos@datacom.com.br>
-Message-ID: <87h8e43bl6.fsf@dell.be.48ers.dk>
+Date: Sat, 19 Jan 2019 16:35:06 +0100
+Subject: [Buildroot] [PATCH 1/1] tesseract-ocr: disable documentation
+In-Reply-To: <20190118195641.16087-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 18 Jan 2019 20:56:41 +0100")
+References: <20190118195641.16087-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0os3bkl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > By default syslog-ng installs a .service that requires a config file at
- > /etc/default, so provide one with the default values.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a608e9bfb2b0161c45ae490e2866d96763593723
 
- > It's also necessary to enable the service by means of a symlink created
- > at /etc/systemd/system/multi-user.target.wants.
-
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
