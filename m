@@ -1,42 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Jan 2019 22:33:43 +0100
-Subject: [Buildroot] [git commit] Revert "package/php: fix building pcre
- extension"
-Message-ID: <20190119214058.09FE88A69B@busybox.osuosl.org>
+Date: Sat, 19 Jan 2019 22:34:19 +0100
+Subject: [Buildroot] [git commit] php: security bump to 7.3.1
+Message-ID: <20190119214058.1A40E8D2C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=392a50b2e34bd31138b6603684166742fa5c37f7
+commit: https://git.buildroot.net/buildroot/commit/?id=6e6b257d546039b9207cda32e4c281fecba87ae1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 745f884e41b5f350296e8448f5fc31d20f67a077.
+Fixes the following security issue:
 
-This was the wrong fix: issue is that php moves from pcre to pcre2 since
-version 7.3.0 and
-http://github.com/php/php-src/commit/a5bc5aed71f7a15f14f33bb31b8e17bf5f327e2d
+- CVE-2018-19935: Allows remote attackers to cause a denial of service
+  (NULL pointer dereference and application crash) via an empty string in the
+  message argument to the imap_mail function.
+https://www.cvedetails.com/cve/CVE-2018-19935/
 
-This patch will always disable external pcre2 support and raise a build
-failure when toolchaine does not have pthread
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index c1c6e8c3e9..2cb89e0366 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 7d195cad55af8b288c3919c67023a14ff870a73e3acc2165a6d17a4850a560b5  php-7.3.0.tar.xz
++sha256 cfe93e40be0350cd53c4a579f52fe5d8faf9c6db047f650a4566a2276bf33362  php-7.3.1.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 7d7d78353b..fd428e192a 100644
+index b6b17a1562..be7e9b3c89 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -244,7 +244,7 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ### Use external PCRE if it's available
- ifeq ($(BR2_PACKAGE_PCRE),y)
--PHP_CONF_OPTS += --with-pcre-regex
-+PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += pcre
- else
- # The bundled pcre library is not configurable through ./configure options,
+-PHP_VERSION = 7.3.0
++PHP_VERSION = 7.3.1
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
