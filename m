@@ -1,67 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 19 Jan 2019 10:37:10 +0100
-Subject: [Buildroot] [PATCH 1/1] zbar: needs kernel headers >= 3.17
-Message-ID: <20190119093710.1337-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 19 Jan 2019 12:01:47 +0200
+Subject: [Buildroot] [PATCH 1/1] python-crossbar: bump to version 19.1.2
+Message-ID: <20190119100148.18202-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v4l2_query_ext_ctrl has been added in kernel 3.17:
-https://github.com/torvalds/linux/commit/5082c2417841e64df975789011e182ce99a9dacd
-
-Fixes:
- - http://autobuild.buildroot.org/results/d7b244cf9488eafb59ba8575f17884f4f8512db1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/gstreamer/gst-plugins-bad/Config.in | 6 +++---
- package/zbar/Config.in                      | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-crossbar/python-crossbar.hash | 4 ++--
+ package/python-crossbar/python-crossbar.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index 7bbd56a602..f45981f6c8 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -326,12 +326,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
- 	depends on BR2_USE_MMU # zbar-> libv4l
- 	depends on !BR2_STATIC_LIBS # zbar-> libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
- 	select BR2_PACKAGE_ZBAR
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index 665cc25d1f..f956dc27e1 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	83c025eb8f1406642503aa590edabaf2  crossbar-19.1.1.tar.gz
+-sha256	6b30970f8cbd6962581790444b19a0743f0c589bd441e727623e8a7004a8679b  crossbar-19.1.1.tar.gz
++md5	462a204da3c776cbb770b98f9047e8e7  crossbar-19.1.2.tar.gz
++sha256	269d534a65c136a5c952a6accccf256f457569f731ee65e201e5a14e69db471a  crossbar-19.1.2.tar.gz
+ # Locally computed
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index 787d0f9441..064d2d92b6 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
-+comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- endif
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-index 0f4d115745..e850c1f02b 100644
---- a/package/zbar/Config.in
-+++ b/package/zbar/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZBAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
- 	depends on BR2_USE_MMU # libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBV4L
- 	help
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_ZBAR
- 
- 	  https://git.linuxtv.org/zbar.git/about/
- 
--comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
-+comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+-PYTHON_CROSSBAR_VERSION = 19.1.1
++PYTHON_CROSSBAR_VERSION = 19.1.2
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/38/55/54ac74ca6b4a3b0fe5919fd7ee787c444ce79d8dca58d561ea3f8e185782
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/86/19/54c7bd9da1ac70643b9ae7d3d4592a73391f62fcb376fcd30f8328c1c5ce
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
 -- 
-2.14.1
+2.19.1
