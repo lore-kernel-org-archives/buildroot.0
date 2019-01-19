@@ -1,49 +1,147 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Jan 2019 12:01:48 +0200
-Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.3
-In-Reply-To: <20190119100148.18202-1-asafka7@gmail.com>
-References: <20190119100148.18202-1-asafka7@gmail.com>
-Message-ID: <20190119100148.18202-2-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 19 Jan 2019 12:03:54 +0100
+Subject: [Buildroot] [PATCH 1/1] libva-utils: fix build with gcc 4.8
+Message-ID: <20190119110354.27457-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/64d9b79de5d31eb5a0c219081479bebb1f2527ed
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 1fdb7e19cf..0eeeecd4cb 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	175af2d64f9ae09d25f5cf8181388559  Cython-0.29.2.tar.gz
--sha256	2ac187ff998a95abb7fae452b5178f91e1a713698c9ced89836c94e6b1d3f41e  Cython-0.29.2.tar.gz
-+md5	14ef74e227f0b55e67a20f5459a7942e  Cython-0.29.3.tar.gz
-+sha256	d687fb1cd9df28c1515666174c62e54bd894a6a6d0862f89705063cd47739f83  Cython-0.29.3.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 8dd1469495..024364a48d 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 0.29.2
-+PYTHON_CYTHON_VERSION = 0.29.3
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/c1/f2/d1207fd0dfe5cb4dbb06a035eb127653821510d896ce952b5c66ca3dafa4
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/02/24/f73045afb049295b34ac55aaf6ea1592604cda3749632a22e563e66604a3
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../libva-utils/0002-KJSL-fix-up-C99-issue.patch   | 120 +++++++++++++++++++++
+ 1 file changed, 120 insertions(+)
+ create mode 100644 package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
+
+diff --git a/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch b/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
+new file mode 100644
+index 0000000000..763986c774
+--- /dev/null
++++ b/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
+@@ -0,0 +1,120 @@
++From 6307b68156db2040a1be5b324efe4bad4461d52e Mon Sep 17 00:00:00 2001
++From: Kev <klambert@kevs-encoder.switch.internal>
++Date: Fri, 26 Oct 2018 10:59:49 +1100
++Subject: [PATCH] KJSL fix up C99 issue
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/intel/libva-utils/commit/6307b68156db2040a1be5b324efe4bad4461d52e]
++---
++ encode/vp8enc.c | 24 +++++++++++++++---------
++ 1 file changed, 15 insertions(+), 9 deletions(-)
++
++diff --git a/encode/vp8enc.c b/encode/vp8enc.c
++index 9be2870..fce0a46 100644
++--- a/encode/vp8enc.c
+++++ b/encode/vp8enc.c
++@@ -400,18 +400,19 @@ vp8enc_upload_thread_function(void *data)
++ void vp8enc_init_QMatrix(VAQMatrixBufferVP8 *qMatrix)
++ {
++   // When segmentation is disabled, only quantization_index[0] will be used
++-  for (size_t i = 0; i < N_ELEMENTS(qMatrix->quantization_index); i++) {
+++  size_t i;
+++  for (i = 0; i < N_ELEMENTS(qMatrix->quantization_index); i++) {
++       qMatrix->quantization_index[i] = settings.quantization_parameter;
++   }
++ 
++-  for (size_t i = 0; i < N_ELEMENTS(qMatrix->quantization_index_delta); i++) {
+++  for (i = 0; i < N_ELEMENTS(qMatrix->quantization_index_delta); i++) {
++       qMatrix->quantization_index_delta[i] = 0;
++   }
++-
++ }
++ 
++ void vp8enc_init_SequenceParameterBuffer(VAEncSequenceParameterBufferVP8* seqParam)
++ {
+++  size_t i;
++ 
++   memset(seqParam, 0, sizeof(VAEncSequenceParameterBufferVP8));
++ 
++@@ -426,12 +427,13 @@ void vp8enc_init_SequenceParameterBuffer(VAEncSequenceParameterBufferVP8* seqPar
++   seqParam->intra_period = settings.intra_period;
++   seqParam->error_resilient = settings.error_resilient;
++ 
++-  for (size_t i = 0; i < N_ELEMENTS(seqParam->reference_frames); i++)
+++  for (i = 0; i < N_ELEMENTS(seqParam->reference_frames); i++)
++      seqParam->reference_frames[i] = VA_INVALID_ID;
++ }
++ 
++ void vp8enc_init_PictureParameterBuffer(VAEncPictureParameterBufferVP8 *picParam)
++ {
+++  size_t i;
++   memset(picParam, 0, sizeof(VAEncPictureParameterBufferVP8));
++ 
++   picParam->ref_last_frame = VA_INVALID_SURFACE;
++@@ -441,7 +443,7 @@ void vp8enc_init_PictureParameterBuffer(VAEncPictureParameterBufferVP8 *picParam
++   /* always show it */
++   picParam->pic_flags.bits.show_frame = 1;
++ 
++-  for (size_t i = 0; i < N_ELEMENTS(picParam->loop_filter_level); i++) {
+++  for (i = 0; i < N_ELEMENTS(picParam->loop_filter_level); i++) {
++       picParam->loop_filter_level[i] = settings.loop_filter_level;
++   }
++ 
++@@ -578,8 +580,9 @@ void vp8enc_update_picture_parameter(int frame_type, int current_frame)
++ VASurfaceID vp8enc_get_unused_surface()
++ {
++   VASurfaceID current_surface;
+++  size_t i = 0;
++ 
++-  for (size_t i = 0; i < NUM_REF_SURFACES; i++) {
+++  for (i = 0; i < NUM_REF_SURFACES; i++) {
++         current_surface = vaapi_context.surfaces[i];
++ 
++         if(current_surface != vaapi_context.last_ref_surface && current_surface != vaapi_context.golden_ref_surface && current_surface != vaapi_context.alt_ref_surface)
++@@ -676,6 +679,7 @@ void vp8enc_create_EncoderPipe()
++ {
++   VAEntrypoint entrypoints[5];
++   int num_entrypoints;
+++  int i;
++   bool entrypoint_found;
++   VAConfigAttrib conf_attrib[2];
++   VASurfaceAttrib surface_attrib;
++@@ -690,7 +694,7 @@ void vp8enc_create_EncoderPipe()
++                            &num_entrypoints);
++ 
++   entrypoint_found = true;
++-  for(int i = 0; i < num_entrypoints;i++)
+++  for(i = 0; i < num_entrypoints;i++)
++   {
++     if (entrypoints[i] == settings.vaapi_entry_point)
++       entrypoint_found = true;
++@@ -773,6 +777,7 @@ void vp8enc_destory_EncoderPipe()
++ 
++ void vp8enc_init_VaapiContext()
++ {
+++  size_t i;
++   vaapi_context.profile = VAProfileVP8Version0_3;
++ 
++   vp8enc_init_SequenceParameterBuffer(&vaapi_context.seq_param);
++@@ -784,7 +789,7 @@ void vp8enc_init_VaapiContext()
++   vaapi_context.rate_control_param.header.type = VAEncMiscParameterTypeRateControl;
++   vp8enc_init_MiscParameterBuffers(&vaapi_context.hrd_param.data, &vaapi_context.frame_rate_param.data,&vaapi_context.rate_control_param.data);
++ 
++-  for(size_t i = 0; i < N_ELEMENTS(vaapi_context.va_buffers);i++)
+++  for(i = 0; i < N_ELEMENTS(vaapi_context.va_buffers);i++)
++     vaapi_context.va_buffers[i] = VA_INVALID_ID;
++   vaapi_context.num_va_buffers = 0;
++ 
++@@ -956,9 +961,10 @@ vp8enc_render_picture()
++ 
++ void vp8enc_destroy_buffers()
++ {
+++  int i;
++   VAStatus va_status;
++ 
++-  for(int i = 0; i < vaapi_context.num_va_buffers; i++) {
+++  for(i = 0; i < vaapi_context.num_va_buffers; i++) {
++     if (vaapi_context.va_buffers[i] != VA_INVALID_ID) {
++       va_status = vaDestroyBuffer(vaapi_context.display, vaapi_context.va_buffers[i]);
++       CHECK_VASTATUS(va_status,"vaDestroyBuffer");
 -- 
-2.19.1
+2.14.1
