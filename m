@@ -1,147 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 19 Jan 2019 12:03:54 +0100
-Subject: [Buildroot] [PATCH 1/1] libva-utils: fix build with gcc 4.8
-Message-ID: <20190119110354.27457-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 19 Jan 2019 16:33:27 +0100
+Subject: [Buildroot] [PATCH] package/wireshark: security bump to version
+ 2.6.6
+In-Reply-To: <20190118080029.30013-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 18 Jan 2019 09:00:28 +0100")
+References: <20190118080029.30013-1-peter@korsgaard.com>
+Message-ID: <87y37g3bnc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/64d9b79de5d31eb5a0c219081479bebb1f2527ed
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../libva-utils/0002-KJSL-fix-up-C99-issue.patch   | 120 +++++++++++++++++++++
- 1 file changed, 120 insertions(+)
- create mode 100644 package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
+ > Fixes the following security vulnerabilities:
+ > - wnpa-sec-2019-01 The 6LoWPAN dissector could crash. Bug 15217. CVE-2019-5716
+ >   https://www.wireshark.org/security/wnpa-sec-2019-01
 
-diff --git a/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch b/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
-new file mode 100644
-index 0000000000..763986c774
---- /dev/null
-+++ b/package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
-@@ -0,0 +1,120 @@
-+From 6307b68156db2040a1be5b324efe4bad4461d52e Mon Sep 17 00:00:00 2001
-+From: Kev <klambert@kevs-encoder.switch.internal>
-+Date: Fri, 26 Oct 2018 10:59:49 +1100
-+Subject: [PATCH] KJSL fix up C99 issue
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/intel/libva-utils/commit/6307b68156db2040a1be5b324efe4bad4461d52e]
-+---
-+ encode/vp8enc.c | 24 +++++++++++++++---------
-+ 1 file changed, 15 insertions(+), 9 deletions(-)
-+
-+diff --git a/encode/vp8enc.c b/encode/vp8enc.c
-+index 9be2870..fce0a46 100644
-+--- a/encode/vp8enc.c
-++++ b/encode/vp8enc.c
-+@@ -400,18 +400,19 @@ vp8enc_upload_thread_function(void *data)
-+ void vp8enc_init_QMatrix(VAQMatrixBufferVP8 *qMatrix)
-+ {
-+   // When segmentation is disabled, only quantization_index[0] will be used
-+-  for (size_t i = 0; i < N_ELEMENTS(qMatrix->quantization_index); i++) {
-++  size_t i;
-++  for (i = 0; i < N_ELEMENTS(qMatrix->quantization_index); i++) {
-+       qMatrix->quantization_index[i] = settings.quantization_parameter;
-+   }
-+ 
-+-  for (size_t i = 0; i < N_ELEMENTS(qMatrix->quantization_index_delta); i++) {
-++  for (i = 0; i < N_ELEMENTS(qMatrix->quantization_index_delta); i++) {
-+       qMatrix->quantization_index_delta[i] = 0;
-+   }
-+-
-+ }
-+ 
-+ void vp8enc_init_SequenceParameterBuffer(VAEncSequenceParameterBufferVP8* seqParam)
-+ {
-++  size_t i;
-+ 
-+   memset(seqParam, 0, sizeof(VAEncSequenceParameterBufferVP8));
-+ 
-+@@ -426,12 +427,13 @@ void vp8enc_init_SequenceParameterBuffer(VAEncSequenceParameterBufferVP8* seqPar
-+   seqParam->intra_period = settings.intra_period;
-+   seqParam->error_resilient = settings.error_resilient;
-+ 
-+-  for (size_t i = 0; i < N_ELEMENTS(seqParam->reference_frames); i++)
-++  for (i = 0; i < N_ELEMENTS(seqParam->reference_frames); i++)
-+      seqParam->reference_frames[i] = VA_INVALID_ID;
-+ }
-+ 
-+ void vp8enc_init_PictureParameterBuffer(VAEncPictureParameterBufferVP8 *picParam)
-+ {
-++  size_t i;
-+   memset(picParam, 0, sizeof(VAEncPictureParameterBufferVP8));
-+ 
-+   picParam->ref_last_frame = VA_INVALID_SURFACE;
-+@@ -441,7 +443,7 @@ void vp8enc_init_PictureParameterBuffer(VAEncPictureParameterBufferVP8 *picParam
-+   /* always show it */
-+   picParam->pic_flags.bits.show_frame = 1;
-+ 
-+-  for (size_t i = 0; i < N_ELEMENTS(picParam->loop_filter_level); i++) {
-++  for (i = 0; i < N_ELEMENTS(picParam->loop_filter_level); i++) {
-+       picParam->loop_filter_level[i] = settings.loop_filter_level;
-+   }
-+ 
-+@@ -578,8 +580,9 @@ void vp8enc_update_picture_parameter(int frame_type, int current_frame)
-+ VASurfaceID vp8enc_get_unused_surface()
-+ {
-+   VASurfaceID current_surface;
-++  size_t i = 0;
-+ 
-+-  for (size_t i = 0; i < NUM_REF_SURFACES; i++) {
-++  for (i = 0; i < NUM_REF_SURFACES; i++) {
-+         current_surface = vaapi_context.surfaces[i];
-+ 
-+         if(current_surface != vaapi_context.last_ref_surface && current_surface != vaapi_context.golden_ref_surface && current_surface != vaapi_context.alt_ref_surface)
-+@@ -676,6 +679,7 @@ void vp8enc_create_EncoderPipe()
-+ {
-+   VAEntrypoint entrypoints[5];
-+   int num_entrypoints;
-++  int i;
-+   bool entrypoint_found;
-+   VAConfigAttrib conf_attrib[2];
-+   VASurfaceAttrib surface_attrib;
-+@@ -690,7 +694,7 @@ void vp8enc_create_EncoderPipe()
-+                            &num_entrypoints);
-+ 
-+   entrypoint_found = true;
-+-  for(int i = 0; i < num_entrypoints;i++)
-++  for(i = 0; i < num_entrypoints;i++)
-+   {
-+     if (entrypoints[i] == settings.vaapi_entry_point)
-+       entrypoint_found = true;
-+@@ -773,6 +777,7 @@ void vp8enc_destory_EncoderPipe()
-+ 
-+ void vp8enc_init_VaapiContext()
-+ {
-++  size_t i;
-+   vaapi_context.profile = VAProfileVP8Version0_3;
-+ 
-+   vp8enc_init_SequenceParameterBuffer(&vaapi_context.seq_param);
-+@@ -784,7 +789,7 @@ void vp8enc_init_VaapiContext()
-+   vaapi_context.rate_control_param.header.type = VAEncMiscParameterTypeRateControl;
-+   vp8enc_init_MiscParameterBuffers(&vaapi_context.hrd_param.data, &vaapi_context.frame_rate_param.data,&vaapi_context.rate_control_param.data);
-+ 
-+-  for(size_t i = 0; i < N_ELEMENTS(vaapi_context.va_buffers);i++)
-++  for(i = 0; i < N_ELEMENTS(vaapi_context.va_buffers);i++)
-+     vaapi_context.va_buffers[i] = VA_INVALID_ID;
-+   vaapi_context.num_va_buffers = 0;
-+ 
-+@@ -956,9 +961,10 @@ vp8enc_render_picture()
-+ 
-+ void vp8enc_destroy_buffers()
-+ {
-++  int i;
-+   VAStatus va_status;
-+ 
-+-  for(int i = 0; i < vaapi_context.num_va_buffers; i++) {
-++  for(i = 0; i < vaapi_context.num_va_buffers; i++) {
-+     if (vaapi_context.va_buffers[i] != VA_INVALID_ID) {
-+       va_status = vaDestroyBuffer(vaapi_context.display, vaapi_context.va_buffers[i]);
-+       CHECK_VASTATUS(va_status,"vaDestroyBuffer");
+ > - wnpa-sec-2019-02 The P_MUL dissector could crash. Bug 15337. CVE-2019-5717
+ >   https://www.wireshark.org/security/wnpa-sec-2019-02
+
+ > - wnpa-sec-2019-03 The RTSE dissector and other dissectors could crash.  Bug
+ >   15373.  CVE-2019-5718
+ >   https://www.wireshark.org/security/wnpa-sec-2019-03
+
+ > - wnpa-sec-2019-04 The ISAKMP dissector could crash. Bug 15374. CVE-2019-5719
+ >   https://www.wireshark.org/security/wnpa-sec-2019-04
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
