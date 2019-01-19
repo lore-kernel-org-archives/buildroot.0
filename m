@@ -1,41 +1,70 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Sat, 19 Jan 2019 20:19:46 +1300
-Subject: [Buildroot] [PATCH 1/2] syslog-ng: fix builds with static libc
-Message-ID: <20190119071947.5472-1-judge.packham@gmail.com>
+Date: Sat, 19 Jan 2019 20:23:03 +1300
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix startup with systemd
+In-Reply-To: <20190118184625.11484-1-casantos@datacom.com.br>
+References: <20190118184625.11484-1-casantos@datacom.com.br>
+Message-ID: <CAFOYHZCo=rjdJ8img+tVKW_g7gF-GQK21ZzP4TKonxZn_Lyfmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bring in an upstream patch to fix builds for targets which lack dlfcn.h.
+On Sat, Jan 19, 2019 at 7:46 AM Carlos Santos <casantos@datacom.com.br> wrote:
+>
+> By default syslog-ng installs a .service that requires a config file at
+> /etc/default, so provide one with the default values.
+>
+> It's also necessary to enable the service by means of a symlink created
+> at /etc/systemd/system/multi-user.target.wants.
+>
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/syslog-ng/syslog-ng.hash | 1 +
- package/syslog-ng/syslog-ng.mk   | 1 +
- 2 files changed, 2 insertions(+)
+Thanks
 
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 1f83e39ff0..69c94da02b 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -3,3 +3,4 @@ sha256 5cf931a9d7bead0e6d9a2c65eee8f6005a005878f59aa280f3c4294257ed5178  syslog-
- sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
- sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-+sha256 feb26f77921b42fa7e5468229d883c5fae0b349cd075013eec2cb071a677179b  d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index ecde9e8181..f96b97f30e 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -18,6 +18,7 @@ SYSLOG_NG_AUTORECONF = YES
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
- 	--disable-java --disable-java-modules --disable-mongodb
-+SYSLOG_NG_PATCH = https://github.com/balabit/syslog-ng/commit/d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
- 
- ifeq ($(BR2_PACKAGE_GEOIP),y)
- SYSLOG_NG_DEPENDENCIES += geoip
--- 
-2.20.1
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
+
+> ---
+>  package/syslog-ng/syslog-ng.mk      | 10 ++++++++++
+>  package/syslog-ng/syslog-ng at default |  8 ++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/syslog-ng/syslog-ng at default
+>
+> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+> index ecde9e8181..0c92b091b4 100644
+> --- a/package/syslog-ng/syslog-ng.mk
+> +++ b/package/syslog-ng/syslog-ng.mk
+> @@ -97,6 +97,16 @@ define SYSLOG_NG_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S01syslog-ng
+>  endef
+>
+> +# By default syslog-ng installs a .service that requires a config file at
+> +# /etc/default, so provide one with the default values.
+> +define SYSLOG_NG_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -m 0644 -D package/syslog-ng/syslog-ng at default \
+> +               $(TARGET_DIR)/etc/default/syslog-ng at default
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf ../../../../usr/lib/systemd/system/syslog-ng at .service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog-ng at default.service
+> +endef
+> +
+>  # By default syslog-ng installs a number of sample configuration
+>  # files. Some of these rely on optional features being
+>  # enabled. Because of this buildroot uninstalls the shipped config
+> diff --git a/package/syslog-ng/syslog-ng at default b/package/syslog-ng/syslog-ng at default
+> new file mode 100644
+> index 0000000000..0fad00ebac
+> --- /dev/null
+> +++ b/package/syslog-ng/syslog-ng at default
+> @@ -0,0 +1,8 @@
+> +#
+> +# /etc/default/syslog-ng at default
+> +#
+> +CONFIG_FILE=/etc/syslog-ng.conf
+> +PERSIST_FILE=/var/run/syslog-ng.persist
+> +CONTROL_FILE=/var/run/syslog-ng.ctl
+> +PID_FILE=/var/run/syslog-ng.pid
+> +OTHER_OPTIONS="--enable-core"
+> --
+> 2.14.5
+>
