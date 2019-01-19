@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 19 Jan 2019 10:44:53 +0200
-Subject: [Buildroot] [PATCH 1/1] python-logbook: bump to version 1.4.3
+Date: Sat, 19 Jan 2019 10:44:54 +0200
+Subject: [Buildroot] [PATCH 1/1] python-txtorcon: bump to version 19.0.0
 In-Reply-To: <20190119084454.22687-1-asafka7@gmail.com>
 References: <20190119084454.22687-1-asafka7@gmail.com>
-Message-ID: <20190119084454.22687-3-asafka7@gmail.com>
+Message-ID: <20190119084454.22687-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-logbook/python-logbook.hash | 4 ++--
- package/python-logbook/python-logbook.mk   | 4 ++--
+ package/python-txtorcon/python-txtorcon.hash | 4 ++--
+ package/python-txtorcon/python-txtorcon.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
-index a32ff3bde2..0db9def1ba 100644
---- a/package/python-logbook/python-logbook.hash
-+++ b/package/python-logbook/python-logbook.hash
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+index d46a7769dc..ffc4e8379c 100644
+--- a/package/python-txtorcon/python-txtorcon.hash
++++ b/package/python-txtorcon/python-txtorcon.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/logbook/json
--md5	c9fab07b6a91aa7358155baa16802707  Logbook-1.4.1.tar.gz
--sha256	32375ce706d04a46886f9818bb953e53e0eda636552d7c0a2e482dd670fa56db  Logbook-1.4.1.tar.gz
-+md5	352d66684713fc323febe60c9244270e  Logbook-1.4.3.tar.gz
-+sha256	a5a96792abd8172c80d61b7530e134524f20e2841981038031e602ed5920fef5  Logbook-1.4.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/txtorcon/json
+-md5    31492e847973710f6533e9979a134ffa  txtorcon-18.3.0.tar.gz
+-sha256 5601956b3a2452526cd1ea31662696a51ddbf8ed6452633ee464fc1ff275f8b0  txtorcon-18.3.0.tar.gz
++md5	7e6ef4d29c2cc51e85614cd2d57bf8df  txtorcon-19.0.0.tar.gz
++sha256	3731b740653e3f551412744f1fcd7fa6f04aa9fa37c90dc6c9152e619886bf3b  txtorcon-19.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256	2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
-diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
-index ab1b2703e2..4e9a5306d0 100644
---- a/package/python-logbook/python-logbook.mk
-+++ b/package/python-logbook/python-logbook.mk
+ sha256 3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index 6ebcdb4f90..7bf1c252b9 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LOGBOOK_VERSION = 1.4.1
-+PYTHON_LOGBOOK_VERSION = 1.4.3
- PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
--PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/74/fc/3e7557ed1ef1bd4e3ee189fc670416abfc7192b550e8d3c1d858a63f41ab
-+PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/f6/83/20fc0270614919cb799f76e32cf143a54c58ce2fa45c19fd38ac2e4f9977
- PYTHON_LOGBOOK_SETUP_TYPE = setuptools
- PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
- PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
+-PYTHON_TXTORCON_VERSION = 18.3.0
++PYTHON_TXTORCON_VERSION = 19.0.0
+ PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
+-PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/a2/71/2fe0c7d9350ff95cd22128f375dbf2b49438ca1a5d8ca0795311a964586b
++PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/b7/93/e16d8160bac3a19d13c9ead9ac6b38f837f2534d40884109a334be1f849c
+ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
 -- 
 2.19.1
