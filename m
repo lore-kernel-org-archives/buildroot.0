@@ -1,103 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 19 Jan 2019 20:29:31 +0200
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-In-Reply-To: <20190118201045.13947-2-lpdev@cordier.org>
-References: <20190118201045.13947-1-lpdev@cordier.org>
- <20190118201045.13947-2-lpdev@cordier.org>
-Message-ID: <87h8e4o60k.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 19 Jan 2019 21:53:08 +0100
+Subject: [Buildroot] [PATCH 1/1] libftdi1: fix python build with cmake < 3.7
+Message-ID: <20190119205308.31175-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Louis-Paul,
+Fixes:
+ - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
 
-On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
-> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> ---
->  package/Config.in                      |  1 +
->  package/intel-gmmlib/Config.in         |  8 ++++++++
->  package/intel-gmmlib/intel-gmmlib.hash |  2 ++
->  package/intel-gmmlib/intel-gmmlib.mk   | 21 +++++++++++++++++++++
->  4 files changed, 32 insertions(+)
->  create mode 100644 package/intel-gmmlib/Config.in
->  create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
->  create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 5036421a73..9082ed9956 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1265,6 +1265,7 @@ menu "Graphics"
->  	source "package/harfbuzz/Config.in"
->  	source "package/ijs/Config.in"
->  	source "package/imlib2/Config.in"
-> +	source "package/intel-gmmlib/Config.in"
->  	source "package/irrlicht/Config.in"
->  	source "package/jasper/Config.in"
->  	source "package/jpeg/Config.in"
-> diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-> new file mode 100644
-> index 0000000000..8d9fab7ce3
-> --- /dev/null
-> +++ b/package/intel-gmmlib/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_INTEL_GMMLIB
-> +	bool "intel-gmmlib"
-> +	depends on BR2_x86_64
-> +	help
-> +	  The Intel(R) Graphics Memory Management Library provides
-> +	  device specific and buffer management for the Intel(R)
-> +	  Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
-> +	  Media Driver for VAAPI.
-> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-> new file mode 100644
-> index 0000000000..7e3b3dfd3f
-> --- /dev/null
-> +++ b/package/intel-gmmlib/intel-gmmlib.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1  intel-gmmlib-18.3.0.tar.gz
-> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-> new file mode 100644
-> index 0000000000..206ea6db86
-> --- /dev/null
-> +++ b/package/intel-gmmlib/intel-gmmlib.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# intel-gmmlib
-> +#
-> +################################################################################
-> +
-> +INTEL_GMMLIB_VERSION = 18.3.0
-> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-> +INTEL_GMMLIB_LICENSE = MIT
-> +INTEL_GMMLIB_LICENSE_FILES = COPYING
-> +
-> +INTEL_GMMLIB_INSTALL_STAGING = YES
-> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
-> +
-> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
-> +
-> +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
-> +	cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...n-CMakeLists.txt-fix-build-with-cmake-3.7.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
 
-This is unusual. Can't you use the default install make target like the
-staging install? Why do you install in /lib on target when upstream
-installs in /usr/lib on staging?
-
-If this is all intended please explain why in a comment.
-
-baruch
-
-> +endef
-> +
-> +$(eval $(cmake-package))
-
-
+diff --git a/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch b/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
+new file mode 100644
+index 0000000000..c9fcb0ee4f
+--- /dev/null
++++ b/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
+@@ -0,0 +1,34 @@
++From ddfbe611fd273ea6a0c1ac86c184fa8b395fa2fe Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 19 Jan 2019 21:09:22 +0100
++Subject: [PATCH] python/CMakeLists.txt: fix build with cmake < 3.7
++
++VERSION_GREATER_EQUAL has been added only in cmake 3.7:
++https://cmake.org/cmake/help/v3.7/release/3.7.html
++
++So replace this statement by NOT CMAKE_VERSION VERSION_LESS
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++http://developer.intra2net.com/mailarchive/html/libftdi/2019/msg00009.html]
++---
++ python/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
++index 7bdd9f9..376dae6 100644
++--- a/python/CMakeLists.txt
+++++ b/python/CMakeLists.txt
++@@ -1,5 +1,5 @@
++   # workaround for cmake bug #0013449
++-  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.0.0 )
+++  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR NOT CMAKE_VERSION VERSION_LESS 3.0.0 )
++     find_package ( SWIG )
++   else ()
++     find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
++-- 
++2.14.1
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.1
