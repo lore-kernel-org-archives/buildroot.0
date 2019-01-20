@@ -1,62 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Jan 2019 21:26:52 +0100
-Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix build on armv5
-Message-ID: <20190120202652.4419-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 20 Jan 2019 21:54:51 +0100
+Subject: [Buildroot] [PATCH 1/1] exempi: fix libiconv dependency
+In-Reply-To: <20190116214618.7467-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 16 Jan 2019 22:46:18 +0100")
+References: <20190116214618.7467-1-fontaine.fabrice@gmail.com>
+Message-ID: <87munvxd5w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't override the user-provided ARCH when cross-compiling otherwise
-ARCH won't be correct for armv5, aarch64 and x86_64
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a77a891683ae9a135dc31be1b419061922d0e1ba
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ts-don-t-override-ARCH-when-cross-compili.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/exempi/Config.in | 1 +
+ >  package/exempi/exempi.mk | 3 ++-
+ >  2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-new file mode 100644
-index 0000000000..c256541781
---- /dev/null
-+++ b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-@@ -0,0 +1,32 @@
-+From 3452721eafae90749f4af63264c412f398460b15 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 20 Jan 2019 21:07:11 +0100
-+Subject: [PATCH] Make.defaults: don't override ARCH when cross-compiling
-+
-+Don't override the user-provided ARCH when cross-compiling otherwise
-+ARCH won't be correct for armv5, aarch64 and x86_64
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Make.defaults | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Make.defaults b/Make.defaults
-+index ba743f1..a0e5632 100755
-+--- a/Make.defaults
-++++ b/Make.defaults
-+@@ -67,7 +67,7 @@ ARCH         ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[345678
-+ 
-+ # Get ARCH from the compiler if cross compiling 
-+ ifneq ($(CROSS_COMPILE),)
-+-  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
-++  ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
-+ endif
-+ 
-+ # FreeBSD (and possibly others) reports amd64 instead of x86_64
-+-- 
-+2.14.1
-+
+ > diff --git a/package/exempi/Config.in b/package/exempi/Config.in
+ > index ed71e0fb12..c9af219a20 100644
+ > --- a/package/exempi/Config.in
+ > +++ b/package/exempi/Config.in
+ > @@ -4,6 +4,7 @@ config BR2_PACKAGE_EXEMPI
+ >  	depends on BR2_INSTALL_LIBSTDCPP
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ >  	select BR2_PACKAGE_EXPAT
+ > +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ >  	select BR2_PACKAGE_ZLIB
+ >  	help
+ >  	  Exempi is an implementation of XMP (Extensible Metadata
+ > diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
+ > index e7b297ffe1..600ac3a1f2 100644
+ > --- a/package/exempi/exempi.mk
+ > +++ b/package/exempi/exempi.mk
+ > @@ -9,7 +9,8 @@ EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
+ >  EXEMPI_SITE = https://libopenraw.freedesktop.org/download
+ >  EXEMPI_INSTALL_STAGING = YES
+ >  EXEMPI_CONF_OPTS = --disable-unittest
+ > -EXEMPI_DEPENDENCIES = host-pkgconf expat zlib
+ > +EXEMPI_DEPENDENCIES = host-pkgconf expat zlib \
+ > +	$(if $(BR2_PACKAGE_LIBICONV), libiconv)
+
+Committed after removing the extra space before libiconv, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
