@@ -1,143 +1,742 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Jan 2019 08:00:28 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-19
-Message-ID: <20190120070028.E9166209BF@mail.bootlin.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 20 Jan 2019 08:19:45 +0100
+Subject: [Buildroot] [PATCH] luarocks: refactor buildroot addon without patch
+Message-ID: <20190120071945.11304-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+addon commands are actually implemented in luarocks 3.0.4,
+and they must be located in luarocks/cmd/external.
 
-Build statistics for 2019-01-19
-===============================
+so, it is useless to patch luarocks.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  37 |   3 |   0 |  40 |
-   2018.11.x |  26 |   0 |   0 |  26 |
-      master | 193 |  67 |   0 | 260 |
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luarocks/0002-Buildroot-addon.patch | 361 --------------------
+ package/luarocks/buildroot.lua              | 326 ++++++++++++++++++
+ package/luarocks/luarocks.mk                |   6 +
+ 3 files changed, 332 insertions(+), 361 deletions(-)
+ delete mode 100644 package/luarocks/0002-Buildroot-addon.patch
+ create mode 100644 package/luarocks/buildroot.lua
 
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  cc-tool-0.26 | 1 
-       host-libunistring-0.9.7 | 1 
-                 mplayer-1.3.0 | 1 
-
-
-Detail of failures
-------------------
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/6fb109ad74de6cd361ae65098f76126c5fd086e0 |     
-     sparc64 |        host-libunistring-0.9.7 | NOK | http://autobuild.buildroot.net/results/5d5dd9852f4dce529f4792e43ea4c78388970f59 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/6038784fc249e010722a723cd76729544a15ca77 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                     php-7.3.0 | 10
-           tesseract-ocr-4.0.0 | 7 
-             host-grpc-v1.16.1 | 6 
-             libva-utils-2.3.0 | 5 
-zbar-b3b4e32b55f570372fc3af... | 5 
-                     pcre-8.42 | 4 
-                 gnu-efi-3.0.9 | 3 
-         libcpprestsdk-v2.10.8 | 3 
-                  libssh-0.8.6 | 3 
-   libtorrent-rasterbar-1.1.11 | 3 
-                 dmalloc-5.5.2 | 2 
-                  ffmpeg-3.4.5 | 2 
-                  libftdi1-1.4 | 2 
-rtc-tools-33ef4aa1c92b0c92a... | 2 
-                       unknown | 2 
-                civetweb-v1.11 | 1 
-                 gnupg2-2.2.12 | 1 
-       gst-plugins-bad-0.10.23 | 1 
-                 haproxy-1.9.1 | 1 
-                libkcapi-1.1.3 | 1 
-                  linuxptp-2.0 | 1 
-                   netsurf-3.8 | 1 
-             stress-ng-0.09.47 | 1 
-
-
-Detail of failures
-------------------
-
-     riscv32 |                 civetweb-v1.11 | NOK | http://autobuild.buildroot.net/results/b9cf8da43e94fe51c4bd8041031f89311fa1a618 |     
-         arm |                  dmalloc-5.5.2 | NOK | http://autobuild.buildroot.net/results/9464ddbacabe63aca7661a7da93083425248006f | ORPH
-    mips64el |                  dmalloc-5.5.2 | NOK | http://autobuild.buildroot.net/results/6ffb191ca31ed7b774fc7b3e7d5373b678e39fc6 | ORPH
-         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/245e6380b8ebd78ebfb7be40f6c7f754dee503a0 |     
-    mips64el |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/fa946941012eecb50d05ab72d85c8cb93f345974 |     
-         arm |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/098270e77fe1562288a6a4855e775d8f9c2767de |     
-        i686 |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/05b8d62043f3147c008c69c3b699d719589ff6b0 |     
-         arm |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/0685b9c477f916bf74250127028f6c0ff9a676b8 |     
-       sparc |                  gnupg2-2.2.12 | NOK | http://autobuild.buildroot.net/results/18f2a2f07a9e28963e485be7cefb552017580c6d | ORPH
-         arm |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/94bbfbd44126fe0e8e44424df43aa16326a16fd7 | ORPH
-         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/0731978539d723b7b23f173d71bae4557b82039e |     
-    mips64el |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/53cdd5ed0f15bdc7d420508aeaa4b0ec8e0643a6 |     
-        or1k |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/c0ed4fea4044ab373821e730dd2e8aac91f16999 |     
-         arm |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/d2ec4c87c55e9071d0b8f3edf9261a37052b0d74 |     
-      xtensa |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/a46370bc46b6ba3b4f287227fbc8a4bae9e46b2e |     
-      x86_64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/929aa01541e04b1ad17abe02aa29b9c74893050b |     
-      x86_64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/855a23316a45e4189598f6a1506ded2fe030041d |     
-     powerpc |          libcpprestsdk-v2.10.8 | NOK | http://autobuild.buildroot.net/results/eccc1aaadd868c581a1cb6e0a696e99411bb83e1 |     
-     powerpc |          libcpprestsdk-v2.10.8 | NOK | http://autobuild.buildroot.net/results/5a9c4d88f09be07aa30406d5ccc4c0205ea97f12 |     
-     powerpc |          libcpprestsdk-v2.10.8 | NOK | http://autobuild.buildroot.net/results/95c24b899198f44ee1016156df63106ac53a89d5 |     
-         arm |                   libftdi1-1.4 | NOK | http://autobuild.buildroot.net/results/1091872e2b77d789e361d1ddefd235c738933c55 |     
-      mipsel |                   libftdi1-1.4 | NOK | http://autobuild.buildroot.net/results/7dcacda751b1c88fcc4b3dc46eb67709bac0e278 |     
-         arc |                 libkcapi-1.1.3 | NOK | http://autobuild.buildroot.net/results/2959f0bbbb1427ee1e5710194763af08880d6834 |     
-         arm |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/be7bc70bfc4dd7e1fb5b9e589c0804dcd775e197 |     
-         arm |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/b91c0c2865bebbd82baf78509afc6c368848866a |     
-       nios2 |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/757a1df464ba11d811ad7257823cb393b323fe9c |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/a8270dfda94aea729373389ca3773f20537c54d6 |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/b6234cfaeec51b62a74e09427ac75c300ef7808b |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/e224337b7af09568a7791dcbf6ae623d09638b58 |     
-         arm |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/4a0bae73c8ec66a834d53a43d327fe940966ca14 |     
-      x86_64 |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/485345684e79f54eaa627358f18e1427fc9f84e6 |     
-      x86_64 |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/35525c8c6971097b8fb8667dc3b0e972098a201b |     
-    mips64el |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/64d9b79de5d31eb5a0c219081479bebb1f2527ed |     
-    mips64el |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/f27bc7fc2c05bbfd3603ba0bb6bb57f0cd4c9f26 |     
-     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/d6a33fa4879839cc310f1f5d50a89a44f50d45cb |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/1248dcfda2152dbe11a3fbb73cdea0e25c754f2e |     
-      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/4e58f96ae051634779728456e23c07f3abdfc4d4 | ORPH
-      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/a5daedca6742b6841ebe383b60d4e24c502fb42e | ORPH
-      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/49ce0e04d3e79237fc867d44be0f0303b02cae98 | ORPH
-      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/0b6593fb42d64701dffd61255edf661cd0b8af0a | ORPH
-       nios2 |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/361bda979e92327a45db796edaafc992eaa74dc7 | ORPH
-      xtensa |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/84141cb14e388985891c4c878b5b8fc9a68fa954 | ORPH
-         arm |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/ccb59e1cf89d11c7f7782146b2940d560572a179 | ORPH
-        or1k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/275fc3f53d62bd00c81d4f44a19c4c825dc2425b | ORPH
-         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/7aaa791d63e4c93ccb39f2c29964c9840def1e34 | ORPH
-         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/8a2d964be9146a8c9718301910eea0e6d6b3fa46 | ORPH
-microblazeel |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/023fba024a971bb92759366c6cd522852adaf551 | ORPH
-         arc |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/5b228d47620784ae547b4b1703f426cb2fa48f69 | ORPH
-        or1k |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/a5f0849c596458b7a503863a8dbe2282189a7fe0 | ORPH
-      xtensa |                      php-7.3.0 | NOK | http://autobuild.buildroot.net/results/489f10fa4baca438bb8828e01a09c7c7a1947c1b | ORPH
-         arm | rtc-tools-33ef4aa1c92b0c92a... | NOK | http://autobuild.buildroot.net/results/a5b25b1dc465ae357586ed952aa16136fa51be5d |     
-         arm | rtc-tools-33ef4aa1c92b0c92a... | NOK | http://autobuild.buildroot.net/results/1877cfbbe37ef15c16cec5d6ad6e3d4d60bc3cbc |     
-      mipsel |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/82a3c4cf7900cab074b1151455ed16cb53861ed9 |     
-      x86_64 |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/8acf77d94fd255027e8ee9fa60795341327abe38 |     
-         arc |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/2cf06d8d0d0925e0ae6a7f7ce20ae0367ae59b7c |     
-         arc |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/fe5fd100558fa2fd692a1edfc204c38a77e1b953 |     
-         arm |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/d2b229474ad44aac4221d54c1f364cfb90a25a5d |     
-         arm |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/8dec651f7bf601fe2603a11621f6d289a697ea87 |     
-        i686 |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/336e511fb897e78553b806dd9b99630cc2136e75 |     
-         arc |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/6c9e2d83794b051bdec299e8fa2053f03f4acf9a |     
-        or1k |                        unknown | NOK | http://autobuild.buildroot.net/results/1a12165921bf70faad0935c1416022ebf749efdd |     
-       sparc |                        unknown | NOK | http://autobuild.buildroot.net/results/f2397d74d76d142b913ddf100bb8637a9620e860 |     
-        i686 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/6a6a1cdae69c89e048b476ba3e61078f0ac0ee0e |     
-      x86_64 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/df9de8d6f79d74489ac6c4f72cb892fb8e3717f5 |     
-         arm | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/a3561f8bbf57e2785fde61dd3081da9e278bd85f |     
-    mips64el | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/536baa2d544e1ce81eb42a7ddc84086d67d78f3a |     
-     powerpc | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/d7b244cf9488eafb59ba8575f17884f4f8512db1 |     
-
-
+diff --git a/package/luarocks/0002-Buildroot-addon.patch b/package/luarocks/0002-Buildroot-addon.patch
+deleted file mode 100644
+index 56b28eab2..000000000
+--- a/package/luarocks/0002-Buildroot-addon.patch
++++ /dev/null
+@@ -1,361 +0,0 @@
+-From c250ac86b8633a2d53c4d10a642f2304e2b2d148 Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Sat, 27 Oct 2018 17:15:50 +0200
+-Subject: [PATCH] Add a Buildroot addon
+-
+-This addon allows to generate a Buildroot package from a Luarocks one.
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- src/bin/luarocks                 |   1 +
+- src/luarocks/addon/buildroot.lua | 326 +++++++++++++++++++++++++++++++
+- 2 files changed, 327 insertions(+)
+- create mode 100644 src/luarocks/addon/buildroot.lua
+-
+-diff --git a/src/bin/luarocks b/src/bin/luarocks
+-index d982530..53c7b0b 100755
+---- a/src/bin/luarocks
+-+++ b/src/bin/luarocks
+-@@ -31,6 +31,7 @@ local commands = {
+-    config = "luarocks.cmd.config",
+-    which = "luarocks.cmd.which",
+-    test = "luarocks.cmd.test",
+-+   buildroot = "luarocks.addon.buildroot",
+- }
+- 
+- cmd.run_command(description, commands, "luarocks.cmd.external", ...)
+-diff --git a/src/luarocks/addon/buildroot.lua b/src/luarocks/addon/buildroot.lua
+-new file mode 100644
+-index 0000000..606b94c
+---- /dev/null
+-+++ b/src/luarocks/addon/buildroot.lua
+-@@ -0,0 +1,326 @@
+-+
+-+--- Module implementing the LuaRocks "buildroot" command.
+-+local buildroot = {}
+-+
+-+local dir = require("luarocks.dir")
+-+local fs = require("luarocks.fs")
+-+local util = require("luarocks.util")
+-+local queries = require("luarocks.queries")
+-+local search = require("luarocks.search")
+-+local download = require("luarocks.download")
+-+local fetch = require("luarocks.fetch")
+-+
+-+buildroot.help_summary = "generate buildroot package files of a rock."
+-+buildroot.help_arguments = "rockname [brname]"
+-+buildroot.help = [[
+-+This addon generates Buildroot package files of a rock.
+-+First argument is the name of a rock, the second argument is optional
+-+and needed when Buildroot uses another name (usually prefixed by lua-).
+-+Files are generated with the source content of the rock and more
+-+especially the rockspec. So, the rock is downloaded and unpacked.
+-+]]
+-+
+-+local function brname (name)
+-+   return name:upper():gsub('-', '_')
+-+end
+-+
+-+local function brlicense (license)
+-+   if license:match('MIT/X') then
+-+      return 'MIT'
+-+   end
+-+   return license
+-+end
+-+
+-+local function wrap (txt, max)
+-+   local lines = {}
+-+   local line = ''
+-+   for word in txt:gmatch('(%S+)') do
+-+      if line:len() + word:len() > max - 1 then
+-+          lines[#lines+1] = line
+-+          line = ''
+-+      end
+-+      if line == '' then
+-+         line  = word
+-+      else
+-+         line = line .. ' ' .. word
+-+      end
+-+   end
+-+   lines[#lines+1] = line
+-+   return lines
+-+end
+-+
+-+local function get_external_dependencies (rockspec)
+-+   local t = {}
+-+   for k in pairs(rockspec.external_dependencies or {}) do
+-+      k = k:lower()
+-+      if fs.is_dir('package/' .. k) then
+-+         t[#t+1] = k
+-+      else
+-+         t[#t+1] = 'lib' .. k
+-+         if not fs.is_dir('package/lib' .. k) then
+-+            util.printout('unkwown external dependency: ' .. k)
+-+         end
+-+      end
+-+   end
+-+   table.sort(t)
+-+   return t
+-+end
+-+
+-+local function get_dependencies (rockspec)
+-+   local t = {}
+-+   for i = 1, #rockspec.dependencies do
+-+      local dep = tostring(rockspec.dependencies[i]):match('^(%S+)')
+-+      if dep ~= 'lua' then
+-+         dep = dep:gsub('_', '-')
+-+         if fs.is_dir('package/lua-' .. dep) then
+-+            t[#t+1] = 'lua-' .. dep
+-+         else
+-+            t[#t+1] = dep
+-+            if not fs.is_dir('package/' .. dep) then
+-+               util.printout('unkwown dependency: ' .. dep)
+-+            end
+-+         end
+-+      end
+-+   end
+-+   table.sort(t)
+-+   return t
+-+end
+-+
+-+function get_digest (file)
+-+   local absname = fs.absolute_name(file)
+-+   local pipe = io.popen('sha256sum ' .. fs.Q(absname))
+-+   local line = pipe:read('*l')
+-+   pipe:close()
+-+   local computed = line and line:match('(' .. ('%x'):rep(64) .. ')')
+-+   if computed then
+-+      return computed
+-+   else
+-+      return nil, "Failed to compute SHA256 hash for file " .. absname
+-+   end
+-+end
+-+
+-+local function generate_config (rockspec, lcname)
+-+   local ucname = brname(lcname)
+-+   local only_luajit = rockspec.package:match('^lj')
+-+   local summary = rockspec.description.summary
+-+   if not summary then
+-+      summary = '???'
+-+   elseif not summary:match('%.%s*$') then
+-+      summary = summary:gsub('%s*$', '.')
+-+   end
+-+   local homepage = rockspec.description.homepage or '???'
+-+   local external_dependencies = get_external_dependencies(rockspec)
+-+   local dependencies = get_dependencies(rockspec)
+-+   local fname = 'package/' .. lcname .. '/Config.in'
+-+   local f = assert(io.open(fname, 'w'))
+-+   util.printout('write ' .. fname)
+-+   f:write('config BR2_PACKAGE_' .. ucname .. '\n')
+-+   f:write('\tbool "' .. lcname .. '"\n')
+-+   if only_luajit then
+-+      f:write('\tdepends on BR2_PACKAGE_LUAJIT\n')
+-+   end
+-+   for i = 1, #external_dependencies do
+-+      f:write('\tselect BR2_PACKAGE_' .. brname(external_dependencies[i]) .. '\n')
+-+   end
+-+   for i = 1, #dependencies do
+-+      f:write('\tselect BR2_PACKAGE_' .. brname(dependencies[i]) .. ' # runtime\n')
+-+   end
+-+   f:write('\thelp\n')
+-+   f:write('\t  ' .. table.concat(wrap(summary, 62), '\n\t  ') .. '\n')
+-+   f:write('\n\t  ' .. homepage .. '\n')
+-+   if only_luajit then
+-+      f:write('\ncomment "' .. lcname .. ' needs LuaJIT"\n')
+-+      f:write('\tdepends on !BR2_PACKAGE_LUAJIT\n')
+-+   end
+-+   f:close()
+-+end
+-+
+-+local function generate_mk (rockspec, lcname, licenses)
+-+   local function escape (s)
+-+      return s:gsub('-', '%%-'):gsub('%.', '%%.')
+-+   end
+-+
+-+   local ucname = brname(lcname)
+-+   local need_name_upstream = false
+-+   local need_version_upstream = false
+-+   local name_upstream = rockspec.package
+-+   local version = rockspec.version
+-+   local version_upstream = version:match('^([^-]+)-')
+-+   local revision = version:match('-(%d+)$')
+-+   local license = rockspec.description.license
+-+   local subdir = rockspec.source.dir
+-+   if subdir then
+-+      local root = subdir:match('^(.-)-' .. escape(version) .. '$')
+-+      if root then
+-+         subdir = root .. '-$(' .. ucname .. '_VERSION)'
+-+      end
+-+      root = subdir:match('^(.--[Vv])' .. escape(version_upstream) .. '$')
+-+      if root then
+-+         need_version_upstream = true
+-+         subdir = root .. '$(' .. ucname .. '_VERSION_UPSTREAM)'
+-+      end
+-+      root = subdir:match('^(.-)-' .. escape(version_upstream) .. '$')
+-+      if root then
+-+         if root == lcname then
+-+            subdir = nil
+-+         elseif root == name_upstream then
+-+            subdir = nil
+-+            need_name_upstream = true
+-+         else
+-+            need_version_upstream = true
+-+            subdir = root .. '-$(' .. ucname .. '_VERSION_UPSTREAM)'
+-+         end
+-+      end
+-+   end
+-+   local external_dependencies = get_external_dependencies(rockspec)
+-+   local fname = 'package/' .. lcname .. '/' .. lcname .. '.mk'
+-+   local f = assert(io.open(fname, 'w'))
+-+   util.printout('write ' .. fname)
+-+   f:write('################################################################################\n')
+-+   f:write('#\n')
+-+   f:write('# ' .. lcname .. '\n')
+-+   f:write('#\n')
+-+   f:write('################################################################################\n')
+-+   f:write('\n')
+-+   if need_version_upstream then
+-+      f:write(ucname .. '_VERSION_UPSTREAM = ' .. version_upstream .. '\n')
+-+      f:write(ucname .. '_VERSION = $(' .. ucname .. '_VERSION_UPSTREAM)-' .. revision .. '\n')
+-+   else
+-+      f:write(ucname .. '_VERSION = ' .. version .. '\n')
+-+   end
+-+   if lcname ~= name_upstream:lower() or need_name_upstream then
+-+      f:write(ucname .. '_NAME_UPSTREAM = ' .. name_upstream .. '\n')
+-+   end
+-+   if subdir then
+-+      f:write(ucname .. '_SUBDIR = ' .. subdir .. '\n')
+-+   end
+-+   if license then
+-+      f:write(ucname .. '_LICENSE = ' .. brlicense(license) .. '\n')
+-+   end
+-+   if #licenses == 1 then
+-+      f:write(ucname .. '_LICENSE_FILES = $(' .. ucname .. '_SUBDIR)/' .. licenses[1] .. '\n')
+-+   elseif #licenses > 1 then
+-+      f:write(ucname .. '_LICENSE_FILES =')
+-+      for i = 1, #licenses do
+-+         local file = licenses[i]
+-+         f:write(' \\\n\t$(' .. ucname .. '_SUBDIR)/' .. file)
+-+      end
+-+      f:write('\n')
+-+   end
+-+   if #external_dependencies > 0 then
+-+      f:write(ucname .. '_DEPENDENCIES = ' .. table.concat(external_dependencies, ' ') .. '\n')
+-+   end
+-+   f:write('\n$(eval $(luarocks-package))\n')
+-+   f:close()
+-+end
+-+
+-+local function generate_hash (rockspec, lcname, rock_file, licenses, digest)
+-+   local subdir = rockspec.source.dir
+-+   local fname = 'package/' .. lcname .. '/' .. lcname .. '.hash'
+-+   local f = assert(io.open(fname, 'w'))
+-+   util.printout('write ' .. fname)
+-+   f:write('# computed by luarocks/buildroot\n')
+-+   f:write('sha256 ' .. digest[rock_file] .. '  ' .. rock_file .. '\n')
+-+   for i = 1, #licenses do
+-+      local file = licenses[i]
+-+      f:write('sha256 ' .. digest[file] .. '  ' .. subdir .. '/' .. file .. '\n')
+-+   end
+-+   f:close()
+-+end
+-+
+-+--- Driver function for the "buildroot" command.
+-+-- @param rockname string: the name of a rock to be fetched and unpacked.
+-+-- @param brname string: the name used by Buildroot (optional)
+-+-- @return boolean: true if successful
+-+function buildroot.command(flags, rockname, fsname)
+-+   if type(rockname) ~= 'string' then
+-+      return nil, "Argument missing. "..util.see_help('buildroot')
+-+   end
+-+   fsname = fsname or rockname
+-+   assert(type(fsname) == 'string')
+-+
+-+   local query = queries.new(rockname:lower(), nil, false, 'src')
+-+   local url, err = search.find_suitable_rock(query)
+-+   if not url then
+-+      return nil, "Could not find a result named " .. tostring(query) .. ": " .. err
+-+   end
+-+   local rock_file = dir.base_name(url)
+-+
+-+   local temp_dir, err = fs.make_temp_dir(rockname)
+-+   if not temp_dir then
+-+      return nil, "Failed creating temporary dir: " .. err
+-+   end
+-+   local ok, err = fs.change_dir(temp_dir)
+-+   if not ok then return nil, err end
+-+
+-+   ok = fs.download(url, rock_file, true)
+-+   if not ok then
+-+      return nil, "Failed downloading " .. url
+-+   end
+-+
+-+   local digest = {}
+-+   digest[rock_file], err = get_digest(rock_file)
+-+   if not digest[rock_file] then return nil, err end
+-+   ok, err = fs.unzip(rock_file)
+-+   if not ok then return nil, err end
+-+
+-+   local rockspec_file = rock_file:gsub('%.src%.rock$', '.rockspec')
+-+   local rockspec, err = fetch.load_rockspec(rockspec_file)
+-+   if not rockspec then
+-+      return nil, "Error loading rockspec: " .. err
+-+   end
+-+   if rockspec.source.file then
+-+      ok, err = fs.unpack_archive(rockspec.source.file)
+-+      if not ok then return nil, err end
+-+   end
+-+
+-+   if rockspec.source.dir ~= '.' then
+-+      fs.copy(rockspec.local_abs_filename, rockspec.source.dir, 'read')
+-+   end
+-+
+-+   local build_type = rockspec.build.type
+-+   if build_type ~= 'none' and build_type ~= 'builtin' and build_type ~= 'module' then
+-+      util.printout('[' .. rockspec.package .. "] build_type '" .. build_type .. "' not supported")
+-+   end
+-+
+-+   local licenses = {}
+-+   ok, err = fs.change_dir(rockspec.source.dir)
+-+   if not ok then return nil, err end
+-+   local files = fs.find()
+-+   for i = 1, #files do
+-+      local v = files[i]
+-+      if v == 'COPYING'
+-+         or v == 'COPYRIGHT'
+-+         or v:match('^LICENSE') then
+-+         licenses[#licenses+1] = v
+-+         digest[v], err = get_digest(v)
+-+         if not digest[v] then return nil, err end
+-+      end
+-+   end
+-+   if #licenses == 0 then
+-+      for i = 1, #files do
+-+         local v = files[i]
+-+         if v:match('^doc/LICENSE')
+-+            or v:match('^doc/license')
+-+            or v:match('^doc/us/license') then
+-+            licenses[#licenses+1] = v
+-+            digest[v], err = get_digest(v)
+-+            if not digest[v] then return nil, err end
+-+         end
+-+      end
+-+   end
+-+   fs.pop_dir()
+-+   table.sort(licenses)
+-+
+-+   fs.pop_dir()
+-+   ok, err = fs.make_dir('package/' .. fsname:lower())
+-+   if not ok then return nil, err end
+-+
+-+   generate_config(rockspec, fsname:lower())
+-+   generate_mk(rockspec, fsname:lower(), licenses)
+-+   generate_hash(rockspec, fsname:lower(), rock_file, licenses, digest)
+-+
+-+   return true
+-+end
+-+
+-+return buildroot
+--- 
+-2.17.1
+-
+diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
+new file mode 100644
+index 000000000..4be5fbd7c
+--- /dev/null
++++ b/package/luarocks/buildroot.lua
+@@ -0,0 +1,326 @@
++
++--- Module implementing the LuaRocks "buildroot" command.
++local buildroot = {}
++
++local dir = require("luarocks.dir")
++local fs = require("luarocks.fs")
++local util = require("luarocks.util")
++local queries = require("luarocks.queries")
++local search = require("luarocks.search")
++local download = require("luarocks.download")
++local fetch = require("luarocks.fetch")
++
++buildroot.help_summary = "generate buildroot package files of a rock."
++buildroot.help_arguments = "rockname [brname]"
++buildroot.help = [[
++This addon generates Buildroot package files of a rock.
++First argument is the name of a rock, the second argument is optional
++and needed when Buildroot uses another name (usually prefixed by lua-).
++Files are generated with the source content of the rock and more
++especially the rockspec. So, the rock is downloaded and unpacked.
++]]
++
++local function brname (name)
++   return name:upper():gsub('-', '_')
++end
++
++local function brlicense (license)
++   if license:match('MIT/X') then
++      return 'MIT'
++   end
++   return license
++end
++
++local function wrap (txt, max)
++   local lines = {}
++   local line = ''
++   for word in txt:gmatch('(%S+)') do
++      if line:len() + word:len() > max - 1 then
++          lines[#lines+1] = line
++          line = ''
++      end
++      if line == '' then
++         line  = word
++      else
++         line = line .. ' ' .. word
++      end
++   end
++   lines[#lines+1] = line
++   return lines
++end
++
++local function get_external_dependencies (rockspec)
++   local t = {}
++   for k in pairs(rockspec.external_dependencies or {}) do
++      k = k:lower()
++      if fs.is_dir('package/' .. k) then
++         t[#t+1] = k
++      else
++         t[#t+1] = 'lib' .. k
++         if not fs.is_dir('package/lib' .. k) then
++            util.printout('unkwown external dependency: ' .. k)
++         end
++      end
++   end
++   table.sort(t)
++   return t
++end
++
++local function get_dependencies (rockspec)
++   local t = {}
++   for i = 1, #rockspec.dependencies do
++      local dep = tostring(rockspec.dependencies[i]):match('^(%S+)')
++      if dep ~= 'lua' then
++         dep = dep:gsub('_', '-')
++         if fs.is_dir('package/lua-' .. dep) then
++            t[#t+1] = 'lua-' .. dep
++         else
++            t[#t+1] = dep
++            if not fs.is_dir('package/' .. dep) then
++               util.printout('unkwown dependency: ' .. dep)
++            end
++         end
++      end
++   end
++   table.sort(t)
++   return t
++end
++
++function get_digest (file)
++   local absname = fs.absolute_name(file)
++   local pipe = io.popen('sha256sum ' .. fs.Q(absname))
++   local line = pipe:read('*l')
++   pipe:close()
++   local computed = line and line:match('(' .. ('%x'):rep(64) .. ')')
++   if computed then
++      return computed
++   else
++      return nil, "Failed to compute SHA256 hash for file " .. absname
++   end
++end
++
++local function generate_config (rockspec, lcname)
++   local ucname = brname(lcname)
++   local only_luajit = rockspec.package:match('^lj')
++   local summary = rockspec.description.summary
++   if not summary then
++      summary = '???'
++   elseif not summary:match('%.%s*$') then
++      summary = summary:gsub('%s*$', '.')
++   end
++   local homepage = rockspec.description.homepage or '???'
++   local external_dependencies = get_external_dependencies(rockspec)
++   local dependencies = get_dependencies(rockspec)
++   local fname = 'package/' .. lcname .. '/Config.in'
++   local f = assert(io.open(fname, 'w'))
++   util.printout('write ' .. fname)
++   f:write('config BR2_PACKAGE_' .. ucname .. '\n')
++   f:write('\tbool "' .. lcname .. '"\n')
++   if only_luajit then
++      f:write('\tdepends on BR2_PACKAGE_LUAJIT\n')
++   end
++   for i = 1, #external_dependencies do
++      f:write('\tselect BR2_PACKAGE_' .. brname(external_dependencies[i]) .. '\n')
++   end
++   for i = 1, #dependencies do
++      f:write('\tselect BR2_PACKAGE_' .. brname(dependencies[i]) .. ' # runtime\n')
++   end
++   f:write('\thelp\n')
++   f:write('\t  ' .. table.concat(wrap(summary, 62), '\n\t  ') .. '\n')
++   f:write('\n\t  ' .. homepage .. '\n')
++   if only_luajit then
++      f:write('\ncomment "' .. lcname .. ' needs LuaJIT"\n')
++      f:write('\tdepends on !BR2_PACKAGE_LUAJIT\n')
++   end
++   f:close()
++end
++
++local function generate_mk (rockspec, lcname, licenses)
++   local function escape (s)
++      return s:gsub('-', '%%-'):gsub('%.', '%%.')
++   end
++
++   local ucname = brname(lcname)
++   local need_name_upstream = false
++   local need_version_upstream = false
++   local name_upstream = rockspec.package
++   local version = rockspec.version
++   local version_upstream = version:match('^([^-]+)-')
++   local revision = version:match('-(%d+)$')
++   local license = rockspec.description.license
++   local subdir = rockspec.source.dir
++   if subdir then
++      local root = subdir:match('^(.-)-' .. escape(version) .. '$')
++      if root then
++         subdir = root .. '-$(' .. ucname .. '_VERSION)'
++      end
++      root = subdir:match('^(.--[Vv])' .. escape(version_upstream) .. '$')
++      if root then
++         need_version_upstream = true
++         subdir = root .. '$(' .. ucname .. '_VERSION_UPSTREAM)'
++      end
++      root = subdir:match('^(.-)-' .. escape(version_upstream) .. '$')
++      if root then
++         if root == lcname then
++            subdir = nil
++         elseif root == name_upstream then
++            subdir = nil
++            need_name_upstream = true
++         else
++            need_version_upstream = true
++            subdir = root .. '-$(' .. ucname .. '_VERSION_UPSTREAM)'
++         end
++      end
++   end
++   local external_dependencies = get_external_dependencies(rockspec)
++   local fname = 'package/' .. lcname .. '/' .. lcname .. '.mk'
++   local f = assert(io.open(fname, 'w'))
++   util.printout('write ' .. fname)
++   f:write('################################################################################\n')
++   f:write('#\n')
++   f:write('# ' .. lcname .. '\n')
++   f:write('#\n')
++   f:write('################################################################################\n')
++   f:write('\n')
++   if need_version_upstream then
++      f:write(ucname .. '_VERSION_UPSTREAM = ' .. version_upstream .. '\n')
++      f:write(ucname .. '_VERSION = $(' .. ucname .. '_VERSION_UPSTREAM)-' .. revision .. '\n')
++   else
++      f:write(ucname .. '_VERSION = ' .. version .. '\n')
++   end
++   if lcname ~= name_upstream:lower() or need_name_upstream then
++      f:write(ucname .. '_NAME_UPSTREAM = ' .. name_upstream .. '\n')
++   end
++   if subdir then
++      f:write(ucname .. '_SUBDIR = ' .. subdir .. '\n')
++   end
++   if license then
++      f:write(ucname .. '_LICENSE = ' .. brlicense(license) .. '\n')
++   end
++   if #licenses == 1 then
++      f:write(ucname .. '_LICENSE_FILES = $(' .. ucname .. '_SUBDIR)/' .. licenses[1] .. '\n')
++   elseif #licenses > 1 then
++      f:write(ucname .. '_LICENSE_FILES =')
++      for i = 1, #licenses do
++         local file = licenses[i]
++         f:write(' \\\n\t$(' .. ucname .. '_SUBDIR)/' .. file)
++      end
++      f:write('\n')
++   end
++   if #external_dependencies > 0 then
++      f:write(ucname .. '_DEPENDENCIES = ' .. table.concat(external_dependencies, ' ') .. '\n')
++   end
++   f:write('\n$(eval $(luarocks-package))\n')
++   f:close()
++end
++
++local function generate_hash (rockspec, lcname, rock_file, licenses, digest)
++   local subdir = rockspec.source.dir
++   local fname = 'package/' .. lcname .. '/' .. lcname .. '.hash'
++   local f = assert(io.open(fname, 'w'))
++   util.printout('write ' .. fname)
++   f:write('# computed by luarocks/buildroot\n')
++   f:write('sha256 ' .. digest[rock_file] .. '  ' .. rock_file .. '\n')
++   for i = 1, #licenses do
++      local file = licenses[i]
++      f:write('sha256 ' .. digest[file] .. '  ' .. subdir .. '/' .. file .. '\n')
++   end
++   f:close()
++end
++
++--- Driver function for the "buildroot" command.
++-- @param rockname string: the name of a rock to be fetched and unpacked.
++-- @param brname string: the name used by Buildroot (optional)
++-- @return boolean: true if successful
++function buildroot.command(flags, rockname, fsname)
++   if type(rockname) ~= 'string' then
++      return nil, "Argument missing. "..util.see_help('buildroot')
++   end
++   fsname = fsname or rockname
++   assert(type(fsname) == 'string')
++
++   local query = queries.new(rockname:lower(), nil, false, 'src')
++   local url, err = search.find_suitable_rock(query)
++   if not url then
++      return nil, "Could not find a result named " .. tostring(query) .. ": " .. err
++   end
++   local rock_file = dir.base_name(url)
++
++   local temp_dir, err = fs.make_temp_dir(rockname)
++   if not temp_dir then
++      return nil, "Failed creating temporary dir: " .. err
++   end
++   local ok, err = fs.change_dir(temp_dir)
++   if not ok then return nil, err end
++
++   ok = fs.download(url, rock_file, true)
++   if not ok then
++      return nil, "Failed downloading " .. url
++   end
++
++   local digest = {}
++   digest[rock_file], err = get_digest(rock_file)
++   if not digest[rock_file] then return nil, err end
++   ok, err = fs.unzip(rock_file)
++   if not ok then return nil, err end
++
++   local rockspec_file = rock_file:gsub('%.src%.rock$', '.rockspec')
++   local rockspec, err = fetch.load_rockspec(rockspec_file)
++   if not rockspec then
++      return nil, "Error loading rockspec: " .. err
++   end
++   if rockspec.source.file then
++      ok, err = fs.unpack_archive(rockspec.source.file)
++      if not ok then return nil, err end
++   end
++
++   if rockspec.source.dir ~= '.' then
++      fs.copy(rockspec.local_abs_filename, rockspec.source.dir, 'read')
++   end
++
++   local build_type = rockspec.build.type
++   if build_type ~= 'none' and build_type ~= 'builtin' and build_type ~= 'module' then
++      util.printout('[' .. rockspec.package .. "] build_type '" .. build_type .. "' not supported")
++   end
++
++   local licenses = {}
++   ok, err = fs.change_dir(rockspec.source.dir)
++   if not ok then return nil, err end
++   local files = fs.find()
++   for i = 1, #files do
++      local v = files[i]
++      if v == 'COPYING'
++         or v == 'COPYRIGHT'
++         or v:match('^LICENSE') then
++         licenses[#licenses+1] = v
++         digest[v], err = get_digest(v)
++         if not digest[v] then return nil, err end
++      end
++   end
++   if #licenses == 0 then
++      for i = 1, #files do
++         local v = files[i]
++         if v:match('^doc/LICENSE')
++            or v:match('^doc/license')
++            or v:match('^doc/us/license') then
++            licenses[#licenses+1] = v
++            digest[v], err = get_digest(v)
++            if not digest[v] then return nil, err end
++         end
++      end
++   end
++   fs.pop_dir()
++   table.sort(licenses)
++
++   fs.pop_dir()
++   ok, err = fs.make_dir('package/' .. fsname:lower())
++   if not ok then return nil, err end
++
++   generate_config(rockspec, fsname:lower())
++   generate_mk(rockspec, fsname:lower(), licenses)
++   generate_hash(rockspec, fsname:lower(), rock_file, licenses, digest)
++
++   return true
++end
++
++return buildroot
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 1b29a2140..5b15eae67 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -18,6 +18,12 @@ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
+ endif
+ 
++define LUAROCKS_ADDON_EXTRACT
++	mkdir $(@D)/src/luarocks/cmd/external
++	cp package/luarocks/buildroot.lua $(@D)/src/luarocks/cmd/external/buildroot.lua
++endef
++HOST_LUAROCKS_POST_EXTRACT_HOOKS += LUAROCKS_ADDON_EXTRACT
++
+ HOST_LUAROCKS_CONF_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
 -- 
-http://autobuild.buildroot.net
+2.17.1
