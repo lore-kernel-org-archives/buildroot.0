@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Jan 2019 20:14:09 +0100
-Subject: [Buildroot] [git commit] libupnpp: fix libupnp dependency
-Message-ID: <20190120191627.7612E8E07E@busybox.osuosl.org>
+Date: Sun, 20 Jan 2019 20:17:43 +0100
+Subject: [Buildroot] [git commit] ocrad: bump to version 0.27
+Message-ID: <20190120191716.E4EE8880F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bf54343cdeee1d452d3bf94f7ff18430feddb40
+commit: https://git.buildroot.net/buildroot/commit/?id=fa9462d682f705125fff0dab18f873e4f8c6d6c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 9b551dacf74445d58aaefef349e2817e009c9d5d added support for
-libupnp18 but without updating LIBUPNPP_DEPENDENCIES
-
-Fixes:
- - http://autobuild.buildroot.org/results/aa734318b9ad318d25e772585c8794429cc0f489
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnpp/libupnpp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/ocrad/ocrad.hash | 2 +-
+ package/ocrad/ocrad.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index 69ce0768a9..31a066a648 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -9,7 +9,8 @@ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
--LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
-+LIBUPNPP_DEPENDENCIES = expat libcurl \
-+	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
- # We're patching configure.ac
- LIBUPNPP_AUTORECONF = YES
+diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
+index 5cde4d3ac4..7ae38c30e8 100644
+--- a/package/ocrad/ocrad.hash
++++ b/package/ocrad/ocrad.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
++sha256 a9bfe67e9a040907aff5640dca56392476b6a89e48e37dc94ba846c5b6733b36  ocrad-0.27.tar.lz
+ sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
+diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
+index 94020d2d25..e037a08195 100644
+--- a/package/ocrad/ocrad.mk
++++ b/package/ocrad/ocrad.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-OCRAD_VERSION = 0.26
++OCRAD_VERSION = 0.27
+ OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
+ OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
+ OCRAD_LICENSE = GPL-3.0+
