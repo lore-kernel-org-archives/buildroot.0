@@ -1,74 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Jan 2019 23:53:50 +0100
-Subject: [Buildroot] [git commit] shadowsocks-libev: fix static build with
- netfilter_conntrack
-Message-ID: <20190120225319.5E0938347B@busybox.osuosl.org>
+From: Charles Hardin <charles.hardin@storagecraft.com>
+Date: Sun, 20 Jan 2019 13:02:29 -0800
+Subject: [Buildroot] [PATCH 1/1] package/rrdtool: bump version from 1.6.0 to
+ 1.7.0
+Message-ID: <1548018149-46022-1-git-send-email-charles.hardin@storagecraft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c259ed651f6cc45c2d6108f11c4562269e4d726f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From the releases at https://github.com/oetiker/rrdtool-1.x/releases
+which mentions this is not a user facing release but attempts to
+be more robust against odd input.
 
-Fixes:
- - http://autobuild.buildroot.org/results/22a28e8fd8182e1c908541dbc5b0ee087c3803e6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
 ---
- ...c-fix-static-build-with-netfilter_conntra.patch | 31 ++++++++++++++++++++++
- package/shadowsocks-libev/shadowsocks-libev.mk     |  2 ++
- 2 files changed, 33 insertions(+)
+ package/rrdtool/rrdtool.hash | 6 ++++--
+ package/rrdtool/rrdtool.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch b/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-new file mode 100644
-index 0000000000..7ddb140e8d
---- /dev/null
-+++ b/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-@@ -0,0 +1,31 @@
-+From 9b4aebc840f444e5aa83633838e3890cec523017 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 18 Jan 2019 21:05:34 +0100
-+Subject: [PATCH] configure.ac: fix static build with netfilter_conntrack
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/22a28e8fd8182e1c908541dbc5b0ee087c3803e6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/shadowsocks/shadowsocks-libev/pull/2270]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a706591..c6dab8b 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -256,7 +256,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
-+ 	        fi
-+-	        with_netfilter_conntrack=no])
-++	        with_netfilter_conntrack=no], [-lnfnetlink])
-+ 	    AC_CHECK_HEADERS([libnetfilter_conntrack/libnetfilter_conntrack.h \
-+ 	        libnetfilter_conntrack/libnetfilter_conntrack_tcp.h],,[
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+-- 
-+2.14.1
-+
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index e8ca161477..c2c33b7aa5 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
- SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
- SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+SHADOWSOCKS_LIBEV_AUTORECONF = YES
- SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index cff5501..6640673 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,2 +1,4 @@
+-# Locally calculated
+-sha256	cd948e89cd2d8825fab4a6fb0323f810948d934af7d92c9ee8b5e9e1350e52d7	rrdtool-1.6.0.tar.gz
++# Locally calculated sha256
++sha256	f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b	rrdtool-1.7.0.tar.gz
++sha256	884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3	COPYRIGHT
++sha256	14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178	LICENSE
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index ea5c892..144bbcf 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RRDTOOL_VERSION = 1.6.0
++RRDTOOL_VERSION = 1.7.0
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+-- 
+2.7.4
