@@ -1,40 +1,146 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 20 Jan 2019 13:02:21 +0100
-Subject: [Buildroot] [PATCH] ocrad: bump to version 0.27
-Message-ID: <1547985741-5377-1-git-send-email-gilles.talis@gmail.com>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Sun, 20 Jan 2019 20:51:32 +0800
+Subject: [Buildroot] Building host-python-2.7.15 Failed
+In-Reply-To: <20190119163336.ihaetocpbabtnnjj@vkochan-ThinkPad-T470p>
+References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+ <20190119163336.ihaetocpbabtnnjj@vkochan-ThinkPad-T470p>
+Message-ID: <CAAsE_udPhniigABfB27SO9nWdPKSAg=kfjrwLTDKuU3DAyuC7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/ocrad/ocrad.hash | 2 +-
- package/ocrad/ocrad.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
-index 5cde4d3..7ae38c3 100644
---- a/package/ocrad/ocrad.hash
-+++ b/package/ocrad/ocrad.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 c383d37869baa0990d38d38836d4d567e9e2862aa0cd704868b62dafeac18e3c  ocrad-0.26.tar.lz
-+sha256 a9bfe67e9a040907aff5640dca56392476b6a89e48e37dc94ba846c5b6733b36  ocrad-0.27.tar.lz
- sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-index 94020d2..e037a08 100644
---- a/package/ocrad/ocrad.mk
-+++ b/package/ocrad/ocrad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OCRAD_VERSION = 0.26
-+OCRAD_VERSION = 0.27
- OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
- OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
- OCRAD_LICENSE = GPL-3.0+
+My savedefconfig:
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_FPU_NEON=y
+BR2_DL_DIR="$(TOPDIR)/../downloads"
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnueabihf"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_IOSTAT=y
+BR2_PACKAGE_NODEJS=y
+BR2_PACKAGE_PYTHON=y
+
+BTW: My building system is ubuntu 18.10.  The target is armv7
+
+
+On Sun, Jan 20, 2019 at 12:24 AM Vadim Kochan <vadim4j@gmail.com> wrote:
+
+> Hi Woody,
+>
+> On Sun, Jan 20, 2019 at 12:15:36AM +0800, Woody Wu wrote:
+> > Hi,
+> >
+> > This is buildroot-2018.11.1.    I found I cannot build some packages with
+> > buildroot, the problem seemed in the building of the host-python. Below
+> is
+> > the log:
+> >
+> > >>> host-python 2.7.15 Building
+> >
+> PATH="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/sbin:/opt/linaro/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf/bin:/home/woody/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
+> >
+> PKG_CONFIG="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin/pkg-config"
+> > PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+> > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+> >
+> PKG_CONFIG_LIBDIR="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib/pkgconfig:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/share/pkgconfig"
+> > /usr/bin/make -j1  -C
+> >
+> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/
+> > running build
+> > running build_ext
+> > INFO: Can't locate Tcl/Tk libs and/or headers
+> > building 'crypt' extension
+> > /usr/bin/gcc -pthread -fPIC -fno-strict-aliasing -O2
+> >
+> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
+> > -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I. -IInclude
+> -I./Include
+> >
+> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
+> > -I/usr/include/x86_64-linux-gnu -I/usr/local/include
+> >
+> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Include
+> >
+> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15
+> > -c
+> >
+> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.c
+> > -o
+> >
+> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
+> > /usr/bin/gcc -pthread -shared
+> >
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> >
+> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> > -Wl,--enable-new-dtags
+> >
+> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
+> >
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> > -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
+> > build/lib.linux-x86_64-2.7/crypt.so
+> > /usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o):
+> > relocation R_X86_64_PC32 against symbol `_ufc_foobar' can not be used
+> when
+> > making a shared object; recompile with -fPIC
+> > /usr/bin/ld: final link failed: bad value
+> > collect2: error: ld returned 1 exit status
+> >
+> > Python build finished, but the necessary bits to build these modules were
+> > not found:
+> > _bsddb             _sqlite3           _tkinter
+> > bsddb185           bz2                dbm
+> > dl                 gdbm               imageop
+> > readline           sunaudiodev
+> > To find the necessary bits, look in setup.py in detect_modules() for the
+> > module's name.
+> >
+> > Failed to build these modules:
+> > crypt
+> > =============
+> >
+> > Can someone have a look at it and give me a hint?
+> >
+> > Thanks!
+> >
+> >
+> > --
+> > Life is the only flaw in an otherwise perfect nonexistence
+> >     -- Schopenhauer
+> >
+> > woody
+> > public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
+>
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Can you please provide the savedefconfig ?
+>
+> Regards,
+> Vadim Kochan
+>
+
+
 -- 
-2.7.4
+Life is the only flaw in an otherwise perfect nonexistence
+    -- Schopenhauer
+
+woody
+public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190120/49d4a1c8/attachment.html>
