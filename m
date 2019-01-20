@@ -1,85 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Jan 2019 09:55:51 +0100
-Subject: [Buildroot] [PATCH 1/1] libftdi1: fix python build with cmake <
- 3.7
-In-Reply-To: <87ef97oprq.fsf@tarshish>
-References: <20190119205308.31175-1-fontaine.fabrice@gmail.com>
- <87ef97oprq.fsf@tarshish>
-Message-ID: <CAPi7W834K4UFNbUGRGxbtU_zFCwisMcYwDhsPQt97-EohrNCEg@mail.gmail.com>
+Date: Sun, 20 Jan 2019 10:15:25 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libftdi1: fix python build with cmake < 3.7
+Message-ID: <20190120091525.2772-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Fixes:
+ - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
 
-Le dim. 20 janv. 2019 ? 06:35, Baruch Siach <baruch@tkos.co.il> a ?crit :
->
-> Hi Fabrice,
->
-> On Sat, Jan 19 2019, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...n-CMakeLists.txt-fix-build-with-cmake-3.7.patch | 34 ++++++++++++++++++++++
-> >  1 file changed, 34 insertions(+)
-> >  create mode 100644 package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
-> >
-> > diff --git a/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch b/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
-> > new file mode 100644
-> > index 0000000000..c9fcb0ee4f
-> > --- /dev/null
-> > +++ b/package/libftdi1/0005-python-CMakeLists.txt-fix-build-with-cmake-3.7.patch
-> > @@ -0,0 +1,34 @@
-> > +From ddfbe611fd273ea6a0c1ac86c184fa8b395fa2fe Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Sat, 19 Jan 2019 21:09:22 +0100
-> > +Subject: [PATCH] python/CMakeLists.txt: fix build with cmake < 3.7
-> > +
-> > +VERSION_GREATER_EQUAL has been added only in cmake 3.7:
-> > +https://cmake.org/cmake/help/v3.7/release/3.7.html
-> > +
-> > +So replace this statement by NOT CMAKE_VERSION VERSION_LESS
-> > +
-> > +Fixes:
-> > + - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +[Upstream status:
-> > +http://developer.intra2net.com/mailarchive/html/libftdi/2019/msg00009.html]
-> > +---
-> > + python/CMakeLists.txt | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
-> > +index 7bdd9f9..376dae6 100644
-> > +--- a/python/CMakeLists.txt
-> > ++++ b/python/CMakeLists.txt
-> > +@@ -1,5 +1,5 @@
-> > +   # workaround for cmake bug #0013449
-> > +-  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.0.0 )
-> > ++  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR NOT CMAKE_VERSION VERSION_LESS 3.0.0 )
->
-> VERSION_GREATER_EQUAL is added in Buildroot patch 0004. Why not fix it
-> there?
-Indeed, I can fix the issue in patch 0004, I'll send a v2.
->
-> > +     find_package ( SWIG )
-> > +   else ()
-> > +     find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
-> > +--
-> > +2.14.1
-> > +
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-Best Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Baruch Siach):
+ - Move fix to existing fourth patch
 
-Fabrice
+ package/libftdi1/0004-cmake-find-swig.patch | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/libftdi1/0004-cmake-find-swig.patch b/package/libftdi1/0004-cmake-find-swig.patch
+index 25922cca53..cf787a6806 100644
+--- a/package/libftdi1/0004-cmake-find-swig.patch
++++ b/package/libftdi1/0004-cmake-find-swig.patch
+@@ -10,6 +10,9 @@ Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
+ [Mark: patch retrieved and updated from
+ http://developer.intra2net.com/git/?p=libftdi;a=commit;h=fcda9c6a208d3a7fe651ef661b2eb6e462a89c17]
+ Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
++[Update patch to make it work with cmake < 3.7:
++http://developer.intra2net.com/mailarchive/html/libftdi/2019/msg00009.html]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+ diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+ index 31ef1c6..eefc344 100644
+@@ -20,7 +23,7 @@ index 31ef1c6..eefc344 100644
+  if ( PYTHON_BINDINGS )
+    # workaround for cmake bug #0013449
+ -  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH )
+-+  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR CMAKE_VERSION VERSION_GREATER_EQUAL 3.0.0 )
+++  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH OR NOT CMAKE_VERSION VERSION_LESS 3.0.0 )
+      find_package ( SWIG )
+    else ()
+      find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
+-- 
+2.14.1
