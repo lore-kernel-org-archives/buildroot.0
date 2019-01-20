@@ -1,69 +1,62 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 20 Jan 2019 18:21:25 -0200
-Subject: [Buildroot] [PATCH v2] .gitlab-ci.yml: add trigger per job
-References: <4cf9afed-0532-c3ad-d090-2fe43bc9b6cb@mind.be>
-Message-ID: <5c44d845843bc_4b3e2b00552834648974@ultri5.mail>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 20 Jan 2019 21:26:52 +0100
+Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix build on armv5
+Message-ID: <20190120202652.4419-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Don't override the user-provided ARCH when cross-compiling otherwise
+ARCH won't be correct for armv5, aarch64 and x86_64
 
-On Fri, Jan 18, 2019 at 08:21 AM, Arnout Vandecappelle wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
 
-[snip]
-> On 16/01/2019 23:45, Ricardo Martincoski wrote:
-> 
->> +aarch64_efi_defconfig:
->> +    <<: *defconfig
->> +    only:
->> +        - triggers
->> +        - tags
->> +        - /-defconfigs$/
->> +        - /-aarch64_efi_defconfig$/
-> 
->  Since we have a nice pattern with the branch name here, I think we could
-> instead rely on the branch name in the script and make a separate job for a
-> single defconfig. Something like this:
-> 
-> build-one-defconfig:
->     only:
->         - /_defconfig$/
->     script:
->         ... Use some sedded version of ${CI_BRANCH_NAME} ...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ts-don-t-override-ARCH-when-cross-compili.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
 
-Using a separate job is a great idea. It would even allow to easily not run the
-check-* jobs when a single job is requested (something that Thomas suggested).
-
-I will mark this patch as Changes Requested and resend.
-
-> 
-> Of course, you'd want to refactor that with the existing defconfig_script so it
-> needs a little more work...
-> 
-> 
->  Completely independent of this, it would also be nice if the .gitlab-ci could
-> be converted to use the "extends" keyword [1]. And also if the generated part
-
-Sure. We can use "extends" instead of YAML anchors. It will make the .yml file
-more readable and allow us...
-
-> could be "include"d [2]. New gitlab features which weren't available when we
-
-... to use "include" and avoid copying all the contents from .gitlab-ci.yml.in.
-But ...
-
-> created this. With that in place, it might even be possible to do this in a
-> pipeline, where the included part is generated in the first stage - but I'm not
-> sure if gitlab-ci supports that.
-
-... no. Gitlab CI does not support generating .gitlab-ci.yml dynamically yet.
-Let's hope this issue gets fixed:
-https://gitlab.com/gitlab-org/gitlab-ce/issues/45828
-There is already a prototype (I did not tested it):
-https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/22219
-
-Regards,
-Ricardo
+diff --git a/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
+new file mode 100644
+index 0000000000..c256541781
+--- /dev/null
++++ b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
+@@ -0,0 +1,32 @@
++From 3452721eafae90749f4af63264c412f398460b15 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 20 Jan 2019 21:07:11 +0100
++Subject: [PATCH] Make.defaults: don't override ARCH when cross-compiling
++
++Don't override the user-provided ARCH when cross-compiling otherwise
++ARCH won't be correct for armv5, aarch64 and x86_64
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Make.defaults | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Make.defaults b/Make.defaults
++index ba743f1..a0e5632 100755
++--- a/Make.defaults
+++++ b/Make.defaults
++@@ -67,7 +67,7 @@ ARCH         ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[345678
++ 
++ # Get ARCH from the compiler if cross compiling 
++ ifneq ($(CROSS_COMPILE),)
++-  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
+++  ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
++ endif
++ 
++ # FreeBSD (and possibly others) reports amd64 instead of x86_64
++-- 
++2.14.1
++
+-- 
+2.14.1
