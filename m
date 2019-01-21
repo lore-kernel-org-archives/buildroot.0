@@ -1,8 +1,8 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 21 Jan 2019 14:51:11 +0100
-Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support for
- fftw-double and fftw-long-double
-In-Reply-To: <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+Date: Mon, 21 Jan 2019 14:51:03 +0100
+Subject: [Buildroot] [PATCH v4 09/17] package/gqrx: remove unneeded fftw
+ dependency
+In-Reply-To: <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
 References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-2-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
@@ -11,77 +11,66 @@ References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thanks to the new fftw package organization, gnuradio already selects
+the appropriate fftw precision, and there is no need to propagate the
+"depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE" that used to be present
+in the gnuradio package.
 
-liquid-dsp has the following code:
-#if HAVE_FFTW3_H && !defined LIQUID_FFTOVERRIDE
-#   include <fftw3.h>
-#   define FFT_PLAN             fftwf_plan
-#   define FFT_CREATE_PLAN      fftwf_plan_dft_1d
-#   define FFT_DESTROY_PLAN     fftwf_destroy_plan
-#   define FFT_EXECUTE          fftwf_execute
-#   define FFT_DIR_FORWARD      FFTW_FORWARD
-#   define FFT_DIR_BACKWARD     FFTW_BACKWARD
-#   define FFT_METHOD           FFTW_ESTIMATE
-#else
-#   define FFT_PLAN             fftplan
-#   define FFT_CREATE_PLAN      fft_create_plan
-#   define FFT_DESTROY_PLAN     fft_destroy_plan
-#   define FFT_EXECUTE          fft_execute
-#   define FFT_DIR_FORWARD      LIQUID_FFT_FORWARD
-#   define FFT_DIR_BACKWARD     LIQUID_FFT_BACKWARD
-#   define FFT_METHOD           0
-#endif
-
-So, if it uses the external fftw library, it can only use the fftwf
-variant, i.e the fftw-single variant. Otherwise, it uses its internal
-FFT library.
-
-There is no way for liquid-dsp to use fftw-double or fftw-long-double.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liquid-dsp/liquid-dsp.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+Changes v3 -> v4:
+ * use select instead of depends on for GNURadio and propagates
+   dependencies.(yann)
+---
+ package/gqrx/Config.in | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index 6aa27a5248..64c403e87f 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -40,16 +40,6 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
- LIQUID_DSP_CONF_OPTS += --enable-simdoverride
- endif
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index 1dc40c6d24..b55b5740ad 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -1,22 +1,25 @@
+-comment "gqrx needs a toolchain w/ C++, threads, wchar"
++comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
++	depends on BR2_USE_MMU # gnuradio
++	depends on !BR2_PACKAGE_PYTHON3 # gnuradio
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR
++		!BR2_USE_WCHAR || !BR2_STATIC_LIBS
  
--ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
--LIQUID_DSP_LDFLAGS += -lfftw3
--LIQUID_DSP_DEPENDENCIES += fftw-double
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
--LIQUID_DSP_LDFLAGS += -lfftw3l
--LIQUID_DSP_DEPENDENCIES += fftw-long-double
--endif
--
- LIQUID_DSP_CONF_OPTS += \
- 	CFLAGS="$(LIQUID_DSP_CFLAGS)" \
- 	LDFLAGS="$(LIQUID_DSP_LDFLAGS)"
+-comment "gqrx needs qt5, gnuradio, fftw's single precision"
+-	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
+-		!BR2_PACKAGE_QT5
++comment "gqrx needs qt5"
++	depends on !BR2_PACKAGE_QT5
+ 
+ config BR2_PACKAGE_GQRX
+ 	bool "gqrx"
+-	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
+-	depends on BR2_PACKAGE_GNURADIO
+ 	depends on BR2_PACKAGE_QT5
++	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
++	depends on !BR2_STATIC_LIBS # gnuradio
++	depends on BR2_USE_MMU # gnuradio
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_USE_WCHAR # boost
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_GNURADIO
+ 	select BR2_PACKAGE_GNURADIO_ANALOG
+ 	select BR2_PACKAGE_GNURADIO_AUDIO
+ 	select BR2_PACKAGE_GNURADIO_BLOCKS
 -- 
 2.19.2
