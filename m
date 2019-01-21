@@ -1,39 +1,51 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 21 Jan 2019 19:31:17 +0100
-Subject: [Buildroot] [PATCH 1/1] sqlcipher: add license
-Message-ID: <20190121183117.14187-1-fontaine.fabrice@gmail.com>
+Date: Mon, 21 Jan 2019 20:21:12 +0100
+Subject: [Buildroot] [PATCH 1/2] dmalloc: fix build with strdup
+Message-ID: <20190121192113.6077-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/3f2518f7a9e87034cd501ac3d121ea3a33827e7d
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sqlcipher/sqlcipher.hash | 1 +
- package/sqlcipher/sqlcipher.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/dmalloc/0005-fix-strdup.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/dmalloc/0005-fix-strdup.patch
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index f3c7e0bd9c..8632cd7a50 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  25fa4f4cb38dcf9e52e4d1f46be8fee9c7aaef35b6df96912a216b289e22c2af  sqlcipher-v3.2.0.tar.gz
-+sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index db94d06c54..812ae7fa47 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -6,6 +6,8 @@
- 
- SQLCIPHER_VERSION = v3.2.0
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,$(SQLCIPHER_VERSION))
-+SQLCIPHER_LICENSE = BSD-3-Clause
-+SQLCIPHER_LICENSE_FILES = LICENSE
- SQLCIPHER_DEPENDENCIES = openssl host-tcl
- SQLCIPHER_INSTALL_STAGING = YES
- 
+diff --git a/package/dmalloc/0005-fix-strdup.patch b/package/dmalloc/0005-fix-strdup.patch
+new file mode 100644
+index 0000000000..5884df6a89
+--- /dev/null
++++ b/package/dmalloc/0005-fix-strdup.patch
+@@ -0,0 +1,24 @@
++From 59d73a473f1c1a31bcba90d314f956d0bcc3de95 Mon Sep 17 00:00:00 2001
++From: Siana Gearz <siana.sg@live.de>
++Date: Sat, 8 Sep 2012 22:55:17 +0200
++Subject: [PATCH] Fix strdup
++
++[Retrieved from:
++https://github.com/siana/dmalloc/commit/59d73a473f1c1a31bcba90d314f956d0bcc3de95]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ dmalloc.h.3 | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/dmalloc.h.3 b/dmalloc.h.3
++index d3d1c13..3fc573a 100644
++--- a/dmalloc.h.3
+++++ b/dmalloc.h.3
++@@ -459,6 +459,7 @@ DMALLOC_PNT	valloc(DMALLOC_SIZE size);
++  *
++  * string -> String we are duplicating.
++  */
+++#undef strdup
++ extern
++ char	*strdup(const char *string);
++ #endif /* ifndef DMALLOC_STRDUP_MACRO */
 -- 
 2.14.1
