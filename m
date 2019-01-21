@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jan 2019 22:19:12 +0100
-Subject: [Buildroot] [PATCH 1/1] python-pyopenssl: bump to version 19.0.0
-In-Reply-To: <20190121201929.4730-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Mon, 21 Jan 2019 22:19:28 +0200")
+Date: Mon, 21 Jan 2019 22:19:17 +0100
+Subject: [Buildroot] [PATCH 1/1] python-uvloop: bump to version 0.11.3
+In-Reply-To: <20190121201929.4730-2-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Mon, 21 Jan 2019 22:19:29 +0200")
 References: <20190121201929.4730-1-asafka7@gmail.com>
-Message-ID: <87sgxlwvxr.fsf@dell.be.48ers.dk>
+ <20190121201929.4730-2-asafka7@gmail.com>
+Message-ID: <87o989wvxm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
