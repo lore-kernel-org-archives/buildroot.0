@@ -1,14 +1,8 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 21 Jan 2019 13:32:23 +0200
-Subject: [Buildroot] [PATCH v5 1/4] libopenssl: bump version to 1.1.1a
-In-Reply-To: <CAKKE0ZH4PzYGW5i55kEpG_6NsoWZ=tUwn3y0abg2NpzB1yKyLQ@mail.gmail.com>
-References: <20190117181608.12644-1-ps.report@gmx.net>
- <CAKKE0ZG54aPrwtbCiPKogDTHJfgha_x1iR1bBnhVQ4H0bp4q5g@mail.gmail.com>
- <20190118114943.j5jdw7nzzl2cddnu@vkochan-ThinkPad-T470p>
- <CAKKE0ZFNnbbDE8TQK_L8hSZ_PSpT+F0jYgTT-cAy58zRrq8vQQ@mail.gmail.com>
- <20190118160114.episx2qs7ohdawgm@vkochan-ThinkPad-T470p>
- <CAKKE0ZH4PzYGW5i55kEpG_6NsoWZ=tUwn3y0abg2NpzB1yKyLQ@mail.gmail.com>
-Message-ID: <20190121113223.t2sy6dvhrogw2u7z@vkochan-ThinkPad-T470p>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Mon, 21 Jan 2019 14:11:20 +0100 (CET)
+Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
+In-Reply-To: <87h8e4o60k.fsf@tarshish>
+Message-ID: <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,23 +11,119 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Mon, Jan 21, 2019 at 11:31:17AM +0100, Patrick Havelange wrote:
-> Hi,
-> 
-> > I looked into uclibc-1.0.31/extra/Configs/Config.in and I see that
-> > UCLIBC_HAS_CONTEXT_FUNCS depends on ARCH_HAS_UCONTEXT which is not
-> > selected by extra/Configs/Config.xtensa .
-> >
-> 
-> Thanks for the explanation, I'm also now doing a patch to set the
-> proper openssl #define based on that property.
-> 
-> BR,
-> 
-> Patrick Havelange
 
-I think that probably disabling the openssl's "async" feature for arch which does
-not support ucontext by uclibc might be enough.
 
-Regards,
-Vadim Kochan
+The default install target is installing a bunch of header files on the target, while unecessary. Maybe Buildroot scripts are cleaning them before creating the image?
+
+
+
+Concerning the /lib folder, it is an error indeed. It must be in /usr/lib. Any other suggestions? This is my first contribution to the Buildroot project ;)
+
+
+
+Thank you for your feedback!
+
+
+
+De : Baruch Siach <baruch@tkos.co.il>
+? : Louis-Paul Cordier <lpdev@cordier.org>
+Sujet : Re: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
+Date : 19/01/2019 19:29:31 Europe/Paris
+Copie ? : buildroot at buildroot.org;
+???Bernd Kuhls <bernd.kuhls@t-online.de>;
+???Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+
+Hi Louis-Paul,
+
+On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
+> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+> ---
+> package/Config.in | 1 +
+> package/intel-gmmlib/Config.in | 8 ++++++++
+> package/intel-gmmlib/intel-gmmlib.hash | 2 ++
+> package/intel-gmmlib/intel-gmmlib.mk | 21 +++++++++++++++++++++
+> 4 files changed, 32 insertions(+)
+> create mode 100644 package/intel-gmmlib/Config.in
+> create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
+> create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 5036421a73..9082ed9956 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1265,6 +1265,7 @@ menu "Graphics"
+> source "package/harfbuzz/Config.in"
+> source "package/ijs/Config.in"
+> source "package/imlib2/Config.in"
+> + source "package/intel-gmmlib/Config.in"
+> source "package/irrlicht/Config.in"
+> source "package/jasper/Config.in"
+> source "package/jpeg/Config.in"
+> diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+> new file mode 100644
+> index 0000000000..8d9fab7ce3
+> --- /dev/null
+> +++ b/package/intel-gmmlib/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_INTEL_GMMLIB
+> + bool "intel-gmmlib"
+> + depends on BR2_x86_64
+> + help
+> + The Intel(R) Graphics Memory Management Library provides
+> + device specific and buffer management for the Intel(R)
+> + Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
+> + Media Driver for VAAPI.
+> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+> new file mode 100644
+> index 0000000000..7e3b3dfd3f
+> --- /dev/null
+> +++ b/package/intel-gmmlib/intel-gmmlib.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1 intel-gmmlib-18.3.0.tar.gz
+> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+> new file mode 100644
+> index 0000000000..206ea6db86
+> --- /dev/null
+> +++ b/package/intel-gmmlib/intel-gmmlib.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# intel-gmmlib
+> +#
+> +################################################################################
+> +
+> +INTEL_GMMLIB_VERSION = 18.3.0
+> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+> +INTEL_GMMLIB_LICENSE = MIT
+> +INTEL_GMMLIB_LICENSE_FILES = COPYING
+> +
+> +INTEL_GMMLIB_INSTALL_STAGING = YES
+> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
+> +
+> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
+> +
+> +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
+> + cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
+
+This is unusual. Can't you use the default install make target like the
+staging install? Why do you install in /lib on target when upstream
+installs in /usr/lib on staging?
+
+If this is all intended please explain why in a comment.
+
+baruch
+
+> +endef
+> +
+> +$(eval $(cmake-package))
+
+
+-- 
+http://baruch.siach.name/blog/ ~. .~ Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+- baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190121/72f23c5f/attachment.html>
