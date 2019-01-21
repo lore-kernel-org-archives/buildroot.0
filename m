@@ -1,78 +1,46 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 21 Jan 2019 21:04:50 +0100
-Subject: [Buildroot] [PATCH] configs/qemu_riscv64_virt_defconfig: bump Linux
- version
-Message-ID: <20190121200450.4023-1-gwenj@trabucayre.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 21 Jan 2019 22:19:28 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyopenssl: bump to version 19.0.0
+Message-ID: <20190121201929.4730-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-
-Since riscv64 works with linux default defconfig, this patch drop custom config.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- board/qemu/riscv64-virt/linux.config | 23 -----------------------
- configs/qemu_riscv64_virt_defconfig  |  9 ++++-----
- 2 files changed, 4 insertions(+), 28 deletions(-)
- delete mode 100644 board/qemu/riscv64-virt/linux.config
+ package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
+ package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/riscv64-virt/linux.config b/board/qemu/riscv64-virt/linux.config
-deleted file mode 100644
-index d09e8b3bb1..0000000000
---- a/board/qemu/riscv64-virt/linux.config
-+++ /dev/null
-@@ -1,23 +0,0 @@
--CONFIG_ARCH_RV64I=y
--CONFIG_SMP=y
--CONFIG_NR_CPUS=8
--CONFIG_PCI=y
--CONFIG_SYSVIPC=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--# CONFIG_WIRELESS is not set
--CONFIG_VIRTIO_BLK=y
--CONFIG_NETDEVICES=y
--CONFIG_VIRTIO_NET=y
--# CONFIG_ETHERNET is not set
--# CONFIG_WLAN is not set
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_VIRT_DRIVERS=y
--CONFIG_VIRTIO_MMIO=y
--CONFIG_EXT2_FS=y
--CONFIG_EXT4_FS=y
--CONFIG_TMPFS=y
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index e15f804341..705ec1293a 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -10,16 +10,15 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+index ebd16cf28b..30071cf9ff 100644
+--- a/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-pyopenssl/python-pyopenssl.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
+-md5 c92e9c85b520b7e153fef0f7f3c5dda7  pyOpenSSL-18.0.0.tar.gz
+-sha256 6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580  pyOpenSSL-18.0.0.tar.gz
++md5 b9876625dc1d5a5a662d748689191537  pyOpenSSL-19.0.0.tar.gz
++sha256 aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200  pyOpenSSL-19.0.0.tar.gz
+ # Locally computed sha256
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index afdd06500f..d341ef124d 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+# Linux headers same as kernel, a 4.20 series
-+BR2_KERNEL_HEADERS_4_20=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- 
- # Bootloader
- BR2_TARGET_RISCV_PK=y
+-PYTHON_PYOPENSSL_VERSION = 18.0.0
++PYTHON_PYOPENSSL_VERSION = 19.0.0
+ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+-PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480
++PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/40/d0/8efd61531f338a89b4efa48fcf1972d870d2b67a7aea9dcf70783c8464dc
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
+ PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
 -- 
-2.19.2
+2.19.1
