@@ -1,18 +1,14 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 21 Jan 2019 14:51:04 +0100
-Subject: [Buildroot] [PATCH v4 10/17] package/hackrf: use the new
+Date: Mon, 21 Jan 2019 14:51:00 +0100
+Subject: [Buildroot] [PATCH v4 06/17] package/alsa-utils: use the new
  fftw-single package
-In-Reply-To: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+In-Reply-To: <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
 References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-2-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,43 +21,21 @@ Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/hackrf/Config.in | 6 ++----
- package/hackrf/hackrf.mk | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/alsa-utils/alsa-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hackrf/Config.in b/package/hackrf/Config.in
-index 4fa27699c4..b86790f2b0 100644
---- a/package/hackrf/Config.in
-+++ b/package/hackrf/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_HACKRF
- 	bool "hackrf"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	select BR2_PACKAGE_FFTW
-+	select BR2_PACKAGE_FFTW_SINGLE
- 	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Library and tools for accessing HackRF SDR boards.
-@@ -11,6 +12,3 @@ config BR2_PACKAGE_HACKRF
- 
- comment "hackrf needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "hackrf needs fftw's single precision"
--	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
-index acab0be1d3..b83f6518e8 100644
---- a/package/hackrf/hackrf.mk
-+++ b/package/hackrf/hackrf.mk
-@@ -9,7 +9,7 @@ HACKRF_SITE = https://github.com/mossmann/hackrf/releases/download/v$(HACKRF_VER
- HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
- HACKRF_LICENSE = GPL-2.0+ BSD-3c
- HACKRF_LICENSE_FILES = COPYING
--HACKRF_DEPENDENCIES = fftw libusb
-+HACKRF_DEPENDENCIES = fftw-single libusb
- HACKRF_SUBDIR = host
- HACKRF_INSTALL_STAGING = YES
- 
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 4ce4aace46..b5c36e0a46 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -41,7 +41,7 @@ endif
+ ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
+ ALSA_UTILS_CONF_OPTS += --enable-bat
+ # Analysis support requires fftw single precision
+-ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
++ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single)
+ else
+ ALSA_UTILS_CONF_OPTS += --disable-bat
+ endif
 -- 
 2.19.2
