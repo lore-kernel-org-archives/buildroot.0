@@ -1,68 +1,71 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 21 Jan 2019 18:19:47 -0200
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump kernel version
-Message-ID: <20190121201947.20816-1-festevam@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 21 Jan 2019 21:45:44 +0100
+Subject: [Buildroot] Enable mount SquashFS
+In-Reply-To: <CAOqJNTfN9Ux1x_q3hXd6utAqtVCasUyx5yA1d2MqvMFg2_bMKg@mail.gmail.com>
+References: <CAOqJNTc0j8hKGbugSyOqMKKymn8yB3UBSkvamLe9-cnK572UvA@mail.gmail.com>
+ <20190118203223.02765998@gmx.net>
+ <CAOqJNTfN9Ux1x_q3hXd6utAqtVCasUyx5yA1d2MqvMFg2_bMKg@mail.gmail.com>
+Message-ID: <20190121214544.5e615f30@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the kernel version to 4.19.16.
+Hello ??????,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6-sabresd_defconfig     | 6 +++---
- configs/imx6-sabresd_qt5_defconfig | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+please keep buildroot at busybox.net in CC....
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 89ffa02916..c2924b2e39 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 2534d5cb87..4616f57eae 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
--- 
-2.17.1
+On Mon, 21 Jan 2019 12:21:55 +0200, ?????? ????? <sergei.sakhno@gmail.com> wrote:
+
+> Thks. I missed this this parametr.
+> Can you help me with mount squashfs image in minimal image of linux,
+> created in buildroot?
+> When i try mount squashfs image as root (mount -t squashfs -o
+> ro,loop,sizelimit=14319616 /home/update-last.raucb /run/rauc/bundle), i get
+> error:
+> 
+> > mount: /run/rauc/bundle: mount failed: Operation not permitted.
+> > Failed mounting bundle: failed to run mount: Child process exited with
+> > code 1
+> > installing /home/update-last.raucb: Failed mounting bundle: failed to run
+> > mount: Child process exited with code 1
+> >  
+> EXT4 partition on real storage device mounted successfully.
+
+Not much info....why mount to /run/rauc/bundle and not just /mnt ? Why option sizelimit?
+Where does the 'installing' error message come from? How is the squashfs image update-last.raucb
+created (never worked with rauc (yet))? Loop mounting enabled in the kernel?
+Do you run your commands as root user? Which are the file permissions of the squashfs image file?
+
+Regards,
+Peter
+
+> 
+> 
+> ??, 18 ???. 2019 ?. ? 21:32, Peter Seiderer <ps.report@gmx.net>:
+> 
+> > Hello ??????,
+> >
+> > On Fri, 18 Jan 2019 20:27:41 +0200, ?????? ????? <sergei.sakhno@gmail.com>
+> > wrote:
+> >  
+> > > Good evening everyone. How to enable the ability to mount SquashFS? In  
+> > the  
+> > > menuconfig of busybox downloaded from the busybox site there is an item
+> > > [SquashFS filesystem] in the [Filesystem / Volume identification]  
+> > section,  
+> > > but in the menuconfig of busybox unpacked buildroot it is not.  
+> >
+> > Busybox CONFIG_FEATURE_VOLUMEID_SQUASHFS depends on VOLUMEID &&
+> > FEATURE_BLKID_TYPE,
+> > VOLUMEID is already enabled, FEATURE_BLKID_TYPE is Linux System Utilities  
+> > -->  
+> > blkid --> Print Filesystem type
+> >
+> > More important is enabled squashfs support in the linux kernel...
+> >
+> > Regards,
+> > Peter
+> >
+> >  
