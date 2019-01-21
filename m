@@ -1,8 +1,8 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 21 Jan 2019 14:51:03 +0100
-Subject: [Buildroot] [PATCH v4 09/17] package/gqrx: remove unneeded fftw
- dependency
-In-Reply-To: <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
+Date: Mon, 21 Jan 2019 14:51:05 +0100
+Subject: [Buildroot] [PATCH v4 11/17] package/httping: use the new
+ fftw-double package
+In-Reply-To: <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
 References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-2-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
@@ -11,7 +11,9 @@ References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,57 +22,34 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Thanks to the new fftw package organization, gnuradio already selects
-the appropriate fftw precision, and there is no need to propagate the
-"depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE" that used to be present
-in the gnuradio package.
+This patch add an explicitly dependency to fftw-double (the only compatible
+fftw's flavor) instead of default behavior where the package do assumption
+about the compatible version.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
 Changes v3 -> v4:
- * use select instead of depends on for GNURadio and propagates
-   dependencies.(yann)
+ * improve commit message about fftw version. (Yann)
 ---
- package/gqrx/Config.in | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ package/httping/httping.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index 1dc40c6d24..b55b5740ad 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -1,22 +1,25 @@
--comment "gqrx needs a toolchain w/ C++, threads, wchar"
-+comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
-+	depends on BR2_USE_MMU # gnuradio
-+	depends on !BR2_PACKAGE_PYTHON3 # gnuradio
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR
-+		!BR2_USE_WCHAR || !BR2_STATIC_LIBS
- 
--comment "gqrx needs qt5, gnuradio, fftw's single precision"
--	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
--		!BR2_PACKAGE_QT5
-+comment "gqrx needs qt5"
-+	depends on !BR2_PACKAGE_QT5
- 
- config BR2_PACKAGE_GQRX
- 	bool "gqrx"
--	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
--	depends on BR2_PACKAGE_GNURADIO
- 	depends on BR2_PACKAGE_QT5
-+	depends on !BR2_PACKAGE_PYTHON3
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
-+	depends on !BR2_STATIC_LIBS # gnuradio
-+	depends on BR2_USE_MMU # gnuradio
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR # boost
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_GNURADIO
- 	select BR2_PACKAGE_GNURADIO_ANALOG
- 	select BR2_PACKAGE_GNURADIO_AUDIO
- 	select BR2_PACKAGE_GNURADIO_BLOCKS
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 955ee3131b..b3a625a8e1 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -17,9 +17,9 @@ HTTPING_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+-	$(if $(BR2_PACKAGE_FFTW),fftw)
++	$(if $(BR2_PACKAGE_FFTW_DOUBLE),fftw-double)
+ HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+-	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
++	FW=$(if $(BR2_PACKAGE_FFTW_DOUBLE),yes,no) \
+ 	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+ 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
 -- 
 2.19.2
