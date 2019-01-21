@@ -1,129 +1,54 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Mon, 21 Jan 2019 14:11:20 +0100 (CET)
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-In-Reply-To: <87h8e4o60k.fsf@tarshish>
-Message-ID: <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 21 Jan 2019 08:02:18 -0600
+Subject: [Buildroot] [PATCH 1/1] fs/common.mk: enable multithreaded xz
+ compression
+In-Reply-To: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
+References: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CANQCQpbo+puWN0o99zFBqthPLAe9hkd9gBTfXiZrE3x-qTvoHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+James,
 
 
-
-The default install target is installing a bunch of header files on the target, while unecessary. Maybe Buildroot scripts are cleaning them before creating the image?
-
-
-
-Concerning the /lib folder, it is an error indeed. It must be in /usr/lib. Any other suggestions? This is my first contribution to the Buildroot project ;)
-
-
-
-Thank you for your feedback!
-
-
-
-De : Baruch Siach <baruch@tkos.co.il>
-? : Louis-Paul Cordier <lpdev@cordier.org>
-Sujet : Re: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-Date : 19/01/2019 19:29:31 Europe/Paris
-Copie ? : buildroot at buildroot.org;
-???Bernd Kuhls <bernd.kuhls@t-online.de>;
-???Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-
-Hi Louis-Paul,
-
-On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
-> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> ---
-> package/Config.in | 1 +
-> package/intel-gmmlib/Config.in | 8 ++++++++
-> package/intel-gmmlib/intel-gmmlib.hash | 2 ++
-> package/intel-gmmlib/intel-gmmlib.mk | 21 +++++++++++++++++++++
-> 4 files changed, 32 insertions(+)
-> create mode 100644 package/intel-gmmlib/Config.in
-> create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
-> create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
+On Sun, Jan 20, 2019 at 8:08 PM <james.hilliard1@gmail.com> wrote:
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 5036421a73..9082ed9956 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1265,6 +1265,7 @@ menu "Graphics"
-> source "package/harfbuzz/Config.in"
-> source "package/ijs/Config.in"
-> source "package/imlib2/Config.in"
-> + source "package/intel-gmmlib/Config.in"
-> source "package/irrlicht/Config.in"
-> source "package/jasper/Config.in"
-> source "package/jpeg/Config.in"
-> diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-> new file mode 100644
-> index 0000000000..8d9fab7ce3
-> --- /dev/null
-> +++ b/package/intel-gmmlib/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_INTEL_GMMLIB
-> + bool "intel-gmmlib"
-> + depends on BR2_x86_64
-> + help
-> + The Intel(R) Graphics Memory Management Library provides
-> + device specific and buffer management for the Intel(R)
-> + Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
-> + Media Driver for VAAPI.
-> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-> new file mode 100644
-> index 0000000000..7e3b3dfd3f
-> --- /dev/null
-> +++ b/package/intel-gmmlib/intel-gmmlib.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1 intel-gmmlib-18.3.0.tar.gz
-> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-> new file mode 100644
-> index 0000000000..206ea6db86
-> --- /dev/null
-> +++ b/package/intel-gmmlib/intel-gmmlib.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# intel-gmmlib
-> +#
-> +################################################################################
-> +
-> +INTEL_GMMLIB_VERSION = 18.3.0
-> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-> +INTEL_GMMLIB_LICENSE = MIT
-> +INTEL_GMMLIB_LICENSE_FILES = COPYING
-> +
-> +INTEL_GMMLIB_INSTALL_STAGING = YES
-> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
-> +
-> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
-> +
-> +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
-> + cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
+> From: James Hilliard <james.hilliard1@gmail.com>
+>
+> xz help indicates only 1 thread is used unless we set threads:
+> -T, --threads=NUM   use at most NUM threads; the default is 1; set to 0
+>                     to use as many threads as there are processor cores
+>
 
-This is unusual. Can't you use the default install make target like the
-staging install? Why do you install in /lib on target when upstream
-installs in /usr/lib on staging?
+It's good to see xz now has support, but I assume there is a minimum
+version?  We ran into this outside of Builroot on a project where we
+conditionally used the parallel "pxz" tool when available, as "xz"
+didn't have the -T support consistently in distros yet.
 
-If this is all intended please explain why in a comment.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index a560417..6a57121 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -106,7 +106,7 @@ endif
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+>  ROOTFS_$(2)_DEPENDENCIES += host-xz
+>  ROOTFS_$(2)_COMPRESS_EXT = .xz
+> -ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+> +ROOTFS_$(2)_COMPRESS_CMD = xz -T 0 -9 -C crc32 -c
+>  endif
+>
+>  $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): ROOTFS=$(2)
+> --
+> 2.7.4
+>
 
-baruch
-
-> +endef
-> +
-> +$(eval $(cmake-package))
-
-
--- 
-http://baruch.siach.name/blog/ ~. .~ Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-- baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190121/72f23c5f/attachment.html>
+Thanks for sending the patch!
+Matt
