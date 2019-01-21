@@ -1,47 +1,58 @@
-From: Charles Hardin <charles.hardin@storagecraft.com>
-Date: Sun, 20 Jan 2019 13:02:29 -0800
-Subject: [Buildroot] [PATCH 1/1] package/rrdtool: bump version from 1.6.0 to
- 1.7.0
-Message-ID: <1548018149-46022-1-git-send-email-charles.hardin@storagecraft.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 20 Jan 2019 23:11:10 -0200
+Subject: [Buildroot] [PATCH v3 0/5] .gitlab-ci.yml: rework and add trigger
+ per job
+In-Reply-To: <20190116224556.8619-1-ricardo.martincoski@gmail.com>
+References: <20190116224556.8619-1-ricardo.martincoski@gmail.com>
+Message-ID: <20190121011115.19255-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the releases at https://github.com/oetiker/rrdtool-1.x/releases
-which mentions this is not a user facing release but attempts to
-be more robust against odd input.
+Hello,
 
-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
----
- package/rrdtool/rrdtool.hash | 6 ++++--
- package/rrdtool/rrdtool.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Beside the current subsets of jobs that can be triggered by pushing temporary
+branches with special names:
+ - all defconfigs: /.*-defconfigs$/
+ - all runtime tests: /.*-runtime-tests$/
+This series allows the user of GitLab pipeline to trigger some interesting
+subsets of jobs by pushing temporary branches with names that match regexps:
+ - one defconfig: /.*-defconfig_name$/
+ - one test case: /.*-test_case_name$/
+Pushing a tag still triggers all jobs.
+Using an API token still triggers all jobs.
 
-diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
-index cff5501..6640673 100644
---- a/package/rrdtool/rrdtool.hash
-+++ b/package/rrdtool/rrdtool.hash
-@@ -1,2 +1,4 @@
--# Locally calculated
--sha256	cd948e89cd2d8825fab4a6fb0323f810948d934af7d92c9ee8b5e9e1350e52d7	rrdtool-1.6.0.tar.gz
-+# Locally calculated sha256
-+sha256	f97d348935b91780f2cd80399719e20c0b91f0a23537c0a85f9ff306d4c5526b	rrdtool-1.7.0.tar.gz
-+sha256	884385795ee48cd820082e8823bc748cd20574112da2cc7d2ef505b47b1058c3	COPYRIGHT
-+sha256	14079d501f3092405a192463603f66e13da88fc5894981e2962e2e6aec4ab178	LICENSE
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index ea5c892..144bbcf 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RRDTOOL_VERSION = 1.6.0
-+RRDTOOL_VERSION = 1.7.0
- RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
- RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
- RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+Patches 1 to 3 rework .gitlab-ci.yml to make maintenance easier:
+ - do not copy anymore the content of the template into .gitlab-ci.yml, use
+   instead the new keywords "extends" and "include";
+ - reorder the template so similar keys stay together;
+Patch 4 could be merged to patch 5, but for the sake of easier review/testing I
+had split them.
+Patches 1 to 4 do not change any functionality.
+
+Finally patch 5 actually adds the per defconfig and per runtime test triggers.
+
+Regards,
+Ricardo
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Ricardo Martincoski (5):
+  .gitlab-ci.yml: use "extends" keyword
+  .gitlab-ci.yml: use "include" keyword
+  .gitlab-ci.yml: reorder jobs
+  .gitlab-ci.yml: prepare to reuse scripts
+  .gitlab-ci.yml: add trigger per job
+
+ .gitlab-ci.yml.in => .gitlab-ci-template.yml |  94 ++-
+ .gitlab-ci.yml                               | 703 ++++++++-----------
+ Makefile                                     |   4 +-
+ support/scripts/generate-gitlab-ci-yml       |  13 +-
+ 4 files changed, 384 insertions(+), 430 deletions(-)
+ rename .gitlab-ci.yml.in => .gitlab-ci-template.yml (60%)
+
 -- 
-2.7.4
+2.17.1
