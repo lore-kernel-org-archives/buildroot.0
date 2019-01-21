@@ -1,49 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jan 2019 22:19:26 +0100
-Subject: [Buildroot] [git commit] python-uvloop: bump to version 0.11.3
-Message-ID: <20190121211901.9BD3F7FF82@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 21 Jan 2019 14:34:51 -0700
+Subject: [Buildroot] [PATCH 1/1] fs/common.mk: enable multithreaded xz
+ compression
+In-Reply-To: <871s55ykoj.fsf@dell.be.48ers.dk>
+References: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
+ <CANQCQpbo+puWN0o99zFBqthPLAe9hkd9gBTfXiZrE3x-qTvoHg@mail.gmail.com>
+ <CADvTj4rH7G-LSt=TBzjNAUpSiRdCLgwf6NbuAqFAG-i95mZRnw@mail.gmail.com>
+ <871s55ykoj.fsf@dell.be.48ers.dk>
+Message-ID: <CADvTj4qWCObi2v1nZtGsa_L1-ireD+62hVk7MpRDASpKzTrdZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d078cecdcf0c38f8f2e20d1dab5b1e62c6af8338
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-uvloop/python-uvloop.hash | 4 ++--
- package/python-uvloop/python-uvloop.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
-index ac65fbaaca..2eaa92d6db 100644
---- a/package/python-uvloop/python-uvloop.hash
-+++ b/package/python-uvloop/python-uvloop.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/uvloop/json
--md5	7d509d78b18a5863cc06697ccfd835ad  uvloop-0.11.2.tar.gz
--sha256	a97bd62ebbdf7e6e84bf44afe439d9b24ce4d8661a29a639626a8c03748f6f98  uvloop-0.11.2.tar.gz
-+md5	9584c5e372755f752e47c2ff8419efe1  uvloop-0.11.3.tar.gz
-+sha256	fd5042d0a2ea07b92d0e2190f7711feb91cde31cf2bf1829e2e8c4c0fdd1f1aa  uvloop-0.11.3.tar.gz
- # Locally computed sha256 checksums
- sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
- sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
-diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-index a835a9952b..037cca388b 100644
---- a/package/python-uvloop/python-uvloop.mk
-+++ b/package/python-uvloop/python-uvloop.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UVLOOP_VERSION = 0.11.2
-+PYTHON_UVLOOP_VERSION = 0.11.3
- PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
--PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/5c/37/6daa39aac42b2deda6ee77f408bec0419b600e27b89b374b0d440af32b10
-+PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/46/60/8e46188acba22369848d5e9bcbee3ca04b68a12d0598bd625c1a3994f5df
- PYTHON_UVLOOP_SETUP_TYPE = setuptools
- PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
- PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+On Mon, Jan 21, 2019 at 10:39 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>
+>  > On Mon, Jan 21, 2019 at 7:02 AM Matthew Weber <matthew.weber@collins.com> wrote:
+>  >>
+>  >> James,
+>  >>
+>  >>
+>  >> On Sun, Jan 20, 2019 at 8:08 PM <james.hilliard1@gmail.com> wrote:
+>  >> >
+>  >> > From: James Hilliard <james.hilliard1@gmail.com>
+>  >> >
+>  >> > xz help indicates only 1 thread is used unless we set threads:
+>  >> > -T, --threads=NUM   use at most NUM threads; the default is 1; set to 0
+>  >> >                     to use as many threads as there are processor cores
+>  >> >
+>  >>
+>  >> It's good to see xz now has support, but I assume there is a minimum
+>  >> version?  We ran into this outside of Builroot on a project where we
+>  >> conditionally used the parallel "pxz" tool when available, as "xz"
+>  >> didn't have the -T support consistently in distros yet.
+>
+> > I thought it was using the version compiled by buildroot.
+> > Isn't that what host-xz is being used for?
+>
+> Yes, correct. Do you know if the -T 0 option generates identical output
+> as -T 1? Otherwise we may want to disable it for reproducible builds.
+I think it doesn't generate identical output, I wonder if it would be
+a good idea to make all these compression flags configurable.
+One issue I'm running across is that my test builds take at least 5
+minutes or so to compress, having a way to set different xz flags
+between test and production builds would be handy.
+>
+> --
+> Bye, Peter Korsgaard
