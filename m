@@ -1,85 +1,78 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 21 Jan 2019 20:50:04 +0100
-Subject: [Buildroot] [PATCH] xenomai: move arch restriction to Cobalt core,
- no restriction for Mercury
-Message-ID: <20190121195005.17768-1-patrickdepinguin@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 21 Jan 2019 21:04:50 +0100
+Subject: [Buildroot] [PATCH] configs/qemu_riscv64_virt_defconfig: bump Linux
+ version
+Message-ID: <20190121200450.4023-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Xenomai has two mutually exclusive cores:
-- Cobalt: dual-kernel approach: patched kernel + userland
-- Mercury: only userland
+Since riscv64 works with linux default defconfig, this patch drop custom config.
 
-In the Cobalt core, not all architectures are supported. This is the source
-of the existing ARCH_SUPPORTS variable.
-
-In the Mercury core, there is no imposed architecture restriction.
-
-Rename the XENOMAI_ARCH_SUPPORTS flag to XENOMAI_COBALT_ARCH_SUPPORTS and
-move its check from the Xenomai package to the Cobalt core.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- linux/Config.ext.in       | 4 ++--
- package/xenomai/Config.in | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ board/qemu/riscv64-virt/linux.config | 23 -----------------------
+ configs/qemu_riscv64_virt_defconfig  |  9 ++++-----
+ 2 files changed, 4 insertions(+), 28 deletions(-)
+ delete mode 100644 board/qemu/riscv64-virt/linux.config
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index acc8a04742..71d8e07c25 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -4,7 +4,7 @@ menu "Linux Kernel Extensions"
- # Xenomai
- config BR2_LINUX_KERNEL_EXT_XENOMAI
- 	bool "Adeos/Xenomai Real-time patch"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_XENOMAI
-@@ -34,7 +34,7 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
- 	  and verify that your kernel version in buildroot matches.
+diff --git a/board/qemu/riscv64-virt/linux.config b/board/qemu/riscv64-virt/linux.config
+deleted file mode 100644
+index d09e8b3bb1..0000000000
+--- a/board/qemu/riscv64-virt/linux.config
++++ /dev/null
+@@ -1,23 +0,0 @@
+-CONFIG_ARCH_RV64I=y
+-CONFIG_SMP=y
+-CONFIG_NR_CPUS=8
+-CONFIG_PCI=y
+-CONFIG_SYSVIPC=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-# CONFIG_WIRELESS is not set
+-CONFIG_VIRTIO_BLK=y
+-CONFIG_NETDEVICES=y
+-CONFIG_VIRTIO_NET=y
+-# CONFIG_ETHERNET is not set
+-# CONFIG_WLAN is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_OF_PLATFORM=y
+-CONFIG_VIRT_DRIVERS=y
+-CONFIG_VIRTIO_MMIO=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT4_FS=y
+-CONFIG_TMPFS=y
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index e15f804341..705ec1293a 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -10,16 +10,15 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
  
- comment "xenomai needs a uClibc or glibc toolchain w/ threads"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.20 series
++BR2_KERNEL_HEADERS_4_20=y
  
- #-------------------------------------------------------------------------------
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index f3d8ea4baf..a2bb1ab679 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
-@@ -6,11 +6,9 @@ config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  
- comment "xenomai needs an glibc or uClibc toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_XENOMAI
- 	bool "Xenomai Userspace"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# uses <error.h>, __WORDSIZE and bits/local_lim.h
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-@@ -67,6 +65,7 @@ config BR2_PACKAGE_XENOMAI_MERCURY
- 
- config BR2_PACKAGE_XENOMAI_COBALT
- 	bool "Cobalt"
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	help
- 	  Select Cobalt core (dual kernel) for the Xenomai
- 	  userspace. Use this if you use a Xenomai-patched
+ # Bootloader
+ BR2_TARGET_RISCV_PK=y
 -- 
 2.19.2
