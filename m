@@ -1,28 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Jan 2019 08:44:47 +0100
-Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: bump to version 2.10.9
-In-Reply-To: <20190119162411.7202-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 19 Jan 2019 17:24:11 +0100")
-References: <20190119162411.7202-1-fontaine.fabrice@gmail.com>
-Message-ID: <877eeyxxn4.fsf@dell.be.48ers.dk>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 21 Jan 2019 10:25:47 +0100
+Subject: [Buildroot] RFC: Qt5 LTS Versions
+Message-ID: <b3124494-30f3-eadf-10ff-141dbf5afe07@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi all,
 
- > - Remove second patch (already in version)
- > - Fix build with gcc 4.7:
- >   https://github.com/Microsoft/cpprestsdk/commit/e6498b2f99cf20163d8224716d8127f9089b01ef
+since Qt will soon end its LTS support for 5.6, see
+https://blog.qt.io/blog/2018/11/29/support-qt-5-6-lts-ends-march-2019/,
+I wonder which versions will be included/supported in buildroot in 2019.02.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/a080dbe2977cd35e4f8351d864bd71aaa8f9b743
+At the moment, I would need 5.9 support, so my first thought was to
+create a patch which drops 5.6 for 5.9. However someone might just want
+to use 5.6 even after upstream maintenance stopped. (I vaguely remember 
+licensing being a reason for some folks to stick with 5.6.)
+Creating the patch itself also seems to be a somewhat fiddly task
+because of the many conditionals (LATEST vs 5_6) involved. Of course 
+LATEST used to be 5.9, but it's 5.11 now (maybe 5.12 soon?) so the 5.9 
+specialties would have to be re-integrated using yet another variable.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+So I guess the question are, should we introduce more than one LTS
+version at all?  And, for easier transistion in the future, should 
+_LATEST be renamed to _5_XX before bumping to the next non-lts version?
+Are there any other/better mechanisms to maintain multiple versions in 
+one package?
 
-Committed, thanks.
 
--- 
-Bye, Peter Korsgaard
+regards,
+Andreas
