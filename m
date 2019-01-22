@@ -1,38 +1,45 @@
-From: =?UTF-8?B?0KHQtdGA0LPQtdC5INCh0LDRhdC90L4=?= <sergei.sakhno@gmail.com>
-Date: Tue, 22 Jan 2019 19:38:44 +0200
-Subject: [Buildroot] Error while build with python3 modules
-Message-ID: <CAOqJNTfhysiTA1RO91QTy8aWShcaNLzfo=fs7trwyQM8mxbv1Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 22 Jan 2019 19:47:33 +0200
+Subject: [Buildroot] [PATCH] package/ipset: bump to version 7.1
+Message-ID: <c7f3a297e61e61414525f90714136ef74db1aaa0.1548179253.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am selected python3 and python-pip, and while build i got error:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ipset/ipset.hash | 6 +++---
+ package/ipset/ipset.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> >>> python-pip 18.1 Building
-> (cd /home/user/GIT/standard/output/build/python-pip-18.1//;
-> _PYTHON_SYSCONFIGDATA_NAME="_sysconfigdata_m_linux_arm-linux-gnueabihf"
-> PATH="/home/user/GIT/standard/output/host/bin:/home/user/GIT/standard/output/host/sbin:/home/user/bin:/home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
-> PYTHONPATH="/home/user/GIT/standard/output/target/usr/lib/python3.7/"
-> PYTHONNOUSERSITE=1
-> _python_sysroot=/home/user/GIT/standard/output/host/arm-buildroot-linux-gnueabihf/sysroot
-> _python_prefix=/usr _python_exec_prefix=/usr
-> /home/user/GIT/standard/output/host/bin/python setup.py build  )
->   File "/home/user/GIT/standard/output/target/usr/lib/python3.7/site.py",
-> line 177
->     file=sys.stderr)
->         ^
-> SyntaxError: invalid syntax
-> package/pkg-generic.mk:230: recipe for target
-> '/home/user/GIT/standard/output/build/python-pip-18.1/.stamp_built' failed
-> make[1]: ***
-> [/home/user/GIT/standard/output/build/python-pip-18.1/.stamp_built] Error 1
-> Makefile:84: recipe for target '_all' failed
-> make: *** [_all] Error 2
->
-After added python3 and puthon-aiohttpi got same error. Or am I doing
-something wrong?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190122/700b8dcd/attachment.html>
+diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
+index 5885fdbf609c..46e285b1ea8c 100644
+--- a/package/ipset/ipset.hash
++++ b/package/ipset/ipset.hash
+@@ -1,6 +1,6 @@
+-# From http://ipset.netfilter.org/ipset-7.0.tar.bz2.md5sum.txt
+-md5 64c4e2e7123481c9db7ee1df127d9531  ipset-7.0.tar.bz2
++# From http://ipset.netfilter.org/ipset-7.1.tar.bz2.md5sum.txt
++md5 72b477d1ce076d681b0799f88280f2f3  ipset-7.1.tar.bz2
+ # Calculated based on the hash above
+-sha256 c6fa0f3b7d514e3edd0113ea02f82ab299e5467a4b7733dc31e127cdccc741af  ipset-7.0.tar.bz2
++sha256 7b5eb3b93205c20cdc39e3fc8b6e5f7bb214bf79a7c0c00729dd4a31ce16adc4  ipset-7.1.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 98bdcea674ae..542afc963bcb 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPSET_VERSION = 7.0
++IPSET_VERSION = 7.1
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
+-- 
+2.20.1
