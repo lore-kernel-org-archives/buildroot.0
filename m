@@ -1,48 +1,115 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 Jan 2019 21:12:20 +0200
-Subject: [Buildroot] [PATCH] package/lsof: bump to version 4.91
-Message-ID: <7d971394fa5f61b75c685071ad67d72e72840689.1548184340.git.baruch@tkos.co.il>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 22 Jan 2019 20:18:27 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: add upstream patch to fix
+ musl build issue
+Message-ID: <20190122191827.32742-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream provided md5 hash.
+upmpdcli 1.4.0 uses both the `uint64_t` and `u_int64_t` type. `uintN_t` is
+standard C99 type available in `<stdint.h>`, whereas `u_intN_t` is defined in
+`<sys/types.h>`.
 
-Add license fine hash.
+Because of the missing include of `<sys/types.h>` building upmpdcli breaks now
+when building with the musl C library, which is very strict:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+```
+src/mediaserver/cdplugins/netfetch.h:71:5: error: ?u_int64_t? does not name a type
+     u_int64_t datacount() {
+```
+
+Add a patch from upstream which fixes the issue by replacing `u_int64_t`
+with `uint64_t`.
+
+Fixes:
+http://autobuild.buildroot.net/results/f3082d2fdda8d73dbd9d3b65a08d844934066ef7
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/lsof/lsof.hash | 7 ++++++-
- package/lsof/lsof.mk   | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ ...01-Use-uint64_t-instead-of-u_int64_t.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
 
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-index 4a1249f1af04..ccb737153d94 100644
---- a/package/lsof/lsof.hash
-+++ b/package/lsof/lsof.hash
-@@ -1,2 +1,7 @@
-+# From http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/CHECKSUMS_4.91
-+md5 148ed410cb52e08c2adc0c60f480f11f  lsof_4.91.tar.bz2
- # Locally calculated after checking pgp signature
--sha256	81ac2fc5fdc944793baf41a14002b6deb5a29096b387744e28f8c30a360a3718	lsof_4.89.tar.bz2
-+# http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.91.tar.bz2.sig
-+# with (old, weak) key 40BD3D55
-+sha256	c9da946a525fbf82ff80090b6d1879c38df090556f3fe0e6d782cb44172450a3	lsof_4.91.tar.bz2
-+sha256	32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1	dialects/linux/dproto.h
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 83a9b6c3885b..58a2d8ef1bcf 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LSOF_VERSION = 4.89
-+LSOF_VERSION = 4.91
- LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
- # Use http mirror since master ftp site access is very draconian
- LSOF_SITE = http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof
+diff --git a/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
+new file mode 100644
+index 0000000000..69e05827ce
+--- /dev/null
++++ b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
+@@ -0,0 +1,72 @@
++From 256394399f57ba6e3057ee2c981127a14e4623f8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Tue, 22 Jan 2019 09:07:56 +0100
++Subject: [PATCH] Use uint64_t instead of u_int64_t
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++`uintN_t` is standard C99 type available in `<stdint.h>`, whereas `u_intN_t`
++is defined `<sys/types.h>`
++
++As upmpdcli already uses the `uintN_t` type, replace the few existing
++`u_intN_t` types, as it breaks build with the musl C library, which is
++very strict, because of the missing `<sys/types.h>`:
++
++```
++src/mediaserver/cdplugins/netfetch.h:71:5: error: ?u_int64_t? does not name a type
++     u_int64_t datacount() {
++```
++
++Backported from: 256394399f57ba6e3057ee2c981127a14e4623f8
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ src/mediaserver/cdplugins/netfetch.h | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/mediaserver/cdplugins/netfetch.h b/src/mediaserver/cdplugins/netfetch.h
++index d7e9df4..d105e53 100644
++--- a/src/mediaserver/cdplugins/netfetch.h
+++++ b/src/mediaserver/cdplugins/netfetch.h
++@@ -68,7 +68,7 @@ public:
++     /// Reset after transfer done, for retrying for exemple.
++     virtual bool reset() = 0;
++ 
++-    u_int64_t datacount() {
+++    uint64_t datacount() {
++         return fetch_data_count;
++     }
++ 
++@@ -84,11 +84,11 @@ public:
++         buf1cb = f;
++     }
++     // Called when the network transfer is done
++-    void setEOFetchCB(std::function<void(bool ok, u_int64_t count)> f) {
+++    void setEOFetchCB(std::function<void(bool ok, uint64_t count)> f) {
++         eofcb = f;
++     }
++     // Called every time we get new data from the remote
++-    void setFetchBytesCB(std::function<void(u_int64_t count)> f) {
+++    void setFetchBytesCB(std::function<void(uint64_t count)> f) {
++         fbcb = f;
++     }
++ 
++@@ -98,11 +98,11 @@ protected:
++     std::string _url;
++     uint64_t startoffset;
++     int timeoutsecs{0};
++-    u_int64_t fetch_data_count{0};
+++    uint64_t fetch_data_count{0};
++     BufXChange<ABuffer*> *outqueue{nullptr};
++     std::function<bool(std::string&, void *, int)> buf1cb;
++-    std::function<void(u_int64_t)> fbcb;
++-    std::function<void(bool, u_int64_t)> eofcb;
+++    std::function<void(uint64_t)> fbcb;
+++    std::function<void(bool, uint64_t)> eofcb;
++ };
++ 
++ #endif /* _MEDIAFETCH_H_INCLUDED_ */
++-- 
++2.20.1
++
 -- 
 2.20.1
