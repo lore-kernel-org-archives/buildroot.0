@@ -1,137 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 Jan 2019 14:57:51 +0200
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-In-Reply-To: <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
-References: <87h8e4o60k.fsf@tarshish>
- <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
-Message-ID: <87r2d4hmsw.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 22 Jan 2019 14:43:58 +0100
+Subject: [Buildroot] [PATCH] musl: bump to version 1.1.21
+In-Reply-To: <20190122085436.4940-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Tue, 22 Jan 2019 09:54:36 +0100")
+References: <20190122085436.4940-1-joerg.krause@embedded.rocks>
+Message-ID: <87womwoli9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Louis-Paul,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Please avoid top-posting.
+ > From the upstream release announcement:
+ > """
+ > This release makes improvements with respect to default thread stack size,
+ > including increasing the default from 80k to 128k, increasing the default
+ > guard size from 4k to 8k, and allowing the default to be increased via ELF
+ > headers so that programs that need larger stacks can be build without
+ > source-level changes, using just LDFLAGS. Insufficient stack size for AIO
+ > threads on kernels that don't honor the constant MINSIGSTKSZ is also fixed.
 
-On Mon, Jan 21 2019, lpdev wrote:
-> The default install target is installing a bunch of header files on
-> the target, while unecessary. Maybe Buildroot scripts are cleaning
-> them before creating the image?
+ > The glob core has been rewritten to fix inability to see past
+ > searchable-but-unreadable path components, and to avoid excessive stack usage
+ > and unnecessary syscalls. The tsearch AVL tree implementation has also been
+ > rewritten for better size and performance. The math library adds more native
+ > single-instruction implementations for arm, s390x, powerpc, and x86_64.
 
-Correct. See the target-finalize target definition in the top level
-Makefile.
+ > Various bugs are fixed, including several possible deadlocks, one of which was
+ > a new regression in 1.1.20.
+ > """
 
-> Concerning the /lib folder, it is an error indeed. It must be in
-> /usr/lib. Any other suggestions?
+ > Drop upstream patch 0002 which is included in the release.
 
-Just leave the libraries where upstream install target put them.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-> This is my first contribution to the Buildroot project ;)
+Committed, thanks.
 
-Thanks for you contribution. This is not bad for first time.
-
-Good luck,
-baruch
-
->> Thank you for your feedback!
->
-> De : Baruch Siach <baruch@tkos.co.il>
-> ? : Louis-Paul Cordier <lpdev@cordier.org>
-> Sujet : Re: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-> Date : 19/01/2019 19:29:31 Europe/Paris
-> Copie ? : buildroot at buildroot.org;
-> Bernd Kuhls <bernd.kuhls@t-online.de>;
-> Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
->
-> Hi Louis-Paul,
->
-> On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
->> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
->> ---
->> package/Config.in | 1 +
->> package/intel-gmmlib/Config.in | 8 ++++++++
->> package/intel-gmmlib/intel-gmmlib.hash | 2 ++
->> package/intel-gmmlib/intel-gmmlib.mk | 21 +++++++++++++++++++++
->> 4 files changed, 32 insertions(+)
->> create mode 100644 package/intel-gmmlib/Config.in
->> create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
->> create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 5036421a73..9082ed9956 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1265,6 +1265,7 @@ menu "Graphics"
->> source "package/harfbuzz/Config.in"
->> source "package/ijs/Config.in"
->> source "package/imlib2/Config.in"
->> + source "package/intel-gmmlib/Config.in"
->> source "package/irrlicht/Config.in"
->> source "package/jasper/Config.in"
->> source "package/jpeg/Config.in"
->> diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
->> new file mode 100644
->> index 0000000000..8d9fab7ce3
->> --- /dev/null
->> +++ b/package/intel-gmmlib/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_INTEL_GMMLIB
->> + bool "intel-gmmlib"
->> + depends on BR2_x86_64
->> + help
->> + The Intel(R) Graphics Memory Management Library provides
->> + device specific and buffer management for the Intel(R)
->> + Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
->> + Media Driver for VAAPI.
->> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
->> new file mode 100644
->> index 0000000000..7e3b3dfd3f
->> --- /dev/null
->> +++ b/package/intel-gmmlib/intel-gmmlib.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed
->> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1 intel-gmmlib-18.3.0.tar.gz
->> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
->> new file mode 100644
->> index 0000000000..206ea6db86
->> --- /dev/null
->> +++ b/package/intel-gmmlib/intel-gmmlib.mk
->> @@ -0,0 +1,21 @@
->> +################################################################################
->> +#
->> +# intel-gmmlib
->> +#
->> +################################################################################
->> +
->> +INTEL_GMMLIB_VERSION = 18.3.0
->> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
->> +INTEL_GMMLIB_LICENSE = MIT
->> +INTEL_GMMLIB_LICENSE_FILES = COPYING
->> +
->> +INTEL_GMMLIB_INSTALL_STAGING = YES
->> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
->> +
->> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
->> +
->> +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
->> + cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
->
-> This is unusual. Can't you use the default install make target like the
-> staging install? Why do you install in /lib on target when upstream
-> installs in /usr/lib on staging?
->
-> If this is all intended please explain why in a comment.
->
-> baruch
->
->> +endef
->> +
->> +$(eval $(cmake-package))
-
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-- 
+Bye, Peter Korsgaard
