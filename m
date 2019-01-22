@@ -1,116 +1,127 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 22 Jan 2019 09:01:05 +0100
-Subject: [Buildroot] [PATCH] package/wavemon: add upstream patch to fix
- musl/uclibc build issue
-Message-ID: <20190122080105.12748-1-joerg.krause@embedded.rocks>
+Date: Tue, 22 Jan 2019 09:54:36 +0100
+Subject: [Buildroot] [PATCH] musl: bump to version 1.1.21
+Message-ID: <20190122085436.4940-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In version 0.9.0 wavemon uses the GLIBC-specific extension `on_exit()`
-which is not available in musl and uClibc.
+From the upstream release announcement:
 
-According to the Linux kernel man page [1]: "Portable application should
-avoid this function, and use the standard atexit(3) instead."
+"""
+This release makes improvements with respect to default thread stack size,
+including increasing the default from 80k to 128k, increasing the default
+guard size from 4k to 8k, and allowing the default to be increased via ELF
+headers so that programs that need larger stacks can be build without
+source-level changes, using just LDFLAGS. Insufficient stack size for AIO
+threads on kernels that don't honor the constant MINSIGSTKSZ is also fixed.
 
-Add patch from upstream which is fixing this issue by dropping
-`on_exit()` and using the standard `atexit()` instead. Note, that the commit
-message of the upstream patch was changed to add some useful information.
+The glob core has been rewritten to fix inability to see past
+searchable-but-unreadable path components, and to avoid excessive stack usage
+and unnecessary syscalls. The tsearch AVL tree implementation has also been
+rewritten for better size and performance. The math library adds more native
+single-instruction implementations for arm, s390x, powerpc, and x86_64.
 
-[1] http://man7.org/linux/man-pages/man3/on_exit.3.html
+Various bugs are fixed, including several possible deadlocks, one of which was
+a new regression in 1.1.20.
+"""
 
-Backported from: f6e20c9c6e9b50963caaf5483248d329473a6815
-
-Fixes:
-http://autobuild.buildroot.net/results/ae54441c65fe9a1bdcf743aa7f6a208e5545ca29
-http://autobuild.buildroot.net/results/40fd66e6a351a1acd537ade715ab3e993eddb1c1
+Drop upstream patch 0002 which is included in the release.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...-on_exit-use-standard-atexit-instead.patch | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 package/wavemon/0001-Drop-on_exit-use-standard-atexit-instead.patch
+ ...2-fix-race-condition-in-file-locking.patch | 55 -------------------
+ package/musl/musl.hash                        |  4 +-
+ package/musl/musl.mk                          |  2 +-
+ 3 files changed, 3 insertions(+), 58 deletions(-)
+ delete mode 100644 package/musl/0002-fix-race-condition-in-file-locking.patch
 
-diff --git a/package/wavemon/0001-Drop-on_exit-use-standard-atexit-instead.patch b/package/wavemon/0001-Drop-on_exit-use-standard-atexit-instead.patch
-new file mode 100644
-index 0000000000..67292539ca
---- /dev/null
-+++ b/package/wavemon/0001-Drop-on_exit-use-standard-atexit-instead.patch
-@@ -0,0 +1,73 @@
-+From f6e20c9c6e9b50963caaf5483248d329473a6815 Mon Sep 17 00:00:00 2001
-+From: Gerrit Renker <Gerrit.Renker@ctl.io>
-+Date: Mon, 21 Jan 2019 09:23:43 -0700
-+Subject: [PATCH] Drop on_exit(), use standard atexit() instead
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+`on_exit()` is a GLIBC specific extension and not available in musl and uClibc.
-+
-+Portable applications should avoid this function, and use the standard
-+`atexit()` instead.
-+
-+Backported from:f6e20c9c6e9b50963caaf5483248d329473a6815
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ iw_if.c   | 10 ++++++----
-+ iw_if.h   |  2 +-
-+ iw_scan.c |  2 +-
-+ 3 files changed, 8 insertions(+), 6 deletions(-)
-+
-+diff --git a/iw_if.c b/iw_if.c
-+index c0b0128..d8bacbc 100644
-+--- a/iw_if.c
-++++ b/iw_if.c
-+@@ -87,11 +87,13 @@ int if_set_down(const char *ifname)
-+ 	return if_set_up_or_down(ifname, false);
-+ }
-+ 
-+-/** Exit handler to restore interface 'down' state on exit via on_exit(3). */
-+-void if_set_down_on_exit(int rc, void *arg)
-++/** Exit handler to restore interface 'down' state on exit via atexit(3). */
-++void if_set_down_on_exit(void)
-+ {
-+-	if (if_set_down(arg) < 0) {
-+-		err_msg("unable to restore %s interface state - set down manually", arg);
-++	const char *ifname = conf_ifname();
-++
-++	if (ifname && if_set_down(ifname) < 0) {
-++		err_msg("unable to restore %s interface state - set down manually", ifname);
-+ 	}
-+ }
-+ 
-+diff --git a/iw_if.h b/iw_if.h
-+index 50f5a47..e2199d3 100644
-+--- a/iw_if.h
-++++ b/iw_if.h
-+@@ -76,7 +76,7 @@ struct if_info {
-+ };
-+ extern bool if_is_up(const char *ifname);
-+ extern int  if_set_up(const char *ifname);
-+-extern void if_set_down_on_exit(int rc, void *arg);
-++extern void if_set_down_on_exit(void);
-+ extern void if_getinf(const char *ifname, struct if_info *info);
-+ 
-+ /**
-+diff --git a/iw_scan.c b/iw_scan.c
-+index 18e9e06..e2b3067 100644
-+--- a/iw_scan.c
-++++ b/iw_scan.c
-+@@ -430,7 +430,7 @@ void *do_scan(void *sr_ptr)
-+ 
-+ 				if (if_set_up(conf_ifname()) < 0)
-+ 					err_sys("Can not bring up interface '%s'", conf_ifname());
-+-				if (on_exit(if_set_down_on_exit, (void *)conf_ifname()) < 0)
-++				if (atexit(if_set_down_on_exit) < 0)
-+ 					snprintf(sr->msg, sizeof(sr->msg), "Warning: unable to restore %s down state on exit", conf_ifname());
-+ 				break;
-+ 			}
-+-- 
-+2.20.1
-+
+diff --git a/package/musl/0002-fix-race-condition-in-file-locking.patch b/package/musl/0002-fix-race-condition-in-file-locking.patch
+deleted file mode 100644
+index f3e85e6888..0000000000
+--- a/package/musl/0002-fix-race-condition-in-file-locking.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 0db393d3a77bb9f300a356c6a5484fc2dddb161d Mon Sep 17 00:00:00 2001
+-From: Kaarle Ritvanen <kaarle.ritvanen@datakunkku.fi>
+-Date: Tue, 18 Sep 2018 10:03:27 +0300
+-Subject: [PATCH] fix race condition in file locking
+-
+-The condition occurs when
+-- thread #1 is holding the lock
+-- thread #2 is waiting for it on __futexwait
+-- thread #1 is about to release the lock and performs a_swap
+-- thread #3 enters the __lockfile function and manages to grab the lock
+-  before thread #1 calls __wake, resetting the MAYBE_WAITERS flag
+-- thread #1 calls __wake
+-- thread #2 wakes up but goes again to __futexwait as the lock is
+-  held by thread #3
+-- thread #3 releases the lock but does not call __wake as the
+-  MAYBE_WAITERS flag is not set
+-
+-This condition results in thread #2 not being woken up. This patch fixes
+-the problem by making the woken up thread ensure that the flag is
+-properly set before going to sleep again.
+-
+-Mainainer's note: This fixes a regression introduced in commit
+-c21f750727515602a9e84f2a190ee8a0a2aeb2a1.
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/stdio/__lockfile.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/stdio/__lockfile.c b/src/stdio/__lockfile.c
+-index 2ff75d8a..0dcb2a42 100644
+---- a/src/stdio/__lockfile.c
+-+++ b/src/stdio/__lockfile.c
+-@@ -8,13 +8,13 @@ int __lockfile(FILE *f)
+- 	int owner = f->lock, tid = __pthread_self()->tid;
+- 	if ((owner & ~MAYBE_WAITERS) == tid)
+- 		return 0;
+--	for (;;) {
+--		owner = a_cas(&f->lock, 0, tid);
+--		if (!owner) return 1;
+--		if (a_cas(&f->lock, owner, owner|MAYBE_WAITERS)==owner) break;
+-+	owner = a_cas(&f->lock, 0, tid);
+-+	if (!owner) return 1;
+-+	while ((owner = a_cas(&f->lock, 0, tid|MAYBE_WAITERS))) {
+-+		if ((owner & MAYBE_WAITERS) ||
+-+		    a_cas(&f->lock, owner, owner|MAYBE_WAITERS)==owner)
+-+			__futexwait(&f->lock, owner|MAYBE_WAITERS, 1);
+- 	}
+--	while ((owner = a_cas(&f->lock, 0, tid|MAYBE_WAITERS)))
+--		__futexwait(&f->lock, owner, 1);
+- 	return 1;
+- }
+- 
+--- 
+-2.14.4
+-
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index f7cc05bcce..18e011a965 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://www.musl-libc.org/releases/musl-1.1.20.tar.gz.asc
+-sha256  44be8771d0e6c6b5f82dd15662eb2957c9a3173a19a8b49966ac0542bbd40d61  musl-1.1.20.tar.gz
++# http://www.musl-libc.org/releases/musl-1.1.21.tar.gz.asc
++sha256  c742b66f6f49c9e5f52f64d8b79fecb5a0f6e0203fca176c70ca20f6be285f44  musl-1.1.21.tar.gz
+ sha256  15d9afbf84041872b4d840ed7d165d3eee786ff3f97e703b10467c259ff4e7d9  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 058a362922..90c753926e 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUSL_VERSION = 1.1.20
++MUSL_VERSION = 1.1.21
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
 -- 
 2.20.1
