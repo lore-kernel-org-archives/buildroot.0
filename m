@@ -1,44 +1,48 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 22 Jan 2019 12:34:30 -0600
-Subject: [Buildroot] [PATCH] package/iperf: bump to 2.0.13
-Message-ID: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 22 Jan 2019 21:12:20 +0200
+Subject: [Buildroot] [PATCH] package/lsof: bump to version 4.91
+Message-ID: <7d971394fa5f61b75c685071ad67d72e72840689.1548184340.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/iperf/iperf.hash | 5 +++--
- package/iperf/iperf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Add upstream provided md5 hash.
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 3540c6e..696085c 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,5 +1,6 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1	909b469bbbc38508cd268e334a6ec319c3116f15	iperf-2.0.12.tar.gz
-+sha1	3eb21c329af811af53a2c816e1ed26b3dd2c259f	iperf-2.0.13.tar.gz
-+
- # Locally computed:
--sha256  367f651fb1264b13f6518e41b8a7e08ce3e41b2a1c80e99ff0347561eed32646  iperf-2.0.12.tar.gz
-+sha256  a43ee9d6476955e7fc7aa894b6c4d227a2129943ad6171ad39aa52f1a065db50  iperf-2.0.13.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index c712de6..7088b0f 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
+Add license fine hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lsof/lsof.hash | 7 ++++++-
+ package/lsof/lsof.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index 4a1249f1af04..ccb737153d94 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
+@@ -1,2 +1,7 @@
++# From http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/CHECKSUMS_4.91
++md5 148ed410cb52e08c2adc0c60f480f11f  lsof_4.91.tar.bz2
+ # Locally calculated after checking pgp signature
+-sha256	81ac2fc5fdc944793baf41a14002b6deb5a29096b387744e28f8c30a360a3718	lsof_4.89.tar.bz2
++# http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.91.tar.bz2.sig
++# with (old, weak) key 40BD3D55
++sha256	c9da946a525fbf82ff80090b6d1879c38df090556f3fe0e6d782cb44172450a3	lsof_4.91.tar.bz2
++sha256	32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1	dialects/linux/dproto.h
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 83a9b6c3885b..58a2d8ef1bcf 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF_VERSION = 2.0.12
-+IPERF_VERSION = 2.0.13
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
+-LSOF_VERSION = 4.89
++LSOF_VERSION = 4.91
+ LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
+ # Use http mirror since master ftp site access is very draconian
+ LSOF_SITE = http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof
 -- 
-1.9.1
+2.20.1
