@@ -1,19 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 21:49:20 +0100
-Subject: [Buildroot] [PATCH] package/iperf: bump to 2.0.13
-In-Reply-To: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Tue, 22 Jan 2019 12:34:30 -0600")
-References: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87fttko1tb.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Jan 2019 21:50:11 +0100
+Subject: [Buildroot] [PATCH] package/lsof: bump to version 4.91
+In-Reply-To: <7d971394fa5f61b75c685071ad67d72e72840689.1548184340.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 22 Jan 2019 21:12:20 +0200")
+References: <7d971394fa5f61b75c685071ad67d72e72840689.1548184340.git.baruch@tkos.co.il>
+Message-ID: <87bm48o1rw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Add upstream provided md5 hash.
+ > Add license fine hash.
+
+s/fine/file/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
