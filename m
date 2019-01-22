@@ -1,62 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 19:15:42 +0100
-Subject: [Buildroot] [PATCH] package/apache: security bump to version 2.4.38
-Message-ID: <20190122181542.11918-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 22 Jan 2019 19:19:39 +0100
+Subject: [Buildroot] Enable mount SquashFS
+In-Reply-To: <CAOqJNTd10twL7LOeVpJn2Q8XLLALxYT-zr7hoH_oC4uYP2enwQ@mail.gmail.com>
+References: <CAOqJNTc0j8hKGbugSyOqMKKymn8yB3UBSkvamLe9-cnK572UvA@mail.gmail.com>
+ <20190118203223.02765998@gmx.net>
+ <CAOqJNTfN9Ux1x_q3hXd6utAqtVCasUyx5yA1d2MqvMFg2_bMKg@mail.gmail.com>
+ <20190121214544.5e615f30@gmx.net>
+ <CAOqJNTd10twL7LOeVpJn2Q8XLLALxYT-zr7hoH_oC4uYP2enwQ@mail.gmail.com>
+Message-ID: <20190122191939.408da0e2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+Hello ??????,
 
-  *) SECURITY: CVE-2018-17199 (cve.mitre.org)
-     mod_session: mod_session_cookie does not respect expiry time allowing
-     sessions to be reused.  [Hank Ibell]
+On Tue, 22 Jan 2019 01:33:59 +0200, ????? <sergei.sakhno@gmail.com> wrote:
 
-  *) SECURITY: CVE-2018-17189 (cve.mitre.org)
-     mod_http2: fixes a DoS attack vector. By sending slow request bodies
-     to resources not consuming them, httpd cleanup code occupies a server
-     thread unnecessarily. This was changed to an immediate stream reset
-     which discards all stream state and incoming data.  [Stefan Eissing]
+> Problem was with loop-devices. I am did not  enable loop-devices support in
+> kernel.
 
-  *) SECURITY: CVE-2019-0190 (cve.mitre.org)
-     mod_ssl: Fix infinite loop triggered by a client-initiated
-     renegotiation in TLSv1.2 (or earlier) with OpenSSL 1.1.1 and
-     later.  PR 63052.  [Joe Orton]
+Thanks for the feedback...
 
-For more details, see the CHANGES file:
-https://www.apache.org/dist/httpd/CHANGES_2.4.38
+Regards,
+Peter
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 6d21f0f614..fd42cd4872 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
--sha256 3498dc5c6772fac2eb7307dc7963122ffe243b5e806e0be4fb51974ff759d726 httpd-2.4.37.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.38.tar.bz2.sha256
-+sha256 7dc65857a994c98370dc4334b260101a7a04be60e6e74a5c57a6dee1bc8f394a httpd-2.4.38.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index a95ac69f31..dd8f175f9c 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.37
-+APACHE_VERSION = 2.4.38
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
--- 
-2.11.0
+> 
+> ??, 21 ???. 2019 ?. ? 22:45, Peter Seiderer <ps.report@gmx.net>:
+> 
+> > Hello ??????, buildroot at buildroot.org
+> >
+> > please keep buildroot at busybox.net in CC....
+> >
+> > On Mon, 21 Jan 2019 12:21:55 +0200, ?????? ????? <sergei.sakhno@gmail.com>
+> > wrote:
+> >  
+> > > Thks. I missed this this parametr.
+> > > Can you help me with mount squashfs image in minimal image of linux,
+> > > created in buildroot?
+> > > When i try mount squashfs image as root (mount -t squashfs -o
+> > > ro,loop,sizelimit=14319616 /home/update-last.raucb /run/rauc/bundle), i  
+> > get  
+> > > error:
+> > >  
+> > > > mount: /run/rauc/bundle: mount failed: Operation not permitted.
+> > > > Failed mounting bundle: failed to run mount: Child process exited with
+> > > > code 1
+> > > > installing /home/update-last.raucb: Failed mounting bundle: failed to  
+> > run  
+> > > > mount: Child process exited with code 1
+> > > >  
+> > > EXT4 partition on real storage device mounted successfully.  
+> >
+> > Not much info....why mount to /run/rauc/bundle and not just /mnt ? Why
+> > option sizelimit?
+> > Where does the 'installing' error message come from? How is the squashfs
+> > image update-last.raucb
+> > created (never worked with rauc (yet))? Loop mounting enabled in the
+> > kernel?
+> > Do you run your commands as root user? Which are the file permissions of
+> > the squashfs image file?
+> >
+> > Regards,
+> > Peter
+> >  
+> > >
+> > >
+> > > ??, 18 ???. 2019 ?. ? 21:32, Peter Seiderer <ps.report@gmx.net>:
+> > >  
+> > > > Hello ??????,
+> > > >
+> > > > On Fri, 18 Jan 2019 20:27:41 +0200, ?????? ????? <  
+> > sergei.sakhno at gmail.com>  
+> > > > wrote:
+> > > >  
+> > > > > Good evening everyone. How to enable the ability to mount SquashFS?  
+> > In  
+> > > > the  
+> > > > > menuconfig of busybox downloaded from the busybox site there is an  
+> > item  
+> > > > > [SquashFS filesystem] in the [Filesystem / Volume identification]  
+> > > > section,  
+> > > > > but in the menuconfig of busybox unpacked buildroot it is not.  
+> > > >
+> > > > Busybox CONFIG_FEATURE_VOLUMEID_SQUASHFS depends on VOLUMEID &&
+> > > > FEATURE_BLKID_TYPE,
+> > > > VOLUMEID is already enabled, FEATURE_BLKID_TYPE is Linux System  
+> > Utilities  
+> > > > -->  
+> > > > blkid --> Print Filesystem type
+> > > >
+> > > > More important is enabled squashfs support in the linux kernel...
+> > > >
+> > > > Regards,
+> > > > Peter
+> > > >
+> > > >  
+> >
+> >  
