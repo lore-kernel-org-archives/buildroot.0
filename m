@@ -1,89 +1,102 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 22 Jan 2019 11:51:21 +0000
-Subject: [Buildroot] [PATCH] configs/qemu_riscv64_virt_defconfig: bump
- Linux version
-In-Reply-To: <20190121200450.4023-1-gwenj@trabucayre.com>
-References: <20190121200450.4023-1-gwenj@trabucayre.com>
-Message-ID: <af63f98d-a5f1-8b73-7174-41b4373d88ab@embecosm.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 Jan 2019 12:53:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libshout: Add support for
+ openssl 1.1.x
+In-Reply-To: <20190118001059.6045-1-vadim4j@gmail.com>
+References: <20190118001059.6045-1-vadim4j@gmail.com>
+Message-ID: <6bf5c9ac-4274-24b8-f07a-d74e4c17ed60@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gwenhael
 
-On 21/01/2019 20:04, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->
-> Since riscv64 works with linux default defconfig, this patch drop custom config.
->
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+On 18/01/2019 01:10, Vadim Kochan wrote:
+> Added patch from Debian:
+> 
+> https://sources.debian.org/data/main/libs/libshout/2.4.1-2/debian/patches/01-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 > ---
->  board/qemu/riscv64-virt/linux.config | 23 -----------------------
->  configs/qemu_riscv64_virt_defconfig  |  9 ++++-----
->  2 files changed, 4 insertions(+), 28 deletions(-)
->  delete mode 100644 board/qemu/riscv64-virt/linux.config
->
-> diff --git a/board/qemu/riscv64-virt/linux.config b/board/qemu/riscv64-virt/linux.config
-> deleted file mode 100644
-> index d09e8b3bb1..0000000000
-> --- a/board/qemu/riscv64-virt/linux.config
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -CONFIG_ARCH_RV64I=y
-> -CONFIG_SMP=y
-> -CONFIG_NR_CPUS=8
-> -CONFIG_PCI=y
-> -CONFIG_SYSVIPC=y
-> -CONFIG_NET=y
-> -CONFIG_PACKET=y
-> -CONFIG_UNIX=y
-> -CONFIG_INET=y
-> -# CONFIG_WIRELESS is not set
-> -CONFIG_VIRTIO_BLK=y
-> -CONFIG_NETDEVICES=y
-> -CONFIG_VIRTIO_NET=y
-> -# CONFIG_ETHERNET is not set
-> -# CONFIG_WLAN is not set
-> -CONFIG_SERIAL_8250=y
-> -CONFIG_SERIAL_8250_CONSOLE=y
-> -CONFIG_SERIAL_OF_PLATFORM=y
-> -CONFIG_VIRT_DRIVERS=y
-> -CONFIG_VIRTIO_MMIO=y
-> -CONFIG_EXT2_FS=y
-> -CONFIG_EXT4_FS=y
-> -CONFIG_TMPFS=y
-> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-> index e15f804341..705ec1293a 100644
-> --- a/configs/qemu_riscv64_virt_defconfig
-> +++ b/configs/qemu_riscv64_virt_defconfig
-> @@ -10,16 +10,15 @@ BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_GENERIC_GETTY=y
->  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->  
-> -# Linux headers same as kernel, a 4.15 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-> +# Linux headers same as kernel, a 4.20 series
-> +BR2_KERNEL_HEADERS_4_20=y
->  
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  
->  # Bootloader
->  BR2_TARGET_RISCV_PK=y
-This builds on my system and boots under QEMU 2.12.0.
+>  ...3-libshout-tls-compile-with-OpenSSL-1.1.0.patch | 58 ++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+> 
+> diff --git a/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+> new file mode 100644
+> index 0000000000..befd16e384
+> --- /dev/null
+> +++ b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+> @@ -0,0 +1,58 @@
+> +From 01fafc449f0de56743d08e7976933c49e2915bfa Mon Sep 17 00:00:00 2001
+> +From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+> +Date: Wed, 15 Nov 2017 12:46:25 +0000
+> +Subject: [PATCH] tls: compile with OpenSSL 1.1.0
+> +
+> +The init functions are not longer required in OpenSSL 1.1 so I dropped
+> +them.
+> +
+> +TLSv1_client_method() should not be used because it enables only the
+> +TLSv1.0 protocol. Better is to use SSLv23_client_method() which enable
+> +all the protocols including TLSv1.2. With this functions SSLv2 and SSLv3
+> +is theoretically possible but as of today those protocols are usually
+> +build-time disabled.
+> +To avoid all this OpenSSL 1.1 provides TLS_client_method() which is aim
+> +to provide to highest TLS protocol version (same as
+> +SSLv23_client_method() but it is deprecated in 1.1).
+> +
+> +Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
 
-Tested-by: Mark Corbin <mark.corbin@embecosm.com>
+ You should also add your Signed-off-by here (cfr. [1]).
 
--- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+
+ Regards,
+ Arnout
+
+[1]
+https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+
+
+> +---
+> + src/tls.c | 12 ++++++++----
+> + 1 file changed, 8 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/tls.c b/src/tls.c
+> +index 4562c7327077..e0e5c1a5f079 100644
+> +--- a/src/tls.c
+> ++++ b/src/tls.c
+> +@@ -24,6 +24,7 @@
+> + #endif
+> + 
+> + #include <shout/shout.h>
+> ++#include <string.h>
+> + #include "shout_private.h"
+> + 
+> + #ifndef XXX_HAVE_X509_check_host
+> +@@ -61,14 +62,17 @@ shout_tls_t *shout_tls_new(shout_t *self, sock_t socket)
+> + 
+> + static inline int tls_setup(shout_tls_t *tls)
+> + {
+> +-	SSL_METHOD *meth;
+> +-
+> ++	const SSL_METHOD *meth;
+> ++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+> + 	SSL_library_init();
+> + 	SSL_load_error_strings();
+> + 	SSLeay_add_all_algorithms();
+> +- 	SSLeay_add_ssl_algorithms();
+> ++	SSLeay_add_ssl_algorithms();
+> + 
+> +-	meth = TLSv1_client_method();
+> ++	meth = SSLv23_client_method();
+> ++#else
+> ++	meth = TLS_client_method();
+> ++#endif
+> + 	if (!meth)
+> + 		goto error;
+> + 
+> +-- 
+> +2.15.0
+> 
