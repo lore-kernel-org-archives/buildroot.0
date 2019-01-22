@@ -1,115 +1,158 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 22 Jan 2019 20:18:27 +0100
-Subject: [Buildroot] [PATCH] package/upmpdcli: add upstream patch to fix
- musl build issue
-Message-ID: <20190122191827.32742-1-joerg.krause@embedded.rocks>
+From: Igor Miranda <igorcmiranda3110@gmail.com>
+Date: Tue, 22 Jan 2019 18:05:59 -0200
+Subject: [Buildroot] Unsafe Headers
+Message-ID: <CAAOxJQQArADC06G0XDQkQU2mGJ6XQWjZtGfUVTKRafzNoR0q9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upmpdcli 1.4.0 uses both the `uint64_t` and `u_int64_t` type. `uintN_t` is
-standard C99 type available in `<stdint.h>`, whereas `u_intN_t` is defined in
-`<sys/types.h>`.
+*Dear Buildroot Support,*
 
-Because of the missing include of `<sys/types.h>` building upmpdcli breaks now
-when building with the musl C library, which is very strict:
+*I'm writing this email because I did a recipe for the GST-SHARK and I got
+this error:*
 
-```
-src/mediaserver/cdplugins/netfetch.h:71:5: error: ?u_int64_t? does not name a type
-     u_int64_t datacount() {
-```
++ check for build tools
+  checking for autoreconf ...
+/usr/bin/autoreconf
+  checking for pkg-config ...
+/usr/bin/pkg-config
+configure.ac:96: installing './compile'
+configure.ac:34: installing './config.guess'
+configure.ac:34: installing './config.sub'
+configure.ac:16: installing './install-sh'
+configure.ac:16: installing './missing'
+common/coverage/lcov.mak:2: warning: .PHONY was already defined in
+condition GST_GCOV_ENABLED, which is included in condition TRUE ...
+Makefile.am:88:   'common/coverage/lcov.mak' included from here
+Makefile.am:38: ... '.PHONY' previously defined here
+Makefile.am: installing './INSTALL'
+plugins/tracers/Makefile.am:1: error: Libtool library used but 'LIBTOOL' is
+undefined
+plugins/tracers/Makefile.am:1:   The usual way to define 'LIBTOOL' is to
+add 'LT_INIT'
+plugins/tracers/Makefile.am:1:   to 'configure.ac' and run 'aclocal' and
+'autoconf' again.
+plugins/tracers/Makefile.am:1:   If 'LT_INIT' is in 'configure.ac', make
+sure
+plugins/tracers/Makefile.am:1:   its definition is in aclocal's search path.
+plugins/tracers/Makefile.am: installing './depcomp'
+tests/check/Makefile.am:8: warning: AM_TESTS_ENVIRONMENT multiply defined
+in condition TRUE ...
+common/check.mak:15: ... 'AM_TESTS_ENVIRONMENT' previously defined here
+tests/check/Makefile.am:1:   'common/check.mak' included from here
+parallel-tests: installing './test-driver'
+autoreconf: automake failed with exit status: 1
+package/pkg-generic.mk:220: recipe for target
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/.stamp_configured'
+failed
+make: ***
+[/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/.stamp_configured]
+Error 1
 
-Add a patch from upstream which fixes the issue by replacing `u_int64_t`
-with `uint64_t`.
 
-Fixes:
-http://autobuild.buildroot.net/results/f3082d2fdda8d73dbd9d3b65a08d844934066ef7
+*So, after I add libtoolize in my mk file and I got this other error:*
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...01-Use-uint64_t-instead-of-u_int64_t.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
 
-diff --git a/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
-new file mode 100644
-index 0000000000..69e05827ce
---- /dev/null
-+++ b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
-@@ -0,0 +1,72 @@
-+From 256394399f57ba6e3057ee2c981127a14e4623f8 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 22 Jan 2019 09:07:56 +0100
-+Subject: [PATCH] Use uint64_t instead of u_int64_t
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+`uintN_t` is standard C99 type available in `<stdint.h>`, whereas `u_intN_t`
-+is defined `<sys/types.h>`
-+
-+As upmpdcli already uses the `uintN_t` type, replace the few existing
-+`u_intN_t` types, as it breaks build with the musl C library, which is
-+very strict, because of the missing `<sys/types.h>`:
-+
-+```
-+src/mediaserver/cdplugins/netfetch.h:71:5: error: ?u_int64_t? does not name a type
-+     u_int64_t datacount() {
-+```
-+
-+Backported from: 256394399f57ba6e3057ee2c981127a14e4623f8
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/mediaserver/cdplugins/netfetch.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/mediaserver/cdplugins/netfetch.h b/src/mediaserver/cdplugins/netfetch.h
-+index d7e9df4..d105e53 100644
-+--- a/src/mediaserver/cdplugins/netfetch.h
-++++ b/src/mediaserver/cdplugins/netfetch.h
-+@@ -68,7 +68,7 @@ public:
-+     /// Reset after transfer done, for retrying for exemple.
-+     virtual bool reset() = 0;
-+ 
-+-    u_int64_t datacount() {
-++    uint64_t datacount() {
-+         return fetch_data_count;
-+     }
-+ 
-+@@ -84,11 +84,11 @@ public:
-+         buf1cb = f;
-+     }
-+     // Called when the network transfer is done
-+-    void setEOFetchCB(std::function<void(bool ok, u_int64_t count)> f) {
-++    void setEOFetchCB(std::function<void(bool ok, uint64_t count)> f) {
-+         eofcb = f;
-+     }
-+     // Called every time we get new data from the remote
-+-    void setFetchBytesCB(std::function<void(u_int64_t count)> f) {
-++    void setFetchBytesCB(std::function<void(uint64_t count)> f) {
-+         fbcb = f;
-+     }
-+ 
-+@@ -98,11 +98,11 @@ protected:
-+     std::string _url;
-+     uint64_t startoffset;
-+     int timeoutsecs{0};
-+-    u_int64_t fetch_data_count{0};
-++    uint64_t fetch_data_count{0};
-+     BufXChange<ABuffer*> *outqueue{nullptr};
-+     std::function<bool(std::string&, void *, int)> buf1cb;
-+-    std::function<void(u_int64_t)> fbcb;
-+-    std::function<void(bool, u_int64_t)> eofcb;
-++    std::function<void(uint64_t)> fbcb;
-++    std::function<void(bool, uint64_t)> eofcb;
-+ };
-+ 
-+ #endif /* _MEDIAFETCH_H_INCLUDED_ */
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+
+libtool: install: /usr/bin/install -c .libs/libgstshark.so.0.0.0
+/home/igor/buildroot/buildroot/output/target/usr/lib/libgstshark.so.0.0.0
+libtool: install: (cd /home/igor/buildroot/buildroot/output/target/usr/lib
+&& { ln -s -f libgstshark.so.0.0.0 libgstshark.so.0 || { rm -f
+libgstshark.so.0 && ln -s libgstshark.so.0.0.0 libgstshark.so.0; }; })
+libtool: install: (cd /home/igor/buildroot/buildroot/output/target/usr/lib
+&& { ln -s -f libgstshark.so.0.0.0 libgstshark.so || { rm -f libgstshark.so
+&& ln -s libgstshark.so.0.0.0 libgstshark.so; }; })
+libtool: install: /usr/bin/install -c .libs/libgstshark.lai
+/home/igor/buildroot/buildroot/output/target/usr/lib/libgstshark.la
+libtool: warning: relinking 'libgstsharktracers.la'
+libtool: install: (cd
+/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/plugins/tracers;
+/bin/bash
+"/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/libtool"
+--silent --tag CC --tag disable-static --mode=relink
+/home/igor/buildroot/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
+-I../.. -I../..
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib/glib-2.0/include
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/include
+-pthread -DG_THREADS_MANDATORY -DG_DISABLE_DEPRECATED -Wall
+-Wdeclaration-after-statement -Wvla -Wpointer-arith -Wmissing-declarations
+-Wmissing-prototypes -Wredundant-decls -Wundef -Wwrite-strings
+-Wformat-nonliteral -Wformat-security -Wold-style-definition -Winit-self
+-Wmissing-include-dirs -Waddress -Waggregate-return -Wno-multichar
+-Wnested-externs -g -DGST_DISABLE_DEPRECATED -Werror
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/include/gstreamer-1.0
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/include/glib-2.0
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib/glib-2.0/include
+-I/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/include
+-pthread -DGST_USE_UNSTABLE_API -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -Os -module -avoid-version -export-symbols-regex
+"^_*gst_plugin_.*" -no-undefined -Wl,-Bsymbolic-functions -o
+libgstsharktracers.la -rpath /usr/lib/gstreamer-1.0
+libgstsharktracers_la-gstplugin.lo libgstsharktracers_la-gstsharktracer.lo
+libgstsharktracers_la-gstgraphic.lo libgstsharktracers_la-gstcpuusage.lo
+libgstsharktracers_la-gstproctime.lo
+libgstsharktracers_la-gstinterlatency.lo
+libgstsharktracers_la-gstscheduletime.lo
+libgstsharktracers_la-gstframerate.lo
+libgstsharktracers_la-gstqueuelevel.lo libgstsharktracers_la-gstbitrate.lo
+libgstsharktracers_la-gstbuffer.lo
+libgstsharktracers_la-gstperiodictracer.lo
+-L/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib
+-lgobject-2.0 -lgmodule-2.0 -pthread -lglib-2.0
+-L/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib
+-lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 libgstshark.la -inst-prefix-dir
+/home/igor/buildroot/buildroot/output/target)
+libtool: warning: remember to run 'libtool --finish /usr/lib'
+arm-buildroot-linux-gnueabi-gcc: ERROR: unsafe header/library path used in
+cross-compilation: '-L/usr/lib'
+libtool:   error: error: relink 'libgstsharktracers.la' with the above
+command before installing it
+Makefile:646: recipe for target 'install-pluginLTLIBRARIES' failed
+make[4]: *** [install-pluginLTLIBRARIES] Error 1
+make[4]: Leaving directory
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/plugins/tracers'
+Makefile:963: recipe for target 'install-am' failed
+make[3]: *** [install-am] Error 2
+make[3]: Leaving directory
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/plugins/tracers'
+Makefile:483: recipe for target 'install-recursive' failed
+make[2]: *** [install-recursive] Error 1
+make[2]: Leaving directory
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/plugins'
+Makefile:599: recipe for target 'install-recursive' failed
+make[1]: *** [install-recursive] Error 1
+make[1]: Leaving directory
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5'
+package/pkg-generic.mk:315: recipe for target
+'/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/.stamp_target_installed'
+failed
+make: ***
+[/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/.stamp_target_installed]
+Error 2
+Visualizar o anexo gst-shark.mk
+gst-shark.
+
+*I will send my mk file too, but what changes is that in this line:*
+
+*cd $(@D) && ./autogen.sh --prefix=${STAGING_DIR}/usr
+--libdir=${STAGING_DIR}/usr/lib *
+
+*with libtoolize is going to be something like this *
+
+*cd $(@D) && libtoolize && ./autogen.sh --prefix=${STAGING_DIR}/usr
+--libdir=${STAGING_DIR}/usr/lib*
+
+?rea de anexos
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190122/70b731ac/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gst-shark.mk
+Type: text/x-makefile
+Size: 830 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190122/70b731ac/attachment.bin>
