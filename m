@@ -1,50 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 21:49:58 +0100
-Subject: [Buildroot] [git commit] package/lsof: bump to version 4.91
-Message-ID: <20190122204938.BA6DA8E2D4@busybox.osuosl.org>
+Date: Tue, 22 Jan 2019 22:08:52 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 22 Jan 2019 12:23:14 +0100")
+References: <20190115224239.26125-1-ps.report@gmx.net>
+ <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
+ <20190117194339.5cb2eb0f@gmx.net>
+ <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
+Message-ID: <877eewo0wr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f900e9cd5e21154a4db5969e78bb5e1da4fdf74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Add upstream provided md5 hash.
+Hi,
 
-Add license file hash.
+ >  At some point, we'll just have to let an autobuilder detect the issues. Some
+ > issues anyway only become apparent at link time, so when building a dependency
+ > of a dependency...
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lsof/lsof.hash | 7 ++++++-
- package/lsof/lsof.mk   | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ >  We have an autobuilder running on an openssl-bump branch and Patrick is fixing
+ > the issues that come out. But at some point we'll need to just bite the bullet
+ > and accept the whole thing.
 
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-index 4a1249f1af..ccb737153d 100644
---- a/package/lsof/lsof.hash
-+++ b/package/lsof/lsof.hash
-@@ -1,2 +1,7 @@
-+# From http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/CHECKSUMS_4.91
-+md5 148ed410cb52e08c2adc0c60f480f11f  lsof_4.91.tar.bz2
- # Locally calculated after checking pgp signature
--sha256	81ac2fc5fdc944793baf41a14002b6deb5a29096b387744e28f8c30a360a3718	lsof_4.89.tar.bz2
-+# http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.91.tar.bz2.sig
-+# with (old, weak) key 40BD3D55
-+sha256	c9da946a525fbf82ff80090b6d1879c38df090556f3fe0e6d782cb44172450a3	lsof_4.91.tar.bz2
-+sha256	32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1	dialects/linux/dproto.h
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 83a9b6c388..58a2d8ef1b 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LSOF_VERSION = 4.89
-+LSOF_VERSION = 4.91
- LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
- # Use http mirror since master ftp site access is very draconian
- LSOF_SITE = http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof
+ >  I do hope that it could still go into 2019.02.
+
+If that is our goal, then we might as well merge it ASAP to get more
+test coverage?
+
+What is the killer feature why we need openssl-1.1.x in 2019.02.x? TLS
+1.3 or just that 1.0.2 goes EOL at the end of the year?
+
+-- 
+Bye, Peter Korsgaard
