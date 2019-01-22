@@ -1,116 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 22:45:44 +0100
-Subject: [Buildroot] [git commit] package/upmpdcli: add upstream patch to
- fix musl build issue
-Message-ID: <20190122214705.AAE6F835B9@busybox.osuosl.org>
+Date: Tue, 22 Jan 2019 23:30:08 +0100
+Subject: [Buildroot] Downloading at91bootstrap3 fails on recent master?
+In-Reply-To: <20190122143744.j5n5os57dcsds7qr@falbala.home.lespocky.de>
+ (Alexander Dahl's message of "Tue, 22 Jan 2019 15:37:44 +0100")
+References: <20190122143744.j5n5os57dcsds7qr@falbala.home.lespocky.de>
+Message-ID: <87h8e0mikv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=255f9172377f98da18ce8797e1ddf35f8f369373
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
-upmpdcli 1.4.0 uses both the `uint64_t` and `u_int64_t` type. `uintN_t` is
-standard C99 type available in `<stdint.h>`, whereas `u_intN_t` is defined in
-`<sys/types.h>`.
+ > Hei hei,
+ > I just pulled current master (2018.11-829-gd078cecdcf) and tried
+ > building atmel_sama5d27_som1_ek_mmc_dev_defconfig, like this:
 
-Because of the missing include of `<sys/types.h>` building upmpdcli breaks now
-when building with the musl C library, which is very strict:
+ > (Note, env variable BR2_DL_DIR is set to:
+ > '/home/adahl/mnt/bagend-ia/src_archive'.)
 
-```
-src/mediaserver/cdplugins/netfetch.h:71:5: error: ???u_int64_t??? does not name a type
-     u_int64_t datacount() {
-```
+Does it work if you don't set BR2_DL_DIR?
 
-Add a patch from upstream which fixes the issue by replacing `u_int64_t`
-with `uint64_t`.
+ >>>> at91bootstrap3 v3.8.10 Downloading
+ > 	/home/adahl/mnt/bagend-ia/src_archive/at91bootstrap3/git/.git: Datei oder Verzeichnis nicht gefunden
 
-Fixes:
-http://autobuild.buildroot.net/results/f3082d2fdda8d73dbd9d3b65a08d844934066ef7
+I guess this is something like file not found? It sounds like your git
+clone has gotten corrupted?
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Use-uint64_t-instead-of-u_int64_t.patch   | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+It works here:
 
-diff --git a/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
-new file mode 100644
-index 0000000000..69e05827ce
---- /dev/null
-+++ b/package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
-@@ -0,0 +1,72 @@
-+From 256394399f57ba6e3057ee2c981127a14e4623f8 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 22 Jan 2019 09:07:56 +0100
-+Subject: [PATCH] Use uint64_t instead of u_int64_t
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+`uintN_t` is standard C99 type available in `<stdint.h>`, whereas `u_intN_t`
-+is defined `<sys/types.h>`
-+
-+As upmpdcli already uses the `uintN_t` type, replace the few existing
-+`u_intN_t` types, as it breaks build with the musl C library, which is
-+very strict, because of the missing `<sys/types.h>`:
-+
-+```
-+src/mediaserver/cdplugins/netfetch.h:71:5: error: ???u_int64_t??? does not name a type
-+     u_int64_t datacount() {
-+```
-+
-+Backported from: 256394399f57ba6e3057ee2c981127a14e4623f8
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/mediaserver/cdplugins/netfetch.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/mediaserver/cdplugins/netfetch.h b/src/mediaserver/cdplugins/netfetch.h
-+index d7e9df4..d105e53 100644
-+--- a/src/mediaserver/cdplugins/netfetch.h
-++++ b/src/mediaserver/cdplugins/netfetch.h
-+@@ -68,7 +68,7 @@ public:
-+     /// Reset after transfer done, for retrying for exemple.
-+     virtual bool reset() = 0;
-+ 
-+-    u_int64_t datacount() {
-++    uint64_t datacount() {
-+         return fetch_data_count;
-+     }
-+ 
-+@@ -84,11 +84,11 @@ public:
-+         buf1cb = f;
-+     }
-+     // Called when the network transfer is done
-+-    void setEOFetchCB(std::function<void(bool ok, u_int64_t count)> f) {
-++    void setEOFetchCB(std::function<void(bool ok, uint64_t count)> f) {
-+         eofcb = f;
-+     }
-+     // Called every time we get new data from the remote
-+-    void setFetchBytesCB(std::function<void(u_int64_t count)> f) {
-++    void setFetchBytesCB(std::function<void(uint64_t count)> f) {
-+         fbcb = f;
-+     }
-+ 
-+@@ -98,11 +98,11 @@ protected:
-+     std::string _url;
-+     uint64_t startoffset;
-+     int timeoutsecs{0};
-+-    u_int64_t fetch_data_count{0};
-++    uint64_t fetch_data_count{0};
-+     BufXChange<ABuffer*> *outqueue{nullptr};
-+     std::function<bool(std::string&, void *, int)> buf1cb;
-+-    std::function<void(u_int64_t)> fbcb;
-+-    std::function<void(bool, u_int64_t)> eofcb;
-++    std::function<void(uint64_t)> fbcb;
-++    std::function<void(bool, uint64_t)> eofcb;
-+ };
-+ 
-+ #endif /* _MEDIAFETCH_H_INCLUDED_ */
-+-- 
-+2.20.1
-+
+make at91bootstrap3-patch
+>>> at91bootstrap3 v3.8.10 Downloading
+Initialized empty Git repository in /var/lib/downloads/at91bootstrap3/git/.git/
+Fetching all references
+remote: Enumerating objects: 42, done.
+remote: Counting objects: 100% (42/42), done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 8347 (delta 0), reused 42 (delta 0), pack-reused 8305
+Receiving objects: 100% (8347/8347), 3.38 MiB | 2.85 MiB/s, done.
+Resolving deltas: 100% (6301/6301), done.
+From https://github.com/linux4sam/at91bootstrap
+ * [new branch]      at91bootstrap-3.x -> origin/at91bootstrap-3.x
+ * [new branch]      master            -> origin/master
+ * [new branch]      sam9x60_early     -> origin/sam9x60_early
+ * [new tag]         sam9x60_1.0       -> sam9x60_1.0
+ * [new tag]         5series_1.0          -> 5series_1.0
+ * [new tag]         5series_1.1          -> 5series_1.1
+ * [new tag]         5series_1.2          -> 5series_1.2
+ * [new tag]         5series_1.3          -> 5series_1.3
+ * [new tag]         Android4sam_v4.0     -> Android4sam_v4.0
+ * [new tag]         Android4sam_v4.1     -> Android4sam_v4.1
+ * [new tag]         Android4sam_v4.2     -> Android4sam_v4.2
+ * [new tag]         Android4sam_v4.3     -> Android4sam_v4.3
+ * [new tag]         Android4sam_v4.4     -> Android4sam_v4.4
+ * [new tag]         Android4sam_v4.4_rc1 -> Android4sam_v4.4_rc1
+ * [new tag]         Android4sam_v4.4_rc2 -> Android4sam_v4.4_rc2
+ * [new tag]         android4sam_v4.0     -> android4sam_v4.0
+ * [new tag]         linux4sam_5.6-rc1    -> linux4sam_5.6-rc1
+ * [new tag]         v3.5.1               -> v3.5.1
+ * [new tag]         v3.5.2               -> v3.5.2
+ * [new tag]         v3.5.3               -> v3.5.3
+ * [new tag]         v3.5.4               -> v3.5.4
+ * [new tag]         v3.6.0               -> v3.6.0
+ * [new tag]         v3.6.1               -> v3.6.1
+ * [new tag]         v3.6.2               -> v3.6.2
+ * [new tag]         v3.7                 -> v3.7
+ * [new tag]         v3.7.1               -> v3.7.1
+ * [new tag]         v3.7.2               -> v3.7.2
+ * [new tag]         v3.7.2-rc2           -> v3.7.2-rc2
+ * [new tag]         v3.8                 -> v3.8
+ * [new tag]         v3.8-alpha1          -> v3.8-alpha1
+ * [new tag]         v3.8-alpha2          -> v3.8-alpha2
+ * [new tag]         v3.8-alpha3          -> v3.8-alpha3
+ * [new tag]         v3.8-alpha4          -> v3.8-alpha4
+ * [new tag]         v3.8-alpha5          -> v3.8-alpha5
+ * [new tag]         v3.8-alpha6          -> v3.8-alpha6
+ * [new tag]         v3.8-alpha7          -> v3.8-alpha7
+ * [new tag]         v3.8-beta1           -> v3.8-beta1
+ * [new tag]         v3.8.1               -> v3.8.1
+ * [new tag]         v3.8.10              -> v3.8.10
+ * [new tag]         v3.8.10-rc1          -> v3.8.10-rc1
+ * [new tag]         v3.8.11              -> v3.8.11
+ * [new tag]         v3.8.11-rc1          -> v3.8.11-rc1
+ * [new tag]         v3.8.11-rc2          -> v3.8.11-rc2
+ * [new tag]         v3.8.11-rc3          -> v3.8.11-rc3
+ * [new tag]         v3.8.11-rc4          -> v3.8.11-rc4
+ * [new tag]         v3.8.12              -> v3.8.12
+ * [new tag]         v3.8.2               -> v3.8.2
+ * [new tag]         v3.8.3               -> v3.8.3
+ * [new tag]         v3.8.4               -> v3.8.4
+ * [new tag]         v3.8.5               -> v3.8.5
+ * [new tag]         v3.8.6               -> v3.8.6
+ * [new tag]         v3.8.7               -> v3.8.7
+ * [new tag]         v3.8.8               -> v3.8.8
+ * [new tag]         v3.8.8-rc2           -> v3.8.8-rc2
+ * [new tag]         v3.8.8-rc3           -> v3.8.8-rc3
+ * [new tag]         v3.8.9               -> v3.8.9
+ * [new tag]         v3.8.9-rc1           -> v3.8.9-rc1
+ * [new tag]         v3.8.9-rc2           -> v3.8.9-rc2
+ * [new tag]         v3.8.9-rc3           -> v3.8.9-rc3
+ * [new tag]         v3.8.9-rc4           -> v3.8.9-rc4
+ * [new tag]         v3.8.9-rc6           -> v3.8.9-rc6
+ * [new tag]         v3.8.9-rc7           -> v3.8.9-rc7
+remote: Enumerating objects: 1232, done.
+remote: Counting objects: 100% (1232/1232), done.
+remote: Total 2651 (delta 1232), reused 1232 (delta 1232), pack-reused 1419
+Receiving objects: 100% (2651/2651), 673.57 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (2108/2108), completed with 141 local objects.
+From https://github.com/linux4sam/at91bootstrap
+ * [new tag]         android4sam_v3.1 -> android4sam_v3.1
+ * [new tag]         v3.3             -> v3.3
+ * [new tag]         v3.4             -> v3.4
+ * [new tag]         v3.4.1           -> v3.4.1
+ * [new tag]         v3.4.2           -> v3.4.2
+ * [new tag]         v3.4.3           -> v3.4.3
+ * [new tag]         v3.4.4           -> v3.4.4
+ * [new tag]         v3.5.0           -> v3.5.0
+Could not fetch special ref 'v3.8.10'; assuming it is not special.
+>>> at91bootstrap3 v3.8.10 Extracting
+gzip -d -c /var/lib/downloads/at91bootstrap3/at91bootstrap3-v3.8.10.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output-at91/build/at91bootstrap3-v3.8.10   -xf -
+>>> at91bootstrap3 v3.8.10 Patching
+
+-- 
+Bye, Peter Korsgaard
