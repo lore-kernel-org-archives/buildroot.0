@@ -1,45 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 Jan 2019 19:47:33 +0200
-Subject: [Buildroot] [PATCH] package/ipset: bump to version 7.1
-Message-ID: <c7f3a297e61e61414525f90714136ef74db1aaa0.1548179253.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 22 Jan 2019 19:15:42 +0100
+Subject: [Buildroot] [PATCH] package/apache: security bump to version 2.4.38
+Message-ID: <20190122181542.11918-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes the following security vulnerabilities:
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 5885fdbf609c..46e285b1ea8c 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,6 @@
--# From http://ipset.netfilter.org/ipset-7.0.tar.bz2.md5sum.txt
--md5 64c4e2e7123481c9db7ee1df127d9531  ipset-7.0.tar.bz2
-+# From http://ipset.netfilter.org/ipset-7.1.tar.bz2.md5sum.txt
-+md5 72b477d1ce076d681b0799f88280f2f3  ipset-7.1.tar.bz2
- # Calculated based on the hash above
--sha256 c6fa0f3b7d514e3edd0113ea02f82ab299e5467a4b7733dc31e127cdccc741af  ipset-7.0.tar.bz2
-+sha256 7b5eb3b93205c20cdc39e3fc8b6e5f7bb214bf79a7c0c00729dd4a31ce16adc4  ipset-7.1.tar.bz2
- # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 98bdcea674ae..542afc963bcb 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+  *) SECURITY: CVE-2018-17199 (cve.mitre.org)
+     mod_session: mod_session_cookie does not respect expiry time allowing
+     sessions to be reused.  [Hank Ibell]
+
+  *) SECURITY: CVE-2018-17189 (cve.mitre.org)
+     mod_http2: fixes a DoS attack vector. By sending slow request bodies
+     to resources not consuming them, httpd cleanup code occupies a server
+     thread unnecessarily. This was changed to an immediate stream reset
+     which discards all stream state and incoming data.  [Stefan Eissing]
+
+  *) SECURITY: CVE-2019-0190 (cve.mitre.org)
+     mod_ssl: Fix infinite loop triggered by a client-initiated
+     renegotiation in TLSv1.2 (or earlier) with OpenSSL 1.1.1 and
+     later.  PR 63052.  [Joe Orton]
+
+For more details, see the CHANGES file:
+https://www.apache.org/dist/httpd/CHANGES_2.4.38
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 6d21f0f614..fd42cd4872 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.bz2.sha256
+-sha256 3498dc5c6772fac2eb7307dc7963122ffe243b5e806e0be4fb51974ff759d726 httpd-2.4.37.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.38.tar.bz2.sha256
++sha256 7dc65857a994c98370dc4334b260101a7a04be60e6e74a5c57a6dee1bc8f394a httpd-2.4.38.tar.bz2
+ # Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index a95ac69f31..dd8f175f9c 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 7.0
-+IPSET_VERSION = 7.1
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-APACHE_VERSION = 2.4.37
++APACHE_VERSION = 2.4.38
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
-2.20.1
+2.11.0
