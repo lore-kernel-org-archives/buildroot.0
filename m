@@ -1,27 +1,38 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 22 Jan 2019 11:47:26 -0500
-Subject: [Buildroot] Has anybody tried packaging up fluoride for buildroot?
-Message-ID: <CAF_dkJD7vVUxCurgdNy5nxv-VqxNq+Fs-eQuZTvoQJh3j-0QmQ@mail.gmail.com>
+From: =?UTF-8?B?0KHQtdGA0LPQtdC5INCh0LDRhdC90L4=?= <sergei.sakhno@gmail.com>
+Date: Tue, 22 Jan 2019 19:38:44 +0200
+Subject: [Buildroot] Error while build with python3 modules
+Message-ID: <CAOqJNTfhysiTA1RO91QTy8aWShcaNLzfo=fs7trwyQM8mxbv1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I notice that there are no package files for fluoride
-(https://android.googlesource.com/platform/system/bt).
+I am selected python3 and python-pip, and while build i got error:
 
-I also notice that the build instructions at that link are somewhat complicated:
-1. git clone bt
-2. install dependencies
-3. Fetch third party dependencies:
-mkdir third_party; cd third_party; for x in LIST OF OTHER REPOS; do git clone x
-4. Fetch third party dependencies of third party dependencies...
-
-at this point, I figure I should take a step back and see if anybody
-else in the community has tried this and what you may have learned
-from your attempt...
-
-Thanks.
-
---wpd
+> >>> python-pip 18.1 Building
+> (cd /home/user/GIT/standard/output/build/python-pip-18.1//;
+> _PYTHON_SYSCONFIGDATA_NAME="_sysconfigdata_m_linux_arm-linux-gnueabihf"
+> PATH="/home/user/GIT/standard/output/host/bin:/home/user/GIT/standard/output/host/sbin:/home/user/bin:/home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
+> PYTHONPATH="/home/user/GIT/standard/output/target/usr/lib/python3.7/"
+> PYTHONNOUSERSITE=1
+> _python_sysroot=/home/user/GIT/standard/output/host/arm-buildroot-linux-gnueabihf/sysroot
+> _python_prefix=/usr _python_exec_prefix=/usr
+> /home/user/GIT/standard/output/host/bin/python setup.py build  )
+>   File "/home/user/GIT/standard/output/target/usr/lib/python3.7/site.py",
+> line 177
+>     file=sys.stderr)
+>         ^
+> SyntaxError: invalid syntax
+> package/pkg-generic.mk:230: recipe for target
+> '/home/user/GIT/standard/output/build/python-pip-18.1/.stamp_built' failed
+> make[1]: ***
+> [/home/user/GIT/standard/output/build/python-pip-18.1/.stamp_built] Error 1
+> Makefile:84: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+After added python3 and puthon-aiohttpi got same error. Or am I doing
+something wrong?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190122/700b8dcd/attachment.html>
