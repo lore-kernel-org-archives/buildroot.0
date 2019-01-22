@@ -1,33 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 22:13:49 +0100
-Subject: [Buildroot] [git commit] package/xerces: use new website (was
- redirecting)
-Message-ID: <20190122211425.CF6F7880F5@busybox.osuosl.org>
+Date: Tue, 22 Jan 2019 22:47:41 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: add upstream patch to fix
+ musl build issue
+In-Reply-To: <20190122191827.32742-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Tue, 22 Jan 2019 20:18:27 +0100")
+References: <20190122191827.32742-1-joerg.krause@embedded.rocks>
+Message-ID: <87lg3cmkjm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22c80d2a820f33ccfbaef3446d72a7650ebddf38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xerces/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > upmpdcli 1.4.0 uses both the `uint64_t` and `u_int64_t` type. `uintN_t` is
+ > standard C99 type available in `<stdint.h>`, whereas `u_intN_t` is defined in
+ > `<sys/types.h>`.
 
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 8d55a5cbc2..2edc4346b5 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_XERCES
- 	help
- 	  Xerces-C++ is a validating XML parser written in portable C++.
- 
--	  http://xml.apache.org/xerces-c/
-+	  http://xerces.apache.org/xerces-c/
- 
- comment "xerces-c++ needs a toolchain w/ C++, wchar"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+ > Because of the missing include of `<sys/types.h>` building upmpdcli breaks now
+ > when building with the musl C library, which is very strict:
+
+ > ```
+ > src/mediaserver/cdplugins/netfetch.h:71:5: error: ?u_int64_t? does not name a type
+ >      u_int64_t datacount() {
+ > ```
+
+ > Add a patch from upstream which fixes the issue by replacing `u_int64_t`
+ > with `uint64_t`.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/f3082d2fdda8d73dbd9d3b65a08d844934066ef7
+
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
