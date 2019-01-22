@@ -1,101 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 22 Jan 2019 19:19:39 +0100
-Subject: [Buildroot] Enable mount SquashFS
-In-Reply-To: <CAOqJNTd10twL7LOeVpJn2Q8XLLALxYT-zr7hoH_oC4uYP2enwQ@mail.gmail.com>
-References: <CAOqJNTc0j8hKGbugSyOqMKKymn8yB3UBSkvamLe9-cnK572UvA@mail.gmail.com>
- <20190118203223.02765998@gmx.net>
- <CAOqJNTfN9Ux1x_q3hXd6utAqtVCasUyx5yA1d2MqvMFg2_bMKg@mail.gmail.com>
- <20190121214544.5e615f30@gmx.net>
- <CAOqJNTd10twL7LOeVpJn2Q8XLLALxYT-zr7hoH_oC4uYP2enwQ@mail.gmail.com>
-Message-ID: <20190122191939.408da0e2@gmx.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 22 Jan 2019 12:34:30 -0600
+Subject: [Buildroot] [PATCH] package/iperf: bump to 2.0.13
+Message-ID: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ??????,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/iperf/iperf.hash | 5 +++--
+ package/iperf/iperf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-On Tue, 22 Jan 2019 01:33:59 +0200, ????? <sergei.sakhno@gmail.com> wrote:
-
-> Problem was with loop-devices. I am did not  enable loop-devices support in
-> kernel.
-
-Thanks for the feedback...
-
-Regards,
-Peter
-
-> 
-> ??, 21 ???. 2019 ?. ? 22:45, Peter Seiderer <ps.report@gmx.net>:
-> 
-> > Hello ??????, buildroot at buildroot.org
-> >
-> > please keep buildroot at busybox.net in CC....
-> >
-> > On Mon, 21 Jan 2019 12:21:55 +0200, ?????? ????? <sergei.sakhno@gmail.com>
-> > wrote:
-> >  
-> > > Thks. I missed this this parametr.
-> > > Can you help me with mount squashfs image in minimal image of linux,
-> > > created in buildroot?
-> > > When i try mount squashfs image as root (mount -t squashfs -o
-> > > ro,loop,sizelimit=14319616 /home/update-last.raucb /run/rauc/bundle), i  
-> > get  
-> > > error:
-> > >  
-> > > > mount: /run/rauc/bundle: mount failed: Operation not permitted.
-> > > > Failed mounting bundle: failed to run mount: Child process exited with
-> > > > code 1
-> > > > installing /home/update-last.raucb: Failed mounting bundle: failed to  
-> > run  
-> > > > mount: Child process exited with code 1
-> > > >  
-> > > EXT4 partition on real storage device mounted successfully.  
-> >
-> > Not much info....why mount to /run/rauc/bundle and not just /mnt ? Why
-> > option sizelimit?
-> > Where does the 'installing' error message come from? How is the squashfs
-> > image update-last.raucb
-> > created (never worked with rauc (yet))? Loop mounting enabled in the
-> > kernel?
-> > Do you run your commands as root user? Which are the file permissions of
-> > the squashfs image file?
-> >
-> > Regards,
-> > Peter
-> >  
-> > >
-> > >
-> > > ??, 18 ???. 2019 ?. ? 21:32, Peter Seiderer <ps.report@gmx.net>:
-> > >  
-> > > > Hello ??????,
-> > > >
-> > > > On Fri, 18 Jan 2019 20:27:41 +0200, ?????? ????? <  
-> > sergei.sakhno at gmail.com>  
-> > > > wrote:
-> > > >  
-> > > > > Good evening everyone. How to enable the ability to mount SquashFS?  
-> > In  
-> > > > the  
-> > > > > menuconfig of busybox downloaded from the busybox site there is an  
-> > item  
-> > > > > [SquashFS filesystem] in the [Filesystem / Volume identification]  
-> > > > section,  
-> > > > > but in the menuconfig of busybox unpacked buildroot it is not.  
-> > > >
-> > > > Busybox CONFIG_FEATURE_VOLUMEID_SQUASHFS depends on VOLUMEID &&
-> > > > FEATURE_BLKID_TYPE,
-> > > > VOLUMEID is already enabled, FEATURE_BLKID_TYPE is Linux System  
-> > Utilities  
-> > > > -->  
-> > > > blkid --> Print Filesystem type
-> > > >
-> > > > More important is enabled squashfs support in the linux kernel...
-> > > >
-> > > > Regards,
-> > > > Peter
-> > > >
-> > > >  
-> >
-> >  
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 3540c6e..696085c 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,5 +1,6 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1	909b469bbbc38508cd268e334a6ec319c3116f15	iperf-2.0.12.tar.gz
++sha1	3eb21c329af811af53a2c816e1ed26b3dd2c259f	iperf-2.0.13.tar.gz
++
+ # Locally computed:
+-sha256  367f651fb1264b13f6518e41b8a7e08ce3e41b2a1c80e99ff0347561eed32646  iperf-2.0.12.tar.gz
++sha256  a43ee9d6476955e7fc7aa894b6c4d227a2129943ad6171ad39aa52f1a065db50  iperf-2.0.13.tar.gz
+ sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index c712de6..7088b0f 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPERF_VERSION = 2.0.12
++IPERF_VERSION = 2.0.13
+ IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
+ IPERF_LICENSE = MIT-like
+ IPERF_LICENSE_FILES = COPYING
+-- 
+1.9.1
