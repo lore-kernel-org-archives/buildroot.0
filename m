@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Jan 2019 22:14:45 +0100
-Subject: [Buildroot] [PATCH] package/apache: security bump to version
- 2.4.38
-In-Reply-To: <20190122181542.11918-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 22 Jan 2019 19:15:42 +0100")
-References: <20190122181542.11918-1-peter@korsgaard.com>
-Message-ID: <87pnsomm2i.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Jan 2019 22:09:30 +0100
+Subject: [Buildroot] [git commit] package/openresolv: update webpage URL
+Message-ID: <20190122211425.BC6488B691@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=824e34728c5b0f94c4e1c93121cad5973bddda89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security vulnerabilities:
- >   *) SECURITY: CVE-2018-17199 (cve.mitre.org)
- >      mod_session: mod_session_cookie does not respect expiry time allowing
- >      sessions to be reused.  [Hank Ibell]
+Update URL to point at the project page vs just the GIT repository
+containing the source code.
 
- >   *) SECURITY: CVE-2018-17189 (cve.mitre.org)
- >      mod_http2: fixes a DoS attack vector. By sending slow request bodies
- >      to resources not consuming them, httpd cleanup code occupies a server
- >      thread unnecessarily. This was changed to an immediate stream reset
- >      which discards all stream state and incoming data.  [Stefan Eissing]
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openresolv/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   *) SECURITY: CVE-2019-0190 (cve.mitre.org)
- >      mod_ssl: Fix infinite loop triggered by a client-initiated
- >      renegotiation in TLSv1.2 (or earlier) with OpenSSL 1.1.1 and
- >      later.  PR 63052.  [Joe Orton]
-
- > For more details, see the CHANGES file:
- > https://www.apache.org/dist/httpd/CHANGES_2.4.38
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
+index 2a393c6bc4..835fbf29ee 100644
+--- a/package/openresolv/Config.in
++++ b/package/openresolv/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_OPENRESOLV
+ 	  manages resolv.conf. This tool provides a dns management
+ 	  framework to track currently available nameservers.
+ 
+-	  https://github.com/rsmarples/openresolv
++	  https://roy.marples.name/projects/openresolv
