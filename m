@@ -1,309 +1,137 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 Jan 2019 13:27:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vboot-utils: Add support for
- openssl 1.1.x
-In-Reply-To: <20190118113710.32309-1-vadim4j@gmail.com>
-References: <20190118113710.32309-1-vadim4j@gmail.com>
-Message-ID: <3185ce0e-ffae-29dc-7175-205863aaaec8@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 22 Jan 2019 14:57:51 +0200
+Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
+In-Reply-To: <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
+References: <87h8e4o60k.fsf@tarshish>
+ <ea-mime-5c45c4f8-23fb-726a437b@www-6.netcourrier.com>
+Message-ID: <87r2d4hmsw.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Louis-Paul,
+
+Please avoid top-posting.
+
+On Mon, Jan 21 2019, lpdev wrote:
+> The default install target is installing a bunch of header files on
+> the target, while unecessary. Maybe Buildroot scripts are cleaning
+> them before creating the image?
+
+Correct. See the target-finalize target definition in the top level
+Makefile.
+
+> Concerning the /lib folder, it is an error indeed. It must be in
+> /usr/lib. Any other suggestions?
+
+Just leave the libraries where upstream install target put them.
+
+> This is my first contribution to the Buildroot project ;)
+
+Thanks for you contribution. This is not bad for first time.
+
+Good luck,
+baruch
+
+>> Thank you for your feedback!
+>
+> De : Baruch Siach <baruch@tkos.co.il>
+> ? : Louis-Paul Cordier <lpdev@cordier.org>
+> Sujet : Re: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
+> Date : 19/01/2019 19:29:31 Europe/Paris
+> Copie ? : buildroot at buildroot.org;
+> Bernd Kuhls <bernd.kuhls@t-online.de>;
+> Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+>
+> Hi Louis-Paul,
+>
+> On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
+>> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+>> ---
+>> package/Config.in | 1 +
+>> package/intel-gmmlib/Config.in | 8 ++++++++
+>> package/intel-gmmlib/intel-gmmlib.hash | 2 ++
+>> package/intel-gmmlib/intel-gmmlib.mk | 21 +++++++++++++++++++++
+>> 4 files changed, 32 insertions(+)
+>> create mode 100644 package/intel-gmmlib/Config.in
+>> create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
+>> create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 5036421a73..9082ed9956 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1265,6 +1265,7 @@ menu "Graphics"
+>> source "package/harfbuzz/Config.in"
+>> source "package/ijs/Config.in"
+>> source "package/imlib2/Config.in"
+>> + source "package/intel-gmmlib/Config.in"
+>> source "package/irrlicht/Config.in"
+>> source "package/jasper/Config.in"
+>> source "package/jpeg/Config.in"
+>> diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+>> new file mode 100644
+>> index 0000000000..8d9fab7ce3
+>> --- /dev/null
+>> +++ b/package/intel-gmmlib/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_INTEL_GMMLIB
+>> + bool "intel-gmmlib"
+>> + depends on BR2_x86_64
+>> + help
+>> + The Intel(R) Graphics Memory Management Library provides
+>> + device specific and buffer management for the Intel(R)
+>> + Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
+>> + Media Driver for VAAPI.
+>> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+>> new file mode 100644
+>> index 0000000000..7e3b3dfd3f
+>> --- /dev/null
+>> +++ b/package/intel-gmmlib/intel-gmmlib.hash
+>> @@ -0,0 +1,2 @@
+>> +# Locally computed
+>> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1 intel-gmmlib-18.3.0.tar.gz
+>> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+>> new file mode 100644
+>> index 0000000000..206ea6db86
+>> --- /dev/null
+>> +++ b/package/intel-gmmlib/intel-gmmlib.mk
+>> @@ -0,0 +1,21 @@
+>> +################################################################################
+>> +#
+>> +# intel-gmmlib
+>> +#
+>> +################################################################################
+>> +
+>> +INTEL_GMMLIB_VERSION = 18.3.0
+>> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+>> +INTEL_GMMLIB_LICENSE = MIT
+>> +INTEL_GMMLIB_LICENSE_FILES = COPYING
+>> +
+>> +INTEL_GMMLIB_INSTALL_STAGING = YES
+>> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
+>> +
+>> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
+>> +
+>> +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
+>> + cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
+>
+> This is unusual. Can't you use the default install make target like the
+> staging install? Why do you install in /lib on target when upstream
+> installs in /usr/lib on staging?
+>
+> If this is all intended please explain why in a comment.
+>
+> baruch
+>
+>> +endef
+>> +
+>> +$(eval $(cmake-package))
 
 
-On 18/01/2019 12:37, Vadim Kochan wrote:
-> Backported changes from commit bce7904376beee2912932433a4634c1c25afe2f5,
-> there was some conflicts in few places which includes openssl_compat.h and
-> 1 place in vb2_rsa_sig_alg function.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  .../vboot-utils/0006-Update-for-openssl-1.1.patch  | 268 +++++++++++++++++++++
->  1 file changed, 268 insertions(+)
->  create mode 100644 package/vboot-utils/0006-Update-for-openssl-1.1.patch
-> 
-> diff --git a/package/vboot-utils/0006-Update-for-openssl-1.1.patch b/package/vboot-utils/0006-Update-for-openssl-1.1.patch
-> new file mode 100644
-> index 0000000000..8ddf5cee1c
-> --- /dev/null
-> +++ b/package/vboot-utils/0006-Update-for-openssl-1.1.patch
-> @@ -0,0 +1,268 @@
-> +From 2e730b2259c701f16d473dbfb7e58e86a6e71b01 Mon Sep 17 00:00:00 2001
-> +From: Daniel Kurtz <djkurtz@chromium.org>
-> +Date: Fri, 18 Jan 2019 13:04:59 +0200
-> +Subject: [PATCH] Update for openssl 1.1
-> +
-> +OpenSSL 1.1 has made significant non-backwards compatible changes to its
-> +API as outlined in:
-> +https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
-> +
-> +BRANCH=none
-> +BUG=chromium:738114
-> +TEST=cros_workon --host start vboot_reference
-> +TEST=w/ openssl-1.0.2k: sudo emerge vboot_reference
-> +TEST=w/ openssl-1.1.0e: sudo emerge vboot_reference
-> + => both build ok
-> + $ futility version
-> +  => command runs without error
-> +TEST=cros_workon --board=soraka start vboot_reference coreboot
-> +TEST=w/ openssl-1.0.2k: emerge-soraka vboot_reference coreboot
-> +TEST=w/ openssl-1.1.0e: emerge-soraka vboot_reference coreboot
-> + => All build ok
-> +
-> +Change-Id: I37cfc8cbb04a092eab7b0b3224f475b82609447c
-> +Reviewed-on: https://chromium-review.googlesource.com/557739
-> +Commit-Ready: Daniel Kurtz <djkurtz@chromium.org>
-> +Tested-by: Daniel Kurtz <djkurtz@chromium.org>
-> +Reviewed-by: Randall Spangler <rspangler@chromium.org>
-> +Reviewed-by: Mike Frysinger <vapier@chromium.org>
-> +
-> +[ Vadim: backport to version based on bbdd62f9b030db7ad8eef789aaf58a7ff9a25656 ]
-
- The upstream commit reference should be mentioned here (and in that case, it's
-not necessary to mention it in the out commit message). It's not really
-necessary to mention the version you backported it to.
-
- Regards,
- Arnout
-
-> +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> +---
-> + futility/cmd_create.c         |  5 ++++-
-> + futility/vb2_helper.c         |  7 +++++--
-> + host/include/openssl_compat.h | 26 ++++++++++++++++++++++++++
-> + host/lib/util_misc.c          |  7 +++++--
-> + host/lib21/host_key.c         |  8 +++++++-
-> + utility/dumpRSAPublicKey.c    | 19 ++++++++++++++-----
-> + 6 files changed, 61 insertions(+), 11 deletions(-)
-> + create mode 100644 host/include/openssl_compat.h
-> +
-> +diff --git a/futility/cmd_create.c b/futility/cmd_create.c
-> +index 143ea9ae..80d3fd90 100644
-> +--- a/futility/cmd_create.c
-> ++++ b/futility/cmd_create.c
-> +@@ -13,6 +13,7 @@
-> + #include "2common.h"
-> + #include "2id.h"
-> + #include "2rsa.h"
-> ++#include "openssl_compat.h"
-> + #include "util_misc.h"
-> + #include "vb2_common.h"
-> + #include "vb2_struct.h"
-> +@@ -170,6 +171,7 @@ static int vb2_make_keypair()
-> + 	enum vb2_signature_algorithm sig_alg;
-> + 	uint8_t *pubkey_buf = 0;
-> + 	int has_priv = 0;
-> ++	const BIGNUM *rsa_d;
-> + 
-> + 	FILE *fp;
-> + 	int ret = 1;
-> +@@ -193,7 +195,8 @@ static int vb2_make_keypair()
-> + 		goto done;
-> + 	}
-> + 	/* Public keys doesn't have the private exponent */
-> +-	has_priv = !!rsa_key->d;
-> ++	RSA_get0_key(rsa_key, NULL, NULL, &rsa_d);
-> ++	has_priv = !!rsa_d;
-> + 	if (!has_priv)
-> + 		fprintf(stderr, "%s has a public key only.\n", infile);
-> + 
-> +diff --git a/futility/vb2_helper.c b/futility/vb2_helper.c
-> +index 51a78375..c6cc0fdd 100644
-> +--- a/futility/vb2_helper.c
-> ++++ b/futility/vb2_helper.c
-> +@@ -11,6 +11,7 @@
-> + #include "2common.h"
-> + #include "2id.h"
-> + #include "2rsa.h"
-> ++#include "openssl_compat.h"
-> + #include "util_misc.h"
-> + #include "vb2_common.h"
-> + #include "vb2_struct.h"
-> +@@ -216,6 +217,7 @@ int ft_show_pem(const char *name, uint8_t *buf, uint32_t len, void *data)
-> + 	uint8_t *keyb, *digest;
-> + 	uint32_t keyb_len;
-> + 	int i, bits;
-> ++	const BIGNUM *rsa_key_n, *rsa_key_d;
-> + 
-> + 	/* We're called only after ft_recognize_pem, so this should work. */
-> + 	rsa_key = rsa_from_buffer(buf, len);
-> +@@ -223,10 +225,11 @@ int ft_show_pem(const char *name, uint8_t *buf, uint32_t len, void *data)
-> + 		DIE;
-> + 
-> + 	/* Use to presence of the private exponent to decide if it's public */
-> +-	printf("%s Key file:      %s\n", rsa_key->d ? "Private" : "Public",
-> ++	RSA_get0_key(rsa_key, &rsa_key_n, NULL, &rsa_key_d);
-> ++	printf("%s Key file:      %s\n", rsa_key_d ? "Private" : "Public",
-> + 					 name);
-> + 
-> +-	bits = BN_num_bits(rsa_key->n);
-> ++	bits = BN_num_bits(rsa_key_n);
-> + 	printf("  Key length:          %d\n", bits);
-> + 
-> + 	if (vb_keyb_from_rsa(rsa_key, &keyb, &keyb_len)) {
-> +diff --git a/host/include/openssl_compat.h b/host/include/openssl_compat.h
-> +new file mode 100644
-> +index 00000000..7771f32a
-> +--- /dev/null
-> ++++ b/host/include/openssl_compat.h
-> +@@ -0,0 +1,26 @@
-> ++/* Copyright 2017 The Chromium OS Authors. All rights reserved.
-> ++ * Use of this source code is governed by a BSD-style license that can be
-> ++ * found in the LICENSE file.
-> ++ */
-> ++
-> ++#ifndef VBOOT_REFERENCE_OPENSSL_COMPAT_H_
-> ++#define VBOOT_REFERENCE_OPENSSL_COMPAT_H_
-> ++
-> ++#include <openssl/rsa.h>
-> ++
-> ++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-> ++
-> ++static inline void RSA_get0_key(const RSA *rsa, const BIGNUM **n,
-> ++				const BIGNUM **e, const BIGNUM **d)
-> ++{
-> ++	if (n != NULL)
-> ++		*n = rsa->n;
-> ++	if (e != NULL)
-> ++		*e = rsa->e;
-> ++	if (d != NULL)
-> ++		*d = rsa->d;
-> ++}
-> ++
-> ++#endif  /* OPENSSL_VERSION_NUMBER < 0x10100000L */
-> ++
-> ++#endif  /* VBOOT_REFERENCE_OPENSSL_COMPAT_H_ */
-> +diff --git a/host/lib/util_misc.c b/host/lib/util_misc.c
-> +index 03ec683f..f0a1f7ad 100644
-> +--- a/host/lib/util_misc.c
-> ++++ b/host/lib/util_misc.c
-> +@@ -15,6 +15,7 @@
-> + 
-> + #include "cryptolib.h"
-> + #include "host_common.h"
-> ++#include "openssl_compat.h"
-> + #include "util_misc.h"
-> + #include "vboot_common.h"
-> + 
-> +@@ -58,6 +59,7 @@ int vb_keyb_from_rsa(struct rsa_st *rsa_private_key,
-> + 	BIGNUM *N0inv = NULL, *R = NULL, *RR = NULL;
-> + 	BIGNUM *RRTemp = NULL, *NnumBits = NULL;
-> + 	BIGNUM *n = NULL, *rr = NULL;
-> ++	const BIGNUM *rsa_private_key_n;
-> + 	BN_CTX *bn_ctx = BN_CTX_new();
-> + 	uint32_t n0invout;
-> + 	uint32_t bufsize;
-> +@@ -65,7 +67,7 @@ int vb_keyb_from_rsa(struct rsa_st *rsa_private_key,
-> + 	int retval = 1;
-> + 
-> + 	/* Size of RSA key in 32-bit words */
-> +-	nwords = BN_num_bits(rsa_private_key->n) / 32;
-> ++	nwords = RSA_size(rsa_private_key) / 4;
-> + 
-> + 	bufsize = (2 + nwords + nwords) * sizeof(uint32_t);
-> + 	outbuf = malloc(bufsize);
-> +@@ -94,7 +96,8 @@ int vb_keyb_from_rsa(struct rsa_st *rsa_private_key,
-> + 	NEW_BIGNUM(B);
-> + #undef NEW_BIGNUM
-> + 
-> +-	BN_copy(N, rsa_private_key->n);
-> ++	RSA_get0_key(rsa_private_key, &rsa_private_key_n, NULL, NULL);
-> ++	BN_copy(N, rsa_private_key_n);
-> + 	BN_set_word(Big1, 1L);
-> + 	BN_set_word(Big2, 2L);
-> + 	BN_set_word(Big32, 32L);
-> +diff --git a/host/lib21/host_key.c b/host/lib21/host_key.c
-> +index f7ea1622..f9419ad3 100644
-> +--- a/host/lib21/host_key.c
-> ++++ b/host/lib21/host_key.c
-> +@@ -17,6 +17,7 @@
-> + #include "host_common.h"
-> + #include "host_key2.h"
-> + #include "host_misc.h"
-> ++#include "openssl_compat.h"
-> + 
-> + struct vb2_text_vs_enum vb2_text_vs_algorithm[] = {
-> + 	{"RSA1024 SHA1",   VB2_ALG_RSA1024_SHA1},
-> +@@ -544,7 +545,12 @@ int vb2_public_key_hash(struct vb2_public_key *key,
-> + 
-> + enum vb2_signature_algorithm vb2_rsa_sig_alg(struct rsa_st *rsa)
-> + {
-> +-	int bits = BN_num_bits(rsa->n);
-> ++	const BIGNUM *e, *n;
-> ++	int exp, bits;
-> ++
-> ++	RSA_get0_key(rsa, &n, &e, NULL);
-> ++	exp = BN_get_word(e);
-> ++	bits = BN_num_bits(n);
-> + 
-> + 	switch (bits) {
-> + 	case 1024:
-> +diff --git a/utility/dumpRSAPublicKey.c b/utility/dumpRSAPublicKey.c
-> +index b3b7b96b..a17b159e 100644
-> +--- a/utility/dumpRSAPublicKey.c
-> ++++ b/utility/dumpRSAPublicKey.c
-> +@@ -14,14 +14,20 @@
-> + #include <string.h>
-> + #include <unistd.h>
-> + 
-> ++#include "openssl_compat.h"
-> ++
-> + /* Command line tool to extract RSA public keys from X.509 certificates
-> +  * and output a pre-processed version of keys for use by RSA verification
-> +  * routines.
-> +  */
-> + 
-> + int check(RSA* key) {
-> +-  int public_exponent = BN_get_word(key->e);
-> +-  int modulus = BN_num_bits(key->n);
-> ++  const BIGNUM *n, *e;
-> ++  int public_exponent, modulus;
-> ++
-> ++  RSA_get0_key(key, &n, &e, NULL);
-> ++  public_exponent = BN_get_word(e);
-> ++  modulus = BN_num_bits(n);
-> + 
-> +   if (public_exponent != 65537) {
-> +     fprintf(stderr, "WARNING: Public exponent should be 65537 (but is %d).\n",
-> +@@ -40,7 +46,8 @@ int check(RSA* key) {
-> +  */
-> + void output(RSA* key) {
-> +   int i, nwords;
-> +-  BIGNUM *N = key->n;
-> ++  const BIGNUM *key_n;
-> ++  BIGNUM *N = NULL;
-> +   BIGNUM *Big1 = NULL, *Big2 = NULL, *Big32 = NULL, *BigMinus1 = NULL;
-> +   BIGNUM *B = NULL;
-> +   BIGNUM *N0inv= NULL, *R = NULL, *RR = NULL, *RRTemp = NULL, *NnumBits = NULL;
-> +@@ -48,14 +55,15 @@ void output(RSA* key) {
-> +   BN_CTX *bn_ctx = BN_CTX_new();
-> +   uint32_t n0invout;
-> + 
-> +-  N = key->n;
-> +   /* Output size of RSA key in 32-bit words */
-> +-  nwords = BN_num_bits(N) / 32;
-> ++  nwords = RSA_size(key) / 4;
-> +   if (-1 == write(1, &nwords, sizeof(nwords)))
-> +     goto failure;
-> + 
-> + 
-> +   /* Initialize BIGNUMs */
-> ++  RSA_get0_key(key, &key_n, NULL, NULL);
-> ++  N = BN_dup(key_n);
-> +   Big1 = BN_new();
-> +   Big2 = BN_new();
-> +   Big32 = BN_new();
-> +@@ -120,6 +128,7 @@ void output(RSA* key) {
-> + 
-> + failure:
-> +   /* Free BIGNUMs. */
-> ++  BN_free(N);
-> +   BN_free(Big1);
-> +   BN_free(Big2);
-> +   BN_free(Big32);
-> +-- 
-> +2.14.1
-> +
-> 
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
