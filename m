@@ -1,159 +1,86 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Wed, 23 Jan 2019 14:43:21 +0100
-Subject: [Buildroot] Downloading at91bootstrap3 fails on recent master?
-In-Reply-To: <87h8e0mikv.fsf@dell.be.48ers.dk>
-References: <20190122143744.j5n5os57dcsds7qr@falbala.home.lespocky.de>
- <87h8e0mikv.fsf@dell.be.48ers.dk>
-Message-ID: <20190123134321.ybndoube7a3u5jv6@falbala.home.lespocky.de>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Wed, 23 Jan 2019 13:51:55 +0000
+Subject: [Buildroot] btrfs filesystem image as subvolume
+In-Reply-To: <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
+References: <BL0PR0102MB3412448238EBCFA54C15B849F39F0@BL0PR0102MB3412.prod.exchangelabs.com>
+ <878szbn2qx.fsf@dell.be.48ers.dk>,
+ <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
+Message-ID: <BL0PR0102MB3412B01454EA6DB8E16F2D59F3990@BL0PR0102MB3412.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Thanks a lot for your input Robert,
 
-On Tue, Jan 22, 2019 at 11:30:08PM +0100, Peter Korsgaard wrote:
-> >>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
->  > I just pulled current master (2018.11-829-gd078cecdcf) and tried
->  > building atmel_sama5d27_som1_ek_mmc_dev_defconfig, like this:
-> 
->  > (Note, env variable BR2_DL_DIR is set to:
->  > '/home/adahl/mnt/bagend-ia/src_archive'.)
-> 
-> Does it work if you don't set BR2_DL_DIR?
 
-I tried again this morning after pulling the latest master (now at
-2018.11-841-g9952e3b56e) and it worked then, but it should have not,
-see below.
+Too bad, I didn't think about this superuser limitation. It would have been a really useful buildroot output.
 
->  >>>> at91bootstrap3 v3.8.10 Downloading
->  > 	/home/adahl/mnt/bagend-ia/src_archive/at91bootstrap3/git/.git: Datei oder Verzeichnis nicht gefunden
-> 
-> I guess this is something like file not found? It sounds like your git
-> clone has gotten corrupted?
 
-Yes, ENOENT 2 No such file or directory, but German locale. ;-)
+In that case, I will give your script a try.
 
-> It works here:
-> 
-> make at91bootstrap3-patch
-> >>> at91bootstrap3 v3.8.10 Downloading
-> Initialized empty Git repository in /var/lib/downloads/at91bootstrap3/git/.git/
-> Fetching all references
-> remote: Enumerating objects: 42, done.
-> remote: Counting objects: 100% (42/42), done.
-> remote: Compressing objects: 100% (42/42), done.
-> remote: Total 8347 (delta 0), reused 42 (delta 0), pack-reused 8305
-> Receiving objects: 100% (8347/8347), 3.38 MiB | 2.85 MiB/s, done.
-> Resolving deltas: 100% (6301/6301), done.
-> >From https://github.com/linux4sam/at91bootstrap
->  * [new branch]      at91bootstrap-3.x -> origin/at91bootstrap-3.x
->  * [new branch]      master            -> origin/master
->  * [new branch]      sam9x60_early     -> origin/sam9x60_early
->  * [new tag]         sam9x60_1.0       -> sam9x60_1.0
->  * [new tag]         5series_1.0          -> 5series_1.0
->  * [new tag]         5series_1.1          -> 5series_1.1
->  * [new tag]         5series_1.2          -> 5series_1.2
->  * [new tag]         5series_1.3          -> 5series_1.3
->  * [new tag]         Android4sam_v4.0     -> Android4sam_v4.0
->  * [new tag]         Android4sam_v4.1     -> Android4sam_v4.1
->  * [new tag]         Android4sam_v4.2     -> Android4sam_v4.2
->  * [new tag]         Android4sam_v4.3     -> Android4sam_v4.3
->  * [new tag]         Android4sam_v4.4     -> Android4sam_v4.4
->  * [new tag]         Android4sam_v4.4_rc1 -> Android4sam_v4.4_rc1
->  * [new tag]         Android4sam_v4.4_rc2 -> Android4sam_v4.4_rc2
->  * [new tag]         android4sam_v4.0     -> android4sam_v4.0
->  * [new tag]         linux4sam_5.6-rc1    -> linux4sam_5.6-rc1
->  * [new tag]         v3.5.1               -> v3.5.1
->  * [new tag]         v3.5.2               -> v3.5.2
->  * [new tag]         v3.5.3               -> v3.5.3
->  * [new tag]         v3.5.4               -> v3.5.4
->  * [new tag]         v3.6.0               -> v3.6.0
->  * [new tag]         v3.6.1               -> v3.6.1
->  * [new tag]         v3.6.2               -> v3.6.2
->  * [new tag]         v3.7                 -> v3.7
->  * [new tag]         v3.7.1               -> v3.7.1
->  * [new tag]         v3.7.2               -> v3.7.2
->  * [new tag]         v3.7.2-rc2           -> v3.7.2-rc2
->  * [new tag]         v3.8                 -> v3.8
->  * [new tag]         v3.8-alpha1          -> v3.8-alpha1
->  * [new tag]         v3.8-alpha2          -> v3.8-alpha2
->  * [new tag]         v3.8-alpha3          -> v3.8-alpha3
->  * [new tag]         v3.8-alpha4          -> v3.8-alpha4
->  * [new tag]         v3.8-alpha5          -> v3.8-alpha5
->  * [new tag]         v3.8-alpha6          -> v3.8-alpha6
->  * [new tag]         v3.8-alpha7          -> v3.8-alpha7
->  * [new tag]         v3.8-beta1           -> v3.8-beta1
->  * [new tag]         v3.8.1               -> v3.8.1
->  * [new tag]         v3.8.10              -> v3.8.10
->  * [new tag]         v3.8.10-rc1          -> v3.8.10-rc1
->  * [new tag]         v3.8.11              -> v3.8.11
->  * [new tag]         v3.8.11-rc1          -> v3.8.11-rc1
->  * [new tag]         v3.8.11-rc2          -> v3.8.11-rc2
->  * [new tag]         v3.8.11-rc3          -> v3.8.11-rc3
->  * [new tag]         v3.8.11-rc4          -> v3.8.11-rc4
->  * [new tag]         v3.8.12              -> v3.8.12
->  * [new tag]         v3.8.2               -> v3.8.2
->  * [new tag]         v3.8.3               -> v3.8.3
->  * [new tag]         v3.8.4               -> v3.8.4
->  * [new tag]         v3.8.5               -> v3.8.5
->  * [new tag]         v3.8.6               -> v3.8.6
->  * [new tag]         v3.8.7               -> v3.8.7
->  * [new tag]         v3.8.8               -> v3.8.8
->  * [new tag]         v3.8.8-rc2           -> v3.8.8-rc2
->  * [new tag]         v3.8.8-rc3           -> v3.8.8-rc3
->  * [new tag]         v3.8.9               -> v3.8.9
->  * [new tag]         v3.8.9-rc1           -> v3.8.9-rc1
->  * [new tag]         v3.8.9-rc2           -> v3.8.9-rc2
->  * [new tag]         v3.8.9-rc3           -> v3.8.9-rc3
->  * [new tag]         v3.8.9-rc4           -> v3.8.9-rc4
->  * [new tag]         v3.8.9-rc6           -> v3.8.9-rc6
->  * [new tag]         v3.8.9-rc7           -> v3.8.9-rc7
-> remote: Enumerating objects: 1232, done.
-> remote: Counting objects: 100% (1232/1232), done.
-> remote: Total 2651 (delta 1232), reused 1232 (delta 1232), pack-reused 1419
-> Receiving objects: 100% (2651/2651), 673.57 KiB | 0 bytes/s, done.
-> Resolving deltas: 100% (2108/2108), completed with 141 local objects.
-> >From https://github.com/linux4sam/at91bootstrap
->  * [new tag]         android4sam_v3.1 -> android4sam_v3.1
->  * [new tag]         v3.3             -> v3.3
->  * [new tag]         v3.4             -> v3.4
->  * [new tag]         v3.4.1           -> v3.4.1
->  * [new tag]         v3.4.2           -> v3.4.2
->  * [new tag]         v3.4.3           -> v3.4.3
->  * [new tag]         v3.4.4           -> v3.4.4
->  * [new tag]         v3.5.0           -> v3.5.0
-> Could not fetch special ref 'v3.8.10'; assuming it is not special.
-> >>> at91bootstrap3 v3.8.10 Extracting
-> gzip -d -c /var/lib/downloads/at91bootstrap3/at91bootstrap3-v3.8.10.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output-at91/build/at91bootstrap3-v3.8.10   -xf -
-> >>> at91bootstrap3 v3.8.10 Patching
 
-I'm not sure why it used /var/lib/downloads/at91bootstrap3/git/.git/
-this morning. Strange thing.
+Thank you
 
-However, together with our administrator we could track it down.
-Turned out the samba share we used for BR2_DL_DIR had this set:
+________________________________
+From: Robert Heywood <robert.heywood@codethink.co.uk>
+Sent: January 23, 2019 4:44:42 AM
+To: Peter Korsgaard; Gervais, Francois
+Cc: buildroot at busybox.net
+Subject: Re: btrfs filesystem image as subvolume
 
-  veto files = /.*/
+Hi all.
 
-That prevented to create some .git folder, which buildroot does. Now
-I'm allowed to create (some) dotfiles on that share. Problem solved.
+I wanted the same kind of functionality, but found that mkfs.btrfs doesn't
+support much more than dumping the files into the root of the filesystem.
+As a workaround, I made a script that mounts the filesystem, creates the
+subvolume and uses btrfs-send to create the stream.
 
-Anyway, thanks Peter for looking into that. :-)
+Sadly it requires root access, so it's not something that can be added to
+buildroot. However, you're welcome to use the script if you want :)
 
-Greets
-Alex
+https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_robjh_buildroot-2Ddev_blob_robjh-2Dtmpfiles_robjh_make-5Fbtrfs-5Fstream.sh&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=3V9oKBq7rxLqcrf3JIBDk22u4pP_IDTOFoffRmPieMw&e=
 
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+run it from your buildroot directory with sudo.
+It'll produce ./output/images/os.btrfss, which you can use with btrfs-receive.
+
+You might also want to look at this script, which uses the os.btrfss file to
+create a btrfs filesystem on a flash drive, with my desired layout. and with
+compression enabled;
+
+https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_robjh_buildroot-2Ddev_blob_robjh-2Dtmpfiles_robjh_prep-5Fsd.sh&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=IZuvvxl42Wylzoav0LmUMJfs0aKv8VB5n1CV8b2Y600&e=
+
+I hope this helps.
+
+kind regards, rob.
+
+On 23/01/2019 09:26, Peter Korsgaard wrote:
+>>>>>> "Gervais," == Gervais, Francois <FGervais@distech-controls.com> writes:
+>
+> Hi,
+>
+>   > Hi,
+>   > I tried the btrfs filesystem image and it works fine however in my
+>   > use-case I'd like to have only the subvolume and not the whole btrfs
+>   > filesystem.
+>
+>   > Basically the output of "btrfs send".
+>
+>   > I'd first like to make sure this is not possible today and discuss some
+>   > high level guidelines you would like me to follow when I implement
+>   > the feature.
+>
+>   > Should I add a sub-option to the "btrfs root filesystem" menu?
+>   > Should if have it's own "Filesystem images" entry?
+>
+> Adding Robert who contributed the btrfs support. Robert, any feedback on
+> this?
+>
+
+--
+Robert Heywood, Codethink Ltd.
+<blink>Privacy policy; https://urldefense.proofpoint.com/v2/url?u=https-3A__www.codethink.co.uk_privacy.html&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=-U9tssz2CxIl9yle9dhShM-tx-Zg8OEGzG77dUgcF1U&e=</blink>
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/29078a9a/attachment.asc>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/39dae9fc/attachment.html>
