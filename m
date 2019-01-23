@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 16:15:16 +0100
-Subject: [Buildroot] [PATCH] package/wireshark: security bump to version
- 2.6.6
-In-Reply-To: <20190118080029.30013-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 18 Jan 2019 09:00:28 +0100")
-References: <20190118080029.30013-1-peter@korsgaard.com>
-Message-ID: <87a7jrl81n.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Jan 2019 16:16:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/udisks: Fix compilation issue
+ with missing sys/sysmacros.h
+In-Reply-To: <20181231091551.6335-1-vadim4j@gmail.com> (Vadim Kochan's message
+ of "Mon, 31 Dec 2018 11:15:51 +0200")
+References: <20181231091551.6335-1-vadim4j@gmail.com>
+Message-ID: <875zufl7zx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
- > Fixes the following security vulnerabilities:
- > - wnpa-sec-2019-01 The 6LoWPAN dissector could crash. Bug 15217. CVE-2019-5716
- >   https://www.wireshark.org/security/wnpa-sec-2019-01
+ > It fixes compilation error with undefined "minor", "major" and
+ > "makedev" objects which caused by missing include of <sys/sysmacros.h>
 
- > - wnpa-sec-2019-02 The P_MUL dissector could crash. Bug 15337. CVE-2019-5717
- >   https://www.wireshark.org/security/wnpa-sec-2019-02
+ > These definitions were moved to <sys/sysmacros.h> in newer gibc.
 
- > - wnpa-sec-2019-03 The RTSE dissector and other dissectors could crash.  Bug
- >   15373.  CVE-2019-5718
- >   https://www.wireshark.org/security/wnpa-sec-2019-03
+ > Fixes: http://autobuild.buildroot.net/results/74a8d8c247cfc9c0024e749e1f1ac423c9e90855/
 
- > - wnpa-sec-2019-04 The ISAKMP dissector could crash. Bug 15374. CVE-2019-5719
- >   https://www.wireshark.org/security/wnpa-sec-2019-04
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
+Committed to 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
