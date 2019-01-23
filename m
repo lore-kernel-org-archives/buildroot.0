@@ -1,64 +1,58 @@
-From: Robert Heywood <robert.heywood@codethink.co.uk>
-Date: Wed, 23 Jan 2019 09:44:42 +0000
-Subject: [Buildroot] btrfs filesystem image as subvolume
-In-Reply-To: <878szbn2qx.fsf@dell.be.48ers.dk>
-References: <BL0PR0102MB3412448238EBCFA54C15B849F39F0@BL0PR0102MB3412.prod.exchangelabs.com>
- <878szbn2qx.fsf@dell.be.48ers.dk>
-Message-ID: <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
+From: Alexander Dahl <post@lespocky.de>
+Date: Wed, 23 Jan 2019 11:28:25 +0100
+Subject: [Buildroot] [PATCH] package/iperf: bump to 2.0.13
+In-Reply-To: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20190123102825.gtswtv7v3lvtg3vh@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all.
+Hei hei,
 
-I wanted the same kind of functionality, but found that mkfs.btrfs doesn't 
-support much more than dumping the files into the root of the filesystem.
-As a workaround, I made a script that mounts the filesystem, creates the 
-subvolume and uses btrfs-send to create the stream.
-
-Sadly it requires root access, so it's not something that can be added to 
-buildroot. However, you're welcome to use the script if you want :)
-
-https://github.com/robjh/buildroot-dev/blob/robjh-tmpfiles/robjh/make_btrfs_stream.sh
-
-run it from your buildroot directory with sudo.
-It'll produce ./output/images/os.btrfss, which you can use with btrfs-receive.
-
-You might also want to look at this script, which uses the os.btrfss file to 
-create a btrfs filesystem on a flash drive, with my desired layout. and with 
-compression enabled;
-
-https://github.com/robjh/buildroot-dev/blob/robjh-tmpfiles/robjh/prep_sd.sh
-
-I hope this helps.
-
-kind regards, rob.
-
-On 23/01/2019 09:26, Peter Korsgaard wrote:
->>>>>> "Gervais," == Gervais, Francois <FGervais@distech-controls.com> writes:
+On Tue, Jan 22, 2019 at 12:34:30PM -0600, Matt Weber wrote:
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/iperf/iperf.hash | 5 +++--
+>  package/iperf/iperf.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> Hi,
-> 
->   > Hi,
->   > I tried the btrfs filesystem image and it works fine however in my
->   > use-case I'd like to have only the subvolume and not the whole btrfs
->   > filesystem.
-> 
->   > Basically the output of "btrfs send".
-> 
->   > I'd first like to make sure this is not possible today and discuss some
->   > high level guidelines you would like me to follow when I implement
->   > the feature.
-> 
->   > Should I add a sub-option to the "btrfs root filesystem" menu?
->   > Should if have it's own "Filesystem images" entry?
-> 
-> Adding Robert who contributed the btrfs support. Robert, any feedback on
-> this?
-> 
+> diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+> index 3540c6e..696085c 100644
+> --- a/package/iperf/iperf.hash
+> +++ b/package/iperf/iperf.hash
+> @@ -1,5 +1,6 @@
+>  # From https://sourceforge.net/projects/iperf2/files/
+> -sha1	909b469bbbc38508cd268e334a6ec319c3116f15	iperf-2.0.12.tar.gz
+> +sha1	3eb21c329af811af53a2c816e1ed26b3dd2c259f	iperf-2.0.13.tar.gz
+
+ERROR: iperf-2.0.13.tar.gz has wrong sha1 hash:
+ERROR: expected: 3eb21c329af811af53a2c816e1ed26b3dd2c259f
+ERROR: got     : 0c7625c61087b9e6866421abb8bb533658b40a8d
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+The hashes shown on https://sourceforge.net/projects/iperf2/files/
+are:
+
+SHA1: 0c7625c61087b9e6866421abb8bb533658b40a8d
+MD5: 31ea1c6d5cbf80b16ff3abe4288dad5e
+
+The patch was already committed to master. :-/
+
+Greets
+Alex
 
 -- 
-Robert Heywood, Codethink Ltd.
-<blink>Privacy policy; https://www.codethink.co.uk/privacy.html</blink>
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/b4d71895/attachment.asc>
