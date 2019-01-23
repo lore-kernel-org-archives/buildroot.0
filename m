@@ -1,61 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 15:22:32 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/sqlite: security
- bump to version 3.25.3
-Message-ID: <20190123143025.C4153814C4@busybox.osuosl.org>
+Date: Wed, 23 Jan 2019 15:22:20 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] sqlite: fix build without
+ threads
+Message-ID: <20190123143025.B87E27FA2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95317402ef89638af1b681ab0cd0cd5b3f831839
+commit: https://git.buildroot.net/buildroot/commit/?id=abd02280c2bd4c85c63755693662775dcf05513e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2018-20346: SQLite before 3.25.3, when the FTS3 extension is
-enabled, encounters an integer overflow (and resultant buffer overflow) for
-FTS3 queries that occur after crafted changes to FTS3 shadow tables,
-allowing remote attackers to execute arbitrary code by leveraging the
-ability to run arbitrary SQL statements (such as in certain WebSQL use
-cases), aka Magellan.
+If threads are not available, set SQLITE_THREADSAFE to 0.
+Indeed, since version 3.25.0, the following line:
+THREADSAFE_FLAGS=-DSQLITE_THREADSAFE=0
+has been removed from configure.ac
+As a result, SQLITE_THREADSAFE will be set to a default value of 1 even
+if --disable-threadsafe is set
 
-For more details, see:
-https://blade.tencent.com/magellan/index_en.html
-https://www.sqlite.org/releaselog/3_25_3.html
-https://www.mail-archive.com/sqlite-users at mailinglists.sqlite.org/msg113218.html
+Fixes:
+ - http://autobuild.buildroot.org/results/70b1582edcb787746e4483e80b27f86ac781f0fa
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c4475c0a577308c81f4cddfc48b34b4d14fadf02)
+(cherry picked from commit d3143409ac99609c160bd3d53250bcebe09fe975)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sqlite/sqlite.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index eefa31ffb7..7be42a0aca 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
-+sha1 5d6dc7634ec59e7a6fffa8758c1e184b2522c2e5  sqlite-autoconf-3250300.tar.gz
- # Calculated based on the hash above
--sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
-+sha256 00ebf97be13928941940cc71de3d67e9f852698233cd98ce2d178fd08092f3dd  sqlite-autoconf-3250300.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
 diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index fa24fd01d4..7ee60bf154 100644
+index 9911be6916..fa24fd01d4 100644
 --- a/package/sqlite/sqlite.mk
 +++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -50,6 +50,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ SQLITE_CONF_OPTS += --enable-threadsafe
+ else
+ SQLITE_CONF_OPTS += --disable-threadsafe
++SQLITE_CFLAGS += -DSQLITE_THREADSAFE=0
+ endif
  
--SQLITE_VERSION = 3250200
-+SQLITE_VERSION = 3250300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+ ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
