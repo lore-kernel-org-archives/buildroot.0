@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 16:14:59 +0100
+Date: Wed, 23 Jan 2019 16:15:16 +0100
 Subject: [Buildroot] [PATCH] package/wireshark: security bump to version
- 2.6.5
-In-Reply-To: <20181231083022.4370-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 31 Dec 2018 09:30:21 +0100")
-References: <20181231083022.4370-1-peter@korsgaard.com>
-Message-ID: <87ef93l824.fsf@dell.be.48ers.dk>
+ 2.6.6
+In-Reply-To: <20190118080029.30013-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 18 Jan 2019 09:00:28 +0100")
+References: <20190118080029.30013-1-peter@korsgaard.com>
+Message-ID: <87a7jrl81n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +14,19 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The following vulnerabilities have been fixed:
- > - wnpa-sec-2018-51 The Wireshark dissection engine could crash. Bug 14466. CVE-2018-19625.
- > - wnpa-sec-2018-52 The DCOM dissector could crash. Bug 15130. CVE-2018-19626.
- > - wnpa-sec-2018-53 The LBMPDM dissector could crash. Bug 15132. CVE-2018-19623.
- > - wnpa-sec-2018-54 The MMSE dissector could go into an infinite loop. Bug 15250. CVE-2018-19622.
- > - wnpa-sec-2018-55 The IxVeriWave file parser could crash. Bug 15279. CVE-2018-19627.
- > - wnpa-sec-2018-56 The PVFS dissector could crash. Bug 15280. CVE-2018-19624.
- > - wnpa-sec-2018-57 The ZigBee ZCL dissector could crash. Bug 15281. CVE-2018-19628.
+ > Fixes the following security vulnerabilities:
+ > - wnpa-sec-2019-01 The 6LoWPAN dissector could crash. Bug 15217. CVE-2019-5716
+ >   https://www.wireshark.org/security/wnpa-sec-2019-01
+
+ > - wnpa-sec-2019-02 The P_MUL dissector could crash. Bug 15337. CVE-2019-5717
+ >   https://www.wireshark.org/security/wnpa-sec-2019-02
+
+ > - wnpa-sec-2019-03 The RTSE dissector and other dissectors could crash.  Bug
+ >   15373.  CVE-2019-5718
+ >   https://www.wireshark.org/security/wnpa-sec-2019-03
+
+ > - wnpa-sec-2019-04 The ISAKMP dissector could crash. Bug 15374. CVE-2019-5719
+ >   https://www.wireshark.org/security/wnpa-sec-2019-04
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
