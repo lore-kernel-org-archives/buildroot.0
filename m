@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 16:18:26 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] board/pc: ensure grub.cfg
+Date: Wed, 23 Jan 2019 16:17:38 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] board/pc: ensure grub.cfg
  is copied to target filesystem
-Message-ID: <20190123151902.0B65480FC6@busybox.osuosl.org>
+Message-ID: <20190123151907.C3E8A81420@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6140d6762b6fcb8fa64a0cf06f79bc3e637396de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a130f69330d5077bc403b39c77b976baed17ffed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Before this commit, the grub configuration file was copied to the
 TARGET_DIR in a post-image hook, after the filesystem has been
@@ -75,7 +75,7 @@ index bdd0847ec5..0000000000
 -
 -exit $?
 diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 47787bc118..6d9432d307 100644
+index 6e9220bb31..1c1f7a3666 100644
 --- a/configs/pc_x86_64_bios_defconfig
 +++ b/configs/pc_x86_64_bios_defconfig
 @@ -19,7 +19,8 @@ BR2_TARGET_ROOTFS_EXT2=y
@@ -87,9 +87,9 @@ index 47787bc118..6d9432d307 100644
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
  
- # Linux headers same as kernel, a 4.13 series
+ # Linux headers same as kernel, a 4.18 series
 diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 67ba5bcf5b..6a93eacfa3 100644
+index 2a76f403df..bba04c8f5d 100644
 --- a/configs/pc_x86_64_efi_defconfig
 +++ b/configs/pc_x86_64_efi_defconfig
 @@ -22,7 +22,8 @@ BR2_TARGET_ROOTFS_EXT2=y
@@ -101,4 +101,4 @@ index 67ba5bcf5b..6a93eacfa3 100644
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-efi.cfg"
  
- # Linux headers same as kernel, a 4.13 series
+ # Linux headers same as kernel, a 4.18 series
