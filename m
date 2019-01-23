@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 15:33:03 +0100
-Subject: [Buildroot] [PATCH] rauc: target rauc needs unsquashfs at
- runtime
-In-Reply-To: <20181230224246.31d700d2@windsurf> (Thomas Petazzoni's message of
- "Sun, 30 Dec 2018 22:42:46 +0100")
-References: <20181217221500.7317-1-tpiepho@impinj.com>
- <20181230224246.31d700d2@windsurf>
-Message-ID: <87imyfla00.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Jan 2019 15:32:17 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/rauc: target rauc
+ needs unsquashfs at runtime
+Message-ID: <20190123143220.AA7F98158D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=89084e988c29405596ebe05a233a2d775916c0e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Hello,
- > On Mon, 17 Dec 2018 22:15:19 +0000, Trent Piepho wrote:
- >> In order to provide info about a bundle file, e.g. running "rauc info
- >> bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
- >> package.
- >> 
- >> This was not documented until upstream commit 10c501c12752 ("docs:
- >> integration: document need for 'unsquashfs' tool for 'rauc info'"), but
- >> is already present in rauc.
- >> 
- >> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
- >> ---
- >> package/rauc/Config.in | 1 +
- >> 1 file changed, 1 insertion(+)
+In order to provide info about a bundle file, e.g. running "rauc info
+bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
+package.
 
- > Applied to master, thanks.
+This was not documented until upstream commit 10c501c12752 ("docs:
+integration: document need for 'unsquashfs' tool for 'rauc info'"), but
+is already present in rauc.
 
-Committed to 2018.02.x and 2018.11.x, thanks.
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4a4dba21b9f9469b189ad04f74138039a4ba8109)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rauc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 6433b827d3..456f8f382c 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_RAUC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_DBUS # run-time dependency
++	select BR2_PACKAGE_SQUASHFS # run-time dependency
+ 	help
+ 	  RAUC is the Robust Auto-Update Controller developed by
+ 	  Pengutronix. It supports updating embedded Linux
