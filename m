@@ -1,46 +1,40 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 23 Jan 2019 07:09:11 -0800
-Subject: [Buildroot] [PATCH 2/2] package/inadyn: bump version to 2.5
-In-Reply-To: <20190123150911.3321-1-bluemrp9@gmail.com>
-References: <20190123150911.3321-1-bluemrp9@gmail.com>
-Message-ID: <20190123150911.3321-2-bluemrp9@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Jan 2019 16:05:47 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] wireshark: disable build
+ of user guide
+Message-ID: <20190123151352.A12F2849D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/inadyn/inadyn.hash | 6 +++---
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=55d9c073b23df9703b38f7d2f402f5aefb8273ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index 742b6f226f..2691ba0ef9 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.3/inadyn-2.3.tar.xz.md5
--md5 63efb284b7f3f389c01bad19ee28407e  inadyn-2.3.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.5/inadyn-2.5.tar.xz.md5
-+md5 8a864d5186e54d24de2d7554fc01b3ec  inadyn-2.5.tar.xz
- # Locally computed
--sha256 4a98b80d8565b9e4cb32b19b7a8b06a22a7d9a6f4f03a5298a8d441b6187c760  inadyn-2.3.tar.xz
-+sha256 4a9ad208671f62912428413da0282450b2d2c4da38f3c95c4ac975d048c41fcd  inadyn-2.5.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 0b1f82dae8..96a37d4768 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+--disable-guides has been added since version 2.5.0:
+https://github.com/wireshark/wireshark/commit/aa04d2355effb1cf611831b0a260cf1aff199b9a
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5ae6d46573942713687f4e659b3eaf0b768ebc71
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 92c32d389026222c6296094ec00e2cc03b1fab9d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index bb0d570391..468229df3f 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -16,6 +16,7 @@ WIRESHARK_CONF_ENV = \
  
--INADYN_VERSION = 2.3
-+INADYN_VERSION = 2.5
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
--- 
-2.20.1
+ WIRESHARK_CONF_OPTS = \
+ 	--without-krb5 \
++	--disable-guides \
+ 	--enable-static=no \
+ 	--without-bcg729 \
+ 	--without-libxml2 \
