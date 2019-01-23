@@ -1,69 +1,41 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Wed, 23 Jan 2019 12:28:18 +0100
-Subject: [Buildroot] [PATCH] package/iperf: bump to 2.0.13
-In-Reply-To: <20190123102825.gtswtv7v3lvtg3vh@falbala.home.lespocky.de>
-References: <1548182070-35867-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20190123102825.gtswtv7v3lvtg3vh@falbala.home.lespocky.de>
-Message-ID: <20190123112818.hsvkcnecm2oim7lf@falbala.home.lespocky.de>
+From: Nylon Chen <nylon7@andestech.com>
+Date: Wed, 23 Jan 2019 20:39:44 +0800
+Subject: [Buildroot] [PATCH v2 0/3] Add prebuilt nds32 toolchain,
+ ae3xx board and autobuild configs support
+Message-ID: <20190123123947.5084-1-nylon7@andestech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patchset adds basic support for Andes's nds32 ISA
+and nds32 family's CPU IP based on ae3xx platform.
+The board is entirely supported since Linux 4.17.
 
-me again ?
+Nylon Chen (3):
+  arch: add support for Andes 32-bit (nds32) architecture
+  configs/andes_nds32_ae3xx: new defconfig
+  support/config-fragments: add Andes 32-bit (nds32) to autobuild
+    configs
 
-On Wed, Jan 23, 2019 at 11:28:25AM +0100, Alexander Dahl wrote:
-> On Tue, Jan 22, 2019 at 12:34:30PM -0600, Matt Weber wrote:
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> >  package/iperf/iperf.hash | 5 +++--
-> >  package/iperf/iperf.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-> > index 3540c6e..696085c 100644
-> > --- a/package/iperf/iperf.hash
-> > +++ b/package/iperf/iperf.hash
-> > @@ -1,5 +1,6 @@
-> >  # From https://sourceforge.net/projects/iperf2/files/
-> > -sha1	909b469bbbc38508cd268e334a6ec319c3116f15	iperf-2.0.12.tar.gz
-> > +sha1	3eb21c329af811af53a2c816e1ed26b3dd2c259f	iperf-2.0.13.tar.gz
-> 
-> ERROR: iperf-2.0.13.tar.gz has wrong sha1 hash:
-> ERROR: expected: 3eb21c329af811af53a2c816e1ed26b3dd2c259f
-> ERROR: got     : 0c7625c61087b9e6866421abb8bb533658b40a8d
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> The hashes shown on https://sourceforge.net/projects/iperf2/files/
-> are:
-> 
-> SHA1: 0c7625c61087b9e6866421abb8bb533658b40a8d
-> MD5: 31ea1c6d5cbf80b16ff3abe4288dad5e
-
-For the record, this is not the first time upstream changes files
-again after release, I even blogged about that two years ago:
-
-http://blog.antiblau.de/2017/06/20/do-not-change-already-released-files/
-https://sourceforge.net/p/iperf2/tickets/20/
-
-Could please someone kindly tell upstream, that this behaviour breaks
-things and annoys people? :-/
-
-Greets
-Alex
+ DEVELOPERS                                    |  9 ++++++
+ arch/Config.in                                | 13 ++++++++
+ arch/Config.in.nds32                          | 31 +++++++++++++++++++
+ board/andes/ae3xx/ae3xx.fragment              |  1 +
+ ...0001-nds32-Fix-boot-messages-garbled.patch | 28 +++++++++++++++++
+ configs/andes_ae3xx_defconfig                 | 14 +++++++++
+ package/binutils/Config.in.host               |  2 ++
+ package/gcc/Config.in.host                    |  4 +++
+ package/linux-headers/Config.in.host          |  3 ++
+ .../autobuild/br-andes-nds32-glibc.config     |  9 ++++++
+ .../autobuild/toolchain-configs.csv           |  1 +
+ 11 files changed, 115 insertions(+)
+ create mode 100644 arch/Config.in.nds32
+ create mode 100644 board/andes/ae3xx/ae3xx.fragment
+ create mode 100644 board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
+ create mode 100644 configs/andes_ae3xx_defconfig
+ create mode 100644 support/config-fragments/autobuild/br-andes-nds32-glibc.config
 
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/780cbb3a/attachment.asc>
+2.18.0
