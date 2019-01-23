@@ -1,86 +1,61 @@
-From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Wed, 23 Jan 2019 13:51:55 +0000
-Subject: [Buildroot] btrfs filesystem image as subvolume
-In-Reply-To: <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
-References: <BL0PR0102MB3412448238EBCFA54C15B849F39F0@BL0PR0102MB3412.prod.exchangelabs.com>
- <878szbn2qx.fsf@dell.be.48ers.dk>,
- <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
-Message-ID: <BL0PR0102MB3412B01454EA6DB8E16F2D59F3990@BL0PR0102MB3412.prod.exchangelabs.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Jan 2019 15:17:55 +0100
+Subject: [Buildroot] [PATCH] support/scripts/apply-patches: use "git
+ apply" as a fallback when applying patches
+In-Reply-To: <875zutvvf2.fsf@tarshish>
+References: <20190110203004.9812-1-thomas.petazzoni@bootlin.com>
+ <87wonbhnny.fsf@tarshish> <20190111091552.72fba6ad@windsurf>
+ <875zutvvf2.fsf@tarshish>
+Message-ID: <55a5605d-5773-16d5-ef79-a37dac3c009a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot for your input Robert,
 
 
-Too bad, I didn't think about this superuser limitation. It would have been a really useful buildroot output.
+On 13/01/2019 09:00, Baruch Siach wrote:
+> 
+> On Fri, Jan 11 2019, Thomas Petazzoni wrote:
+>> On Fri, 11 Jan 2019 05:35:13 +0200, Baruch Siach wrote:
+>>
+>>>> Switching everybody to unconditionally use "git apply" seems a bit
+>>>> risky, so instead we take a different route: if applying the patch
+>>>> with "patch" fails, then we try with "git apply".  
+>>>
+>>> This makes git a host dependency. Should we add host-git, or list git
+>>> with host requirements?
+>>
+>> It does not really make git a mandatory dependency. Indeed, "git apply"
+>> is only tried if "patch" fails.
+>>
+>> So, before my patch, if a patch failed to apply because "patch" failed,
+>> then it aborted the build.
+>>
+>> With my patch, if a patch fails to apply because "patch" failed, then
+>> we will try "git apply". If "git apply" is not available, it will fail,
+>> just like it used to be.
+>>
+>> So my proposal doesn't *require* git, it only tries harder to apply
+>> patches by using "git apply" if available.
+>>
+>> Setups that used to work today without "git" installed will continue to
+>> work with no change.
+> 
+> With this patch a package selection change that works on the developer's
+> machine where git is installed, would fail on the production build
+> machine that is missing git. Is there a clear error message in case of
+> patch failure?
 
+ I'm with Baruch here. The reason to have this feature is exactly to have the
+possibility to have patches that modify binaries or that modify symlinks. Thus,
+it becomes likely that someone will submit such a patch. It will work for the
+developer, and it will also work in the autobuilders since all of them have git
+installed (otherwise they wouldn't be able to clone the Buildroot repo). Thus,
+any such patch will go unnoticed.
 
-In that case, I will give your script a try.
+ I don't think it hurts to force git as a dependency.
 
-
-Thank you
-
-________________________________
-From: Robert Heywood <robert.heywood@codethink.co.uk>
-Sent: January 23, 2019 4:44:42 AM
-To: Peter Korsgaard; Gervais, Francois
-Cc: buildroot at busybox.net
-Subject: Re: btrfs filesystem image as subvolume
-
-Hi all.
-
-I wanted the same kind of functionality, but found that mkfs.btrfs doesn't
-support much more than dumping the files into the root of the filesystem.
-As a workaround, I made a script that mounts the filesystem, creates the
-subvolume and uses btrfs-send to create the stream.
-
-Sadly it requires root access, so it's not something that can be added to
-buildroot. However, you're welcome to use the script if you want :)
-
-https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_robjh_buildroot-2Ddev_blob_robjh-2Dtmpfiles_robjh_make-5Fbtrfs-5Fstream.sh&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=3V9oKBq7rxLqcrf3JIBDk22u4pP_IDTOFoffRmPieMw&e=
-
-run it from your buildroot directory with sudo.
-It'll produce ./output/images/os.btrfss, which you can use with btrfs-receive.
-
-You might also want to look at this script, which uses the os.btrfss file to
-create a btrfs filesystem on a flash drive, with my desired layout. and with
-compression enabled;
-
-https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_robjh_buildroot-2Ddev_blob_robjh-2Dtmpfiles_robjh_prep-5Fsd.sh&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=IZuvvxl42Wylzoav0LmUMJfs0aKv8VB5n1CV8b2Y600&e=
-
-I hope this helps.
-
-kind regards, rob.
-
-On 23/01/2019 09:26, Peter Korsgaard wrote:
->>>>>> "Gervais," == Gervais, Francois <FGervais@distech-controls.com> writes:
->
-> Hi,
->
->   > Hi,
->   > I tried the btrfs filesystem image and it works fine however in my
->   > use-case I'd like to have only the subvolume and not the whole btrfs
->   > filesystem.
->
->   > Basically the output of "btrfs send".
->
->   > I'd first like to make sure this is not possible today and discuss some
->   > high level guidelines you would like me to follow when I implement
->   > the feature.
->
->   > Should I add a sub-option to the "btrfs root filesystem" menu?
->   > Should if have it's own "Filesystem images" entry?
->
-> Adding Robert who contributed the btrfs support. Robert, any feedback on
-> this?
->
-
---
-Robert Heywood, Codethink Ltd.
-<blink>Privacy policy; https://urldefense.proofpoint.com/v2/url?u=https-3A__www.codethink.co.uk_privacy.html&d=DwICaQ&c=tvvHx3uC0XdtgG-ImPDjfM0QnakIsmmGcwejQDVxD-g&r=G3HxHlWbpios6mQS7YUj_ICsYvxAzbjryvMxyUQ7Mso&m=RdpATESXfxVKQQJznVe_7qw6k-ANfDtCrwJT0MhIFsA&s=-U9tssz2CxIl9yle9dhShM-tx-Zg8OEGzG77dUgcF1U&e=</blink>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/39dae9fc/attachment.html>
+ Regards,
+ Arnout
