@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 11:50:40 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/acpica: add
+Date: Wed, 23 Jan 2019 11:51:06 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/acpica: add
  missing dependencies for host variant
-Message-ID: <20190123105054.DB42F8E3D9@busybox.osuosl.org>
+Message-ID: <20190123105050.549C18E290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa069b85b348265b63a3925e198af2db50ce42f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c2425a513592945d4581599b2a6f0efae5626228
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Just like the target acpica package needs host-flex and host-bison,
 the host variant also needs the same dependencies. This allows to fix
