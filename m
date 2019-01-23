@@ -1,10 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Jan 2019 15:21:18 +0100
-Subject: [Buildroot] [PATCH v2,1/1] gnuchess: needs -fPIC
-In-Reply-To: <20190113141329.4d526438@windsurf.home>
-References: <20190112175505.14348-1-fontaine.fabrice@gmail.com>
- <20190113141329.4d526438@windsurf.home>
-Message-ID: <391d5d2d-90ca-1224-ce6f-cab3b440cbc7@mind.be>
+Date: Wed, 23 Jan 2019 15:29:46 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <877eewo0wr.fsf@dell.be.48ers.dk>
+References: <20190115224239.26125-1-ps.report@gmx.net>
+ <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
+ <20190117194339.5cb2eb0f@gmx.net>
+ <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
+ <877eewo0wr.fsf@dell.be.48ers.dk>
+Message-ID: <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +16,29 @@ To: buildroot@busybox.net
 
 
 
-On 13/01/2019 14:13, Thomas Petazzoni wrote:
-> Hello Fabrice,
+On 22/01/2019 22:08, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
-> On Sat, 12 Jan 2019 18:55:05 +0100, Fabrice Fontaine wrote:
->> When building with -O2 (or -O3) on ARM cortex-M cpus, link fails on:
->>
->> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/arm-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -Wl,-elf2flt -static  -Wl,-elf2flt -static   -Wl,-elf2flt -static -o gnuchess main.o components.o  frontend/libfrontend.a adapter/libadapter.a engine/libengine.a -lreadline -lncurses
->> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
->> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
->>
->> To fix this, pas -fPIC unconditionnally
->>
->> Fixes:
->>  - http://autobuild.buildroot.org/results/7918757b255ed41609609d2083c2d8904ff3136e
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Hi,
 > 
-> I'm sorry but this doesn't make sense to me. -fPIC is for Position
-> Independent Code, which is needed when building shared libraries. Here
-> we are building with -static on Cortex-M which doesn't even have
-> support for shared libraries. So building with -fPIC doesn't make sense
-> I believe. It seems to be more a workaround than a real fix.
+>  >  At some point, we'll just have to let an autobuilder detect the issues. Some
+>  > issues anyway only become apparent at link time, so when building a dependency
+>  > of a dependency...
 > 
-> Perhaps this should be discussed with upstream binutils, or at least a
-> proper investigation be done about those relocation types ?
+>  >  We have an autobuilder running on an openssl-bump branch and Patrick is fixing
+>  > the issues that come out. But at some point we'll need to just bite the bullet
+>  > and accept the whole thing.
+> 
+>  >  I do hope that it could still go into 2019.02.
+> 
+> If that is our goal, then we might as well merge it ASAP to get more
+> test coverage?
+> 
+> What is the killer feature why we need openssl-1.1.x in 2019.02.x? TLS
+> 1.3 or just that 1.0.2 goes EOL at the end of the year?
 
- Or we could argue that gnuchess on Cortex-M probably isn't that essential, and
-just put an architecture dependency...
+ Both, I guess. Also that the whole known world (including Debian stable,
+released June 2017) has already switched to 1.1.x.
 
  Regards,
  Arnout
