@@ -1,44 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 22:50:09 +0100
-Subject: [Buildroot] [git commit] package/libite: bump version to 2.0.2
-Message-ID: <20190123215314.0332D813FB@busybox.osuosl.org>
+Date: Wed, 23 Jan 2019 22:49:53 +0100
+Subject: [Buildroot] [git commit] package/subversion: security bump to
+ version 1.9.10
+Message-ID: <20190123215313.F08B28E383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbb114a64f9604ae409381b30ba6d2d48fb5cdf3
+commit: https://git.buildroot.net/buildroot/commit/?id=ed382bf74a64e5cc5b90010f4f7c51396a970468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Additional fixes for CVE-2017-9800: Malicious server can execute arbitrary
+command on client and a number of crash fixes.
+
+https://svn.apache.org/repos/asf/subversion/tags/1.9.10/CHANGES
+
+Drop upstream SHA1 hash as that is no longer listed.  Also add a hash for
+the license file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libite/libite.hash | 2 +-
- package/libite/libite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/subversion/subversion.hash | 9 +++++----
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 7ef9dca57a..aac01fd36d 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
-+sha256 bd5d08066f3e53cc8967beb6f0620286aad7a24d49fb730caa1c6d09a26bb705  libite-v2.0.2.tar.gz
- sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
- sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
- sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index a128953c7a..bcda5f3f0c 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 6adb57c1ae..be0c8ec931 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,4 +1,5 @@
+-# From http://subversion.apache.org/download.cgi#recommended-release
+-sha1 874b81749cdc3e88152d103243c3623ac6338388  subversion-1.9.7.tar.bz2
+-# From https://www.apache.org/dist/subversion/subversion-1.9.7.tar.bz2.sha512
+-sha512 a55efd3edaddbc099450d849fcc6fe5a8d20b85ece966d8ac2fd73ee9cb4255a0349bbcfceb4e9fca6daf054ce7c648eff8d273c6873f5dade6e62dcea7eeb2b  subversion-1.9.7.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.9.10.tar.bz2.sha512
++sha512 58ac11078e0e5a1720199e5c66da76e7a20b86d02edcb8d313f98e2ddc74ae70aa3e0763a7d8a8fcb5a1fd7d65186829625ff110d78028b1c447e91f420d6f48 subversion-1.9.10.tar.bz2
++
++# Locally calculated
++sha256 3202942c1aba495fd17390618dedc1d3542815c5bc11958da7fd98c985abc11a LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 55738a826d..db7e36a638 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBITE_VERSION = v2.0.1
-+LIBITE_VERSION = v2.0.2
- LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
- LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
+-SUBVERSION_VERSION = 1.9.7
++SUBVERSION_VERSION = 1.9.10
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
+ SUBVERSION_LICENSE = Apache-2.0
