@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 15:32:17 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/rauc: target rauc
+Date: Wed, 23 Jan 2019 15:31:45 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/rauc: target rauc
  needs unsquashfs at runtime
-Message-ID: <20190123143220.AA7F98158D@busybox.osuosl.org>
+Message-ID: <20190123143224.6D6C78293D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89084e988c29405596ebe05a233a2d775916c0e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4d671f1f1478e7cc7fa04cb9a14705c347624d6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 In order to provide info about a bundle file, e.g. running "rauc info
 bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
