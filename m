@@ -1,67 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 10:59:27 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14, 19,
- 20}.x series
-Message-ID: <20190123095927.23701-1-peter@korsgaard.com>
+From: Robert Heywood <robert.heywood@codethink.co.uk>
+Date: Wed, 23 Jan 2019 09:44:42 +0000
+Subject: [Buildroot] btrfs filesystem image as subvolume
+In-Reply-To: <878szbn2qx.fsf@dell.be.48ers.dk>
+References: <BL0PR0102MB3412448238EBCFA54C15B849F39F0@BL0PR0102MB3412.prod.exchangelabs.com>
+ <878szbn2qx.fsf@dell.be.48ers.dk>
+Message-ID: <81138fbc-8766-a8dd-4420-8f8934d70733@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Hi all.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1a50958ea1..7c7263a101 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.19.16" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.17" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9770bcd3da..b25f9774a2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 b9c1bd128404a8e73b57f764256fcaca8eb09f9a892e292856dbeffafa187f45  linux-4.20.3.tar.xz
--sha256 d8a088381fe3e7e5484c060dabcdda4b053ef7114f91cfd56db003a89bb11bdf  linux-4.19.16.tar.xz
--sha256 e728518bb024209acc222e803cdc00d0ea2b1f4ebf28a8ed17a639171a1c23f1  linux-4.14.94.tar.xz
--sha256 15965595807e4dce34da951a806af9928b60c19d3f40773de43f606f14ed425c  linux-4.9.151.tar.xz
-+sha256 dd7fd7eafb8f94a3813a6398d5d2720422a80c933d0dc076479e5c58ecfd34d1  linux-4.20.4.tar.xz
-+sha256 872d92a17a2d252ccd6334503bc8f67eebceeb99cb822a77f5c72b936f2ccb59  linux-4.19.17.tar.xz
-+sha256 ce6729e3fca312520e3cb4f27993852dbb019d94c59c0b35cedab571f9cb58e4  linux-4.14.95.tar.xz
-+sha256 90e47b85c09af47eefafe851685ee731538f640b0650a6a9cfa0234436708e39  linux-4.9.152.tar.xz
- sha256 fd4074da2a946368292b04c44241de37f6b30a10f4231673d0689cf6454fefa0  linux-4.4.171.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 88373aee6f..92db2975c8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -288,10 +288,10 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.171"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.151"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.94"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.16"	if BR2_KERNEL_HEADERS_4_19
--	default "4.20.3"	if BR2_KERNEL_HEADERS_4_20
-+	default "4.9.152"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.95"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.17"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.20.4"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+I wanted the same kind of functionality, but found that mkfs.btrfs doesn't 
+support much more than dumping the files into the root of the filesystem.
+As a workaround, I made a script that mounts the filesystem, creates the 
+subvolume and uses btrfs-send to create the stream.
+
+Sadly it requires root access, so it's not something that can be added to 
+buildroot. However, you're welcome to use the script if you want :)
+
+https://github.com/robjh/buildroot-dev/blob/robjh-tmpfiles/robjh/make_btrfs_stream.sh
+
+run it from your buildroot directory with sudo.
+It'll produce ./output/images/os.btrfss, which you can use with btrfs-receive.
+
+You might also want to look at this script, which uses the os.btrfss file to 
+create a btrfs filesystem on a flash drive, with my desired layout. and with 
+compression enabled;
+
+https://github.com/robjh/buildroot-dev/blob/robjh-tmpfiles/robjh/prep_sd.sh
+
+I hope this helps.
+
+kind regards, rob.
+
+On 23/01/2019 09:26, Peter Korsgaard wrote:
+>>>>>> "Gervais," == Gervais, Francois <FGervais@distech-controls.com> writes:
+> 
+> Hi,
+> 
+>   > Hi,
+>   > I tried the btrfs filesystem image and it works fine however in my
+>   > use-case I'd like to have only the subvolume and not the whole btrfs
+>   > filesystem.
+> 
+>   > Basically the output of "btrfs send".
+> 
+>   > I'd first like to make sure this is not possible today and discuss some
+>   > high level guidelines you would like me to follow when I implement
+>   > the feature.
+> 
+>   > Should I add a sub-option to the "btrfs root filesystem" menu?
+>   > Should if have it's own "Filesystem images" entry?
+> 
+> Adding Robert who contributed the btrfs support. Robert, any feedback on
+> this?
+> 
+
 -- 
-2.11.0
+Robert Heywood, Codethink Ltd.
+<blink>Privacy policy; https://www.codethink.co.uk/privacy.html</blink>
