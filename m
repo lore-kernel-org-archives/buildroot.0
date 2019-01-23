@@ -1,44 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Jan 2019 15:29:46 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
-In-Reply-To: <877eewo0wr.fsf@dell.be.48ers.dk>
-References: <20190115224239.26125-1-ps.report@gmx.net>
- <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
- <20190117194339.5cb2eb0f@gmx.net>
- <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
- <877eewo0wr.fsf@dell.be.48ers.dk>
-Message-ID: <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Jan 2019 15:31:09 +0100
+Subject: [Buildroot] [PATCH] package/sqlite: security bump to version
+ 3.25.3
+In-Reply-To: <20181222074448.24100-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 22 Dec 2018 08:44:47 +0100")
+References: <20181222074448.24100-1-peter@korsgaard.com>
+Message-ID: <87munrla36.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > Fixes CVE-2018-20346: SQLite before 3.25.3, when the FTS3 extension is
+ > enabled, encounters an integer overflow (and resultant buffer overflow) for
+ > FTS3 queries that occur after crafted changes to FTS3 shadow tables,
+ > allowing remote attackers to execute arbitrary code by leveraging the
+ > ability to run arbitrary SQL statements (such as in certain WebSQL use
+ > cases), aka Magellan.
 
-On 22/01/2019 22:08, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >  At some point, we'll just have to let an autobuilder detect the issues. Some
->  > issues anyway only become apparent at link time, so when building a dependency
->  > of a dependency...
-> 
->  >  We have an autobuilder running on an openssl-bump branch and Patrick is fixing
->  > the issues that come out. But at some point we'll need to just bite the bullet
->  > and accept the whole thing.
-> 
->  >  I do hope that it could still go into 2019.02.
-> 
-> If that is our goal, then we might as well merge it ASAP to get more
-> test coverage?
-> 
-> What is the killer feature why we need openssl-1.1.x in 2019.02.x? TLS
-> 1.3 or just that 1.0.2 goes EOL at the end of the year?
+ > For more details, see:
+ > https://blade.tencent.com/magellan/index_en.html
+ > https://www.sqlite.org/releaselog/3_25_3.html
+ > https://www.mail-archive.com/sqlite-users at mailinglists.sqlite.org/msg113218.html
 
- Both, I guess. Also that the whole known world (including Debian stable,
-released June 2017) has already switched to 1.1.x.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- Regards,
- Arnout
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
