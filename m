@@ -1,7 +1,8 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Jan 2019 23:44:26 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Jan 2019 00:03:12 +0100
 Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
-In-Reply-To: <87sgxjjqo1.fsf@dell.be.48ers.dk>
+In-Reply-To: <e09d9674-3ee7-7d9f-5579-063e44691582@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 23 Jan 2019 23:44:26 +0100")
 References: <20190115224239.26125-1-ps.report@gmx.net>
  <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
  <20190117194339.5cb2eb0f@gmx.net>
@@ -9,45 +10,30 @@ References: <20190115224239.26125-1-ps.report@gmx.net>
  <877eewo0wr.fsf@dell.be.48ers.dk>
  <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
  <87sgxjjqo1.fsf@dell.be.48ers.dk>
-Message-ID: <e09d9674-3ee7-7d9f-5579-063e44691582@mind.be>
+ <e09d9674-3ee7-7d9f-5579-063e44691582@mind.be>
+Message-ID: <87tvhzht8v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 23/01/2019 17:15, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >> >  I do hope that it could still go into 2019.02.
->  >> 
->  >> If that is our goal, then we might as well merge it ASAP to get more
->  >> test coverage?
->  >> 
->  >> What is the killer feature why we need openssl-1.1.x in 2019.02.x? TLS
->  >> 1.3 or just that 1.0.2 goes EOL at the end of the year?
-> 
->  >  Both, I guess. Also that the whole known world (including Debian stable,
->  > released June 2017) has already switched to 1.1.x.
-> 
-> With 1.1.x I take it you mean 1.1.0, right? The 1.1.1 series (strange
-> numbering convention) was only released back in September.
+ >> >  Both, I guess. Also that the whole known world (including Debian stable,
+ >> > released June 2017) has already switched to 1.1.x.
+ >> 
+ >> With 1.1.x I take it you mean 1.1.0, right? The 1.1.1 series (strange
+ >> numbering convention) was only released back in September.
 
- With 1.1.x I mean 1.1.0 or 1.1.1. The breakage comes from the 1.1.0 bump; .0 to
-.1 is fairly smooth.
+ >  With 1.1.x I mean 1.1.0 or 1.1.1. The breakage comes from the 1.1.0 bump; .0 to
+ > .1 is fairly smooth.
 
+Ok. 1.1.0 was released 2.5 years ago (August 2016). How come we still
+need fixes for quite some packages? All abandoned software? Should we
+get rid of some of those packages?
 
- Regards,
- Arnout
-
-> 1.1.0 is not a LTS so not suitable for 2019.02.x. 1.0.2 is supported
-> until the end of 2019, so that is IMHO still OK for 2019.02.
-> 
-> I agree that having 1.1.1x in 2019.02.x would be nice, but a pity that
-> quite some packages break with it (even if the whole known world has
-> switched to it).
-> 
+-- 
+Bye, Peter Korsgaard
