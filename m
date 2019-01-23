@@ -1,238 +1,116 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Wed, 23 Jan 2019 12:06:38 +0800
-Subject: [Buildroot] Building host-python-2.7.15 Failed
-In-Reply-To: <CAAsE_uf8o9nR2C+kDxfGz12Ov6oEGaM3MBuonnqMHR7MgWd9Jw@mail.gmail.com>
-References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
- <20190119163336.ihaetocpbabtnnjj@vkochan-ThinkPad-T470p>
- <CAAsE_udPhniigABfB27SO9nWdPKSAg=kfjrwLTDKuU3DAyuC7Q@mail.gmail.com>
- <20190120141318.szbl7zs4bgazznov@vkochan-ThinkPad-T470p>
- <CAAsE_uf8o9nR2C+kDxfGz12Ov6oEGaM3MBuonnqMHR7MgWd9Jw@mail.gmail.com>
-Message-ID: <CAAsE_udrJ3nzaw+w3sKWPwM=broa+V_P_1536ZLPP3fR68M8cQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 23 Jan 2019 08:00:32 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-22
+Message-ID: <20190123070032.326C120A0E@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Does some else get some blue? Thanks.
+Hello,
 
-On Mon, Jan 21, 2019 at 12:08 AM Woody Wu <narkewoody@gmail.com> wrote:
+Build statistics for 2019-01-22
+===============================
 
-> I tried several combination with the toolchain selections, at the last I
-> also directly copied your config, but it's still the same error.  But the
-> last time (with your configs) the output log appeared a little different:
->
-> PATH="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/sbin:/opt/linaro/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf/bin:/home/woody/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
-> PKG_CONFIG="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin/pkg-config"
-> PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-> PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-> PKG_CONFIG_LIBDIR="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib/pkgconfig:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/share/pkgconfig"
-> /usr/bin/make -j1  -C
-> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/
-> running build
-> running build_ext
-> INFO: Can't locate Tcl/Tk libs and/or headers
-> building 'crypt' extension
-> /usr/bin/gcc -pthread -fPIC -fno-strict-aliasing -O2
-> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
-> -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I. -IInclude -I./Include
-> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
-> -I/usr/include/x86_64-linux-gnu -I/usr/local/include
-> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Include
-> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15
-> -c
-> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.c
-> -o
-> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
-> /usr/bin/gcc -pthread -shared
-> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -Wl,--enable-new-dtags
-> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
-> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
-> build/lib.linux-x86_64-2.7/crypt.so
->
-> Python build finished, but the necessary bits to build these modules were
-> not found:
-> _bsddb             _sqlite3           _tkinter
-> bsddb185           bz2                dbm
-> dl                 gdbm               imageop
-> readline           sunaudiodev
-> To find the necessary bits, look in setup.py in detect_modules() for the
-> module's name.
->
->
-> Failed to build these modules:
-> crypt
-> ================
->
-> Can you guess a clue from above?  Thanks!
->
->
-> On Sun, Jan 20, 2019 at 10:04 PM Vadim Kochan <vadim4j@gmail.com> wrote:
->
->> Hi,
->>
->> On Sun, Jan 20, 2019 at 08:51:32PM +0800, Woody Wu wrote:
->> > Hi,
->> >
->> > My savedefconfig:
->> >
->> > BR2_arm=y
->> > BR2_cortex_a8=y
->> > BR2_ARM_FPU_NEON=y
->> > BR2_DL_DIR="$(TOPDIR)/../downloads"
->> > BR2_TOOLCHAIN_EXTERNAL=y
->> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
->> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnueabihf"
->> > BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
->> > BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
->> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
->> > BR2_TOOLCHAIN_EXTERNAL_CXX=y
->> > BR2_PACKAGE_IOSTAT=y
->> > BR2_PACKAGE_NODEJS=y
->> > BR2_PACKAGE_PYTHON=y
->> >
->> > BTW: My building system is ubuntu 18.10.  The target is armv7
->> >
->> >
->> > On Sun, Jan 20, 2019 at 12:24 AM Vadim Kochan <vadim4j@gmail.com>
->> wrote:
->> >
->> > > Hi Woody,
->> > >
->> > > On Sun, Jan 20, 2019 at 12:15:36AM +0800, Woody Wu wrote:
->> > > > Hi,
->> > > >
->> > > > This is buildroot-2018.11.1.    I found I cannot build some
->> packages with
->> > > > buildroot, the problem seemed in the building of the host-python.
->> Below
->> > > is
->> > > > the log:
->> > > >
->> > > > >>> host-python 2.7.15 Building
->> > > >
->> > >
->> PATH="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/sbin:/opt/linaro/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf/bin:/home/woody/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
->> > > >
->> > >
->> PKG_CONFIG="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/bin/pkg-config"
->> > > > PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
->> > > > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
->> > > >
->> > >
->> PKG_CONFIG_LIBDIR="/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib/pkgconfig:/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/share/pkgconfig"
->> > > > /usr/bin/make -j1  -C
->> > > >
->> > >
->> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/
->> > > > running build
->> > > > running build_ext
->> > > > INFO: Can't locate Tcl/Tk libs and/or headers
->> > > > building 'crypt' extension
->> > > > /usr/bin/gcc -pthread -fPIC -fno-strict-aliasing -O2
->> > > >
->> > >
->> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
->> > > > -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I. -IInclude
->> > > -I./Include
->> > > >
->> > >
->> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/include
->> > > > -I/usr/include/x86_64-linux-gnu -I/usr/local/include
->> > > >
->> > >
->> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Include
->> > > >
->> > >
->> -I/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15
->> > > > -c
->> > > >
->> > >
->> /home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.c
->> > > > -o
->> > > >
->> > >
->> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
->> > > > /usr/bin/gcc -pthread -shared
->> > > >
->> > >
->> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
->> > > >
->> > >
->> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
->> > > > -Wl,--enable-new-dtags
->> > > >
->> > >
->> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
->> > > >
->> > >
->> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
->> > > > -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt
->> -lpython2.7 -o
->> > > > build/lib.linux-x86_64-2.7/crypt.so
->> > > > /usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o):
->> > > > relocation R_X86_64_PC32 against symbol `_ufc_foobar' can not be
->> used
->> > > when
->> > > > making a shared object; recompile with -fPIC
->> > > > /usr/bin/ld: final link failed: bad value
->> > > > collect2: error: ld returned 1 exit status
->> > > >
->> > > > Python build finished, but the necessary bits to build these
->> modules were
->> > > > not found:
->> > > > _bsddb             _sqlite3           _tkinter
->> > > > bsddb185           bz2                dbm
->> > > > dl                 gdbm               imageop
->> > > > readline           sunaudiodev
->> > > > To find the necessary bits, look in setup.py in detect_modules()
->> for the
->> > > > module's name.
->> > > >
->> > > > Failed to build these modules:
->> > > > crypt
->> > > > =============
->> > > >
->> > > > Can someone have a look at it and give me a hint?
->> > > >
->> > > > Thanks!
->> > > >
->>
->> So, you are using custom toolchain, I used this defconfig:
->>
->>         BR2_arm=y
->>         BR2_cortex_a8=y
->>         BR2_ARM_FPU_NEON=y
->>         BR2_TOOLCHAIN_EXTERNAL=y
->>         BR2_PACKAGE_IOSTAT=y
->>         BR2_PACKAGE_NODEJS=y
->>         BR2_PACKAGE_PYTHON=y
->>
->> and it builds OK on master and 2018.11.1 tag.
->>
->> Regards,
->> Vadim Kochan
->>
->
->
-> --
-> Life is the only flaw in an otherwise perfect nonexistence
->     -- Schopenhauer
->
-> woody
-> public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
->
->
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  27 |   0 |   0 |  27 |
+   2018.11.x |  23 |   0 |   0 |  23 |
+      master | 188 |  54 |   0 | 242 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+zbar-b3b4e32b55f570372fc3af... | 7 
+             host-grpc-v1.16.1 | 5 
+                  libssh-0.8.6 | 5 
+                  ffmpeg-3.4.5 | 4 
+                   netsurf-3.8 | 4 
+             libva-utils-2.3.0 | 3 
+                  gnutls-3.6.5 | 2 
+                     gpsd-3.18 | 2 
+                 haproxy-1.9.1 | 2 
+                     lua-5.3.5 | 2 
+                     squid-4.4 | 2 
+               curlftpfs-0.9.2 | 1 
+                  daemon-0.6.4 | 1 
+   libtorrent-rasterbar-1.1.11 | 1 
+               mono-5.14.0.177 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+                p11-kit-0.23.2 | 1 
+                     php-7.3.1 | 1 
+               skalibs-2.6.4.0 | 1 
+                   strace-4.26 | 1 
+             stress-ng-0.09.47 | 1 
+                   systemd-240 | 1 
+tvheadend-17dff3e5ffbd67174... | 1 
+                upmpdcli-1.4.0 | 1 
+                wavemon-v0.9.0 | 1 
+                   wget-1.20.1 | 1 
+               xapp_luit-1.1.1 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv32 |                curlftpfs-0.9.2 | NOK | http://autobuild.buildroot.net/results/935730c8295c3a80383a774c919b21aba9eb20cf |     
+     riscv32 |                   daemon-0.6.4 | NOK | http://autobuild.buildroot.net/results/ffd03bb65383139fe8a3ade529bdaf1f2f00816c |     
+        i586 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/a25ee6309af88c274fe424a53c283cf4631431eb |     
+     riscv32 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/44b3181794d1d75bd164e6dc909530a6f7788967 |     
+    mips64el |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/ebd7ae8a5c415366f3de4357c7b646105263a6c9 |     
+      x86_64 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/2718102f8e97a4da6dddcff839097d487a48c306 |     
+       sparc |                   gnutls-3.6.5 | NOK | http://autobuild.buildroot.net/results/1d9389115dcbdd81b41447720d65b425be5e6cac |     
+         arm |                   gnutls-3.6.5 | NOK | http://autobuild.buildroot.net/results/2c45089453e1c9dc53fad43e53544dd363acb829 |     
+     riscv32 |                      gpsd-3.18 | NOK | http://autobuild.buildroot.net/results/8b21d7e1ded65c8ccda7843aa7d1abf88888074f | ORPH
+     riscv32 |                      gpsd-3.18 | NOK | http://autobuild.buildroot.net/results/7605a10f59806011a627076a6ec929d3ec73c251 | ORPH
+         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/527d7b6479b84c273e33e160310c0c9db8e52d91 |     
+         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/993528dcc4f4404bd00b0b0fa7bd19454e79c4c2 |     
+         arm |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/5704c20a3a4eccdd68fd451e29d73d60bc42a075 |     
+      x86_64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/f4e6baf788240e3453978b49d526bddf3c834b8c |     
+      xtensa |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/99c66187034c2347184016a0e933ee8d8e97961d |     
+   powerpc64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/f930429ebeefcde505f27bb5bb6628341c081fca |     
+         arm |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/be26a25275f1f9bec6cc5aab8ff11f2acc85889f |     
+     aarch64 |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/2d0a8a567571c50095d993667443a68cf58f889b |     
+     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/496ab9ac238990a24afc1278c453d9cf68573bff |     
+    mips64el |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/7d093dacd539229d58e00128f37d72eecf7cb4f8 |     
+     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/7c8068208b5c2d94028e4fbacd030b2bf766818c |     
+      xtensa |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/9239f230629ca4e381af5e8f43989997d9bfde99 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/9a3bf4b411c418ea78d59e35d23ba865dd453890 |     
+      x86_64 |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/ffcc8ef54c114dfd813bc4d8e3dd96a7aabe2641 |     
+         arm |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/b33af520d5ffeee194d1887897e76b27d647d482 |     
+    mips64el |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/416426fc9692353109ab181e9b7f13e3e4b81875 |     
+     riscv32 |                      lua-5.3.5 | NOK | http://autobuild.buildroot.net/results/24ab698bc9cfe6ba583388d57e18592acde03370 |     
+     riscv32 |                      lua-5.3.5 | NOK | http://autobuild.buildroot.net/results/35f47068de4376d6deef93f0d64cfc5188392e9b |     
+         arm |                mono-5.14.0.177 | NOK | http://autobuild.buildroot.net/results/ebb6a1b75d7520baabb38e6958440e48a783acaa |     
+     powerpc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/9cf4fd4b3e69e4b18ab780ab9e1a9b4275514a03 |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/24266e4149a68b423f1a2083f485928bb8221e53 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/ed433d82ccdb895e4fa2b4008290b729ad49cb9c |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/70bc4abd2266726c9375e8182119f7a292e3cf99 |     
+      x86_64 |    openvmtools-10.3.5-10430147 | NOK | http://autobuild.buildroot.net/results/92f7c88917066b1d3e15ee0d1baafe01c0cb29c8 |     
+     riscv32 |                 p11-kit-0.23.2 | NOK | http://autobuild.buildroot.net/results/f563a7698d19a8db6b079d0493895c3d2b5c6e31 | ORPH
+     aarch64 |                      php-7.3.1 | NOK | http://autobuild.buildroot.net/results/a407238ed91130d9fcb85feb1f6cd7d8b4d57603 | ORPH
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/3ab6a3a745abd8f1b22afb8147117dd13765c03d |     
+         sh4 |                      squid-4.4 | NOK | http://autobuild.buildroot.net/results/adc3c0e986f4333266c345ca685a32c6563e0c28 | ORPH
+         sh4 |                      squid-4.4 | NOK | http://autobuild.buildroot.net/results/7d20b846ba24196422754a310f16b0fcc9f61cb7 | ORPH
+      xtensa |                    strace-4.26 | NOK | http://autobuild.buildroot.net/results/212173e72374dce65748e4344ceaaccc126a5996 |     
+     powerpc |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/033f081e0eb0fc4f03eebc950496294cfeeff4b1 |     
+        mips |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/e484bc976266633029b26c8e21959ae4e9137da3 |     
+    mips64el | tvheadend-17dff3e5ffbd67174... | NOK | http://autobuild.buildroot.net/results/2d2d40a578ccd60e0a573bde94fcc4928e48fa4a |     
+      x86_64 |                 upmpdcli-1.4.0 | NOK | http://autobuild.buildroot.net/results/f482a695b9a3e8acfca5c83bad7b6065cd1c8cd8 |     
+         arm |                 wavemon-v0.9.0 | NOK | http://autobuild.buildroot.net/results/114958ac3d10d1bcdfa095b78dfe42be24321e5a |     
+       sparc |                    wget-1.20.1 | NOK | http://autobuild.buildroot.net/results/d7dafe5737e3cde706b086e8e9f1b14e139e091f | ORPH
+     riscv32 |                xapp_luit-1.1.1 | NOK | http://autobuild.buildroot.net/results/9a0fda72bb614ec41b3ebb4702f07a8d4180f34e |     
+        i686 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/f6c2207145b420329ed0ee282ce148f40d40c3a1 |     
+    mips64el | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/ca5c9d2b21f713b08187f9eedfb91f7bd597538d |     
+        i686 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/7f85387d99b58e3bb151ae546738da1b04493931 |     
+      x86_64 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/9dc852c61e34c024d1ed782c42febb05364d9aba |     
+      x86_64 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/6f8aaaf3cc18cfcfdeff6da82186b8bdb7e99619 |     
+    mips64el | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/36f5d1cb9b92d8e607454a6cf7d3a8b599735f1c |     
+         arm | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/60bd7035388617a5440b9fc37ffd324a1986ef2b |     
+
 
 -- 
-Life is the only flaw in an otherwise perfect nonexistence
-    -- Schopenhauer
-
-woody
-public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190123/e805c612/attachment.html>
+http://autobuild.buildroot.net
