@@ -1,13 +1,13 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Wed, 23 Jan 2019 09:53:10 -0600
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 23 Jan 2019 10:10:29 -0600
 Subject: [Buildroot] Error when installing to staging directory
-In-Reply-To: <1548257896385.11693@jhuapl.edu>
+In-Reply-To: <1548258173866.68555@jhuapl.edu>
 References: <1548107272423.65265@jhuapl.edu>
  <CANQCQpZ-NUo_5cjPFFNiYaJh_SEeTRS8=Kyt4greg7mRTqSdVw@mail.gmail.com>
  <1548167904630.87035@jhuapl.edu>
  <CANQCQpZ8mV=BrnhMKG6mj6tKP1yaT_9qOPMCp0c098FrpUnK_w@mail.gmail.com>
- <1548257896385.11693@jhuapl.edu>
-Message-ID: <CAH=K+6=oPqgjyUMbRn-=2jrXP6VAxP+Wk+TvR1Kp_7_tv88j4A@mail.gmail.com>
+ <1548258173866.68555@jhuapl.edu>
+Message-ID: <CANQCQpYEFgxUHY1-RpoasGhXi-hThEoiQ5ChDgUMxyWkKOXGDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Anastasia,
-On Wed, Jan 23, 2019 at 9:38 AM Raffucci, Anastasia
+
+On Wed, Jan 23, 2019 at 9:43 AM Raffucci, Anastasia
 <Anastasia.Raffucci@jhuapl.edu> wrote:
 >
 > Matthew,
->
-> I am having some difficulties to test with 2018.11.x.
->
-> Makefile:569: *** liblinear is in the dependency chain of nmap that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-
-This usually happens when a dependency is selected in the packages .mk
-file, but not declared a dependency in the Config.in file. I would
-start searching there. This file is in $br_root/package/nmap/Config.in
-
-Hope this helps,
-
-Sam
-
->
-> I am not sure what I need to modify or install in addition to be able to use this version of buildroot.
->
 >
 > Yes, I am running with fresh clone 2017.11.x. I do not copy, or modify any files in buildroot folder.
 > I am using external compiler:
@@ -42,7 +27,7 @@ Sam
 > gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi.tar.xz
 > In my $ROOT I have:
 > $ ls
-> bashrc.local  build/  build_all.sh  defconfig/  overlays/  post-image.sh  pre-image.sh  skeleton/
+> bashrc.local  build  build_all.sh  defconfig  overlays  post-image.sh  pre-image.sh  skeleton
 >
 > and I run: $source build_all.sh
 >
@@ -61,14 +46,20 @@ Sam
 >         make
 > else
 >         # first run
->         make O=$ROOT/build -C ~/buildroot
+>         make O=$ROOT/build -C ~/buildroot     #build folder is created manually
 > fi
 >
 > bashrc.local:
 > export ARCH=arm
 > export ROOT=$PWD
-> export CROSS_TOOL_PATH=/tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi
+> export CROSS_TOOL_PATH=/tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi      #copied manually to this location
 > export CROSS_TOOL_PREFIX=arm-linux-gnueabi
+
+I'd suggest not setting these exports.  Instead setup your toolchain
+as a external toolchain in buildroot.  If you need them for building
+something else, I'd suggest a env script you can use locally in that
+shell as part of the specific software build.
+
 >
 > I am reading "host/ contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain." I also compared the contents of host/ now and when it was working and it is different.
 > I expect to have: arm-buildroot-linux-gnueabi  bin  doc  etc  include  lib  lib64  libexec  man  sbin  share  usr  var
@@ -79,6 +70,7 @@ Sam
 > bin/                                         libexec/
 > gcc-linaro-7.1.1-2017.05-linux-manifest.txt  share/
 > include/
+>
 >
 > Anastasia
 > ________________________________________
@@ -178,27 +170,3 @@ Sam
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-
-Sam Voss | Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 263 4039
-
-sam.voss at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
