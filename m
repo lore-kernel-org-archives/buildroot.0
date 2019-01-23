@@ -1,42 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 15:31:45 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/rauc: target rauc
- needs unsquashfs at runtime
-Message-ID: <20190123143224.6D6C78293D@busybox.osuosl.org>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Wed, 23 Jan 2019 07:09:10 -0800
+Subject: [Buildroot] [PATCH 1/2] package/libite: bump version to 2.0.2
+Message-ID: <20190123150911.3321-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d671f1f1478e7cc7fa04cb9a14705c347624d6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
-
-In order to provide info about a bundle file, e.g. running "rauc info
-bundle.raucb", rauc needs to use the unsquashfs progam from the squashfs
-package.
-
-This was not documented until upstream commit 10c501c12752 ("docs:
-integration: document need for 'unsquashfs' tool for 'rauc info'"), but
-is already present in rauc.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4a4dba21b9f9469b189ad04f74138039a4ba8109)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/rauc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libite/libite.hash | 2 +-
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 6433b827d3..456f8f382c 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_RAUC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DBUS # run-time dependency
-+	select BR2_PACKAGE_SQUASHFS # run-time dependency
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. It supports updating embedded Linux
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index 7ef9dca57a..aac01fd36d 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
++sha256 bd5d08066f3e53cc8967beb6f0620286aad7a24d49fb730caa1c6d09a26bb705  libite-v2.0.2.tar.gz
+ sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+ sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
+ sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index a128953c7a..bcda5f3f0c 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBITE_VERSION = v2.0.1
++LIBITE_VERSION = v2.0.2
+ LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+ LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
+-- 
+2.20.1
