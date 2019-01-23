@@ -1,36 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 22:51:08 +0100
-Subject: [Buildroot] [git commit] package/iperf: fixed hash to match v2.0.13
- archive
-Message-ID: <20190123215314.16255813FB@busybox.osuosl.org>
+Date: Wed, 23 Jan 2019 22:50:09 +0100
+Subject: [Buildroot] [git commit] package/libite: bump version to 2.0.2
+Message-ID: <20190123215314.0332D813FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=332d476195357bb2fffe1a38266cf203cc5b9270
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb114a64f9604ae409381b30ba6d2d48fb5cdf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The iperf project changed the archive after the release without changing
-the filename of the archive.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iperf/iperf.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libite/libite.hash | 2 +-
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 696085c05d..bce46c6919 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1	3eb21c329af811af53a2c816e1ed26b3dd2c259f	iperf-2.0.13.tar.gz
-+sha1	0c7625c61087b9e6866421abb8bb533658b40a8d	iperf-2.0.13.tar.gz
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index 7ef9dca57a..aac01fd36d 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
++sha256 bd5d08066f3e53cc8967beb6f0620286aad7a24d49fb730caa1c6d09a26bb705  libite-v2.0.2.tar.gz
+ sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+ sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
+ sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index a128953c7a..bcda5f3f0c 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Locally computed:
--sha256  a43ee9d6476955e7fc7aa894b6c4d227a2129943ad6171ad39aa52f1a065db50  iperf-2.0.13.tar.gz
-+sha256  c88adec966096a81136dda91b4bd19c27aae06df4d45a7f547a8e50d723778ad  iperf-2.0.13.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
+-LIBITE_VERSION = v2.0.1
++LIBITE_VERSION = v2.0.2
+ LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+ LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
