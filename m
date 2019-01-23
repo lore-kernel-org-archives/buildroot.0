@@ -1,61 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 16:07:08 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/wireshark:
- security bump to version 2.6.6
-Message-ID: <20190123151352.B4F2E849D1@busybox.osuosl.org>
+Date: Wed, 23 Jan 2019 16:06:37 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] wireshark: fix static
+ build
+Message-ID: <20190123151352.A7F6A849D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03c9b123e608cfbd10afe91fe75ef3d22dc1bcf2
+commit: https://git.buildroot.net/buildroot/commit/?id=0af2651146bf87ba5476eaaa8df39d1b40c73469
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes the following security vulnerabilities:
+Don't give a path in --with-pcap option otherwise PCAP_CONFIG won't be
+used (see AC_WIRESHARK_PCAP_CHECK in acinclude.m4) to retrieve pcap
+static dependencies such as -lnl-3 and as a result pcap detection will
+fail
 
-- wnpa-sec-2019-01 The 6LoWPAN dissector could crash. Bug 15217. CVE-2019-5716
-  https://www.wireshark.org/security/wnpa-sec-2019-01
+Fixes:
+ - http://autobuild.buildroot.org/results/084354a33825cf4e723e0a9f1e9656ad2a212a15
 
-- wnpa-sec-2019-02 The P_MUL dissector could crash. Bug 15337. CVE-2019-5717
-  https://www.wireshark.org/security/wnpa-sec-2019-02
-
-- wnpa-sec-2019-03 The RTSE dissector and other dissectors could crash.  Bug
-  15373.  CVE-2019-5718
-  https://www.wireshark.org/security/wnpa-sec-2019-03
-
-- wnpa-sec-2019-04 The ISAKMP dissector could crash. Bug 15374. CVE-2019-5719
-  https://www.wireshark.org/security/wnpa-sec-2019-04
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cd232aefc9eedae43aff1e4a4abf86b64ef3bdfa)
+(cherry picked from commit fecf82a1668c5cfbe6ebec985ce60a5526bcf35c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 7748dd8409..bad0a0fd45 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.5.txt
--sha256 93155b798544b2f07693920f4ac1b531c952965ee4eb1d98419961240177438a  wireshark-2.6.5.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.6.txt
-+sha256 487933ea075bdbb25d8df06017d9c4f49fc20eb7f6ec80af086718ed5550e863  wireshark-2.6.6.tar.xz
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
 diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 632a7a6aa8..3b77deabb0 100644
+index 468229df3f..f67368ae43 100644
 --- a/package/wireshark/wireshark.mk
 +++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -24,7 +24,7 @@ WIRESHARK_CONF_OPTS = \
+ 	--without-nghttp2 \
+ 	--without-snappy \
+ 	--with-libsmi=no \
+-	--with-pcap=$(STAGING_DIR)/usr
++	--with-pcap=yes
  
--WIRESHARK_VERSION = 2.6.5
-+WIRESHARK_VERSION = 2.6.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ # wireshark GUI options
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
