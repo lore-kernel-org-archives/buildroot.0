@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Jan 2019 15:17:55 +0100
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches: use "git
- apply" as a fallback when applying patches
-In-Reply-To: <875zutvvf2.fsf@tarshish>
-References: <20190110203004.9812-1-thomas.petazzoni@bootlin.com>
- <87wonbhnny.fsf@tarshish> <20190111091552.72fba6ad@windsurf>
- <875zutvvf2.fsf@tarshish>
-Message-ID: <55a5605d-5773-16d5-ef79-a37dac3c009a@mind.be>
+Date: Wed, 23 Jan 2019 15:21:18 +0100
+Subject: [Buildroot] [PATCH v2,1/1] gnuchess: needs -fPIC
+In-Reply-To: <20190113141329.4d526438@windsurf.home>
+References: <20190112175505.14348-1-fontaine.fabrice@gmail.com>
+ <20190113141329.4d526438@windsurf.home>
+Message-ID: <391d5d2d-90ca-1224-ce6f-cab3b440cbc7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +13,39 @@ To: buildroot@busybox.net
 
 
 
-On 13/01/2019 09:00, Baruch Siach wrote:
+On 13/01/2019 14:13, Thomas Petazzoni wrote:
+> Hello Fabrice,
 > 
-> On Fri, Jan 11 2019, Thomas Petazzoni wrote:
->> On Fri, 11 Jan 2019 05:35:13 +0200, Baruch Siach wrote:
+> On Sat, 12 Jan 2019 18:55:05 +0100, Fabrice Fontaine wrote:
+>> When building with -O2 (or -O3) on ARM cortex-M cpus, link fails on:
 >>
->>>> Switching everybody to unconditionally use "git apply" seems a bit
->>>> risky, so instead we take a different route: if applying the patch
->>>> with "patch" fails, then we try with "git apply".  
->>>
->>> This makes git a host dependency. Should we add host-git, or list git
->>> with host requirements?
+>> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/arm-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -Wl,-elf2flt -static  -Wl,-elf2flt -static   -Wl,-elf2flt -static -o gnuchess main.o components.o  frontend/libfrontend.a adapter/libadapter.a engine/libengine.a -lreadline -lncurses
+>> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+>> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
 >>
->> It does not really make git a mandatory dependency. Indeed, "git apply"
->> is only tried if "patch" fails.
+>> To fix this, pas -fPIC unconditionnally
 >>
->> So, before my patch, if a patch failed to apply because "patch" failed,
->> then it aborted the build.
+>> Fixes:
+>>  - http://autobuild.buildroot.org/results/7918757b255ed41609609d2083c2d8904ff3136e
 >>
->> With my patch, if a patch fails to apply because "patch" failed, then
->> we will try "git apply". If "git apply" is not available, it will fail,
->> just like it used to be.
->>
->> So my proposal doesn't *require* git, it only tries harder to apply
->> patches by using "git apply" if available.
->>
->> Setups that used to work today without "git" installed will continue to
->> work with no change.
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > 
-> With this patch a package selection change that works on the developer's
-> machine where git is installed, would fail on the production build
-> machine that is missing git. Is there a clear error message in case of
-> patch failure?
+> I'm sorry but this doesn't make sense to me. -fPIC is for Position
+> Independent Code, which is needed when building shared libraries. Here
+> we are building with -static on Cortex-M which doesn't even have
+> support for shared libraries. So building with -fPIC doesn't make sense
+> I believe. It seems to be more a workaround than a real fix.
+> 
+> Perhaps this should be discussed with upstream binutils, or at least a
+> proper investigation be done about those relocation types ?
 
- I'm with Baruch here. The reason to have this feature is exactly to have the
-possibility to have patches that modify binaries or that modify symlinks. Thus,
-it becomes likely that someone will submit such a patch. It will work for the
-developer, and it will also work in the autobuilders since all of them have git
-installed (otherwise they wouldn't be able to clone the Buildroot repo). Thus,
-any such patch will go unnoticed.
-
- I don't think it hurts to force git as a dependency.
+ Or we could argue that gnuchess on Cortex-M probably isn't that essential, and
+just put an architecture dependency...
 
  Regards,
  Arnout
