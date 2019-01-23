@@ -1,172 +1,140 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Wed, 23 Jan 2019 10:10:29 -0600
-Subject: [Buildroot] Error when installing to staging directory
-In-Reply-To: <1548258173866.68555@jhuapl.edu>
-References: <1548107272423.65265@jhuapl.edu>
- <CANQCQpZ-NUo_5cjPFFNiYaJh_SEeTRS8=Kyt4greg7mRTqSdVw@mail.gmail.com>
- <1548167904630.87035@jhuapl.edu>
- <CANQCQpZ8mV=BrnhMKG6mj6tKP1yaT_9qOPMCp0c098FrpUnK_w@mail.gmail.com>
- <1548258173866.68555@jhuapl.edu>
-Message-ID: <CANQCQpYEFgxUHY1-RpoasGhXi-hThEoiQ5ChDgUMxyWkKOXGDA@mail.gmail.com>
+From: Juan A. Rubio <jarubio2001@gmail.com>
+Date: Wed, 23 Jan 2019 16:15:03 +0000
+Subject: [Buildroot] imx6 solo VPU support in Buildroot
+In-Reply-To: <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
+References: <CAE58QoON4RUMgNdtUjBQDpYrmUSqTzjTyxJ+3LGPa=V=Q8kTRw@mail.gmail.com>
+ <CAOMZO5Aso5o=qeRWYcXoQfQb714APBi7ZgR3aszXgvxEmx8UJA@mail.gmail.com>
+ <CAE58QoOdeCvOVNBVx=oWzYLgiO-R8A-S2zC1ZtR4-3wGbUVCJw@mail.gmail.com>
+ <CAAMH-ytuk2w9Tj19TzrXyU4R1qCqS-=CfLRyGnicJw_dOYK=fQ@mail.gmail.com>
+ <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
+Message-ID: <CAE58QoP-N7wbKjAiZtLgdcVXrmJO6BhwQ0yNFihXyuLLk8MEpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anastasia,
+Hi,
 
-On Wed, Jan 23, 2019 at 9:43 AM Raffucci, Anastasia
-<Anastasia.Raffucci@jhuapl.edu> wrote:
->
-> Matthew,
->
-> Yes, I am running with fresh clone 2017.11.x. I do not copy, or modify any files in buildroot folder.
-> I am using external compiler:
-> (https://releases.linaro.org/components/toolchain/binaries/7.1-2017.05/arm-linux-gnueabi/)
-> gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi.tar.xz
-> In my $ROOT I have:
-> $ ls
-> bashrc.local  build  build_all.sh  defconfig  overlays  post-image.sh  pre-image.sh  skeleton
->
-> and I run: $source build_all.sh
->
-> build_all.sh:
-> #!/bin/sh
-> source bashrc.local
-> cd
-> if [ ! -d buildroot ]; then
->         git clone git://git.busybox.net/buildroot
-> fi
-> cd buildroot
-> git checkout origin/2017.11.x
-> cd $ROOT
-> cp defconfig/defconfig build/.config
-> if [ -f Makefile ]; then
->         make
-> else
->         # first run
->         make O=$ROOT/build -C ~/buildroot     #build folder is created manually
-> fi
->
-> bashrc.local:
-> export ARCH=arm
-> export ROOT=$PWD
-> export CROSS_TOOL_PATH=/tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi      #copied manually to this location
-> export CROSS_TOOL_PREFIX=arm-linux-gnueabi
+I'm still chasing the issue of hw-accelerated video playback on my
+imx6 solo custom board.
 
-I'd suggest not setting these exports.  Instead setup your toolchain
-as a external toolchain in buildroot.  If you need them for building
-something else, I'd suggest a env script you can use locally in that
-shell as part of the specific software build.
+I'm now using the IMX6Q platform in my Buildroot config but I have not
+switched to a mainline kernel, and I'm still using the nxp kernel
+(imx6dl-sabresd.dts device tree with a few modifications, none of them
+related to the VPU or GPU).
 
+In the BSP I can see that the VPU firmware files are in the expected location:
+# ls /lib/firmware/vpu/
+vpu_fw_imx27_TO1.bin  vpu_fw_imx51.bin      vpu_fw_imx6d.bin
+vpu_fw_imx27_TO2.bin  vpu_fw_imx53.bin      vpu_fw_imx6q.bin
+
+I've verified that video decoding works using a software decoder with
+this pipeline:
+'$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! avdec_h264 !
+imxeglvivsink'
+
+However, when I use the hw decoder, I get errors:
+'$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! imxvpudec !
+imxeglvivsink'
+
+ 'failed delayed linking some pad of GstQTDemux named qtdemux0 to some
+pad of GstImxVpuDecoder named imxvpudecoder0'
+
+Someone on #gstreamer told me that the 'h264parse' should have been
+added before 'imxvpudec', but 'h264parse' is not present in the
+gstreamer1 Buildroot package (I can see it is there in the gstreamer
+0.x package).
+
+Any ideas on what is the actual problem here?
+
+Thanks in advance.
+Juan
+
+
+
+
+
+
+On Fri, Jan 11, 2019 at 5:42 PM Juan A. Rubio <jarubio2001@gmail.com> wrote:
 >
-> I am reading "host/ contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain." I also compared the contents of host/ now and when it was working and it is different.
-> I expect to have: arm-buildroot-linux-gnueabi  bin  doc  etc  include  lib  lib64  libexec  man  sbin  share  usr  var
-> But I currently have: arm-buildroot-linux-gnueabi  bin  lib  lib64  share  usr
-> Maybe because of the previous error that is not printed to the screen. So there are obvious missing folders. I think these are the part from cross compiler.
-> $ ls /tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi/
-> arm-linux-gnueabi/                           lib/
-> bin/                                         libexec/
-> gcc-linaro-7.1.1-2017.05-linux-manifest.txt  share/
-> include/
+> Gary,
 >
+> Yes, I've seen this overlapping naming convention in other places.
+> Makes sense. I'll try changing the platform to IMX6Q.
 >
-> Anastasia
-> ________________________________________
-> From: Matthew Weber <matthew.weber@collins.com>
-> Sent: Tuesday, January 22, 2019 10:41 AM
-> To: Raffucci, Anastasia
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] Error when installing to staging directory
+> Thanks for the clarification.
 >
-> Raffucci,
+> BR,
+> Juan
 >
-> On Tue, Jan 22, 2019 at 8:38 AM Raffucci, Anastasia
-> <Anastasia.Raffucci@jhuapl.edu> wrote:
+> On Fri, Jan 11, 2019 at 5:27 PM Gary Bisson
+> <gary.bisson@boundarydevices.com> wrote:
 > >
-> > I am using origin/2017.11.x (0edec09c322744ce1820337487e9bcb9cbcf7ab7) No modifications.
->
-> Would you mind testing with 2018.11?
->
-> When you copy over to the new location, is it a fresh 2017.11 git
-> clone?  Are you using a target that's already in buildroot or are
-> there additional files you copy into the buildroot folder after GIT
-> cloning?
->
-> You mention doing a out of tree build.  I assume that folder is never
-> relocated and always created new when you do your "make O=<out of tree
-> location> <defconfig name>_defconfig" to setup your build?
->
-> > Not sure what you mean by br2-external. I guess I am not using it. Should I?
->
-> Not necessarly, it's a way you can manage customization but not
-> required.  Checkout details in the manual about keeping customizations
-> outside of buildroot if you have interest in that.
->
+> > Hi,
 > >
-> > -----Original Message-----
-> > From: Matthew Weber [mailto:matthew.weber at collins.com]
-> > Sent: Monday, January 21, 2019 9:51 PM
-> > To: Raffucci, Anastasia
-> > Cc: buildroot at busybox.net
-> > Subject: Re: [Buildroot] Error when installing to staging directory
+> > Otherwise, the reason it has been removed is that IMX6S in NXP's
+> > packages doesn't refer to the i.MX6 Solo processors but to the i.MX6
+> > SoloLite and i.MX6 Solo X which do not have a VPU.
 > >
-> > Raffucci,
+> > You can see it in the menuconfig or package/freescale-imx/Config.in:
+> > config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+> >     bool "imx6q/imx6dl"
+> >
+> > config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
+> >     bool "imx6sl/imx6sx"
+> >
+> > So for a i.MX6 Solo processor, you should use the IMX6Q platform as it
+> > is meant for i.MX6 DualLite which is equivalent to the Solo.
+> >
+> > I know it all sounds confusing but that's how NXP/Freescale chose to
+> > differentiate their CPU and we decided to match their naming
+> > convention.
+> >
+> > Regards,
+> > Gary
+> >
+> > Gary Bisson
+> > Boundary Devices, LLC
+> > www.boundarydevices.com
 > >
 > >
-> > On Mon, Jan 21, 2019 at 3:48 PM Raffucci, Anastasia <Anastasia.Raffucci@jhuapl.edu> wrote:
+> > On Fri, Jan 11, 2019 at 1:59 PM Juan A. Rubio <jarubio2001@gmail.com> wrote:
 > > >
-> > > Buildroot Support Team,
+> > > Thanks!,
 > > >
-> > >
-> > > I am relatively new to Buildroot and embedded Linux. I used Buildroot once for one project before the one I am working on right now. I have some support from people that are using it around me as well. But here is one problem I am struggling to solve.
-> > >
-> > >
-> > > I am having a problem where the process breaks when trying to install staging directory. I am building out of tree with custom skeleton and overlays. I was able to build root file system once. But when I cloned my project to another location on the same machine, I have this error:
+> > > I'll try this other route.
 > > >
 > > >
-> >
-> > Which version of buildroot is your build based on and are there any modifications or use of a br2-external?
-> >
+> > > On Fri, 11 Jan 2019 at 12:17 Fabio Estevam <festevam@gmail.com> wrote:
+> > >>
+> > >> Hi Juan,
+> > >>
+> > >> On Fri, Jan 11, 2019 at 9:39 AM Juan A. Rubio <jarubio2001@gmail.com> wrote:
+> > >> >
+> > >> > Hi,
+> > >> >
+> > >> > I've noticed that the imx6 solo VPU is not supported in Buildroot
+> > >> > starting from 2018.02.x
+> > >> >
+> > >> > There is some information about this in this commit:
+> > >> > https://github.com/buildroot/buildroot/commit/b86b227fda97ef439a3cc0da03da0ebcad5c203a
+> > >>
+> > >> This is related to the VPU library used by the NXP vendor code.
+> > >>
+> > >> >
+> > >> > Has anyone come up with a solution to successfully enable the VPU
+> > >> > libraries on imx6 solo with Buildroot?. Is there any more information
+> > >> > about this that might help to get this to work somehow?
+> > >>
+> > >> I am able to use VPU on mx6 with Buildroot using mainline kernel.
+> > >>
+> > >> You can use configs/imx6-sabresd_qt5_defconfig as a reference.
+> > >>
+> > >> Please check this post with the details:
+> > >> https://imxdev.gitlab.io/tutorial/Decoding_video_with_a_mainline_kernel_on_i.MX6/
 > > >
-> > > >>> skeleton-custom  Installing to staging directory
-> > > rsync -a --ignore-times --exclude .svn --exclude .git --exclude .hg
-> > > --exclude .bzr --exclude CVS --chmod=u=rwX,go=rX --exclude .empty
-> > > --exclude '*~' /home/user/linux/buildroot/skeleton/
-> > > /home/user/linux/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/
-> > > ln -snf lib
-> > > /home/user/linux/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/li
-> > > b32 ln -snf lib
-> > > /home/user/linux/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/us
-> > > r/lib32
-> > > ln: failed to create symbolic link
-> > > '/home/user/linux/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/u
-> > > sr/lib32': No such file or directory
-> > > package/pkg-generic.mk:273: recipe for target
-> > > '/home/user/linux/buildroot/build/skeleton-custom/.stamp_staging_insta
-> > > lled' failed
-> > > make[1]: ***
-> > > [/home/user/linux/buildroot/build/skeleton-custom/.stamp_staging_insta
-> > > lled] Error 1
-> > > Makefile:16: recipe for target '_all' failed
-> > > make: *** [_all] Error 2
-> > >
-> > >
-> > >
-> > > I am not reusing any files or directories that get generated by the Buildroot. I also make sure to checkout buildroot git repository to not have any local changes. Unless it is hidden by .gitignore... What could possibly cause this error? As far as I see, everything in /host directory is populated by the Buildroot process. So why the sysroot/usr is missing? Am I missing to export another environment variable for Buildroot that gets set once when you run it first time and always there unchanged? Please help.
-> >
-> > Would you mind pastebin sharing your .config, environment values and command line history showing your initial build and then what you do
-> > when you setup your new build location?    That would help give us an
-> > idea of what sequence might be leading up to this error.
-> >
-> > Thanks!
-> > Matt
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
