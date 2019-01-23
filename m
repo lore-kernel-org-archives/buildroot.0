@@ -1,140 +1,45 @@
-From: Juan A. Rubio <jarubio2001@gmail.com>
-Date: Wed, 23 Jan 2019 16:15:03 +0000
-Subject: [Buildroot] imx6 solo VPU support in Buildroot
-In-Reply-To: <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
-References: <CAE58QoON4RUMgNdtUjBQDpYrmUSqTzjTyxJ+3LGPa=V=Q8kTRw@mail.gmail.com>
- <CAOMZO5Aso5o=qeRWYcXoQfQb714APBi7ZgR3aszXgvxEmx8UJA@mail.gmail.com>
- <CAE58QoOdeCvOVNBVx=oWzYLgiO-R8A-S2zC1ZtR4-3wGbUVCJw@mail.gmail.com>
- <CAAMH-ytuk2w9Tj19TzrXyU4R1qCqS-=CfLRyGnicJw_dOYK=fQ@mail.gmail.com>
- <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
-Message-ID: <CAE58QoP-N7wbKjAiZtLgdcVXrmJO6BhwQ0yNFihXyuLLk8MEpg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Jan 2019 17:15:58 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 23 Jan 2019 15:29:46 +0100")
+References: <20190115224239.26125-1-ps.report@gmx.net>
+ <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
+ <20190117194339.5cb2eb0f@gmx.net>
+ <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
+ <877eewo0wr.fsf@dell.be.48ers.dk>
+ <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
+Message-ID: <87sgxjjqo1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
 Hi,
 
-I'm still chasing the issue of hw-accelerated video playback on my
-imx6 solo custom board.
+ >> >  I do hope that it could still go into 2019.02.
+ >> 
+ >> If that is our goal, then we might as well merge it ASAP to get more
+ >> test coverage?
+ >> 
+ >> What is the killer feature why we need openssl-1.1.x in 2019.02.x? TLS
+ >> 1.3 or just that 1.0.2 goes EOL at the end of the year?
 
-I'm now using the IMX6Q platform in my Buildroot config but I have not
-switched to a mainline kernel, and I'm still using the nxp kernel
-(imx6dl-sabresd.dts device tree with a few modifications, none of them
-related to the VPU or GPU).
+ >  Both, I guess. Also that the whole known world (including Debian stable,
+ > released June 2017) has already switched to 1.1.x.
 
-In the BSP I can see that the VPU firmware files are in the expected location:
-# ls /lib/firmware/vpu/
-vpu_fw_imx27_TO1.bin  vpu_fw_imx51.bin      vpu_fw_imx6d.bin
-vpu_fw_imx27_TO2.bin  vpu_fw_imx53.bin      vpu_fw_imx6q.bin
+With 1.1.x I take it you mean 1.1.0, right? The 1.1.1 series (strange
+numbering convention) was only released back in September.
 
-I've verified that video decoding works using a software decoder with
-this pipeline:
-'$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! avdec_h264 !
-imxeglvivsink'
+1.1.0 is not a LTS so not suitable for 2019.02.x. 1.0.2 is supported
+until the end of 2019, so that is IMHO still OK for 2019.02.
 
-However, when I use the hw decoder, I get errors:
-'$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! imxvpudec !
-imxeglvivsink'
+I agree that having 1.1.1x in 2019.02.x would be nice, but a pity that
+quite some packages break with it (even if the whole known world has
+switched to it).
 
- 'failed delayed linking some pad of GstQTDemux named qtdemux0 to some
-pad of GstImxVpuDecoder named imxvpudecoder0'
-
-Someone on #gstreamer told me that the 'h264parse' should have been
-added before 'imxvpudec', but 'h264parse' is not present in the
-gstreamer1 Buildroot package (I can see it is there in the gstreamer
-0.x package).
-
-Any ideas on what is the actual problem here?
-
-Thanks in advance.
-Juan
-
-
-
-
-
-
-On Fri, Jan 11, 2019 at 5:42 PM Juan A. Rubio <jarubio2001@gmail.com> wrote:
->
-> Gary,
->
-> Yes, I've seen this overlapping naming convention in other places.
-> Makes sense. I'll try changing the platform to IMX6Q.
->
-> Thanks for the clarification.
->
-> BR,
-> Juan
->
-> On Fri, Jan 11, 2019 at 5:27 PM Gary Bisson
-> <gary.bisson@boundarydevices.com> wrote:
-> >
-> > Hi,
-> >
-> > Otherwise, the reason it has been removed is that IMX6S in NXP's
-> > packages doesn't refer to the i.MX6 Solo processors but to the i.MX6
-> > SoloLite and i.MX6 Solo X which do not have a VPU.
-> >
-> > You can see it in the menuconfig or package/freescale-imx/Config.in:
-> > config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-> >     bool "imx6q/imx6dl"
-> >
-> > config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
-> >     bool "imx6sl/imx6sx"
-> >
-> > So for a i.MX6 Solo processor, you should use the IMX6Q platform as it
-> > is meant for i.MX6 DualLite which is equivalent to the Solo.
-> >
-> > I know it all sounds confusing but that's how NXP/Freescale chose to
-> > differentiate their CPU and we decided to match their naming
-> > convention.
-> >
-> > Regards,
-> > Gary
-> >
-> > Gary Bisson
-> > Boundary Devices, LLC
-> > www.boundarydevices.com
-> >
-> >
-> > On Fri, Jan 11, 2019 at 1:59 PM Juan A. Rubio <jarubio2001@gmail.com> wrote:
-> > >
-> > > Thanks!,
-> > >
-> > > I'll try this other route.
-> > >
-> > >
-> > > On Fri, 11 Jan 2019 at 12:17 Fabio Estevam <festevam@gmail.com> wrote:
-> > >>
-> > >> Hi Juan,
-> > >>
-> > >> On Fri, Jan 11, 2019 at 9:39 AM Juan A. Rubio <jarubio2001@gmail.com> wrote:
-> > >> >
-> > >> > Hi,
-> > >> >
-> > >> > I've noticed that the imx6 solo VPU is not supported in Buildroot
-> > >> > starting from 2018.02.x
-> > >> >
-> > >> > There is some information about this in this commit:
-> > >> > https://github.com/buildroot/buildroot/commit/b86b227fda97ef439a3cc0da03da0ebcad5c203a
-> > >>
-> > >> This is related to the VPU library used by the NXP vendor code.
-> > >>
-> > >> >
-> > >> > Has anyone come up with a solution to successfully enable the VPU
-> > >> > libraries on imx6 solo with Buildroot?. Is there any more information
-> > >> > about this that might help to get this to work somehow?
-> > >>
-> > >> I am able to use VPU on mx6 with Buildroot using mainline kernel.
-> > >>
-> > >> You can use configs/imx6-sabresd_qt5_defconfig as a reference.
-> > >>
-> > >> Please check this post with the details:
-> > >> https://imxdev.gitlab.io/tutorial/Decoding_video_with_a_mainline_kernel_on_i.MX6/
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
