@@ -1,49 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 15:22:04 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] sqlite: bump to version
- 3.25.2
-Message-ID: <20190123143025.AFCB08E290@busybox.osuosl.org>
+Date: Wed, 23 Jan 2019 15:21:23 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] sqlite: avoid use of
+ unsupported -Ofast CFLAGS
+Message-ID: <20190123143025.9809F814C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d43424565fe0853ac8fa97ff7a7b7e27a4462f5
+commit: https://git.buildroot.net/buildroot/commit/?id=f232cb356fdca03911e6d01e1bdae28b30999adf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Ferdinand van Aartsen <ferdinand@ombud.nl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5a5102c428d98d79e2b4eeba5226a7c824a1fb66)
+sqlite3 refuses to be built with -ffast-math (a side effect of -Ofast) when it
+falls back to implementing its own isnan() function.
+
+sqlite3.c: In function ???sqlite3IsNaN???:
+sqlite3.c:28554:3: error: #error SQLite will not work correctly with the -ffast-math option of GCC.
+
+To work around this, when -Ofast is used replace with -O3.
+
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 83781f11dce6d4ef8da052253454cafcbec80dbe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sqlite/sqlite.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 4c67e9a00c..eefa31ffb7 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 1d494ca2355ffe8ddbeea7cf615ef61122fe421e  sqlite-autoconf-3250100.tar.gz
-+sha1 aedfbdc14eb700099434d6a743135743cff47393  sqlite-autoconf-3250200.tar.gz
- # Calculated based on the hash above
--sha256 96ed46bd87f093073ca8afd613020def847009b611c89f397bc24bd932ec6fd1  sqlite-autoconf-3250100.tar.gz
-+sha256 da9a1484423d524d3ac793af518cdf870c8255d209e369bd6a193e9f9d0e3181  sqlite-autoconf-3250200.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
 diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 21fc22b59b..9911be6916 100644
+index e8ce92df56..d917cca8f2 100644
 --- a/package/sqlite/sqlite.mk
 +++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -35,7 +35,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_NO_SYNC),y)
+ SQLITE_CFLAGS += -DSQLITE_NO_SYNC
+ endif
  
--SQLITE_VERSION = 3250100
-+SQLITE_VERSION = 3250200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+-SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
++# fallback to standard -O3 when -Ofast is present to avoid -ffast-math
++SQLITE_CFLAGS += $(subst -Ofast,-O3,$(TARGET_CFLAGS))
++
++SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)"
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
