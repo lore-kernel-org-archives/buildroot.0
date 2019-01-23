@@ -1,81 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 23 Jan 2019 20:38:00 +0100
-Subject: [Buildroot] [PATCH 1/1] libkcapi: fix build with gcc 8.2.x
-Message-ID: <20190123193800.3499-1-fontaine.fabrice@gmail.com>
+Date: Wed, 23 Jan 2019 20:50:25 +0100
+Subject: [Buildroot] [PATCH 1/1] musl: fix hash of license file
+Message-ID: <20190123195025.4489-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+COPYRIGHT file has been updated between version 1.1.20 and 1.1.21:
+https://git.musl-libc.org/cgit/musl/commit/COPYRIGHT?id=c50985d5c8e316c5c464f352e79eeebfed1121a9
+
 Fixes:
- - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
+ - http://autobuild.buildroot.org/results/8cfa70b906221442c9e6dfd46b64011c987d24bf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...s-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
+ package/musl/musl.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-new file mode 100644
-index 0000000000..a4c352d30c
---- /dev/null
-+++ b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-@@ -0,0 +1,54 @@
-+From dcb02c1639c2ff05938c01eaa41286a2e2f8d698 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 20 Jan 2019 20:04:13 +0100
-+Subject: [PATCH] apps/kcapi-hasher.c: fix build with gcc 8.2.x
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/smuellerDD/libkcapi/pull/76]
-+---
-+ apps/kcapi-hasher.c | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/apps/kcapi-hasher.c b/apps/kcapi-hasher.c
-+index d6be685..7172b12 100644
-+--- a/apps/kcapi-hasher.c
-++++ b/apps/kcapi-hasher.c
-+@@ -357,16 +357,20 @@ out:
-+ }
-+ 
-+ /*
-+- * GCC v8.1.0 introduced -Wstringop-truncation but it is not smart enough to
-+- * find that cursor string will be NULL-terminated after all paste() calls and
-+- * warns with:
-++ * GCC v8.1.0 introduced -Wstringop-truncation and GCC v8.2.0 introduced
-++ * -Wstringop-overflow but it is not smart enough to find that cursor string
-++ * will be NULL-terminated after all paste() calls and warns with:
-+  * error: 'strncpy' destination unchanged after copying no bytes [-Werror=stringop-truncation]
-+  * error: 'strncpy' output truncated before terminating nul copying 5 bytes from a string of the same length [-Werror=stringop-truncation]
-++ * error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
-+  */
-+ #pragma GCC diagnostic push
-+ #if GCC_VERSION >= 80100
-+ #pragma GCC diagnostic ignored "-Wstringop-truncation"
-+ #endif
-++#if GCC_VERSION >= 80200
-++#pragma GCC diagnostic ignored "-Wstringop-overflow"
-++#endif
-+ static char *paste(char *dst, const char *src, size_t size)
-+ {
-+ 	strncpy(dst, src, size);
-+@@ -417,7 +421,7 @@ static char *get_hmac_file(const char *filename, const char *checkdir)
-+ 	strncpy(cursor, "\0", 1);
-+ 	return checkfile;
-+ }
-+-#pragma GCC diagnostic pop /* -Wstringop-truncation */
-++#pragma GCC diagnostic pop /* -Wstringop-truncation -Wstringop-overflow */
-+ 
-+ static int hash_files(const struct hash_params *params,
-+ 		      char *filenames[], uint32_t files,
-+-- 
-+2.14.1
-+
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 18e011a965..9121424657 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+ # http://www.musl-libc.org/releases/musl-1.1.21.tar.gz.asc
+ sha256  c742b66f6f49c9e5f52f64d8b79fecb5a0f6e0203fca176c70ca20f6be285f44  musl-1.1.21.tar.gz
+-sha256  15d9afbf84041872b4d840ed7d165d3eee786ff3f97e703b10467c259ff4e7d9  COPYRIGHT
++sha256  a3ae1b9fc5d4938f5734734383b9813d27a5652df23010c6f9d4c5419b239a41  COPYRIGHT
 -- 
 2.14.1
