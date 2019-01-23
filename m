@@ -1,12 +1,12 @@
 From: Raffucci, Anastasia <Anastasia.Raffucci@jhuapl.edu>
-Date: Wed, 23 Jan 2019 15:38:16 +0000
+Date: Wed, 23 Jan 2019 15:42:53 +0000
 Subject: [Buildroot] Error when installing to staging directory
 In-Reply-To: <CANQCQpZ8mV=BrnhMKG6mj6tKP1yaT_9qOPMCp0c098FrpUnK_w@mail.gmail.com>
 References: <1548107272423.65265@jhuapl.edu>
  <CANQCQpZ-NUo_5cjPFFNiYaJh_SEeTRS8=Kyt4greg7mRTqSdVw@mail.gmail.com>
  <1548167904630.87035@jhuapl.edu>,
  <CANQCQpZ8mV=BrnhMKG6mj6tKP1yaT_9qOPMCp0c098FrpUnK_w@mail.gmail.com>
-Message-ID: <1548257896385.11693@jhuapl.edu>
+Message-ID: <1548258173866.68555@jhuapl.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,13 @@ To: buildroot@busybox.net
 
 Matthew,
 
-I am having some difficulties to test with 2018.11.x. 
-
-Makefile:569: *** liblinear is in the dependency chain of nmap that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-
-I am not sure what I need to modify or install in addition to be able to use this version of buildroot. 
-
-
 Yes, I am running with fresh clone 2017.11.x. I do not copy, or modify any files in buildroot folder. 
 I am using external compiler: 
 (https://releases.linaro.org/components/toolchain/binaries/7.1-2017.05/arm-linux-gnueabi/)
 gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi.tar.xz
 In my $ROOT I have:
 $ ls
-bashrc.local  build/  build_all.sh  defconfig/  overlays/  post-image.sh  pre-image.sh  skeleton/
+bashrc.local  build  build_all.sh  defconfig  overlays  post-image.sh  pre-image.sh  skeleton
 
 and I run: $source build_all.sh
 
@@ -47,13 +40,13 @@ if [ -f Makefile ]; then
 	make
 else
 	# first run
-	make O=$ROOT/build -C ~/buildroot 
+	make O=$ROOT/build -C ~/buildroot     #build folder is created manually
 fi
 
 bashrc.local:
 export ARCH=arm
 export ROOT=$PWD
-export CROSS_TOOL_PATH=/tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi 
+export CROSS_TOOL_PATH=/tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi      #copied manually to this location
 export CROSS_TOOL_PREFIX=arm-linux-gnueabi
 
 I am reading "host/ contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain." I also compared the contents of host/ now and when it was working and it is different.
@@ -64,9 +57,10 @@ $ ls /tmp/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabi/
 arm-linux-gnueabi/                           lib/
 bin/                                         libexec/
 gcc-linaro-7.1.1-2017.05-linux-manifest.txt  share/
-include/                                     
+include/    
 
-Anastasia
+
+Anastasia                                 
 ________________________________________
 From: Matthew Weber <matthew.weber@collins.com>
 Sent: Tuesday, January 22, 2019 10:41 AM
