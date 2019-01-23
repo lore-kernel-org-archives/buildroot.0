@@ -1,43 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Jan 2019 21:34:00 +0100
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches: use "git
- apply" as a fallback when applying patches
-In-Reply-To: <55a5605d-5773-16d5-ef79-a37dac3c009a@mind.be> (Arnout
- Vandecappelle's message of "Wed, 23 Jan 2019 15:17:55 +0100")
-References: <20190110203004.9812-1-thomas.petazzoni@bootlin.com>
- <87wonbhnny.fsf@tarshish> <20190111091552.72fba6ad@windsurf>
- <875zutvvf2.fsf@tarshish>
- <55a5605d-5773-16d5-ef79-a37dac3c009a@mind.be>
-Message-ID: <87o987jepz.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 23 Jan 2019 21:51:10 +0100
+Subject: [Buildroot] imx6 solo VPU support in Buildroot
+In-Reply-To: <CAE58QoP-N7wbKjAiZtLgdcVXrmJO6BhwQ0yNFihXyuLLk8MEpg@mail.gmail.com>
+References: <CAE58QoON4RUMgNdtUjBQDpYrmUSqTzjTyxJ+3LGPa=V=Q8kTRw@mail.gmail.com>
+ <CAOMZO5Aso5o=qeRWYcXoQfQb714APBi7ZgR3aszXgvxEmx8UJA@mail.gmail.com>
+ <CAE58QoOdeCvOVNBVx=oWzYLgiO-R8A-S2zC1ZtR4-3wGbUVCJw@mail.gmail.com>
+ <CAAMH-ytuk2w9Tj19TzrXyU4R1qCqS-=CfLRyGnicJw_dOYK=fQ@mail.gmail.com>
+ <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
+ <CAE58QoP-N7wbKjAiZtLgdcVXrmJO6BhwQ0yNFihXyuLLk8MEpg@mail.gmail.com>
+Message-ID: <20190123215110.52c721d4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello Juan,
 
-Hi,
+On Wed, 23 Jan 2019 16:15:03 +0000, "Juan A. Rubio" <jarubio2001@gmail.com> wrote:
 
- >> With this patch a package selection change that works on the developer's
- >> machine where git is installed, would fail on the production build
- >> machine that is missing git. Is there a clear error message in case of
- >> patch failure?
+> Hi,
+> 
+> I'm still chasing the issue of hw-accelerated video playback on my
+> imx6 solo custom board.
+> 
+> I'm now using the IMX6Q platform in my Buildroot config but I have not
+> switched to a mainline kernel, and I'm still using the nxp kernel
+> (imx6dl-sabresd.dts device tree with a few modifications, none of them
+> related to the VPU or GPU).
+> 
+> In the BSP I can see that the VPU firmware files are in the expected location:
+> # ls /lib/firmware/vpu/
+> vpu_fw_imx27_TO1.bin  vpu_fw_imx51.bin      vpu_fw_imx6d.bin
+> vpu_fw_imx27_TO2.bin  vpu_fw_imx53.bin      vpu_fw_imx6q.bin
+> 
+> I've verified that video decoding works using a software decoder with
+> this pipeline:
+> '$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! avdec_h264 !
+> imxeglvivsink'
+> 
+> However, when I use the hw decoder, I get errors:
+> '$ gst-launch-1.0 filesrc location=video.mp4 ! qtdemux ! imxvpudec !
+> imxeglvivsink'
+> 
+>  'failed delayed linking some pad of GstQTDemux named qtdemux0 to some
+> pad of GstImxVpuDecoder named imxvpudecoder0'
 
- >  I'm with Baruch here. The reason to have this feature is exactly to have the
- > possibility to have patches that modify binaries or that modify symlinks. Thus,
- > it becomes likely that someone will submit such a patch. It will work for the
- > developer, and it will also work in the autobuilders since all of them have git
- > installed (otherwise they wouldn't be able to clone the Buildroot repo). Thus,
- > any such patch will go unnoticed.
+Try 'GST_DEBUG=*:3 gst-launch-1.0 ...' to gain more error info...
 
-I agree, that is not good.
+> 
+> Someone on #gstreamer told me that the 'h264parse' should have been
+> added before 'imxvpudec', but 'h264parse' is not present in the
+> gstreamer1 Buildroot package (I can see it is there in the gstreamer
+> 0.x package).
 
+Try to enable
 
- >  I don't think it hurts to force git as a dependency.
+BR2_PACKAGE_GST1_PLUGINS_BAD=y
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
 
-If we do that, should we then always use git apply instead of patch?
-(and drop the patch dependency)
+the gst1-plugins-bad h264parse element is hidden there...
 
--- 
-Bye, Peter Korsgaard
+Regards,
+Peter
