@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 17:26:39 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/openssh: add
+Date: Thu, 24 Jan 2019 17:25:24 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: add
  upstream security fix
-Message-ID: <20190124162608.9C2068E4B3@busybox.osuosl.org>
+Message-ID: <20190124162613.097B78E1F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad444c2557c258979d752cf7f87536d7a883ffce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0e418046b1356bfc0351a06a267b8c9c6371c37b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2018-20685: The scp client allows server to modify permissions
 of the target directory by using empty ("D0777 0 \n") or dot ("D0777 0
