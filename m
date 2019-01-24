@@ -1,76 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 17:25:24 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: add
- upstream security fix
-Message-ID: <20190124162613.097B78E1F0@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 24 Jan 2019 17:33:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.97
+Message-ID: <20190124163304.8193-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e418046b1356bfc0351a06a267b8c9c6371c37b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
-
-Fixes CVE-2018-20685: The scp client allows server to modify permissions
-of the target directory by using empty ("D0777 0 \n") or dot ("D0777 0
-.\n") directory name.
-
-The bug reporter lists a number of related vulnerabilities that are not
-fixed yet:
-
-  https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8233c666124890fff713ecb254993b52b1fa7674)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...sallow-empty-incoming-filename-or-ones-th.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch b/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
-new file mode 100644
-index 0000000000..2b5a958d13
---- /dev/null
-+++ b/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
-@@ -0,0 +1,39 @@
-+From 6010c0303a422a9c5fa8860c061bf7105eb7f8b2 Mon Sep 17 00:00:00 2001
-+From: "djm at openbsd.org" <djm@openbsd.org>
-+Date: Fri, 16 Nov 2018 03:03:10 +0000
-+Subject: [PATCH] upstream: disallow empty incoming filename or ones that refer
-+ to the
-+
-+current directory; based on report/patch from Harry Sintonen
-+
-+OpenBSD-Commit-ID: f27651b30eaee2df49540ab68d030865c04f6de9
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status (openssh-portable): commit 6010c0303a422
-+
-+ scp.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/scp.c b/scp.c
-+index 60682c68769b..4f3fdcd3db89 100644
-+--- a/scp.c
-++++ b/scp.c
-+@@ -1,4 +1,4 @@
-+-/* $OpenBSD: scp.c,v 1.197 2018/06/01 04:31:48 dtucker Exp $ */
-++/* $OpenBSD: scp.c,v 1.198 2018/11/16 03:03:10 djm Exp $ */
-+ /*
-+  * scp - secure remote copy.  This is basically patched BSD rcp which
-+  * uses ssh to do the data transfer (instead of using rcmd).
-+@@ -1106,7 +1106,8 @@ sink(int argc, char **argv)
-+ 			SCREWUP("size out of range");
-+ 		size = (off_t)ull;
-+ 
-+-		if ((strchr(cp, '/') != NULL) || (strcmp(cp, "..") == 0)) {
-++		if (*cp == '\0' || strchr(cp, '/') != NULL ||
-++		    strcmp(cp, ".") == 0 || strcmp(cp, "..") == 0) {
-+ 			run_err("error: unexpected filename: %s", cp);
-+ 			exit(1);
-+ 		}
-+-- 
-+2.20.1
-+
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 78b3ef75ac..301866c8b0 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2018-October/193244.html
+-md5 f296d87272b1befeada3bb135751ab3d  libdrm-2.4.96.tar.bz2
+-sha1 51eb4c248a437b3f200bd1cd84461d3e0b60d71e  libdrm-2.4.96.tar.bz2
+-sha256 0d561acf7bb4cc59dc82415100e6c1a44860e8c380e00f9592923e3cd08db393  libdrm-2.4.96.tar.bz2
+-sha512 008cb7658d953b44e11fa3cc6e00dfeb3efb59c7fdadd59f7066101aff138acbbc2f2508e9ebe0528340e39dc7693937755d1641816ddde135c10a13e7d81e3b  libdrm-2.4.96.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-January/204447.html
++md5 acef22d0c62c89692348c2dd5591393e  libdrm-2.4.97.tar.bz2
++sha1 7635bec769a17edd140282fa2c46838c4a44bc91  libdrm-2.4.97.tar.bz2
++sha256 77d0ccda3e10d6593398edb70b1566bfe1a23a39bd3da98ace2147692eadd123  libdrm-2.4.97.tar.bz2
++sha512 3e08ee9d6c9ce265d783a59b51e22449905ea73aa27f25a082a1e9e1532f7c99e1c9f7cb966eb0970be2a08e2e5993dc9aa55093b1bff548689fdb465e7145ed  libdrm-2.4.97.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 06efa20195..cc7350c10e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.96
++LIBDRM_VERSION = 2.4.97
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+2.20.1
