@@ -1,66 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 11:58:30 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] utils/get-developers:
- really make it callable from elsewhere than the toplevel directory
-Message-ID: <20190124105900.8CCCC8E37D@busybox.osuosl.org>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 24 Jan 2019 10:50:33 +0000
+Subject: [Buildroot] [PATCH] package/libqmi: bump to version 1.22.0
+Message-ID: <20190124104952.63650-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcb3cf3a668a211b11101374a7f9d9e343ef9bf3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
-
-Commit 62d5558f76a (utils/get-developers: make it callable from elsewhere
-than the toplevel directory) tried to fix this by passing in the toplevel
-directory when the DEVELOPERS file is parsed.
-
-Unfortunately this is not enough, as E.G.  also the paths listed in the
-patches are relative to the toplevel directory, causing it to not match the
-entries in the DEVELOPERS file.
-
-In concept this can be fixed by also passing the toplevel directory to the
-Developers class, but the simplest solution is just to chdir to the toplevel
-Buildroot directory before calling any of the getdeveloperlib functions.
-
-This does require us to finish parsing command line arguments (which opens
-the provided patch files) to not get into trouble with relative paths to
-patches before chdir'ing / initializing getdeveloperlib.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 45aabcddc5668b926078d43decc5fc5e59d43788)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- utils/get-developers | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index ce882e6699..750fc556dc 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -24,9 +24,6 @@ def parse_args():
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 297e1f0fa2..0c27451ec2 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 21428cd3749c56246565123f707fee51238651a22c60bdc85ebce97388626eb4  libqmi-1.20.0.tar.xz
++sha256 21c198b481f1617bb7edb1960d823569de3e38b269dbf513af1b56048cafaa17  libqmi-1.22.0.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index a7140dc38c..319c2362bf 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
- def __main__():
--    devs = getdeveloperlib.parse_developers()
--    if devs is None:
--        sys.exit(1)
-     args = parse_args()
- 
-     # Check that only one action is given
-@@ -48,6 +45,14 @@ def __main__():
-         print("No action specified")
-         return
- 
-+    # getdeveloperlib expects to be executed from the toplevel buildroot
-+    # directory, which is one level up from this script
-+    os.chdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-+
-+    devs = getdeveloperlib.parse_developers()
-+    if devs is None:
-+        sys.exit(1)
-+
-     # Handle the check action
-     if args.check:
-         files = getdeveloperlib.check_developers(devs)
+-LIBQMI_VERSION = 1.20.0
++LIBQMI_VERSION = 1.22.0
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-- 
+2.20.1
