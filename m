@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:27:19 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/liburiparser:
+Date: Thu, 24 Jan 2019 12:26:56 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/liburiparser:
  security bump to version 0.9.1
-Message-ID: <20190124112700.0221788860@busybox.osuosl.org>
+Message-ID: <20190124112705.A3BF3883A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd719e566c8b70d864f2f0f992f39525a71d004b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ce6f86666ac5b4d53a4b37129c3bae67ad52960
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes an out-of-bounds read, the parsing of some a malformed URIs and a
 function that reported 1 more byte than actually needed for IPv4 address
