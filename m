@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:27:10 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] patchelf: update _SITE to
+Date: Thu, 24 Jan 2019 16:27:02 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] patchelf: update _SITE to
  new location
-Message-ID: <20190124152622.482648E4C7@busybox.osuosl.org>
+Message-ID: <20190124152628.264E682B3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4d94bf61f125f09f4a59b3c6d81d0805aaf7c2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8175f6e88940dd0f18b5539a6a00be8db7773118
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 releases.nixos.org gives some weird XML pages. The upstream location is
 nixos.org/releases.
