@@ -1,42 +1,42 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu, 24 Jan 2019 00:16:33 -0800
-Subject: [Buildroot] [PATCH 1/1] go: security bump to 1.11.5
-Message-ID: <20190124081633.16600-1-christian@paral.in>
+Date: Thu, 24 Jan 2019 00:18:34 -0800
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: add strip, asmflags,
+ gcflags support
+Message-ID: <20190124081834.17534-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Go 1.11.5 addresses a reported security issue, CVE-2019-6486.
+Adding package-level variables to set asmflags, gcflags.
+
+Conditionally sets ldflags -s -w when buildroot is configured to strip binaries.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-golang.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index ee1c881e6a..29891399c3 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	4cfd42720a6b1e79a8024895fa6607b69972e8e32446df76d6ce79801bbadb15  go1.11.4.src.tar.gz
-+sha256	bc1ef02bb1668835db1390a2e478dcbccb5dd16911691af9d75184bbe5aa943e  go1.11.5.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0d7b961dda..7755a3f785 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 4f2c7e77e1..79ebec94be 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -55,7 +55,15 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ $(2)_LDFLAGS += -extldflags '-static'
+ endif
  
--GO_VERSION = 1.11.4
-+GO_VERSION = 1.11.5
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
++ifeq ($(BR2_STRIP_strip),y)
++$(2)_LDFLAGS += -s -w
++endif
++
++$(2)_ASMFLAGS += -trimpath=$(BUILD_DIR)
++$(2)_GCFLAGS  += -trimpath=$(BUILD_DIR)
+ $(2)_BUILD_OPTS += \
++	-asmflags "$$($(2)_ASMFLAGS)" \
++	-gcflags "$$($(2)_GCFLAGS)" \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
+ 	-tags "$$($(2)_TAGS)" \
+ 	-p $(PARALLEL_JOBS)
 -- 
 2.19.2
