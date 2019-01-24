@@ -1,46 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 24 Jan 2019 17:33:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.97
-Message-ID: <20190124163304.8193-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Jan 2019 16:33:26 +0000
+Subject: [Buildroot] [Bug 11641] New: linux kernel .config timestamp always
+ out of date fixed with KCONFIG_NOSILENTUPDATE
+Message-ID: <bug-11641-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=11641
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 78b3ef75ac..301866c8b0 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2018-October/193244.html
--md5 f296d87272b1befeada3bb135751ab3d  libdrm-2.4.96.tar.bz2
--sha1 51eb4c248a437b3f200bd1cd84461d3e0b60d71e  libdrm-2.4.96.tar.bz2
--sha256 0d561acf7bb4cc59dc82415100e6c1a44860e8c380e00f9592923e3cd08db393  libdrm-2.4.96.tar.bz2
--sha512 008cb7658d953b44e11fa3cc6e00dfeb3efb59c7fdadd59f7066101aff138acbbc2f2508e9ebe0528340e39dc7693937755d1641816ddde135c10a13e7d81e3b  libdrm-2.4.96.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2019-January/204447.html
-+md5 acef22d0c62c89692348c2dd5591393e  libdrm-2.4.97.tar.bz2
-+sha1 7635bec769a17edd140282fa2c46838c4a44bc91  libdrm-2.4.97.tar.bz2
-+sha256 77d0ccda3e10d6593398edb70b1566bfe1a23a39bd3da98ace2147692eadd123  libdrm-2.4.97.tar.bz2
-+sha512 3e08ee9d6c9ce265d783a59b51e22449905ea73aa27f25a082a1e9e1532f7c99e1c9f7cb966eb0970be2a08e2e5993dc9aa55093b1bff548689fdb465e7145ed  libdrm-2.4.97.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 06efa20195..cc7350c10e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.96
-+LIBDRM_VERSION = 2.4.97
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+            Bug ID: 11641
+           Summary: linux kernel .config timestamp always out of date
+                    fixed with KCONFIG_NOSILENTUPDATE
+           Product: buildroot
+           Version: 2018.11.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: dcraw101 at yahoo.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Just noticed this when migrating from kernel 4.9 to 4.19.  I noticed that now
+in the linux kernel build dir the .config timestamp is always later than the
+.stamp_kconfig_fixup_done.  So every incremental buildroot make causes the
+kernel build to always run starting at the kconfig fixup phase.
+
+I traced the problem to somewhere in the kernel syncconfig step in the kernel
+"build" phase.  I think it is related to this new kernel 4.19 commit.
+
+16952b77d8 kconfig: make syncconfig update .config regardless of
+sym_change_count
+
+If I define KCONFIG_NOSILENTUPDATE in my environment the problem goes away and
+the timestamps are correct.  Should buildroot set this env variable?  I am not
+sure what the other side affects would be.
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
