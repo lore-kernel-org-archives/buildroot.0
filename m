@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:28:20 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gnuchess: license
+Date: Thu, 24 Jan 2019 16:28:13 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/gnuchess: license
  is GPL-3.0+, not GPL-2.0+
-Message-ID: <20190124152732.95356815BF@busybox.osuosl.org>
+Message-ID: <20190124152737.99AED83DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dde1779fccb9c569552d8a5b3c67e3164ee10d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=af993e068477df5fbf3c86dfedf3692ce04a9412
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 gnuchess is licensed under GPL-3.0+ not GPL-2.0+, also add hash for
 license file
