@@ -1,57 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 11:53:45 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/nodejs: bump
- version to v8.15.0
-Message-ID: <20190124105516.0D3E08E4B0@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 11:59:23 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "utils/get-developers: make it
+ callable from elsewhere than the toplevel directory"
+In-Reply-To: <20190103105657.23751-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 3 Jan 2019 11:56:55 +0100")
+References: <20190103105657.23751-1-peter@korsgaard.com>
+Message-ID: <87d0omgw38.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4baa5cb31be5a3da42bd09f2c3fec7afca9c425d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes regressions introduced by the v8.14.0 security release.  From the
-announcement:
+ > This reverts commit 62d5558f76a790d1c1b3a1834f1736dc86b6e34f.
+ > This actually does not work, as patches contain paths relative to the
+ > toplevel directory as well.
 
-The 8.14.0 security release introduced some unexpected breakages on the 8.x
-release line.  This is a special release to fix a regression in the HTTP
-binary upgrade response body and add a missing CLI flag to adjust the max
-header size of the http parser.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.15.0
+Committed to 2018.02.x and 2018.11.x, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f68e5cf72118b2c6441172511812853c803202d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 13a5c2daa5..5a06e5328c 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v8.14.0/SHASUMS256.txt
--sha256 8ce252913c9f6aaa9871f2d9661b6e54858dae2f0064bd3c624676edb09083c4  node-v8.14.0.tar.xz
-+# From https://nodejs.org/dist/v8.15.0/SHASUMS256.txt
-+sha256 968523333947cc3f769d73dedc6c9c60580826d8714bc0e62ca4589de6a7c633  node-v8.15.0.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 8c8afbc332..446cb77dbf 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.14.0
-+NODEJS_VERSION = 8.15.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-- 
+Bye, Peter Korsgaard
