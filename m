@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 17:19:36 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/2] cc-tool: drop BR2_PACKAGE_BOOST_SIGNALS select
-In-Reply-To: <20190113174316.26267-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 13 Jan 2019 18:43:15 +0100")
-References: <20190113174316.26267-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bm46do4n.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2019 17:18:56 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/cc-tool: drop
+ BR2_PACKAGE_BOOST_SIGNALS select
+Message-ID: <20190124161850.4667D8E4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8967a17894e9b424b8ad5188312de346f1a549c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > cc-tool depends on signals2 not signals, indeed only signals2 is used in
- > src/data/progress_watcher.h and BOOST_SIGNALS defined in m4/boost.m4 is
- > never used in configure.ac
+cc-tool depends on signals2 not signals, indeed only signals2 is used
+in src/data/progress_watcher.h and BOOST_SIGNALS defined in
+m4/boost.m4 is never used in configure.ac.
 
- > No BR2_PACKAGE_SIGNALS2 is needed as signals2 is a header-only boost
- > library
+There is no need to select any sort of BR2_PACKAGE_BOOST_SIGNALS2
+option, as signals2 is a header-only boost library, and such
+header-only boost libraries do not have any Config.in options, as they
+are all always installed with the base boost library.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Give more details in commit log
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: tweak commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Committed to 2018.02.x and 2018.11.x, thanks.
+(cherry picked from commit 024ed470adc684391ee12b8f762f5c0bf76d7e57)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cc-tool/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
+index b2cf97969b..8145b676c9 100644
+--- a/package/cc-tool/Config.in
++++ b/package/cc-tool/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_CC_TOOL
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_REGEX
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_SIGNALS
+ 	help
+ 	  cc-tool provides support for Texas Instruments CC Debugger
+ 	  for Linux OS in order to program 8051-based System-On-Chip
