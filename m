@@ -1,48 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 10:46:12 +0100
-Subject: [Buildroot] [git commit] tslib: update to 1.19
-Message-ID: <20190124094754.51A827FF3B@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 10:38:20 +0100
+Subject: [Buildroot] [git commit] libkcapi: fix build with gcc 8.2.x
+Message-ID: <20190124094754.42FC789049@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e80e2e6a33e3cd6e010a685c4cfcabf00c2e2cf
+commit: https://git.buildroot.net/buildroot/commit/?id=0c35c287bcadd88dba939cdddf865d94d45454bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For the curious, there's the short changelog summary:
-https://github.com/kergoth/tslib/releases
+Fixes:
+ - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...s-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index a758702e74..cfe78765bc 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.18/tslib-1.18.tar.xz.sha256
--sha256  986cce6d8ed896c0eba68d78acd788c7860ffe8a2165a9f631954e7f2889958b  tslib-1.18.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
-+sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index f5c4cd7997..ccc2671c6a 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.18
-+TSLIB_VERSION = 1.19
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+diff --git a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
+new file mode 100644
+index 0000000000..a4c352d30c
+--- /dev/null
++++ b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
+@@ -0,0 +1,54 @@
++From dcb02c1639c2ff05938c01eaa41286a2e2f8d698 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 20 Jan 2019 20:04:13 +0100
++Subject: [PATCH] apps/kcapi-hasher.c: fix build with gcc 8.2.x
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/smuellerDD/libkcapi/pull/76]
++---
++ apps/kcapi-hasher.c | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/apps/kcapi-hasher.c b/apps/kcapi-hasher.c
++index d6be685..7172b12 100644
++--- a/apps/kcapi-hasher.c
+++++ b/apps/kcapi-hasher.c
++@@ -357,16 +357,20 @@ out:
++ }
++ 
++ /*
++- * GCC v8.1.0 introduced -Wstringop-truncation but it is not smart enough to
++- * find that cursor string will be NULL-terminated after all paste() calls and
++- * warns with:
+++ * GCC v8.1.0 introduced -Wstringop-truncation and GCC v8.2.0 introduced
+++ * -Wstringop-overflow but it is not smart enough to find that cursor string
+++ * will be NULL-terminated after all paste() calls and warns with:
++  * error: 'strncpy' destination unchanged after copying no bytes [-Werror=stringop-truncation]
++  * error: 'strncpy' output truncated before terminating nul copying 5 bytes from a string of the same length [-Werror=stringop-truncation]
+++ * error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
++  */
++ #pragma GCC diagnostic push
++ #if GCC_VERSION >= 80100
++ #pragma GCC diagnostic ignored "-Wstringop-truncation"
++ #endif
+++#if GCC_VERSION >= 80200
+++#pragma GCC diagnostic ignored "-Wstringop-overflow"
+++#endif
++ static char *paste(char *dst, const char *src, size_t size)
++ {
++ 	strncpy(dst, src, size);
++@@ -417,7 +421,7 @@ static char *get_hmac_file(const char *filename, const char *checkdir)
++ 	strncpy(cursor, "\0", 1);
++ 	return checkfile;
++ }
++-#pragma GCC diagnostic pop /* -Wstringop-truncation */
+++#pragma GCC diagnostic pop /* -Wstringop-truncation -Wstringop-overflow */
++ 
++ static int hash_files(const struct hash_params *params,
++ 		      char *filenames[], uint32_t files,
++-- 
++2.14.1
++
