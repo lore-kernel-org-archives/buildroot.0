@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:36:46 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] xenomai: remove
- unnecessary autoreconf
-Message-ID: <20190124113558.BEEBD8E56D@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 12:37:26 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/xenomai: drop
+ consecutive empty lines
+Message-ID: <20190124113645.CF2CF812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a4bf18f35dd9930783ecb57dd0956f1a707fdda
+commit: https://git.buildroot.net/buildroot/commit/?id=6430aa503c4a8b26f8ad5804aabff4b3a8f27dd0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-As xenomai release tarballs ship with a configure script, there is only a
-need for autoreconfiguring when patches are applied.
+Commit 4219c58c (xenomai: remove unnecessary autoreconf) introduced a
+check-package warning:
 
-The last patch was removed with git commit
-de993bc23aab100e16026cb4cabebed48b9e1989 but the AUTORECONF line remained.
+1 warnings generated
+package/xenomai/xenomai.mk:27: consecutive empty lines
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+https://gitlab.com/buildroot.org/buildroot/-/jobs/143155797
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4219c58c386fdd351eb75185fa851addd63a75ed)
+(cherry picked from commit d2e1617cccb9c3183fae5cba78633e1b39e8a6a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xenomai/xenomai.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/xenomai/xenomai.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 6bf08edfbc..d88e969adb 100644
+index d88e969adb..98f550af60 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -24,8 +24,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
+@@ -24,7 +24,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
  
  XENOMAI_DEPENDENCIES = host-pkgconf
  
--# 0002-boilerplate-build-obstack-support-conditionally.patch
--XENOMAI_AUTORECONF = YES
- 
+-
  XENOMAI_INSTALL_STAGING = YES
  XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
