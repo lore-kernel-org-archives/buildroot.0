@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:30:16 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] tcpreplay: security bump
+Date: Thu, 24 Jan 2019 12:29:55 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] tcpreplay: security bump
  to version 4.3.1
-Message-ID: <20190124112928.E3AE08E2C8@busybox.osuosl.org>
+Message-ID: <20190124112933.EF3E68E2C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e9e8a55ded0568999d17966f7baaa98dd7399c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4c909a095c23c70892ade8b2c6efb4e5f4d12638
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Upstream CHANGELOG entry for 4.3.0 lists these fixes:
 
