@@ -1,40 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 17:17:35 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/lxc: add optional
- dependency to bash-completion
-Message-ID: <20190124161708.A282A8E451@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 17:19:36 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/2] cc-tool: drop BR2_PACKAGE_BOOST_SIGNALS select
+In-Reply-To: <20190113174316.26267-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 13 Jan 2019 18:43:15 +0100")
+References: <20190113174316.26267-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bm46do4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab0ca5e38da8cbe225735f0469ea5afcfa4797a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-lxc uses the completionsdir variable from bash-completions.pc to decide
-where to install things.
+ > cc-tool depends on signals2 not signals, indeed only signals2 is used in
+ > src/data/progress_watcher.h and BOOST_SIGNALS defined in m4/boost.m4 is
+ > never used in configure.ac
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 61a425590a71d232480181431eb0073ad0c420a9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lxc/lxc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > No BR2_PACKAGE_SIGNALS2 is needed as signals2 is a header-only boost
+ > library
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index c9838fb229..c758a15b9d 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -17,6 +17,10 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+LXC_DEPENDENCIES += bash-completion
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LXC_CONF_OPTS += --enable-gnutls
- LXC_DEPENDENCIES += gnutls
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Give more details in commit log
+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
