@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 20:04:23 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] sunxi-cedarx: needs -fPIC
-Message-ID: <20190124190339.27A308114C@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 20:04:34 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] sunxi-cedarx: needs -fPIC
+Message-ID: <20190124190349.755DE8179A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9a583f7b841893b8e82d1713294194ca64d9004
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a8e130e5d13716754414d2f8ffd01456e26ac7b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/c17062e1558f26c2db837883a0c33ef39dd031a2
