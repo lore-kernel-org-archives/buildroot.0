@@ -1,376 +1,292 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 21:54:01 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: bump to
- v240
-Message-ID: <20190124214756.F363D8E667@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 21:54:49 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: add
+ upstream fix for CVE-2018-16865
+Message-ID: <20190124214757.1D3018E69E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0813faf13862aa1c93a4d2f7fc7caa22c72c0992
+commit: https://git.buildroot.net/buildroot/commit/?id=9b3dd1787204d087b4b55d7a5e23ae530a7f60e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-In addition:
-
- - Remove unused option -Dkill-path.
-  (See commit 9a85778412fa3e3f8d4561064131ba69f3259b28)
-
- - Change option -Dmyhostname to -Dnss-myhostname.
-
- - Remove patches from upstream.
-
- - Update hash of README file. The changes are unrelated to licensing.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Tested-by: J??r??my Rosen <jeremy.rosen@smile.fr>
-[Thomas: update the hash of the README file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit 0b213d5a38361408dd82b3c61bf31e6d7efee61e)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f4d3d62b1014f63c028a1ed1089f533bfb249ccb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-install-don-t-use-ln-relative.patch       |   2 +-
- ...etect-whether-struct-statx-is-defined-in-.patch | 111 ---------------------
- ...-linux-stat.h-check-with-other-checks-and.patch |  77 --------------
- ...sure-we-have-enough-space-for-the-DHCP6-o.patch |  30 ------
- ...eson.build-fix-detection-of-Werror-shadow.patch |  34 -------
- package/systemd/systemd.hash                       |   4 +-
- package/systemd/systemd.mk                         |   7 +-
- 7 files changed, 6 insertions(+), 259 deletions(-)
+ ...ld-set-a-limit-on-the-number-of-fields-1k.patch |  57 +++++++++++
+ ...al-remote-verify-entry-length-from-header.patch | 112 +++++++++++++++++++++
+ ...ote-set-a-limit-on-the-number-of-fields-i.patch |  81 +++++++++++++++
+ 3 files changed, 250 insertions(+)
 
-diff --git a/package/systemd/0002-install-don-t-use-ln-relative.patch b/package/systemd/0002-install-don-t-use-ln-relative.patch
-index a024ac4a23..7933207780 100644
---- a/package/systemd/0002-install-don-t-use-ln-relative.patch
-+++ b/package/systemd/0002-install-don-t-use-ln-relative.patch
-@@ -33,7 +33,7 @@ diff --git a/meson.build b/meson.build
- index 04331dd41..359042c04 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -559,7 +559,7 @@ endforeach
-+@@ -628,7 +628,7 @@ endforeach
-  conf.set_quoted('TELINIT', get_option('telinit-path'))
-  
-  if run_command('ln', '--relative', '--help').returncode() != 0
-diff --git a/package/systemd/0003-build-sys-Detect-whether-struct-statx-is-defined-in-.patch b/package/systemd/0003-build-sys-Detect-whether-struct-statx-is-defined-in-.patch
-deleted file mode 100644
-index d849659c77..0000000000
---- a/package/systemd/0003-build-sys-Detect-whether-struct-statx-is-defined-in-.patch
-+++ /dev/null
-@@ -1,111 +0,0 @@
--From ebe5606eadb1241796ba9747d8e357bd6b3e912e Mon Sep 17 00:00:00 2001
--From: Filipe Brandenburger <filbranden@google.com>
--Date: Sun, 15 Jul 2018 22:43:35 -0700
--Subject: [PATCH] build-sys: Detect whether struct statx is defined in
-- sys/stat.h
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Starting with glibc 2.27.9000-36.fc29, include file sys/stat.h will have a
--definition for struct statx, in which case include file linux/stat.h should be
--avoided, in order to prevent a duplicate definition.
--
--    In file included from ../src/basic/missing.h:18,
--		     from ../src/basic/util.h:28,
--		     from ../src/basic/hashmap.h:10,
--		     from ../src/shared/bus-util.h:12,
--		     from ../src/libsystemd/sd-bus/bus-creds.c:11:
--    /usr/include/linux/stat.h:99:8: error: redefinition of ???struct statx???
--     struct statx {
--	    ^~~~~
--    In file included from /usr/include/sys/stat.h:446,
--		     from ../src/basic/util.h:19,
--		     from ../src/basic/hashmap.h:10,
--		     from ../src/shared/bus-util.h:12,
--		     from ../src/libsystemd/sd-bus/bus-creds.c:11:
--    /usr/include/bits/statx.h:36:8: note: originally defined here
--     struct statx
--	    ^~~~~
--
--Extend our meson.build to look for struct statx when only sys/stat.h is
--included and, in that case, do not include linux/stat.h anymore.
--
--Tested that systemd builds correctly when using a glibc version that includes a
--definition for struct statx.
--
--glibc Fedora RPM update:
--https://src.fedoraproject.org/rpms/glibc/c/28cb5d31fc1e5887912283c889689c47076278ae
--
--glibc upstream commit:
--https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=fd70af45528d59a00eb3190ef6706cb299488fcd
--
--(cherry picked from commit 75720bff62a84896e9a0654afc7cf9408cf89a38)
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- meson.build            | 5 +++++
-- src/basic/missing.h    | 5 ++++-
-- src/basic/xattr-util.c | 1 -
-- 3 files changed, 9 insertions(+), 2 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 04331dd41..a0e724070 100644
----- a/meson.build
--+++ b/meson.build
--@@ -425,6 +425,7 @@ decl_headers = '''
-- #include <sys/stat.h>
-- '''
-- # FIXME: key_serial_t is only defined in keyutils.h, this is bound to fail
--+# FIXME: these should use -D_GNU_SOURCE, since that is defined at build time
-- 
-- foreach decl : ['char16_t',
--                 'char32_t',
--@@ -439,6 +440,10 @@ foreach decl : ['char16_t',
--         conf.set10('HAVE_' + decl.underscorify().to_upper(), have)
-- endforeach
-- 
--+conf.set10('HAVE_STRUCT_STATX_IN_SYS_STAT_H', cc.sizeof('struct statx', prefix : '''
--+#include <sys/stat.h>
--+''', args : '-D_GNU_SOURCE') > 0)
--+
-- foreach decl : [['IFLA_INET6_ADDR_GEN_MODE',         'linux/if_link.h'],
--                 ['IN6_ADDR_GEN_MODE_STABLE_PRIVACY', 'linux/if_link.h'],
--                 ['IFLA_VRF_TABLE',                   'linux/if_link.h'],
--diff --git a/src/basic/missing.h b/src/basic/missing.h
--index 71a07d057..14ad3d491 100644
----- a/src/basic/missing.h
--+++ b/src/basic/missing.h
--@@ -15,7 +15,6 @@
-- #include <linux/neighbour.h>
-- #include <linux/oom.h>
-- #include <linux/rtnetlink.h>
---#include <linux/stat.h>
-- #include <net/ethernet.h>
-- #include <stdlib.h>
-- #include <sys/resource.h>
--@@ -25,6 +24,10 @@
-- #include <uchar.h>
-- #include <unistd.h>
-- 
--+#if !HAVE_STRUCT_STATX_IN_SYS_STAT_H
--+#include <linux/stat.h>
--+#endif
--+
-- #if HAVE_AUDIT
-- #include <libaudit.h>
-- #endif
--diff --git a/src/basic/xattr-util.c b/src/basic/xattr-util.c
--index c5c55ea84..0ee097983 100644
----- a/src/basic/xattr-util.c
--+++ b/src/basic/xattr-util.c
--@@ -2,7 +2,6 @@
-- 
-- #include <errno.h>
-- #include <fcntl.h>
---#include <linux/stat.h>
-- #include <stdint.h>
-- #include <stdlib.h>
-- #include <string.h>
---- 
--2.14.4
--
-diff --git a/package/systemd/0004-meson-unify-linux-stat.h-check-with-other-checks-and.patch b/package/systemd/0004-meson-unify-linux-stat.h-check-with-other-checks-and.patch
-deleted file mode 100644
-index 70c35c66e2..0000000000
---- a/package/systemd/0004-meson-unify-linux-stat.h-check-with-other-checks-and.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 17bd864a04a0583cfb343c5621b591bdd76d79ad Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
--Date: Wed, 18 Jul 2018 17:26:17 +0200
--Subject: [PATCH] meson: unify linux/stat.h check with other checks and use
-- _GNU_SOURCE
--
--Using _GNU_SOURCE is better because that's how we include the headers in the
--actual build, and some headers define different stuff when it is defined.
--sys/stat.h for example defines 'struct statx' conditionally.
--
--(cherry picked from commit 9c869d08d82c73f62ab3527567858ce4b0cf1257)
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- meson.build         | 20 ++++++++++++++------
-- src/basic/missing.h |  2 +-
-- 2 files changed, 15 insertions(+), 7 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index a0e724070..5dcabdc6c 100644
----- a/meson.build
--+++ b/meson.build
--@@ -421,11 +421,9 @@ decl_headers = '''
-- #include <uchar.h>
-- #include <linux/ethtool.h>
-- #include <linux/fib_rules.h>
---#include <linux/stat.h>
-- #include <sys/stat.h>
-- '''
-- # FIXME: key_serial_t is only defined in keyutils.h, this is bound to fail
---# FIXME: these should use -D_GNU_SOURCE, since that is defined at build time
-- 
-- foreach decl : ['char16_t',
--                 'char32_t',
--@@ -436,13 +434,23 @@ foreach decl : ['char16_t',
--                ]
-- 
--         # We get -1 if the size cannot be determined
---        have = cc.sizeof(decl, prefix : decl_headers) > 0
--+        have = cc.sizeof(decl, prefix : decl_headers, args : '-D_GNU_SOURCE') > 0
--+
--+        if decl == 'struct statx'
--+                if have
--+                        want_linux_stat_h = false
--+                else
--+                        have = cc.sizeof(decl,
--+                                         prefix : decl_headers + '#include <linux/stat.h>',
--+                                         args : '-D_GNU_SOURCE') > 0
--+                        want_linux_stat_h = have
--+                endif
--+        endif
--+
--         conf.set10('HAVE_' + decl.underscorify().to_upper(), have)
-- endforeach
-- 
---conf.set10('HAVE_STRUCT_STATX_IN_SYS_STAT_H', cc.sizeof('struct statx', prefix : '''
---#include <sys/stat.h>
---''', args : '-D_GNU_SOURCE') > 0)
--+conf.set10('WANT_LINUX_STAT_H', want_linux_stat_h)
-- 
-- foreach decl : [['IFLA_INET6_ADDR_GEN_MODE',         'linux/if_link.h'],
--                 ['IN6_ADDR_GEN_MODE_STABLE_PRIVACY', 'linux/if_link.h'],
--diff --git a/src/basic/missing.h b/src/basic/missing.h
--index 14ad3d491..9044683b1 100644
----- a/src/basic/missing.h
--+++ b/src/basic/missing.h
--@@ -24,7 +24,7 @@
-- #include <uchar.h>
-- #include <unistd.h>
-- 
---#if !HAVE_STRUCT_STATX_IN_SYS_STAT_H
--+#if WANT_LINUX_STAT_H
-- #include <linux/stat.h>
-- #endif
-- 
---- 
--2.14.4
--
-diff --git a/package/systemd/0005-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch b/package/systemd/0005-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
-deleted file mode 100644
-index 6a72a38988..0000000000
---- a/package/systemd/0005-dhcp6-make-sure-we-have-enough-space-for-the-DHCP6-o.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 49653743f69658aeeebdb14faf1ab158f1f2cb20 Mon Sep 17 00:00:00 2001
--From: Lennart Poettering <lennart@poettering.net>
--Date: Fri, 19 Oct 2018 12:12:33 +0200
--Subject: [PATCH] dhcp6: make sure we have enough space for the DHCP6 option
-- header
--
--Fixes CVE-2018-15688:
--https://security-tracker.debian.org/tracker/CVE-2018-15688
--
--Patch downloaded from upstream commit:
--https://github.com/systemd/systemd/commit/49653743f69658aeeebdb14faf1ab158f1f2cb20
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/libsystemd-network/dhcp6-option.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/libsystemd-network/dhcp6-option.c b/src/libsystemd-network/dhcp6-option.c
--index cbd4bc7a2a3..2806415100c 100644
----- a/src/libsystemd-network/dhcp6-option.c
--+++ b/src/libsystemd-network/dhcp6-option.c
--@@ -106,7 +106,7 @@ int dhcp6_option_append_ia(uint8_t **buf, size_t *buflen, const DHCP6IA *ia) {
--                 return -EINVAL;
--         }
-- 
---        if (*buflen < len)
--+        if (*buflen < offsetof(DHCP6Option, data) + len)
--                 return -ENOBUFS;
-- 
--         ia_hdr = *buf;
-diff --git a/package/systemd/0006-meson.build-fix-detection-of-Werror-shadow.patch b/package/systemd/0006-meson.build-fix-detection-of-Werror-shadow.patch
-deleted file mode 100644
-index 0aa3189206..0000000000
---- a/package/systemd/0006-meson.build-fix-detection-of-Werror-shadow.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 7bd6e6db3dbb980c099b444c61d9aff7fcc636cf Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 29 Nov 2018 13:22:08 +0100
--Subject: [PATCH] meson.build: fix detection of -Werror=shadow
--
--Pass -Werror=shadow in args of cc.compiles otherwise test will always
--succeed
--This fix a build failure with gcc 4.7.3
--
--Fixes:
-- - http://autobuild.buildroot.org/results/ffd71c473d3b29618c18cd2e04705370266696f2
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/systemd/systemd/pull/10993]
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 37ae27b4a..980150ac8 100644
----- a/meson.build
--+++ b/meson.build
--@@ -396,7 +396,7 @@ if cc.compiles('''
--            struct timespec now;
--            return 0;
--    }
---''', name : '-Werror=shadow with local shadowing')
--+''', args: '-Werror=shadow', name : '-Werror=shadow with local shadowing')
--         add_project_arguments('-Werror=shadow', language : 'c')
-- endif
-- 
---- 
--2.14.1
--
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 012f1e595e..9c1a512ce7 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	8a11b1b07d620f4c06a16e95bba4dd2a97e90efdf2a5ba47ed0a935085787a14  	systemd-239.tar.gz
-+sha256	8f15aec1ac926e13a21a04d0ca3fe371f7004951448142a6f8952075c5b5f0b5  	systemd-240.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
--sha256	37ab495827a3cdbbc35ceaba3066764d69b6490e514e0c8a1acdb3c2fdb9e921	README
-+sha256	a693f8f654fdf016e2aefe6b30aa6e1211728b8269ab325408a152c6c9b6ebe8	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index e53f0b699a..15db1969e5 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 239
-+SYSTEMD_VERSION = 240
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -34,7 +34,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsystem-uid-max=999 \
- 	-Dsystem-gid-max=999 \
- 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
--	-Dkill-path=/usr/bin/kill \
- 	-Dkmod-path=/usr/bin/kmod \
- 	-Dkexec-path=/usr/sbin/kexec \
- 	-Dsulogin-path=/usr/sbin/sulogin \
-@@ -251,9 +250,9 @@ SYSTEMD_CONF_OPTS += -Dhostnamed=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_MYHOSTNAME),y)
--SYSTEMD_CONF_OPTS += -Dmyhostname=true
-+SYSTEMD_CONF_OPTS += -Dnss-myhostname=true
- else
--SYSTEMD_CONF_OPTS += -Dmyhostname=false
-+SYSTEMD_CONF_OPTS += -Dnss-myhostname=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMEDATED),y)
+diff --git a/package/systemd/0010-journald-set-a-limit-on-the-number-of-fields-1k.patch b/package/systemd/0010-journald-set-a-limit-on-the-number-of-fields-1k.patch
+new file mode 100644
+index 0000000000..df1ed806a4
+--- /dev/null
++++ b/package/systemd/0010-journald-set-a-limit-on-the-number-of-fields-1k.patch
+@@ -0,0 +1,57 @@
++From 052c57f132f04a3cf4148f87561618da1a6908b4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
++Date: Wed, 5 Dec 2018 22:45:02 +0100
++Subject: [PATCH] journald: set a limit on the number of fields (1k)
++
++We allocate a iovec entry for each field, so with many short entries,
++our memory usage and processing time can be large, even with a relatively
++small message size. Let's refuse overly long entries.
++
++CVE-2018-16865
++https://bugzilla.redhat.com/show_bug.cgi?id=1653861
++
++What from I can see, the problem is not from an alloca, despite what the CVE
++description says, but from the attack multiplication that comes from creating
++many very small iovecs: (void* + size_t) for each three bytes of input message.
++
++[james.hilliard1 at gmail.com: backport from upstream commit
++052c57f132f04a3cf4148f87561618da1a6908b4]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ src/journal/journald-native.c | 5 +++++
++ src/shared/journal-importer.h | 3 +++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/src/journal/journald-native.c b/src/journal/journald-native.c
++index e86178e..d0fee2a 100644
++--- a/src/journal/journald-native.c
+++++ b/src/journal/journald-native.c
++@@ -141,6 +141,11 @@ static int server_process_entry(
++                 }
++ 
++                 /* A property follows */
+++                if (n > ENTRY_FIELD_COUNT_MAX) {
+++                        log_debug("Received an entry that has more than " STRINGIFY(ENTRY_FIELD_COUNT_MAX) " fields, ignoring entry.");
+++                        r = 1;
+++                        goto finish;
+++                }
++ 
++                 /* n existing properties, 1 new, +1 for _TRANSPORT */
++                 if (!GREEDY_REALLOC(iovec, m,
++diff --git a/src/shared/journal-importer.h b/src/shared/journal-importer.h
++index 53354b7..7914c0c 100644
++--- a/src/shared/journal-importer.h
+++++ b/src/shared/journal-importer.h
++@@ -21,6 +21,9 @@
++ #endif
++ #define LINE_CHUNK 8*1024u
++ 
+++/* The maximum number of fields in an entry */
+++#define ENTRY_FIELD_COUNT_MAX 1024
+++
++ struct iovec_wrapper {
++         struct iovec *iovec;
++         size_t size_bytes;
++-- 
++2.7.4
++
+diff --git a/package/systemd/0011-journal-remote-verify-entry-length-from-header.patch b/package/systemd/0011-journal-remote-verify-entry-length-from-header.patch
+new file mode 100644
+index 0000000000..7b74a31d35
+--- /dev/null
++++ b/package/systemd/0011-journal-remote-verify-entry-length-from-header.patch
+@@ -0,0 +1,112 @@
++From 7fdb237f5473cb8fc2129e57e8a0039526dcb4fd Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
++Date: Fri, 7 Dec 2018 12:47:14 +0100
++Subject: [PATCH] journal-remote: verify entry length from header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Calling mhd_respond(), which ulimately calls MHD_queue_response() is
++ineffective at point, becuase MHD_queue_response() immediately returns
++MHD_NO signifying an error, because the connection is in state
++MHD_CONNECTION_CONTINUE_SENT.
++
++As Christian Grothoff kindly explained:
++> You are likely calling MHD_queue_repsonse() too late: once you are
++> receiving upload_data, HTTP forces you to process it all. At this time,
++> MHD has already sent "100 continue" and cannot take it back (hence you
++> get MHD_NO!).
++>
++> In your request handler, the first time when you are called for a
++> connection (and when hence *upload_data_size == 0 and upload_data ==
++> NULL) you must check the content-length header and react (with
++> MHD_queue_response) based on this (to prevent MHD from automatically
++> generating 100 continue).
++
++If we ever encounter this kind of error, print a warning and immediately
++abort the connection. (The alternative would be to keep reading the data,
++but ignore it, and return an error after we get to the end of data.
++That is possible, but of course puts additional load on both the
++sender and reciever, and doesn't seem important enough just to return
++a good error message.)
++
++Note that sending of the error does not work (the connection is always aborted
++when MHD_queue_response is used with MHD_RESPMEM_MUST_FREE, as in this case)
++with lib??httpd 0.59, but works with 0.61:
++https://src.fedoraproject.org/rpms/libmicrohttpd/pull-request/1
++
++[james.hilliard1 at gmail.com: backport from upstream commit
++7fdb237f5473cb8fc2129e57e8a0039526dcb4fd]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ src/journal-remote/journal-remote-main.c | 34 ++++++++++++++++++++++----------
++ 1 file changed, 24 insertions(+), 10 deletions(-)
++
++diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
++index e1748cb..8543dba 100644
++--- a/src/journal-remote/journal-remote-main.c
+++++ b/src/journal-remote/journal-remote-main.c
++@@ -221,16 +221,14 @@ static int process_http_upload(
++                                    journal_remote_server_global->seal);
++                 if (r == -EAGAIN)
++                         break;
++-                else if (r < 0) {
++-                        log_warning("Failed to process data for connection %p", connection);
+++                if (r < 0) {
++                         if (r == -E2BIG)
++-                                return mhd_respondf(connection,
++-                                                    r, MHD_HTTP_PAYLOAD_TOO_LARGE,
++-                                                    "Entry is too large, maximum is " STRINGIFY(DATA_SIZE_MAX) " bytes.");
+++                                log_warning_errno(r, "Entry is too above maximum of %u, aborting connection %p.",
+++                                                  DATA_SIZE_MAX, connection);
++                         else
++-                                return mhd_respondf(connection,
++-                                                    r, MHD_HTTP_UNPROCESSABLE_ENTITY,
++-                                                    "Processing failed: %m.");
+++                                log_warning_errno(r, "Failed to process data, aborting connection %p: %m",
+++                                                  connection);
+++                        return MHD_NO;
++                 }
++         }
++ 
++@@ -264,6 +262,7 @@ static int request_handler(
++         const char *header;
++         int r, code, fd;
++         _cleanup_free_ char *hostname = NULL;
+++        size_t len;
++ 
++         assert(connection);
++         assert(connection_cls);
++@@ -283,12 +282,27 @@ static int request_handler(
++         if (!streq(url, "/upload"))
++                 return mhd_respond(connection, MHD_HTTP_NOT_FOUND, "Not found.");
++ 
++-        header = MHD_lookup_connection_value(connection,
++-                                             MHD_HEADER_KIND, "Content-Type");
+++        header = MHD_lookup_connection_value(connection, MHD_HEADER_KIND, "Content-Type");
++         if (!header || !streq(header, "application/vnd.fdo.journal"))
++                 return mhd_respond(connection, MHD_HTTP_UNSUPPORTED_MEDIA_TYPE,
++                                    "Content-Type: application/vnd.fdo.journal is required.");
++ 
+++        header = MHD_lookup_connection_value(connection, MHD_HEADER_KIND, "Content-Length");
+++        if (!header)
+++                return mhd_respond(connection, MHD_HTTP_LENGTH_REQUIRED,
+++                                   "Content-Length header is required.");
+++        r = safe_atozu(header, &len);
+++        if (r < 0)
+++                return mhd_respondf(connection, r, MHD_HTTP_LENGTH_REQUIRED,
+++                                    "Content-Length: %s cannot be parsed: %m", header);
+++
+++        if (len > ENTRY_SIZE_MAX)
+++                /* When serialized, an entry of maximum size might be slightly larger,
+++                 * so this does not correspond exactly to the limit in journald. Oh well.
+++                 */
+++                return mhd_respondf(connection, 0, MHD_HTTP_PAYLOAD_TOO_LARGE,
+++                                    "Payload larger than maximum size of %u bytes", ENTRY_SIZE_MAX);
+++
++         {
++                 const union MHD_ConnectionInfo *ci;
++ 
++-- 
++2.7.4
++
+diff --git a/package/systemd/0012-journal-remote-set-a-limit-on-the-number-of-fields-i.patch b/package/systemd/0012-journal-remote-set-a-limit-on-the-number-of-fields-i.patch
+new file mode 100644
+index 0000000000..e0aae98d90
+--- /dev/null
++++ b/package/systemd/0012-journal-remote-set-a-limit-on-the-number-of-fields-i.patch
+@@ -0,0 +1,81 @@
++From ef4d6abe7c7fab6cbff975b32e76b09feee56074 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
++Date: Fri, 7 Dec 2018 10:48:10 +0100
++Subject: [PATCH] journal-remote: set a limit on the number of fields in a
++ message
++
++Existing use of E2BIG is replaced with ENOBUFS (entry too long), and E2BIG is
++reused for the new error condition (too many fields).
++
++This matches the change done for systemd-journald, hence forming the second
++part of the fix for CVE-2018-16865
++(https://bugzilla.redhat.com/show_bug.cgi?id=1653861).
++
++[james.hilliard1 at gmail.com: backport from upstream commit
++ef4d6abe7c7fab6cbff975b32e76b09feee56074]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ src/journal-remote/journal-remote-main.c | 7 +++++--
++ src/journal-remote/journal-remote.c      | 3 +++
++ src/shared/journal-importer.c            | 5 ++++-
++ 3 files changed, 12 insertions(+), 3 deletions(-)
++
++diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
++index 8543dba..802c3ea 100644
++--- a/src/journal-remote/journal-remote-main.c
+++++ b/src/journal-remote/journal-remote-main.c
++@@ -222,9 +222,12 @@ static int process_http_upload(
++                 if (r == -EAGAIN)
++                         break;
++                 if (r < 0) {
++-                        if (r == -E2BIG)
++-                                log_warning_errno(r, "Entry is too above maximum of %u, aborting connection %p.",
+++                        if (r == -ENOBUFS)
+++                                log_warning_errno(r, "Entry is above the maximum of %u, aborting connection %p.",
++                                                   DATA_SIZE_MAX, connection);
+++                        else if (r == -E2BIG)
+++                                log_warning_errno(r, "Entry with more fields than the maximum of %u, aborting connection %p.",
+++                                                  ENTRY_FIELD_COUNT_MAX, connection);
++                         else
++                                 log_warning_errno(r, "Failed to process data, aborting connection %p: %m",
++                                                   connection);
++diff --git a/src/journal-remote/journal-remote.c b/src/journal-remote/journal-remote.c
++index 3c0916c..1da32c5 100644
++--- a/src/journal-remote/journal-remote.c
+++++ b/src/journal-remote/journal-remote.c
++@@ -407,6 +407,9 @@ int journal_remote_handle_raw_source(
++                 log_debug("%zu active sources remaining", s->active);
++                 return 0;
++         } else if (r == -E2BIG) {
+++                log_notice("Entry with too many fields, skipped");
+++                return 1;
+++        } else if (r == -ENOBUFS) {
++                 log_notice("Entry too big, skipped");
++                 return 1;
++         } else if (r == -EAGAIN) {
++diff --git a/src/shared/journal-importer.c b/src/shared/journal-importer.c
++index b0e6192..8638cd3 100644
++--- a/src/shared/journal-importer.c
+++++ b/src/shared/journal-importer.c
++@@ -23,6 +23,9 @@ enum {
++ };
++ 
++ static int iovw_put(struct iovec_wrapper *iovw, void* data, size_t len) {
+++        if (iovw->count >= ENTRY_FIELD_COUNT_MAX)
+++                return -E2BIG;
+++
++         if (!GREEDY_REALLOC(iovw->iovec, iovw->size_bytes, iovw->count + 1))
++                 return log_oom();
++ 
++@@ -97,7 +100,7 @@ static int get_line(JournalImporter *imp, char **line, size_t *size) {
++ 
++                 imp->scanned = imp->filled;
++                 if (imp->scanned >= DATA_SIZE_MAX)
++-                        return log_error_errno(SYNTHETIC_ERRNO(E2BIG),
+++                        return log_error_errno(SYNTHETIC_ERRNO(ENOBUFS),
++                                                "Entry is bigger than %u bytes.",
++                                                DATA_SIZE_MAX);
++ 
++-- 
++2.7.4
++
