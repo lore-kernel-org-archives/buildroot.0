@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 17:18:56 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/cc-tool: drop
+Date: Thu, 24 Jan 2019 17:18:40 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/cc-tool: drop
  BR2_PACKAGE_BOOST_SIGNALS select
-Message-ID: <20190124161850.4667D8E4E6@busybox.osuosl.org>
+Message-ID: <20190124161854.835B98E4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8967a17894e9b424b8ad5188312de346f1a549c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0e151993986fbf4a04e8f03929087bc282c76b83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 cc-tool depends on signals2 not signals, indeed only signals2 is used
 in src/data/progress_watcher.h and BOOST_SIGNALS defined in
