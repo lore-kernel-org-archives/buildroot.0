@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 10:46:29 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.19
-In-Reply-To: <20190124080555.29907-1-martink@posteo.de> (Martin Kepplinger's
- message of "Thu, 24 Jan 2019 09:05:55 +0100")
-References: <20190124080555.29907-1-martink@posteo.de>
-Message-ID: <87lg3aie16.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2019 10:46:44 +0100
+Subject: [Buildroot] [PATCH 1/1] go: security bump to 1.11.5
+In-Reply-To: <20190124081633.16600-1-christian@paral.in> (Christian Stewart's
+ message of "Thu, 24 Jan 2019 00:16:33 -0800")
+References: <20190124081633.16600-1-christian@paral.in>
+Message-ID: <87h8dyie0r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > For the curious, there's the short changelog summary:
- > https://github.com/kergoth/tslib/releases
-
- > Signed-off-by: Martin Kepplinger <martink@posteo.de>
+ > Go 1.11.5 addresses a reported security issue, CVE-2019-6486.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
 Committed, thanks.
 
