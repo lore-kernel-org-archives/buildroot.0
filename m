@@ -1,71 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Jan 2019 17:12:01 +0100
-Subject: [Buildroot] [PATCH 2/3] boot/uboot: use HOSTCC_NOCCACHE as
- kconfig HOSTCC
-In-Reply-To: <20190113215155.GN2428@scaer>
-References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
- <20190110211500.14368-3-thomas.petazzoni@bootlin.com>
- <20190113214739.GL2428@scaer> <20190113215155.GN2428@scaer>
-Message-ID: <2c9e76dc-ec17-e3d2-feb5-dbda889281fc@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Jan 2019 17:14:33 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] python-pyyaml: bump to
+ version 3.13
+Message-ID: <20190124161401.62E0C890FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=bfc00651e9e1dd409b813a855676e5932dc63807
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
+Fixes:
+http://autobuild.buildroot.net/results/e71/e715a7dc8b6856b4aba0b9b4568d61420c52a5c8
 
-On 13/01/2019 22:51, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2019-01-13 22:47 +0100, Yann E. MORIN spake thusly:
->> On 2019-01-10 22:14 +0100, Thomas Petazzoni spake thusly:
->>> At kconfig time, dependencies are not built, and therefore host-ccache
->>> is not ready. Due to this, using $(HOSTCC) as the host compiler in
->>> KCONFIG_OPTS does not work: a "make uboot-menuconfig" invocation from
->>> a clean tree with ccache enabled fails.
->>>
->>> This commit fixes this by using $(HOSTCC_NOCCACHE). We cannot rely on
->>> the default value of HOSTCC passed by the kconfig-package
->>> infrastructure, because $(UBOOT_MAKE_OPTS) also contains a HOSTCC
->>> definition that would override the one passed by the kconfig-package
->>> infrastructure.
->>>
->>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->>> ---
->>>  boot/uboot/uboot.mk | 5 +++--
->>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->>> index cbdfee6ac3..6977bcc064 100644
->>> --- a/boot/uboot/uboot.mk
->>> +++ b/boot/uboot/uboot.mk
->>> @@ -227,8 +227,9 @@ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
->>>  # (which is typically wchar) but link with
->>>  # $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
->>>  # need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
->>> -# override again.
->>> -UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
->>> +# override again. In addition, host-ccache is not ready at kconfig
->>> +# time, so use HOSTCC_NOCCACHE.
->>> +UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTLDFLAGS=""
->>
->> Since you're just switching over to the no-ccache variant:
->>
->> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->> However, I wonder if we would not be better off if we had written
->> something like;
->>
->>     UBOOT_KCONFIG_OPTS = $(filter-out HOSTCC=% HOSTLDFLAGS=%, $(UBOOT_MAKE_OPTS))
-> 
-> No, no, we can't, because there might be spaces in the previous HOSTCC="..."
-> definition, so we really need to over-override it.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fbe289f1450c3a20ade5444b40b03c1d6d074ded)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pyyaml/python-pyyaml.hash | 6 +++---
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- Maybe, instead of over-overriding HOSTCC, we can just avoid using
-UBOOT_MAKE_OPTS in UBOOT_KCONFIG_OPTS, instead passing the ARCH= and
-CROSS_COMPILE= explicitly. And we probably don't even need CROSS_COMPILE for
-configuring.
-
- Regards,
- Arnout
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 209ab27e53..47a379ce6a 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pyyaml/json, sha256 locally computed
+-md5 4c129761b661d181ebf7ff4eb2d79950 PyYAML-3.12.tar.gz
+-sha256 592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab PyYAML-3.12.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
++md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
++sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index beeaf88e96..cbf8df7b2d 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYYAML_VERSION = 3.12
++PYTHON_PYYAML_VERSION = 3.13
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
