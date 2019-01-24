@@ -1,73 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 11:50:36 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: document the
- new get-developers -e option
-Message-ID: <20190124105008.482998E395@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 11:50:40 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: fix typo
+ get-developer (-> get-developers)
+Message-ID: <20190124105008.4E0C08E395@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15f373aff8b3e60af7b55ab30fbed444db29bbc3
+commit: https://git.buildroot.net/buildroot/commit/?id=bb938aed2cdffde59f7a88bdac7be2e5dfc069b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Explain how this can be used with git send-email, and how git can be
-configured to use it automatically.
+The script is utils/get-developers but the manual refers to get-developer in
+several places.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 507d56a6be67b7b4e5c40b55c2e56ffbb4ff0386)
+(cherry picked from commit 81aeab60cd830c4f674df24e860f342233315d38)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/contribute.txt | 22 ++++++++++++++++++++++
- docs/manual/developers.txt |  3 ++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ docs/manual/developers.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 8bbc2b9eb7..077562133a 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -304,6 +304,28 @@ Use the output of +get-developers+ to send your patches:
- $ git send-email --to buildroot at buildroot.org --cc bob --cc alice outgoing/*
- ---------------------
- 
-+Alternatively, +get-developers -e+ can be used directly with the
-++--cc-cmd+ argument to +git send-email+ to automatically CC the
-+affected developers:
-+
-+---------------------
-+$ git send-email --to buildroot at buildroot.org \
-+      --cc-cmd './utils/get-developers -e' origin/master
-+---------------------
-+
-++git+ can be configured to automatically do this out of the box with:
-+
-+---------------------
-+$ git config sendemail.to buildroot at buildroot.org
-+$ git config sendemail.ccCmd "$(pwd)/utils/get-developers -e"
-+---------------------
-+
-+And then just do:
-+
-+---------------------
-+$ git send-email origin/master
-+---------------------
-+
- Note that +git+ should be configured to use your mail account.
- To configure +git+, see +man git-send-email+ or google it.
- 
 diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
-index a0a3668dbc..0da499e100 100644
+index 0da499e100..7058d57b20 100644
 --- a/docs/manual/developers.txt
 +++ b/docs/manual/developers.txt
-@@ -31,7 +31,8 @@ the +DEVELOPERS+ file for various tasks:
+@@ -6,7 +6,7 @@
+ 
+ The main Buildroot directory contains a file named +DEVELOPERS+ that
+ lists the developers involved with various areas of Buildroot. Thanks
+-to this file, the +get-developer+ tool allows to:
++to this file, the +get-developers+ tool allows to:
+ 
+ - Calculate the list of developers to whom patches should be sent, by
+   parsing the patches and matching the modified files with the
+@@ -26,21 +26,21 @@ to include in his patch the appropriate modification to the
+ The +DEVELOPERS+ file format is documented in detail inside the file
+ itself.
+ 
+-The +get-developer+ tool, located in +utils/+ allows to use
++The +get-developers+ tool, located in +utils/+ allows to use
+ the +DEVELOPERS+ file for various tasks:
  
  - When passing one or several patches as command line argument,
-   +get-developer+ will return the appropriate +git send-email+
--  command.
-+  command. If the +-e+ option is passed, only the email addresses are
-+  printed in a format suitable for +git send-email --cc-cmd+.
+-  +get-developer+ will return the appropriate +git send-email+
++  +get-developers+ will return the appropriate +git send-email+
+   command. If the +-e+ option is passed, only the email addresses are
+   printed in a format suitable for +git send-email --cc-cmd+.
  
- - When using the +-a <arch>+ command line option, +get-developer+ will
+-- When using the +-a <arch>+ command line option, +get-developer+ will
++- When using the +-a <arch>+ command line option, +get-developers+ will
    return the list of developers in charge of the given architecture.
+ 
+-- When using the +-p <package>+ command line option, +get-developer+
++- When using the +-p <package>+ command line option, +get-developers+
+   will return the list of developers in charge of the given package.
+ 
+-- When using the +-c+ command line option, +get-developer+ will look
++- When using the +-c+ command line option, +get-developers+ will look
+   at all files under version control in the Buildroot repository, and
+   list the ones that are not handled by any developer. The purpose of
+   this option is to help completing the +DEVELOPERS+ file.
