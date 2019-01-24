@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:26:30 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] Makefile, manual,
+Date: Thu, 24 Jan 2019 12:26:19 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] Makefile, manual,
  website: Bump copyright year
-Message-ID: <20190124112542.CDAB68E395@busybox.osuosl.org>
+Message-ID: <20190124112549.00B918E395@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=208610dbef9f1476d14c4c0e41462ac04f73b354
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bca62e0a014db4460ac603470f0a19e6864a94a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Happy 2019!
 
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index c3695300b0..03ea4ffd9e 100644
+index dd8cc7a9ae..998b571071 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -2,7 +2,7 @@
