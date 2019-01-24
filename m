@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:30:38 +0100
-Subject: [Buildroot] [PATCH] tcpreplay: security bump to version 4.3.1
-In-Reply-To: <a85a18e1c92657beb563b238ffdd8548c3408b6b.1546964038.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 8 Jan 2019 18:13:58 +0200")
-References: <a85a18e1c92657beb563b238ffdd8548c3408b6b.1546964038.git.baruch@tkos.co.il>
-Message-ID: <87va2efg2p.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2019 12:36:37 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] xenomai: remove
+ unnecessary autoreconf
+Message-ID: <20190124113550.F19898E243@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f17bde9466a78bebcf6fb5ca6495bc98912c325a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > Upstream CHANGELOG entry for 4.3.0 lists these fixes:
- >     - CVE-2018-18408 use-after-free in post_args (#489)
- >     - CVE-2018-18407 heap-buffer-overflow csum_replace4 (#488)
- >     - CVE-2018-17974 heap-buffer-overflow dlt_en10mb_encode (#486)
- >     - CVE-2018-17580 heap-buffer-overflow fast_edit_packet (#485)
- >     - CVE-2018-17582 heap-buffer-overflow in get_next_packet (#484)
- > 	- CVE-2018-13112 heap-buffer-overflow in get_l2len (#477 dup #408)
+As xenomai release tarballs ship with a configure script, there is only a
+need for autoreconfiguring when patches are applied.
 
- > Drop tr_cv_libpcap_version and ac_cv_have_bpf; unused in current
- > configure script.
+The last patch was removed with git commit
+de993bc23aab100e16026cb4cabebed48b9e1989 but the AUTORECONF line remained.
 
- > Make configure script use pcap-config to list library dependencies.
- > Unfortunately, pcap-config is not entirely correct, so we still need to
- > set the LIBS variable for static linking.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4219c58c386fdd351eb75185fa851addd63a75ed)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xenomai/xenomai.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
- > Use the smaller tar.xz archive.
-
- > Add license file hash.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 6bf08edfbc..d88e969adb 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -24,8 +24,6 @@ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
+ 
+ XENOMAI_DEPENDENCIES = host-pkgconf
+ 
+-# 0002-boilerplate-build-obstack-support-conditionally.patch
+-XENOMAI_AUTORECONF = YES
+ 
+ XENOMAI_INSTALL_STAGING = YES
+ XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
