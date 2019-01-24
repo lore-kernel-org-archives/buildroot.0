@@ -1,233 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 21:54:39 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: add
- upstream fix for CVE-2018-16864
-Message-ID: <20190124214757.177C08E69C@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 24 Jan 2019 23:00:14 +0100
+Subject: [Buildroot] [PATCH 2/2] package/gdb/8.2.1: fix gdb build with musl
+ and kernel headers
+In-Reply-To: <20190124220014.10707-1-romain.naour@gmail.com>
+References: <20190124220014.10707-1-romain.naour@gmail.com>
+Message-ID: <20190124220014.10707-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3c6598dc7d3247b37b48a385f4fc06a9360f7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+As reported by toolchain builder [1], gdb 8.2.1 doesn't build with musl
+toolchains on aarch64.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1d7031b31e8cbf855981c1b4993a2f0567cc6c27)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Backport an upstream patch [2].
+
+Keep gdb 8.2.x disable for aarch64 with musl toolchain since it require
+kernel headers > 5.0. We can enable this gdb version as soon as we have
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0 symbol in Buildroot.
+
+[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356393
+[2] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=51b4f73a37c2e7eec31e932fc3c8dae879735f63
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...-not-store-the-iovec-entry-for-process-co.patch | 205 +++++++++++++++++++++
- 1 file changed, 205 insertions(+)
+ ...-AArch64-Fix-the-gdb-build-with-musl-libc.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/gdb/8.2.1/0006-AArch64-Fix-the-gdb-build-with-musl-libc.patch
 
-diff --git a/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch b/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch
+diff --git a/package/gdb/8.2.1/0006-AArch64-Fix-the-gdb-build-with-musl-libc.patch b/package/gdb/8.2.1/0006-AArch64-Fix-the-gdb-build-with-musl-libc.patch
 new file mode 100644
-index 0000000000..dbf9bb51c3
+index 0000000000..d90750f849
 --- /dev/null
-+++ b/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch
-@@ -0,0 +1,205 @@
-+From 084eeb865ca63887098e0945fb4e93c852b91b0f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-+Date: Wed, 5 Dec 2018 18:38:39 +0100
-+Subject: [PATCH] journald: do not store the iovec entry for process
-+ commandline on stack
++++ b/package/gdb/8.2.1/0006-AArch64-Fix-the-gdb-build-with-musl-libc.patch
+@@ -0,0 +1,52 @@
++From dc3493a11c987edc1c85d9bd7f2242b5bffb7430 Mon Sep 17 00:00:00 2001
++From: Szabolcs Nagy <szabolcs.nagy@arm.com>
++Date: Thu, 13 Dec 2018 17:47:17 +0000
++Subject: [PATCH] AArch64: Fix the gdb build with musl libc
 +
-+This fixes a crash where we would read the commandline, whose length is under
-+control of the sending program, and then crash when trying to create a stack
-+allocation for it.
++Including asm/sigcontext.h together with libc headers is not valid. In
++general linux headers may not work with libc headers, so mixing them
++should be avoided, especially when the linux header defines types that
++are also exposed in libc headers.
 +
-+CVE-2018-16864
-+https://bugzilla.redhat.com/show_bug.cgi?id=1653855
++In case of asm/sigcontext.h glibc happens to work because glibc signal.h
++directly includes it, but e.g. in musl libc signal.h replicates the
++sigcontext.h definitions in an abi compatible way which are in conflict
++with the linux definitions when both headers are included.
 +
-+The message actually doesn't get written to disk, because
-+journal_file_append_entry() returns -E2BIG.
++Since old linux headers or old libc headers may not have the necessary
++definitions, gdb has to replicate the definitions it relies on anyway.
++Which is fine since all definitions must be ABI stable. For linux apis
++that are not available via libc headers, replicating the definitions in
++gdb is the most reliable way to use them.
 +
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+084eeb865ca63887098e0945fb4e93c852b91b0f]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Note: asm/ptrace.h includes asm/sigcontext.h in some versions of linux
++headers, which is just as problematic and should be fixed in linux.
++
++gdb/ChangeLog:
++
++	* nat/aarch64-sve-linux-ptrace.h: Include signal.h instead of
++	asm/sigcontext.h.
++
++[Romain: backport to 8.2 from upstream commit
++  51b4f73a37c2e7eec31e932fc3c8dae879735f63]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ src/basic/io-util.c           | 10 ++++++++++
-+ src/basic/io-util.h           |  2 ++
-+ src/coredump/coredump.c       | 31 +++++++++++--------------------
-+ src/journal/journald-server.c | 25 +++++++++++++++----------
-+ 4 files changed, 38 insertions(+), 30 deletions(-)
++ gdb/nat/aarch64-sve-linux-ptrace.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/basic/io-util.c b/src/basic/io-util.c
-+index 1f64cc9..575398f 100644
-+--- a/src/basic/io-util.c
-++++ b/src/basic/io-util.c
-+@@ -8,6 +8,7 @@
-+ #include <unistd.h>
++diff --git a/gdb/nat/aarch64-sve-linux-ptrace.h b/gdb/nat/aarch64-sve-linux-ptrace.h
++index 029e753ffe8..172ae39432f 100644
++--- a/gdb/nat/aarch64-sve-linux-ptrace.h
+++++ b/gdb/nat/aarch64-sve-linux-ptrace.h
++@@ -20,7 +20,7 @@
++ #ifndef AARCH64_SVE_LINUX_PTRACE_H
++ #define AARCH64_SVE_LINUX_PTRACE_H
 + 
-+ #include "io-util.h"
-++#include "string-util.h"
-+ #include "time-util.h"
-+ 
-+ int flush_fd(int fd) {
-+@@ -252,3 +253,12 @@ ssize_t sparse_write(int fd, const void *p, size_t sz, size_t run_length) {
-+ 
-+         return q - (const uint8_t*) p;
-+ }
-++
-++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
-++        char *x;
-++
-++        x = strappend(field, value);
-++        if (x)
-++                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
-++        return x;
-++}
-+diff --git a/src/basic/io-util.h b/src/basic/io-util.h
-+index ed189b5..792a64a 100644
-+--- a/src/basic/io-util.h
-++++ b/src/basic/io-util.h
-+@@ -71,3 +71,5 @@ static inline bool FILE_SIZE_VALID_OR_INFINITY(uint64_t l) {
-+ #define IOVEC_MAKE(base, len) (struct iovec) IOVEC_INIT(base, len)
-+ #define IOVEC_INIT_STRING(string) IOVEC_INIT((char*) string, strlen(string))
-+ #define IOVEC_MAKE_STRING(string) (struct iovec) IOVEC_INIT_STRING(string)
-++
-++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value);
-+diff --git a/src/coredump/coredump.c b/src/coredump/coredump.c
-+index 20c1fb0..db2cf64 100644
-+--- a/src/coredump/coredump.c
-++++ b/src/coredump/coredump.c
-+@@ -1063,19 +1063,10 @@ static int send_iovec(const struct iovec iovec[], size_t n_iovec, int input_fd)
-+         return 0;
-+ }
-+ 
-+-static char* set_iovec_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
-+-        char *x;
-+-
-+-        x = strappend(field, value);
-+-        if (x)
-+-                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
-+-        return x;
-+-}
-+-
-+ static char* set_iovec_field_free(struct iovec *iovec, size_t *n_iovec, const char *field, char *value) {
-+         char *x;
-+ 
-+-        x = set_iovec_field(iovec, n_iovec, field, value);
-++        x = set_iovec_string_field(iovec, n_iovec, field, value);
-+         free(value);
-+         return x;
-+ }
-+@@ -1125,36 +1116,36 @@ static int gather_pid_metadata(
-+                         disable_coredumps();
-+                 }
-+ 
-+-                set_iovec_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
-++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
-+         }
-+ 
-+         if (cg_pid_get_user_unit(pid, &t) >= 0)
-+                 set_iovec_field_free(iovec, n_iovec, "COREDUMP_USER_UNIT=", t);
-+ 
-+         /* The next few are mandatory */
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
-+                 return log_oom();
-+ 
-+-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
-++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
-+                 return log_oom();
-+ 
-+         if (context[CONTEXT_EXE] &&
-+-            !set_iovec_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
-++            !set_iovec_string_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
-+                 return log_oom();
-+ 
-+         if (sd_pid_get_session(pid, &t) >= 0)
-+@@ -1222,7 +1213,7 @@ static int gather_pid_metadata(
-+                 iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(t);
-+ 
-+         if (safe_atoi(context[CONTEXT_SIGNAL], &signo) >= 0 && SIGNAL_VALID(signo))
-+-                set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
-++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
-+ 
-+         return 0; /* we successfully acquired all metadata */
-+ }
-+diff --git a/src/journal/journald-server.c b/src/journal/journald-server.c
-+index f096725..2a960eb 100644
-+--- a/src/journal/journald-server.c
-++++ b/src/journal/journald-server.c
-+@@ -905,6 +905,7 @@ static void dispatch_message_real(
-+                 pid_t object_pid) {
-+ 
-+         char source_time[sizeof("_SOURCE_REALTIME_TIMESTAMP=") + DECIMAL_STR_MAX(usec_t)];
-++        _cleanup_free_ char *cmdline1 = NULL, *cmdline2 = NULL;
-+         uid_t journal_uid;
-+         ClientContext *o;
-+ 
-+@@ -921,20 +922,23 @@ static void dispatch_message_real(
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->uid, uid_t, uid_is_valid, UID_FMT, "_UID");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->gid, gid_t, gid_is_valid, GID_FMT, "_GID");
-+ 
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cmdline, "_CMDLINE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM"); /* At most TASK_COMM_LENGTH (16 bytes) */
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE"); /* A path, so at most PATH_MAX (4096 bytes) */
-+ 
-+-                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
-++                if (c->cmdline)
-++                        /* At most _SC_ARG_MAX (2MB usually), which is too much to put on stack.
-++                         * Let's use a heap allocation for this one. */
-++                        cmdline1 = set_iovec_string_field(iovec, &n, "_CMDLINE=", c->cmdline);
-+ 
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE"); /* Read from /proc/.../status */
-++                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "_AUDIT_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->loginuid, uid_t, uid_is_valid, UID_FMT, "_AUDIT_LOGINUID");
-+ 
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP"); /* A path */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->session, "_SYSTEMD_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->owner_uid, uid_t, uid_is_valid, UID_FMT, "_SYSTEMD_OWNER_UID");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT");
-++                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT"); /* Unit names are bounded by UNIT_NAME_MAX */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_unit, "_SYSTEMD_USER_UNIT");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->slice, "_SYSTEMD_SLICE");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_slice, "_SYSTEMD_USER_SLICE");
-+@@ -955,13 +959,14 @@ static void dispatch_message_real(
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->uid, uid_t, uid_is_valid, UID_FMT, "OBJECT_UID");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->gid, gid_t, gid_is_valid, GID_FMT, "OBJECT_GID");
-+ 
-++                /* See above for size limits, only ->cmdline may be large, so use a heap allocation for it. */
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, o->comm, "OBJECT_COMM");
-+                 IOVEC_ADD_STRING_FIELD(iovec, n, o->exe, "OBJECT_EXE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, o->cmdline, "OBJECT_CMDLINE");
-+-                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
-++                if (o->cmdline)
-++                        cmdline2 = set_iovec_string_field(iovec, &n, "OBJECT_CMDLINE=", o->cmdline);
-+ 
-++                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
-+                 IOVEC_ADD_SIZED_FIELD(iovec, n, o->label, o->label_size, "OBJECT_SELINUX_CONTEXT");
-+-
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "OBJECT_AUDIT_SESSION");
-+                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->loginuid, uid_t, uid_is_valid, UID_FMT, "OBJECT_AUDIT_LOGINUID");
-+ 
++-#include <asm/sigcontext.h>
+++#include <signal.h>
++ #include <sys/utsname.h>
++ #include <sys/ptrace.h>
++ #include <asm/ptrace.h>
 +-- 
-+2.7.4
++2.14.5
 +
+-- 
+2.14.5
