@@ -1,46 +1,42 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Thu, 24 Jan 2019 09:05:55 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.19
-Message-ID: <20190124080555.29907-1-martink@posteo.de>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 24 Jan 2019 00:16:33 -0800
+Subject: [Buildroot] [PATCH 1/1] go: security bump to 1.11.5
+Message-ID: <20190124081633.16600-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the curious, there's the short changelog summary:
-https://github.com/kergoth/tslib/releases
+Go 1.11.5 addresses a reported security issue, CVE-2019-6486.
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index a758702e74..cfe78765bc 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.18/tslib-1.18.tar.xz.sha256
--sha256  986cce6d8ed896c0eba68d78acd788c7860ffe8a2165a9f631954e7f2889958b  tslib-1.18.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
-+sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index f5c4cd7997..ccc2671c6a 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index ee1c881e6a..29891399c3 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	4cfd42720a6b1e79a8024895fa6607b69972e8e32446df76d6ce79801bbadb15  go1.11.4.src.tar.gz
++sha256	bc1ef02bb1668835db1390a2e478dcbccb5dd16911691af9d75184bbe5aa943e  go1.11.5.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 0d7b961dda..7755a3f785 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TSLIB_VERSION = 1.18
-+TSLIB_VERSION = 1.19
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+-GO_VERSION = 1.11.4
++GO_VERSION = 1.11.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-2.11.0
+2.19.2
