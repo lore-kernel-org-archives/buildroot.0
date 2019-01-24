@@ -1,59 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:00:39 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/python-django:
- security bump to version 2.1.5
-Message-ID: <20190124112119.497B88CA45@busybox.osuosl.org>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 24 Jan 2019 10:51:54 +0000
+Subject: [Buildroot] [PATCH] package/libmbim: bum to version 1.18.0
+Message-ID: <20190124105123.64140-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f6f5e28f56065c847ed8b9468eb84b3a83f6a62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
-
-Fixes CVE-2019-3498: Content spoofing possibility in the default 404 page
-
-For more details, see the announcement:
-https://www.djangoproject.com/weblog/2019/jan/04/security-releases/
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-[Peter: mention that bump fixes security issues]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 86d0ecf07615ff47a11ca6aa4d6aba908d6f359a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b6c85922a5..4b932ac907 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	3afc8bcec941e37221287f1a5323b1f1  Django-2.1.4.tar.gz
--sha256	068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7  Django-2.1.4.tar.gz
-+md5	9309c48c8b92503b8969a7603a97e2a1  Django-2.1.5.tar.gz
-+sha256	d6393918da830530a9516bbbcbf7f1214c3d733738779f06b0f649f49cc698c3  Django-2.1.5.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9ce74fbdc5..53e8f20e87 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 9364183080..9e8629f341 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  eb494fee2c200daf4f5cc8a40061d24a3dfafe8c59151c95c6a826fd96dcb262  libmbim-1.16.2.tar.xz
++sha256  6cf40128d83d087946a7d8577e735526202e034d52f90047735329609097b282  libmbim-1.18.0.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 9d74b108ca..748d215537 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 2.1.4
-+PYTHON_DJANGO_VERSION = 2.1.5
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/83/f7/4939b60c4127d5f49ccb570e34f4c59ecc222949220234a88e4f363f1456
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/7f/4c750e09b246621e5e90fa08f93dec1b991f5c203b0ff615d62a891c8f41
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-LIBMBIM_VERSION = 1.16.2
++LIBMBIM_VERSION = 1.18.0
+ LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-- 
+2.20.1
