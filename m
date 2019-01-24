@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:51:45 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] boot/barebox: change
+Date: Thu, 24 Jan 2019 16:51:20 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] boot/barebox: change
  download site to https
-Message-ID: <20190124155056.7C3638E2B5@busybox.osuosl.org>
+Message-ID: <20190124155101.560048E2B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7c0363e7eed279a04e06f15d4dc80c3c9f114c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e466b2767415cbd70d5f2ad5094787bd9627b9ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
