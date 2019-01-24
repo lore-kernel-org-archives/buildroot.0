@@ -1,43 +1,38 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 24 Jan 2019 10:52:46 +0000
-Subject: [Buildroot] [PATCH] package/mobile-broadband-provider-info: bump to
- version 20190116
-Message-ID: <20190124105223.64523-1-nicolas.serafini@sensefly.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 24 Jan 2019 10:54:10 -0200 (BRST)
+Subject: [Buildroot] [PATCH 1/2] syslog-ng: fix builds with static libc
+In-Reply-To: <CAFOYHZAUKvTXjxQfx6rRWrdJ-=uqhvmb04ZXR=bc7r+9FQZeqw@mail.gmail.com>
+References: <20190119071947.5472-1-judge.packham@gmail.com>
+ <CAFOYHZAUKvTXjxQfx6rRWrdJ-=uqhvmb04ZXR=bc7r+9FQZeqw@mail.gmail.com>
+Message-ID: <1721988266.3734002.1548334450658.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- .../mobile-broadband-provider-info.hash                     | 6 ++++--
- .../mobile-broadband-provider-info.mk                       | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+> From: "Chris Packham" <judge.packham@gmail.com>
+> To: "buildroot" <buildroot@buildroot.org>
+> Cc: "Carlos Santos" <casantos@datacom.com.br>
+> Sent: S?bado, 19 de janeiro de 2019 5:28:16
+> Subject: Re: [PATCH 1/2] syslog-ng: fix builds with static libc
 
-diff --git a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
-index 5ab2e318fe..632fc935a8 100644
---- a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
-+++ b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
-@@ -1,2 +1,4 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/20151214/mobile-broadband-provider-info-20151214.sha256sum
--sha256	8ae45d6f10fed9750e259935804c4f40a4372bb119f0504187e4221896b205a4	mobile-broadband-provider-info-20151214.tar.xz
-+# http://ftp.acc.umu.se/pub/GNOME/sources/mobile-broadband-provider-info/20190116/mobile-broadband-provider-info-20190116.sha256sum
-+sha256	2cba10f82b8e6aec46b871c1f7d20086ecc17e1168f18e588a6a37770fa3c59b  mobile-broadband-provider-info-20190116.tar.xz
-+# Locally computed
-+sha256	3d510b215a33087b9ceb9592da21575ea1f9f98bd4d983a38e65fe851a552174  COPYING
-diff --git a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
-index 1a68708d45..ed741f6fa2 100644
---- a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
-+++ b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20151214
-+MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20190116
- MOBILE_BROADBAND_PROVIDER_INFO_SITE = http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION)
- MOBILE_BROADBAND_PROVIDER_INFO_SOURCE = mobile-broadband-provider-info-$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION).tar.xz
- MOBILE_BROADBAND_PROVIDER_INFO_LICENSE = Public domain
+> On Sat, Jan 19, 2019 at 8:20 PM Chris Packham <judge.packham@gmail.com> wrote:
+>>
+>> Bring in an upstream patch to fix builds for targets which lack dlfcn.h.
+>>
+> 
+> Probably should have added
+> 
+> Fixes:
+> -
+> http://autobuild.buildroot.net/results/c0bca852e053cd0e021205b3a949e750ae602333/
+> 
+> Let me know if you want me to send a v2.
+
+Yes, please. I also believe that all files should be updated in a single
+patch, since the change in Config.in does not make sense without the other
+ones.
+
 -- 
-2.20.1
+Carlos Santos (Casantos) - DATACOM, P&D
