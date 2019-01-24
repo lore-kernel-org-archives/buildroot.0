@@ -1,50 +1,66 @@
-From: Juan A. Rubio <jarubio2001@gmail.com>
-Date: Thu, 24 Jan 2019 14:02:42 +0000
-Subject: [Buildroot] imx6 solo VPU support in Buildroot
-In-Reply-To: <CAOMZO5CNd=GbYaqr2ZB3ymL31tBoxF-nfwyu_HtLVxiCE2xKzw@mail.gmail.com>
-References: <CAE58QoON4RUMgNdtUjBQDpYrmUSqTzjTyxJ+3LGPa=V=Q8kTRw@mail.gmail.com>
- <CAOMZO5Aso5o=qeRWYcXoQfQb714APBi7ZgR3aszXgvxEmx8UJA@mail.gmail.com>
- <CAE58QoOdeCvOVNBVx=oWzYLgiO-R8A-S2zC1ZtR4-3wGbUVCJw@mail.gmail.com>
- <CAAMH-ytuk2w9Tj19TzrXyU4R1qCqS-=CfLRyGnicJw_dOYK=fQ@mail.gmail.com>
- <CAE58QoM4dqY37hHdoRctcXRg3bnK1RsVHg2g58AixyN-p2qT=g@mail.gmail.com>
- <CAE58QoP-N7wbKjAiZtLgdcVXrmJO6BhwQ0yNFihXyuLLk8MEpg@mail.gmail.com>
- <CAOMZO5CNd=GbYaqr2ZB3ymL31tBoxF-nfwyu_HtLVxiCE2xKzw@mail.gmail.com>
-Message-ID: <CAE58QoOAz-WuQ0OrzYRQe52YxTv1DbsQWG+Na5irW057ZDmFnQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 24 Jan 2019 09:01:56 -0600
+Subject: [Buildroot] [PATCH v2 1/1] fs/common.mk: enable multithreaded
+ xz compression
+In-Reply-To: <1548318453-25435-1-git-send-email-james.hilliard1@gmail.com>
+References: <1548318453-25435-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <CANQCQpbkzWAf=fomzWqqqcFmityJutDyqajq+5ZexJ-7SHuniA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks all,
+James,
 
-I did a rebuild of the gst1-plugins-bad package. After that, the
-h264parse element showed up on my BSP and with that, this pipeline now
-works like a charm:
 
-gst-launch-1.0 filesrc
-location=/opt/himalayas/videos_1860/alarms/AirFilterReplacement.mp4 !
-qtdemux ! h264parse ! imxvpudec ! imxeglvivsink
-
-Cheers,
-Juan
-
-On Thu, Jan 24, 2019 at 12:17 PM Fabio Estevam <festevam@gmail.com> wrote:
+On Thu, Jan 24, 2019 at 2:28 AM <james.hilliard1@gmail.com> wrote:
 >
-> Hi Juan,
+> From: James Hilliard <james.hilliard1@gmail.com>
 >
-> On Wed, Jan 23, 2019 at 2:15 PM Juan A. Rubio <jarubio2001@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > I'm still chasing the issue of hw-accelerated video playback on my
-> > imx6 solo custom board.
-> >
-> > I'm now using the IMX6Q platform in my Buildroot config but I have not
-> > switched to a mainline kernel, and I'm still using the nxp kernel
-> > (imx6dl-sabresd.dts device tree with a few modifications, none of them
-> > related to the VPU or GPU).
+> xz help indicates only 1 thread is used unless we set threads:
+> -T, --threads=NUM   use at most NUM threads; the default is 1; set to 0
+>                     to use as many threads as there are processor cores
 >
-> This defconfig from Boundary Devices shows the selection of the NXP
-> vendor Gstreamer packages and VPU libraries:
-> https://github.com/boundarydevices/buildroot-external-boundary/blob/cd0df015977533ea5d62c8de010267500aa88df9/configs/nitrogen6x_qt5_gst1_defconfig
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+> ---
+> Changes v1 -> v2:
+>   - use PARALLEL_JOBS to determine how many threads to compress with
+>   - disable multithreaded compression for reproducible builds
+> ---
+>  fs/common.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/fs/common.mk b/fs/common.mk
+> index a560417..76da6d8 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -106,7 +106,11 @@ endif
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+>  ROOTFS_$(2)_DEPENDENCIES += host-xz
+>  ROOTFS_$(2)_COMPRESS_EXT = .xz
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+>  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+> +else
+> +ROOTFS_$(2)_COMPRESS_CMD = xz -T $(PARALLEL_JOBS) -9 -C crc32 -c
+
+I double checked this logic below in package/Makefile.in for creating
+PARALLEL_JOBS still made sense for the use of the value above.
+
+# If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
+# CPUs. An additional job is used in order to keep processors busy
+# while waiting on I/O.
+# If the number of processors is not available, assume one.
+ifeq ($(BR2_JLEVEL),0)
+PARALLEL_JOBS := $(shell echo \
+        $$((1 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
+else
+PARALLEL_JOBS := $(BR2_JLEVEL)
+endif
+
+
+Matt
