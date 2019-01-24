@@ -1,52 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 19:55:52 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] gnupg2: bump to version
- 2.2.10
-Message-ID: <20190124190126.458268E62F@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 19:55:05 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libassuan: bump
+ to version 2.5.2
+Message-ID: <20190124190126.3DF038E62F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2681514abfd9a16c031d4f2b620472358a6d7e0
+commit: https://git.buildroot.net/buildroot/commit/?id=12edda7407b09e8c72ad730397fb32a6e10047b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bf8e55fd08fd1ed55efa3d32c91ae71e43350038)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b905370c098d1266acfae6fa9678ea40953aaa8b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 9 +++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libassuan/libassuan.hash | 7 ++++---
+ package/libassuan/libassuan.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f5890c5e2a..a367effcab 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,6 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
--sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q3/000428.html
-+sha1 3e87504e2ca317718aa9b6299947ebf7e906b54e  gnupg-2.2.10.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
--sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.10.tar.bz2.sig
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index 2e80cfa4e1..4878a692cf 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,7 +1,8 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
++sha1 fb66bc1e8971d48ac9dbacd1cdaf6487a3e77375  libassuan-2.5.2.tar.bz2
+ # Locally calculated after checking signature
+-# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
+-sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
++# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.2.tar.bz2.sig
 +# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
-+sha256 799dd37a86a1448732e339bd20440f4f5ee6e69755f6fd7a73ee8af30840c915  gnupg-2.2.10.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 3151860f37..64329522d5 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
++sha256 986b1bf277e375f7a960450fbb8ffbd45294d06598916ad4ebf79aee0cb788e7  libassuan-2.5.2.tar.bz2
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index e807086b73..18d0ad5b83 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.8
-+GNUPG2_VERSION = 2.2.10
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-LIBASSUAN_VERSION = 2.5.1
++LIBASSUAN_VERSION = 2.5.2
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
