@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:45:53 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libsquish: really
+Date: Thu, 24 Jan 2019 16:44:55 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libsquish: really
  install shared library
-Message-ID: <20190124154611.89B7C8E289@busybox.osuosl.org>
+Message-ID: <20190124154615.DEBD88E5E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02401f9ea16462f733de3d166ce077fc02d5fad1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7758db51e651068460bc1659a56bb3e18a57ae88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 While testing the new supertuxkart 0.10-beta1 version, the build
 failed due to missing libsquash shared library.
