@@ -1,39 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:46:57 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libsquash: really install
- shared library
-In-Reply-To: <20190112121024.27896-2-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 12 Jan 2019 13:10:24 +0100")
-References: <20190112121024.27896-1-romain.naour@gmail.com>
- <20190112121024.27896-2-romain.naour@gmail.com>
-Message-ID: <871s52f47i.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Jan 2019 16:45:48 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libsquish: add
+ license file hash
+Message-ID: <20190124154611.83717815D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bf376e8b6016fd8c586adcc00d9ad4a0b417e49d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > While testing the new supertuxkart 0.10-beta1 version, the build failed
- > due to missing libsquash shared library.
- > Indeed, by default (see config file) the shared library is not build
- > and all symlinks created by LIBSQUISH_INSTALL_{STAGING,TARGET}_CMDS are
- > curently broken.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9b377e9dcfbad9025cfcc87d95735a61bd8722ca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsquish/libsquish.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > To fix that, add USE_SHARED=1 to LIBSQUISH_MAKE_ENV.
-
- > Also add a patch to allow reinstall the package.
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > There is a new CMakeFiles.txt but it doesn't install libsquish.pc file.
-
- > @Peter: This patch should be backported to all stable version
- > (i.e since the bump to 1.15, commit 374e39df819598a0049a9c485ce5b2adbe2c90a1)
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsquish/libsquish.hash b/package/libsquish/libsquish.hash
+index e68d28d66f..06c96e977b 100644
+--- a/package/libsquish/libsquish.hash
++++ b/package/libsquish/libsquish.hash
+@@ -1,3 +1,5 @@
+ # From http://sourceforge.net/projects/libsquish/files
+ sha1 51844b9a8bc815a27e2cc0ffbede5fee3ef75110 libsquish-1.15.tgz
+ md5 c02645800131e55b519ff8dbe7284f93 libsquish-1.15.tgz
++# Locally calculated
++sha256 a6b8c383bf3ab28460d6507484d605dd722e03971606f0cd3032a3af682b63a5  LICENSE.txt
