@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 12:36:37 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] xenomai: remove
+Date: Thu, 24 Jan 2019 12:36:46 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] xenomai: remove
  unnecessary autoreconf
-Message-ID: <20190124113550.F19898E243@busybox.osuosl.org>
+Message-ID: <20190124113558.BEEBD8E56D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17bde9466a78bebcf6fb5ca6495bc98912c325a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3a4bf18f35dd9930783ecb57dd0956f1a707fdda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 As xenomai release tarballs ship with a configure script, there is only a
 need for autoreconfiguring when patches are applied.
