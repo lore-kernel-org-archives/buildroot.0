@@ -1,35 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 16:51:20 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] boot/barebox: change
- download site to https
-Message-ID: <20190124155101.560048E2B5@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 16:52:06 +0100
+Subject: [Buildroot] [PATCH v1 2/2] barebox: change download site to
+ https
+In-Reply-To: <20190111215235.23315-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 11 Jan 2019 22:52:35 +0100")
+References: <20190111215235.23315-1-ps.report@gmx.net>
+ <20190111215235.23315-2-ps.report@gmx.net>
+Message-ID: <87o986dpeh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e466b2767415cbd70d5f2ad5094787bd9627b9ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2cf068864708285c6bc7cffffc38be17aa376c49)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/barebox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index b811e322b5..9e8a9f67b5 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -28,7 +28,7 @@ $(1)_SITE_METHOD = git
- else
- # Handle stable official Barebox versions
- $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
--$(1)_SITE = http://www.barebox.org/download
-+$(1)_SITE = https://www.barebox.org/download
- endif
- 
- $(1)_DEPENDENCIES = host-lzop
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
