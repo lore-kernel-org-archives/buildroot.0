@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 11:12:51 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x]
+Date: Thu, 24 Jan 2019 11:12:34 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x]
  package/lua-msgpack-native: adjust Config.in comment
-Message-ID: <20190124101252.4E3818E313@busybox.osuosl.org>
+Message-ID: <20190124101259.5B2888E312@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39d4c7c4a48c8f79961e76d5d955a7c6ff5a6769
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=446ba17e9512bd0ea84272b764acd1427766627b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The Config.in comment of lua-msgpack-native only indicates that it
 needs Lua 5.1, while the package can actually build with LuaJIT. This
