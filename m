@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 11:54:59 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libhttpparser:
+Date: Thu, 24 Jan 2019 11:53:39 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libhttpparser:
  bump version to v2.9.0
-Message-ID: <20190124105511.49DF88E4B0@busybox.osuosl.org>
+Message-ID: <20190124105516.054E68E4B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=198c799595b1357917b2e7f7563878c7bd707bd0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e8b60ec4daf70c0a4a80906ab97adc9996719613
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Needed by nodejs v8.15.0+
 
@@ -32,7 +32,7 @@ index acbf3787f9..b7df9ca602 100644
 +sha256 ef26268c54c8084d17654ba2ed5140bffeffd2a040a895ffb22a6cca3f6c613f  libhttpparser-v2.9.0.tar.gz
  sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
 diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index c71e043cdc..068d697dd9 100644
+index 502ab75b88..8c0afe2807 100644
 --- a/package/libhttpparser/libhttpparser.mk
 +++ b/package/libhttpparser/libhttpparser.mk
 @@ -4,7 +4,7 @@
