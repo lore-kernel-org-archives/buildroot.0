@@ -1,91 +1,233 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 21:54:18 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: fix
- build on toolchain without C++
-Message-ID: <20190124214757.06F108E667@busybox.osuosl.org>
+Date: Thu, 24 Jan 2019 21:54:39 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: add
+ upstream fix for CVE-2018-16864
+Message-ID: <20190124214757.177C08E69C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=326635afec4169bb5b02ab694fd0facd46bc51d1
+commit: https://git.buildroot.net/buildroot/commit/?id=4a3c6598dc7d3247b37b48a385f4fc06a9360f7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-This is a backport from upstream.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5ae9157af6b8a0a134cb54f44dea3fbb3a3f3481)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1d7031b31e8cbf855981c1b4993a2f0567cc6c27)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-use-cross-compilation-compatible-c-check.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ ...-not-store-the-iovec-entry-for-process-co.patch | 205 +++++++++++++++++++++
+ 1 file changed, 205 insertions(+)
 
-diff --git a/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
+diff --git a/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch b/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch
 new file mode 100644
-index 0000000000..70d816fae2
+index 0000000000..dbf9bb51c3
 --- /dev/null
-+++ b/package/systemd/0003-meson-use-cross-compilation-compatible-c-check.patch
-@@ -0,0 +1,60 @@
-+From 180a940333c84495015bd5b24d41c1dbfff509f2 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 27 Dec 2018 09:16:20 +0800
-+Subject: [PATCH] meson: use cross compilation compatible c++ check
++++ b/package/systemd/0009-journald-do-not-store-the-iovec-entry-for-process-co.patch
+@@ -0,0 +1,205 @@
++From 084eeb865ca63887098e0945fb4e93c852b91b0f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
++Date: Wed, 5 Dec 2018 18:38:39 +0100
++Subject: [PATCH] journald: do not store the iovec entry for process
++ commandline on stack
++
++This fixes a crash where we would read the commandline, whose length is under
++control of the sending program, and then crash when trying to create a stack
++allocation for it.
++
++CVE-2018-16864
++https://bugzilla.redhat.com/show_bug.cgi?id=1653855
++
++The message actually doesn't get written to disk, because
++journal_file_append_entry() returns -E2BIG.
 +
 +[james.hilliard1 at gmail.com: backport from upstream commit
-+46e63a2a3ed46ce97430ce38e4cc0798c57900eb]
++084eeb865ca63887098e0945fb4e93c852b91b0f]
 +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 +---
-+ meson.build             | 4 +---
-+ src/systemd/meson.build | 3 +--
-+ src/test/meson.build    | 2 +-
-+ 3 files changed, 3 insertions(+), 6 deletions(-)
++ src/basic/io-util.c           | 10 ++++++++++
++ src/basic/io-util.h           |  2 ++
++ src/coredump/coredump.c       | 31 +++++++++++--------------------
++ src/journal/journald-server.c | 25 +++++++++++++++----------
++ 4 files changed, 38 insertions(+), 30 deletions(-)
 +
-+diff --git a/meson.build b/meson.build
-+index b338886..1964b1a 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -287,10 +287,8 @@ want_tests = get_option('tests')
-+ slow_tests = want_tests != 'false' and get_option('slow-tests')
-+ install_tests = get_option('install-tests')
++diff --git a/src/basic/io-util.c b/src/basic/io-util.c
++index 1f64cc9..575398f 100644
++--- a/src/basic/io-util.c
+++++ b/src/basic/io-util.c
++@@ -8,6 +8,7 @@
++ #include <unistd.h>
 + 
-+-cxx = find_program('c++', required : fuzzer_build)
-+-if cxx.found()
-++if add_languages('cpp', required : fuzzer_build)
-+         #  Used only for tests
-+-        add_languages('cpp')
-+         cxx_cmd = ' '.join(meson.get_compiler('cpp').cmd_array())
-+ else
-+         cxx_cmd = ''
-+diff --git a/src/systemd/meson.build b/src/systemd/meson.build
-+index e0c967e..75c48b0 100644
-+--- a/src/systemd/meson.build
-++++ b/src/systemd/meson.build
-+@@ -52,8 +52,7 @@ if cc.has_argument('-std=iso9899:2017')
-+         opts += [['c', '-std=iso9899:2017']]
-+ endif
++ #include "io-util.h"
+++#include "string-util.h"
++ #include "time-util.h"
 + 
-+-cxx = find_program('c++', required : false)
-+-if cxx.found()
-++if add_languages('cpp', required : false)
-+         opts += [['c++'],
-+                  ['c++', '-std=c++98'],
-+                  ['c++', '-std=c++11']]
-+diff --git a/src/test/meson.build b/src/test/meson.build
-+index ea049a6..d9d87e0 100644
-+--- a/src/test/meson.build
-++++ b/src/test/meson.build
-+@@ -957,7 +957,7 @@ tests += [
++ int flush_fd(int fd) {
++@@ -252,3 +253,12 @@ ssize_t sparse_write(int fd, const void *p, size_t sz, size_t run_length) {
 + 
-+ ]
++         return q - (const uint8_t*) p;
++ }
+++
+++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
+++        char *x;
+++
+++        x = strappend(field, value);
+++        if (x)
+++                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
+++        return x;
+++}
++diff --git a/src/basic/io-util.h b/src/basic/io-util.h
++index ed189b5..792a64a 100644
++--- a/src/basic/io-util.h
+++++ b/src/basic/io-util.h
++@@ -71,3 +71,5 @@ static inline bool FILE_SIZE_VALID_OR_INFINITY(uint64_t l) {
++ #define IOVEC_MAKE(base, len) (struct iovec) IOVEC_INIT(base, len)
++ #define IOVEC_INIT_STRING(string) IOVEC_INIT((char*) string, strlen(string))
++ #define IOVEC_MAKE_STRING(string) (struct iovec) IOVEC_INIT_STRING(string)
+++
+++char* set_iovec_string_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value);
++diff --git a/src/coredump/coredump.c b/src/coredump/coredump.c
++index 20c1fb0..db2cf64 100644
++--- a/src/coredump/coredump.c
+++++ b/src/coredump/coredump.c
++@@ -1063,19 +1063,10 @@ static int send_iovec(const struct iovec iovec[], size_t n_iovec, int input_fd)
++         return 0;
++ }
 + 
-+-if cxx.found()
-++if cxx_cmd != ''
-+         tests += [
-+                 [['src/libsystemd/sd-bus/test-bus-vtable-cc.cc'],
-+                  [],
++-static char* set_iovec_field(struct iovec *iovec, size_t *n_iovec, const char *field, const char *value) {
++-        char *x;
++-
++-        x = strappend(field, value);
++-        if (x)
++-                iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(x);
++-        return x;
++-}
++-
++ static char* set_iovec_field_free(struct iovec *iovec, size_t *n_iovec, const char *field, char *value) {
++         char *x;
++ 
++-        x = set_iovec_field(iovec, n_iovec, field, value);
+++        x = set_iovec_string_field(iovec, n_iovec, field, value);
++         free(value);
++         return x;
++ }
++@@ -1125,36 +1116,36 @@ static int gather_pid_metadata(
++                         disable_coredumps();
++                 }
++ 
++-                set_iovec_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
+++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_UNIT=", context[CONTEXT_UNIT]);
++         }
++ 
++         if (cg_pid_get_user_unit(pid, &t) >= 0)
++                 set_iovec_field_free(iovec, n_iovec, "COREDUMP_USER_UNIT=", t);
++ 
++         /* The next few are mandatory */
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_PID=", context[CONTEXT_PID]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_UID=", context[CONTEXT_UID]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_GID=", context[CONTEXT_GID]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL=", context[CONTEXT_SIGNAL]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_RLIMIT=", context[CONTEXT_RLIMIT]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_HOSTNAME=", context[CONTEXT_HOSTNAME]))
++                 return log_oom();
++ 
++-        if (!set_iovec_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
+++        if (!set_iovec_string_field(iovec, n_iovec, "COREDUMP_COMM=", context[CONTEXT_COMM]))
++                 return log_oom();
++ 
++         if (context[CONTEXT_EXE] &&
++-            !set_iovec_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
+++            !set_iovec_string_field(iovec, n_iovec, "COREDUMP_EXE=", context[CONTEXT_EXE]))
++                 return log_oom();
++ 
++         if (sd_pid_get_session(pid, &t) >= 0)
++@@ -1222,7 +1213,7 @@ static int gather_pid_metadata(
++                 iovec[(*n_iovec)++] = IOVEC_MAKE_STRING(t);
++ 
++         if (safe_atoi(context[CONTEXT_SIGNAL], &signo) >= 0 && SIGNAL_VALID(signo))
++-                set_iovec_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
+++                set_iovec_string_field(iovec, n_iovec, "COREDUMP_SIGNAL_NAME=SIG", signal_to_string(signo));
++ 
++         return 0; /* we successfully acquired all metadata */
++ }
++diff --git a/src/journal/journald-server.c b/src/journal/journald-server.c
++index f096725..2a960eb 100644
++--- a/src/journal/journald-server.c
+++++ b/src/journal/journald-server.c
++@@ -905,6 +905,7 @@ static void dispatch_message_real(
++                 pid_t object_pid) {
++ 
++         char source_time[sizeof("_SOURCE_REALTIME_TIMESTAMP=") + DECIMAL_STR_MAX(usec_t)];
+++        _cleanup_free_ char *cmdline1 = NULL, *cmdline2 = NULL;
++         uid_t journal_uid;
++         ClientContext *o;
++ 
++@@ -921,20 +922,23 @@ static void dispatch_message_real(
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->uid, uid_t, uid_is_valid, UID_FMT, "_UID");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->gid, gid_t, gid_is_valid, GID_FMT, "_GID");
++ 
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cmdline, "_CMDLINE");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE");
+++                IOVEC_ADD_STRING_FIELD(iovec, n, c->comm, "_COMM"); /* At most TASK_COMM_LENGTH (16 bytes) */
+++                IOVEC_ADD_STRING_FIELD(iovec, n, c->exe, "_EXE"); /* A path, so at most PATH_MAX (4096 bytes) */
++ 
++-                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
+++                if (c->cmdline)
+++                        /* At most _SC_ARG_MAX (2MB usually), which is too much to put on stack.
+++                         * Let's use a heap allocation for this one. */
+++                        cmdline1 = set_iovec_string_field(iovec, &n, "_CMDLINE=", c->cmdline);
++ 
+++                IOVEC_ADD_STRING_FIELD(iovec, n, c->capeff, "_CAP_EFFECTIVE"); /* Read from /proc/.../status */
+++                IOVEC_ADD_SIZED_FIELD(iovec, n, c->label, c->label_size, "_SELINUX_CONTEXT");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "_AUDIT_SESSION");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->loginuid, uid_t, uid_is_valid, UID_FMT, "_AUDIT_LOGINUID");
++ 
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP");
+++                IOVEC_ADD_STRING_FIELD(iovec, n, c->cgroup, "_SYSTEMD_CGROUP"); /* A path */
++                 IOVEC_ADD_STRING_FIELD(iovec, n, c->session, "_SYSTEMD_SESSION");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, c->owner_uid, uid_t, uid_is_valid, UID_FMT, "_SYSTEMD_OWNER_UID");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT");
+++                IOVEC_ADD_STRING_FIELD(iovec, n, c->unit, "_SYSTEMD_UNIT"); /* Unit names are bounded by UNIT_NAME_MAX */
++                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_unit, "_SYSTEMD_USER_UNIT");
++                 IOVEC_ADD_STRING_FIELD(iovec, n, c->slice, "_SYSTEMD_SLICE");
++                 IOVEC_ADD_STRING_FIELD(iovec, n, c->user_slice, "_SYSTEMD_USER_SLICE");
++@@ -955,13 +959,14 @@ static void dispatch_message_real(
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->uid, uid_t, uid_is_valid, UID_FMT, "OBJECT_UID");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->gid, gid_t, gid_is_valid, GID_FMT, "OBJECT_GID");
++ 
+++                /* See above for size limits, only ->cmdline may be large, so use a heap allocation for it. */
++                 IOVEC_ADD_STRING_FIELD(iovec, n, o->comm, "OBJECT_COMM");
++                 IOVEC_ADD_STRING_FIELD(iovec, n, o->exe, "OBJECT_EXE");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, o->cmdline, "OBJECT_CMDLINE");
++-                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
+++                if (o->cmdline)
+++                        cmdline2 = set_iovec_string_field(iovec, &n, "OBJECT_CMDLINE=", o->cmdline);
++ 
+++                IOVEC_ADD_STRING_FIELD(iovec, n, o->capeff, "OBJECT_CAP_EFFECTIVE");
++                 IOVEC_ADD_SIZED_FIELD(iovec, n, o->label, o->label_size, "OBJECT_SELINUX_CONTEXT");
++-
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->auditid, uint32_t, audit_session_is_valid, "%" PRIu32, "OBJECT_AUDIT_SESSION");
++                 IOVEC_ADD_NUMERIC_FIELD(iovec, n, o->loginuid, uid_t, uid_is_valid, UID_FMT, "OBJECT_AUDIT_LOGINUID");
++ 
 +-- 
 +2.7.4
 +
