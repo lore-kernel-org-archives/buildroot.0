@@ -1,82 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Jan 2019 10:38:20 +0100
-Subject: [Buildroot] [git commit] libkcapi: fix build with gcc 8.2.x
-Message-ID: <20190124094754.42FC789049@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 24 Jan 2019 11:07:17 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: fix static build issue
+Message-ID: <20190124100717.12620-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c35c287bcadd88dba939cdddf865d94d45454bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The spotify plugin requires shared library support and needs <dlfcn.h>.
+Explicitly disable the spotify plugin when building upmpdcli in a static
+context.
 
 Fixes:
- - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
+http://autobuild.buildroot.net/results/cb942d3c5f68959d6cbc85535ccff4a275369f91/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...s-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ package/upmpdcli/upmpdcli.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-new file mode 100644
-index 0000000000..a4c352d30c
---- /dev/null
-+++ b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-@@ -0,0 +1,54 @@
-+From dcb02c1639c2ff05938c01eaa41286a2e2f8d698 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 20 Jan 2019 20:04:13 +0100
-+Subject: [PATCH] apps/kcapi-hasher.c: fix build with gcc 8.2.x
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index d88caac78b..22a5bf2429 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -10,6 +10,11 @@ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
+ UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+ 
++# Disable spotify plugin which requires dlfcn.h
++ifeq ($(BR2_STATIC_LIBS),y)
++UPMPDCLI_CONF_OPTS = --disable-spotify
++endif
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/smuellerDD/libkcapi/pull/76]
-+---
-+ apps/kcapi-hasher.c | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/apps/kcapi-hasher.c b/apps/kcapi-hasher.c
-+index d6be685..7172b12 100644
-+--- a/apps/kcapi-hasher.c
-++++ b/apps/kcapi-hasher.c
-+@@ -357,16 +357,20 @@ out:
-+ }
-+ 
-+ /*
-+- * GCC v8.1.0 introduced -Wstringop-truncation but it is not smart enough to
-+- * find that cursor string will be NULL-terminated after all paste() calls and
-+- * warns with:
-++ * GCC v8.1.0 introduced -Wstringop-truncation and GCC v8.2.0 introduced
-++ * -Wstringop-overflow but it is not smart enough to find that cursor string
-++ * will be NULL-terminated after all paste() calls and warns with:
-+  * error: 'strncpy' destination unchanged after copying no bytes [-Werror=stringop-truncation]
-+  * error: 'strncpy' output truncated before terminating nul copying 5 bytes from a string of the same length [-Werror=stringop-truncation]
-++ * error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
-+  */
-+ #pragma GCC diagnostic push
-+ #if GCC_VERSION >= 80100
-+ #pragma GCC diagnostic ignored "-Wstringop-truncation"
-+ #endif
-++#if GCC_VERSION >= 80200
-++#pragma GCC diagnostic ignored "-Wstringop-overflow"
-++#endif
-+ static char *paste(char *dst, const char *src, size_t size)
-+ {
-+ 	strncpy(dst, src, size);
-+@@ -417,7 +421,7 @@ static char *get_hmac_file(const char *filename, const char *checkdir)
-+ 	strncpy(cursor, "\0", 1);
-+ 	return checkfile;
-+ }
-+-#pragma GCC diagnostic pop /* -Wstringop-truncation */
-++#pragma GCC diagnostic pop /* -Wstringop-truncation -Wstringop-overflow */
-+ 
-+ static int hash_files(const struct hash_params *params,
-+ 		      char *filenames[], uint32_t files,
-+-- 
-+2.14.1
-+
+ # Upmpdcli only runs if user upmpdcli exists
+ define UPMPDCLI_USERS
+ 	upmpdcli -1 upmpdcli -1 * - - audio Upmpdcli MPD UPnP Renderer Front-End
+-- 
+2.20.1
