@@ -1,88 +1,63 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 24 Jan 2019 10:53:47 +0000
-Subject: [Buildroot] [PATCH] package/ofono: bump to version 1.28
-Message-ID: <20190124105327.65069-1-nicolas.serafini@sensefly.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Jan 2019 12:26:30 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] Makefile, manual,
+ website: Bump copyright year
+Message-ID: <20190124112542.CDAB68E395@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix musl TEMP_FAILURE_RETRY error
+commit: https://git.buildroot.net/buildroot/commit/?id=208610dbef9f1476d14c4c0e41462ac04f73b354
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Happy 2019!
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8e928a8389d88e0f64f04ee1b3aa4985dcfd373f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ofono/0002-fix-musl-compile.patch | 37 +++++++++++++++++++++++
- package/ofono/ofono.hash                  |  4 ++-
- package/ofono/ofono.mk                    |  2 +-
- 3 files changed, 41 insertions(+), 2 deletions(-)
- create mode 100644 package/ofono/0002-fix-musl-compile.patch
+ Makefile                   | 2 +-
+ docs/manual/manual.txt     | 2 +-
+ docs/website/copyright.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ofono/0002-fix-musl-compile.patch b/package/ofono/0002-fix-musl-compile.patch
-new file mode 100644
-index 0000000000..369fb71791
---- /dev/null
-+++ b/package/ofono/0002-fix-musl-compile.patch
-@@ -0,0 +1,37 @@
-+From 4a1d114fa3a5d6bef1f71222787c1f6c3a952284 Mon Sep 17 00:00:00 2001
-+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-+Date: Thu, 24 Jan 2019 10:11:42 +0100
-+Subject: [PATCH] mbim: add optional copy of TEMP_FAILURE_RETRY macro (fix musl
-+ compile)
-+
-+TEMP_FAILURE_RETRY is not available on musl.
-+
-+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-+---
-+ drivers/mbimmodem/mbim.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/drivers/mbimmodem/mbim.c b/drivers/mbimmodem/mbim.c
-+index 54b18acf..4b040528 100644
-+--- a/drivers/mbimmodem/mbim.c
-++++ b/drivers/mbimmodem/mbim.c
-+@@ -37,6 +37,16 @@
-+ #include "mbim-message.h"
-+ #include "mbim-private.h"
-+ 
-++/* taken from glibc unistd.h for musl support */
-++#ifndef TEMP_FAILURE_RETRY
-++#define TEMP_FAILURE_RETRY(expression)             \
-++  (__extension__                                   \
-++    ({ long int __result;                          \
-++       do __result = (long int) (expression);      \
-++       while (__result == -1L && errno == EINTR);  \
-++       __result; }))
-++#endif
-++
-+ #define MAX_CONTROL_TRANSFER 4096
-+ #define HEADER_SIZE (sizeof(struct mbim_message_header) + \
-+ 					sizeof(struct mbim_fragment_header))
-+-- 
-+2.20.1
-+
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 37933f126b..2dbb9986c7 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 a6b021cda0b444b772897cd637d5f455857fb5819b62c279a8302b44f9c7f2c3  ofono-1.21.tar.xz
-+sha256 93bb2cedef54f897dd5200e22b072a6e38b5d9b44be57eebbbe8d513f0beb0e4	ofono-1.28.tar.xz
-+# Locally computed
-+sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index b4b7915a30..0552a181fd 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
+diff --git a/Makefile b/Makefile
+index c3695300b0..03ea4ffd9e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
  #
- ################################################################################
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2018 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2019 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 9d5076047f..4eb4ba9bf0 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
+ file in the Buildroot sources for the full text of this license.
  
--OFONO_VERSION = 1.21
-+OFONO_VERSION = 1.28
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
--- 
-2.20.1
+-Copyright (C) 2004-2018 The Buildroot developers
++Copyright (C) 2004-2019 The Buildroot developers
+ 
+ image::logo.png[]
+ 
+diff --git a/docs/website/copyright.txt b/docs/website/copyright.txt
+index b8ad36af99..600bf7df77 100644
+--- a/docs/website/copyright.txt
++++ b/docs/website/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2018 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2019 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
