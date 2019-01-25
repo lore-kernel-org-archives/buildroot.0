@@ -1,70 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Jan 2019 23:59:55 +0100
-Subject: [Buildroot] Fwd: Unsafe Headers
-In-Reply-To: <CAAOxJQQYvcTFHoXTosuDqFB_XuLejNPe-4My1YkPMJj0-cS9vw@mail.gmail.com>
-References: <CAAOxJQT0dUAvax=feyRUmEM7kFyd5ftSgX_8nfn1P_8NoH+Gkg@mail.gmail.com>
- <CAAOxJQQYvcTFHoXTosuDqFB_XuLejNPe-4My1YkPMJj0-cS9vw@mail.gmail.com>
-Message-ID: <a2faa708-60de-2a0a-6603-e4fe1a73812f@mind.be>
+Date: Sat, 26 Jan 2019 00:27:23 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
+In-Reply-To: <87tvhzht8v.fsf@dell.be.48ers.dk>
+References: <20190115224239.26125-1-ps.report@gmx.net>
+ <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
+ <20190117194339.5cb2eb0f@gmx.net>
+ <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
+ <877eewo0wr.fsf@dell.be.48ers.dk>
+ <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
+ <87sgxjjqo1.fsf@dell.be.48ers.dk>
+ <e09d9674-3ee7-7d9f-5579-063e44691582@mind.be>
+ <87tvhzht8v.fsf@dell.be.48ers.dk>
+Message-ID: <114d45f6-efb2-e5a4-0ea8-5ca32a0c15fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Igor,
 
- Please avoid sending HTML mails.
 
-On 24/01/2019 14:06, Igor Miranda wrote:
+On 24/01/2019 00:03, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
-> ---------- Forwarded message ---------
-> From: *Igor Miranda* <igorcmiranda3110@gmail.com
-> <mailto:igorcmiranda3110@gmail.com>>
-> Date: qui, 24 de jan de 2019 08:05
-> Subject: Unsafe Headers
-> To: <aduskett at gmail.com <mailto:aduskett@gmail.com>>
+> Hi,
 > 
+>  >> >  Both, I guess. Also that the whole known world (including Debian stable,
+>  >> > released June 2017) has already switched to 1.1.x.
+>  >> 
+>  >> With 1.1.x I take it you mean 1.1.0, right? The 1.1.1 series (strange
+>  >> numbering convention) was only released back in September.
 > 
-> *Dear Adam,*
-> *
-> *
-> *I'm writing this email because I did a recipe for the GST-SHARK and I got this
-> error:*
-[snip]
-> libtool: install: (cd
-> /home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/plugins/tracers;
-> /bin/bash "/home/igor/buildroot/buildroot/output/build/gst-shark-0.5.5/libtool"?
-> --silent --tag CC --tag disable-static --mode=relink
-> /home/igor/buildroot/buildroot/output/host/bin/arm-buildroot-linux-gnueabi-gcc
-[snip compilation options]
-> -L/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib
-> -lgobject-2.0 -lgmodule-2.0 -pthread -lglib-2.0
-> -L/home/igor/buildroot/buildroot/output/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib
-> -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0?libgstshark.la
-> <http://libgstshark.la/>?-inst-prefix-dir
-> /home/igor/buildroot/buildroot/output/target)
-> libtool: warning: remember to run 'libtool --finish /usr/lib'
-> arm-buildroot-linux-gnueabi-gcc: ERROR: unsafe header/library path used in
-> cross-compilation: '-L/usr/lib'
+>  >  With 1.1.x I mean 1.1.0 or 1.1.1. The breakage comes from the 1.1.0 bump; .0 to
+>  > .1 is fairly smooth.
+> 
+> Ok. 1.1.0 was released 2.5 years ago (August 2016). How come we still
+> need fixes for quite some packages? All abandoned software? Should we
+> get rid of some of those packages?
 
- As you can see, no -L/usr/lib is given on the command line, but still it
-reaches the compiler. That's because libtool wasn't patched, and that is because
-you used libtoolize/autogen.sh which overwrites the patched libtool files.
+ Looking at the fixes that are included in Patrick's last posting:
 
- The solution is not to use autogen.sh. Instead, set GST_SHARK_AUTORECONF = YES
-in the .mk file. Buildroot's autoreconf will take care of patching the libtool
-files.
+* rtmpdump: dead upstream;
+* pound: incompetent upstream;
+* nut: last bump from Jan 2017;
+* libshout, vboot-utils, thrift: last bump from before June 2016.
 
- You may have a problem because the downloaded tarball doesn't contain the
-common/ submodule. The best solution for that is to not use the tarball
-download, but instead use the git download method:
-
-GST_SHARK_SITE = https://github.com/RidgeRun/gst-shark
-GST_SHARK_SITE_METHOD = git
-GST_SHARK_GIT_SUBMODULES = YES
-# Downloaded from git, no configure script
-GST_SHARK_AUTORECONF = YES
-
+ Also note that all of these except the first two had upstream fixes.
 
  Regards,
  Arnout
