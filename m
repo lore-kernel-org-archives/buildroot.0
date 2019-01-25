@@ -1,89 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 15:37:45 +0100
-Subject: [Buildroot] [git commit] package/ofono: bump to version 1.28
-Message-ID: <20190125144018.EEE4581312@busybox.osuosl.org>
+Date: Fri, 25 Jan 2019 15:40:18 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.3.2
+Message-ID: <20190125144019.1FC8F81312@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=081e3bbb20681ebe137fca41411935cdcf5a4059
+commit: https://git.buildroot.net/buildroot/commit/?id=59178773886d6d1016e90436db396e6dc92d7527
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch to fix musl TEMP_FAILURE_RETRY error
-
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ofono/0002-fix-musl-compile.patch | 37 +++++++++++++++++++++++++++++++
- package/ofono/ofono.hash                  |  4 +++-
- package/ofono/ofono.mk                    |  2 +-
- 3 files changed, 41 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/ofono/0002-fix-musl-compile.patch b/package/ofono/0002-fix-musl-compile.patch
-new file mode 100644
-index 0000000000..369fb71791
---- /dev/null
-+++ b/package/ofono/0002-fix-musl-compile.patch
-@@ -0,0 +1,37 @@
-+From 4a1d114fa3a5d6bef1f71222787c1f6c3a952284 Mon Sep 17 00:00:00 2001
-+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-+Date: Thu, 24 Jan 2019 10:11:42 +0100
-+Subject: [PATCH] mbim: add optional copy of TEMP_FAILURE_RETRY macro (fix musl
-+ compile)
-+
-+TEMP_FAILURE_RETRY is not available on musl.
-+
-+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-+---
-+ drivers/mbimmodem/mbim.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/drivers/mbimmodem/mbim.c b/drivers/mbimmodem/mbim.c
-+index 54b18acf..4b040528 100644
-+--- a/drivers/mbimmodem/mbim.c
-++++ b/drivers/mbimmodem/mbim.c
-+@@ -37,6 +37,16 @@
-+ #include "mbim-message.h"
-+ #include "mbim-private.h"
-+ 
-++/* taken from glibc unistd.h for musl support */
-++#ifndef TEMP_FAILURE_RETRY
-++#define TEMP_FAILURE_RETRY(expression)             \
-++  (__extension__                                   \
-++    ({ long int __result;                          \
-++       do __result = (long int) (expression);      \
-++       while (__result == -1L && errno == EINTR);  \
-++       __result; }))
-++#endif
-++
-+ #define MAX_CONTROL_TRANSFER 4096
-+ #define HEADER_SIZE (sizeof(struct mbim_message_header) + \
-+ 					sizeof(struct mbim_fragment_header))
-+-- 
-+2.20.1
-+
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 37933f126b..2dbb9986c7 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 a6b021cda0b444b772897cd637d5f455857fb5819b62c279a8302b44f9c7f2c3  ofono-1.21.tar.xz
-+sha256 93bb2cedef54f897dd5200e22b072a6e38b5d9b44be57eebbbe8d513f0beb0e4	ofono-1.28.tar.xz
-+# Locally computed
-+sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index b4b7915a30..0552a181fd 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 710cebe070..a1b0f4909d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.3.1
++MESA3D_HEADERS_VERSION = 18.3.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 68ec1ec5b8..78e8c3c291 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-December/000484.html
+-md5 d60828056d77bfdbae0970f9b15fb1be  mesa-18.3.1.tar.xz
+-sha1 50ba2d37647fea77ea19416e8a6ffed34c313330  mesa-18.3.1.tar.xz
+-sha256 5b1f827d28684a25f6657289f8b7d47ac56395988c7ac23e0ec9a62b644bdc63  mesa-18.3.1.tar.xz
+-sha512 a68d39158cf1e868d70730d0641a0cfe4c6e5b3cd1bc0c47f54022402aca03503933084f6ddc722bf88c9b6d1281ba5c847ec4fed8092a9b33f90527d08e12db  mesa-18.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-January/000489.html
++md5 4a82bf3ac2e81493a1a84dd7581ec786  mesa-18.3.2.tar.xz
++sha1 8775d7bfac7e07141ac4299888d426d5550949f7  mesa-18.3.2.tar.xz
++sha256 f7ce7181c07b6d8e0132da879af1729523a6c8aa87f79a9d59dfd064024cfb35  mesa-18.3.2.tar.xz
++sha512 34b66520728d720b1f3d3d63f8ba5c255d57b9e8fe427264419e4163b474df662ff6db9ca8b81283866da415e34346a4c39fc37bebe2a0929be14480faf4db45  mesa-18.3.2.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e1c54fbee4..73e35aa281 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OFONO_VERSION = 1.21
-+OFONO_VERSION = 1.28
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.3.1
++MESA3D_VERSION = 18.3.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
