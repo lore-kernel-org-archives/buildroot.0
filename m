@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 08:35:56 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/wolfssl: bump to
+Date: Fri, 25 Jan 2019 08:33:37 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/wolfssl: bump to
  version 3.15.5
-Message-ID: <20190125073557.F0F018E6B8@busybox.osuosl.org>
+Message-ID: <20190125073601.9A64E8292A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b0803b214c8fe612a18e1dc2ca30bb0dc58c46a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3dfa23c33bc4bbee2d6193a0017e7b55cbaae463
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
