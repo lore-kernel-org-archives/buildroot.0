@@ -1,17 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Jan 2019 00:27:23 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libopenssl: bump version to 1.1.1a
-In-Reply-To: <87tvhzht8v.fsf@dell.be.48ers.dk>
-References: <20190115224239.26125-1-ps.report@gmx.net>
- <20190116135821.pbjzcpixjbuacu3o@vkochan-ThinkPad-T470p>
- <20190117194339.5cb2eb0f@gmx.net>
- <ad65c62d-eef9-2113-cfb6-6b5941958285@mind.be>
- <877eewo0wr.fsf@dell.be.48ers.dk>
- <914629e8-64d8-29b5-0275-3355e45cb07a@mind.be>
- <87sgxjjqo1.fsf@dell.be.48ers.dk>
- <e09d9674-3ee7-7d9f-5579-063e44691582@mind.be>
- <87tvhzht8v.fsf@dell.be.48ers.dk>
-Message-ID: <114d45f6-efb2-e5a4-0ea8-5ca32a0c15fb@mind.be>
+Date: Sat, 26 Jan 2019 00:34:31 +0100
+Subject: [Buildroot] Building host-python-2.7.15 Failed
+In-Reply-To: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+Message-ID: <8017d9a3-290f-f8de-8e13-55430ace2b77@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,32 +12,22 @@ To: buildroot@busybox.net
 
 
 
-On 24/01/2019 00:03, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >> >  Both, I guess. Also that the whole known world (including Debian stable,
->  >> > released June 2017) has already switched to 1.1.x.
->  >> 
->  >> With 1.1.x I take it you mean 1.1.0, right? The 1.1.1 series (strange
->  >> numbering convention) was only released back in September.
-> 
->  >  With 1.1.x I mean 1.1.0 or 1.1.1. The breakage comes from the 1.1.0 bump; .0 to
->  > .1 is fairly smooth.
-> 
-> Ok. 1.1.0 was released 2.5 years ago (August 2016). How come we still
-> need fixes for quite some packages? All abandoned software? Should we
-> get rid of some of those packages?
+On 19/01/2019 17:15, Woody Wu wrote:
+> /usr/bin/gcc -pthread -shared
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -Wl,--enable-new-dtags
+> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
+> build/lib.linux-x86_64-2.7/crypt.so
+> /usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o): relocation
+> R_X86_64_PC32 against symbol `_ufc_foobar' can not be used when making a shared
+> object; recompile with -fPIC
 
- Looking at the fixes that are included in Patrick's last posting:
-
-* rtmpdump: dead upstream;
-* pound: incompetent upstream;
-* nut: last bump from Jan 2017;
-* libshout, vboot-utils, thrift: last bump from before June 2016.
-
- Also note that all of these except the first two had upstream fixes.
+ There is something wrong with your host compiler. There should be a
+/lib*/libcrypt.so that the compiler links against, instead of
+/usr/lib/libcrypt.a. On which distro do you work?
 
  Regards,
  Arnout
