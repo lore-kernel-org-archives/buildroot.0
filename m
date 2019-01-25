@@ -1,42 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 08:36:45 +0100
-Subject: [Buildroot] [PATCH] package/wolfssl: security bump to version
- 3.5.17
-In-Reply-To: <20190116124521.17109-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 16 Jan 2019 13:45:21 +0100")
-References: <20190116124521.17109-1-peter@korsgaard.com>
-Message-ID: <87y3799oj6.fsf@dell.be.48ers.dk>
+Date: Fri, 25 Jan 2019 08:35:41 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] wolfssl: install into
+ staging
+Message-ID: <20190125073557.EA5D28E6B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cabefddff5d456adfafde813dfedbfaf6ab005be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > From the release notes:
- > This release of wolfSSL includes a fix for 1 security vulnerability.
+wolfssl is a library, so it should be installed into staging so other
+packages can find the header files / library.
 
- > Medium level fix for potential cache attack with a variant of
- > Bleichenbacher?s attack.  Earlier versions of wolfSSL leaked PKCS #1 v1.5
- > padding information during private key decryption that could lead to a
- > potential padding oracle attack.  It is recommended that users update to the
- > latest version of wolfSSL if they have RSA cipher suites enabled and have
- > the potential for malicious software to be ran on the same system that is
- > performing RSA operations.  Users that have only ECC cipher suites enabled
- > and are not performing RSA PKCS #1 v1.5 Decryption operations are not
- > vulnerable.  Also users with TLS 1.3 only connections are not vulnerable to
- > this attack.  Thanks to Eyal Ronen (Weizmann Institute), Robert Gillham
- > (University of Adelaide), Daniel Genkin (University of Michigan), Adi Shamir
- > (Weizmann Institute), David Wong (NCC Group), and Yuval Yarom (University of
- > Adelaide and Data61) for the report.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ff1d005f8026b05c1f7e016f8342b18845641a81)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wolfssl/wolfssl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > The paper for further reading on the attack details can be found at
- > http://cat.eyalro.net/cat.pdf
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index ec83d7d1dd..c246b08513 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -7,6 +7,7 @@
+ WOLFSSL_VERSION = 3.14.0
+ WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
+ WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
++WOLFSSL_INSTALL_STAGING = YES
+ 
+ WOLFSSL_LICENSE = GPL-2.0
+ WOLFSSL_LICENSE_FILES = COPYING LICENSING
