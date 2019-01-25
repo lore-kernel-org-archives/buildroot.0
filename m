@@ -1,37 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 16:03:49 +0100
-Subject: [Buildroot] [PATCH v2 6/7] tpm2-tools: do not enforce
- dependency on tpm2-abrmd
-In-Reply-To: <b169a705-b11b-cd83-4b74-f593f1d2e2fc@mind.be> (Arnout
- Vandecappelle's message of "Thu, 24 Jan 2019 17:50:31 +0100")
-References: <20190115101522.21042-1-peter@korsgaard.com>
- <20190115101522.21042-6-peter@korsgaard.com>
- <20190115204308.GB2556@scaer> <875zuog74i.fsf@dell.be.48ers.dk>
- <20190117155827.GD2556@scaer>
- <b169a705-b11b-cd83-4b74-f593f1d2e2fc@mind.be>
-Message-ID: <8736pgu6cq.fsf@dell.be.48ers.dk>
+Date: Fri, 25 Jan 2019 16:05:04 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] tpm2-abrmd: add missing
+ backslash
+Message-ID: <20190125150506.9631A8E6B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9aeadd754c25bcea5ec26d9cd9e4917227cd670
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Hi,
+Commit e04ae696d4f (tpm2-abrmd: fix build with BR2_FORTIFY_SOURCE_1) missed
+a backslash in TPM2_ABRMD_CONF_ENV, fix that.
 
- >  For the situations like the one in this patch, I would say that we could relax
- > a little the 'avoid extra per-package configuration options'. In fact, extra
- > configuration options in Config.in don't cost that much. They don't really make
- > the menus larger because they're only visible when the package is selected. And
- > the .mk handling is the same as for an automatic optional dependency. That said,
- > in this specific case of tpm2-tools, I have the feeling that an additional
- > option is not appropriate. Since the two packages are right next to each other,
- > that is almost the same as having the suboption. So I would go for the help text
- > instead.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tpm2-abrmd/tpm2-abrmd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ok, I'll send an updated patch that drops the select and adds a note in
-the help text instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index f3a6980c23..90d175fc67 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+@@ -15,7 +15,7 @@ TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
+ # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
+ # in the toolchain wrapper and CFLAGS are used instead
+ TPM2_ABRMD_CONF_ENV = \
+-	ax_cv_check_cflags___fstack_protector_all=no
++	ax_cv_check_cflags___fstack_protector_all=no \
+ 	ax_cv_check_ccppflags___U_FORTIFY_SOURCE=no \
+ 	ax_cv_check_ccppflags___D_FORTIFY_SOURCE_2=no
+ 
