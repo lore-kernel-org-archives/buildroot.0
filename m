@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 08:00:32 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] tpm2-abrmd: do not
- enforce -fstack-protector-all
-Message-ID: <20190125072924.2C2678B44E@busybox.osuosl.org>
+Date: Fri, 25 Jan 2019 08:36:45 +0100
+Subject: [Buildroot] [PATCH] package/wolfssl: security bump to version
+ 3.5.17
+In-Reply-To: <20190116124521.17109-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 16 Jan 2019 13:45:21 +0100")
+References: <20190116124521.17109-1-peter@korsgaard.com>
+Message-ID: <87y3799oj6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91addc74701b86f562c720ce9d9df84ed763c1a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Stack protection is now controlled Buildroot wide with the BR2_SSP_*
-options, so disable the explicit -fstack-protector-all so the SSP logic in
-the toolchain wrapper is used instead.
+ > From the release notes:
+ > This release of wolfSSL includes a fix for 1 security vulnerability.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit db828b919214db5cc2cbce644a75db3e3d4f74d6)
-[Peter: adjust variable names for abrmd-1.3.0]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-abrmd/tpm2-abrmd.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ > Medium level fix for potential cache attack with a variant of
+ > Bleichenbacher?s attack.  Earlier versions of wolfSSL leaked PKCS #1 v1.5
+ > padding information during private key decryption that could lead to a
+ > potential padding oracle attack.  It is recommended that users update to the
+ > latest version of wolfSSL if they have RSA cipher suites enabled and have
+ > the potential for malicious software to be ran on the same system that is
+ > performing RSA operations.  Users that have only ECC cipher suites enabled
+ > and are not performing RSA PKCS #1 v1.5 Decryption operations are not
+ > vulnerable.  Also users with TLS 1.3 only connections are not vulnerable to
+ > this attack.  Thanks to Eyal Ronen (Weizmann Institute), Robert Gillham
+ > (University of Adelaide), Daniel Genkin (University of Michigan), Adi Shamir
+ > (Weizmann Institute), David Wong (NCC Group), and Yuval Yarom (University of
+ > Adelaide and Data61) for the report.
 
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index b918ceaa4b..bc5daa054d 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -11,9 +11,10 @@ TPM2_ABRMD_LICENSE_FILES = LICENSE
- TPM2_ABRMD_INSTALL_STAGING = YES
- TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
- 
--# configure.ac doesn't contain a link test, so it doesn't detect when
--# libssp is missing.
--TPM2_ABRMD_CONF_ENV = ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+# -fstack-protector-all is used by default. Disable that so the
-+# BR2_SSP_* options in the toolchain wrapper are used instead
-+TPM2_ABRMD_CONF_ENV = \
-+	ax_cv_check_cflags___fstack_protector_all=no
- 
- TPM2_ABRMD_CONF_OPTS += \
- 	--with-systemdsystemunitdir=$(if $(BR2_INIT_SYSTEMD),/usr/lib/systemd/system,no) \
+ > The paper for further reading on the attack details can be found at
+ > http://cat.eyalro.net/cat.pdf
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
