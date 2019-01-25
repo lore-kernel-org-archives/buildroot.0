@@ -1,135 +1,365 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Fri, 25 Jan 2019 17:04:19 +0100
-Subject: [Buildroot] [PATCH 09/10] freeswitch: bump to git master
- 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
+Date: Fri, 25 Jan 2019 17:04:14 +0100
+Subject: [Buildroot] [PATCH 04/10] package/pound: Fix build with OpenSSL
+ 1.1.x
 In-Reply-To: <20190125160420.10932-1-patrick.havelange@essensium.com>
 References: <20190125160420.10932-1-patrick.havelange@essensium.com>
-Message-ID: <20190125160420.10932-9-patrick.havelange@essensium.com>
+Message-ID: <20190125160420.10932-4-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Seiderer <ps.report@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Enables openssl-1.1.0h compatible compile.
-
-- add bootstrap.sh post-patch call (normal AUTORECONF is broken)
-- add tiff dependency (bundled tiff source is gone)
-- rebase (and git format) 001-libvpx-cross.patch patch
-- update libs/srtp/LICENSE file hash (updated copyright year)
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
----
- .../0001-Fix-cross-compiling-libvpx.patch     | 30 ++++++++++++-------
- package/freeswitch/freeswitch.hash            | 11 +++----
- package/freeswitch/freeswitch.mk              | 16 ++++++++--
- 3 files changed, 37 insertions(+), 20 deletions(-)
 
-diff --git a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-index 1d4b97a7a0..9542d037ed 100644
---- a/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-+++ b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-@@ -1,4 +1,7 @@
--Fix cross-compiling libvpx
-+From 4ba073af7877242a79579b040e3be00bed4275cc Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 3 May 2018 22:24:23 +0200
-+Subject: [PATCH] Fix cross-compiling libvpx
- 
- Freeswitch since version 1.6.7 only uses an in-tree-version of libvpx:
- https://freeswitch.org/fisheye/changelog/freeswitch?cs=febe0f8dacea2d2a31902b3dc469be757f8c3c4d
-@@ -10,20 +13,27 @@ package/freeswitch/freeswitch.mk and add target=generic-gnu as
- configure parameter:
- https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
- 
--And yes, autoreconf is also broken, so we patch Makefile.in instead
--of Makefile.am.
--
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- 
--diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
----- freeswitch-1.6.7.org/Makefile.in	2016-04-01 18:09:54.000000000 +0200
--+++ freeswitch-1.6.7/Makefile.in	2016-04-22 20:11:37.938961730 +0200
--@@ -4025,7 +4025,7 @@
-+[rebased on freeswitch git master branch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v6:
+  - none
+---
+ package/pound/0002-fix-openssl-1.1.0.patch | 331 +++++++++++++++++++++
+ 1 file changed, 331 insertions(+)
+ create mode 100644 package/pound/0002-fix-openssl-1.1.0.patch
+
+diff --git a/package/pound/0002-fix-openssl-1.1.0.patch b/package/pound/0002-fix-openssl-1.1.0.patch
+new file mode 100644
+index 0000000000..a94a6386b7
+--- /dev/null
++++ b/package/pound/0002-fix-openssl-1.1.0.patch
+@@ -0,0 +1,331 @@
++From a2c9dde4d055ea8942afb150b7fc3a807d4e5d60 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Wed, 28 Feb 2018 13:44:01 +0000
++Subject: [PATCH] Support for Openssl 1.1
++
++Downloaded from github fork:
++https://github.com/graygnuorg/pound/commit/a2c9dde4d055ea8942afb150b7fc3a807d4e5d60
++
++This patch was announced on the upstream mailinglist:
++http://www.apsis.ch/pound/pound_list/archive/2018/2018-03/1519920322000
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ .gitignore |  15 ++++++++
++ config.c   |  17 +++++++--
++ http.c     |  12 ++++++-
++ pound.h    |   4 ++-
++ svc.c      | 101 +++++++++++++++++++++++++++++++++++++++++++----------
++ 5 files changed, 125 insertions(+), 24 deletions(-)
++ create mode 100644 .gitignore
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 53bd7c66aa..2e4059740a 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -567,7 +567,7 @@ libs/libzrtp/libzrtp.a:
-  	cd libs/libzrtp && $(MAKE)
-  
-  libs/libvpx/Makefile:
---	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384 --extra-cflags="$(VISIBILITY_FLAG)"
--+	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --target=generic-gnu --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --size-limit=16384x16384 --extra-cflags="$(VISIBILITY_FLAG)"
-+-	cd libs/libvpx && CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --extra-cflags="$(VISIBILITY_FLAG)"
-++	cd libs/libvpx && CROSS=$(CROSS) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --target=generic-gnu --enable-pic --disable-docs --disable-examples --disable-install-bins --disable-install-srcs --disable-unit-tests --extra-cflags="$(VISIBILITY_FLAG)"
-  
-  libs/libvpx/libvpx.a: libs/libvpx/Makefile
-  	@cd libs/libvpx && $(MAKE)
-+-- 
-+2.19.2
-+
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index dab2fb237b..23dab45dc5 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,10 +1,7 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.md5
--md5 61de81cd70afb056dde7b1dcb91ad967 freeswitch-1.8.2.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha1
--sha1 f2c077db40b05c5fdf66cbe77bd879f41132f79a freeswitch-1.8.2.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.2.tar.xz.sha256
--sha256 ebcf3db970ea9bb534c0983a1c9eef88395deb6e0902d8d6407bf217b2f27b9a freeswitch-1.8.2.tar.xz
--# Locally computed
-+# Locally computed:
-+sha256 56d932c001f3cc53b6ee5d835536b01fceacf1e360a6b48c5c1265eda5d6be86  freeswitch-8f10ae54a18a19fc6ed938e4f662bd218ba54b5e.tar.gz
-+
-+# License files:
- sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
- sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
- sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 577d6c9450..a7d52995ce 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.8.2
--FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
--FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
-+FREESWITCH_VERSION = 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
-+#FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
-+FREESWITCH_SITE = https://freeswitch.org/stash/scm/fs/freeswitch.git
-+FREESWITCH_SITE_METHOD = git
- # External modules need headers/libs from staging
- FREESWITCH_INSTALL_STAGING = YES
- FREESWITCH_LICENSE = MPL-1.1, \
-@@ -38,6 +39,15 @@ FREESWITCH_DEPENDENCIES = \
- 	util-linux \
- 	zlib
- 
-+# run bootstrap.sh (normal AUTORECONF is broken)
-+define FREESWITCH_RUN_BOOTSTRAP
-+	cd $(@D); PATH=$(BR_PATH) ./bootstrap.sh
-+endef
-+
-+# running while POST_PATCH stage enables libtool patching
-+FREESWITCH_POST_PATCH_HOOKS += FREESWITCH_RUN_BOOTSTRAP
-+FREESWITCH_DEPENDENCIES += host-automake host-autoconf host-libtool
-+
- # disable display of ClueCon banner in fs_cli
- FREESWITCH_CONF_ENV += \
- 	disable_cc=yes
++diff --git a/config.c b/config.c
++index d41a3ee..e8fec0f 100644
++--- a/config.c
+++++ b/config.c
++@@ -174,6 +174,16 @@ conf_fgets(char *buf, const int max)
++     }
++ }
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_get0_data(n->d.dNSName),	\
+++	        ASN1_STRING_length(n->d.dNSName) + 1)
+++#else
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_data(n->d.dNSName),	\
+++	       ASN1_STRING_length(n->d.dNSName) + 1)
+++#endif
+++
++ unsigned char **
++ get_subjectaltnames(X509 *x509, unsigned int *count)
++ {
++@@ -194,8 +204,7 @@ get_subjectaltnames(X509 *x509, unsigned int *count)
++         name = sk_GENERAL_NAME_pop(san_stack);
++         switch(name->type) {
++             case GEN_DNS:
++-                temp[local_count] = strndup(ASN1_STRING_data(name->d.dNSName), ASN1_STRING_length(name->d.dNSName)
++-                                    + 1);
+++ 	        temp[local_count] = general_name_string(name);
++                 if(temp[local_count] == NULL)
++                     conf_err("out of memory");
++                 local_count++;
++@@ -565,7 +574,9 @@ parse_service(const char *svc_name)
++     pthread_mutex_init(&res->mut, NULL);
++     if(svc_name)
++         strncpy(res->name, svc_name, KEY_SIZE);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res->sessions = lh_TABNODE_new(t_hash, t_cmp)) == NULL)    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res->sessions = LHM_lh_new(TABNODE, t)) == NULL)
++ #else
++     if((res->sessions = lh_new(LHASH_HASH_FN(t_hash), LHASH_COMP_FN(t_cmp))) == NULL)
++diff --git a/http.c b/http.c
++index dd211e4..c8e756a 100644
++--- a/http.c
+++++ b/http.c
++@@ -527,12 +527,22 @@ log_bytes(char *res, const LONG cnt)
++ 
++ /* Cleanup code. This should really be in the pthread_cleanup_push, except for bugs in some implementations */
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define clear_error()
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_thread_state(NULL); }
+++#else
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); }
+++#endif
+++
++ #define clean_all() {   \
++     if(ssl != NULL) { BIO_ssl_shutdown(cl); } \
++     if(be != NULL) { BIO_flush(be); BIO_reset(be); BIO_free_all(be); be = NULL; } \
++     if(cl != NULL) { BIO_flush(cl); BIO_reset(cl); BIO_free_all(cl); cl = NULL; } \
++     if(x509 != NULL) { X509_free(x509); x509 = NULL; } \
++-    if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); } \
+++    clear_error(); \
++ }
++ 
++ /*
++diff --git a/pound.h b/pound.h
++index fa22c36..9603b91 100644
++--- a/pound.h
+++++ b/pound.h
++@@ -344,7 +344,9 @@ typedef struct _tn {
++ /* maximal session key size */
++ #define KEY_SIZE    127
++ 
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++  DEFINE_LHASH_OF(TABNODE);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++ DECLARE_LHASH_OF(TABNODE);
++ #endif
++ 
++diff --git a/svc.c b/svc.c
++index 60ba488..063b92c 100644
++--- a/svc.c
+++++ b/svc.c
++@@ -27,10 +27,17 @@
++ 
++ #include    "pound.h"
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define TABNODE_GET_DOWN_LOAD(t) lh_TABNODE_get_down_load(t)
+++# define TABNODE_SET_DOWN_LOAD(t,n) lh_TABNODE_set_down_load(t,n)
+++#else
++ #ifndef LHASH_OF
++ #define LHASH_OF(x) LHASH
++ #define CHECKED_LHASH_OF(type, h) h
++ #endif
+++# define TABNODE_GET_DOWN_LOAD(t) (CHECKED_LHASH_OF(TABNODE, t)->down_load)
+++# define TABNODE_SET_DOWN_LOAD(t,n) (CHECKED_LHASH_OF(TABNODE, t)->down_load = n)
+++#endif
++ 
++ /*
++  * Add a new key/content pair to a hash table
++@@ -58,7 +65,9 @@ t_add(LHASH_OF(TABNODE) *const tab, const char *key, const void *content, const
++     }
++     memcpy(t->content, content, cont_len);
++     t->last_acc = time(NULL);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((old = lh_TABNODE_insert(tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((old = LHM_lh_insert(TABNODE, tab, t)) != NULL) {
++ #else
++     if((old = (TABNODE *)lh_insert(tab, t)) != NULL) {
++@@ -82,7 +91,9 @@ t_find(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_retrieve(tab, &t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = (TABNODE *)LHM_lh_retrieve(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_retrieve(tab, &t)) != NULL) {
++@@ -102,7 +113,9 @@ t_remove(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_delete(tab, &t)) != NULL) {    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = LHM_lh_delete(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_delete(tab, &t)) != NULL) {
++@@ -127,7 +140,9 @@ t_old_doall_arg(TABNODE *t, ALL_ARG *a)
++     TABNODE *res;
++ 
++     if(t->last_acc < a->lim)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(a->tab, t)) != NULL) {	    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, a->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(a->tab, t)) != NULL) {
++@@ -145,6 +160,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE, ALL_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE *, ALL_ARG *)
++ #endif
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,ALL_ARG);
+++#endif
+++
++ /*
++  * Expire all old nodes
++  */
++@@ -156,14 +175,16 @@ t_expire(LHASH_OF(TABNODE) *const tab, const time_t lim)
++ 
++     a.tab = tab;
++     a.lim = lim;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_old_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_old), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_old), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++     return;
++ }
++ 
++@@ -173,7 +194,9 @@ t_cont_doall_arg(TABNODE *t, ALL_ARG *arg)
++     TABNODE *res;
++ 
++     if(memcmp(t->content, arg->content, arg->cont_len) == 0)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(arg->tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, arg->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(arg->tab, t)) != NULL) {
++@@ -203,15 +226,16 @@ t_clean(LHASH_OF(TABNODE) *const tab, void *const content, const size_t cont_len
++     a.tab = tab;
++     a.content = content;
++     a.cont_len = cont_len;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_cont_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_cont), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_cont), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
++-    return;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++ }
++ 
++ /*
++@@ -1262,6 +1286,31 @@ RSA_tmp_callback(/* not used */SSL *ssl, /* not used */int is_export, int keylen
++     return res;
++ }
++ 
+++static int
+++generate_key(RSA **ret_rsa, unsigned long bits)
+++{
+++#if OPENSSL_VERSION_NUMBER > 0x00908000L
+++    int rc = 0;
+++    RSA *rsa;
+++
+++    rsa = RSA_new();
+++    if (rsa) {
+++	BIGNUM *bne = BN_new();
+++	if (BN_set_word(bne, RSA_F4))
+++	    rc = RSA_generate_key_ex(rsa, bits, bne, NULL);
+++	BN_free(bne);
+++	if (rc)
+++	    *ret_rsa = rsa;
+++	else
+++	    RSA_free(rsa);
+++    }
+++    return rc;
+++#else
+++    *ret_rsa = RSA_generate_key(bits, RSA_F4, NULL, NULL);
+++    return *ret_rsa != NULL;
+++#endif
+++}
+++
++ /*
++  * Periodically regenerate ephemeral RSA keys
++  * runs every T_RSA_KEYS seconds
++@@ -1274,8 +1323,9 @@ do_RSAgen(void)
++     RSA *t_RSA1024_keys[N_RSA_KEYS];
++ 
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        t_RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL);
++-        t_RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL);
+++        /* FIXME: Error handling */
+++        generate_key(&t_RSA512_keys[n], 512);
+++	generate_key(&t_RSA1024_keys[n], 1024);
++     }
++     if(ret_val = pthread_mutex_lock(&RSA_mut))
++         logmsg(LOG_WARNING, "thr_RSAgen() lock: %s", strerror(ret_val));
++@@ -1329,11 +1379,11 @@ init_timer(void)
++      * Pre-generate ephemeral RSA keys
++      */
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        if((RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA512_keys[n], 512)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 512) failed", n);
++             return;
++         }
++-        if((RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA1024_keys[n], 1024)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 1024) failed", n);
++             return;
++         }
++@@ -1420,6 +1470,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE, DUMP_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE *, DUMP_ARG *)
++ #endif
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,DUMP_ARG);
+++#endif
+++	
++ /*
++  * write sessions to the control socket
++  */
++@@ -1430,7 +1484,9 @@ dump_sess(const int control_sock, LHASH_OF(TABNODE) *const sess, BACKEND *const
++ 
++     a.control_sock = control_sock;
++     a.backends = backends;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_DUMP_ARG(sess, t_dump_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, sess, LHASH_DOALL_ARG_FN(t_dump), DUMP_ARG, &a);
++ #else
++     lh_doall_arg(sess, LHASH_DOALL_ARG_FN(t_dump), &a);
++@@ -1664,6 +1720,13 @@ thr_control(void *arg)
++     }
++ }
++ 
+++#ifndef SSL3_ST_SR_CLNT_HELLO_A
+++# define SSL3_ST_SR_CLNT_HELLO_A (0x110|SSL_ST_ACCEPT)
+++#endif
+++#ifndef SSL23_ST_SR_CLNT_HELLO_A
+++# define SSL23_ST_SR_CLNT_HELLO_A (0x210|SSL_ST_ACCEPT)
+++#endif
+++		
++ void
++ SSLINFO_callback(const SSL *ssl, int where, int rc)
++ {
 -- 
 2.17.1
