@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 15:38:40 +0100
-Subject: [Buildroot] [git commit] package/libmbim: bum to version 1.18.0
-Message-ID: <20190125144019.0BB4081312@busybox.osuosl.org>
+Date: Fri, 25 Jan 2019 15:40:40 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+Message-ID: <20190125144019.2652281312@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c91e9e0fd43dcad7bfc67338272972bf04b4057a
+commit: https://git.buildroot.net/buildroot/commit/?id=252b2085a18ae171b4e0aff4b71709354d5bce91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 2 +-
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 2 +-
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 9364183080..9e8629f341 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  eb494fee2c200daf4f5cc8a40061d24a3dfafe8c59151c95c6a826fd96dcb262  libmbim-1.16.2.tar.xz
-+sha256  6cf40128d83d087946a7d8577e735526202e034d52f90047735329609097b282  libmbim-1.18.0.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 9d74b108ca..748d215537 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+index 469649ec30..2443dc2880 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 8a008db80964700c57db407fe9fab78884d6919bd5343a269f681625132b4687  xdriver_xf86-video-intel-3d395062ce73f85e8340218df01c2ebf4bc25023.tar.gz
++sha256 685a1b3e1b486f4fb02dd14adc33b8ce215bb96ed8e26787ee8b7bda4c0d6cce  xdriver_xf86-video-intel-33ee0c3b21ea279e08d0863fcb2e874f0974b00e.tar.gz
+ sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 66b0f9defe..bd315c8d9a 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMBIM_VERSION = 1.16.2
-+LIBMBIM_VERSION = 1.18.0
- LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 3d395062ce73f85e8340218df01c2ebf4bc25023
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 33ee0c3b21ea279e08d0863fcb2e874f0974b00e
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
