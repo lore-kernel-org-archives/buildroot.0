@@ -1,106 +1,90 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Fri, 25 Jan 2019 22:13:22 +1300
-Subject: [Buildroot] [PATCH] gst1-shark: new package
-Message-ID: <20190125091322.27522-1-judge.packham@gmail.com>
+From: Andrew <andrewtholt60@gmail.com>
+Date: Fri, 25 Jan 2019 13:50:01 +0000
+Subject: [Buildroot] Remote debug
+Message-ID: <47d1e1e9-f58e-d775-e935-031d28cb3945@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GstShark leverages GStreamers newest instrumentation subsystem by
-installing a set of custom hooks to the trace points. A variety of data
-analytics are extracted and presented to the user in a graphical,
-friendly way.
+Hi,
 
-https://developer.ridgerun.com/wiki/index.php?title=GstShark
-https://github.com/RidgeRun/gst-shark
+I?m have a problem remotely debugging a device.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Jo?o Victor Oliveira <jv.oliveirag@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Igor Miranda <igorcmiranda3110@gmail.com>
----
-I saw a few emails on the list with problems building gst-shark but nothing
-that actually added the package. I figured I'd give it a go. This seems to work
-(build) for me but I have no idea about using gstreamer so I may have missed
-something.
+My setup is
 
- package/gstreamer1/Config.in                  |  1 +
- package/gstreamer1/gst1-shark/Config.in       | 12 ++++++++++++
- package/gstreamer1/gst1-shark/gst1-shark.hash |  5 +++++
- package/gstreamer1/gst1-shark/gst1-shark.mk   | 19 +++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/gstreamer1/gst1-shark/Config.in
- create mode 100644 package/gstreamer1/gst1-shark/gst1-shark.hash
- create mode 100644 package/gstreamer1/gst1-shark/gst1-shark.mk
+Target: Boundary Devices Nitrogen 6 (i.MX6)
 
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index 28b1ed25c5..922ecefcff 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -11,6 +11,7 @@ source "package/gstreamer1/gst1-imx/Config.in"
- source "package/gstreamer1/gst1-interpipe/Config.in"
- source "package/gstreamer1/gst1-libav/Config.in"
- source "package/gstreamer1/gst1-rtsp-server/Config.in"
-+source "package/gstreamer1/gst1-shark/Config.in"
- source "package/gstreamer1/gst1-validate/Config.in"
- source "package/gstreamer1/gst1-vaapi/Config.in"
- source "package/gstreamer1/gst-omx/Config.in"
-diff --git a/package/gstreamer1/gst1-shark/Config.in b/package/gstreamer1/gst1-shark/Config.in
-new file mode 100644
-index 0000000000..0f9ddb30bc
---- /dev/null
-+++ b/package/gstreamer1/gst1-shark/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_GST1_SHARK
-+	bool "gst-shark"
-+	select BR2_PACKAGE_GSTREAMER1_CHECK
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+	help
-+	  GstShark leverages GStreamers newest instrumentation subsystem
-+	  by installing a set of custom hooks to the trace points. A
-+	  variety of data analytics are extracted and presented to the
-+	  user in a graphical, friendly way.
-+
-+	  https://github.com/RidgeRun/gst-shark
-diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
-new file mode 100644
-index 0000000000..fdcbc563a8
---- /dev/null
-+++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
-@@ -0,0 +1,5 @@
-+# locally computed hash
-+sha256 35c56b89c10f42c623f5831f9533e1b9dcab8946eff0e4000bf3137bad5c705a  gst1-shark-v0.5.5.tar.gz
-+
-+# Hashes for license files:
-+sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
-diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
-new file mode 100644
-index 0000000000..75fd155b41
---- /dev/null
-+++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# gst1-shark
-+#
-+################################################################################
-+
-+GST1_SHARK_VERSION = v0.5.5
-+GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
-+GST1_SHARK_SITE_METHOD = git
-+GST1_SHARK_GIT_SUBMODULES = YES
-+
-+GST1_SHARK_LICENSE = LGPL-2.1
-+GST1_SHARK_LICENSE_FILES = COPYING
-+
-+GST1_SHARK_AUTORECONF = YES
-+GST1_SHARK_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
-+GST1_SHARK_CONF_OPTS = --disable-graphviz
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+Host : Linux Mint 18.3 Sylvia
+
+Buildroot 2017.08
+
+I have built my image so that if I run file on a binary I get this:
+
+file /usr/bin/lwsws
+/usr/bin/lwsws: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), 
+dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 
+2.6.32, BuildID[sha1]=04bcb93a38c3a59d7ec2812a70c4e13fd5609024, with 
+debug_info, not stripped
+
+If I run gdbserver on the target I can connect from the host, set a 
+breakpoint on a symbol (e.g. main) run the code, and the breakpoint is 
+hit and the code stops.
+
+If I try to list the code, I simply get the gdb prompt. If I try to list 
+the code
+
+So here is waht I see on the host
+
+|$GDB -x ~/.gdbinit GNU gdb (Linaro_GDB-2017.02) 7.12.1.20170215-git 
+Copyright (C) 2017 Free Software Foundation, Inc. License GPLv3+: GNU 
+GPL version 3 or later <http://gnu.org/licenses/gpl.html> This is free 
+software: you are free to change and redistribute it. There is NO 
+WARRANTY, to the extent permitted by law. Type "show copying" and "show 
+warranty" for details. This GDB was configured as 
+"--host=x86_64-unknown-linux-gnu --target=arm-linux-gnueabihf". Type 
+"show configuration" for configuration details. For bug reporting 
+instructions, please see: <http://www.gnu.org/software/gdb/bugs/>. Find 
+the GDB manual and other documentation resources online at: 
+<http://www.gnu.org/software/gdb/documentation/>. For help, type "help". 
+Type "apropos word" to search for commands related to "word". (gdb) set 
+remote exec-file lwsws (gdb) target remote 10.31.1.113:2345 
+^C10.31.1.113:2345: Interrupted system call. (gdb) Quit (gdb) target 
+remote 10.31.1.99:2345 Remote debugging using 10.31.1.99:2345 Reading 
+/usr/bin/lwsws from remote target... warning: File transfers from remote 
+targets can be slow. Use "set sysroot" to access files locally instead. 
+Reading /usr/bin/lwsws from remote target... Reading symbols from 
+target:/usr/bin/lwsws...done. Reading /lib/ld-linux-armhf.so.3 from 
+remote target... Reading /lib/ld-linux-armhf.so.3 from remote target... 
+Reading symbols from target:/lib/ld-linux-armhf.so.3...(no debugging 
+symbols found)...done. 0x76fd7a00 in _start () from 
+target:/lib/ld-linux-armhf.so.3 (gdb) br main Breakpoint 1 at 0x10f3c 
+(gdb) run The "remote" target does not support "run". Try "help target" 
+or "continue". (gdb) c Continuing. Reading /usr/lib/libwebsockets.so.12 
+from remote target... Reading /usr/lib/libz.so.1 from remote target... 
+Reading /usr/lib/libssl.so.1.0.0 from remote target... Reading 
+/usr/lib/libcrypto.so.1.0.0 from remote target... Reading 
+/usr/lib/libuv.so.1 from remote target... Reading /lib/libm.so.6 from 
+remote target... Reading /lib/libc.so.6 from remote target... Reading 
+/lib/libdl.so.2 from remote target... Reading /lib/librt.so.1 from 
+remote target... Reading /lib/libpthread.so.0 from remote target... 
+Reading /lib/libnsl.so.1 from remote target... Breakpoint 1, 0x00010f3c 
+in main () (gdb) |
+
+So, if I now do:
+
+l main
+
+I get
+
+(gdb)
+
+Any hint tips, questions much appreciated.
+
+Andrew
+
+?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190125/f71d5b83/attachment.html>
