@@ -1,33 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Jan 2019 00:34:31 +0100
-Subject: [Buildroot] Building host-python-2.7.15 Failed
-In-Reply-To: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
-References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
-Message-ID: <8017d9a3-290f-f8de-8e13-55430ace2b77@mind.be>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 25 Jan 2019 15:34:52 -0800
+Subject: [Buildroot] [PATCH] toolchain: add variadic MI thunk support flag
+Message-ID: <20190125233452.6316-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+GCC uses thunk functions to adjust the 'this' pointer when calling
+C++ member functions in classes derived with multiple inheritance.
+Generation of thunk functions requires support from the compiler
+back end. In the absence of that support target-independent code
+in the C++ front end is used to generate thunk functions, but it
+does not support vararg functions.
 
+Support for this feature is currently missing in or1k and xtensa
+toolchains.
 
-On 19/01/2019 17:15, Woody Wu wrote:
-> /usr/bin/gcc -pthread -shared
-> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -Wl,--enable-new-dtags
-> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
-> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
-> -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
-> build/lib.linux-x86_64-2.7/crypt.so
-> /usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o): relocation
-> R_X86_64_PC32 against symbol `_ufc_foobar' can not be used when making a shared
-> object; recompile with -fPIC
+Add flag BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK that indicates
+presence of this feature in the toolchain. Add dependency to packages
+that require this feature to be built.
 
- There is something wrong with your host compiler. There should be a
-/lib*/libcrypt.so that the compiler links against, instead of
-/usr/lib/libcrypt.a. On which distro do you work?
+Fixes:
+http://autobuild.buildroot.net/results/c9e660c764edbd7cf0ae54ab0f0f412464721446/
+http://autobuild.buildroot.net/results/9a3bf4b411c418ea78d59e35d23ba865dd453890/
 
- Regards,
- Arnout
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/libtorrent-rasterbar/Config.in |  6 ++++--
+ toolchain/Config.in                    | 13 +++++++++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
+index aa986f2388e0..e9a1a40fb9b1 100644
+--- a/package/libtorrent-rasterbar/Config.in
++++ b/package/libtorrent-rasterbar/Config.in
+@@ -1,6 +1,7 @@
+-comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
++comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, variadic MI thunks, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 
+ config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+ 	bool "libtorrent-rasterbar"
+@@ -8,6 +9,7 @@ config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 	depends on BR2_USE_WCHAR # boost
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_CHRONO
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index baf192c936d4..5109f66946ef 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -93,6 +93,19 @@ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_sparc_v8
+ 	depends on !BR2_m68k_cf5208
+ 
++# GCC uses thunk functions to adjust the 'this' pointer when calling
++# C++ member functions in classes derived with multiple inheritance.
++# Generation of thunk functions requires support from the compiler
++# back end. In the absence of that support target-independent code
++# in the C++ front end is used to generate thunk functions, but it
++# does not support vararg functions.
++# or1k will support it in the gcc mainline starting with gcc-9.
++config BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
++	bool
++	default y
++	depends on !BR2_or1k
++	depends on !BR2_xtensa
++
+ # Prior to gcc 7.x, exception_ptr, nested_exception and future from
+ # libstdc++ would only be provided on architectures that support
+ # always lock-free atomic ints. See
+-- 
+2.11.0
