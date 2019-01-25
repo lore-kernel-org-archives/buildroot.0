@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Jan 2019 15:40:40 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
- bump version
-Message-ID: <20190125144019.2652281312@busybox.osuosl.org>
+Date: Fri, 25 Jan 2019 15:39:59 +0100
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.97
+Message-ID: <20190125144019.18E2181312@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=252b2085a18ae171b4e0aff4b71709354d5bce91
+commit: https://git.buildroot.net/buildroot/commit/?id=af54cd6270a025648c6261ecea57f9353fee4c4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 2 +-
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-index 469649ec30..2443dc2880 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 8a008db80964700c57db407fe9fab78884d6919bd5343a269f681625132b4687  xdriver_xf86-video-intel-3d395062ce73f85e8340218df01c2ebf4bc25023.tar.gz
-+sha256 685a1b3e1b486f4fb02dd14adc33b8ce215bb96ed8e26787ee8b7bda4c0d6cce  xdriver_xf86-video-intel-33ee0c3b21ea279e08d0863fcb2e874f0974b00e.tar.gz
- sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 66b0f9defe..bd315c8d9a 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 78b3ef75ac..301866c8b0 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2018-October/193244.html
+-md5 f296d87272b1befeada3bb135751ab3d  libdrm-2.4.96.tar.bz2
+-sha1 51eb4c248a437b3f200bd1cd84461d3e0b60d71e  libdrm-2.4.96.tar.bz2
+-sha256 0d561acf7bb4cc59dc82415100e6c1a44860e8c380e00f9592923e3cd08db393  libdrm-2.4.96.tar.bz2
+-sha512 008cb7658d953b44e11fa3cc6e00dfeb3efb59c7fdadd59f7066101aff138acbbc2f2508e9ebe0528340e39dc7693937755d1641816ddde135c10a13e7d81e3b  libdrm-2.4.96.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-January/204447.html
++md5 acef22d0c62c89692348c2dd5591393e  libdrm-2.4.97.tar.bz2
++sha1 7635bec769a17edd140282fa2c46838c4a44bc91  libdrm-2.4.97.tar.bz2
++sha256 77d0ccda3e10d6593398edb70b1566bfe1a23a39bd3da98ace2147692eadd123  libdrm-2.4.97.tar.bz2
++sha512 3e08ee9d6c9ce265d783a59b51e22449905ea73aa27f25a082a1e9e1532f7c99e1c9f7cb966eb0970be2a08e2e5993dc9aa55093b1bff548689fdb465e7145ed  libdrm-2.4.97.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 06efa20195..cc7350c10e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 3d395062ce73f85e8340218df01c2ebf4bc25023
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 33ee0c3b21ea279e08d0863fcb2e874f0974b00e
- XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-LIBDRM_VERSION = 2.4.96
++LIBDRM_VERSION = 2.4.97
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
