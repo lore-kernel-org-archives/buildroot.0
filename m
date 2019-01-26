@@ -1,59 +1,45 @@
-From: Vivien Didelot <vivien.didelot@gmail.com>
-Date: Fri, 25 Jan 2019 19:34:06 -0500
-Subject: [Buildroot] [PATCH] Makefile: add update-defconfig target
-Message-ID: <20190126003406.7723-1-vivien.didelot@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 26 Jan 2019 08:33:12 +0200
+Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 3.3.0
+Message-ID: <20190126063316.10832-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For symmetry with the Kconfig-based packages offering comprehensive
-targets like linux-update-defconfig, barebox-update-defconfig and so
-on, add a new top level update-defconfig target to run savedefconfig.
-
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/python-engineio/python-engineio.hash | 4 ++--
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index dd8cc7a9ae..3a2f74be69 100644
---- a/Makefile
-+++ b/Makefile
-@@ -151,7 +151,7 @@ nobuild_targets := source %-source \
- 	clean distclean help show-targets graph-depends \
- 	%-graph-depends %-show-depends %-show-version \
- 	graph-build graph-size list-defconfigs \
--	savedefconfig printvars
-+	savedefconfig update-defconfig printvars
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-@@ -959,13 +959,15 @@ define percent_defconfig
- endef
- $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
- 
-+update-defconfig: savedefconfig
-+
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
- 	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
- 
--.PHONY: defconfig savedefconfig
-+.PHONY: defconfig savedefconfig update-defconfig
- 
- ################################################################################
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index 3b16d7ef61..09e004ac46 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	ba0fd43c77028bd6fed4ee1004f37c71  python-engineio-3.2.3.tar.gz
+-sha256	401458bb0046d950c429dac3ef82ce12e3ff1236f63b4bbb344d60a1b51c4e94  python-engineio-3.2.3.tar.gz
++md5	ad32353278d0576bfa7d7a2f9b97dec5  python-engineio-3.3.0.tar.gz
++sha256	e4ac17c04c32ccca67287dfdbbe4ee1e9eec3a0a1a9a6070f3ab784db08407dd  python-engineio-3.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 8d4e344247..c20101984b 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
-@@ -1047,6 +1049,7 @@ help:
- 	@echo '  defconfig              - New config with default answer to all options;'
- 	@echo '                             BR2_DEFCONFIG, if set on the command line, is used as input'
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
-+	@echo '  update-defconfig       - Same as savedefconfig'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
- 	@echo '  alldefconfig           - New config where all options are set to default'
+ ################################################################################
+ 
+-PYTHON_ENGINEIO_VERSION = 3.2.3
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e6/1e/64fd629f8215b81bf0e5682504ebbbd10d1d48e52ee30d053484b6e91421
++PYTHON_ENGINEIO_VERSION = 3.3.0
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/2f/09/83d627ad3dadd064bfb875c7767e93f3568354fe82cebe298b4e07f79238
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.19.1
