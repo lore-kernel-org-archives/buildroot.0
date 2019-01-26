@@ -1,48 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 26 Jan 2019 08:33:13 +0200
-Subject: [Buildroot] [PATCH 1/1] python-msgpack: bump to version 0.6.1
+Date: Sat, 26 Jan 2019 08:33:14 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pip: bump to version 19.0.1
 In-Reply-To: <20190126063316.10832-1-asafka7@gmail.com>
 References: <20190126063316.10832-1-asafka7@gmail.com>
-Message-ID: <20190126063316.10832-2-asafka7@gmail.com>
+Message-ID: <20190126063316.10832-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+License change - a year bump.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-msgpack/python-msgpack.hash | 4 ++--
- package/python-msgpack/python-msgpack.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pip/python-pip.hash | 6 +++---
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 98027009ad..cb3b75d5f7 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 1a70f0f7c2..149099b118 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5	be3043cc2c1e3b5ebf08463ffa71cf17  msgpack-0.6.0.tar.gz
--sha256	64abc6bf3a2ac301702f5760f4e6e227d0fd4d84d9014ef9a40faa9d43365259  msgpack-0.6.0.tar.gz
-+md5	1b96537be6f5186fed0d131aaa59ef26  msgpack-0.6.1.tar.gz
-+sha256	4008c72f5ef2b7936447dcb83db41d97e9791c83221be13d5e19db0796df1972  msgpack-0.6.1.tar.gz
- # Locally computed sha256
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 8bbae9283d..517166db63 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	75cad449ad62c88b22de317a26781714  pip-18.1.tar.gz
+-sha256	c0a292bd977ef590379a3f05d7b7f65135487b67470f6281289a94e015650ea1  pip-18.1.tar.gz
++md5    b6919f1a368138f73b367abccc06f5ae  pip-19.0.1.tar.gz
++sha256 e81ddd35e361b630e94abeda4a1eddd36d47a90e71eb00f38f46b57f787cd1a5  pip-19.0.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	391a8784e319dae5431477d4cc9bc504fc5d71fd9e89e1c80f1cd3855f5d7cfa  LICENSE.txt
++sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 9ae7e7324f..22562cc93f 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 0.6.0
-+PYTHON_MSGPACK_VERSION = 0.6.1
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/3a/bb/dc3f9fc608a6c1c7a471c2bebc761d9c8dbb2f7179a4283a89b9451765b5
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/81/9c/0036c66234482044070836cc622266839e2412f8108849ab0bfdeaab8578
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-PYTHON_PIP_VERSION = 18.1
++PYTHON_PIP_VERSION = 19.0.1
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/45/ae/8a0ad77defb7cc903f09e551d88b443304a9bd6e6f124e75c0fbbf6de8f7
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/c8/89/ad7f27938e59db1f0f55ce214087460f65048626e2226531ba6cb6da15f0
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 -- 
 2.19.1
