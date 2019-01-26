@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 26 Jan 2019 09:04:37 +0100
-Subject: [Buildroot] [PATCH 4/8] perl-mojolicious: bump to version 8.11
+Date: Sat, 26 Jan 2019 09:04:38 +0100
+Subject: [Buildroot] [PATCH 5/8] perl-net-dns: bump to version 1.19
 In-Reply-To: <20190126080441.10769-1-francois.perrad@gadz.org>
 References: <20190126080441.10769-1-francois.perrad@gadz.org>
-Message-ID: <20190126080441.10769-4-francois.perrad@gadz.org>
+Message-ID: <20190126080441.10769-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index b406f6d82..e2eb158b1 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 7a2bba564..2a30ea7ba 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    f1d22e9110f1b51f4be9a40a84391089 Mojolicious-8.04.tar.gz
--sha256 330e919f3caf62e03fdc545dda2e66f772f30192aed6c47e19fd78f67de557fb Mojolicious-8.04.tar.gz
-+md5    00419dac75fec23d06fe8695e4bde303 Mojolicious-8.11.tar.gz
-+sha256 d95f42aa901b9aba96880dae53fd77d89690cca65635ff93a47885a2c7b312f2 Mojolicious-8.11.tar.gz
+-md5    67af7e5c1c339f60c45c1054374bd8ee Net-DNS-1.18.tar.gz
+-sha256 52ce1494fc9707fd5a60ed71db5cde727157b7f2363787d730d4d1bd9800a9d3 Net-DNS-1.18.tar.gz
++md5    8a40402888487b853f861d21433f341a Net-DNS-1.19.tar.gz
++sha256 206278bdd9a538bec3e45b50e80cc5a9d7dc6e70ebf0889ef78254f0f710ccd7 Net-DNS-1.19.tar.gz
  
  # computed by scancpan
- sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 8ea0c2e01..4ff942ce8 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+ sha256 afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583 README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 4e00b2f89..31db330b1 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 8.04
-+PERL_MOJOLICIOUS_VERSION = 8.11
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-PERL_NET_DNS_VERSION = 1.18
++PERL_NET_DNS_VERSION = 1.19
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
 2.17.1
