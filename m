@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Jan 2019 15:06:22 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: enable multithreaded xz
- compression
-In-Reply-To: <871s55ykoj.fsf@dell.be.48ers.dk>
-References: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
- <CANQCQpbo+puWN0o99zFBqthPLAe9hkd9gBTfXiZrE3x-qTvoHg@mail.gmail.com>
- <CADvTj4rH7G-LSt=TBzjNAUpSiRdCLgwf6NbuAqFAG-i95mZRnw@mail.gmail.com>
- <871s55ykoj.fsf@dell.be.48ers.dk>
-Message-ID: <20190126150622.23c7375e@windsurf>
+Date: Sat, 26 Jan 2019 15:09:50 +0100
+Subject: [Buildroot] Building host-python-2.7.15 Failed
+In-Reply-To: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+Message-ID: <20190126150950.20114d4e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 Jan 2019 18:39:24 +0100, Peter Korsgaard wrote:
+On Sun, 20 Jan 2019 00:15:36 +0800, Woody Wu wrote:
 
-> > I thought it was using the version compiled by buildroot.
-> > Isn't that what host-xz is being used for?  
-> 
-> Yes, correct. Do you know if the -T 0 option generates identical output
-> as -T 1? Otherwise we may want to disable it for reproducible builds.
+> /usr/bin/gcc -pthread -shared
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -Wl,-rpath,/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -Wl,--enable-new-dtags
+> build/temp.linux-x86_64-2.7/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/build/host-python-2.7.15/Modules/cryptmodule.o
+> -L/home/woody/beacon-cross-build/buildroot/buildroot-2018.11.1/output/host/lib
+> -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib -L. -lcrypt -lpython2.7 -o
+> build/lib.linux-x86_64-2.7/crypt.so
+> /usr/bin/ld: /usr/lib/x86_64-linux-gnu/libcrypt.a(crypt-entry.o):
+> relocation R_X86_64_PC32 against symbol `_ufc_foobar' can not be used when
+> making a shared object; recompile with -fPIC
+> /usr/bin/ld: final link failed: bad value
+> collect2: error: ld returned 1 exit status
 
-Does it matter than the output of -T 0 and -T 1 are identical ?
+The problem here is that it is trying to build a shared library
+(Python module crypt.so), which uses the system libcrypt library.
+However, it seems like on your system only the static version of
+libcrypt is available, and this static version is not compiled with
+-fPIC, which is OK but makes it unsuitable for linking in a shared
+library.
 
-What matters for BR2_REPRODUCIBLE=y is if the same input, with -T 0,
-always provide the exact identical output.
-
-Am I missing something here ?
+Could you check why you don't have libcrypt.so available on your
+system ?
 
 Best regards,
 
