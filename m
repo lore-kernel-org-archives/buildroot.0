@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Jan 2019 09:56:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mga: bump
- version to 2.0.0
-Message-ID: <20190126085638.16075-1-bernd.kuhls@t-online.de>
+Date: Sat, 26 Jan 2019 10:35:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-neomagic:
+ bump version to 1.3.0
+Message-ID: <20190126093546.2883-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash   | 9 +++++++--
- .../xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk     | 2 +-
+ .../xdriver_xf86-video-neomagic.hash                     | 9 +++++++--
+ .../xdriver_xf86-video-neomagic.mk                       | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-index 0187e6fbb5..218e52e19c 100644
---- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-+++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
+index fc830661b4..55996f5b0d 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
 @@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002765.html
--sha256 b663cd8e6364f7c4e2637b9fcab9861d0e3971518c73b00d213f6545a1289422  xf86-video-mga-1.6.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-December/002933.html
-+md5 b8fc99b4adea8bfe80156b13df4b6c9c  xf86-video-mga-2.0.0.tar.bz2
-+sha1 833f2710a1fd7b3f2db3700b2ad055527da5033b  xf86-video-mga-2.0.0.tar.bz2
-+sha256 268946e1a13e9d80e4f724a0740df9e6e8c8bad37697fcbf456924e9fdbb5d79  xf86-video-mga-2.0.0.tar.bz2
-+sha512 b92006486aef815ff4399f291d610c65d88c0b32a9dae97658c644715ff62b221b01495b5c7a2311745e26f699c1c1f753b81c7bf54cf75567af9f78ac015540  xf86-video-mga-2.0.0.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-May/002602.html
+-sha256	72f89396b10527549337cb72a7eafb1194cf140144f9236a94ad2becdf140bf2	xf86-video-neomagic-1.2.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-December/002934.html
++md5 349d5254d09eb46f2a1f151cd423b89a  xf86-video-neomagic-1.3.0.tar.bz2
++sha1 6bccfa15ea05d5264120cd96ccf13687642e8f6d  xf86-video-neomagic-1.3.0.tar.bz2
++sha256 93833950fae7757088eb6abb125e15e8c245e5e25681c19c3ad4213ec7319064  xf86-video-neomagic-1.3.0.tar.bz2
++sha512 25d019a2556e52aeb4e25942f444437a921e76d527c10ddd420f16aa7d85bf2b8a51612c382a2a7e3e407bb1e8d610d063101184eea0889c3e1a69bfb3b37735  xf86-video-neomagic-1.3.0.tar.bz2
 +# Locally computed
-+sha256 6c567575e381478c7616eedff3ea2ae5228a5b54fbdd22d4070ebae312fa085c  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-index bdc9f35884..2720848a17 100644
---- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-+++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
++sha256 95063ce9aa09850025dd317549ce688519079a8d3cf66ceb3d882cb2bafcced9  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+index 93cd55a11b..8dd2777ff9 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_MGA_VERSION = 1.6.5
-+XDRIVER_XF86_VIDEO_MGA_VERSION = 2.0.0
- XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.2.9
++XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.3.0
+ XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
 -- 
 2.20.1
