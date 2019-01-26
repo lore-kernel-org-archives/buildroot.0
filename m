@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 26 Jan 2019 09:04:39 +0100
-Subject: [Buildroot] [PATCH 6/8] perl-package-stash: bump to version 0.38
+Date: Sat, 26 Jan 2019 09:04:41 +0100
+Subject: [Buildroot] [PATCH 8/8] perl-uri: bump to version 1.76
 In-Reply-To: <20190126080441.10769-1-francois.perrad@gadz.org>
 References: <20190126080441.10769-1-francois.perrad@gadz.org>
-Message-ID: <20190126080441.10769-6-francois.perrad@gadz.org>
+Message-ID: <20190126080441.10769-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-package-stash/perl-package-stash.hash | 6 +++---
- package/perl-package-stash/perl-package-stash.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
-index 4d9b20287..be8760d2d 100644
---- a/package/perl-package-stash/perl-package-stash.hash
-+++ b/package/perl-package-stash/perl-package-stash.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 4ef17ece6..02287a064 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
--sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c Package-Stash-0.37.tar.gz
-+md5    dc2d802eea2cb0b52ed9c4dd178761dd Package-Stash-0.38.tar.gz
-+sha256 c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f Package-Stash-0.38.tar.gz
+-md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
+-sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
++md5    c236e0142adecc1b1104da664bc43a79 URI-1.76.tar.gz
++sha256 b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e URI-1.76.tar.gz
  
  # computed by scancpan
--sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e LICENSE
-+sha256 13aab710649bae5a8bbb1ae725587ece773bf390537dba2da71247bd937d54b4 LICENSE
-diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
-index 26e8eb325..b1a83bd95 100644
---- a/package/perl-package-stash/perl-package-stash.mk
-+++ b/package/perl-package-stash/perl-package-stash.mk
+ sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index 5be440131..730b39052 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_PACKAGE_STASH_VERSION = 0.37
-+PERL_PACKAGE_STASH_VERSION = 0.38
- PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
--PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
-+PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
- PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
- PERL_PACKAGE_STASH_DISTNAME = Package-Stash
+-PERL_URI_VERSION = 1.74
++PERL_URI_VERSION = 1.76
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+-PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
+ PERL_URI_LICENSE_FILES = LICENSE
+ PERL_URI_DISTNAME = URI
 -- 
 2.17.1
