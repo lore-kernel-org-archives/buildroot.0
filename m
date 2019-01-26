@@ -1,45 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Jan 2019 10:48:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.4
-Message-ID: <20190126094852.23546-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 26 Jan 2019 10:56:59 +0100
+Subject: [Buildroot] [PATCH] initramfs: drop comment against multiple
+ formats
+In-Reply-To: <20190126001901.3090-1-vivien.didelot@gmail.com> (Vivien
+ Didelot's message of "Fri, 25 Jan 2019 19:19:01 -0500")
+References: <20190126001901.3090-1-vivien.didelot@gmail.com>
+Message-ID: <87womrspw4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.9.4.html
+>>>>> "Vivien" == Vivien Didelot <vivien.didelot@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > This patch removes an old comment against having multiple filesystem
+ > formats which doesn't bring any value.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 41c670059f..de349c3049 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.3.tar.asc
--sha256 cf8fd8707e9ad7bce7832006aac5644155165745ba371170661b3004fa2135cf  samba-4.9.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.4.tar.asc
-+sha256 6d98a8d8bcccbe788e4bbb406362e6676311aca711a3f3cc9b3a404bb9ff0b4f  samba-4.9.4.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 89e39dab55..9f771cf82f 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > It is also wrong per-se: one may want to use Buildroot to prepare a
+ > custom distribution containing a kernel+initramfs and a persistent
+ > default rootfs to pivot to.
+
+Yes, but in that case the final persistent rootfs would contain
+different files than the initramfs, right?
+
+E.G. I handle such a use case by two different defconfigs, one building
+the Linux kernel + initramfs and another for the final persistent
+rootfs.
+
+> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+
+> ---
+ >  fs/initramfs/Config.in | 5 -----
+ >  1 file changed, 5 deletions(-)
+
+ > diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
+ > index 9d5a3f92e6..42a9d60524 100644
+ > --- a/fs/initramfs/Config.in
+ > +++ b/fs/initramfs/Config.in
+ > @@ -13,10 +13,5 @@ config BR2_TARGET_ROOTFS_INITRAMFS
+ >  	  is used, regardless of how buildroot's cpio archive is
+ >  	  configured.
  
--SAMBA4_VERSION = 4.9.3
-+SAMBA4_VERSION = 4.9.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ > -	  Note that enabling initramfs together with another filesystem
+ > -	  formats doesn't make sense: you would end up having two
+ > -	  identical root filesystems, one embedded inside the kernel
+ > -	  image, and one separately.
+ > -
+ >  comment "initramfs needs a Linux kernel to be built"
+ >  	depends on !BR2_LINUX_KERNEL
+ > -- 
+ > 2.20.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
