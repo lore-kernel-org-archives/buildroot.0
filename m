@@ -1,61 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Jan 2019 10:56:59 +0100
-Subject: [Buildroot] [PATCH] initramfs: drop comment against multiple
- formats
-In-Reply-To: <20190126001901.3090-1-vivien.didelot@gmail.com> (Vivien
- Didelot's message of "Fri, 25 Jan 2019 19:19:01 -0500")
-References: <20190126001901.3090-1-vivien.didelot@gmail.com>
-Message-ID: <87womrspw4.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 26 Jan 2019 11:10:37 +0100
+Subject: [Buildroot] [PATCH 2/2] package/clamav: add optional dependency to
+ pcre2
+In-Reply-To: <20190126101037.22267-1-bernd.kuhls@t-online.de>
+References: <20190126101037.22267-1-bernd.kuhls@t-online.de>
+Message-ID: <20190126101037.22267-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vivien" == Vivien Didelot <vivien.didelot@gmail.com> writes:
+Upstream recommends pcre2 over pcre:
+https://github.com/Cisco-Talos/clamav-devel/commit/1f71c2b21ccaef412280471444f4d01ec9b8099d
 
- > This patch removes an old comment against having multiple filesystem
- > formats which doesn't bring any value.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/clamav/clamav.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- > It is also wrong per-se: one may want to use Buildroot to prepare a
- > custom distribution containing a kernel+initramfs and a persistent
- > default rootfs to pivot to.
-
-Yes, but in that case the final persistent rootfs would contain
-different files than the initramfs, right?
-
-E.G. I handle such a use case by two different defconfigs, one building
-the Linux kernel + initramfs and another for the final persistent
-rootfs.
-
-> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
-
-> ---
- >  fs/initramfs/Config.in | 5 -----
- >  1 file changed, 5 deletions(-)
-
- > diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
- > index 9d5a3f92e6..42a9d60524 100644
- > --- a/fs/initramfs/Config.in
- > +++ b/fs/initramfs/Config.in
- > @@ -13,10 +13,5 @@ config BR2_TARGET_ROOTFS_INITRAMFS
- >  	  is used, regardless of how buildroot's cpio archive is
- >  	  configured.
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 7e1b162f79..b5a184a67c 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -76,7 +76,10 @@ else
+ CLAMAV_CONF_OPTS += --without-iconv
+ endif
  
- > -	  Note that enabling initramfs together with another filesystem
- > -	  formats doesn't make sense: you would end up having two
- > -	  identical root filesystems, one embedded inside the kernel
- > -	  image, and one separately.
- > -
- >  comment "initramfs needs a Linux kernel to be built"
- >  	depends on !BR2_LINUX_KERNEL
- > -- 
- > 2.20.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
+-ifeq ($(BR2_PACKAGE_PCRE),y)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++CLAMAV_CONF_OPTS += --with-pcre=$(STAGING_DIR)/usr
++CLAMAV_DEPENDENCIES += pcre2
++else ifeq ($(BR2_PACKAGE_PCRE),y)
+ CLAMAV_CONF_OPTS += --with-pcre=$(STAGING_DIR)/usr
+ CLAMAV_DEPENDENCIES += pcre
+ else
 -- 
-Bye, Peter Korsgaard
+2.20.1
