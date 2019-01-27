@@ -1,42 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 18:54:19 +0100
-Subject: [Buildroot] [PATCH] package/lighttpd: bump to version 1.4.53
-Message-ID: <20190127175420.29078-1-peter@korsgaard.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 27 Jan 2019 16:59:35 -0200
+Subject: [Buildroot] [PATCH 0/8] Detect and fix overridden variables in .mk
+ files
+Message-ID: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lighttpd/lighttpd.hash | 4 ++--
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 93581a9abb..926de33ef2 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,4 +1,4 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.52.sha256sum
--sha256 27bc0991c530b7c6335e6efff2181934d3c1a1c516f7401ea71d8302cefda764  lighttpd-1.4.52.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.53.sha256sum
-+sha256 3bdfce1cf3e9650a556a8c26fb15342c5717c63f530c54693db632b0371dcb78  lighttpd-1.4.53.tar.xz
- # Locally calculated
- sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 5c0315a265..f50a4af935 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).52
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).53
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+This series makes check-package to warn when a variable is overridden in a .mk
+file.
+
+For the general case, appending values to variables is OK and also a good
+practice, like this:
+|PACKAGE_VAR = value1
+|ifeq ...
+|PACKAGE_VAR += value2
+
+or this, when the above is not possible:
+|PACKAGE_VAR = value1
+|ifeq ...
+|PACKAGE_VAR := $(PACKAGE_VAR), value2
+
+But this override is an error:
+|PACKAGE_VAR = value1
+|PACKAGE_VAR = value2
+
+as well this one:
+|ifeq ...
+|PACKAGE_VAR += value1
+|endif
+|PACKAGE_VAR = value2
+
+And this override is error-prone:
+|PACKAGE_VAR = value1
+|ifeq ...
+|PACKAGE_VAR = value2
+
+Patches 1 to 3 fix packages that currently overridden variables in .mk files:
+s6-networking, sdl_sound, avrdude.
+
+Patch 4 removes a unicode character from usb_modeswitch.mk. When I was about to
+send this series, git send-email warned about it.
+
+Patch 5 standardize the code by avoiding conditionally overridden variables in
+usb_modeswitch.
+
+Patch 6 adds to check-package the ability to recognize a special comment and
+ignore one or more warnings that would otherwise be issued for the next line of
+code. This is a common feature for static-analysis tools.
+
+Patch 7 teaches check-package about ifdef/ifndef, problem identified while
+implementing patch 8.
+
+Patch 8 adds a new check function to check-package to warn for overridden
+variables.
+
+With the entire series applied, a check-package job:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151812563
+
+With only patches 6 to 8 applied, a check-package job:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151813273
+
+NOTE: I used git format-patch -U16 to make the review of patches 1,2,3,5 easier.
+
+Regards,
+Ricardo
+
+Ricardo Martincoski (8):
+  package/s6-networking: fix dependency when libressl is enabled
+  package/sdl_sound: actually use the optional CONF_OPTS
+  Revert "avrdude: add license information"
+  package/usb_modeswitch: drop unicode space in comment
+  package/usb_modeswitch: avoid overriding variables
+  utils/check-package: allow to disable warning for a line
+  utils/check-package: handle ifdef/ifndef in .mk files
+  utils/check-package: warn about overridden variables
+
+ package/avrdude/avrdude.mk               |  2 -
+ package/gcc/gcc-final/gcc-final.mk       |  2 +
+ package/s6-networking/s6-networking.mk   |  2 +-
+ package/sdl_sound/sdl_sound.mk           | 11 ++--
+ package/usb_modeswitch/usb_modeswitch.mk |  8 +--
+ package/zmqpp/zmqpp.mk                   |  1 +
+ utils/check-package                      |  4 ++
+ utils/checkpackagelib/base.py            |  2 +
+ utils/checkpackagelib/lib_mk.py          | 70 +++++++++++++++++++++++-
+ 9 files changed, 86 insertions(+), 16 deletions(-)
+
 -- 
-2.11.0
+2.17.1
