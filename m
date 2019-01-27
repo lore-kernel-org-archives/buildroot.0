@@ -1,97 +1,104 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 27 Jan 2019 16:59:40 -0200
-Subject: [Buildroot] [PATCH 5/8] package/usb_modeswitch: avoid overriding
- variables
+Date: Sun, 27 Jan 2019 16:59:42 -0200
+Subject: [Buildroot] [PATCH 7/8] utils/check-package: handle ifdef/ifndef in
+ .mk files
 In-Reply-To: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
 References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190127185943.1136-6-ricardo.martincoski@gmail.com>
+Message-ID: <20190127185943.1136-8-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Overriding variables in packages recipes is an error-prone practice.
-
-Current behavior of installing either only as a script or only as a
-binary is intended, as describe in the commit log of "d3e4db4e34
-usb_modeswitch: bump to version 1.2.6" from 2013.
-
-Rewrite the code to keep the same behavior while replacing variable
-override [1] by conditional assignments [2].
-
-[1]
-VAR = ...
-if ...
-VAR = ...
-
-[2]
-if ...
-VAR = ...
-else
-VAR = ...
+Currently check-package only knows about ifeq/ifneq.
+Add code to handle ifdef/ifndef as well.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-The output for below commands is the same in current master (f6843a75fe)
-and after this patch:
-$ make -s BR2_HAVE_DOT_CONFIG=y BR2_PACKAGE_TCL_SHLIB_ONLY=y printvars \
-  VARS='USB_MODESWITCH_BUILD_TARGETS USB_MODESWITCH_INSTALL_TARGETS'
-USB_MODESWITCH_BUILD_TARGETS=script
-USB_MODESWITCH_INSTALL_TARGETS=install-script
-$ make -s BR2_HAVE_DOT_CONFIG=y printvars \
-  VARS='USB_MODESWITCH_BUILD_TARGETS USB_MODESWITCH_INSTALL_TARGETS'
-USB_MODESWITCH_BUILD_TARGETS=static
-USB_MODESWITCH_INSTALL_TARGETS=install-static
----
- package/usb_modeswitch/usb_modeswitch.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ utils/checkpackagelib/lib_mk.py | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 8b93e086e3..9832d3c808 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -1,38 +1,38 @@
- ################################################################################
- #
- # usb_modeswitch
- #
- ################################################################################
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 4387cf7167..51c6577d2c 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -1,34 +1,38 @@
+ # See utils/checkpackagelib/readme.txt before editing this file.
+ # There are already dependency checks during the build, so below check
+ # functions don't need to check for things already checked by exploring the
+ # menu options using "make menuconfig" and by running "make" with appropriate
+ # packages enabled.
  
- USB_MODESWITCH_VERSION = 2.5.2
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
- USB_MODESWITCH_LICENSE = GPL-2.0+
- USB_MODESWITCH_LICENSE_FILES = COPYING
- # Package does not build in parallel due to improper make rules
- USB_MODESWITCH_MAKE = $(MAKE1)
+ import re
  
--USB_MODESWITCH_BUILD_TARGETS = static
--USB_MODESWITCH_INSTALL_TARGETS = install-static
--
- ifeq ($(BR2_PACKAGE_TCL)$(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
- USB_MODESWITCH_DEPENDENCIES += tcl
- USB_MODESWITCH_BUILD_TARGETS = script
- USB_MODESWITCH_INSTALL_TARGETS = install-script
-+else
-+USB_MODESWITCH_BUILD_TARGETS = static
-+USB_MODESWITCH_INSTALL_TARGETS = install-static
- endif
+ from checkpackagelib.base import _CheckFunction
+ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
+ from checkpackagelib.lib import EmptyLastLine          # noqa: F401
+ from checkpackagelib.lib import NewlineAtEof           # noqa: F401
+ from checkpackagelib.lib import TrailingSpace          # noqa: F401
  
- # build system of embedded jimtcl doesn't use autotools, but does use
- # an old version of gnuconfig which doesn't know all the architectures
- # supported by Buildroot, so update config.guess / config.sub like we
- # do in pkg-autotools.mk
- USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++# used in more than one check
++start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
++end_conditional = ["endif"]
++
  
- define USB_MODESWITCH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
- 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
- 		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
- 		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
- endef
+ class Indent(_CheckFunction):
+     COMMENT = re.compile("^\s*#")
+-    CONDITIONAL = re.compile("^\s*(ifeq|ifneq|endif)\s")
++    CONDITIONAL = re.compile("^\s*({})\s".format("|".join(start_conditional + end_conditional)))
+     ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
+     END_DEFINE = re.compile("^\s*endef\s")
+     MAKEFILE_TARGET = re.compile("^[^# \t]+:\s")
+     START_DEFINE = re.compile("^\s*define\s")
+ 
+     def before(self):
+         self.define = False
+         self.backslash = False
+         self.makefile_target = False
+ 
+     def check_line(self, lineno, text):
+         if self.START_DEFINE.search(text):
+             self.define = True
+             return
+         if self.END_DEFINE.search(text):
+             self.define = False
+@@ -209,34 +213,34 @@ class TypoInPackageVariable(_CheckFunction):
+             return
+         if self.REGEX.search(text) is None:
+             return ["{}:{}: possible typo: {} -> *{}*"
+                     .format(self.filename, lineno, variable, self.package),
+                     text]
+ 
+ 
+ class UselessFlag(_CheckFunction):
+     DEFAULT_AUTOTOOLS_FLAG = re.compile("^.*{}".format("|".join([
+         "_AUTORECONF\s*=\s*NO",
+         "_LIBTOOL_PATCH\s*=\s*YES"])))
+     DEFAULT_GENERIC_FLAG = re.compile("^.*{}".format("|".join([
+         "_INSTALL_IMAGES\s*=\s*NO",
+         "_INSTALL_REDISTRIBUTE\s*=\s*YES",
+         "_INSTALL_STAGING\s*=\s*NO",
+         "_INSTALL_TARGET\s*=\s*YES"])))
+-    END_CONDITIONAL = re.compile("^\s*(endif)")
+-    START_CONDITIONAL = re.compile("^\s*(ifeq|ifneq)")
++    END_CONDITIONAL = re.compile("^\s*({})".format("|".join(end_conditional)))
++    START_CONDITIONAL = re.compile("^\s*({})".format("|".join(start_conditional)))
+ 
+     def before(self):
+         self.conditional = 0
+ 
+     def check_line(self, lineno, text):
+         if self.START_CONDITIONAL.search(text):
+             self.conditional += 1
+             return
+         if self.END_CONDITIONAL.search(text):
+             self.conditional -= 1
+             return
+ 
+         # allow non-default conditionally overridden by default
+         if self.conditional > 0:
+             return
  
 -- 
 2.17.1
