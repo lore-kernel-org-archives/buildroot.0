@@ -1,50 +1,137 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 10:45:13 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-mga: bump
- version to 2.0.0
-Message-ID: <20190127095108.8012283BE0@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 10:49:33 +0100
+Subject: [Buildroot] [git commit] package/clamav: bump version to 0.101.1
+Message-ID: <20190127095108.93C2583BE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37edd8a62a17fb4c693bfdb7bf310a7a943f3ffb
+commit: https://git.buildroot.net/buildroot/commit/?id=0e424610bc356aebb7325ca212f1095d152bb65b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream and license hash.
+Removed patch applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash | 9 +++++++--
- package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ ...zation-libs-curl.m4-fix-curl-config-detec.patch | 75 ----------------------
+ package/clamav/clamav.hash                         |  2 +-
+ package/clamav/clamav.mk                           |  4 +-
+ 3 files changed, 2 insertions(+), 79 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-index 0187e6fbb5..218e52e19c 100644
---- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-+++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002765.html
--sha256 b663cd8e6364f7c4e2637b9fcab9861d0e3971518c73b00d213f6545a1289422  xf86-video-mga-1.6.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-December/002933.html
-+md5 b8fc99b4adea8bfe80156b13df4b6c9c  xf86-video-mga-2.0.0.tar.bz2
-+sha1 833f2710a1fd7b3f2db3700b2ad055527da5033b  xf86-video-mga-2.0.0.tar.bz2
-+sha256 268946e1a13e9d80e4f724a0740df9e6e8c8bad37697fcbf456924e9fdbb5d79  xf86-video-mga-2.0.0.tar.bz2
-+sha512 b92006486aef815ff4399f291d610c65d88c0b32a9dae97658c644715ff62b221b01495b5c7a2311745e26f699c1c1f753b81c7bf54cf75567af9f78ac015540  xf86-video-mga-2.0.0.tar.bz2
-+# Locally computed
-+sha256 6c567575e381478c7616eedff3ea2ae5228a5b54fbdd22d4070ebae312fa085c  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-index bdc9f35884..2720848a17 100644
---- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-+++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+diff --git a/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch b/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
+deleted file mode 100644
+index 1d26b099b9..0000000000
+--- a/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 6b6ff53b5931c162be13504a1efc53fc5212f9d1 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Mon, 7 May 2018 22:57:34 +0200
+-Subject: [PATCH] m4/reorganization/libs/curl.m4: fix curl-config detection
+- logic
+-
+-The current logic in curl.m4 doesn't behave properly when
+---without-libcurl is passed to the ./configure script.
+-
+-Indeed, in this case what happens is that:
+-
+- (1) Since --without-libcurl is passed, LIBCURL_HOME is set to nothing
+-
+- (2) find_curl is set to "no"
+-
+- (3) Due to find_curl being "no", LIBCURL_HOME is not set to
+-     /usr/local and remains empty
+-
+- (4) We test if $LIBCURL_HOME/bin/curl_config exists, which is
+-     equivalent to testing if /bin/curl-config exists. So curl.m4 is
+-     looking at /bin/curl-config, which is irrelevant in a
+-     cross-compilation context: it is not because the build machine
+-     has libcurl installed that it is available for the target.
+-
+-     Due to this mistake, it sets have_curl="yes"
+-
+-Due to this, the ./configure script assumes it can build the
+-clamsubmit program, which fails at build time because curl/curl.h
+-doesn't exist.
+-
+-To fix this, this commit rewrites the curl-config detection logic with
+-a simpler loop. If find_curl=yes, it means we have to find libcurl
+-ourselves, so we iterate over /usr/local and /usr, and check if a
+-bin/curl-config binary is available there. If so, we use this path as
+-LIBCURL_HOME and set have_curl="yes".
+-
+-This preserves the existing behavior, while fixing the situation where
+---without-libcurl is passed, but /bin/curl-config exists.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: https://github.com/Cisco-Talos/clamav-devel/pull/87
+----
+- m4/reorganization/libs/curl.m4 | 15 +++++----------
+- 1 file changed, 5 insertions(+), 10 deletions(-)
+-
+-diff --git a/m4/reorganization/libs/curl.m4 b/m4/reorganization/libs/curl.m4
+-index 2a5966ee7..b6a9c2137 100644
+---- a/m4/reorganization/libs/curl.m4
+-+++ b/m4/reorganization/libs/curl.m4
+-@@ -19,17 +19,12 @@ fi
+- [find_curl="yes"])
+- 
+- if test "X$find_curl" = "Xyes"; then
+--    LIBCURL_HOME=/usr/local
+--fi
+--if test -f "$LIBCURL_HOME/bin/curl-config"; then
+--    have_curl="yes"
+--else
+--    if test "X$find_curl" = "Xyes"; then
+--        LIBCURL_HOME=/usr
+--        if test -f "$LIBCURL_HOME/bin/curl-config"; then
+--            have_curl="yes"
+-+    for p in /usr/local /usr ; do
+-+        if test -f "${p}/bin/curl-config"; then
+-+           LIBCURL_HOME=$p
+-+           have_curl="yes"
+-         fi
+--    fi
+-+    done
+- fi
+- 
+- if test "X$have_curl" = "Xyes"; then
+--- 
+-2.14.3
+-
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 390251fc24..9ac68e7607 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 4a2e4f0cd41e62adb5a713b4a1857c49145cd09a69957e6d946ecad575206dd6  clamav-0.100.2.tar.gz
++sha256 fa368fa9b2f57638696150c7d108b06dec284e8d8e3b8e702c784947c01fb806  clamav-0.101.1.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 25ae240545..7e1b162f79 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_MGA_VERSION = 1.6.5
-+XDRIVER_XF86_VIDEO_MGA_VERSION = 2.0.0
- XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
+-CLAMAV_VERSION = 0.100.2
++CLAMAV_VERSION = 0.101.1
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+@@ -16,8 +16,6 @@ CLAMAV_DEPENDENCIES = \
+ 	openssl \
+ 	zlib \
+ 	$(TARGET_NLS_DEPENDENCIES)
+-# 0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
+-CLAMAV_AUTORECONF = YES
+ 
+ # mmap cannot be detected when cross-compiling, needed for mempool support
+ CLAMAV_CONF_ENV = \
