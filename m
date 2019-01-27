@@ -1,75 +1,141 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 27 Jan 2019 16:59:38 -0200
-Subject: [Buildroot] [PATCH 3/8] Revert "avrdude: add license information"
+Date: Sun, 27 Jan 2019 16:59:37 -0200
+Subject: [Buildroot] [PATCH 2/8] package/sdl_sound: actually use the
+ optional CONF_OPTS
 In-Reply-To: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
 References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190127185943.1136-4-ricardo.martincoski@gmail.com>
+Message-ID: <20190127185943.1136-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit d1f545004bf0533064363d87c2d7c71e7acf7435 from 2014
-because the added variables already existed. The real problem at the
-time was that one of the pre-existent variables had a typo, fixed in a
-later commit.
+Since "57ace26b6c package/sdl_sound: add optional support for
+libmodplug" from 2016, optional CONF_OPTS are added but they do not
+really take effect because there is an unconditional override below the
+conditional append.
 
-Currently AVRDUDE_LICENSE and AVRDUDE_LICENSE_FILES are declared twice
-with the same values for each one. So remove one of them.
+Currently this does not cause build failures, but it can lead to wrong
+detection of dependencies because many explicit --enable/--disable are
+not passed to configure.
+
+Fix this by moving the unconditional code to the top.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Wojciech M. Zabolotny <wzab01@gmail.com>
 ---
-NOTE: When I first sent the series adding check-package, I reported the
-typo. Unfortunately I failed to identify the duplicated variables.
+On current master (f6843a75fe), test-pkg with this config:
+BR2_PACKAGE_SDL=y
+BR2_PACKAGE_SDL_SOUND=y
+results in:
+6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+After this patch, the same result:
+6 builds, 0 skipped, 0 build failed, 0 legal-info failed
 
-The output for below command is the same in current master (f6843a75fe)
-and after this patch:
-$ make -s BR2_HAVE_DOT_CONFIG=y printvars VARS=AVRDUDE_LICENSE%
-AVRDUDE_LICENSE=GPL-2.0+
-AVRDUDE_LICENSE_FILES=avrdude/COPYING
+After running test-pkg I diffed this file between the output of master
+and the output after this patch:
+br-arm-full/build/sdl_sound-1.0.3/config.status
+Following flags are added, result of this patch:
+'--disable-flac' '--disable-modplug' '--disable-ogg' '--disable-speex' '--disable-physfs'
+
+On current master (f6843a75fe), test-pkg with this config:
+BR2_PACKAGE_FLAC=y
+BR2_PACKAGE_SDL=y
+BR2_PACKAGE_SDL_SOUND=y
+BR2_PACKAGE_SDL_SOUND_PLAYSOUND=y
+BR2_PACKAGE_LIBMODPLUG=y
+BR2_PACKAGE_LIBVORBIS=y
+BR2_PACKAGE_SPEEX=y
+BR2_PACKAGE_PHYSFS=y
+results in:
+6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+After this patch, the same result:
+6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+
+After running test-pkg I diffed this file between the output of master
+and the output after this patch:
+br-arm-full/build/sdl_sound-1.0.3/config.status
+Following flags are added, result of this patch:
+'--enable-flac' '--enable-modplug' '--enable-ogg' '--enable-speex' '--enable-physfs'
 ---
- package/avrdude/avrdude.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/sdl_sound/sdl_sound.mk | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 0e34076e38..ae378dfbac 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -2,34 +2,32 @@
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 2544b598e9..c6028e7910 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -1,29 +1,34 @@
+ ################################################################################
  #
- # avrdude
+ # sdl_sound
  #
  ################################################################################
  
- AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
- AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
- AVRDUDE_LICENSE = GPL-2.0+
- AVRDUDE_LICENSE_FILES = avrdude/COPYING
- AVRDUDE_SUBDIR = avrdude
- # Sources coming from git, without generated configure and Makefile.in
- # files.
- AVRDUDE_AUTORECONF = YES
- AVRDUDE_CONF_OPTS = --enable-linuxgpio
- AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
- 	host-flex host-bison
--AVRDUDE_LICENSE = GPL-2.0+
--AVRDUDE_LICENSE_FILES = avrdude/COPYING
+ SDL_SOUND_VERSION = 1.0.3
+ SDL_SOUND_SOURCE = SDL_sound-$(SDL_SOUND_VERSION).tar.gz
+ SDL_SOUND_SITE = http://icculus.org/SDL_sound/downloads
+ SDL_SOUND_LICENSE = LGPL-2.1+
+ SDL_SOUND_LICENSE_FILES = COPYING
+ SDL_SOUND_INSTALL_STAGING = YES
+ SDL_SOUND_DEPENDENCIES = sdl
++SDL_SOUND_CONF_OPTS = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--enable-static
  
- ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
- AVRDUDE_DEPENDENCIES += libftdi1
- else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
- AVRDUDE_DEPENDENCIES += libftdi
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ SDL_SOUND_DEPENDENCIES += libiconv
  endif
  
- # if /etc/avrdude.conf exists, the installation process creates a
- # backup file, which we do not want in the context of Buildroot.
- define AVRDUDE_REMOVE_BACKUP_FILE
- 	$(RM) -f $(TARGET_DIR)/etc/avrdude.conf.bak
+ # optional dependencies
+ ifeq ($(BR2_PACKAGE_FLAC)$(BR2_PACKAGE_LIBOGG),yy)
+ SDL_SOUND_CONF_OPTS += --enable-flac
+ SDL_SOUND_DEPENDENCIES += flac libogg
+ else
+ SDL_SOUND_CONF_OPTS += --disable-flac
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
+ SDL_SOUND_CONF_OPTS += --enable-modplug
+ SDL_SOUND_DEPENDENCIES += libmodplug
+@@ -39,37 +44,31 @@ SDL_SOUND_CONF_OPTS += --disable-ogg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SPEEX),y)
+ SDL_SOUND_CONF_OPTS += --enable-speex
+ SDL_SOUND_DEPENDENCIES += speex
+ else
+ SDL_SOUND_CONF_OPTS += --disable-speex
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHYSFS),y)
+ SDL_SOUND_CONF_OPTS += --enable-physfs
+ SDL_SOUND_DEPENDENCIES += physfs
+ else
+ SDL_SOUND_CONF_OPTS += --disable-physfs
+ endif
+ 
+-SDL_SOUND_CONF_OPTS = \
+-	--with-sdl-prefix=$(STAGING_DIR)/usr \
+-	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+-	--disable-sdltest \
+-	--enable-static
+-
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ SDL_SOUND_CONF_OPTS += --enable-mmx
+ else
+ SDL_SOUND_CONF_OPTS += --disable-mmx
+ endif
+ 
+ define SDL_SOUND_REMOVE_PLAYSOUND
+ 	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
  endef
  
- AVRDUDE_POST_INSTALL_TARGET_HOOKS += AVRDUDE_REMOVE_BACKUP_FILE
+ ifneq ($(BR2_PACKAGE_SDL_SOUND_PLAYSOUND),y)
+ SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
+ endif
  
  $(eval $(autotools-package))
 -- 
