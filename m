@@ -1,49 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 21:24:17 +0100
-Subject: [Buildroot] [git commit] python-pyasn1-modules: bump to version
- 0.2.4
-Message-ID: <20190127202336.6D9278E38F@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 21:27:04 +0100
+Subject: [Buildroot] [PATCH] package/libarchive: add four security
+ patches
+In-Reply-To: <20190125185053.4882-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Fri, 25 Jan 2019 19:50:52 +0100")
+References: <20190125185053.4882-1-patrickdepinguin@gmail.com>
+Message-ID: <87r2cxonhj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afffba5cd790b35c36e8ee1648422cd71c54790b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pyasn1-modules/python-pyasn1-modules.hash | 4 ++--
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Add backported patches for the following four security issues in libarchive.
+ > There is no new release yet including these patches.
 
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-index afceea3902..f8af9a4bb8 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
--md5	59e45656b8b2661ba97ad401797caa36  pyasn1-modules-0.2.3.tar.gz
--sha256	d14fcb29dabecba3d7b360bf72327c26c385248a5d603cf6be5f566ce999b261  pyasn1-modules-0.2.3.tar.gz
-+md5	0116a480c28e1ab00587ba3a6fd7c335  pyasn1-modules-0.2.4.tar.gz
-+sha256	a52090e8c5841ebbf08ae455146792d9ef3e8445b21055d3a3b7ed9c712b7c7c  pyasn1-modules-0.2.4.tar.gz
- # Locally computed sha256 checksums
- sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-index 784f2014ac..a67d469568 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYASN1_MODULES_VERSION = 0.2.3
-+PYTHON_PYASN1_MODULES_VERSION = 0.2.4
- PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
--PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/c8/0e/3fe59edc782faf8b429f4a1db734418d0f68a7e50f43095747c08330e952
-+PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/bd/a5/ef7bf693e8a8f015386c9167483199f54f8a8ec01d1c737e05524f16e792
- PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
- PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
+ > - CVE-2018-1000877 (https://nvd.nist.gov/vuln/detail/CVE-2018-1000877)
+
+ > "libarchive version commit 416694915449219d505531b1096384f3237dd6cc onwards
+ > (release v3.1.0 onwards) contains a CWE-415: Double Free vulnerability in
+ > RAR decoder - libarchive/archive_read_support_format_rar.c, parse_codes(),
+ > realloc(rar->lzss.window, new_size) with new_size = 0 that can result in
+ > Crash/DoS. This attack appear to be exploitable via the victim must open a
+ > specially crafted RAR archive."
+
+ > - CVE-2018-1000878 (https://nvd.nist.gov/vuln/detail/CVE-2018-1000878)
+
+ > "libarchive version commit 416694915449219d505531b1096384f3237dd6cc onwards
+ > (release v3.1.0 onwards) contains a CWE-416: Use After Free vulnerability in
+ > RAR decoder - libarchive/archive_read_support_format_rar.c that can result
+ > in Crash/DoS - it is unknown if RCE is possible. This attack appear to be
+ > exploitable via the victim must open a specially crafted RAR archive."
+
+ > - CVE-2018-1000879 (https://nvd.nist.gov/vuln/detail/CVE-2018-1000879)
+
+ > "libarchive version commit 379867ecb330b3a952fb7bfa7bffb7bbd5547205 onwards
+ > (release v3.3.0 onwards) contains a CWE-476: NULL Pointer Dereference
+ > vulnerability in ACL parser - libarchive/archive_acl.c,
+ > archive_acl_from_text_l() that can result in Crash/DoS. This attack appear
+ > to be exploitable via the victim must open a specially crafted archive
+ > file."
+
+ > - CVE-2018-1000880 (https://nvd.nist.gov/vuln/detail/CVE-2018-1000880)
+
+ > "libarchive version commit 9693801580c0cf7c70e862d305270a16b52826a7 onwards
+ > (release v3.2.0 onwards) contains a CWE-20: Improper Input Validation
+ > vulnerability in WARC parser -
+ > libarchive/archive_read_support_format_warc.c, _warc_read() that can result
+ > in DoS - quasi-infinite run time and disk usage from tiny file. This attack
+ > appear to be exploitable via the victim must open a specially crafted WARC
+ > file."
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
