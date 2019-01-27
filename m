@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Jan 2019 21:45:24 +0100
-Subject: [Buildroot] [PATCH v2] syslog-ng: fix builds with static libc
-In-Reply-To: <20190124195848.16647-1-judge.packham@gmail.com>
-References: <20190124195848.16647-1-judge.packham@gmail.com>
-Message-ID: <20190127214524.3eb64084@windsurf.home>
+Date: Sun, 27 Jan 2019 21:46:03 +0100
+Subject: [Buildroot] [git commit] package/upmpdcli: fix static build issue
+Message-ID: <20190127204512.943928118F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+commit: https://git.buildroot.net/buildroot/commit/?id=bb06035e6a1b41f1cb348a3eaa7d6c1184d0d97e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 25 Jan 2019 08:58:48 +1300
-Chris Packham <judge.packham@gmail.com> wrote:
+The spotify plugin requires shared library support and needs <dlfcn.h>.
+Explicitly disable the spotify plugin when building upmpdcli in a static
+context.
 
-> diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-> index 1f83e39ff0..69c94da02b 100644
-> --- a/package/syslog-ng/syslog-ng.hash
-> +++ b/package/syslog-ng/syslog-ng.hash
-> @@ -3,3 +3,4 @@ sha256 5cf931a9d7bead0e6d9a2c65eee8f6005a005878f59aa280f3c4294257ed5178  syslog-
->  sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
->  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-> +sha256 feb26f77921b42fa7e5468229d883c5fae0b349cd075013eec2cb071a677179b  d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
-> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-> index ecde9e8181..f96b97f30e 100644
-> --- a/package/syslog-ng/syslog-ng.mk
-> +++ b/package/syslog-ng/syslog-ng.mk
-> @@ -18,6 +18,7 @@ SYSLOG_NG_AUTORECONF = YES
->  SYSLOG_NG_CONF_ENV = LIBS=-lrt
->  SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
->  	--disable-java --disable-java-modules --disable-mongodb
-> +SYSLOG_NG_PATCH = https://github.com/balabit/syslog-ng/commit/d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
+Fixes:
+http://autobuild.buildroot.net/results/cb942d3c5f68959d6cbc85535ccff4a275369f91/
 
-We no longer want to download patches from github, because their hashes
-change once in a while (when a new commit is made to the repository,
-the beginning of its SHA1 may be identical to the one of an existing
-commit, in which case the SHA1 mentioned in patches are extended in
-length, causing the contents of the patch and therefore its hash to
-change). So we need such patches directly stored in package/syslog-ng/.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/upmpdcli/upmpdcli.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index d88caac78b..22a5bf2429 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -10,6 +10,11 @@ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
+ UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+ 
++# Disable spotify plugin which requires dlfcn.h
++ifeq ($(BR2_STATIC_LIBS),y)
++UPMPDCLI_CONF_OPTS = --disable-spotify
++endif
++
+ # Upmpdcli only runs if user upmpdcli exists
+ define UPMPDCLI_USERS
+ 	upmpdcli -1 upmpdcli -1 * - - audio Upmpdcli MPD UPnP Renderer Front-End
