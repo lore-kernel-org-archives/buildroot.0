@@ -1,42 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 27 Jan 2019 18:08:08 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/rpi-userland: bump version to
- e5803f2c98
-In-Reply-To: <20190127170808.7860-1-ps.report@gmx.net>
-References: <20190127170808.7860-1-ps.report@gmx.net>
-Message-ID: <20190127170808.7860-2-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Jan 2019 18:54:19 +0100
+Subject: [Buildroot] [PATCH] package/lighttpd: bump to version 1.4.53
+Message-ID: <20190127175420.29078-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 2f10993899..44d446ea3e 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 cf4f9ea62d0986f03af07485a9dfed6dc80253b691dedd6851b140581b72cafc rpi-userland-7cbfbd38d9824535164f93a1d32c81a33a00ca31.tar.gz
-+sha256 9424ffa45ef888fb61483c63fd66532c1c648e071fea72c93762efbb3c2a8669 rpi-userland-e5803f2c986cbf8c919c60278b3231dcdf4271a6.tar.gz
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index ea4df49a5e..20ef2fca98 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 93581a9abb..926de33ef2 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.52.sha256sum
+-sha256 27bc0991c530b7c6335e6efff2181934d3c1a1c516f7401ea71d8302cefda764  lighttpd-1.4.52.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.53.sha256sum
++sha256 3bdfce1cf3e9650a556a8c26fb15342c5717c63f530c54693db632b0371dcb78  lighttpd-1.4.53.tar.xz
+ # Locally calculated
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 5c0315a265..f50a4af935 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RPI_USERLAND_VERSION = 7cbfbd38d9824535164f93a1d32c81a33a00ca31
-+RPI_USERLAND_VERSION = e5803f2c986cbf8c919c60278b3231dcdf4271a6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).52
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).53
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 -- 
-2.20.1
+2.11.0
