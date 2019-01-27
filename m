@@ -1,46 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 11:22:48 +0100
-Subject: [Buildroot] [git commit] perl-net-dns: bump to version 1.19
-Message-ID: <20190127102332.710E88E255@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 11:23:16 +0100
+Subject: [Buildroot] [git commit] perl-uri: bump to version 1.76
+Message-ID: <20190127102332.872F08E255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e12dd35aadf6c0df9849c36f2bb7c8e963cc09
+commit: https://git.buildroot.net/buildroot/commit/?id=df9b13e674dc0ce0616db8f678875e9910813753
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 7a2bba5640..2a30ea7ba5 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 4ef17ece64..02287a0645 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    67af7e5c1c339f60c45c1054374bd8ee Net-DNS-1.18.tar.gz
--sha256 52ce1494fc9707fd5a60ed71db5cde727157b7f2363787d730d4d1bd9800a9d3 Net-DNS-1.18.tar.gz
-+md5    8a40402888487b853f861d21433f341a Net-DNS-1.19.tar.gz
-+sha256 206278bdd9a538bec3e45b50e80cc5a9d7dc6e70ebf0889ef78254f0f710ccd7 Net-DNS-1.19.tar.gz
+-md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
+-sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
++md5    c236e0142adecc1b1104da664bc43a79 URI-1.76.tar.gz
++sha256 b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e URI-1.76.tar.gz
  
  # computed by scancpan
- sha256 afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583 README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index 4e00b2f89b..31db330b1f 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
+ sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index 5be4401314..730b390526 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.18
-+PERL_NET_DNS_VERSION = 1.19
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-PERL_URI_VERSION = 1.74
++PERL_URI_VERSION = 1.76
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+-PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
+ PERL_URI_LICENSE_FILES = LICENSE
+ PERL_URI_DISTNAME = URI
