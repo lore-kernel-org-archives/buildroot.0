@@ -1,119 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 20:38:04 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi*: bump kernel version
- to 83b36f98e1
-Message-ID: <20190127193800.1091283251@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 20:11:49 +0100
+Subject: [Buildroot] [git commit] prosody: bump to version 0.11.2
+Message-ID: <20190127193759.DA177853BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=567355742fc90c8b67b0d7ad22f260b5b2db7aa5
+commit: https://git.buildroot.net/buildroot/commit/?id=1ad4cc99794236b6b0c56c2ac67e2a2d09eced21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now based on 4.14.95 (from 4.14.91).
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi0_defconfig       | 2 +-
- configs/raspberrypi0w_defconfig      | 2 +-
- configs/raspberrypi2_defconfig       | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi_defconfig        | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ package/prosody/0001-enable-syslog.patch | 2 +-
+ package/prosody/0002-add-pidfile.patch   | 6 +++---
+ package/prosody/prosody.hash             | 8 ++++----
+ package/prosody/prosody.mk               | 2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 0efcfc6cdc..2c8030d03d 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/prosody/0001-enable-syslog.patch b/package/prosody/0001-enable-syslog.patch
+index 4bd0a15aed..16acc89c5a 100644
+--- a/package/prosody/0001-enable-syslog.patch
++++ b/package/prosody/0001-enable-syslog.patch
+@@ -11,7 +11,7 @@ diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
+ index a0fc6c9e..af3cc0e4 100644
+ --- a/prosody.cfg.lua.dist
+ +++ b/prosody.cfg.lua.dist
+-@@ -163,7 +163,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
++@@ -155,7 +155,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
+  log = {
+  	info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
+  	error = "prosody.err";
+diff --git a/package/prosody/0002-add-pidfile.patch b/package/prosody/0002-add-pidfile.patch
+index b6af8dd822..6221fd0856 100644
+--- a/package/prosody/0002-add-pidfile.patch
++++ b/package/prosody/0002-add-pidfile.patch
+@@ -11,9 +11,9 @@ diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
+ index af3cc0e4..675db12f 100644
+ --- a/prosody.cfg.lua.dist
+ +++ b/prosody.cfg.lua.dist
+-@@ -181,6 +181,9 @@ log = {
+- -- Location of directory to find certificates in (relative to main config file):
+- certificates = "certs"
++@@ -176,6 +176,9 @@ log = {
++ -- HTTPS currently only supports a single certificate, specify it here:
++ --https_certificate = "certs/localhost.crt"
+  
+ +-- This must match the PIDFILE used in S50prosody
+ +pidfile = "/var/run/prosody/prosody.pid"
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 65bf5c9344..f3f9aa4777 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5    9157b6eaf05f7dfe004e38dbe950cafd  prosody-0.11.1.tar.gz
+-sha1   dacce98fda317f5ba3c05842e2d97018d050b435  prosody-0.11.1.tar.gz
+-sha256 91bec43f0798729e0a2b207613a745598ea3ca7dcb7fd85df44ccf04fa5c65aa  prosody-0.11.1.tar.gz
+-sha512 6e25d2365d40582f57799bb08bf2673ba43270e8bcca5c5b785381380db55ec3ea6ab771fb9bd228bf265a564bb017dbfeae81713abd2de35a92704f8b8004ef  prosody-0.11.1.tar.gz
++md5    b4529e0cf8e0ee82a2f677e404c3df35  prosody-0.11.2.tar.gz
++sha1   0508cfc1c3c74a7eb8fdac2ed50435e190930f6a  prosody-0.11.2.tar.gz
++sha256 8911f6dc29b9e0c4edf9e61dc23fa22d77bc42c4caf28b809ab843b2f08e4831  prosody-0.11.2.tar.gz
++sha512 22e55a551a40c92f38a1ed1de5fdcad574d699d58c2e27f93c3d465b55487b8e923c2ba088daf93c7140cbafb0d429687e0b662c8bb1c1aba4b79ac1ea271cd1  prosody-0.11.2.tar.gz
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 95c9686795..c2111f6b83 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 45b7f68302..7149d91ba5 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-0-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 30caab74f8..343ae7b2fd 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 3951197319..43687d29f1 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index b976389d65..9ad5b54b7c 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 3c4ecac0f1..276c7cd550 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 8b82116dca..97573acafa 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4c5aec7827ac970729ac54e57cbd85fba878a462)/linux-4c5aec7827ac970729ac54e57cbd85fba878a462.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+-PROSODY_VERSION = 0.11.1
++PROSODY_VERSION = 0.11.2
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
