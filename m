@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Jan 2019 16:12:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/znc: bump version to 1.7.2
-Message-ID: <20190127151248.18819-1-bernd.kuhls@t-online.de>
+Date: Sun, 27 Jan 2019 16:29:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.12.2
+Message-ID: <20190127152946.4180-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pngquant/pngquant.hash | 4 ++--
+ package/pngquant/pngquant.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index 7a14595907..0845df5355 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 44cfea7158ea05dc2547c7c6bc22371e66c869def90351de0ab90a9c200d39c4  znc-1.7.1.tar.gz
-+sha256 60b4e78f54c532c32673d1ef8e5f606c530ef3a6d6b76ea1daa66459a86682a9  znc-1.7.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 5235fd9196..b2e422c0f0 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index f525e466c3..f27eda60dd 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,5 @@
+ # From https://pngquant.org/releases.html
+-sha1 f57ce0112e86ac966c55270ccf5971deff241d4f  pngquant-2.12.0-src.tar.gz
++sha1 24efa42105bf3d8d0f4cf699053d2701ea787bd5  pngquant-2.12.2-src.tar.gz
+ # Locally computed
+-sha256 0e540c64bb58c05f2a05b4eaf1d3d165f0d3278500f15abfeac47f93f8fa8fa8  pngquant-2.12.0-src.tar.gz
++sha256 bb031c48039ee73ea0e60709bb9ab80c55bfa3a5920b798ea37a03f2757b099c  pngquant-2.12.2-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 26c293bec3..0053b9a46e 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZNC_VERSION = 1.7.1
-+ZNC_VERSION = 1.7.2
- ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+-PNGQUANT_VERSION = 2.12.0
++PNGQUANT_VERSION = 2.12.2
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
 -- 
 2.20.1
