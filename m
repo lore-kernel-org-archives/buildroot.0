@@ -1,47 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 10:41:07 +0100
-Subject: [Buildroot] [git commit] python-engineio: bump to version 3.3.0
-Message-ID: <20190127095108.3F86983BE0@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 10:41:15 +0100
+Subject: [Buildroot] [git commit] python-msgpack: bump to version 0.6.1
+Message-ID: <20190127095108.486DB7FA8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e881a3ef382373a0bed91c58a530f22cec6f645
+commit: https://git.buildroot.net/buildroot/commit/?id=1abe2884ddf325cb0197d5de4b7ad76987fff904
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index 3b16d7ef61..09e004ac46 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 98027009ad..cb3b75d5f7 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	ba0fd43c77028bd6fed4ee1004f37c71  python-engineio-3.2.3.tar.gz
--sha256	401458bb0046d950c429dac3ef82ce12e3ff1236f63b4bbb344d60a1b51c4e94  python-engineio-3.2.3.tar.gz
-+md5	ad32353278d0576bfa7d7a2f9b97dec5  python-engineio-3.3.0.tar.gz
-+sha256	e4ac17c04c32ccca67287dfdbbe4ee1e9eec3a0a1a9a6070f3ab784db08407dd  python-engineio-3.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 8d4e344247..c20101984b 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5	be3043cc2c1e3b5ebf08463ffa71cf17  msgpack-0.6.0.tar.gz
+-sha256	64abc6bf3a2ac301702f5760f4e6e227d0fd4d84d9014ef9a40faa9d43365259  msgpack-0.6.0.tar.gz
++md5	1b96537be6f5186fed0d131aaa59ef26  msgpack-0.6.1.tar.gz
++sha256	4008c72f5ef2b7936447dcb83db41d97e9791c83221be13d5e19db0796df1972  msgpack-0.6.1.tar.gz
+ # Locally computed sha256
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 8bbae9283d..517166db63 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ENGINEIO_VERSION = 3.2.3
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/e6/1e/64fd629f8215b81bf0e5682504ebbbd10d1d48e52ee30d053484b6e91421
-+PYTHON_ENGINEIO_VERSION = 3.3.0
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/2f/09/83d627ad3dadd064bfb875c7767e93f3568354fe82cebe298b4e07f79238
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+-PYTHON_MSGPACK_VERSION = 0.6.0
++PYTHON_MSGPACK_VERSION = 0.6.1
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/3a/bb/dc3f9fc608a6c1c7a471c2bebc761d9c8dbb2f7179a4283a89b9451765b5
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/81/9c/0036c66234482044070836cc622266839e2412f8108849ab0bfdeaab8578
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
