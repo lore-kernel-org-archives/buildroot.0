@@ -1,34 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Jan 2019 21:46:22 +0100
-Subject: [Buildroot] [PATCH] package/upmpdcli: fix static build issue
-In-Reply-To: <20190124100717.12620-1-joerg.krause@embedded.rocks>
-References: <20190124100717.12620-1-joerg.krause@embedded.rocks>
-Message-ID: <20190127214622.53141022@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Jan 2019 22:02:37 +0100
+Subject: [Buildroot] [PATCH 02/10] package/nut: Add support for openssl
+ 1.1.x
+In-Reply-To: <20190125160420.10932-2-patrick.havelange@essensium.com> (Patrick
+ Havelange's message of "Fri, 25 Jan 2019 17:04:12 +0100")
+References: <20190125160420.10932-1-patrick.havelange@essensium.com>
+ <20190125160420.10932-2-patrick.havelange@essensium.com>
+Message-ID: <87imy9olua.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Jan 2019 11:07:17 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+>>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
 
-> The spotify plugin requires shared library support and needs <dlfcn.h>.
-> Explicitly disable the spotify plugin when building upmpdcli in a static
-> context.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/cb942d3c5f68959d6cbc85535ccff4a275369f91/
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/upmpdcli/upmpdcli.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+ > From: Vadim Kochan <vadim4j@gmail.com>
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+ > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 
-Applied to master, thanks.
+ > ---
+ > Changes v6:
+ >   - use the actual upstream patch
+ >   - drop unrelated patch
+ > ---
+ >  ...Add-compatibility-with-openssl-1.1.0.patch | 75 +++++++++++++++++++
+ >  1 file changed, 75 insertions(+)
+ >  create mode 100644 package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
 
-Thomas
+ > diff --git a/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch b/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
+ > new file mode 100644
+ > index 0000000000..65b7f2d6f7
+ > --- /dev/null
+ > +++ b/package/nut/0003-Add-compatibility-with-openssl-1.1.0.patch
+ > @@ -0,0 +1,75 @@
+ > +From fcbf18c92918ce5e81d0aab62a7aed5c2245ea4d Mon Sep 17 00:00:00 2001
+ > +From: Eneas U de Queiroz <cote2004-github@yahoo.com>
+ > +Date: Fri, 1 Jun 2018 11:17:28 -0300
+ > +Subject: [PATCH 1/2] Add compatibility with openssl 1.1.0
+ > +
+ > +Minor adjustments were needed:
+ > +* Openssl 1.1 libs do not need to be initialized.
+ > +* TLSv*_method became TLS_*_method.
+ > +
+ > +Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
+ > +Upstream: https://github.com/networkupstools/nut/pull/558/
+ > +Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+ > +---
+ > + clients/upsclient.c        | 5 ++++-
+ > + m4/nut_check_libopenssl.m4 | 2 +-
+ > + server/netssl.c            | 7 +++++--
+ > + 3 files changed, 10 insertions(+), 4 deletions(-)
+ > +
+ > +diff --git a/clients/upsclient.c b/clients/upsclient.c
+ > +index b90587b0..053d60fb 100644
+ > +--- a/clients/upsclient.c
+ > ++++ b/clients/upsclient.c
+ > +@@ -316,10 +316,13 @@ int upscli_init(int certverify, const char *certpath,
+ > + 	
+ > + #ifdef WITH_OPENSSL
+ > + 	
+ > ++# if OPENSSL_VERSION_NUMBER < 0x10100000L
+ > + 	SSL_library_init();
+ > + 	SSL_load_error_strings();
+ > ++#  define TLS_client_method TLSv1_client_method
+ > ++# endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+ > + 
+ > +-	ssl_method = TLSv1_client_method();
+ > ++	ssl_method = TLS_client_method();
+ > + 
+ > + 	if (!ssl_method) {
+ > + 		return 0;
+ > +diff --git a/m4/nut_check_libopenssl.m4 b/m4/nut_check_libopenssl.m4
+ > +index 1b875077..7eb401cd 100644
+ > +--- a/m4/nut_check_libopenssl.m4
+ > ++++ b/m4/nut_check_libopenssl.m4
+ > +@@ -58,7 +58,7 @@ if test -z "${nut_have_libopenssl_seen}"; then
+ > + 
+ > + 	dnl check if openssl is usable
+ > + 	AC_CHECK_HEADERS(openssl/ssl.h, [nut_have_openssl=yes], [nut_have_openssl=no], [AC_INCLUDES_DEFAULT])
+ > +-	AC_CHECK_FUNCS(SSL_library_init, [], [nut_have_openssl=no])
+ > ++	AC_CHECK_FUNCS(SSL_CTX_new, [], [nut_have_openssl=no])
+ > + 
+ > + 	if test "${nut_have_openssl}" = "yes"; then
+ > + 		nut_with_ssl="yes"
+ > +diff --git a/server/netssl.c b/server/netssl.c
+ > +index c2f40989..0289e296 100644
+ > +--- a/server/netssl.c
+ > ++++ b/server/netssl.c
+ > +@@ -387,12 +387,15 @@ void ssl_init(void)
+ > + 
+ > + #ifdef WITH_OPENSSL
+ > + 
+ > ++# if OPENSSL_VERSION_NUMBER < 0x10100000L
+
+The libshout patch alternatively checked for libressl, but that is not
+done here?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
