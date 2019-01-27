@@ -1,48 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 10:41:57 +0100
-Subject: [Buildroot] [git commit] python-psycopg2: bump to version 2.7.7
-Message-ID: <20190127095108.59E3083BE0@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 10:41:30 +0100
+Subject: [Buildroot] [git commit] python-pip: bump to version 19.0.1
+Message-ID: <20190127095108.4C1D48E2D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e05e274148bf9bc7133779f99bd04122d8df3674
+commit: https://git.buildroot.net/buildroot/commit/?id=8c807f3ac40a2335b8130cd45c17fac0776bfc06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License change - a year bump.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-psycopg2/python-psycopg2.hash | 4 ++--
- package/python-psycopg2/python-psycopg2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pip/python-pip.hash | 6 +++---
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
-index 5dedd61abc..c6e199769b 100644
---- a/package/python-psycopg2/python-psycopg2.hash
-+++ b/package/python-psycopg2/python-psycopg2.hash
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 1a70f0f7c2..149099b118 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psycopg2/json
--md5	9e7d6f695fc7f8d1c42a7905449246c9  psycopg2-2.7.5.tar.gz
--sha256	eccf962d41ca46e6326b97c8fe0a6687b58dfc1a5f6540ed071ff1474cea749e  psycopg2-2.7.5.tar.gz
-+md5	598e2f43c1b26361ae2d3a3254dae414  psycopg2-2.7.7.tar.gz
-+sha256	f4526d078aedd5187d0508aa5f9a01eae6a48a470ed678406da94b4cd6524b7e  psycopg2-2.7.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	75cad449ad62c88b22de317a26781714  pip-18.1.tar.gz
+-sha256	c0a292bd977ef590379a3f05d7b7f65135487b67470f6281289a94e015650ea1  pip-18.1.tar.gz
++md5    b6919f1a368138f73b367abccc06f5ae  pip-19.0.1.tar.gz
++sha256 e81ddd35e361b630e94abeda4a1eddd36d47a90e71eb00f38f46b57f787cd1a5  pip-19.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256	3c2b037df24cb85ca1a48739dcab60a5037644b436f87173f6db0d101636b525  LICENSE
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index c8c328d801..e297d6e2b2 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
+-sha256	391a8784e319dae5431477d4cc9bc504fc5d71fd9e89e1c80f1cd3855f5d7cfa  LICENSE.txt
++sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 9ae7e7324f..22562cc93f 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSYCOPG2_VERSION = 2.7.5
-+PYTHON_PSYCOPG2_VERSION = 2.7.7
- PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
--PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/b2/c1/7bf6c464e903ffc4f3f5907c389e5a4199666bf57f6cd6bf46c17912a1f9
-+PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/63/54/c039eb0f46f9a9406b59a638415c2012ad7be9b4b97bfddb1f48c280df3a
- PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
+-PYTHON_PIP_VERSION = 18.1
++PYTHON_PIP_VERSION = 19.0.1
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/45/ae/8a0ad77defb7cc903f09e551d88b443304a9bd6e6f124e75c0fbbf6de8f7
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/c8/89/ad7f27938e59db1f0f55ce214087460f65048626e2226531ba6cb6da15f0
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
