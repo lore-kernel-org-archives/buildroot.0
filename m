@@ -1,40 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Jan 2019 20:52:14 +0100
-Subject: [Buildroot] [PATCH 1/8] package/s6-networking: fix dependency
- when libressl is enabled
-In-Reply-To: <20190127185943.1136-2-ricardo.martincoski@gmail.com>
-References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
- <20190127185943.1136-2-ricardo.martincoski@gmail.com>
-Message-ID: <20190127205214.274ecc14@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Jan 2019 21:24:24 +0100
+Subject: [Buildroot] [PATCH 1/1] python-pyasn1-modules: bump to version
+ 0.2.4
+In-Reply-To: <20190126194606.20116-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 26 Jan 2019 21:46:06 +0200")
+References: <20190126194606.20116-1-asafka7@gmail.com>
+Message-ID: <87va29onlz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-On Sun, 27 Jan 2019 16:59:36 -0200
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-> Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
-> actually dropped the dependency on s6-dns and s6 when libressl is
-> enabled.
-> Fix this by using += inside the conditional code.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
-> NOTE: I don't know why the autobuilders didn't caught this.
+Committed, thanks.
 
-Because libressl is selected as part of a choice..endchoice, and such
-choices are not randomized by "randpackageconfig". Therefore, only
-OpenSSL is tested by the autobuilders, and LibreSSL is never tested.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
