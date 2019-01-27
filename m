@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 11:22:35 +0100
-Subject: [Buildroot] [git commit] perl-gd: bump to version 2.70
-Message-ID: <20190127102332.62F4C8E255@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 11:22:25 +0100
+Subject: [Buildroot] [git commit] perl-file-slurp: bump to version 9999.25
+Message-ID: <20190127102332.5CABE8E255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b045ebf4d4880790431ec1529c4a43e18aedc6fd
+commit: https://git.buildroot.net/buildroot/commit/?id=1662c215b8e7eea0b8bd082bdca6d414f6cd89c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-gd/perl-gd.hash | 4 ++--
- package/perl-gd/perl-gd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-file-slurp/perl-file-slurp.hash | 6 +++---
+ package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
-index deeda0eb15..851aa6e57c 100644
---- a/package/perl-gd/perl-gd.hash
-+++ b/package/perl-gd/perl-gd.hash
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
+index 617973191d..4ed670ec7c 100644
+--- a/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    aa1488a54fd9baba7aadb53720675bdc GD-2.69.tar.gz
--sha256 ddb02d491cfd84d30448438c84239b0893d84e9576a90c3b5ed109420fae545d GD-2.69.tar.gz
-+md5    d9596406f64e50b9ecef8d7cfbf0d99b GD-2.70.tar.gz
-+sha256 66b26a322e1fd82ef874721dd5274effcc60eb0c0f3481bf88ddf91529b633e2 GD-2.70.tar.gz
+-md5    5c08acb15544113657994960f16c8910 File-Slurp-9999.23.tar.gz
+-sha256 9eb73287890e172c4e39ce069f0e6a82da90df20dc7e2d52c666e9b07489a7f7 File-Slurp-9999.23.tar.gz
++md5    52afbe79bbf2b86c11ac4986030a9275 File-Slurp-9999.25.tar.gz
++sha256 c7ea97bae61bc68404476ce69277f6f796d31ab58c9c40ee390d9d5a1c5ce3c1 File-Slurp-9999.25.tar.gz
  
  # computed by scancpan
- sha256 1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f LICENSE
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-index 751ea983eb..7557517131 100644
---- a/package/perl-gd/perl-gd.mk
-+++ b/package/perl-gd/perl-gd.mk
+-sha256 21eec4bf12d10c78042734c76873852aaffce278ad4fd90814d91b8c885e6ef3 README.md
++sha256 87744d1995d9a41ef32478c98f08167a13a1e09d96c3bb00ade315e3290facef README.md
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index fd80d4f6d5..4ceba25f51 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_GD_VERSION = 2.69
-+PERL_GD_VERSION = 2.70
- PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
- PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_GD_DEPENDENCIES = zlib libpng freetype gd
+-PERL_FILE_SLURP_VERSION = 9999.23
++PERL_FILE_SLURP_VERSION = 9999.25
+ PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+ PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+ PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
