@@ -1,49 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 11:23:16 +0100
-Subject: [Buildroot] [git commit] perl-uri: bump to version 1.76
-Message-ID: <20190127102332.872F08E255@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 11:22:35 +0100
+Subject: [Buildroot] [git commit] perl-gd: bump to version 2.70
+Message-ID: <20190127102332.62F4C8E255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df9b13e674dc0ce0616db8f678875e9910813753
+commit: https://git.buildroot.net/buildroot/commit/?id=b045ebf4d4880790431ec1529c4a43e18aedc6fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-gd/perl-gd.hash | 4 ++--
+ package/perl-gd/perl-gd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 4ef17ece64..02287a0645 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index deeda0eb15..851aa6e57c 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
--sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
-+md5    c236e0142adecc1b1104da664bc43a79 URI-1.76.tar.gz
-+sha256 b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e URI-1.76.tar.gz
+-md5    aa1488a54fd9baba7aadb53720675bdc GD-2.69.tar.gz
+-sha256 ddb02d491cfd84d30448438c84239b0893d84e9576a90c3b5ed109420fae545d GD-2.69.tar.gz
++md5    d9596406f64e50b9ecef8d7cfbf0d99b GD-2.70.tar.gz
++sha256 66b26a322e1fd82ef874721dd5274effcc60eb0c0f3481bf88ddf91529b633e2 GD-2.70.tar.gz
  
  # computed by scancpan
- sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 5be4401314..730b390526 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,9 +4,9 @@
+ sha256 1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f LICENSE
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index 751ea983eb..7557517131 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 1.74
-+PERL_URI_VERSION = 1.76
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
--PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_URI_LICENSE = Artistic or GPL-1.0+
- PERL_URI_LICENSE_FILES = LICENSE
- PERL_URI_DISTNAME = URI
+-PERL_GD_VERSION = 2.69
++PERL_GD_VERSION = 2.70
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
