@@ -1,61 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 20:34:38 +0100
-Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.36
-Message-ID: <20190127193759.F404C8E52B@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 20:13:40 +0100
+Subject: [Buildroot] [git commit] package/pngquant: bump version to 2.12.2
+Message-ID: <20190127193759.F36808E3D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a67cc410bc6c13624aa018a9eda06edcb272f2
+commit: https://git.buildroot.net/buildroot/commit/?id=0abeee374a579b66aa612306f931a3f5cfedd7a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License[1] was bumped to v2, for details see
-http://lists.opensource.org/pipermail/license-review_lists.opensource.org/2018-November/003791.html
-
-[1] http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: use Libpng-2.0 as license tag]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 11 +++++------
- package/libpng/libpng.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ package/pngquant/pngquant.hash | 4 ++--
+ package/pngquant/pngquant.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 27f66a5d01..066d2c3bcd 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,7 +1,6 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
--md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
--sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
--
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.36/
-+md5 df2be2d29c40937fe1f5349b16bc2826  libpng-1.6.36.tar.xz
-+sha1 aec9548c8319104226cc4c31d1f5e524f1b55295  libpng-1.6.36.tar.xz
- # Locally computed:
--sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
--sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
-+sha256 eceb924c1fa6b79172fdfd008d335f0e59172a86a66481e09d4089df872aa319  libpng-1.6.36.tar.xz
-+sha256 142da07fb4b0cceb861b2e69fe7e5b602f25ec7adc85b0a426133d9ee0d2e116  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index b6d1d8d071..f956f9ce19 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index f525e466c3..f27eda60dd 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,5 @@
+ # From https://pngquant.org/releases.html
+-sha1 f57ce0112e86ac966c55270ccf5971deff241d4f  pngquant-2.12.0-src.tar.gz
++sha1 24efa42105bf3d8d0f4cf699053d2701ea787bd5  pngquant-2.12.2-src.tar.gz
+ # Locally computed
+-sha256 0e540c64bb58c05f2a05b4eaf1d3d165f0d3278500f15abfeac47f93f8fa8fa8  pngquant-2.12.0-src.tar.gz
++sha256 bb031c48039ee73ea0e60709bb9ab80c55bfa3a5920b798ea37a03f2757b099c  pngquant-2.12.2-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 26c293bec3..0053b9a46e 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.35
-+LIBPNG_VERSION = 1.6.36
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
--LIBPNG_LICENSE = Libpng
-+LIBPNG_LICENSE = Libpng-2.0
- LIBPNG_LICENSE_FILES = LICENSE
- LIBPNG_INSTALL_STAGING = YES
- LIBPNG_DEPENDENCIES = host-pkgconf zlib
+-PNGQUANT_VERSION = 2.12.0
++PNGQUANT_VERSION = 2.12.2
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
