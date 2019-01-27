@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Jan 2019 20:55:47 +0100
-Subject: [Buildroot] Building host-python-2.7.15 Failed
-In-Reply-To: <CAAsE_ucb7QYz1MQcdk8Cf_N9Oni7ZTjQnLZ8tNXZgWpFZKCi3g@mail.gmail.com>
-References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
- <8017d9a3-290f-f8de-8e13-55430ace2b77@mind.be>
- <20190126151022.23c5a011@windsurf>
- <CAAsE_uc6pTbBHu_UgUSSaTyEbyKocPpEcSJK9hgz+UsMBN=QoQ@mail.gmail.com>
- <CAAsE_ucb7QYz1MQcdk8Cf_N9Oni7ZTjQnLZ8tNXZgWpFZKCi3g@mail.gmail.com>
-Message-ID: <20190127205547.224c1eae@windsurf.home>
+Date: Sun, 27 Jan 2019 20:52:14 +0100
+Subject: [Buildroot] [PATCH 1/8] package/s6-networking: fix dependency
+ when libressl is enabled
+In-Reply-To: <20190127185943.1136-2-ricardo.martincoski@gmail.com>
+References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
+ <20190127185943.1136-2-ricardo.martincoski@gmail.com>
+Message-ID: <20190127205214.274ecc14@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ricardo,
 
-On Mon, 28 Jan 2019 01:06:29 +0800
-Woody Wu <narkewoody@gmail.com> wrote:
+On Sun, 27 Jan 2019 16:59:36 -0200
+Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
 
-> I checked my ubuntu 18.04.  It has /lib/x86_64-linux-gnu/libcrypt.so.1 and
-> no libcrypt.so.
+> Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
+> actually dropped the dependency on s6-dns and s6 when libressl is
+> enabled.
+> Fix this by using += inside the conditional code.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+> NOTE: I don't know why the autobuilders didn't caught this.
 
-It is weird, because libc6-dev should have installed both libcrypt.a
-and libcrypt.so. See
-https://packages.ubuntu.com/cosmic/amd64/libc6-dev/filelist. So it
-should not be possible to have libcrypt.a without libcrypt.so.
+Because libressl is selected as part of a choice..endchoice, and such
+choices are not randomized by "randpackageconfig". Therefore, only
+OpenSSL is tested by the autobuilders, and LibreSSL is never tested.
 
 Best regards,
 
