@@ -1,41 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 22:17:07 +0100
-Subject: [Buildroot] [git commit] Revert "avrdude: add license information"
-Message-ID: <20190127212827.65BA18137F@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 22:15:55 +0100
+Subject: [Buildroot] [git commit] package/sdl_sound: actually use the
+ optional CONF_OPTS
+Message-ID: <20190127212827.5FB4F8137C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6bce837ec80b65a873e6c12ae1f813ed505e006
+commit: https://git.buildroot.net/buildroot/commit/?id=df0d7d1371d2916bf9b48968f0a2dcd471ea6d85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit d1f545004bf0533064363d87c2d7c71e7acf7435 from 2014
-because the added variables already existed. The real problem at the
-time was that one of the pre-existent variables had a typo, fixed in a
-later commit.
+Since "57ace26b6c package/sdl_sound: add optional support for
+libmodplug" from 2016, optional CONF_OPTS are added but they do not
+really take effect because there is an unconditional override below the
+conditional append.
 
-Currently AVRDUDE_LICENSE and AVRDUDE_LICENSE_FILES are declared twice
-with the same values for each one. So remove one of them.
+Currently this does not cause build failures, but it can lead to wrong
+detection of dependencies because many explicit --enable/--disable are
+not passed to configure.
+
+Fix this by moving the unconditional code to the top.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Wojciech M. Zabolotny <wzab01@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avrdude/avrdude.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/sdl_sound/sdl_sound.mk | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 0e34076e38..ae378dfbac 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -15,8 +15,6 @@ AVRDUDE_AUTORECONF = YES
- AVRDUDE_CONF_OPTS = --enable-linuxgpio
- AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
- 	host-flex host-bison
--AVRDUDE_LICENSE = GPL-2.0+
--AVRDUDE_LICENSE_FILES = avrdude/COPYING
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 2544b598e9..c6028e7910 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -11,6 +11,11 @@ SDL_SOUND_LICENSE = LGPL-2.1+
+ SDL_SOUND_LICENSE_FILES = COPYING
+ SDL_SOUND_INSTALL_STAGING = YES
+ SDL_SOUND_DEPENDENCIES = sdl
++SDL_SOUND_CONF_OPTS = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--enable-static
  
- ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
- AVRDUDE_DEPENDENCIES += libftdi1
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ SDL_SOUND_DEPENDENCIES += libiconv
+@@ -52,12 +57,6 @@ else
+ SDL_SOUND_CONF_OPTS += --disable-physfs
+ endif
+ 
+-SDL_SOUND_CONF_OPTS = \
+-	--with-sdl-prefix=$(STAGING_DIR)/usr \
+-	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+-	--disable-sdltest \
+-	--enable-static
+-
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ SDL_SOUND_CONF_OPTS += --enable-mmx
+ else
