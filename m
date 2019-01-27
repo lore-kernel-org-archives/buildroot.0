@@ -1,23 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 20:38:39 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/rpi-userland: bump version
- to e5803f2c98
-In-Reply-To: <20190127170808.7860-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 27 Jan 2019 18:08:08 +0100")
-References: <20190127170808.7860-1-ps.report@gmx.net>
- <20190127170808.7860-2-ps.report@gmx.net>
-Message-ID: <875zu9q4ao.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Jan 2019 20:34:38 +0100
+Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.36
+Message-ID: <20190127193759.F404C8E52B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6a67cc410bc6c13624aa018a9eda06edcb272f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+License[1] was bumped to v2, for details see
+http://lists.opensource.org/pipermail/license-review_lists.opensource.org/2018-November/003791.html
 
-Committed, thanks.
+[1] http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: use Libpng-2.0 as license tag]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpng/libpng.hash | 11 +++++------
+ package/libpng/libpng.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 27f66a5d01..066d2c3bcd 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,7 +1,6 @@
+-# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.35/
+-md5		678b7e696a62a193ed3503b04bf449d6			libpng-1.6.35.tar.xz
+-sha1	0df1561aa1da610e892239348970d574b14deed0	libpng-1.6.35.tar.xz
+-
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.36/
++md5 df2be2d29c40937fe1f5349b16bc2826  libpng-1.6.36.tar.xz
++sha1 aec9548c8319104226cc4c31d1f5e524f1b55295  libpng-1.6.36.tar.xz
+ # Locally computed:
+-sha256	23912ec8c9584917ed9b09c5023465d71709dce089be503c7867fec68a93bcd7	libpng-1.6.35.tar.xz
+-sha256	f9850940c6606003eea9c8864b2a3f177eb5c963614aba5a3c5a24c47dd043ab	LICENSE
++sha256 eceb924c1fa6b79172fdfd008d335f0e59172a86a66481e09d4089df872aa319  libpng-1.6.36.tar.xz
++sha256 142da07fb4b0cceb861b2e69fe7e5b602f25ec7adc85b0a426133d9ee0d2e116  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index b6d1d8d071..f956f9ce19 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.35
++LIBPNG_VERSION = 1.6.36
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+-LIBPNG_LICENSE = Libpng
++LIBPNG_LICENSE = Libpng-2.0
+ LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkgconf zlib
