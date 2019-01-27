@@ -1,42 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 20:38:30 +0100
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version to
- e5803f2c98
-Message-ID: <20190127193800.172D983251@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Jan 2019 20:55:47 +0100
+Subject: [Buildroot] Building host-python-2.7.15 Failed
+In-Reply-To: <CAAsE_ucb7QYz1MQcdk8Cf_N9Oni7ZTjQnLZ8tNXZgWpFZKCi3g@mail.gmail.com>
+References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+ <8017d9a3-290f-f8de-8e13-55430ace2b77@mind.be>
+ <20190126151022.23c5a011@windsurf>
+ <CAAsE_uc6pTbBHu_UgUSSaTyEbyKocPpEcSJK9hgz+UsMBN=QoQ@mail.gmail.com>
+ <CAAsE_ucb7QYz1MQcdk8Cf_N9Oni7ZTjQnLZ8tNXZgWpFZKCi3g@mail.gmail.com>
+Message-ID: <20190127205547.224c1eae@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d176bf678971cd235c33af31952cd616409e36a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 28 Jan 2019 01:06:29 +0800
+Woody Wu <narkewoody@gmail.com> wrote:
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 2f10993899..44d446ea3e 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 cf4f9ea62d0986f03af07485a9dfed6dc80253b691dedd6851b140581b72cafc rpi-userland-7cbfbd38d9824535164f93a1d32c81a33a00ca31.tar.gz
-+sha256 9424ffa45ef888fb61483c63fd66532c1c648e071fea72c93762efbb3c2a8669 rpi-userland-e5803f2c986cbf8c919c60278b3231dcdf4271a6.tar.gz
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index ea4df49a5e..20ef2fca98 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 7cbfbd38d9824535164f93a1d32c81a33a00ca31
-+RPI_USERLAND_VERSION = e5803f2c986cbf8c919c60278b3231dcdf4271a6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+> I checked my ubuntu 18.04.  It has /lib/x86_64-linux-gnu/libcrypt.so.1 and
+> no libcrypt.so.
+
+It is weird, because libc6-dev should have installed both libcrypt.a
+and libcrypt.so. See
+https://packages.ubuntu.com/cosmic/amd64/libc6-dev/filelist. So it
+should not be possible to have libcrypt.a without libcrypt.so.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
