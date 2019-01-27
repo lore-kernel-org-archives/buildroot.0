@@ -1,46 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 11:22:11 +0100
-Subject: [Buildroot] [git commit] perl-date-manip: bump to version 6.75
-Message-ID: <20190127102332.55E748E255@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 11:22:48 +0100
+Subject: [Buildroot] [git commit] perl-net-dns: bump to version 1.19
+Message-ID: <20190127102332.710E88E255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a10613eebcbe99936b873c51efaf14e580e528a
+commit: https://git.buildroot.net/buildroot/commit/?id=60e12dd35aadf6c0df9849c36f2bb7c8e963cc09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-date-manip/perl-date-manip.hash | 4 ++--
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index 6fb8a18967..b290e8ea24 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 7a2bba5640..2a30ea7ba5 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    0f85b1d9236e22a53dcb1c7f4b4fed77 Date-Manip-6.73.tar.gz
--sha256 d39295c7c3f19b43470d1203dded8cb649b41a1098e51b5b7c7cf17b662ca255 Date-Manip-6.73.tar.gz
-+md5    d922d5fe4a00521dc171ac3ee65a9d61 Date-Manip-6.75.tar.gz
-+sha256 c1fbcfbe2ab1a84e57f191807e87c97985da00926f64d1aae598c8756acbb67d Date-Manip-6.75.tar.gz
+-md5    67af7e5c1c339f60c45c1054374bd8ee Net-DNS-1.18.tar.gz
+-sha256 52ce1494fc9707fd5a60ed71db5cde727157b7f2363787d730d4d1bd9800a9d3 Net-DNS-1.18.tar.gz
++md5    8a40402888487b853f861d21433f341a Net-DNS-1.19.tar.gz
++sha256 206278bdd9a538bec3e45b50e80cc5a9d7dc6e70ebf0889ef78254f0f710ccd7 Net-DNS-1.19.tar.gz
  
  # computed by scancpan
- sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index 5e34ba4dae..cc668184ee 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
+ sha256 afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583 README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 4e00b2f89b..31db330b1f 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.73
-+PERL_DATE_MANIP_VERSION = 6.75
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_DNS_VERSION = 1.18
++PERL_NET_DNS_VERSION = 1.19
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
