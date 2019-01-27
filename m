@@ -1,104 +1,96 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 27 Jan 2019 16:59:42 -0200
-Subject: [Buildroot] [PATCH 7/8] utils/check-package: handle ifdef/ifndef in
- .mk files
+Date: Sun, 27 Jan 2019 16:59:41 -0200
+Subject: [Buildroot] [PATCH 6/8] utils/check-package: allow to disable
+ warning for a line
 In-Reply-To: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
 References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190127185943.1136-8-ricardo.martincoski@gmail.com>
+Message-ID: <20190127185943.1136-7-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently check-package only knows about ifeq/ifneq.
-Add code to handle ifdef/ifndef as well.
+Currently any exceptions for a check function need to be coded into the
+check-package script itself.
+
+Create a pattern that can be used in a comment to make check-package
+ignore one or more warning types in the line immediately below:
+ # check-package Indent, VariableWithBraces
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- utils/checkpackagelib/lib_mk.py | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ utils/check-package           | 4 ++++
+ utils/checkpackagelib/base.py | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 4387cf7167..51c6577d2c 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -1,34 +1,38 @@
+diff --git a/utils/check-package b/utils/check-package
+index 26439f08eb..ce1fe98d67 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -119,36 +119,40 @@ def check_file_using_lib(fname):
+         return nwarnings, nlines
+     classes = inspect.getmembers(lib, is_a_check_function)
+ 
+     if flags.dry_run:
+         functions_to_run = [c[0] for c in classes]
+         print("{}: would run: {}".format(fname, functions_to_run))
+         return nwarnings, nlines
+ 
+     objects = [c[1](fname, flags.manual_url) for c in classes]
+ 
+     for cf in objects:
+         nwarnings += print_warnings(cf.before())
+     if six.PY3:
+         f = open(fname, "r", errors="surrogateescape")
+     else:
+         f = open(fname, "r")
++    lastline = ""
+     for lineno, text in enumerate(f.readlines()):
+         nlines += 1
+         for cf in objects:
++            if cf.disable.search(lastline):
++                continue
+             nwarnings += print_warnings(cf.check_line(lineno + 1, text))
++        lastline = text
+     f.close()
+     for cf in objects:
+         nwarnings += print_warnings(cf.after())
+ 
+     return nwarnings, nlines
+ 
+ 
+ def __main__():
+     global flags
+     flags = parse_args()
+ 
+     if flags.intree_only:
+         # change all paths received to be relative to the base dir
+         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+         files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
+         # move current dir so the script find the files
+diff --git a/utils/checkpackagelib/base.py b/utils/checkpackagelib/base.py
+index fc09bec9a2..9544a64e5a 100644
+--- a/utils/checkpackagelib/base.py
++++ b/utils/checkpackagelib/base.py
+@@ -1,16 +1,18 @@
  # See utils/checkpackagelib/readme.txt before editing this file.
- # There are already dependency checks during the build, so below check
- # functions don't need to check for things already checked by exploring the
- # menu options using "make menuconfig" and by running "make" with appropriate
- # packages enabled.
++import re
  
- import re
  
- from checkpackagelib.base import _CheckFunction
- from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
- from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
- 
-+# used in more than one check
-+start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
-+end_conditional = ["endif"]
-+
- 
- class Indent(_CheckFunction):
-     COMMENT = re.compile("^\s*#")
--    CONDITIONAL = re.compile("^\s*(ifeq|ifneq|endif)\s")
-+    CONDITIONAL = re.compile("^\s*({})\s".format("|".join(start_conditional + end_conditional)))
-     ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
-     END_DEFINE = re.compile("^\s*endef\s")
-     MAKEFILE_TARGET = re.compile("^[^# \t]+:\s")
-     START_DEFINE = re.compile("^\s*define\s")
+ class _CheckFunction(object):
+     def __init__(self, filename, url_to_manual):
+         self.filename = filename
+         self.url_to_manual = url_to_manual
++        self.disable = re.compile(r"^\s*# check-package .*\b{}\b".format(self.__class__.__name__))
  
      def before(self):
-         self.define = False
-         self.backslash = False
-         self.makefile_target = False
+         pass
  
      def check_line(self, lineno, text):
-         if self.START_DEFINE.search(text):
-             self.define = True
-             return
-         if self.END_DEFINE.search(text):
-             self.define = False
-@@ -209,34 +213,34 @@ class TypoInPackageVariable(_CheckFunction):
-             return
-         if self.REGEX.search(text) is None:
-             return ["{}:{}: possible typo: {} -> *{}*"
-                     .format(self.filename, lineno, variable, self.package),
-                     text]
+         pass
  
- 
- class UselessFlag(_CheckFunction):
-     DEFAULT_AUTOTOOLS_FLAG = re.compile("^.*{}".format("|".join([
-         "_AUTORECONF\s*=\s*NO",
-         "_LIBTOOL_PATCH\s*=\s*YES"])))
-     DEFAULT_GENERIC_FLAG = re.compile("^.*{}".format("|".join([
-         "_INSTALL_IMAGES\s*=\s*NO",
-         "_INSTALL_REDISTRIBUTE\s*=\s*YES",
-         "_INSTALL_STAGING\s*=\s*NO",
-         "_INSTALL_TARGET\s*=\s*YES"])))
--    END_CONDITIONAL = re.compile("^\s*(endif)")
--    START_CONDITIONAL = re.compile("^\s*(ifeq|ifneq)")
-+    END_CONDITIONAL = re.compile("^\s*({})".format("|".join(end_conditional)))
-+    START_CONDITIONAL = re.compile("^\s*({})".format("|".join(start_conditional)))
- 
-     def before(self):
-         self.conditional = 0
- 
-     def check_line(self, lineno, text):
-         if self.START_CONDITIONAL.search(text):
-             self.conditional += 1
-             return
-         if self.END_CONDITIONAL.search(text):
-             self.conditional -= 1
-             return
- 
-         # allow non-default conditionally overridden by default
-         if self.conditional > 0:
-             return
- 
+     def after(self):
+         pass
 -- 
 2.17.1
