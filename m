@@ -1,37 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 22:18:50 +0100
-Subject: [Buildroot] [git commit] package/usb_modeswitch: drop unicode space
- in comment
-Message-ID: <20190127212827.6BEEB8137C@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 22:44:35 +0100
+Subject: [Buildroot] [PATCH] qemu: Change CPU in qemu command for aarch64
+In-Reply-To: <20190124165309.2001-1-gerome.burlats@smile.fr> (Gerome Burlats's
+ message of "Thu, 24 Jan 2019 17:53:09 +0100")
+References: <20190124165309.2001-1-gerome.burlats@smile.fr>
+Message-ID: <87ef8xn5bw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8be8c72c2ba6cf4c0951e577199e69e91e9f7f3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gerome" == Gerome Burlats <gerome.burlats@smile.fr> writes:
 
-Commit "a554109af8 package/usb_modeswitch: disable parallel build" added
-a unicode space in a comment. Replace it with a normal ASCII space for
-consistency with elsewhere.
+ > This commit changes to "cortex-a53" the CPU model in the qemu command
+ > for aarch64 (since it is the default one for this architecture).
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/usb_modeswitch/usb_modeswitch.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
+ > Cc: Romain Naour <romain.naour@smile.fr>
+ > ---
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index bb0d6ab1bf..8b93e086e3 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -10,7 +10,7 @@ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
- USB_MODESWITCH_LICENSE = GPL-2.0+
- USB_MODESWITCH_LICENSE_FILES = COPYING
--#??Package does not build in parallel due to improper make rules
-+# Package does not build in parallel due to improper make rules
- USB_MODESWITCH_MAKE = $(MAKE1)
- 
- USB_MODESWITCH_BUILD_TARGETS = static
+ > cortex-a53 is the default cpu for aarch64, but some defconfigs, for
+ > example raspberrypi3_64_defconfig, still have "BR2_cortex_a53=y"
+ > (maybe at one point, this cpu was not the default).
+ > Should this line stay in the defconfig for info, even if it is not used ?
+ > If we generate the defconfig with "make savedefconfig", BR2_cortex_a53=y is indeed not added in the file.
+
+Correct. We typically do add for clarity and robustness against changes
+of the default value.
+
+It is correct that savedefconfig will strip such redundant entries, but
+as you can see from the comments, qemu_aarch64_virt_defconfig is edited
+by hand.
+
+Committed after extending the commit message and adding an explicit
+BR2_cortex_a53=y to the defconfig, thanks.
+
+-- 
+Bye, Peter Korsgaard
