@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 22:38:45 +0100
-Subject: [Buildroot] [git commit] qemu/aarch64-virt: Emulate cortex-a53 in
- qemu to match Buildroot config
-Message-ID: <20190127214349.3B9B48137B@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 23:06:14 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/common.mk: enable multithreaded xz
+ compression
+In-Reply-To: <20190126150622.23c7375e@windsurf> (Thomas Petazzoni's message of
+ "Sat, 26 Jan 2019 15:06:22 +0100")
+References: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
+ <CANQCQpbo+puWN0o99zFBqthPLAe9hkd9gBTfXiZrE3x-qTvoHg@mail.gmail.com>
+ <CADvTj4rH7G-LSt=TBzjNAUpSiRdCLgwf6NbuAqFAG-i95mZRnw@mail.gmail.com>
+ <871s55ykoj.fsf@dell.be.48ers.dk> <20190126150622.23c7375e@windsurf>
+Message-ID: <87a7jln4bt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0203df36ac5ab7d2e7a7fad94edaa51594360f34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-qemu_aarch64_virt_defconfig (implicitly) specifies cortex-a53, so adjust the
-QEMU command line to also emulate a a53 instead of a57.
+ > Hello,
+ > On Mon, 21 Jan 2019 18:39:24 +0100, Peter Korsgaard wrote:
 
-Also adjust the defconfig to explicitly specify a53 for consistency/clarity.
+ >> > I thought it was using the version compiled by buildroot.
+ >> > Isn't that what host-xz is being used for?  
+ >> 
+ >> Yes, correct. Do you know if the -T 0 option generates identical output
+ >> as -T 1? Otherwise we may want to disable it for reproducible builds.
 
-Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/aarch64-virt/readme.txt  | 2 +-
- configs/qemu_aarch64_virt_defconfig | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ > Does it matter than the output of -T 0 and -T 1 are identical ?
 
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index 76fc2d6f32..1ff2fba47d 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
-+  qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
- 
- The login prompt will appear in the terminal that started Qemu.
- 
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 2706544e52..a7b097ef40 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -1,5 +1,6 @@
- # Architecture
- BR2_aarch64=y
-+BR2_cortex_a53=y
- 
- # System
- BR2_SYSTEM_DHCP="eth0"
+It would cause an extra change in output between buildroot versions
+using -T 0 and ones using -T 1 - But OK, probably that isn't really
+important given all the other changes.
+
+What I really meant was if the -T 1 option affected the output format,
+and if so, if the difference involved any tradeoff (E.G. perhaps -T 1
+compresses slightly worse than -T 0) and if repeated runs with -T 1
+would generate the same output (on same machine or on another machine
+with different number of threads).
+
+ > What matters for BR2_REPRODUCIBLE=y is if the same input, with -T 0,
+ > always provide the exact identical output.
+
+With the new patch that only enables -T 1 for !reproducible builds,
+that is correct.
+
+-- 
+Bye, Peter Korsgaard
