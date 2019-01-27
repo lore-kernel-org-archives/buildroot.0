@@ -1,42 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 22:28:31 +0100
-Subject: [Buildroot] [PATCH 5/8] package/usb_modeswitch: avoid
- overriding variables
-In-Reply-To: <20190127185943.1136-6-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 27 Jan 2019 16:59:40 -0200")
-References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
- <20190127185943.1136-6-ricardo.martincoski@gmail.com>
-Message-ID: <87imy9n62o.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Jan 2019 22:14:48 +0100
+Subject: [Buildroot] [git commit] package/s6-networking: fix dependency when
+ libressl is enabled
+Message-ID: <20190127212827.590AA8137F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=30ff614a035dd49e357f7c3560555dae8e605f80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Overriding variables in packages recipes is an error-prone practice.
- > Current behavior of installing either only as a script or only as a
- > binary is intended, as describe in the commit log of "d3e4db4e34
- > usb_modeswitch: bump to version 1.2.6" from 2013.
+Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
+actually dropped the dependency on s6-dns and s6 when libressl is
+enabled.
+Fix this by using += inside the conditional code.
 
- > Rewrite the code to keep the same behavior while replacing variable
- > override [1] by conditional assignments [2].
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/s6-networking/s6-networking.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > [1]
- > VAR = ...
- > if ...
- > VAR = ...
-
- > [2]
- > if ...
- > VAR = ...
- > else
- > VAR = ...
-
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
+index 7c9f087051..b621eb225d 100644
+--- a/package/s6-networking/s6-networking.mk
++++ b/package/s6-networking/s6-networking.mk
+@@ -25,7 +25,7 @@ S6_NETWORKING_CONF_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+ S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
+-S6_NETWORKING_DEPENDENCIES = libressl
++S6_NETWORKING_DEPENDENCIES += libressl
+ endif
+ 
+ define S6_NETWORKING_CONFIGURE_CMDS
