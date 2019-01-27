@@ -1,48 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 10:41:42 +0100
-Subject: [Buildroot] [git commit] python-psutil: bump to version 5.5.0
-Message-ID: <20190127095108.52FD683BE0@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 10:44:40 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xcursorgen: bump
+ version to 1.0.7
+Message-ID: <20190127095108.7108383BE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11f4c717ca7f69fa6ee5b0f59f53e7c471cca8b7
+commit: https://git.buildroot.net/buildroot/commit/?id=4b29faab1ed986a7724be658a25205624dff6ab2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Added all hashes provided by upstream and license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash | 9 +++++++--
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 1f44281e29..12d53f95c7 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5	0f08bf02400f81c28c4581619ca3e6cb  psutil-5.4.8.tar.gz
--sha256	6e265c8f3da00b015d24b842bfeb111f856b13d24f2c57036582568dc650d6c3  psutil-5.4.8.tar.gz
-+md5	0502dad59fcbe047baebe07165b1376a  psutil-5.5.0.tar.gz
-+sha256	1aba93430050270750d046a179c5f3d6e1f5f8b96c20399ba38c596b28fc4d37  psutil-5.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 18567702bc..2a70845483 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
+index b98d449c1f..51031d62bc 100644
+--- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
++++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-May/002438.html
+-sha256	31c8910f54eb175a8a74a60e7662697467e21a8bf948220a6048a93924b3f66c	xcursorgen-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-January/002936.html
++md5 25cc7ca1ce5dcbb61c2b471c55e686b5  xcursorgen-1.0.7.tar.bz2
++sha1 109367eb23b0ad52cf5de15f50c02ebe872698ae  xcursorgen-1.0.7.tar.bz2
++sha256 35b6f844b24f1776e9006c880a745728800764dbe3b327a128772b4610d8eb3d  xcursorgen-1.0.7.tar.bz2
++sha512 bd13ad23691d3daa2d5dcdc5902cf62e3dcb97a0289aff362e6cd85866a1d8cafb64f98800a75bfb4cf1f3c76244ca20201847dff594543d136d0abaec7011d2  xcursorgen-1.0.7.tar.bz2
++# Locally computed
++sha256 8c773336b654442ac8018715a52be1a8254895c57c898d5387016e9488cc2009  COPYING
+diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+index 4bee26b5dc..bcc696b01c 100644
+--- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
++++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.4.8
-+PYTHON_PSUTIL_VERSION = 5.5.0
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/e3/58/0eae6e4466e5abf779d7e2b71fac7fba5f59e00ea36ddb3ed690419ccb0f
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/6e/a0/833bcbcede5141cc5615e50c7cc5b960ce93d9c9b885fbe3b7d36e48a2d4
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-XAPP_XCURSORGEN_VERSION = 1.0.6
++XAPP_XCURSORGEN_VERSION = 1.0.7
+ XAPP_XCURSORGEN_SOURCE = xcursorgen-$(XAPP_XCURSORGEN_VERSION).tar.bz2
+ XAPP_XCURSORGEN_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XCURSORGEN_LICENSE = MIT
