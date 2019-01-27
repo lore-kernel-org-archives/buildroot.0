@@ -1,50 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 10:45:36 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-neomagic:
- bump version to 1.3.0
-Message-ID: <20190127095108.8663E83BE0@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 10:46:21 +0100
+Subject: [Buildroot] [git commit] package/samba4: security bump to version
+ 4.9.4
+Message-ID: <20190127095108.8CF1A83BE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c97b479772f3623b10497acb686118abb321206f
+commit: https://git.buildroot.net/buildroot/commit/?id=3cf46525b943b3844020f41d4271aee8b0083ec1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream and license hash.
+Fixes the following security issues:
+
+- CVE-2018-14629 dns: Fix CNAME loop prevention using counter regression
+- CVE-2018-16853: Fix S4U2Self crash with MIT KDC build
+- CVE-2018-16853: Do not segfault if client is not set
+
+For more info, see the release notes:
+https://www.samba.org/samba/history/samba-4.9.4.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: mention security impact, add CVE info]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash | 9 +++++++--
- .../xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
-index fc830661b4..55996f5b0d 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002602.html
--sha256	72f89396b10527549337cb72a7eafb1194cf140144f9236a94ad2becdf140bf2	xf86-video-neomagic-1.2.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-December/002934.html
-+md5 349d5254d09eb46f2a1f151cd423b89a  xf86-video-neomagic-1.3.0.tar.bz2
-+sha1 6bccfa15ea05d5264120cd96ccf13687642e8f6d  xf86-video-neomagic-1.3.0.tar.bz2
-+sha256 93833950fae7757088eb6abb125e15e8c245e5e25681c19c3ad4213ec7319064  xf86-video-neomagic-1.3.0.tar.bz2
-+sha512 25d019a2556e52aeb4e25942f444437a921e76d527c10ddd420f16aa7d85bf2b8a51612c382a2a7e3e407bb1e8d610d063101184eea0889c3e1a69bfb3b37735  xf86-video-neomagic-1.3.0.tar.bz2
-+# Locally computed
-+sha256 95063ce9aa09850025dd317549ce688519079a8d3cf66ceb3d882cb2bafcced9  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-index 93cd55a11b..8dd2777ff9 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 41c670059f..de349c3049 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.3.tar.asc
+-sha256 cf8fd8707e9ad7bce7832006aac5644155165745ba371170661b3004fa2135cf  samba-4.9.3.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.4.tar.asc
++sha256 6d98a8d8bcccbe788e4bbb406362e6676311aca711a3f3cc9b3a404bb9ff0b4f  samba-4.9.4.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 89e39dab55..9f771cf82f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.2.9
-+XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.3.0
- XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
+-SAMBA4_VERSION = 4.9.3
++SAMBA4_VERSION = 4.9.4
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
