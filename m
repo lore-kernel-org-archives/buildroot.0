@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 11:22:54 +0100
-Subject: [Buildroot] [git commit] perl-package-stash: bump to version 0.38
-Message-ID: <20190127102332.779D58E255@busybox.osuosl.org>
+Date: Sun, 27 Jan 2019 11:22:40 +0100
+Subject: [Buildroot] [git commit] perl-mojolicious: bump to version 8.11
+Message-ID: <20190127102332.69E1B8E255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b915946af03e3590d325a0a5f6c6012d8de5d632
+commit: https://git.buildroot.net/buildroot/commit/?id=2a9bc11ea96395e69cc3830748374ba1c7d8575b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-package-stash/perl-package-stash.hash | 6 +++---
- package/perl-package-stash/perl-package-stash.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
-index 4d9b202879..be8760d2d9 100644
---- a/package/perl-package-stash/perl-package-stash.hash
-+++ b/package/perl-package-stash/perl-package-stash.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index b406f6d82a..e2eb158b11 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
--sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c Package-Stash-0.37.tar.gz
-+md5    dc2d802eea2cb0b52ed9c4dd178761dd Package-Stash-0.38.tar.gz
-+sha256 c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f Package-Stash-0.38.tar.gz
+-md5    f1d22e9110f1b51f4be9a40a84391089 Mojolicious-8.04.tar.gz
+-sha256 330e919f3caf62e03fdc545dda2e66f772f30192aed6c47e19fd78f67de557fb Mojolicious-8.04.tar.gz
++md5    00419dac75fec23d06fe8695e4bde303 Mojolicious-8.11.tar.gz
++sha256 d95f42aa901b9aba96880dae53fd77d89690cca65635ff93a47885a2c7b312f2 Mojolicious-8.11.tar.gz
  
  # computed by scancpan
--sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e LICENSE
-+sha256 13aab710649bae5a8bbb1ae725587ece773bf390537dba2da71247bd937d54b4 LICENSE
-diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
-index 26e8eb3253..b1a83bd957 100644
---- a/package/perl-package-stash/perl-package-stash.mk
-+++ b/package/perl-package-stash/perl-package-stash.mk
-@@ -4,9 +4,9 @@
+ sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 8ea0c2e01b..4ff942ce80 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PACKAGE_STASH_VERSION = 0.37
-+PERL_PACKAGE_STASH_VERSION = 0.38
- PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
--PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
-+PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
- PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
- PERL_PACKAGE_STASH_DISTNAME = Package-Stash
+-PERL_MOJOLICIOUS_VERSION = 8.04
++PERL_MOJOLICIOUS_VERSION = 8.11
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
