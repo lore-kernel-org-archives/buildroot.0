@@ -1,45 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Jan 2019 23:18:53 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: enable multithreaded xz
- compression
-In-Reply-To: <87a7jln4bt.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 27 Jan 2019 23:06:14 +0100")
-References: <1548036475-25449-1-git-send-email-james.hilliard1@gmail.com>
- <CANQCQpbo+puWN0o99zFBqthPLAe9hkd9gBTfXiZrE3x-qTvoHg@mail.gmail.com>
- <CADvTj4rH7G-LSt=TBzjNAUpSiRdCLgwf6NbuAqFAG-i95mZRnw@mail.gmail.com>
- <871s55ykoj.fsf@dell.be.48ers.dk> <20190126150622.23c7375e@windsurf>
- <87a7jln4bt.fsf@dell.be.48ers.dk>
-Message-ID: <875zu9n3qq.fsf@dell.be.48ers.dk>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 28 Jan 2019 00:14:06 -0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: add atop test
+In-Reply-To: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
+References: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
+Message-ID: <20190128021406.27477-2-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ .gitlab-ci.yml                             |  1 +
+ support/testing/tests/package/test_atop.py | 40 ++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 support/testing/tests/package/test_atop.py
 
- >> Does it matter than the output of -T 0 and -T 1 are identical ?
-
- > It would cause an extra change in output between buildroot versions
- > using -T 0 and ones using -T 1 - But OK, probably that isn't really
- > important given all the other changes.
-
- > What I really meant was if the -T 1 option affected the output format,
- > and if so, if the difference involved any tradeoff (E.G. perhaps -T 1
- > compresses slightly worse than -T 0) and if repeated runs with -T 1
- > would generate the same output (on same machine or on another machine
- > with different number of threads).
-
-Sorry, got -T 1 and -T 0 mixed up, I meant -T 0 here.
-
- >> What matters for BR2_REPRODUCIBLE=y is if the same input, with -T 0,
- >> always provide the exact identical output.
-
- > With the new patch that only enables -T 1 for !reproducible builds,
- > that is correct.
-
-The assumption is that this is not true, especially between systems with
-different number of CPUs.
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 79daebf160..8f1e4ae804 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -317,6 +317,7 @@ tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
++tests.package.test_atop.TestAtop: *runtime_test
+ tests.package.test_dropbear.TestDropbear: *runtime_test
+ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+diff --git a/support/testing/tests/package/test_atop.py b/support/testing/tests/package/test_atop.py
+new file mode 100644
+index 0000000000..32c5a07c3c
+--- /dev/null
++++ b/support/testing/tests/package/test_atop.py
+@@ -0,0 +1,40 @@
++import os
++
++import infra.basetest
++
++
++class TestAtop(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_PACKAGE_ATOP=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        kernel = os.path.join(self.builddir, "images", "zImage")
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        dtb = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7", kernel=kernel, options=["-initrd", cpio_file, "-M", "vexpress-a9", "-dtb", dtb])
++        self.emulator.login()
++
++        cmd = "atop -V | grep '^Version'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "atop -a 1 2 | grep '% *atop *$'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 -- 
-Bye, Peter Korsgaard
+2.17.1
