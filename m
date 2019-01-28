@@ -1,117 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Jan 2019 23:22:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] toolchain: update AArch32/AArch64
- toolchains to 8-2-2019.01
-In-Reply-To: <20190128170533.16555-1-joakim.bech@linaro.org>
-References: <20190128133500.7515-1-joakim.bech@linaro.org>
- <20190128170533.16555-1-joakim.bech@linaro.org>
-Message-ID: <f01f063d-4b46-62b9-12f4-1cba370a3029@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 28 Jan 2019 17:31:46 -0500
+Subject: [Buildroot] [PATCH 0/2] OpenJDK: new package.
+In-Reply-To: <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
+References: <20190128163126.106059-1-aduskett@gmail.com>
+ <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
+Message-ID: <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Joakim,
+Hello;
 
- Thanks for this updated patch, but you haven't taken into account the rest of
-Thomas's comments.
+On Mon, Jan 28, 2019 at 2:36 PM Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+>
+> Hello,
+> El lun., 28 ene. 2019 a las 17:31, <aduskett@gmail.com> escribi?:
+> >
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > This patch series introduces BuildRoot to OpenJDK.
+> >
+> > A previous patch series for OpenJDK8 used the JDK Muricle page to download a
+> > tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
+> > repository. This repository allows us to use the GitHub macro instead of trying
+> > to provide a nasty workaround when grabbing the source code.
+> >
+> > With this patch series, there are some quirks that I would like to detail:
+> >
+> > - The openjdk-bin package:
+> > From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
+> > "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
+> > the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
+> > porting OpenJDK to a new platform, the chances are that there already exists
+> > another JDK for that platform that is usable as boot JDK.
+> >
+> > The rule of thumb is that the boot JDK for building JDK major version N should
+> > be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
+> > as boot JDK."
+> >
+> > This paradox causes an issue because every distribution I have used comes with
+> > JDK8 by default. So there are two solutions that I could come up with:
+> > 1) Require the host-system to have JDK N-1
+> > 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
+> >    repository, and use those binaries as the boot-jdk.
+> >
+> > - JDK >= 10 requires X11, even if building a headless version.
+> >   It's unfortunate, but there isn't anything I cared to do about it.
+>
+> It should be possible to build without X11, with some changes.
+> See also the openjdk package I sent last year as reference:
+> http://lists.busybox.net/pipermail/buildroot/2018-February/213282.html
+>
+> Best regards,
+> Thomas
+Thank's Thomas!
+I did see those patches and came to the conclusion that while it's
+probably possible, for the initial
+release I don't really want to go through the effort of
+forward-porting those patches to JDK11.
 
- I'll repeat them below for your convenience.
+I am always welcome to patch-donations though!
 
-
-On 28/01/2019 18:05, Joakim Bech wrote:
-[snip]
-> +config BR2_KERNEL_HEADERS_5_00
-> +	bool "Linux 5.00.x kernel headers"
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
-
- Adding support for the 5.0 headers should be a separate patch. See commit
-649883d2c9957b7a7fcf81c4475f848ad8865ca1 for an example how it was done for 4.20.
-
- Also, please call it 5.0 and not 5.00.
-
- And also some new comments:
-
-[snip]
-> diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-> index cda90f7517..90e44d5c3b 100644
-> --- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-> +++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-> @@ -2,3 +2,8 @@
->  md5 319ca548ff05b0ec1008988a7e5ab619 gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
->  # locally calculated
->  sha256 0142366da2f30feb1c366997cbdaa02286c8f1aa527c0fc177ee5ce8e77970fc gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
-
- Remove the existing hashes: they are no longer used since the version has
-changed. In other words, every line of this file should be updated, except for
-the # locally calculated.
-
-> +
-> +# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2019.01/gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz.asc
-> +md5 ed467a18abc7cf81d53c0cf6014b1867 gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz
-> +# locally calculated
-> +sha256 6683d51b0dd61a91ab1e8e478a0a8a50ccb34d5590c84aa36697e956b16f14a1 gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz
-> diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-> index 0398bd1297..bb9c658639 100644
-> --- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-> +++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.11
-> +TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2019.01
->  TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)
->  
->  TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-linux-gnu.tar.xz
-> diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in> index 0449737889..69c2f7425e 100644
-> --- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-> +++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-> @@ -4,7 +4,7 @@ comment "Arm toolchains available for Cortex-A + EABIhf"
->  	depends on !BR2_STATIC_LIBS
->  
->  config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
-> -	bool "Arm ARM 2018.11"
-> +	bool "Arm ARM 2019.01"
->  	depends on BR2_arm
->  	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
->  	depends on BR2_HOSTARCH = "x86_64"
-> @@ -14,7 +14,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
->  	select BR2_TOOLCHAIN_HAS_SSP
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  	select BR2_TOOLCHAIN_HAS_FORTRAN
->  	help
-
- The help text here also says which GDB, GCC, binutils and kernel headers
-versions it is using. Please update that to the actual versions.
-
-[snip]
-> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> index 08a79ee4d9..48eb1ea080 100644
-> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-> @@ -123,6 +123,10 @@ choice
->  	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
->  	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_00
-> +	bool "5.00.x"
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
-> +
-
- Note that this bit belongs to the patch that adds the 5.0 version.
-
->  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_20
->  	bool "4.20.x"
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
-> 
-
- And finally, there is also an ARM aarch64-be toolchain that should be updated.
-
- Regards,
- Arnout
+Adam
