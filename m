@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:01:16 +0100
-Subject: [Buildroot] [PATCH 1/3] package/pkg-kconfig: pass HOSTCC during
- kconfig steps
-In-Reply-To: <20190110211500.14368-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 10 Jan 2019 22:14:58 +0100")
+Date: Mon, 28 Jan 2019 18:01:23 +0100
+Subject: [Buildroot] [PATCH 3/3] linux: use HOSTCC_NOCCACHE as kconfig
+ HOSTCC
+In-Reply-To: <20190110211500.14368-4-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 10 Jan 2019 22:15:00 +0100")
 References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
- <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87sgxcemxv.fsf@dell.be.48ers.dk>
+ <20190110211500.14368-4-thomas.petazzoni@bootlin.com>
+Message-ID: <87o980emxo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > The kconfig build logic uses the HOSTCC variable to find the host
- > compiler. It makes sense to explicitly pass a value to this variable,
- > pointing to the host compiler used by Buildroot.
+ > linux is a bit different than other kconfig-package, because it has
+ > "toolchain" in KCONFIG_DEPENDENCIES. Thanks to this, host-ccache *is*
+ > ready by the time kconfig invocations are made, so we could use
+ > $(HOSTCC) as the host compiler for kconfig related operations.
 
- > During the kconfig step, host-ccache is not ready (host-ccache is only
- > a dependency to the configure step of packages), so we use
- > $(HOSTCC_NOCCACHE).
+ > However, for consistency with other kconfig-package packages, we chose
+ > to use $(HOSTCC_NOCCACHE) as well.
 
- > Packages currently using the kconfig-package fell into two categories:
-
- >  - Those not passing any HOSTCC value. For such packages, it was the
- >    default host compiler detected by the kconfig build logic that was
- >    used. ccache was therefore never used. With this commit, those
- >    packages will now be using the host compiler detected by
- >    Buildroot. Packages in this situation: at91bootstrap3, barebox,
- >    busybox, swupdate, uclibc, xvisor.
-
- >  - Those passing a HOSTCC value. Such packages were passing $(HOSTCC),
- >    which doesn't work as host-ccache will not be ready. This commit
- >    does not fix them, as they still override HOSTCC. It will be fixed
- >    in followup commits. Packages in this situation: uboot and
- >    linux. Note that linux was a bit special, because it has a
- >    KCONFIG_DEPENDENCIES on the toolchain package, so in fact
- >    host-ccache was ready.
-
- > So practically speaking, this commit does not fix anything, as the two
- > only problematic packages that use $(HOSTCC) are not fixed. However,
- > it makes things more correct by explicitly telling kconfig which
- > compiler to use.
+ > We cannot rely on the default value of HOSTCC passed by the
+ > kconfig-package infrastructure, because $(LINUX_MAKE_FLAGS) also
+ > contains a HOSTCC definition that would override the one passed by the
+ > kconfig-package infrastructure.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
