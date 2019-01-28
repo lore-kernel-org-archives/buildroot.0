@@ -1,110 +1,59 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 29 Jan 2019 00:16:10 +0100
-Subject: [Buildroot] [git commit] ffmpeg: fix static linking build failure
- when using libavutil
-Message-ID: <20190128233144.1433A8132A@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 00:32:11 +0100
+Subject: [Buildroot] [git commit] docs/manual: update
+ package-make-target.txt with more targets
+Message-ID: <20190128233144.19B11812E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=483db9908985d023b858c0b59d4016f9abb4b6f9
+commit: https://git.buildroot.net/buildroot/commit/?id=9ef15934fea905fddf71efd48fd805dab2ec58d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If a package tries to static link with libavutil it fails due to the
-lack of libavutil private dependencies in libavutil.pc (-ldrm in this
-case).
+This commit updates package-make-target.txt with a few additional
+useful per-package targets that have been added in recent times.
 
-Add patch to:
-- Check if libdrm is present.
-- Add it to Libs.private: in libavutil.pc if present.
-
-Fixes:
-http://autobuild.buildroot.net/results/766/766de487f394490df8c712652ac364ebb4a3ab14/
-http://autobuild.buildroot.net/results/041/041e29dfddb2da3309ac7d34a576c60c5a75fe4d/
-http://autobuild.buildroot.net/results/780/78061b61cfe3f42554a475c048d54dacacfe11d5/
-http://autobuild.buildroot.net/results/275/275e4e0030d26c029085b408cfb272d5633969c6/
-http://autobuild.buildroot.net/results/515/5152dcca58944cf732d09fba6e6c9af8a9243c75/
-http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...0002-configure-add-LIBDRM-to-Libs.private.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ docs/manual/package-make-target.txt | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
-new file mode 100644
-index 0000000000..5493473d0f
---- /dev/null
-+++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
-@@ -0,0 +1,68 @@
-+From e1e11d404eec24c158ae1241d6573c263e57a7b9 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+Date: Wed, 17 Oct 2018 13:13:10 +0200
-+Subject: [PATCH] configure: add LIBDRM to Libs.private
+diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+index c91106e8e9..795c7d46de 100644
+--- a/docs/manual/package-make-target.txt
++++ b/docs/manual/package-make-target.txt
+@@ -59,14 +59,28 @@ Additionally, there are some other useful make targets:
+ |===================================================
+ | command/target    | Description
+ 
+-| +show-depends+    | Displays the dependencies required to build the
++| +show-depends+    | Displays the first-order dependencies required to build the
+ package
+ 
++| +show-recursive-depends+ | Recursively displays the dependencies
++  required to build the package
 +
-+When static linking programs using ffmpeg libraries, if linking against
-+libavutil, -ldrm is listed before -lavutil. This leads to linking
-+failure due to undefined reference of drmGetVersion() and
-+drmFreeVersion().
-+This is why when pkg-config create libavutil.pc doesn't append -ldrm
-+to Libs.private:.
++| +show-rdepends+   | Displays the first-order reverse dependencies of
++  the package (i.e packages that directly depend on it)
 +
-+- Create LIBDRM=-ldrm in case libdrm is enabled.
-+- Add privatelibs_avutil variable for explicit private libraries to be
-+  appended to Libs.private:
-+- Add $LIBDRM to privatelibs_avutil.
++| +show-recursive-rdepends+ | Recursively displays the reverse
++  dependencies of the package (i.e the packages that depend on it,
++  directly or indirectly)
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ configure                     | 3 ++-
-+ ffbuild/pkgconfig_generate.sh | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
+ | +graph-depends+   | Generate a dependency graph of the package, in the
+ context of the current Buildroot configuration. See
+ xref:graph-depends[this section] for more details about dependency
+ graphs.
+ 
++| +graph-rdepends+  | Generate a graph of this package reverse
++  dependencies (i.e the packages that depend on it, directly or
++  indirectly)
 +
-+diff --git a/configure b/configure
-+index 7377046d0a..0996d8a85d 100755
-+--- a/configure
-++++ b/configure
-+@@ -5919,7 +5919,7 @@ enabled libcelt           && require libcelt celt/celt.h celt_decode -lcelt0 &&
-+                                die "ERROR: libcelt must be installed and version must be >= 0.11.0."; }
-+ enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas
-+ enabled libdc1394         && require_pkg_config libdc1394 libdc1394-2 dc1394/dc1394.h dc1394_new
-+-enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion
-++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
-+ enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
-+                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
-+                                  warn "using libfdk without pkg-config"; } }
-+@@ -7097,6 +7097,7 @@ LIBPREF=${LIBPREF}
-+ LIBSUF=${LIBSUF}
-+ 
-+ extralibs_avutil="$LIBRT $LIBM"
-++privatelibs_avutil="$LIBDRM"
-+ extralibs_avcodec="$extralibs"
-+ extralibs_avformat="$extralibs"
-+ extralibs_avdevice="$extralibs"
-+diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
-+index e5de6716d2..b86486a107 100755
-+--- a/ffbuild/pkgconfig_generate.sh
-++++ b/ffbuild/pkgconfig_generate.sh
-+@@ -13,6 +13,7 @@ name=lib${shortname}
-+ fullname=${name}${build_suffix}
-+ comment=$2
-+ libs=$(eval echo \$extralibs_${shortname})
-++privatelibs=$(eval echo \$privatelibs_${shortname})
-+ deps=$(eval echo \$${shortname}_deps)
-+ 
-+ for dep in $deps; do
-+@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
-+ Requires.private: $($shared && echo $requires)
-+ Conflicts:
-+ Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
-+-Libs.private: $($shared && echo $libs)
-++Libs.private: $($shared && echo $libs) ${privatelibs}
-+ Cflags: -I\${includedir}
-+ EOF
-+ 
-+-- 
-+2.17.1
-+
+ | +dirclean+        | Remove the whole package build directory
+ 
+ | +reinstall+       | Re-run the install commands
