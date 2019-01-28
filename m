@@ -1,79 +1,140 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 28 Jan 2019 00:14:06 -0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: add atop test
-In-Reply-To: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
-References: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190128021406.27477-2-ricardo.martincoski@gmail.com>
+Date: Mon, 28 Jan 2019 00:14:05 -0200
+Subject: [Buildroot] [PATCH 1/2] package/atop: bump to version 2.4.0
+Message-ID: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop patch 0001 as it was applied upstream [1].
+This new version uses PERF_FLAG_FD_CLOEXEC therefore it needs a
+toolchain with headers >= 3.14.
+
+[1] https://github.com/Atoptool/atop/commit/414127c03669b4eedc85778a7bff80cf601311d8
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- .gitlab-ci.yml                             |  1 +
- support/testing/tests/package/test_atop.py | 40 ++++++++++++++++++++++
- 2 files changed, 41 insertions(+)
- create mode 100644 support/testing/tests/package/test_atop.py
+Applied on master @ df9b13e674, test-pkg:
+BR2_PACKAGE_ATOP=y
+48 builds, 13 skipped, 0 build failed, 0 legal-info failed
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 79daebf160..8f1e4ae804 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -317,6 +317,7 @@ tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
- tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
- tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
- tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
-+tests.package.test_atop.TestAtop: *runtime_test
- tests.package.test_dropbear.TestDropbear: *runtime_test
- tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
-diff --git a/support/testing/tests/package/test_atop.py b/support/testing/tests/package/test_atop.py
-new file mode 100644
-index 0000000000..32c5a07c3c
---- /dev/null
-+++ b/support/testing/tests/package/test_atop.py
-@@ -0,0 +1,40 @@
-+import os
+Before this patch: build OK
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832827
+Before this patch, removing patch 0001: build FAIL
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832862
+After this patch: build OK
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832833
+---
+ ...ysmacros.h-to-compile-with-newer-gcc.patch | 52 -------------------
+ package/atop/Config.in                        |  5 ++
+ package/atop/atop.hash                        |  2 +-
+ package/atop/atop.mk                          |  2 +-
+ 4 files changed, 7 insertions(+), 54 deletions(-)
+ delete mode 100644 package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+
+diff --git a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+deleted file mode 100644
+index a80be7b736..0000000000
+--- a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 414127c03669b4eedc85778a7bff80cf601311d8 Mon Sep 17 00:00:00 2001
+-From: SjonHortensius <SjonHortensius@users.noreply.github.com>
+-Date: Fri, 24 Aug 2018 18:26:58 +0200
+-Subject: [PATCH] Include sysmacros.h to compile with newer gcc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Older gcc throws a warning
+-```
+-photosyst.c: In function 'lvmmapname':
+-photosyst.c:1465:13: warning: In the GNU C Library, "major" is defined
+- by <sys/sysmacros.h>. For historical compatibility, it is
+- currently defined by <sys/types.h> as well, but we plan to
+- remove this soon. To use "major", include <sys/sysmacros.h>
+- directly. If you did not intend to use a system-defined macro
+- "major", you should undefine it after including <sys/types.h>.
+-     dmp->major  = major(statbuf.st_rdev);
+-```
+-
+-Newer gcc throws an error:
+-
+-```
+-photosyst.c: In function ?lvmmapname?:
+-photosyst.c:1482:19: error: called object ?major? is not a function or function pointer
+-     dmp->major  = major(statbuf.st_rdev);
+-                   ^~~~~
+-photosyst.c:1437:25: note: declared here
+- lvmmapname(unsigned int major, unsigned int minor,
+-            ~~~~~~~~~~~~~^~~~~
+-```
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+----
+- photosyst.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/photosyst.c b/photosyst.c
+-index 19cbbe1..50841a1 100644
+---- a/photosyst.c
+-+++ b/photosyst.c
+-@@ -152,6 +152,7 @@
+- static const char rcsid[] = "$Id: photosyst.c,v 1.38 2010/11/19 07:40:40 gerlof Exp $";
+- 
+- #include <sys/types.h>
+-+#include <sys/sysmacros.h>
+- #include <stdio.h>
+- #include <string.h>
+- #include <unistd.h>
+--- 
+-2.17.1
+-
+diff --git a/package/atop/Config.in b/package/atop/Config.in
+index d42a201bd9..9e42eddb57 100644
+--- a/package/atop/Config.in
++++ b/package/atop/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_ATOP
+ 	bool "atop"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # PERF_FLAG_FD_CLOEXEC
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -16,3 +17,7 @@ config BR2_PACKAGE_ATOP
+ 	  username, state, and exit code.
+ 
+ 	  http://www.atoptool.nl
 +
-+import infra.basetest
-+
-+
-+class TestAtop(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_PACKAGE_ATOP=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        kernel = os.path.join(self.builddir, "images", "zImage")
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        dtb = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7", kernel=kernel, options=["-initrd", cpio_file, "-M", "vexpress-a9", "-dtb", dtb])
-+        self.emulator.login()
-+
-+        cmd = "atop -V | grep '^Version'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "atop -a 1 2 | grep '% *atop *$'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
++comment "atop needs a toolchain w/ headers >= 3.14"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+diff --git a/package/atop/atop.hash b/package/atop/atop.hash
+index 9ee0d62bc6..80082d022d 100644
+--- a/package/atop/atop.hash
++++ b/package/atop/atop.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  73e4725de0bafac8c63b032e8479e2305e3962afbe977ec1abd45f9e104eb264  atop-2.3.0.tar.gz
++sha256  be1c010a77086b7d98376fce96514afcd73c3f20a8d1fe01520899ff69a73d69  atop-2.4.0.tar.gz
+ 
+ # Hash for license file:
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/atop/atop.mk b/package/atop/atop.mk
+index 2cc0da6afa..aaf02908c4 100644
+--- a/package/atop/atop.mk
++++ b/package/atop/atop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATOP_VERSION = 2.3.0
++ATOP_VERSION = 2.4.0
+ ATOP_SITE = http://www.atoptool.nl/download
+ ATOP_LICENSE = GPL-2.0+
+ ATOP_LICENSE_FILES = COPYING
 -- 
 2.17.1
