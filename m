@@ -1,127 +1,107 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 18:22:04 -0500
-Subject: [Buildroot] [PATCH v3 0/5] OpenJDK: new package and tests
-Message-ID: <20190128232209.17485-1-aduskett@gmail.com>
+Date: Mon, 28 Jan 2019 18:22:05 -0500
+Subject: [Buildroot] [PATCH v3 1/5] testing/infra/builder: build with target
+ and environment
+In-Reply-To: <20190128232209.17485-1-aduskett@gmail.com>
+References: <20190128232209.17485-1-aduskett@gmail.com>
+Message-ID: <20190128232209.17485-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 
-This patch series adds OpenJDK and an updated testing framework to BuildRoot.
+Make the builder able to call 'VAR1=1 make VAR2=2 target'.
 
-A previous patch series for OpenJDK8 used the JDK Muricle page to download a
-tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
-repository. This repository allows us to use the GitHub macro instead of trying
-to provide a nasty workaround when grabbing the source code.
+Allow sending extra parameters to be added to the end of make command
+line. Uses for these purposes:
+ - to configure a br2-external, using the 'BR2_EXTERNAL="dir" variable.
+ - to specify a make target, such as 'foo-source.'
 
-With this patch series, there are some quirks that I would like to detail:
+Allow adding variables to the environment when calling make.
+These added variables allow a user to override default values from BuildRoot,
+such as 'BR2_DL_DIR="dl"'.
 
-- The openjdk-bin package:
-From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
-"Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
-the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
-porting OpenJDK to a new platform, the chances are that there already exists
-another JDK for that platform that is usable as boot JDK.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v3:
+  - Added this patch to the series.
 
-The rule of thumb is that the boot JDK for building JDK major version N should
-be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
-as boot JDK."
+ support/testing/infra/builder.py | 36 ++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
 
-This paradox causes an issue because every distribution I have used comes with
-JDK8 by default. So there are two solutions that I could come up with:
-1) Require the host-system to have JDK N-1
-2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
-   repository, and use those binaries as the boot-jdk.
-
-- JDK >= 10 requires X11, even if building a headless version.
-  It's unfortunate, but there isn't anything I cared to do about it.
-
-- Running "make install" installs the entire JDK to the target directory,
-  which is why INSTALL_TARGET is manual. 
-
-- The OpenJDK package:
-
-- Depending on !BR2_SOFT_FLOAT
-From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#building-for-armaarch64
-"Note that soft-float ABIs are no longer properly supported on OpenJDK."
-Yes, it compiles as of right now, but I don't want to have to help people with
-possible ASM java bugs because they wanted to use a processor without an FPU.
-
-- Requiring GLIBC
-OpenJDK could probably build against uClibc with a few patches, but I decided
-against going through the effort of doing so. My reasoning is that uClibc
-advertises itself as a small C library, however, at this time, OpenJDK comes in
-at over 100MB for a minimal install. So the few megabytes saved by using uClibc
-probably isn't going to be a concern for anybody wanting to use Java on their
-embedded environment.
-
-- Other thoughts:
-It is possible to use fine-grained make targets when building OpenJDK, check out
-http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#using-fine-grained-make-targets.
-Perhaps in the future, BuildRoot could have Java setup just like PHP or Python,
-with a large selection of modules to build? This fine-grained build could
-potentially save a massive amount of space.
-
-Perhaps in the future, a patch set that removes the X11/Alsa/cups dependencies
-can be added.
-
-In addition to the OpenJDK patches, Matt Webber, Daniel Leach and
-Ricardo Martincoski extended the testing framework to allow for a more
-flexible and comprehensive testing environment. The first of which is to test
-OpenJDK by running a simple "Hello world" application.
-
-
-Comments and critiques are always welcome!
-
-Adam
-
-Daniel J. Leach (1):
-  support/testing: openjdk hello world
-
-Ricardo Martincoski (2):
-  testing/infra/builder: build with target and environment
-  testing/infra/basetest: support br2-external
-
-Adam Duskett (5):
-  openjdk-bin: new package
-  openjdk: new package
-
- .gitlab-ci.yml                                |   1 +
- DEVELOPERS                                    |   3 +
- package/Config.in                             |   1 +
- package/Config.in.host                        |   1 +
- package/openjdk-bin/Config.in.host            |  12 ++
- package/openjdk-bin/openjdk-bin.hash          |   6 +
- package/openjdk-bin/openjdk-bin.mk            |  20 +++
- package/openjdk/Config.in                     |  55 +++++++
- package/openjdk/openjdk.hash                  |   3 +
- package/openjdk/openjdk.mk                    | 141 ++++++++++++++++++
- support/testing/infra/basetest.py             |   3 +-
- support/testing/infra/builder.py              |  36 ++++-
- .../package/br2-external/openjdk/Config.in    |   1 +
- .../br2-external/openjdk/external.desc        |   1 +
- .../package/br2-external/openjdk/external.mk  |   1 +
- .../package/openjdk-hello-world/Config.in     |  26 ++++
- .../openjdk-hello-world/HelloWorld.java       |   8 +
- .../openjdk-hello-world.mk                    |  19 +++
- support/testing/tests/package/test_openjdk.py |  42 ++++++
- 19 files changed, 375 insertions(+), 5 deletions(-)
- create mode 100644 package/openjdk-bin/Config.in.host
- create mode 100644 package/openjdk-bin/openjdk-bin.hash
- create mode 100644 package/openjdk-bin/openjdk-bin.mk
- create mode 100644 package/openjdk/Config.in
- create mode 100644 package/openjdk/openjdk.hash
- create mode 100644 package/openjdk/openjdk.mk
- create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
- create mode 100644 support/testing/tests/package/test_openjdk.py
-
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index fc318fe26e..018747555d 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -12,7 +12,17 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ 
+-    def configure(self):
++    def configure(self, make_extra_opts=[], make_extra_env={}):
++        """Configure the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command.
++        e.g. make_extra_opts=["BR2_EXTERNAL=/path"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         if not os.path.isdir(self.builddir):
+             os.makedirs(self.builddir)
+ 
+@@ -25,22 +35,40 @@ class Builder(object):
+         self.logfile.flush()
+ 
+         env = {"PATH": os.environ["PATH"]}
++        env.update(make_extra_env)
++
+         cmd = ["make",
+-               "O={}".format(self.builddir),
+-               "olddefconfig"]
++               "O={}".format(self.builddir)]
++        cmd += make_extra_opts
++        cmd += ["olddefconfig"]
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
+-    def build(self):
++    def build(self, make_extra_opts=[], make_extra_env={}):
++        """Perform the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command. It can include a make target.
++        e.g. make_extra_opts=["foo-source"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         env = {"PATH": os.environ["PATH"]}
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
+             env['http_proxy'] = os.environ["http_proxy"]
+             env['https_proxy'] = os.environ["http_proxy"]
++        env.update(make_extra_env)
++
+         cmd = ["make", "-C", self.builddir]
++        cmd += make_extra_opts
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
 -- 
 2.20.1
