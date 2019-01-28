@@ -1,56 +1,127 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Jan 2019 00:13:11 +0100
-Subject: [Buildroot] [PATCH v2] skeleton-init-common: improve /etc/hosts
- generation
-In-Reply-To: <20181019135824.981-1-casantos@datacom.com.br>
-References: <20181019135824.981-1-casantos@datacom.com.br>
-Message-ID: <41da8c03-8637-cfab-d146-fd4ad3814254@mind.be>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 28 Jan 2019 18:22:04 -0500
+Subject: [Buildroot] [PATCH v3 0/5] OpenJDK: new package and tests
+Message-ID: <20190128232209.17485-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Adam Duskett <Aduskett@gmail.com>
+
+This patch series adds OpenJDK and an updated testing framework to BuildRoot.
+
+A previous patch series for OpenJDK8 used the JDK Muricle page to download a
+tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
+repository. This repository allows us to use the GitHub macro instead of trying
+to provide a nasty workaround when grabbing the source code.
+
+With this patch series, there are some quirks that I would like to detail:
+
+- The openjdk-bin package:
+From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
+"Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
+the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
+porting OpenJDK to a new platform, the chances are that there already exists
+another JDK for that platform that is usable as boot JDK.
+
+The rule of thumb is that the boot JDK for building JDK major version N should
+be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
+as boot JDK."
+
+This paradox causes an issue because every distribution I have used comes with
+JDK8 by default. So there are two solutions that I could come up with:
+1) Require the host-system to have JDK N-1
+2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
+   repository, and use those binaries as the boot-jdk.
+
+- JDK >= 10 requires X11, even if building a headless version.
+  It's unfortunate, but there isn't anything I cared to do about it.
+
+- Running "make install" installs the entire JDK to the target directory,
+  which is why INSTALL_TARGET is manual. 
+
+- The OpenJDK package:
+
+- Depending on !BR2_SOFT_FLOAT
+From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#building-for-armaarch64
+"Note that soft-float ABIs are no longer properly supported on OpenJDK."
+Yes, it compiles as of right now, but I don't want to have to help people with
+possible ASM java bugs because they wanted to use a processor without an FPU.
+
+- Requiring GLIBC
+OpenJDK could probably build against uClibc with a few patches, but I decided
+against going through the effort of doing so. My reasoning is that uClibc
+advertises itself as a small C library, however, at this time, OpenJDK comes in
+at over 100MB for a minimal install. So the few megabytes saved by using uClibc
+probably isn't going to be a concern for anybody wanting to use Java on their
+embedded environment.
+
+- Other thoughts:
+It is possible to use fine-grained make targets when building OpenJDK, check out
+http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#using-fine-grained-make-targets.
+Perhaps in the future, BuildRoot could have Java setup just like PHP or Python,
+with a large selection of modules to build? This fine-grained build could
+potentially save a massive amount of space.
+
+Perhaps in the future, a patch set that removes the X11/Alsa/cups dependencies
+can be added.
+
+In addition to the OpenJDK patches, Matt Webber, Daniel Leach and
+Ricardo Martincoski extended the testing framework to allow for a more
+flexible and comprehensive testing environment. The first of which is to test
+OpenJDK by running a simple "Hello world" application.
 
 
-On 19/10/2018 15:58, Carlos Santos wrote:
-> If BR2_TARGET_GENERIC_HOSTNAME contains a FQDN, strip the host part and
-> add it as an alias, e.g.
-> 
->     127.0.1.1	hostname.example.com hostname
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Comments and critiques are always welcome!
 
- Applied to master, thanks.
+Adam
 
- Regards,
- Arnout
+Daniel J. Leach (1):
+  support/testing: openjdk hello world
 
-> ---
-> Changes v1->v2: remove stray "else"
-> ---
->  package/skeleton-init-common/skeleton-init-common.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-> index e8a0522052..02f86df359 100644
-> --- a/package/skeleton-init-common/skeleton-init-common.mk
-> +++ b/package/skeleton-init-common/skeleton-init-common.mk
-> @@ -41,10 +41,15 @@ SKELETON_INIT_COMMON_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_M
->  SKELETON_INIT_COMMON_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
->  
->  ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),)
-> +SKELETON_INIT_COMMON_HOSTS_LINE = $(SKELETON_INIT_COMMON_HOSTNAME)
-> +SKELETON_INIT_COMMON_SHORT_HOSTNAME = $(firstword $(subst ., ,$(SKELETON_INIT_COMMON_HOSTNAME)))
-> +ifneq ($(SKELETON_INIT_COMMON_HOSTNAME),$(SKELETON_INIT_COMMON_SHORT_HOSTNAME))
-> +SKELETON_INIT_COMMON_HOSTS_LINE += $(SKELETON_INIT_COMMON_SHORT_HOSTNAME)
-> +endif
->  define SKELETON_INIT_COMMON_SET_HOSTNAME
->  	mkdir -p $(TARGET_DIR)/etc
->  	echo "$(SKELETON_INIT_COMMON_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
-> -	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTNAME)' \
-> +	$(SED) '$$a \127.0.1.1\t$(SKELETON_INIT_COMMON_HOSTS_LINE)' \
->  		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
->  endef
->  SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_HOSTNAME
-> 
+Ricardo Martincoski (2):
+  testing/infra/builder: build with target and environment
+  testing/infra/basetest: support br2-external
+
+Adam Duskett (5):
+  openjdk-bin: new package
+  openjdk: new package
+
+ .gitlab-ci.yml                                |   1 +
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ package/Config.in.host                        |   1 +
+ package/openjdk-bin/Config.in.host            |  12 ++
+ package/openjdk-bin/openjdk-bin.hash          |   6 +
+ package/openjdk-bin/openjdk-bin.mk            |  20 +++
+ package/openjdk/Config.in                     |  55 +++++++
+ package/openjdk/openjdk.hash                  |   3 +
+ package/openjdk/openjdk.mk                    | 141 ++++++++++++++++++
+ support/testing/infra/basetest.py             |   3 +-
+ support/testing/infra/builder.py              |  36 ++++-
+ .../package/br2-external/openjdk/Config.in    |   1 +
+ .../br2-external/openjdk/external.desc        |   1 +
+ .../package/br2-external/openjdk/external.mk  |   1 +
+ .../package/openjdk-hello-world/Config.in     |  26 ++++
+ .../openjdk-hello-world/HelloWorld.java       |   8 +
+ .../openjdk-hello-world.mk                    |  19 +++
+ support/testing/tests/package/test_openjdk.py |  42 ++++++
+ 19 files changed, 375 insertions(+), 5 deletions(-)
+ create mode 100644 package/openjdk-bin/Config.in.host
+ create mode 100644 package/openjdk-bin/openjdk-bin.hash
+ create mode 100644 package/openjdk-bin/openjdk-bin.mk
+ create mode 100644 package/openjdk/Config.in
+ create mode 100644 package/openjdk/openjdk.hash
+ create mode 100644 package/openjdk/openjdk.mk
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+ create mode 100644 support/testing/tests/package/test_openjdk.py
+
+-- 
+2.20.1
