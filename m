@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:26:47 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libmad: needs autoreconf
-Message-ID: <20190128172548.30A42814FD@busybox.osuosl.org>
+Date: Mon, 28 Jan 2019 18:26:41 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] libmad: needs autoreconf
+Message-ID: <20190128172558.13CD8810A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e553f46d1dd36304c04f88647af3bff9afaa543e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ab3a1266d9ceb8ff7e17f54cba3862914f0b1be6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 libmad uses a very old configure script.
 
