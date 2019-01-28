@@ -1,67 +1,151 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 17:31:46 -0500
-Subject: [Buildroot] [PATCH 0/2] OpenJDK: new package.
-In-Reply-To: <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
-References: <20190128163126.106059-1-aduskett@gmail.com>
- <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
-Message-ID: <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Jan 2019 00:02:34 +0100
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.58.3
+In-Reply-To: <20190128221234.93143-1-aduskett@gmail.com>
+References: <20190128221234.93143-1-aduskett@gmail.com>
+Message-ID: <fc2cd166-8bf5-a0f2-698e-5697b8bf04f1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+ Hi Adam,
 
-On Mon, Jan 28, 2019 at 2:36 PM Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
->
-> Hello,
-> El lun., 28 ene. 2019 a las 17:31, <aduskett@gmail.com> escribi?:
-> >
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > This patch series introduces BuildRoot to OpenJDK.
-> >
-> > A previous patch series for OpenJDK8 used the JDK Muricle page to download a
-> > tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
-> > repository. This repository allows us to use the GitHub macro instead of trying
-> > to provide a nasty workaround when grabbing the source code.
-> >
-> > With this patch series, there are some quirks that I would like to detail:
-> >
-> > - The openjdk-bin package:
-> > From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
-> > "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
-> > the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
-> > porting OpenJDK to a new platform, the chances are that there already exists
-> > another JDK for that platform that is usable as boot JDK.
-> >
-> > The rule of thumb is that the boot JDK for building JDK major version N should
-> > be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
-> > as boot JDK."
-> >
-> > This paradox causes an issue because every distribution I have used comes with
-> > JDK8 by default. So there are two solutions that I could come up with:
-> > 1) Require the host-system to have JDK N-1
-> > 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
-> >    repository, and use those binaries as the boot-jdk.
-> >
-> > - JDK >= 10 requires X11, even if building a headless version.
-> >   It's unfortunate, but there isn't anything I cared to do about it.
->
-> It should be possible to build without X11, with some changes.
-> See also the openjdk package I sent last year as reference:
-> http://lists.busybox.net/pipermail/buildroot/2018-February/213282.html
->
-> Best regards,
-> Thomas
-Thank's Thomas!
-I did see those patches and came to the conclusion that while it's
-probably possible, for the initial
-release I don't really want to go through the effort of
-forward-porting those patches to JDK11.
+ Thanks for this second attempt at bumping libglib2.
 
-I am always welcome to patch-donations though!
+On 28/01/2019 23:12, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> In addition:
+>   - Re-add the changes from 178eb1d7ea165d87460224d297ce615bb63090f0
 
-Adam
+ This is not saying much, better copy the relevant parts of the original commit
+message.
+
+> 
+>   - Add a new patch: 0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+>     This patch fixes the previous autobuild errors by removing the ${bindir}
+>     variable in the front of the glib_genmarshal, gobject_query and glib_mkenums
+>     lines.
+> 
+> All tests passed with the packages: AT, libsoup, and dbus-glib selected:
+> br-arm-full [1/6]: OK
+> br-arm-cortex-a9-glibc [2/6]: OK
+> br-arm-cortex-m4-full [3/6]: SKIPPED
+> br-x86-64-musl [4/6]: OK
+> br-arm-full-static [5/6]: OK
+> armv5-ctng-linux-gnueabi [6/6]: OK
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[snip]
+> diff --git a/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+> new file mode 100644
+> index 0000000000..561f461da9
+> --- /dev/null
+> +++ b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+> @@ -0,0 +1,37 @@
+> +From d30304db01a87964bdccf1ff99b6baf257fa26c6 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <Aduskett@gmail.com>
+> +Date: Mon, 28 Jan 2019 15:22:31 -0500
+> +Subject: [PATCH] remove glib-2.0.pc bindir variable prefix.
+> +
+> +If glib_genmarshal, gobject_query or glib_mkenums are prefixed with
+> +${bindir} pkg-config will search the host system if the --variable flag
+> +is called.
+> +
+> +Revert the behavior by removing the bindir prefix from these variables.
+
+ This is not upstreamable since it reverts upstream behaviour.
+
+ So let's see if we can find something upstreamable...
+
+ The upstream commit that introduces this issue refers to [1] to explain why the
+prefix is added. That post basically says that the .pc file should not contain
+absolute paths, but rather paths that are relative to some other variable.
+
+> +
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + glib-2.0.pc.in | 7 +++----
+> + 1 file changed, 3 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
+> +index 3c5ea81..275fc01 100644
+> +--- a/glib-2.0.pc.in
+> ++++ b/glib-2.0.pc.in
+> +@@ -3,10 +3,9 @@ exec_prefix=@exec_prefix@
+> + libdir=@libdir@
+> + includedir=@includedir@
+> + 
+> +-bindir=@bindir@
+> +-glib_genmarshal=${bindir}/glib-genmarshal
+
+ This could be changed into:
+
+tooldir=${bindir}
+glib_genmarshal=${tooldir}/glib-genmarshal
+
+ pkg-config --variable=glib_genmarshal will evaluate to exactly the same value
+as before. However, the extra tooldir variable allows us to add a
+post-install-staging hook that SEDs it into the host path instead of the staging
+path. Our sed can of course use an absolute path.
+
+ If you make this an upstreamable patch, please make sure that the meson version
+(glib/meson.build) is also updated.
+
+ Regards,
+ Arnout
+
+> +-gobject_query=${bindir}/gobject-query
+> +-glib_mkenums=${bindir}/glib-mkenums
+> ++glib_genmarshal=glib-genmarshal
+> ++gobject_query=gobject-query
+> ++glib_mkenums=glib-mkenums
+> + 
+> + Name: GLib
+> + Description: C Utility Library
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+> index 57403a2154..7aa4c6cc02 100644
+> --- a/package/libglib2/libglib2.hash
+> +++ b/package/libglib2/libglib2.hash
+> @@ -1,4 +1,4 @@
+> -# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
+> -sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
+> +# http://ftp.gnome.org/pub/gnome/sources/glib/2.58/glib-2.58.3.sha256sum
+> +sha256  8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481  glib-2.58.3.tar.xz
+>  # License files, locally calculated
+>  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index f602c371f5..981112cac0 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBGLIB2_VERSION_MAJOR = 2.56
+> +LIBGLIB2_VERSION_MAJOR = 2.58
+>  LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+>  LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+>  LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+> @@ -13,6 +13,15 @@ LIBGLIB2_LICENSE_FILES = COPYING
+>  # 0002-disable-tests.patch
+>  LIBGLIB2_AUTORECONF = YES
+>  
+> +# Copy what is done in autogen.sh when gtk-doc is not available
+> +define LIBGLIB2_GTK_DOC_HOOK
+> +	echo "EXTRA_DIST=" > $(@D)/gtk-doc.make
+> +	echo "CLEANFILES=" >> $(@D)/gtk-doc.make
+> +endef
+> +
+> +LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
+> +HOST_LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
+> +
+>  LIBGLIB2_INSTALL_STAGING = YES
+>  LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+>  
+> 
