@@ -1,66 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 10:03:05 +0100
-Subject: [Buildroot] [PATCH 2/2] support/testing: add atop test
-In-Reply-To: <20190128021406.27477-2-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Mon, 28 Jan 2019 00:14:06 -0200")
-References: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
- <20190128021406.27477-2-ricardo.martincoski@gmail.com>
-Message-ID: <87d0ohf92u.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Jan 2019 09:58:59 +0100
+Subject: [Buildroot] [git commit] zbar: needs kernel headers >= 3.17
+Message-ID: <20190128090221.48CBE7FB8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dd08ca7aa98209222a077d1db97323bbc3b563b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- > ---
- >  .gitlab-ci.yml                             |  1 +
- >  support/testing/tests/package/test_atop.py | 40 ++++++++++++++++++++++
- >  2 files changed, 41 insertions(+)
- >  create mode 100644 support/testing/tests/package/test_atop.py
+v4l2_query_ext_ctrl has been added in kernel 3.17:
+https://github.com/torvalds/linux/commit/5082c2417841e64df975789011e182ce99a9dacd
 
- > diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
- > index 79daebf160..8f1e4ae804 100644
- > --- a/.gitlab-ci.yml
- > +++ b/.gitlab-ci.yml
- > @@ -317,6 +317,7 @@ tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
- >  tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
- >  tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
- >  tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
- > +tests.package.test_atop.TestAtop: *runtime_test
- >  tests.package.test_dropbear.TestDropbear: *runtime_test
- >  tests.package.test_ipython.TestIPythonPy2: *runtime_test
- >  tests.package.test_ipython.TestIPythonPy3: *runtime_test
- > diff --git a/support/testing/tests/package/test_atop.py b/support/testing/tests/package/test_atop.py
- > new file mode 100644
- > index 0000000000..32c5a07c3c
- > --- /dev/null
- > +++ b/support/testing/tests/package/test_atop.py
- > @@ -0,0 +1,40 @@
- > +import os
- > +
- > +import infra.basetest
- > +
- > +
- > +class TestAtop(infra.basetest.BRTest):
- > +    config = \
- > +        """
- > +        BR2_arm=y
- > +        BR2_cortex_a9=y
- > +        BR2_ARM_ENABLE_NEON=y
- > +        BR2_ARM_ENABLE_VFP=y
- > +        BR2_TOOLCHAIN_EXTERNAL=y
- > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- > +        BR2_SYSTEM_DHCP="eth0"
- > +        BR2_LINUX_KERNEL=y
- > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+Fixes:
+ - http://autobuild.buildroot.org/results/d7b244cf9488eafb59ba8575f17884f4f8512db1
 
-Any specific reason for this old unsupported kernel version?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer/gst-plugins-bad/Config.in | 6 +++---
+ package/zbar/Config.in                      | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 7bbd56a602..f45981f6c8 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -326,12 +326,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ 	depends on BR2_USE_MMU # zbar-> libv4l
+ 	depends on !BR2_STATIC_LIBS # zbar-> libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
+ 	select BR2_PACKAGE_ZBAR
+ 
+-comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
++comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
+ endif
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+index 0f4d115745..e850c1f02b 100644
+--- a/package/zbar/Config.in
++++ b/package/zbar/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZBAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+ 	depends on BR2_USE_MMU # libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBV4L
+ 	help
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_ZBAR
+ 
+ 	  https://git.linuxtv.org/zbar.git/about/
+ 
+-comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
++comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
