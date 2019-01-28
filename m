@@ -1,58 +1,68 @@
-From: Joakim Bech <joakim.bech@linaro.org>
-Date: Mon, 28 Jan 2019 17:41:40 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain: update AArch32/AArch64
- toolchain to 8-2-2019.01
-In-Reply-To: <20190128155951.6eb96b67@windsurf>
-References: <20190128133500.7515-1-joakim.bech@linaro.org>
- <20190128140206.25948-1-joakim.bech@linaro.org>
- <20190128150834.206739d5@windsurf> <20190128143507.GA31160@guppy>
- <20190128155951.6eb96b67@windsurf>
-Message-ID: <20190128164140.GA6634@guppy>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 28 Jan 2019 18:42:29 +0200
+Subject: [Buildroot] [PATCH] package/gnutls: bump to version 3.6.6
+In-Reply-To: <20190128160854.32691-1-peter@korsgaard.com>
+References: <20190128160854.32691-1-peter@korsgaard.com>
+Message-ID: <20190128164229.2mblf4wbvf5zie7g@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Peter,
 
-On Mon, Jan 28, 2019 at 03:59:51PM +0100, Thomas Petazzoni wrote:
-> In your case, I don't see how the version bump can work if you don't
-> change:
+On Mon, Jan 28, 2019 at 05:08:54PM +0100, Peter Korsgaard wrote:
+> Drop now upstreamed 0001-configure.ac-check-if-libatomic-is-needed.patch and
+> autoreconf.
 > 
-When I'm building for OP-TEE we are pre-downloading the toolchain from the
-OP-TEE makefiles and refer to that when configuring Buildroot, which explains
-why this was working on my side even before making the changes you're asking
-for.
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
 
->   toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
->   toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
->   toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
->   toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-> 
-Got it! I've made changes to those files and this time I've also tested
-directly in Buildroot (without involving OP-TEE) as follows:
+[...]
 
-1) $ make qemu_aarch64_virt_defconfig
-   $ make menuconfig ... select external toolchain
-   $ make
-   ...
-   2019-01-28 17:06:00 (1.11 MB/s) - ?/home/jbech/devel/optee_projects/qemu_v8/buildroot/output/build/.gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz.7NG7Nw/output? saved [267998260/267998260]
+> diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+> index 89e8b14597..f33d8672d4 100644
+> --- a/package/gnutls/gnutls.hash
+> +++ b/package/gnutls/gnutls.hash
+> @@ -1,6 +1,6 @@
+>  # Locally calculated after checking pgp signature
+> -# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.5.tar.xz.sig
+> -sha256	073eced3acef49a3883e69ffd5f0f0b5f46e2760ad86eddc6c0866df4e7abb35	gnutls-3.6.5.tar.xz
+> +# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.6.tar.xz.sig
+> +none	bb9acab8af2ac430edf45faaaa4ed2c51f86e57cb57689be6701aceef4732ca7	gnutls-3.6.6.tar.xz
 
-    gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz: OK (md5: ed467a18abc7cf81d53c0cf6014b1867)
-    gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz: OK (sha256: 6683d51b0dd61a91ab1e8e478a0a8a50ccb34d5590c84aa36697e956b16f14a1) 
+Why none?
 
-2) $ make qemu_arm_vexpress_defconfig
-   $ make menuconfig ... select external toolchain
-   $ make
-   ...
-   2019-01-28 17:26:29 (1.11 MB/s) - ?/home/jbech/devel/optee_projects/qemu_v8/buildroot/output/build/.gcc-arm-8.2-2019.01-x86_64-arm-linux-gnueabihf.tar.xz.XkMAPN/output? saved [252108596/252108596]                                                     
-   gcc-arm-8.2-2019.01-x86_64-arm-linux-gnueabihf.tar.xz: OK (md5: 123887bdaa27b362f0f428dc36af5693)
-   gcc-arm-8.2-2019.01-x86_64-arm-linux-gnueabihf.tar.xz: OK (sha256: 6b73016fa4773a7450bac9bd80b2ca056b5d582dd966b509a17b305fc89506a9)
+baruch
 
-Which I believe looks good and what we would expect (the builds also ended
-successfully). I will send v2-patch soon, thanks for the guidance!
+>  # Locally calculated
+>  sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+>  sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+> index d9befa1612..c6d2d72771 100644
+> --- a/package/gnutls/gnutls.mk
+> +++ b/package/gnutls/gnutls.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  GNUTLS_VERSION_MAJOR = 3.6
+> -GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).5
+> +GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
+>  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+>  GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+>  GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+> @@ -27,8 +27,6 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+>  	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no) \
+>  	gl_cv_func_gettimeofday_clobber=no
+>  GNUTLS_INSTALL_STAGING = YES
+> -# We're patching configure.ac
+> -GNUTLS_AUTORECONF = YES
+>  
+>  # libpthread autodetection poison the linkpath
+>  GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
 
 -- 
-Regards,
-Joakim
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
