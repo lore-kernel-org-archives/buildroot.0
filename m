@@ -1,38 +1,49 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 28 Jan 2019 00:26:43 -0200
-Subject: [Buildroot] [PATCH 1/8] package/s6-networking: fix dependency
- when libressl is enabled
-References: <20190127205214.274ecc14@windsurf.home>
-Message-ID: <5c4e68636212e_30e3fbb3e150aac52e2@ultri5.mail>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 28 Jan 2019 19:55:02 +1300
+Subject: [Buildroot] [PATCH v2] syslog-ng: fix builds with static libc
+In-Reply-To: <20190127214524.3eb64084@windsurf.home>
+References: <20190124195848.16647-1-judge.packham@gmail.com>
+ <20190127214524.3eb64084@windsurf.home>
+Message-ID: <CAFOYHZBjs+6_f=vzUV9psOXpq=-1b3wQPLSxPnTtJ9q+kPEJeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Jan 28, 2019 at 9:45 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Chris,
+>
+> On Fri, 25 Jan 2019 08:58:48 +1300
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+> > index 1f83e39ff0..69c94da02b 100644
+> > --- a/package/syslog-ng/syslog-ng.hash
+> > +++ b/package/syslog-ng/syslog-ng.hash
+> > @@ -3,3 +3,4 @@ sha256 5cf931a9d7bead0e6d9a2c65eee8f6005a005878f59aa280f3c4294257ed5178  syslog-
+> >  sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
+> >  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+> >  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+> > +sha256 feb26f77921b42fa7e5468229d883c5fae0b349cd075013eec2cb071a677179b  d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
+> > diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+> > index ecde9e8181..f96b97f30e 100644
+> > --- a/package/syslog-ng/syslog-ng.mk
+> > +++ b/package/syslog-ng/syslog-ng.mk
+> > @@ -18,6 +18,7 @@ SYSLOG_NG_AUTORECONF = YES
+> >  SYSLOG_NG_CONF_ENV = LIBS=-lrt
+> >  SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+> >       --disable-java --disable-java-modules --disable-mongodb
+> > +SYSLOG_NG_PATCH = https://github.com/balabit/syslog-ng/commit/d85121c0dc700cad4bd9735b0ee1dab9addf9dd7.patch
+>
+> We no longer want to download patches from github, because their hashes
+> change once in a while (when a new commit is made to the repository,
+> the beginning of its SHA1 may be identical to the one of an existing
+> commit, in which case the SHA1 mentioned in patches are extended in
+> length, causing the contents of the patch and therefore its hash to
+> change). So we need such patches directly stored in package/syslog-ng/.
+>
 
-On Sun, Jan 27, 2019 at 05:52 PM, Thomas Petazzoni wrote:
-
-> On Sun, 27 Jan 2019 16:59:36 -0200
-> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
-> 
->> Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
->> actually dropped the dependency on s6-dns and s6 when libressl is
->> enabled.
->> Fix this by using += inside the conditional code.
->> 
->> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> ---
->> NOTE: I don't know why the autobuilders didn't caught this.
-> 
-> Because libressl is selected as part of a choice..endchoice, and such
-> choices are not randomized by "randpackageconfig". Therefore, only
-> OpenSSL is tested by the autobuilders, and LibreSSL is never tested.
-
-Right. Thank you for the clarification.
-
-
-Regards,
-Ricardo
+OK makes sense. I had a feeling something had changed. I'll send a v3.
