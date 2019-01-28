@@ -1,46 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:13:43 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/cargo: pass
- appropriate library path to the linker
-Message-ID: <20190128171412.1AA718103E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Jan 2019 18:16:07 +0100
+Subject: [Buildroot] [PATCH 6/8] utils/check-package: allow to disable
+ warning for a line
+In-Reply-To: <20190127185943.1136-7-ricardo.martincoski@gmail.com>
+References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
+ <20190127185943.1136-7-ricardo.martincoski@gmail.com>
+Message-ID: <9c30744b-fdf5-1b48-d320-b1c8a958ceec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=820a4c61c82b8082cef8764607ab64c3058c3126
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-When linking the host cargo binary, the linker should be told to find
-libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
-such as libhttp_parser. This was found with per-package directory
-support, where the build failed with:
 
-  = note: /usr/bin/ld: cannot find -lhttp_parser
-          collect2: error: ld returned 1 exit status
+On 27/01/2019 19:59, Ricardo Martincoski wrote:
+> Currently any exceptions for a check function need to be coded into the
+> check-package script itself.
+> 
+> Create a pattern that can be used in a comment to make check-package
+> ignore one or more warning types in the line immediately below:
+>  # check-package Indent, VariableWithBraces
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-In order to fix this, instead of passing -L$(HOST_DIR)/lib during the
-build of Cargo, we make sure all flags in $(HOST_LDFLAGS) are passed.
+ It would be nice to have mentioned that an in-tree user of this feature will be
+added in a later patch.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b5e1b51dd1ee68ee342a3340c9c947c083861eb8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cargo/cargo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-index 1b1053ba41..a387281b4c 100644
---- a/package/cargo/cargo.mk
-+++ b/package/cargo/cargo.mk
-@@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
- 	$(if $(VERBOSE),--verbose)
- 
- HOST_CARGO_ENV = \
--	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-+	RUSTFLAGS="$(addprefix -Clink-arg=,$(HOST_LDFLAGS))" \
- 	CARGO_HOME=$(HOST_CARGO_HOME)
- 
- define HOST_CARGO_BUILD_CMDS
+ Regards,
+ Arnout
+
+> ---
+>  utils/check-package           | 4 ++++
+>  utils/checkpackagelib/base.py | 2 ++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/utils/check-package b/utils/check-package
+> index 26439f08eb..ce1fe98d67 100755
+> --- a/utils/check-package
+> +++ b/utils/check-package
+> @@ -119,36 +119,40 @@ def check_file_using_lib(fname):
+>          return nwarnings, nlines
+>      classes = inspect.getmembers(lib, is_a_check_function)
+>  
+>      if flags.dry_run:
+>          functions_to_run = [c[0] for c in classes]
+>          print("{}: would run: {}".format(fname, functions_to_run))
+>          return nwarnings, nlines
+>  
+>      objects = [c[1](fname, flags.manual_url) for c in classes]
+>  
+>      for cf in objects:
+>          nwarnings += print_warnings(cf.before())
+>      if six.PY3:
+>          f = open(fname, "r", errors="surrogateescape")
+>      else:
+>          f = open(fname, "r")
+> +    lastline = ""
+>      for lineno, text in enumerate(f.readlines()):
+>          nlines += 1
+>          for cf in objects:
+> +            if cf.disable.search(lastline):
+> +                continue
+>              nwarnings += print_warnings(cf.check_line(lineno + 1, text))
+> +        lastline = text
+>      f.close()
+>      for cf in objects:
+>          nwarnings += print_warnings(cf.after())
+>  
+>      return nwarnings, nlines
+>  
+>  
+>  def __main__():
+>      global flags
+>      flags = parse_args()
+>  
+>      if flags.intree_only:
+>          # change all paths received to be relative to the base dir
+>          base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+>          files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
+>          # move current dir so the script find the files
+> diff --git a/utils/checkpackagelib/base.py b/utils/checkpackagelib/base.py
+> index fc09bec9a2..9544a64e5a 100644
+> --- a/utils/checkpackagelib/base.py
+> +++ b/utils/checkpackagelib/base.py
+> @@ -1,16 +1,18 @@
+>  # See utils/checkpackagelib/readme.txt before editing this file.
+> +import re
+>  
+>  
+>  class _CheckFunction(object):
+>      def __init__(self, filename, url_to_manual):
+>          self.filename = filename
+>          self.url_to_manual = url_to_manual
+> +        self.disable = re.compile(r"^\s*# check-package .*\b{}\b".format(self.__class__.__name__))
+>  
+>      def before(self):
+>          pass
+>  
+>      def check_line(self, lineno, text):
+>          pass
+>  
+>      def after(self):
+>          pass
+> 
