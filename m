@@ -1,54 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Jan 2019 22:10:16 +0100
-Subject: [Buildroot] [PATCH 1/1] haproxy: disable on sh4 with gcc < 7
-In-Reply-To: <878sz4cwxf.fsf@dell.be.48ers.dk>
-References: <20190128190702.7157-1-fontaine.fabrice@gmail.com>
- <878sz4cwxf.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W83r0bw2KBLaxBheFde-8W0XCuLz3Ry7p8whaA1cWcAh4A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Jan 2019 22:11:24 +0100
+Subject: [Buildroot] [PATCH v3] tpm2-tools: drop dependency on tpm2-abrmd
+In-Reply-To: <20190125150304.16661-1-peter@korsgaard.com>
+References: <20190125150304.16661-1-peter@korsgaard.com>
+Message-ID: <20190128211124.GJ7130@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Peter, All,
 
-Le lun. 28 janv. 2019 ? 22:08, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Build fails on sh4:
->  > src/dns.c:290:1: error: unable to find a register to spill in class 'R0_REGS'
->  >  }
->
->  > This build failure seems related to a known gcc bug that has been fixed
->  > only in gcc 7:
->  > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
->
->  > Fixes:
->  >  - http://autobuild.buildroot.org/results/2e181cc874d5389f10ecddb0d11253c3aa5e7fc4
->
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > ---
->  >  package/haproxy/Config.in | 2 ++
->  >  1 file changed, 2 insertions(+)
->
->  > diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
->  > index cbcbc0c388..78cbf6e103 100644
->  > --- a/package/haproxy/Config.in
->  > +++ b/package/haproxy/Config.in
->  > @@ -1,5 +1,7 @@
->  >  config BR2_PACKAGE_HAPROXY
->  >      bool "haproxy"
->  > +    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
->  > +    depends on !(BR2_sh4 && !BR2_TOOLCHAIN_GCC_AT_LEAST_7)
->
-> Have you btw verified that this only happens on sh4 and not the other sh
-> variants?
-Nope, I will test it and keep you informed of the results.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+On 2019-01-25 16:03 +0100, Peter Korsgaard spake thusly:
+> tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
+> CAN be used without, E.G. by setting the TPM2TOOLS_TCTI_NAME environment
+> variable to communicate directly with the kernel driver:
+> 
+> export TPM2TOOLS_TCTI_NAME=device
+> 
+> Either directly with the TPM device (/dev/tpmN) or through the in-kernel
+> resource manager provided by Linux kernel since 4.12 (/dev/tpmrmN)
+> 
+> For some use cases (E.G. initramfs) it makes sense to use tpm2-tools
+> without abrmd, so remove the tpm2-abrmd select, and instead a note in the
+> help text that it may be needed.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fabrice
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thank you. :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes since v2:
+> - Drop the imply and instead add a comment as suggested by Yann and Arnout
+> 
+>  package/tpm2-tools/Config.in | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+> index cc87e2a1bf..d8660a8f71 100644
+> --- a/package/tpm2-tools/Config.in
+> +++ b/package/tpm2-tools/Config.in
+> @@ -8,7 +8,6 @@ config BR2_PACKAGE_TPM2_TOOLS
+>  	select BR2_PACKAGE_LIBCURL
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	select BR2_PACKAGE_OPENSSL
+> -	select BR2_PACKAGE_TPM2_ABRMD # run-time
+>  	select BR2_PACKAGE_TPM2_TSS
+>  	help
+>  	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
+> @@ -17,6 +16,11 @@ config BR2_PACKAGE_TPM2_TOOLS
+>  	  and manage non-volatile storage through a TPM2.0 HW
+>  	  implementation.
+>  
+> +	  Notice: An in-kernel resource manager is provided by the
+> +	  Linux kernel since 4.12. Depending on use cases and kernel
+> +	  version, the user space resource manager provided by
+> +	  tpm2-abrmd may be needed.
+> +
+>  	  https://github.com/tpm2-software/tpm2-tools
+>  
+>  comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
+> -- 
+> 2.11.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
