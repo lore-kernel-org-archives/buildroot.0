@@ -1,67 +1,166 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Jan 2019 00:34:08 +0100
-Subject: [Buildroot] [PATCH] docs/manual: update package-make-target.txt
- with more targets
-In-Reply-To: <20181227164533.21663-1-thomas.petazzoni@bootlin.com>
-References: <20181227164533.21663-1-thomas.petazzoni@bootlin.com>
-Message-ID: <0c70d53b-78e0-b182-a995-9976bb9bd3fc@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 28 Jan 2019 18:38:51 -0500
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.58.3
+In-Reply-To: <fc2cd166-8bf5-a0f2-698e-5697b8bf04f1@mind.be>
+References: <20190128221234.93143-1-aduskett@gmail.com>
+ <fc2cd166-8bf5-a0f2-698e-5697b8bf04f1@mind.be>
+Message-ID: <CAFSsvmpOb-DAA2ffYBN82ovq4kGUvTa=RPDR7a95=LQN=wOAjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hey Arnout
 
+On Mon, Jan 28, 2019 at 6:02 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Adam,
+>
+>  Thanks for this second attempt at bumping libglib2.
+>
+> On 28/01/2019 23:12, aduskett at gmail.com wrote:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > In addition:
+> >   - Re-add the changes from 178eb1d7ea165d87460224d297ce615bb63090f0
+>
+>  This is not saying much, better copy the relevant parts of the original commit
+> message.
+>
+> >
+> >   - Add a new patch: 0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+> >     This patch fixes the previous autobuild errors by removing the ${bindir}
+> >     variable in the front of the glib_genmarshal, gobject_query and glib_mkenums
+> >     lines.
+> >
+> > All tests passed with the packages: AT, libsoup, and dbus-glib selected:
+> > br-arm-full [1/6]: OK
+> > br-arm-cortex-a9-glibc [2/6]: OK
+> > br-arm-cortex-m4-full [3/6]: SKIPPED
+> > br-x86-64-musl [4/6]: OK
+> > br-arm-full-static [5/6]: OK
+> > armv5-ctng-linux-gnueabi [6/6]: OK
+> >
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> [snip]
+> > diff --git a/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+> > new file mode 100644
+> > index 0000000000..561f461da9
+> > --- /dev/null
+> > +++ b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+> > @@ -0,0 +1,37 @@
+> > +From d30304db01a87964bdccf1ff99b6baf257fa26c6 Mon Sep 17 00:00:00 2001
+> > +From: Adam Duskett <Aduskett@gmail.com>
+> > +Date: Mon, 28 Jan 2019 15:22:31 -0500
+> > +Subject: [PATCH] remove glib-2.0.pc bindir variable prefix.
+> > +
+> > +If glib_genmarshal, gobject_query or glib_mkenums are prefixed with
+> > +${bindir} pkg-config will search the host system if the --variable flag
+> > +is called.
+> > +
+> > +Revert the behavior by removing the bindir prefix from these variables.
+>
+>  This is not upstreamable since it reverts upstream behaviour.
+>
+>  So let's see if we can find something upstreamable...
+>
+>  The upstream commit that introduces this issue refers to [1] to explain why the
+> prefix is added. That post basically says that the .pc file should not contain
+> absolute paths, but rather paths that are relative to some other variable.
+>
+> > +
+> > +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > +---
+> > + glib-2.0.pc.in | 7 +++----
+> > + 1 file changed, 3 insertions(+), 4 deletions(-)
+> > +
+> > +diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
+> > +index 3c5ea81..275fc01 100644
+> > +--- a/glib-2.0.pc.in
+> > ++++ b/glib-2.0.pc.in
+> > +@@ -3,10 +3,9 @@ exec_prefix=@exec_prefix@
+> > + libdir=@libdir@
+> > + includedir=@includedir@
+> > +
+> > +-bindir=@bindir@
+> > +-glib_genmarshal=${bindir}/glib-genmarshal
+>
+>  This could be changed into:
+>
+> tooldir=${bindir}
+> glib_genmarshal=${tooldir}/glib-genmarshal
+>
+>  pkg-config --variable=glib_genmarshal will evaluate to exactly the same value
+> as before. However, the extra tooldir variable allows us to add a
+> post-install-staging hook that SEDs it into the host path instead of the staging
+> path. Our sed can of course use an absolute path.
+>
+>  If you make this an upstreamable patch, please make sure that the meson version
+> (glib/meson.build) is also updated.
+>
+Eh, this was a quick patch that worked with everything. I really don't
+have time to deal
+with libglib2. I asked Yann on IRC if the patch was acceptable and he
+seemed to not
+mind it.
 
-On 27/12/2018 17:45, Thomas Petazzoni wrote:
-> This commit updates package-make-target.txt with a few additional
-> useful per-package targets that have been added in recent times.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+I can reject the patch if you want.
 
- Applied to master after changing into first-order as suggested by Yann. Google
-gives mixed results, but Wikipedia consistently uses first-order, so that seems
-like a good base.
-
- Regards,
- Arnout
-
-> ---
->  docs/manual/package-make-target.txt | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
-> index c91106e8e9..fd5f9e8e7f 100644
-> --- a/docs/manual/package-make-target.txt
-> +++ b/docs/manual/package-make-target.txt
-> @@ -59,14 +59,28 @@ Additionally, there are some other useful make targets:
->  |===================================================
->  | command/target    | Description
->  
-> -| +show-depends+    | Displays the dependencies required to build the
-> +| +show-depends+    | Displays the first order dependencies required to build the
->  package
->  
-> +| +show-recursive-depends+ | Recursively displays the dependencies
-> +  required to build the package
-> +
-> +| +show-rdepends+   | Displays the first order reverse dependencies of
-> +  the package (i.e packages that directly depend on it)
-> +
-> +| +show-recursive-rdepends+ | Recursively displays the reverse
-> +  dependencies of the package (i.e the packages that depend on it,
-> +  directly or indirectly)
-> +
->  | +graph-depends+   | Generate a dependency graph of the package, in the
->  context of the current Buildroot configuration. See
->  xref:graph-depends[this section] for more details about dependency
->  graphs.
->  
-> +| +graph-rdepends+  | Generate a graph of this package reverse
-> +  dependencies (i.e the packages that depend on it, directly or
-> +  indirectly)
-> +
->  | +dirclean+        | Remove the whole package build directory
->  
->  | +reinstall+       | Re-run the install commands
-> 
+Thanks!
+Adam
+>  Regards,
+>  Arnout
+>
+> > +-gobject_query=${bindir}/gobject-query
+> > +-glib_mkenums=${bindir}/glib-mkenums
+> > ++glib_genmarshal=glib-genmarshal
+> > ++gobject_query=gobject-query
+> > ++glib_mkenums=glib-mkenums
+> > +
+> > + Name: GLib
+> > + Description: C Utility Library
+> > +--
+> > +2.20.1
+> > +
+> > diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+> > index 57403a2154..7aa4c6cc02 100644
+> > --- a/package/libglib2/libglib2.hash
+> > +++ b/package/libglib2/libglib2.hash
+> > @@ -1,4 +1,4 @@
+> > -# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
+> > -sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
+> > +# http://ftp.gnome.org/pub/gnome/sources/glib/2.58/glib-2.58.3.sha256sum
+> > +sha256  8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481  glib-2.58.3.tar.xz
+> >  # License files, locally calculated
+> >  sha256       dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> > index f602c371f5..981112cac0 100644
+> > --- a/package/libglib2/libglib2.mk
+> > +++ b/package/libglib2/libglib2.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >
+> > -LIBGLIB2_VERSION_MAJOR = 2.56
+> > +LIBGLIB2_VERSION_MAJOR = 2.58
+> >  LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+> >  LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+> >  LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+> > @@ -13,6 +13,15 @@ LIBGLIB2_LICENSE_FILES = COPYING
+> >  # 0002-disable-tests.patch
+> >  LIBGLIB2_AUTORECONF = YES
+> >
+> > +# Copy what is done in autogen.sh when gtk-doc is not available
+> > +define LIBGLIB2_GTK_DOC_HOOK
+> > +     echo "EXTRA_DIST=" > $(@D)/gtk-doc.make
+> > +     echo "CLEANFILES=" >> $(@D)/gtk-doc.make
+> > +endef
+> > +
+> > +LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
+> > +HOST_LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
+> > +
+> >  LIBGLIB2_INSTALL_STAGING = YES
+> >  LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+> >
+> >
