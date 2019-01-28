@@ -1,51 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:04:40 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/llvm: set the
- path to llvm-config
-Message-ID: <20190128170357.C474D81489@busybox.osuosl.org>
+Date: Mon, 28 Jan 2019 18:06:47 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] apr: fix runtime tests
+ for cross compile
+Message-ID: <20190128170550.10C4C81497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc188d35a69d35e4ab24903d76eaccff16b49ea1
+commit: https://git.buildroot.net/buildroot/commit/?id=9503cb83a9dbefa443fad34e583b3d58ece53c14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-While building llvm for the target (x86_64), the build failed due to
-path poisoning (-I/usr/include/libxml2) while building NATIVE tools
-(i.e for the host). The llvm package tries to build a tool for the host
-with the cross-compiler which doesn't work when the paranoid toolchain
-wrapper (BR2_COMPILER_PARANOID_UNSAFE_PATH) is enabled.
+- epoll supported since linux-2.5.44/glibc-2.3.2 (see [1])
+ - dup3 supported since linux-2.6.27/glibc-2.9 (see [2])
+ - SOCK_CLOEXEC supported on linux (see [3])
+ - accept4 suppported since linux-2.6.28/glibc-2.10 (see [4])
 
-We know that llvm (target) needs llvm-tablegen and llvm-config built by
-host-llvm, but only LLVM_TABLEGEN is provided by llvm.mk. Adding
-LLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config for llvm (target)
-fixes the path poisoining issue since llvm doesn't build the NATIVE
-variant.
+Fixes [5] apache runtime failure (#11576)
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+  [mpm_event:crit] [pid 173:tid 1996214272] (70023)This function has not been
+      implemented on this platform: AH00495: Couldn't create a Thread Safe Pollset.
+      Is it supported on your platform?Also check system or user limits!
+  [:emerg] [pid 173:tid 1996214272] AH00017: Pre-configuration failed, exiting
+
+[1] http://man7.org/linux/man-pages/man7/epoll.7.html
+[2] https://linux.die.net/man/2/dup3
+[4] https://linux.die.net/man/2/accept4
+[5] https://bugs.busybox.net/show_bug.cgi?id=11576
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d3245ce4258f4f5e5230e976862a0fd40fdd1890)
+(cherry picked from commit 7a3b44f445ff82acdc7524e401148b16bfdd24ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/llvm/llvm.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/apr/apr.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 1f9bd447f5..e8377437e8 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -57,6 +57,9 @@ endif
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 58b1d86b28..8f29e57c59 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -26,7 +26,12 @@ APR_CONF_ENV = \
+ 	ac_cv_sizeof_pid_t=4 \
+ 	ac_cv_struct_rlimit=yes \
+ 	ac_cv_o_nonblock_inherited=no \
+-	apr_cv_mutex_recursive=yes
++	apr_cv_mutex_recursive=yes \
++	apr_cv_epoll=yes \
++	apr_cv_epoll_create1=yes \
++	apr_cv_dup3=yes \
++	apr_cv_sock_cloexec=yes \
++	apr_cv_accept4=yes
+ APR_CONFIG_SCRIPTS = apr-1-config
  
-+# Use native llvm-config from host-llvm (needed for cross-compilation)
-+LLVM_CONF_OPTS += -DLLVM_CONFIG_PATH=$(HOST_DIR)/bin/llvm-config
-+
- # BUILD_SHARED_LIBS has a misleading name. It is in fact an option for
- # LLVM developers to build all LLVM libraries as separate shared libraries.
- # For normal use of LLVM, it is recommended to build a single
+ # Doesn't even try to guess when cross compiling
