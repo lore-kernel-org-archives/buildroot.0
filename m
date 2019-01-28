@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:14:21 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/cargo: pass
+Date: Mon, 28 Jan 2019 18:13:43 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/cargo: pass
  appropriate library path to the linker
-Message-ID: <20190128171404.4C9A181530@busybox.osuosl.org>
+Message-ID: <20190128171412.1AA718103E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adad8807fe825d848dad971313f3f684ebc27e95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=820a4c61c82b8082cef8764607ab64c3058c3126
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 When linking the host cargo binary, the linker should be told to find
 libraries in $(HOST_DIR)/lib, otherwise it will not work libraries
@@ -32,7 +32,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-index 3fd088d727..666e0bc77b 100644
+index 1b1053ba41..a387281b4c 100644
 --- a/package/cargo/cargo.mk
 +++ b/package/cargo/cargo.mk
 @@ -70,7 +70,7 @@ HOST_CARGO_SNAP_OPTS = \
