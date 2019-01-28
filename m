@@ -1,47 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:27:12 +0100
-Subject: [Buildroot] [PATCH 1/1] libmad: needs autoreconf
-In-Reply-To: <20190117203605.7325-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 17 Jan 2019 21:36:05 +0100")
-References: <20190117203605.7325-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736pcelqn.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Jan 2019 19:47:06 +0100
+Subject: [Buildroot] [PATCH 1/1] clamav: needs C++
+Message-ID: <20190128184706.5378-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+clamav needs C++ since bump to version 0.101.1 and
+https://github.com/Cisco-Talos/clamav-devel/commit/d39cb6581f3c854476044f069d2393fc44702c36
 
- > libmad uses a very old configure script.
- > When the toolchain lacks C++ and the build machine lacks /lib/cpp, this
- > old configure script fails because it can't find a C++ preprocessor that
- > is valid:
+Fixes:
+ - http://autobuild.buildroot.org/results/be14aa571309cda32a5963feed9fd7f220e87fe6
 
- >     checking for arm-buildroot-linux-uclibcgnueabi-g++... no
- >     checking whether we are using the GNU C++ compiler... no
- >     checking whether no accepts -g... no
- >     checking dependency style of no... none
- >     checking how to run the C++ preprocessor... /lib/cpp
- >     configure: error: C++ preprocessor "/lib/cpp" fails sanity check
- >     See `config.log' for more details.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/clamav/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- > This is yet another case that was tentatively fixed by bd39d11d2e
- > (core/infra: fix build on toolchain without C++), further amended by
- > 4cd1ab15886 (core: alternate solution to disable C++).
-
- > However, this only works on libtool scripts that are recent enough, and
- > thus we need to autoreconf to get it.
-
- > We also need to patch configure.ac so that it does not fail on the
- > missing, GNU-specific files: NEWS, AUTHORS, and Changelog.
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/6a6aa29295bd70679c3a22a149e79010fa20c1bf
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index bc934ea452..56bf0af38c 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CLAMAV
+ 	bool "clamav"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBTOOL
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_CLAMAV
+ 
+ 	  http://www.clamav.net
+ 
+-comment "clamav needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "clamav needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
 -- 
-Bye, Peter Korsgaard
+2.14.1
