@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 11:36:22 -0500
-Subject: [Buildroot] [PATCH v2 0/2] OpenJDK: new package.
-Message-ID: <20190128163624.107243-1-aduskett@gmail.com>
+Date: Mon, 28 Jan 2019 11:36:23 -0500
+Subject: [Buildroot] [PATCH v2 1/2] openjdk-bin: new package
+In-Reply-To: <20190128163624.107243-1-aduskett@gmail.com>
+References: <20190128163624.107243-1-aduskett@gmail.com>
+Message-ID: <20190128163624.107243-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +12,112 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-V2: Fixed the second patch name. Copy and paste is sometimes my enemy!
+Paradoxically, building OpenJDK requires a pre-existing JDK.
+This pre-existing JDK is called the "boot JDK."
 
-This patch series introduces BuildRoot to OpenJDK.
+The boot JDK for building JDK major version N should be a JDK of major
+version N-1, so for building JDK11, JDK10 would be needed. This requirement is
+an issue when building on most distributions, as the host JDK tends to be JDK8.
 
-A previous patch series for OpenJDK8 used the JDK Muricle page to download a
-tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
-repository. This repository allows us to use the GitHub macro instead of trying
-to provide a nasty workaround when grabbing the source code.
+The AdoptOpenJDK project provides binaries that can act as the boot JDK to
+build the target JDK, which is what this package provides.
 
-With this patch series, there are some quirks that I would like to detail:
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - None
 
-- The openjdk-bin package:
-From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
-"Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
-the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
-porting OpenJDK to a new platform, the chances are that there already exists
-another JDK for that platform that is usable as boot JDK.
-
-The rule of thumb is that the boot JDK for building JDK major version N should
-be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
-as boot JDK."
-
-This paradox causes an issue because every distribution I have used comes with
-JDK8 by default. So there are two solutions that I could come up with:
-1) Require the host-system to have JDK N-1
-2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
-   repository, and use those binaries as the boot-jdk.
-
-- JDK >= 10 requires X11, even if building a headless version.
-  It's unfortunate, but there isn't anything I cared to do about it.
-
-- Running "make install" installs the entire JDK to the target directory,
-  which is why INSTALL_TARGET is manual. 
-
-- Depending on !BR2_SOFT_FLOAT
-From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#building-for-armaarch64
-"Note that soft-float ABIs are no longer properly supported on OpenJDK."
-Yes, it will compile as of right now, but I don't want to have to help people with
-possible ASM java bugs because they wanted to use a processor without an FPU.
-
-- Requiring GLIBC
-OpenJDK could probably build against uClibc with a few patches, but I decided
-against going through the effort of doing so. My reasoning is that uClibc
-advertises itself as a small C library, however, at this time, OpenJDK comes in
-at over 100MB for a minimal install. So the few megabytes saved by using uClibc
-probably isn't going to be a concern for anybody wanting to use Java on their
-embedded environment.
-
-- Other thoughts:
-It is possible to use fine-grained make targets when building OpenJDK, check out
-http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#using-fine-grained-make-targets.
-Perhaps in the future, BuildRoot could have Java setup just like PHP or Python,
-with a large selection of modules to build? This could potentially save a massive
-amount of space.
-
-Comments and critiques are always welcome!
-
-Adam
-
-Adam Duskett (2):
-  openjdk-bin: new package
-  OpenJDK is a free and open-source implementation of the Java Platform.
-    This package provides the option to build a client or a server JVM
-    interpreter.
-
- DEVELOPERS                           |   2 +
- package/Config.in                    |   1 +
- package/Config.in.host               |   1 +
- package/openjdk-bin/Config.in.host   |  12 +++
- package/openjdk-bin/openjdk-bin.hash |   6 ++
- package/openjdk-bin/openjdk-bin.mk   |  22 +++++
- package/openjdk/Config.in            |  54 ++++++++++
- package/openjdk/openjdk.hash         |   3 +
- package/openjdk/openjdk.mk           | 141 +++++++++++++++++++++++++++
- 9 files changed, 242 insertions(+)
+ DEVELOPERS                           |  1 +
+ package/Config.in.host               |  1 +
+ package/openjdk-bin/Config.in.host   | 12 ++++++++++++
+ package/openjdk-bin/openjdk-bin.hash |  6 ++++++
+ package/openjdk-bin/openjdk-bin.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
  create mode 100644 package/openjdk-bin/Config.in.host
  create mode 100644 package/openjdk-bin/openjdk-bin.hash
  create mode 100644 package/openjdk-bin/openjdk-bin.mk
- create mode 100644 package/openjdk/Config.in
- create mode 100644 package/openjdk/openjdk.hash
- create mode 100644 package/openjdk/openjdk.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c1950bb0f4..28ba480d85 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -50,6 +50,7 @@ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
+ F:	package/nginx-naxsi/
++F:	package/openjdk-bin/
+ F:	package/policycoreutils/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 16b474fc9d..0499589c4f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -39,6 +39,7 @@ menu "Host utilities"
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
++	source "package/openjdk-bin/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+ 	source "package/parted/Config.in.host"
+diff --git a/package/openjdk-bin/Config.in.host b/package/openjdk-bin/Config.in.host
+new file mode 100644
+index 0000000000..e3dd438a0f
+--- /dev/null
++++ b/package/openjdk-bin/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "x86_64"
++
++config BR2_PACKAGE_HOST_OPENJDK_BIN
++	bool "host openjdk-bin"
++	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	help
++	  Pre-packaged OpenJDK binaries used to compile the target
++	  OpenJDK.
++
++	  https://adoptopenjdk.net/
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+new file mode 100644
+index 0000000000..35d0b5c44b
+--- /dev/null
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -0,0 +1,6 @@
++# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
++sha256	d89304a971e5186e80b6a48a9415e49583b7a5a9315ba5552d373be7782fc528	OpenJDK11U-jdk_x64_linux_hotspot_11.0.2_7.tar.gz
++
++# Locally calculated
++sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
++sha256	a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb	legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+new file mode 100644
+index 0000000000..cfad5d78d5
+--- /dev/null
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# host-openjdk-bin
++#
++################################################################################
++
++HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.2
++HOST_OPENJDK_BIN_VERSION_MINOR = 7
++HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
++HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_LICENSE = GPLv2+ with exception
++HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
++
++# The java binary expects the JDK to be installed in /usr/jvm/openjdk.
++HOST_OPENJDK_BIN_INSTALL_DIR=$(HOST_DIR)/usr/jvm/openjdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)
++define HOST_OPENJDK_BIN_INSTALL_CMDS
++	mkdir -p $(HOST_DIR)/usr/jvm/openjdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)
++	cp -aLrf $(@D)/* $(HOST_OPENJDK_BIN_INSTALL_DIR)
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.20.1
