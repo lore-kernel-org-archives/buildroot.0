@@ -1,40 +1,18 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Jan 2019 20:07:02 +0100
-Subject: [Buildroot] [PATCH 1/1] haproxy: disable on sh4 with gcc < 7
-Message-ID: <20190128190702.7157-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 28 Jan 2019 20:25:49 +0100
+Subject: [Buildroot] [PATCH 1/1] clamav: needs C++
+References: <20190128184706.5378-1-fontaine.fabrice@gmail.com>
+Message-ID: <ti14ifxuqt.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails on sh4:
-src/dns.c:290:1: error: unable to find a register to spill in class 'R0_REGS'
- }
+Am Mon, 28 Jan 2019 19:47:06 +0100 schrieb Fabrice Fontaine:
 
-This build failure seems related to a known gcc bug that has been fixed
-only in gcc 7:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
+> clamav needs C++ since bump to version 0.101.1 and
+> https://github.com/Cisco-Talos/clamav-devel/commit/
+d39cb6581f3c854476044f069d2393fc44702c36
 
-Fixes:
- - http://autobuild.buildroot.org/results/2e181cc874d5389f10ecddb0d11253c3aa5e7fc4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/haproxy/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index cbcbc0c388..78cbf6e103 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_HAPROXY
- 	bool "haproxy"
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
-+	depends on !(BR2_sh4 && !BR2_TOOLCHAIN_GCC_AT_LEAST_7)
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	help
--- 
-2.14.1
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
