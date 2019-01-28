@@ -1,140 +1,79 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 28 Jan 2019 00:14:05 -0200
-Subject: [Buildroot] [PATCH 1/2] package/atop: bump to version 2.4.0
-Message-ID: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
+Date: Mon, 28 Jan 2019 00:20:33 -0200
+Subject: [Buildroot] Buildroot 2018.11.1 released
+References: <20181220091656.40397ad9@windsurf>
+Message-ID: <5c4e66f13d185_30e3fbb3e15ae1c48ee@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch 0001 as it was applied upstream [1].
-This new version uses PERF_FLAG_FD_CLOEXEC therefore it needs a
-toolchain with headers >= 3.14.
+Hello,
 
-[1] https://github.com/Atoptool/atop/commit/414127c03669b4eedc85778a7bff80cf601311d8
+Sorry the long delay.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-Applied on master @ df9b13e674, test-pkg:
-BR2_PACKAGE_ATOP=y
-48 builds, 13 skipped, 0 build failed, 0 legal-info failed
+On Thu, Dec 20, 2018 at 06:16 AM, Thomas Petazzoni wrote:
 
-Before this patch: build OK
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832827
-Before this patch, removing patch 0001: build FAIL
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832862
-After this patch: build OK
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/151832833
----
- ...ysmacros.h-to-compile-with-newer-gcc.patch | 52 -------------------
- package/atop/Config.in                        |  5 ++
- package/atop/atop.hash                        |  2 +-
- package/atop/atop.mk                          |  2 +-
- 4 files changed, 7 insertions(+), 54 deletions(-)
- delete mode 100644 package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+[snip]
+> +Fabio for Freescale/NXP related build failures, +Ricardo for the
+> systemd test failure.
+> 
+> On Wed, 19 Dec 2018 23:25:27 +0100, Peter Korsgaard wrote:
+> 
+>> Buildroot 2018.11.1 is released - Go download it at:
+[snip]
+> The last failure is on a systemd test, where it says that the boot
+> didn't work:
+> 
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206
+> 
+> However, looking at the boot log at
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/136980206/artifacts/file/test-output/TestInitSystemSystemdRwFull-run.log,
 
-diff --git a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-deleted file mode 100644
-index a80be7b736..0000000000
---- a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 414127c03669b4eedc85778a7bff80cf601311d8 Mon Sep 17 00:00:00 2001
--From: SjonHortensius <SjonHortensius@users.noreply.github.com>
--Date: Fri, 24 Aug 2018 18:26:58 +0200
--Subject: [PATCH] Include sysmacros.h to compile with newer gcc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Older gcc throws a warning
--```
--photosyst.c: In function 'lvmmapname':
--photosyst.c:1465:13: warning: In the GNU C Library, "major" is defined
-- by <sys/sysmacros.h>. For historical compatibility, it is
-- currently defined by <sys/types.h> as well, but we plan to
-- remove this soon. To use "major", include <sys/sysmacros.h>
-- directly. If you did not intend to use a system-defined macro
-- "major", you should undefine it after including <sys/types.h>.
--     dmp->major  = major(statbuf.st_rdev);
--```
--
--Newer gcc throws an error:
--
--```
--photosyst.c: In function ?lvmmapname?:
--photosyst.c:1482:19: error: called object ?major? is not a function or function pointer
--     dmp->major  = major(statbuf.st_rdev);
--                   ^~~~~
--photosyst.c:1437:25: note: declared here
-- lvmmapname(unsigned int major, unsigned int minor,
--            ~~~~~~~~~~~~~^~~~~
--```
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- photosyst.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/photosyst.c b/photosyst.c
--index 19cbbe1..50841a1 100644
----- a/photosyst.c
--+++ b/photosyst.c
--@@ -152,6 +152,7 @@
-- static const char rcsid[] = "$Id: photosyst.c,v 1.38 2010/11/19 07:40:40 gerlof Exp $";
-- 
-- #include <sys/types.h>
--+#include <sys/sysmacros.h>
-- #include <stdio.h>
-- #include <string.h>
-- #include <unistd.h>
---- 
--2.17.1
--
-diff --git a/package/atop/Config.in b/package/atop/Config.in
-index d42a201bd9..9e42eddb57 100644
---- a/package/atop/Config.in
-+++ b/package/atop/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_ATOP
- 	bool "atop"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # PERF_FLAG_FD_CLOEXEC
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -16,3 +17,7 @@ config BR2_PACKAGE_ATOP
- 	  username, state, and exit code.
- 
- 	  http://www.atoptool.nl
-+
-+comment "atop needs a toolchain w/ headers >= 3.14"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index 9ee0d62bc6..80082d022d 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  73e4725de0bafac8c63b032e8479e2305e3962afbe977ec1abd45f9e104eb264  atop-2.3.0.tar.gz
-+sha256  be1c010a77086b7d98376fce96514afcd73c3f20a8d1fe01520899ff69a73d69  atop-2.4.0.tar.gz
- 
- # Hash for license file:
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index 2cc0da6afa..aaf02908c4 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.3.0
-+ATOP_VERSION = 2.4.0
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
--- 
-2.17.1
+The artifacts are now expired.
+But I downloaded in time and made a copy here:
+https://www.filedropper.com/artifacts
+md5sum 0ebf84f1f7b7ff8f9309f49a3675a243
+
+> it did boot, the login prompt appears.
+> 
+> Perhaps something for Ricardo ? :-)
+
+The "Welcome" message appeared but not the "login:" because the getty was not
+started. Getty didn't start because /dev/ttyAMA0 was not ready.
+
+These are the messages in the log:
+|A start job is running for dev-ttyAMA0.device (1min 35s / 1min 30s)
+| TIME    Timed out waiting for device dev-ttyAMA0.device.
+|[DEPEND] Dependency failed for Serial Getty on ttyAMA0.
+
+
+I found in the wild 2 issue reports that have similar symptoms, but I think
+they are not the same issue found in this run.
+
+https://github.com/systemd/systemd/issues/10914
+This is not the case because that issue is caused by the use of /dev/console
+instead of /dev/tty*, I checked and our test case is correctly using /dev/tty*
+
+https://jira.automotivelinux.org/browse/SPEC-544
+This one seems to be related only to old systemd versions and already fixed
+upstream.
+
+So I created 2 commits:
+1) change the test case to boot the image 100 times instead of a single time;
+2) add a pre-built image to skip the build in the Gitlab CI (this is the actual
+   image that failed in the original report).
+
+So far there were more than 2000 boots without this problem (100 per run):
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/42333203/builds
+
+The only time the boot failed the logs do not show the same DEPEND message:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/142073152
+
+
+I am not sure it's worth digging further if we don't see this issue again.
+
+
+Regards,
+Ricardo
