@@ -1,36 +1,32 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 28 Jan 2019 10:48:17 +0100
-Subject: [Buildroot] [PATCH] qemu_riscv64_virt_defconfig: fix linux header
- selection
-Message-ID: <1548668897-4064-1-git-send-email-gwenj@trabucayre.com>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Date: Mon, 28 Jan 2019 09:34:51 -0200 (BRST)
+Subject: [Buildroot] [PATCH 2/2] support/testing: add atop test
+In-Reply-To: <87d0ohf92u.fsf@dell.be.48ers.dk>
+References: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
+ <20190128021406.27477-2-ricardo.martincoski@gmail.com>
+ <87d0ohf92u.fsf@dell.be.48ers.dk>
+Message-ID: <1909116512.4141756.1548675291647.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hello,
 
-When the kernel is built by Buildroot BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_YY
-must be used and not BR2_KERNEL_HEADERS_X_YY.
+----- Original Message -----
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> Sent: Segunda-feira, 28 de janeiro de 2019 7:03:05
+> Subject: Re: [PATCH 2/2] support/testing: add atop test
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- configs/qemu_riscv64_virt_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+[snip]
+> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> 
+> Any specific reason for this old unsupported kernel version?
 
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index 705ec1293a..65dbef4135 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # Linux headers same as kernel, a 4.20 series
--BR2_KERNEL_HEADERS_4_20=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--- 
-2.19.2
+Not really. I copied from qemu_arm_vexpress_defconfig.
+
+
+Regards,
+Ricardo
