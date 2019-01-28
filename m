@@ -1,52 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Jan 2019 15:59:51 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain: update AArch32/AArch64
- toolchain to 8-2-2019.01
-In-Reply-To: <20190128143507.GA31160@guppy>
-References: <20190128133500.7515-1-joakim.bech@linaro.org>
- <20190128140206.25948-1-joakim.bech@linaro.org>
- <20190128150834.206739d5@windsurf> <20190128143507.GA31160@guppy>
-Message-ID: <20190128155951.6eb96b67@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Jan 2019 16:55:34 +0100
+Subject: [Buildroot] [PATCH 1/1] gnutls: fix build on sparc
+In-Reply-To: <20190117190252.32440-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 17 Jan 2019 20:02:52 +0100")
+References: <20190117190252.32440-1-fontaine.fabrice@gmail.com>
+Message-ID: <877eeog4jt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Mon, 28 Jan 2019 15:35:07 +0100
-Joakim Bech <joakim.bech@linaro.org> wrote:
+ > gnutls source code uses the C++11 <atomic> functionality since
+ > https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
+ > which internally is implemented using the __atomic_*() gcc built-ins
 
-> > I don't see how this can be sufficient to update the toolchain version.
-> > Surely the .mk and .hash files need to be changed as well.
-> >   
-> Chapter 17.3 and 17.4 is about this in the documentation, right?
-> 
-> For hash files, are you referring to these:
-> 
-> $ find -name "*.hash" | grep gcc
-> ./package/gcc/gcc-initial/gcc-initial.hash
-> ./package/gcc/gcc.hash
-> ./package/gcc/gcc-final/gcc-final.hash
+ > On certain architectures, the __atomic_*() built-ins are implemented in
+ > the libatomic library that comes with the rest of the gcc runtime. Due
+ > to this, code using <atomic> might need to link against libatomic,
+ > otherwise one hits build issues such as:
 
-These are all the same files, thanks to symlinks. But anyway, these
-files are not relevant, since they are for the "internal toolchain"
-backend (i.e when Buildroot builds a toolchain) and not the external
-toolchain backend.
+ > ../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
 
-In your case, I don't see how the version bump can work if you don't
-change:
+ > on an architecture like SPARC.
 
-  toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-  toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-  toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-  toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+ > To solve this, a configure.ac check is added to know if we need to
+ > link against libatomic or not. The library is also added to gnutls.pc.
 
-Best regards,
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6c749bd592ceffeacadd2ab570d127936cce64b2
+ >  - http://autobuild.buildroot.org/results/30aa83d3cf3482af8a59250c196c85f4a278d343
 
-Thomas
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
