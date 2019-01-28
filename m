@@ -1,69 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Jan 2019 17:59:49 +0100
-Subject: [Buildroot] Linux extension from a BR2_EXTERNAL tree
-In-Reply-To: <20190128172511.754500e4@windsurf>
-References: <20190128172511.754500e4@windsurf>
-Message-ID: <9e371258-7b3f-447a-7a65-7e3b2d6e4298@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Jan 2019 18:01:16 +0100
+Subject: [Buildroot] [PATCH 1/3] package/pkg-kconfig: pass HOSTCC during
+ kconfig steps
+In-Reply-To: <20190110211500.14368-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 10 Jan 2019 22:14:58 +0100")
+References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
+ <20190110211500.14368-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87sgxcemxv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
+ > The kconfig build logic uses the HOSTCC variable to find the host
+ > compiler. It makes sense to explicitly pass a value to this variable,
+ > pointing to the host compiler used by Buildroot.
 
-On 28/01/2019 17:25, Thomas Petazzoni wrote:
-> So it seems like adding an entry to the LINUX_EXTENSIONS variable
-> *after* linux/linux.mk has been processed works fine for the hook
-> registration, but not for the dependency addition. This looks odd to
-> me. The generic-package infrastructure does seem to have all the
-> necessary double-dollars to make sure the evaluation is delayed to the
-> time of use, but it seems to not be sufficient.
-> 
-> I am missing something obvious here ? I am not sure if I'm seeing
-> something that's easily fixable, or something that is just plain
-> impossible due to how make works.
+ > During the kconfig step, host-ccache is not ready (host-ccache is only
+ > a dependency to the configure step of packages), so we use
+ > $(HOSTCC_NOCCACHE).
 
- Yes you're missing something obvious :-)
+ > Packages currently using the kconfig-package fell into two categories:
 
- inner-generic-package has:
+ >  - Those not passing any HOSTCC value. For such packages, it was the
+ >    default host compiler detected by the kconfig build logic that was
+ >    used. ccache was therefore never used. With this commit, those
+ >    packages will now be using the host compiler detected by
+ >    Buildroot. Packages in this situation: at91bootstrap3, barebox,
+ >    busybox, swupdate, uclibc, xvisor.
 
-$(1)-depends:           $$($(2)_FINAL_DEPENDENCIES)
+ >  - Those passing a HOSTCC value. Such packages were passing $(HOSTCC),
+ >    which doesn't work as host-ccache will not be ready. This commit
+ >    does not fix them, as they still override HOSTCC. It will be fixed
+ >    in followup commits. Packages in this situation: uboot and
+ >    linux. Note that linux was a bit special, because it has a
+ >    KCONFIG_DEPENDENCIES on the toolchain package, so in fact
+ >    host-ccache was ready.
 
- At the time of
+ > So practically speaking, this commit does not fix anything, as the two
+ > only problematic packages that use $(HOSTCC) are not fixed. However,
+ > it makes things more correct by explicitly telling kconfig which
+ > compiler to use.
 
-$(eval $(generic-package))
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-in linux.mk, this gets evaluated into
+Committed to 2018.11.x, thanks.
 
-linux-depends:	$(LINUX_FINAL_DEPENDENCIES)
-
- For dependencies, however, the variable expansion is done then and there. So
-with or without $$, this gets immediately expanded into
-
-linux-depends:	<value-of-LINUX_FINAL_DEPENDENCIES-at-the-end-of-linux.mk>
-
- At that point, linux/linux-ext-*.mk has already been included, so in-tree linux
-extensions are fine. However, BR2_EXTERNAL has not yet been included, so that
-doesn't work...
-
-
- A possible solution that I've been thinking of for quite some time, is to delay
-the expansion of inner-generic-package. In fact, it would have to be split into
-a generic-package-definitions section, that defines all the rules and
-dependencies and so on, and the actual inner-generic-package that just adds the
-package name to the list of defined packages. Then, in a second run, we can
-expand generic-package-definitions for all defined packages.
-
- Doing this would e.g. make it possibly to reliable refer to some other
-package's _VERSION.
-
- It might also be useful to reduce empty 'make' time, by limiting the expansion
-to only packages that are defined in PACKAGES (and host packages, as long as we
-don't have complete Config.in.host).
-
- The potential breakage is obviously huge :-)
-
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
