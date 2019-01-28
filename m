@@ -1,142 +1,45 @@
-From: LP C <lpdev@cordier.org>
-Date: Mon, 28 Jan 2019 20:57:52 +0100
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-In-Reply-To: <87r2d4hmsw.fsf@tarshish>
-References: <87r2d4hmsw.fsf@tarshish>
-Message-ID: <1548705292.local-04f35002-3061-v1.5.5-b7939d38@getmailspring.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Jan 2019 21:04:07 +0100
+Subject: [Buildroot] [PATCH 1/1] minizip: disable compatibility headers
+Message-ID: <20190128200407.27306-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+minizip enables zip.h and unzip.h compatibility headers since version
+2.7.2 and
+https://github.com/nmoinvaz/minizip/commit/1b2b32c8b8c7ea441b14a2fd827d7e2dc886776c
 
-On Jan 22 2019, at 1:57 pm, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Louis-Paul,
->
-> Please avoid top-posting.
-> On Mon, Jan 21 2019, lpdev wrote:
-> > The default install target is installing a bunch of header files on
-> > the target, while unecessary. Maybe Buildroot scripts are cleaning
-> > them before creating the image?
->
->
-> Correct. See the target-finalize target definition in the top level
-> Makefile.
->
-> > Concerning the /lib folder, it is an error indeed. It must be in
-> > /usr/lib. Any other suggestions?
->
->
-> Just leave the libraries where upstream install target put them.
-> > This is my first contribution to the Buildroot project ;)
-> Thanks for you contribution. This is not bad for first time.
-> Good luck,
-> baruch
->
-> > > Thank you for your feedback!
-> > De : Baruch Siach <baruch@tkos.co.il>
-> > ? : Louis-Paul Cordier <lpdev@cordier.org>
-> > Sujet : Re: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-> > Date : 19/01/2019 19:29:31 Europe/Paris
-> > Copie ? : buildroot at buildroot.org;
-> > Bernd Kuhls <bernd.kuhls@t-online.de>;
-> > Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-> >
-> > Hi Louis-Paul,
-> > On Fri, Jan 18 2019, Louis-Paul Cordier wrote:
-> > > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> > > ---
-> > > package/Config.in | 1 +
-> > > package/intel-gmmlib/Config.in | 8 ++++++++
-> > > package/intel-gmmlib/intel-gmmlib.hash | 2 ++
-> > > package/intel-gmmlib/intel-gmmlib.mk | 21 +++++++++++++++++++++
-> > > 4 files changed, 32 insertions(+)
-> > > create mode 100644 package/intel-gmmlib/Config.in
-> > > create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
-> > > create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
-> > >
-> > > diff --git a/package/Config.in b/package/Config.in
-> > > index 5036421a73..9082ed9956 100644
-> > > --- a/package/Config.in
-> > > +++ b/package/Config.in
-> > > @@ -1265,6 +1265,7 @@ menu "Graphics"
-> > > source "package/harfbuzz/Config.in"
-> > > source "package/ijs/Config.in"
-> > > source "package/imlib2/Config.in"
-> > > + source "package/intel-gmmlib/Config.in"
-> > > source "package/irrlicht/Config.in"
-> > > source "package/jasper/Config.in"
-> > > source "package/jpeg/Config.in"
-> > > diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-> > > new file mode 100644
-> > > index 0000000000..8d9fab7ce3
-> > > --- /dev/null
-> > > +++ b/package/intel-gmmlib/Config.in
-> > > @@ -0,0 +1,8 @@
-> > > +config BR2_PACKAGE_INTEL_GMMLIB
-> > > + bool "intel-gmmlib"
-> > > + depends on BR2_x86_64
-> > > + help
-> > > + The Intel(R) Graphics Memory Management Library provides
-> > > + device specific and buffer management for the Intel(R)
-> > > + Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
-> > > + Media Driver for VAAPI.
-> > > diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-> > > new file mode 100644
-> > > index 0000000000..7e3b3dfd3f
-> > > --- /dev/null
-> > > +++ b/package/intel-gmmlib/intel-gmmlib.hash
-> > > @@ -0,0 +1,2 @@
-> > > +# Locally computed
-> > > +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1 intel-gmmlib-18.3.0.tar.gz
-> > > diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-> > > new file mode 100644
-> > > index 0000000000..206ea6db86
-> > > --- /dev/null
-> > > +++ b/package/intel-gmmlib/intel-gmmlib.mk
-> > > @@ -0,0 +1,21 @@
-> > > +################################################################################
-> > > +#
-> > > +# intel-gmmlib
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +INTEL_GMMLIB_VERSION = 18.3.0
-> > > +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-> > > +INTEL_GMMLIB_LICENSE = MIT
-> > > +INTEL_GMMLIB_LICENSE_FILES = COPYING
-> > > +
-> > > +INTEL_GMMLIB_INSTALL_STAGING = YES
-> > > +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
-> > > +
-> > > +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
-> > > +
-> > > +define INTEL_GMMLIB_INSTALL_TARGET_CMDS
-> > > + cp -a $(STAGING_DIR)/usr/lib/libigdgmm* $(TARGET_DIR)/lib
-> >
-> >
-> > This is unusual. Can't you use the default install make target like the
-> > staging install? Why do you install in /lib on target when upstream
-> > installs in /usr/lib on staging?
-> >
-> > If this is all intended please explain why in a comment.
-> > baruch
-> > > +endef
-> > > +
-> > > +$(eval $(cmake-package))
-> >
->
->
->
-> --
-> http://baruch.siach.name/blog/ ~. .~ Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
-> - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
+This is an issue as php fails to build if minizip is built after libzip
+because minizip installs a zip.h header without zip_stat, ZIP_CREATE,
+ZIP_FL_NOCASE, zip_fopen, etc ...
 
-Thank you for your feedback. I will fix everything on tomorrow. Any hope to see these patches in the upcoming 2019.02?
-Louis-Paul
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190128/39b28151/attachment.html>
+So until the compatibility headers are enhanced/fixed in minizip, disable them
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7b41f4e4a521b1e17aa885aac4419b26e0dd8700
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/minizip/minizip.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 7f7a1d277d..a9eea1b1c8 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -11,7 +11,9 @@ MINIZIP_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ MINIZIP_INSTALL_STAGING = YES
+-MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),-DBUILD_TEST=ON)
++MINIZIP_CONF_OPTS = \
++	$(if $(BR2_PACKAGE_MINIZIP_DEMOS),-DBUILD_TEST=ON) \
++	-DUSE_COMPAT=OFF
+ MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
+ 
+-- 
+2.14.1
