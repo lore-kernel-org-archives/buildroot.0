@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 22:06:51 +0100
-Subject: [Buildroot] [git commit] haproxy: disable on sh4 with gcc < 7
-Message-ID: <20190128210844.7A67581062@busybox.osuosl.org>
+Date: Mon, 28 Jan 2019 22:05:15 +0100
+Subject: [Buildroot] [git commit] clamav: needs C++
+Message-ID: <20190128210844.6758A81062@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5e916f31565f1268484182b9924984fac0a87e
+commit: https://git.buildroot.net/buildroot/commit/?id=4d85d5038ec0a7fb127cd58a48dfd7113c9c22c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build fails on sh4:
-src/dns.c:290:1: error: unable to find a register to spill in class 'R0_REGS'
- }
-
-This build failure seems related to a known gcc bug that has been fixed
-only in gcc 7:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
+clamav needs C++ since bump to version 0.101.1 and
+https://github.com/Cisco-Talos/clamav-devel/commit/d39cb6581f3c854476044f069d2393fc44702c36
 
 Fixes:
- - http://autobuild.buildroot.org/results/2e181cc874d5389f10ecddb0d11253c3aa5e7fc4
+ - http://autobuild.buildroot.org/results/be14aa571309cda32a5963feed9fd7f220e87fe6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/clamav/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index cbcbc0c388..78cbf6e103 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_HAPROXY
- 	bool "haproxy"
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
-+	depends on !(BR2_sh4 && !BR2_TOOLCHAIN_GCC_AT_LEAST_7)
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index bc934ea452..56bf0af38c 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CLAMAV
+ 	bool "clamav"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	help
+ 	select BR2_PACKAGE_LIBTOOL
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_CLAMAV
+ 
+ 	  http://www.clamav.net
+ 
+-comment "clamav needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "clamav needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
