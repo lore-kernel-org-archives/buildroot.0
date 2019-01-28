@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:06:47 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] apr: fix runtime tests
+Date: Mon, 28 Jan 2019 18:07:03 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] apr: fix runtime tests
  for cross compile
-Message-ID: <20190128170550.10C4C81497@busybox.osuosl.org>
+Message-ID: <20190128170604.695E681497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9503cb83a9dbefa443fad34e583b3d58ece53c14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d51993fb45088b8248c5c3fec62493bd3a887d24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 - epoll supported since linux-2.5.44/glibc-2.3.2 (see [1])
  - dup3 supported since linux-2.6.27/glibc-2.9 (see [2])
