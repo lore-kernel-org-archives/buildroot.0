@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 17:19:37 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] check-package: fix
+Date: Mon, 28 Jan 2019 17:19:31 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] check-package: fix
  Python3 support
-Message-ID: <20190128162117.B7E9B814AE@busybox.osuosl.org>
+Message-ID: <20190128162123.8550D8151C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64c9b0ed6ea422c20ebfb6cc21a685829823c043
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=638d44b9c13db5c340c8c6748a03e0c0a4b625e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 This script currently uses "/usr/bin/env python" as shebang but it does
 not really support Python3. Instead of limiting the script to Python2,
@@ -52,18 +52,18 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  6 files changed, 25 insertions(+), 19 deletions(-)
 
 diff --git a/utils/check-package b/utils/check-package
-index a87a74decc..6467af6a64 100755
+index 3dbc28b0a2..26439f08eb 100755
 --- a/utils/check-package
 +++ b/utils/check-package
-@@ -5,6 +5,7 @@ from __future__ import print_function
- import argparse
+@@ -6,6 +6,7 @@ import argparse
  import inspect
+ import os
  import re
 +import six
  import sys
  
  import checkpackagelib.lib_config
-@@ -103,10 +104,15 @@ def check_file_using_lib(fname):
+@@ -127,10 +128,15 @@ def check_file_using_lib(fname):
  
      for cf in objects:
          nwarnings += print_warnings(cf.before())
@@ -93,7 +93,7 @@ index 91f4ad49b7..6afe1aabce 100644
  
  class ConsecutiveEmptyLines(_CheckFunction):
 diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 11d885f8c7..f7b5d31d3a 100644
+index 1d273f1c5f..89d44da57e 100644
 --- a/utils/checkpackagelib/lib_config.py
 +++ b/utils/checkpackagelib/lib_config.py
 @@ -5,11 +5,11 @@
@@ -135,7 +135,7 @@ index 6d4cc9fd62..3e381119a5 100644
  
  def _empty_line_or_comment(text):
 diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 2df2e1a884..fa8b8f9781 100644
+index 0e430a2f12..4387cf7167 100644
 --- a/utils/checkpackagelib/lib_mk.py
 +++ b/utils/checkpackagelib/lib_mk.py
 @@ -6,11 +6,11 @@
