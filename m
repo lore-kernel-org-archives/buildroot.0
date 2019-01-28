@@ -1,69 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 09:58:59 +0100
-Subject: [Buildroot] [git commit] zbar: needs kernel headers >= 3.17
-Message-ID: <20190128090221.48CBE7FB8C@busybox.osuosl.org>
+Date: Mon, 28 Jan 2019 10:00:45 +0100
+Subject: [Buildroot] [git commit] support/testing: add atop test
+Message-ID: <20190128090221.5794F80067@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd08ca7aa98209222a077d1db97323bbc3b563b2
+commit: https://git.buildroot.net/buildroot/commit/?id=e2b98dfede5f0e2a525853fcddade263af4a0202
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-v4l2_query_ext_ctrl has been added in kernel 3.17:
-https://github.com/torvalds/linux/commit/5082c2417841e64df975789011e182ce99a9dacd
-
-Fixes:
- - http://autobuild.buildroot.org/results/d7b244cf9488eafb59ba8575f17884f4f8512db1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gst-plugins-bad/Config.in | 6 +++---
- package/zbar/Config.in                      | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .gitlab-ci.yml                             |  1 +
+ support/testing/tests/package/test_atop.py | 40 ++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index 7bbd56a602..f45981f6c8 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -326,12 +326,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
- 	depends on BR2_USE_MMU # zbar-> libv4l
- 	depends on !BR2_STATIC_LIBS # zbar-> libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # zbar-> libv4l
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
- 	select BR2_PACKAGE_ZBAR
- 
--comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
-+comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- endif
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-index 0f4d115745..e850c1f02b 100644
---- a/package/zbar/Config.in
-+++ b/package/zbar/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZBAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
- 	depends on BR2_USE_MMU # libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBV4L
- 	help
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_ZBAR
- 
- 	  https://git.linuxtv.org/zbar.git/about/
- 
--comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
-+comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 79daebf160..8f1e4ae804 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -317,6 +317,7 @@ tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
+ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
++tests.package.test_atop.TestAtop: *runtime_test
+ tests.package.test_dropbear.TestDropbear: *runtime_test
+ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+diff --git a/support/testing/tests/package/test_atop.py b/support/testing/tests/package/test_atop.py
+new file mode 100644
+index 0000000000..32c5a07c3c
+--- /dev/null
++++ b/support/testing/tests/package/test_atop.py
+@@ -0,0 +1,40 @@
++import os
++
++import infra.basetest
++
++
++class TestAtop(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_PACKAGE_ATOP=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        kernel = os.path.join(self.builddir, "images", "zImage")
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        dtb = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7", kernel=kernel, options=["-initrd", cpio_file, "-M", "vexpress-a9", "-dtb", dtb])
++        self.emulator.login()
++
++        cmd = "atop -V | grep '^Version'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "atop -a 1 2 | grep '% *atop *$'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
