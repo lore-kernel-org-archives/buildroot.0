@@ -1,148 +1,117 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 17:12:34 -0500
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.58.3
-Message-ID: <20190128221234.93143-1-aduskett@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Jan 2019 23:22:13 +0100
+Subject: [Buildroot] [PATCH v2 1/1] toolchain: update AArch32/AArch64
+ toolchains to 8-2-2019.01
+In-Reply-To: <20190128170533.16555-1-joakim.bech@linaro.org>
+References: <20190128133500.7515-1-joakim.bech@linaro.org>
+ <20190128170533.16555-1-joakim.bech@linaro.org>
+Message-ID: <f01f063d-4b46-62b9-12f4-1cba370a3029@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+ Hi Joakim,
 
-In addition:
-  - Re-add the changes from 178eb1d7ea165d87460224d297ce615bb63090f0
+ Thanks for this updated patch, but you haven't taken into account the rest of
+Thomas's comments.
 
-  - Add a new patch: 0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-    This patch fixes the previous autobuild errors by removing the ${bindir}
-    variable in the front of the glib_genmarshal, gobject_query and glib_mkenums
-    lines.
+ I'll repeat them below for your convenience.
 
-All tests passed with the packages: AT, libsoup, and dbus-glib selected:
-br-arm-full [1/6]: OK
-br-arm-cortex-a9-glibc [2/6]: OK
-br-arm-cortex-m4-full [3/6]: SKIPPED
-br-x86-64-musl [4/6]: OK
-br-arm-full-static [5/6]: OK
-armv5-ctng-linux-gnueabi [6/6]: OK
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/libglib2/0002-disable-tests.patch     |  8 ++--
- ...e-glib-2.0.pc-bindir-variable-prefix.patch | 37 +++++++++++++++++++
- package/libglib2/libglib2.hash                |  4 +-
- package/libglib2/libglib2.mk                  | 11 +++++-
- 4 files changed, 54 insertions(+), 6 deletions(-)
- create mode 100644 package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
+On 28/01/2019 18:05, Joakim Bech wrote:
+[snip]
+> +config BR2_KERNEL_HEADERS_5_00
+> +	bool "Linux 5.00.x kernel headers"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
 
-diff --git a/package/libglib2/0002-disable-tests.patch b/package/libglib2/0002-disable-tests.patch
-index 523ebb35ac..e03dc2fee2 100644
---- a/package/libglib2/0002-disable-tests.patch
-+++ b/package/libglib2/0002-disable-tests.patch
-@@ -8,6 +8,8 @@ gets mixed with distro python leading to build failures.
- 
- Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for version 2.58.1]
- ---
-  Makefile.am      | 2 +-
-  gio/Makefile.am  | 2 +-
-@@ -22,9 +24,9 @@ index 008ad58..007332d 100644
-  
-  ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
-  
---SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
--+SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
-- DIST_SUBDIRS = $(SUBDIRS) build win32
-+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests subprojects
-++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs subprojects
-+ DIST_SUBDIRS = $(SUBDIRS) build
-  
-  bin_SCRIPTS = glib-gettextize
- diff --git a/gio/Makefile.am b/gio/Makefile.am
-diff --git a/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-new file mode 100644
-index 0000000000..561f461da9
---- /dev/null
-+++ b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-@@ -0,0 +1,37 @@
-+From d30304db01a87964bdccf1ff99b6baf257fa26c6 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Mon, 28 Jan 2019 15:22:31 -0500
-+Subject: [PATCH] remove glib-2.0.pc bindir variable prefix.
-+
-+If glib_genmarshal, gobject_query or glib_mkenums are prefixed with
-+${bindir} pkg-config will search the host system if the --variable flag
-+is called.
-+
-+Revert the behavior by removing the bindir prefix from these variables.
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ glib-2.0.pc.in | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-+index 3c5ea81..275fc01 100644
-+--- a/glib-2.0.pc.in
-++++ b/glib-2.0.pc.in
-+@@ -3,10 +3,9 @@ exec_prefix=@exec_prefix@
-+ libdir=@libdir@
-+ includedir=@includedir@
-+ 
-+-bindir=@bindir@
-+-glib_genmarshal=${bindir}/glib-genmarshal
-+-gobject_query=${bindir}/gobject-query
-+-glib_mkenums=${bindir}/glib-mkenums
-++glib_genmarshal=glib-genmarshal
-++gobject_query=gobject-query
-++glib_mkenums=glib-mkenums
-+ 
-+ Name: GLib
-+ Description: C Utility Library
-+-- 
-+2.20.1
-+
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 57403a2154..7aa4c6cc02 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
--sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
-+# http://ftp.gnome.org/pub/gnome/sources/glib/2.58/glib-2.58.3.sha256sum
-+sha256  8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481  glib-2.58.3.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index f602c371f5..981112cac0 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.56
-+LIBGLIB2_VERSION_MAJOR = 2.58
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
-@@ -13,6 +13,15 @@ LIBGLIB2_LICENSE_FILES = COPYING
- # 0002-disable-tests.patch
- LIBGLIB2_AUTORECONF = YES
- 
-+# Copy what is done in autogen.sh when gtk-doc is not available
-+define LIBGLIB2_GTK_DOC_HOOK
-+	echo "EXTRA_DIST=" > $(@D)/gtk-doc.make
-+	echo "CLEANFILES=" >> $(@D)/gtk-doc.make
-+endef
-+
-+LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-+HOST_LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-+
- LIBGLIB2_INSTALL_STAGING = YES
- LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
- 
--- 
-2.20.1
+ Adding support for the 5.0 headers should be a separate patch. See commit
+649883d2c9957b7a7fcf81c4475f848ad8865ca1 for an example how it was done for 4.20.
+
+ Also, please call it 5.0 and not 5.00.
+
+ And also some new comments:
+
+[snip]
+> diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+> index cda90f7517..90e44d5c3b 100644
+> --- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+> +++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+> @@ -2,3 +2,8 @@
+>  md5 319ca548ff05b0ec1008988a7e5ab619 gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
+>  # locally calculated
+>  sha256 0142366da2f30feb1c366997cbdaa02286c8f1aa527c0fc177ee5ce8e77970fc gcc-arm-8.2-2018.11-x86_64-aarch64-linux-gnu.tar.xz
+
+ Remove the existing hashes: they are no longer used since the version has
+changed. In other words, every line of this file should be updated, except for
+the # locally calculated.
+
+> +
+> +# From https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-2019.01/gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz.asc
+> +md5 ed467a18abc7cf81d53c0cf6014b1867 gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz
+> +# locally calculated
+> +sha256 6683d51b0dd61a91ab1e8e478a0a8a50ccb34d5590c84aa36697e956b16f14a1 gcc-arm-8.2-2019.01-x86_64-aarch64-linux-gnu.tar.xz
+> diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+> index 0398bd1297..bb9c658639 100644
+> --- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+> +++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2018.11
+> +TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2019.01
+>  TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)
+>  
+>  TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-linux-gnu.tar.xz
+> diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in> index 0449737889..69c2f7425e 100644
+> --- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+> +++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+> @@ -4,7 +4,7 @@ comment "Arm toolchains available for Cortex-A + EABIhf"
+>  	depends on !BR2_STATIC_LIBS
+>  
+>  config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+> -	bool "Arm ARM 2018.11"
+> +	bool "Arm ARM 2019.01"
+>  	depends on BR2_arm
+>  	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+>  	depends on BR2_HOSTARCH = "x86_64"
+> @@ -14,7 +14,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+>  	select BR2_TOOLCHAIN_HAS_SSP
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_INSTALL_LIBSTDCPP
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+>  	select BR2_TOOLCHAIN_HAS_FORTRAN
+>  	help
+
+ The help text here also says which GDB, GCC, binutils and kernel headers
+versions it is using. Please update that to the actual versions.
+
+[snip]
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> index 08a79ee4d9..48eb1ea080 100644
+> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -123,6 +123,10 @@ choice
+>  	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+>  	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_00
+> +	bool "5.00.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
+> +
+
+ Note that this bit belongs to the patch that adds the 5.0 version.
+
+>  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_20
+>  	bool "4.20.x"
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+> 
+
+ And finally, there is also an ARM aarch64-be toolchain that should be updated.
+
+ Regards,
+ Arnout
