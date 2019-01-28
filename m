@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 18:01:23 +0100
-Subject: [Buildroot] [PATCH 3/3] linux: use HOSTCC_NOCCACHE as kconfig
- HOSTCC
-In-Reply-To: <20190110211500.14368-4-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 10 Jan 2019 22:15:00 +0100")
+Date: Mon, 28 Jan 2019 18:01:31 +0100
+Subject: [Buildroot] [PATCH 2/3] boot/uboot: use HOSTCC_NOCCACHE as
+ kconfig HOSTCC
+In-Reply-To: <20190110211500.14368-3-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 10 Jan 2019 22:14:59 +0100")
 References: <20190110211500.14368-1-thomas.petazzoni@bootlin.com>
- <20190110211500.14368-4-thomas.petazzoni@bootlin.com>
-Message-ID: <87o980emxo.fsf@dell.be.48ers.dk>
+ <20190110211500.14368-3-thomas.petazzoni@bootlin.com>
+Message-ID: <87k1ioemxg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > linux is a bit different than other kconfig-package, because it has
- > "toolchain" in KCONFIG_DEPENDENCIES. Thanks to this, host-ccache *is*
- > ready by the time kconfig invocations are made, so we could use
- > $(HOSTCC) as the host compiler for kconfig related operations.
+ > At kconfig time, dependencies are not built, and therefore host-ccache
+ > is not ready. Due to this, using $(HOSTCC) as the host compiler in
+ > KCONFIG_OPTS does not work: a "make uboot-menuconfig" invocation from
+ > a clean tree with ccache enabled fails.
 
- > However, for consistency with other kconfig-package packages, we chose
- > to use $(HOSTCC_NOCCACHE) as well.
-
- > We cannot rely on the default value of HOSTCC passed by the
- > kconfig-package infrastructure, because $(LINUX_MAKE_FLAGS) also
- > contains a HOSTCC definition that would override the one passed by the
- > kconfig-package infrastructure.
+ > This commit fixes this by using $(HOSTCC_NOCCACHE). We cannot rely on
+ > the default value of HOSTCC passed by the kconfig-package
+ > infrastructure, because $(UBOOT_MAKE_OPTS) also contains a HOSTCC
+ > definition that would override the one passed by the kconfig-package
+ > infrastructure.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
