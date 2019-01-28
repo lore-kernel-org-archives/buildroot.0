@@ -1,208 +1,110 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 18:22:09 -0500
-Subject: [Buildroot] [PATCH v3 5/5] openjdk-hello-world: new test
-In-Reply-To: <20190128232209.17485-1-aduskett@gmail.com>
-References: <20190128232209.17485-1-aduskett@gmail.com>
-Message-ID: <20190128232209.17485-6-aduskett@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 29 Jan 2019 00:16:10 +0100
+Subject: [Buildroot] [git commit] ffmpeg: fix static linking build failure
+ when using libavutil
+Message-ID: <20190128233144.1433A8132A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Daniel J. Leach" <dleach@belcan.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=483db9908985d023b858c0b59d4016f9abb4b6f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This test is a simple "Hello, World" integration test of the OpenJDK package.
+If a package tries to static link with libavutil it fails due to the
+lack of libavutil private dependencies in libavutil.pc (-ldrm in this
+case).
 
-It compiles the Java app on the host, then runs it on an emulated AARCH64
-target and verifies "Hello, World" is printed.
+Add patch to:
+- Check if libdrm is present.
+- Add it to Libs.private: in libavutil.pc if present.
 
-Signed-off-by: Daniel J. Leach <dleach@belcan.com>
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/766/766de487f394490df8c712652ac364ebb4a3ab14/
+http://autobuild.buildroot.net/results/041/041e29dfddb2da3309ac7d34a576c60c5a75fe4d/
+http://autobuild.buildroot.net/results/780/78061b61cfe3f42554a475c048d54dacacfe11d5/
+http://autobuild.buildroot.net/results/275/275e4e0030d26c029085b408cfb272d5633969c6/
+http://autobuild.buildroot.net/results/515/5152dcca58944cf732d09fba6e6c9af8a9243c75/
+http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v3:
-  - Added this patch to the series.
+ ...0002-configure-add-LIBDRM-to-Libs.private.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- .../package/br2-external/openjdk/Config.in    |  1 +
- .../br2-external/openjdk/external.desc        |  1 +
- .../package/br2-external/openjdk/external.mk  |  1 +
- .../package/openjdk-hello-world/Config.in     | 26 ++++++++++++
- .../openjdk-hello-world/HelloWorld.java       |  8 ++++
- .../openjdk-hello-world.mk                    | 19 +++++++++
- support/testing/tests/package/test_openjdk.py | 42 +++++++++++++++++++
- 9 files changed, 100 insertions(+)
- create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
- create mode 100644 support/testing/tests/package/test_openjdk.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 8f1e4ae804..8a8bd29d14 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -323,6 +323,7 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
- tests.package.test_lua.TestLua: *runtime_test
- tests.package.test_lua.TestLuajit: *runtime_test
-+tests.package.test_openjdk.TestOpenJdk: *runtime_test
- tests.package.test_perl.TestPerl: *runtime_test
- tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
- tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: *runtime_test
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0893af58dc..baa325eead 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1470,6 +1470,7 @@ F:	package/valijson/
- F:	package/wpa_supplicant/
- F:	package/wireless_tools/
- F:	package/xen/
-+F:	support/testing/tests/package/br2-external/openjdk/
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
-diff --git a/support/testing/tests/package/br2-external/openjdk/Config.in b/support/testing/tests/package/br2-external/openjdk/Config.in
+diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
 new file mode 100644
-index 0000000000..00c7fd4799
+index 0000000000..5493473d0f
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-hello-world/Config.in"
-diff --git a/support/testing/tests/package/br2-external/openjdk/external.desc b/support/testing/tests/package/br2-external/openjdk/external.desc
-new file mode 100644
-index 0000000000..f28ba5060c
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/external.desc
-@@ -0,0 +1 @@
-+name: OPENJDK
-diff --git a/support/testing/tests/package/br2-external/openjdk/external.mk b/support/testing/tests/package/br2-external/openjdk/external.mk
-new file mode 100644
-index 0000000000..54c24e8c64
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_OPENJDK_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
-new file mode 100644
-index 0000000000..4f9022fb92
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_OPENJDK_HELLO_WORLD
-+	bool "openjdk hello world"
-+	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # gtk2 -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gtk2 -> glib2
-+	depends on BR2_USE_MMU # gtk2 -> glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # gtk2, cups
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # gtk2 -> pango -> harfbuzz
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENJDK
-+	help
-+	  Simple class for testing openjdk
++++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+@@ -0,0 +1,68 @@
++From e1e11d404eec24c158ae1241d6573c263e57a7b9 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Wed, 17 Oct 2018 13:13:10 +0200
++Subject: [PATCH] configure: add LIBDRM to Libs.private
 +
-+comment "OpenJDK-hello-world needs a glibc toolchain w/ wchar, dynamic library, threads, C++, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_USE_WCHAR || \
-+		BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
-new file mode 100644
-index 0000000000..612d661cdd
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
-@@ -0,0 +1,8 @@
-+public class HelloWorld
-+{
-+    public static void main(String[] args)
-+    {
-+        System.out.println("Hello, World");
-+    }
++When static linking programs using ffmpeg libraries, if linking against
++libavutil, -ldrm is listed before -lavutil. This leads to linking
++failure due to undefined reference of drmGetVersion() and
++drmFreeVersion().
++This is why when pkg-config create libavutil.pc doesn't append -ldrm
++to Libs.private:.
 +
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-new file mode 100644
-index 0000000000..1847a11d4f
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# openjdk hello world
-+#
-+################################################################################
++- Create LIBDRM=-ldrm in case libdrm is enabled.
++- Add privatelibs_avutil variable for explicit private libraries to be
++  appended to Libs.private:
++- Add $LIBDRM to privatelibs_avutil.
 +
-+OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ configure                     | 3 ++-
++ ffbuild/pkgconfig_generate.sh | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
 +
-+define OPENJDK_HELLO_WORLD_BUILD_CMDS
-+	$(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
-+	$(HOST_DIR)/openjdk/bin/javac $(@D)/HelloWorld.java
-+endef
++diff --git a/configure b/configure
++index 7377046d0a..0996d8a85d 100755
++--- a/configure
+++++ b/configure
++@@ -5919,7 +5919,7 @@ enabled libcelt           && require libcelt celt/celt.h celt_decode -lcelt0 &&
++                                die "ERROR: libcelt must be installed and version must be >= 0.11.0."; }
++ enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas
++ enabled libdc1394         && require_pkg_config libdc1394 libdc1394-2 dc1394/dc1394.h dc1394_new
++-enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion
+++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
++ enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
++                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
++                                  warn "using libfdk without pkg-config"; } }
++@@ -7097,6 +7097,7 @@ LIBPREF=${LIBPREF}
++ LIBSUF=${LIBSUF}
++ 
++ extralibs_avutil="$LIBRT $LIBM"
+++privatelibs_avutil="$LIBDRM"
++ extralibs_avcodec="$extralibs"
++ extralibs_avformat="$extralibs"
++ extralibs_avdevice="$extralibs"
++diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
++index e5de6716d2..b86486a107 100755
++--- a/ffbuild/pkgconfig_generate.sh
+++++ b/ffbuild/pkgconfig_generate.sh
++@@ -13,6 +13,7 @@ name=lib${shortname}
++ fullname=${name}${build_suffix}
++ comment=$2
++ libs=$(eval echo \$extralibs_${shortname})
+++privatelibs=$(eval echo \$privatelibs_${shortname})
++ deps=$(eval echo \$${shortname}_deps)
++ 
++ for dep in $deps; do
++@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
++ Requires.private: $($shared && echo $requires)
++ Conflicts:
++ Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
++-Libs.private: $($shared && echo $libs)
+++Libs.private: $($shared && echo $libs) ${privatelibs}
++ Cflags: -I\${includedir}
++ EOF
++ 
++-- 
++2.17.1
 +
-+define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/HelloWorld.class $(TARGET_DIR)/usr/bin/HelloWorld.class
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-new file mode 100644
-index 0000000000..ed8a1f1be4
---- /dev/null
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -0,0 +1,42 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOpenJdk(infra.basetest.BRTest):
-+    br2_external = [infra.filepath("tests/package/br2-external/openjdk")]
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_XORG7=y
-+        BR2_PACKAGE_OPENJDK=y
-+        BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
-+        """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        cmd = "java -cp /usr/bin HelloWorld"
-+        output, exit_code = self.emulator.run(cmd)
-+        print(output)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["Hello, World"])
--- 
-2.20.1
