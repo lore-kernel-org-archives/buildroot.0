@@ -1,318 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Jan 2019 21:55:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix building with
- libfdk-aac v2
-Message-ID: <20190128205519.693-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 28 Jan 2019 21:55:38 +0100
+Subject: [Buildroot] [PATCH 1/1] libxml2: security bump to version 2.9.9
+Message-ID: <20190128205538.29494-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patches to fix
-http://autobuild.buildroot.net/results/909/9097a2b190f4032ff51eda531f4379a99da5181a/
+- Fixes CVE-2018-9251 and CVE-2018-14567:
+  https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74
+- Fixes CVE-2018-14404: https://gitlab.gnome.org/GNOME/libxml2/issues/5
+- Remove patch: CVE-2017-8872 was fixed by
+  https://gitlab.gnome.org/GNOME/libxml2/issues/26
 
-after fdk-aac was bumped to 2.0.0:
-https://git.buildroot.net/buildroot/commit/package/fdk-aac?id=31ff32824a4f3d09351367c3418b5605f9c40521
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...cenc-Fix-building-with-libfdk-aac-v2.patch | 100 ++++++++++++++++++
- ...stently-use-a-proper-version-check-m.patch |  99 +++++++++++++++++
- ...dk-aac-Don-t-use-defined-in-a-define.patch |  72 +++++++++++++
- 3 files changed, 271 insertions(+)
- create mode 100644 package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
- create mode 100644 package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
- create mode 100644 package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
+ package/libxml2/0001-CVE-2017-8872.patch | 33 --------------------------------
+ package/libxml2/libxml2.hash             |  2 +-
+ package/libxml2/libxml2.mk               |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/libxml2/0001-CVE-2017-8872.patch
 
-diff --git a/package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch b/package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
-new file mode 100644
-index 0000000000..3f452242fa
---- /dev/null
-+++ b/package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
-@@ -0,0 +1,100 @@
-+From c60fb550302878aba7e86037451f7996e8069289 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
-+Date: Fri, 31 Aug 2018 14:25:30 +0300
-+Subject: [PATCH] libfdk-aacenc: Fix building with libfdk-aac v2
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When flushing the encoder, we now need to provide non-null buffer
-+parameters for everything, even if they are unused.
-+
-+The encoderDelay parameter has been replaced by two, nDelay and
-+nDelayCore.
-+
-+Downloaded from
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=141c960e21d2860e354f9b90df136184dd00a9a8
-+
-+Signed-off-by: Martin Storsj?? <martin@martin.st>
-+[Bernd: rebased for ffmpeg 3.4.5]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libavcodec/libfdk-aacenc.c | 34 +++++++++++++++++++++++++---------
-+ 1 file changed, 25 insertions(+), 9 deletions(-)
-+
-+diff --git a/libavcodec/libfdk-aacenc.c b/libavcodec/libfdk-aacenc.c
-+index 0e2051b468..f5adb407ed 100644
-+--- a/libavcodec/libfdk-aacenc.c
-++++ b/libavcodec/libfdk-aacenc.c
-+@@ -26,6 +26,11 @@
-+ #include "audio_frame_queue.h"
-+ #include "internal.h"
-+ 
-++#define FDKENC_VER_AT_LEAST(vl0, vl1) \
-++    (defined(AACENCODER_LIB_VL0) && \
-++        ((AACENCODER_LIB_VL0 > vl0) || \
-++         (AACENCODER_LIB_VL0 == vl0 && AACENCODER_LIB_VL1 >= vl1)))
-++
-+ typedef struct AACContext {
-+     const AVClass *class;
-+     HANDLE_AACENCODER handle;
-+@@ -286,7 +291,11 @@ static av_cold int aac_encode_init(AVCodecContext *avctx)
-+     }
-+ 
-+     avctx->frame_size = info.frameLength;
-++#if FDKENC_VER_AT_LEAST(4, 0)
-++    avctx->initial_padding = info.nDelay;
-++#else
-+     avctx->initial_padding = info.encoderDelay;
-++#endif
-+     ff_af_queue_init(avctx, &s->afq);
-+ 
-+     if (avctx->flags & AV_CODEC_FLAG_GLOBAL_HEADER) {
-+@@ -319,28 +328,35 @@ static int aac_encode_frame(AVCodecContext *avctx, AVPacket *avpkt,
-+     int out_buffer_size, out_buffer_element_size;
-+     void *in_ptr, *out_ptr;
-+     int ret;
-++    uint8_t dummy_buf[1];
-+     AACENC_ERROR err;
-+ 
-+     /* handle end-of-stream small frame and flushing */
-+     if (!frame) {
-++        /* Must be a non-null pointer, even if it's a dummy. We could use
-++         * the address of anything else on the stack as well. */
-++        in_ptr               = dummy_buf;
-++        in_buffer_size       = 0;
-++
-+         in_args.numInSamples = -1;
-+     } else {
-+-        in_ptr                   = frame->data[0];
-+-        in_buffer_size           = 2 * avctx->channels * frame->nb_samples;
-+-        in_buffer_element_size   = 2;
-++        in_ptr               = frame->data[0];
-++        in_buffer_size       = 2 * avctx->channels * frame->nb_samples;
-+ 
-+-        in_args.numInSamples     = avctx->channels * frame->nb_samples;
-+-        in_buf.numBufs           = 1;
-+-        in_buf.bufs              = &in_ptr;
-+-        in_buf.bufferIdentifiers = &in_buffer_identifier;
-+-        in_buf.bufSizes          = &in_buffer_size;
-+-        in_buf.bufElSizes        = &in_buffer_element_size;
-++        in_args.numInSamples = avctx->channels * frame->nb_samples;
-+ 
-+         /* add current frame to the queue */
-+         if ((ret = ff_af_queue_add(&s->afq, frame)) < 0)
-+             return ret;
-+     }
-+ 
-++    in_buffer_element_size   = 2;
-++    in_buf.numBufs           = 1;
-++    in_buf.bufs              = &in_ptr;
-++    in_buf.bufferIdentifiers = &in_buffer_identifier;
-++    in_buf.bufSizes          = &in_buffer_size;
-++    in_buf.bufElSizes        = &in_buffer_element_size;
-++
-+     /* The maximum packet size is 6144 bits aka 768 bytes per channel. */
-+     if ((ret = ff_alloc_packet2(avctx, avpkt, FFMAX(8192, 768 * avctx->channels), 0)) < 0)
-+         return ret;
-+-- 
-+2.20.1
-+
-diff --git a/package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch b/package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
-new file mode 100644
-index 0000000000..c358a045d1
---- /dev/null
-+++ b/package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
-@@ -0,0 +1,99 @@
-+From 48be4c81e0ad081edab65e133e6e1bdec7de3b55 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
-+Date: Tue, 4 Sep 2018 08:29:37 +0300
-+Subject: [PATCH] libfdk-aac: Consistently use a proper version check macro for
-+ detecting features
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libfdk-aac: Consistently use a proper version check macro for detecting features
-+
-+The previous version checks checked explicitly for the version
-+where the version define was added to the installed headers,
-+making an "#ifdef AACDECODER_LIB_VL0" enough. Now that we have
-+a need for more diverse version checks than this, convert all checks
-+to such checks.
-+
-+Downloaded from
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=ffb9b7a6bab6c6bfd3dd9a7c32e3724209824999
-+
-+Signed-off-by: Martin Storsj? <martin@martin.st>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libavcodec/libfdk-aacdec.c | 13 ++++++++-----
-+ libavcodec/libfdk-aacenc.c |  6 +++---
-+ 2 files changed, 11 insertions(+), 8 deletions(-)
-+
-+diff --git a/libavcodec/libfdk-aacdec.c b/libavcodec/libfdk-aacdec.c
-+index 2857b9453f..ef51184ebd 100644
-+--- a/libavcodec/libfdk-aacdec.c
-++++ b/libavcodec/libfdk-aacdec.c
-+@@ -25,9 +25,12 @@
-+ #include "avcodec.h"
-+ #include "internal.h"
-+ 
-+-/* The version macro is introduced the same time as the setting enum was
-+- * changed, so this check should suffice. */
-+-#ifndef AACDECODER_LIB_VL0
-++#define FDKDEC_VER_AT_LEAST(vl0, vl1) \
-++    (defined(AACDECODER_LIB_VL0) && \
-++        ((AACDECODER_LIB_VL0 > vl0) || \
-++         (AACDECODER_LIB_VL0 == vl0 && AACDECODER_LIB_VL1 >= vl1)))
-++
-++#if !FDKDEC_VER_AT_LEAST(2, 5) // < 2.5.10
-+ #define AAC_PCM_MAX_OUTPUT_CHANNELS AAC_PCM_OUTPUT_CHANNELS
-+ #endif
-+ 
-+@@ -72,7 +75,7 @@ static const AVOption fdk_aac_dec_options[] = {
-+                      OFFSET(drc_level),      AV_OPT_TYPE_INT,   { .i64 = -1},  -1, 127, AD, NULL    },
-+     { "drc_heavy", "Dynamic Range Control: heavy compression, where [1] is on (RF mode) and [0] is off",
-+                      OFFSET(drc_heavy),      AV_OPT_TYPE_INT,   { .i64 = -1},  -1, 1,   AD, NULL    },
-+-#ifdef AACDECODER_LIB_VL0
-++#if FDKDEC_VER_AT_LEAST(2, 5) // 2.5.10
-+     { "level_limit", "Signal level limiting", OFFSET(level_limit), AV_OPT_TYPE_INT, { .i64 = 0 }, -1, 1, AD },
-+ #endif
-+     { NULL }
-+@@ -293,7 +296,7 @@ static av_cold int fdk_aac_decode_init(AVCodecContext *avctx)
-+         }
-+     }
-+ 
-+-#ifdef AACDECODER_LIB_VL0
-++#if FDKDEC_VER_AT_LEAST(2, 5) // 2.5.10
-+     if (aacDecoder_SetParam(s->handle, AAC_PCM_LIMITER_ENABLE, s->level_limit) != AAC_DEC_OK) {
-+         av_log(avctx, AV_LOG_ERROR, "Unable to set in signal level limiting in the decoder\n");
-+         return AVERROR_UNKNOWN;
-+diff --git a/libavcodec/libfdk-aacenc.c b/libavcodec/libfdk-aacenc.c
-+index f5adb407ed..91dcb5a1b9 100644
-+--- a/libavcodec/libfdk-aacenc.c
-++++ b/libavcodec/libfdk-aacenc.c
-+@@ -156,7 +156,7 @@ static av_cold int aac_encode_init(AVCodecContext *avctx)
-+     case 6: mode = MODE_1_2_2_1; sce = 2; cpe = 2; break;
-+ /* The version macro is introduced the same time as the 7.1 support, so this
-+    should suffice. */
-+-#ifdef AACENCODER_LIB_VL0
-++#if FDKENC_VER_AT_LEAST(3, 4) // 3.4.12
-+     case 8:
-+         sce = 2;
-+         cpe = 3;
-+@@ -291,7 +291,7 @@ static av_cold int aac_encode_init(AVCodecContext *avctx)
-+     }
-+ 
-+     avctx->frame_size = info.frameLength;
-+-#if FDKENC_VER_AT_LEAST(4, 0)
-++#if FDKENC_VER_AT_LEAST(4, 0) // 4.0.0
-+     avctx->initial_padding = info.nDelay;
-+ #else
-+     avctx->initial_padding = info.encoderDelay;
-+@@ -412,7 +412,7 @@ static const uint64_t aac_channel_layout[] = {
-+     AV_CH_LAYOUT_4POINT0,
-+     AV_CH_LAYOUT_5POINT0_BACK,
-+     AV_CH_LAYOUT_5POINT1_BACK,
-+-#ifdef AACENCODER_LIB_VL0
-++#if FDKENC_VER_AT_LEAST(3, 4) // 3.4.12
-+     AV_CH_LAYOUT_7POINT1_WIDE_BACK,
-+     AV_CH_LAYOUT_7POINT1,
-+ #endif
-+-- 
-+2.20.1
-+
-diff --git a/package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch b/package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
-new file mode 100644
-index 0000000000..30357b91e1
---- /dev/null
-+++ b/package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
-@@ -0,0 +1,72 @@
-+From 452746d80fdaaaf1b546860eb78449c6de3678d7 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
-+Date: Wed, 12 Sep 2018 20:03:12 +0300
-+Subject: [PATCH] libfdk-aac: Don't use defined() in a #define
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libfdk-aac: Don't use defined() in a #define
-+
-+MSVC expands the preprocessor directives differently, making the
-+version check fail in the previous form.
-+
-+Clang can warn about this with -Wexpansion-to-defined (not currently
-+enabled by default):
-+warning: macro expansion producing 'defined' has undefined behavior [-Wexpansion-to-defined]
-+
-+Downloaded from
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=2a9e1c122eed66be1b26b747342b848300b226c7
-+
-+Signed-off-by: Martin Storsj? <martin@martin.st>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libavcodec/libfdk-aacdec.c | 9 ++++++---
-+ libavcodec/libfdk-aacenc.c | 9 ++++++---
-+ 2 files changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/libavcodec/libfdk-aacdec.c b/libavcodec/libfdk-aacdec.c
-+index ef51184ebd..0fbab36463 100644
-+--- a/libavcodec/libfdk-aacdec.c
-++++ b/libavcodec/libfdk-aacdec.c
-+@@ -25,10 +25,13 @@
-+ #include "avcodec.h"
-+ #include "internal.h"
-+ 
-++#ifdef AACDECODER_LIB_VL0
-+ #define FDKDEC_VER_AT_LEAST(vl0, vl1) \
-+-    (defined(AACDECODER_LIB_VL0) && \
-+-        ((AACDECODER_LIB_VL0 > vl0) || \
-+-         (AACDECODER_LIB_VL0 == vl0 && AACDECODER_LIB_VL1 >= vl1)))
-++    ((AACDECODER_LIB_VL0 > vl0) || \
-++     (AACDECODER_LIB_VL0 == vl0 && AACDECODER_LIB_VL1 >= vl1))
-++#else
-++#define FDKDEC_VER_AT_LEAST(vl0, vl1) 0
-++#endif
-+ 
-+ #if !FDKDEC_VER_AT_LEAST(2, 5) // < 2.5.10
-+ #define AAC_PCM_MAX_OUTPUT_CHANNELS AAC_PCM_OUTPUT_CHANNELS
-+diff --git a/libavcodec/libfdk-aacenc.c b/libavcodec/libfdk-aacenc.c
-+index 91dcb5a1b9..8349e56dcb 100644
-+--- a/libavcodec/libfdk-aacenc.c
-++++ b/libavcodec/libfdk-aacenc.c
-+@@ -26,10 +26,13 @@
-+ #include "audio_frame_queue.h"
-+ #include "internal.h"
-+ 
-++#ifdef AACENCODER_LIB_VL0
-+ #define FDKENC_VER_AT_LEAST(vl0, vl1) \
-+-    (defined(AACENCODER_LIB_VL0) && \
-+-        ((AACENCODER_LIB_VL0 > vl0) || \
-+-         (AACENCODER_LIB_VL0 == vl0 && AACENCODER_LIB_VL1 >= vl1)))
-++    ((AACENCODER_LIB_VL0 > vl0) || \
-++     (AACENCODER_LIB_VL0 == vl0 && AACENCODER_LIB_VL1 >= vl1))
-++#else
-++#define FDKENC_VER_AT_LEAST(vl0, vl1) 0
-++#endif
-+ 
-+ typedef struct AACContext {
-+     const AVClass *class;
-+-- 
-+2.20.1
-+
+diff --git a/package/libxml2/0001-CVE-2017-8872.patch b/package/libxml2/0001-CVE-2017-8872.patch
+deleted file mode 100644
+index b7a75c19a7..0000000000
+--- a/package/libxml2/0001-CVE-2017-8872.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 8b329effb610f4138e4e680f6a6867570f6d6179 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 9 Feb 2018 10:58:11 +0200
+-Subject: [PATCH] CVE-2017-8872
+-
+-Taken from attachment to upstream bug report comment #9.
+-
+-https://bugzilla.gnome.org/show_bug.cgi?id=775200#c9
+-https://bugzilla.gnome.org/attachment.cgi?id=366193&action=diff
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- parser.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/parser.c b/parser.c
+-index 1c5e036ea265..025111067ae8 100644
+---- a/parser.c
+-+++ b/parser.c
+-@@ -12467,6 +12467,10 @@ xmlHaltParser(xmlParserCtxtPtr ctxt) {
+- 	ctxt->input->cur = BAD_CAST"";
+- 	ctxt->input->base = ctxt->input->cur;
+-         ctxt->input->end = ctxt->input->cur;
+-+    if (ctxt->input->buf)
+-+        xmlBufEmpty (ctxt->input->buf->buffer);
+-+    else
+-+        ctxt->input->length = 0;
+-     }
+- }
+- 
+--- 
+-2.15.1
+-
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index d114d98060..ce8f5ef7f2 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732	libxml2-2.9.8.tar.gz
++sha256	94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871	libxml2-2.9.9.tar.gz
+ # License files, locally calculated
+ sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 06a802eb10..3b3714fff1 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXML2_VERSION = 2.9.8
++LIBXML2_VERSION = 2.9.9
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
 -- 
-2.20.1
+2.14.1
