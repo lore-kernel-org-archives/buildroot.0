@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 09:59:40 +0100
-Subject: [Buildroot] [PATCH 1/1] zbar: needs kernel headers >= 3.17
-In-Reply-To: <20190119093710.1337-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 19 Jan 2019 10:37:10 +0100")
-References: <20190119093710.1337-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lg35f98j.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Jan 2019 10:02:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/atop: bump to version 2.4.0
+In-Reply-To: <20190128021406.27477-1-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Mon, 28 Jan 2019 00:14:05 -0200")
+References: <20190128021406.27477-1-ricardo.martincoski@gmail.com>
+Message-ID: <87h8dtf93o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > v4l2_query_ext_ctrl has been added in kernel 3.17:
- > https://github.com/torvalds/linux/commit/5082c2417841e64df975789011e182ce99a9dacd
+ > Drop patch 0001 as it was applied upstream [1].
+ > This new version uses PERF_FLAG_FD_CLOEXEC therefore it needs a
+ > toolchain with headers >= 3.14.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d7b244cf9488eafb59ba8575f17884f4f8512db1
+ > [1] https://github.com/Atoptool/atop/commit/414127c03669b4eedc85778a7bff80cf601311d8
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > ---
+ > Applied on master @ df9b13e674, test-pkg:
+ > BR2_PACKAGE_ATOP=y
+ > 48 builds, 13 skipped, 0 build failed, 0 legal-info failed
 
 Committed, thanks.
 
