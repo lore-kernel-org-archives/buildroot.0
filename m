@@ -1,48 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jan 2019 22:06:07 +0100
-Subject: [Buildroot] [git commit] libkcapi: bump to version 1.1.4
-Message-ID: <20190128210844.7444381062@busybox.osuosl.org>
+Date: Mon, 28 Jan 2019 22:04:17 +0100
+Subject: [Buildroot] [git commit] package/gnutls: bump to version 3.6.6
+Message-ID: <20190128210844.5A32B81062@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e04fbb4d19033e243b0d8effc6cc2f59cd9198
+commit: https://git.buildroot.net/buildroot/commit/?id=da17aef2e00774fae4a4fa983b11899869504bb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of COPYING (year has been updated):
-https://github.com/smuellerDD/libkcapi/commit/3c56934f44a8f5a1257c342942e6e034fc6f20be
+Drop now upstreamed 0001-configure.ac-check-if-libatomic-is-needed.patch and
+autoreconf.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkcapi/libkcapi.hash | 4 ++--
- package/libkcapi/libkcapi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...configure.ac-check-if-libatomic-is-needed.patch | 60 ----------------------
+ package/gnutls/gnutls.hash                         |  4 +-
+ package/gnutls/gnutls.mk                           |  4 +-
+ 3 files changed, 3 insertions(+), 65 deletions(-)
 
-diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
-index b340ea84b6..a9b42bf6e2 100644
---- a/package/libkcapi/libkcapi.hash
-+++ b/package/libkcapi/libkcapi.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch b/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch
+deleted file mode 100644
+index 15c1893b01..0000000000
+--- a/package/gnutls/0001-configure.ac-check-if-libatomic-is-needed.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From cce372f10a755d59ccf09fb7dc6e87b416f63a6f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 17 Jan 2019 10:50:00 +0100
+-Subject: [PATCH] configure.ac: check if libatomic is needed
+-
+-gnutls source code uses the C++11 <atomic> functionality since
+-https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
+-which internally is implemented using the __atomic_*() gcc built-ins
+-
+-On certain architectures, the __atomic_*() built-ins are implemented in
+-the libatomic library that comes with the rest of the gcc runtime. Due
+-to this, code using <atomic> might need to link against libatomic,
+-otherwise one hits build issues such as:
+-
+-../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
+-
+-on an architecture like SPARC.
+-
+-To solve this, a configure.ac check is added to know if we need to
+-link against libatomic or not. The library is also added to gnutls.pc.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/6c749bd592ceffeacadd2ab570d127936cce64b2
+- - http://autobuild.buildroot.org/results/30aa83d3cf3482af8a59250c196c85f4a278d343
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://gitlab.com/gnutls/gnutls/merge_requests/878]
+----
+- configure.ac     | 2 ++
+- lib/gnutls.pc.in | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index e81ff8970..b2c0c2b3d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -207,6 +207,8 @@ dnl Need netinet/tcp.h for TCP_FASTOPEN
+- AC_CHECK_HEADERS([netinet/tcp.h])
+- AC_CHECK_HEADERS([stdatomic.h])
+- 
+-+AC_SEARCH_LIBS([__atomic_load_4], [atomic], [AC_SUBST([LIBATOMIC_LIBS], [-latomic])])
+-+
+- dnl We use its presence to detect C11 threads
+- AC_CHECK_HEADERS([threads.h])
+- 
+-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+-index 9f26852cc..68be2d110 100644
+---- a/lib/gnutls.pc.in
+-+++ b/lib/gnutls.pc.in
+-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+- URL: http://www.gnutls.org/
+- Version: @VERSION@
+- Libs: -L${libdir} -lgnutls
+--Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@
+-+Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@
+- @GNUTLS_REQUIRES_PRIVATE@
+- Cflags: -I${includedir}
+--- 
+-2.14.1
+-
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 89e8b14597..1af0e2d45d 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.5.tar.xz.sig
+-sha256	073eced3acef49a3883e69ffd5f0f0b5f46e2760ad86eddc6c0866df4e7abb35	gnutls-3.6.5.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.6.tar.xz.sig
++sha256	bb9acab8af2ac430edf45faaaa4ed2c51f86e57cb57689be6701aceef4732ca7	gnutls-3.6.6.tar.xz
  # Locally calculated
--sha256 19c044310eda0bf5403fae8df2eeffcfef33b67cb5b01def5f440d41ff16b55f	libkcapi-1.1.3.tar.xz
--sha256 b0336f8f07a6abf8b0a59d961f53601d7c4a7c09a8137805b730a34a976039f8	COPYING
-+sha256 9197f35aca270f97c544fe94dab379b44a2879a07eb78acd5d02c55924902763	libkcapi-1.1.4.tar.xz
-+sha256 c6b8402a68999b0f84560ab43cdf60f9ff33c4a9a8ced6a40db9d3b787ba5b4a	COPYING
- sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING.gplv2
- sha256 13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239	COPYING.bsd
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 9edf0394d4..48d34ffc40 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -4,7 +4,7 @@
- #
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index d9befa1612..c6d2d72771 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBKCAPI_VERSION = 1.1.3
-+LIBKCAPI_VERSION = 1.1.4
- LIBKCAPI_SOURCE = libkcapi-$(LIBKCAPI_VERSION).tar.xz
- LIBKCAPI_SITE = http://www.chronox.de/libkcapi
- LIBKCAPI_AUTORECONF = YES
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).5
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+@@ -27,8 +27,6 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no) \
+ 	gl_cv_func_gettimeofday_clobber=no
+ GNUTLS_INSTALL_STAGING = YES
+-# We're patching configure.ac
+-GNUTLS_AUTORECONF = YES
+ 
+ # libpthread autodetection poison the linkpath
+ GNUTLS_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
