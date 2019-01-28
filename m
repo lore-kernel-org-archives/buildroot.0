@@ -1,303 +1,208 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 18:22:08 -0500
-Subject: [Buildroot] [PATCH v3 4/5] openjdk: new package
+Date: Mon, 28 Jan 2019 18:22:09 -0500
+Subject: [Buildroot] [PATCH v3 5/5] openjdk-hello-world: new test
 In-Reply-To: <20190128232209.17485-1-aduskett@gmail.com>
 References: <20190128232209.17485-1-aduskett@gmail.com>
-Message-ID: <20190128232209.17485-5-aduskett@gmail.com>
+Message-ID: <20190128232209.17485-6-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+From: "Daniel J. Leach" <dleach@belcan.com>
 
-OpenJDK is a free and open-source implementation of the Java Platform.
-This package provides the option to build a client or a server JVM interpreter.
+This test is a simple "Hello, World" integration test of the OpenJDK package.
 
-The default option is the server option, as that is what the majority of users
-use. This JVM interpreter loads more slowly, putting more effort into JIT
-compilations to yield higher performance.
+It compiles the Java app on the host, then runs it on an emulated AARCH64
+target and verifies "Hello, World" is printed.
 
-Unlike most autotools packages, OpenJDK is exceptionally different and has many
-quirks, some of which are documented below:
-
-- X11, alsa, and cups are required to build Java, even if it's a headless build.
-
-- There is no autogen.sh file, instead, a user calls ./configure autogen.
-
-- If ccache is enabled, BuildRoot sets CC, CXX, and CPP to
-  the ccache binary, which causes OpenJDK to throw an error during the
-  configure step, so LD, CC, CXX, and CPP must set explicitly to the actual
-  binaries.
-
-- Some variables are ignored unless set as a configure option. These variables
-  are OBJCOPY, OBJDUMP, NM, STRIP, and AR.
-
-- Other variables must be environment variables, these are PATH, LD, CC, CXX, and CPP.
-
-- Parallel make is possible, but not with make -jN, instead, one has to pass the
-  --with-jobs=$(PARALLEL_JOBS) to configure, or pass JOBS=$(PARALLEL_JOBS) to
-  make. I chose the former because it seems cleaner.
-
+Signed-off-by: Daniel J. Leach <dleach@belcan.com>
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Fixed the patch name.
+Changes v1 -> v3:
+  - Added this patch to the series.
 
-Changes v2 -> v3:
-  - Changed the install location of the libraries and binaries to
-    $(TARGET_DIR)/bin and $(TARGET_DIR)/lib.
+ .gitlab-ci.yml                                |  1 +
+ DEVELOPERS                                    |  1 +
+ .../package/br2-external/openjdk/Config.in    |  1 +
+ .../br2-external/openjdk/external.desc        |  1 +
+ .../package/br2-external/openjdk/external.mk  |  1 +
+ .../package/openjdk-hello-world/Config.in     | 26 ++++++++++++
+ .../openjdk-hello-world/HelloWorld.java       |  8 ++++
+ .../openjdk-hello-world.mk                    | 19 +++++++++
+ support/testing/tests/package/test_openjdk.py | 42 +++++++++++++++++++
+ 9 files changed, 100 insertions(+)
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+ create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+ create mode 100644 support/testing/tests/package/test_openjdk.py
 
-  - Changed -with-boot-jdk location to $(HOST_DIR)/openjdk
-
-  - Added a more in-depth commit message explaining some of the my reasoning
-    for some of the quirks in the package files.
-
- DEVELOPERS                   |   1 +
- package/Config.in            |   1 +
- package/openjdk/Config.in    |  55 ++++++++++++++
- package/openjdk/openjdk.hash |   3 +
- package/openjdk/openjdk.mk   | 136 +++++++++++++++++++++++++++++++++++
- 5 files changed, 196 insertions(+)
- create mode 100644 package/openjdk/Config.in
- create mode 100644 package/openjdk/openjdk.hash
- create mode 100644 package/openjdk/openjdk.mk
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 8f1e4ae804..8a8bd29d14 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -323,6 +323,7 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_lua.TestLua: *runtime_test
+ tests.package.test_lua.TestLuajit: *runtime_test
++tests.package.test_openjdk.TestOpenJdk: *runtime_test
+ tests.package.test_perl.TestPerl: *runtime_test
+ tests.package.test_perl_class_load.TestPerlClassLoad: *runtime_test
+ tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: *runtime_test
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 28ba480d85..0893af58dc 100644
+index 0893af58dc..baa325eead 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -50,6 +50,7 @@ F:	package/libselinux/
- F:	package/libsemanage/
- F:	package/libsepol/
- F:	package/nginx-naxsi/
-+F:	package/openjdk/
- F:	package/openjdk-bin/
- F:	package/policycoreutils/
- F:	package/python-flask-sqlalchemy/
-diff --git a/package/Config.in b/package/Config.in
-index 5036421a73..e150e32563 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -671,6 +671,7 @@ menu "Mono libraries/modules"
- endmenu
- endif
- 	source "package/nodejs/Config.in"
-+	source "package/openjdk/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+@@ -1470,6 +1470,7 @@ F:	package/valijson/
+ F:	package/wpa_supplicant/
+ F:	package/wireless_tools/
+ F:	package/xen/
++F:	support/testing/tests/package/br2-external/openjdk/
+ 
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
+diff --git a/support/testing/tests/package/br2-external/openjdk/Config.in b/support/testing/tests/package/br2-external/openjdk/Config.in
 new file mode 100644
-index 0000000000..f23cedc7ca
+index 0000000000..00c7fd4799
 --- /dev/null
-+++ b/package/openjdk/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_OPENJDK
-+	bool "OpenJDK"
-+	depends on !BR2_SOFT_FLOAT
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP # gtk2, cups
++++ b/support/testing/tests/package/br2-external/openjdk/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-hello-world/Config.in"
+diff --git a/support/testing/tests/package/br2-external/openjdk/external.desc b/support/testing/tests/package/br2-external/openjdk/external.desc
+new file mode 100644
+index 0000000000..f28ba5060c
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/openjdk/external.desc
+@@ -0,0 +1 @@
++name: OPENJDK
+diff --git a/support/testing/tests/package/br2-external/openjdk/external.mk b/support/testing/tests/package/br2-external/openjdk/external.mk
+new file mode 100644
+index 0000000000..54c24e8c64
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/openjdk/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_OPENJDK_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+new file mode 100644
+index 0000000000..4f9022fb92
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_OPENJDK_HELLO_WORLD
++	bool "openjdk hello world"
 +	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
 +	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_WCHAR # gtk2 -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gtk2 -> glib2
++	depends on BR2_USE_MMU # gtk2 -> glib2
++	depends on BR2_INSTALL_LIBSTDCPP # gtk2, cups
 +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # gtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gtk2 -> glib2
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_MMU # gtk2 -> glib2
-+	depends on BR2_USE_WCHAR # gtk2 -> glib2
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_CUPS
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_HOST_OPENJDK_BIN
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_XLIB_LIBXTST
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_OPENJDK
 +	help
-+	  OpenJDK is a free and open-source implementation of the
-+	  Java Platform.
++	  Simple class for testing openjdk
 +
-+	  http://openjdk.java.net/
-+
-+if BR2_PACKAGE_OPENJDK
-+
-+menu "JVM Variants"
-+
-+config BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT
-+	bool "client"
-+	help
-+	  Quick loading, but slower run-time performance.
-+
-+config BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER
-+	bool "server"
-+	default y
-+	help
-+	  Slower loading, but faster run-time performance.
-+
-+endmenu
-+endif
-+
-+comment "OpenJDK needs a glibc toolchain w/ wchar, dynamic library, threads, C++, gcc >= 4.9"
++comment "OpenJDK-hello-world needs a glibc toolchain w/ wchar, dynamic library, threads, C++, gcc >= 4.9"
 +	depends on BR2_USE_MMU
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 +	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on !BR2_USE_WCHAR || \
++		BR2_STATIC_LIBS || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
 +		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+new file mode 100644
+index 0000000000..612d661cdd
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+@@ -0,0 +1,8 @@
++public class HelloWorld
++{
++    public static void main(String[] args)
++    {
++        System.out.println("Hello, World");
++    }
 +
-+comment "OpenJDK does not support soft floats"
-+	depends on BR2_SOFT_FLOAT
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
++}
+diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
 new file mode 100644
-index 0000000000..dc201863a7
+index 0000000000..1847a11d4f
 --- /dev/null
-+++ b/package/openjdk/openjdk.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 9bb8c44e42fbfcee8402f6d0722fbe2209647b7959544d924a6790bc053e8f20  openjdk-jdk-11.0.2+7.tar.gz
-+sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-new file mode 100644
-index 0000000000..97c55434b6
---- /dev/null
-+++ b/package/openjdk/openjdk.mk
-@@ -0,0 +1,135 @@
++++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# openjdk
++# openjdk hello world
 +#
 +################################################################################
 +
-+OPENJDK_VERSION_MAJOR = 11.0.2
-+OPENJDK_VERSION_MINOR = 7
-+OPENJDK_VERSION=jdk-$(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-+OPENJDK_RELEASE = jdk11u
-+OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk11u,$(OPENJDK_VERSION))
-+OPENJDK_LICENSE = GPLv2+ with exception
-+OPENJDK_LICENSE_FILES = LICENSE
++OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
 +
-+OPENJDK_DEPENDENCIES = \
-+	host-openjdk-bin \
-+	host-pkgconf \
-+	alsa-lib \
-+	cups \
-+	fontconfig \
-+	libusb \
-+	xlib_libXrender \
-+	xlib_libXt \
-+	xlib_libXtst
-+
-+# JVM variants
-+ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT),y)
-+OPENJDK_JVM_VARIANTS += client
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER),y)
-+OPENJDK_JVM_VARIANTS += server
-+endif
-+OPENJDK_JVM_VARIANT_LIST = $(subst $(space),$(comma),$(OPENJDK_JVM_VARIANTS))
-+
-+# Some environment variables will be ignored unless passed via environment
-+# variables.
-+# OpenJDK will default to ld, but will pass -Xlinker and -z as arguments,
-+# which will cause compilation failures. Instead, tell OpenJDK to use gcc.
-+# Furthermore, if ccache is enabled, BuildRoot will set CC,CXX, and CPP to
-+# the ccache binary, which will cause OpenJDK to throw an error during the
-+# configure step, so we must set these variables explicitly to the actual
-+# binaries.
-+OPENJDK_CONF_ENV = \
-+	PATH=$(BR_PATH) \
-+	LD=$(TARGET_CC) \
-+	CC=$(TARGET_CC) \
-+	CXX=$(TARGET_CXX) \
-+	CPP=$(TARGET_CPP)
-+
-+OPENJDK_CONF_OPTS = \
-+	--disable-full-docs \
-+	--disable-hotspot-gtest \
-+	--disable-manpages \
-+	--disable-warnings-as-errors \
-+	--enable-headless-only \
-+	--enable-openjdk-only \
-+	--enable-unlimited-crypto \
-+	--openjdk-target=$(GNU_TARGET_NAME) \
-+	--prefix=$(TARGET_DIR)/usr \
-+	--with-boot-jdk=$(HOST_DIR)/openjdk \
-+	--with-debug-level=release \
-+	--with-devkit=$(HOST_DIR) \
-+	--with-extra-cflags="$(TARGET_CFLAGS)" \
-+	--with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
-+	--with-extra-path=$(HOST_DIR)/bin:$(HOST_DIR)/sbin \
-+	--with-giflib=bundled \
-+	--with-jobs=$(PARALLEL_JOBS) \
-+	--with-jvm-variants=$(OPENJDK_JVM_VARIANT_LIST) \
-+	--with-libjpeg=bundled \
-+	--with-libpng=bundled \
-+	--with-native-debug-symbols=none \
-+	--without-version-pre \
-+	--with-sysroot=$(STAGING_DIR) \
-+	--with-vendor-name="AdoptOpenJDK" \
-+	--with-vendor-url="https://adoptopenjdk.net/" \
-+	--with-vendor-version-string="AdoptOpenJDK" \
-+	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
-+	--with-version-string="$(OPENJDK_VERSION_MAJOR)" \
-+	--with-zlib=bundled \
-+	OBJCOPY=$(TARGET_OBJCOPY) \
-+	OBJDUMP=$(TARGET_OBJDUMP) \
-+	NM=$(TARGET_NM) \
-+	STRIP=$(TARGET_STRIP) \
-+	AR=$(TARGET_AR)
-+
-+ifeq ($(BR2_aarch64),y)
-+OPENJDK_CONF_OPTS += --with-cpu-port=aarch64 --with-abi-profile=aarch64
-+endif
-+
-+ifeq ($(BR2_CCACHE),y)
-+OPENJDK_CONF_OPTS += \
-+	--enable-ccache \
-+	--with-ccache-dir=$(BR2_CCACHE_DIR)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+OPENJDK_DEPENDENCIES += jpeg
-+OPENJDK_CONF_OPTS += --with-libjpeg=system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+OPENJDK_DEPENDENCIES += giflib
-+OPENJDK_CONF_OPTS += --with-giflib=system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+OPENJDK_DEPENDENCIES += libpng
-+OPENJDK_CONF_OPTS += --with-libpng=system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+OPENJDK_DEPENDENCIES += libzlib
-+OPENJDK_CONF_OPTS += --with-zlib=system
-+endif
-+
-+# Autogen and configure are done in a single step.
-+define OPENJDK_CONFIGURE_CMDS
-+	chmod +x $(@D)/configure
-+	cd $(@D); $(OPENJDK_CONF_ENV) ./configure autogen $(OPENJDK_CONF_OPTS)
++define OPENJDK_HELLO_WORLD_BUILD_CMDS
++	$(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
++	$(HOST_DIR)/openjdk/bin/javac $(@D)/HelloWorld.java
 +endef
 +
-+# Build just the JRE image for the target.
-+define OPENJDK_BUILD_CMDS
-+	$(MAKE1) -C $(@D) legacy-jre-image
-+endef
-+
-+# Calling make install will build and install the JDK instad of the JRE,
-+# which makes manual installation necessary.
-+define OPENJDK_INSTALL_TARGET_CMDS
-+	cp -rf $(@D)/build/linux-*-release/images/jre/bin/* $(TARGET_DIR)/usr/bin/
-+	cp -rf $(@D)/build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
++define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/HelloWorld.class $(TARGET_DIR)/usr/bin/HelloWorld.class
 +endef
 +
 +$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
+new file mode 100644
+index 0000000000..ed8a1f1be4
+--- /dev/null
++++ b/support/testing/tests/package/test_openjdk.py
+@@ -0,0 +1,42 @@
++import os
++
++import infra.basetest
++
++
++class TestOpenJdk(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/openjdk")]
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        BR2_PACKAGE_XORG7=y
++        BR2_PACKAGE_OPENJDK=y
++        BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
++        """
++
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
++        self.emulator.login()
++
++    def test_run(self):
++        self.login()
++
++        cmd = "java -cp /usr/bin HelloWorld"
++        output, exit_code = self.emulator.run(cmd)
++        print(output)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, ["Hello, World"])
 -- 
 2.20.1
