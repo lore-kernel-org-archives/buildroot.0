@@ -1,77 +1,164 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 29 Jan 2019 13:13:13 +0100
-Subject: [Buildroot] [PATCH 0/2] OpenJDK: new package.
-In-Reply-To: <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
-References: <20190128163126.106059-1-aduskett@gmail.com>
- <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
- <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
-Message-ID: <CAAXf6LWnMs5jF0VEcHBG-pNHaZei8k8-FkkmFX3yyx8SmZp2Kg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 29 Jan 2019 13:30:46 +0100
+Subject: [Buildroot] [git commit] ffmpeg: fix static linking build
+ failure when using libavutil
+In-Reply-To: <2b98573b-12e5-5edb-e14c-bf867162f913@mind.be>
+References: <20190128233144.1433A8132A@busybox.osuosl.org>
+ <2b98573b-12e5-5edb-e14c-bf867162f913@mind.be>
+Message-ID: <5d3cbc8e-e846-65ed-6ef9-6c5f3dcf4933@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 28 ene. 2019 a las 23:31, Adam Duskett (<aduskett@gmail.com>) escribi?:
->
-> Hello;
->
-> On Mon, Jan 28, 2019 at 2:36 PM Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
-> >
-> > Hello,
-> > El lun., 28 ene. 2019 a las 17:31, <aduskett@gmail.com> escribi?:
-> > >
-> > > From: Adam Duskett <Aduskett@gmail.com>
-> > >
-> > > This patch series introduces BuildRoot to OpenJDK.
-> > >
-> > > A previous patch series for OpenJDK8 used the JDK Muricle page to download a
-> > > tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
-> > > repository. This repository allows us to use the GitHub macro instead of trying
-> > > to provide a nasty workaround when grabbing the source code.
-> > >
-> > > With this patch series, there are some quirks that I would like to detail:
-> > >
-> > > - The openjdk-bin package:
-> > > From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
-> > > "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
-> > > the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
-> > > porting OpenJDK to a new platform, the chances are that there already exists
-> > > another JDK for that platform that is usable as boot JDK.
-> > >
-> > > The rule of thumb is that the boot JDK for building JDK major version N should
-> > > be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
-> > > as boot JDK."
-> > >
-> > > This paradox causes an issue because every distribution I have used comes with
-> > > JDK8 by default. So there are two solutions that I could come up with:
-> > > 1) Require the host-system to have JDK N-1
-> > > 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
-> > >    repository, and use those binaries as the boot-jdk.
-> > >
-> > > - JDK >= 10 requires X11, even if building a headless version.
-> > >   It's unfortunate, but there isn't anything I cared to do about it.
-> >
-> > It should be possible to build without X11, with some changes.
-> > See also the openjdk package I sent last year as reference:
-> > http://lists.busybox.net/pipermail/buildroot/2018-February/213282.html
-> >
-> > Best regards,
-> > Thomas
-> Thank's Thomas!
-> I did see those patches and came to the conclusion that while it's
-> probably possible, for the initial
-> release I don't really want to go through the effort of
-> forward-porting those patches to JDK11.
->
-> I am always welcome to patch-donations though!
+Hi Arnout,
 
+Il 29/01/2019 10:03, Arnout Vandecappelle ha scritto:
+>   Oopsie...
+> 
+> On 29/01/2019 00:16, Arnout Vandecappelle (Essensium/Mind) wrote:
+>> commit: https://git.buildroot.net/buildroot/commit/?id=483db9908985d023b858c0b59d4016f9abb4b6f9
+>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>
+>> If a package tries to static link with libavutil it fails due to the
+>> lack of libavutil private dependencies in libavutil.pc (-ldrm in this
+>> case).
+>>
+>> Add patch to:
+>> - Check if libdrm is present.
+>> - Add it to Libs.private: in libavutil.pc if present.
+> 
+>   I didn't want to push this one, it was just a test. The patch no longer applies
+> to ffmpeg 3.4.5 so this is causing autobuilder breakage. Therefore, I pushed a
+> revert commit.
 
-Thanks for your response to my comments.
-I have no particular interest myself either in using/improving
-openjdk. Our use case has vanished.
-So as long as you are aware of the previous patches, I'm good :-)
+I've forgot it there pending on patchwork after ffmpeg bump.
 
-Best regards,
-Thomas
+>   Giulio, FYI, upstream has added an explicit $LIBDRM but not to Libs.Private, so
+> the static linking case still breaks for the same reason. The patch just needs
+> to be rebased (and sent upstream).
+
+I've tried several times to discuss this on ffmpeg-devel:
+[1] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235269.html
+but they ignored my last patch:
+[2] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235417.html
+to fix the previous I've sent:
+[3] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235269.html
+
+I can't understand why they don't want to upstream my last patch[2]...
+
+Anyway I'm going to submit the last one for Buildroot asap.
+I'm going to reproduce it right now.
+
+Best regards
+
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+>   Regards,
+>   Arnout
+> 
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/766/766de487f394490df8c712652ac364ebb4a3ab14/
+>> http://autobuild.buildroot.net/results/041/041e29dfddb2da3309ac7d34a576c60c5a75fe4d/
+>> http://autobuild.buildroot.net/results/780/78061b61cfe3f42554a475c048d54dacacfe11d5/
+>> http://autobuild.buildroot.net/results/275/275e4e0030d26c029085b408cfb272d5633969c6/
+>> http://autobuild.buildroot.net/results/515/5152dcca58944cf732d09fba6e6c9af8a9243c75/
+>> http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>>   ...0002-configure-add-LIBDRM-to-Libs.private.patch | 68 ++++++++++++++++++++++
+>>   1 file changed, 68 insertions(+)
+>>
+>> diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+>> new file mode 100644
+>> index 0000000000..5493473d0f
+>> --- /dev/null
+>> +++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private.patch
+>> @@ -0,0 +1,68 @@
+>> +From e1e11d404eec24c158ae1241d6573c263e57a7b9 Mon Sep 17 00:00:00 2001
+>> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +Date: Wed, 17 Oct 2018 13:13:10 +0200
+>> +Subject: [PATCH] configure: add LIBDRM to Libs.private
+>> +
+>> +When static linking programs using ffmpeg libraries, if linking against
+>> +libavutil, -ldrm is listed before -lavutil. This leads to linking
+>> +failure due to undefined reference of drmGetVersion() and
+>> +drmFreeVersion().
+>> +This is why when pkg-config create libavutil.pc doesn't append -ldrm
+>> +to Libs.private:.
+>> +
+>> +- Create LIBDRM=-ldrm in case libdrm is enabled.
+>> +- Add privatelibs_avutil variable for explicit private libraries to be
+>> +  appended to Libs.private:
+>> +- Add $LIBDRM to privatelibs_avutil.
+>> +
+>> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +---
+>> + configure                     | 3 ++-
+>> + ffbuild/pkgconfig_generate.sh | 3 ++-
+>> + 2 files changed, 4 insertions(+), 2 deletions(-)
+>> +
+>> +diff --git a/configure b/configure
+>> +index 7377046d0a..0996d8a85d 100755
+>> +--- a/configure
+>> ++++ b/configure
+>> +@@ -5919,7 +5919,7 @@ enabled libcelt           && require libcelt celt/celt.h celt_decode -lcelt0 &&
+>> +                                die "ERROR: libcelt must be installed and version must be >= 0.11.0."; }
+>> + enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas
+>> + enabled libdc1394         && require_pkg_config libdc1394 libdc1394-2 dc1394/dc1394.h dc1394_new
+>> +-enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion
+>> ++enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion && LIBDRM="-ldrm"
+>> + enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
+>> +                                { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
+>> +                                  warn "using libfdk without pkg-config"; } }
+>> +@@ -7097,6 +7097,7 @@ LIBPREF=${LIBPREF}
+>> + LIBSUF=${LIBSUF}
+>> +
+>> + extralibs_avutil="$LIBRT $LIBM"
+>> ++privatelibs_avutil="$LIBDRM"
+>> + extralibs_avcodec="$extralibs"
+>> + extralibs_avformat="$extralibs"
+>> + extralibs_avdevice="$extralibs"
+>> +diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
+>> +index e5de6716d2..b86486a107 100755
+>> +--- a/ffbuild/pkgconfig_generate.sh
+>> ++++ b/ffbuild/pkgconfig_generate.sh
+>> +@@ -13,6 +13,7 @@ name=lib${shortname}
+>> + fullname=${name}${build_suffix}
+>> + comment=$2
+>> + libs=$(eval echo \$extralibs_${shortname})
+>> ++privatelibs=$(eval echo \$privatelibs_${shortname})
+>> + deps=$(eval echo \$${shortname}_deps)
+>> +
+>> + for dep in $deps; do
+>> +@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
+>> + Requires.private: $($shared && echo $requires)
+>> + Conflicts:
+>> + Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
+>> +-Libs.private: $($shared && echo $libs)
+>> ++Libs.private: $($shared && echo $libs) ${privatelibs}
+>> + Cflags: -I\${includedir}
+>> + EOF
+>> +
+>> +--
+>> +2.17.1
+>> +
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
