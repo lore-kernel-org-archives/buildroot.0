@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:27:57 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/php: security
+Date: Tue, 29 Jan 2019 17:28:18 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/php: security
  bump to 7.2.14
-Message-ID: <20190129162659.35B3782283@busybox.osuosl.org>
+Message-ID: <20190129162720.D9C2B8148D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a1cb96e52fb7f3beb49854a5a3bd98b50362075
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8df933efac73c2295f6240e56dbb09674062ed5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes the following security issue:
 
@@ -37,7 +37,7 @@ index 094977c548..acbe499536 100644
  # License file
  sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index b11ee4cf4a..d140565322 100644
+index b95ceb5c9d..e5a0d7729c 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
