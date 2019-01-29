@@ -1,35 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 19:27:56 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/xerces: use new
- website (was redirecting)
-Message-ID: <20190129182709.A64268122D@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 19:28:23 +0100
+Subject: [Buildroot] [PATCH] package/xerces: use new website(was
+ redirecting)
+In-Reply-To: <1548165526-45785-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 22 Jan 2019 07:58:46 -0600")
+References: <1548165526-45785-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <878sz35neg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c40d29d1cd3d915612300cb9c3bae06a6e3ba0d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 22c80d2a820f33ccfbaef3446d72a7650ebddf38)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xerces/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 8d55a5cbc2..2edc4346b5 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_XERCES
- 	help
- 	  Xerces-C++ is a validating XML parser written in portable C++.
- 
--	  http://xml.apache.org/xerces-c/
-+	  http://xerces.apache.org/xerces-c/
- 
- comment "xerces-c++ needs a toolchain w/ C++, wchar"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
