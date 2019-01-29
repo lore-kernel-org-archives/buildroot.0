@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 19:28:02 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/xerces: use new
+Date: Tue, 29 Jan 2019 19:27:56 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/xerces: use new
  website (was redirecting)
-Message-ID: <20190129182705.93D74814ED@busybox.osuosl.org>
+Message-ID: <20190129182709.A64268122D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad78c7178b015c9e76f0b43817a470a8ad108ca1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c40d29d1cd3d915612300cb9c3bae06a6e3ba0d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
