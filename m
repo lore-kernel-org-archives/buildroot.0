@@ -1,104 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Jan 2019 21:02:11 +0100
-Subject: [Buildroot] [PATCH 1/1] pcre2: bump to version 10.32
-Message-ID: <20190129200211.32464-1-fontaine.fabrice@gmail.com>
+Date: Tue, 29 Jan 2019 21:27:35 +0100
+Subject: [Buildroot] [PATCH 1/1] mbedtls: security bump to version 2.7.9
+Message-ID: <20190129202735.3298-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- Update hash of license file:
-  https://vcs.pcre.org/pcre2/code/trunk/LICENCE?r1=1001&r2=910
+CVE-2018-19608 is fixed by bumping mbdedtls to a version greater or
+equal to 2.7.8, see
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2018-03
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pcre2/0001-fix-heapframe-alignment.patch | 49 ------------------------
- package/pcre2/pcre2.hash                         |  6 +--
- package/pcre2/pcre2.mk                           |  2 +-
- 3 files changed, 4 insertions(+), 53 deletions(-)
- delete mode 100644 package/pcre2/0001-fix-heapframe-alignment.patch
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pcre2/0001-fix-heapframe-alignment.patch b/package/pcre2/0001-fix-heapframe-alignment.patch
-deleted file mode 100644
-index a10e9e793f..0000000000
---- a/package/pcre2/0001-fix-heapframe-alignment.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--src/pcre2_intmodedep.h: fix alignment of fields in struct heapframe
--
--pcre2_intmodedep.h has a check to verify that the size of the struct
--heapframe is a multiple of 4 bytes. On most architectures this works
--fine, but not on m68k. Indeed, when building the 16-bit variant of
--pcre2, the heapframe structure contains:
--
-- PCRE2_UCHAR occu[2];
-- PCRE2_SPTR  eptr;
--
--Where PCRE2_UCHAR is a 16-bit data type, and PCRE2_SPTR is a
--pointer. The occu[] array starts at byte 0x32, so not aligned on a
--32-bit boundary. With 2 x 16-bit, the occur[] array ends at byte 0x36.
--
--Now, on most architectures, the alignment required for a pointer will
--make the eptr field start at 0x38 (on 32 bit architectures). However,
--on m68k, it is fine to have a pointer aligned only on a 16-bit
--boundary, and the eptr pointer will be at offset 0x36.
--
--This doesn't cause a problem per-se, but breaks the check that
--heapframe should be a multiple of 4 bytes.
--
--To fix this, we make sure eptr is aligned by introducing an unused
--field of 16 bits after the occu[] array (in the 16-bit variant) or
--after the occu[] array (in the 32-bit variant). These choices have
--been made to keep the structure layout unchanged.
--
--Fixes the following build failure on m68k:
--
--src/pcre2_intmodedep.h:818:14: error: size of array 'check_heapframe_size' is negative
-- typedef char check_heapframe_size[
--              ^~~~~~~~~~~~~~~~~~~~
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Upstream: https://bugs.exim.org/show_bug.cgi?id=2247
--
--Index: src/pcre2_intmodedep.h
--===================================================================
----- a/src/pcre2_intmodedep.h	(revision 923)
--+++ b/src/pcre2_intmodedep.h	(working copy)
--@@ -797,7 +797,9 @@
--   PCRE2_UCHAR occu[6];       /* Used for other case code units */
-- #elif PCRE2_CODE_UNIT_WIDTH == 16
--   PCRE2_UCHAR occu[2];       /* Used for other case code units */
--+  uint8_t     unused[2];     /* Ensure 32 bit alignment */
-- #else
--+  uint8_t     unused[2];     /* Ensure 32 bit alignment */
--   PCRE2_UCHAR occu[1];       /* Used for other case code units */
-- #endif
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index 210e2e58c1..a3210b184a 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.31.tar.bz2.sig
--sha256 e07d538704aa65e477b6a392b32ff9fc5edf75ab9a40ddfc876186c4ff4d68ac  pcre2-10.31.tar.bz2
-+# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.32.tar.bz2.sig
-+sha256 f29e89cc5de813f45786580101aaee3984a65818631d4ddbda7b32f699b87c2e  pcre2-10.32.tar.bz2
- # Locally computed
--sha256 4806d1c067bffe106d97dac68744373a866bfdd65486c0532ed1b41595ec4b64  LICENCE
-+sha256 c4a8b89cd38d6a7501d5b11a472fa15e71a051b66d6331c6cda364101389d6ee  LICENCE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 49ece6b9dc..ee3cacb9aa 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 47e446dd07..57a5aeffcb 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.12.0-2.7.5-and-2.1.14-released
+-sha1	180ca49e2bb6df3826113781b793529a81427ce3	mbedtls-2.7.5-apache.tgz
+-sha256	a1302ad9094aabb9880d2755927b466a6bac8e02b68e04dee77321f3859e9b40	mbedtls-2.7.5-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.0-2.7.9-and-2.1.18-released
++sha1	70dc65f3f6f6b2392b821163be7f1f634f0012c8	mbedtls-2.7.9-apache.tgz
++sha256	18e57260b46579245744adb79c2924194dad36aac38c2d0be9e749b9181c706f	mbedtls-2.7.9-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index e07cc3d71c..4a5a731d42 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PCRE2_VERSION = 10.31
-+PCRE2_VERSION = 10.32
- PCRE2_SITE = https://ftp.pcre.org/pub/pcre
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.7.5
++MBEDTLS_VERSION = 2.7.9
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
 -- 
 2.14.1
