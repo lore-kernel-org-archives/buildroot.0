@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:30:26 +0100
-Subject: [Buildroot] [PATCH 1/1] odhcp6c: fix build with gcc 8
-In-Reply-To: <20190116192910.8922-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 16 Jan 2019 20:29:10 +0100")
-References: <20190116192910.8922-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zhrj5sv1.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 17:32:59 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libftdi1: fix python build with cmake < 3.7
+In-Reply-To: <20190120091525.2772-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 20 Jan 2019 10:15:25 +0100")
+References: <20190120091525.2772-1-fontaine.fabrice@gmail.com>
+Message-ID: <87va275sqs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Retrieve and backport upstream patch to fix build with gcc 8
  > Fixes:
- >  - http://autobuild.buildroot.org/results/1c6f0d1f2fcd3474af81b3851d875f834a3a0a4f
+ >  - http://autobuild.buildroot.org/results/1091872e2b77d789e361d1ddefd235c738933c55
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Baruch Siach):
+ >  - Move fix to existing fourth patch
 
 Committed to 2018.11.x, thanks.
 
