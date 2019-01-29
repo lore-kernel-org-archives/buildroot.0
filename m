@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:35:09 +0100
+Date: Tue, 29 Jan 2019 17:35:00 +0100
 Subject: [Buildroot] [git commit branch/2018.11.x] package/openresolv:
- update webpage URL
-Message-ID: <20190129163438.7561C81158@busybox.osuosl.org>
+ update to fix install location
+Message-ID: <20190129163438.701A781238@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2760cc78cd07c72a3e6a43193e006ee06b51296a
+commit: https://git.buildroot.net/buildroot/commit/?id=2c5b922470fc3e55386f3d05dd4852b6a4c78b0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Update URL to point at the project page vs just the GIT repository
-containing the source code.
+Update to install in /sbin as expected by other applications
+such as strongswan instead of /usr/sbin
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 824e34728c5b0f94c4e1c93121cad5973bddda89)
+(cherry picked from commit 4a0cf00e6be024488456b31622d139d40d57460c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openresolv/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openresolv/openresolv.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
-index 2a393c6bc4..835fbf29ee 100644
---- a/package/openresolv/Config.in
-+++ b/package/openresolv/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_OPENRESOLV
- 	  manages resolv.conf. This tool provides a dns management
- 	  framework to track currently available nameservers.
+diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
+index 6adf973527..3f9d603d40 100644
+--- a/package/openresolv/openresolv.mk
++++ b/package/openresolv/openresolv.mk
+@@ -10,8 +10,7 @@ OPENRESOLV_LICENSE = BSD-2-Clause
+ OPENRESOLV_LICENSE_FILES = LICENSE
  
--	  https://github.com/rsmarples/openresolv
-+	  https://roy.marples.name/projects/openresolv
+ define OPENRESOLV_CONFIGURE_CMDS
+-	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure --prefix=/usr \
+-		--sysconfdir=/etc
++	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure --sysconfdir=/etc
+ endef
+ 
+ define OPENRESOLV_BUILD_CMDS
