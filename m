@@ -1,55 +1,113 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 29 Jan 2019 13:36:08 +0100
-Subject: [Buildroot] [PATCH] package/busybox: drop empty configure command
-Message-ID: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+From: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Date: Tue, 29 Jan 2019 13:23:04 +0000
+Subject: [Buildroot] [PATCH 3/8] board/raspberrypi: post-image,
+ include .config dfs files.
+In-Reply-To: <20190129132309.3455-1-robert.heywood@codethink.co.uk>
+References: <20190129132309.3455-1-robert.heywood@codethink.co.uk>
+Message-ID: <20190129132309.3455-4-robert.heywood@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
-longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
-empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
+This change pulls dts filenames from the .config file instead of
+specifying the required dts files in a board config file.
+This reduces duplication and makes it possible to specify different
+dts files in the config file to have it appear in the resultant
+image. You would want to do so if you were using mainline kernel
+sources.
 
-Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
+The device tree declarations were removed from the board .conf files.
 
-Signed-off-by: Yann MORIN <yann.morin@orange.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Robert J. Heywood <robert.heywood@codethink.co.uk>
 ---
- package/busybox/busybox.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ board/raspberrypi/post-image.sh        | 7 +++++++
+ board/raspberrypi/raspberrypi.conf     | 3 ---
+ board/raspberrypi/raspberrypi0.conf    | 1 -
+ board/raspberrypi/raspberrypi0w.conf   | 1 -
+ board/raspberrypi/raspberrypi2.conf    | 1 -
+ board/raspberrypi/raspberrypi3-64.conf | 3 ---
+ board/raspberrypi/raspberrypi3.conf    | 3 ---
+ 7 files changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index bfcca6ed3e..5c5a8ea839 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -323,10 +323,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
- endef
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 5cc25a9ac6..900bf1eae2 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -63,6 +63,13 @@ if $INCLUDE_OVERLAYS; then
+ 	FILES+=( "rpi-firmware/overlays" )
+ fi
  
--define BUSYBOX_CONFIGURE_CMDS
--	$(BUSYBOX_NOCLOBBER_INSTALL)
--endef
--
- define BUSYBOX_BUILD_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
- endef
++# Pull device tree names from the .config file.
++eval `grep BR2_LINUX_KERNEL_INTREE_DTS_NAME .config`
++for dts in $BR2_LINUX_KERNEL_INTREE_DTS_NAME
++do
++	FILES+=( "$(basename $dts).dtb" )
++done
++
+ for i in ${!FILES[*]}
+ do
+ 	FILES[$i]="\"${FILES[$i]}\","
+diff --git a/board/raspberrypi/raspberrypi.conf b/board/raspberrypi/raspberrypi.conf
+index 962cf726e2..7b511fd0fc 100644
+--- a/board/raspberrypi/raspberrypi.conf
++++ b/board/raspberrypi/raspberrypi.conf
+@@ -1,6 +1,3 @@
+ FILES=(
+-	"bcm2708-rpi-b.dtb"
+-	"bcm2708-rpi-b-plus.dtb"
+-	"bcm2708-rpi-cm.dtb"
+ 	"zImage"
+ )
+diff --git a/board/raspberrypi/raspberrypi0.conf b/board/raspberrypi/raspberrypi0.conf
+index 132540b543..7b511fd0fc 100644
+--- a/board/raspberrypi/raspberrypi0.conf
++++ b/board/raspberrypi/raspberrypi0.conf
+@@ -1,4 +1,3 @@
+ FILES=(
+-	"bcm2708-rpi-b-plus.dtb"
+ 	"zImage"
+ )
+diff --git a/board/raspberrypi/raspberrypi0w.conf b/board/raspberrypi/raspberrypi0w.conf
+index 27b4ec2399..7b511fd0fc 100644
+--- a/board/raspberrypi/raspberrypi0w.conf
++++ b/board/raspberrypi/raspberrypi0w.conf
+@@ -1,4 +1,3 @@
+ FILES=(
+-	"bcm2708-rpi-0-w.dtb"
+ 	"zImage"
+ )
+diff --git a/board/raspberrypi/raspberrypi2.conf b/board/raspberrypi/raspberrypi2.conf
+index ea7d2402a6..7b511fd0fc 100644
+--- a/board/raspberrypi/raspberrypi2.conf
++++ b/board/raspberrypi/raspberrypi2.conf
+@@ -1,4 +1,3 @@
+ FILES=(
+-	"bcm2709-rpi-2-b.dtb"
+ 	"zImage"
+ )
+diff --git a/board/raspberrypi/raspberrypi3-64.conf b/board/raspberrypi/raspberrypi3-64.conf
+index 11cb88e191..6e810367d0 100644
+--- a/board/raspberrypi/raspberrypi3-64.conf
++++ b/board/raspberrypi/raspberrypi3-64.conf
+@@ -1,6 +1,3 @@
+ FILES=(
+-	"bcm2710-rpi-3-b.dtb"
+-	"bcm2710-rpi-3-b-plus.dtb"
+-	"bcm2837-rpi-3-b.dtb"
+ 	"Image"
+ )
+diff --git a/board/raspberrypi/raspberrypi3.conf b/board/raspberrypi/raspberrypi3.conf
+index 51df913860..7b511fd0fc 100644
+--- a/board/raspberrypi/raspberrypi3.conf
++++ b/board/raspberrypi/raspberrypi3.conf
+@@ -1,6 +1,3 @@
+ FILES=(
+-	"bcm2710-rpi-3-b.dtb"
+-	"bcm2710-rpi-3-b-plus.dtb"
+-	"bcm2710-rpi-cm3.dtb"
+ 	"zImage"
+ )
 -- 
-2.17.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.11.0
