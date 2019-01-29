@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:35:22 +0100
-Subject: [Buildroot] [PATCH] package/openresolv: updated webpage URL
-In-Reply-To: <1548164923-15879-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Tue, 22 Jan 2019 07:48:43 -0600")
-References: <1548164923-15879-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87munj5smt.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 17:35:36 +0100
+Subject: [Buildroot] [PATCH v1 1/1] package/openresolv: update to fix
+ install location
+In-Reply-To: <20190117150542.13062-1-jared.bents@rockwellcollins.com> (jared
+ bents's message of "Thu, 17 Jan 2019 09:05:42 -0600")
+References: <20190117150542.13062-1-jared.bents@rockwellcollins.com>
+Message-ID: <87imy75smf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "jared" == jared bents <jared.bents@rockwellcollins.com> writes:
 
- > Updated URL to point at the project page vs just the GIT repository
- > containing the source code.
+ > From: Jared Bents <jared.bents@rockwellcollins.com>
+ > Update to install in /sbin as expected by other applications
+ > such as strongswan instead of /usr/sbin
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
 Committed to 2018.11.x, thanks.
 
