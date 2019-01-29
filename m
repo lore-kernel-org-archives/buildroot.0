@@ -1,102 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Jan 2019 22:14:55 +0100
-Subject: [Buildroot] [git commit] support/testing/infra/builder: configure
- and build with make target and environment
-Message-ID: <20190129215346.C9AAF82285@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Jan 2019 22:55:35 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/s6-networking:
+ fix dependency when libressl is enabled
+Message-ID: <20190129215437.8853E821F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07bbf1b4dd1fc97e31950b5ba827af7807386179
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=1275545888261ba92372178dd04524248e61c33e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Make the builder able to call 'VAR1=1 make VAR2=2 target'.
+Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
+actually dropped the dependency on s6-dns and s6 when libressl is
+enabled.
+Fix this by using += inside the conditional code.
 
-Allow sending extra parameters to be added to the end of make command
-line. Uses for these purposes:
- - to configure a br2-external, using the 'BR2_EXTERNAL="dir" variable.
- - to specify a make target, such as 'foo-source.'
-
-Allow adding variables to the environment when calling make.
-These added variables allow a user to override default values from BuildRoot,
-such as 'BR2_DL_DIR="dl"'.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Daniel J. Leach <dleach@belcan.com>
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 30ff614a035dd49e357f7c3560555dae8e605f80)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/builder.py | 36 ++++++++++++++++++++++++++++++++----
- 1 file changed, 32 insertions(+), 4 deletions(-)
+ package/s6-networking/s6-networking.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index fc318fe26e..018747555d 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -12,7 +12,17 @@ class Builder(object):
-         self.builddir = builddir
-         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
+index 7c9f087051..b621eb225d 100644
+--- a/package/s6-networking/s6-networking.mk
++++ b/package/s6-networking/s6-networking.mk
+@@ -25,7 +25,7 @@ S6_NETWORKING_CONF_OPTS = \
  
--    def configure(self):
-+    def configure(self, make_extra_opts=[], make_extra_env={}):
-+        """Configure the build.
-+
-+        make_extra_opts: a list of arguments to be passed to the make
-+        command.
-+        e.g. make_extra_opts=["BR2_EXTERNAL=/path"]
-+
-+        make_extra_env: a dict of variables to be appended (or replaced)
-+        in the environment that calls make.
-+        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
-+        """
-         if not os.path.isdir(self.builddir):
-             os.makedirs(self.builddir)
+ ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+ S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
+-S6_NETWORKING_DEPENDENCIES = libressl
++S6_NETWORKING_DEPENDENCIES += libressl
+ endif
  
-@@ -25,22 +35,40 @@ class Builder(object):
-         self.logfile.flush()
- 
-         env = {"PATH": os.environ["PATH"]}
-+        env.update(make_extra_env)
-+
-         cmd = ["make",
--               "O={}".format(self.builddir),
--               "olddefconfig"]
-+               "O={}".format(self.builddir)]
-+        cmd += make_extra_opts
-+        cmd += ["olddefconfig"]
-+
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-                               env=env)
-         if ret != 0:
-             raise SystemError("Cannot olddefconfig")
- 
--    def build(self):
-+    def build(self, make_extra_opts=[], make_extra_env={}):
-+        """Perform the build.
-+
-+        make_extra_opts: a list of arguments to be passed to the make
-+        command. It can include a make target.
-+        e.g. make_extra_opts=["foo-source"]
-+
-+        make_extra_env: a dict of variables to be appended (or replaced)
-+        in the environment that calls make.
-+        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
-+        """
-         env = {"PATH": os.environ["PATH"]}
-         if "http_proxy" in os.environ:
-             self.logfile.write("Using system proxy: " +
-                                os.environ["http_proxy"] + "\n")
-             env['http_proxy'] = os.environ["http_proxy"]
-             env['https_proxy'] = os.environ["http_proxy"]
-+        env.update(make_extra_env)
-+
-         cmd = ["make", "-C", self.builddir]
-+        cmd += make_extra_opts
-+
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-                               env=env)
-         if ret != 0:
+ define S6_NETWORKING_CONFIGURE_CMDS
