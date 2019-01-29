@@ -1,22 +1,19 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Tue, 29 Jan 2019 10:39:18 +0100
-Subject: [Buildroot] [PATCH v7 7/8] package/rtmpdump: Fix compilation issues
- with openssl 1.1.x
+Date: Tue, 29 Jan 2019 10:39:14 +0100
+Subject: [Buildroot] [PATCH v7 3/8] package/pound: Fix build with OpenSSL
+ 1.1.x
 In-Reply-To: <20190129093919.22060-1-patrick.havelange@essensium.com>
 References: <20190129093919.22060-1-patrick.havelange@essensium.com>
-Message-ID: <20190129093919.22060-7-patrick.havelange@essensium.com>
+Message-ID: <20190129093919.22060-3-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vadim Kochan <vadim4j@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Upstream is dead, other distros use gnutls exclusively,
-so patch is not sent upstream.
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 
 ---
@@ -24,293 +21,348 @@ Changes v7:
   - none
 
 Changes v6:
-  - Commit msg
+  - none
 ---
- ...p-Fix-compilation-with-openssl-1.1.x.patch | 276 ++++++++++++++++++
- 1 file changed, 276 insertions(+)
- create mode 100644 package/rtmpdump/0001-librtmp-Fix-compilation-with-openssl-1.1.x.patch
+ package/pound/0002-fix-openssl-1.1.0.patch | 331 +++++++++++++++++++++
+ 1 file changed, 331 insertions(+)
+ create mode 100644 package/pound/0002-fix-openssl-1.1.0.patch
 
-diff --git a/package/rtmpdump/0001-librtmp-Fix-compilation-with-openssl-1.1.x.patch b/package/rtmpdump/0001-librtmp-Fix-compilation-with-openssl-1.1.x.patch
+diff --git a/package/pound/0002-fix-openssl-1.1.0.patch b/package/pound/0002-fix-openssl-1.1.0.patch
 new file mode 100644
-index 0000000000..44e70b495a
+index 0000000000..a94a6386b7
 --- /dev/null
-+++ b/package/rtmpdump/0001-librtmp-Fix-compilation-with-openssl-1.1.x.patch
-@@ -0,0 +1,276 @@
-+From f3ca4b9450e273afc5b773e5e5637b7fcbc71dd8 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Fri, 18 Jan 2019 01:15:33 +0200
-+Subject: [PATCH] librtmp: Fix compilation with openssl 1.1.x
++++ b/package/pound/0002-fix-openssl-1.1.0.patch
+@@ -0,0 +1,331 @@
++From a2c9dde4d055ea8942afb150b7fc3a807d4e5d60 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Wed, 28 Feb 2018 13:44:01 +0000
++Subject: [PATCH] Support for Openssl 1.1
 +
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++Downloaded from github fork:
++https://github.com/graygnuorg/pound/commit/a2c9dde4d055ea8942afb150b7fc3a807d4e5d60
++
++This patch was announced on the upstream mailinglist:
++http://www.apsis.ch/pound/pound_list/archive/2018/2018-03/1519920322000
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ librtmp/dh.h        | 70 +++++++++++++++++++++++++++++++++++++++++++----------
-+ librtmp/handshake.h | 13 ++++++----
-+ librtmp/hashswf.c   | 18 +++++++++-----
-+ librtmp/rtmp.c      |  4 +--
-+ 4 files changed, 78 insertions(+), 27 deletions(-)
++ .gitignore |  15 ++++++++
++ config.c   |  17 +++++++--
++ http.c     |  12 ++++++-
++ pound.h    |   4 ++-
++ svc.c      | 101 +++++++++++++++++++++++++++++++++++++++++++----------
++ 5 files changed, 125 insertions(+), 24 deletions(-)
++ create mode 100644 .gitignore
 +
-+diff --git a/librtmp/dh.h b/librtmp/dh.h
-+index 5fc3f32..2cf6b8c 100644
-+--- a/librtmp/dh.h
-++++ b/librtmp/dh.h
-+@@ -186,6 +186,32 @@ typedef BIGNUM * MP_t;
-+ #define MDH_free(dh)  DH_free(dh)
-+ #define MDH_generate_key(dh)  DH_generate_key(dh)
-+ #define MDH_compute_key(secret, seclen, pub, dh)      DH_compute_key(secret, pub, dh)
-++#define MDH_set_g(dh, g) DH_set0_pqg(dh, NULL, NULL, g)
-++#define MDH_set_p(dh, p) DH_set0_pqg(dh, p, NULL, NULL)
-++#define MDH_set_len(dh, l) DH_set_length(dh, l)
-++#define MDH_set_pub_key(dh, pub) DH_set0_key(dh, pub, NULL)
-++#define MDH_set_priv_key(dh, priv) DH_set0_key(dh, NULL, priv)
++diff --git a/config.c b/config.c
++index d41a3ee..e8fec0f 100644
++--- a/config.c
+++++ b/config.c
++@@ -174,6 +174,16 @@ conf_fgets(char *buf, const int max)
++     }
++ }
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_get0_data(n->d.dNSName),	\
+++	        ASN1_STRING_length(n->d.dNSName) + 1)
+++#else
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_data(n->d.dNSName),	\
+++	       ASN1_STRING_length(n->d.dNSName) + 1)
+++#endif
 ++
-++static inline BIGNUM *MDH_get_p(DH *dh)
++ unsigned char **
++ get_subjectaltnames(X509 *x509, unsigned int *count)
++ {
++@@ -194,8 +204,7 @@ get_subjectaltnames(X509 *x509, unsigned int *count)
++         name = sk_GENERAL_NAME_pop(san_stack);
++         switch(name->type) {
++             case GEN_DNS:
++-                temp[local_count] = strndup(ASN1_STRING_data(name->d.dNSName), ASN1_STRING_length(name->d.dNSName)
++-                                    + 1);
+++ 	        temp[local_count] = general_name_string(name);
++                 if(temp[local_count] == NULL)
++                     conf_err("out of memory");
++                 local_count++;
++@@ -565,7 +574,9 @@ parse_service(const char *svc_name)
++     pthread_mutex_init(&res->mut, NULL);
++     if(svc_name)
++         strncpy(res->name, svc_name, KEY_SIZE);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res->sessions = lh_TABNODE_new(t_hash, t_cmp)) == NULL)    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res->sessions = LHM_lh_new(TABNODE, t)) == NULL)
++ #else
++     if((res->sessions = lh_new(LHASH_HASH_FN(t_hash), LHASH_COMP_FN(t_cmp))) == NULL)
++diff --git a/http.c b/http.c
++index dd211e4..c8e756a 100644
++--- a/http.c
+++++ b/http.c
++@@ -527,12 +527,22 @@ log_bytes(char *res, const LONG cnt)
++ 
++ /* Cleanup code. This should really be in the pthread_cleanup_push, except for bugs in some implementations */
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define clear_error()
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_thread_state(NULL); }
+++#else
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); }
+++#endif
+++
++ #define clean_all() {   \
++     if(ssl != NULL) { BIO_ssl_shutdown(cl); } \
++     if(be != NULL) { BIO_flush(be); BIO_reset(be); BIO_free_all(be); be = NULL; } \
++     if(cl != NULL) { BIO_flush(cl); BIO_reset(cl); BIO_free_all(cl); cl = NULL; } \
++     if(x509 != NULL) { X509_free(x509); x509 = NULL; } \
++-    if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); } \
+++    clear_error(); \
++ }
++ 
++ /*
++diff --git a/pound.h b/pound.h
++index fa22c36..9603b91 100644
++--- a/pound.h
+++++ b/pound.h
++@@ -344,7 +344,9 @@ typedef struct _tn {
++ /* maximal session key size */
++ #define KEY_SIZE    127
++ 
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++  DEFINE_LHASH_OF(TABNODE);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++ DECLARE_LHASH_OF(TABNODE);
++ #endif
++ 
++diff --git a/svc.c b/svc.c
++index 60ba488..063b92c 100644
++--- a/svc.c
+++++ b/svc.c
++@@ -27,10 +27,17 @@
++ 
++ #include    "pound.h"
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define TABNODE_GET_DOWN_LOAD(t) lh_TABNODE_get_down_load(t)
+++# define TABNODE_SET_DOWN_LOAD(t,n) lh_TABNODE_set_down_load(t,n)
+++#else
++ #ifndef LHASH_OF
++ #define LHASH_OF(x) LHASH
++ #define CHECKED_LHASH_OF(type, h) h
++ #endif
+++# define TABNODE_GET_DOWN_LOAD(t) (CHECKED_LHASH_OF(TABNODE, t)->down_load)
+++# define TABNODE_SET_DOWN_LOAD(t,n) (CHECKED_LHASH_OF(TABNODE, t)->down_load = n)
+++#endif
++ 
++ /*
++  * Add a new key/content pair to a hash table
++@@ -58,7 +65,9 @@ t_add(LHASH_OF(TABNODE) *const tab, const char *key, const void *content, const
++     }
++     memcpy(t->content, content, cont_len);
++     t->last_acc = time(NULL);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((old = lh_TABNODE_insert(tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((old = LHM_lh_insert(TABNODE, tab, t)) != NULL) {
++ #else
++     if((old = (TABNODE *)lh_insert(tab, t)) != NULL) {
++@@ -82,7 +91,9 @@ t_find(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_retrieve(tab, &t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = (TABNODE *)LHM_lh_retrieve(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_retrieve(tab, &t)) != NULL) {
++@@ -102,7 +113,9 @@ t_remove(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_delete(tab, &t)) != NULL) {    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = LHM_lh_delete(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_delete(tab, &t)) != NULL) {
++@@ -127,7 +140,9 @@ t_old_doall_arg(TABNODE *t, ALL_ARG *a)
++     TABNODE *res;
++ 
++     if(t->last_acc < a->lim)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(a->tab, t)) != NULL) {	    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, a->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(a->tab, t)) != NULL) {
++@@ -145,6 +160,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE, ALL_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE *, ALL_ARG *)
++ #endif
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,ALL_ARG);
+++#endif
+++
++ /*
++  * Expire all old nodes
++  */
++@@ -156,14 +175,16 @@ t_expire(LHASH_OF(TABNODE) *const tab, const time_t lim)
++ 
++     a.tab = tab;
++     a.lim = lim;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_old_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_old), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_old), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++     return;
++ }
++ 
++@@ -173,7 +194,9 @@ t_cont_doall_arg(TABNODE *t, ALL_ARG *arg)
++     TABNODE *res;
++ 
++     if(memcmp(t->content, arg->content, arg->cont_len) == 0)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(arg->tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, arg->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(arg->tab, t)) != NULL) {
++@@ -203,15 +226,16 @@ t_clean(LHASH_OF(TABNODE) *const tab, void *const content, const size_t cont_len
++     a.tab = tab;
++     a.content = content;
++     a.cont_len = cont_len;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_cont_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_cont), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_cont), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
++-    return;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++ }
++ 
++ /*
++@@ -1262,6 +1286,31 @@ RSA_tmp_callback(/* not used */SSL *ssl, /* not used */int is_export, int keylen
++     return res;
++ }
++ 
+++static int
+++generate_key(RSA **ret_rsa, unsigned long bits)
 ++{
-++  const BIGNUM *p;
-++  DH_get0_pqg(dh, &p, NULL, NULL);
-++  return (BIGNUM *) p;
+++#if OPENSSL_VERSION_NUMBER > 0x00908000L
+++    int rc = 0;
+++    RSA *rsa;
+++
+++    rsa = RSA_new();
+++    if (rsa) {
+++	BIGNUM *bne = BN_new();
+++	if (BN_set_word(bne, RSA_F4))
+++	    rc = RSA_generate_key_ex(rsa, bits, bne, NULL);
+++	BN_free(bne);
+++	if (rc)
+++	    *ret_rsa = rsa;
+++	else
+++	    RSA_free(rsa);
+++    }
+++    return rc;
+++#else
+++    *ret_rsa = RSA_generate_key(bits, RSA_F4, NULL, NULL);
+++    return *ret_rsa != NULL;
+++#endif
 ++}
 ++
-++static inline BIGNUM *MDH_get_pub_key(DH *dh)
-++{
-++  const BIGNUM *pub;
-++  DH_get0_key(dh, &pub, NULL);
-++  return (BIGNUM *) pub;
-++}
-++
-++static inline BIGNUM *MDH_get_priv_key(DH *dh)
-++{
-++  const BIGNUM *priv;
-++  DH_get0_key(dh, NULL, &priv);
-++  return (BIGNUM *) priv;
-++}
-+
-+ #endif
-+
-+@@ -249,24 +275,28 @@ DHInit(int nKeyBits)
-+ {
-+   size_t res;
-+   MDH *dh = MDH_new();
-++  MP_t g, p;
-+
-+   if (!dh)
-+     goto failed;
-+
-+-  MP_new(dh->g);
-++  MP_new(g);
-+
-+-  if (!dh->g)
-++  if (g)
-+     goto failed;
-+
-+-  MP_gethex(dh->p, P1024, res);       /* prime P1024, see dhgroups.h */
-++  MDH_set_g(dh, g);
-++  p = MDH_get_p(dh);
-++  MP_gethex(p, P1024, res);   /* prime P1024, see dhgroups.h */
-+   if (!res)
-+     {
-+       goto failed;
++ /*
++  * Periodically regenerate ephemeral RSA keys
++  * runs every T_RSA_KEYS seconds
++@@ -1274,8 +1323,9 @@ do_RSAgen(void)
++     RSA *t_RSA1024_keys[N_RSA_KEYS];
++ 
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        t_RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL);
++-        t_RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL);
+++        /* FIXME: Error handling */
+++        generate_key(&t_RSA512_keys[n], 512);
+++	generate_key(&t_RSA1024_keys[n], 1024);
 +     }
-+
-+-  MP_set_w(dh->g, 2); /* base 2 */
-++  MDH_set_p(dh, p);
-++  MP_set_w(g, 2);     /* base 2 */
-++  MDH_set_len(dh, nKeyBits);
-+
-+-  dh->length = nKeyBits;
-+   return dh;
-+
-+ failed:
-+@@ -286,6 +316,9 @@ DHGenerateKey(MDH *dh)
-+   while (!res)
-+     {
-+       MP_t q1 = NULL;
-++      MP_t priv_key;
-++      MP_t pub_key;
-++      MP_t p;
-+
-+       if (!MDH_generate_key(dh))
-+       return 0;
-+@@ -293,12 +326,17 @@ DHGenerateKey(MDH *dh)
-+       MP_gethex(q1, Q1024, res);
-+       assert(res);
-+
-+-      res = isValidPublicKey(dh->pub_key, dh->p, q1);
-++      priv_key = MDH_get_priv_key(dh);
-++      pub_key = MDH_get_pub_key(dh);
-++      p = MDH_get_p(dh);
-++
-++      res = isValidPublicKey(pub_key, p, q1);
-+       if (!res)
-+       {
-+-        MP_free(dh->pub_key);
-+-        MP_free(dh->priv_key);
-+-        dh->pub_key = dh->priv_key = 0;
-++        MP_free(pub_key);
-++        MP_free(priv_key);
-++        MDH_set_pub_key(dh, NULL);
-++        MDH_set_priv_key(dh, NULL);
-+       }
-+
-+       MP_free(q1);
-+@@ -313,16 +351,22 @@ DHGenerateKey(MDH *dh)
-+ static int
-+ DHGetPublicKey(MDH *dh, uint8_t *pubkey, size_t nPubkeyLen)
-+ {
-++  MP_t pub_key;
-+   int len;
-+-  if (!dh || !dh->pub_key)
-++
-++  if (!dh)
-++    return 0;
-++
-++  pub_key = MDH_get_pub_key(dh);
-++  if (!pub_key)
-+     return 0;
-+
-+-  len = MP_bytes(dh->pub_key);
-++  len = MP_bytes(pub_key);
-+   if (len <= 0 || len > (int) nPubkeyLen)
-+     return 0;
-+
-+   memset(pubkey, 0, nPubkeyLen);
-+-  MP_setbin(dh->pub_key, pubkey + (nPubkeyLen - len), len);
-++  MP_setbin(pub_key, pubkey + (nPubkeyLen - len), len);
-+   return 1;
-+ }
-+
-+@@ -364,7 +408,7 @@ DHComputeSharedSecretKey(MDH *dh, uint8_t *pubkey, size_t nPubkeyLen,
-+   MP_gethex(q1, Q1024, len);
-+   assert(len);
-+
-+-  if (isValidPublicKey(pubkeyBn, dh->p, q1))
-++  if (isValidPublicKey(pubkeyBn, MDH_get_p(dh), q1))
-+     res = MDH_compute_key(secret, nPubkeyLen, pubkeyBn, dh);
-+   else
-+     res = -1;
-+diff --git a/librtmp/handshake.h b/librtmp/handshake.h
-+index 0438486..1e84b3a 100644
-+--- a/librtmp/handshake.h
-++++ b/librtmp/handshake.h
-+@@ -69,9 +69,9 @@ typedef struct arcfour_ctx*  RC4_handle;
-+ #if OPENSSL_VERSION_NUMBER < 0x0090800 || !defined(SHA256_DIGEST_LENGTH)
-+ #error Your OpenSSL is too old, need 0.9.8 or newer with SHA256
++     if(ret_val = pthread_mutex_lock(&RSA_mut))
++         logmsg(LOG_WARNING, "thr_RSAgen() lock: %s", strerror(ret_val));
++@@ -1329,11 +1379,11 @@ init_timer(void)
++      * Pre-generate ephemeral RSA keys
++      */
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        if((RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA512_keys[n], 512)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 512) failed", n);
++             return;
++         }
++-        if((RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA1024_keys[n], 1024)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 1024) failed", n);
++             return;
++         }
++@@ -1420,6 +1470,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE, DUMP_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE *, DUMP_ARG *)
 + #endif
-+-#define HMAC_setup(ctx, key, len)     HMAC_CTX_init(&ctx); HMAC_Init_ex(&ctx, key, len, EVP_sha256(), 0)
-+-#define HMAC_crunch(ctx, buf, len)    HMAC_Update(&ctx, buf, len)
-+-#define HMAC_finish(ctx, dig, dlen)   HMAC_Final(&ctx, dig, &dlen); HMAC_CTX_cleanup(&ctx)
-++#define HMAC_setup(ctx, key, len)     HMAC_CTX_reset(ctx); HMAC_Init_ex(ctx, key, len, EVP_sha256(), 0)
-++#define HMAC_crunch(ctx, buf, len)    HMAC_Update(ctx, buf, len)
-++#define HMAC_finish(ctx, dig, dlen)   HMAC_Final(ctx, dig, &dlen);
-+
-+ typedef RC4_KEY *     RC4_handle;
-+ #define RC4_alloc(h)  *h = malloc(sizeof(RC4_KEY))
-+@@ -117,7 +117,7 @@ static void InitRC4Encryption
-+ {
-+   uint8_t digest[SHA256_DIGEST_LENGTH];
-+   unsigned int digestLen = 0;
-+-  HMAC_CTX ctx;
-++  HMAC_CTX *ctx = HMAC_CTX_new();
-+
-+   RC4_alloc(rc4keyIn);
-+   RC4_alloc(rc4keyOut);
-+@@ -139,6 +139,8 @@ static void InitRC4Encryption
-+   RTMP_LogHex(RTMP_LOGDEBUG, digest, 16);
-+
-+   RC4_setkey(*rc4keyIn, 16, digest);
-++
-++  HMAC_CTX_free(ctx);
-+ }
-+
-+ typedef unsigned int (getoff)(uint8_t *buf, unsigned int len);
-+@@ -266,12 +268,13 @@ HMACsha256(const uint8_t *message, size_t messageLen, const uint8_t *key,
-+          size_t keylen, uint8_t *digest)
-+ {
-+   unsigned int digestLen;
-+-  HMAC_CTX ctx;
-++  HMAC_CTX *ctx = HMAC_CTX_new();
-+
-+   HMAC_setup(ctx, key, keylen);
-+   HMAC_crunch(ctx, message, messageLen);
-+   HMAC_finish(ctx, digest, digestLen);
-+
-++  HMAC_CTX_free(ctx);
-+   assert(digestLen == 32);
-+ }
-+
-+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
-+index 9f4e2c0..ba2c228 100644
-+--- a/librtmp/hashswf.c
-++++ b/librtmp/hashswf.c
-+@@ -57,10 +57,10 @@
-+ #include <openssl/sha.h>
-+ #include <openssl/hmac.h>
-+ #include <openssl/rc4.h>
-+-#define HMAC_setup(ctx, key, len)     HMAC_CTX_init(&ctx); HMAC_Init_ex(&ctx, (unsigned char *)key, len, EVP_sha256(), 0)
-+-#define HMAC_crunch(ctx, buf, len)    HMAC_Update(&ctx, (unsigned char *)buf, len)
-+-#define HMAC_finish(ctx, dig, dlen)   HMAC_Final(&ctx, (unsigned char *)dig, &dlen);
-+-#define HMAC_close(ctx)       HMAC_CTX_cleanup(&ctx)
-++#define HMAC_setup(ctx, key, len)     HMAC_CTX_reset(ctx); HMAC_Init_ex(ctx, (unsigned char *)key, len, EVP_sha256(), 0)
-++#define HMAC_crunch(ctx, buf, len)    HMAC_Update(ctx, (unsigned char *)buf, len)
-++#define HMAC_finish(ctx, dig, dlen)   HMAC_Final(ctx, (unsigned char *)dig, &dlen);
-++#define HMAC_close(ctx)
-+ #endif
-+
-+ extern void RTMP_TLS_Init();
-+@@ -289,7 +289,7 @@ leave:
-+ struct info
-+ {
-+   z_stream *zs;
-+-  HMAC_CTX ctx;
-++  HMAC_CTX *ctx;
-+   int first;
-+   int zlib;
-+   int size;
-+@@ -582,6 +582,10 @@ RTMP_HashSWF(const char *url, unsigned int *size, unsigned char *hash,
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,DUMP_ARG);
+++#endif
+++	
++ /*
++  * write sessions to the control socket
++  */
++@@ -1430,7 +1484,9 @@ dump_sess(const int control_sock, LHASH_OF(TABNODE) *const sess, BACKEND *const
++ 
++     a.control_sock = control_sock;
++     a.backends = backends;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_DUMP_ARG(sess, t_dump_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, sess, LHASH_DOALL_ARG_FN(t_dump), DUMP_ARG, &a);
++ #else
++     lh_doall_arg(sess, LHASH_DOALL_ARG_FN(t_dump), &a);
++@@ -1664,6 +1720,13 @@ thr_control(void *arg)
 +     }
-+
-+   in.first = 1;
-++  in.ctx = HMAC_CTX_new();
-++  if (!in.ctx)
-++    goto out;
-++
-+   HMAC_setup(in.ctx, "Genuine Adobe Flash Player 001", 30);
-+   inflateInit(&zs);
-+   in.zs = &zs;
-+@@ -621,7 +625,7 @@ RTMP_HashSWF(const char *url, unsigned int *size, unsigned char *hash,
-+                 "%s: couldn't open %s for writing, errno %d (%s)",
-+                 __FUNCTION__, path, err, strerror(err));
-+             ret = -1;
-+-            goto out;
-++            goto free_ctx;
-+           }
-+         fseek(f, 0, SEEK_END);
-+         q = strchr(url, '?');
-+@@ -649,6 +653,8 @@ RTMP_HashSWF(const char *url, unsigned int *size, unsigned char *hash,
-+       }
-+     }
-+   HMAC_close(in.ctx);
-++free_ctx:
-++  HMAC_CTX_free(in.ctx);
-+ out:
-+   free(path);
-+   if (f)
-+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
-+index a2863b0..c995568 100644
-+--- a/librtmp/rtmp.c
-++++ b/librtmp/rtmp.c
-+@@ -245,9 +245,7 @@ RTMP_TLS_Init()
-+       "ca.pem", GNUTLS_X509_FMT_PEM);
-+ #elif !defined(NO_SSL) /* USE_OPENSSL */
-+   /* libcrypto doesn't need anything special */
-+-  SSL_load_error_strings();
-+-  SSL_library_init();
-+-  OpenSSL_add_all_digests();
-++  OPENSSL_init_crypto(OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
-+   RTMP_TLS_ctx = SSL_CTX_new(SSLv23_method());
-+   SSL_CTX_set_options(RTMP_TLS_ctx, SSL_OP_ALL);
-+   SSL_CTX_set_default_verify_paths(RTMP_TLS_ctx);
-+--
-+2.14.1
-+
++ }
++ 
+++#ifndef SSL3_ST_SR_CLNT_HELLO_A
+++# define SSL3_ST_SR_CLNT_HELLO_A (0x110|SSL_ST_ACCEPT)
+++#endif
+++#ifndef SSL23_ST_SR_CLNT_HELLO_A
+++# define SSL23_ST_SR_CLNT_HELLO_A (0x210|SSL_ST_ACCEPT)
+++#endif
+++		
++ void
++ SSLINFO_callback(const SSL *ssl, int where, int rc)
++ {
 -- 
 2.17.1
