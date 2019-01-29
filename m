@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:12:39 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/pango: add
+Date: Tue, 29 Jan 2019 17:12:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/pango: add
  upstream security fix for CVE-2018-15120
-Message-ID: <20190129161151.4231081972@busybox.osuosl.org>
+Message-ID: <20190129161202.6E0EE81972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a27bb7320399c8f70d72d100d45fa6eaa919096
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0bc231e916512b958c146708f6abafa97ecc177c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 libpango in Pango 1.40.8 through 1.42.3, as used in hexchat and other
 products, allows remote attackers to cause a denial of service (application
