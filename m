@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:58:03 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] Revert "avrdude: add
+Date: Tue, 29 Jan 2019 22:59:18 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] Revert "avrdude: add
  license information"
-Message-ID: <20190129215804.3CC5A82641@busybox.osuosl.org>
+Message-ID: <20190129215817.BC25B81607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=541a8f407c6fd570c1465985d836ca9fc46b9bef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c48c4c65ad4a49f81c02d4dd77331edd6d2bd1fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 This reverts commit d1f545004bf0533064363d87c2d7c71e7acf7435 from 2014
 because the added variables already existed. The real problem at the
