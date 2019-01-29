@@ -1,72 +1,143 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Jan 2019 14:39:45 +0100
-Subject: [Buildroot] [git commit] ffmpeg: fix static linking build
- failure when using libavutil
-In-Reply-To: <5d3cbc8e-e846-65ed-6ef9-6c5f3dcf4933@micronovasrl.com>
-References: <20190128233144.1433A8132A@busybox.osuosl.org>
- <2b98573b-12e5-5edb-e14c-bf867162f913@mind.be>
- <5d3cbc8e-e846-65ed-6ef9-6c5f3dcf4933@micronovasrl.com>
-Message-ID: <0535ae91-47fa-5a31-5ff6-7977c5bbbe8b@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Jan 2019 15:46:58 +0100
+Subject: [Buildroot] [PATCH 1/1] systemd: fix build on mips32
+Message-ID: <20190129144658.12069-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/e484bc976266633029b26c8e21959ae4e9137da3
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ev_t-var-to-device_path_parse_major_minor.patch | 116 +++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
+ create mode 100644 package/systemd/0013-Pass-separate-dev_t-var-to-device_path_parse_major_minor.patch
 
-On 29/01/2019 13:30, Giulio Benetti wrote:
-> Hi Arnout,
-> 
-> Il 29/01/2019 10:03, Arnout Vandecappelle ha scritto:
->> ? Oopsie...
->>
->> On 29/01/2019 00:16, Arnout Vandecappelle (Essensium/Mind) wrote:
->>> commit:
->>> https://git.buildroot.net/buildroot/commit/?id=483db9908985d023b858c0b59d4016f9abb4b6f9
->>>
->>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>>
->>> If a package tries to static link with libavutil it fails due to the
->>> lack of libavutil private dependencies in libavutil.pc (-ldrm in this
->>> case).
->>>
->>> Add patch to:
->>> - Check if libdrm is present.
->>> - Add it to Libs.private: in libavutil.pc if present.
->>
->> ? I didn't want to push this one, it was just a test. The patch no longer applies
->> to ffmpeg 3.4.5 so this is causing autobuilder breakage. Therefore, I pushed a
->> revert commit.
-> 
-> I've forgot it there pending on patchwork after ffmpeg bump.
-
- I've marked it as Changes Requested now.
-
-> 
->> ? Giulio, FYI, upstream has added an explicit $LIBDRM but not to Libs.Private, so
->> the static linking case still breaks for the same reason. The patch just needs
->> to be rebased (and sent upstream).
-> 
-> I've tried several times to discuss this on ffmpeg-devel:
-> [1] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235269.html
-> but they ignored my last patch:
-> [2] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235417.html
-> to fix the previous I've sent:
-> [3] http://ffmpeg.org/pipermail/ffmpeg-devel/2018-October/235269.html
-> 
-> I can't understand why they don't want to upstream my last patch[2]...
-
- Same as everywhere: too many patches, too few reviewers. The reactions to v1
-seemed to be positive. So if v2 still applies to current ffmpeg master, just
-ping it; if it needs to be rebased, rebase it and resubmit.
-
- Regards,
- Arnout
-
-> 
-> Anyway I'm going to submit the last one for Buildroot asap.
-> I'm going to reproduce it right now.
-> 
-> Best regards
-> 
+diff --git a/package/systemd/0013-Pass-separate-dev_t-var-to-device_path_parse_major_minor.patch b/package/systemd/0013-Pass-separate-dev_t-var-to-device_path_parse_major_minor.patch
+new file mode 100644
+index 0000000000..eb7e0a2705
+--- /dev/null
++++ b/package/systemd/0013-Pass-separate-dev_t-var-to-device_path_parse_major_minor.patch
+@@ -0,0 +1,116 @@
++From f5855697aa19fb92637e72ab02e4623abe77f288 Mon Sep 17 00:00:00 2001
++From: YunQiang Su <syq@debian.org>
++Date: Tue, 25 Dec 2018 19:01:17 +0800
++Subject: [PATCH] Pass separate dev_t var to device_path_parse_major_minor
++
++MIPS/O32's st_rdev member of struct stat is unsigned long, which
++is 32bit, while dev_t is defined as 64bit, which make some problems
++in device_path_parse_major_minor.
++
++Don't pass st.st_rdev, st_mode to device_path_parse_major_minor,
++while pass 2 seperate variables. The result of stat is alos copied
++out into these 2 variables. Fixes: #11247
++
++[Retrieved from:
++https://github.com/systemd/systemd/commit/f5855697aa19fb92637e72ab02e4623abe77f288]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/core/cgroup.c | 35 ++++++++++++++++++++++-------------
++ 1 file changed, 22 insertions(+), 13 deletions(-)
++
++diff --git a/src/core/cgroup.c b/src/core/cgroup.c
++index 7b817dc225e..ed2f331b33e 100644
++--- a/src/core/cgroup.c
+++++ b/src/core/cgroup.c
++@@ -396,26 +396,31 @@ static void cgroup_xattr_apply(Unit *u) {
++ }
++ 
++ static int lookup_block_device(const char *p, dev_t *ret) {
++-        struct stat st = {};
+++        dev_t rdev, dev = 0;
+++        mode_t mode;
++         int r;
++ 
++         assert(p);
++         assert(ret);
++ 
++-        r = device_path_parse_major_minor(p, &st.st_mode, &st.st_rdev);
+++        r = device_path_parse_major_minor(p, &mode, &rdev);
++         if (r == -ENODEV) { /* not a parsable device node, need to go to disk */
+++                struct stat st;
++                 if (stat(p, &st) < 0)
++                         return log_warning_errno(errno, "Couldn't stat device '%s': %m", p);
+++                rdev = (dev_t)st.st_rdev;
+++                dev = (dev_t)st.st_dev;
+++                mode = st.st_mode;
++         } else if (r < 0)
++                 return log_warning_errno(r, "Failed to parse major/minor from path '%s': %m", p);
++ 
++-        if (S_ISCHR(st.st_mode)) {
+++        if (S_ISCHR(mode)) {
++                 log_warning("Device node '%s' is a character device, but block device needed.", p);
++                 return -ENOTBLK;
++-        } else if (S_ISBLK(st.st_mode))
++-                *ret = st.st_rdev;
++-        else if (major(st.st_dev) != 0)
++-                *ret = st.st_dev; /* If this is not a device node then use the block device this file is stored on */
+++        } else if (S_ISBLK(mode))
+++                *ret = rdev;
+++        else if (major(dev) != 0)
+++                *ret = dev; /* If this is not a device node then use the block device this file is stored on */
++         else {
++                 /* If this is btrfs, getting the backing block device is a bit harder */
++                 r = btrfs_get_block_device(p, ret);
++@@ -436,7 +441,8 @@ static int lookup_block_device(const char *p, dev_t *ret) {
++ }
++ 
++ static int whitelist_device(BPFProgram *prog, const char *path, const char *node, const char *acc) {
++-        struct stat st = {};
+++        dev_t rdev;
+++        mode_t mode;
++         int r;
++ 
++         assert(path);
++@@ -445,11 +451,12 @@ static int whitelist_device(BPFProgram *prog, const char *path, const char *node
++         /* Some special handling for /dev/block/%u:%u, /dev/char/%u:%u, /run/systemd/inaccessible/chr and
++          * /run/systemd/inaccessible/blk paths. Instead of stat()ing these we parse out the major/minor directly. This
++          * means clients can use these path without the device node actually around */
++-        r = device_path_parse_major_minor(node, &st.st_mode, &st.st_rdev);
+++        r = device_path_parse_major_minor(node, &mode, &rdev);
++         if (r < 0) {
++                 if (r != -ENODEV)
++                         return log_warning_errno(r, "Couldn't parse major/minor from device path '%s': %m", node);
++ 
+++                struct stat st;
++                 if (stat(node, &st) < 0)
++                         return log_warning_errno(errno, "Couldn't stat device %s: %m", node);
++ 
++@@ -457,22 +464,24 @@ static int whitelist_device(BPFProgram *prog, const char *path, const char *node
++                         log_warning("%s is not a device.", node);
++                         return -ENODEV;
++                 }
+++                rdev = (dev_t) st.st_rdev;
+++                mode = st.st_mode;
++         }
++ 
++         if (cg_all_unified() > 0) {
++                 if (!prog)
++                         return 0;
++ 
++-                return cgroup_bpf_whitelist_device(prog, S_ISCHR(st.st_mode) ? BPF_DEVCG_DEV_CHAR : BPF_DEVCG_DEV_BLOCK,
++-                                                   major(st.st_rdev), minor(st.st_rdev), acc);
+++                return cgroup_bpf_whitelist_device(prog, S_ISCHR(mode) ? BPF_DEVCG_DEV_CHAR : BPF_DEVCG_DEV_BLOCK,
+++                                                   major(rdev), minor(rdev), acc);
++ 
++         } else {
++                 char buf[2+DECIMAL_STR_MAX(dev_t)*2+2+4];
++ 
++                 sprintf(buf,
++                         "%c %u:%u %s",
++-                        S_ISCHR(st.st_mode) ? 'c' : 'b',
++-                        major(st.st_rdev), minor(st.st_rdev),
+++                        S_ISCHR(mode) ? 'c' : 'b',
+++                        major(rdev), minor(rdev),
++                         acc);
++ 
++                 /* Changing the devices list of a populated cgroup might result in EINVAL, hence ignore EINVAL here. */
+-- 
+2.14.1
