@@ -1,25 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:10:06 +0100
-Subject: [Buildroot] [PATCH 1/1] mbedtls: security bump to version 2.7.9
-In-Reply-To: <20190129202735.3298-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 29 Jan 2019 21:27:35 +0100")
-References: <20190129202735.3298-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736pb2k01.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Jan 2019 23:33:54 +0100
+Subject: [Buildroot] [PATCH 1/2] libpcap: remove unrecognized canusb option
+Message-ID: <20190129223355.30600-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+canusb has been removed since version 1.8.1 and
+https://github.com/the-tcpdump-group/libpcap/commit/93ca5ff7030aaf1219e1de05ec89a68384bfc50b
 
- > CVE-2018-19608 is fixed by bumping mbdedtls to a version greater or
- > equal to 2.7.8, see
- > https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2018-03
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libpcap/libpcap.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index c4c5f31465..daa369f66c 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -38,13 +38,6 @@ else
+ LIBPCAP_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUSB),y)
+-LIBPCAP_CONF_OPTS += --enable-canusb
+-LIBPCAP_DEPENDENCIES += libusb
+-else
+-LIBPCAP_CONF_OPTS += --disable-canusb
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ LIBPCAP_DEPENDENCIES += libnl
+ LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
 -- 
-Bye, Peter Korsgaard
+2.14.1
