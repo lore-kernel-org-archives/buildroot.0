@@ -1,31 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:27:25 +0100
-Subject: [Buildroot] [PATCH 1/1] php: security bump to 7.3.1
-In-Reply-To: <20190119212934.85216-1-aduskett@gmail.com> (aduskett@gmail.com's
- message of "Sat, 19 Jan 2019 16:29:34 -0500")
-References: <20190119212934.85216-1-aduskett@gmail.com>
-Message-ID: <878sz377ki.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 17:27:57 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/php: security
+ bump to 7.2.14
+Message-ID: <20190129162659.35B3782283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6a1cb96e52fb7f3beb49854a5a3bd98b50362075
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > From: Adam Duskett <Aduskett@gmail.com>
- > Fixes the following security issue:
+Fixes the following security issue:
 
- > - CVE-2018-19935: Allows remote attackers to cause a denial of service
- >   (NULL pointer dereference and application crash) via an empty string in the
- >   message argument to the imap_mail function.
- > https://www.cvedetails.com/cve/CVE-2018-19935/
+- CVE-2018-19935: Allows remote attackers to cause a denial of service (NULL
+  pointer dereference and application crash) via an empty string in the
+  message argument to the imap_mail function.
+  https://www.cvedetails.com/cve/CVE-2018-19935/
 
- > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Given the fallout from moving to 7.3.x, I have NOT applied this to
-2018.02.x / 2018.11.x. Instead I have applied a patch to bump the
-version to 7.2.14, which fixes the same CVE.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 094977c548..acbe499536 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 14b0429abdb46b65c843e5882c9a8c46b31dfbf279c747293b8ab950c2644a4b  php-7.2.13.tar.xz
++sha256 ee3f1cc102b073578a3c53ba4420a76da3d9f0c981c02b1664ae741ca65af84f  php-7.2.14.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b11ee4cf4a..d140565322 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.2.13
++PHP_VERSION = 7.2.14
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
