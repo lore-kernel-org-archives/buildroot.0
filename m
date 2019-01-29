@@ -1,85 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 21:58:50 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] libkcapi: fix build with
- gcc 8.2.x
-Message-ID: <20190129205826.E6ED481516@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 22:05:27 +0100
+Subject: [Buildroot] [PATCH 1/1] go: security bump to 1.11.5
+In-Reply-To: <20190124081633.16600-1-christian@paral.in> (Christian Stewart's
+ message of "Thu, 24 Jan 2019 00:16:33 -0800")
+References: <20190124081633.16600-1-christian@paral.in>
+Message-ID: <87imy741k8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7927eca55936a158e1b74f38b7ab377aa60fded1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
+ > Go 1.11.5 addresses a reported security issue, CVE-2019-6486.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0c35c287bcadd88dba939cdddf865d94d45454bd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...s-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Committed to 2018.11.x, thanks.
 
-diff --git a/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-new file mode 100644
-index 0000000000..a4c352d30c
---- /dev/null
-+++ b/package/libkcapi/0001-apps-kcapi-hasher.c-fix-build-with-gcc-8.2.x.patch
-@@ -0,0 +1,54 @@
-+From dcb02c1639c2ff05938c01eaa41286a2e2f8d698 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 20 Jan 2019 20:04:13 +0100
-+Subject: [PATCH] apps/kcapi-hasher.c: fix build with gcc 8.2.x
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8355bc42238e885f7f11ed3d9d37fc55ebdead2b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/smuellerDD/libkcapi/pull/76]
-+---
-+ apps/kcapi-hasher.c | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/apps/kcapi-hasher.c b/apps/kcapi-hasher.c
-+index d6be685..7172b12 100644
-+--- a/apps/kcapi-hasher.c
-++++ b/apps/kcapi-hasher.c
-+@@ -357,16 +357,20 @@ out:
-+ }
-+ 
-+ /*
-+- * GCC v8.1.0 introduced -Wstringop-truncation but it is not smart enough to
-+- * find that cursor string will be NULL-terminated after all paste() calls and
-+- * warns with:
-++ * GCC v8.1.0 introduced -Wstringop-truncation and GCC v8.2.0 introduced
-++ * -Wstringop-overflow but it is not smart enough to find that cursor string
-++ * will be NULL-terminated after all paste() calls and warns with:
-+  * error: 'strncpy' destination unchanged after copying no bytes [-Werror=stringop-truncation]
-+  * error: 'strncpy' output truncated before terminating nul copying 5 bytes from a string of the same length [-Werror=stringop-truncation]
-++ * error: 'strncpy' specified bound depends on the length of the source argument [-Werror=stringop-overflow=]
-+  */
-+ #pragma GCC diagnostic push
-+ #if GCC_VERSION >= 80100
-+ #pragma GCC diagnostic ignored "-Wstringop-truncation"
-+ #endif
-++#if GCC_VERSION >= 80200
-++#pragma GCC diagnostic ignored "-Wstringop-overflow"
-++#endif
-+ static char *paste(char *dst, const char *src, size_t size)
-+ {
-+ 	strncpy(dst, src, size);
-+@@ -417,7 +421,7 @@ static char *get_hmac_file(const char *filename, const char *checkdir)
-+ 	strncpy(cursor, "\0", 1);
-+ 	return checkfile;
-+ }
-+-#pragma GCC diagnostic pop /* -Wstringop-truncation */
-++#pragma GCC diagnostic pop /* -Wstringop-truncation -Wstringop-overflow */
-+ 
-+ static int hash_files(const struct hash_params *params,
-+ 		      char *filenames[], uint32_t files,
-+-- 
-+2.14.1
-+
+We use go 1.9.7 on the 2018.02.x branch. It is not really clear to me if
+1.9.x is also affected?
+
+-- 
+Bye, Peter Korsgaard
