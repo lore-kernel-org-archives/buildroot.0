@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:11:02 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libsndfile: add
+Date: Tue, 29 Jan 2019 17:11:16 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libsndfile: add
  upstream post-1.0.28 security fixes
-Message-ID: <20190129161001.F05E0815B1@busybox.osuosl.org>
+Message-ID: <20190129161015.0B2188177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e27f17033ab6cd14eb73979aabf7707fc03372
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5d61338f8bdd0a0aa818f58da20eb7b4917a78be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes the following security vulnerabilities:
 
