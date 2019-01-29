@@ -1,55 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 19:31:40 +0100
+Date: Tue, 29 Jan 2019 19:31:46 +0100
 Subject: [Buildroot] [git commit branch/2018.11.x] dmalloc: fix build with
- strdup
-Message-ID: <20190129183152.EF90A81617@busybox.osuosl.org>
+ strndup
+Message-ID: <20190129183153.04D4A81617@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d111eb306dcb63f3969b4097d226a8e58485e8d
+commit: https://git.buildroot.net/buildroot/commit/?id=1fc14f1231f25f564afea72d008cb069454fad5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/3f2518f7a9e87034cd501ac3d121ea3a33827e7d
+ - http://autobuild.buildroot.org/results/5cfa01a41951ee3be2e8c1cb10edac3722d72c77
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c10e96b3310d9a4a21016d4e9292ace7898e9c5c)
+(cherry picked from commit 9c1d2f1dea659eb1d95d52e9c9838cd39099704c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmalloc/0005-fix-strdup.patch | 24 ++++++++++++++++++++++++
+ package/dmalloc/0006-fix-strndup.patch | 24 ++++++++++++++++++++++++
  1 file changed, 24 insertions(+)
 
-diff --git a/package/dmalloc/0005-fix-strdup.patch b/package/dmalloc/0005-fix-strdup.patch
+diff --git a/package/dmalloc/0006-fix-strndup.patch b/package/dmalloc/0006-fix-strndup.patch
 new file mode 100644
-index 0000000000..5884df6a89
+index 0000000000..a1865acb85
 --- /dev/null
-+++ b/package/dmalloc/0005-fix-strdup.patch
++++ b/package/dmalloc/0006-fix-strndup.patch
 @@ -0,0 +1,24 @@
-+From 59d73a473f1c1a31bcba90d314f956d0bcc3de95 Mon Sep 17 00:00:00 2001
++From 005d92c2cebbde5c8623daa29725f7a62b18df7c Mon Sep 17 00:00:00 2001
 +From: Siana Gearz <siana.sg@live.de>
-+Date: Sat, 8 Sep 2012 22:55:17 +0200
-+Subject: [PATCH] Fix strdup
++Date: Sat, 8 Sep 2012 22:44:35 +0200
++Subject: [PATCH] Fix strndup
 +
 +[Retrieved from:
-+https://github.com/siana/dmalloc/commit/59d73a473f1c1a31bcba90d314f956d0bcc3de95]
++https://github.com/siana/dmalloc/commit/005d92c2cebbde5c8623daa29725f7a62b18df7c]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
 + dmalloc.h.3 | 1 +
 + 1 file changed, 1 insertion(+)
 +
 +diff --git a/dmalloc.h.3 b/dmalloc.h.3
-+index d3d1c13..3fc573a 100644
++index 8bda997..fb538a8 100644
 +--- a/dmalloc.h.3
 ++++ b/dmalloc.h.3
-+@@ -459,6 +459,7 @@ DMALLOC_PNT	valloc(DMALLOC_SIZE size);
++@@ -429,6 +429,7 @@ char	*strdup(const char *string);
 +  *
-+  * string -> String we are duplicating.
++  * len -> Length of the string to duplicate.
 +  */
-++#undef strdup
+++#undef strndup
 + extern
-+ char	*strdup(const char *string);
-+ #endif /* ifndef DMALLOC_STRDUP_MACRO */
++ char	*strndup(const char *string, const DMALLOC_SIZE len);
++ 
