@@ -1,47 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Jan 2019 23:03:26 +0100
-Subject: [Buildroot] [PATCH v3] syslog-ng: fix builds with static libc
-In-Reply-To: <20190128072934.12788-1-judge.packham@gmail.com>
-References: <20190128072934.12788-1-judge.packham@gmail.com>
-Message-ID: <20190129230326.32c51889@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Jan 2019 23:03:52 +0100
+Subject: [Buildroot] [PATCH] qemu: Change CPU in qemu command for aarch64
+In-Reply-To: <87ef8xn5bw.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 27 Jan 2019 22:44:35 +0100")
+References: <20190124165309.2001-1-gerome.burlats@smile.fr>
+ <87ef8xn5bw.fsf@dell.be.48ers.dk>
+Message-ID: <87fttb2kaf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-This commit doesn't really "fix building with static libc", because it
-was forbidden until now. It rather "allows" it.
+>>>>> "Gerome" == Gerome Burlats <gerome.burlats@smile.fr> writes:
+ >> This commit changes to "cortex-a53" the CPU model in the qemu command
+ >> for aarch64 (since it is the default one for this architecture).
 
-On Mon, 28 Jan 2019 20:29:34 +1300
-Chris Packham <judge.packham@gmail.com> wrote:
+ >> Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
+ >> Cc: Romain Naour <romain.naour@smile.fr>
+ >> ---
 
-> Bring in an upstream patch to fix builds for targets which lack dlfcn.h
-> and revert "package/syslog-ng: depend on !BR2_STATIC_LIBS".
-> 
-> This reverts commit 44dbd2907c5995b0b0c56cb2274dc60415205dd8. Now that
-> upstream has different fix for the build issues with a static libc we
-> can re-enable syslog-ng on these systems.
-> 
-> Fixes:
-> - http://autobuild.buildroot.net/results/c0bca852e053cd0e021205b3a949e750ae602333
+ >> cortex-a53 is the default cpu for aarch64, but some defconfigs, for
+ >> example raspberrypi3_64_defconfig, still have "BR2_cortex_a53=y"
+ >> (maybe at one point, this cpu was not the default).
+ >> Should this line stay in the defconfig for info, even if it is not used ?
+ >> If we generate the defconfig with "make savedefconfig", BR2_cortex_a53=y is indeed not added in the file.
 
-Also, this commit doesn't fix this autobuilder issue: the autobuilder
-issue was resolved by your commit
-44dbd2907c5995b0b0c56cb2274dc60415205dd8, which prevented selecting
-syslog-ng in BR2_STATIC_LIBS=y configurations.
+ > Correct. We typically do add for clarity and robustness against changes
+ > of the default value.
 
-What this new commit does is re-allow selecting syslog-ng in
-BR2_STATIC_LIBS=y configurations.
+ > It is correct that savedefconfig will strip such redundant entries, but
+ > as you can see from the comments, qemu_aarch64_virt_defconfig is edited
+ > by hand.
 
-I've adjusted the commit log accordingly, and applied to master.
+ > Committed after extending the commit message and adding an explicit
+ > BR2_cortex_a53=y to the defconfig, thanks.
 
-Thanks!
+Committed to 2018.02.x and 2018.11.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
