@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 17:33:50 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] tekui: disable parallel
+Date: Tue, 29 Jan 2019 17:33:45 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] tekui: disable parallel
  build
-Message-ID: <20190129163255.52626821E6@busybox.osuosl.org>
+Message-ID: <20190129163304.8E858821E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa5bbe4b85e00a220928664a1252c565a71fd295
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f56cc090da9de8b4cb2f057b9ea4f7e3014e102
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 It seems tekui has parallel build issues since November 2017:
  - Fatal error: can't create build/posix/directfb_lua.lo: No such file or directory
