@@ -1,51 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 16:49:57 +0100
-Subject: [Buildroot] [PATCH v7 3/8] package/pound: Fix build with
- OpenSSL 1.1.x
-In-Reply-To: <20190129093919.22060-3-patrick.havelange@essensium.com> (Patrick
- Havelange's message of "Tue, 29 Jan 2019 10:39:14 +0100")
-References: <20190129093919.22060-1-patrick.havelange@essensium.com>
- <20190129093919.22060-3-patrick.havelange@essensium.com>
-Message-ID: <87lg3379ay.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 16:40:39 +0100
+Subject: [Buildroot] [git commit] package/libshout: Add support for openssl
+ 1.1.x
+Message-ID: <20190129154912.6F5B4814EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=93cd0fe748b5bc3d1ef0b4358656ae09fecbb089
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Add patch from Debian:
 
- > ---
- > Changes v7:
- >   - none
+https://sources.debian.org/data/main/libs/libshout/2.4.1-2/debian/patches/01-libshout-tls-compile-with-OpenSSL-1.1.0.patch
 
- > Changes v6:
- >   - none
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...3-libshout-tls-compile-with-OpenSSL-1.1.0.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-This looks to break building against libressl:
-
-/home/peko/source/buildroot/output-pound/host/bin/arm-none-linux-gnueabi-gcc -DF_CONF=\"/etc/pound.cfg\" -DVERSION=\"2.8\" -DC_SSL=\"\" -DC_T_RSA=\"0\" -DC_DH_LEN=\"2048\" -DC_MAXBUF=\"0\" -DC_OWNER=\"peko\" -DC_GROUP=\"peko\" -DC_SUPER=\"0\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -pthread -DUPER -DNEED_STACK -DHAVE_SYSLOG_H=1 -pthread -DDH_LEN=2048 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_REENTRANT -D_THREAD_SAFE -c -o svc.o svc.c
-In file included from poundctl.c:28:0:
-pound.h:348:3: warning: data definition has no type or storage class [enabled by default]
-   DEFINE_LHASH_OF(TABNODE);
-   ^
-In file included from http.c:28:0:
-pound.h:348:3: warning: data definition has no type or storage class [enabled by default]
-   DEFINE_LHASH_OF(TABNODE);
-   ^
-In file included from pound.c:28:0:
-pound.h:348:3: warning: data definition has no type or storage class [enabled by default]
-   DEFINE_LHASH_OF(TABNODE);
-   ^
-In file included from config.c:32:0:
-pound.h:348:3: warning: data definition has no type or storage class [enabled by default]
-   DEFINE_LHASH_OF(TABNODE);
-   ^
-config.c: In function 't_hash':
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+new file mode 100644
+index 0000000000..49b71501ed
+--- /dev/null
++++ b/package/libshout/0003-libshout-tls-compile-with-OpenSSL-1.1.0.patch
+@@ -0,0 +1,59 @@
++From 01fafc449f0de56743d08e7976933c49e2915bfa Mon Sep 17 00:00:00 2001
++From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++Date: Wed, 15 Nov 2017 12:46:25 +0000
++Subject: [PATCH] tls: compile with OpenSSL 1.1.0
++
++The init functions are not longer required in OpenSSL 1.1 so I dropped
++them.
++
++TLSv1_client_method() should not be used because it enables only the
++TLSv1.0 protocol. Better is to use SSLv23_client_method() which enable
++all the protocols including TLSv1.2. With this functions SSLv2 and SSLv3
++is theoretically possible but as of today those protocols are usually
++build-time disabled.
++To avoid all this OpenSSL 1.1 provides TLS_client_method() which is aim
++to provide to highest TLS protocol version (same as
++SSLv23_client_method() but it is deprecated in 1.1).
++
++Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
++---
++ src/tls.c | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/src/tls.c b/src/tls.c
++index 4562c7327077..e0e5c1a5f079 100644
++--- a/src/tls.c
+++++ b/src/tls.c
++@@ -24,6 +24,7 @@
++ #endif
++ 
++ #include <shout/shout.h>
+++#include <string.h>
++ #include "shout_private.h"
++ 
++ #ifndef XXX_HAVE_X509_check_host
++@@ -61,14 +62,17 @@ shout_tls_t *shout_tls_new(shout_t *self, sock_t socket)
++ 
++ static inline int tls_setup(shout_tls_t *tls)
++ {
++-	SSL_METHOD *meth;
++-
+++	const SSL_METHOD *meth;
+++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
++ 	SSL_library_init();
++ 	SSL_load_error_strings();
++ 	SSLeay_add_all_algorithms();
++- 	SSLeay_add_ssl_algorithms();
+++	SSLeay_add_ssl_algorithms();
++ 
++-	meth = TLSv1_client_method();
+++	meth = SSLv23_client_method();
+++#else
+++	meth = TLS_client_method();
+++#endif
++ 	if (!meth)
++ 		goto error;
++ 
++-- 
++2.15.0
