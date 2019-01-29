@@ -1,35 +1,41 @@
-From: David Picard <dplamp@gmx.com>
-Date: Tue, 29 Jan 2019 19:28:31 +0100
-Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
-Message-ID: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Jan 2019 19:29:52 +0100
+Subject: [Buildroot] [PATCH] package/apache: security bump to version
+ 2.4.38
+In-Reply-To: <20190122181542.11918-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 22 Jan 2019 19:15:42 +0100")
+References: <20190122181542.11918-1-peter@korsgaard.com>
+Message-ID: <874l9r5nbz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-I can build Qt5 successfully. I tested my custom application in QEMU, 
-with the same disk.img that I use on the read target (AMD Geode LX).
+ > Fixes the following security vulnerabilities:
+ >   *) SECURITY: CVE-2018-17199 (cve.mitre.org)
+ >      mod_session: mod_session_cookie does not respect expiry time allowing
+ >      sessions to be reused.  [Hank Ibell]
 
-But on the target, whenever I link one of my programs with Qt5, it 
-terminates straight away with a SIGILL (illegal instruction). Including 
-a simple printf("Hello world") that doesn't include nor call in Qt5.
+ >   *) SECURITY: CVE-2018-17189 (cve.mitre.org)
+ >      mod_http2: fixes a DoS attack vector. By sending slow request bodies
+ >      to resources not consuming them, httpd cleanup code occupies a server
+ >      thread unnecessarily. This was changed to an immediate stream reset
+ >      which discards all stream state and incoming data.  [Stefan Eissing]
 
-With gdbserver + gdb, I could find the instruction where the SIGILL is 
-thrown :
-movq?? %xmm0,0x8(%esp)
-with op code :
-66 0F D6 44 24 08
+ >   *) SECURITY: CVE-2019-0190 (cve.mitre.org)
+ >      mod_ssl: Fix infinite loop triggered by a client-initiated
+ >      renegotiation in TLSv1.2 (or earlier) with OpenSSL 1.1.1 and
+ >      later.  PR 63052.  [Joe Orton]
 
-I'm not fluent in assembly code, but my guess is that the instruction is 
-not be supported by my CPU. Flags of /proc/cpuinfo : fpu de pse tsc msr 
-cx8 sep pge cmov clflush mmx mmxext 3dnowext 3dnow cpuid 3dnowprefetch 
-vmmcall
+ > For more details, see the CHANGES file:
+ > https://www.apache.org/dist/httpd/CHANGES_2.4.38
 
-I thought I could pass e.g. -march=geode when I build Qt. But I don't 
-know how to do it. I noticed a arch.conf file in the build directory but 
-it gest overwritten when I make qt5base-reconfigure...
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-David
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
