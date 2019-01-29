@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:55:35 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/s6-networking:
+Date: Tue, 29 Jan 2019 22:54:51 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/s6-networking:
  fix dependency when libressl is enabled
-Message-ID: <20190129215437.8853E821F3@busybox.osuosl.org>
+Message-ID: <20190129215525.60E70821F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1275545888261ba92372178dd04524248e61c33e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=52800efe23e2031ba1b97a180e3a99b194cc8ee8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
 actually dropped the dependency on s6-dns and s6 when libressl is
