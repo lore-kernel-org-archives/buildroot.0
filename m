@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:13:51 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libwebsock: Fix openssl
+Date: Tue, 29 Jan 2019 22:12:42 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] libwebsock: Fix openssl
  reporting in header
-Message-ID: <20190129211302.27CF182641@busybox.osuosl.org>
+Message-ID: <20190129211306.2FDCA82641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddc03afd425dd7a5a38a2897e6e3aba70960871b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f6b39438259a816cdeac792b30987dfd7b0970
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The websock_config.h file currently ends up being installed into the
 sysroot with a #include "config.h" line but the config.h file does not
