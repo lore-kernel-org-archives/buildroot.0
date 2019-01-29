@@ -1,32 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:32:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.4
-In-Reply-To: <87h8duqvkx.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 27 Jan 2019 10:49:18 +0100")
-References: <20190126094852.23546-1-bernd.kuhls@t-online.de>
- <87h8duqvkx.fsf@dell.be.48ers.dk>
-Message-ID: <87a7jj40bv.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 22:46:37 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: security
+ bump to version 4.8.8
+Message-ID: <20190129214628.0A15382641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=45a1b24ebd37869c8ee5e57b5b8e4f947141c4bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Release notes:
- >> https://www.samba.org/samba/history/samba-4.9.4.html
+Fixes the following security issues:
 
- > The releae notes mentions 3 CVEs, so I have changed the description to
- > mention that this is a security bump.
+- CVE-2018-14629 dns: Fix CNAME loop prevention using counter regression
+- CVE-2018-16853: Fix S4U2Self crash with MIT KDC build
+- CVE-2018-16853: Do not segfault if client is not set
 
- > Committed with that fixed, thanks.
+For more info, see the release notes:
+https://www.samba.org/samba/history/samba-4.8.8.html
 
-Committed to 2018.11.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-For 2018.02.x which uses 4.8.7 I will instead bump the version to 4.8.8,
-which fixes the same CVEs.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 2ecea7fa5a..1671440569 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.8.7.tar.asc
+-sha256 0f6f67932e8bb23ab83b43070037ac452f9fc5f20763857d2b67e209ee7cd362  samba-4.8.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.8.8.tar.asc
++sha256 3bc97ba7b827526b299e09a1c410f22d3a3c57bb46f1e67e8f93258945f8cf60  samba-4.8.8.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ed860fbda2..a8585f4ffb 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.8.7
++SAMBA4_VERSION = 4.8.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
