@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:02:39 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] qemu/aarch64-virt:
+Date: Tue, 29 Jan 2019 23:02:29 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] qemu/aarch64-virt:
  Emulate cortex-a53 in qemu to match Buildroot config
-Message-ID: <20190129220137.8D51A827FB@busybox.osuosl.org>
+Message-ID: <20190129220142.655C881344@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72db196e792344d09866f2a3ddd605641dac9847
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6d9be6a47ecfc6d4afa82c77d306935c393c98d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 qemu_aarch64_virt_defconfig (implicitly) specifies cortex-a53, so adjust the
 QEMU command line to also emulate a a53 instead of a57.
@@ -28,7 +28,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index 9e09d953f9..32025494bd 100644
+index 76fc2d6f32..1ff2fba47d 100644
 --- a/board/qemu/aarch64-virt/readme.txt
 +++ b/board/qemu/aarch64-virt/readme.txt
 @@ -1,6 +1,6 @@
@@ -40,7 +40,7 @@ index 9e09d953f9..32025494bd 100644
  The login prompt will appear in the terminal that started Qemu.
  
 diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index c94c4ac773..f9df2fb33e 100644
+index 2706544e52..a7b097ef40 100644
 --- a/configs/qemu_aarch64_virt_defconfig
 +++ b/configs/qemu_aarch64_virt_defconfig
 @@ -1,5 +1,6 @@
