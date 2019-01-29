@@ -1,60 +1,77 @@
-From: Joakim Bech <joakim.bech@linaro.org>
-Date: Tue, 29 Jan 2019 13:00:07 +0100
-Subject: [Buildroot] [PATCH v2 1/1] toolchain: update AArch32/AArch64
- toolchains to 8-2-2019.01
-In-Reply-To: <2f050b43-578d-2208-1cc6-e81df01f8b6d@mind.be>
-References: <20190128133500.7515-1-joakim.bech@linaro.org>
- <20190128170533.16555-1-joakim.bech@linaro.org>
- <f01f063d-4b46-62b9-12f4-1cba370a3029@mind.be>
- <20190129102608.4k3wfli3dyomb7aa@debby>
- <1e40561f-02d9-c356-8630-c301251048ff@mind.be>
- <2f050b43-578d-2208-1cc6-e81df01f8b6d@mind.be>
-Message-ID: <20190129120007.bwfy3wwcgtd3xzi2@debby>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Jan 2019 13:13:13 +0100
+Subject: [Buildroot] [PATCH 0/2] OpenJDK: new package.
+In-Reply-To: <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
+References: <20190128163126.106059-1-aduskett@gmail.com>
+ <CAAXf6LX_oUqyC3HbkLFhUPR0GfpoOWgmwVHu09eP0FcBtPNGEg@mail.gmail.com>
+ <CAFSsvmrm1rah8CNv14a-WskzfB=dX3aVYx8ydAzU3ryaX8ZD4g@mail.gmail.com>
+Message-ID: <CAAXf6LWnMs5jF0VEcHBG-pNHaZei8k8-FkkmFX3yyx8SmZp2Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 29, 2019 at 12:34:33PM +0100, Arnout Vandecappelle wrote:
-> 
-> 
-> On 29/01/2019 12:27, Arnout Vandecappelle wrote:
-> >>> On 28/01/2019 18:05, Joakim Bech wrote:
-> >>> [snip]
-> >>>> +config BR2_KERNEL_HEADERS_5_00
-> >>>> +	bool "Linux 5.00.x kernel headers"
-> >>>> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
-> >>>  Adding support for the 5.0 headers should be a separate patch. See commit
-> >>> 649883d2c9957b7a7fcf81c4475f848ad8865ca1 for an example how it was done for 4.20.
-> >>>
-> >> So after looking a bit more into the git log of how patches where
-> >> created in the past it looks like I should create 4 patches, "pseudo git
-> >> log -4".
-> >> - toolchain-external: update Arm ARM 8.2-2019.01
-> >> - toolchain-external: update Arm AArch64-BE toolchain 8.2-2019.01
-> >> - toolchain-external: update Arm AArch64 toolchain 8.2-2019.01
-> >> - toolchain: add necessary options to support 5.0 kernel headers
-> >  Indeed, that's the way to go.
-> 
->  Hold on a moment, I'm having second thoughts on this... This toolchain is using
-> 5.0-rcX kernel headers. I'm not so sure that we will want that in our 2019.02
-> LTS release... So I expect that this patch will not get included in the 2919.02
-> cut-off, and will end up being superseded by the Arm 2019.03 release...
-> 
->  Peter?
-> 
->  That said, the part that adds support for 5.0 kernel headers is certainly
-> something we'd like to have in the 2019.02 LTS.
-> 
-That is actually sufficient for our (OP-TEE) usage, i.e., as mentioned
-in my earlier patch set we are pre-downloading the toolchain outside
-Buildroot. But we need the kernel header changes, otherwise we cannot
-upgrade our "pre-downloaded" toolchain. On the other hand, it's not the
-end of the world if we hold off with this for a month or two.
+El lun., 28 ene. 2019 a las 23:31, Adam Duskett (<aduskett@gmail.com>) escribi?:
+>
+> Hello;
+>
+> On Mon, Jan 28, 2019 at 2:36 PM Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+> >
+> > Hello,
+> > El lun., 28 ene. 2019 a las 17:31, <aduskett@gmail.com> escribi?:
+> > >
+> > > From: Adam Duskett <Aduskett@gmail.com>
+> > >
+> > > This patch series introduces BuildRoot to OpenJDK.
+> > >
+> > > A previous patch series for OpenJDK8 used the JDK Muricle page to download a
+> > > tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
+> > > repository. This repository allows us to use the GitHub macro instead of trying
+> > > to provide a nasty workaround when grabbing the source code.
+> > >
+> > > With this patch series, there are some quirks that I would like to detail:
+> > >
+> > > - The openjdk-bin package:
+> > > From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
+> > > "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
+> > > the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
+> > > porting OpenJDK to a new platform, the chances are that there already exists
+> > > another JDK for that platform that is usable as boot JDK.
+> > >
+> > > The rule of thumb is that the boot JDK for building JDK major version N should
+> > > be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
+> > > as boot JDK."
+> > >
+> > > This paradox causes an issue because every distribution I have used comes with
+> > > JDK8 by default. So there are two solutions that I could come up with:
+> > > 1) Require the host-system to have JDK N-1
+> > > 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
+> > >    repository, and use those binaries as the boot-jdk.
+> > >
+> > > - JDK >= 10 requires X11, even if building a headless version.
+> > >   It's unfortunate, but there isn't anything I cared to do about it.
+> >
+> > It should be possible to build without X11, with some changes.
+> > See also the openjdk package I sent last year as reference:
+> > http://lists.busybox.net/pipermail/buildroot/2018-February/213282.html
+> >
+> > Best regards,
+> > Thomas
+> Thank's Thomas!
+> I did see those patches and came to the conclusion that while it's
+> probably possible, for the initial
+> release I don't really want to go through the effort of
+> forward-porting those patches to JDK11.
+>
+> I am always welcome to patch-donations though!
 
-Anyhow, I'm holding off posting v3 until I've seen a reply from Peter.
 
--- 
-Regards,
-Joakim
+Thanks for your response to my comments.
+I have no particular interest myself either in using/improving
+openjdk. Our use case has vanished.
+So as long as you are aware of the previous patches, I'm good :-)
+
+Best regards,
+Thomas
