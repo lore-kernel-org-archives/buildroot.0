@@ -1,54 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Jan 2019 22:16:33 +0100
-Subject: [Buildroot] [git commit] support/testing/infra/basetest: support
- br2-external
-Message-ID: <20190129215346.CF97882285@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 22:14:55 +0100
+Subject: [Buildroot] [git commit] support/testing/infra/builder: configure
+ and build with make target and environment
+Message-ID: <20190129215346.C9AAF82285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d5d0124c795a4269e9ae81efcdd1a121dd2f739
+commit: https://git.buildroot.net/buildroot/commit/?id=07bbf1b4dd1fc97e31950b5ba827af7807386179
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some upcoming test cases can use one or more br2-external trees as
-fixtures that provide packages used only in runtime tests.
+Make the builder able to call 'VAR1=1 make VAR2=2 target'.
 
-Add support for br2-external into the BRTest class. Any test case can
-then provide a list of paths for being used as br2-external trees
-during the build of the image to test.
+Allow sending extra parameters to be added to the end of make command
+line. Uses for these purposes:
+ - to configure a br2-external, using the 'BR2_EXTERNAL="dir" variable.
+ - to specify a make target, such as 'foo-source.'
+
+Allow adding variables to the environment when calling make.
+These added variables allow a user to override default values from BuildRoot,
+such as 'BR2_DL_DIR="dl"'.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Daniel J. Leach <dleach@belcan.com>
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Thomas: use named argument for make_extra_opts.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/infra/basetest.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/testing/infra/builder.py | 36 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 5014fefafa..e67bf1af23 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -30,6 +30,7 @@ MINIMAL_CONFIG = \
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index fc318fe26e..018747555d 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -12,7 +12,17 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
  
- class BRTest(unittest.TestCase):
-     config = None
-+    br2_external = list()
-     downloaddir = None
-     outputdir = None
-     logtofile = True
-@@ -58,7 +59,7 @@ class BRTest(unittest.TestCase):
+-    def configure(self):
++    def configure(self, make_extra_opts=[], make_extra_env={}):
++        """Configure the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command.
++        e.g. make_extra_opts=["BR2_EXTERNAL=/path"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         if not os.path.isdir(self.builddir):
+             os.makedirs(self.builddir)
  
-         if not self.b.is_finished():
-             self.show_msg("Building")
--            self.b.configure()
-+            self.b.configure(make_extra_opts=["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
-             self.b.build()
-             self.show_msg("Building done")
+@@ -25,22 +35,40 @@ class Builder(object):
+         self.logfile.flush()
  
+         env = {"PATH": os.environ["PATH"]}
++        env.update(make_extra_env)
++
+         cmd = ["make",
+-               "O={}".format(self.builddir),
+-               "olddefconfig"]
++               "O={}".format(self.builddir)]
++        cmd += make_extra_opts
++        cmd += ["olddefconfig"]
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
+-    def build(self):
++    def build(self, make_extra_opts=[], make_extra_env={}):
++        """Perform the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command. It can include a make target.
++        e.g. make_extra_opts=["foo-source"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         env = {"PATH": os.environ["PATH"]}
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
+             env['http_proxy'] = os.environ["http_proxy"]
+             env['https_proxy'] = os.environ["http_proxy"]
++        env.update(make_extra_env)
++
+         cmd = ["make", "-C", self.builddir]
++        cmd += make_extra_opts
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
+         if ret != 0:
