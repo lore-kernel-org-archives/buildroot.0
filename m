@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 21:57:20 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/subversion:
+Date: Tue, 29 Jan 2019 20:20:51 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/subversion:
  security bump to version 1.9.10
-Message-ID: <20190129205636.3A15A80FC6@busybox.osuosl.org>
+Message-ID: <20190129205643.6CBA17FEAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e3e4b20fd844639fa54761a99f813a68370aefe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a86c57f22624d2060a2a07b4fae4055080715616
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Additional fixes for CVE-2017-9800: Malicious server can execute arbitrary
 command on client and a number of crash fixes.
