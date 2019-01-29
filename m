@@ -1,37 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 16:37:29 +0100
-Subject: [Buildroot] [PATCH] package/busybox: drop empty configure
+Date: Tue, 29 Jan 2019 16:37:10 +0100
+Subject: [Buildroot] [git commit] package/busybox: drop empty configure
  command
-In-Reply-To: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- (yann morin's message of "Tue, 29 Jan 2019 13:36:08 +0100")
-References: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-Message-ID: <877een8og6.fsf@dell.be.48ers.dk>
+Message-ID: <20190129153631.9C80E81496@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <yann.morin@orange.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=908a8b5a7fb5744c55adbe609dca991709b2181a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
- > longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
- > empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
+Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
+longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
+empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
 
- > Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
+Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
 
- > Signed-off-by: Yann MORIN <yann.morin@orange.com>
+Signed-off-by: Yann MORIN <yann.morin@orange.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/busybox.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-FYI, your author name was not configured correctly (was your email
-address):
-
-remote:
-remote: Refusing to update refs/heads/master:
-remote:     fc9fd5a8780966970525b4da8313091a0f0bbc80..8cbcb445b951b3b9e19d7cde7253ec6ce61f06f6
-remote:
-remote: Author name is not set properly (needs to be first and last name, and it is 'yann.morin at orange.com' instead)
-
-I've fixed that and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index bfcca6ed3e..5c5a8ea839 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -323,10 +323,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+ endef
+ 
+-define BUSYBOX_CONFIGURE_CMDS
+-	$(BUSYBOX_NOCLOBBER_INSTALL)
+-endef
+-
+ define BUSYBOX_BUILD_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
+ endef
