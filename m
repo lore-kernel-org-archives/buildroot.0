@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:53:41 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libarchive: add
+Date: Tue, 29 Jan 2019 22:53:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libarchive: add
  four security patches
-Message-ID: <20190129215241.1606F8225E@busybox.osuosl.org>
+Message-ID: <20190129215246.CC54E8225E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be6fcb12ff923e72fd6a4f54f01b4eb6ea8c4204
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=01ee284f8844a6c4f37735bdeb2193a25fc04e52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Add backported patches for the following four security issues in libarchive.
 There is no new release yet including these patches.
