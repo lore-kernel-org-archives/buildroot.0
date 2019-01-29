@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:57:15 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/sdl_sound:
+Date: Tue, 29 Jan 2019 22:57:33 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/sdl_sound:
  actually use the optional CONF_OPTS
-Message-ID: <20190129215620.0235882A5E@busybox.osuosl.org>
+Message-ID: <20190129215632.4AF748128E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f1c58fad166dcde3fbb1dd5faabe1840cf3f070
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b3d7918195283c6fbf084ab79b1f84a3e1259fff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Since "57ace26b6c package/sdl_sound: add optional support for
 libmodplug" from 2016, optional CONF_OPTS are added but they do not
