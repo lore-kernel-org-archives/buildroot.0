@@ -1,92 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:06:05 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libxml2: security bump to
- version 2.9.9
-Message-ID: <20190129220527.A247F8154B@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 23:06:58 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] tpm2-tools: drop
+ dependency on tpm2-abrmd
+Message-ID: <20190129220610.5641E82640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fc89549ae401f81ea0b59e9c9c3c0c77484fdc6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3e17b25da283757d030f59182b6dea5bd290aa6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-- Fixes CVE-2018-9251 and CVE-2018-14567:
-  https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74
-- Fixes CVE-2018-14404: https://gitlab.gnome.org/GNOME/libxml2/issues/5
-- Remove patch: CVE-2017-8872 was fixed by
-  https://gitlab.gnome.org/GNOME/libxml2/issues/26
+tpm2-tools is commonly used with the resource manager, tpm2-abrmd - But it
+CAN be used without, E.G. by setting the TPM2TOOLS_TCTI_NAME environment
+variable to communicate directly with the kernel driver:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+export TPM2TOOLS_TCTI_NAME=device
+
+Either directly with the TPM device (/dev/tpmN) or through the in-kernel
+resource manager provided by Linux kernel since 4.12 (/dev/tpmrmN)
+
+For some use cases (E.G. initramfs) it makes sense to use tpm2-tools
+without abrmd, so remove the tpm2-abrmd select, and instead a note in the
+help text that it may be needed.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cb3397e633b51a62edc4927e4f2c9350fbec9e65)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7b8feba51df4955193c4d58902bb1002c92b430b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/0001-CVE-2017-8872.patch | 33 --------------------------------
- package/libxml2/libxml2.hash             |  2 +-
- package/libxml2/libxml2.mk               |  2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
+ package/tpm2-tools/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libxml2/0001-CVE-2017-8872.patch b/package/libxml2/0001-CVE-2017-8872.patch
-deleted file mode 100644
-index b7a75c19a7..0000000000
---- a/package/libxml2/0001-CVE-2017-8872.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 8b329effb610f4138e4e680f6a6867570f6d6179 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 9 Feb 2018 10:58:11 +0200
--Subject: [PATCH] CVE-2017-8872
--
--Taken from attachment to upstream bug report comment #9.
--
--https://bugzilla.gnome.org/show_bug.cgi?id=775200#c9
--https://bugzilla.gnome.org/attachment.cgi?id=366193&action=diff
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- parser.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/parser.c b/parser.c
--index 1c5e036ea265..025111067ae8 100644
----- a/parser.c
--+++ b/parser.c
--@@ -12467,6 +12467,10 @@ xmlHaltParser(xmlParserCtxtPtr ctxt) {
-- 	ctxt->input->cur = BAD_CAST"";
-- 	ctxt->input->base = ctxt->input->cur;
--         ctxt->input->end = ctxt->input->cur;
--+    if (ctxt->input->buf)
--+        xmlBufEmpty (ctxt->input->buf->buffer);
--+    else
--+        ctxt->input->length = 0;
--     }
-- }
-- 
---- 
--2.15.1
--
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index d114d98060..ce8f5ef7f2 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732	libxml2-2.9.8.tar.gz
-+sha256	94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871	libxml2-2.9.9.tar.gz
- # License files, locally calculated
- sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 06a802eb10..3b3714fff1 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index e5feb18786..e19a6ea4e6 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_TPM2_ABRMD # run-time
+ 	select BR2_PACKAGE_TPM2_TSS
+ 	help
+ 	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
+@@ -18,6 +17,11 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	  and manage non-volatile storage through a TPM2.0 HW
+ 	  implementation.
  
--LIBXML2_VERSION = 2.9.8
-+LIBXML2_VERSION = 2.9.9
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
++	  Notice: An in-kernel resource manager is provided by the
++	  Linux kernel since 4.12. Depending on use cases and kernel
++	  version, the user space resource manager provided by
++	  tpm2-abrmd may be needed.
++
+ 	  https://github.com/tpm2-software/tpm2-tools
+ 
+ comment "tpm2-tools needs a uClibc or glibc toolchain w/ C++, wchar, threads"
