@@ -1,42 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:03:52 +0100
-Subject: [Buildroot] [PATCH] qemu: Change CPU in qemu command for aarch64
-In-Reply-To: <87ef8xn5bw.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 27 Jan 2019 22:44:35 +0100")
-References: <20190124165309.2001-1-gerome.burlats@smile.fr>
- <87ef8xn5bw.fsf@dell.be.48ers.dk>
-Message-ID: <87fttb2kaf.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Jan 2019 23:06:19 +0100
+Subject: [Buildroot] [PATCH 1/1] libxml2: security bump to version 2.9.9
+In-Reply-To: <20190128205538.29494-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 28 Jan 2019 21:55:38 +0100")
+References: <20190128205538.29494-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bm3z2k6c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
->>>>> "Gerome" == Gerome Burlats <gerome.burlats@smile.fr> writes:
- >> This commit changes to "cortex-a53" the CPU model in the qemu command
- >> for aarch64 (since it is the default one for this architecture).
+ > - Fixes CVE-2018-9251 and CVE-2018-14567:
+ >   https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74
+ > - Fixes CVE-2018-14404: https://gitlab.gnome.org/GNOME/libxml2/issues/5
+ > - Remove patch: CVE-2017-8872 was fixed by
+ >   https://gitlab.gnome.org/GNOME/libxml2/issues/26
 
- >> Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
- >> Cc: Romain Naour <romain.naour@smile.fr>
- >> ---
-
- >> cortex-a53 is the default cpu for aarch64, but some defconfigs, for
- >> example raspberrypi3_64_defconfig, still have "BR2_cortex_a53=y"
- >> (maybe at one point, this cpu was not the default).
- >> Should this line stay in the defconfig for info, even if it is not used ?
- >> If we generate the defconfig with "make savedefconfig", BR2_cortex_a53=y is indeed not added in the file.
-
- > Correct. We typically do add for clarity and robustness against changes
- > of the default value.
-
- > It is correct that savedefconfig will strip such redundant entries, but
- > as you can see from the comments, qemu_aarch64_virt_defconfig is edited
- > by hand.
-
- > Committed after extending the commit message and adding an explicit
- > BR2_cortex_a53=y to the defconfig, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x and 2018.11.x, thanks.
 
