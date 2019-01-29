@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 19:25:40 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/rp-pppoe: update
+Date: Tue, 29 Jan 2019 19:25:36 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/rp-pppoe: update
  website url
-Message-ID: <20190129182440.31C698177C@busybox.osuosl.org>
+Message-ID: <20190129182446.2C26D81501@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff56a93250366b08a170a4607b4e5f7730af2072
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=243493ee022d74e9d80bf8eafeaaafa1d17c018c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The website for rp-pppoe moved from Roaring Penguin's main site to
 a personal project page.
