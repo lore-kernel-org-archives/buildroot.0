@@ -1,63 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:01:14 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/usb_modeswitch:
- avoid overriding variables
-Message-ID: <20190129220043.8F199827FB@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 23:02:39 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] qemu/aarch64-virt:
+ Emulate cortex-a53 in qemu to match Buildroot config
+Message-ID: <20190129220137.8D51A827FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fad2ee5e04b3e0cd851c77f57bfc886af214ac7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=72db196e792344d09866f2a3ddd605641dac9847
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Overriding variables in packages recipes is an error-prone practice.
+qemu_aarch64_virt_defconfig (implicitly) specifies cortex-a53, so adjust the
+QEMU command line to also emulate a a53 instead of a57.
 
-Current behavior of installing either only as a script or only as a
-binary is intended, as describe in the commit log of "d3e4db4e34
-usb_modeswitch: bump to version 1.2.6" from 2013.
+Also adjust the defconfig to explicitly specify a53 for consistency/clarity.
 
-Rewrite the code to keep the same behavior while replacing variable
-override [1] by conditional assignments [2].
-
-[1]
-VAR = ...
-if ...
-VAR = ...
-
-[2]
-if ...
-VAR = ...
-else
-VAR = ...
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e25040d31a8d50c3c523f78f43ba1f557269b3bb)
+(cherry picked from commit 0203df36ac5ab7d2e7a7fad94edaa51594360f34)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/qemu/aarch64-virt/readme.txt  | 2 +-
+ configs/qemu_aarch64_virt_defconfig | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 8b93e086e3..9832d3c808 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -13,13 +13,13 @@ USB_MODESWITCH_LICENSE_FILES = COPYING
- # Package does not build in parallel due to improper make rules
- USB_MODESWITCH_MAKE = $(MAKE1)
+diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
+index 9e09d953f9..32025494bd 100644
+--- a/board/qemu/aarch64-virt/readme.txt
++++ b/board/qemu/aarch64-virt/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
  
--USB_MODESWITCH_BUILD_TARGETS = static
--USB_MODESWITCH_INSTALL_TARGETS = install-static
--
- ifeq ($(BR2_PACKAGE_TCL)$(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
- USB_MODESWITCH_DEPENDENCIES += tcl
- USB_MODESWITCH_BUILD_TARGETS = script
- USB_MODESWITCH_INSTALL_TARGETS = install-script
-+else
-+USB_MODESWITCH_BUILD_TARGETS = static
-+USB_MODESWITCH_INSTALL_TARGETS = install-static
- endif
+-  qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
++  qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
  
- # build system of embedded jimtcl doesn't use autotools, but does use
+ The login prompt will appear in the terminal that started Qemu.
+ 
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index c94c4ac773..f9df2fb33e 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -1,5 +1,6 @@
+ # Architecture
+ BR2_aarch64=y
++BR2_cortex_a53=y
+ 
+ # System
+ BR2_SYSTEM_DHCP="eth0"
