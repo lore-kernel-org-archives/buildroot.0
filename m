@@ -1,55 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 19:31:46 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] dmalloc: fix build with
- strndup
-Message-ID: <20190129183153.04D4A81617@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Jan 2019 19:33:48 +0100
+Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
+In-Reply-To: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
+References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
+Message-ID: <20190129183348.GL7130@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fc14f1231f25f564afea72d008cb069454fad5a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+David, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/5cfa01a41951ee3be2e8c1cb10edac3722d72c77
+On 2019-01-29 19:28 +0100, David Picard spake thusly:
+> I can build Qt5 successfully. I tested my custom application in QEMU, with
+> the same disk.img that I use on the read target (AMD Geode LX).
+> 
+> But on the target, whenever I link one of my programs with Qt5, it
+> terminates straight away with a SIGILL (illegal instruction). Including a
+> simple printf("Hello world") that doesn't include nor call in Qt5.
+[--SNIP--]
+> I thought I could pass e.g. -march=geode when I build Qt. But I don't know
+> how to do it. I noticed a arch.conf file in the build directory but it gest
+> overwritten when I make qt5base-reconfigure...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9c1d2f1dea659eb1d95d52e9c9838cd39099704c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dmalloc/0006-fix-strndup.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Well, if even a program that is not linked to Qt failes, you won;t solve
+that by only "fixing" it in Qt...
 
-diff --git a/package/dmalloc/0006-fix-strndup.patch b/package/dmalloc/0006-fix-strndup.patch
-new file mode 100644
-index 0000000000..a1865acb85
---- /dev/null
-+++ b/package/dmalloc/0006-fix-strndup.patch
-@@ -0,0 +1,24 @@
-+From 005d92c2cebbde5c8623daa29725f7a62b18df7c Mon Sep 17 00:00:00 2001
-+From: Siana Gearz <siana.sg@live.de>
-+Date: Sat, 8 Sep 2012 22:44:35 +0200
-+Subject: [PATCH] Fix strndup
-+
-+[Retrieved from:
-+https://github.com/siana/dmalloc/commit/005d92c2cebbde5c8623daa29725f7a62b18df7c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ dmalloc.h.3 | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/dmalloc.h.3 b/dmalloc.h.3
-+index 8bda997..fb538a8 100644
-+--- a/dmalloc.h.3
-++++ b/dmalloc.h.3
-+@@ -429,6 +429,7 @@ char	*strdup(const char *string);
-+  *
-+  * len -> Length of the string to duplicate.
-+  */
-++#undef strndup
-+ extern
-+ char	*strndup(const char *string, const DMALLOC_SIZE len);
-+ 
+In that cas, since your processor is a geode, you have to confiugyure
+Buildroot to generate code for that processor, i.e.: BR2_x86_geode=y
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
