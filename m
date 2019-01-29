@@ -1,166 +1,112 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 28 Jan 2019 18:38:51 -0500
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.58.3
-In-Reply-To: <fc2cd166-8bf5-a0f2-698e-5697b8bf04f1@mind.be>
-References: <20190128221234.93143-1-aduskett@gmail.com>
- <fc2cd166-8bf5-a0f2-698e-5697b8bf04f1@mind.be>
-Message-ID: <CAFSsvmpOb-DAA2ffYBN82ovq4kGUvTa=RPDR7a95=LQN=wOAjA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 Jan 2019 08:00:35 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-28
+Message-ID: <20190129070035.08974209BD@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Arnout
+Hello,
 
-On Mon, Jan 28, 2019 at 6:02 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Adam,
->
->  Thanks for this second attempt at bumping libglib2.
->
-> On 28/01/2019 23:12, aduskett at gmail.com wrote:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > In addition:
-> >   - Re-add the changes from 178eb1d7ea165d87460224d297ce615bb63090f0
->
->  This is not saying much, better copy the relevant parts of the original commit
-> message.
->
-> >
-> >   - Add a new patch: 0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-> >     This patch fixes the previous autobuild errors by removing the ${bindir}
-> >     variable in the front of the glib_genmarshal, gobject_query and glib_mkenums
-> >     lines.
-> >
-> > All tests passed with the packages: AT, libsoup, and dbus-glib selected:
-> > br-arm-full [1/6]: OK
-> > br-arm-cortex-a9-glibc [2/6]: OK
-> > br-arm-cortex-m4-full [3/6]: SKIPPED
-> > br-x86-64-musl [4/6]: OK
-> > br-arm-full-static [5/6]: OK
-> > armv5-ctng-linux-gnueabi [6/6]: OK
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> [snip]
-> > diff --git a/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-> > new file mode 100644
-> > index 0000000000..561f461da9
-> > --- /dev/null
-> > +++ b/package/libglib2/0005-remove-glib-2.0.pc-bindir-variable-prefix.patch
-> > @@ -0,0 +1,37 @@
-> > +From d30304db01a87964bdccf1ff99b6baf257fa26c6 Mon Sep 17 00:00:00 2001
-> > +From: Adam Duskett <Aduskett@gmail.com>
-> > +Date: Mon, 28 Jan 2019 15:22:31 -0500
-> > +Subject: [PATCH] remove glib-2.0.pc bindir variable prefix.
-> > +
-> > +If glib_genmarshal, gobject_query or glib_mkenums are prefixed with
-> > +${bindir} pkg-config will search the host system if the --variable flag
-> > +is called.
-> > +
-> > +Revert the behavior by removing the bindir prefix from these variables.
->
->  This is not upstreamable since it reverts upstream behaviour.
->
->  So let's see if we can find something upstreamable...
->
->  The upstream commit that introduces this issue refers to [1] to explain why the
-> prefix is added. That post basically says that the .pc file should not contain
-> absolute paths, but rather paths that are relative to some other variable.
->
-> > +
-> > +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > +---
-> > + glib-2.0.pc.in | 7 +++----
-> > + 1 file changed, 3 insertions(+), 4 deletions(-)
-> > +
-> > +diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-> > +index 3c5ea81..275fc01 100644
-> > +--- a/glib-2.0.pc.in
-> > ++++ b/glib-2.0.pc.in
-> > +@@ -3,10 +3,9 @@ exec_prefix=@exec_prefix@
-> > + libdir=@libdir@
-> > + includedir=@includedir@
-> > +
-> > +-bindir=@bindir@
-> > +-glib_genmarshal=${bindir}/glib-genmarshal
->
->  This could be changed into:
->
-> tooldir=${bindir}
-> glib_genmarshal=${tooldir}/glib-genmarshal
->
->  pkg-config --variable=glib_genmarshal will evaluate to exactly the same value
-> as before. However, the extra tooldir variable allows us to add a
-> post-install-staging hook that SEDs it into the host path instead of the staging
-> path. Our sed can of course use an absolute path.
->
->  If you make this an upstreamable patch, please make sure that the meson version
-> (glib/meson.build) is also updated.
->
-Eh, this was a quick patch that worked with everything. I really don't
-have time to deal
-with libglib2. I asked Yann on IRC if the patch was acceptable and he
-seemed to not
-mind it.
+Build statistics for 2019-01-28
+===============================
 
-I can reject the patch if you want.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  24 |   2 |   0 |  26 |
+   2018.11.x |  25 |   0 |   0 |  25 |
+      master | 169 |  39 |   1 | 209 |
 
-Thanks!
-Adam
->  Regards,
->  Arnout
->
-> > +-gobject_query=${bindir}/gobject-query
-> > +-glib_mkenums=${bindir}/glib-mkenums
-> > ++glib_genmarshal=glib-genmarshal
-> > ++gobject_query=gobject-query
-> > ++glib_mkenums=glib-mkenums
-> > +
-> > + Name: GLib
-> > + Description: C Utility Library
-> > +--
-> > +2.20.1
-> > +
-> > diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-> > index 57403a2154..7aa4c6cc02 100644
-> > --- a/package/libglib2/libglib2.hash
-> > +++ b/package/libglib2/libglib2.hash
-> > @@ -1,4 +1,4 @@
-> > -# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
-> > -sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
-> > +# http://ftp.gnome.org/pub/gnome/sources/glib/2.58/glib-2.58.3.sha256sum
-> > +sha256  8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481  glib-2.58.3.tar.xz
-> >  # License files, locally calculated
-> >  sha256       dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> > index f602c371f5..981112cac0 100644
-> > --- a/package/libglib2/libglib2.mk
-> > +++ b/package/libglib2/libglib2.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -LIBGLIB2_VERSION_MAJOR = 2.56
-> > +LIBGLIB2_VERSION_MAJOR = 2.58
-> >  LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
-> >  LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
-> >  LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
-> > @@ -13,6 +13,15 @@ LIBGLIB2_LICENSE_FILES = COPYING
-> >  # 0002-disable-tests.patch
-> >  LIBGLIB2_AUTORECONF = YES
-> >
-> > +# Copy what is done in autogen.sh when gtk-doc is not available
-> > +define LIBGLIB2_GTK_DOC_HOOK
-> > +     echo "EXTRA_DIST=" > $(@D)/gtk-doc.make
-> > +     echo "CLEANFILES=" >> $(@D)/gtk-doc.make
-> > +endef
-> > +
-> > +LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-> > +HOST_LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-> > +
-> >  LIBGLIB2_INSTALL_STAGING = YES
-> >  LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
-> >
-> >
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+       host-libunistring-0.9.7 | 1 
+             qt5location-5.9.6 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |        host-libunistring-0.9.7 | NOK | http://autobuild.buildroot.net/results/7e18bb206447bd8c7cbdda68c065d56398cf644b |     
+         arm |              qt5location-5.9.6 | NOK | http://autobuild.buildroot.net/results/cce362ab0309c6baf9c6d8402c04f965de5e6890 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  ffmpeg-3.4.5 | 6 
+             host-grpc-v1.16.1 | 4 
+                 haproxy-1.9.1 | 3 
+             libva-utils-2.3.0 | 3 
+                   netsurf-3.8 | 3 
+zbar-b3b4e32b55f570372fc3af... | 3 
+                clamav-0.101.1 | 2 
+                     php-7.3.1 | 2 
+                qt5base-5.11.3 | 2 
+                civetweb-v1.11 | 1 
+                 gnu-efi-3.0.9 | 1 
+                 gnupg2-2.2.12 | 1 
+                  grpc-v1.16.1 | 1 
+                host-libsodium | 1 
+                  libnfc-1.7.1 | 1 
+                libnice-0.1.14 | 1 
+                openmpi-1.10.7 | 1 
+                     pcre-8.42 | 1 
+                 qt5base-5.6.3 | 1 
+               skalibs-2.6.4.0 | 1 
+                   systemd-240 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv32 |                 civetweb-v1.11 | NOK | http://autobuild.buildroot.net/results/1cb5f63d3be1277345641d4cec24115d46f8b86c |     
+microblazeel |                 clamav-0.101.1 | NOK | http://autobuild.buildroot.net/results/be14aa571309cda32a5963feed9fd7f220e87fe6 |     
+     riscv64 |                 clamav-0.101.1 | NOK | http://autobuild.buildroot.net/results/8d6e8e076819d8a10012b0552b77faa304233b76 |     
+     riscv32 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/f96991bb74c8e374aa2bed9c9aaea045fcda1f18 |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/9097a2b190f4032ff51eda531f4379a99da5181a |     
+      x86_64 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/08ad9df616e5dcb0a3a87bd85c9eccd2fb90b41d |     
+         arm |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/cfa0f8b68fcf03ae993ed936a88d6e3a464d7439 |     
+        i686 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/3885647ff2093530232f4e1a9823c1dbd977e127 |     
+        i686 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/68077e6c22604ecdebb81f7c1c6e3f40d912bbd1 |     
+         arm |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/57e6af4b53936edaa94d6b7ee2b21c6a45bcf32e |     
+       sparc |                  gnupg2-2.2.12 | NOK | http://autobuild.buildroot.net/results/3d00cd1250f73da252e854cf5ddf138706254cb3 | ORPH
+      x86_64 |                   grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/1bf386466eb84a451c7c78710cdc655f74f97c9f |     
+         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/e0dd78c4c61935af6434cfa656da5b870333efaa |     
+         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/7f9a0ad99a157fa7d8ae46bf6ec9f3828f675df5 |     
+         sh4 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/5394f894959d24ef576b329848b57e80e0ecdae1 |     
+    mips64el |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/e97ef5f45734633820d79b3aeab2f40a12d2383f |     
+      x86_64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/5279273b13c6139fb52da3999f53e3223d98680a |     
+       nios2 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/4e15a01618a3dc04d5f891a75cda4b772b296b2e |     
+      x86_64 |              host-grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/24f451c98a6e294ab62a1f0aaad6a634c3dc1449 |     
+         arc |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/01312f7d0169aac68d87ef88e9ef743c136e95ed |     
+     riscv32 |                   libnfc-1.7.1 | NOK | http://autobuild.buildroot.net/results/6be7b5923a0907f1e1e5b731701d7417b4250319 |     
+       sparc |                 libnice-0.1.14 | NOK | http://autobuild.buildroot.net/results/3da21d36ae38ab4a4a530211fd7c1b53295b4b47 |     
+    mips64el |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/b16777cffae4106e8397f1a1e2ab58994c063052 |     
+         arm |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/674594c09ab5f8569fcc9f1ef42c8490efb8b9ab |     
+         arm |              libva-utils-2.3.0 | NOK | http://autobuild.buildroot.net/results/eb1a905a6f0c0146ce464e6b21a4548e2cc0e401 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e382206ac47a9b6cac301ec532078c40d9b524ff |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/05cd82c39bb1bc7feb99c21940f69ce05265438c |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/f387508f33daf4e23848267b7d467c91f5c9db6c |     
+microblazeel |                 openmpi-1.10.7 | NOK | http://autobuild.buildroot.net/results/b93b9184141ccc25b70f54bd7242926e18cd6319 | ORPH
+      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/d1017906c29382ebb5b392df7b03198d67f9ab22 | ORPH
+     sparc64 |                      php-7.3.1 | NOK | http://autobuild.buildroot.net/results/80f3ef1ee4b7dd36483a396efeda3311c63f0f55 | ORPH
+    mips64el |                      php-7.3.1 | NOK | http://autobuild.buildroot.net/results/7b41f4e4a521b1e17aa885aac4419b26e0dd8700 | ORPH
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/89ac4405966ee4c5d443f25a71c0a3d18799e97f |     
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/a098b573f6ce093124844ce135b6edad9e75daff |     
+         arm |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/2a7dd8b6fe2600e6f9540c6cc2a226e28d437c66 |     
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/b4641c68299053c9fa7c49733d2690a88aa56e77 |     
+      mipsel |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/db7249e5c165a4624ed210d1e7a3700cf30c78f7 |     
+    mips64el | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/216ad6baffc6a4daae0ba627f5d92be762455b7f |     
+      x86_64 | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/55cdc099beca6257c5d5e89310cf25100f6fcc1a |     
+         arm | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/c04d67711a66cda039ba2b359b09a47f971f6ba5 |     
+
+
+-- 
+http://autobuild.buildroot.net
