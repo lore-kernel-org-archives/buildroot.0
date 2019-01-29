@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Jan 2019 22:56:29 +0100
-Subject: [Buildroot] [PATCH v3 1/5] testing/infra/builder: build with
- target and environment
-In-Reply-To: <20190128232209.17485-2-aduskett@gmail.com>
+Date: Tue, 29 Jan 2019 22:57:00 +0100
+Subject: [Buildroot] [PATCH v3 2/5] testing/infra/basetest: support
+ br2-external
+In-Reply-To: <20190128232209.17485-3-aduskett@gmail.com>
 References: <20190128232209.17485-1-aduskett@gmail.com>
- <20190128232209.17485-2-aduskett@gmail.com>
-Message-ID: <20190129225629.7d2b4400@windsurf>
+ <20190128232209.17485-3-aduskett@gmail.com>
+Message-ID: <20190129225700.6c01cc19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 28 Jan 2019 18:22:05 -0500
+On Mon, 28 Jan 2019 18:22:06 -0500
 aduskett at gmail.com wrote:
 
-> -    def configure(self):
-> +    def configure(self, make_extra_opts=[], make_extra_env={}):
 
-I was initially a bit skeptical about make_extra_opts being a list and
-make_extra_env being a dict. But it in fact makes sense: the opts are
-part of the command, which is a list, while the environment is expected
-to be a dict in subprocess.call.
+>          if not self.b.is_finished():
+>              self.show_msg("Building")
+> -            self.b.configure()
+> +            self.b.configure(["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
 
-So: patch applied to master. Thanks!
+I made things explicit by using named arguments, i.e
+make_extra_opts=...
+
+Applied to master with this change. Thanks!
 
 Thomas
 -- 
