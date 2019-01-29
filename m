@@ -1,29 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:56:25 +0100
-Subject: [Buildroot] [PATCH 1/8] package/s6-networking: fix dependency
- when libressl is enabled
-In-Reply-To: <20190127185943.1136-2-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 27 Jan 2019 16:59:36 -0200")
-References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
- <20190127185943.1136-2-ricardo.martincoski@gmail.com>
-Message-ID: <871s4v3z7a.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 Jan 2019 22:56:29 +0100
+Subject: [Buildroot] [PATCH v3 1/5] testing/infra/builder: build with
+ target and environment
+In-Reply-To: <20190128232209.17485-2-aduskett@gmail.com>
+References: <20190128232209.17485-1-aduskett@gmail.com>
+ <20190128232209.17485-2-aduskett@gmail.com>
+Message-ID: <20190129225629.7d2b4400@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+Hello,
 
- > Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
- > actually dropped the dependency on s6-dns and s6 when libressl is
- > enabled.
- > Fix this by using += inside the conditional code.
+On Mon, 28 Jan 2019 18:22:05 -0500
+aduskett at gmail.com wrote:
 
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> -    def configure(self):
+> +    def configure(self, make_extra_opts=[], make_extra_env={}):
 
-Committed to 2018.02.x and 2018.11.x, thanks.
+I was initially a bit skeptical about make_extra_opts being a list and
+make_extra_env being a dict. But it in fact makes sense: the opts are
+part of the command, which is a list, while the environment is expected
+to be a dict in subprocess.call.
 
+So: patch applied to master. Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
