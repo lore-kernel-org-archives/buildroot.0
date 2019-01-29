@@ -1,41 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 22:54:51 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/s6-networking:
- fix dependency when libressl is enabled
-Message-ID: <20190129215525.60E70821F3@busybox.osuosl.org>
+Date: Tue, 29 Jan 2019 22:56:25 +0100
+Subject: [Buildroot] [PATCH 1/8] package/s6-networking: fix dependency
+ when libressl is enabled
+In-Reply-To: <20190127185943.1136-2-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 27 Jan 2019 16:59:36 -0200")
+References: <20190127185943.1136-1-ricardo.martincoski@gmail.com>
+ <20190127185943.1136-2-ricardo.martincoski@gmail.com>
+Message-ID: <871s4v3z7a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52800efe23e2031ba1b97a180e3a99b194cc8ee8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
-actually dropped the dependency on s6-dns and s6 when libressl is
-enabled.
-Fix this by using += inside the conditional code.
+ > Commit "c5b85231fb s6-networking: enable SSL if libressl is selected"
+ > actually dropped the dependency on s6-dns and s6 when libressl is
+ > enabled.
+ > Fix this by using += inside the conditional code.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 30ff614a035dd49e357f7c3560555dae8e605f80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/s6-networking/s6-networking.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index 7c9f087051..b621eb225d 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
-@@ -25,7 +25,7 @@ S6_NETWORKING_CONF_OPTS = \
- 
- ifeq ($(BR2_PACKAGE_LIBRESSL),y)
- S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
--S6_NETWORKING_DEPENDENCIES = libressl
-+S6_NETWORKING_DEPENDENCIES += libressl
- endif
- 
- define S6_NETWORKING_CONFIGURE_CMDS
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
