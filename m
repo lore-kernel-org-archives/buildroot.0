@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Jan 2019 23:05:33 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] libxml2: security bump to
+Date: Tue, 29 Jan 2019 23:06:05 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libxml2: security bump to
  version 2.9.9
-Message-ID: <20190129220532.5991A82641@busybox.osuosl.org>
+Message-ID: <20190129220527.A247F8154B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc2a8fbdabe96206d3f3eb24e99c93757398a085
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6fc89549ae401f81ea0b59e9c9c3c0c77484fdc6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 - Fixes CVE-2018-9251 and CVE-2018-14567:
   https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74
