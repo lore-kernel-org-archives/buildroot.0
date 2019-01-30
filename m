@@ -1,79 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 23:28:09 +0100
-Subject: [Buildroot] [PATCH] package/docker-engine: add sysv init script
-Message-ID: <20190130222810.3927-1-peter@korsgaard.com>
+Date: Wed, 30 Jan 2019 23:30:13 +0100
+Subject: [Buildroot] Docker.sock problem
+In-Reply-To: <AM0PR04MB5699FBDFAB694D96AA1C990ECF990@AM0PR04MB5699.eurprd04.prod.outlook.com>
+ (Bedran Atug's message of "Wed, 23 Jan 2019 23:46:12 +0000")
+References: <AM0PR04MB5699FBDFAB694D96AA1C990ECF990@AM0PR04MB5699.eurprd04.prod.outlook.com>
+Message-ID: <87o97xzslm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/S60dockerd       | 38 ++++++++++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk |  5 +++++
- 2 files changed, 43 insertions(+)
- create mode 100755 package/docker-engine/S60dockerd
+>>>>> "Bedran" == Bedran Atug <bedoo47@hotmail.de> writes:
 
-diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-new file mode 100755
-index 0000000000..def8bea149
---- /dev/null
-+++ b/package/docker-engine/S60dockerd
-@@ -0,0 +1,38 @@
-+#!/bin/sh
-+
-+NAME=dockerd
-+DAEMON=/usr/bin/$NAME
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON_ARGS=""
-+
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
-+
-+do_start() {
-+        echo -n "Starting $NAME: "
-+        start-stop-daemon --start --quiet --background --make-pidfile \
-+		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+do_stop() {
-+        echo -n "Stopping $NAME: "
-+        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+        start)
-+                do_start
-+                ;;
-+        stop)
-+                do_stop
-+                ;;
-+        restart)
-+                do_stop
-+                sleep 1
-+                do_start
-+                ;;
-+	*)
-+                echo "Usage: $0 {start|stop|restart}"
-+                exit 1
-+esac
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index f19c1d995c..aae44ab6df 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -73,6 +73,11 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
- endef
- 
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
-+		$(TARGET_DIR)/etc/init.d/S60dockerd
-+endef
-+
- define DOCKER_ENGINE_USERS
- 	- - docker -1 * - - - Docker Application Container Framework
- endef
+ > Hello,
+ > I have created an image with Buildroot. I wanted to install Docker
+ > inside my image. All docker commands work, but when I start a docker
+ > container like docker run hello-world, I get the following problem:
+ > Cannot connect to the Docker daemon at unix:/var/run/docker.sock. Is
+ > the docker daemon running?
+ > I already looked in the var/run/ directory but there is no docker.sock file there.
+
+The issue is that the docker-engine package currently does not provide
+an init script to start dockerd at bootup.
+
+I have submitted a patch to add a init script:
+
+https://patchwork.ozlabs.org/patch/1033807/
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
