@@ -1,10 +1,7 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Jan 2019 21:11:55 +0100
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time: replace
- confusing colors
-In-Reply-To: <20190130201156.5927-1-patrickdepinguin@gmail.com>
-References: <20190130201156.5927-1-patrickdepinguin@gmail.com>
-Message-ID: <20190130201156.5927-2-patrickdepinguin@gmail.com>
+Date: Wed, 30 Jan 2019 21:12:22 +0100
+Subject: [Buildroot] [PATCH 1/3] arch/mips: introduce mips32r3 and mips64r3
+Message-ID: <20190130201224.6555-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +10,91 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The color for 'extract' is very similar to the one for 'install-images'.
-Both are cyan-like.
+It's unclear why Buildroot only defined MIPS 32/64 releases 1, 2, 5 and 6
+while 3 exists as well.
 
-Replace the former by a pale blue to make all colors sufficiently distinct.
+Interesting fact:
+"Release 4 was skipped because the number four is perceived as unlucky in
+many Asian cultures."
+https://en.wikipedia.org/wiki/MIPS_architecture#MIPS32/MIPS64
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/scripts/graph-build-time | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.mips | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index 2fdb6a476d..ba3cdad85b 100755
---- a/support/scripts/graph-build-time
-+++ b/support/scripts/graph-build-time
-@@ -76,7 +76,7 @@ steps = ['download', 'extract', 'patch', 'configure', 'build',
- default_colors = ['#8d02ff', '#e60004', '#009836', '#2e1d86', '#ffed00',
-                   '#0068b5', '#f28e00', '#940084', '#97c000']
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index e45299f818..f28113df44 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -5,6 +5,9 @@ config BR2_MIPS_CPU_MIPS32
+ config BR2_MIPS_CPU_MIPS32R2
+ 	bool
+ 	select BR2_MIPS_NAN_LEGACY
++config BR2_MIPS_CPU_MIPS32R3
++	bool
++	select BR2_MIPS_NAN_LEGACY
+ config BR2_MIPS_CPU_MIPS32R5
+ 	bool
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+@@ -18,6 +21,9 @@ config BR2_MIPS_CPU_MIPS64
+ config BR2_MIPS_CPU_MIPS64R2
+ 	bool
+ 	select BR2_MIPS_NAN_LEGACY
++config BR2_MIPS_CPU_MIPS64R3
++	bool
++	select BR2_MIPS_NAN_LEGACY
+ config BR2_MIPS_CPU_MIPS64R5
+ 	bool
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+@@ -34,8 +40,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
  
--alternate_colors = ['#ffbe0a', '#00e0e0', '#3f7f7f', '#ff0000', '#00c000',
-+alternate_colors = ['#ffbe0a', '#96bdff', '#3f7f7f', '#ff0000', '#00c000',
-                     '#0080ff', '#c000ff', '#00eeee', '#e0e000']
+-	  64bit cabable: 64, 64r2, 64r5, 64r6
+-	  non-64bit capable: 32, 32r2, 32r5, 32r6
++	  64bit capable: 64, 64r2, 64r3, 64r5, 64r6
++	  non-64bit capable: 32, 32r2, 32r3, 32r5, 32r6
  
- 
+ config BR2_mips_32
+ 	bool "Generic MIPS32"
+@@ -45,6 +51,10 @@ config BR2_mips_32r2
+ 	bool "Generic MIPS32R2"
+ 	depends on !BR2_ARCH_IS_64
+ 	select BR2_MIPS_CPU_MIPS32R2
++config BR2_mips_32r3
++	bool "Generic MIPS32R3"
++	depends on !BR2_ARCH_IS_64
++	select BR2_MIPS_CPU_MIPS32R3
+ config BR2_mips_32r5
+ 	bool "Generic MIPS32R5"
+ 	depends on !BR2_ARCH_IS_64
+@@ -95,6 +105,10 @@ config BR2_mips_64r2
+ 	bool "Generic MIPS64R2"
+ 	depends on BR2_ARCH_IS_64
+ 	select BR2_MIPS_CPU_MIPS64R2
++config BR2_mips_64r3
++	bool "Generic MIPS64R3"
++	depends on BR2_ARCH_IS_64
++	select BR2_MIPS_CPU_MIPS64R3
+ config BR2_mips_64r5
+ 	bool "Generic MIPS64R5"
+ 	depends on BR2_ARCH_IS_64
+@@ -213,6 +227,7 @@ config BR2_ENDIAN
+ config BR2_GCC_TARGET_ARCH
+ 	default "mips32"	if BR2_mips_32
+ 	default "mips32r2"	if BR2_mips_32r2
++	default "mips32r3"	if BR2_mips_32r3
+ 	default "mips32r5"	if BR2_mips_32r5
+ 	default "mips32r6"	if BR2_mips_32r6
+ 	default "interaptiv"	if BR2_mips_interaptiv
+@@ -222,6 +237,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "mips32r2"	if BR2_mips_xburst
+ 	default "mips64"	if BR2_mips_64
+ 	default "mips64r2"	if BR2_mips_64r2
++	default "mips64r3"	if BR2_mips_64r3
+ 	default "mips64r5"	if BR2_mips_64r5
+ 	default "mips64r6"	if BR2_mips_64r6
+ 	default "i6400"		if BR2_mips_i6400
 -- 
 2.19.2
