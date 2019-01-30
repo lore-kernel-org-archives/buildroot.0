@@ -1,102 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 17:18:11 +0100
-Subject: [Buildroot] Buildroot 2018.11.2 released
-Message-ID: <87y372yv98.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Jan 2019 17:34:24 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2018.11.2
+Message-ID: <20190130163330.8B23982C83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=b0f0f07c59d646d4afd647684ce7994cd561e604
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Buildroot 2018.11.2 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2018.11.2.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.11.2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.11.2 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2018.11.1 release.
-
-- Fixes for imx6slevk, imx7dsabresd, imx8mqevk, Lego EV3 and QEMU
-  AArch64-virt defconfigs
-
-- Download: Fix scp download handling
-
-- check-package: fix Python 3 support
-
-- get-developers: Fix behaviour when called from elsewhere than the
-  toplevel directory.
-
-- kconfig: Fix for make linux-menuconfig / uboot-menuconfig from a clean
-  tree when ccache is enabled.
-
-- cmake: Also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake
-
-- Security fixes for apache, gnupg2, go, libarchive, libsndfile,
-  liburiparser, libxml2, mariadb, mbedtls, mosquitto, netatalk, openssh,
-  pango, php, python-django, python-pyyaml, samba4, sqlite, subversion,
-  systemd, tcprelay, wireshark, wolfssl
-
-- Fixes for download/compilation/runtime issues in acpica, apr, cargo,
-  cc-tool, dash, dhcpdump, dmalloc, docker-containerd, efivar, fwts,
-  glibc, gnuchess, leveldb, libftdi1, libmad, libsquish, libwebsock,
-  lighttpd, llvm, lm-sensors, lxc, meson, nodejs, odhcp6c, openresolv,
-  patchelf, python-numpy, rauc, s6-networking, sdl_sound,
-  shairport-sync, sunxi-cedarx, swupdate, tekui, tpm2-abrmd, tpm2-tools,
-  tpm2-tss, udisks, unixodbc, webkitgtk, xapp_rgb, xenomai
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.2
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.11.1..
-
-    33  Peter Korsgaard
-    19  Fabrice Fontaine
-    12  Thomas Petazzoni
-     6  Baruch Siach
-     6  Ricardo Martincoski
-     5  James Hilliard
-     4  Thomas De Schampheleire
-     3  Andr? Hentschel
-     3  Asaf Kahlon
-     3  Matt Weber
-     3  Romain Naour
-     2  Arnout Vandecappelle (Essensium/Mind)
-     2  Bernd Kuhls
-     2  Carlos Santos
-     2  Fabio Estevam
-     2  Francois Perrad
-     2  Mark Corbin
-     2  Peter Seiderer
-     2  Vadim Kochan
-     2  Yann E. MORIN
-     1  Adam Duskett
-     1  Christian Stewart
-     1  Clayton Shotwell
-     1  David Lechner
-     1  Evgeniy Didin
-     1  Gerome Burlats
-     1  Gr?goire Delattre
-     1  Jared Bents
-     1  Ryan Coe
-     1  Sergio Prado
-     1  Trent Piepho
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/download.html b/docs/website/download.html
+index e2eae30189..8cefc3feb8 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2018.11.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2018.11.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.11.1.tar.gz">buildroot-2018.11.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11.2.tar.gz">buildroot-2018.11.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.11.1.tar.bz2">buildroot-2018.11.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.11.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.11.2.tar.bz2">buildroot-2018.11.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.11.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index ae25396cc2..330852d5ac 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.11.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>30 January 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.11.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.11.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-January/241981.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.11.2.tar.bz2">2018.11.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
