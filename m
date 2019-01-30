@@ -1,98 +1,77 @@
-From: David Picard <dplamp@gmx.com>
-Date: Wed, 30 Jan 2019 15:39:26 +0100
-Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
-In-Reply-To: <33183700-a3d6-6917-911e-9b4e3827c8c5@gmx.com>
-References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
- <20190129183348.GL7130@scaer> <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
- <33183700-a3d6-6917-911e-9b4e3827c8c5@gmx.com>
-Message-ID: <22a54ac3-06ef-5094-ddae-88938e303c9d@gmx.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Jan 2019 16:40:52 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] Update for 2018.11.2
+Message-ID: <20190130153958.16876815F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=49dfa901e1b16563045bb0f5456fcadc9b62e380
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-I fixed it. So for the record, the solution was :
-BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 37 +++++++++++++++++++++++++++++++++++++
+ Makefile |  2 +-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-Got it from Qt's configure utility :
-$ configure --help
-
-Regards,
-David
-
-Le 30/01/2019 ? 11:21, David Picard a ?crit?:
-> Hello,
->
-> With this search :
-> $ cd build
-> $ grep "\-msse2" $(find ./ -name "Makefile*")
->
-> I can see that only Qt5 uses the SSE2 instruction set that my CPU 
-> doesn't support.
->
-> Can anyone help me remove this flag ? Should I patch the qt5* packages 
-> somehow ?
->
-> Thanks.
->
-> Le 30/01/2019 ? 08:46, David Picard a ?crit?:
->> Hello,
->>
->> I'm sorry, my message was not clear, it seems. To put it in a 
->> nutshell : as soon as a program is linked to Qt5, it crashes with a 
->> SIGILL. Everything else works : X11, framebuffer, network, and my own 
->> programs (provided they are not linked to Qt5).
->>
->> More interesting :
->> I found by DuckDucking that the faulty instruction may be part of the 
->> SSE2 instruction set. My CPU doesn't support this.
->> build/qt5base-5.11.2/src/corelib/Makefile has "-msse2" in CFLAGS and 
->> CXXFLAGS.
->>
->> Could you help me get rid of this flag ? I'm connected on the IRC 
->> channel today as "dplamp".
->>
->> I did select all the Geode stuff :
->> - Builroot config : BR2_x86_geode=y, 
->> BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE=y
->> - Kernel config : CONFIG_MGEODE_LX=y, CONFIG_FB_GEODE=y, 
->> CONFIG_FB_GEODE_LX=y
->>
->>
->> Le 29/01/2019 ? 19:33, Yann E. MORIN a ?crit?:
->>> David, All,
->>>
->>> On 2019-01-29 19:28 +0100, David Picard spake thusly:
->>>> I can build Qt5 successfully. I tested my custom application in 
->>>> QEMU, with
->>>> the same disk.img that I use on the read target (AMD Geode LX).
->>>>
->>>> But on the target, whenever I link one of my programs with Qt5, it
->>>> terminates straight away with a SIGILL (illegal instruction). 
->>>> Including a
->>>> simple printf("Hello world") that doesn't include nor call in Qt5.
->>> [--SNIP--]
->>>> I thought I could pass e.g. -march=geode when I build Qt. But I 
->>>> don't know
->>>> how to do it. I noticed a arch.conf file in the build directory but 
->>>> it gest
->>>> overwritten when I make qt5base-reconfigure...
->>> Well, if even a program that is not linked to Qt failes, you won;t 
->>> solve
->>> that by only "fixing" it in Qt...
->>>
->>> In that cas, since your processor is a geode, you have to confiugyure
->>> Buildroot to generate code for that processor, i.e.: BR2_x86_geode=y
->>>
->>> Regards,
->>> Yann E. MORIN.
->>>
->>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/CHANGES b/CHANGES
+index c4ccda92e7..f99c996eb5 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,40 @@
++2018.11.2, Released January 30th, 2019
++
++	Important / security related fixes.
++
++	Defconfigs: Fixes for imx6slevk, imx7dsabresd, imx8mqevk, Lego
++	EV3, QEMU AArch64-virt
++
++	Download: Fix scp download handling
++
++	check-package: fix Python 3 support
++
++	get-developers: Fix behaviour when called from elsewhere than
++	the toplevel directory.
++
++	kconfig: Fix for make linux-menuconfig / uboot-menuconfig from
++	a clean tree when ccache is enabled.
++
++	cmake: Also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake
++
++	Updated/fixed packages: acpica, apache, apr, avrdude, cargo,
++	cc-tool, dash, dhcpdump, dmalloc, docker-containerd, efivar,
++	fwts, glibc, gnuchess, gnupg2, go, leveldb, libarchive,
++	libassuan, libftdi1, libgpg-error, libhttpparser, libkcapi,
++	libmad, libsndfile, libsquish, liburiparser, libwebsock,
++	libxml2, lighttpd, llvm, lm-sensors, lua-msgpack-native, lxc,
++	mariadb, mbedtls, meson, mosquitto, netatalk, nodejs, odhcp6c,
++	openresolv, openssh, pango, patchelf, php, python-django,
++	python-numpy, python-pyyaml, rauc, rp-pppoe, s6-networking,
++	samba4, sdl_sound, shairport-sync, sqlite, subversion,
++	sunxi-cedarx, swupdate, systemd, tcpreplay, tekui, tmp2-abrmd,
++	tpm2-tools, tpm2-tss, udisks, unixodbc, usb_modeswitch,
++	webkitgtk, wireshark, wolfssl, xapp_rgb, xenomai, xerces
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11576: Unable to start apache with event MPM on raspberry pi 3
++
+ 2018.11.1, Released December 20th, 2018
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 998b571071..6379d069d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.11.1
++export BR2_VERSION := 2018.11.2
+ # Actual time the release is cut (for reproducible builds)
+ BR2_VERSION_EPOCH = 1545257000
+ 
