@@ -1,62 +1,56 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 30 Jan 2019 00:37:31 -0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: add atop test
-References: <20190129222539.54bafd2a@windsurf>
-Message-ID: <5c510deba126a_42713fb91e0de6f447919@ultri5.mail>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 30 Jan 2019 13:29:08 +0800
+Subject: [Buildroot] Building host-python-2.7.15 Failed
+In-Reply-To: <20190127205547.224c1eae@windsurf.home>
+References: <CAAsE_udvpXEBB_euZymg+QHajf5oC5SSywpOCvoiY=Oyan2Xog@mail.gmail.com>
+ <8017d9a3-290f-f8de-8e13-55430ace2b77@mind.be>
+ <20190126151022.23c5a011@windsurf>
+ <CAAsE_uc6pTbBHu_UgUSSaTyEbyKocPpEcSJK9hgz+UsMBN=QoQ@mail.gmail.com>
+ <CAAsE_ucb7QYz1MQcdk8Cf_N9Oni7ZTjQnLZ8tNXZgWpFZKCi3g@mail.gmail.com>
+ <20190127205547.224c1eae@windsurf.home>
+Message-ID: <CAAsE_ucRYOF3F5K0a3SakEAzwAs7JGnueqCnAeUikyYj+GJ4zA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, thanks for your finding.  After I reinstalled the libc-dev, the
+compile passed!
 
-On Tue, Jan 29, 2019 at 07:25 PM, Thomas Petazzoni wrote:
+On Mon, Jan 28, 2019 at 3:55 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-> On Mon, 28 Jan 2019 00:14:06 -0200
-> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
-> 
->> +class TestAtop(infra.basetest.BRTest):
->> +    config = \
->> +        """
->> +        BR2_arm=y
->> +        BR2_cortex_a9=y
->> +        BR2_ARM_ENABLE_NEON=y
->> +        BR2_ARM_ENABLE_VFP=y
->> +        BR2_TOOLCHAIN_EXTERNAL=y
->> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
->> +        BR2_SYSTEM_DHCP="eth0"
->> +        BR2_LINUX_KERNEL=y
->> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
->> +        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
->> +        BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-> 
-> Is there a good reason to build the kernel as part of this test case,
-> instead of using the prebuilt kernel, like most other package test
-> cases are doing ?
-
-No. My mistake, sorry.
-I should had used the prebuilt armv7 kernel.
-I guess I can remove all lines from BR2_TARGET_GENERIC_GETTY_PORT to
-BR2_LINUX_KERNEL_INTREE_DTS_NAME.
-
-I was (wrongly) pretty sure we always use prebuilt kernel 3.11.0 .
-That's because all *-run.log for the python test cases.
-
-This new version of atop needs kernel headers >= 3.14.
-So I decided to not take the risk of having weird behaviors using an older (than
-3.14) kernel.
-Then I saw that the rust test case compiles kernel 4.x and decided to do the
-same. I just copied the current kernel version from qemu_arm_vexpress_defconfig.
-
-What I missed is that only the armv5 prebuilt kernel is 3.11.0 . The armv7 one
-is 4.0.0 (as we can see on all *-run.log for the perl test cases) and therefore
-it should work here.
-
-Should I send a followup patch switching to prebuilt kernel?
+> Hello,
+>
+> On Mon, 28 Jan 2019 01:06:29 +0800
+> Woody Wu <narkewoody@gmail.com> wrote:
+>
+> > I checked my ubuntu 18.04.  It has /lib/x86_64-linux-gnu/libcrypt.so.1
+> and
+> > no libcrypt.so.
+>
+> It is weird, because libc6-dev should have installed both libcrypt.a
+> and libcrypt.so. See
+> https://packages.ubuntu.com/cosmic/amd64/libc6-dev/filelist. So it
+> should not be possible to have libcrypt.a without libcrypt.so.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
 
-Regards,
-Ricardo
+-- 
+Life is the only flaw in an otherwise perfect nonexistence
+    -- Schopenhauer
+
+woody
+public key at http://subkeys.pgp.net:11371 (narkewoody at gmail.com)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190130/e26253dd/attachment.html>
