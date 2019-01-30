@@ -1,49 +1,24 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 30 Jan 2019 15:03:52 +0100
-Subject: [Buildroot] [PATCH v2] libtommath: bump to version 1.1.0
-Message-ID: <20190130140352.7658-1-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Jan 2019 15:08:35 +0100
+Subject: [Buildroot] [PATCH v7 3/8] package/pound: Fix build with
+ OpenSSL 1.1.x
+In-Reply-To: <87lg3379ay.fsf@dell.be.48ers.dk>
+References: <20190129093919.22060-1-patrick.havelange@essensium.com>
+ <20190129093919.22060-3-patrick.havelange@essensium.com>
+ <87lg3379ay.fsf@dell.be.48ers.dk>
+Message-ID: <fb239a34-ee70-faa7-9bd4-d2a9aaf3f241@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the library was re-licensed to The Unlicense (https://unlicense.org/),
-more details on https://www.libtom.net/news/LTM_1.1.0RC1/
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libtommath/libtommath.hash | 5 ++++-
- package/libtommath/libtommath.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
-index 359dfeda3..75aa7c7f1 100644
---- a/package/libtommath/libtommath.hash
-+++ b/package/libtommath/libtommath.hash
-@@ -1,2 +1,5 @@
- # Locally computed
--sha256 47032fb39d698ce4cf9c9c462c198e6b08790ce8203ad1224086b9b978636c69  ltm-1.0.1.tar.xz
-+sha256 90466c88783d1fe9f5c2364a69f5479f10d73ed616011be6196f35f7f1537ead  ltm-1.1.0.tar.xz
-+
-+# Hashes for license files:
-+sha256 2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  LICENSE
-diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
-index ceb2e6846..36e7a89e6 100644
---- a/package/libtommath/libtommath.mk
-+++ b/package/libtommath/libtommath.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--LIBTOMMATH_VERSION = 1.0.1
-+LIBTOMMATH_VERSION = 1.1.0
- LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
- LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
--LIBTOMMATH_LICENSE = WTFPL
-+LIBTOMMATH_LICENSE = Unlicense
- LIBTOMMATH_LICENSE_FILES = LICENSE
- LIBTOMMATH_INSTALL_STAGING = YES
- LIBTOMMATH_INSTALL_TARGET = NO  # only static library
--- 
-2.17.1
+On 29/01/2019 16:49, Peter Korsgaard wrote:
+> This looks to break building against libressl:
+
+ Indeed, looks like it needs libressl exceptions as well.
+
+ Regards,
+ Arnout
