@@ -1,69 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Jan 2019 21:34:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: add support for a
- limited set of configuration options
-In-Reply-To: <20190130201416.9078-1-patrickdepinguin@gmail.com>
-References: <20190130201416.9078-1-patrickdepinguin@gmail.com>
-Message-ID: <20190130213451.6c45821d@windsurf>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 30 Jan 2019 21:41:48 +0100
+Subject: [Buildroot] [PATCH 3/3] arch/mips: add (Marvell) Octeon III
+ processor
+In-Reply-To: <20190130212938.11cdb74b@windsurf>
+References: <20190130201224.6555-1-patrickdepinguin@gmail.com>
+ <20190130201224.6555-3-patrickdepinguin@gmail.com>
+ <20190130212938.11cdb74b@windsurf>
+Message-ID: <CAAXf6LV9Ebrn4kzwszd0WDji8P-dy0OUK1nVqEvEF9CF9kh0hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+El mi?., 30 ene. 2019 a las 21:29, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello Thomas,
+>
+> On Wed, 30 Jan 2019 21:12:24 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > @@ -156,6 +163,7 @@ endchoice
+> >  config BR2_MIPS_SOFT_FLOAT
+> >       bool "Use soft-float"
+> >       default y
+>
+> Not related directly to your patch, but MIPS related anyway: does it
+> make sense to default to soft-float ?
+>
+> Wouldn't it better to have, like on ARM, an indication of which MIPS
+> cores support hardware floating point, and for those, default to using
+> hardware floating point ?
 
-Quick comments, not a full review.
+I don't know the reason why it was done this way. Perhaps historically
+most MIPS had no floating-point unit?
+Or maybe because originally there were only 'generic' variants
+described, like 'mips32r2' for which it is not defined if there is a
+floating-point unit in the actual SoC implementation.
 
-On Wed, 30 Jan 2019 21:14:16 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+In any case, the strategy you describe sounds more 'neutral'.
+But it requires investigating whether or not the existing processors
+definitely/maybe/never have an FPU.
 
-> +config BR2_PACKAGE_PUGIXML_NO_XPATH_SUPPORT
-> +	bool "Disable XPath support"
-> +	help
-> +	  Disables XPath support in pugixml. Both XPath interfaces and
-> +	  XPath implementation are excluded from compilation. This
-> +	  option is provided in case you do not need XPath functionality
-> +	  and need to save code space.
-> +
-> +config BR2_PACKAGE_PUGIXML_NO_STL_SUPPORT
-> +	bool "Disable STL support"
-> +	help
-> +	  Disables use of STL in pugixml. The functions that operate on
-> +	  STL types are no longer present (i.e. load/save via iostream)
-> +	  if this macro is defined.  This option is provided in case
-> +	  your target platform does not have a standard-compliant STL
-> +	  implementation.
-> +
-> +config BR2_PACKAGE_PUGIXML_NO_EXCEPTIONS
-> +	bool "Disable exceptions"
-> +	help
-> +	  Disables use of exceptions in pugixml. This option is provided
-> +	  in case your target platform does not have exception handling
-> +	  capabilities.
-
-These options that you enable to disable something are backwards. Could
-you turn them over to actual enabling options, with "default y" if you
-want to keep backward compatibility.
-
-> +config BR2_PACKAGE_PUGIXML_HEADER_ONLY
-> +	bool "Enable header-only version"
-> +	help
-> +	  All source code for pugixml will be included in every
-> +	  translation unit that includes pugixml.hpp. This is how most
-> +	  of Boost and STL libraries work.
-> +
-> +	  http://pugixml.org/docs/manual.html#install.building.header
-> +
-> +config BR2_PACKAGE_PUGIXML_HAS_LONG_LONG
-
-"HAS_LONG_LONG" doesn't read like an enabling option, but like "does
-this package has long long".
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/Thomas
