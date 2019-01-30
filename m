@@ -1,28 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Jan 2019 10:36:03 +0200
-Subject: [Buildroot] [PATCH 1/6] intel-gmmlib: new package.
-In-Reply-To: <1548705292.local-04f35002-3061-v1.5.5-b7939d38@getmailspring.com>
-References: <87r2d4hmsw.fsf@tarshish>
- <1548705292.local-04f35002-3061-v1.5.5-b7939d38@getmailspring.com>
-Message-ID: <20190130083603.dqerhsyy5o6xhn4s@sapphire.tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Jan 2019 10:41:49 +0100
+Subject: [Buildroot] [PATCH 1/1] mbedtls: security bump to version 2.7.9
+In-Reply-To: <20190129202735.3298-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 29 Jan 2019 21:27:35 +0100")
+References: <20190129202735.3298-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ef8u1nz6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Louis-Paul,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Mon, Jan 28, 2019 at 08:57:52PM +0100, LP C wrote:
-> Thank you for your feedback. I will fix everything on tomorrow. Any hope to 
-> see these patches in the upcoming 2019.02?
+ > CVE-2018-19608 is fixed by bumping mbdedtls to a version greater or
+ > equal to 2.7.8, see
+ > https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2018-03
 
-The schedule for 2019.02 is a little tight. Especially since the packages you 
-add are not so simple. A few more iterations will probably be needed.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-baruch
+Committed to 2018.02.x and 2018.11.x, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
