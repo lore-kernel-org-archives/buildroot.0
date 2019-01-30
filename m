@@ -1,46 +1,64 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Jan 2019 21:41:48 +0100
-Subject: [Buildroot] [PATCH 3/3] arch/mips: add (Marvell) Octeon III
- processor
-In-Reply-To: <20190130212938.11cdb74b@windsurf>
-References: <20190130201224.6555-1-patrickdepinguin@gmail.com>
- <20190130201224.6555-3-patrickdepinguin@gmail.com>
- <20190130212938.11cdb74b@windsurf>
-Message-ID: <CAAXf6LV9Ebrn4kzwszd0WDji8P-dy0OUK1nVqEvEF9CF9kh0hw@mail.gmail.com>
+Date: Wed, 30 Jan 2019 21:50:55 +0100
+Subject: [Buildroot] [RFC 0/3] init: Add s6 as init system
+In-Reply-To: <20190120153151.GA22618@itchy>
+References: <20190116215135.32142-1-vadim4j@gmail.com>
+ <20190120153151.GA22618@itchy>
+Message-ID: <CAAXf6LXes1KNb9UHO33cNpVhQjR0Qg36OUJEyUL3iG11vZ2_yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mi?., 30 ene. 2019 a las 21:29, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> Hello Thomas,
->
-> On Wed, 30 Jan 2019 21:12:24 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > @@ -156,6 +163,7 @@ endchoice
-> >  config BR2_MIPS_SOFT_FLOAT
-> >       bool "Use soft-float"
-> >       default y
->
-> Not related directly to your patch, but MIPS related anyway: does it
-> make sense to default to soft-float ?
->
-> Wouldn't it better to have, like on ARM, an indication of which MIPS
-> cores support hardware floating point, and for those, default to using
-> hardware floating point ?
+Hi Eric, Vadim,
 
-I don't know the reason why it was done this way. Perhaps historically
-most MIPS had no floating-point unit?
-Or maybe because originally there were only 'generic' variants
-described, like 'mips32r2' for which it is not defined if there is a
-floating-point unit in the actual SoC implementation.
+El dom., 20 ene. 2019 a las 16:32, Eric Le Bihan
+(<eric.le.bihan.dev@free.fr>) escribi?:
+>
+> Hi!
+> On 2019-01-16 23:51, Vadim Kochan wrote:
+> > Add new system init support (BR2_INIT_S6) based on s6 suite. This is very-very
+> > basic support which does not have any setup automation logic (but only getty)
+> > but it allows to install custom s6-rc services in a bit easier way by the
+> > board. All s6-rc services which were copied by rootfs-overlay or post-build
+> > will be compiled as s6-rc db into /etc/s6-rc/compiled-initial, which also has
+> > /etc/s6-rc/compiled link to easy replace it in runtime.
+> >
+> > In case if such kind of change will be merged, then may be it would be good to
+> > think about of some packages integration into s6-rc system.
+> >
+> > Vadim Kochan (3):
+> >   package/s6-linux-init: Build also for the host
+> >   package/s6-linux-init: Allow to install as init system
+> >   package/s6-rc: Allow to integrate s6-rc services
+> >
+> >  package/s6-linux-init/s6-linux-init.mk | 69 +++++++++++++++++++++++++++++++++-
+> >  package/s6-rc/rc.init                  |  4 ++
+> >  package/s6-rc/rc.shutdown              |  3 ++
+> >  package/s6-rc/s6-rc.mk                 | 32 ++++++++++++++++
+> >  system/Config.in                       |  9 ++++-
+> >  5 files changed, 114 insertions(+), 3 deletions(-)
+> >  create mode 100644 package/s6-rc/rc.init
+> >  create mode 100644 package/s6-rc/rc.shutdown
+> >
+> > --
+> > 2.14.1
+> >
+>
+> I worked on a s6-based init system eons ago [1], but without using a
+> host variant of s6-linux-init.
+>
+> I'll test your patches.
+>
+> [1] https://github.com/elebihan/br2-ext-skarnet
+>
 
-In any case, the strategy you describe sounds more 'neutral'.
-But it requires investigating whether or not the existing processors
-definitely/maybe/never have an FPU.
+We are based on Eric's original s6 init files, before it was moved to
+a BR2_EXTERNAL logic.
+But I'm no s6 expert at all, so I can't really comment on these changes.
+Nevertheless, I'm quite interested to see how this evolves so we can
+align our local situation with something in upstream Buildroot.
 
-/Thomas
+Best regards,
+Thomas
