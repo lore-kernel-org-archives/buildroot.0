@@ -1,77 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 16:40:52 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] Update for 2018.11.2
-Message-ID: <20190130153958.16876815F5@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 30 Jan 2019 17:01:16 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: improve linking avoiding -ldrm to be
+ appended when -lavutil is linked
+In-Reply-To: <0535ae91-47fa-5a31-5ff6-7977c5bbbe8b@mind.be>
+References: <0535ae91-47fa-5a31-5ff6-7977c5bbbe8b@mind.be>
+Message-ID: <20190130160116.3782-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49dfa901e1b16563045bb0f5456fcadc9b62e380
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Upstream ffmpeg patch[1] has a drawback. Linking against libavutil
+results in appending -ldrm to library list in linker command tail, but
+in shared linking this is no needed at all since shared linking is
+transparent about library dependecies, hence -ldrm in this case is not
+needed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add patch to avoid this behaviour by:
+- Introducing new variable "privatelibs" that is assigned to
+  "Libs.private:" when creating various .pc files.
+- Move $LIBDRM from extralibs_avutil to privatelibs_avutil
+
+[1]
+https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- CHANGES  | 37 +++++++++++++++++++++++++++++++++++++
- Makefile |  2 +-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+ ...BDRM-to-Libs.private-instead-of-Libs.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
 
-diff --git a/CHANGES b/CHANGES
-index c4ccda92e7..f99c996eb5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,40 @@
-+2018.11.2, Released January 30th, 2019
+diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
+new file mode 100644
+index 0000000000..f19c74f228
+--- /dev/null
++++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
+@@ -0,0 +1,59 @@
++From e34be93d478ad510960d03549572805a0430144c Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sun, 21 Oct 2018 22:43:39 +0200
++Subject: [PATCH] configure: add LIBDRM to Libs.private instead of Libs
 +
-+	Important / security related fixes.
++Currently LIBDRM is appended to Libs: in libavutil.pc. This causes
++every program linking with avutil to link with -ldrm in both shared and
++static linking cases. In shared linking case it makes no sense, since
++-ldrm is a dependency of libavutil and is transparent while linking with
++libavutil
 +
-+	Defconfigs: Fixes for imx6slevk, imx7dsabresd, imx8mqevk, Lego
-+	EV3, QEMU AArch64-virt
++- Add privatelibs_avutil variable for explicit private libraries to be
++  appended to Libs.private:
++- Add $LIBDRM to privatelibs_avutil.
 +
-+	Download: Fix scp download handling
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ configure                     | 3 ++-
++ ffbuild/pkgconfig_generate.sh | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
 +
-+	check-package: fix Python 3 support
++diff --git a/configure b/configure
++index 9fe7760822..0996d8a85d 100755
++--- a/configure
+++++ b/configure
++@@ -7096,7 +7096,8 @@ source_path=${source_path}
++ LIBPREF=${LIBPREF}
++ LIBSUF=${LIBSUF}
++ 
++-extralibs_avutil="$LIBRT $LIBDRM $LIBM"
+++extralibs_avutil="$LIBRT $LIBM"
+++privatelibs_avutil="$LIBDRM"
++ extralibs_avcodec="$extralibs"
++ extralibs_avformat="$extralibs"
++ extralibs_avdevice="$extralibs"
++diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
++index e5de6716d2..b86486a107 100755
++--- a/ffbuild/pkgconfig_generate.sh
+++++ b/ffbuild/pkgconfig_generate.sh
++@@ -13,6 +13,7 @@ name=lib${shortname}
++ fullname=${name}${build_suffix}
++ comment=$2
++ libs=$(eval echo \$extralibs_${shortname})
+++privatelibs=$(eval echo \$privatelibs_${shortname})
++ deps=$(eval echo \$${shortname}_deps)
++ 
++ for dep in $deps; do
++@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
++ Requires.private: $($shared && echo $requires)
++ Conflicts:
++ Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
++-Libs.private: $($shared && echo $libs)
+++Libs.private: $($shared && echo $libs) ${privatelibs}
++ Cflags: -I\${includedir}
++ EOF
++ 
++-- 
++2.17.1
 +
-+	get-developers: Fix behaviour when called from elsewhere than
-+	the toplevel directory.
-+
-+	kconfig: Fix for make linux-menuconfig / uboot-menuconfig from
-+	a clean tree when ccache is enabled.
-+
-+	cmake: Also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake
-+
-+	Updated/fixed packages: acpica, apache, apr, avrdude, cargo,
-+	cc-tool, dash, dhcpdump, dmalloc, docker-containerd, efivar,
-+	fwts, glibc, gnuchess, gnupg2, go, leveldb, libarchive,
-+	libassuan, libftdi1, libgpg-error, libhttpparser, libkcapi,
-+	libmad, libsndfile, libsquish, liburiparser, libwebsock,
-+	libxml2, lighttpd, llvm, lm-sensors, lua-msgpack-native, lxc,
-+	mariadb, mbedtls, meson, mosquitto, netatalk, nodejs, odhcp6c,
-+	openresolv, openssh, pango, patchelf, php, python-django,
-+	python-numpy, python-pyyaml, rauc, rp-pppoe, s6-networking,
-+	samba4, sdl_sound, shairport-sync, sqlite, subversion,
-+	sunxi-cedarx, swupdate, systemd, tcpreplay, tekui, tmp2-abrmd,
-+	tpm2-tools, tpm2-tss, udisks, unixodbc, usb_modeswitch,
-+	webkitgtk, wireshark, wolfssl, xapp_rgb, xenomai, xerces
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11576: Unable to start apache with event MPM on raspberry pi 3
-+
- 2018.11.1, Released December 20th, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 998b571071..6379d069d4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.11.1
-+export BR2_VERSION := 2018.11.2
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1545257000
- 
+-- 
+2.17.1
