@@ -1,31 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 08:38:56 +0100
-Subject: [Buildroot] [PATCH 2/2] leveldb: disable parallel build
-In-Reply-To: <20190129193929.27076-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 29 Jan 2019 20:39:29 +0100")
-References: <20190129193929.27076-1-fontaine.fabrice@gmail.com>
- <20190129193929.27076-2-fontaine.fabrice@gmail.com>
-Message-ID: <87muni1tnz.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Jan 2019 08:39:26 +0100
+Subject: [Buildroot] [PATCH] package/busybox: drop empty configure
+ command
+In-Reply-To: <21912_1548828053_5C513D95_21912_326_1_20190130060051.GA3548@r-lnx-nyma7486-2>
+ (yann morin's message of "Wed, 30 Jan 2019 07:00:51 +0100")
+References: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+ <877een8og6.fsf@dell.be.48ers.dk>
+ <21912_1548828053_5C513D95_21912_326_1_20190130060051.GA3548@r-lnx-nyma7486-2>
+Message-ID: <87imy61tn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>>   <yann.morin@orange.com> writes:
 
- > Commit abba4e701246f69bc22ca9045e9932abfe9228e9 did not succeed in
- > fixing all parallel build failures because sometimes $(SHARED_OUTDIR) is
- > created but not $(SHARED_OUTDIR)/db so instead of fixing this mess,
- > revert the patch and disable parallel build as upstream switched to
- > cmake
+ > Peter, All,
+ > On 2019-01-29 16:37 +0100, Peter Korsgaard spake thusly:
+ >> >>>>>   <yann.morin@orange.com> writes:
+ >> 
+ >> > Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
+ >> > longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
+ >> > empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
+ >> 
+ >> > Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
+ >> 
+ >> > Signed-off-by: Yann MORIN <yann.morin@orange.com>
+ >> 
+ >> FYI, your author name was not configured correctly (was your email
+ >> address):
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9c33692aa130a20b0f8e868156e49990e862d6ee
+ > Yeah, I have no idea why that is, because here, my 'From' was really what
+ > you'd expect:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >     From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Committed, thanks.
+ > But it seems my intelligent mail server stripped it out... Let's see how
+ > that one will fare...
+
+Still the same ;)
 
 -- 
 Bye, Peter Korsgaard
