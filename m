@@ -1,63 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 08:38:40 +0100
-Subject: [Buildroot] [git commit] Revert "leveldb: fix parallel build"
-Message-ID: <20190130073902.617DC82CA2@busybox.osuosl.org>
+From: David Picard <dplamp@gmx.com>
+Date: Wed, 30 Jan 2019 08:46:36 +0100
+Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
+In-Reply-To: <20190129183348.GL7130@scaer>
+References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
+ <20190129183348.GL7130@scaer>
+Message-ID: <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64c62209f820e32a0c011b19c6d35a65d708a861
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit abba4e701246f69bc22ca9045e9932abfe9228e9.
+I'm sorry, my message was not clear, it seems. To put it in a nutshell : 
+as soon as a program is linked to Qt5, it crashes with a SIGILL. 
+Everything else works : X11, framebuffer, network, and my own programs 
+(provided they are not linked to Qt5).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/leveldb/0003-fix-parallel-build.patch | 36 ---------------------------
- 1 file changed, 36 deletions(-)
+More interesting :
+I found by DuckDucking that the faulty instruction may be part of the 
+SSE2 instruction set. My CPU doesn't support this.
+build/qt5base-5.11.2/src/corelib/Makefile has "-msse2" in CFLAGS and 
+CXXFLAGS.
 
-diff --git a/package/leveldb/0003-fix-parallel-build.patch b/package/leveldb/0003-fix-parallel-build.patch
-deleted file mode 100644
-index 8aafbc2e02..0000000000
---- a/package/leveldb/0003-fix-parallel-build.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 293e1b08317567b2e479d24530986676ae4d2221 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 8 Oct 2018 23:08:19 +0200
--Subject: [PATCH] fix parallel build
--
--Build of leveldb sometimes fails on:
--Fatal error: can't create out-shared/db/db_bench.o: No such file or directory
--
--Fix this, by creating $(SHARED_OUTDIR) before building
--(SHARED_OUTDIR)/db/db_bench.o
--
--Fixes:
-- - http://autobuild.buildroot.net/results/945bb8096c1f98f307161a6def5a9f7f25b2454a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not upstreamable as upstream switched to cmake]
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index f7cc7d7..edb56a5 100644
----- a/Makefile
--+++ b/Makefile
--@@ -386,7 +386,7 @@ $(STATIC_OUTDIR)/write_batch_test:db/write_batch_test.cc $(STATIC_LIBOBJECTS) $(
-- $(STATIC_OUTDIR)/memenv_test:$(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS)
-- 	$(XCRUN) $(CXX) $(LDFLAGS) $(STATIC_OUTDIR)/helpers/memenv/memenv_test.o $(STATIC_OUTDIR)/libmemenv.a $(STATIC_OUTDIR)/libleveldb.a $(TESTHARNESS) -o $@ $(LIBS)
-- 
---$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
--+$(SHARED_OUTDIR)/db_bench:$(SHARED_OUTDIR) $(SHARED_OUTDIR)/db/db_bench.o $(SHARED_LIBS) $(TESTUTIL)
-- 	$(XCRUN) $(CXX) $(LDFLAGS) $(CXXFLAGS) $(PLATFORM_SHARED_CFLAGS) $(SHARED_OUTDIR)/db/db_bench.o $(TESTUTIL) $(SHARED_OUTDIR)/$(SHARED_LIB3) -o $@ $(LIBS)
-- 
-- .PHONY: run-shared
---- 
--2.17.1
--
+Could you help me get rid of this flag ? I'm connected on the IRC 
+channel today as "dplamp".
+
+I did select all the Geode stuff :
+- Builroot config : BR2_x86_geode=y, BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE=y
+- Kernel config : CONFIG_MGEODE_LX=y, CONFIG_FB_GEODE=y, 
+CONFIG_FB_GEODE_LX=y
+
+
+Le 29/01/2019 ? 19:33, Yann E. MORIN a ?crit?:
+> David, All,
+>
+> On 2019-01-29 19:28 +0100, David Picard spake thusly:
+>> I can build Qt5 successfully. I tested my custom application in QEMU, with
+>> the same disk.img that I use on the read target (AMD Geode LX).
+>>
+>> But on the target, whenever I link one of my programs with Qt5, it
+>> terminates straight away with a SIGILL (illegal instruction). Including a
+>> simple printf("Hello world") that doesn't include nor call in Qt5.
+> [--SNIP--]
+>> I thought I could pass e.g. -march=geode when I build Qt. But I don't know
+>> how to do it. I noticed a arch.conf file in the build directory but it gest
+>> overwritten when I make qt5base-reconfigure...
+> Well, if even a program that is not linked to Qt failes, you won;t solve
+> that by only "fixing" it in Qt...
+>
+> In that cas, since your processor is a geode, you have to confiugyure
+> Buildroot to generate code for that processor, i.e.: BR2_x86_geode=y
+>
+> Regards,
+> Yann E. MORIN.
+>
