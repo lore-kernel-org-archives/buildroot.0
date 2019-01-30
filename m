@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 10:41:17 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] mbedtls: security bump to
+Date: Wed, 30 Jan 2019 10:17:00 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] mbedtls: security bump to
  version 2.7.9
-Message-ID: <20190130094049.B15B081240@busybox.osuosl.org>
+Message-ID: <20190130094054.31FDC82641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06374c180de8ba4cc64d12ae3dd41ca614684a99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7aa9be7b27e582da108bfb738b1ed5e6925878e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 CVE-2018-19608 is fixed by bumping mbdedtls to a version greater or
 equal to 2.7.8, see
