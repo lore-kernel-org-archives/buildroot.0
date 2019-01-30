@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 08:39:26 +0100
-Subject: [Buildroot] [PATCH] package/busybox: drop empty configure
- command
-In-Reply-To: <21912_1548828053_5C513D95_21912_326_1_20190130060051.GA3548@r-lnx-nyma7486-2>
- (yann morin's message of "Wed, 30 Jan 2019 07:00:51 +0100")
-References: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- <877een8og6.fsf@dell.be.48ers.dk>
- <21912_1548828053_5C513D95_21912_326_1_20190130060051.GA3548@r-lnx-nyma7486-2>
-Message-ID: <87imy61tn5.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Jan 2019 08:38:47 +0100
+Subject: [Buildroot] [git commit] leveldb: disable parallel build
+Message-ID: <20190130073902.689B782CEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <yann.morin@orange.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fb22931bcfa66e2b1c8788245876ad7fed134477
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter, All,
- > On 2019-01-29 16:37 +0100, Peter Korsgaard spake thusly:
- >> >>>>>   <yann.morin@orange.com> writes:
- >> 
- >> > Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
- >> > longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
- >> > empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
- >> 
- >> > Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
- >> 
- >> > Signed-off-by: Yann MORIN <yann.morin@orange.com>
- >> 
- >> FYI, your author name was not configured correctly (was your email
- >> address):
+Commit abba4e701246f69bc22ca9045e9932abfe9228e9 did not succeed in
+fixing all parallel build failures because sometimes $(SHARED_OUTDIR) is
+created but not $(SHARED_OUTDIR)/db so instead of fixing this mess,
+revert the patch and disable parallel build as upstream switched to
+cmake
 
- > Yeah, I have no idea why that is, because here, my 'From' was really what
- > you'd expect:
+Fixes:
+ - http://autobuild.buildroot.org/results/9c33692aa130a20b0f8e868156e49990e862d6ee
 
- >     From: "Yann E. MORIN" <yann.morin@orange.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/leveldb/leveldb.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > But it seems my intelligent mail server stripped it out... Let's see how
- > that one will fare...
-
-Still the same ;)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+index 54942a0f27..af9e879828 100644
+--- a/package/leveldb/leveldb.mk
++++ b/package/leveldb/leveldb.mk
+@@ -17,18 +17,18 @@ LEVELDB_MAKE_ARGS += SHARED_LIBS= SHARED_PROGRAMS=
+ endif
+ 
+ define LEVELDB_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) \
+ 		$(LEVELDB_MAKE_ARGS) -C $(@D)
+ endef
+ 
+ define LEVELDB_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
++	$(TARGET_MAKE_ENV) $(MAKE1) \
+ 		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
+ 		$(LEVELDB_MAKE_ARGS) -C $(@D) install
+ endef
+ 
+ define LEVELDB_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
++	$(TARGET_MAKE_ENV) $(MAKE1) \
+ 		INSTALL_ROOT=$(TARGET_DIR) INSTALL_PREFIX=/usr \
+ 		$(LEVELDB_MAKE_ARGS) -C $(@D) install
+ endef
