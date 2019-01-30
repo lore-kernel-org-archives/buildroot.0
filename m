@@ -1,73 +1,55 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Wed, 30 Jan 2019 07:00:51 +0100
-Subject: [Buildroot] [PATCH] package/busybox: drop empty configure
- command
-In-Reply-To: <877een8og6.fsf@dell.be.48ers.dk>
-References: <31287_1548765380_5C5048C4_31287_396_1_f8e0aabc-6c1f-4878-b75e-c8bbc4e1a17e@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- <877een8og6.fsf@dell.be.48ers.dk>
-Message-ID: <21912_1548828053_5C513D95_21912_326_1_20190130060051.GA3548@r-lnx-nyma7486-2>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 30 Jan 2019 08:24:14 +0200
+Subject: [Buildroot] [PATCH 1/2] libpcap: remove unrecognized canusb
+ option
+In-Reply-To: <20190129223355.30600-1-fontaine.fabrice@gmail.com>
+References: <20190129223355.30600-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190130062414.2br2gudhp2vous2u@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Fabrice,
 
-On 2019-01-29 16:37 +0100, Peter Korsgaard spake thusly:
-> >>>>>   <yann.morin@orange.com> writes:
+On Tue, Jan 29, 2019 at 11:33:54PM +0100, Fabrice Fontaine wrote:
+> canusb has been removed since version 1.8.1 and
+> https://github.com/the-tcpdump-group/libpcap/commit/93ca5ff7030aaf1219e1de05ec89a68384bfc50b
 > 
->  > Since commit 50dc350c65 (package/busybox: update to 1.29.0), we no
->  > longer define the BUSYBOX_NOCLOBBER_INSTALL macro, so it expands to an
->  > empty string, so we end up with no action in BUSYBOX_CONFIGURE_CMDS.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+
+baruch
+
+> ---
+>  package/libpcap/libpcap.mk | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
->  > Drop BUSYBOX_CONFIGURE_CMDS now that it serves no purpose.
+> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+> index c4c5f31465..daa369f66c 100644
+> --- a/package/libpcap/libpcap.mk
+> +++ b/package/libpcap/libpcap.mk
+> @@ -38,13 +38,6 @@ else
+>  LIBPCAP_CONF_OPTS += --disable-dbus
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> -LIBPCAP_CONF_OPTS += --enable-canusb
+> -LIBPCAP_DEPENDENCIES += libusb
+> -else
+> -LIBPCAP_CONF_OPTS += --disable-canusb
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_LIBNL),y)
+>  LIBPCAP_DEPENDENCIES += libnl
+>  LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
+> -- 
+> 2.14.1
 > 
->  > Signed-off-by: Yann MORIN <yann.morin@orange.com>
-> 
-> FYI, your author name was not configured correctly (was your email
-> address):
-
-Yeah, I have no idea why that is, because here, my 'From' was really what
-you'd expect:
-
-    From: "Yann E. MORIN" <yann.morin@orange.com>
-
-But it seems my intelligent mail server stripped it out... Let's see how
-that one will fare...
-
-> remote:
-> remote: Refusing to update refs/heads/master:
-> remote:     fc9fd5a8780966970525b4da8313091a0f0bbc80..8cbcb445b951b3b9e19d7cde7253ec6ce61f06f6
-> remote:
-> remote: Author name is not set properly (needs to be first and last name, and it is 'yann.morin at orange.com' instead)
-> 
-> I've fixed that and committed, thanks.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
