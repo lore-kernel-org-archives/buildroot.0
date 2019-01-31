@@ -1,118 +1,102 @@
-From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Thu, 31 Jan 2019 13:15:24 +0100
-Subject: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1. ffserver is
- not supported anymore.
-In-Reply-To: <20190131121526.11816-1-lpdev@cordier.org>
-References: <20190131121526.11816-1-lpdev@cordier.org>
-Message-ID: <20190131121526.11816-5-lpdev@cordier.org>
+From: Gerhard Heift <gerhard@heift.name>
+Date: Thu, 31 Jan 2019 13:59:28 +0100
+Subject: [Buildroot] [PATCH] store debug information in
+ $HOST_DIR/lib/debug
+In-Reply-To: <CAAXf6LV8bLx0Fc_HviELwbwAAR6bLeGi+kdRTc_QRJvq9k5B-g@mail.gmail.com>
+References: <20190123131539.24699-1-Gerhard@Heift.Name>
+ <CAAXf6LV8bLx0Fc_HviELwbwAAR6bLeGi+kdRTc_QRJvq9k5B-g@mail.gmail.com>
+Message-ID: <CACeaM8-HzGuX9sr_X8VsPY3azmUHHrCZV6cVVyheWwWsXfDB6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
----
- package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 -----------------------
- package/ffmpeg/Config.in                  |  6 ----
- package/ffmpeg/ffmpeg.hash                |  2 +-
- package/ffmpeg/ffmpeg.mk                  |  8 +-----
- 4 files changed, 2 insertions(+), 48 deletions(-)
- delete mode 100644 package/ffmpeg/0001-ffmpeg-pthreads.patch
+Am Mi., 30. Jan. 2019 um 21:29 Uhr schrieb Thomas De Schampheleire
+<patrickdepinguin@gmail.com>:
+>
+> El mi?., 23 ene. 2019 a las 14:22, Gerhard Heift
+> (<gerhard@heift.name>) escribi?:
+> >
+> > Before striping the binaries in $TARGET_DIR, the debug information is saved to
+> > $HOST_DIR/lib/debug using the following command as described in [1]:
+> >
+> >   $ objcopy --only-keep-debug --compress-debug-sections $file
+> >
+> > This allows remote debugging as described in section 8.12.2 with striped
+> > binaries in the final image. Therefore the build ID is included during the build
+> > process, if debug information is enabled via BR2_ENABLE_DEBUG.
+> >
+> > [1] https://sourceware.org/gdb/onlinedocs/gdb/Separate-Debug-Files.html
+> >
+> > Signed-off-by: Gerhard Heift <Gerhard@Heift.Name>
+> > ---
+> >  Makefile                   |  6 ++---
+> >  package/Makefile.in        | 12 ++++++---
+> >  support/scripts/copy-debug | 52 ++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 63 insertions(+), 7 deletions(-)
+> >  create mode 100755 support/scripts/copy-debug
+> >
+>
+> If I understand this correctly then the sysroot you'd specify in gdb
+> would be this new directory output/host/lib/debug, right?
+> Previously this gdb sysroot was set as output/staging, see
+> toolchain/helpers.mk. I believe that path should be adapted in your
+> patch.
+>
+> It's unclear to me why you selected 'output/host/lib/debug' as path:
+> this is not about host stuff but target stuff. Moreover, it's also not
+> only about 'lib' but also binaries.
 
-diff --git a/package/ffmpeg/0001-ffmpeg-pthreads.patch b/package/ffmpeg/0001-ffmpeg-pthreads.patch
-deleted file mode 100644
-index c6d75d2297..0000000000
---- a/package/ffmpeg/0001-ffmpeg-pthreads.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From patchwork Wed Oct 25 13:32:36 2017
--Content-Type: text/plain; charset="utf-8"
--MIME-Version: 1.0
--Content-Transfer-Encoding: 7bit
--Subject: [FFmpeg-devel] configure: v4l2_m2m depends on pthreads
--From: Mark Thompson <sw@jkqxz.net>
--X-Patchwork-Id: 5688
--Message-Id: <27e5b360-1210-d550-c8de-a761f8e9f326@jkqxz.net>
--To: FFmpeg development discussions and patches <ffmpeg-devel@ffmpeg.org>
--Date: Wed, 25 Oct 2017 14:32:36 +0100
--
--Fixes build with --disable-pthreads.
--
--Downloaded from upstream patchworks:
--https://patchwork.ffmpeg.org/patch/5688/
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure b/configure
--index c86e578..76523c8 100755
----- a/configure
--+++ b/configure
--@@ -2780,7 +2780,7 @@ omx_rpi_select="omx"
-- qsvdec_select="qsv"
-- qsvenc_select="qsv"
-- vaapi_encode_deps="vaapi"
---v4l2_m2m_deps_any="linux_videodev2_h"
--+v4l2_m2m_deps="linux_videodev2_h pthreads"
-- 
-- hwupload_cuda_filter_deps="cuda"
-- scale_npp_filter_deps="cuda libnpp"
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 2d94c5712a..eec7ce0f6b 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -63,12 +63,6 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
- comment "ffplay needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_FFMPEG_FFSERVER
--	bool "Build ffserver"
--	depends on BR2_USE_MMU # fork()
--	help
--	  FFserver is a streaming server for both audio and video.
--
- config BR2_PACKAGE_FFMPEG_FFPROBE
- 	bool "Build ffprobe"
- 	help
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e00c4ec56c..c21561698f 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 741cbd6394eaed370774ca4cc089eaafbc54d0824b9aa360d4b3b0cbcbc4a92c  ffmpeg-3.4.5.tar.xz
-+sha256 a38ec4d026efb58506a99ad5cd23d5a9793b4bf415f2c4c2e9c1bb444acd1994  ffmpeg-4.1.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index b86d465df8..c42fa54cd1 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.4.5
-+FFMPEG_VERSION = 4.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -84,12 +84,6 @@ else
- FFMPEG_CONF_OPTS += --disable-ffplay
- endif
- 
--ifeq ($(BR2_PACKAGE_FFMPEG_FFSERVER),y)
--FFMPEG_CONF_OPTS += --enable-ffserver
--else
--FFMPEG_CONF_OPTS += --disable-ffserver
--endif
--
- ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
- FFMPEG_CONF_OPTS += --enable-avresample
- else
--- 
-2.20.1
+I just started the cross debugger as mentioned in [1] with
+  $ host/bin/<tuple>-gdb -x staging/usr/share/buildroot/gdbinit
+target/usr/bin/ls
+and let gdb show me, where it searchs for the debug symbols with (see [2]):
+  (gdb) show debug-file-directory
+which outputs the following:
+
+  > The directory where separate debug symbols are searched for is
+"$HOST_DIR/lib/debug".
+
+This is the reason, why I selected this path. I don't need to change
+anything else beside adding the build-id and copying the symbols to
+this path with the provided wrapper.
+
+If you want to store the debug information in another location, either
+the gdbinit generation has to be adjusted in toolchain/helpers.mk to
+contain something like
+  set debug-file-directory $DEBUGDIR
+or the directory has to be provided to the configuration script of gdb
+in packages/gdb/gdb.mk like this
+  HOST_GDB_CONF_OPTS += --with-separate-debug-dir=$DEBUGDIR
+
+The default directory is derived from the prefix and libdir [3], where
+in this case prefix=$HOST_DIR and libdir=$prefix/lib and therefore
+DEBUGDIR=$HOST_DIR/lib/debug
+which is the directory I used with this patch.
+
+If another location is disered, I am happy to provied an extended
+patch, either by extending the gdbinit generation or by adding the
+configuration option for gdb.
+
+If I understand the directory hierarchy correct, then the debug
+symbols should be located under
+DEBUGDIR=$STAGING_DIR/usr/lib/debug
+Is this correct?
+
+> Do you have some numbers regarding size impact on the buildroot
+> directory as a whole for a typical build?
+
+I just did a test with my personal build and it looks like the
+build-id, which is added to identify the debugging symbols, increses
+each binary or library by 56 to 60 bytes.
+
+> Best regards,
+> Thomas
+
+Best regards,
+  Gerhard
+
+[1] https://buildroot.org/downloads/manual/manual.html#_using_literal_gdb_literal_in_buildroot
+[2] https://sourceware.org/gdb/onlinedocs/gdb/Separate-Debug-Files.html
+[3] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/configure.ac;h=d4133ea71e2207c459cab0cadf51a810fe200141;hb=f99d9b9f436dce02aa06839395c67d400b2a0de0#l120
