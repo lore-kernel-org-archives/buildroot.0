@@ -1,66 +1,85 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Thu, 31 Jan 2019 13:15:20 +0100
-Subject: [Buildroot] [PATCH v2 0/6] *** Add Intel QuickSync support to
- ffmpeg ***
-Message-ID: <20190131121526.11816-1-lpdev@cordier.org>
+Date: Thu, 31 Jan 2019 13:15:21 +0100
+Subject: [Buildroot] [PATCH v2 1/6] intel-gmmlib: new package.
+In-Reply-To: <20190131121526.11816-1-lpdev@cordier.org>
+References: <20190131121526.11816-1-lpdev@cordier.org>
+Message-ID: <20190131121526.11816-2-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition of the existing VAAPI for hardware encoding, Intel provides
-the libmfx API embeded in its Intel MediaSDK. Intel MediaSDK improves
-encoding quality, is faster, and makes use of all encoding capabilities
-on Intel platforms.
+Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+---
+v2: (feedback Baruch Siach)
+- Let default install target.
 
-MFX test procedure (h264):
-
-1. Retrieve sample data (https://github.com/Intel-Media-SDK/samples)
-2. Run ./sample_multi_transcode -i::h264 test_stream.264 -o::h264 out.264.
-3. Test should pass.
-
-FFMpeg QuickSync test procedure (h264):
-
-1. Download test video: https://peach.blender.org/trailer-page/
-2. Run ffmpeg -y -hwaccel qsv -qsv_device /dev/dri/renderD128 -c:v 
-h264_qsv -i /trailer_1080p.mov -c:v h264_qsv -framerate 60 -acodec 
-copy out.mp4
-
-Louis-Paul Cordier (6):
-  intel-gmmlib: new package.
-  intel-mediadriver: new package.
-  intel-mediasdk: new package.
-  ffmpeg: bump to version 4.1. ffserver is not supported anymore.
-  ffmpeg: enable Intel QuickSync support.
-  Update DEVELOPERS.
-
- DEVELOPERS                                    |  5 +++
- package/Config.in                             |  3 ++
- package/ffmpeg/0001-ffmpeg-pthreads.patch     | 34 -------------------
- package/ffmpeg/Config.in                      |  6 ----
- package/ffmpeg/ffmpeg.hash                    |  2 +-
- package/ffmpeg/ffmpeg.mk                      | 15 ++++----
- package/intel-gmmlib/Config.in                |  8 +++++
- package/intel-gmmlib/intel-gmmlib.hash        |  2 ++
- package/intel-gmmlib/intel-gmmlib.mk          | 17 ++++++++++
- package/intel-mediadriver/Config.in           | 17 ++++++++++
- .../intel-mediadriver/intel-mediadriver.hash  |  2 ++
- .../intel-mediadriver/intel-mediadriver.mk    | 29 ++++++++++++++++
- package/intel-mediasdk/Config.in              | 13 +++++++
- package/intel-mediasdk/intel-mediasdk.hash    |  2 ++
- package/intel-mediasdk/intel-mediasdk.mk      | 17 ++++++++++
- 15 files changed, 124 insertions(+), 48 deletions(-)
- delete mode 100644 package/ffmpeg/0001-ffmpeg-pthreads.patch
+ package/Config.in                      |  1 +
+ package/intel-gmmlib/Config.in         |  8 ++++++++
+ package/intel-gmmlib/intel-gmmlib.hash |  2 ++
+ package/intel-gmmlib/intel-gmmlib.mk   | 17 +++++++++++++++++
+ 4 files changed, 28 insertions(+)
  create mode 100644 package/intel-gmmlib/Config.in
  create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
  create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
- create mode 100644 package/intel-mediadriver/Config.in
- create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
- create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
- create mode 100644 package/intel-mediasdk/Config.in
- create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
- create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 5036421a73..9082ed9956 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1265,6 +1265,7 @@ menu "Graphics"
+ 	source "package/harfbuzz/Config.in"
+ 	source "package/ijs/Config.in"
+ 	source "package/imlib2/Config.in"
++	source "package/intel-gmmlib/Config.in"
+ 	source "package/irrlicht/Config.in"
+ 	source "package/jasper/Config.in"
+ 	source "package/jpeg/Config.in"
+diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+new file mode 100644
+index 0000000000..8d9fab7ce3
+--- /dev/null
++++ b/package/intel-gmmlib/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_INTEL_GMMLIB
++	bool "intel-gmmlib"
++	depends on BR2_x86_64
++	help
++	  The Intel(R) Graphics Memory Management Library provides
++	  device specific and buffer management for the Intel(R)
++	  Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
++	  Media Driver for VAAPI.
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+new file mode 100644
+index 0000000000..7e3b3dfd3f
+--- /dev/null
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1  intel-gmmlib-18.3.0.tar.gz
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+new file mode 100644
+index 0000000000..e6ca3e5c5e
+--- /dev/null
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# intel-gmmlib
++#
++################################################################################
++
++INTEL_GMMLIB_VERSION = 18.3.0
++INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
++INTEL_GMMLIB_LICENSE = MIT
++INTEL_GMMLIB_LICENSE_FILES = COPYING
++
++INTEL_GMMLIB_INSTALL_STAGING = YES
++INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
++
++INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
++
++$(eval $(cmake-package))
 -- 
 2.20.1
