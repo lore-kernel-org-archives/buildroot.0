@@ -1,81 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Jan 2019 08:33:09 +0100
-Subject: [Buildroot] [git commit] package/docker-engine: add sysv init script
-Message-ID: <20190131073225.6715781513@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jan 2019 08:38:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: add support for a
+ limited set of configuration options
+In-Reply-To: <20190130213451.6c45821d@windsurf>
+References: <20190130201416.9078-1-patrickdepinguin@gmail.com>
+ <20190130213451.6c45821d@windsurf>
+Message-ID: <CAAXf6LUf3hAvk0BcTX4mu0jCsGtFSXxm9jz4wN0YaJnDohfgCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30f23f9980efa612aae5cecc3d4221b912248095
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+El mi?., 30 ene. 2019 a las 21:34, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello,
+>
+> Quick comments, not a full review.
+>
+> On Wed, 30 Jan 2019 21:14:16 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > +config BR2_PACKAGE_PUGIXML_NO_XPATH_SUPPORT
+> > +     bool "Disable XPath support"
+> > +     help
+> > +       Disables XPath support in pugixml. Both XPath interfaces and
+> > +       XPath implementation are excluded from compilation. This
+> > +       option is provided in case you do not need XPath functionality
+> > +       and need to save code space.
+> > +
+> > +config BR2_PACKAGE_PUGIXML_NO_STL_SUPPORT
+> > +     bool "Disable STL support"
+> > +     help
+> > +       Disables use of STL in pugixml. The functions that operate on
+> > +       STL types are no longer present (i.e. load/save via iostream)
+> > +       if this macro is defined.  This option is provided in case
+> > +       your target platform does not have a standard-compliant STL
+> > +       implementation.
+> > +
+> > +config BR2_PACKAGE_PUGIXML_NO_EXCEPTIONS
+> > +     bool "Disable exceptions"
+> > +     help
+> > +       Disables use of exceptions in pugixml. This option is provided
+> > +       in case your target platform does not have exception handling
+> > +       capabilities.
+>
+> These options that you enable to disable something are backwards. Could
+> you turn them over to actual enabling options, with "default y" if you
+> want to keep backward compatibility.
+>
+> > +config BR2_PACKAGE_PUGIXML_HEADER_ONLY
+> > +     bool "Enable header-only version"
+> > +     help
+> > +       All source code for pugixml will be included in every
+> > +       translation unit that includes pugixml.hpp. This is how most
+> > +       of Boost and STL libraries work.
+> > +
+> > +       http://pugixml.org/docs/manual.html#install.building.header
+> > +
+> > +config BR2_PACKAGE_PUGIXML_HAS_LONG_LONG
+>
+> "HAS_LONG_LONG" doesn't read like an enabling option, but like "does
+> this package has long long".
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/S60dockerd       | 38 ++++++++++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk |  5 +++++
- 2 files changed, 43 insertions(+)
+Ok, thanks for both suggestions, I'll send a v2.
 
-diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-new file mode 100755
-index 0000000000..def8bea149
---- /dev/null
-+++ b/package/docker-engine/S60dockerd
-@@ -0,0 +1,38 @@
-+#!/bin/sh
-+
-+NAME=dockerd
-+DAEMON=/usr/bin/$NAME
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON_ARGS=""
-+
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
-+
-+do_start() {
-+        echo -n "Starting $NAME: "
-+        start-stop-daemon --start --quiet --background --make-pidfile \
-+		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+do_stop() {
-+        echo -n "Stopping $NAME: "
-+        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+        start)
-+                do_start
-+                ;;
-+        stop)
-+                do_stop
-+                ;;
-+        restart)
-+                do_stop
-+                sleep 1
-+                do_start
-+                ;;
-+	*)
-+                echo "Usage: $0 {start|stop|restart}"
-+                exit 1
-+esac
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index f19c1d995c..aae44ab6df 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -73,6 +73,11 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
- endef
- 
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
-+		$(TARGET_DIR)/etc/init.d/S60dockerd
-+endef
-+
- define DOCKER_ENGINE_USERS
- 	- - docker -1 * - - - Docker Application Container Framework
- endef
+/Thomas
