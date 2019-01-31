@@ -1,91 +1,139 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Jan 2019 20:22:32 +0100
-Subject: [Buildroot] Buildroot 2018.02.10 released
-Message-ID: <87ftt81vk7.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jan 2019 21:38:45 +0100
+Subject: [Buildroot] [PATCHv2] package/opentracing-cpp: bump version to
+ v1.5.1
+Message-ID: <20190131203846.14965-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Jan Heylen <jan.heylen@nokia.com>
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Bump opentracing-cpp from 1.2.0 to 1.5.1.
+The license has changed from MIT to Apache-2.0.
+The patch is removed because it has been upstreamed.
 
-Buildroot 2018.02.10 is released - Go download it at:
+Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+[ThomasDS: Additional bump from v1.3.0 to v1.5.1]
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ ...d-static-target-a-configurable-optio.patch | 74 -------------------
+ package/opentracing-cpp/opentracing-cpp.hash  |  4 +-
+ package/opentracing-cpp/opentracing-cpp.mk    |  6 +-
+ 3 files changed, 5 insertions(+), 79 deletions(-)
+ delete mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
 
-http://buildroot.org/downloads/buildroot-2018.02.10.tar.gz
+v2: update license and license file
 
-or
-
-http://buildroot.org/downloads/buildroot-2018.02.10.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.02.10 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2018.02.9 release.
-
-- Fixes for Lego EV3 and QEMU AArch64-virt defconfigs
-
-- check-package: fix Python 3 support
-
-- get-developers: Fix behaviour when called from elsewhere than the
-  toplevel directory.
-
-- cmake: Also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake
-
-- Security fixes for apache, asterisk, gnupg2, libarchive, libsndfile,
-  liburiparser, libxml2, mbedtls, mosquitto, netatalk, openssh, pango,
-  php, python-django, python-pyyaml, samba4, sqlite, subversion,
-  tcpreplay, wireshark, wolfssl
-
-- Fixes for download/compilation/runtime issues in acpica, apr, cargo,
-  cc-tool, dash, dhcpdump, dmalloc, gnuchess, leveldb, libftdi1, libmad,
-  libsquish, libwebsock, lighttpd, lm-sensors, lua-msgpack-native,
-  nodejs, rauc, s6-networking, sdl_sound, shairport-sync, sunxi-cedarx,
-  tekui, webkitgtk, xapp_rgb, xenomai
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.10
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.02.9..
-
-    29  Peter Korsgaard
-    19  Fabrice Fontaine
-    10  Baruch Siach
-     7  Thomas Petazzoni
-     6  Ricardo Martincoski
-     4  Bernd Kuhls
-     3  Thomas De Schampheleire
-     2  Arnout Vandecappelle (Essensium/Mind)
-     2  Carlos Santos
-     2  Ferdinand van Aartsen
-     2  Francois Perrad
-     2  Matt Weber
-     2  Peter Seiderer
-     2  Romain Naour
-     2  Yann E. MORIN
-     1  Asaf Kahlon
-     1  Clayton Shotwell
-     1  David Lechner
-     1  Gerome Burlats
-     1  Gr?goire Delattre
-     1  Joshua Henderson
-     1  Mark Corbin
-     1  Scott Fan
-     1  Sergio Prado
-     1  Trent Piepho
-     1  Vadim Kochan
-     1  Yegor Yefremov
-
+diff --git a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+deleted file mode 100644
+index 90a945bb27..0000000000
+--- a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 9462847f23a25524fdc2112cbc8de3f2c02a1669 Mon Sep 17 00:00:00 2001
+-From: Jan Heylen <jan.heylen@nokia.com>
+-Date: Fri, 22 Dec 2017 22:04:29 +0100
+-Subject: [PATCH] CMake: make shared/static target a configurable option
+-
+-Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+----
+- CMakeLists.txt | 40 ++++++++++++++++++++++++++++------------
+- 1 file changed, 28 insertions(+), 12 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index aadf2f9..d03bd00 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -70,18 +70,36 @@ endif()
+- include_directories(include)
+- include_directories(SYSTEM 3rd_party/include)
+- 
+-+option(BUILD_SHARED_LIBS "Build as a shared library" ON)
+-+option(BUILD_STATIC_LIBS "Build as a static library" ON)
+-+
+-+if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
+-+    message(FATAL_ERROR "One or both of BUILD_SHARED_LIBS or BUILD_STATIC_LIBS must be set to ON to build")
+-+endif()
+-+
+- set(SRCS src/propagation.cpp src/noop.cpp src/tracer.cpp)
+--add_library(opentracing SHARED ${SRCS})
+--target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+--set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+-+
+-+if (BUILD_SHARED_LIBS)
+-+  add_library(opentracing SHARED ${SRCS})
+-+  target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+-+  set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+-                                              SOVERSION ${OPENTRACING_VERSION_MAJOR})
+--add_library(opentracing-static STATIC ${SRCS})
+--set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+--target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+--if (CLANG_TIDY_EXE)
+--  set_target_properties(opentracing PROPERTIES
+-+  install(TARGETS opentracing EXPORT OpenTracingTargets
+-+          LIBRARY DESTINATION lib
+-+          ARCHIVE DESTINATION lib)
+-+  if (CLANG_TIDY_EXE)
+-+    set_target_properties(opentracing PROPERTIES
+-                                     CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
+--endif()
+-+  endif()
+-+endif(BUILD_SHARED_LIBS)
+-+
+-+if (BUILD_STATIC_LIBS)
+-+  add_library(opentracing-static STATIC ${SRCS})
+-+  set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+-+  target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+-+  install(TARGETS opentracing-static EXPORT OpenTracingTargets
+-+          ARCHIVE DESTINATION lib)
+-+endif(BUILD_STATIC_LIBS)
+- 
+- 
+- install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+-@@ -89,9 +107,7 @@ install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+-                            PATTERN "*.h")
+- install(DIRECTORY include/opentracing DESTINATION include
+-             FILES_MATCHING PATTERN "*.h")
+--install(TARGETS opentracing opentracing-static EXPORT OpenTracingTargets
+--        LIBRARY DESTINATION lib
+--        ARCHIVE DESTINATION lib)
+-+
+- 
+- # ==============================================================================
+- # Package configuration setup
+--- 
+-2.7.4
+-
+diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
+index d25dbafeea..c5085ba9ce 100644
+--- a/package/opentracing-cpp/opentracing-cpp.hash
++++ b/package/opentracing-cpp/opentracing-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c77041cb2f147ac81b2b0702abfced5565a9cebc318d045c060a4c3e074009ee opentracing-cpp-v1.2.0.tar.gz
+-sha256 b80bffcfee825a69645f7ca97ddba48714031ea5c845198d184714d5490798b6 COPYING
++sha256 015c4187f7a6426a2b5196f0ccd982aa87f010cf61f507ae3ce5c90523f92301 opentracing-cpp-v1.5.1.tar.gz
++sha256 076d03156735d5ff2df2ea0f8b12351ef65e5e9222b5c8c6a35101dadb41e717 LICENSE
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
+index 4e296fc9fb..a61993f7f2 100644
+--- a/package/opentracing-cpp/opentracing-cpp.mk
++++ b/package/opentracing-cpp/opentracing-cpp.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-OPENTRACING_CPP_VERSION = v1.2.0
++OPENTRACING_CPP_VERSION = v1.5.1
+ OPENTRACING_CPP_SITE = $(call github,opentracing,opentracing-cpp,$(OPENTRACING_CPP_VERSION))
+-OPENTRACING_CPP_LICENSE = MIT
+-OPENTRACING_CPP_LICENSE_FILES = COPYING
++OPENTRACING_CPP_LICENSE = Apache-2.0
++OPENTRACING_CPP_LICENSE_FILES = LICENSE
+ 
+ OPENTRACING_CPP_INSTALL_STAGING = YES
+ 
 -- 
-Bye, Peter Korsgaard
+2.19.2
