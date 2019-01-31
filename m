@@ -1,9 +1,9 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Thu, 31 Jan 2019 13:15:26 +0100
-Subject: [Buildroot] [PATCH v2 6/6] Update DEVELOPERS.
+Date: Thu, 31 Jan 2019 13:15:25 +0100
+Subject: [Buildroot] [PATCH v2 5/6] ffmpeg: enable Intel QuickSync support.
 In-Reply-To: <20190131121526.11816-1-lpdev@cordier.org>
 References: <20190131121526.11816-1-lpdev@cordier.org>
-Message-ID: <20190131121526.11816-7-lpdev@cordier.org>
+Message-ID: <20190131121526.11816-6-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
- DEVELOPERS | 5 +++++
- 1 file changed, 5 insertions(+)
+v2:
+- Fix typo.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c1950bb0f4..dfe7bd67c0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1262,6 +1262,11 @@ F:	package/ti-sgx-demos/
- F:	package/ti-sgx-km/
- F:	package/ti-sgx-um/
+ package/ffmpeg/ffmpeg.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index c42fa54cd1..673c79b4e9 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -309,6 +309,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-libbluray
+ endif
  
-+N:  Louis-Paul Cordier <lpdev@cordier.org>
-+F:  package/intel-gmmlib
-+F:  package/intel-mediadriver
-+F:  package/intel-mediasdk
++ifeq ($(BR2_PACKAGE_INTEL_MEDIASDK),y)
++FFMPEG_CONF_OPTS += --enable-libmfx
++FFMPEG_DEPENDENCIES += intel-mediasdk
++else
++FFMPEG_CONF_OPTS += --disable-libmfx
++endif
 +
- N:	Luca Ceresoli <luca@lucaceresoli.net>
- F:	board/olimex/a20_olinuxino/
- F:	board/zynq/
+ ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
+ FFMPEG_CONF_OPTS += --enable-librtmp
+ FFMPEG_DEPENDENCIES += rtmpdump
 -- 
 2.20.1
