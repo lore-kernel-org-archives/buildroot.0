@@ -1,9 +1,9 @@
 From: Louis-Paul Cordier <lpdev@cordier.org>
-Date: Thu, 31 Jan 2019 13:15:21 +0100
-Subject: [Buildroot] [PATCH v2 1/6] intel-gmmlib: new package.
+Date: Thu, 31 Jan 2019 13:15:23 +0100
+Subject: [Buildroot] [PATCH v2 3/6] intel-mediasdk: new package.
 In-Reply-To: <20190131121526.11816-1-lpdev@cordier.org>
 References: <20190131121526.11816-1-lpdev@cordier.org>
-Message-ID: <20190131121526.11816-2-lpdev@cordier.org>
+Message-ID: <20190131121526.11816-4-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +12,82 @@ To: buildroot@busybox.net
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
-v2: (feedback Baruch Siach)
-- Let default install target.
+v2:
+- Let default install target. (feedback Baruch Siach).
+- Let the install target of intel-mediadriver to generate proper 
+env script.
+- Find a better, shorter way to fix FindMFX issue.
+- Remove useless dependencies.
 
- package/Config.in                      |  1 +
- package/intel-gmmlib/Config.in         |  8 ++++++++
- package/intel-gmmlib/intel-gmmlib.hash |  2 ++
- package/intel-gmmlib/intel-gmmlib.mk   | 17 +++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/intel-gmmlib/Config.in
- create mode 100644 package/intel-gmmlib/intel-gmmlib.hash
- create mode 100644 package/intel-gmmlib/intel-gmmlib.mk
+ package/Config.in                          |  1 +
+ package/intel-mediasdk/Config.in           | 13 +++++++++++++
+ package/intel-mediasdk/intel-mediasdk.hash |  2 ++
+ package/intel-mediasdk/intel-mediasdk.mk   | 17 +++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/intel-mediasdk/Config.in
+ create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
+ create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5036421a73..9082ed9956 100644
+index f80d5b69d9..51d272df55 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1265,6 +1265,7 @@ menu "Graphics"
- 	source "package/harfbuzz/Config.in"
- 	source "package/ijs/Config.in"
+@@ -1267,6 +1267,7 @@ menu "Graphics"
  	source "package/imlib2/Config.in"
-+	source "package/intel-gmmlib/Config.in"
+ 	source "package/intel-gmmlib/Config.in"
+ 	source "package/intel-mediadriver/Config.in"
++	source "package/intel-mediasdk/Config.in"
  	source "package/irrlicht/Config.in"
  	source "package/jasper/Config.in"
  	source "package/jpeg/Config.in"
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
 new file mode 100644
-index 0000000000..8d9fab7ce3
+index 0000000000..aa68d10f3b
 --- /dev/null
-+++ b/package/intel-gmmlib/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_INTEL_GMMLIB
-+	bool "intel-gmmlib"
++++ b/package/intel-mediasdk/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_INTEL_MEDIASDK
++	bool "intel-mediasdk"
 +	depends on BR2_x86_64
++	select BR2_PACKAGE_INTEL_MEDIADRIVER
 +	help
-+	  The Intel(R) Graphics Memory Management Library provides
-+	  device specific and buffer management for the Intel(R)
-+	  Graphics Compute Runtime for OpenCL(TM) and the Intel(R)
-+	  Media Driver for VAAPI.
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
++	  Intel(R) Media SDK provides an API to access
++	  hardware-accelerated video decode, encode and filtering on
++	  Intel? platforms with integrated graphics.
++
++	  Supported video encoders: HEVC, AVC, MPEG-2, JPEG
++	  Supported Video decoders: HEVC, AVC, VP8, MPEG-2, VC1, JPEG
++	  Supported video pre-processing filters: Color Conversion,
++	  Deinterlace, Denoise, Resize, Rotate, Composition
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
 new file mode 100644
-index 0000000000..7e3b3dfd3f
+index 0000000000..e7081ae7d2
 --- /dev/null
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1  intel-gmmlib-18.3.0.tar.gz
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
++sha256 46f54f22e5a9cf41f1a6ab55346a0513ed02b2e99d41f9d178c6820d378922e3  intel-mediasdk-18.3.1.tar.gz
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
 new file mode 100644
-index 0000000000..e6ca3e5c5e
+index 0000000000..f57088d64f
 --- /dev/null
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# intel-gmmlib
++# intel-mediasdk
 +#
 +################################################################################
 +
-+INTEL_GMMLIB_VERSION = 18.3.0
-+INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-+INTEL_GMMLIB_LICENSE = MIT
-+INTEL_GMMLIB_LICENSE_FILES = COPYING
++INTEL_MEDIASDK_VERSION = 18.3.1
++INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
++INTEL_MEDIASDK_LICENSE = MIT
++INTEL_MEDIASDK_LICENSE_FILES = COPYING
 +
-+INTEL_GMMLIB_INSTALL_STAGING = YES
-+INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
++INTEL_MEDIASDK_INSTALL_STAGING = YES
++INTEL_MEDIASDK_DEPENDENCIES += intel-mediadriver
 +
-+INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
++INTEL_MEDIASDK_CONF_OPTS += -DMFX_INCLUDE="$(@D)/api/include"
 +
 +$(eval $(cmake-package))
 -- 
