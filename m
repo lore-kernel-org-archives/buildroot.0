@@ -1,102 +1,137 @@
-From: Gerhard Heift <gerhard@heift.name>
-Date: Thu, 31 Jan 2019 13:59:28 +0100
-Subject: [Buildroot] [PATCH] store debug information in
- $HOST_DIR/lib/debug
-In-Reply-To: <CAAXf6LV8bLx0Fc_HviELwbwAAR6bLeGi+kdRTc_QRJvq9k5B-g@mail.gmail.com>
-References: <20190123131539.24699-1-Gerhard@Heift.Name>
- <CAAXf6LV8bLx0Fc_HviELwbwAAR6bLeGi+kdRTc_QRJvq9k5B-g@mail.gmail.com>
-Message-ID: <CACeaM8-HzGuX9sr_X8VsPY3azmUHHrCZV6cVVyheWwWsXfDB6w@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jan 2019 16:11:26 +0100
+Subject: [Buildroot] [PATCH] package/opentracing-cpp: bump version to
+ v1.5.1
+In-Reply-To: <20190130101610.19049-1-thomas.de_schampheleire@nokia.com>
+References: <20190130101610.19049-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <CAAXf6LU1Q3sSUcYcCoGSe7xXn6D1usHYm7Kr+rR3LWQpz_P6qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mi., 30. Jan. 2019 um 21:29 Uhr schrieb Thomas De Schampheleire
-<patrickdepinguin@gmail.com>:
+El mi?., 30 ene. 2019 a las 14:49, De Schampheleire, Thomas (Nokia -
+BE/Antwerp) (<thomas.de_schampheleire@nokia.com>) escribi?:
 >
-> El mi?., 23 ene. 2019 a las 14:22, Gerhard Heift
-> (<gerhard@heift.name>) escribi?:
-> >
-> > Before striping the binaries in $TARGET_DIR, the debug information is saved to
-> > $HOST_DIR/lib/debug using the following command as described in [1]:
-> >
-> >   $ objcopy --only-keep-debug --compress-debug-sections $file
-> >
-> > This allows remote debugging as described in section 8.12.2 with striped
-> > binaries in the final image. Therefore the build ID is included during the build
-> > process, if debug information is enabled via BR2_ENABLE_DEBUG.
-> >
-> > [1] https://sourceware.org/gdb/onlinedocs/gdb/Separate-Debug-Files.html
-> >
-> > Signed-off-by: Gerhard Heift <Gerhard@Heift.Name>
-> > ---
-> >  Makefile                   |  6 ++---
-> >  package/Makefile.in        | 12 ++++++---
-> >  support/scripts/copy-debug | 52 ++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 63 insertions(+), 7 deletions(-)
-> >  create mode 100755 support/scripts/copy-debug
-> >
+> From: Jan Heylen <jan.heylen@nokia.com>
 >
-> If I understand this correctly then the sysroot you'd specify in gdb
-> would be this new directory output/host/lib/debug, right?
-> Previously this gdb sysroot was set as output/staging, see
-> toolchain/helpers.mk. I believe that path should be adapted in your
-> patch.
+> Patch is removed because it has been upstreamed.
 >
-> It's unclear to me why you selected 'output/host/lib/debug' as path:
-> this is not about host stuff but target stuff. Moreover, it's also not
-> only about 'lib' but also binaries.
+> Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+> [ThomasDS: Additional bump from v1.3.0 to v1.5.1]
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  ...d-static-target-a-configurable-optio.patch | 74 -------------------
+>  package/opentracing-cpp/opentracing-cpp.hash  |  2 +-
+>  package/opentracing-cpp/opentracing-cpp.mk    |  2 +-
+>  3 files changed, 2 insertions(+), 76 deletions(-)
+>  delete mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+>
+> diff --git a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+> deleted file mode 100644
+> index 90a945bb27..0000000000
+> --- a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+> +++ /dev/null
+> @@ -1,74 +0,0 @@
+> -From 9462847f23a25524fdc2112cbc8de3f2c02a1669 Mon Sep 17 00:00:00 2001
+> -From: Jan Heylen <jan.heylen@nokia.com>
+> -Date: Fri, 22 Dec 2017 22:04:29 +0100
+> -Subject: [PATCH] CMake: make shared/static target a configurable option
+> -
+> -Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+> ----
+> - CMakeLists.txt | 40 ++++++++++++++++++++++++++++------------
+> - 1 file changed, 28 insertions(+), 12 deletions(-)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index aadf2f9..d03bd00 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -70,18 +70,36 @@ endif()
+> - include_directories(include)
+> - include_directories(SYSTEM 3rd_party/include)
+> -
+> -+option(BUILD_SHARED_LIBS "Build as a shared library" ON)
+> -+option(BUILD_STATIC_LIBS "Build as a static library" ON)
+> -+
+> -+if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
+> -+    message(FATAL_ERROR "One or both of BUILD_SHARED_LIBS or BUILD_STATIC_LIBS must be set to ON to build")
+> -+endif()
+> -+
+> - set(SRCS src/propagation.cpp src/noop.cpp src/tracer.cpp)
+> --add_library(opentracing SHARED ${SRCS})
+> --target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+> --set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+> -+
+> -+if (BUILD_SHARED_LIBS)
+> -+  add_library(opentracing SHARED ${SRCS})
+> -+  target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+> -+  set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+> -                                              SOVERSION ${OPENTRACING_VERSION_MAJOR})
+> --add_library(opentracing-static STATIC ${SRCS})
+> --set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+> --target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+> --if (CLANG_TIDY_EXE)
+> --  set_target_properties(opentracing PROPERTIES
+> -+  install(TARGETS opentracing EXPORT OpenTracingTargets
+> -+          LIBRARY DESTINATION lib
+> -+          ARCHIVE DESTINATION lib)
+> -+  if (CLANG_TIDY_EXE)
+> -+    set_target_properties(opentracing PROPERTIES
+> -                                     CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
+> --endif()
+> -+  endif()
+> -+endif(BUILD_SHARED_LIBS)
+> -+
+> -+if (BUILD_STATIC_LIBS)
+> -+  add_library(opentracing-static STATIC ${SRCS})
+> -+  set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+> -+  target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+> -+  install(TARGETS opentracing-static EXPORT OpenTracingTargets
+> -+          ARCHIVE DESTINATION lib)
+> -+endif(BUILD_STATIC_LIBS)
+> -
+> -
+> - install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+> -@@ -89,9 +107,7 @@ install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+> -                            PATTERN "*.h")
+> - install(DIRECTORY include/opentracing DESTINATION include
+> -             FILES_MATCHING PATTERN "*.h")
+> --install(TARGETS opentracing opentracing-static EXPORT OpenTracingTargets
+> --        LIBRARY DESTINATION lib
+> --        ARCHIVE DESTINATION lib)
+> -+
+> -
+> - # ==============================================================================
+> - # Package configuration setup
+> ---
+> -2.7.4
+> -
+> diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
+> index d25dbafeea..3394563bc7 100644
+> --- a/package/opentracing-cpp/opentracing-cpp.hash
+> +++ b/package/opentracing-cpp/opentracing-cpp.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 c77041cb2f147ac81b2b0702abfced5565a9cebc318d045c060a4c3e074009ee opentracing-cpp-v1.2.0.tar.gz
+> +sha256 015c4187f7a6426a2b5196f0ccd982aa87f010cf61f507ae3ce5c90523f92301 opentracing-cpp-v1.5.1.tar.gz
+>  sha256 b80bffcfee825a69645f7ca97ddba48714031ea5c845198d184714d5490798b6 COPYING
+> diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
+> index 4e296fc9fb..cfe4df70ed 100644
+> --- a/package/opentracing-cpp/opentracing-cpp.mk
+> +++ b/package/opentracing-cpp/opentracing-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENTRACING_CPP_VERSION = v1.2.0
+> +OPENTRACING_CPP_VERSION = v1.5.1
+>  OPENTRACING_CPP_SITE = $(call github,opentracing,opentracing-cpp,$(OPENTRACING_CPP_VERSION))
+>  OPENTRACING_CPP_LICENSE = MIT
+>  OPENTRACING_CPP_LICENSE_FILES = COPYING
 
-I just started the cross debugger as mentioned in [1] with
-  $ host/bin/<tuple>-gdb -x staging/usr/share/buildroot/gdbinit
-target/usr/bin/ls
-and let gdb show me, where it searchs for the debug symbols with (see [2]):
-  (gdb) show debug-file-directory
-which outputs the following:
+I just noticed that the license has changed from MIT to Apache. I will
+send a new version.
 
-  > The directory where separate debug symbols are searched for is
-"$HOST_DIR/lib/debug".
-
-This is the reason, why I selected this path. I don't need to change
-anything else beside adding the build-id and copying the symbols to
-this path with the provided wrapper.
-
-If you want to store the debug information in another location, either
-the gdbinit generation has to be adjusted in toolchain/helpers.mk to
-contain something like
-  set debug-file-directory $DEBUGDIR
-or the directory has to be provided to the configuration script of gdb
-in packages/gdb/gdb.mk like this
-  HOST_GDB_CONF_OPTS += --with-separate-debug-dir=$DEBUGDIR
-
-The default directory is derived from the prefix and libdir [3], where
-in this case prefix=$HOST_DIR and libdir=$prefix/lib and therefore
-DEBUGDIR=$HOST_DIR/lib/debug
-which is the directory I used with this patch.
-
-If another location is disered, I am happy to provied an extended
-patch, either by extending the gdbinit generation or by adding the
-configuration option for gdb.
-
-If I understand the directory hierarchy correct, then the debug
-symbols should be located under
-DEBUGDIR=$STAGING_DIR/usr/lib/debug
-Is this correct?
-
-> Do you have some numbers regarding size impact on the buildroot
-> directory as a whole for a typical build?
-
-I just did a test with my personal build and it looks like the
-build-id, which is added to identify the debugging symbols, increses
-each binary or library by 56 to 60 bytes.
-
-> Best regards,
-> Thomas
-
-Best regards,
-  Gerhard
-
-[1] https://buildroot.org/downloads/manual/manual.html#_using_literal_gdb_literal_in_buildroot
-[2] https://sourceware.org/gdb/onlinedocs/gdb/Separate-Debug-Files.html
-[3] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/configure.ac;h=d4133ea71e2207c459cab0cadf51a810fe200141;hb=f99d9b9f436dce02aa06839395c67d400b2a0de0#l120
+/Thomas
