@@ -1,32 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Jan 2019 23:30:13 +0100
-Subject: [Buildroot] Docker.sock problem
-In-Reply-To: <AM0PR04MB5699FBDFAB694D96AA1C990ECF990@AM0PR04MB5699.eurprd04.prod.outlook.com>
- (Bedran Atug's message of "Wed, 23 Jan 2019 23:46:12 +0000")
-References: <AM0PR04MB5699FBDFAB694D96AA1C990ECF990@AM0PR04MB5699.eurprd04.prod.outlook.com>
-Message-ID: <87o97xzslm.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 30 Jan 2019 19:11:33 -0800
+Subject: [Buildroot] [PATCH] package/docker-engine: add sysv init script
+In-Reply-To: <20190130222810.3927-1-peter@korsgaard.com>
+References: <20190130222810.3927-1-peter@korsgaard.com>
+Message-ID: <87sgx9ed22.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bedran" == Bedran Atug <bedoo47@hotmail.de> writes:
+Hi Peter,
 
- > Hello,
- > I have created an image with Buildroot. I wanted to install Docker
- > inside my image. All docker commands work, but when I start a docker
- > container like docker run hello-world, I get the following problem:
- > Cannot connect to the Docker daemon at unix:/var/run/docker.sock. Is
- > the docker daemon running?
- > I already looked in the var/run/ directory but there is no docker.sock file there.
+Peter Korsgaard <peter@korsgaard.com> writes:
 
-The issue is that the docker-engine package currently does not provide
-an init script to start dockerd at bootup.
+> +++ b/package/docker-engine/S60dockerd
+> @@ -0,0 +1,38 @@
+> +#!/bin/sh
+> +
+> +NAME=dockerd
+> +DAEMON=/usr/bin/$NAME
+> +PIDFILE=/var/run/$NAME.pid
+> +DAEMON_ARGS=""
 
-I have submitted a patch to add a init script:
+We pull the systemd unit file from /contrib/init/systemd/docker.service
+within the docker-engine codebase.
 
-https://patchwork.ozlabs.org/patch/1033807/
+There also exists /contrib/init/openrc as well as sysvinit-debian,
+sysvinit-redhat, and upstart. I guess none of these are suitable for the
+sysv init system.
 
--- 
-Bye, Peter Korsgaard
+> +define DOCKER_ENGINE_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
+> +		$(TARGET_DIR)/etc/init.d/S60dockerd
+> +endef
+
+In general LGTM.
+
+Acked-by: Christian Stewart <christian@paral.in>
+
+Best,
+Christian
