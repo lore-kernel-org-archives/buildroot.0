@@ -1,38 +1,100 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Jan 2019 22:34:05 +0100
-Subject: [Buildroot] [PATCH 3/3] arch/mips: add (Marvell) Octeon III
- processor
-In-Reply-To: <20190130201224.6555-3-patrickdepinguin@gmail.com>
-References: <20190130201224.6555-1-patrickdepinguin@gmail.com>
- <20190130201224.6555-3-patrickdepinguin@gmail.com>
-Message-ID: <3e257345-6455-2584-b2b9-fc61fd51809e@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 Jan 2019 22:39:37 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2018.02.10
+Message-ID: <20190131213914.614A9835FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5c6ee572ffa9a629770b15ef5f8c9ba34b5347c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-On 30/01/2019 21:12, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> The compiler recognizes a specific 'march' value for Octeon III processors,
-> so create a 'Target Architecture Variant' entry for it in the target menu.
-> 
-> Note: support for '-march=octeon3' was added in gcc 5.x. However, the
-> official compiler provided by Marvell (Cavium Networks) uses gcc 4.7.x (and
-> supports -march=octeon3 via their own modifications). For this reason, no
-> line 'select BR2_ARCH_NEEDS_GCC_AT_LEAST_5' is added.
-
- Actually, I wonder if we should not just remove the GCC_AT_LEAST dependencies
-in the custom external toolchain. It's kind of a "you know what you're doing"
-situation.
-
- Perhaps it would make more sense to extend check_unusable_toolchain with a
-configure-style compile-and-link test of a simple main(){} program to check if
-all the arch et al options that we pass in the wrapper are supported, and error
-out at that time.
-
- Regards,
- Arnout
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 8cefc3feb8..e089ad57e6 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.9</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.10</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.02.9.tar.gz">buildroot-2018.02.9.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.9.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.10.tar.gz">buildroot-2018.02.10.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.10.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.02.9.tar.bz2">buildroot-2018.02.9.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.9.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.10.tar.bz2">buildroot-2018.02.10.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.10.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 330852d5ac..6f7ebad5d7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02.10 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 January 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.02.10 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.02.9 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.10">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-January/242027.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02.10.tar.bz2">2018.02.10 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
