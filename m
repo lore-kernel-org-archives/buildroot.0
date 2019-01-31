@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 Jan 2019 22:24:28 +0100
-Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
-In-Reply-To: <22a54ac3-06ef-5094-ddae-88938e303c9d@gmx.com>
-References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
- <20190129183348.GL7130@scaer> <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
- <33183700-a3d6-6917-911e-9b4e3827c8c5@gmx.com>
- <22a54ac3-06ef-5094-ddae-88938e303c9d@gmx.com>
-Message-ID: <c03763ec-8c68-7424-6c36-001ffaf7fa40@mind.be>
+Date: Thu, 31 Jan 2019 22:34:05 +0100
+Subject: [Buildroot] [PATCH 3/3] arch/mips: add (Marvell) Octeon III
+ processor
+In-Reply-To: <20190130201224.6555-3-patrickdepinguin@gmail.com>
+References: <20190130201224.6555-1-patrickdepinguin@gmail.com>
+ <20190130201224.6555-3-patrickdepinguin@gmail.com>
+Message-ID: <3e257345-6455-2584-b2b9-fc61fd51809e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +14,25 @@ To: buildroot@busybox.net
 
 
 
-On 30/01/2019 15:39, David Picard wrote:
-> Hello,
+On 30/01/2019 21:12, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> I fixed it. So for the record, the solution was :
-> BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
+> The compiler recognizes a specific 'march' value for Octeon III processors,
+> so create a 'Target Architecture Variant' entry for it in the target menu.
 > 
-> Got it from Qt's configure utility :
-> $ configure --help
+> Note: support for '-march=octeon3' was added in gcc 5.x. However, the
+> official compiler provided by Marvell (Cavium Networks) uses gcc 4.7.x (and
+> supports -march=octeon3 via their own modifications). For this reason, no
+> line 'select BR2_ARCH_NEEDS_GCC_AT_LEAST_5' is added.
 
- So the proper fix would be to change qt5base.mk to pass this option
-automatically if !BR2_X86_CPU_HAS_SSE2.
+ Actually, I wonder if we should not just remove the GCC_AT_LEAST dependencies
+in the custom external toolchain. It's kind of a "you know what you're doing"
+situation.
+
+ Perhaps it would make more sense to extend check_unusable_toolchain with a
+configure-style compile-and-link test of a simple main(){} program to check if
+all the arch et al options that we pass in the wrapper are supported, and error
+out at that time.
 
  Regards,
  Arnout
