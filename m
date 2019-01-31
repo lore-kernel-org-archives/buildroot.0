@@ -1,100 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 Jan 2019 22:39:37 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.10
-Message-ID: <20190131213914.614A9835FA@busybox.osuosl.org>
+Date: Thu, 31 Jan 2019 22:12:51 +0100
+Subject: [Buildroot] [git commit] Update for 2018.02.10
+Message-ID: <20190131213914.59C20835FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c6ee572ffa9a629770b15ef5f8c9ba34b5347c4
+commit: https://git.buildroot.net/buildroot/commit/?id=96edc472f9adb211df64646585967512a933d501
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5a697610a0af405aac0f7bd98ddf38bc48bc1b7a)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 8cefc3feb8..e089ad57e6 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index cc77a5d3b4..188b88dfd8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -779,6 +779,35 @@
+ 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
+ 		enabled
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.9</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.10</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.9.tar.gz">buildroot-2018.02.9.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.9.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.10.tar.gz">buildroot-2018.02.10.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.10.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.9.tar.bz2">buildroot-2018.02.9.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.9.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.10.tar.bz2">buildroot-2018.02.10.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.10.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 330852d5ac..6f7ebad5d7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.10 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 January 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.10 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02.9 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.10">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-January/242027.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.10.tar.bz2">2018.02.10 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2018.02.10, Released January 31th, 2019
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Defconfigs: Fixes for Lego EV3, QEMU AArch64-virt
++
++	check-package: fix Python 3 support
++
++	get-developers: Fix behaviour when called from elsewhere than
++	the toplevel directory.
++
++	cmake: Also set CMAKE_SYSTEM_VERSION in toolchainfile.cmake
++
++	Updated/fixed packages: acpica, apache, apr, asterisk,
++	avrdude, cargo, cc-tool, dash, dhcpdump, dmalloc, gnuchess,
++	gnupg2, leveldb, libarchive, libassuan, libftdi1,
++	libgpg-error, libhttpparser, libmad, libsndfile, libsquish,
++	liburiparser, libwebsock, libxml2, lighttpd, lm-sensors,
++	lua-msgpack-native, mbedtls, mosquitto, netatalk, nodejs,
++	openssh, pango, patchelf, php, python-django, python-pyyaml,
++	rauc, rp-pppoe, s6-networking, samba4, sdl_sound,
++	shairport-sync, sqlite, subversion, sunxi-cedarx, tcpreplay,
++	tekui, usb_modeswitch, webkitgtk, wireshark, wolfssl,
++	xapp_rgb, xenomai, xerces
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11576: Unable to start apache with event MPM on raspberry pi 3
++
+ 2018.02.9, Released December 20th, 2018
+ 
+ 	Important / security related fixes.
