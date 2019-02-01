@@ -1,82 +1,62 @@
-From: Alexandru Ardelean <ardeleanalex@gmail.com>
-Date: Fri, 1 Feb 2019 15:07:45 +0200
-Subject: [Buildroot] [PATCH] host-genimage: add host-mtools to
- dependency list
-In-Reply-To: <874l9n1zyh.fsf@dell.be.48ers.dk>
-References: <20190201091304.31051-1-alexandru.ardelean@analog.com>
- <874l9n1zyh.fsf@dell.be.48ers.dk>
-Message-ID: <CA+U=DsooYVzQ7SMJ3ACidu4KY0xuHdY=_ZtkgA=NVf0WWpOpeQ@mail.gmail.com>
+From: David Picard <dplamp@gmx.com>
+Date: Fri, 1 Feb 2019 17:08:27 +0100
+Subject: [Buildroot] how to init environment for non-login shell ?
+In-Reply-To: <87va23znl9.fsf@dell.be.48ers.dk>
+References: <a02fffcb-b5ca-145d-f363-8e63bf3cdbfb@gmx.com>
+ <87va23znl9.fsf@dell.be.48ers.dk>
+Message-ID: <2c5ac4ad-4ae8-11a5-fef2-1bcb44751714@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 1, 2019 at 1:59 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Alexandru" == Alexandru Ardelean <ardeleanalex@gmail.com> writes:
->
->  > From: Alexandru Ardelean <ardeleanalex@gmail.com>
->  > The mcopy command is needed to generate vfat images.
->  > If the host system has mtools installed, all is fine, since `genimage`
->  > would use it.
->
->  > But since there is already a `host-mtools` build in the buildroot
->  > packages, then this can be used instead.
->
->  > Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
->
-> There are use cases for genimage that does not require mcopy, so this
-> isn't really nice.
->
-> But it is indeed true that a lot of genimage use cases require
-> host-dosfstools and host-mtools:
->
+Yes, I understand. Thanks for answering me though.
 
-Another idea I was thinking of [in case this one wasn't very popular],
-is to add in Config.in.host a symbol that adds/selects host-mtools if
-enabled.
+I think I fixed it. I was calling startx from a /etc/init.d/rcS script, 
+so of course, there was no previous login environment to propagate. Now, 
+I call startx from /etc/profile.d/startx.sh, only if X is not running.
 
-Personally, I don't mind if we leave this as-is and manually select
-host-mtools for genimage.
+- David
 
-For a use-case I encountered, adding host-mtools like this change seemed useful.
-
-Thanks
-Alex
-
-> E.G. from raspberrypi_defconfig:
+Le 01/02/2019 ? 13:42, Peter Korsgaard a ?crit?:
+>>>>>> "David" == David Picard <dplamp@gmx.com> writes:
+>   > Hello,
+>   > I have set BR2_INIT_BUSYBOX=y.
 >
-> # Required tools to create the SD image
-> BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> BR2_PACKAGE_HOST_GENIMAGE=y
-> BR2_PACKAGE_HOST_MTOOLS=y
+>   > In login shells, no problem : /etc/profile and ~/.profile are
+>   > sourced. But in non-login shells (xterm in Xorg + Fluxbox), they
+>   > aren't. The $HOME variable isn't even set. How can I fix this ?
 >
+>   > To check what shell I'm in :
+>   > $ echo $0
+>   > sh??? ??? ??? ??? ??? --> non-login shell
+>   > $ echo $0
+>   > -sh??? ??? ??? ??? ??? --> login shell
 >
-> > ---
->  >  package/genimage/genimage.mk | 2 +-
->  >  1 file changed, 1 insertion(+), 1 deletion(-)
+> This is really a question for busybox and dash developers. From man
+> dash:
 >
->  > diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
->  > index 393c3e9b94..18eea58af2 100644
->  > --- a/package/genimage/genimage.mk
->  > +++ b/package/genimage/genimage.mk
->  > @@ -7,7 +7,7 @@
->  >  GENIMAGE_VERSION = 10
->  >  GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
->  >  GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
->  > -HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
->  > +HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse host-mtools
->  >  GENIMAGE_LICENSE = GPL-2.0
->  >  GENIMAGE_LICENSE_FILES = COPYING
+> Invocation
 >
->  > --
->  > 2.17.1
+> If no args are present and if the standard input of the shell is
+> connected to a terminal (or if the -i flag is set), and the -c option is
+> not present, the shell is considered an interactive shell.  An
+> interactive shell generally prompts before each command and handles
+> programming and command errors differently (as described below).  When
+> first starting, the shell inspects argument 0, and if it begins with a
+> dash ?-?, the shell is also considered a login shell.  This is normally
+> done automatically by the system when the user first logs in.  A login
+> shell first reads commands from the files /etc/profile and .profile if
+> they exist.  If the environment variable ENV is set on entry to an
+> interactive shell, or is set in the .profile of a login shell, the shell
+> next reads commands from the file named in ENV.  Therefore, a user
+> should place commands that are to be executed only at login time in the
+> .profile file, and commands that are executed for every interactive
+> shell inside the ENV file.  To set the ENV variable to some file, place
+> the following line in your .profile of your home directory
 >
->  > _______________________________________________
->  > buildroot mailing list
->  > buildroot at busybox.net
->  > http://lists.busybox.net/mailman/listinfo/buildroot
+>   ENV=$HOME/.shinit; export ENV
 >
-> --
-> Bye, Peter Korsgaard
+> substituting for ?.shinit? any filename you wish.
+>
