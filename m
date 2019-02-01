@@ -1,67 +1,151 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Feb 2019 12:59:50 +0100
-Subject: [Buildroot] [PATCH] host-genimage: add host-mtools to
- dependency list
-In-Reply-To: <20190201091304.31051-1-alexandru.ardelean@analog.com> (Alexandru
- Ardelean's message of "Fri, 1 Feb 2019 11:13:04 +0200")
-References: <20190201091304.31051-1-alexandru.ardelean@analog.com>
-Message-ID: <874l9n1zyh.fsf@dell.be.48ers.dk>
+Date: Fri,  1 Feb 2019 13:36:23 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python: add upstream security fix
+ for CVE-2019-5010
+Message-ID: <20190201123625.7287-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandru" == Alexandru Ardelean <ardeleanalex@gmail.com> writes:
+Fixes CVE-2019-5010: NULL pointer dereference using a specially crafted X509
+certificate
 
- > From: Alexandru Ardelean <ardeleanalex@gmail.com>
- > The mcopy command is needed to generate vfat images.
- > If the host system has mtools installed, all is fine, since `genimage`
- > would use it.
+https://bugs.python.org/issue35746
 
- > But since there is already a `host-mtools` build in the buildroot
- > packages, then this can be used instead.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ix-segfault-in-ssl-s-cert-parser-GH-11569.patch | 121 +++++++++++++++++++++
+ 1 file changed, 121 insertions(+)
+ create mode 100644 package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
 
- > Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
-
-There are use cases for genimage that does not require mcopy, so this
-isn't really nice.
-
-But it is indeed true that a lot of genimage use cases require
-host-dosfstools and host-mtools:
-
-E.G. from raspberrypi_defconfig:
-
-# Required tools to create the SD image
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-
-> ---
- >  package/genimage/genimage.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
- > index 393c3e9b94..18eea58af2 100644
- > --- a/package/genimage/genimage.mk
- > +++ b/package/genimage/genimage.mk
- > @@ -7,7 +7,7 @@
- >  GENIMAGE_VERSION = 10
- >  GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- >  GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- > -HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
- > +HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse host-mtools
- >  GENIMAGE_LICENSE = GPL-2.0
- >  GENIMAGE_LICENSE_FILES = COPYING
- 
- > -- 
- > 2.17.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch b/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
+new file mode 100644
+index 0000000000..9eec6db8c9
+--- /dev/null
++++ b/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
+@@ -0,0 +1,121 @@
++From 06b15424b0dcacb1c551b2a36e739fffa8d0c595 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Tue, 15 Jan 2019 15:11:52 -0800
++Subject: [PATCH] bpo-35746: Fix segfault in ssl's cert parser (GH-11569)
++
++Fix a NULL pointer deref in ssl module. The cert parser did not handle CRL
++distribution points with empty DP or URI correctly. A malicious or buggy
++certificate can result into segfault.
++
++Signed-off-by: Christian Heimes <christian@python.org>
++
++https://bugs.python.org/issue35746
++(cherry picked from commit a37f52436f9aa4b9292878b72f3ff1480e2606c3)
++
++Co-authored-by: Christian Heimes <christian@python.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/test/talos-2019-0758.pem                       | 22 ++++++++++++++++++++++
++ Lib/test/test_ssl.py                               | 22 ++++++++++++++++++++++
++ .../2019-01-15-18-16-05.bpo-35746.nMSd0j.rst       |  3 +++
++ Modules/_ssl.c                                     |  4 ++++
++ 4 files changed, 51 insertions(+)
++ create mode 100644 Lib/test/talos-2019-0758.pem
++ create mode 100644 Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
++
++diff --git a/Lib/test/talos-2019-0758.pem b/Lib/test/talos-2019-0758.pem
++new file mode 100644
++index 0000000000..13b95a77fd
++--- /dev/null
+++++ b/Lib/test/talos-2019-0758.pem
++@@ -0,0 +1,22 @@
+++-----BEGIN CERTIFICATE-----
+++MIIDqDCCApKgAwIBAgIBAjALBgkqhkiG9w0BAQswHzELMAkGA1UEBhMCVUsxEDAO
+++BgNVBAMTB2NvZHktY2EwHhcNMTgwNjE4MTgwMDU4WhcNMjgwNjE0MTgwMDU4WjA7
+++MQswCQYDVQQGEwJVSzEsMCoGA1UEAxMjY29kZW5vbWljb24tdm0tMi50ZXN0Lmxh
+++bC5jaXNjby5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC63fGB
+++J80A9Av1GB0bptslKRIUtJm8EeEu34HkDWbL6AJY0P8WfDtlXjlPaLqFa6sqH6ES
+++V48prSm1ZUbDSVL8R6BYVYpOlK8/48xk4pGTgRzv69gf5SGtQLwHy8UPBKgjSZoD
+++5a5k5wJXGswhKFFNqyyxqCvWmMnJWxXTt2XDCiWc4g4YAWi4O4+6SeeHVAV9rV7C
+++1wxqjzKovVe2uZOHjKEzJbbIU6JBPb6TRfMdRdYOw98n1VXDcKVgdX2DuuqjCzHP
+++WhU4Tw050M9NaK3eXp4Mh69VuiKoBGOLSOcS8reqHIU46Reg0hqeL8LIL6OhFHIF
+++j7HR6V1X6F+BfRS/AgMBAAGjgdYwgdMwCQYDVR0TBAIwADAdBgNVHQ4EFgQUOktp
+++HQjxDXXUg8prleY9jeLKeQ4wTwYDVR0jBEgwRoAUx6zgPygZ0ZErF9sPC4+5e2Io
+++UU+hI6QhMB8xCzAJBgNVBAYTAlVLMRAwDgYDVQQDEwdjb2R5LWNhggkA1QEAuwb7
+++2s0wCQYDVR0SBAIwADAuBgNVHREEJzAlgiNjb2Rlbm9taWNvbi12bS0yLnRlc3Qu
+++bGFsLmNpc2NvLmNvbTAOBgNVHQ8BAf8EBAMCBaAwCwYDVR0fBAQwAjAAMAsGCSqG
+++SIb3DQEBCwOCAQEAvqantx2yBlM11RoFiCfi+AfSblXPdrIrHvccepV4pYc/yO6p
+++t1f2dxHQb8rWH3i6cWag/EgIZx+HJQvo0rgPY1BFJsX1WnYf1/znZpkUBGbVmlJr
+++t/dW1gSkNS6sPsM0Q+7HPgEv8CPDNK5eo7vU2seE0iWOkxSyVUuiCEY9ZVGaLVit
+++p0C78nZ35Pdv4I+1cosmHl28+es1WI22rrnmdBpH8J1eY6WvUw2xuZHLeNVN0TzV
+++Q3qq53AaCWuLOD1AjESWuUCxMZTK9DPS4JKXTK8RLyDeqOvJGjsSWp3kL0y3GaQ+
+++10T1rfkKJub2+m9A9duin1fn6tHc2wSvB7m3DA==
+++-----END CERTIFICATE-----
++diff --git a/Lib/test/test_ssl.py b/Lib/test/test_ssl.py
++index e476031702..9240184d98 100644
++--- a/Lib/test/test_ssl.py
+++++ b/Lib/test/test_ssl.py
++@@ -72,6 +72,7 @@ NONEXISTINGCERT = data_file("XXXnonexisting.pem")
++ BADKEY = data_file("badkey.pem")
++ NOKIACERT = data_file("nokia.pem")
++ NULLBYTECERT = data_file("nullbytecert.pem")
+++TALOS_INVALID_CRLDP = data_file("talos-2019-0758.pem")
++ 
++ DHFILE = data_file("ffdh3072.pem")
++ BYTES_DHFILE = DHFILE.encode(sys.getfilesystemencoding())
++@@ -227,6 +228,27 @@ class BasicSocketTests(unittest.TestCase):
++         self.assertEqual(p['crlDistributionPoints'],
++                          ('http://SVRIntl-G3-crl.verisign.com/SVRIntlG3.crl',))
++ 
+++    def test_parse_cert_CVE_2019_5010(self):
+++        p = ssl._ssl._test_decode_cert(TALOS_INVALID_CRLDP)
+++        if support.verbose:
+++            sys.stdout.write("\n" + pprint.pformat(p) + "\n")
+++        self.assertEqual(
+++            p,
+++            {
+++                'issuer': (
+++                    (('countryName', 'UK'),), (('commonName', 'cody-ca'),)),
+++                'notAfter': 'Jun 14 18:00:58 2028 GMT',
+++                'notBefore': 'Jun 18 18:00:58 2018 GMT',
+++                'serialNumber': '02',
+++                'subject': ((('countryName', 'UK'),),
+++                            (('commonName',
+++                              'codenomicon-vm-2.test.lal.cisco.com'),)),
+++                'subjectAltName': (
+++                    ('DNS', 'codenomicon-vm-2.test.lal.cisco.com'),),
+++                'version': 3
+++            }
+++        )
+++
++     def test_parse_cert_CVE_2013_4238(self):
++         p = ssl._ssl._test_decode_cert(NULLBYTECERT)
++         if support.verbose:
++diff --git a/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst b/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
++new file mode 100644
++index 0000000000..dffe347eec
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
++@@ -0,0 +1,3 @@
+++[CVE-2019-5010] Fix a NULL pointer deref in ssl module. The cert parser did
+++not handle CRL distribution points with empty DP or URI correctly. A
+++malicious or buggy certificate can result into segfault.
++diff --git a/Modules/_ssl.c b/Modules/_ssl.c
++index a96c419260..19bb1207b4 100644
++--- a/Modules/_ssl.c
+++++ b/Modules/_ssl.c
++@@ -1223,6 +1223,10 @@ _get_crl_dp(X509 *certificate) {
++         STACK_OF(GENERAL_NAME) *gns;
++ 
++         dp = sk_DIST_POINT_value(dps, i);
+++        if (dp->distpoint == NULL) {
+++            /* Ignore empty DP value, CVE-2019-5010 */
+++            continue;
+++        }
++         gns = dp->distpoint->name.fullname;
++ 
++         for (j=0; j < sk_GENERAL_NAME_num(gns); j++) {
++-- 
++2.11.0
++
 -- 
-Bye, Peter Korsgaard
+2.11.0
