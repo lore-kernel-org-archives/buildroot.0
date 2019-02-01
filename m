@@ -1,8 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  1 Feb 2019 13:36:23 +0100
-Subject: [Buildroot] [PATCH 1/2] package/python: add upstream security fix
+Date: Fri,  1 Feb 2019 13:36:24 +0100
+Subject: [Buildroot] [PATCH 2/2] package/python3: add upstream security fix
  for CVE-2019-5010
-Message-ID: <20190201123625.7287-1-peter@korsgaard.com>
+In-Reply-To: <20190201123625.7287-1-peter@korsgaard.com>
+References: <20190201123625.7287-1-peter@korsgaard.com>
+Message-ID: <20190201123625.7287-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,18 +20,18 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...ix-segfault-in-ssl-s-cert-parser-GH-11569.patch | 121 +++++++++++++++++++++
  1 file changed, 121 insertions(+)
- create mode 100644 package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
+ create mode 100644 package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
 
-diff --git a/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch b/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
+diff --git a/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch b/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
 new file mode 100644
-index 0000000000..9eec6db8c9
+index 0000000000..c29ab7efaa
 --- /dev/null
-+++ b/package/python/0035-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
++++ b/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
 @@ -0,0 +1,121 @@
-+From 06b15424b0dcacb1c551b2a36e739fffa8d0c595 Mon Sep 17 00:00:00 2001
++From be5de958e9052e322b0087c6dba81cdad0c3e031 Mon Sep 17 00:00:00 2001
 +From: "Miss Islington (bot)"
 + <31488909+miss-islington@users.noreply.github.com>
-+Date: Tue, 15 Jan 2019 15:11:52 -0800
++Date: Tue, 15 Jan 2019 15:03:36 -0800
 +Subject: [PATCH] bpo-35746: Fix segfault in ssl's cert parser (GH-11569)
 +
 +Fix a NULL pointer deref in ssl module. The cert parser did not handle CRL
@@ -81,18 +83,18 @@ index 0000000000..9eec6db8c9
 ++10T1rfkKJub2+m9A9duin1fn6tHc2wSvB7m3DA==
 ++-----END CERTIFICATE-----
 +diff --git a/Lib/test/test_ssl.py b/Lib/test/test_ssl.py
-+index e476031702..9240184d98 100644
++index f1b9565c8d..b6794ce3a8 100644
 +--- a/Lib/test/test_ssl.py
 ++++ b/Lib/test/test_ssl.py
-+@@ -72,6 +72,7 @@ NONEXISTINGCERT = data_file("XXXnonexisting.pem")
++@@ -116,6 +116,7 @@ NONEXISTINGCERT = data_file("XXXnonexisting.pem")
 + BADKEY = data_file("badkey.pem")
 + NOKIACERT = data_file("nokia.pem")
 + NULLBYTECERT = data_file("nullbytecert.pem")
 ++TALOS_INVALID_CRLDP = data_file("talos-2019-0758.pem")
 + 
 + DHFILE = data_file("ffdh3072.pem")
-+ BYTES_DHFILE = DHFILE.encode(sys.getfilesystemencoding())
-+@@ -227,6 +228,27 @@ class BasicSocketTests(unittest.TestCase):
++ BYTES_DHFILE = os.fsencode(DHFILE)
++@@ -365,6 +366,27 @@ class BasicSocketTests(unittest.TestCase):
 +         self.assertEqual(p['crlDistributionPoints'],
 +                          ('http://SVRIntl-G3-crl.verisign.com/SVRIntlG3.crl',))
 + 
@@ -130,10 +132,10 @@ index 0000000000..9eec6db8c9
 ++not handle CRL distribution points with empty DP or URI correctly. A
 ++malicious or buggy certificate can result into segfault.
 +diff --git a/Modules/_ssl.c b/Modules/_ssl.c
-+index a96c419260..19bb1207b4 100644
++index 9894ad821d..9baec8a9bc 100644
 +--- a/Modules/_ssl.c
 ++++ b/Modules/_ssl.c
-+@@ -1223,6 +1223,10 @@ _get_crl_dp(X509 *certificate) {
++@@ -1516,6 +1516,10 @@ _get_crl_dp(X509 *certificate) {
 +         STACK_OF(GENERAL_NAME) *gns;
 + 
 +         dp = sk_DIST_POINT_value(dps, i);
