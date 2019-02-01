@@ -1,133 +1,100 @@
-From: David Picard <dplamp@gmx.com>
-Date: Fri, 1 Feb 2019 07:53:13 +0100
-Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
-In-Reply-To: <20190131234918.499ab263@gmx.net>
-References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
- <20190129183348.GL7130@scaer> <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
- <33183700-a3d6-6917-911e-9b4e3827c8c5@gmx.com>
- <22a54ac3-06ef-5094-ddae-88938e303c9d@gmx.com>
- <c03763ec-8c68-7424-6c36-001ffaf7fa40@mind.be>
- <20190131234918.499ab263@gmx.net>
-Message-ID: <606c0897-2b69-d84b-e5fc-f654c19789ef@gmx.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri,  1 Feb 2019 07:00:43 +0000 (UTC)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-31
+Message-ID: <20190201070043.7B3BD86A10@fraxinus.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Here is my defconfig.
+Build statistics for 2019-01-31
+===============================
 
-- David
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  22 |   1 |   0 |  23 |
+   2018.11.x |  22 |   2 |   0 |  24 |
+      master | 171 |  20 |   0 | 191 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                 mesa3d-17.3.6 | 1 
 
 
-Le 31/01/2019 ? 23:49, Peter Seiderer a ?crit?:
-> Hello David,
->
-> On Thu, 31 Jan 2019 22:24:28 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->> On 30/01/2019 15:39, David Picard wrote:
->>> Hello,
->>>
->>> I fixed it. So for the record, the solution was :
->>> BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
->>>
->>> Got it from Qt's configure utility :
->>> $ configure --help
->>   So the proper fix would be to change qt5base.mk to pass this option
->> automatically if !BR2_X86_CPU_HAS_SSE2.
-> Yes something like this should fix it ;-)
->
-> David would you mind to share your .config/defconfig file?
->
-> Regards,
-> Peter
->
->>   Regards,
->>   Arnout
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+Detail of failures
+------------------
 
--------------- next part --------------
-BR2_x86_geode=y
-BR2_DL_DIR="$(BASE_DIR)/../dl_scanotron"
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_PACKAGE_HOST_GDB_TUI=y
-BR2_PACKAGE_HOST_GDB_PYTHON=y
-BR2_TARGET_GENERIC_HOSTNAME="scanotron"
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="toor"
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_SCANOTRON_PATH)/board/lx800/rootfs_overlay"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_SCANOTRON_PATH)/board/lx800/linux.config"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_LIBERATION=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
-BR2_PACKAGE_QT5BASE_LINUXFB=y
-BR2_PACKAGE_QT5BASE_XCB=y
-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
-BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-BR2_PACKAGE_QT5BASE_JPEG=y
-BR2_PACKAGE_QT5BASE_PNG=y
-BR2_PACKAGE_QT5BASE_DBUS=y
-BR2_PACKAGE_QT5BASE_TSLIB=y
-BR2_PACKAGE_QT5SERIALBUS=y
-BR2_PACKAGE_QWT=y
-BR2_PACKAGE_QWT_MATHML=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XLIB_LIBXTST=y
-BR2_PACKAGE_XAPP_SESSREG=y
-BR2_PACKAGE_XAPP_XCALC=y
-BR2_PACKAGE_XAPP_XCLIPBOARD=y
-BR2_PACKAGE_XAPP_XCLOCK=y
-BR2_PACKAGE_XAPP_XCONSOLE=y
-BR2_PACKAGE_XAPP_XEYES=y
-BR2_PACKAGE_XAPP_XHOST=y
-BR2_PACKAGE_XAPP_XINIT=y
-BR2_PACKAGE_XAPP_XINPUT=y
-BR2_PACKAGE_XAPP_XINPUT_CALIBRATOR=y
-BR2_PACKAGE_XAPP_XMESSAGE=y
-BR2_PACKAGE_XAPP_XRANDR=y
-BR2_PACKAGE_XAPP_XRDB=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_CIRRUS=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
-BR2_PACKAGE_XTERM=y
-BR2_PACKAGE_FLUXBOX=y
-BR2_PACKAGE_LINUX_FIRMWARE=y
-BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100=y
-BR2_PACKAGE_MSR_TOOLS=y
-BR2_PACKAGE_LIBSHA1=y
-BR2_PACKAGE_LIBFM=y
-BR2_PACKAGE_LIBUSB=y
-BR2_PACKAGE_LIBXML2=y
-BR2_PACKAGE_LIBNL=y
-BR2_PACKAGE_CONNMAN=y
-BR2_PACKAGE_CONNMAN_CLIENT=y
-BR2_PACKAGE_OPENSSH=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-BR2_TARGET_GRUB2=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_LIBRST=y
-BR2_PACKAGE_LIBSZDIST=y
+     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/fb5956fd009245abff378ce83b206d3dacc425a5 |     
+
+Results for branch '2018.11.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+  libnetfilter_cttimeout-1.0.0 | 1 
+          synergy-v2.0.12-beta | 1 
+
+
+Detail of failures
+------------------
+
+         arm |   libnetfilter_cttimeout-1.0.0 | NOK | http://autobuild.buildroot.net/results/137cf1adc81c414454ee56cc4609631ca90b7e2f | ORPH
+         arm |           synergy-v2.0.12-beta | NOK | http://autobuild.buildroot.net/results/55bff09b4d802eee927faf796bf7516a45d88ff1 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+   libtorrent-rasterbar-1.1.11 | 3 
+               curlftpfs-0.9.2 | 2 
+                 gnu-efi-3.0.9 | 2 
+            sunxi-tools-v1.4.1 | 2 
+                civetweb-v1.11 | 1 
+                 expect-5.45.3 | 1 
+                  ffmpeg-3.4.5 | 1 
+                  libnfc-1.7.1 | 1 
+                     lua-5.3.5 | 1 
+                   netsurf-3.8 | 1 
+                 openssh-7.9p1 | 1 
+           python-numpy-1.15.1 | 1 
+                snort-2.9.11.1 | 1 
+             stress-ng-0.09.47 | 1 
+zbar-b3b4e32b55f570372fc3af... | 1 
+
+
+Detail of failures
+------------------
+
+     riscv32 |                 civetweb-v1.11 | NOK | http://autobuild.buildroot.net/results/a5717271beb98b8877f015f021f747228f87c8a7 |     
+     riscv32 |                curlftpfs-0.9.2 | NOK | http://autobuild.buildroot.net/results/258dc2a1031bc3c5748fe8ceeeaa693e5862d047 |     
+     riscv32 |                curlftpfs-0.9.2 | NOK | http://autobuild.buildroot.net/results/9f524cfe3c15a5af6f0e1134a696f37a783e32df |     
+        i686 |                  expect-5.45.3 | NOK | http://autobuild.buildroot.net/results/bc7d2db4384748ee5b10db762d6a128b348c2f2e | ORPH
+    mips64el |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/c66100a4249bd534992ccaff23ec72a41acb0b38 |     
+         arm |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/ac1d619908fa1dfbbf1b5820325e2b6b007a3442 |     
+  aarch64_be |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/d9c7a5704d1e785024312e3175eeda315b0b199c |     
+     riscv32 |                   libnfc-1.7.1 | NOK | http://autobuild.buildroot.net/results/391d479607449802ff1309f4593453efa55f3d63 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/086a9843b3f72cc687d1afc1e55afaf93977b360 |     
+        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/0de753b47422c22ae4dc7390eab931565b0457d3 |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/3495443d10afd2e9035a0814872b049a7a7fa709 |     
+     riscv32 |                      lua-5.3.5 | NOK | http://autobuild.buildroot.net/results/a2f587f8cb1263856976d80b59f59c2a9545099c |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/af793e7f2bff8dab48a57f707d2c518c08ba3f91 |     
+     riscv32 |                  openssh-7.9p1 | NOK | http://autobuild.buildroot.net/results/d0a5863165c94e53d29ade0ef39a89e47db97df9 | ORPH
+         arm |            python-numpy-1.15.1 | NOK | http://autobuild.buildroot.net/results/7842e02cce8523827d58a01aff8f573085f21752 |     
+     aarch64 |                 snort-2.9.11.1 | NOK | http://autobuild.buildroot.net/results/c22409b05e9037c42fe08dad682bee84e8928139 |     
+        or1k |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/acea43e448755c4f81b602636ae8ca33a533fc02 |     
+         arm |             sunxi-tools-v1.4.1 | NOK | http://autobuild.buildroot.net/results/4e9f4550fbee40bb392ac0e9c3b81c6ecf0c0967 | ORPH
+         arm |             sunxi-tools-v1.4.1 | NOK | http://autobuild.buildroot.net/results/eedacc7cf7fcdf5cab72499db5aa44522b86bb37 | ORPH
+     powerpc | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/889fde0d5282ad3a43fafccfd210704f41eb83b3 |     
+
+
+-- 
+http://autobuild.buildroot.net
