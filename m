@@ -1,47 +1,133 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 31 Jan 2019 23:49:18 +0100
+From: David Picard <dplamp@gmx.com>
+Date: Fri, 1 Feb 2019 07:53:13 +0100
 Subject: [Buildroot] flags to build Qt5 for AMD Geode LX arch ?
-In-Reply-To: <c03763ec-8c68-7424-6c36-001ffaf7fa40@mind.be>
+In-Reply-To: <20190131234918.499ab263@gmx.net>
 References: <bb5b237e-ba8d-6857-f475-1960a6375112@gmx.com>
- <20190129183348.GL7130@scaer>
- <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
+ <20190129183348.GL7130@scaer> <56c9f95c-00bf-609b-6b07-5598499aaa20@gmx.com>
  <33183700-a3d6-6917-911e-9b4e3827c8c5@gmx.com>
  <22a54ac3-06ef-5094-ddae-88938e303c9d@gmx.com>
  <c03763ec-8c68-7424-6c36-001ffaf7fa40@mind.be>
-Message-ID: <20190131234918.499ab263@gmx.net>
+ <20190131234918.499ab263@gmx.net>
+Message-ID: <606c0897-2b69-d84b-e5fc-f654c19789ef@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+Hi,
 
-On Thu, 31 Jan 2019 22:24:28 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+Here is my defconfig.
 
-> On 30/01/2019 15:39, David Picard wrote:
-> > Hello,
-> > 
-> > I fixed it. So for the record, the solution was :
-> > BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
-> > 
-> > Got it from Qt's configure utility :
-> > $ configure --help  
-> 
->  So the proper fix would be to change qt5base.mk to pass this option
-> automatically if !BR2_X86_CPU_HAS_SSE2.
+- David
 
-Yes something like this should fix it ;-)
 
-David would you mind to share your .config/defconfig file?
+Le 31/01/2019 ? 23:49, Peter Seiderer a ?crit?:
+> Hello David,
+>
+> On Thu, 31 Jan 2019 22:24:28 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>> On 30/01/2019 15:39, David Picard wrote:
+>>> Hello,
+>>>
+>>> I fixed it. So for the record, the solution was :
+>>> BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
+>>>
+>>> Got it from Qt's configure utility :
+>>> $ configure --help
+>>   So the proper fix would be to change qt5base.mk to pass this option
+>> automatically if !BR2_X86_CPU_HAS_SSE2.
+> Yes something like this should fix it ;-)
+>
+> David would you mind to share your .config/defconfig file?
+>
+> Regards,
+> Peter
+>
+>>   Regards,
+>>   Arnout
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Regards,
-Peter
-
-> 
->  Regards,
->  Arnout
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+BR2_x86_geode=y
+BR2_DL_DIR="$(BASE_DIR)/../dl_scanotron"
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREAD_DEBUG=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_HOST_GDB=y
+BR2_PACKAGE_HOST_GDB_TUI=y
+BR2_PACKAGE_HOST_GDB_PYTHON=y
+BR2_TARGET_GENERIC_HOSTNAME="scanotron"
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="toor"
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_SCANOTRON_PATH)/board/lx800/rootfs_overlay"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh support/scripts/genimage.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_SCANOTRON_PATH)/board/lx800/linux.config"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_GDB=y
+BR2_PACKAGE_LIBERATION=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS="-no-sse2"
+BR2_PACKAGE_QT5BASE_LINUXFB=y
+BR2_PACKAGE_QT5BASE_XCB=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+BR2_PACKAGE_QT5BASE_JPEG=y
+BR2_PACKAGE_QT5BASE_PNG=y
+BR2_PACKAGE_QT5BASE_DBUS=y
+BR2_PACKAGE_QT5BASE_TSLIB=y
+BR2_PACKAGE_QT5SERIALBUS=y
+BR2_PACKAGE_QWT=y
+BR2_PACKAGE_QWT_MATHML=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XLIB_LIBXTST=y
+BR2_PACKAGE_XAPP_SESSREG=y
+BR2_PACKAGE_XAPP_XCALC=y
+BR2_PACKAGE_XAPP_XCLIPBOARD=y
+BR2_PACKAGE_XAPP_XCLOCK=y
+BR2_PACKAGE_XAPP_XCONSOLE=y
+BR2_PACKAGE_XAPP_XEYES=y
+BR2_PACKAGE_XAPP_XHOST=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XINPUT=y
+BR2_PACKAGE_XAPP_XINPUT_CALIBRATOR=y
+BR2_PACKAGE_XAPP_XMESSAGE=y
+BR2_PACKAGE_XAPP_XRANDR=y
+BR2_PACKAGE_XAPP_XRDB=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_CIRRUS=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
+BR2_PACKAGE_XTERM=y
+BR2_PACKAGE_FLUXBOX=y
+BR2_PACKAGE_LINUX_FIRMWARE=y
+BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100=y
+BR2_PACKAGE_MSR_TOOLS=y
+BR2_PACKAGE_LIBSHA1=y
+BR2_PACKAGE_LIBFM=y
+BR2_PACKAGE_LIBUSB=y
+BR2_PACKAGE_LIBXML2=y
+BR2_PACKAGE_LIBNL=y
+BR2_PACKAGE_CONNMAN=y
+BR2_PACKAGE_CONNMAN_CLIENT=y
+BR2_PACKAGE_OPENSSH=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+BR2_TARGET_GRUB2=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_LIBRST=y
+BR2_PACKAGE_LIBSZDIST=y
