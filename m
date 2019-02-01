@@ -1,100 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  1 Feb 2019 07:00:43 +0000 (UTC)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-01-31
-Message-ID: <20190201070043.7B3BD86A10@fraxinus.osuosl.org>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Fri,  1 Feb 2019 11:13:04 +0200
+Subject: [Buildroot] [PATCH] host-genimage: add host-mtools to dependency
+ list
+Message-ID: <20190201091304.31051-1-alexandru.ardelean@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
 
-Build statistics for 2019-01-31
-===============================
+The mcopy command is needed to generate vfat images.
+If the host system has mtools installed, all is fine, since `genimage`
+would use it.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  22 |   1 |   0 |  23 |
-   2018.11.x |  22 |   2 |   0 |  24 |
-      master | 171 |  20 |   0 | 191 |
+But since there is already a `host-mtools` build in the buildroot
+packages, then this can be used instead.
 
-Results for branch '2018.02.x'
-==============================
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+---
+ package/genimage/genimage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Classification of failures by reason
-------------------------------------
-
-                 mesa3d-17.3.6 | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/fb5956fd009245abff378ce83b206d3dacc425a5 |     
-
-Results for branch '2018.11.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-  libnetfilter_cttimeout-1.0.0 | 1 
-          synergy-v2.0.12-beta | 1 
-
-
-Detail of failures
-------------------
-
-         arm |   libnetfilter_cttimeout-1.0.0 | NOK | http://autobuild.buildroot.net/results/137cf1adc81c414454ee56cc4609631ca90b7e2f | ORPH
-         arm |           synergy-v2.0.12-beta | NOK | http://autobuild.buildroot.net/results/55bff09b4d802eee927faf796bf7516a45d88ff1 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-   libtorrent-rasterbar-1.1.11 | 3 
-               curlftpfs-0.9.2 | 2 
-                 gnu-efi-3.0.9 | 2 
-            sunxi-tools-v1.4.1 | 2 
-                civetweb-v1.11 | 1 
-                 expect-5.45.3 | 1 
-                  ffmpeg-3.4.5 | 1 
-                  libnfc-1.7.1 | 1 
-                     lua-5.3.5 | 1 
-                   netsurf-3.8 | 1 
-                 openssh-7.9p1 | 1 
-           python-numpy-1.15.1 | 1 
-                snort-2.9.11.1 | 1 
-             stress-ng-0.09.47 | 1 
-zbar-b3b4e32b55f570372fc3af... | 1 
-
-
-Detail of failures
-------------------
-
-     riscv32 |                 civetweb-v1.11 | NOK | http://autobuild.buildroot.net/results/a5717271beb98b8877f015f021f747228f87c8a7 |     
-     riscv32 |                curlftpfs-0.9.2 | NOK | http://autobuild.buildroot.net/results/258dc2a1031bc3c5748fe8ceeeaa693e5862d047 |     
-     riscv32 |                curlftpfs-0.9.2 | NOK | http://autobuild.buildroot.net/results/9f524cfe3c15a5af6f0e1134a696f37a783e32df |     
-        i686 |                  expect-5.45.3 | NOK | http://autobuild.buildroot.net/results/bc7d2db4384748ee5b10db762d6a128b348c2f2e | ORPH
-    mips64el |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/c66100a4249bd534992ccaff23ec72a41acb0b38 |     
-         arm |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/ac1d619908fa1dfbbf1b5820325e2b6b007a3442 |     
-  aarch64_be |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/d9c7a5704d1e785024312e3175eeda315b0b199c |     
-     riscv32 |                   libnfc-1.7.1 | NOK | http://autobuild.buildroot.net/results/391d479607449802ff1309f4593453efa55f3d63 |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/086a9843b3f72cc687d1afc1e55afaf93977b360 |     
-        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/0de753b47422c22ae4dc7390eab931565b0457d3 |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/3495443d10afd2e9035a0814872b049a7a7fa709 |     
-     riscv32 |                      lua-5.3.5 | NOK | http://autobuild.buildroot.net/results/a2f587f8cb1263856976d80b59f59c2a9545099c |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/af793e7f2bff8dab48a57f707d2c518c08ba3f91 |     
-     riscv32 |                  openssh-7.9p1 | NOK | http://autobuild.buildroot.net/results/d0a5863165c94e53d29ade0ef39a89e47db97df9 | ORPH
-         arm |            python-numpy-1.15.1 | NOK | http://autobuild.buildroot.net/results/7842e02cce8523827d58a01aff8f573085f21752 |     
-     aarch64 |                 snort-2.9.11.1 | NOK | http://autobuild.buildroot.net/results/c22409b05e9037c42fe08dad682bee84e8928139 |     
-        or1k |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/acea43e448755c4f81b602636ae8ca33a533fc02 |     
-         arm |             sunxi-tools-v1.4.1 | NOK | http://autobuild.buildroot.net/results/4e9f4550fbee40bb392ac0e9c3b81c6ecf0c0967 | ORPH
-         arm |             sunxi-tools-v1.4.1 | NOK | http://autobuild.buildroot.net/results/eedacc7cf7fcdf5cab72499db5aa44522b86bb37 | ORPH
-     powerpc | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/889fde0d5282ad3a43fafccfd210704f41eb83b3 |     
-
-
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 393c3e9b94..18eea58af2 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -7,7 +7,7 @@
+ GENIMAGE_VERSION = 10
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+-HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
++HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse host-mtools
+ GENIMAGE_LICENSE = GPL-2.0
+ GENIMAGE_LICENSE_FILES = COPYING
+ 
 -- 
-http://autobuild.buildroot.net
+2.17.1
