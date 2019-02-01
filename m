@@ -1,45 +1,72 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 1 Feb 2019 19:07:53 +0100
-Subject: [Buildroot] bug in package/qt5/qt5base/qt5base.mk ?
-In-Reply-To: <974e7b88-1018-6b1b-79eb-5fa677ef713c@gmx.com>
-References: <974e7b88-1018-6b1b-79eb-5fa677ef713c@gmx.com>
-Message-ID: <20190201190753.2aabfa16@gmx.net>
+Date: Fri,  1 Feb 2019 21:24:52 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5/qt5base: handle
+ sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
+Message-ID: <20190201202452.11724-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+The Qt configure auto detection (and anounced runtime detection
+feature) failes (see e.g. [1]), so override the configuration
+with the buildroot determined settings.
 
-On Fri, 1 Feb 2019 17:20:50 +0100, David Picard <dplamp@gmx.com> wrote:
+[1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
 
-> Hi,
-> 
-> If BR2_PACKAGE_QTBASE_CONFIG_FILE is set, qt5base.mk calls Qt's 
-> configure utility with the '-config' option, which is not recognized by 
-> configure. Also, I couldn't find an equivalent option.
+Reported-by: David Picard <dplamp@gmx.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+ - suggested by Arnout Vandecappelle [2]
 
-You mean BR2_PACKAGE_QT5BASE_CONFIG_FILE and '-qconfig' and yes
-it is the Qt-5.6.x (still present as a choice in buildroot) way
-for fain grained configure...
+[2] http://lists.busybox.net/pipermail/buildroot/2019-January/242030.html
+---
+ package/qt5/qt5base/qt5base.mk | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-> 
-> My suggestion would be to replace the original 
-> $(@D)/src/corelib/global/qconfig.h with the file pointed to by 
-> BR2_PACKAGE_QTBASE_CONFIG_FILE. What do you think ?
-
-The modern way (since Qt-5.8) is via the config.opt file
-and configure -redo (see [1])...
-
-Regards,
-Peter
-
-[1] https://doc.qt.io/QtForDeviceCreation/qt-configuration-tool.html
-
-> 
-> - David
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d10f233b46..b84efcc2bf 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -33,6 +33,37 @@ else
+ QT5BASE_DEPENDENCIES += pcre2
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE2),)
++QT5BASE_CONFIGURE_OPTS += -no-sse2
++else
++ifeq ($(BR2_X86_CPU_HAS_SSE3),)
++QT5BASE_CONFIGURE_OPTS += -no-sse3
++else
++ifeq ($(BR2_X86_CPU_HAS_SSSE3),)
++QT5BASE_CONFIGURE_OPTS += -no-ssse3
++else
++ifeq ($(BR2_X86_CPU_HAS_SSE4),)
++QT5BASE_CONFIGURE_OPTS += -no-sse4.1
++else
++ifeq ($(BR2_X86_CPU_HAS_SSE42),)
++QT5BASE_CONFIGURE_OPTS += -no-sse4.2
++else
++ifeq ($(BR2_X86_CPU_HAS_AVX),)
++QT5BASE_CONFIGURE_OPTS += -no-avx
++else
++ifeq ($(BR2_X86_CPU_HAS_AVX2),)
++QT5BASE_CONFIGURE_OPTS += -no-avx2
++else
++# no BR2_X86_CPU_HAS_AVX512 for qt configure option
++# '-no-avx512' (available for latest)
++endif
++endif
++endif
++endif
++endif
++endif
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+-- 
+2.20.1
