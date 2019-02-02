@@ -1,99 +1,139 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Feb 2019 18:16:41 +0100
-Subject: [Buildroot] [PATCH v4 16/17] package/fftw: remove as regular
- package
-In-Reply-To: <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190202171641.GH6663@scaer>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat,  2 Feb 2019 21:25:59 +0100
+Subject: [Buildroot] [PATCHv3] package/pugixml: add support for a limited
+ set of configuration options
+Message-ID: <20190202202559.19535-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+From: Wouter Vermeiren <wouter.vermeiren@nokia.com>
 
-On 2019-01-21 14:51 +0100, Gwenhael Goavec-Merou spake thusly:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> fftw is no longer a package: only fftw-single, fftw-double,
-> fftw-long-double and fftw-quad are. fftw.mk only contains some common
-> definitions that are used by the different fftw variants.
-> 
-> The old BR2_PACKAGE_FFTW_PRECISION_* options, which are no longer used
-> anywhere, are moved to Config.in.legacy.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  Changes v3 -> V4:
->  * when BR2_PACKAGE_FFTW is enabled without flavour, selects fftw-double
->    by default. (Yann)
->  * suppress suppress two consecutive empty lines. (Yann)
+Signed-off-by: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+[ThomasDS:
+- align with Buildroot coding style
+- rename some options
+- always enable 'long long' type
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/pugixml/Config.in  | 62 ++++++++++++++++++++++++++++++++++++++
+ package/pugixml/pugixml.mk | 25 +++++++++++++++
+ 2 files changed, 87 insertions(+)
 
-:-)
+v3:
+- always enable 'long long' type (feedback Arnout Vandecappelle)
+- remove unnecessary 'strip' on PUGIXML_BUILD_DEFINES
+v2: (feedback Thomas Petazzoni)
+- change 'disable' options into 'enable' and reorder them to be first
+- rename 'has-long-long' option
 
-[--SNIP--]
-> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index 862ad5edc0..bcfdb9c96a 100644
-> --- a/package/fftw/fftw.mk
-> +++ b/package/fftw/fftw.mk
-> @@ -10,22 +10,6 @@ FFTW_INSTALL_STAGING = YES
->  FFTW_LICENSE = GPL-2.0+
->  FFTW_LICENSE_FILES = COPYING
->  
-> -ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
-> -FFTW_DEPENDENCIES += fftw-double
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
-> -FFTW_DEPENDENCIES += fftw-long-double
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
-> -FFTW_DEPENDENCIES += fftw-quad
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
-> -FFTW_DEPENDENCIES += fftw-single
-> -endif
-
-Actually, I think these dependencies should stay. This would allow a
-package that needs any fftw variant to just select BR2_PACKAGE_FFTW
-and add FOO_DEPENDENCIES = fftw.
-
-Regards,
-Yann E. MORIN.
-
->  # fortran support only enables generation and installation of fortran sources
->  ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
->  FFTW_COMMON_CONF_OPTS += --enable-fortran
-> @@ -49,6 +33,4 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
->  endif
->  FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
->  
-> -$(eval $(generic-package))
-> -
->  include $(sort $(wildcard package/fftw/*/*.mk))
-> -- 
-> 2.19.2
-> 
-
+diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
+index c37b1df9e5..421f19f0f2 100644
+--- a/package/pugixml/Config.in
++++ b/package/pugixml/Config.in
+@@ -18,5 +18,67 @@ config BR2_PACKAGE_PUGIXML
+ 	  http://pugixml.org/
+ 	  https://github.com/zeux/pugixml
+ 
++if BR2_PACKAGE_PUGIXML
++
++config BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
++	bool "Enable XPath support"
++	default y
++	help
++	  Enables XPath support in pugixml.
++	  When disabled, both XPath interfaces and XPath implementation
++	  are excluded from compilation. This option is provided in case
++	  you do not need XPath functionality and need to save code
++	  space.
++
++config BR2_PACKAGE_PUGIXML_STL_SUPPORT
++	bool "Enable STL support"
++	default y
++	help
++	  Enables use of STL in pugixml.
++	  When disabled, the functions that operate on STL types are no
++	  longer present (i.e. load/save via iostream). This option is
++	  provided in case your target platform does not have a
++	  standard-compliant STL implementation.
++
++config BR2_PACKAGE_PUGIXML_EXCEPTIONS
++	bool "Enable exceptions"
++	default y
++	help
++	  Enables use of exceptions in pugixml. This option is provided
++	  in case your target platform does not have exception handling
++	  capabilities.
++
++config BR2_PACKAGE_PUGIXML_WCHAR_MODE
++	bool "Enable wchar_t mode"
++	help
++	  Toggles between UTF-8 (default) style interface (the in-memory
++	  text encoding is assumed to be UTF-8, most functions use char
++	  as character type) and UTF-16/32 style interface (the
++	  in-memory text encoding is assumed to be UTF-16/32, depending
++	  on wchar_t size, most functions use wchar_t as character type)
++
++	  http://pugixml.org/docs/manual.html#dom.unicode
++
++config BR2_PACKAGE_PUGIXML_COMPACT
++	bool "Enable compact mode"
++	help
++	  Activates a different internal representation of document
++	  storage that is much more memory efficient for documents with
++	  a lot of markup (i.e.  nodes and attributes), but is slightly
++	  slower to parse and access.
++
++	  http://pugixml.org/docs/manual.html#dom.memory.compact
++
++config BR2_PACKAGE_PUGIXML_HEADER_ONLY
++	bool "Enable header-only version"
++	help
++	  All source code for pugixml will be included in every
++	  translation unit that includes pugixml.hpp. This is how most
++	  of Boost and STL libraries work.
++
++	  http://pugixml.org/docs/manual.html#install.building.header
++
++endif
++
+ comment "pugixml needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index e5188e5f53..faeec4368a 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -10,4 +10,29 @@ PUGIXML_LICENSE = MIT
+ PUGIXML_LICENSE_FILES = readme.txt
+ PUGIXML_INSTALL_STAGING = YES
+ 
++# gcc always supports 'long long' type, see
++# https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
++PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
++
++ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
++PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_STL_SUPPORT),)
++PUGIXML_BUILD_DEFINES += PUGIXML_NO_STL
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_EXCEPTIONS),)
++PUGIXML_BUILD_DEFINES += PUGIXML_NO_EXCEPTIONS
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_WCHAR_MODE),y)
++PUGIXML_BUILD_DEFINES += PUGIXML_WCHAR_MODE
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
++PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
++PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
++endif
++
++PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
++
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.2
