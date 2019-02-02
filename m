@@ -1,139 +1,104 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  2 Feb 2019 21:25:59 +0100
-Subject: [Buildroot] [PATCHv3] package/pugixml: add support for a limited
- set of configuration options
-Message-ID: <20190202202559.19535-1-patrickdepinguin@gmail.com>
+Date: Sat,  2 Feb 2019 21:37:56 +0100
+Subject: [Buildroot] [PATCHv2] package/s6-linux-utils: bump to 2.5.0.0
+Message-ID: <20190202203756.9988-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Wouter Vermeiren <wouter.vermeiren@nokia.com>
-[ThomasDS:
-- align with Buildroot coding style
-- rename some options
-- always enable 'long long' type
+In 2.4.0.2, compilation under glibc 2.28 is fixed (and our local patch can
+thus be removed).
+While at it, bump to the latest released version 2.5.0.0.
+
+Note: change in COPYING file is only the copyright year.
+
+From the NEWS file:
+"""
+In 2.5.0.0
+----------
+ - Optional nsss support.
+ - s6-devd, s6-uevent-listener, s6-uevent-spawner removed.
+
+In 2.4.0.2
+----------
+ - s6-logwatch rewrite.
+ - Better portability with old glibc versions.
+ - s6-uevent-listener and s6-uevent-spawner are marked as deprecated. (The
+   mdevd package obsoletes them.)
+"""
+
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/pugixml/Config.in  | 62 ++++++++++++++++++++++++++++++++++++++
- package/pugixml/pugixml.mk | 25 +++++++++++++++
- 2 files changed, 87 insertions(+)
+ ...s-sysmacros.h-because-glibc-is-glibc.patch | 27 -------------------
+ package/s6-linux-utils/s6-linux-utils.hash    |  4 +--
+ package/s6-linux-utils/s6-linux-utils.mk      |  2 +-
+ 3 files changed, 3 insertions(+), 30 deletions(-)
+ delete mode 100644 package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
 
-v3:
-- always enable 'long long' type (feedback Arnout Vandecappelle)
-- remove unnecessary 'strip' on PUGIXML_BUILD_DEFINES
-v2: (feedback Thomas Petazzoni)
-- change 'disable' options into 'enable' and reorder them to be first
-- rename 'has-long-long' option
+v2:
+- remove leftover patch (feedback Thomas Petazzoni)
+- fix hash of COPYING file
 
-diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
-index c37b1df9e5..421f19f0f2 100644
---- a/package/pugixml/Config.in
-+++ b/package/pugixml/Config.in
-@@ -18,5 +18,67 @@ config BR2_PACKAGE_PUGIXML
- 	  http://pugixml.org/
- 	  https://github.com/zeux/pugixml
+
+diff --git a/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch b/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
+deleted file mode 100644
+index ac31394f2b..0000000000
+--- a/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From bec661b6f037209c67fc7c9f022ee157c342ade6 Mon Sep 17 00:00:00 2001
+-From: Laurent Bercot <ska-skaware@skarnet.org>
+-Date: Thu, 5 Oct 2017 18:05:00 +0000
+-Subject: [PATCH]  Include sys/sysmacros.h because glibc is glibc
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit bec661b6f037
+-
+- src/minutils/s6ps_ttycache.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/minutils/s6ps_ttycache.c b/src/minutils/s6ps_ttycache.c
+-index 7fa4bc09e624..319356044da9 100644
+---- a/src/minutils/s6ps_ttycache.c
+-+++ b/src/minutils/s6ps_ttycache.c
+-@@ -7,6 +7,7 @@
+- #include <string.h>
+- #include <stdint.h>
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <errno.h>
+- #include <skalibs/types.h>
+- #include <skalibs/allreadwrite.h>
+--- 
+-2.18.0
+-
+diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
+index 34fc5ea9b1..20af7328d7 100644
+--- a/package/s6-linux-utils/s6-linux-utils.hash
++++ b/package/s6-linux-utils/s6-linux-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 9562ef293c916c4448d16fcbbc065eb28fd995ac34cd3538179cbc3ee056ab93  s6-linux-utils-2.4.0.1.tar.gz
+-sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
++sha256 78571574464c76fc623ef50dc14800138b4fd98c5fa877af6850fdd9c2f90213  s6-linux-utils-2.5.0.0.tar.gz
++sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
+diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
+index 3f1745708d..619f4c3732 100644
+--- a/package/s6-linux-utils/s6-linux-utils.mk
++++ b/package/s6-linux-utils/s6-linux-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+if BR2_PACKAGE_PUGIXML
-+
-+config BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
-+	bool "Enable XPath support"
-+	default y
-+	help
-+	  Enables XPath support in pugixml.
-+	  When disabled, both XPath interfaces and XPath implementation
-+	  are excluded from compilation. This option is provided in case
-+	  you do not need XPath functionality and need to save code
-+	  space.
-+
-+config BR2_PACKAGE_PUGIXML_STL_SUPPORT
-+	bool "Enable STL support"
-+	default y
-+	help
-+	  Enables use of STL in pugixml.
-+	  When disabled, the functions that operate on STL types are no
-+	  longer present (i.e. load/save via iostream). This option is
-+	  provided in case your target platform does not have a
-+	  standard-compliant STL implementation.
-+
-+config BR2_PACKAGE_PUGIXML_EXCEPTIONS
-+	bool "Enable exceptions"
-+	default y
-+	help
-+	  Enables use of exceptions in pugixml. This option is provided
-+	  in case your target platform does not have exception handling
-+	  capabilities.
-+
-+config BR2_PACKAGE_PUGIXML_WCHAR_MODE
-+	bool "Enable wchar_t mode"
-+	help
-+	  Toggles between UTF-8 (default) style interface (the in-memory
-+	  text encoding is assumed to be UTF-8, most functions use char
-+	  as character type) and UTF-16/32 style interface (the
-+	  in-memory text encoding is assumed to be UTF-16/32, depending
-+	  on wchar_t size, most functions use wchar_t as character type)
-+
-+	  http://pugixml.org/docs/manual.html#dom.unicode
-+
-+config BR2_PACKAGE_PUGIXML_COMPACT
-+	bool "Enable compact mode"
-+	help
-+	  Activates a different internal representation of document
-+	  storage that is much more memory efficient for documents with
-+	  a lot of markup (i.e.  nodes and attributes), but is slightly
-+	  slower to parse and access.
-+
-+	  http://pugixml.org/docs/manual.html#dom.memory.compact
-+
-+config BR2_PACKAGE_PUGIXML_HEADER_ONLY
-+	bool "Enable header-only version"
-+	help
-+	  All source code for pugixml will be included in every
-+	  translation unit that includes pugixml.hpp. This is how most
-+	  of Boost and STL libraries work.
-+
-+	  http://pugixml.org/docs/manual.html#install.building.header
-+
-+endif
-+
- comment "pugixml needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index e5188e5f53..faeec4368a 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -10,4 +10,29 @@ PUGIXML_LICENSE = MIT
- PUGIXML_LICENSE_FILES = readme.txt
- PUGIXML_INSTALL_STAGING = YES
- 
-+# gcc always supports 'long long' type, see
-+# https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
-+PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
-+
-+ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
-+PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
-+endif
-+ifeq ($(BR2_PACKAGE_PUGIXML_STL_SUPPORT),)
-+PUGIXML_BUILD_DEFINES += PUGIXML_NO_STL
-+endif
-+ifeq ($(BR2_PACKAGE_PUGIXML_EXCEPTIONS),)
-+PUGIXML_BUILD_DEFINES += PUGIXML_NO_EXCEPTIONS
-+endif
-+ifeq ($(BR2_PACKAGE_PUGIXML_WCHAR_MODE),y)
-+PUGIXML_BUILD_DEFINES += PUGIXML_WCHAR_MODE
-+endif
-+ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
-+PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
-+endif
-+ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
-+PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
-+endif
-+
-+PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
-+
- $(eval $(cmake-package))
+-S6_LINUX_UTILS_VERSION = 2.4.0.1
++S6_LINUX_UTILS_VERSION = 2.5.0.0
+ S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
+ S6_LINUX_UTILS_LICENSE = ISC
+ S6_LINUX_UTILS_LICENSE_FILES = COPYING
 -- 
 2.19.2
