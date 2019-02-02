@@ -1,64 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Feb 2019 15:51:23 +0100
-Subject: [Buildroot] [PATCH v2 1/6] intel-gmmlib: new package.
-In-Reply-To: <20190131121526.11816-2-lpdev@cordier.org>
-References: <20190131121526.11816-1-lpdev@cordier.org>
- <20190131121526.11816-2-lpdev@cordier.org>
-Message-ID: <20190202155123.7200cc06@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Feb 2019 15:52:55 +0100
+Subject: [Buildroot] [PATCH v4 07/17] package/aubio: use the new
+ fftw-double and fftw-single packages
+In-Reply-To: <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-2-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190202145255.GB3761@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Gwenhael, All,
 
-Nit: there shouldn't be a final dot at end of commit title.
+On 2019-01-21 14:51 +0100, Gwenhael Goavec-Merou spake thusly:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> [Thomas: drop the condition on BR2_PACKAGE_FFTW]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Changes v3 -> v4:
+>  * allows to build samplerate without fft support and ensure samplerate and
+>    double precision are not enabled in same time. (yann)
+> ---
+>  package/aubio/aubio.mk | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+> index b0cc8b899e..ba182d9bd7 100644
+> --- a/package/aubio/aubio.mk
+> +++ b/package/aubio/aubio.mk
+> @@ -27,7 +27,7 @@ AUBIO_CONF_OPTS += --disable-sndfile
+>  endif
+>  
+>  # Could not compile aubio in double precision mode with libsamplerate
+> -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
+> +ifeq ($(BR2_PACKAGE_LIBSAMPLERATE):$(BR2_PACKAGE_FFTW_DOUBLE),y:)
+>  AUBIO_DEPENDENCIES += libsamplerate
+>  AUBIO_CONF_OPTS += --enable-samplerate
+>  else
+> @@ -41,15 +41,14 @@ else
+>  AUBIO_CONF_OPTS += --disable-jack
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW),y)
+> -AUBIO_DEPENDENCIES += fftw
+>  # fftw3 require double otherwise it will look for fftw3f
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+>  AUBIO_CONF_OPTS += --enable-fftw3 --enable-double
+> -else ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+> +AUBIO_DEPENDENCIES += fftw-double
+> +else ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+>  AUBIO_CONF_OPTS += --enable-fftw3f --disable-double
+> -endif
+> -else  # !BR2_PACKAGE_FFTW
+> +AUBIO_DEPENDENCIES += fftw-single
+> +else
+>  AUBIO_CONF_OPTS += --disable-fftw3
+>  endif
 
-On Thu, 31 Jan 2019 13:15:21 +0100
-Louis-Paul Cordier <lpdev@cordier.org> wrote:
+So, with this new code, it means that using fftw-double takes
+precendence over libsamplerate, so we can get in a situation, when
+fftw-single, fftw-double, and libsamplerate are all three enabled.
 
->  package/Config.in                      |  1 +
->  package/intel-gmmlib/Config.in         |  8 ++++++++
->  package/intel-gmmlib/intel-gmmlib.hash |  2 ++
->  package/intel-gmmlib/intel-gmmlib.mk   | 17 +++++++++++++++++
+I wonder if, in that situation, we should not favour using libsamplerate and
+fftw-single, rather than using just fftw-double?
 
-Missing update to the DEVELOPERS file
+Note that I am totally OK with the patch as is, and that someone can
+come later to change the conditions, so:
 
-> +sha256 e3114d7ddd429f1b9aa43a1b1d0086d881fbf4d90e4a90ab8577c369d2e3a5e1  intel-gmmlib-18.3.0.tar.gz
-> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-> new file mode 100644
-> index 0000000000..e6ca3e5c5e
-> --- /dev/null
-> +++ b/package/intel-gmmlib/intel-gmmlib.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# intel-gmmlib
-> +#
-> +################################################################################
-> +
-> +INTEL_GMMLIB_VERSION = 18.3.0
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-There is an ewer 18.4.1 version available.
+Regards,
+Yann E. MORIN.
 
-> +INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
-> +INTEL_GMMLIB_LICENSE = MIT
-> +INTEL_GMMLIB_LICENSE_FILES = COPYING
-> +
-> +INTEL_GMMLIB_INSTALL_STAGING = YES
-> +INTEL_GMMLIB_SUPPORTS_IN_SOURCE_BUILD = NO
-> +
-> +INTEL_GMMLIB_CONF_OPTS += -DRUN_TEST_SUITE=OFF
-
-+= can be made just =.
-
-Other than those minor nits, looks good to me.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
