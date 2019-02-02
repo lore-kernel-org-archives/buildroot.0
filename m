@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Feb 2019 17:45:04 +0100
-Subject: [Buildroot] [PATCH v4 14/17] package/pulseaudio: use the new
- fftw-single package
-In-Reply-To: <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
+Date: Sat, 2 Feb 2019 17:54:52 +0100
+Subject: [Buildroot] [PATCH v4 15/17] package/liquid-dsp: use the new
+ fftw-{single, double, long-double} packages
+In-Reply-To: <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
@@ -13,7 +12,8 @@ References: <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190202164504.GF6663@scaer>
+ <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190202165452.GG6663@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,38 +25,58 @@ Gwenhael, All,
 On 2019-01-21 14:51 +0100, Gwenhael Goavec-Merou spake thusly:
 > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> This patch add an explicitly dependency to fftw-single (the only compatible
-> fftw's flavor) instead of default behavior where the package do assumption
-> about the compatible version.
-> 
 > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I still believe this change to be incorrect, since liquiddsp only really
+supports fftw-single, as patch 17 states.
+
+So, at the very least, I believe tpatch 17 should be squashed into this
+one, and an even better solution would be to actually fix the package in
+a previous patch, as I said in my previous review.
 
 Regards,
 Yann E. MORIN.
 
 > ---
-> Changes v3 -> v4:
->  * improve commit message about fftw version. (Yann)
-> ---
->  package/pulseaudio/pulseaudio.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/liquid-dsp/liquid-dsp.mk | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-> index d1c35654cf..c91af22935 100644
-> --- a/package/pulseaudio/pulseaudio.mk
-> +++ b/package/pulseaudio/pulseaudio.mk
-> @@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
->  	$(if $(BR2_PACKAGE_DBUS),dbus) \
->  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
-> -	$(if $(BR2_PACKAGE_FFTW),fftw) \
-> +	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
->  	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+> diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+> index db67893844..6aa27a5248 100644
+> --- a/package/liquid-dsp/liquid-dsp.mk
+> +++ b/package/liquid-dsp/liquid-dsp.mk
+> @@ -30,9 +30,9 @@ LIQUID_DSP_CFLAGS += -ffast-math
+>  endif
 >  
->  ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
+>  # use FFTW instead of built-in FFT
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3f
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-single
+>  endif
+>  
+>  # disable altivec, it has build issues
+> @@ -40,14 +40,14 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+>  LIQUID_DSP_CONF_OPTS += --enable-simdoverride
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-double
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
+> +ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+>  LIQUID_DSP_LDFLAGS += -lfftw3l
+> -LIQUID_DSP_DEPENDENCIES += fftw
+> +LIQUID_DSP_DEPENDENCIES += fftw-long-double
+>  endif
+>  
+>  LIQUID_DSP_CONF_OPTS += \
 > -- 
 > 2.19.2
 > 
