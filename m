@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Feb 2019 17:42:59 +0100
-Subject: [Buildroot] [PATCH v4 12/17] package/imagemagick: use the new
+Date: Sat, 2 Feb 2019 17:44:22 +0100
+Subject: [Buildroot] [PATCH v4 13/17] package/libvips: use the new
  fftw-double package
-In-Reply-To: <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
+In-Reply-To: <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
@@ -13,7 +12,8 @@ References: <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190202164259.GD6663@scaer>
+ <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190202164422.GE6663@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -41,26 +41,24 @@ Yann E. MORIN.
 > Changes v3 -> v4:
 >  * improve commit message about fftw version. (Yann)
 > ---
->  package/imagemagick/imagemagick.mk | 4 ++--
+>  package/libvips/libvips.mk | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index 72482267ce..7678980582 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
-> @@ -113,11 +113,11 @@ else
->  IMAGEMAGICK_CONF_OPTS += --without-lzma
+> diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+> index 8078e046d1..7622f32fbc 100644
+> --- a/package/libvips/libvips.mk
+> +++ b/package/libvips/libvips.mk
+> @@ -68,9 +68,9 @@ else
+>  LIBVIPS_CONF_OPTS += --without-tiff
 >  endif
 >  
 > -ifeq ($(BR2_PACKAGE_FFTW),y)
 > +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
->  # configure script misdetects these leading to build errors
->  IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
->  IMAGEMAGICK_CONF_OPTS += --with-fftw
-> -IMAGEMAGICK_DEPENDENCIES += fftw
-> +IMAGEMAGICK_DEPENDENCIES += fftw-double
+>  LIBVIPS_CONF_OPTS += --with-fftw
+> -LIBVIPS_DEPENDENCIES += fftw
+> +LIBVIPS_DEPENDENCIES += fftw-double
 >  else
->  IMAGEMAGICK_CONF_OPTS += --without-fftw
+>  LIBVIPS_CONF_OPTS += --without-fftw
 >  endif
 > -- 
 > 2.19.2
