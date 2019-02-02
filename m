@@ -1,45 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Feb 2019 15:03:20 +0100
-Subject: [Buildroot] [PATCH 1/3] aircrack-ng: add optional hwloc
- dependency
-In-Reply-To: <20190130172835.4761-1-fontaine.fabrice@gmail.com>
-References: <20190130172835.4761-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190202150320.3edb8af6@windsurf>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 2 Feb 2019 15:14:07 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/pugixml: add support for a
+ limited set of configuration options
+In-Reply-To: <5166d507-189b-f139-f9a7-c0cac006f014@mind.be>
+References: <20190131074019.19252-1-patrickdepinguin@gmail.com>
+ <5166d507-189b-f139-f9a7-c0cac006f014@mind.be>
+Message-ID: <CAAXf6LUZDh6Htqq6M+2T+XW-7bx+Ohww6VGD6Ycw-Ao-jsANEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+On Sat, Feb 2, 2019, 14:37 Arnout Vandecappelle <arnout@mind.be wrote:
 
-On Wed, 30 Jan 2019 18:28:33 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+>
+> On 31/01/2019 08:40, Thomas De Schampheleire wrote:
+> > +config BR2_PACKAGE_PUGIXML_FORCE_ENABLE_LONG_LONG
+> > +     bool "Force-enable long long support"
+> > +     help
+> > +       Force-enables support for long long type in pugixml.  Long
+> > +       long support is automatically enabled if your platform is
+> > +       known to have long long support (i.e. has C++11 support or
+> > +       uses a reasonably modern version of a known compiler). If
+> > +       pugixml does not recognize that your platform supports long
+> > +       long but in fact it does, you can enable the define manually.
+> > +endif
+>
+>  AFAIK gcc always supports long long, so shouldn't we just always enable
+> this?
+>
 
-> hwloc dependency has been added in version 1.4 with
-> https://github.com/aircrack-ng/aircrack-ng/commit/c31b27449962bc69638b32ec14e0ffdb8997dfcf
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/aircrack-ng/aircrack-ng.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Gcc doc says:
+https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
+"ISO C99 and ISO C++11 support data types for integers that are at least 64
+bits wide, and as an extension GCC supports them in C90 and C++98 modes.
+Simply write long long int for a signed integer, or unsigned long long int
+for an unsigned integer."
 
-Series applied, thanks. I hesitated a bit on PATCH 2/3, because we
-typically don't really care about building tests in the context of
-Buildroot. However, since unit tests in aircrack-ng are unconditionally
-built, and the result depends on whether cmoka is available or not, it
-makes sense to have it as an optional dependency.
+So it seems you are right.
+I will send an update later...
 
-Also, could you start using the convention of "package/<foo>" prefixes
-for your commit titles ? We have finally standardized a bit the format
-of commit titles, see:
-
-  http://nightly.buildroot.org/manual.html#submitting-patches
-
-Thanks!
-
+Thanks
 Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190202/e1dd4bcb/attachment.html>
