@@ -1,45 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  2 Feb 2019 14:39:53 +0100
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20190123
-Message-ID: <20190202133953.14021-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 2 Feb 2019 14:57:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s6-linux-utils: bump to 2.5.0.0
+In-Reply-To: <20190130201436.9514-1-patrickdepinguin@gmail.com>
+References: <20190130201436.9514-1-patrickdepinguin@gmail.com>
+Message-ID: <20190202145704.27115bc9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-January/003805.html
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, 30 Jan 2019 21:14:35 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 265ae671ef..70558de720 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2018-December/003687.html
--sha256 2e9f86acefa49dbfb7fa6f5e10d543f1885a2d5460cd5e102696901107675735  WireGuard-0.0.20181218.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-January/003805.html
-+sha256 edd13c7631af169e3838621b1a1bff3ef73cf7bc778eec2bd55f7c1089ffdf9b  WireGuard-0.0.20190123.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index d36929efd8..8d6cdb8e56 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20181218
-+WIREGUARD_VERSION = 0.0.20190123
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> In 2.4.0.2, compilation under glibc 2.28 is fixed.
+> While at it, bump to the latest released version 2.5.0.0.
+> 
+> From the NEWS file:
+> 
+> In 2.5.0.0
+> ----------
+>  - Optional nsss support.
+>  - s6-devd, s6-uevent-listener, s6-uevent-spawner removed.
+> 
+> In 2.4.0.2
+> ----------
+>  - s6-logwatch rewrite.
+>  - Better portability with old glibc versions.
+>  - s6-uevent-listener and s6-uevent-spawner are marked as deprecated. (The
+>    mdevd package obsoletes them.)
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+This patch seems to be incomplete:
+
+$ make s6-linux-utils-legal-info
+s6-linux-utils-2.5.0.0.tar.gz: OK (sha256: 78571574464c76fc623ef50dc14800138b4fd98c5fa877af6850fdd9c2f90213)
+>>> s6-linux-utils 2.5.0.0 Extracting
+gzip -d -c /home/thomas/dl/s6-linux-utils/s6-linux-utils-2.5.0.0.tar.gz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/s6-linux-utils-2.5.0.0   -xf -
+>>> s6-linux-utils 2.5.0.0 Patching
+
+Applying 0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch using patch: 
+patching file src/minutils/s6ps_ttycache.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file src/minutils/s6ps_ttycache.c.rej
+make[1]: *** [package/pkg-generic.mk:198: /home/thomas/projets/buildroot/output/build/s6-linux-utils-2.5.0.0/.stamp_patched] Error 1
+make: *** [Makefile:84: _all] Error 2
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
