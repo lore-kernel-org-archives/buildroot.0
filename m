@@ -1,151 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 Feb 2019 14:27:24 +0100
-Subject: [Buildroot] [git commit] package/python3: add upstream security fix
- for CVE-2019-5010
-Message-ID: <20190202132650.0B992825CC@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Feb 2019 14:37:26 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/pugixml: add support for a
+ limited set of configuration options
+In-Reply-To: <20190131074019.19252-1-patrickdepinguin@gmail.com>
+References: <20190131074019.19252-1-patrickdepinguin@gmail.com>
+Message-ID: <5166d507-189b-f139-f9a7-c0cac006f014@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3191d1624e6b4964f35675542bf68235a3dbdb08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2019-5010: NULL pointer dereference using a specially crafted X509
-certificate
 
-https://bugs.python.org/issue35746
+On 31/01/2019 08:40, Thomas De Schampheleire wrote:
+> +config BR2_PACKAGE_PUGIXML_FORCE_ENABLE_LONG_LONG
+> +	bool "Force-enable long long support"
+> +	help
+> +	  Force-enables support for long long type in pugixml.  Long
+> +	  long support is automatically enabled if your platform is
+> +	  known to have long long support (i.e. has C++11 support or
+> +	  uses a reasonably modern version of a known compiler). If
+> +	  pugixml does not recognize that your platform supports long
+> +	  long but in fact it does, you can enable the define manually.
+> +endif
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ix-segfault-in-ssl-s-cert-parser-GH-11569.patch | 121 +++++++++++++++++++++
- 1 file changed, 121 insertions(+)
+ AFAIK gcc always supports long long, so shouldn't we just always enable this?
 
-diff --git a/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch b/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
-new file mode 100644
-index 0000000000..c29ab7efaa
---- /dev/null
-+++ b/package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
-@@ -0,0 +1,121 @@
-+From be5de958e9052e322b0087c6dba81cdad0c3e031 Mon Sep 17 00:00:00 2001
-+From: "Miss Islington (bot)"
-+ <31488909+miss-islington@users.noreply.github.com>
-+Date: Tue, 15 Jan 2019 15:03:36 -0800
-+Subject: [PATCH] bpo-35746: Fix segfault in ssl's cert parser (GH-11569)
-+
-+Fix a NULL pointer deref in ssl module. The cert parser did not handle CRL
-+distribution points with empty DP or URI correctly. A malicious or buggy
-+certificate can result into segfault.
-+
-+Signed-off-by: Christian Heimes <christian@python.org>
-+
-+https://bugs.python.org/issue35746
-+(cherry picked from commit a37f52436f9aa4b9292878b72f3ff1480e2606c3)
-+
-+Co-authored-by: Christian Heimes <christian@python.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Lib/test/talos-2019-0758.pem                       | 22 ++++++++++++++++++++++
-+ Lib/test/test_ssl.py                               | 22 ++++++++++++++++++++++
-+ .../2019-01-15-18-16-05.bpo-35746.nMSd0j.rst       |  3 +++
-+ Modules/_ssl.c                                     |  4 ++++
-+ 4 files changed, 51 insertions(+)
-+ create mode 100644 Lib/test/talos-2019-0758.pem
-+ create mode 100644 Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
-+
-+diff --git a/Lib/test/talos-2019-0758.pem b/Lib/test/talos-2019-0758.pem
-+new file mode 100644
-+index 0000000000..13b95a77fd
-+--- /dev/null
-++++ b/Lib/test/talos-2019-0758.pem
-+@@ -0,0 +1,22 @@
-++-----BEGIN CERTIFICATE-----
-++MIIDqDCCApKgAwIBAgIBAjALBgkqhkiG9w0BAQswHzELMAkGA1UEBhMCVUsxEDAO
-++BgNVBAMTB2NvZHktY2EwHhcNMTgwNjE4MTgwMDU4WhcNMjgwNjE0MTgwMDU4WjA7
-++MQswCQYDVQQGEwJVSzEsMCoGA1UEAxMjY29kZW5vbWljb24tdm0tMi50ZXN0Lmxh
-++bC5jaXNjby5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC63fGB
-++J80A9Av1GB0bptslKRIUtJm8EeEu34HkDWbL6AJY0P8WfDtlXjlPaLqFa6sqH6ES
-++V48prSm1ZUbDSVL8R6BYVYpOlK8/48xk4pGTgRzv69gf5SGtQLwHy8UPBKgjSZoD
-++5a5k5wJXGswhKFFNqyyxqCvWmMnJWxXTt2XDCiWc4g4YAWi4O4+6SeeHVAV9rV7C
-++1wxqjzKovVe2uZOHjKEzJbbIU6JBPb6TRfMdRdYOw98n1VXDcKVgdX2DuuqjCzHP
-++WhU4Tw050M9NaK3eXp4Mh69VuiKoBGOLSOcS8reqHIU46Reg0hqeL8LIL6OhFHIF
-++j7HR6V1X6F+BfRS/AgMBAAGjgdYwgdMwCQYDVR0TBAIwADAdBgNVHQ4EFgQUOktp
-++HQjxDXXUg8prleY9jeLKeQ4wTwYDVR0jBEgwRoAUx6zgPygZ0ZErF9sPC4+5e2Io
-++UU+hI6QhMB8xCzAJBgNVBAYTAlVLMRAwDgYDVQQDEwdjb2R5LWNhggkA1QEAuwb7
-++2s0wCQYDVR0SBAIwADAuBgNVHREEJzAlgiNjb2Rlbm9taWNvbi12bS0yLnRlc3Qu
-++bGFsLmNpc2NvLmNvbTAOBgNVHQ8BAf8EBAMCBaAwCwYDVR0fBAQwAjAAMAsGCSqG
-++SIb3DQEBCwOCAQEAvqantx2yBlM11RoFiCfi+AfSblXPdrIrHvccepV4pYc/yO6p
-++t1f2dxHQb8rWH3i6cWag/EgIZx+HJQvo0rgPY1BFJsX1WnYf1/znZpkUBGbVmlJr
-++t/dW1gSkNS6sPsM0Q+7HPgEv8CPDNK5eo7vU2seE0iWOkxSyVUuiCEY9ZVGaLVit
-++p0C78nZ35Pdv4I+1cosmHl28+es1WI22rrnmdBpH8J1eY6WvUw2xuZHLeNVN0TzV
-++Q3qq53AaCWuLOD1AjESWuUCxMZTK9DPS4JKXTK8RLyDeqOvJGjsSWp3kL0y3GaQ+
-++10T1rfkKJub2+m9A9duin1fn6tHc2wSvB7m3DA==
-++-----END CERTIFICATE-----
-+diff --git a/Lib/test/test_ssl.py b/Lib/test/test_ssl.py
-+index f1b9565c8d..b6794ce3a8 100644
-+--- a/Lib/test/test_ssl.py
-++++ b/Lib/test/test_ssl.py
-+@@ -116,6 +116,7 @@ NONEXISTINGCERT = data_file("XXXnonexisting.pem")
-+ BADKEY = data_file("badkey.pem")
-+ NOKIACERT = data_file("nokia.pem")
-+ NULLBYTECERT = data_file("nullbytecert.pem")
-++TALOS_INVALID_CRLDP = data_file("talos-2019-0758.pem")
-+ 
-+ DHFILE = data_file("ffdh3072.pem")
-+ BYTES_DHFILE = os.fsencode(DHFILE)
-+@@ -365,6 +366,27 @@ class BasicSocketTests(unittest.TestCase):
-+         self.assertEqual(p['crlDistributionPoints'],
-+                          ('http://SVRIntl-G3-crl.verisign.com/SVRIntlG3.crl',))
-+ 
-++    def test_parse_cert_CVE_2019_5010(self):
-++        p = ssl._ssl._test_decode_cert(TALOS_INVALID_CRLDP)
-++        if support.verbose:
-++            sys.stdout.write("\n" + pprint.pformat(p) + "\n")
-++        self.assertEqual(
-++            p,
-++            {
-++                'issuer': (
-++                    (('countryName', 'UK'),), (('commonName', 'cody-ca'),)),
-++                'notAfter': 'Jun 14 18:00:58 2028 GMT',
-++                'notBefore': 'Jun 18 18:00:58 2018 GMT',
-++                'serialNumber': '02',
-++                'subject': ((('countryName', 'UK'),),
-++                            (('commonName',
-++                              'codenomicon-vm-2.test.lal.cisco.com'),)),
-++                'subjectAltName': (
-++                    ('DNS', 'codenomicon-vm-2.test.lal.cisco.com'),),
-++                'version': 3
-++            }
-++        )
-++
-+     def test_parse_cert_CVE_2013_4238(self):
-+         p = ssl._ssl._test_decode_cert(NULLBYTECERT)
-+         if support.verbose:
-+diff --git a/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst b/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
-+new file mode 100644
-+index 0000000000..dffe347eec
-+--- /dev/null
-++++ b/Misc/NEWS.d/next/Security/2019-01-15-18-16-05.bpo-35746.nMSd0j.rst
-+@@ -0,0 +1,3 @@
-++[CVE-2019-5010] Fix a NULL pointer deref in ssl module. The cert parser did
-++not handle CRL distribution points with empty DP or URI correctly. A
-++malicious or buggy certificate can result into segfault.
-+diff --git a/Modules/_ssl.c b/Modules/_ssl.c
-+index 9894ad821d..9baec8a9bc 100644
-+--- a/Modules/_ssl.c
-++++ b/Modules/_ssl.c
-+@@ -1516,6 +1516,10 @@ _get_crl_dp(X509 *certificate) {
-+         STACK_OF(GENERAL_NAME) *gns;
-+ 
-+         dp = sk_DIST_POINT_value(dps, i);
-++        if (dp->distpoint == NULL) {
-++            /* Ignore empty DP value, CVE-2019-5010 */
-++            continue;
-++        }
-+         gns = dp->distpoint->name.fullname;
-+ 
-+         for (j=0; j < sk_GENERAL_NAME_num(gns); j++) {
-+-- 
-+2.11.0
-+
+ Regards,
+ Arnout
