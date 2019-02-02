@@ -1,104 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  2 Feb 2019 21:37:56 +0100
-Subject: [Buildroot] [PATCHv2] package/s6-linux-utils: bump to 2.5.0.0
-Message-ID: <20190202203756.9988-1-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 Feb 2019 22:31:11 +0100
+Subject: [Buildroot] [PATCHv2] package/opentracing-cpp: bump version to
+ v1.5.1
+In-Reply-To: <20190131203846.14965-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Thu, 31 Jan 2019 21:38:45 +0100")
+References: <20190131203846.14965-1-patrickdepinguin@gmail.com>
+Message-ID: <874l9lzxls.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-In 2.4.0.2, compilation under glibc 2.28 is fixed (and our local patch can
-thus be removed).
-While at it, bump to the latest released version 2.5.0.0.
+ > From: Jan Heylen <jan.heylen@nokia.com>
+ > Bump opentracing-cpp from 1.2.0 to 1.5.1.
+ > The license has changed from MIT to Apache-2.0.
+ > The patch is removed because it has been upstreamed.
 
-Note: change in COPYING file is only the copyright year.
+ > Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+ > [ThomasDS: Additional bump from v1.3.0 to v1.5.1]
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-From the NEWS file:
-"""
-In 2.5.0.0
-----------
- - Optional nsss support.
- - s6-devd, s6-uevent-listener, s6-uevent-spawner removed.
+Committed, thanks.
 
-In 2.4.0.2
-----------
- - s6-logwatch rewrite.
- - Better portability with old glibc versions.
- - s6-uevent-listener and s6-uevent-spawner are marked as deprecated. (The
-   mdevd package obsoletes them.)
-"""
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- ...s-sysmacros.h-because-glibc-is-glibc.patch | 27 -------------------
- package/s6-linux-utils/s6-linux-utils.hash    |  4 +--
- package/s6-linux-utils/s6-linux-utils.mk      |  2 +-
- 3 files changed, 3 insertions(+), 30 deletions(-)
- delete mode 100644 package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
-
-v2:
-- remove leftover patch (feedback Thomas Petazzoni)
-- fix hash of COPYING file
-
-
-diff --git a/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch b/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
-deleted file mode 100644
-index ac31394f2b..0000000000
---- a/package/s6-linux-utils/0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From bec661b6f037209c67fc7c9f022ee157c342ade6 Mon Sep 17 00:00:00 2001
--From: Laurent Bercot <ska-skaware@skarnet.org>
--Date: Thu, 5 Oct 2017 18:05:00 +0000
--Subject: [PATCH]  Include sys/sysmacros.h because glibc is glibc
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit bec661b6f037
--
-- src/minutils/s6ps_ttycache.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/minutils/s6ps_ttycache.c b/src/minutils/s6ps_ttycache.c
--index 7fa4bc09e624..319356044da9 100644
----- a/src/minutils/s6ps_ttycache.c
--+++ b/src/minutils/s6ps_ttycache.c
--@@ -7,6 +7,7 @@
-- #include <string.h>
-- #include <stdint.h>
-- #include <sys/stat.h>
--+#include <sys/sysmacros.h>
-- #include <errno.h>
-- #include <skalibs/types.h>
-- #include <skalibs/allreadwrite.h>
---- 
--2.18.0
--
-diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
-index 34fc5ea9b1..20af7328d7 100644
---- a/package/s6-linux-utils/s6-linux-utils.hash
-+++ b/package/s6-linux-utils/s6-linux-utils.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 9562ef293c916c4448d16fcbbc065eb28fd995ac34cd3538179cbc3ee056ab93  s6-linux-utils-2.4.0.1.tar.gz
--sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
-+sha256 78571574464c76fc623ef50dc14800138b4fd98c5fa877af6850fdd9c2f90213  s6-linux-utils-2.5.0.0.tar.gz
-+sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
-index 3f1745708d..619f4c3732 100644
---- a/package/s6-linux-utils/s6-linux-utils.mk
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_LINUX_UTILS_VERSION = 2.4.0.1
-+S6_LINUX_UTILS_VERSION = 2.5.0.0
- S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
- S6_LINUX_UTILS_LICENSE = ISC
- S6_LINUX_UTILS_LICENSE_FILES = COPYING
 -- 
-2.19.2
+Bye, Peter Korsgaard
