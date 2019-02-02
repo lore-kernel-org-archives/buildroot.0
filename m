@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Feb 2019 17:54:52 +0100
-Subject: [Buildroot] [PATCH v4 15/17] package/liquid-dsp: use the new
- fftw-{single, double, long-double} packages
-In-Reply-To: <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
+Date: Sat, 2 Feb 2019 18:16:41 +0100
+Subject: [Buildroot] [PATCH v4 16/17] package/fftw: remove as regular
+ package
+In-Reply-To: <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
@@ -13,7 +12,8 @@ References: <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190202165452.GG6663@scaer>
+ <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190202171641.GH6663@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,60 +23,69 @@ To: buildroot@busybox.net
 Gwenhael, All,
 
 On 2019-01-21 14:51 +0100, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> fftw is no longer a package: only fftw-single, fftw-double,
+> fftw-long-double and fftw-quad are. fftw.mk only contains some common
+> definitions that are used by the different fftw variants.
+> 
+> The old BR2_PACKAGE_FFTW_PRECISION_* options, which are no longer used
+> anywhere, are moved to Config.in.legacy.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  Changes v3 -> V4:
+>  * when BR2_PACKAGE_FFTW is enabled without flavour, selects fftw-double
+>    by default. (Yann)
+>  * suppress suppress two consecutive empty lines. (Yann)
 
-I still believe this change to be incorrect, since liquiddsp only really
-supports fftw-single, as patch 17 states.
+:-)
 
-So, at the very least, I believe tpatch 17 should be squashed into this
-one, and an even better solution would be to actually fix the package in
-a previous patch, as I said in my previous review.
+[--SNIP--]
+> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+> index 862ad5edc0..bcfdb9c96a 100644
+> --- a/package/fftw/fftw.mk
+> +++ b/package/fftw/fftw.mk
+> @@ -10,22 +10,6 @@ FFTW_INSTALL_STAGING = YES
+>  FFTW_LICENSE = GPL-2.0+
+>  FFTW_LICENSE_FILES = COPYING
+>  
+> -ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+> -FFTW_DEPENDENCIES += fftw-double
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+> -FFTW_DEPENDENCIES += fftw-long-double
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
+> -FFTW_DEPENDENCIES += fftw-quad
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+> -FFTW_DEPENDENCIES += fftw-single
+> -endif
+
+Actually, I think these dependencies should stay. This would allow a
+package that needs any fftw variant to just select BR2_PACKAGE_FFTW
+and add FOO_DEPENDENCIES = fftw.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/liquid-dsp/liquid-dsp.mk | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-> index db67893844..6aa27a5248 100644
-> --- a/package/liquid-dsp/liquid-dsp.mk
-> +++ b/package/liquid-dsp/liquid-dsp.mk
-> @@ -30,9 +30,9 @@ LIQUID_DSP_CFLAGS += -ffast-math
+>  # fortran support only enables generation and installation of fortran sources
+>  ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+>  FFTW_COMMON_CONF_OPTS += --enable-fortran
+> @@ -49,6 +33,4 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
 >  endif
+>  FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
 >  
->  # use FFTW instead of built-in FFT
-> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-> +ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
->  LIQUID_DSP_LDFLAGS += -lfftw3f
-> -LIQUID_DSP_DEPENDENCIES += fftw
-> +LIQUID_DSP_DEPENDENCIES += fftw-single
->  endif
->  
->  # disable altivec, it has build issues
-> @@ -40,14 +40,14 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
->  LIQUID_DSP_CONF_OPTS += --enable-simdoverride
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
-> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
->  LIQUID_DSP_LDFLAGS += -lfftw3
-> -LIQUID_DSP_DEPENDENCIES += fftw
-> +LIQUID_DSP_DEPENDENCIES += fftw-double
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
-> +ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
->  LIQUID_DSP_LDFLAGS += -lfftw3l
-> -LIQUID_DSP_DEPENDENCIES += fftw
-> +LIQUID_DSP_DEPENDENCIES += fftw-long-double
->  endif
->  
->  LIQUID_DSP_CONF_OPTS += \
+> -$(eval $(generic-package))
+> -
+>  include $(sort $(wildcard package/fftw/*/*.mk))
 > -- 
 > 2.19.2
 > 
