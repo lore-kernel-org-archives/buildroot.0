@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Feb 2019 17:44:22 +0100
-Subject: [Buildroot] [PATCH v4 13/17] package/libvips: use the new
- fftw-double package
-In-Reply-To: <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
+Date: Sat, 2 Feb 2019 17:45:04 +0100
+Subject: [Buildroot] [PATCH v4 14/17] package/pulseaudio: use the new
+ fftw-single package
+In-Reply-To: <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
@@ -13,7 +12,8 @@ References: <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
  <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190202164422.GE6663@scaer>
+ <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190202164504.GF6663@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Gwenhael, All,
 On 2019-01-21 14:51 +0100, Gwenhael Goavec-Merou spake thusly:
 > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> This patch add an explicitly dependency to fftw-double (the only compatible
+> This patch add an explicitly dependency to fftw-single (the only compatible
 > fftw's flavor) instead of default behavior where the package do assumption
 > about the compatible version.
 > 
@@ -41,25 +41,22 @@ Yann E. MORIN.
 > Changes v3 -> v4:
 >  * improve commit message about fftw version. (Yann)
 > ---
->  package/libvips/libvips.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/pulseaudio/pulseaudio.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-> index 8078e046d1..7622f32fbc 100644
-> --- a/package/libvips/libvips.mk
-> +++ b/package/libvips/libvips.mk
-> @@ -68,9 +68,9 @@ else
->  LIBVIPS_CONF_OPTS += --without-tiff
->  endif
+> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+> index d1c35654cf..c91af22935 100644
+> --- a/package/pulseaudio/pulseaudio.mk
+> +++ b/package/pulseaudio/pulseaudio.mk
+> @@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+>  	$(if $(BR2_PACKAGE_DBUS),dbus) \
+>  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+> -	$(if $(BR2_PACKAGE_FFTW),fftw) \
+> +	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
+>  	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
 >  
-> -ifeq ($(BR2_PACKAGE_FFTW),y)
-> +ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
->  LIBVIPS_CONF_OPTS += --with-fftw
-> -LIBVIPS_DEPENDENCIES += fftw
-> +LIBVIPS_DEPENDENCIES += fftw-double
->  else
->  LIBVIPS_CONF_OPTS += --without-fftw
->  endif
+>  ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
 > -- 
 > 2.19.2
 > 
