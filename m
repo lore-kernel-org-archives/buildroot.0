@@ -1,60 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Feb 2019 14:57:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/s6-linux-utils: bump to 2.5.0.0
-In-Reply-To: <20190130201436.9514-1-patrickdepinguin@gmail.com>
-References: <20190130201436.9514-1-patrickdepinguin@gmail.com>
-Message-ID: <20190202145704.27115bc9@windsurf>
+Date: Sat, 2 Feb 2019 15:00:13 +0100
+Subject: [Buildroot] [git commit] package/aircrack-ng: add optional cmocka
+ dependency
+Message-ID: <20190202135913.B3BEC81171@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=62af09f313a455f781594b3184fd3a52213c341e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Jan 2019 21:14:35 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+cmocka dependency has been added in version 1.3 with
+https://github.com/aircrack-ng/aircrack-ng/commit/e3a3a6db30ca99c2473928621a1ba234abcaebf3
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> In 2.4.0.2, compilation under glibc 2.28 is fixed.
-> While at it, bump to the latest released version 2.5.0.0.
-> 
-> From the NEWS file:
-> 
-> In 2.5.0.0
-> ----------
->  - Optional nsss support.
->  - s6-devd, s6-uevent-listener, s6-uevent-spawner removed.
-> 
-> In 2.4.0.2
-> ----------
->  - s6-logwatch rewrite.
->  - Better portability with old glibc versions.
->  - s6-uevent-listener and s6-uevent-spawner are marked as deprecated. (The
->    mdevd package obsoletes them.)
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aircrack-ng/aircrack-ng.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-This patch seems to be incomplete:
-
-$ make s6-linux-utils-legal-info
-s6-linux-utils-2.5.0.0.tar.gz: OK (sha256: 78571574464c76fc623ef50dc14800138b4fd98c5fa877af6850fdd9c2f90213)
->>> s6-linux-utils 2.5.0.0 Extracting
-gzip -d -c /home/thomas/dl/s6-linux-utils/s6-linux-utils-2.5.0.0.tar.gz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/s6-linux-utils-2.5.0.0   -xf -
->>> s6-linux-utils 2.5.0.0 Patching
-
-Applying 0001-Include-sys-sysmacros.h-because-glibc-is-glibc.patch using patch: 
-patching file src/minutils/s6ps_ttycache.c
-Reversed (or previously applied) patch detected!  Skipping patch.
-1 out of 1 hunk ignored -- saving rejects to file src/minutils/s6ps_ttycache.c.rej
-make[1]: *** [package/pkg-generic.mk:198: /home/thomas/projets/buildroot/output/build/s6-linux-utils-2.5.0.0/.stamp_patched] Error 1
-make: *** [Makefile:84: _all] Error 2
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index b51332ab77..64dc15a4aa 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -9,6 +9,7 @@ AIRCRACK_NG_SITE = http://download.aircrack-ng.org
+ AIRCRACK_NG_LICENSE = GPL-2.0+
+ AIRCRACK_NG_LICENSE_FILES = LICENSE
+ AIRCRACK_NG_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_CMOCKA),cmocka) \
+ 	$(if $(BR2_PACKAGE_LIBNL),libnl) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_PCRE),pcre) \
