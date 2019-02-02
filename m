@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Feb 2019 15:54:00 +0100
-Subject: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1.
- ffserver is not supported anymore.
-In-Reply-To: <20190131121526.11816-5-lpdev@cordier.org>
+Date: Sat, 2 Feb 2019 17:03:30 +0100
+Subject: [Buildroot] [PATCH v2 2/6] intel-mediadriver: new package.
+In-Reply-To: <20190131121526.11816-3-lpdev@cordier.org>
 References: <20190131121526.11816-1-lpdev@cordier.org>
- <20190131121526.11816-5-lpdev@cordier.org>
-Message-ID: <20190202155400.6547fba9@windsurf>
+ <20190131121526.11816-3-lpdev@cordier.org>
+Message-ID: <20190202170330.27653572@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +13,141 @@ To: buildroot@busybox.net
 
 Hello,
 
-The commit title should be just:
+Commit tite should be:
 
-	package/ffmpeg: bump to version 4.1
+	package/intel-mediadriver: new package
 
-The fact that ffserver is removed should be part of the commit log.
-
-On Thu, 31 Jan 2019 13:15:24 +0100
+On Thu, 31 Jan 2019 13:15:22 +0100
 Louis-Paul Cordier <lpdev@cordier.org> wrote:
 
-> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+>  package/Config.in                             |  1 +
+>  package/intel-mediadriver/Config.in           | 17 +++++++++++
+>  .../intel-mediadriver/intel-mediadriver.hash  |  2 ++
+>  .../intel-mediadriver/intel-mediadriver.mk    | 29 +++++++++++++++++++
+>  4 files changed, 49 insertions(+)
 
-I'd like to hear from Bernd about this ffmpeg bump. If I remember well,
-major ffmpeg bumps are typically breaking some APIs, causing build
-issues with packages that use ffmpeg.
+Missing update to the DEVELOPERS file.
 
-Have you verified that other Buildroot packages that use ffmpeg do not
-break after this ffmpeg version bump ?
+> diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
+> new file mode 100644
+> index 0000000000..ab44a65b91
+> --- /dev/null
+> +++ b/package/intel-mediadriver/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_INTEL_MEDIADRIVER
+> +	bool "intel-mediadriver"
+> +	depends on BR2_x86_64
+> +	select BR2_PACKAGE_INTEL_GMMLIB
+> +	select BR2_PACKAGE_LIBPCIACCESS
+> +	select BR2_PACKAGE_LIBVA
+> +	select BR2_PACKAGE_MESA3D
+> +	select BR2_PACKAGE_XLIB_LIBX11
 
->  package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 -----------------------
+You cannot select all those packages without replicating their
+dependencies.
 
-Would be good to mention in the sommit log why this patch is removed
-(accepted upstream ? no longer relevant ?)
+libva has:
 
+        depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
+        depends on !BR2_STATIC_LIBS
 
-> -config BR2_PACKAGE_FFMPEG_FFSERVER
-> -	bool "Build ffserver"
-> -	depends on BR2_USE_MMU # fork()
-> -	help
-> -	  FFserver is a streaming server for both audio and video.
+mesa3d has:
 
-If ffserver is no longer supported, we want to move this option to
-Config.in.legacy so that users who have configurations with this
-enabled are aware.
+        depends on BR2_INSTALL_LIBSTDCPP
+        depends on !BR2_STATIC_LIBS
+        depends on BR2_TOOLCHAIN_HAS_SYNC_1
+        depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+
+and for libx11, you need to add:
+
+	depends on BR2_PACKAGE_XORG7
+
+> +
+
+Unneeded blank line.
+
+> +	help
+> +	  The Intel(R) Media Driver for VAAPI is a new VA-API (Video
+> +	  Acceleration API) user mode driver supporting hardware
+> +	  accelerated decoding, encoding, and video post processing for
+> +	  GEN based graphics hardware.
+
+Please add a blank line, followed by the upstream URL of the project.
+
+> +comment "intel-mediadriver needs libx11"
+> +	  depends on !BR2_PACKAGE_XLIB_LIBX11
+
+This particular comment didn't make much sense, because you are
+selecting BR2_PACKAGE_XLIB_LIBX11.
+
+Instead, we need a comment that details the "depends on" dependencies
+of this package.
+
+> diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+> new file mode 100644
+> index 0000000000..9068b40e07
+> --- /dev/null
+> +++ b/package/intel-mediadriver/intel-mediadriver.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 df9af1cc796b4123508aacaf19d040cc5d8c5742c05199f45c9a3905ed8d1b52  intel-media-18.3.0.tar.gz
+
+Please add a hash for the license file.
+
+> diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+> new file mode 100644
+> index 0000000000..77a757f212
+> --- /dev/null
+> +++ b/package/intel-mediadriver/intel-mediadriver.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# intel-mediadriver
+> +#
+> +################################################################################
+> +
+> +# based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+> +
+> +INTEL_MEDIADRIVER_VERSION = 18.3.0
+
+A 18.4.0 release is now available.
+
+> +INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
+> +INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+> +INTEL_MEDIADRIVER_LICENSE = MIT BSD-3-Clause
+
+The list of licenses is comma-separated.
+
+> +INTEL_MEDIADRIVER_LICENSE_FILES = LICENSE.md
+> +
+> +INTEL_MEDIADRIVER_DEPENDENCIES += intel-gmmlib
+> +INTEL_MEDIADRIVER_DEPENDENCIES += libpciaccess
+> +INTEL_MEDIADRIVER_DEPENDENCIES += libva
+> +INTEL_MEDIADRIVER_DEPENDENCIES += mesa3d
+> +INTEL_MEDIADRIVER_DEPENDENCIES += xlib_libX11
+
+Please us a single assignment:
+
+INTEL_MEDIADRIVER_DEPENDENCIES = \
+	intel-gmmlib \
+	libpciaccess \
+	libva \
+	mesa3d \
+	xlib_libx11
+
+> +
+> +INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
+> +
+> +INTEL_MEDIADRIVER_CONF_OPTS += -DMEDIA_VERSION="2.0.0"\
+
+No need for += here, a regular = assignment will be fine.
+
+> +	-DBUILD_ALONG_WITH_CMRTLIB=1 \
+> +	-DINSTALL_DRIVERS_SYSCONF=OFF \
+> +	-DMEDIA_RUN_TEST_SUITE=OFF \
+> +	-DRUN_TEST_SUITE=OFF
+> +
+> +$(eval $(cmake-package))
 
 Thanks!
 
