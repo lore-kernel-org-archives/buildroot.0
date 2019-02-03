@@ -1,100 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Feb 2019 23:35:24 +0100
-Subject: [Buildroot] [PATCH 1/1] libgeotiff: fix build without C++
-Message-ID: <20190203223524.19304-1-fontaine.fabrice@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun,  3 Feb 2019 16:38:51 -0600
+Subject: [Buildroot] [PATCH] package/ntp: use common sysv init install
+Message-ID: <1549233531-21486-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not check for C++ compiler as libgeotiff is written in C otherwise
-build will fail on toolchains without a working C++ compiler:
+Previously the sysv init script install was conditional based on ntpd
+being selected, now that sntp also has an init script and could be
+selected independent of ntpd, a common install is necessary.
 
-checking how to run the C++ preprocessor... /lib/cpp
-configure: error: in
-`/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
-configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-
-Fixes:
- - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+ package/ntp/ntp.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
-new file mode 100644
-index 0000000000..68082dd023
---- /dev/null
-+++ b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
-@@ -0,0 +1,65 @@
-+From edc9ec69b43c27955ee4f24db2e6808bb1a8974d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 3 Feb 2019 23:20:43 +0100
-+Subject: [PATCH] libgeotiff/configure.ac: do not check for C++
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index aad1cdd..c62d59e 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -102,9 +102,8 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
+-define NTP_INSTALL_INIT_SYSV
++define NTP_INSTALL_INIT_SYSV_NTPD
+ 	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
+-	$(NTP_INSTALL_INIT_SYSV_SNTP)
+ endef
+ 
+ define NTP_INSTALL_INIT_SYSTEMD
+@@ -115,4 +114,9 @@ define NTP_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
++define NTP_INSTALL_INIT_SYSV
++	$(NTP_INSTALL_INIT_SYSV_NTPD)
++	$(NTP_INSTALL_INIT_SYSV_SNTP)
++endef
 +
-+Do not check for C++ compiler as libgeotiff is written in C otherwise
-+build will fail on toolchains without a working C++ compiler:
-+
-+checking how to run the C++ preprocessor... /lib/cpp
-+configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
-+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OSGeo/libgeotiff/pull/9]
-+---
-+ libgeotiff/configure.ac | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a334416..4ebbd6f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -25,8 +25,6 @@ dnl #########################################################################
-+ AM_INIT_AUTOMAKE
-+ AM_MAINTAINER_MODE
-+ AC_PROG_CC
-+-AC_PROG_CXX
-+-AC_PROG_CXXCPP
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-+ AC_PROG_MAKE_SET
-+@@ -46,7 +44,6 @@ dnl #########################################################################
-+ m4_define([debug_default],[no])
-+ 
-+ CFLAGS="$CFLAGS"
-+-CXXFLAGS="$CXXFLAGS"
-+ 
-+ dnl We want to honor the users wishes with regard to linking.
-+ LIBS="$LDFLAGS $LIBS"
-+@@ -82,11 +79,9 @@ AC_MSG_CHECKING([for debug enabled])
-+ 
-+ if test "x$enable_debug" = "xyes"; then
-+     CFLAGS="$CFLAGS -g -DDEBUG -Wall"
-+-    CXXFLAGS="$CXXFLAGS -g -DDEBUG -Wall"
-+     AC_MSG_RESULT(yes)
-+ else
-+     CFLAGS="$CFLAGS -O3 -DNDEBUG"
-+-    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
-+     AC_MSG_RESULT(no)
-+ fi
-+ 
-+@@ -367,7 +362,6 @@ LOC_MSG()
-+ LOC_MSG([  Version..................: ${RELEASE_VERSION}])
-+ LOC_MSG([  Installation directory...: ${prefix}])
-+ LOC_MSG([  C compiler...............: ${CC} ${CFLAGS}])
-+-LOC_MSG([  C++ compiler.............: ${CXX} ${CXXFLAGS}])
-+ 
-+ LOC_MSG([  Debugging support........: ${enable_debug}])
-+ LOC_MSG()
-+-- 
-+2.14.1
-+
+ $(eval $(autotools-package))
 -- 
-2.14.1
+1.9.1
