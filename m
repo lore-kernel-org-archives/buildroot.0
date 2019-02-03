@@ -1,89 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Feb 2019 17:17:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpcap: bump to version 1.9.0
-Message-ID: <20190203161740.31109-1-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Feb 2019 19:04:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add optional iptables
+ dependency
+Message-ID: <20190203180416.32140-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable Endace DAG card support as libdag is not available in
-  buildroot
-- Add upstream patch to fix build on musl
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...x.c-add-missing-limits.h-for-musl-systems.patch | 26 ++++++++++++++++++++++
- package/libpcap/libpcap.hash                       |  2 +-
- package/libpcap/libpcap.mk                         |  4 ++--
- 3 files changed, 29 insertions(+), 3 deletions(-)
- create mode 100644 package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
+ package/systemd/systemd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch b/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
-new file mode 100644
-index 0000000000..aabaef3383
---- /dev/null
-+++ b/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-systems.patch
-@@ -0,0 +1,26 @@
-+From aafa3512b7b742f5e66a5543e41974cc5e7eebfa Mon Sep 17 00:00:00 2001
-+From: maxice8 <thinkabit.ukim@gmail.com>
-+Date: Sun, 22 Jul 2018 18:54:17 -0300
-+Subject: [PATCH] pcap-usb-linux.c: add missing limits.h for musl systems.
-+
-+fix compilation on musl libc systems like Void Linux and Alpine.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/the-tcpdump-group/libpcap/commit/aafa3512b7b742f5e66a5543e41974cc5e7eebfa]
-+---
-+ pcap-usb-linux.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/pcap-usb-linux.c b/pcap-usb-linux.c
-+index 6f8adf65e..b92c05ea1 100644
-+--- a/pcap-usb-linux.c
-++++ b/pcap-usb-linux.c
-+@@ -50,6 +50,7 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <limits.h>
-+ #include <string.h>
-+ #include <dirent.h>
-+ #include <byteswap.h>
-diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
-index f8bc1bcfef..19ce2adbe1 100644
---- a/package/libpcap/libpcap.hash
-+++ b/package/libpcap/libpcap.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	673dbc69fdc3f5a86fb5759ab19899039a8e5e6c631749e48dcd9c6f0c83541e	libpcap-1.8.1.tar.gz
-+sha256	2edb88808e5913fdaa8e9c1fcaf272e19b2485338742b5074b9fe44d68f37019	libpcap-1.9.0.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 15db1969e5..f9df66b039 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -64,6 +64,13 @@ else
+ SYSTEMD_CONF_OPTS += -Delfutils=false
+ endif
  
- # Hash for license file:
- sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 8cc444e7af..126087220b 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPCAP_VERSION = 1.8.1
-+LIBPCAP_VERSION = 1.9.0
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3-Clause
- LIBPCAP_LICENSE_FILES = LICENSE
-@@ -15,7 +15,7 @@ LIBPCAP_CONF_ENV = \
- 	ac_cv_header_linux_wireless_h=yes \
- 	CFLAGS="$(LIBPCAP_CFLAGS)"
- LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
--LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux
-+LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag
- LIBPCAP_CONFIG_SCRIPTS = pcap-config
- 
- # Omit -rpath from pcap-config output
++ifeq ($(BR2_PACKAGE_IPTABLES),y)
++SYSTEMD_DEPENDENCIES += iptables
++SYSTEMD_CONF_OPTS += -Dlibiptc=true
++else
++SYSTEMD_CONF_OPTS += -Dlibiptc=false
++endif
++
+ # Both options can't be selected at the same time so prefer libidn2
+ ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+ SYSTEMD_DEPENDENCIES += libidn2
 -- 
 2.14.1
