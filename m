@@ -1,32 +1,100 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 3 Feb 2019 22:30:06 +0100
-Subject: [Buildroot] [PATCH v5] package/ntp: sntp time sync script
-In-Reply-To: <CANQCQpao8HkkQWiZ+_v1B7=PwGeA83pVRkJJk3NdkPCMbGYQ1A@mail.gmail.com>
-References: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
- <b30f789e-46c6-b695-cb48-990624424f4d@mind.be>
- <CANQCQpao8HkkQWiZ+_v1B7=PwGeA83pVRkJJk3NdkPCMbGYQ1A@mail.gmail.com>
-Message-ID: <beb437ea-27d7-6958-070d-88d9968bd540@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Feb 2019 23:35:24 +0100
+Subject: [Buildroot] [PATCH 1/1] libgeotiff: fix build without C++
+Message-ID: <20190203223524.19304-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Do not check for C++ compiler as libgeotiff is written in C otherwise
+build will fail on toolchains without a working C++ compiler:
 
+checking how to run the C++ preprocessor... /lib/cpp
+configure: error: in
+`/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-On 03/02/2019 21:55, Matthew Weber wrote:
->>> diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
->>> old mode 100755
->>> new mode 100644
->>  I applied it now, but isn't this an accident?
-> Accident but correct, right?  (guessing I wildcarded 644 the folder as
-> part of cleanup) Then the install step correctly places the file and
-> permissions.
+Fixes:
+ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
 
- Hm, about half of our init scripts are executable and the other half are not...
-Not sure what is the best option here. But keeping it consistent is probably
-better :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
 
-
- Regards,
- Arnout
+diff --git a/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+new file mode 100644
+index 0000000000..68082dd023
+--- /dev/null
++++ b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+@@ -0,0 +1,65 @@
++From edc9ec69b43c27955ee4f24db2e6808bb1a8974d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 Feb 2019 23:20:43 +0100
++Subject: [PATCH] libgeotiff/configure.ac: do not check for C++
++
++Do not check for C++ compiler as libgeotiff is written in C otherwise
++build will fail on toolchains without a working C++ compiler:
++
++checking how to run the C++ preprocessor... /lib/cpp
++configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
++configure: error: C++ preprocessor "/lib/cpp" fails sanity check
++
++Fixes:
++ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OSGeo/libgeotiff/pull/9]
++---
++ libgeotiff/configure.ac | 6 ------
++ 1 file changed, 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index a334416..4ebbd6f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,8 +25,6 @@ dnl #########################################################################
++ AM_INIT_AUTOMAKE
++ AM_MAINTAINER_MODE
++ AC_PROG_CC
++-AC_PROG_CXX
++-AC_PROG_CXXCPP
++ AC_PROG_INSTALL
++ AC_PROG_LN_S
++ AC_PROG_MAKE_SET
++@@ -46,7 +44,6 @@ dnl #########################################################################
++ m4_define([debug_default],[no])
++ 
++ CFLAGS="$CFLAGS"
++-CXXFLAGS="$CXXFLAGS"
++ 
++ dnl We want to honor the users wishes with regard to linking.
++ LIBS="$LDFLAGS $LIBS"
++@@ -82,11 +79,9 @@ AC_MSG_CHECKING([for debug enabled])
++ 
++ if test "x$enable_debug" = "xyes"; then
++     CFLAGS="$CFLAGS -g -DDEBUG -Wall"
++-    CXXFLAGS="$CXXFLAGS -g -DDEBUG -Wall"
++     AC_MSG_RESULT(yes)
++ else
++     CFLAGS="$CFLAGS -O3 -DNDEBUG"
++-    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
++     AC_MSG_RESULT(no)
++ fi
++ 
++@@ -367,7 +362,6 @@ LOC_MSG()
++ LOC_MSG([  Version..................: ${RELEASE_VERSION}])
++ LOC_MSG([  Installation directory...: ${prefix}])
++ LOC_MSG([  C compiler...............: ${CC} ${CFLAGS}])
++-LOC_MSG([  C++ compiler.............: ${CXX} ${CXXFLAGS}])
++ 
++ LOC_MSG([  Debugging support........: ${enable_debug}])
++ LOC_MSG()
++-- 
++2.14.1
++
+-- 
+2.14.1
