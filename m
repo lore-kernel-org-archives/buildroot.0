@@ -1,47 +1,38 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun,  3 Feb 2019 13:47:52 +0100
-Subject: [Buildroot] [PATCH] ncdu: bump to version 1.13
-Message-ID: <1549198072-2967-1-git-send-email-gilles.talis@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Feb 2019 15:40:44 +0100
+Subject: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1.
+ ffserver is not supported anymore.
+In-Reply-To: <mfmiifx78d.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Sun, 03 Feb 2019 09:48:22 +0100")
+References: <20190131121526.11816-1-lpdev@cordier.org>
+ <20190131121526.11816-5-lpdev@cordier.org>
+ <20190202155400.6547fba9@windsurf>
+ <mfmiifx78d.ln2@ID-313208.user.individual.net>
+Message-ID: <87a7jdx7df.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also added license hash
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/ncdu/ncdu.hash | 9 ++++++---
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ > Am Sat, 02 Feb 2019 15:54:00 +0100 schrieb Thomas Petazzoni:
+ >> I'd like to hear from Bernd about this ffmpeg bump. If I remember well,
+ >> major ffmpeg bumps are typically breaking some APIs, causing build
+ >> issues with packages that use ffmpeg.
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index 8a0c1d1..213232e 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,3 +1,6 @@
--# From http://dev.yorhel.nl/download/ncdu-1.12.tar.gz.{md5,sha1}
--md5 7365ac46c420bc511621216b1747984f  ncdu-1.12.tar.gz
--sha1 b79b1c44784f334dca74d89a49f49274f14cfeef  ncdu-1.12.tar.gz
-+# From http://dev.yorhel.nl/download/ncdu-1.13.tar.gz.{md5,sha1}
-+md5 67239592ac41f42290f52ab89ff198be  ncdu-1.13.tar.gz
-+sha1 3233c4185208d9989ac528a94817ed92dd59c773  ncdu-1.13.tar.gz
-+
-+# computed locally
-+md5 6682a63e3e3e8ea14051d05056a857a0 COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index d45e62d..9a7170d 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NCDU_VERSION = 1.12
-+NCDU_VERSION = 1.13
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+ > Hi Thomas,
+
+ > afaik the only package left over to be fixed before we bump ffmpeg to 4.x 
+ > is gstreamer1/gst1-libav, see my patch:
+ > http://patchwork.ozlabs.org/patch/962138/
+
+ > In the meantime upstream released version 1.15.1 as unstable release so 
+ > we have two choices: Apply my patch or bump gstreamer1 to an unstable 
+ > version.
+
+I would prefer to stick with the stable versions if possible.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
