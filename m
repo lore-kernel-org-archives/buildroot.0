@@ -1,82 +1,170 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  3 Feb 2019 07:00:36 +0000 (UTC)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-02-02
-Message-ID: <20190203070036.8A20F227C1@silver.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 3 Feb 2019 08:46:49 +0100
+Subject: [Buildroot] [PATCHv3] package/pugixml: add support for a
+ limited set of configuration options
+In-Reply-To: <20190202202559.19535-1-patrickdepinguin@gmail.com>
+References: <20190202202559.19535-1-patrickdepinguin@gmail.com>
+Message-ID: <54556da5-8f42-851c-1f37-c8dcacc1426c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Thomas, Wouter,
 
-Build statistics for 2019-02-02
-===============================
+ I'm sorry, I only did a really quick review yesterday. There's a lot of stuff
+here that gives me some doubts...
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  20 |   1 |   0 |  21 |
-   2018.11.x |  21 |   0 |   0 |  21 |
-      master | 199 |  18 |   1 | 218 |
+On 02/02/2019 21:25, Thomas De Schampheleire wrote:
+> From: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+> 
+> Signed-off-by: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+> [ThomasDS:
+> - align with Buildroot coding style
+> - rename some options
+> - always enable 'long long' type
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  package/pugixml/Config.in  | 62 ++++++++++++++++++++++++++++++++++++++
+>  package/pugixml/pugixml.mk | 25 +++++++++++++++
+>  2 files changed, 87 insertions(+)
+> 
+> v3:
+> - always enable 'long long' type (feedback Arnout Vandecappelle)
+> - remove unnecessary 'strip' on PUGIXML_BUILD_DEFINES
+> v2: (feedback Thomas Petazzoni)
+> - change 'disable' options into 'enable' and reorder them to be first
+> - rename 'has-long-long' option
+> 
+> diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
+> index c37b1df9e5..421f19f0f2 100644
+> --- a/package/pugixml/Config.in
+> +++ b/package/pugixml/Config.in
+> @@ -18,5 +18,67 @@ config BR2_PACKAGE_PUGIXML
+>  	  http://pugixml.org/
+>  	  https://github.com/zeux/pugixml
+>  
+> +if BR2_PACKAGE_PUGIXML
+> +
+> +config BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
+> +	bool "Enable XPath support"
+> +	default y
+> +	help
+> +	  Enables XPath support in pugixml.
+> +	  When disabled, both XPath interfaces and XPath implementation
+> +	  are excluded from compilation. This option is provided in case
+> +	  you do not need XPath functionality and need to save code
+> +	  space.
 
-Results for branch '2018.02.x'
-==============================
+ Does it make a significant difference? Like, more than 10% of the code size of
+pugixml?
 
-Classification of failures by reason
-------------------------------------
+ If you added this option, I guess you have a reason for it, so you probably can
+quote some number?
 
-                   attr-2.4.48 | 1 
+> +
+> +config BR2_PACKAGE_PUGIXML_STL_SUPPORT
+> +	bool "Enable STL support"
+> +	default y
+> +	help
+> +	  Enables use of STL in pugixml.
+> +	  When disabled, the functions that operate on STL types are no
+> +	  longer present (i.e. load/save via iostream). This option is
+> +	  provided in case your target platform does not have a
+> +	  standard-compliant STL implementation.
 
+ If "STL" means C++98 STL, all the compilers that we support have it. So it
+doesn't make sense to make it optional. But again, I guess you had a reason for it?
 
-Detail of failures
-------------------
+> +
+> +config BR2_PACKAGE_PUGIXML_EXCEPTIONS
+> +	bool "Enable exceptions"
+> +	default y
+> +	help
+> +	  Enables use of exceptions in pugixml. This option is provided
+> +	  in case your target platform does not have exception handling
+> +	  capabilities.
 
-        bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/d21e9d9d955bf0b1270fa51aed0e25b7bf2060dc |     
+ Same same same. For exceptions, there may in fact be a performance impact
+(though for your typical C++ code base it would be negligible).
 
-Results for branch 'master'
-===========================
+> +
+> +config BR2_PACKAGE_PUGIXML_WCHAR_MODE
+> +	bool "Enable wchar_t mode"
+> +	help
+> +	  Toggles between UTF-8 (default) style interface (the in-memory
+> +	  text encoding is assumed to be UTF-8, most functions use char
+> +	  as character type) and UTF-16/32 style interface (the
+> +	  in-memory text encoding is assumed to be UTF-16/32, depending
+> +	  on wchar_t size, most functions use wchar_t as character type)
+> +
+> +	  http://pugixml.org/docs/manual.html#dom.unicode
 
-Classification of failures by reason
-------------------------------------
+ This option makes complete sense. However, I have the feeling it might need to
+depend on BR2_USE_WCHAR...
 
-                  ffmpeg-3.4.5 | 3 
-                 haproxy-1.9.1 | 2 
-   libtorrent-rasterbar-1.1.11 | 2 
-                   netsurf-3.8 | 2 
-                collectd-5.7.1 | 1 
-                 gnu-efi-3.0.9 | 1 
-                host-libsodium | 1 
-                  libssh-0.8.6 | 1 
-            mesa3d-demos-8.4.0 | 1 
-          shairport-sync-3.2.1 | 1 
-               skalibs-2.6.4.0 | 1 
-              swupdate-2018.11 | 1 
-                upmpdcli-1.4.0 | 1 
-zbar-b3b4e32b55f570372fc3af... | 1 
+ This time I reviewed the patch completely :-)
 
+ Regards,
+ Arnout
 
-Detail of failures
-------------------
-
-     riscv32 |                 collectd-5.7.1 | NOK | http://autobuild.buildroot.net/results/6bc1592ac39c620c274ddb8dbad61ed3da8fae3f | ORPH
-    mips64el |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/a22b0720b29a35b79b10d22ec9bfb84a7e62d7ae |     
-     powerpc |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/45b9593a96ff917d8642f27df3f11d440a2d3c81 |     
-     powerpc |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/3f8df64acb3b4c1f032e1206ebb9311e04673a05 |     
-  aarch64_be |                  gnu-efi-3.0.9 | NOK | http://autobuild.buildroot.net/results/69e73833c43a8c4a6b17368d0ff34e599721324d |     
-microblazeel |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/876e43cbc52937cb64303ea2838221919b6e12f9 |     
-microblazeel |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/dded1ffce9d9ba33c8bdbcdb5208aa7bb3c96e6e |     
-     aarch64 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/3385f663ce5fff0fa5d910ce5ce47251da9b9e3b |     
-     powerpc |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/db8be0d52b0ca2b030990490c6dd8b30a1973f9c |     
-      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/ad9305d5958155b9bbe36bc6fdd512a8c5a48dad |     
-         arc |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/bfba22c49cfa0f3daaa4d915442e406eb3b7d16c |     
-         arm |             mesa3d-demos-8.4.0 | NOK | http://autobuild.buildroot.net/results/5060676d127490b7c8255d98d2a7ad0b1ec99be6 |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/6fb2b0dd9eabdc05e8b43c4eee2ae1903b573167 |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/8c8e1f60eb274ec15639bcc0dabc229392b7416e |     
-         arm |           shairport-sync-3.2.1 | NOK | http://autobuild.buildroot.net/results/bf5dc09ef44569b239db996c925d71699c2d19ed |     
-     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/dd15100c2aca7ad4b80f4cf613235b6150e10d33 |     
-        m68k |               swupdate-2018.11 | NOK | http://autobuild.buildroot.net/results/2b3197c74dbd99c57cd2f730f8eca628b425b3bb |     
-        m68k |                 upmpdcli-1.4.0 | NOK | http://autobuild.buildroot.net/results/fc7a08709962be65931dbae745df3273a36d4f53 |     
-       sparc | zbar-b3b4e32b55f570372fc3af... | NOK | http://autobuild.buildroot.net/results/2467e6b1f0ea719777dad02271245d38422cf39d |     
-
-
--- 
-http://autobuild.buildroot.net
+> +
+> +config BR2_PACKAGE_PUGIXML_COMPACT
+> +	bool "Enable compact mode"
+> +	help
+> +	  Activates a different internal representation of document
+> +	  storage that is much more memory efficient for documents with
+> +	  a lot of markup (i.e.  nodes and attributes), but is slightly
+> +	  slower to parse and access.
+> +
+> +	  http://pugixml.org/docs/manual.html#dom.memory.compact
+> +
+> +config BR2_PACKAGE_PUGIXML_HEADER_ONLY
+> +	bool "Enable header-only version"
+> +	help
+> +	  All source code for pugixml will be included in every
+> +	  translation unit that includes pugixml.hpp. This is how most
+> +	  of Boost and STL libraries work.
+> +
+> +	  http://pugixml.org/docs/manual.html#install.building.header
+> +
+> +endif
+> +
+>  comment "pugixml needs a toolchain w/ C++"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+> index e5188e5f53..faeec4368a 100644
+> --- a/package/pugixml/pugixml.mk
+> +++ b/package/pugixml/pugixml.mk
+> @@ -10,4 +10,29 @@ PUGIXML_LICENSE = MIT
+>  PUGIXML_LICENSE_FILES = readme.txt
+>  PUGIXML_INSTALL_STAGING = YES
+>  
+> +# gcc always supports 'long long' type, see
+> +# https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
+> +PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
+> +
+> +ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_STL_SUPPORT),)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_NO_STL
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_EXCEPTIONS),)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_NO_EXCEPTIONS
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_WCHAR_MODE),y)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_WCHAR_MODE
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
+> +endif
+> +
+> +PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+> +
+>  $(eval $(cmake-package))
+> 
