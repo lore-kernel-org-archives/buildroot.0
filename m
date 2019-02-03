@@ -1,38 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 3 Feb 2019 22:01:23 +0100
-Subject: [Buildroot] [PATCH] package/openssh: Set /var/empty permissions
-In-Reply-To: <10b66c1b-f710-cee3-d646-973ab9ed4003@licor.com>
-References: <20181217222522.13499-1-chris.lesiak@licor.com>
- <5a82d54f-a308-bd2f-f3f9-49b583196333@mind.be>
- <10b66c1b-f710-cee3-d646-973ab9ed4003@licor.com>
-Message-ID: <28943e62-e93f-706f-a52e-c859b5e87cf8@mind.be>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Sun, 03 Feb 2019 21:44:19 +0100
+Subject: [Buildroot] [PATCH] configs/rock64: new defconfig
+In-Reply-To: <20190203204119.31934-1-michal.lyszczek@bofc.pl>
+References: <20190203204119.31934-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190203204419.fy4qpno34w3ahvol@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 18/12/2018 00:37, Chris Lesiak wrote:
-> I can certainly submit a new version that adds the following change:
+On 2019-02-03 21:41:19, Micha? ?yszczek wrote:
+> Configuration contains:
+>   - building tpl, spl and u-boot (forked u-boot repository)
+>   - booting from SD card and network via PXE
+>   - working ethernet, usb and uart
+>   - minimal rootfs with busybox
+>   - ready to flash SD card image
 > 
->  ?define OPENSSH_USERS
-> -?????? sshd -1 sshd -1 * - - - SSH drop priv user
-> +?????? sshd -1 sshd -1 * /var/empty /bin/false - SSH drop priv user
->  ?endef
-> 
-> 
-> Is everyone happy with using /var/empty as the home directory? It isn't 
-> obvious that /var/empty should belong to sshd.
+> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+> ---
 
- It doesn't belong to sshd. There are plenty of system users that have home
-directories like / or /sbin.
+Please, note that this patch requires another patch that is not yet merged:
 
- Note that there is no need to set the shell. - does not exist, so logging in as
-that user doesn't work, which is what we want. I even think login treats it special.
-
- But changing the home directory of sshd would probably be good.
-
- Regards,
- Arnout
+[v3] uboot: add support for bundling ATF BL31 in ELF format into U-Boot
+http://patchwork.ozlabs.org/patch/996196/
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190203/605dd84c/attachment.asc>
