@@ -1,92 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 3 Feb 2019 21:00:33 +0100
-Subject: [Buildroot] [PATCH v5] package/ntp: sntp time sync script
-In-Reply-To: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <b30f789e-46c6-b695-cb48-990624424f4d@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 3 Feb 2019 21:27:20 +0100
+Subject: [Buildroot] [git commit] package/netsurf: use TMP_PREFIX inside the
+ build directory
+Message-ID: <20190203203001.BC04981560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=122089adf699ebe879d55466fe34f1ccabfe4808
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I've finally applied to master since it really is a useful feature and it
-works. However, I have a few additional remarks. Also one for Carlos, the init
-script dude :-)
+The netsurf build system creates a stamp file inside TMP_PREFIX to
+know if the build was done, and if the stamp file exists, it doesn't
+do any build. Therefore, having this stamp file in STAGING_DIR
+prevents from rebuilding netsurf, even after removing its entire build
+directory: the stamp file exists in STAGING_DIR, and netsurf doesn't
+build anything, causing the installation to fail.
 
-On 12/12/2018 04:45, Matt Weber wrote:
-[snip]
-> +#!/bin/sh
-> +
-> +DAEMON="sntp"
+We fix this by putting this temporary directory inside the netsurf
+build directory. We must mkdir this directory manually, otherwise the
+build fails with:
 
- Carlos, I'm starting to doubt the usefulness of this DAEMON variable. Other
-variables are prefixed by SNTP_, only this one isn't. In other init scripts you
-started using PROGRAM instead because it isn't actually a daemon.
+COMPILE: src/stylesheet.c
+In file included from src/stylesheet.c:12:0:
+src/stylesheet.h:14:10: fatal error: libwapcaplet/libwapcaplet.h: No such file or directory
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
 
- However, the only reason to make it a variable is to make it easier to copy and
-adapt an existing init script. But really, doing a search/replace of that string
-is not so much work. And you anyway need to review the entire file, e.g.
-/usr/bin/$DAEMON is used which may not be correct.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Arnout: mkdir it first]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/netsurf/netsurf.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- So I'd propose to replace DAEMON with a direct reference to the program. What
-do you think?
-
-
-> +# sntp uses all the IPs resolved for the hostname (i.e. pool.ntp.org has 4).
-> +# It will try each until they either all timeout or time has been set. Thus
-> +# default to only providing one NTP pool host.
-> +SNTP_SERVERS="pool.ntp.org"
-
- I think this was discussed before, but why isn't this
-
-if [ -e /etc/ntpd.conf ]; then
- 	SNTP_SERVERS="$(sed -n
-'/^[[:space:]]*server[[:space:]]\+\([^[:space:]]\+\).*$/s//\1/p' /etc/ntpd.conf
-| head -1)"
-else
-	SNTP_SERVERS="pool.ntp.org"
-fi
-
-so the ntpd.conf gets reused by default?
-
-[snip]
-> diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-> old mode 100755
-> new mode 100644
-
- I applied it now, but isn't this an accident?
-
-> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-> index af3c1aa..aad1cdd 100644
-> --- a/package/ntp/ntp.mk
-> +++ b/package/ntp/ntp.mk
-> @@ -93,9 +93,18 @@ define NTP_INSTALL_TARGET_CMDS
->  	$(INSTALL) -m 644 package/ntp/ntpd.etc.conf $(TARGET_DIR)/etc/ntp.conf
->  endef
->  
-> +# This script will step the time if there is a large difference
-> +# before ntpd takes over the necessary slew adjustments
-> +ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-> +define NTP_INSTALL_INIT_SYSV_SNTP
-> +	$(INSTALL) -D -m 755 package/ntp/S48sntp $(TARGET_DIR)/etc/init.d/S48sntp
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
->  define NTP_INSTALL_INIT_SYSV
->  	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-> +	$(NTP_INSTALL_INIT_SYSV_SNTP)
-
- So, the sntp script only gets installed if ntpd is installed. Is that
-intentional? Doesn't sound ideal...
-
- Regards,
- Arnout
-
->  endef
->  
->  define NTP_INSTALL_INIT_SYSTEMD
-> 
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 2e17c5768f..d1efd66f34 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -78,11 +78,12 @@ NETSURF_MAKE_OPTS = \
+ 	BUILD_CC="$(HOSTCC)" \
+ 	CC="$(TARGET_CC)" \
+ 	AR="$(TARGET_AR)" \
+-	TMP_PREFIX=$(STAGING_DIR)/usr \
++	TMP_PREFIX=$(@D)/tmpusr \
+ 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+ 	PREFIX=/usr
+ 
+ define NETSURF_BUILD_CMDS
++	mkdir -p $(@D)/tmpusr
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
+ 		build
+ endef
