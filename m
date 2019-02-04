@@ -1,78 +1,83 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Tue,  5 Feb 2019 07:11:18 +0800
-Subject: [Buildroot] [PATCH v2 2/2] gnu-efi: fix stdint include location
-In-Reply-To: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
-References: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
-Message-ID: <1549321878-9108-2-git-send-email-james.hilliard1@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue,  5 Feb 2019 01:30:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/android-tools: Fix build with
+ OpenSSL 1.1.x
+Message-ID: <20190204233029.1318-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Use patch from:
 
-Some applications such as systemd-boot include efilink.h without a libc.
-Move the stdint.h include to lib.h so that efilink.h can be used directly
-without requiring a libc.
+	https://github.com/lede-project/source/commit/f63f20fb93c7e67775cb01d97fc88b5b29452b81
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+which fixes compilation of adb with OpenSSL 1.1.x, and took only part
+for adb only.
+
+Fixes:
+
+	http://autobuild.buildroot.net/results/66f/66f05eb9a56aa8526a1420334d68c7eda094e90e/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- .../0001-efilink-fix-build-with-gcc-4.8.patch      | 32 ++++++++++------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+ ...ded-patch-for-openssl-1.1.0-compatibility.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
 
-diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-index 57c78c9..7938a69 100644
---- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-+++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-@@ -1,4 +1,4 @@
--From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
-+From 4a00c8403a09634cc4fbff2421f2fa7af7b2c657 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Fri, 18 Jan 2019 22:05:37 +0100
- Subject: [PATCH] efilink: fix build with gcc 4.8
-@@ -8,28 +8,26 @@ intptr_t is undefined without an include on stdint.h
- Fixes:
-  - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
- 
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status:
--https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/4]
- ---
-- inc/efilink.h | 4 ++++
-- 1 file changed, 4 insertions(+)
-+ lib/lib.h | 1 +
-+ 1 file changed, 1 insertion(+)
- 
--diff --git a/inc/efilink.h b/inc/efilink.h
--index cc5aa2d..b69a6fd 100644
----- a/inc/efilink.h
--+++ b/inc/efilink.h
--@@ -1,6 +1,10 @@
-- #ifndef _EFI_LINK_H
-- #define _EFI_LINK_H
-+diff --git a/lib/lib.h b/lib/lib.h
-+index 37fbb95..7858cd0 100644
-+--- a/lib/lib.h
-++++ b/lib/lib.h
-+@@ -18,6 +18,7 @@ Revision History
-  
--+#if defined(__GNUC__)
-+ #ifdef __GNUC__
-+ #pragma GCC visibility push(hidden)
- +#include <stdint.h>
--+#endif
--+
-- /*++
-+ #endif
-  
-- Copyright (c) 1998  Intel Corporation
-+ #include "efi.h"
- -- 
--2.14.1
-+2.7.4
- 
+diff --git a/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
+new file mode 100644
+index 0000000000..2de338368f
+--- /dev/null
++++ b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
+@@ -0,0 +1,47 @@
++From bb3da0e32be4f2260940edf3ee0f88103dfd0dcc Mon Sep 17 00:00:00 2001
++From: Eneas U de Queiroz <cote2004-github@yahoo.com>
++Date: Tue, 5 Feb 2019 01:12:19 +0200
++Subject: [PATCH] adb: added patch for openssl 1.1.0 compatibility
++
++Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
++
++[Vadim: took only adb related part from
++https://github.com/lede-project/source/commit/f63f20fb93c7e67775cb01d97fc88b5b29452b81]
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ core/adb/adb_auth_host.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/core/adb/adb_auth_host.c b/core/adb/adb_auth_host.c
++index 9039d42..debd2ef 100644
++--- a/core/adb/adb_auth_host.c
+++++ b/core/adb/adb_auth_host.c
++@@ -79,7 +79,13 @@ static int RSA_to_RSAPublicKey(RSA *rsa, RSAPublicKey *pkey)
++     }
++ 
++     BN_set_bit(r32, 32);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    const BIGNUM *rsa_n, *rsa_e;
+++    RSA_get0_key(rsa, &rsa_n, &rsa_e, NULL);
+++    BN_copy(n, rsa_n);
+++#else
++     BN_copy(n, rsa->n);
+++#endif
++     BN_set_bit(r, RSANUMWORDS * 32);
++     BN_mod_sqr(rr, r, n, ctx);
++     BN_div(NULL, rem, n, r32, ctx);
++@@ -93,7 +99,11 @@ static int RSA_to_RSAPublicKey(RSA *rsa, RSAPublicKey *pkey)
++         BN_div(n, rem, n, r32, ctx);
++         pkey->n[i] = BN_get_word(rem);
++     }
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    pkey->exponent = BN_get_word(rsa_e);
+++#else
++     pkey->exponent = BN_get_word(rsa->e);
+++#endif
++ 
++ out:
++     BN_free(n0inv);
++-- 
++2.14.1
++
 -- 
-2.7.4
+2.14.1
