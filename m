@@ -1,54 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 21:11:39 +0100
-Subject: [Buildroot] [git commit] package/rtmpdump: drop openssl support
-Message-ID: <20190204201021.41F0983BE5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 21:14:06 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5/qt5base: handle
+ sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
+In-Reply-To: <20190201202452.11724-1-ps.report@gmx.net>
+References: <20190201202452.11724-1-ps.report@gmx.net>
+Message-ID: <20190204211406.48b446b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d001395fac944b476e342e06dd0a92a70de3bd2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-Rtmpdump does not support openssl 1.1.x, has not seen any changes upstream
-since 2015, is only used with the gnutls backend in Debian and Fedora.
+On Fri,  1 Feb 2019 21:24:52 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-There exists a 3rd party patch for openssl 1.1.x support:
+> +ifeq ($(BR2_X86_CPU_HAS_SSE2),)
+> +QT5BASE_CONFIGURE_OPTS += -no-sse2
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_SSE3),)
+> +QT5BASE_CONFIGURE_OPTS += -no-sse3
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_SSSE3),)
+> +QT5BASE_CONFIGURE_OPTS += -no-ssse3
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_SSE4),)
+> +QT5BASE_CONFIGURE_OPTS += -no-sse4.1
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_SSE42),)
+> +QT5BASE_CONFIGURE_OPTS += -no-sse4.2
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_AVX),)
+> +QT5BASE_CONFIGURE_OPTS += -no-avx
+> +else
+> +ifeq ($(BR2_X86_CPU_HAS_AVX2),)
+> +QT5BASE_CONFIGURE_OPTS += -no-avx2
+> +else
+> +# no BR2_X86_CPU_HAS_AVX512 for qt configure option
+> +# '-no-avx512' (available for latest)
+> +endif
+> +endif
+> +endif
+> +endif
+> +endif
+> +endif
+> +endif
 
-https://github.com/JudgeZarbi/RTMPDump-OpenSSL-1.1
+Instead of:
 
-But there is an open issue reported about a crash in the handshake code
-(which is modified by the patch):
+ifeq ...
 
-https://github.com/JudgeZarbi/RTMPDump-OpenSSL-1.1/issues/1
+else
+ifeq ...
 
-And the README for the repo states:
+else
+ifeq ...
 
-I modified a few of the files in the librtmp directory to conform to the new
-getters and setters in OpenSSL 1.1.0.  I don't claim to be a security
-expert, and neither have I had any experience with OpenSSL in a programming
-sense, so I'm not sure exactly if it's correct, but it compiles and seems to
-work for what I use it for.
+endif
+endif
+endif
 
-Which does not sound very reassuring, so instead drop the openssl support.
+which requires a lot of endifs, you can do:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rtmpdump/rtmpdump.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ifeq ...
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index f5d430ce36..03cdd9d00f 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -16,9 +16,6 @@ RTMPDUMP_DEPENDENCIES = zlib
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- RTMPDUMP_DEPENDENCIES += gnutls
- RTMPDUMP_CRYPTO = GNUTLS
--else ifeq ($(BR2_PACKAGE_OPENSSL),y)
--RTMPDUMP_DEPENDENCIES += openssl
--RTMPDUMP_CRYPTO = OPENSSL
- else
- # no crypto
- RTMPDUMP_CRYPTO =
+else ifeq ...
+
+else ifeq ...
+
+else ifeq ...
+
+endif
+
+which is a bit nicer.
+
+However, like Titouan, I'd like to get a confirmation that those "else"
+conditions are what you want. For example, when you don't have SSE2,
+you also don't have SSE3. But in such a situation, you're just passing
+-no-sse2. Is this expected ? If so, a quick explanation in the commit
+log about this would be nice. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
