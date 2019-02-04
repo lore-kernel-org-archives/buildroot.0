@@ -1,34 +1,56 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Mon, 4 Feb 2019 19:06:24 +0100
-Subject: [Buildroot] [PATCH] ncdu: bump to version 1.13
-In-Reply-To: <20190204095707.5994e0e2@windsurf>
-References: <1549198072-2967-1-git-send-email-gilles.talis@gmail.com>
- <20190204095707.5994e0e2@windsurf>
-Message-ID: <CAKcgs2wPTWp-8-o62TfmUr=bE3Mg25TNZcD-bT6wM5D5D5wEkQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon,  4 Feb 2019 19:05:50 +0100
+Subject: [Buildroot] [PATCHv2 5/8] support/download/file: implement
+ source-check
+In-Reply-To: <20190204180553.18394-1-patrickdepinguin@gmail.com>
+References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
+Message-ID: <20190204180553.18394-6-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-Le lun. 4 f?vr. 2019 ? 09:57, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> We now like to have commit titles that start with "package/<foo>", so I
-> fixed that.
-Understood. Thanks.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ support/download/file | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
->
-> On Sun,  3 Feb 2019 13:47:52 +0100
-> Gilles Talis <gilles.talis@gmail.com> wrote:
->
-> > +# computed locally
-> > +md5 6682a63e3e3e8ea14051d05056a857a0 COPYING
->
-> We use sha256 hashes for locally calculated hashes, so I've replaced by
-> such a hash instead.
-Same here. Thanks for the fix.
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..bf3c428cbe 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -7,6 +7,7 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          Only check that the source file exists.
+ #   -o FILE     Copy to file FILE.
+ #   -f FILE     Copy from basename file FILE.
+ #   -u DIR      Copy from FILE in DIR.
+@@ -23,6 +24,7 @@ verbose=-v
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=;;
++    C)  checkonly=1;;
+     o)  output="${OPTARG}";;
+     f)  file="${OPTARG}";;
+     u)  dir="${OPTARG}";;
+@@ -39,4 +41,12 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+-_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
++# Remove any scheme prefix
++dir="${dir##file://}"
++
++if [ -n "${checkonly}" ]; then
++    test -e "'${dir}/${file}'"
++    exit ${?}
++fi
++
++_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
+-- 
+2.19.2
