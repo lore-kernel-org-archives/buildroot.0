@@ -1,41 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 21:06:27 +0100
-Subject: [Buildroot] [git commit] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <CANQCQpYFv3Gt_dkg_T_7ppb1Fiy8JmXsHX6pDrGvJzZrZOvRhg@mail.gmail.com>
-References: <20190204155559.02D428385C@busybox.osuosl.org>
- <CANQCQpYFv3Gt_dkg_T_7ppb1Fiy8JmXsHX6pDrGvJzZrZOvRhg@mail.gmail.com>
-Message-ID: <20190204210627.4fe621fc@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 4 Feb 2019 21:10:37 +0100
+Subject: [Buildroot] [PATCH v7 4/8] mariadb: use host-openssl from
+ buildroot-system
+In-Reply-To: <874l9jykc4.fsf@dell.be.48ers.dk>
+References: <20190129093919.22060-1-patrick.havelange@essensium.com>
+ <20190129093919.22060-4-patrick.havelange@essensium.com>
+ <874l9jykc4.fsf@dell.be.48ers.dk>
+Message-ID: <20190204211037.6f5df78e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 4 Feb 2019 12:58:08 -0600
-Matthew Weber <matthew.weber@collins.com> wrote:
+Hello Peter, Patrick,
 
-> > +# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-> > +STRIP_FIND_SPECIAL_LIBS_CMD = \
-> > +       $(STRIP_FIND_COMMON_CMD) \
-> > +       \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \  
+On Mon, 04 Feb 2019 10:27:39 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:  
 > 
-> The answer to you question about needing to strip libpthread for only
-> glibc is true.  I did poke around a bit and checked if libthread_db
-> needed symbols and verified it can be stripped.  Do you think a noted
-> should be added to state the libpthread stripping detail?
+> Hi,
+> 
+>  > From: Peter Seiderer <ps.report@gmx.net>
+>  > - change WITH_SSL for host build from bundled to system (and add
+>  >   host-openssl dependency) to avoid the following configure failure:  
+> 9276747defdd4f91ec21ba0930afdf6d947730b6
+>  >   CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>  >     Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+>  >     (Required is at least version "3.3.24")
+>  >   Call Stack (most recent call first):
+>  >     /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>  >     /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>  >     libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)  
+> 
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  > Tested-by: Ryan Coe <bluemrp9@gmail.com>
+>  > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>  
+> 
+>  > ---
+>  > Changes v7:
+>  >   - none  
+> 
+>  > Changes v6:
+>  >   - none
+>  > ---
+>  >  package/mariadb/mariadb.mk | 3 ++-
+>  >  1 file changed, 2 insertions(+), 1 deletion(-)  
+> 
+>  > diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+>  > index e17649209a..e354a9137c 100644
+>  > --- a/package/mariadb/mariadb.mk
+>  > +++ b/package/mariadb/mariadb.mk
+>  > @@ -86,7 +86,8 @@ MARIADB_CONF_OPTS += \
+>  >  	-DMYSQL_DATADIR=/var/lib/mysql \
+>  >  	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)  
+>  
+>  > -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
+>  > +HOST_MARIADB_DEPENDENCIES = host-openssl
+>  > +HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system  
+> 
+> I don't quite get this patch. What is the relation to the openssl bump?
 
-So basically thread debugging on musl/uclibc works even if libc.so is
-stripped ?
+It was related back in 2018 when suggested by Ryan Coe ([1])...
 
-In any case, thanks for you investigation on this. I'm not sure adding
-a note here is really useful: uclibc/musl simply don't have any
-libpthread, and it's OK to not do anything special for uclibc/musl here.
+> 
+> From the error message it sounds like mariadb perhaps has gnutls
+> support, and it ends up falling back to that if SSL support is disabled?
+> Can't we just disable that?
+> 
 
-Thanks!
+...and pre commit 9276747defdd4f91ec21ba0930afdf6d947730b6 which disabled
+ssl support for the host build (did not get it right while rebasing the
+openssl bump patch series), so yes, this patch can be dropped...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Peter
+ 
+[1] http://lists.busybox.net/pipermail/buildroot/2018-June/223349.html
+[2] https://git.buildroot.net/buildroot/commit/package/mariadb?id=9276747defdd4f91ec21ba0930afdf6d947730b6
