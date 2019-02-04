@@ -1,147 +1,152 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  4 Feb 2019 08:33:55 -0600
-Subject: [Buildroot] [PATCH v5] package/pamtester: new package
-Message-ID: <1549290835-14995-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 4 Feb 2019 15:34:47 +0100
+Subject: [Buildroot] [PATCH v1 5/5] cog: new package
+In-Reply-To: <20181231154915.32660-6-francois.perrad@gadz.org>
+References: <20181231154915.32660-1-francois.perrad@gadz.org>
+ <20181231154915.32660-6-francois.perrad@gadz.org>
+Message-ID: <20190204153447.GJ22033@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <casantos@datacom.com.br>
+Hi,
 
-Utility for testing pluggable authentication modules (PAM) facility.
+On Mon, 31 Dec 2018 16:49:15 +0100, Francois Perrad <fperrad@gmail.com> wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  DEVELOPERS            |  2 ++
+>  package/Config.in     |  1 +
+>  package/cog/Config.in | 20 ++++++++++++++++++++
+>  package/cog/cog.hash  |  5 +++++
+>  package/cog/cog.mk    | 24 ++++++++++++++++++++++++
+>  5 files changed, 52 insertions(+)
+>  create mode 100644 package/cog/Config.in
+>  create mode 100644 package/cog/cog.hash
+>  create mode 100644 package/cog/cog.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index af392f73f..27dc7fe44 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -66,6 +66,7 @@ F:	package/sngrep/
+>  
+>  N:	Adrian Perez de Castro <aperez@igalia.com>
+>  F:	package/brotli/
+> +F:	package/cog/
+>  F:	package/libepoxy/
+>  F:	package/libwpe/
+>  F:	package/webkitgtk/
+> @@ -807,6 +808,7 @@ F:	configs/olimex_a20_olinuxino_*
+>  F:	package/4th/
+>  F:	package/botan/
+>  F:	package/chipmunk/
+> +F:	package/cog/
+>  F:	package/dado/
+>  F:	package/ficl/
+>  F:	package/gdbm/
+> diff --git a/package/Config.in b/package/Config.in
+> index 95a61da1c..88c179b0e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -259,6 +259,7 @@ endmenu
+>  menu "Graphic libraries and applications (graphic/text)"
+>  
+>  comment "Graphic applications"
+> +	source "package/cog/Config.in"
+>  	source "package/fswebcam/Config.in"
+>  	source "package/ghostscript/Config.in"
+>  	source "package/glmark2/Config.in"
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> new file mode 100644
+> index 000000000..bd4b6acb3
+> --- /dev/null
+> +++ b/package/cog/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_COG
+> +	bool "cog"
+> +	depends on BR2_PACKAGE_WPEWEBKIT
+> +	help
+> +	  Single "window" launcher for the WebKit WPE port, and
+> +	  helper library for implementing WPE launcher. It does
 
-While specifically designed to help PAM module authors to test their
-modules, that might also be handy for system administrators interested
-in building a centralised authentication system using common standards
-such as NIS, SASL and LDAP.
+?...for implementing WPE launchers.? (note the plural ?launchers?)
 
-One patch was included from the Debian bugtracker which fixes a
-spelling error.
+> +	  not provide any chrome, and is suitable to be used
+> +	  as a Web application container.
+> +
+> +if BR2_PACKAGE_COG
+> +
+> +config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+> +	string "home uri"
+> +	default "https://wpewebkit.org"
+> +	help
+> +	  Default URI to open when "cog" is launched. If an empty
+> +	  string is used, there is no default and the URI to open
+> +	  must be always specified in the command line.
+> +
+> +endif
+> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+> new file mode 100644
+> index 000000000..85f242413
+> --- /dev/null
+> +++ b/package/cog/cog.hash
+> @@ -0,0 +1,5 @@
+> +# Locally generated
+> +sha256 562ad3db11c3340f62a51df1dba44c2acfb2cf3210b2ebd2c1e2d2284ba38c2c  cog-1b83211d939c97f12331593217d2514e2e9cf0ba.tar.gz
+> +
+> +# Hashes for license files:
+> +sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> new file mode 100644
+> index 000000000..00593de95
+> --- /dev/null
+> +++ b/package/cog/cog.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# cog
+> +#
+> +################################################################################
+> +
+> +COG_VERSION = 1b83211d939c97f12331593217d2514e2e9cf0ba
+> +COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v4 -> v5
- - fixed title of patch to be package/
- - Added signed-offs in Debian patch
- - Added license file hash
- - Spelling of pamtester in kconfig comment
- - DEVELOPERS entry needed fixup
----
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/pamtester/0001-fix-spelling-errors.patch | 21 +++++++++++++++++++++
- package/pamtester/Config.in                      | 15 +++++++++++++++
- package/pamtester/pamtester.hash                 |  3 +++
- package/pamtester/pamtester.mk                   | 13 +++++++++++++
- 6 files changed, 54 insertions(+)
- create mode 100644 package/pamtester/0001-fix-spelling-errors.patch
- create mode 100644 package/pamtester/Config.in
- create mode 100644 package/pamtester/pamtester.hash
- create mode 100644 package/pamtester/pamtester.mk
+We have started making releases of Cog a little while ago, so let's change
+this and use the tarball for version 0.2.0 instead.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3703b3f..893d2aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -426,6 +426,7 @@ F:	package/intel-microcode/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
- F:	package/modem-manager/
-+F:	package/pamtester/
- F:	package/pcm-tools/
- F:	package/perl-file-util/
- F:	package/skeleton-custom/
-diff --git a/package/Config.in b/package/Config.in
-index 9082ed9..bca61f1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2163,6 +2163,7 @@ menu "System tools"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
- 	source "package/openvmtools/Config.in"
-+	source "package/pamtester/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/pamtester/0001-fix-spelling-errors.patch b/package/pamtester/0001-fix-spelling-errors.patch
-new file mode 100644
-index 0000000..05e737c
---- /dev/null
-+++ b/package/pamtester/0001-fix-spelling-errors.patch
-@@ -0,0 +1,21 @@
-+Description: Fix spelling error in pamtester
-+Origin: vendor
-+Bug: https://sourceforge.net/tracker/?func=detail&aid=3599109&group_id=135111&atid=731890
-+Forwarded: yes
-+Author: Salvatore Bonaccorso <carnil@debian.org>
-+Last-Update: 2013-01-01
-+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+
-+--- a/src/app.c
-++++ b/src/app.c
-+@@ -373,7 +373,7 @@
-+ 				err_msg = xstrdup(pam_strerror(pamh, err));
-+ 				goto out;
-+ 			} else {
-+-				printf("%s: sucessfully opened a session\n", params->app_name);
-++				printf("%s: successfully opened a session\n", params->app_name);
-+ 			}
-+ 		} else if (!strcasecmp(op->name, "close_session")) {
-+ 			int flag = 0;
-diff --git a/package/pamtester/Config.in b/package/pamtester/Config.in
-new file mode 100644
-index 0000000..19b76d3
---- /dev/null
-+++ b/package/pamtester/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PAMTESTER
-+	bool "pamtester"
-+	depends on BR2_PACKAGE_LINUX_PAM
-+	help
-+	  A tiny utility for testing pluggable authentication modules
-+	  (PAM) facility. While specifically designed to help PAM module
-+	  authors to test their modules, that might also be handy for
-+	  system administrators interested in building a centralised
-+	  authentication system using common standards such as NIS, SASL
-+	  and LDAP.
-+
-+	  http://pamtester.sourceforge.net/
-+
-+comment "pamtester depends on linux-pam"
-+	depends on !BR2_PACKAGE_LINUX_PAM
-diff --git a/package/pamtester/pamtester.hash b/package/pamtester/pamtester.hash
-new file mode 100644
-index 0000000..17497e3
---- /dev/null
-+++ b/package/pamtester/pamtester.hash
-@@ -0,0 +1,3 @@
-+# from https://sourceforge.net/projects/pamtester/files/pamtester/0.1.2/
-+sha1   33bcc610d7f208b50a0a23c144bdbd1e2cae4ac6  pamtester-0.1.2.tar.gz
-+sha256 1e3922a8ab0907c1f3bcc3e00005ef88930e50d0890f40a6a39f5f83b05f05cc LICENSE
-diff --git a/package/pamtester/pamtester.mk b/package/pamtester/pamtester.mk
-new file mode 100644
-index 0000000..b09e4d1
---- /dev/null
-+++ b/package/pamtester/pamtester.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# pamtester
-+#
-+################################################################################
-+
-+PAMTESTER_VERSION = 0.1.2
-+PAMTESTER_SITE = https://download.sourceforge.net/project/pamtester/pamtester/$(PAMTESTER_VERSION)
-+PAMTESTER_DEPENDENCIES = linux-pam
-+PAMTESTER_LICENSE = BSD-3-Clause
-+PAMTESTER_LICENSE_FILES = LICENSE
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+> +COG_DEPENDENCIES = wpewebkit wpebackend-fdo
+> +COG_LICENSE = MIT
+> +COG_LICENSE_FILES = COPYING
+> +COG_CONF_OPTS = \
+> +	-DCOG_BUILD_PROGRAMS=ON \
+> +	-DCOG_PLATFORM_FDO=ON \
+> +	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+> +
+> +ifeq ($(BR2_PACKAGE_DBUS),y)
+> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
+> +COG_DEPENDENCIES += dbus
+> +else
+> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
+> +endif
+
+Note that support for D-Bus is always built inside the ?cog? and ?cogctl?
+binaries. By default Cog will attach itself to the user session bus. What
+the COG_DBUS_SYSTEM_BUS=ON does is attaching to the system bus instead.
+
+I would either add a new option in ?Config.in? to select the mode desired,
+or not pass the option to CMake to let it pick the default setting.
+
+> +$(eval $(cmake-package))
+> -- 
+> 2.17.1
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190204/f5165c1b/attachment.asc>
