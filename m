@@ -1,8 +1,9 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Tue,  5 Feb 2019 07:11:17 +0800
-Subject: [Buildroot] [PATCH v2 1/2] package/systemd: enable building of
- systemd-boot
-Message-ID: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
+Date: Tue,  5 Feb 2019 07:11:18 +0800
+Subject: [Buildroot] [PATCH v2 2/2] gnu-efi: fix stdint include location
+In-Reply-To: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
+References: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
+Message-ID: <1549321878-9108-2-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,147 +12,67 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-systemd-boot is the integration of gummiboot into systemd, when
-gummiboot is no longer maintained [0].
-
-Add an option to build systemd-boot as part of the systemd build.
-
-Install the boot files, that can serve as a template for the user
-to tweak for their system.
-
-[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
+Some applications such as systemd-boot include efilink.h without a libc.
+Move the stdint.h include to lib.h so that efilink.h can be used directly
+without requiring a libc.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - add missing depends on i386 || x86_64
-  - add missing dependency to gnu-efi
-  - add missing boot files (they will be shared with standalone
-    systemd-boot later)
-]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/systemd/Config.in                 | 28 +++++++++++++++++++++++++
- package/systemd/boot-files/buildroot.conf |  3 +++
- package/systemd/boot-files/loader.conf    |  2 ++
- package/systemd/systemd.mk                | 34 +++++++++++++++++++++++++++++--
- 4 files changed, 65 insertions(+), 2 deletions(-)
- create mode 100644 package/systemd/boot-files/buildroot.conf
- create mode 100644 package/systemd/boot-files/loader.conf
+ .../0001-efilink-fix-build-with-gcc-4.8.patch      | 32 ++++++++++------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 25f322e..a99358f 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -77,6 +77,34 @@ if BR2_PACKAGE_SYSTEMD
- config BR2_PACKAGE_PROVIDES_UDEV
- 	default "systemd"
+diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+index 57c78c9..7938a69 100644
+--- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
++++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+@@ -1,4 +1,4 @@
+-From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
++From 4a00c8403a09634cc4fbff2421f2fa7af7b2c657 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Fri, 18 Jan 2019 22:05:37 +0100
+ Subject: [PATCH] efilink: fix build with gcc 4.8
+@@ -8,28 +8,26 @@ intptr_t is undefined without an include on stdint.h
+ Fixes:
+  - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
  
-+config BR2_PACKAGE_SYSTEMD_BOOT
-+	bool "systemd-boot"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_GNU_EFI
-+	help
-+	  systemd-boot is a simple UEFI boot manager which executes
-+	  configured EFI images. The default entry is selected by a
-+	  configured pattern (glob) or an on-screen menu.
-+
-+	  systemd-boot operates on the EFI System Partition (ESP)
-+	  only. Configuration file fragments, kernels, initrds, other
-+	  EFI images need to reside on the ESP. Linux kernels need to
-+	  be built with CONFIG_EFI_STUB to be able to be directly
-+	  executed as an EFI image.
-+
-+	  See the Grub2 help text for details on preparing an EFI
-+	  capable disk image using systemd-boot: the instructions are
-+	  exactly the same, except that the systemd-boot configuration
-+	  files will be located in /loader/ inside the EFI partition.
-+
-+	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
-+
-+config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
-+	string
-+	default "ia32"  if BR2_i386
-+	default "x64"   if BR2_x86_64
-+	depends on BR2_PACKAGE_SYSTEMD_BOOT
-+
- config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
- 	bool "HTTP server for journal events"
- 	select BR2_PACKAGE_LIBMICROHTTPD
-diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
-new file mode 100644
-index 0000000..16d4d85
---- /dev/null
-+++ b/package/systemd/boot-files/buildroot.conf
-@@ -0,0 +1,3 @@
-+title	Buildroot
-+linux	/bzImage
-+options	root=/dev/sda2 rootwait console=tty1
-diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
-new file mode 100644
-index 0000000..93b77b8
---- /dev/null
-+++ b/package/systemd/boot-files/loader.conf
-@@ -0,0 +1,2 @@
-+timeout 3
-+default buildroot
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index f9df66b..23816a6 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -24,8 +24,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dman=false \
- 	-Dima=false \
- 	-Dlibcryptsetup=false \
--	-Defi=false \
--	-Dgnu-efi=false \
- 	-Dldconfig=false \
- 	-Ddefault-dnssec=no \
- 	-Dtests=false \
-@@ -338,6 +336,34 @@ else
- SYSTEMD_CONF_OPTS += -Dhibernate=false
- endif
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ [Upstream status:
+-https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
++https://sourceforge.net/p/gnu-efi/code/merge-requests/4]
+ ---
+- inc/efilink.h | 4 ++++
+- 1 file changed, 4 insertions(+)
++ lib/lib.h | 1 +
++ 1 file changed, 1 insertion(+)
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
-+SYSTEMD_INSTALL_IMAGES = YES
-+SYSTEMD_DEPENDENCIES += gnu-efi
-+SYSTEMD_CONF_OPTS += \
-+	-Defi=true \
-+	-Dgnu-efi=true \
-+	-Defi-cc=$(TARGET_CC) \
-+	-Defi-ld=$(TARGET_LD) \
-+	-Defi-libdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
-+
-+SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
-+define SYSTEMD_INSTALL_BOOT_FILES
-+	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
-+		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
-+	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
-+		$(BINARIES_DIR)/efi-part/startup.nsh
-+	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
-+		$(BINARIES_DIR)/efi-part/loader/loader.conf
-+	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
-+		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
-+endef
-+
-+else
-+SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
-+endif # BR2_PACKAGE_SYSTEMD_BOOT == y
-+
- SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
- SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
-@@ -362,6 +388,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+-diff --git a/inc/efilink.h b/inc/efilink.h
+-index cc5aa2d..b69a6fd 100644
+---- a/inc/efilink.h
+-+++ b/inc/efilink.h
+-@@ -1,6 +1,10 @@
+- #ifndef _EFI_LINK_H
+- #define _EFI_LINK_H
++diff --git a/lib/lib.h b/lib/lib.h
++index 37fbb95..7858cd0 100644
++--- a/lib/lib.h
+++++ b/lib/lib.h
++@@ -18,6 +18,7 @@ Revision History
+  
+-+#if defined(__GNUC__)
++ #ifdef __GNUC__
++ #pragma GCC visibility push(hidden)
+ +#include <stdint.h>
+-+#endif
+-+
+- /*++
++ #endif
+  
+- Copyright (c) 1998  Intel Corporation
++ #include "efi.h"
+ -- 
+-2.14.1
++2.7.4
  
-+define SYSTEMD_INSTALL_IMAGES_CMDS
-+	$(SYSTEMD_INSTALL_BOOT_FILES)
-+endef
-+
- define SYSTEMD_USERS
- 	- - input -1 * - - - Input device group
- 	- - systemd-journal -1 * - - - Journal
 -- 
 2.7.4
