@@ -1,103 +1,127 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 5 Feb 2019 00:43:05 +0200
-Subject: [Buildroot] [PATCH v7 8/8] libopenssl: bump version to 1.1.1a
-In-Reply-To: <87imxzqk2p.fsf@dell.be.48ers.dk>
-References: <20190129093919.22060-1-patrick.havelange@essensium.com>
- <20190129093919.22060-8-patrick.havelange@essensium.com>
- <87womfqnjq.fsf@dell.be.48ers.dk> <87imxzqk2p.fsf@dell.be.48ers.dk>
-Message-ID: <CAMw6YJLy1G11m5t0HRTDNDhit-JvzRrp0=nKgDsacgtqay9n1Q@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 4 Feb 2019 15:55:38 -0700
+Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix stdint include location
+In-Reply-To: <20190204223005.10f8689e@windsurf>
+References: <1548460985-22568-1-git-send-email-james.hilliard1@gmail.com>
+ <20190204223005.10f8689e@windsurf>
+Message-ID: <CADvTj4rtEJRehF47WHUU9fhi+o7YtZjj3ED6P=fn1wvC4ovD3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
-On Tue, Feb 5, 2019 at 12:12 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, Feb 4, 2019 at 2:30 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> Hello James,
 >
->  >> From: Peter Seiderer <ps.report@gmx.net>
->  >> - use BR2_TOOLCHAIN_HAS_UCONTEXT
->  >> This is used to set -DOPENSSL_NO_ASYNC if needed.
+> On Sat, 26 Jan 2019 08:03:05 +0800
+> james.hilliard1 at gmail.com wrote:
 >
->  >> - apply the CFLAGS correctly when compiling with -Os (bugfix).
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> >
+> > Some applications such as systemd-boot include efilink.h without a libc.
+> > Move the stdint.h include to lib.h so that efilink.h can be used directly
+> > without requiring a libc.
 >
->  >> - use -latomic when needed
->  >> This fixes the build for br-sparc-uclibc-2018.05
+> This is a bit weird: gcc does provide <stdint.h>. It contains something
+> like this:
 >
->  >> - don't use madvise() if no MMU
->  >> Trying to do so results in undefined reference to madvise() as
->  >> it is not available on uclibc without MMU.
->  >> The original openssl code checks if a macro used in the madvise call
->  >> is defined. The problem comes from the fact that the code in
->  >> crypto/mem_sec.c also includes a kernel header defining the same macro
->  >> unconditionally. Thus the check is always true in that case.
->  >> Upstream: https://github.com/openssl/openssl/pull/8089
+> #ifndef _GCC_WRAP_STDINT_H
+> #if __STDC_HOSTED__
+> # if defined __cplusplus && __cplusplus >= 201103L
+> #  undef __STDC_LIMIT_MACROS
+> #  define __STDC_LIMIT_MACROS
+> #  undef __STDC_CONSTANT_MACROS
+> #  define __STDC_CONSTANT_MACROS
+> # endif
+> # include_next <stdint.h>
+> #else
+> # include "stdint-gcc.h"
+> #endif
+> #define _GCC_WRAP_STDINT_H
+> #endif
 >
->  >> - don't compile test/fuzzers
->  >> These binaries introduced with 1.1.x sometimes do not compile.
->  >> This is the case with the br-arm-cortex-m4-full toolchain
+> So, when there's a C library, it does a "include_next <stdint.h>" to
+> use the stdint.h from the C library, but otherwise it falls back to
+> stdint-gcc.h, which does provide a type definition for intptr_t.
 >
->  >> - don't build ocsp daemon if no MMU.
->  >> Patch from  Richard Levitte.
+> Since elflink.h itself uses intptr_t, it seems to make sense for it to
+> include <stdint.h>. What exact error are you getting ?
+>>> systemd 240 Building
+PATH="/home/dragon/atmfirmware/bitaccess/output/host/bin:/home/dragon/atmfirmware/bitaccess/output/host/sbin:/home/dragon/bin:/home/dragon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+LC_ALL=en_US.UTF-8 PYTHONNOUSERSITE=y
+/home/dragon/atmfirmware/bitaccess/output/host/bin/ninja  -j5  -C
+/home/dragon/atmfirmware/bitaccess/output/build/systemd-240//build
+ninja: Entering directory
+`/home/dragon/atmfirmware/bitaccess/output/build/systemd-240//build'
+[519/832] Generating disk.c.o with a custom command.
+FAILED: src/boot/efi/disk.c.o
+/home/dragon/atmfirmware/bitaccess/output/host/bin/x86_64-buildroot-linux-gnu-gcc
+-c ../src/boot/efi/disk.c -o src/boot/efi/disk.c.o -Wall -Wextra
+-std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar -ffreestanding
+-fno-strict-aliasing -fno-stack-protector -Wsign-compare
+-Wno-missing-field-initializers -isystem
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi
+-isystem /home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/x86_64
+-include src/boot/efi/efi_config.h -mno-red-zone -mno-sse -mno-mmx
+-DEFI_FUNCTION_WRAPPER -DGNU_EFI_USE_MS_ABI
+In file included from
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25:0,
+                 from ../src/boot/efi/disk.c:4:
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10:
+fatal error: stdint.h: No such file or directory
+ #include <stdint.h>
+          ^~~~~~~~~~
+compilation terminated.
+[521/832] Generating graphics.c.o with a custom command.
+FAILED: src/boot/efi/graphics.c.o
+/home/dragon/atmfirmware/bitaccess/output/host/bin/x86_64-buildroot-linux-gnu-gcc
+-c ../src/boot/efi/graphics.c -o src/boot/efi/graphics.c.o -Wall
+-Wextra -std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar
+-ffreestanding -fno-strict-aliasing -fno-stack-protector
+-Wsign-compare -Wno-missing-field-initializers -isystem
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi
+-isystem /home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/x86_64
+-include src/boot/efi/efi_config.h -mno-red-zone -mno-sse -mno-mmx
+-DEFI_FUNCTION_WRAPPER -DGNU_EFI_USE_MS_ABI
+In file included from
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25:0,
+                 from ../src/boot/efi/graphics.c:8:
+/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10:
+fatal error: stdint.h: No such file or directory
+ #include <stdint.h>
+          ^~~~~~~~~~
+compilation terminated.
 >
->  >> - correctly enable cryptodev engine
->  >> Thanks to Arnout Vandecappelle for spotting this.
+> It doesn't really help that this fix is sent standalone, without the
+> rest of the systemd-boot series, as it doesn't allow us to try to
+> reproduce the build issue.
+I'll send v2 with systemd-boot.
 >
->  >> - remove all parallel build patches (openssl build-system changed)
+> >  .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++------------
+> >  1 file changed, 16 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+> > index 57c78c9..7dc8d8d 100644
+> > --- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+> > +++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+> > @@ -1,5 +1,5 @@
+> > -From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
+> > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +From 92d0653f09aa44b24b9306fa9384f13d2c9f1a24 Mon Sep 17 00:00:00 2001
+> > +From: James Hilliard <james.hilliard1@gmail.com>
+> >  Date: Fri, 18 Jan 2019 22:05:37 +0100
 >
->  >> - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->  >> to apply to Configurations/unix-Makefile.tmpl (Makefile template)
+> It's not really nice to "hijack" the authorship of the patch here, even
+> if admittedly it's just a one-liner.
+Ok, I wasn't sure what best practices there was, will change back in v2.
 >
->  >> - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
->  >> (upstream applied)
+> Thanks,
 >
->  >> - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
->  >> apply to crypto/build.info (Makefile template)
->
->  >> - fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
->
->  >> - remove legacy enable-tlsext configure option
->
->  >> - remove target/host libdir configure options, fixes openssl.pc installation
->  >> path, fixes wget compile
->
->  >> - change legacy INSTALL_PREFIX to DESTDIR
->
->  >> - remove 'libraries gets installed read only, so strip fails'
->  >> workaround (not needed anymore)
->
->  >> - change engine directory from /usr/lib/engines to
->  >> /usr/lib/engines-1.1
->
->  >> - change license file hash, no license change, only the following
->  >> hint was removed:
->
->  >> Actually both licenses are BSD-style Open Source licenses.
->  >> In case of any license issues related to OpenSSL please
->  >> contact openssl-core at openssl.org.
->
->  >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  >> Tested-by: Ryan Coe <bluemrp9@gmail.com>
->  >> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
->  >> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
->
-> This looks to break host-android-tools:
->
-> http://autobuild.buildroot.net/results/66f/66f05eb9a56aa8526a1420334d68c7eda094e90e/build-end.log
->
-> Care to take a look?
->
+> Thomas
 > --
-> Bye, Peter Korsgaard
-
-I think this patch might help:
-
-https://build.opensuse.org/package/view_file/home:plater/android-tools/openssl-1.1.0.patch?expand=0
-
-I can check and send a patch.
-
-Regards,
-Vadim Kochan
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
