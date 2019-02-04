@@ -1,52 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 19:23:02 +0100
-Subject: [Buildroot] [git commit] python-docker-pycreds: bump version to
- 0.4.0
-Message-ID: <20190204182438.A2CBB83A2F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Feb 2019 19:27:44 +0100
+Subject: [Buildroot] [PATCH] store debug information in
+ $HOST_DIR/lib/debug
+In-Reply-To: <20190204191954.533a4216@windsurf>
+References: <20190123131539.24699-1-Gerhard@Heift.Name>
+ <20190204175809.7b710934@windsurf>
+ <CAAXf6LW961NpVPtOUbmoi4oJeqmtqYWPA8V7FwQP6ztAXdJAKg@mail.gmail.com>
+ <20190204191954.533a4216@windsurf>
+Message-ID: <20190204182744.GF17819@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87f8dae15381029998dfdddd7456db20435dada3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
 
-Needed by newer python-docker versions.
+On 2019-02-04 19:19 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 4 Feb 2019 19:05:26 +0100
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
+> 
+> > The difference that this patch brings is that now also binaries can be
+> > debugged based from the target directory, i.e. you don't need to find
+> > the binary in output/build/foo-version/somewhere/.
+> > 
+> > Today, the staging directory only contains packages that explicitly
+> > set FOO_INSTALL_STAGING = YES, which is typically only done for
+> > libraries.
+> 
+> Yes, but:
+> 
+> 1) Typically the binary being debugged has to be passed explicitly as
+>    gdb argument, it's not automatically "inferred" by gdb. So having it
+>    in output/build/foo-<version>/somewhere/ or elsewhere doesn't make a
+>    huge difference.
+> 
+> 2) If for convenience reasons we want to make all binaries with
+>    debugging symbols easily available, then the long term solution we
+>    have been discussing for a while is to install all packages to
+>    STAGING_DIR. So basically I'm more for extending STAGING_DIR to
+>    contain binaries rather than to create a partial copy of STAGING_DIR
+>    in HOST_DIR/lib/debug.
 
-Pypi now proves a sha256 hash as well.
+I side with Thomas P. on that one.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-docker-pycreds/python-docker-pycreds.hash | 6 +++---
- package/python-docker-pycreds/python-docker-pycreds.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+We've had this discussion a few times already, and the conslusion was to
+try and install everything in staging.
 
-diff --git a/package/python-docker-pycreds/python-docker-pycreds.hash b/package/python-docker-pycreds/python-docker-pycreds.hash
-index 9e1182d4a4..d93a3a1d31 100644
---- a/package/python-docker-pycreds/python-docker-pycreds.hash
-+++ b/package/python-docker-pycreds/python-docker-pycreds.hash
-@@ -1,4 +1,4 @@
--# md5 from https://pypi.python.org/pypi/docker-pycreds/json, sha256 locally computed
--md5	ae63c7def3e58cb51a4d8f5810683030  docker-pycreds-0.2.2.tar.gz
--sha256	c7ab85de2894baff6ee8f15160cbbfa2fd3a04e56f0372c5793d24060687b299  docker-pycreds-0.2.2.tar.gz
-+# md5 and sha256 from https://pypi.python.org/pypi/docker-pycreds/json
-+md5	322f570cea6b4661c6ac335683988e18  docker-pycreds-0.4.0.tar.gz
-+sha256	6ce3270bcaf404cc4c3e27e4b6c70d3521deae82fb508767870fdbf772d584d4  docker-pycreds-0.4.0.tar.gz
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-docker-pycreds/python-docker-pycreds.mk b/package/python-docker-pycreds/python-docker-pycreds.mk
-index e7ffd0eb51..6575ada084 100644
---- a/package/python-docker-pycreds/python-docker-pycreds.mk
-+++ b/package/python-docker-pycreds/python-docker-pycreds.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOCKER_PYCREDS_VERSION = 0.2.2
-+PYTHON_DOCKER_PYCREDS_VERSION = 0.4.0
- PYTHON_DOCKER_PYCREDS_SOURCE = docker-pycreds-$(PYTHON_DOCKER_PYCREDS_VERSION).tar.gz
--PYTHON_DOCKER_PYCREDS_SITE = https://pypi.python.org/packages/db/73/42d4c698e70633d99f7f7c4c87c6de45ead5ad7b36dcfccd998fd1556ac9
-+PYTHON_DOCKER_PYCREDS_SITE = https://files.pythonhosted.org/packages/c5/e6/d1f6c00b7221e2d7c4b470132c931325c8b22c51ca62417e300f5ce16009
- PYTHON_DOCKER_PYCREDS_SETUP_TYPE = setuptools
- PYTHON_DOCKER_PYCREDS_LICENSE = Apache-2.0
- PYTHON_DOCKER_PYCREDS_LICENSE_FILES = LICENSE
+Then, target can be created at the end, by copying staging/ to target/
+and do the target-finalize step on that copy.
+
+Or so that is the main idea, and it can be refined to account for subtle
+details, such as the on-going per-package directory and top-level
+parallel build...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
