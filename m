@@ -1,46 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 16:38:59 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/utp_com: new host package
-In-Reply-To: <1549285823-41193-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1549285823-41193-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1549285823-41193-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20190204163859.134917a1@windsurf>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Mon,  4 Feb 2019 15:49:59 +0000
+Subject: [Buildroot] [PATCH 1/1] packages/glibc: Fix mcontext_t error that
+ breaks RISC-V package builds
+Message-ID: <20190204154959.26237-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The riscv-glibc repository version of glibc 2.26 will build for
+RISC-V 32bit, but when many packages are built against the resulting
+library an 'unknown type name mcontext_t' error is reported. The
+definition of mcontext_h in the ucontext.h header file needs to be
+moved outside of the '#ifdef __USE_MISC' structure to fix this
+issue.
 
-On Mon,  4 Feb 2019 07:10:23 -0600
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Fixes:
+  http://autobuild.buildroot.net/results/5aa9cb29c459f511dc9c4fcf218dc9a842505aa3
 
-> From: Vincent Prince <vincent.prince.fr@gmail.com>
-> 
-> This tool is used to send commands to imx6 based hardware using NXP's
-> UTP protocol.
-> 
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> 
-> (Vincent, I'd suggest sending a follow on patch to add yourself as a
-> DEVELOPER to maintain this package)
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+---
+ ...rror-that-breaks-RISC-V-architecture.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0002-Fix-mcontext_t-error-that-breaks-RISC-V-architecture.patch
 
-Actually, when adding a new package, having an entry in the DEVELOPERS
-file is mandatory, so I've added one.
-
-> +define HOST_UTP_COM_INSTALL_CMDS
-> +	$(INSTALL) -m 755 $(@D)/utp_com $(HOST_DIR)/bin/utp_com
-
-Missing -D option (just in case).
-
-Applied with those two nits fixed. Thanks!
-
-Thomas
+diff --git a/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0002-Fix-mcontext_t-error-that-breaks-RISC-V-architecture.patch b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0002-Fix-mcontext_t-error-that-breaks-RISC-V-architecture.patch
+new file mode 100644
+index 0000000000..e0875a4590
+--- /dev/null
++++ b/package/glibc/4e2943456e690d89f48e6e710757dd09404b0c9a/0002-Fix-mcontext_t-error-that-breaks-RISC-V-architecture.patch
+@@ -0,0 +1,39 @@
++From 6b4520e13c2ed7fca725d5f5c879854cd7c96c19 Mon Sep 17 00:00:00 2001
++From: Mark Corbin <mark.corbin@embecosm.com>
++Date: Mon, 4 Feb 2019 10:35:27 +0000
++Subject: [PATCH 1/1] Fix mcontext_t error that breaks RISC-V architecture
++ package builds
++
++The riscv-glibc repository version of glibc 2.26 will build for
++RISC-V 32bit, but when many packages are built against the resulting
++library an 'unknown type name mcontext_t' error is reported. The
++definition of mcontext_h in the ucontext.h header file needs to be
++moved outside of the '#ifdef __USE_MISC' structure to fix this
++issue.
++
++Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
++---
++ sysdeps/unix/sysv/linux/riscv/sys/ucontext.h | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/sysdeps/unix/sysv/linux/riscv/sys/ucontext.h b/sysdeps/unix/sysv/linux/riscv/sys/ucontext.h
++index 8f02f09106..b9dd04564a 100644
++--- a/sysdeps/unix/sysv/linux/riscv/sys/ucontext.h
+++++ b/sysdeps/unix/sysv/linux/riscv/sys/ucontext.h
++@@ -48,12 +48,11 @@ typedef greg_t gregset_t[NGREG];
++ 
++ /* Container for floating-point state.  */
++ typedef union __riscv_fp_state fpregset_t;
+++#endif
++ 
++ /* Context to describe whole processor state.  */
++ typedef struct sigcontext mcontext_t;
++ 
++-#endif
++-
++ /* Userlevel context.  */
++ typedef struct ucontext
++   {
++-- 
++2.19.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
