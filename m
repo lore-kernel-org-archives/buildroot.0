@@ -1,62 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 14:35:17 +0100
-Subject: [Buildroot] [git commit] Makefile: add update-defconfig target
-Message-ID: <20190204133400.80EE5814EE@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  4 Feb 2019 14:28:11 +0100
+Subject: [Buildroot] [PATCH v3] docs/website: consolidate CDN's and enable
+ SRI
+Message-ID: <1549286891-10671-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45f03959719b4b7c06818a82d9830db7f9d23d96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: James Hilliard <james.hilliard1@gmail.com>
 
-For symmetry with the Kconfig-based packages offering comprehensive
-targets like linux-update-defconfig, barebox-update-defconfig and so
-on, add a new top level update-defconfig target to run savedefconfig.
+Some of our cdn's are going discontinued (rawgit) and some others are
+not recommended anymore, thus we update to the recommended cdnjs.
+This patch enables also SRI protection on js to be sure the modules we
+download are not manipulated in any way.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+About SRI:
+https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+[v1 -> v2]:
+* Fixing wrong CDN for bootswatch
+* Fixing commit message
 
-diff --git a/Makefile b/Makefile
-index a382a5defb..74240ab895 100644
---- a/Makefile
-+++ b/Makefile
-@@ -135,7 +135,7 @@ nobuild_targets := source %-source \
- 	clean distclean help show-targets graph-depends \
- 	%-graph-depends %-show-depends %-show-version \
- 	graph-build graph-size list-defconfigs \
--	savedefconfig printvars
-+	savedefconfig update-defconfig printvars
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-@@ -964,13 +964,15 @@ define percent_defconfig
- endef
- $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
+[v2 -> v3]:
+* Better commit message
+* Giving sha256 to bootswatch SRI for conformity with the other cdns sri
+
+ docs/website/footer.html | 6 +++---
+ docs/website/header.html | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/docs/website/footer.html b/docs/website/footer.html
+index 2811fc5..5b18047 100644
+--- a/docs/website/footer.html
++++ b/docs/website/footer.html
+@@ -1,6 +1,6 @@
+-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+-	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha256-Daf8GuI2eLKHJlOWLRR/zRy9Clqcj4TUSumbxYH9kGI=" crossorigin="anonymous"></script>
+ 	<script type="text/javascript" src="js/buildroot.js"></script>
+ </body>
+ </html>
+diff --git a/docs/website/header.html b/docs/website/header.html
+index ef6724f..a6f16e6 100644
+--- a/docs/website/header.html
++++ b/docs/website/header.html
+@@ -10,12 +10,12 @@
  
-+update-defconfig: savedefconfig
-+
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
- 	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+ 	<title>Buildroot - Making Embedded Linux Easy</title>
  
--.PHONY: defconfig savedefconfig
-+.PHONY: defconfig savedefconfig update-defconfig
+-	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
++	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" integrity="sha256-LxKiHTQko0DUCUSgrIK23SYMymvfuj8uxXmblBvVWm0=" crossorigin="anonymous">
+ 	<link href="css/main.css" rel="stylesheet">
  
- ################################################################################
- #
-@@ -1052,6 +1054,7 @@ help:
- 	@echo '  defconfig              - New config with default answer to all options;'
- 	@echo '                             BR2_DEFCONFIG, if set on the command line, is used as input'
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
-+	@echo '  update-defconfig       - Same as savedefconfig'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
- 	@echo '  alldefconfig           - New config where all options are set to default'
+ 	<!--[if lt IE 9]>
+-	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+-	  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha256-jHqcBHBWM2erADB7T7m7MFLQon8LlOY7ncC7jDaUScs=" crossorigin="anonymous"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.min.js" integrity="sha256-g2lnLPqUkGXj7GDW+Zy47+O2ph+Ur1cmtdklVqkj+kg=" crossorigin="anonymous"></script>
+ 	<![endif]-->
+ </head>
+ 
+-- 
+2.7.4
