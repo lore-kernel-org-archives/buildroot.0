@@ -1,85 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  4 Feb 2019 19:05:53 +0100
-Subject: [Buildroot] [PATCHv2 8/8] support/download/{bzr, cvs, git,
- svn}: highlight unimplemented source-check
-In-Reply-To: <20190204180553.18394-1-patrickdepinguin@gmail.com>
-References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
-Message-ID: <20190204180553.18394-9-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Feb 2019 19:13:38 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
+ enable SRI
+In-Reply-To: <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
+ (Angelo Compagnucci's message of "Mon, 4 Feb 2019 15:11:10 +0100")
+References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
+ <87y36vvij1.fsf@dell.be.48ers.dk>
+ <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
+ <87lg2vvepy.fsf@dell.be.48ers.dk>
+ <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
+Message-ID: <878syvtoa5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-For bzr, cvs, git and svn, there is no method of checking whether the
-revision exists remotely, without actually cloning the repository.
-Therefore, there is no actual implementation for '-C' (checkonly) for these
-download helpers. The script will fall back to the normal download logic,
-which would effectively fail if the revision does not exist.
+Hi,
 
-For completeness, mention this unimplemented feature in the usage text.
+ >> Yes, but given their small size, this is probably not a huge concern?
+ >> E.G. news.html is ~200KB.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- support/download/bzr | 2 ++
- support/download/cvs | 2 ++
- support/download/git | 2 ++
- support/download/svn | 2 ++
- 4 files changed, 8 insertions(+)
+ > Yes, I know, in an optimistic world we could have that page sliced on
+ > smaller chunks and retrieved one chunk at a time.
+ > It could be done, but I don't know how much that page is visited.
+ > I don't know if we have a proper network load statistics to understand
+ > if this could be a valuable work to do.
 
-diff --git a/support/download/bzr b/support/download/bzr
-index 5289a421cd..278d8778af 100755
---- a/support/download/bzr
-+++ b/support/download/bzr
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Clone from repository at URI.
- #   -c CSET     Use changeset (or revision) CSET.
-diff --git a/support/download/cvs b/support/download/cvs
-index 9d0dc3cb3a..d9a586293a 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
-diff --git a/support/download/git b/support/download/git
-index 17ca04eb98..e9c02d6712 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -7,6 +7,8 @@ set -E
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -r          Clone and archive sub-modules.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Clone from repository at URI.
-diff --git a/support/download/svn b/support/download/svn
-index 542b25c0a2..5fff064683 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
+We afaik don't really have any data. We used to have Google analytics on
+the website, but it seems to be broken.
+
+
+ >> > Moreover, saving a compressed javascript in git it's not recommended
+ >> > because their somewhat like binary files.
+ >> 
+ >> Correct, but we already have the website images in it as well. Given
+ >> that these things only rarely change, I don't think that is a big
+ >> concern.
+
+ > Yes I know, but unless we pay to host on a CDN ourselves, we can't do
+ > otherwise.  I think that something could be optimized from a size
+ > point of view.
+
+ > I think if we can save some some bandwidth, we should go that route,
+ > but if costs are not a main concern, we can opt to have everything on
+ > local server.
+
+We don't directly pay for bandwidth (osuosl.org does), and I seriously
+doubt it is significant compared to sources.buildroot.org (~1.5TB/month).
+
 -- 
-2.19.2
+Bye, Peter Korsgaard
