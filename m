@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 13:19:35 +0100
-Subject: [Buildroot] [PATCH v3 1/2] dependencies.sh: Check for a host
- python version >= 2.7
-In-Reply-To: <20181216232734.100068-1-aduskett@gmail.com>
- (aduskett@gmail.com's message of "Sun, 16 Dec 2018 18:27:33 -0500")
+Date: Mon, 04 Feb 2019 13:24:17 +0100
+Subject: [Buildroot] [PATCH v3 2/2] prerequisite.txt: Bump python
+ dependency to 2.7
+In-Reply-To: <20181216232734.100068-2-aduskett@gmail.com>
+ (aduskett@gmail.com's message of "Sun, 16 Dec 2018 18:27:34 -0500")
 References: <20181216232734.100068-1-aduskett@gmail.com>
-Message-ID: <878syvwxt4.fsf@dell.be.48ers.dk>
+ <20181216232734.100068-2-aduskett@gmail.com>
+Message-ID: <874l9jwxla.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +16,15 @@ To: buildroot@busybox.net
 >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
  > From: Adam Duskett <Aduskett@gmail.com>
- > Older distributions such as CentOS6 come with python2.6, which causes build
- > failures in packages such as host-libglib2 because they require python2.7 and
- > above.
-
- > host-libglib2 will produce the error message:
- > /bin/sh: python2.7: command not found
-
- > Python2.7 is a hard-coded value in configure.ac. If one changes the value to
- > just "python," the following stack trace is produced:
-
- > Traceback (most recent call last):
- >   File "./gdbus-2.0/codegen/gdbus-codegen.in", line 55, in <module>
- >     self.outfile.write(LICENSE_STR.format(config.VERSION))
- > ValueError    : sys.exit(codegen_main.codegen_main())
- > zero length field name in format
-
- > Instead of supporting an ancient version of Python that had its support ended
- > in October os 2013, it would be more pragmatic only to support Python2.7 and
- > above.
-
- > Luckily; CentOS6 has the centos-release-scl repository, which allows users to
- > install python2.7, and Debian 8 comes with Python2.7 already, making this patch
- > relatively low impact.
-
  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
  > ---
  > Changes v1 -> v2:
- >   - Updated version requirement in prerequisite.txt
+ >   - Added this patch to the patch series.
 
  > Changes v2 -> v3:
- >   - Added more precise language to the commit message.
- >   - Added an example stack trace and error caused by python2.6 and
- >     host-libglib2.
+ >   - None.
 
- >  support/dependencies/dependencies.sh | 8 ++++++++
- >  1 file changed, 8 insertions(+)
-
- > diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
- > index 58c34d880f..d0b6bdc23a 100755
- > --- a/support/dependencies/dependencies.sh
- > +++ b/support/dependencies/dependencies.sh
- > @@ -181,6 +181,14 @@ if test "${missing_progs}" = "yes" ; then
- >  	exit 1
- >  fi
- 
- > +# Check that the python version is at least 2.7
- > +PYTHON_VERSION=$(python -V 2>&1 |awk '{print $2}')
- > +if [ $(echo $PYTHON_VERSION |sed -e 's/\.//g') -lt 2700 ]; then
-
-This fails on the (fairly unlikely case) of 2.7.x where x < 10, so I
-have changed it to:
-
-PYTHON_VERSION=$(python -V 2>&1 |awk '{ split($2, v, "."); print v[1] v[2] }')
-
-To only look at the major.minor part and committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
