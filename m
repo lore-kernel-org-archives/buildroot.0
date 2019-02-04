@@ -1,56 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Feb 2019 11:07:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add optional iptables
- dependency
-In-Reply-To: <20190203180416.32140-1-fontaine.fabrice@gmail.com>
-References: <20190203180416.32140-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190204100750.GB17819@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Feb 2019 11:08:36 +0100
+Subject: [Buildroot] [PATCH v2 1/1] toolchain: update AArch32/AArch64
+ toolchains to 8-2-2019.01
+In-Reply-To: <2f050b43-578d-2208-1cc6-e81df01f8b6d@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 29 Jan 2019 12:34:33 +0100")
+References: <20190128133500.7515-1-joakim.bech@linaro.org>
+ <20190128170533.16555-1-joakim.bech@linaro.org>
+ <f01f063d-4b46-62b9-12f4-1cba370a3029@mind.be>
+ <20190129102608.4k3wfli3dyomb7aa@debby>
+ <1e40561f-02d9-c356-8630-c301251048ff@mind.be>
+ <2f050b43-578d-2208-1cc6-e81df01f8b6d@mind.be>
+Message-ID: <87r2cnx3vf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2019-02-03 19:04 +0100, Fabrice Fontaine spake thusly:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > On 29/01/2019 12:27, Arnout Vandecappelle wrote:
+ >>>> On 28/01/2019 18:05, Joakim Bech wrote:
+ >>>> [snip]
+ >>>>> +config BR2_KERNEL_HEADERS_5_00
+ >>>>> +	bool "Linux 5.00.x kernel headers"
+ >>>>> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_00
+ >>>> Adding support for the 5.0 headers should be a separate patch. See commit
+ >>>> 649883d2c9957b7a7fcf81c4475f848ad8865ca1 for an example how it was done for 4.20.
+ >>>> 
+ >>> So after looking a bit more into the git log of how patches where
+ >>> created in the past it looks like I should create 4 patches, "pseudo git
+ >>> log -4".
+ >>> - toolchain-external: update Arm ARM 8.2-2019.01
+ >>> - toolchain-external: update Arm AArch64-BE toolchain 8.2-2019.01
+ >>> - toolchain-external: update Arm AArch64 toolchain 8.2-2019.01
+ >>> - toolchain: add necessary options to support 5.0 kernel headers
+ >> Indeed, that's the way to go.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >  Hold on a moment, I'm having second thoughts on this... This toolchain is using
+ > 5.0-rcX kernel headers. I'm not so sure that we will want that in our 2019.02
+ > LTS release... So I expect that this patch will not get included in the 2919.02
+ > cut-off, and will end up being superseded by the Arm 2019.03 release...
 
-Regards,
-Yann E. MORIN.
+ >  Peter?
 
-> ---
->  package/systemd/systemd.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 15db1969e5..f9df66b039 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -64,6 +64,13 @@ else
->  SYSTEMD_CONF_OPTS += -Delfutils=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_IPTABLES),y)
-> +SYSTEMD_DEPENDENCIES += iptables
-> +SYSTEMD_CONF_OPTS += -Dlibiptc=true
-> +else
-> +SYSTEMD_CONF_OPTS += -Dlibiptc=false
-> +endif
-> +
->  # Both options can't be selected at the same time so prefer libidn2
->  ifeq ($(BR2_PACKAGE_LIBIDN2),y)
->  SYSTEMD_DEPENDENCIES += libidn2
-> -- 
-> 2.14.1
-> 
+Yes, using a RC doesn't sound very nice for the LTS.
+
+ >  That said, the part that adds support for 5.0 kernel headers is certainly
+ > something we'd like to have in the 2019.02 LTS.
+
+Why? 5.0 is not released yet, and will not become a LTS release.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
