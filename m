@@ -1,78 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 15:52:44 +0100
-Subject: [Buildroot] [git commit] infra: add force build flag for host
- dependencies
-Message-ID: <20190204145126.ED66483722@busybox.osuosl.org>
+From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Mon, 4 Feb 2019 16:03:25 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/bird: bump version to 2.0.3
+In-Reply-To: <20190204154149.6c46e8ef@windsurf>
+References: <20190204092208.maeiwjvs23rtxdap@sapphire.tkos.co.il>
+ <20190204100200.3628-1-adrien@gallouet.fr> <20190204141129.34c40848@windsurf>
+ <CAFtSRGAAkpuyg7==BY7oQ++_uWTeYaZZnA9GjrB2aNXTazQj8Q@mail.gmail.com>
+ <20190204154149.6c46e8ef@windsurf>
+Message-ID: <CAFtSRGDpsBaP7Gk3hbEdxdTtNt-Hg--W_z9-YNrxLCOwUt-xYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f1b965bc36c64f83c962e373f7b5fe1245e3355
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Feb 4, 2019 at 3:41 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Please keep the mailing list in Cc and avoid top-posting. Thanks!
 
-This commit adds a config option which will force buildroot to
-build all host dependencies even if they are already present on the
-host system. This may be a desirable option if different hosts are
-used to build the same source. In this case, some packages will be
-built on one host that are not built on another. This is problematic
-if build source archives are cached afterwards for offline builds.
+Sorry, I'll double check from now :)
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-[Peter: reword, drop exit 1, reshuffle]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in                            | 12 ++++++++++++
- support/dependencies/dependencies.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+>
+> On Mon, 4 Feb 2019 15:17:44 +0100
+> Adrien Gallou?t <adrien@gallouet.fr> wrote:
+>
+> > Hi,
+> > Yes (I think). We can still download the first tag of BIRD released 9yrs
+> > ago.
+>
+> Well, that it is not really the question I was asking. My question is
+> whether this tarball is always *exactly* identical. As you say, it's a
+> tarball generated automatically. Since we store a hash of the tarball
+> in bird.hash, if gitlab does some subtle changes in how the tarball is
+> generated, the hash will change, breaking the download.
 
-diff --git a/Config.in b/Config.in
-index f965e9d6d8..d58d8dc04a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -677,6 +677,18 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	  and external toolchain backends (through the toolchain
- 	  wrapper).
- 
-+config BR2_FORCE_HOST_BUILD
-+	bool "Force the building of host dependencies"
-+	help
-+	  Build all available host dependencies, even if they are
-+	  already installed on the system.
-+
-+	  This option can be used to ensure that the download cache of
-+	  source archives for packages remain consistent between
-+	  different build hosts.
-+
-+	  This option will increase build time.
-+
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index 563574d6ad..4fac5c731b 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -5,6 +5,11 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_FORCE_HOST_BUILD),y)
-+# ignore all available host packages
-+define suitable-host-package
-+endef
-+else
- # suitable-host-pkg: calls check-host-$(1).sh shell script. Parameter (2)
- # can be the candidate to be checked. If not present, the check-host-$(1).sh
- # script should use 'which' to find a candidate. The script should return
-@@ -12,6 +17,7 @@
- define suitable-host-package
- $(shell support/dependencies/check-host-$(1).sh $(2))
- endef
-+endif
- # host utilities needs host-tar to extract the source code tarballs, so
- # ensure check-host-tar.mk is included before the rest
- include support/dependencies/check-host-tar.mk
+They moved from something like archive.tar.gz?ref=<ref> to <repo>-<ref>.tar.gz
+so there is no guarantee AFAIK but they are sensible to this like github.
+
+BIRD ppl use an ftp server: ftp://bird.network.cz/pub/bird/ for packaging
+maybe it is preferable to use it ?
+
+>
+> We had this issue with Github in the past.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
