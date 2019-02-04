@@ -1,50 +1,76 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 3 Feb 2019 22:27:48 -0200 (BRST)
-Subject: [Buildroot] [PATCH v5] package/ntp: sntp time sync script
-In-Reply-To: <b30f789e-46c6-b695-cb48-990624424f4d@mind.be>
-References: <1544586337-7888-1-git-send-email-matthew.weber@rockwellcollins.com>
- <b30f789e-46c6-b695-cb48-990624424f4d@mind.be>
-Message-ID: <1438353593.5225109.1549240068747.JavaMail.zimbra@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  4 Feb 2019 07:00:37 +0000 (UTC)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-02-03
+Message-ID: <20190204070037.DA0D786879@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Matthew Weber" <matthew.weber@rockwellcollins.com>, "buildroot" <buildroot@buildroot.org>
-> Cc: "Oscar Gomez Fuente" <oscargomezf@gmail.com>, "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Domingo, 3 de fevereiro de 2019 18:00:33
-> Subject: Re: [Buildroot] [PATCH v5] package/ntp: sntp time sync script
+Hello,
 
-> Hi Matt,
-> 
-> I've finally applied to master since it really is a useful feature and it
-> works. However, I have a few additional remarks. Also one for Carlos, the init
-> script dude :-)
-> 
-> On 12/12/2018 04:45, Matt Weber wrote:
-> [snip]
->> +#!/bin/sh
->> +
->> +DAEMON="sntp"
-> 
-> Carlos, I'm starting to doubt the usefulness of this DAEMON variable. Other
-> variables are prefixed by SNTP_, only this one isn't. In other init scripts you
-> started using PROGRAM instead because it isn't actually a daemon.
-> 
-> However, the only reason to make it a variable is to make it easier to copy and
-> adapt an existing init script. But really, doing a search/replace of that string
-> is not so much work. And you anyway need to review the entire file, e.g.
-> /usr/bin/$DAEMON is used which may not be correct.
-> 
-> So I'd propose to replace DAEMON with a direct reference to the program. What
-> do you think?
+Build statistics for 2019-02-03
+===============================
 
-DAEMON can be useful sometime in the future if we homogenize the scripts
-so well that we can use a template that is sourced after setting a small
-of variables (DAEMON, DAEMON_ARGS, PIDFILE, and so on). Perhaps we should
-use an EXECFILE variable instead of /usr/bin/$DAEMON.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  18 |   0 |   0 |  18 |
+   2018.11.x |  29 |   1 |   0 |  30 |
+      master | 212 |  13 |   1 | 226 |
+
+Results for branch '2018.11.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                     vlc-3.0.4 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                      vlc-3.0.4 | NOK | http://autobuild.buildroot.net/results/04d3527e3967010fb49a40385799b03a7409cc24 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+   libtorrent-rasterbar-1.1.11 | 2 
+                  brotli-1.0.7 | 1 
+                clamav-0.101.1 | 1 
+                  ffmpeg-3.4.5 | 1 
+                        jasper | 1 
+                 libdrm-2.4.97 | 1 
+        opentracing-cpp-v1.5.1 | 1 
+             qt5location-5.6.3 | 1 
+               qt5webkit-5.9.1 | 1 
+          shairport-sync-3.2.1 | 1 
+               skalibs-2.6.4.0 | 1 
+             stress-ng-0.09.47 | 1 
+                   systemd-240 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/01d0ae9a6c02f3f907fc770a871b3ea7b1e34ae2 |     
+     powerpc |                 clamav-0.101.1 | NOK | http://autobuild.buildroot.net/results/e81718de021c8729b13bb40ca5c454e4a8659ee5 |     
+     riscv32 |                   ffmpeg-3.4.5 | NOK | http://autobuild.buildroot.net/results/8ce9711bf67bde5d3e7e61618bd018b1f4bfca94 |     
+microblazeel |                         jasper | TIM | http://autobuild.buildroot.net/results/37e916b576acd212d967be4eb7075fc041008509 |     
+         arm |                  libdrm-2.4.97 | NOK | http://autobuild.buildroot.net/results/11645d4166f27ace9fce0ccf8daf80dfb42baecd |     
+      xtensa |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/a0a72a23d91f185b3fc997a15f11254a3024aac3 |     
+        or1k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/dabf165e3f658788f6d166a001c13e09a32b8be4 |     
+         arm |         opentracing-cpp-v1.5.1 | NOK | http://autobuild.buildroot.net/results/121a9f2aacf9e7b1f5d0b3f2c55bc1da36c7cfb6 |     
+     powerpc |              qt5location-5.6.3 | NOK | http://autobuild.buildroot.net/results/e5d98efb269fd11b12f91c69c8a78a70bb23e825 |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/b8b5ccde83e1976ab0a64a35f1bdcc75c28e3df5 |     
+         arm |           shairport-sync-3.2.1 | NOK | http://autobuild.buildroot.net/results/fec13ba0bc48d1091bcaa1f2497f653ad0e30875 |     
+     riscv32 |                skalibs-2.6.4.0 | NOK | http://autobuild.buildroot.net/results/f32981e3e9dc818c799a8cdb48a848f163d9eded |     
+      mipsel |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/fb0c91346827928e1189958b61fdcebec03be909 |     
+         arm |                    systemd-240 | NOK | http://autobuild.buildroot.net/results/970b09e1d49b53dff12a07ca4ad424ef9dd29a69 |     
+
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+http://autobuild.buildroot.net
