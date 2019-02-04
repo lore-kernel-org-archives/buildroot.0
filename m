@@ -1,65 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 10:27:39 +0100
-Subject: [Buildroot] [PATCH v7 4/8] mariadb: use host-openssl from
- buildroot-system
-In-Reply-To: <20190129093919.22060-4-patrick.havelange@essensium.com> (Patrick
- Havelange's message of "Tue, 29 Jan 2019 10:39:15 +0100")
-References: <20190129093919.22060-1-patrick.havelange@essensium.com>
- <20190129093919.22060-4-patrick.havelange@essensium.com>
-Message-ID: <874l9jykc4.fsf@dell.be.48ers.dk>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Mon,  4 Feb 2019 10:30:54 +0100 (CET)
+Subject: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1.
+ ffserver is not supported anymore.
+In-Reply-To: <20190202155400.6547fba9@windsurf>
+Message-ID: <ea-mime-5c58064e-3d38-4e513c2d@www-5.netcourrier.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
 
-Hi,
 
- > From: Peter Seiderer <ps.report@gmx.net>
- > - change WITH_SSL for host build from bundled to system (and add
- >   host-openssl dependency) to avoid the following configure failure:
 
- >   CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
- >     Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
- >     (Required is at least version "3.3.24")
- >   Call Stack (most recent call first):
- >     /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
- >     /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
- >     libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
+> De : Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ? : Louis-Paul Cordier <lpdev@cordier.org>
+> Sujet : Re: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1. ffserver is not supported anymore.
+> Date : 02/02/2019 15:54:00 Europe/Paris
+> Copie ? : buildroot at buildroot.org;
+>    Bernd Kuhls <bernd.kuhls@t-online.de>;
+>    MahyarKoshkouei <mahyar.koshkouei@gmail.com>
+>
+> Hello,
+>
+> The commit title should be just:
+>
+> package/ffmpeg: bump to version 4.1
+>
+> The fact that ffserver is removed should be part of the commit log.
+>
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > Tested-by: Ryan Coe <bluemrp9@gmail.com>
- > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Will be added.
 
- > ---
- > Changes v7:
- >   - none
+> On Thu, 31 Jan 2019 13:15:24 +0100
+> Louis-Paul Cordier <lpdev@cordier.org> wrote:
+>
+> > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+>
+> I'd like to hear from Bernd about this ffmpeg bump. If I remember well,
+> major ffmpeg bumps are typically breaking some APIs, causing build
+> issues with packages that use ffmpeg.
+>
 
- > Changes v6:
- >   - none
- > ---
- >  package/mariadb/mariadb.mk | 3 ++-
- >  1 file changed, 2 insertions(+), 1 deletion(-)
+According to my experience with FFMpeg, API are marked as deprecated. They can still be used and linked correctly against all application. However, the behaviour of the program can differ. What about creating a ffmpeg4 package, just like opencv2/3 packages?
 
- > diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
- > index e17649209a..e354a9137c 100644
- > --- a/package/mariadb/mariadb.mk
- > +++ b/package/mariadb/mariadb.mk
- > @@ -86,7 +86,8 @@ MARIADB_CONF_OPTS += \
- >  	-DMYSQL_DATADIR=/var/lib/mysql \
- >  	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
- 
- > -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
- > +HOST_MARIADB_DEPENDENCIES = host-openssl
- > +HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
+> Have you verified that other Buildroot packages that use ffmpeg do not
+> break after this ffmpeg version bump ?
+>
+> > package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 -----------------------
+>
+> Would be good to mention in the sommit log why this patch is removed
+> (accepted upstream ? no longer relevant ?)
+>
 
-I don't quite get this patch. What is the relation to the openssl bump?
+The patch did not apply to ffmpeg4. To be honest, I did not investigate this. Thank you for pointing this out I will rework this.
 
-From the error message it sounds like mariadb perhaps has gnutls
-support, and it ends up falling back to that if SSL support is disabled?
-Can't we just disable that?
+>
+> > -config BR2_PACKAGE_FFMPEG_FFSERVER
+> > - bool "Build ffserver"
+> > - depends on BR2_USE_MMU # fork()
+> > - help
+> > - FFserver is a streaming server for both audio and video.
+>
+> If ffserver is no longer supported, we want to move this option to
+> Config.in.legacy so that users who have configurations with this
+> enabled are aware.
+>
 
--- 
-Bye, Peter Korsgaard
+This does not appear in the official documentation. Would it be possible to add it?
+
+> Thanks!
+>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
