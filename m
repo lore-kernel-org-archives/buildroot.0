@@ -1,25 +1,81 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 4 Feb 2019 07:15:00 -0600
-Subject: [Buildroot] [PATCH] qemu: remove host-python dependency.
-In-Reply-To: <20190204124323.2865-1-aduskett@gmail.com>
-References: <20190204124323.2865-1-aduskett@gmail.com>
-Message-ID: <CANQCQpY=kVxQ+V5K8f5FedBFa2sWoB25jPDevtBGtCz4C2c3HQ@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 04 Feb 2019 14:15:23 +0100
+Subject: [Buildroot] [PATCH] Makefile: add update-defconfig target
+In-Reply-To: <20190126003406.7723-1-vivien.didelot@gmail.com>
+References: <20190126003406.7723-1-vivien.didelot@gmail.com>
+Message-ID: <1549286123.7318.44.camel@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hi Thomas, Vivien,
 
-On Mon, Feb 4, 2019 at 6:43 AM <aduskett@gmail.com> wrote:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> Now that BuildRoot requires python >= 2.7, qemu no longer needs a host-python,
-> as it does not use any external Python modules to build.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Looks good and makes sense
 
+On Fri, 2019-01-25 at 19:34 -0500, Vivien Didelot wrote:
+> For symmetry with the Kconfig-based packages offering comprehensive
+> targets like linux-update-defconfig, barebox-update-defconfig and so
+> on, add a new top level update-defconfig target to run savedefconfig.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
 
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+
+> ---
+>  Makefile | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index dd8cc7a9ae..3a2f74be69 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -151,7 +151,7 @@ nobuild_targets := source %-source \
+>  	clean distclean help show-targets graph-depends \
+>  	%-graph-depends %-show-depends %-show-version \
+>  	graph-build graph-size list-defconfigs \
+> -	savedefconfig printvars
+> +	savedefconfig update-defconfig printvars
+>  ifeq ($(MAKECMDGOALS),)
+>  BR_BUILDING = y
+>  else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+> @@ -959,13 +959,15 @@ define percent_defconfig
+>  endef
+>  $(eval $(foreach d,$(call reverse,$(TOPDIR)
+> $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
+>  
+> +update-defconfig: savedefconfig
+> +
+>  savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+>  	@$(COMMON_CONFIG_ENV) $< \
+>  		--savedefconfig=$(if
+> $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+>  		$(CONFIG_CONFIG_IN)
+>  	@$(SED) '/BR2_DEFCONFIG=/d' $(if
+> $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+>  
+> -.PHONY: defconfig savedefconfig
+> +.PHONY: defconfig savedefconfig update-defconfig
+>  
+>  ####################################################################
+> ############
+>  #
+> @@ -1047,6 +1049,7 @@ help:
+>  	@echo '  defconfig              - New config with default
+> answer to all options;'
+>  	@echo '                             BR2_DEFCONFIG, if set on
+> the command line, is used as input'
+>  	@echo '  savedefconfig          - Save current config to
+> BR2_DEFCONFIG (minimal config)'
+> +	@echo '  update-defconfig       - Same as savedefconfig'
+>  	@echo '  allyesconfig           - New config where all
+> options are accepted with yes'
+>  	@echo '  allnoconfig            - New config where all
+> options are answered with no'
+>  	@echo '  alldefconfig           - New config where all
+> options are set to default'
+
+Have a nice Monday,
+
+Titouan
