@@ -1,31 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 15:06:12 +0100
-Subject: [Buildroot] [PATCH] docs/website: fixing query.yahooapis.com
- shutdown
-In-Reply-To: <1549287004-13747-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Mon, 4 Feb 2019 14:30:04 +0100")
-References: <1549287004-13747-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87d0o7veaz.fsf@dell.be.48ers.dk>
+Date: Mon, 4 Feb 2019 15:06:20 +0100
+Subject: [Buildroot] [git commit] docs/website: consolidate CDN's and enable
+ SRI
+Message-ID: <20190204140524.F340381516@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd84208ce6f82e52104a423af535aaff21a1f2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch rework the use of query.yahooapis.com to do the conversion
- > from xml to json required by our script and moves to the use of a js
- > library. Datas are therefore now converted in json format on the client.
+Some of our cdn's are going discontinued (rawgit) and some others are
+not recommended anymore, thus we update to the recommended cdnjs.
+This patch enables also SRI protection on js to be sure the modules we
+download are not manipulated in any way.
 
- > Unfortunately, cause of the CORS restriction on nabble and
- > buildroot.org, we cannot retrieve directly the xml data from these
- > servers and we need a CORS proxy to do that.
+About SRI:
+https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/footer.html | 6 +++---
+ docs/website/header.html | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Committed after changing the integrity tag to use sha256 for consistency
-with the others, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/footer.html b/docs/website/footer.html
+index 2811fc5c0e..5b18047093 100644
+--- a/docs/website/footer.html
++++ b/docs/website/footer.html
+@@ -1,6 +1,6 @@
+-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+-	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha256-Daf8GuI2eLKHJlOWLRR/zRy9Clqcj4TUSumbxYH9kGI=" crossorigin="anonymous"></script>
+ 	<script type="text/javascript" src="js/buildroot.js"></script>
+ </body>
+ </html>
+diff --git a/docs/website/header.html b/docs/website/header.html
+index ef6724f288..a6f16e680b 100644
+--- a/docs/website/header.html
++++ b/docs/website/header.html
+@@ -10,12 +10,12 @@
+ 
+ 	<title>Buildroot - Making Embedded Linux Easy</title>
+ 
+-	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
++	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" integrity="sha256-LxKiHTQko0DUCUSgrIK23SYMymvfuj8uxXmblBvVWm0=" crossorigin="anonymous">
+ 	<link href="css/main.css" rel="stylesheet">
+ 
+ 	<!--[if lt IE 9]>
+-	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+-	  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha256-jHqcBHBWM2erADB7T7m7MFLQon8LlOY7ncC7jDaUScs=" crossorigin="anonymous"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.min.js" integrity="sha256-g2lnLPqUkGXj7GDW+Zy47+O2ph+Ur1cmtdklVqkj+kg=" crossorigin="anonymous"></script>
+ 	<![endif]-->
+ </head>
+ 
