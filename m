@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  4 Feb 2019 19:05:50 +0100
-Subject: [Buildroot] [PATCHv2 5/8] support/download/file: implement
- source-check
+Date: Mon,  4 Feb 2019 19:05:46 +0100
+Subject: [Buildroot] [PATCHv2 1/8] support/download/scp: fix download with
+ scheme prefix 'scp://'
 In-Reply-To: <20190204180553.18394-1-patrickdepinguin@gmail.com>
 References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
-Message-ID: <20190204180553.18394-6-patrickdepinguin@gmail.com>
+Message-ID: <20190204180553.18394-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,33 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
+The scp download helper is broken when the server URL starts with 'scp://'.
+Such prefix is used in two situations:
+1. to let FOO_SITE point to an scp location without explicitly having to set
+   'FOO_SITE_METHOD = scp'
+
+2. when BR2_PRIMARY_SITE or BR2_BACKUP_SITE points to an scp location. In
+   this case, there is no equivalent of 'SITE_METHOD'.
+
+Strip out the scheme prefix, similarly to how the 'file' download helper
+does it. That helper has the same cases as above.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/file | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ support/download/scp | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/support/download/file b/support/download/file
-index e52fcf2c8c..bf3c428cbe 100755
---- a/support/download/file
-+++ b/support/download/file
-@@ -7,6 +7,7 @@ set -e
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          Only check that the source file exists.
- #   -o FILE     Copy to file FILE.
- #   -f FILE     Copy from basename file FILE.
- #   -u DIR      Copy from FILE in DIR.
-@@ -23,6 +24,7 @@ verbose=-v
- while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  verbose=;;
-+    C)  checkonly=1;;
-     o)  output="${OPTARG}";;
-     f)  file="${OPTARG}";;
-     u)  dir="${OPTARG}";;
-@@ -39,4 +41,12 @@ _localfiles() {
-     eval ${LOCALFILES} "${@}"
+diff --git a/support/download/scp b/support/download/scp
+index 49cfff2b9f..80cf495c4e 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -34,4 +34,7 @@ _scp() {
+     eval ${SCP} "${@}"
  }
  
--_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
 +# Remove any scheme prefix
-+dir="${dir##file://}"
++uri="${uri##scp://}"
 +
-+if [ -n "${checkonly}" ]; then
-+    test -e "'${dir}/${file}'"
-+    exit ${?}
-+fi
-+
-+_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
+ _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
 -- 
 2.19.2
