@@ -1,43 +1,101 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Mon,  4 Feb 2019 10:48:49 +0100 (CET)
-Subject: [Buildroot] [PATCH v2 6/6] Update DEVELOPERS.
-In-Reply-To: <20190204104300.324dac2c@windsurf>
-Message-ID: <ea-mime-5c580a81-4655-10c2a2c6@www-5.netcourrier.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 10:48:54 +0100
+Subject: [Buildroot] [git commit] package/libgeotiff: fix build without C++
+Message-ID: <20190204094854.6ECC981554@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> De : Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ? : lpdev at cordier.org
-> Sujet : Re: [Buildroot] [PATCH v2 6/6] Update DEVELOPERS.
-> Date : 04/02/2019 10:43:00 Europe/Paris
-> Copie ? : Bernd Kuhls <bernd.kuhls@t-online.de>;
->    MahyarKoshkouei <mahyar.koshkouei@gmail.com>;
->    buildroot at buildroot.org
->
-> Hello,
->
-> On Mon, 4 Feb 2019 10:11:19 +0100 (CET)
-> lpdev at cordier.org wrote:
->
-> > First of all, thank you for taking the time to review this serie of patches.
->
-> I just applied your PATCH 1/6. For the rest, I'll mark as Changes
-> Requested, so if you could repost a new iteration, it would be good.
->
-> I believe the most difficult issue to solve is fixing the
-> gstreamer1/gst1-libav build issue with ffmpeg 4.x (see the discussion
-> with Bernd on this).
+commit: https://git.buildroot.net/buildroot/commit/?id=2693362a04912462c0b8c02348607fb110f667f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I am affraid that I don't know gstreamer enough to review/fix this patch... Still, we can merge the other patches after the next iteration, I will temporary fork buildroot for ffmpeg4 then :(
+Do not check for C++ compiler as libgeotiff is written in C otherwise
+build will fail on toolchains without a working C++ compiler:
 
->
-> Thanks!
->
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+checking how to run the C++ preprocessor... /lib/cpp
+configure: error: in
+`/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+
+Fixes:
+ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+
+diff --git a/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+new file mode 100644
+index 0000000000..68082dd023
+--- /dev/null
++++ b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+@@ -0,0 +1,65 @@
++From edc9ec69b43c27955ee4f24db2e6808bb1a8974d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 Feb 2019 23:20:43 +0100
++Subject: [PATCH] libgeotiff/configure.ac: do not check for C++
++
++Do not check for C++ compiler as libgeotiff is written in C otherwise
++build will fail on toolchains without a working C++ compiler:
++
++checking how to run the C++ preprocessor... /lib/cpp
++configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
++configure: error: C++ preprocessor "/lib/cpp" fails sanity check
++
++Fixes:
++ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OSGeo/libgeotiff/pull/9]
++---
++ libgeotiff/configure.ac | 6 ------
++ 1 file changed, 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index a334416..4ebbd6f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,8 +25,6 @@ dnl #########################################################################
++ AM_INIT_AUTOMAKE
++ AM_MAINTAINER_MODE
++ AC_PROG_CC
++-AC_PROG_CXX
++-AC_PROG_CXXCPP
++ AC_PROG_INSTALL
++ AC_PROG_LN_S
++ AC_PROG_MAKE_SET
++@@ -46,7 +44,6 @@ dnl #########################################################################
++ m4_define([debug_default],[no])
++ 
++ CFLAGS="$CFLAGS"
++-CXXFLAGS="$CXXFLAGS"
++ 
++ dnl We want to honor the users wishes with regard to linking.
++ LIBS="$LDFLAGS $LIBS"
++@@ -82,11 +79,9 @@ AC_MSG_CHECKING([for debug enabled])
++ 
++ if test "x$enable_debug" = "xyes"; then
++     CFLAGS="$CFLAGS -g -DDEBUG -Wall"
++-    CXXFLAGS="$CXXFLAGS -g -DDEBUG -Wall"
++     AC_MSG_RESULT(yes)
++ else
++     CFLAGS="$CFLAGS -O3 -DNDEBUG"
++-    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
++     AC_MSG_RESULT(no)
++ fi
++ 
++@@ -367,7 +362,6 @@ LOC_MSG()
++ LOC_MSG([  Version..................: ${RELEASE_VERSION}])
++ LOC_MSG([  Installation directory...: ${prefix}])
++ LOC_MSG([  C compiler...............: ${CC} ${CFLAGS}])
++-LOC_MSG([  C++ compiler.............: ${CXX} ${CXXFLAGS}])
++ 
++ LOC_MSG([  Debugging support........: ${enable_debug}])
++ LOC_MSG()
++-- 
++2.14.1
++
