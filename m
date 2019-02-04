@@ -1,10 +1,10 @@
 From: kostap at marvell.com <kostap@marvell.com>
-Date: Mon, 4 Feb 2019 16:31:35 +0200
-Subject: [Buildroot] [PATCH 1/3] package: arm-gnu-rm-toolchain: Add ARM-RM
- toolchain
+Date: Mon, 4 Feb 2019 16:31:36 +0200
+Subject: [Buildroot] [PATCH 2/3] boot: a3700-utils-marvell: Add Armada-3700
+ utilities
 In-Reply-To: <20190204143137.32224-1-kostap@marvell.com>
 References: <20190204143137.32224-1-kostap@marvell.com>
-Message-ID: <20190204143137.32224-2-kostap@marvell.com>
+Message-ID: <20190204143137.32224-3-kostap@marvell.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,93 +13,125 @@ To: buildroot@busybox.net
 
 From: Konstantin Porotchkin <kostap@marvell.com>
 
-Add host-only ARM RM toolchain for supporting firmware
-builds for Armv8-based SoCs utilizing Cortex-M/Cortex-R
-service CPUs.
-The cross-toolchain used for building Armv8 application CPU
-code cannot be used for Cortex-M/Cortex-R 32-bit THUMB code
-generation.
-This patch installs pre-build bate metal ARM GNU-RM toolchain
-into the host file system folder /opt/gcc-arm for covering the
-above mentioned cases.
+Marvell Armada 37xx firmware code and utilities are kept in
+a separate repository. This code is needed as a dependency
+to build ATF firmware for Marvell Armada 37xx SoCs.
 
 Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
 ---
- package/Config.in.host                        |  1 +
- package/arm-gnu-rm-toolchain/Config.in.host   | 13 +++++++++++
- .../arm-gnu-rm-toolchain.hash                 |  2 ++
- .../arm-gnu-rm-toolchain.mk                   | 22 +++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/arm-gnu-rm-toolchain/Config.in.host
- create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
- create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+ boot/Config.in                                |  1 +
+ boot/a3700-utils-marvell/Config.in            | 46 +++++++++++++++++++
+ .../a3700-utils-marvell.hash                  |  2 +
+ .../a3700-utils-marvell.mk                    | 28 +++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 boot/a3700-utils-marvell/Config.in
+ create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.hash
+ create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 16b474fc9d..41dfd76785 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -67,5 +67,6 @@ menu "Host utilities"
- 	source "package/xorriso/Config.in.host"
- 	source "package/zip/Config.in.host"
- 	source "package/zstd/Config.in.host"
-+	source "package/arm-gnu-rm-toolchain/Config.in.host"
+diff --git a/boot/Config.in b/boot/Config.in
+index 8e0c8e5df4..4acde0e764 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -19,5 +19,6 @@ source "boot/syslinux/Config.in"
+ source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
++source "boot/a3700-utils-marvell/Config.in"
  
  endmenu
-diff --git a/package/arm-gnu-rm-toolchain/Config.in.host b/package/arm-gnu-rm-toolchain/Config.in.host
+diff --git a/boot/a3700-utils-marvell/Config.in b/boot/a3700-utils-marvell/Config.in
 new file mode 100644
-index 0000000000..3341760acd
+index 0000000000..1fff8555a9
 --- /dev/null
-+++ b/package/arm-gnu-rm-toolchain/Config.in.host
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_HOST_ARM_GNU_RM_TOOLCHAIN
-+	bool "host arm-gnu-rm-toolchain"
-+	depends on BR2_HOSTARCH = "x86_64"
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++++ b/boot/a3700-utils-marvell/Config.in
+@@ -0,0 +1,46 @@
++config BR2_TARGET_A3700_UTILS_MARVELL
++	bool "a3700-utils-marvell"
++	depends on BR2_aarch64
 +	help
-+	  The GNU Embedded Toolchain for Arm is an open-source pre-built
-+	  suite of tools for C, C++ and Assembly programming targeting
-+	  Arm Cortex-M and Cortex-R family of processors.
-+	  It includes the GNU Compiler (GCC) and is available free of charge
-+	  directly from Arm for embedded software development.
++	  Marvell Armada 37xx firmware code and utilities are kept in
++	  a separate repository. This code is needed as a dependency
++	  to build ATF firmware for Marvell Armada 37xx SoCs.
 +
++	  https://github.com/MarvellEmbeddedProcessors/A3700-utils-marvell/
 +
-+	  https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
-\ No newline at end of file
-diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
++choice
++	bool "a3700-utils-marvell-version"
++
++config BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  Allows to specify custom repository for the component
++	  Useful for developers building out of bleeding edge sources
++
++config BR2_TARGET_A3700_UTILS_MARVELL_RELEASE
++	bool "Release repository on Github"
++	help
++	  Use the package sources specified in this buildroot release
++
++config BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_TARBALL
++	bool "Release sources supplied as archives"
++	help
++	  Use the package sources from local archive
++
++endchoice
++
++if BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_GIT
++
++config BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_TARBALL_LOCATION
++	string "Name of local archive file with release"
+diff --git a/boot/a3700-utils-marvell/a3700-utils-marvell.hash b/boot/a3700-utils-marvell/a3700-utils-marvell.hash
 new file mode 100644
-index 0000000000..a08e8e6208
+index 0000000000..b4f4cd70e9
 --- /dev/null
-+++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
++++ b/boot/a3700-utils-marvell/a3700-utils-marvell.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 bb17109f0ee697254a5d4ae6e5e01440e3ea8f0277f2e8169bf95d07c7d5fe69 gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
-diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
++sha256 5a8dd5ae9322d19a61a8ca9ca9235c0a24dee889e6a0b2f848fc8d9e1494505d a3700-utils-marvell-a0a1cb88327afa91415c59822fa9c5894d9ec3d7.tar.gz
+diff --git a/boot/a3700-utils-marvell/a3700-utils-marvell.mk b/boot/a3700-utils-marvell/a3700-utils-marvell.mk
 new file mode 100644
-index 0000000000..be02130f28
+index 0000000000..c4fb29d73a
 --- /dev/null
-+++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
-@@ -0,0 +1,22 @@
++++ b/boot/a3700-utils-marvell/a3700-utils-marvell.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# arm-gnu-rm-toolchain
++# a3700-utils-marvell
 +#
 +################################################################################
 +
-+ARM_GNU_RM_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
-+ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
-+ARM_GNU_RM_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-linux.tar.bz2
++ifeq ($(BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_GIT),y)
++A3700_UTILS_MARVELL_VERSION = $(call qstrip,$(BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_REPO_VERSION))
++A3700_UTILS_MARVELL_SITE = $(call qstrip,$(BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_REPO_URL))
++A3700_UTILS_MARVELL_SITE_METHOD = git
++BR_NO_CHECK_HASH_FOR += $(A3700_UTILS_MARVELL_SOURCE)
++else
++ifeq ($(BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_TARBALL),y)
++A3700_UTILS_MARVELL_TARBALL = $(call qstrip,$(BR2_TARGET_A3700_UTILS_MARVELL_CUSTOM_TARBALL_LOCATION))
++A3700_UTILS_MARVELL_SITE = $(patsubst %/,%,$(dir $(A3700_UTILS_MARVELL_TARBALL)))
++A3700_UTILS_MARVELL_SITE_METHOD = file
++A3700_UTILS_MARVELL_SOURCE = $(notdir $(A3700_UTILS_MARVELL_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(A3700_UTILS_MARVELL_SOURCE)
++else
++# This is the commit for A3700-utils-armada-18.12.0
++A3700_UTILS_MARVELL_VERSION = a0a1cb88327afa91415c59822fa9c5894d9ec3d7
++A3700_UTILS_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,A3700-utils-marvell,$(A3700_UTILS_MARVELL_VERSION))
++endif
++endif
++A3700_UTILS_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
++A3700_UTILS_MARVELL_LICENSE_FILES = wtptp/src/TBB_Linux/readme.txt
 +
-+define HOST_ARM_GNU_RM_TOOLCHAIN_EXTRACT_CMDS
-+	$(TAR) xf $(HOST_ARM_GNU_RM_TOOLCHAIN_DL_DIR)/$(ARM_GNU_RM_TOOLCHAIN_SOURCE) -C $(BUILD_DIR)
-+	mv $(BUILD_DIR)/gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)/* $(@D)
-+	rmdir $(BUILD_DIR)/gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)/
-+endef
-+
-+define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/opt/gcc-arm/
-+	cp -a $(@D)/* $(HOST_DIR)/opt/gcc-arm/
-+endef
-+
-+$(eval $(host-generic-package))
++$(eval $(generic-package))
 -- 
 2.17.1
