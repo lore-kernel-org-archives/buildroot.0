@@ -1,71 +1,104 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 4 Feb 2019 15:18:20 +0100
-Subject: [Buildroot] [PATCH v1 0/5] WPE WebKit
-In-Reply-To: <20181231154915.32660-1-francois.perrad@gadz.org>
-References: <20181231154915.32660-1-francois.perrad@gadz.org>
-Message-ID: <20190204151820.GB1202@momiji>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 4 Feb 2019 15:14:33 +0100
+Subject: [Buildroot] [git commit] package/pugixml: add support for a limited
+ set of configuration options
+Message-ID: <20190204141958.05B4C837A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=48b2e50eb8df36e3e3ab18692bd9e0dde3b38702
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-First of all, sorry for taking quite some time in getting back to this
-patch series; it caught me around the holidays and a busy start of the
-year (happy 2019, by the way!). Luckily, I have some spare cycles today
-after FOSDEM :)
+Add config options for a few pugixml configurables.
 
+- Xpath support is enabled by default but has a size impact. Disabling it
+  reduces the size significantly (it almost halves). Output of 'size' on the
+  library compiled for x86:
+  - Xpath support enabled
+ 160374	   1244	     28	 161646	  2776e	output/target/usr/lib/libpugixml.so.1.7
+  - Xpath support disabled
+  92754	    880	      8	  93642	  16dca	usr/lib/libpugixml.so.1.7
 
-On Mon, 31 Dec 2018 16:49:10 +0100, Francois Perrad <fperrad@gmail.com> wrote:
-> Another port of WebKit (https://wpewebkit.org/), a project started in 2018.
-> 
-> rfc -> v1
->   - full refactor after Adrian's review
->   - libwpe : version 1.0.0 (stable) instead of 1.1.0 (instable)
->   - wbebackend-fdo : version 1.0.0 (stable) instead of 1.1.0 (instable)
->   - add cog, a WPE WebKit launcher
+- Compact and header-only modes are not strictly needed for our use case, but we
+  did the work anyway and may be useful for someone else.
 
-Some general comments about the patch set: it is looking pretty good overall,
-and I have successfully built images with Cog (and all the dependencies) for
-the Raspberry Pi (AArch64) and the Wandboard (ARMv7). I don't have the boards
-around to boot the images, but I trust Cog works because I have been using
-myself these same versions of the source packages using BR2_EXTERNAL :)
+Signed-off-by: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+[ThomasDS:
+- align with Buildroot coding style
+- retain only feature options: xpath, compact mode, header-only]
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pugixml/Config.in  | 32 ++++++++++++++++++++++++++++++++
+ package/pugixml/pugixml.mk | 14 ++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-That being said, I would like to share some configuration bits among both
-WebKitGTK+ and WPE WebKit, like the Config.in bits to determine whether the
-target architecture supports JIT. The reason why this can be shared is that
-both WebKit ports are released from the *same* upstream branch, even if the
-tarballs are different. Also, major and minor version numbers (but not the
-micro version number) go in tandem so it is easy to make sure things are kept
-in sync: for example all WebKitGTK+ 2.22.X releases use the same source tree
-as the WPE WebKit 2.22.Y versions.
-
-I *think* that it may be acceptable to merge this patch set first, and after
-that we would make a follow-up patch to share among both packages the common
-parts. We talked about this during FOSDEM (mainly with Thomas) and my
-impression is that we share the goal of trying to avoid the duplicated code.
-Unfortunately it seems it would be much harder to also unify the QtWebKit
-bits, so at first we will not be trying to include it.
-
-> Francois Perrad (5):
->   libwpe: new package
->   wpebackend-fdo: new package
->   webkitgtk: remove GTK in WEBKITGTK_ARCH_SUPPORTS* variable names
->   wpewebkit: new package
->   cog: new package
-
-I'll comment on each commit separately in a few moments :)
-
-Cheers,
-
-
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190204/8e56880b/attachment.asc>
+diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
+index c37b1df9e5..6b7d2e3259 100644
+--- a/package/pugixml/Config.in
++++ b/package/pugixml/Config.in
+@@ -18,5 +18,37 @@ config BR2_PACKAGE_PUGIXML
+ 	  http://pugixml.org/
+ 	  https://github.com/zeux/pugixml
+ 
++if BR2_PACKAGE_PUGIXML
++
++config BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
++	bool "Enable XPath support"
++	default y
++	help
++	  When disabled, both XPath interfaces and XPath implementation
++	  are excluded from compilation. This option is provided in case
++	  you do not need XPath functionality and need to save code
++	  space.
++
++config BR2_PACKAGE_PUGIXML_COMPACT
++	bool "Enable compact mode"
++	help
++	  Activates a different internal representation of document
++	  storage that is much more memory efficient for documents with
++	  a lot of markup (i.e.  nodes and attributes), but is slightly
++	  slower to parse and access.
++
++	  http://pugixml.org/docs/manual.html#dom.memory.compact
++
++config BR2_PACKAGE_PUGIXML_HEADER_ONLY
++	bool "Enable header-only version"
++	help
++	  All source code for pugixml will be included in every
++	  translation unit that includes pugixml.hpp. This is how most
++	  of Boost and STL libraries work.
++
++	  http://pugixml.org/docs/manual.html#install.building.header
++
++endif
++
+ comment "pugixml needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index e5188e5f53..acf22604c4 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -10,4 +10,18 @@ PUGIXML_LICENSE = MIT
+ PUGIXML_LICENSE_FILES = readme.txt
+ PUGIXML_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
++PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
++PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
++endif
++ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
++PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
++endif
++
++ifdef PUGIXML_BUILD_DEFINES
++PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
++endif
++
+ $(eval $(cmake-package))
