@@ -1,38 +1,28 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 4 Feb 2019 13:48:06 +0100
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time:
- replace confusing colors
-In-Reply-To: <CANQCQpb-+jaQ6VdvOqQcOqbnRhjXE+5sMywG4-5qvkkXBCzazw@mail.gmail.com>
-References: <20190130201156.5927-1-patrickdepinguin@gmail.com>
- <20190130201156.5927-2-patrickdepinguin@gmail.com>
- <CANQCQpb-+jaQ6VdvOqQcOqbnRhjXE+5sMywG4-5qvkkXBCzazw@mail.gmail.com>
-Message-ID: <CAAXf6LWn9kxCWM4rGP6BD+ZN3feNU8Rorc7VQ9UzmtsFrDRHMw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 13:55:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add optional iptables
+ dependency
+In-Reply-To: <20190203180416.32140-1-fontaine.fabrice@gmail.com>
+References: <20190203180416.32140-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190204135514.2487ee1e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 4 feb. 2019 a las 12:07, Matthew Weber
-(<matthew.weber@collins.com>) escribi?:
->
-> Thomas De,
->
-> On Wed, Jan 30, 2019 at 2:12 PM Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
-> >
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > The color for 'extract' is very similar to the one for 'install-images'.
-> > Both are cyan-like.
-> >
-> > Replace the former by a pale blue to make all colors sufficiently distinct.
-> >
-> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> A bit trickier to test and get a install images with enough time to
-> visually see it :-)
+On Sun,  3 Feb 2019 19:04:16 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-I spoofed the build-time.log file when testing :-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-/Thomas
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
