@@ -1,42 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 10:50:33 +0100
-Subject: [Buildroot] [PATCH 1/1] libgeotiff: fix build without C++
-In-Reply-To: <20190203223524.19304-1-fontaine.fabrice@gmail.com>
-References: <20190203223524.19304-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190204105033.00be968e@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  4 Feb 2019 10:51:12 +0100
+Subject: [Buildroot] [PATCH] Add KF5 package kcoreaddons
+Message-ID: <20190204095112.2411-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 Feb 2019 23:35:24 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+From: Pierre Ducroquet <pinaraf@pinaraf.info>
 
-> Do not check for C++ compiler as libgeotiff is written in C otherwise
-> build will fail on toolchains without a working C++ compiler:
-> 
-> checking how to run the C++ preprocessor... /lib/cpp
-> configure: error: in
-> `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
-> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+KCoreAddons provides classes built on top of QtCore to perform various tasks such as
+manipulating mime types, autosaving files, creating backup files, generating random
+sequences, performing text manipulations such as macro replacement, accessing
+user information and many more.
 
-Applied to master, thanks. Please use "package/<foo>" as package prefix
-for commit titles.
+Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
+[yann.morin.1998 at free.fr + titouan.christophe at railnova.eu:
+  - add missing qt5tools select
+  - fix hash for new version
+  - fix check-package
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/kf5/Config.in                            |  1 +
+ package/kf5/kf5-kcoreaddons/Config.in            | 14 ++++++++++++++
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash |  2 ++
+ package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk   | 16 ++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/kf5/kf5-kcoreaddons/Config.in
+ create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
+ create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
 
-Thanks,
-
-Thomas
+diff --git a/package/kf5/Config.in b/package/kf5/Config.in
+index 075b246269..2e50bce49e 100644
+--- a/package/kf5/Config.in
++++ b/package/kf5/Config.in
+@@ -8,6 +8,7 @@ menuconfig BR2_PACKAGE_KF5
+ 
+ if BR2_PACKAGE_KF5
+ source "package/kf5/kf5-extra-cmake-modules/Config.in"
++source "package/kf5/kf5-kcoreaddons/Config.in"
+ source "package/kf5/kf5-modemmanager-qt/Config.in"
+ source "package/kf5/kf5-networkmanager-qt/Config.in"
+ endif
+diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
+new file mode 100644
+index 0000000000..88fda03ee0
+--- /dev/null
++++ b/package/kf5/kf5-kcoreaddons/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_KF5_KCOREADDONS
++	bool "kf5-kcoreaddons"
++	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
++	select BR2_PACKAGE_QT5TOOLS
++	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
++	help
++	  KF5 is a set of Qt framework addons, extending Qt in
++	  various ways, not only restricted in helping integration
++	  in KDE.
++
++	  This package contains KCoreAddons, a set of classes built
++	  on top of QtCore to perform various tasks.
++
++	  https://api.kde.org/frameworks/kcoreaddons/html/index.html
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
+new file mode 100644
+index 0000000000..6af45c37c5
+--- /dev/null
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 40ff04757e4ac19bc8448940fe18886c894a2069865966cc865fc55ff67b0b46 kcoreaddons-5.47.0.tar.xz
+diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+new file mode 100644
+index 0000000000..acddf493dc
+--- /dev/null
++++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# kf5-kcoreaddons
++#
++################################################################################
++
++KF5_KCOREADDONS_VERSION = $(KF5_VERSION)
++KF5_KCOREADDONS_SITE = $(KF5_SITE)
++KF5_KCOREADDONS_SOURCE = kcoreaddons-$(KF5_KCOREADDONS_VERSION).tar.xz
++KF5_KCOREADDONS_LICENSE = LGPL-2.1+
++KF5_KCOREADDONS_LICENSE_FILE = COPYING.LIB
++
++KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
++KF5_KCOREADDONS_INSTALL_STAGING = YES
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
