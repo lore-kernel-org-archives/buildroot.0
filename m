@@ -1,109 +1,440 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Feb 2019 23:30:09 +0100
-Subject: [Buildroot] [PATCH 2/3] board/qemu/xtensa-lx60: backport upsteam
- patch fixing kernel runtime issue with Binutils 2.32.
+Date: Mon,  4 Feb 2019 23:30:10 +0100
+Subject: [Buildroot] [PATCH 3/3] package/binutils: add support for Binutils
+ 2.32
 In-Reply-To: <20190204223010.19733-1-romain.naour@gmail.com>
 References: <20190204223010.19733-1-romain.naour@gmail.com>
-Message-ID: <20190204223010.19733-2-romain.naour@gmail.com>
+Message-ID: <20190204223010.19733-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Binutils 2.32, xtensa kernel <= 4.18 need an upstream patch from kernel 4.19 [1]
+Remove upstream ARC and Xtensa patches.
+Keep all other patches from binutils 2.31.1.
 
-[1] https://www.sourceware.org/ml/binutils/2019-02/msg00015.html
+See the release note:
+https://sourceware.org/ml/binutils/2019-02/msg00010.html
 
-Fixes:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/155355484
+The Qemu xtensa defconfig need to be updated with a patch [1] from
+kernel 4.19 otherwise the kernel doesn't boot with Binutils 2.32 [2].
+
+All other architecutres has been tested using toolchain-builder [3].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=4119ba211bc4f1bf638f41e50b7a0f329f58aa16
+[2] https://www.sourceware.org/ml/binutils/2019-02/msg00015.html
+[3] https://gitlab.com/kubu93/toolchains-builder/pipelines/45896638
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...sa-add-NOTES-section-to-the-linker-script.patch | 47 ++++++++++++++++++++++
- configs/qemu_xtensa_lx60_defconfig                 |  2 +
- configs/qemu_xtensa_lx60_nommu_defconfig           |  2 +
- 3 files changed, 51 insertions(+)
- create mode 100644 board/qemu/xtensa-lx60/patches/linux/0001-xtensa-add-NOTES-section-to-the-linker-script.patch
+ package/binutils/2.32/0001-sh-conf.patch           |  48 ++++
+ .../2.32/0002-poison-system-directories.patch      | 306 +++++++++++++++++++++
+ package/binutils/Config.in.host                    |   4 +
+ package/binutils/binutils.hash                     |   1 +
+ 4 files changed, 359 insertions(+)
+ create mode 100644 package/binutils/2.32/0001-sh-conf.patch
+ create mode 100644 package/binutils/2.32/0002-poison-system-directories.patch
 
-diff --git a/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-add-NOTES-section-to-the-linker-script.patch b/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-add-NOTES-section-to-the-linker-script.patch
+diff --git a/package/binutils/2.32/0001-sh-conf.patch b/package/binutils/2.32/0001-sh-conf.patch
 new file mode 100644
-index 0000000000..8d82e9e168
+index 0000000000..ca235487b0
 --- /dev/null
-+++ b/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-add-NOTES-section-to-the-linker-script.patch
-@@ -0,0 +1,47 @@
-+From 72b5dcc807e664b705540b2a94ed318889b7a9af Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 29 Oct 2018 18:30:13 -0700
-+Subject: [PATCH] xtensa: add NOTES section to the linker script
++++ b/package/binutils/2.32/0001-sh-conf.patch
+@@ -0,0 +1,48 @@
++From 98b2acf2bd3a527d114a9f8931083c2617a2daa9 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 25 Dec 2015 11:38:13 +0100
++Subject: [PATCH 1/2] sh-conf
 +
-+This section collects all source .note.* sections together in the
-+vmlinux image. Without it .note.Linux section may be placed at address
-+0, while the rest of the kernel is at its normal address, resulting in a
-+huge vmlinux.bin image that may not be linked into the xtensa Image.elf.
++Likewise, binutils has no idea about any of these new targets either, so we
++fix that up too.. now we're able to actually build a real toolchain for
++sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
++inept targets than that one, really. Go look, I promise).
 +
-+Cc: stable at vger.kernel.org
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+(cherry picked from commit 4119ba211bc4f1bf638f41e50b7a0f329f58aa16)
++[Romain: rebase on top of 2.32]
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ arch/xtensa/boot/Makefile        | 2 +-
-+ arch/xtensa/kernel/vmlinux.lds.S | 1 +
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
++ configure    | 2 +-
++ configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/arch/xtensa/boot/Makefile b/arch/xtensa/boot/Makefile
-+index 53e4178711e6..8c20a7965bda 100644
-+--- a/arch/xtensa/boot/Makefile
-++++ b/arch/xtensa/boot/Makefile
-+@@ -34,7 +34,7 @@ boot-elf boot-redboot: $(addprefix $(obj)/,$(subdir-y)) \
-+ 		       $(addprefix $(obj)/,$(host-progs))
-+ 	$(Q)$(MAKE) $(build)=$(obj)/$@ $(MAKECMDGOALS)
-+ 
-+-OBJCOPYFLAGS = --strip-all -R .comment -R .note.gnu.build-id -O binary
-++OBJCOPYFLAGS = --strip-all -R .comment -R .notes -O binary
-+ 
-+ vmlinux.bin: vmlinux FORCE
-+ 	$(call if_changed,objcopy)
-+diff --git a/arch/xtensa/kernel/vmlinux.lds.S b/arch/xtensa/kernel/vmlinux.lds.S
-+index 70b731edc7b8..c430c96ea723 100644
-+--- a/arch/xtensa/kernel/vmlinux.lds.S
-++++ b/arch/xtensa/kernel/vmlinux.lds.S
-+@@ -131,6 +131,7 @@ SECTIONS
-+   .fixup   : { *(.fixup) }
-+ 
-+   EXCEPTION_TABLE(16)
-++  NOTES
-+   /* Data section */
-+ 
-+   _sdata = .;
++diff --git a/configure b/configure
++index 37476459612..66fbc19f9ff 100755
++--- a/configure
+++++ b/configure
++@@ -3861,7 +3861,7 @@ case "${target}" in
++   nvptx*-*-*)
++     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
++     ;;
++-  sh-*-*)
+++  sh*-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
++diff --git a/configure.ac b/configure.ac
++index 46501c28826..6c731930884 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1158,7 +1158,7 @@ case "${target}" in
++   nvptx*-*-*)
++     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
++     ;;
++-  sh-*-*)
+++  sh*-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
 +-- 
 +2.14.5
 +
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index a735c991c7..14fcc4e982 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -3,6 +3,8 @@ BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
- 
-+BR2_GLOBAL_PATCH_DIR="board/qemu/xtensa-lx60/patches/"
+diff --git a/package/binutils/2.32/0002-poison-system-directories.patch b/package/binutils/2.32/0002-poison-system-directories.patch
+new file mode 100644
+index 0000000000..c8dc7a5c62
+--- /dev/null
++++ b/package/binutils/2.32/0002-poison-system-directories.patch
+@@ -0,0 +1,306 @@
++From f559402ea868d370ddf25089c68cda2600db3bfa Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 25 Dec 2015 11:45:38 +0100
++Subject: [PATCH 2/2] poison-system-directories
 +
- # System
- BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index f4d6837bc1..b22716a65a 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -3,6 +3,8 @@ BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
- 
-+BR2_GLOBAL_PATCH_DIR="board/qemu/xtensa-lx60/patches/"
++Patch adapted to binutils 2.23.2 and extended to use
++BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
 +
- # Toolchain
- BR2_PACKAGE_HOST_ELF2FLT=y
- # BR2_USE_MMU is not set
++[Romain: rebase on top of 2.32]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Gustavo: adapt to binutils 2.25]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++Upstream-Status: Inappropriate [distribution: codesourcery]
++
++Patch originally created by Mark Hatle, forward-ported to
++binutils 2.21 by Scott Garman.
++
++purpose:  warn for uses of system directories when cross linking
++
++Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
++
++2008-07-02  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * ld.h (args_type): Add error_poison_system_directories.
++    * ld.texinfo (--error-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.error_poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.error_poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --error-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-06-13  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * config.in: Regenerate.
++    * ld.h (args_type): Add poison_system_directories.
++    * ld.texinfo (--no-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --no-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-04-20  Joseph Myers  <joseph@codesourcery.com>
++
++    Merge from Sourcery G++ binutils 2.17:
++
++    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
++    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
++    ld/
++    * configure.ac (--enable-poison-system-directories): New option.
++    * configure, config.in: Regenerate.
++    * ldfile.c (ldfile_add_library_path): If
++    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
++    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
++
++Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
++Signed-off-by: Scott Garman <scott.a.garman@intel.com>
++---
++ ld/config.in    |  3 +++
++ ld/configure    | 14 ++++++++++++++
++ ld/configure.ac | 10 ++++++++++
++ ld/ld.h         |  8 ++++++++
++ ld/ld.texi      | 12 ++++++++++++
++ ld/ldfile.c     | 17 +++++++++++++++++
++ ld/ldlex.h      |  2 ++
++ ld/ldmain.c     |  2 ++
++ ld/lexsup.c     | 21 +++++++++++++++++++++
++ 9 files changed, 89 insertions(+)
++
++diff --git a/ld/config.in b/ld/config.in
++index d93c9b08300..5da2742beac 100644
++--- a/ld/config.in
+++++ b/ld/config.in
++@@ -31,6 +31,9 @@
++    language is requested. */
++ #undef ENABLE_NLS
++ 
+++/* Define to warn for use of native system library directories */
+++#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+++
++ /* Additional extension a shared object might have. */
++ #undef EXTRA_SHLIB_EXTENSION
++ 
++diff --git a/ld/configure b/ld/configure
++index 18ada7808f5..7e7d2f97809 100755
++--- a/ld/configure
+++++ b/ld/configure
++@@ -822,6 +822,7 @@ with_lib_path
++ enable_targets
++ enable_64_bit_bfd
++ with_sysroot
+++enable_poison_system_directories
++ enable_gold
++ enable_got
++ enable_compressed_debug_sections
++@@ -1486,6 +1487,8 @@ Optional Features:
++   --disable-largefile     omit support for large files
++   --enable-targets        alternative target configurations
++   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+++  --enable-poison-system-directories
+++                          warn for use of native system library directories
++   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
++   --enable-got=<type>     GOT handling scheme (target, single, negative,
++                           multigot)
++@@ -15803,7 +15806,18 @@ else
++ fi
++ 
++ 
+++# Check whether --enable-poison-system-directories was given.
+++if test "${enable_poison_system_directories+set}" = set; then :
+++  enableval=$enable_poison_system_directories;
+++else
+++  enable_poison_system_directories=no
+++fi
+++
+++if test "x${enable_poison_system_directories}" = "xyes"; then
++ 
+++$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+++
+++fi
++ 
++ # Check whether --enable-got was given.
++ if test "${enable_got+set}" = set; then :
++diff --git a/ld/configure.ac b/ld/configure.ac
++index d335f210917..7f692d93873 100644
++--- a/ld/configure.ac
+++++ b/ld/configure.ac
++@@ -94,6 +94,16 @@ AC_SUBST(use_sysroot)
++ AC_SUBST(TARGET_SYSTEM_ROOT)
++ AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
++ 
+++AC_ARG_ENABLE([poison-system-directories],
+++         AS_HELP_STRING([--enable-poison-system-directories],
+++                [warn for use of native system library directories]),,
+++         [enable_poison_system_directories=no])
+++if test "x${enable_poison_system_directories}" = "xyes"; then
+++  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+++       [1],
+++       [Define to warn for use of native system library directories])
+++fi
+++
++ dnl Use --enable-gold to decide if this linker should be the default.
++ dnl "install_as_default" is set to false if gold is the default linker.
++ dnl "installed_linker" is the installed BFD linker name.
++diff --git a/ld/ld.h b/ld/ld.h
++index b97d977f37b..f3bbd2d55d4 100644
++--- a/ld/ld.h
+++++ b/ld/ld.h
++@@ -180,6 +180,14 @@ typedef struct
++      in the linker script.  */
++   bfd_boolean force_group_allocation;
++ 
+++  /* If TRUE (the default) warn for uses of system directories when
+++     cross linking.  */
+++  bfd_boolean poison_system_directories;
+++
+++  /* If TRUE (default FALSE) give an error for uses of system
+++     directories when cross linking instead of a warning.  */
+++  bfd_boolean error_poison_system_directories;
+++
++   /* Big or little endian as set on command line.  */
++   enum endian_enum endian;
++ 
++diff --git a/ld/ld.texi b/ld/ld.texi
++index 5179af3e0e1..f78bf746822 100644
++--- a/ld/ld.texi
+++++ b/ld/ld.texi
++@@ -2524,6 +2524,18 @@ string identifying the original linked file does not change.
++ 
++ Passing @code{none} for @var{style} disables the setting from any
++ @code{--build-id} options earlier on the command line.
+++
+++ at kindex --no-poison-system-directories
+++ at item --no-poison-system-directories
+++Do not warn for @option{-L} options using system directories such as
+++ at file{/usr/lib} when cross linking.  This option is intended for use
+++in chroot environments when such directories contain the correct
+++libraries for the target system rather than the host.
+++
+++ at kindex --error-poison-system-directories
+++ at item --error-poison-system-directories
+++Give an error instead of a warning for @option{-L} options using
+++system directories when cross linking.
++ @end table
++ 
++ @c man end
++diff --git a/ld/ldfile.c b/ld/ldfile.c
++index fcadc08c73f..63e295ce8ae 100644
++--- a/ld/ldfile.c
+++++ b/ld/ldfile.c
++@@ -116,6 +116,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
++     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
++   else
++     new_dirs->name = xstrdup (name);
+++
+++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+++  if (command_line.poison_system_directories
+++  && ((!strncmp (name, "/lib", 4))
+++      || (!strncmp (name, "/usr/lib", 8))
+++      || (!strncmp (name, "/usr/local/lib", 14))
+++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+++   {
+++     if (command_line.error_poison_system_directories)
+++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++     else
+++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++   }
+++#endif
+++
++ }
++ 
++ /* Try to open a BFD for a lang_input_statement.  */
++diff --git a/ld/ldlex.h b/ld/ldlex.h
++index 32853debe45..8135361c498 100644
++--- a/ld/ldlex.h
+++++ b/ld/ldlex.h
++@@ -148,6 +148,8 @@ enum option_values
++   OPTION_REQUIRE_DEFINED_SYMBOL,
++   OPTION_ORPHAN_HANDLING,
++   OPTION_FORCE_GROUP_ALLOCATION,
+++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
++ };
++ 
++ /* The initial parser states.  */
++diff --git a/ld/ldmain.c b/ld/ldmain.c
++index 77cdbd0dd29..725512f1260 100644
++--- a/ld/ldmain.c
+++++ b/ld/ldmain.c
++@@ -269,6 +269,8 @@ main (int argc, char **argv)
++   command_line.warn_mismatch = TRUE;
++   command_line.warn_search_mismatch = TRUE;
++   command_line.check_section_addresses = -1;
+++  command_line.poison_system_directories = TRUE;
+++  command_line.error_poison_system_directories = FALSE;
++ 
++   /* We initialize DEMANGLING based on the environment variable
++      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
++diff --git a/ld/lexsup.c b/ld/lexsup.c
++index 88e85c73f49..be4cd492d14 100644
++--- a/ld/lexsup.c
+++++ b/ld/lexsup.c
++@@ -543,6 +543,14 @@ static const struct ld_option ld_options[] =
++   { {"orphan-handling", required_argument, NULL, OPTION_ORPHAN_HANDLING},
++     '\0', N_("=MODE"), N_("Control how orphan sections are handled."),
++     TWO_DASHES },
+++  { {"no-poison-system-directories", no_argument, NULL,
+++    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Do not warn for -L options using system directories"),
+++    TWO_DASHES },
+++  { {"error-poison-system-directories", no_argument, NULL,
+++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Give an error for -L options using system directories"),
+++    TWO_DASHES },
++ };
++ 
++ #define OPTION_COUNT ARRAY_SIZE (ld_options)
++@@ -555,6 +563,7 @@ parse_args (unsigned argc, char **argv)
++   int ingroup = 0;
++   char *default_dirlist = NULL;
++   char *shortopts;
+++  char *BR_paranoid_env;
++   struct option *longopts;
++   struct option *really_longopts;
++   int last_optind;
++@@ -1543,6 +1552,14 @@ parse_args (unsigned argc, char **argv)
++ 	  }
++ 	  break;
++ 
+++	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+++	  command_line.poison_system_directories = FALSE;
+++	  break;
+++
+++	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+++	  command_line.error_poison_system_directories = TRUE;
+++	  break;
+++
++ 	case OPTION_PUSH_STATE:
++ 	  input_flags.pushed = xmemdup (&input_flags,
++ 					sizeof (input_flags),
++@@ -1586,6 +1603,10 @@ parse_args (unsigned argc, char **argv)
++       command_line.soname = NULL;
++     }
++ 
+++  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+++  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+++    command_line.error_poison_system_directories = TRUE;
+++
++   while (ingroup)
++     {
++       lang_leave_group ();
++-- 
++2.14.5
++
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 924d1749cd..9a2b27c55e 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -30,6 +30,9 @@ config BR2_BINUTILS_VERSION_2_30_X
+ config BR2_BINUTILS_VERSION_2_31_X
+ 	bool "binutils 2.31.1"
+ 
++config BR2_BINUTILS_VERSION_2_32_X
++	bool "binutils 2.32"
++
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.31)"
+ 	depends on BR2_arc
+@@ -42,6 +45,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
+ 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
+ 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
++	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+ 
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index ac0831ca27..873e0dada4 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -3,6 +3,7 @@ sha512	dc5b6872ae01c07c12d38f3bb7ead06effc6da3265ac872e2d9c6104304f89f85f2645b02
+ sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e82624ae37fb0bbd03af3b17088a94f60dfe1a86a7ff82e18ece3c24f0fd0  binutils-2.29.1.tar.xz
+ sha512  e747ea20d8d79fcd21b9d9f6695059caa7189d60f19256da398e34b789fea9a133c32b192e9693b5828d27683739b0198431bf8b3e39fb3b04884cf89d9aa839  binutils-2.30.tar.xz
+ sha512  0fca326feb1d5f5fe505a827b20237fe3ec9c13eaf7ec7e35847fd71184f605ba1cefe1314b1b8f8a29c0aa9d88162849ee1c1a3e70c2f7407d88339b17edb30  binutils-2.31.1.tar.xz
++sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  a96dfcea6064fcd1aac1333ac0d631491bed8b0be9bdcf62f1447909c8f30d2cb8d9323ffeb7c9ad6b326ecddb72e3d28281684e73343189d0a4a37a11aef62f  binutils-gdb-arc-2018.09-release.tar.gz
 -- 
 2.14.5
