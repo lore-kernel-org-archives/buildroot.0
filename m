@@ -1,46 +1,80 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  4 Feb 2019 11:30:06 +0100
-Subject: [Buildroot] [PATCH] package/opentracing-cpp: needs threads
-Message-ID: <20190204103007.10599-1-patrickdepinguin@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Feb 2019 04:36:56 -0600
+Subject: [Buildroot] [PATCH v2 1/1] fs/common.mk: enable multithreaded
+ xz compression
+In-Reply-To: <CANQCQpbkzWAf=fomzWqqqcFmityJutDyqajq+5ZexJ-7SHuniA@mail.gmail.com>
+References: <1548318453-25435-1-git-send-email-james.hilliard1@gmail.com>
+ <CANQCQpbkzWAf=fomzWqqqcFmityJutDyqajq+5ZexJ-7SHuniA@mail.gmail.com>
+Message-ID: <CANQCQpYtgRvwtv1Bz9KprT1ARqF6J9ed9a8HV_jyO1dPmK+qYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Yann, Thomas,
 
-opentracing-cpp uses std::mutex since 1.3.0.
+On Thu, Jan 24, 2019 at 9:01 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> James,
+>
+>
+> On Thu, Jan 24, 2019 at 2:28 AM <james.hilliard1@gmail.com> wrote:
+> >
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> >
+> > xz help indicates only 1 thread is used unless we set threads:
+> > -T, --threads=NUM   use at most NUM threads; the default is 1; set to 0
+> >                     to use as many threads as there are processor cores
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >
+>
+> Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> > ---
+> > Changes v1 -> v2:
+> >   - use PARALLEL_JOBS to determine how many threads to compress with
+> >   - disable multithreaded compression for reproducible builds
+> > ---
+> >  fs/common.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/fs/common.mk b/fs/common.mk
+> > index a560417..76da6d8 100644
+> > --- a/fs/common.mk
+> > +++ b/fs/common.mk
+> > @@ -106,7 +106,11 @@ endif
+> >  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+> >  ROOTFS_$(2)_DEPENDENCIES += host-xz
+> >  ROOTFS_$(2)_COMPRESS_EXT = .xz
+> > +ifeq ($(BR2_REPRODUCIBLE),y)
+> >  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+> > +else
+> > +ROOTFS_$(2)_COMPRESS_CMD = xz -T $(PARALLEL_JOBS) -9 -C crc32 -c
+>
+> I double checked this logic below in package/Makefile.in for creating
+> PARALLEL_JOBS still made sense for the use of the value above.
+>
+> # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
+> # CPUs. An additional job is used in order to keep processors busy
+> # while waiting on I/O.
+> # If the number of processors is not available, assume one.
+> ifeq ($(BR2_JLEVEL),0)
+> PARALLEL_JOBS := $(shell echo \
+>         $$((1 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
+> else
+> PARALLEL_JOBS := $(BR2_JLEVEL)
+> endif
+>
 
-Fixes: http://autobuild.buildroot.net/results/121a9f2aacf9e7b1f5d0b3f2c55bc1da36c7cfb6/
+When we eventually do filesystem creation in a top level parallel
+build, if we add xz multithreaded compression based on parallel jobs
+variable, I assume we'll create a problem with cpu loading?  Maybe
+this isn't a concern at this point or is there a previous
+assumption/discussions on how this was going to be handled with
+different build systems (GO, ninja based, etc) which may be called in
+parallel while building pkgs.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/opentracing-cpp/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
-index 4ee7b29de2..ebcce35aa8 100644
---- a/package/opentracing-cpp/Config.in
-+++ b/package/opentracing-cpp/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPENTRACING_CPP
- 	bool "opentracing-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	help
-@@ -8,8 +9,8 @@ config BR2_PACKAGE_OPENTRACING_CPP
- 
- 	  http://opentracing.io
- 
--comment "opentracing-cpp needs a toolchain w/ C++, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+comment "opentracing-cpp needs a toolchain w/ C++, threads, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "opentracing-cpp needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--- 
-2.19.2
+Matt
