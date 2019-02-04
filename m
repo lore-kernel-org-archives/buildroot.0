@@ -1,168 +1,100 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 4 Feb 2019 03:59:28 -0600
-Subject: [Buildroot] [PATCH v4 0/3] OpenJDK: new package and tests
-In-Reply-To: <20190204085610.66064-1-aduskett@gmail.com>
-References: <20190204085610.66064-1-aduskett@gmail.com>
-Message-ID: <CANQCQpaP=Uxvk7Y=87LBF6wJB-AaqVv__yWNFwrb7_NuTYGOxA@mail.gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Mon,  4 Feb 2019 10:02:01 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/bird: bump version to 2.0.3
+In-Reply-To: <20190204092208.maeiwjvs23rtxdap@sapphire.tkos.co.il>
+References: <20190204092208.maeiwjvs23rtxdap@sapphire.tkos.co.il>
+Message-ID: <20190204100200.3628-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Patch 0001 is no longer needed as it has been ported to this version.
+Also, the README changes but the licence is still GPL-2.0+
 
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+---
+ ...fix-installation-with-disable-client.patch | 41 -------------------
+ package/bird/bird.hash                        |  4 +-
+ package/bird/bird.mk                          |  6 +--
+ 3 files changed, 5 insertions(+), 46 deletions(-)
+ delete mode 100644 package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
 
-On Mon, Feb 4, 2019 at 2:56 AM <aduskett@gmail.com> wrote:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
->
-> This patch series adds OpenJDK and an updated testing framework to BuildRoot.
->
-> A previous patch series for OpenJDK8 used the JDK Muricle page to download a
-> tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
-> repository. This repository allows us to use the GitHub macro instead of trying
-> to provide a nasty workaround when grabbing the source code.
->
-> With this patch series, there are some quirks that I would like to detail:
->
-> - The openjdk-bin package:
-> From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
-> "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
-> the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
-> porting OpenJDK to a new platform, the chances are that there already exists
-> another JDK for that platform that is usable as boot JDK.
->
-> The rule of thumb is that the boot JDK for building JDK major version N should
-> be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
-> as boot JDK."
->
-> This paradox causes an issue because every distribution I have used comes with
-> JDK8 by default. So there are two solutions that I could come up with:
-> 1) Require the host-system to have JDK N-1
-> 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
->    repository, and use those binaries as the boot-jdk.
->
-> - JDK >= 10 requires X11, even if building a headless version.
->   It's unfortunate, but there isn't anything I cared to do about it.
->
-> - Running "make install" installs the entire JDK to the target directory,
->   which is why INSTALL_TARGET is manual.
->
-> - The OpenJDK package:
->
-> - Depending on !BR2_SOFT_FLOAT
-> From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#building-for-armaarch64
-> "Note that soft-float ABIs are no longer properly supported on OpenJDK."
-> Yes, it compiles as of right now, but I don't want to have to help people with
-> possible ASM java bugs because they wanted to use a processor without an FPU.
->
-> - Requiring GLIBC
-> OpenJDK could probably build against uClibc with a few patches, but I decided
-> against going through the effort of doing so. My reasoning is that uClibc
-> advertises itself as a small C library, however, at this time, OpenJDK comes in
-> at over 100MB for a minimal install. So the few megabytes saved by using uClibc
-> probably isn't going to be a concern for anybody wanting to use Java on their
-> embedded environment.
->
-> - Other thoughts:
-> It is possible to use fine-grained make targets when building OpenJDK, check out
-> http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#using-fine-grained-make-targets.
-> Perhaps in the future, BuildRoot could have Java setup just like PHP or Python,
-> with a large selection of modules to build? This fine-grained build could
-> potentially save a massive amount of space.
->
-> Perhaps in the future, a patch set that removes the X11/Alsa/cups dependencies
-> can be added.
->
-> In addition to the OpenJDK patches, Matt Webber, Daniel Leach and
-> Ricardo Martincoski extended the testing framework to allow for a more
-> flexible and comprehensive testing environment. The first of which is to test
-> OpenJDK by running a simple "Hello world" application.
->
-
-Romain, thought I'd mention we are working on a follow-on series which
-uses Valentin's LLVM work to do Just In Time(JIT) for openJDK!
-
->
-> Comments and critiques are always welcome!
->
-> Adam
->
-> Daniel J. Leach (1):
->   support/testing: openjdk hello world
->
-> Adam Duskett (5):
->   openjdk-bin: new package
->   openjdk: new package
->
-> Adam Duskett (3):
->   openjdk-bin: new package
->   openjdk: new package
->   openjdk-hello-world: new test
->
->  .gitlab-ci.yml                                |   1 +
->  DEVELOPERS                                    |   3 +
->  package/Config.in                             |   1 +
->  package/openjdk-bin/openjdk-bin.hash          |   6 +
->  package/openjdk-bin/openjdk-bin.mk            |  23 +++
->  package/openjdk/Config.in                     |  58 ++++++++
->  package/openjdk/openjdk.hash                  |   3 +
->  package/openjdk/openjdk.mk                    | 135 ++++++++++++++++++
->  .../package/br2-external/openjdk/Config.in    |   1 +
->  .../br2-external/openjdk/external.desc        |   1 +
->  .../package/br2-external/openjdk/external.mk  |   1 +
->  .../package/openjdk-hello-world/Config.in     |  26 ++++
->  .../openjdk-hello-world/HelloWorld.java       |   8 ++
->  .../openjdk-hello-world.mk                    |  18 +++
->  support/testing/tests/package/test_openjdk.py |  42 ++++++
->  15 files changed, 327 insertions(+)
->  create mode 100644 package/openjdk-bin/openjdk-bin.hash
->  create mode 100644 package/openjdk-bin/openjdk-bin.mk
->  create mode 100644 package/openjdk/Config.in
->  create mode 100644 package/openjdk/openjdk.hash
->  create mode 100644 package/openjdk/openjdk.mk
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
->  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
->  create mode 100644 support/testing/tests/package/test_openjdk.py
->
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch b/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
+deleted file mode 100644
+index c0faec21b0..0000000000
+--- a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6cb15abfc00cb5e492175a9efc71bfdfd1aa457c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 9 Oct 2018 12:51:08 +0200
+-Subject: [PATCH] Makefile.in: fix installation with --disable-client
+-
+-The configure.ac script initializes the CLIENT variable this way:
+-
+-CLIENT=birdcl
+-if client enabled
+- CLIENT=$CLIENT birdc
+-fi
+-
+-This means that checking if @CLIENT@ is empty to decide whether birdc
+-should be installed or not doesn't work, and causes a failure at
+-installation time when --disable-client is passed.
+-
+-Instead, check if the birdc binary has been produced or not to decide
+-whether it should be installed.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: http://trubka.network.cz/pipermail/bird-users/2018-October/012763.html
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index c8168bbe..fea3683e 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -171,7 +171,7 @@ install: all
+- 	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/@runtimedir@
+- 	$(INSTALL_PROGRAM) $(exedir)/bird $(DESTDIR)/$(sbindir)/bird
+- 	$(INSTALL_PROGRAM) $(exedir)/birdcl $(DESTDIR)/$(sbindir)/birdcl
+--	if test -n "@CLIENT@" ; then								\
+-+	if test -f $(exedir)/birdc ; then							\
+- 		$(INSTALL_PROGRAM) $(exedir)/birdc $(DESTDIR)/$(sbindir)/birdc ;		\
+- 	fi
+- 	if ! test -f $(DESTDIR)/@CONFIG_FILE@ ; then						\
+--- 
+-2.14.4
+-
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index 449e8afd8d..0570373ad3 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
+@@ -1,2 +1,2 @@
+-sha256 bd42d48fbcc2c0046d544f1183cd98193ff15b792d332ff45f386b0180b09335  bird-v2.0.2.tar.gz
+-sha256 f018596a97af0108efc446320631e2fddc0c1d1f3ffab3129327ccdb4f0c29ed  README
++sha256 54ec151518564f87e81de4ac19376689e5ba8dd9129f1e9a79086db3df0931f8  bird-v2.0.3.tar.gz
++sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 297e21dd95..9be0f6e17d 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-BIRD_VERSION = v2.0.2
+-BIRD_SITE = $(call github,BIRD,bird,$(BIRD_VERSION))
++BIRD_VERSION = v2.0.3
++BIRD_SITE = https://gitlab.labs.nic.cz/labs/bird/-/archive/$(BIRD_VERSION)
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
+-# autoreconf is needed since the package is fetched from github
++# autoreconf is needed since the package is fetched from gitlab
+ BIRD_AUTORECONF = YES
+ BIRD_DEPENDENCIES = host-flex host-bison
+ 
 -- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.19.1
