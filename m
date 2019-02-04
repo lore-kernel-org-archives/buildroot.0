@@ -1,53 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 4 Feb 2019 19:41:04 +0100
-Subject: [Buildroot] [PATCHv2 0/8] fix scp and reintroduce source-check
- target
-In-Reply-To: <20190204192400.6f2205e3@windsurf>
-References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
- <20190204192400.6f2205e3@windsurf>
-Message-ID: <CAAXf6LWghjf3xLzfv5YFMRH=QOcZ6wMxFBc1wK1Vo7AqY8KhoA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Feb 2019 19:52:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rrdtool: bump version from
+ 1.6.0 to 1.7.0
+In-Reply-To: <1548018149-46022-1-git-send-email-charles.hardin@storagecraft.com>
+ (Charles Hardin's message of "Sun, 20 Jan 2019 13:02:29 -0800")
+References: <1548018149-46022-1-git-send-email-charles.hardin@storagecraft.com>
+Message-ID: <87munbs7wr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 4 feb. 2019 a las 19:24, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> On Mon,  4 Feb 2019 19:05:45 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > After the overwhelming support for 'source-check' at the Buildroot Developer
-> > Days ;-) , here is a second iteration of this series.
->
->  :-)
->
-> > The first commit is actually a bugfix separate from source-check. In v1 of this
-> > series it was also included as the second of two 'scp'-related bugfixes, but it
-> > seems only the first bug-fix was applied at that time, which I hadn't realized
-> > until now.
-> >
-> > Patches 2-8 are the actual source-check releated ones.
-> > For git, svn, bzr and cvs, there is no actual implementation which means that
-> > the corresponding download scripts will perform the standard download logic,
-> > which will also verify the validity of the specified revision on the remote
-> > server, but not as optimal as for the other methods.
->
-> What are the changes from v1 ? I don't see a changelog here or in the
-> patches themselves.
->
-> Perhaps you were overwhelmingly impatient to send this v2 that you
-> forgot the changelog ? :-)
+>>>>> "Charles" == Charles Hardin <charles.hardin@storagecraft.com> writes:
 
-Haha! You guessed it :-)
+ > From the releases at https://github.com/oetiker/rrdtool-1.x/releases
+ > which mentions this is not a user facing release but attempts to
+ > be more robust against odd input.
 
-Changes from v2:
-- add a trailing dot on all usage texts like for other options
-- split off the reintroduction of BR2_SSH to a separate patch
-- fix the source-check for scp: it seems there were some broken things in v1
-- drop incomplete implementations for git/svn/bzr/cvs so it falls back
-to actual download.
+ > Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
 
-Best regards,
-Thomas
+Committed, thanks.
+
+I see that upstream has released 1.7.1 with a number of fixes, care to
+send a patch bumping the version?
+
+https://github.com/oetiker/rrdtool-1.x/releases
+
+-- 
+Bye, Peter Korsgaard
