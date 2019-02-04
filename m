@@ -1,61 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Feb 2019 15:24:25 +0100
-Subject: [Buildroot] [PATCH 1/2] support/scripts/graph-build-time: add
- download times
-In-Reply-To: <20190130201156.5927-1-patrickdepinguin@gmail.com>
-References: <20190130201156.5927-1-patrickdepinguin@gmail.com>
-Message-ID: <e757a5bb-1841-a625-eb47-4f53f4a65290@mind.be>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 4 Feb 2019 15:25:17 +0100
+Subject: [Buildroot] [PATCH v1 3/5] webkitgtk: remove GTK in
+ WEBKITGTK_ARCH_SUPPORTS* variable names
+In-Reply-To: <20181231154915.32660-4-francois.perrad@gadz.org>
+References: <20181231154915.32660-1-francois.perrad@gadz.org>
+ <20181231154915.32660-4-francois.perrad@gadz.org>
+Message-ID: <20190204152517.GF22033@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-
-On 30/01/2019 21:11, Thomas De Schampheleire wrote:
-> From: Mathias De Mare <mathias.de_mare@nokia.com>
+On Mon, 31 Dec 2018 16:49:13 +0100, Francois Perrad <fperrad@gmail.com> wrote:
+> there are common for the GTK & WPE ports of WebKit
 > 
-> Total build time also involves download. Getting a visibility on the impact
-> of that step can be important for users/admins, e.g. to evaluate different
-> methods of BR2_PRIMARY_SITE.
-> 
-> Colors used are some kind of purple (primary scheme) and light orange
-> (alternate scheme).
-> 
-> Signed-off-by: Mathias De Mar? <mathias.de_mare@nokia.com>
-> [ThomasDS: rebase and update colors to avoid confusion]
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
- Both applied to master, thanks.
-
- Regards,
- Arnout
-
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  support/scripts/graph-build-time | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/midori/Config.in       | 4 ++--
+>  package/webkitgtk/Config.in    | 8 ++++----
+>  package/webkitgtk/webkitgtk.mk | 2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-> index 892e08bf07..2fdb6a476d 100755
-> --- a/support/scripts/graph-build-time
-> +++ b/support/scripts/graph-build-time
-> @@ -69,14 +69,14 @@ import matplotlib.font_manager as fm  # noqa: E402
->  import csv                            # noqa: E402
->  import argparse                       # noqa: E402
+> diff --git a/package/midori/Config.in b/package/midori/Config.in
+> index f0767c85f..460fc6fbf 100644
+> --- a/package/midori/Config.in
+> +++ b/package/midori/Config.in
+> @@ -1,5 +1,5 @@
+>  comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
+> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+
+In the end let's *not* rename this with this patch set, and unify the
+configuration of both ?wpewebkit? and ?webkitgtk? packages in a different
+patch set later.
+
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
+>  		!BR2_TOOLCHAIN_USES_GLIBC
+> @@ -12,7 +12,7 @@ config BR2_PACKAGE_MIDORI
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # webkitgtk -> icu
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	# GCR can only be used with the X11 backend
+>  	select BR2_PACKAGE_GCR if BR2_PACKAGE_LIBGTK3_X11
+>  	select BR2_PACKAGE_GRANITE
+> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+> index 8714677b6..3e5e8d7b6 100644
+> --- a/package/webkitgtk/Config.in
+> +++ b/package/webkitgtk/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> +config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	bool
+>  	# ARM needs BLX, so v5t+, BE completely untested so disabled
+>  	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
+> @@ -12,7 +12,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
 >  
-> -steps = ['extract', 'patch', 'configure', 'build',
-> +steps = ['download', 'extract', 'patch', 'configure', 'build',
->           'install-target', 'install-staging', 'install-images',
->           'install-host']
+> -config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
+> +config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT
+>  	bool
+>  	# ARM needs NEON for JIT.
+>  	default y if BR2_ARM_CPU_HAS_NEON
+> @@ -29,7 +29,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
+>  	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
 >  
-> -default_colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-> +default_colors = ['#8d02ff', '#e60004', '#009836', '#2e1d86', '#ffed00',
->                    '#0068b5', '#f28e00', '#940084', '#97c000']
+>  comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
+> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+>  		!BR2_TOOLCHAIN_USES_GLIBC || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+> @@ -43,7 +43,7 @@ config BR2_PACKAGE_WEBKITGTK
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_PACKAGE_LIBGTK3
+> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_CAIRO
+>  	select BR2_PACKAGE_CAIRO_PNG
+>  	select BR2_PACKAGE_ENCHANT
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index 80daadd15..53d6236ca 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -27,7 +27,7 @@ WEBKITGTK_CONF_OPTS = \
+>  	-DUSE_LIBHYPHEN=OFF \
+>  	-DUSE_WOFF2=ON
 >  
-> -alternate_colors = ['#00e0e0', '#3f7f7f', '#ff0000', '#00c000',
-> +alternate_colors = ['#ffbe0a', '#00e0e0', '#3f7f7f', '#ff0000', '#00c000',
->                      '#0080ff', '#c000ff', '#00eeee', '#e0e000']
->  
->  
-> 
+> -ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
+> +ifeq ($(BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT),y)
+>  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
+>  else
+>  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
+> -- 
+> 2.17.1
+
+Cheers,
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190204/426d113c/attachment.asc>
