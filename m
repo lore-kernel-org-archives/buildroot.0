@@ -1,85 +1,32 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 04 Feb 2019 08:37:24 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: add option to enable generation
- of DTBs symbols
-In-Reply-To: <348bdec7-1518-74f4-de31-c29878b29e18@mind.be>
-References: <20190105105909.31359-1-titouan.christophe@railnova.eu>
- <348bdec7-1518-74f4-de31-c29878b29e18@mind.be>
-Message-ID: <1549265844.7318.24.camel@railnova.eu>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Mon, 4 Feb 2019 08:13:11 +0000
+Subject: [Buildroot] Prebuilt ARC tools are way too old
+Message-ID: <4881796E12491D4BB15146FE0209CE64681D2D2A@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the tips Arnout !
+Hi Thomas,
 
-Titouan
+May I kindly ask you to create a newer prebuilt ARC toolchain
+which uses arc-2018.09 GNU tools?
 
-On Sun, 2019-02-03 at 20:28 +0100, Arnout Vandecappelle wrote:
->  Hi Titouan,
-> 
-> On 05/01/2019 11:59, Titouan Christophe wrote:
-> > Add an option to compile device trees in Linux with symbol
-> > generation
-> > such that device tree overlays can be loaded on the target system
-> > 
-> > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> > ---
-> >  linux/Config.in | 8 ++++++++
-> >  linux/linux.mk  | 4 ++++
-> >  2 files changed, 12 insertions(+)
-> > 
-> > diff --git a/linux/Config.in b/linux/Config.in
-> > index 9a4d46e534..6d695be6c3 100644
-> > --- a/linux/Config.in
-> > +++ b/linux/Config.in
-> > @@ -392,6 +392,14 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
-> >  	  You can provide a list of dts paths to copy and
-> >  	  build, separated by spaces.
-> >  
-> > +config BR2_LINUX_KERNEL_DTB_WITH_SYMBOLS
-> > +	bool "Enable the generation of symbols in the linux device
-> > tree"
-> > +	default n
-> 
->  We don't put "default n" because that's implicit.
-> 
-> > +	help
-> > +	  If enabled, pass the "-@" option to the device tree
-> > compiler,
-> > +	  such that symbols in compiled device tree are visible.
-> > +	  Choose this option to support devicetree overlays
-> > +
-> >  endif
-> >  
-> >  config BR2_LINUX_KERNEL_INSTALL_TARGET
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 6bf2b88038..59c7268e49 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -381,6 +381,10 @@ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-> >  # reproducibility, we use our owns rather than the host ones.
-> >  LINUX_DEPENDENCIES += host-bison host-flex
-> >  
-> > +ifeq ($(BR2_LINUX_KERNEL_DTB_WITH_SYMBOLS),y)
-> > +	LINUX_MAKE_ENV += DTC_FLAGS=-@
-> > +endif
-> 
->  The other LINUX_MAKE_ENV settings are all the way in the beginning
-> of the file,
-> so this one should be there as well.
-> 
->  I've fixed both issues and applied, thanks.
-> 
->  And this is a patch which I've actually used myself!
-> 
->  Regards,
->  Arnout
-> 
-> > +
-> >  ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
-> >  define LINUX_BUILD_DTB
-> >  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)
-> > $(LINUX_DTBS)
-> > 
+arc-2018.09 is based on GCC 8.2 and has a bunch of fixes as compared to
+older tools.
+
+As of today the latest prebuilt ARC tools are br-arcle-hs38-full-2018.11-rc1.tar.bz2
+and it's still based on arc-2018.03 (GCC 7.x based).
+
+What's more in ARC config fragment even older tarball is mentioned 
+https://git.buildroot.org/buildroot/tree/support/config-fragments/autobuild/br-arcle-hs38.config#n6
+
+Probably there's not much sense in updating br-arcle-hs38.config with still obsolete
+tools and better wait before GCC 8.x based tools are available in prebuilt form.
+
+-Alexey
+
+P.S. Please pardon for bugging you on that topic but we continue to get Autobuilder
+     reports with failures which doesn't happen with newer tools and so just
+     pollute Autobuilder logs.
