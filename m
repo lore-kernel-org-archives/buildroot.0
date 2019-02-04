@@ -1,52 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 11:20:52 +0100
-Subject: [Buildroot] [PATCH v2 4/6] ffmpeg: bump to version 4.1.
- ffserver is not supported anymore.
-In-Reply-To: <ea-mime-5c58064e-3d38-4e513c2d@www-5.netcourrier.com>
-References: <20190202155400.6547fba9@windsurf>
- <ea-mime-5c58064e-3d38-4e513c2d@www-5.netcourrier.com>
-Message-ID: <20190204112052.284bbbea@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Feb 2019 11:23:29 +0100
+Subject: [Buildroot] [PATCH] package/netsurf: use TMP_PREFIX inside the
+ build directory
+In-Reply-To: <a83d68d6-0482-5df9-a20f-ecf6f31a4ff8@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 3 Feb 2019 21:36:51 +0100")
+References: <20181217084710.16192-1-thomas.petazzoni@bootlin.com>
+ <87ftuv3h31.fsf@dell.be.48ers.dk> <20181218084826.1d669768@windsurf>
+ <a83d68d6-0482-5df9-a20f-ecf6f31a4ff8@mind.be>
+Message-ID: <87lg2vx36m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Mon,  4 Feb 2019 10:30:54 +0100 (CET)
-lpdev at cordier.org wrote:
+Hi,
 
-> > I'd like to hear from Bernd about this ffmpeg bump. If I remember well,
-> > major ffmpeg bumps are typically breaking some APIs, causing build
-> > issues with packages that use ffmpeg.
-> 
-> According to my experience with FFMpeg, API are marked as deprecated.
-> They can still be used and linked correctly against all application.
+ >>> > -	TMP_PREFIX=$(STAGING_DIR)/usr \
+ >>> > +	TMP_PREFIX=$(@D)/tmpusr \  
+ >>> 
+ >>> Why do we have to set it at all? It looks like it defaults to a
+ >>> directory under the build dir as well?
+ >> 
+ >> Indeed, it does. So it's obviously simpler to drop it. I'll respin the
+ >> patch. Thanks!
 
-Did you see the feedback from Bernd ? I know Bernd always forgets to Cc
-people when replying, so make sure to check the mailing list for his
-reply.
+ >  As
 
-> However, the behaviour of the program can differ. What about creating
-> a ffmpeg4 package, just like opencv2/3 packages?
+As?
 
-Apparently, except for gstreamer1/gst1-libav that needs to be fixed for
-ffmpeg 4.x, all other packages have already been fixed to work with
-ffmpeg 4.x. So there is no reason to introduce a separate ffmpeg4
-package. It would create more complexity/
-
-> > If ffserver is no longer supported, we want to move this option to
-> > Config.in.legacy so that users who have configurations with this
-> > enabled are aware.
-> 
-> This does not appear in the official documentation. Would it be
-> possible to add it?
-
-Patches welcome ! :-)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
