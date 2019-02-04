@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 17:10:35 +0100
-Subject: [Buildroot] [git commit] support/testing/tests/download/gitremote:
- remove trailing whitespace
-Message-ID: <20190204160959.5AB59837AE@busybox.osuosl.org>
+Date: Mon, 4 Feb 2019 17:30:06 +0100
+Subject: [Buildroot] [git commit] arch/mips: add (Marvell) Octeon II
+ processor
+Message-ID: <20190204163131.5253683B8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dd2f4f3e15333d5c36fcdf242d056c2bd37b939
+commit: https://git.buildroot.net/buildroot/commit/?id=b21e159b5da31afaca63fba228a620f74b317c88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following flake8 warnings:
+The compiler recognizes a specific 'march' value for Octeon II processors,
+so create a 'Target Architecture Variant' entry for it in the target menu.
 
-support/testing/tests/download/gitremote.py:29:67: W291 trailing whitespace
-support/testing/tests/download/gitremote.py:30:60: W291 trailing whitespace
-
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/download/gitremote.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/Config.in.mips | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
-index a6e69a1ef1..3b35456dd1 100644
---- a/support/testing/tests/download/gitremote.py
-+++ b/support/testing/tests/download/gitremote.py
-@@ -26,8 +26,8 @@ class GitRemote(object):
-         self.port = None
-         self.logfile = infra.open_log_file(builddir, "gitremote", logtofile)
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index f28113df44..b8567c56b8 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -122,6 +122,13 @@ config BR2_mips_i6400
+ 	depends on BR2_ARCH_IS_64
+ 	select BR2_MIPS_CPU_MIPS64R6
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++config BR2_mips_octeon2
++	bool "Octeon II"
++	depends on BR2_ARCH_IS_64
++	select BR2_MIPS_CPU_MIPS64R2
++	help
++	  Marvell (formerly Cavium Networks) Octeon II CN60XX
++	  processors.
+ config BR2_mips_p6600
+ 	bool "P6600"
+ 	depends on BR2_ARCH_IS_64
+@@ -241,6 +248,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "mips64r5"	if BR2_mips_64r5
+ 	default "mips64r6"	if BR2_mips_64r6
+ 	default "i6400"		if BR2_mips_i6400
++	default "octeon2"	if BR2_mips_octeon2
+ 	default "p6600"		if BR2_mips_p6600
  
--        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", 
--                      "--listen=localhost", "--export-all", 
-+        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose",
-+                      "--listen=localhost", "--export-all",
-                       "--base-path={}".format(serveddir)]
-         for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
-             cmd = daemon_cmd + ["--port={port}".format(port=port)]
+ config BR2_MIPS_OABI32
