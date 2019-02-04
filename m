@@ -1,89 +1,93 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon,  4 Feb 2019 19:53:40 +0100
-Subject: [Buildroot] [PATCH 1/1] postgresql: change systemd service type to
- notify
-In-Reply-To: <20180629183101.9705-1-joseph.kogut@gmail.com>
-References: <20180629183101.9705-1-joseph.kogut@gmail.com>
-Message-ID: <20190204185340.3689-1-titouan.christophe@railnova.eu>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Feb 2019 12:58:08 -0600
+Subject: [Buildroot] [git commit] Makefile: respect strip exclusions for
+ special libraries
+In-Reply-To: <20190204155559.02D428385C@busybox.osuosl.org>
+References: <20190204155559.02D428385C@busybox.osuosl.org>
+Message-ID: <CANQCQpYFv3Gt_dkg_T_7ppb1Fiy8JmXsHX6pDrGvJzZrZOvRhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Joseph Kogut <joseph.kogut@gmail.com>
+Thomas,
 
-During activation, pg_ctl uses exec to start the db server, which causes
-the service to never finish activating when Type=forking. Upstream
-recommends configuring --with-systemd and using Type=notify.
+On Mon, Feb 4, 2019 at 9:57 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> commit: https://git.buildroot.net/buildroot/commit/?id=e5e0f637aba9e926c0420ce6e343b734b968d883
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> ld-*.so and libpthread*.so* are not stripped in the same way as other
+> binaries because some applications need symbols in these libraries in
+> order to operate correctly.
+>
+> However, the special handling for these binaries ignores the usual
+> BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
+> has debugging symbols in these binaries.
+>
+> Pull out the common find functionality so that we can build two find
+> commands that re-use the common exclusion rules.
+>
+> Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: John Keeping <john@metanate.com>
+> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  Makefile | 46 ++++++++++++++++++++++++++--------------------
+>  1 file changed, 26 insertions(+), 20 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 74240ab895..355a404e04 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -613,20 +613,37 @@ RSYNC_VCS_EXCLUSIONS = \
+>         --exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+>         --exclude CVS
+>
+> -STRIP_FIND_CMD = find $(TARGET_DIR)
+> -ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+> -STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+> -endif
+> -STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+> -# file exclusions:
+> +# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
+> +# BR2_STRIP_EXCLUDE_FILES
+> +STRIP_FIND_COMMON_CMD = \
+> +       find $(TARGET_DIR) \
+> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
+> +               \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
+> +               -prune -o \
+> +       ) \
+> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
+> +               -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
+> +
+> +# Regular stripping for everything, except libpthread, ld-*.so and
+> +# kernel modules:
+>  # - libpthread.so: a non-stripped libpthread shared library is needed for
+>  #   proper debugging of pthread programs using gdb.
+>  # - ld.so: a non-stripped dynamic linker library is needed for valgrind
+>  # - kernel modules (*.ko): do not function properly when stripped like normal
+>  #   applications and libraries. Normally kernel modules are already excluded
+> -#   by the executable permission check above, so the explicit exclusion is only
+> +#   by the executable permission check, so the explicit exclusion is only
+>  #   done for kernel modules with incorrect permissions.
+> -STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
+> +STRIP_FIND_CMD = \
+> +       $(STRIP_FIND_COMMON_CMD) \
+> +       -type f \( -perm /111 -o -name '*.so*' \) \
+> +       -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
+> +       -print0
+> +
+> +# Special stripping (only debugging symbols) for libpthread and ld-*.so.
+> +STRIP_FIND_SPECIAL_LIBS_CMD = \
+> +       $(STRIP_FIND_COMMON_CMD) \
+> +       \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
 
-https://www.postgresql.org/docs/10/static/server-start.html
+The answer to you question about needing to strip libpthread for only
+glibc is true.  I did poke around a bit and checked if libthread_db
+needed symbols and verified it can be stripped.  Do you think a noted
+should be added to state the libpthread stripping detail?
 
-Upstream says:
-    When using systemd, you can use the following service unit file
-    [...]
-    Using Type=notify requires that the server binary was built with
-    configure --with-systemd.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/postgresql/postgresql.mk      |  8 ++++++++
- package/postgresql/postgresql.service | 12 ++++++++----
- 2 files changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index c4ba0daa17..fefbcf5f06 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -83,6 +83,14 @@ else
- POSTGRESQL_CONF_OPTS += --without-libxml
- endif
- 
-+# required for postgresql.service Type=notify
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+POSTGRESQL_DEPENDENCIES += systemd
-+POSTGRESQL_CONF_OPTS += --with-systemd
-+else
-+POSTGRESQL_CONF_OPTS += --without-systemd
-+endif
-+
- define POSTGRESQL_USERS
- 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
- endef
-diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-index 4a96258684..53e6f84f00 100644
---- a/package/postgresql/postgresql.service
-+++ b/package/postgresql/postgresql.service
-@@ -3,7 +3,7 @@ Description=PostgreSQL database server
- After=network.target
- 
- [Service]
--Type=forking
-+Type=notify
- 
- # start timeout disabled because initdb may run a little
- # longer (eg. 5 minutes on RaspberryPi)
-@@ -12,13 +12,17 @@ TimeoutStartSec=0
- User=postgres
- Group=postgres
- 
-+StandardOutput=syslog
-+StandardError=syslog
- SyslogIdentifier=postgres
- PIDFile=/var/lib/pgsql/postmaster.pid
- 
- ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
--ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
--ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
--ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
-+ExecStart=/usr/bin/postgres -D /var/lib/pgsql
-+ExecReload=/usr/bin/kill -HUP $MAINPID
-+KillMode=mixed
-+KillSignal=SIGINT
-+TimeoutSec=0
- 
- [Install]
- WantedBy=multi-user.target
--- 
-2.19.2
+Matt
