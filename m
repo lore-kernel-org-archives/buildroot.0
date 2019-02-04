@@ -1,82 +1,97 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 4 Feb 2019 15:11:10 +0100
-Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
- enable SRI
-In-Reply-To: <87lg2vvepy.fsf@dell.be.48ers.dk>
-References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
- <87y36vvij1.fsf@dell.be.48ers.dk>
- <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
- <87lg2vvepy.fsf@dell.be.48ers.dk>
-Message-ID: <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 4 Feb 2019 15:12:03 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: Fix ld.so copying for
+ multilib toolchains.
+In-Reply-To: <20180629113339.59102-1-christoph.muellner@theobroma-systems.com>
+References: <20180629113339.59102-1-christoph.muellner@theobroma-systems.com>
+Message-ID: <CAAXf6LUmhp+bx+wF5u+H33CVsZ18-pwM6k0od0omrVKc7+45qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 4, 2019 at 2:57 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
->
->  > On Mon, Feb 4, 2019 at 1:35 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->  >>
->  >> >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
->  >>
->  >> > From: James Hilliard <james.hilliard1@gmail.com>
->  >> > Some of our cdn's are going discontinued (rawgit) and some others are
->  >> > not recommended anymore, thus we update to the recommended cdnjs.
->  >> > This patch enables also SRI protection on js to be sure the modules we
->  >> > download are not manipulated in any way.
->  >>
->  >> It would be great for people not doing web things (E.G. me) to add the
->  >>
->  >> https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
->  >>
->  >> to explain what SRI is.
->  >>
->  >> The files we get from these CDNs are not that big, E.G:
->  >>
->  >> -rw-r--r--  1 peko peko 139K May 17  2018 bootstrap.min.css
->  >> -rw-r--r--  1 peko peko  37K May 17  2018 bootstrap.min.js
->  >> -rw-r--r--  1 peko peko 2.4K May 17  2018 html5shiv.js
->  >> -rw-r--r--  1 peko peko  85K May 17  2018 jquery.min.js
->  >> -rw-r--r--  1 peko peko 4.0K May 17  2018 respond.min.js
->  >>
->  >> Does it make sense to use those CDNs that we don't have under our
->  >> control, or should we just commit these files?
->
->  > Hosting these files by themselves means serving them by our webserver,
->  > this is usually costly and bandwidth consuming.
->
-> Yes, but given their small size, this is probably not a huge concern?
-> E.G. news.html is ~200KB.
+Hello,
 
-Yes, I know, in an optimistic world we could have that page sliced on
-smaller chunks and retrieved one chunk at a time.
-It could be done, but I don't know how much that page is visited.
-I don't know if we have a proper network load statistics to understand
-if this could be a valuable work to do.
-
->  > Moreover, saving a compressed javascript in git it's not recommended
->  > because their somewhat like binary files.
+El vie., 29 jun. 2018 a las 13:51, Christoph Muellner
+(<christoph.muellner@theobroma-systems.com>) escribi?:
 >
-> Correct, but we already have the website images in it as well. Given
-> that these things only rarely change, I don't think that is a big
-> concern.
-
-Yes I know, but unless we pay to host on a CDN ourselves, we can't do otherwise.
-I think that something could be optimized from a size point of view.
-
-I think if we can save some some bandwidth, we should go that route,
-but if costs are not a main concern, we can opt to have everything on
-local server.
-
-
->  > Again, updating them is quite annoying cause instead of simply
->  > updating a line in a javascript file, we should replace the compressed
->  > js file.
+> Multilib toolchains can have more than one ld.so files in lib/.
+> Typically one for each lib* directory.
+> However the current copy_toolchain_sysroot implemenation does
+> not support more than one ld.so.
 >
-> Is is still a single commit, either changing the the version + hash.
+> This patch addresses this by iterating over all ld.so files
+> in the lib/ directory and choose the one, which has a symlink
+> into $ARCH_LIB_DIR/.
 >
-> --
-> Bye, Peter Korsgaard
+> An example is a multilib toolchain for aarch64 (LP64 and ILP32),
+> which includes the following entries in lib/:
+>
+> $ ls -l lib/
+> lrwxrwxrwx 1 user group ld-linux-aarch64_ilp32.so.1 -> ../libilp32/ld-2.27.so
+> lrwxrwxrwx 1 user group ld-linux-aarch64.so.1 -> ../lib64/ld-2.27.so
+>
+> $ARCH_LIB_DIR/ will be detected as lib64.
+> Without the patch no ld.so will be copied.
+> With the patch the second ld.so (the one for LP64) will be copied.
+>
+> Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+> Signed-off-by: Philipp Tomsich <philipp.tomsich@theobroma-systems.com>
+> ---
+>  toolchain/helpers.mk | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+
+Please extend the commit message and refer to the toolchain in which
+you found this problem, with its link.
+This will help future analysis when more rework in this area is needed.
+
+>
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 1792286add..62c0454be5 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -136,9 +136,14 @@ copy_toolchain_sysroot = \
+>                 done ; \
+>         fi ; \
+>         if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
+> -               if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
+> -                       cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
+> -               fi ; \
+> +               find $${ARCH_SYSROOT_DIR}/lib/ -name ld*.so.* -print0 | while IFS= read -r -d '' LD_SO; do \
+> +                       LINKTARGET=`realpath $${LD_SO}` ; \
+> +                       LINKTARGETDIR=`dirname $${LINKTARGET}` ; \
+> +                       LINKTARGETBASE=`basename $${LINKTARGETDIR}` ; \
+
+This is more correctly 'LINKTARGETDIRBASE' not 'LINKTARGETBASE', i.e.
+'LINKTARGETBASE' would be 'ld.so.xxxx'.
+
+> +                       if [ "$${LINKTARGETBASE}" = "$${ARCH_LIB_DIR}" ]; then \
+> +                               cp -a $${LD_SO} $(STAGING_DIR)/lib/ ; \
+> +                       fi ; \
+> +               done ; \
+
+I tested the changes both for the specified toolchain as for the
+Marvell-provided Octeon toolchain which is also multilib, and the
+expected ld.so files are indeed present on the target.
+
+However, the new code assumes that the ld.so file matched with the
+find command is a symbolic link, and then assumes that it points to
+something identifyable with ARCH_LIB_DIR. I don't know whether it
+occurs in practice, but suppose:
+a. a single file is found and it is a regular file
+b. a single file is found, it is a symbolic link, but it points to
+something that is not containing ARCH_LIB_DIR as base.
+c. multiple files are found, they are not symbolic links.
+
+Case a and b could be solved by falling back to a simple copy (of all
+matched files) if the link-comparing approach is not resulting in a
+match.
+But case c is more complex. An alternative would be to actually
+inspect the architecture using readelf and compare it to the expected
+value, e.g. based on libc.a.
+
+I don't know how far we should go...
+
+Best regards,
+Thomas
