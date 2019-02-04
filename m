@@ -1,104 +1,155 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 16:56:01 +0100
-Subject: [Buildroot] [git commit] Makefile: respect strip exclusions for
- special libraries
-Message-ID: <20190204155559.02D428385C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 4 Feb 2019 16:52:33 +0100
+Subject: [Buildroot] [PATCH v5 04/10] testing/tests/download: add git
+ hash test
+In-Reply-To: <20180512025833.22998-5-ricardo.martincoski@gmail.com>
+References: <20180512025833.22998-1-ricardo.martincoski@gmail.com>
+ <20180512025833.22998-5-ricardo.martincoski@gmail.com>
+Message-ID: <3493f835-d2c0-5d07-b33a-9bfd746b57d8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5e0f637aba9e926c0420ce6e343b734b968d883
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Ricardo,
 
-ld-*.so and libpthread*.so* are not stripped in the same way as other
-binaries because some applications need symbols in these libraries in
-order to operate correctly.
+ I'll apply this today, but I have some comment...
 
-However, the special handling for these binaries ignores the usual
-BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
-has debugging symbols in these binaries.
+On 12/05/2018 04:58, Ricardo Martincoski wrote:
+[snip]
+>  support/testing/tests/download/gitremote.py   |  44 ++++++++++++++++++
+>  support/testing/tests/download/test_git.py    |  43 +++++++++++++++++
 
-Pull out the common find functionality so that we can build two find
-commands that re-use the common exclusion rules.
+ flake8 says:
 
-Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: John Keeping <john@metanate.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile | 46 ++++++++++++++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 20 deletions(-)
+support/testing/tests/download/gitremote.py:5:1: I100 Import statements are in
+the wrong order. 'import infra' should be before 'import pexpect' and in a
+different group.
+support/testing/tests/download/test_git.py:4:1: I100 Import statements are in
+the wrong order. 'from gitremote import GitRemote' should be before 'import
+infra' and in a different group.
+support/testing/tests/download/test_git.py:4:1: I201 Missing newline between
+import groups. 'from gitremote import GitRemote' is identified as Third Party
+and 'import infra' is identified as Third Party.
 
-diff --git a/Makefile b/Makefile
-index 74240ab895..355a404e04 100644
---- a/Makefile
-+++ b/Makefile
-@@ -613,20 +613,37 @@ RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
- 	--exclude CVS
- 
--STRIP_FIND_CMD = find $(TARGET_DIR)
--ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
--STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
--endif
--STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
--# file exclusions:
-+# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-+# BR2_STRIP_EXCLUDE_FILES
-+STRIP_FIND_COMMON_CMD = \
-+	find $(TARGET_DIR) \
-+	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
-+		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
-+		-prune -o \
-+	) \
-+	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-+		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
-+
-+# Regular stripping for everything, except libpthread, ld-*.so and
-+# kernel modules:
- # - libpthread.so: a non-stripped libpthread shared library is needed for
- #   proper debugging of pthread programs using gdb.
- # - ld.so: a non-stripped dynamic linker library is needed for valgrind
- # - kernel modules (*.ko): do not function properly when stripped like normal
- #   applications and libraries. Normally kernel modules are already excluded
--#   by the executable permission check above, so the explicit exclusion is only
-+#   by the executable permission check, so the explicit exclusion is only
- #   done for kernel modules with incorrect permissions.
--STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
-+STRIP_FIND_CMD = \
-+	$(STRIP_FIND_COMMON_CMD) \
-+	-type f \( -perm /111 -o -name '*.so*' \) \
-+	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
-+	-print0
-+
-+# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-+STRIP_FIND_SPECIAL_LIBS_CMD = \
-+	$(STRIP_FIND_COMMON_CMD) \
-+	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
-+	-print0
- 
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
- define TOOLCHAIN_ECLIPSE_REGISTER
-@@ -744,19 +761,8 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
- 
--# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
--# besides the one in which crash occurred; or SIGTRAP kills my program when
--# I set a breakpoint"
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
--endif
--
--# Valgrind needs ld.so with enough information, so only strip
--# debugging symbols.
--	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
- 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
- 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
- 	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
+ I fixed this while applying.
+
+[snip]
+> diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
+> new file mode 100644
+> index 0000000000..60bc49fbf8
+> --- /dev/null
+> +++ b/support/testing/tests/download/gitremote.py
+> @@ -0,0 +1,44 @@
+> +# subprocess does not kill the child daemon when a test case fails by raising
+> +# an exception. So use pexpect instead.
+> +import pexpect
+> +
+> +import infra
+> +
+> +GIT_REMOTE_PORT_INITIAL = 9418
+> +GIT_REMOTE_PORT_LAST = GIT_REMOTE_PORT_INITIAL + 99
+> +
+> +
+> +class GitRemote(object):
+> +    def __init__(self, builddir, serveddir, logtofile):
+> +        """
+> +        Start a local git server.
+> +
+> +        In order to support test cases in parallel, select the port the
+> +        server will listen to in runtime. Since there is no reliable way
+> +        to allocate the port prior to starting the server (another
+> +        process in the host machine can use the port between it is
+> +        selected from a list and it is really allocated to the server)
+> +        try to start the server in a port and in the case it is already
+> +        in use, try the next one in the allowed range.
+> +        """
+> +        self.daemon = None
+> +        self.port = None
+> +        self.logfile = infra.open_log_file(builddir, "gitremote", logtofile)
+> +
+> +        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", "--listen=localhost", "--export-all",
+
+ Line is too long. Fixed as well.
+
+> +                      "--base-path={}".format(serveddir)]
+> +        for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
+> +            cmd = daemon_cmd + ["--port={port}".format(port=port)]
+> +            self.logfile.write("> starting git remote with '{}'\n".format(" ".join(cmd)))
+> +            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile)
+> +            ret = self.daemon.expect(["Ready to rumble",
+> +                                      "Address already in use"])
+
+ Shouldn't we add a timeout here, just to be safe?
+
+ This can be fixed in a follow-up patch.
+
+> +            if ret == 0:
+> +                self.port = port
+> +                return
+> +        raise SystemError("Could not find a free port to run git remote")
+> +
+> +    def stop(self):
+> +        if self.daemon is None:
+> +            return
+> +        self.daemon.terminate(force=True)
+> diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
+> new file mode 100644
+> index 0000000000..14fc8e4da3
+> --- /dev/null
+> +++ b/support/testing/tests/download/test_git.py
+> @@ -0,0 +1,43 @@
+> +import os
+> +
+> +import infra
+> +from gitremote import GitRemote
+> +
+> +
+> +class GitTestBase(infra.basetest.BRTest):
+> +    config = \
+> +        """
+> +        BR2_BACKUP_SITE=""
+> +        """
+> +    gitremotedir = infra.filepath("tests/download/git-remote")
+> +    gitremote = None
+> +
+> +    def setUp(self):
+> +        super(GitTestBase, self).setUp()
+> +        self.gitremote = GitRemote(self.builddir, self.gitremotedir, self.logtofile)
+> +
+> +    def tearDown(self):
+> +        self.show_msg("Cleaning up")
+> +        if self.gitremote:
+> +            self.gitremote.stop()
+> +        if self.b and not self.keepbuilds:
+
+ This is actually a bit useless, since self.b is not initialzed in
+BRTest.__init__ you'll actually get either an exception or self.b evaluates to
+True. But the same pattern is used in other places, so OK. Can be fixed in a
+follow-up patch.
+
+ Regards,
+ Arnout
+
+> +            self.b.delete()
+> +
+> +    def check_hash(self, package):
+> +        # store downloaded tarball inside the output dir so the test infra
+> +        # cleans it up at the end
+> +        env = {"BR2_DL_DIR": os.path.join(self.builddir, "dl"),
+> +               "GITREMOTE_PORT_NUMBER": str(self.gitremote.port)}
+> +        self.b.build(["{}-dirclean".format(package),
+> +                      "{}-source".format(package)],
+> +                     env)
+> +
+> +
+> +class TestGitHash(GitTestBase):
+> +    br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
+> +
+> +    def test_run(self):
+> +        with self.assertRaises(SystemError):
+> +            self.check_hash("bad")
+> +        self.check_hash("good")
+> +        self.check_hash("nohash")
+> 
