@@ -1,86 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 14:20:02 +0100
-Subject: [Buildroot] [git commit] package/{clapack,
- armadillo}: re-enable on MIPS
-Message-ID: <20190204133245.4792B837DF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Feb 2019 14:34:08 +0100
+Subject: [Buildroot] [PATCH] Makefile: add update-defconfig target
+In-Reply-To: <CAAXf6LXNq9PiMst0ONaXp=StcJCimU97ie-bnWFNuTyCcsX5ww@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 30 Jan 2019 21:20:28
+ +0100")
+References: <20190126003406.7723-1-vivien.didelot@gmail.com>
+ <CAAXf6LXNq9PiMst0ONaXp=StcJCimU97ie-bnWFNuTyCcsX5ww@mail.gmail.com>
+Message-ID: <87pns7vfsf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b94e021004cfeb3029f373fcf1ed4f29c77126a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Commit d2b52cebf3b8b4a922a54d38a44a8a183406c5f1 disabled clapack on MIPS
-platforms, to fix an autobuild failure (unfortunately, the results are no
-longer available). The argument was:
+ > El s?b., 26 ene. 2019 a las 1:34, Vivien Didelot
+ > (<vivien.didelot@gmail.com>) escribi?:
+ >> 
+ >> For symmetry with the Kconfig-based packages offering comprehensive
+ >> targets like linux-update-defconfig, barebox-update-defconfig and so
+ >> on, add a new top level update-defconfig target to run savedefconfig.
+ >> 
+ >> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+ >> ---
+ >> Makefile | 7 +++++--
+ >> 1 file changed, 5 insertions(+), 2 deletions(-)
+ >> 
 
-    "Disable this package for MIPS because it needs IRIX headers and
-    libraries."
+ > FWIW, I like this. People who are not very familiar with kconfig-based
+ > systems are easily confused about this.
 
-Nevertheless, today compilation on MIPS seems to work fine. Testing was done
-with test-pkg (armadillo depends on clapack):
+I don't feel strongly about it. It doesn't really hurt, so if it is
+useful to people...
 
-$ echo "BR2_PACKAGE_ARMADILLO=y" > config.snippet;
-$ utils/test-pkg -p armadillo -a -c config.snippet
-                 br-mips32r6-el-hf-glibc [1/8]: OK
-                      br-mips64-n64-full [2/8]: OK
-                 br-mips64r6-el-hf-glibc [3/8]: OK
-                      br-mipsel-o32-full [4/8]: OK
-             mips64el-ctng_n32-linux-gnu [5/8]: OK
-             mips64el-ctng_n64-linux-gnu [6/8]: OK
-                         sourcery-mips64 [7/8]: OK
-                           sourcery-mips [8/8]: OK
-8 builds, 0 skipped, 0 build failed, 0 legal-info failed
+Committed, thanks.
 
-Manual build tests were also done for mips32r2 with gcc 4.9.x and gcc 7.x,
-and for M5150 with gcc 7.x (Buildroot-built toolchains in these three
-cases).
-
-Also building and running on Octeon III, using the toolchain provided by
-Cavium Networks / Marvell, works fine.
-
-Not seeing any problem (but also not understanding the original problem),
-re-enable clapack (and armadillo) on MIPS.  If any problems would pop up in
-the future, they should be investigated in detail and a more fine-grained
-solution should be taken than disabling on MIPS altogether.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/armadillo/Config.in | 2 --
- package/clapack/Config.in   | 1 -
- 2 files changed, 3 deletions(-)
-
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index 47c7cd9ffd..b2b61a3233 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,6 +1,5 @@
- comment "armadillo needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	depends on !BR2_powerpc
- 	depends on !BR2_m68k_cf
- 
-@@ -11,7 +10,6 @@ comment "armadillo needs a glibc toolchain w/ C++"
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
- 	depends on !BR2_m68k_cf # clapack
- 	select BR2_PACKAGE_CLAPACK
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index af7834d985..a912eb6c91 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -4,7 +4,6 @@ comment "clapack needs a glibc toolchain"
- 
- config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack"
--	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	# _fpu_control is used on PowerPC, but not available with
- 	# uClibc or musl
- 	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
+-- 
+Bye, Peter Korsgaard
