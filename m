@@ -1,9 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  4 Feb 2019 19:05:51 +0100
-Subject: [Buildroot] [PATCHv2 6/8] Config.in: reintroduce BR2_SSH
-In-Reply-To: <20190204180553.18394-1-patrickdepinguin@gmail.com>
-References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
-Message-ID: <20190204180553.18394-7-patrickdepinguin@gmail.com>
+Date: Mon,  4 Feb 2019 19:05:45 +0100
+Subject: [Buildroot] [PATCHv2 0/8] fix scp and reintroduce source-check
+ target
+Message-ID: <20190204180553.18394-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +11,50 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The BR2_SSH command was removed in commit
-db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
-command") but will be needed again to support 'source-check' for the scp
-download backend.
+Hello,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- Config.in               | 4 ++++
- package/pkg-download.mk | 1 +
- 2 files changed, 5 insertions(+)
+After the overwhelming support for 'source-check' at the Buildroot Developer
+Days ;-) , here is a second iteration of this series.
 
-diff --git a/Config.in b/Config.in
-index f965e9d6d8..03e4eb3928 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,6 +136,10 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
- 
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index cc04e316e2..e9506ae2a5 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
-+export SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
+The first commit is actually a bugfix separate from source-check. In v1 of this
+series it was also included as the second of two 'scp'-related bugfixes, but it
+seems only the first bug-fix was applied at that time, which I hadn't realized
+until now.
+
+Patches 2-8 are the actual source-check releated ones.
+For git, svn, bzr and cvs, there is no actual implementation which means that
+the corresponding download scripts will perform the standard download logic,
+which will also verify the validity of the specified revision on the remote
+server, but not as optimal as for the other methods.
+
+Best regards,
+Thomas
+
+Thomas De Schampheleire (8):
+  support/download/scp: fix download with scheme prefix 'scp://'
+  support/download: reintroduce 'source-check' target
+  support/download/hg: implement source-check
+  support/download/wget: implement source-check
+  support/download/file: implement source-check
+  Config.in: reintroduce BR2_SSH
+  support/download/scp: implement source-check
+  support/download/{bzr,cvs,git,svn}: highlight unimplemented
+    source-check
+
+ Config.in                   |  4 ++
+ Makefile                    |  7 +++
+ package/pkg-download.mk     | 20 ++++++++
+ package/pkg-generic.mk      | 14 +++++-
+ support/download/bzr        |  2 +
+ support/download/cvs        |  2 +
+ support/download/dl-wrapper | 99 ++++++++++++++++++++-----------------
+ support/download/file       | 12 ++++-
+ support/download/git        |  2 +
+ support/download/hg         |  7 +++
+ support/download/scp        | 17 +++++++
+ support/download/svn        |  2 +
+ support/download/wget       |  7 +++
+ 13 files changed, 149 insertions(+), 46 deletions(-)
+
 -- 
 2.19.2
