@@ -1,99 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Feb 2019 10:51:12 +0100
-Subject: [Buildroot] [PATCH] Add KF5 package kcoreaddons
-Message-ID: <20190204095112.2411-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  4 Feb 2019 10:58:23 +0100
+Subject: [Buildroot] [PATCH 1/2] python-docker-pycreds: bump version to 0.4.0
+Message-ID: <20190204095824.18792-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Pierre Ducroquet <pinaraf@pinaraf.info>
+Needed by newer python-docker versions.
 
-KCoreAddons provides classes built on top of QtCore to perform various tasks such as
-manipulating mime types, autosaving files, creating backup files, generating random
-sequences, performing text manipulations such as macro replacement, accessing
-user information and many more.
+Pypi now proves a sha256 hash as well.
 
-Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
-[yann.morin.1998 at free.fr + titouan.christophe at railnova.eu:
-  - add missing qt5tools select
-  - fix hash for new version
-  - fix check-package
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/Config.in                            |  1 +
- package/kf5/kf5-kcoreaddons/Config.in            | 14 ++++++++++++++
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash |  2 ++
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk   | 16 ++++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/kf5/kf5-kcoreaddons/Config.in
- create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
- create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+ package/python-docker-pycreds/python-docker-pycreds.hash | 6 +++---
+ package/python-docker-pycreds/python-docker-pycreds.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index 075b246269..2e50bce49e 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -8,6 +8,7 @@ menuconfig BR2_PACKAGE_KF5
+diff --git a/package/python-docker-pycreds/python-docker-pycreds.hash b/package/python-docker-pycreds/python-docker-pycreds.hash
+index 9e1182d4a4..d93a3a1d31 100644
+--- a/package/python-docker-pycreds/python-docker-pycreds.hash
++++ b/package/python-docker-pycreds/python-docker-pycreds.hash
+@@ -1,4 +1,4 @@
+-# md5 from https://pypi.python.org/pypi/docker-pycreds/json, sha256 locally computed
+-md5	ae63c7def3e58cb51a4d8f5810683030  docker-pycreds-0.2.2.tar.gz
+-sha256	c7ab85de2894baff6ee8f15160cbbfa2fd3a04e56f0372c5793d24060687b299  docker-pycreds-0.2.2.tar.gz
++# md5 and sha256 from https://pypi.python.org/pypi/docker-pycreds/json
++md5	322f570cea6b4661c6ac335683988e18  docker-pycreds-0.4.0.tar.gz
++sha256	6ce3270bcaf404cc4c3e27e4b6c70d3521deae82fb508767870fdbf772d584d4  docker-pycreds-0.4.0.tar.gz
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-docker-pycreds/python-docker-pycreds.mk b/package/python-docker-pycreds/python-docker-pycreds.mk
+index e7ffd0eb51..6575ada084 100644
+--- a/package/python-docker-pycreds/python-docker-pycreds.mk
++++ b/package/python-docker-pycreds/python-docker-pycreds.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_KF5
- source "package/kf5/kf5-extra-cmake-modules/Config.in"
-+source "package/kf5/kf5-kcoreaddons/Config.in"
- source "package/kf5/kf5-modemmanager-qt/Config.in"
- source "package/kf5/kf5-networkmanager-qt/Config.in"
- endif
-diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
-new file mode 100644
-index 0000000000..88fda03ee0
---- /dev/null
-+++ b/package/kf5/kf5-kcoreaddons/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_KF5_KCOREADDONS
-+	bool "kf5-kcoreaddons"
-+	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
-+	select BR2_PACKAGE_QT5TOOLS
-+	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
-+	help
-+	  KF5 is a set of Qt framework addons, extending Qt in
-+	  various ways, not only restricted in helping integration
-+	  in KDE.
-+
-+	  This package contains KCoreAddons, a set of classes built
-+	  on top of QtCore to perform various tasks.
-+
-+	  https://api.kde.org/frameworks/kcoreaddons/html/index.html
-diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
-new file mode 100644
-index 0000000000..6af45c37c5
---- /dev/null
-+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 40ff04757e4ac19bc8448940fe18886c894a2069865966cc865fc55ff67b0b46 kcoreaddons-5.47.0.tar.xz
-diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-new file mode 100644
-index 0000000000..acddf493dc
---- /dev/null
-+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# kf5-kcoreaddons
-+#
-+################################################################################
-+
-+KF5_KCOREADDONS_VERSION = $(KF5_VERSION)
-+KF5_KCOREADDONS_SITE = $(KF5_SITE)
-+KF5_KCOREADDONS_SOURCE = kcoreaddons-$(KF5_KCOREADDONS_VERSION).tar.xz
-+KF5_KCOREADDONS_LICENSE = LGPL-2.1+
-+KF5_KCOREADDONS_LICENSE_FILE = COPYING.LIB
-+
-+KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
-+KF5_KCOREADDONS_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+-PYTHON_DOCKER_PYCREDS_VERSION = 0.2.2
++PYTHON_DOCKER_PYCREDS_VERSION = 0.4.0
+ PYTHON_DOCKER_PYCREDS_SOURCE = docker-pycreds-$(PYTHON_DOCKER_PYCREDS_VERSION).tar.gz
+-PYTHON_DOCKER_PYCREDS_SITE = https://pypi.python.org/packages/db/73/42d4c698e70633d99f7f7c4c87c6de45ead5ad7b36dcfccd998fd1556ac9
++PYTHON_DOCKER_PYCREDS_SITE = https://files.pythonhosted.org/packages/c5/e6/d1f6c00b7221e2d7c4b470132c931325c8b22c51ca62417e300f5ce16009
+ PYTHON_DOCKER_PYCREDS_SETUP_TYPE = setuptools
+ PYTHON_DOCKER_PYCREDS_LICENSE = Apache-2.0
+ PYTHON_DOCKER_PYCREDS_LICENSE_FILES = LICENSE
 -- 
-2.14.1
+2.11.0
