@@ -1,114 +1,126 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 4 Feb 2019 15:25:17 +0100
-Subject: [Buildroot] [PATCH v1 3/5] webkitgtk: remove GTK in
- WEBKITGTK_ARCH_SUPPORTS* variable names
-In-Reply-To: <20181231154915.32660-4-francois.perrad@gadz.org>
-References: <20181231154915.32660-1-francois.perrad@gadz.org>
- <20181231154915.32660-4-francois.perrad@gadz.org>
-Message-ID: <20190204152517.GF22033@momiji>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon,  4 Feb 2019 15:27:29 +0100
+Subject: [Buildroot] [PATCH v2 1/3] docs/website/js/buildroot.js: switch var
+ to let
+Message-ID: <20190204142731.8429-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Mon, 31 Dec 2018 16:49:13 +0100, Francois Perrad <fperrad@gmail.com> wrote:
-> there are common for the GTK & WPE ports of WebKit
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/midori/Config.in       | 4 ++--
->  package/webkitgtk/Config.in    | 8 ++++----
->  package/webkitgtk/webkitgtk.mk | 2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/midori/Config.in b/package/midori/Config.in
-> index f0767c85f..460fc6fbf 100644
-> --- a/package/midori/Config.in
-> +++ b/package/midori/Config.in
-> @@ -1,5 +1,5 @@
->  comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
-> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+In javascript, let is preferred for local, var is preferred for global.
+Change any local variables from "var" to "let"
 
-In the end let's *not* rename this with this patch set, and unify the
-configuration of both ?wpewebkit? and ?webkitgtk? packages in a different
-patch set later.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Updated to apply to latest master commit.
 
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
->  		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
->  		!BR2_TOOLCHAIN_USES_GLIBC
-> @@ -12,7 +12,7 @@ config BR2_PACKAGE_MIDORI
->  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # webkitgtk -> icu
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
-> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	# GCR can only be used with the X11 backend
->  	select BR2_PACKAGE_GCR if BR2_PACKAGE_LIBGTK3_X11
->  	select BR2_PACKAGE_GRANITE
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index 8714677b6..3e5e8d7b6 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	bool
->  	# ARM needs BLX, so v5t+, BE completely untested so disabled
->  	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
-> @@ -12,7 +12,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
->  
-> -config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
-> +config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT
->  	bool
->  	# ARM needs NEON for JIT.
->  	default y if BR2_ARM_CPU_HAS_NEON
-> @@ -29,7 +29,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
->  	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
->  
->  comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
-> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
->  		!BR2_TOOLCHAIN_USES_GLIBC || \
->  		!BR2_HOST_GCC_AT_LEAST_4_8 || \
-> @@ -43,7 +43,7 @@ config BR2_PACKAGE_WEBKITGTK
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	depends on BR2_PACKAGE_LIBGTK3
-> -	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	select BR2_PACKAGE_CAIRO
->  	select BR2_PACKAGE_CAIRO_PNG
->  	select BR2_PACKAGE_ENCHANT
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 80daadd15..53d6236ca 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -27,7 +27,7 @@ WEBKITGTK_CONF_OPTS = \
->  	-DUSE_LIBHYPHEN=OFF \
->  	-DUSE_WOFF2=ON
->  
-> -ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
-> +ifeq ($(BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT),y)
->  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
->  else
->  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
-> -- 
-> 2.17.1
+ docs/website/js/buildroot.js | 40 ++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-Cheers,
-
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190204/426d113c/attachment.asc>
+diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
+index fa5ad9a78e..3e6ff0d20b 100644
+--- a/docs/website/js/buildroot.js
++++ b/docs/website/js/buildroot.js
+@@ -1,51 +1,51 @@
+ function load_activity(feedurl, divid) {
+-    var container = document.getElementById(divid);
++    let container = document.getElementById(divid);
+     $.ajax({
+       url: "https://cors.io/?" + feedurl
+     })
+     .done(function(data){
+-        var x2js = new X2JS();
+-        var result = x2js.xml_str2json(data);
+-        var loaded = 0;
+-        var nb_display = 8;
++        let x2js = new X2JS();
++        let result = x2js.xml_str2json(data);
++        let loaded = 0;
++        let nb_display = 8;
+         if (result==null) return;
+-        for (var i = 0; i < result.feed.entry.length; i++) {
+-            var entry = result.feed.entry[i];
++        for (let i = 0; i < result.feed.entry.length; i++) {
++            let entry = result.feed.entry[i];
+             if (entry.title.indexOf("git commit") != -1)
+                 continue;
+             loaded += 1;
+             if (loaded > nb_display)
+                 break;
+-            var div = document.createElement("p");
+-            var link = document.createElement("a");
+-            var d = new Date(entry.published);
+-            var data = '[' + d.toLocaleDateString() + '] ' + entry.title
+-            var text = document.createTextNode(data);
++            let div = document.createElement("p");
++            let link = document.createElement("a");
++            let d = new Date(entry.published);
++            let data = '[' + d.toLocaleDateString() + '] ' + entry.title
++            let text = document.createTextNode(data);
+             link.appendChild(text);
+             link.title = entry.title;
+             link.href = entry.link._href;
+             div.appendChild(link);
+             container.appendChild(div);
+         }
+-        var empty = nb_display - loaded;
+-        for (var i = 0; i < empty; i++) {
++        let empty = nb_display - loaded;
++        for (let i = 0; i < empty; i++) {
+             container.appendChild(document.createElement("p"));
+         }
+     });
+ }
+ 
+ function google_analytics() {
+-    var _gaq = _gaq || [];
++    let _gaq = _gaq || [];
+     _gaq.push(['_setAccount', 'UA-21761074-1']);
+     _gaq.push(['_setDomainName', 'none']);
+     _gaq.push(['_setAllowLinker', true]);
+     _gaq.push(['_trackPageview']);
+ 
+-    var ga = document.createElement('script');
++    let ga = document.createElement('script');
+     ga.type = 'text/javascript';
+     ga.async = true;
+     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+-    var s = document.getElementsByTagName('script')[0];
++    let s = document.getElementsByTagName('script')[0];
+     s.parentNode.insertBefore(ga, s);
+ }
+ 
+@@ -54,7 +54,7 @@ function showTooltip(elem, msg) {
+     elem.setAttribute('aria-label', msg);
+ }
+ 
+-var clipboard = new Clipboard('.btn');
++let clipboard = new Clipboard('.btn');
+ 
+ $(function () {
+   $('[data-toggle="tooltip"]').tooltip()
+@@ -68,7 +68,7 @@ clipboard.on('success', function(e) {
+ $(function() {
+   $('a[href*=\\#]:not([href=\\#])').click(function() {
+     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+-      var target = $(this.hash);
++        let target = $(this.hash);
+       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+       if (target.length) {
+         $('html,body').animate({
+@@ -81,7 +81,7 @@ $(function() {
+ });
+ 
+ jQuery(document).ready(function($) {
+-    var url = window.location.href;
++    let url = window.location.href;
+     // Get the basename of the URL
+     url = url.split(/[\\/]/).pop()
+     $('.nav a[href="/' + url + '"]').parent().addClass('active');
+-- 
+2.17.2 (Apple Git-113)
