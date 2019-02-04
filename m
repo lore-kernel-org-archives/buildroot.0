@@ -1,52 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 19:53:45 +0100
-Subject: [Buildroot] [PATCH] support/testing: add docker /
- docker-compose tests
-In-Reply-To: <20190204165557.2160-1-peter@korsgaard.com>
-References: <20190204165557.2160-1-peter@korsgaard.com>
-Message-ID: <20190204195345.6494760a@windsurf>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon,  4 Feb 2019 19:53:40 +0100
+Subject: [Buildroot] [PATCH 1/1] postgresql: change systemd service type to
+ notify
+In-Reply-To: <20180629183101.9705-1-joseph.kogut@gmail.com>
+References: <20180629183101.9705-1-joseph.kogut@gmail.com>
+Message-ID: <20190204185340.3689-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Feb 2019 17:55:57 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+From: Joseph Kogut <joseph.kogut@gmail.com>
 
-> Build for x86-64 as public containers in general are only available for
-> x86-64.  Docker needs a number of kernel options enabled, so use a custom
-> kernel config based on the qemu one.
+During activation, pg_ctl uses exec to start the db server, which causes
+the service to never finish activating when Type=forking. Upstream
+recommends configuring --with-systemd and using Type=notify.
 
-Do you need to duplicate the kernel config entirely, or can you use
-board/qemu/x86_64/linux.config + a fragment ?
+https://www.postgresql.org/docs/10/static/server-start.html
 
-> Docker needs entropy at startup, so enable the virtio-rng-pci device to
-> expose entropy to the guest.  The default RAM amount (128M) is not enough to
-> run docker / docker-compose, so bump to 512MB.
+Upstream says:
+    When using systemd, you can use the following service unit file
+    [...]
+    Using Type=notify requires that the server binary was built with
+    configure --with-systemd.
 
-Wow. Go is efficient :)
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/postgresql/postgresql.mk      |  8 ++++++++
+ package/postgresql/postgresql.service | 12 ++++++++----
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-> diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
-> new file mode 100644
-> index 0000000000..49ff2677da
-> --- /dev/null
-> +++ b/support/testing/conf/docker-compose.yml
-> @@ -0,0 +1,4 @@
-> +version: '3'
-> +services:
-> +  busybox:
-> +    image: "busybox:latest"
-
-Is conf/ really the right place for this ? Don't we have some other
-place to store the per-tests artifacts that go on the target ? I don't
-think we have a good organization for this at the moment, so this will
-do for now.
-
-Thanks!
-
-Thomas
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c4ba0daa17..fefbcf5f06 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -83,6 +83,14 @@ else
+ POSTGRESQL_CONF_OPTS += --without-libxml
+ endif
+ 
++# required for postgresql.service Type=notify
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++POSTGRESQL_DEPENDENCIES += systemd
++POSTGRESQL_CONF_OPTS += --with-systemd
++else
++POSTGRESQL_CONF_OPTS += --without-systemd
++endif
++
+ define POSTGRESQL_USERS
+ 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ endef
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+index 4a96258684..53e6f84f00 100644
+--- a/package/postgresql/postgresql.service
++++ b/package/postgresql/postgresql.service
+@@ -3,7 +3,7 @@ Description=PostgreSQL database server
+ After=network.target
+ 
+ [Service]
+-Type=forking
++Type=notify
+ 
+ # start timeout disabled because initdb may run a little
+ # longer (eg. 5 minutes on RaspberryPi)
+@@ -12,13 +12,17 @@ TimeoutStartSec=0
+ User=postgres
+ Group=postgres
+ 
++StandardOutput=syslog
++StandardError=syslog
+ SyslogIdentifier=postgres
+ PIDFile=/var/lib/pgsql/postmaster.pid
+ 
+ ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+-ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
+-ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
+-ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
++ExecStart=/usr/bin/postgres -D /var/lib/pgsql
++ExecReload=/usr/bin/kill -HUP $MAINPID
++KillMode=mixed
++KillSignal=SIGINT
++TimeoutSec=0
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
