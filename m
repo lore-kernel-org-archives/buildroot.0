@@ -1,111 +1,161 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 04 Feb 2019 11:14:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpcap: bump to version 1.9.0
-In-Reply-To: <20190203161740.31109-1-fontaine.fabrice@gmail.com>
-References: <20190203161740.31109-1-fontaine.fabrice@gmail.com>
-Message-ID: <1549275255.7318.31.camel@railnova.eu>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Feb 2019 04:18:53 -0600
+Subject: [Buildroot] [PATCHv4] package/pugixml: add support for a
+ limited set of configuration options
+In-Reply-To: <20190204100613.25609-1-patrickdepinguin@gmail.com>
+References: <20190204100613.25609-1-patrickdepinguin@gmail.com>
+Message-ID: <CANQCQpan78Y_f2+EyjRB_W25U_4w97QZtgS5j9kxmbjHetWFQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice and all,
+Thomas De,
 
-On Sun, 2019-02-03 at 17:17 +0100, Fabrice Fontaine wrote:
-> - Disable Endace DAG card support as libdag is not available in
->   buildroot
-> - Add upstream patch to fix build on musl
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, Feb 4, 2019 at 4:06 AM Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+>
+> From: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+>
+> Add config options for a few pugixml configurables.
+>
+> - Xpath support is enabled by default but has a size impact. Disabling it
+>   reduces the size significantly (it almost halves). Output of 'size' on the
+>   library compiled for x86:
+>   - Xpath support enabled
+>  160374    1244      28  161646   2776e output/target/usr/lib/libpugixml.so.1.7
+>   - Xpath support disabled
+>   92754     880       8   93642   16dca usr/lib/libpugixml.so.1.7
+>
+> - Compact and header-only modes are not strictly needed for our use case, but we
+>   did the work anyway and may be useful for someone else.
+>
+> Signed-off-by: Wouter Vermeiren <wouter.vermeiren@nokia.com>
+> [ThomasDS:
+> - align with Buildroot coding style
+> - retain only feature options: xpath, compact mode, header-only]
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
-[Yann: Tested by building tcpdump]
-Tested-by: Yann E . MORIN <yann.morin.1998@free.fr>
+Did a build on aarch, adjusted kconfig options and verified build
+completed with pugixml CMakeCache.txt showing
+"BUILD_DEFINES:STRING=PUGIXML_NO_XPATH;PUGIXML_COMPACT;PUGIXML_HEADER_ONLY"
+
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 > ---
->  ...x.c-add-missing-limits.h-for-musl-systems.patch | 26
-> ++++++++++++++++++++++
->  package/libpcap/libpcap.hash                       |  2 +-
->  package/libpcap/libpcap.mk                         |  4 ++--
->  3 files changed, 29 insertions(+), 3 deletions(-)
->  create mode 100644 package/libpcap/0001-pcap-usb-linux.c-add-
-> missing-limits.h-for-musl-systems.patch
-> 
-> diff --git a/package/libpcap/0001-pcap-usb-linux.c-add-missing-
-> limits.h-for-musl-systems.patch b/package/libpcap/0001-pcap-usb-
-> linux.c-add-missing-limits.h-for-musl-systems.patch
-> new file mode 100644
-> index 0000000000..aabaef3383
-> --- /dev/null
-> +++ b/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-
-> musl-systems.patch
-> @@ -0,0 +1,26 @@
-> +From aafa3512b7b742f5e66a5543e41974cc5e7eebfa Mon Sep 17 00:00:00
-> 2001
-> +From: maxice8 <thinkabit.ukim@gmail.com>
-> +Date: Sun, 22 Jul 2018 18:54:17 -0300
-> +Subject: [PATCH] pcap-usb-linux.c: add missing limits.h for musl
-> systems.
+>  package/pugixml/Config.in  | 32 ++++++++++++++++++++++++++++++++
+>  package/pugixml/pugixml.mk | 14 ++++++++++++++
+>  2 files changed, 46 insertions(+)
+>
+> v4:
+> - drop options for exceptions, stl, wchar
+> - drop forced 'long long' support: enabled by C++11 anyway (gcc 4.8+).
+> v3:
+> - always enable 'long long' type (feedback Arnout Vandecappelle)
+> - remove unnecessary 'strip' on PUGIXML_BUILD_DEFINES
+> v2: (feedback Thomas Petazzoni)
+> - change 'disable' options into 'enable' and reorder them to be first
+> - rename 'has-long-long' option
+>
+>
+> diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
+> index c37b1df9e5..6b7d2e3259 100644
+> --- a/package/pugixml/Config.in
+> +++ b/package/pugixml/Config.in
+> @@ -18,5 +18,37 @@ config BR2_PACKAGE_PUGIXML
+>           http://pugixml.org/
+>           https://github.com/zeux/pugixml
+>
+> +if BR2_PACKAGE_PUGIXML
 > +
-> +fix compilation on musl libc systems like Void Linux and Alpine.
+> +config BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
+> +       bool "Enable XPath support"
+> +       default y
+> +       help
+> +         When disabled, both XPath interfaces and XPath implementation
+> +         are excluded from compilation. This option is provided in case
+> +         you do not need XPath functionality and need to save code
+> +         space.
 > +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from:
-> +https://github.com/the-tcpdump-group/libpcap/commit/aafa3512b7b742f5
-> e66a5543e41974cc5e7eebfa]
-> +---
-> + pcap-usb-linux.c | 1 +
-> + 1 file changed, 1 insertion(+)
+> +config BR2_PACKAGE_PUGIXML_COMPACT
+> +       bool "Enable compact mode"
+> +       help
+> +         Activates a different internal representation of document
+> +         storage that is much more memory efficient for documents with
+> +         a lot of markup (i.e.  nodes and attributes), but is slightly
+> +         slower to parse and access.
 > +
-> +diff --git a/pcap-usb-linux.c b/pcap-usb-linux.c
-> +index 6f8adf65e..b92c05ea1 100644
-> +--- a/pcap-usb-linux.c
-> ++++ b/pcap-usb-linux.c
-> +@@ -50,6 +50,7 @@
-> + #include <stdlib.h>
-> + #include <unistd.h>
-> + #include <fcntl.h>
-> ++#include <limits.h>
-> + #include <string.h>
-> + #include <dirent.h>
-> + #include <byteswap.h>
-> diff --git a/package/libpcap/libpcap.hash
-> b/package/libpcap/libpcap.hash
-> index f8bc1bcfef..19ce2adbe1 100644
-> --- a/package/libpcap/libpcap.hash
-> +++ b/package/libpcap/libpcap.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -sha256	673dbc69fdc3f5a86fb5759ab19899039a8e5e6c631749e48dcd9c
-> 6f0c83541e	libpcap-1.8.1.tar.gz
-> +sha256	2edb88808e5913fdaa8e9c1fcaf272e19b2485338742b5074b9fe4
-> 4d68f37019	libpcap-1.9.0.tar.gz
->  
->  # Hash for license file:
->  sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697
-> 014eda7afd	LICENSE
-> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-> index 8cc444e7af..126087220b 100644
-> --- a/package/libpcap/libpcap.mk
-> +++ b/package/libpcap/libpcap.mk
-> @@ -4,7 +4,7 @@
->  #
->  ####################################################################
-> ############
->  
-> -LIBPCAP_VERSION = 1.8.1
-> +LIBPCAP_VERSION = 1.9.0
->  LIBPCAP_SITE = http://www.tcpdump.org/release
->  LIBPCAP_LICENSE = BSD-3-Clause
->  LIBPCAP_LICENSE_FILES = LICENSE
-> @@ -15,7 +15,7 @@ LIBPCAP_CONF_ENV = \
->  	ac_cv_header_linux_wireless_h=yes \
->  	CFLAGS="$(LIBPCAP_CFLAGS)"
->  LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
-> -LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux
-> +LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-
-> dag
->  LIBPCAP_CONFIG_SCRIPTS = pcap-config
->  
->  # Omit -rpath from pcap-config output
+> +         http://pugixml.org/docs/manual.html#dom.memory.compact
+> +
+> +config BR2_PACKAGE_PUGIXML_HEADER_ONLY
+> +       bool "Enable header-only version"
+> +       help
+> +         All source code for pugixml will be included in every
+> +         translation unit that includes pugixml.hpp. This is how most
+> +         of Boost and STL libraries work.
+> +
+> +         http://pugixml.org/docs/manual.html#install.building.header
+> +
+> +endif
+> +
+>  comment "pugixml needs a toolchain w/ C++"
+>         depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+> index e5188e5f53..acf22604c4 100644
+> --- a/package/pugixml/pugixml.mk
+> +++ b/package/pugixml/pugixml.mk
+> @@ -10,4 +10,18 @@ PUGIXML_LICENSE = MIT
+>  PUGIXML_LICENSE_FILES = readme.txt
+>  PUGIXML_INSTALL_STAGING = YES
+>
+> +ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
+> +endif
+> +ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
+> +PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
+> +endif
+> +
+> +ifdef PUGIXML_BUILD_DEFINES
+> +PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+> +endif
+> +
+>  $(eval $(cmake-package))
+> --
+> 2.19.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+-- 
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
