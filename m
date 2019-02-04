@@ -1,113 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Feb 2019 11:10:42 +0100
-Subject: [Buildroot] [PATCH] host-genimage: add host-mtools to
- dependency list
-In-Reply-To: <CA+U=DsooYVzQ7SMJ3ACidu4KY0xuHdY=_ZtkgA=NVf0WWpOpeQ@mail.gmail.com>
-References: <20190201091304.31051-1-alexandru.ardelean@analog.com>
- <874l9n1zyh.fsf@dell.be.48ers.dk>
- <CA+U=DsooYVzQ7SMJ3ACidu4KY0xuHdY=_ZtkgA=NVf0WWpOpeQ@mail.gmail.com>
-Message-ID: <20190204101042.GC17819@scaer>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 04 Feb 2019 11:14:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpcap: bump to version 1.9.0
+In-Reply-To: <20190203161740.31109-1-fontaine.fabrice@gmail.com>
+References: <20190203161740.31109-1-fontaine.fabrice@gmail.com>
+Message-ID: <1549275255.7318.31.camel@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexandru, All,
+Hello Fabrice and all,
 
-On 2019-02-01 15:07 +0200, Alexandru Ardelean spake thusly:
-> On Fri, Feb 1, 2019 at 1:59 PM Peter Korsgaard <peter@korsgaard.com> wrote:
-> >
-> > >>>>> "Alexandru" == Alexandru Ardelean <ardeleanalex@gmail.com> writes:
-> >
-> >  > From: Alexandru Ardelean <ardeleanalex@gmail.com>
-> >  > The mcopy command is needed to generate vfat images.
-> >  > If the host system has mtools installed, all is fine, since `genimage`
-> >  > would use it.
-> >
-> >  > But since there is already a `host-mtools` build in the buildroot
-> >  > packages, then this can be used instead.
-> >
-> >  > Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
-> >
-> > There are use cases for genimage that does not require mcopy, so this
-> > isn't really nice.
-> >
-> > But it is indeed true that a lot of genimage use cases require
-> > host-dosfstools and host-mtools:
-> >
+On Sun, 2019-02-03 at 17:17 +0100, Fabrice Fontaine wrote:
+> - Disable Endace DAG card support as libdag is not available in
+>   buildroot
+> - Add upstream patch to fix build on musl
 > 
-> Another idea I was thinking of [in case this one wasn't very popular],
-> is to add in Config.in.host a symbol that adds/selects host-mtools if
-> enabled.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-That would give the same outcome: host-mtools would be buiklt, even in
-situations they are nto needed.
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+[Yann: Tested by building tcpdump]
+Tested-by: Yann E . MORIN <yann.morin.1998@free.fr>
 
-> Personally, I don't mind if we leave this as-is and manually select
-> host-mtools for genimage.
+> ---
+>  ...x.c-add-missing-limits.h-for-musl-systems.patch | 26
+> ++++++++++++++++++++++
+>  package/libpcap/libpcap.hash                       |  2 +-
+>  package/libpcap/libpcap.mk                         |  4 ++--
+>  3 files changed, 29 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libpcap/0001-pcap-usb-linux.c-add-
+> missing-limits.h-for-musl-systems.patch
 > 
-> For a use-case I encountered, adding host-mtools like this change seemed useful.
-
-A few other tools could be usefull as wel, like host-e2fsprogs or such.
-
-But we do not want to build all of them in all cases, so I side with
-Peter here: we have to rely on the user selecting what they need.
-
-So, I've marked this as rejected in patchwork.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> Thanks
-> Alex
-> 
-> > E.G. from raspberrypi_defconfig:
-> >
-> > # Required tools to create the SD image
-> > BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> > BR2_PACKAGE_HOST_GENIMAGE=y
-> > BR2_PACKAGE_HOST_MTOOLS=y
-> >
-> >
-> > > ---
-> >  >  package/genimage/genimage.mk | 2 +-
-> >  >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> >  > diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-> >  > index 393c3e9b94..18eea58af2 100644
-> >  > --- a/package/genimage/genimage.mk
-> >  > +++ b/package/genimage/genimage.mk
-> >  > @@ -7,7 +7,7 @@
-> >  >  GENIMAGE_VERSION = 10
-> >  >  GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
-> >  >  GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
-> >  > -HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
-> >  > +HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse host-mtools
-> >  >  GENIMAGE_LICENSE = GPL-2.0
-> >  >  GENIMAGE_LICENSE_FILES = COPYING
-> >
-> >  > --
-> >  > 2.17.1
-> >
-> >  > _______________________________________________
-> >  > buildroot mailing list
-> >  > buildroot at busybox.net
-> >  > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/libpcap/0001-pcap-usb-linux.c-add-missing-
+> limits.h-for-musl-systems.patch b/package/libpcap/0001-pcap-usb-
+> linux.c-add-missing-limits.h-for-musl-systems.patch
+> new file mode 100644
+> index 0000000000..aabaef3383
+> --- /dev/null
+> +++ b/package/libpcap/0001-pcap-usb-linux.c-add-missing-limits.h-for-
+> musl-systems.patch
+> @@ -0,0 +1,26 @@
+> +From aafa3512b7b742f5e66a5543e41974cc5e7eebfa Mon Sep 17 00:00:00
+> 2001
+> +From: maxice8 <thinkabit.ukim@gmail.com>
+> +Date: Sun, 22 Jul 2018 18:54:17 -0300
+> +Subject: [PATCH] pcap-usb-linux.c: add missing limits.h for musl
+> systems.
+> +
+> +fix compilation on musl libc systems like Void Linux and Alpine.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/the-tcpdump-group/libpcap/commit/aafa3512b7b742f5
+> e66a5543e41974cc5e7eebfa]
+> +---
+> + pcap-usb-linux.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/pcap-usb-linux.c b/pcap-usb-linux.c
+> +index 6f8adf65e..b92c05ea1 100644
+> +--- a/pcap-usb-linux.c
+> ++++ b/pcap-usb-linux.c
+> +@@ -50,6 +50,7 @@
+> + #include <stdlib.h>
+> + #include <unistd.h>
+> + #include <fcntl.h>
+> ++#include <limits.h>
+> + #include <string.h>
+> + #include <dirent.h>
+> + #include <byteswap.h>
+> diff --git a/package/libpcap/libpcap.hash
+> b/package/libpcap/libpcap.hash
+> index f8bc1bcfef..19ce2adbe1 100644
+> --- a/package/libpcap/libpcap.hash
+> +++ b/package/libpcap/libpcap.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -sha256	673dbc69fdc3f5a86fb5759ab19899039a8e5e6c631749e48dcd9c
+> 6f0c83541e	libpcap-1.8.1.tar.gz
+> +sha256	2edb88808e5913fdaa8e9c1fcaf272e19b2485338742b5074b9fe4
+> 4d68f37019	libpcap-1.9.0.tar.gz
+>  
+>  # Hash for license file:
+>  sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697
+> 014eda7afd	LICENSE
+> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+> index 8cc444e7af..126087220b 100644
+> --- a/package/libpcap/libpcap.mk
+> +++ b/package/libpcap/libpcap.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ####################################################################
+> ############
+>  
+> -LIBPCAP_VERSION = 1.8.1
+> +LIBPCAP_VERSION = 1.9.0
+>  LIBPCAP_SITE = http://www.tcpdump.org/release
+>  LIBPCAP_LICENSE = BSD-3-Clause
+>  LIBPCAP_LICENSE_FILES = LICENSE
+> @@ -15,7 +15,7 @@ LIBPCAP_CONF_ENV = \
+>  	ac_cv_header_linux_wireless_h=yes \
+>  	CFLAGS="$(LIBPCAP_CFLAGS)"
+>  LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+> -LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux
+> +LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-
+> dag
+>  LIBPCAP_CONFIG_SCRIPTS = pcap-config
+>  
+>  # Omit -rpath from pcap-config output
