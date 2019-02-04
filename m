@@ -1,127 +1,157 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 4 Feb 2019 15:55:38 -0700
-Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix stdint include location
-In-Reply-To: <20190204223005.10f8689e@windsurf>
-References: <1548460985-22568-1-git-send-email-james.hilliard1@gmail.com>
- <20190204223005.10f8689e@windsurf>
-Message-ID: <CADvTj4rtEJRehF47WHUU9fhi+o7YtZjj3ED6P=fn1wvC4ovD3w@mail.gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Tue,  5 Feb 2019 07:11:17 +0800
+Subject: [Buildroot] [PATCH v2 1/2] package/systemd: enable building of
+ systemd-boot
+Message-ID: <1549321878-9108-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 4, 2019 at 2:30 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Sat, 26 Jan 2019 08:03:05 +0800
-> james.hilliard1 at gmail.com wrote:
->
-> > From: James Hilliard <james.hilliard1@gmail.com>
-> >
-> > Some applications such as systemd-boot include efilink.h without a libc.
-> > Move the stdint.h include to lib.h so that efilink.h can be used directly
-> > without requiring a libc.
->
-> This is a bit weird: gcc does provide <stdint.h>. It contains something
-> like this:
->
-> #ifndef _GCC_WRAP_STDINT_H
-> #if __STDC_HOSTED__
-> # if defined __cplusplus && __cplusplus >= 201103L
-> #  undef __STDC_LIMIT_MACROS
-> #  define __STDC_LIMIT_MACROS
-> #  undef __STDC_CONSTANT_MACROS
-> #  define __STDC_CONSTANT_MACROS
-> # endif
-> # include_next <stdint.h>
-> #else
-> # include "stdint-gcc.h"
-> #endif
-> #define _GCC_WRAP_STDINT_H
-> #endif
->
-> So, when there's a C library, it does a "include_next <stdint.h>" to
-> use the stdint.h from the C library, but otherwise it falls back to
-> stdint-gcc.h, which does provide a type definition for intptr_t.
->
-> Since elflink.h itself uses intptr_t, it seems to make sense for it to
-> include <stdint.h>. What exact error are you getting ?
->>> systemd 240 Building
-PATH="/home/dragon/atmfirmware/bitaccess/output/host/bin:/home/dragon/atmfirmware/bitaccess/output/host/sbin:/home/dragon/bin:/home/dragon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-LC_ALL=en_US.UTF-8 PYTHONNOUSERSITE=y
-/home/dragon/atmfirmware/bitaccess/output/host/bin/ninja  -j5  -C
-/home/dragon/atmfirmware/bitaccess/output/build/systemd-240//build
-ninja: Entering directory
-`/home/dragon/atmfirmware/bitaccess/output/build/systemd-240//build'
-[519/832] Generating disk.c.o with a custom command.
-FAILED: src/boot/efi/disk.c.o
-/home/dragon/atmfirmware/bitaccess/output/host/bin/x86_64-buildroot-linux-gnu-gcc
--c ../src/boot/efi/disk.c -o src/boot/efi/disk.c.o -Wall -Wextra
--std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar -ffreestanding
--fno-strict-aliasing -fno-stack-protector -Wsign-compare
--Wno-missing-field-initializers -isystem
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi
--isystem /home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/x86_64
--include src/boot/efi/efi_config.h -mno-red-zone -mno-sse -mno-mmx
--DEFI_FUNCTION_WRAPPER -DGNU_EFI_USE_MS_ABI
-In file included from
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25:0,
-                 from ../src/boot/efi/disk.c:4:
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10:
-fatal error: stdint.h: No such file or directory
- #include <stdint.h>
-          ^~~~~~~~~~
-compilation terminated.
-[521/832] Generating graphics.c.o with a custom command.
-FAILED: src/boot/efi/graphics.c.o
-/home/dragon/atmfirmware/bitaccess/output/host/bin/x86_64-buildroot-linux-gnu-gcc
--c ../src/boot/efi/graphics.c -o src/boot/efi/graphics.c.o -Wall
--Wextra -std=gnu90 -nostdinc -ggdb -O0 -fpic -fshort-wchar
--ffreestanding -fno-strict-aliasing -fno-stack-protector
--Wsign-compare -Wno-missing-field-initializers -isystem
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi
--isystem /home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/x86_64
--include src/boot/efi/efi_config.h -mno-red-zone -mno-sse -mno-mmx
--DEFI_FUNCTION_WRAPPER -DGNU_EFI_USE_MS_ABI
-In file included from
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilib.h:25:0,
-                 from ../src/boot/efi/graphics.c:8:
-/home/dragon/atmfirmware/bitaccess/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efilink.h:5:10:
-fatal error: stdint.h: No such file or directory
- #include <stdint.h>
-          ^~~~~~~~~~
-compilation terminated.
->
-> It doesn't really help that this fix is sent standalone, without the
-> rest of the systemd-boot series, as it doesn't allow us to try to
-> reproduce the build issue.
-I'll send v2 with systemd-boot.
->
-> >  .../0001-efilink-fix-build-with-gcc-4.8.patch      | 35 ++++++++++------------
-> >  1 file changed, 16 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-> > index 57c78c9..7dc8d8d 100644
-> > --- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-> > +++ b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-> > @@ -1,5 +1,5 @@
-> > -From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
-> > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +From 92d0653f09aa44b24b9306fa9384f13d2c9f1a24 Mon Sep 17 00:00:00 2001
-> > +From: James Hilliard <james.hilliard1@gmail.com>
-> >  Date: Fri, 18 Jan 2019 22:05:37 +0100
->
-> It's not really nice to "hijack" the authorship of the patch here, even
-> if admittedly it's just a one-liner.
-Ok, I wasn't sure what best practices there was, will change back in v2.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+From: James Hilliard <james.hilliard1@gmail.com>
+
+systemd-boot is the integration of gummiboot into systemd, when
+gummiboot is no longer maintained [0].
+
+Add an option to build systemd-boot as part of the systemd build.
+
+Install the boot files, that can serve as a template for the user
+to tweak for their system.
+
+[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add missing depends on i386 || x86_64
+  - add missing dependency to gnu-efi
+  - add missing boot files (they will be shared with standalone
+    systemd-boot later)
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/systemd/Config.in                 | 28 +++++++++++++++++++++++++
+ package/systemd/boot-files/buildroot.conf |  3 +++
+ package/systemd/boot-files/loader.conf    |  2 ++
+ package/systemd/systemd.mk                | 34 +++++++++++++++++++++++++++++--
+ 4 files changed, 65 insertions(+), 2 deletions(-)
+ create mode 100644 package/systemd/boot-files/buildroot.conf
+ create mode 100644 package/systemd/boot-files/loader.conf
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 25f322e..a99358f 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -77,6 +77,34 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
++config BR2_PACKAGE_SYSTEMD_BOOT
++	bool "systemd-boot"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_GNU_EFI
++	help
++	  systemd-boot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
++
++	  systemd-boot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
++
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using systemd-boot: the instructions are
++	  exactly the same, except that the systemd-boot configuration
++	  files will be located in /loader/ inside the EFI partition.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++
++config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
++	string
++	default "ia32"  if BR2_i386
++	default "x64"   if BR2_x86_64
++	depends on BR2_PACKAGE_SYSTEMD_BOOT
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
+new file mode 100644
+index 0000000..16d4d85
+--- /dev/null
++++ b/package/systemd/boot-files/buildroot.conf
+@@ -0,0 +1,3 @@
++title	Buildroot
++linux	/bzImage
++options	root=/dev/sda2 rootwait console=tty1
+diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
+new file mode 100644
+index 0000000..93b77b8
+--- /dev/null
++++ b/package/systemd/boot-files/loader.conf
+@@ -0,0 +1,2 @@
++timeout 3
++default buildroot
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f9df66b..23816a6 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -24,8 +24,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dman=false \
+ 	-Dima=false \
+ 	-Dlibcryptsetup=false \
+-	-Defi=false \
+-	-Dgnu-efi=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
+@@ -338,6 +336,34 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
++SYSTEMD_INSTALL_IMAGES = YES
++SYSTEMD_DEPENDENCIES += gnu-efi
++SYSTEMD_CONF_OPTS += \
++	-Defi=true \
++	-Dgnu-efi=true \
++	-Defi-cc=$(TARGET_CC) \
++	-Defi-ld=$(TARGET_LD) \
++	-Defi-libdir=$(STAGING_DIR)/usr/lib \
++	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
++	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
++
++SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
++define SYSTEMD_INSTALL_BOOT_FILES
++	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
++		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
++	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
++		$(BINARIES_DIR)/efi-part/startup.nsh
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
++		$(BINARIES_DIR)/efi-part/loader/loader.conf
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
++		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
++endef
++
++else
++SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++endif # BR2_PACKAGE_SYSTEMD_BOOT == y
++
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+@@ -362,6 +388,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
++define SYSTEMD_INSTALL_IMAGES_CMDS
++	$(SYSTEMD_INSTALL_BOOT_FILES)
++endef
++
+ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
+-- 
+2.7.4
