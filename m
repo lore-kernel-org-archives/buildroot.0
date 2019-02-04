@@ -1,113 +1,168 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  4 Feb 2019 10:58:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/python-docker: bump version to 3.5.1
-In-Reply-To: <20190204095824.18792-1-peter@korsgaard.com>
-References: <20190204095824.18792-1-peter@korsgaard.com>
-Message-ID: <20190204095824.18792-2-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 4 Feb 2019 03:59:28 -0600
+Subject: [Buildroot] [PATCH v4 0/3] OpenJDK: new package and tests
+In-Reply-To: <20190204085610.66064-1-aduskett@gmail.com>
+References: <20190204085610.66064-1-aduskett@gmail.com>
+Message-ID: <CANQCQpaP=Uxvk7Y=87LBF6wJB-AaqVv__yWNFwrb7_NuTYGOxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pypi now proves a sha256 hash as well.
+Romain,
 
-Drop 0001-setup.py-make-pip-optional.patch as upstream has now completely
-removed the docker-py checks:
 
-https://github.com/docker/docker-py/commit/accb9de52f6e383ad0335807f73c8c35bd6e7426
+On Mon, Feb 4, 2019 at 2:56 AM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+>
+> This patch series adds OpenJDK and an updated testing framework to BuildRoot.
+>
+> A previous patch series for OpenJDK8 used the JDK Muricle page to download a
+> tarball. Instead, what I have chosen to do is use the AdoptOpenJDK GitHub
+> repository. This repository allows us to use the GitHub macro instead of trying
+> to provide a nasty workaround when grabbing the source code.
+>
+> With this patch series, there are some quirks that I would like to detail:
+>
+> - The openjdk-bin package:
+> From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#boot-jdk-requirements
+> "Paradoxically, building OpenJDK requires a pre-existing JDK. This is called
+> the "boot JDK." The boot JDK does not have to be OpenJDK, though. If you are
+> porting OpenJDK to a new platform, the chances are that there already exists
+> another JDK for that platform that is usable as boot JDK.
+>
+> The rule of thumb is that the boot JDK for building JDK major version N should
+> be a JDK of major version N-1, so for building JDK 9, a JDK 8 would be suitable
+> as boot JDK."
+>
+> This paradox causes an issue because every distribution I have used comes with
+> JDK8 by default. So there are two solutions that I could come up with:
+> 1) Require the host-system to have JDK N-1
+> 2) Grab the convenient and easy to install binaries from the AdoptOpenJDK
+>    repository, and use those binaries as the boot-jdk.
+>
+> - JDK >= 10 requires X11, even if building a headless version.
+>   It's unfortunate, but there isn't anything I cared to do about it.
+>
+> - Running "make install" installs the entire JDK to the target directory,
+>   which is why INSTALL_TARGET is manual.
+>
+> - The OpenJDK package:
+>
+> - Depending on !BR2_SOFT_FLOAT
+> From http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#building-for-armaarch64
+> "Note that soft-float ABIs are no longer properly supported on OpenJDK."
+> Yes, it compiles as of right now, but I don't want to have to help people with
+> possible ASM java bugs because they wanted to use a processor without an FPU.
+>
+> - Requiring GLIBC
+> OpenJDK could probably build against uClibc with a few patches, but I decided
+> against going through the effort of doing so. My reasoning is that uClibc
+> advertises itself as a small C library, however, at this time, OpenJDK comes in
+> at over 100MB for a minimal install. So the few megabytes saved by using uClibc
+> probably isn't going to be a concern for anybody wanting to use Java on their
+> embedded environment.
+>
+> - Other thoughts:
+> It is possible to use fine-grained make targets when building OpenJDK, check out
+> http://hg.openjdk.java.net/jdk10/jdk10/raw-file/tip/common/doc/building.html#using-fine-grained-make-targets.
+> Perhaps in the future, BuildRoot could have Java setup just like PHP or Python,
+> with a large selection of modules to build? This fine-grained build could
+> potentially save a massive amount of space.
+>
+> Perhaps in the future, a patch set that removes the X11/Alsa/cups dependencies
+> can be added.
+>
+> In addition to the OpenJDK patches, Matt Webber, Daniel Leach and
+> Ricardo Martincoski extended the testing framework to allow for a more
+> flexible and comprehensive testing environment. The first of which is to test
+> OpenJDK by running a simple "Hello world" application.
+>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-setup.py-make-pip-optional.patch          | 50 ----------------------
- package/python-docker/python-docker.hash           |  6 +--
- package/python-docker/python-docker.mk             |  4 +-
- 3 files changed, 5 insertions(+), 55 deletions(-)
- delete mode 100644 package/python-docker/0001-setup.py-make-pip-optional.patch
+Romain, thought I'd mention we are working on a follow-on series which
+uses Valentin's LLVM work to do Just In Time(JIT) for openJDK!
 
-diff --git a/package/python-docker/0001-setup.py-make-pip-optional.patch b/package/python-docker/0001-setup.py-make-pip-optional.patch
-deleted file mode 100644
-index d9c958311d..0000000000
---- a/package/python-docker/0001-setup.py-make-pip-optional.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 978643b7222db66837d39037f884be01fb9af234 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Fri, 9 Mar 2018 18:40:16 +0100
--Subject: [PATCH] setup.py: make pip optional
--
--pip may not be available on the build host, and it is only used to check if
--docker-py is already installed, so skip the check if pip isn't available.
--
--[Upstream-status: submitted (https://github.com/docker/docker-py/pull/1948)]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- setup.py | 20 ++++++++++++--------
-- 1 file changed, 12 insertions(+), 8 deletions(-)
--
--diff --git a/setup.py b/setup.py
--index 271d94f..c9b91a3 100644
----- a/setup.py
--+++ b/setup.py
--@@ -5,16 +5,20 @@ import codecs
-- import os
-- import sys
-- 
---import pip
---
-- from setuptools import setup, find_packages
-- 
---if 'docker-py' in [x.project_name for x in pip.get_installed_distributions()]:
---    print(
---        'ERROR: "docker-py" needs to be uninstalled before installing this'
---        ' package:\npip uninstall docker-py', file=sys.stderr
---    )
---    sys.exit(1)
--+try:
--+    import pip
--+
--+    if 'docker-py' in \
--+            [x.project_name for x in pip.get_installed_distributions()]:
--+        print(
--+            'ERROR: "docker-py" needs to be uninstalled before installing this'
--+            ' package:\npip uninstall docker-py', file=sys.stderr
--+        )
--+        sys.exit(1)
--+except ImportError:
--+    pass
-- 
-- ROOT_DIR = os.path.dirname(__file__)
-- SOURCE_DIR = os.path.join(ROOT_DIR)
---- 
--2.11.0
--
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
-index e811d3a8ac..37fda94f0b 100644
---- a/package/python-docker/python-docker.hash
-+++ b/package/python-docker/python-docker.hash
-@@ -1,4 +1,4 @@
--# md5 from https://pypi.python.org/pypi/docker/json, sha256 locally computed
--md5	981b23b41fd2346efcae977244b7188e  docker-3.1.4.tar.gz
--sha256	753251b142d56f243fba53ba321a37740a6b6583c528437f45df4d28ba3d4d5d  docker-3.1.4.tar.gz
-+# md5 and sha256 from https://pypi.python.org/pypi/docker/json
-+md5	496237b9e0826eff8436b1a786943a86  docker-3.5.1.tar.gz
-+sha256	fbe82af9b94ccced752527c8de07fa20267f9634b48674ba478a0bb4000a0b1e  docker-3.5.1.tar.gz
- sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
-index 6a818ebaed..01ae2da9be 100644
---- a/package/python-docker/python-docker.mk
-+++ b/package/python-docker/python-docker.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOCKER_VERSION = 3.1.4
-+PYTHON_DOCKER_VERSION = 3.5.1
- PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
--PYTHON_DOCKER_SITE = https://pypi.python.org/packages/7f/22/fd6e97c99a512f74d46dab2b450fe370eb2f83404ef790298e3fd012cd5c
-+PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/b1/4f/d4f646843335430701d459fea08b0285a2c0a364150dd5b9c5f27f723121
- PYTHON_DOCKER_SETUP_TYPE = setuptools
- PYTHON_DOCKER_LICENSE = Apache-2.0
- PYTHON_DOCKER_LICENSE_FILES = LICENSE
+>
+> Comments and critiques are always welcome!
+>
+> Adam
+>
+> Daniel J. Leach (1):
+>   support/testing: openjdk hello world
+>
+> Adam Duskett (5):
+>   openjdk-bin: new package
+>   openjdk: new package
+>
+> Adam Duskett (3):
+>   openjdk-bin: new package
+>   openjdk: new package
+>   openjdk-hello-world: new test
+>
+>  .gitlab-ci.yml                                |   1 +
+>  DEVELOPERS                                    |   3 +
+>  package/Config.in                             |   1 +
+>  package/openjdk-bin/openjdk-bin.hash          |   6 +
+>  package/openjdk-bin/openjdk-bin.mk            |  23 +++
+>  package/openjdk/Config.in                     |  58 ++++++++
+>  package/openjdk/openjdk.hash                  |   3 +
+>  package/openjdk/openjdk.mk                    | 135 ++++++++++++++++++
+>  .../package/br2-external/openjdk/Config.in    |   1 +
+>  .../br2-external/openjdk/external.desc        |   1 +
+>  .../package/br2-external/openjdk/external.mk  |   1 +
+>  .../package/openjdk-hello-world/Config.in     |  26 ++++
+>  .../openjdk-hello-world/HelloWorld.java       |   8 ++
+>  .../openjdk-hello-world.mk                    |  18 +++
+>  support/testing/tests/package/test_openjdk.py |  42 ++++++
+>  15 files changed, 327 insertions(+)
+>  create mode 100644 package/openjdk-bin/openjdk-bin.hash
+>  create mode 100644 package/openjdk-bin/openjdk-bin.mk
+>  create mode 100644 package/openjdk/Config.in
+>  create mode 100644 package/openjdk/openjdk.hash
+>  create mode 100644 package/openjdk/openjdk.mk
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+>  create mode 100644 support/testing/tests/package/test_openjdk.py
+>
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.11.0
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
