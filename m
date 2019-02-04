@@ -1,62 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 11:24:11 +0100
-Subject: [Buildroot] [PATCH] Add KF5 package kcoreaddons
-In-Reply-To: <20190204095112.2411-1-yann.morin.1998@free.fr>
-References: <20190204095112.2411-1-yann.morin.1998@free.fr>
-Message-ID: <20190204112411.60e01ae7@windsurf>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  4 Feb 2019 11:17:25 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and enable
+ SRI
+Message-ID: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: James Hilliard <james.hilliard1@gmail.com>
 
-On Mon,  4 Feb 2019 10:51:12 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Some of our cdn's are going discontinued (rawgit) and some others are
+not recommended anymore, thus we update to the recommended cdnjs.
+This patch enables also SRI protection on js to be sure the modules we
+download are not manipulated in any way.
 
-> From: Pierre Ducroquet <pinaraf@pinaraf.info>
-> 
-> KCoreAddons provides classes built on top of QtCore to perform various tasks such as
-> manipulating mime types, autosaving files, creating backup files, generating random
-> sequences, performing text manipulations such as macro replacement, accessing
-> user information and many more.
-> 
-> Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
-> [yann.morin.1998 at free.fr + titouan.christophe at railnova.eu:
->   - add missing qt5tools select
->   - fix hash for new version
->   - fix check-package
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  package/kf5/Config.in                            |  1 +
->  package/kf5/kf5-kcoreaddons/Config.in            | 14 ++++++++++++++
->  package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash |  2 ++
->  package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk   | 16 ++++++++++++++++
->  4 files changed, 33 insertions(+)
->  create mode 100644 package/kf5/kf5-kcoreaddons/Config.in
->  create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.hash
->  create mode 100644 package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+[v1 -> v2]:
+* Fixing wrong CDN for bootswatch
+* Fixing commit message
 
-Applied with the following changes:
+ docs/website/footer.html | 6 +++---
+ docs/website/header.html | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-    [Thomas:
-     - fix typo in LICENSE_FILE -> LICENSE_FILES
-     - add hash for license file
-     - change license to LGPL-2.1 instead of LGPL-2.1+, since at least one
-       file says "2.1" without the "or later" option, and so saying just
-       LGPL-2.1 is the safe choice
-    ]
-
-Also, note that the commit title was not correct, so I've adjusted that
-as well.
-
-Thanks,
-
-Thomas
+diff --git a/docs/website/footer.html b/docs/website/footer.html
+index 2811fc5..5b18047 100644
+--- a/docs/website/footer.html
++++ b/docs/website/footer.html
+@@ -1,6 +1,6 @@
+-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+-	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha256-Daf8GuI2eLKHJlOWLRR/zRy9Clqcj4TUSumbxYH9kGI=" crossorigin="anonymous"></script>
+ 	<script type="text/javascript" src="js/buildroot.js"></script>
+ </body>
+ </html>
+diff --git a/docs/website/header.html b/docs/website/header.html
+index ef6724f..f09c232 100644
+--- a/docs/website/header.html
++++ b/docs/website/header.html
+@@ -10,12 +10,12 @@
+ 
+ 	<title>Buildroot - Making Embedded Linux Easy</title>
+ 
+-	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
++	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
+ 	<link href="css/main.css" rel="stylesheet">
+ 
+ 	<!--[if lt IE 9]>
+-	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+-	  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha256-jHqcBHBWM2erADB7T7m7MFLQon8LlOY7ncC7jDaUScs=" crossorigin="anonymous"></script>
++	  <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.min.js" integrity="sha256-g2lnLPqUkGXj7GDW+Zy47+O2ph+Ur1cmtdklVqkj+kg=" crossorigin="anonymous"></script>
+ 	<![endif]-->
+ </head>
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
