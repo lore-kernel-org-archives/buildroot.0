@@ -1,64 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 13:22:55 +0100
-Subject: [Buildroot] [git commit] dependencies.sh: Check for a host python
- version >= 2.7
-Message-ID: <20190204122342.33B6F83848@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 13:26:24 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/sg3_utils: add host build
+In-Reply-To: <1549282146-5745-2-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1549282146-5745-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1549282146-5745-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20190204132624.6da7105e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6809f38351425bd3c407a54e19cf4facdab7db60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  4 Feb 2019 06:09:06 -0600
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-Older distributions such as CentOS6 come with python2.6, which causes build
-failures in packages such as host-libglib2 because they require python2.7 and
-above.
+> Initially used by the host build of the utp_com package
 
-host-libglib2 will produce the error message:
-/bin/sh: python2.7: command not found
+So it should be PATCH 1/2 in the series.
 
-Python2.7 is a hard-coded value in configure.ac. If one changes the value to
-just "python," the following stack trace is produced:
-
-Traceback (most recent call last):
-  File "./gdbus-2.0/codegen/gdbus-codegen.in", line 55, in <module>
-    self.outfile.write(LICENSE_STR.format(config.VERSION))
-ValueError    : sys.exit(codegen_main.codegen_main())
-zero length field name in format
-
-Instead of supporting an ancient version of Python that had its support ended
-in October os 2013, it would be more pragmatic only to support Python2.7 and
-above.
-
-Luckily; CentOS6 has the centos-release-scl repository, which allows users to
-install python2.7, and Debian 8 comes with Python2.7 already, making this patch
-relatively low impact.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[Peter: only look at major.minor to handle x.y.z with z < 10]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 58c34d880f..826874baa2 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -181,6 +181,14 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
- 
-+# Check that the python version is at least 2.7
-+PYTHON_VERSION=$(python -V 2>&1 |awk '{ split($2, v, "."); print v[1] v[2] }')
-+if [ $PYTHON_VERSION -lt 27 ]; then
-+	echo
-+	echo "You have '$(python -V 2>&1)' installed.  Python >= 2.7 is required"
-+	exit 1;
-+fi
-+
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
