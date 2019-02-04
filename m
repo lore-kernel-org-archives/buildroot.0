@@ -1,186 +1,38 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 04 Feb 2019 14:08:31 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: fix build on mips32
-In-Reply-To: <20190129144658.12069-1-fontaine.fabrice@gmail.com>
-References: <20190129144658.12069-1-fontaine.fabrice@gmail.com>
-Message-ID: <1549285711.7318.41.camel@railnova.eu>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  4 Feb 2019 07:10:22 -0600
+Subject: [Buildroot] [PATCH v4 1/2] package/sg3_utils: add host build
+Message-ID: <1549285823-41193-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Initially used by the host build of the utp_com package
 
-On Tue, 2019-01-29 at 15:46 +0100, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/e484bc976266633029b26c8e219
-> 59ae4e9137da3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+Changes
 
-> ---
->  ...ev_t-var-to-device_path_parse_major_minor.patch | 116
-> +++++++++++++++++++++
->  1 file changed, 116 insertions(+)
->  create mode 100644 package/systemd/0013-Pass-separate-dev_t-var-to-
-> device_path_parse_major_minor.patch
-> 
-> diff --git a/package/systemd/0013-Pass-separate-dev_t-var-to-
-> device_path_parse_major_minor.patch b/package/systemd/0013-Pass-
-> separate-dev_t-var-to-device_path_parse_major_minor.patch
-> new file mode 100644
-> index 0000000000..eb7e0a2705
-> --- /dev/null
-> +++ b/package/systemd/0013-Pass-separate-dev_t-var-to-
-> device_path_parse_major_minor.patch
-> @@ -0,0 +1,116 @@
-> +From f5855697aa19fb92637e72ab02e4623abe77f288 Mon Sep 17 00:00:00
-> 2001
-> +From: YunQiang Su <syq@debian.org>
-> +Date: Tue, 25 Dec 2018 19:01:17 +0800
-> +Subject: [PATCH] Pass separate dev_t var to
-> device_path_parse_major_minor
-> +
-> +MIPS/O32's st_rdev member of struct stat is unsigned long, which
-> +is 32bit, while dev_t is defined as 64bit, which make some problems
-> +in device_path_parse_major_minor.
-> +
-> +Don't pass st.st_rdev, st_mode to device_path_parse_major_minor,
-> +while pass 2 seperate variables. The result of stat is alos copied
-> +out into these 2 variables. Fixes: #11247
-> +
-> +[Retrieved from:
-> +https://github.com/systemd/systemd/commit/f5855697aa19fb92637e72ab02
-> e4623abe77f288]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/core/cgroup.c | 35 ++++++++++++++++++++++-------------
-> + 1 file changed, 22 insertions(+), 13 deletions(-)
-> +
-> +diff --git a/src/core/cgroup.c b/src/core/cgroup.c
-> +index 7b817dc225e..ed2f331b33e 100644
-> +--- a/src/core/cgroup.c
-> ++++ b/src/core/cgroup.c
-> +@@ -396,26 +396,31 @@ static void cgroup_xattr_apply(Unit *u) {
-> + }
-> + 
-> + static int lookup_block_device(const char *p, dev_t *ret) {
-> +-        struct stat st = {};
-> ++        dev_t rdev, dev = 0;
-> ++        mode_t mode;
-> +         int r;
-> + 
-> +         assert(p);
-> +         assert(ret);
-> + 
-> +-        r = device_path_parse_major_minor(p, &st.st_mode,
-> &st.st_rdev);
-> ++        r = device_path_parse_major_minor(p, &mode, &rdev);
-> +         if (r == -ENODEV) { /* not a parsable device node, need to
-> go to disk */
-> ++                struct stat st;
-> +                 if (stat(p, &st) < 0)
-> +                         return log_warning_errno(errno, "Couldn't
-> stat device '%s': %m", p);
-> ++                rdev = (dev_t)st.st_rdev;
-> ++                dev = (dev_t)st.st_dev;
-> ++                mode = st.st_mode;
-> +         } else if (r < 0)
-> +                 return log_warning_errno(r, "Failed to parse
-> major/minor from path '%s': %m", p);
-> + 
-> +-        if (S_ISCHR(st.st_mode)) {
-> ++        if (S_ISCHR(mode)) {
-> +                 log_warning("Device node '%s' is a character
-> device, but block device needed.", p);
-> +                 return -ENOTBLK;
-> +-        } else if (S_ISBLK(st.st_mode))
-> +-                *ret = st.st_rdev;
-> +-        else if (major(st.st_dev) != 0)
-> +-                *ret = st.st_dev; /* If this is not a device node
-> then use the block device this file is stored on */
-> ++        } else if (S_ISBLK(mode))
-> ++                *ret = rdev;
-> ++        else if (major(dev) != 0)
-> ++                *ret = dev; /* If this is not a device node then
-> use the block device this file is stored on */
-> +         else {
-> +                 /* If this is btrfs, getting the backing block
-> device is a bit harder */
-> +                 r = btrfs_get_block_device(p, ret);
-> +@@ -436,7 +441,8 @@ static int lookup_block_device(const char *p,
-> dev_t *ret) {
-> + }
-> + 
-> + static int whitelist_device(BPFProgram *prog, const char *path,
-> const char *node, const char *acc) {
-> +-        struct stat st = {};
-> ++        dev_t rdev;
-> ++        mode_t mode;
-> +         int r;
-> + 
-> +         assert(path);
-> +@@ -445,11 +451,12 @@ static int whitelist_device(BPFProgram *prog,
-> const char *path, const char *node
-> +         /* Some special handling for /dev/block/%u:%u,
-> /dev/char/%u:%u, /run/systemd/inaccessible/chr and
-> +          * /run/systemd/inaccessible/blk paths. Instead of
-> stat()ing these we parse out the major/minor directly. This
-> +          * means clients can use these path without the device node
-> actually around */
-> +-        r = device_path_parse_major_minor(node, &st.st_mode,
-> &st.st_rdev);
-> ++        r = device_path_parse_major_minor(node, &mode, &rdev);
-> +         if (r < 0) {
-> +                 if (r != -ENODEV)
-> +                         return log_warning_errno(r, "Couldn't parse
-> major/minor from device path '%s': %m", node);
-> + 
-> ++                struct stat st;
-> +                 if (stat(node, &st) < 0)
-> +                         return log_warning_errno(errno, "Couldn't
-> stat device %s: %m", node);
-> + 
-> +@@ -457,22 +464,24 @@ static int whitelist_device(BPFProgram *prog,
-> const char *path, const char *node
-> +                         log_warning("%s is not a device.", node);
-> +                         return -ENODEV;
-> +                 }
-> ++                rdev = (dev_t) st.st_rdev;
-> ++                mode = st.st_mode;
-> +         }
-> + 
-> +         if (cg_all_unified() > 0) {
-> +                 if (!prog)
-> +                         return 0;
-> + 
-> +-                return cgroup_bpf_whitelist_device(prog,
-> S_ISCHR(st.st_mode) ? BPF_DEVCG_DEV_CHAR : BPF_DEVCG_DEV_BLOCK,
-> +-                                                   major(st.st_rdev
-> ), minor(st.st_rdev), acc);
-> ++                return cgroup_bpf_whitelist_device(prog,
-> S_ISCHR(mode) ? BPF_DEVCG_DEV_CHAR : BPF_DEVCG_DEV_BLOCK,
-> ++                                                   major(rdev),
-> minor(rdev), acc);
-> + 
-> +         } else {
-> +                 char buf[2+DECIMAL_STR_MAX(dev_t)*2+2+4];
-> + 
-> +                 sprintf(buf,
-> +                         "%c %u:%u %s",
-> +-                        S_ISCHR(st.st_mode) ? 'c' : 'b',
-> +-                        major(st.st_rdev), minor(st.st_rdev),
-> ++                        S_ISCHR(mode) ? 'c' : 'b',
-> ++                        major(rdev), minor(rdev),
-> +                         acc);
-> + 
-> +                 /* Changing the devices list of a populated cgroup
-> might result in EINVAL, hence ignore EINVAL here. */
+v4
+[Thomas
+ - Moved to be the first patch in the series
 
-(Note for future us: this patch should land in systemd 241, currently
-in the rc)
+v3
+ - New patch
+---
+ package/sg3_utils/sg3_utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Have a nice monday !
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index 0c17b30..b3a79d6 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -51,3 +51,4 @@ SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+1.9.1
