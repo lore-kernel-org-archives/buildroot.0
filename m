@@ -1,54 +1,38 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 4 Feb 2019 13:39:44 +0100
-Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
- enable SRI
-In-Reply-To: <87y36vvij1.fsf@dell.be.48ers.dk>
-References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
- <87y36vvij1.fsf@dell.be.48ers.dk>
-Message-ID: <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 4 Feb 2019 13:48:06 +0100
+Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time:
+ replace confusing colors
+In-Reply-To: <CANQCQpb-+jaQ6VdvOqQcOqbnRhjXE+5sMywG4-5qvkkXBCzazw@mail.gmail.com>
+References: <20190130201156.5927-1-patrickdepinguin@gmail.com>
+ <20190130201156.5927-2-patrickdepinguin@gmail.com>
+ <CANQCQpb-+jaQ6VdvOqQcOqbnRhjXE+5sMywG4-5qvkkXBCzazw@mail.gmail.com>
+Message-ID: <CAAXf6LWn9kxCWM4rGP6BD+ZN3feNU8Rorc7VQ9UzmtsFrDRHMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 4, 2019 at 1:35 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+El lun., 4 feb. 2019 a las 12:07, Matthew Weber
+(<matthew.weber@collins.com>) escribi?:
 >
-> >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+> Thomas De,
 >
->  > From: James Hilliard <james.hilliard1@gmail.com>
->  > Some of our cdn's are going discontinued (rawgit) and some others are
->  > not recommended anymore, thus we update to the recommended cdnjs.
->  > This patch enables also SRI protection on js to be sure the modules we
->  > download are not manipulated in any way.
+> On Wed, Jan 30, 2019 at 2:12 PM Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+> >
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> >
+> > The color for 'extract' is very similar to the one for 'install-images'.
+> > Both are cyan-like.
+> >
+> > Replace the former by a pale blue to make all colors sufficiently distinct.
+> >
+> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >
-> It would be great for people not doing web things (E.G. me) to add the
->
-> https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
->
-> to explain what SRI is.
->
-> The files we get from these CDNs are not that big, E.G:
->
-> -rw-r--r--  1 peko peko 139K May 17  2018 bootstrap.min.css
-> -rw-r--r--  1 peko peko  37K May 17  2018 bootstrap.min.js
-> -rw-r--r--  1 peko peko 2.4K May 17  2018 html5shiv.js
-> -rw-r--r--  1 peko peko  85K May 17  2018 jquery.min.js
-> -rw-r--r--  1 peko peko 4.0K May 17  2018 respond.min.js
->
-> Does it make sense to use those CDNs that we don't have under our
-> control, or should we just commit these files?
+> A bit trickier to test and get a install images with enough time to
+> visually see it :-)
 
-Hosting these files by themselves means serving them by our webserver,
-this is usually costly and bandwidth consuming.
+I spoofed the build-time.log file when testing :-)
 
-Moreover, saving a compressed javascript in git it's not recommended
-because their somewhat like binary files.
-
-Again, updating them is quite annoying cause instead of simply
-updating a line in a javascript file, we should replace the compressed
-js file.
-
->
-> --
-> Bye, Peter Korsgaard
+/Thomas
