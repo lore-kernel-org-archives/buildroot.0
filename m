@@ -1,81 +1,82 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 04 Feb 2019 14:15:23 +0100
-Subject: [Buildroot] [PATCH] Makefile: add update-defconfig target
-In-Reply-To: <20190126003406.7723-1-vivien.didelot@gmail.com>
-References: <20190126003406.7723-1-vivien.didelot@gmail.com>
-Message-ID: <1549286123.7318.44.camel@railnova.eu>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  4 Feb 2019 14:30:04 +0100
+Subject: [Buildroot] [PATCH] docs/website: fixing query.yahooapis.com
+ shutdown
+Message-ID: <1549287004-13747-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Vivien,
+This patch rework the use of query.yahooapis.com to do the conversion
+from xml to json required by our script and moves to the use of a js
+library. Datas are therefore now converted in json format on the client.
 
-Looks good and makes sense
+Unfortunately, cause of the CORS restriction on nabble and
+buildroot.org, we cannot retrieve directly the xml data from these
+servers and we need a CORS proxy to do that.
 
-On Fri, 2019-01-25 at 19:34 -0500, Vivien Didelot wrote:
-> For symmetry with the Kconfig-based packages offering comprehensive
-> targets like linux-update-defconfig, barebox-update-defconfig and so
-> on, add a new top level update-defconfig target to run savedefconfig.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+I'm in contact with anbble system administrator to give us access to
+cors request for their mailing archive so hopefully we can remove the
+call to an external service in a not so distant future.
 
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ docs/website/footer.html     |  1 +
+ docs/website/js/buildroot.js | 19 +++++++++----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-> ---
->  Makefile | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index dd8cc7a9ae..3a2f74be69 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -151,7 +151,7 @@ nobuild_targets := source %-source \
->  	clean distclean help show-targets graph-depends \
->  	%-graph-depends %-show-depends %-show-version \
->  	graph-build graph-size list-defconfigs \
-> -	savedefconfig printvars
-> +	savedefconfig update-defconfig printvars
->  ifeq ($(MAKECMDGOALS),)
->  BR_BUILDING = y
->  else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-> @@ -959,13 +959,15 @@ define percent_defconfig
->  endef
->  $(eval $(foreach d,$(call reverse,$(TOPDIR)
-> $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
->  
-> +update-defconfig: savedefconfig
-> +
->  savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
->  	@$(COMMON_CONFIG_ENV) $< \
->  		--savedefconfig=$(if
-> $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
->  		$(CONFIG_CONFIG_IN)
->  	@$(SED) '/BR2_DEFCONFIG=/d' $(if
-> $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
->  
-> -.PHONY: defconfig savedefconfig
-> +.PHONY: defconfig savedefconfig update-defconfig
->  
->  ####################################################################
-> ############
->  #
-> @@ -1047,6 +1049,7 @@ help:
->  	@echo '  defconfig              - New config with default
-> answer to all options;'
->  	@echo '                             BR2_DEFCONFIG, if set on
-> the command line, is used as input'
->  	@echo '  savedefconfig          - Save current config to
-> BR2_DEFCONFIG (minimal config)'
-> +	@echo '  update-defconfig       - Same as savedefconfig'
->  	@echo '  allyesconfig           - New config where all
-> options are accepted with yes'
->  	@echo '  allnoconfig            - New config where all
-> options are answered with no'
->  	@echo '  alldefconfig           - New config where all
-> options are set to default'
-
-Have a nice Monday,
-
-Titouan
+diff --git a/docs/website/footer.html b/docs/website/footer.html
+index 5b18047..820c269 100644
+--- a/docs/website/footer.html
++++ b/docs/website/footer.html
+@@ -1,6 +1,7 @@
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha256-Daf8GuI2eLKHJlOWLRR/zRy9Clqcj4TUSumbxYH9kGI=" crossorigin="anonymous"></script>
++	<script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js" integrity="sha384-pEpOtyRrTt7XzQzg30fXkhig417px5mP0UbPdI8mjl2KehUX2bDT807mfjJkg1H2" crossorigin="anonymous"></script>
+ 	<script type="text/javascript" src="js/buildroot.js"></script>
+ </body>
+ </html>
+diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
+index ec28cbb..fa5ad9a 100644
+--- a/docs/website/js/buildroot.js
++++ b/docs/website/js/buildroot.js
+@@ -1,17 +1,16 @@
+ function load_activity(feedurl, divid) {
+-    var yqlURL = "https://query.yahooapis.com/v1/public/yql";
+-    var yqlQS = "?q=select%20entry%20from%20xml%20where%20url%20%3D%20'";
+-    var yqlOPTS = "'%20limit%2010&format=json&callback=";
+     var container = document.getElementById(divid);
+-    var url = yqlURL + yqlQS + encodeURIComponent(feedurl) + yqlOPTS;
+-
+-    $.getJSON(url, function(data){
+-        var result = data.query.results;
++    $.ajax({
++      url: "https://cors.io/?" + feedurl
++    })
++    .done(function(data){
++        var x2js = new X2JS();
++        var result = x2js.xml_str2json(data);
+         var loaded = 0;
+         var nb_display = 8;
+         if (result==null) return;
+-        for (var i = 0; i < result.feed.length; i++) {
+-            var entry = result.feed[i].entry;
++        for (var i = 0; i < result.feed.entry.length; i++) {
++            var entry = result.feed.entry[i];
+             if (entry.title.indexOf("git commit") != -1)
+                 continue;
+             loaded += 1;
+@@ -24,7 +23,7 @@ function load_activity(feedurl, divid) {
+             var text = document.createTextNode(data);
+             link.appendChild(text);
+             link.title = entry.title;
+-            link.href = entry.link.href;
++            link.href = entry.link._href;
+             div.appendChild(link);
+             container.appendChild(div);
+         }
+-- 
+2.7.4
