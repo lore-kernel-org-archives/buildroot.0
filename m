@@ -1,30 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 13:24:17 +0100
-Subject: [Buildroot] [PATCH v3 2/2] prerequisite.txt: Bump python
- dependency to 2.7
-In-Reply-To: <20181216232734.100068-2-aduskett@gmail.com>
- (aduskett@gmail.com's message of "Sun, 16 Dec 2018 18:27:34 -0500")
-References: <20181216232734.100068-1-aduskett@gmail.com>
- <20181216232734.100068-2-aduskett@gmail.com>
-Message-ID: <874l9jwxla.fsf@dell.be.48ers.dk>
+Date: Mon, 4 Feb 2019 13:23:32 +0100
+Subject: [Buildroot] [git commit] prerequisite.txt: Bump python dependency
+ to 2.7
+Message-ID: <20190204122342.3A5D483848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e09d29e62f236b9480653d3e8cbef3035a8fde80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Adam Duskett <Aduskett@gmail.com>
- > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- > ---
- > Changes v1 -> v2:
- >   - Added this patch to the patch series.
+We now require python 2.7+, so update prerequisite.txt to match.
 
- > Changes v2 -> v3:
- >   - None.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/prerequisite.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 66e1b88f16..dcd3fd255e 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -32,7 +32,7 @@ between distributions).
+ ** +perl+ (version 5.8.7 or any later)
+ ** +tar+
+ ** +cpio+
+-** +python+ (version 2.6 or any later)
++** +python+ (version 2.7 or any later)
+ ** +unzip+
+ ** +rsync+
+ ** +file+ (must be in +/usr/bin/file+)
