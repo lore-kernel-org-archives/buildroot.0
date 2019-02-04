@@ -1,93 +1,58 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 4 Feb 2019 12:58:08 -0600
-Subject: [Buildroot] [git commit] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20190204155559.02D428385C@busybox.osuosl.org>
-References: <20190204155559.02D428385C@busybox.osuosl.org>
-Message-ID: <CANQCQpYFv3Gt_dkg_T_7ppb1Fiy8JmXsHX6pDrGvJzZrZOvRhg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  4 Feb 2019 20:00:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zbar: bump to version
+ 57d601e82089f2f31de9e1683c3834f237421f5d
+Message-ID: <20190204190015.30321-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+When building statically zbar, build fails on:
+configure: error: unable to find libv4l.so
 
-On Mon, Feb 4, 2019 at 9:57 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> commit: https://git.buildroot.net/buildroot/commit/?id=e5e0f637aba9e926c0420ce6e343b734b968d883
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> ld-*.so and libpthread*.so* are not stripped in the same way as other
-> binaries because some applications need symbols in these libraries in
-> order to operate correctly.
->
-> However, the special handling for these binaries ignores the usual
-> BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
-> has debugging symbols in these binaries.
->
-> Pull out the common find functionality so that we can build two find
-> commands that re-use the common exclusion rules.
->
-> Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: John Keeping <john@metanate.com>
-> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  Makefile | 46 ++++++++++++++++++++++++++--------------------
->  1 file changed, 26 insertions(+), 20 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 74240ab895..355a404e04 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -613,20 +613,37 @@ RSYNC_VCS_EXCLUSIONS = \
->         --exclude .svn --exclude .git --exclude .hg --exclude .bzr \
->         --exclude CVS
->
-> -STRIP_FIND_CMD = find $(TARGET_DIR)
-> -ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-> -STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-> -endif
-> -STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
-> -# file exclusions:
-> +# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-> +# BR2_STRIP_EXCLUDE_FILES
-> +STRIP_FIND_COMMON_CMD = \
-> +       find $(TARGET_DIR) \
-> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
-> +               \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
-> +               -prune -o \
-> +       ) \
-> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-> +               -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
-> +
-> +# Regular stripping for everything, except libpthread, ld-*.so and
-> +# kernel modules:
->  # - libpthread.so: a non-stripped libpthread shared library is needed for
->  #   proper debugging of pthread programs using gdb.
->  # - ld.so: a non-stripped dynamic linker library is needed for valgrind
->  # - kernel modules (*.ko): do not function properly when stripped like normal
->  #   applications and libraries. Normally kernel modules are already excluded
-> -#   by the executable permission check above, so the explicit exclusion is only
-> +#   by the executable permission check, so the explicit exclusion is only
->  #   done for kernel modules with incorrect permissions.
-> -STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
-> +STRIP_FIND_CMD = \
-> +       $(STRIP_FIND_COMMON_CMD) \
-> +       -type f \( -perm /111 -o -name '*.so*' \) \
-> +       -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
-> +       -print0
-> +
-> +# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-> +STRIP_FIND_SPECIAL_LIBS_CMD = \
-> +       $(STRIP_FIND_COMMON_CMD) \
-> +       \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
+The following errors are raised in config.log:
+configure:19371:
+/home/buildroot/buildroot-test/instance-0/output/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g2  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lv4l2 -lpthread  >&5
+/home/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libv4l2.a(libv4l2_la-libv4l2.o): In function `v4l2_set_src_and_dest_format':
+/home/buildroot/buildroot-test/instance-0/output/build/libv4l-1.16.2/lib/libv4l2/libv4l2.c:952: undefined reference to `v4lconvert_supported_dst_format'
 
-The answer to you question about needing to strip libpthread for only
-glibc is true.  I did poke around a bit and checked if libthread_db
-needed symbols and verified it can be stripped.  Do you think a noted
-should be added to state the libpthread stripping detail?
+To fix this error, bump to version
+57d601e82089f2f31de9e1683c3834f237421f5d to replace AC_CHECK_LIB by
+PKG_CHECK_MODULES to find the correct library (-lv4lconvert but also
+-ljpeg, ...)
 
-Matt
+Fixes:
+ - http://autobuild.buildroot.org/results/acf39e4754508d7ee49e21f08ff0a1fcac4fb7cd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/zbar/zbar.hash | 2 +-
+ package/zbar/zbar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
+index dcad1bd55c..6735bc67d6 100644
+--- a/package/zbar/zbar.hash
++++ b/package/zbar/zbar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 fac99e835c4ced03a5a3d9c94c99aea118aef9663ed86a0ac45c9b7162dac4b1 zbar-b3b4e32b55f570372fc3af473e51f0a13ee57869.tar.gz
++sha256 94c71c6110c705f07ba5ba2803583d09b3853e8773169c86bdcf831443156aaa zbar-57d601e82089f2f31de9e1683c3834f237421f5d.tar.gz
+ sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index fd56e94e70..6df069e001 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZBAR_VERSION = b3b4e32b55f570372fc3af473e51f0a13ee57869
++ZBAR_VERSION = 57d601e82089f2f31de9e1683c3834f237421f5d
+ ZBAR_SITE = git://linuxtv.org/zbar.git
+ ZBAR_LICENSE = LGPL-2.1+
+ ZBAR_LICENSE_FILES = LICENSE
+-- 
+2.14.1
