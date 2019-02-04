@@ -1,51 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Feb 2019 19:03:30 +0100
-Subject: [Buildroot] [git commit] libtommath: bump to version 1.1.0
-Message-ID: <20190204180231.E923D8077E@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 4 Feb 2019 19:05:26 +0100
+Subject: [Buildroot] [PATCH] store debug information in
+ $HOST_DIR/lib/debug
+In-Reply-To: <20190204175809.7b710934@windsurf>
+References: <20190123131539.24699-1-Gerhard@Heift.Name>
+ <20190204175809.7b710934@windsurf>
+Message-ID: <CAAXf6LW961NpVPtOUbmoi4oJeqmtqYWPA8V7FwQP6ztAXdJAKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=855a8f057e63d2a888640ccfb2521d7c9ea8b7c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+El lun., 4 feb. 2019 a las 17:58, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello Gerhard,
+>
+> Thanks for this contribution. I'm adding in Cc a few other people to
+> hopefully get their attention.
+>
+> On Wed, 23 Jan 2019 14:15:39 +0100
+> Gerhard Heift <gerhard@heift.name> wrote:
+>
+> > Before striping the binaries in $TARGET_DIR, the debug information is saved to
+> > $HOST_DIR/lib/debug using the following command as described in [1]:
+> >
+> >   $ objcopy --only-keep-debug --compress-debug-sections $file
+> >
+> > This allows remote debugging as described in section 8.12.2 with striped
+> > binaries in the final image. Therefore the build ID is included during the build
+> > process, if debug information is enabled via BR2_ENABLE_DEBUG.
+> >
+> > [1] https://sourceware.org/gdb/onlinedocs/gdb/Separate-Debug-Files.html
+> >
+> > Signed-off-by: Gerhard Heift <Gerhard@Heift.Name>
+>
+> When you build with BR2_ENABLE_DEBUG=y and BR2_STRIP_strip=y, all the
+> libraries in $(STAGING_DIR) are installed with debugging symbols, and
+> they are not stripped.
+>
+> As explained in our manual section 8.12.2, we provide a gdbinit that
+> tells gdb to look in $(STAGING_DIR) for debugging symbols.
+>
+> Your patch has the effect of duplicating the debugging symbols: they
+> are already in $(STAGING_DIR), and they will now be duplicated in
+> $(HOST_DIR)/lib/debug. The only benefit that I can see is that the
+> gdbinit file is no longer needed because gdb will automatically look in
+> $(HOST_DIR)/lib/debug. But that can probably be resolved by making
+> $(HOST_DIR)/lib/debug a symlink to $(STAGING_DIR). Could you try this
+> instead ?
 
-The library was re-licensed to The Unlicense (https://unlicense.org/),
-more details on https://www.libtom.net/news/LTM_1.1.0RC1/
+The difference that this patch brings is that now also binaries can be
+debugged based from the target directory, i.e. you don't need to find
+the binary in output/build/foo-version/somewhere/.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtommath/libtommath.hash | 5 ++++-
- package/libtommath/libtommath.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Today, the staging directory only contains packages that explicitly
+set FOO_INSTALL_STAGING = YES, which is typically only done for
+libraries.
 
-diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
-index 359dfeda3c..75aa7c7f18 100644
---- a/package/libtommath/libtommath.hash
-+++ b/package/libtommath/libtommath.hash
-@@ -1,2 +1,5 @@
- # Locally computed
--sha256 47032fb39d698ce4cf9c9c462c198e6b08790ce8203ad1224086b9b978636c69  ltm-1.0.1.tar.xz
-+sha256 90466c88783d1fe9f5c2364a69f5479f10d73ed616011be6196f35f7f1537ead  ltm-1.1.0.tar.xz
-+
-+# Hashes for license files:
-+sha256 2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  LICENSE
-diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
-index ceb2e6846c..36e7a89e6b 100644
---- a/package/libtommath/libtommath.mk
-+++ b/package/libtommath/libtommath.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--LIBTOMMATH_VERSION = 1.0.1
-+LIBTOMMATH_VERSION = 1.1.0
- LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
- LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
--LIBTOMMATH_LICENSE = WTFPL
-+LIBTOMMATH_LICENSE = Unlicense
- LIBTOMMATH_LICENSE_FILES = LICENSE
- LIBTOMMATH_INSTALL_STAGING = YES
- LIBTOMMATH_INSTALL_TARGET = NO  # only static library
+Best regards,
+Thomas
