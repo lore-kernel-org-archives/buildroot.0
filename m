@@ -1,155 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Feb 2019 16:52:33 +0100
-Subject: [Buildroot] [PATCH v5 04/10] testing/tests/download: add git
- hash test
-In-Reply-To: <20180512025833.22998-5-ricardo.martincoski@gmail.com>
-References: <20180512025833.22998-1-ricardo.martincoski@gmail.com>
- <20180512025833.22998-5-ricardo.martincoski@gmail.com>
-Message-ID: <3493f835-d2c0-5d07-b33a-9bfd746b57d8@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 16:58:17 +0100
+Subject: [Buildroot] [git commit] package/bird: bump version to 2.0.3
+Message-ID: <20190204160440.DEF9783A31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ricardo,
+commit: https://git.buildroot.net/buildroot/commit/?id=73f0c6c899361caf489adf796697f2534bcbc93b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I'll apply this today, but I have some comment...
+Patch 0001 is no longer needed as it has been ported to this version.
+Also, the README changes but the licence is still GPL-2.0+
 
-On 12/05/2018 04:58, Ricardo Martincoski wrote:
-[snip]
->  support/testing/tests/download/gitremote.py   |  44 ++++++++++++++++++
->  support/testing/tests/download/test_git.py    |  43 +++++++++++++++++
+Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...e.in-fix-installation-with-disable-client.patch | 41 ----------------------
+ package/bird/bird.hash                             |  4 +--
+ package/bird/bird.mk                               |  6 ++--
+ 3 files changed, 4 insertions(+), 47 deletions(-)
 
- flake8 says:
-
-support/testing/tests/download/gitremote.py:5:1: I100 Import statements are in
-the wrong order. 'import infra' should be before 'import pexpect' and in a
-different group.
-support/testing/tests/download/test_git.py:4:1: I100 Import statements are in
-the wrong order. 'from gitremote import GitRemote' should be before 'import
-infra' and in a different group.
-support/testing/tests/download/test_git.py:4:1: I201 Missing newline between
-import groups. 'from gitremote import GitRemote' is identified as Third Party
-and 'import infra' is identified as Third Party.
-
- I fixed this while applying.
-
-[snip]
-> diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
-> new file mode 100644
-> index 0000000000..60bc49fbf8
-> --- /dev/null
-> +++ b/support/testing/tests/download/gitremote.py
-> @@ -0,0 +1,44 @@
-> +# subprocess does not kill the child daemon when a test case fails by raising
-> +# an exception. So use pexpect instead.
-> +import pexpect
-> +
-> +import infra
-> +
-> +GIT_REMOTE_PORT_INITIAL = 9418
-> +GIT_REMOTE_PORT_LAST = GIT_REMOTE_PORT_INITIAL + 99
-> +
-> +
-> +class GitRemote(object):
-> +    def __init__(self, builddir, serveddir, logtofile):
-> +        """
-> +        Start a local git server.
-> +
-> +        In order to support test cases in parallel, select the port the
-> +        server will listen to in runtime. Since there is no reliable way
-> +        to allocate the port prior to starting the server (another
-> +        process in the host machine can use the port between it is
-> +        selected from a list and it is really allocated to the server)
-> +        try to start the server in a port and in the case it is already
-> +        in use, try the next one in the allowed range.
-> +        """
-> +        self.daemon = None
-> +        self.port = None
-> +        self.logfile = infra.open_log_file(builddir, "gitremote", logtofile)
-> +
-> +        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", "--listen=localhost", "--export-all",
-
- Line is too long. Fixed as well.
-
-> +                      "--base-path={}".format(serveddir)]
-> +        for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
-> +            cmd = daemon_cmd + ["--port={port}".format(port=port)]
-> +            self.logfile.write("> starting git remote with '{}'\n".format(" ".join(cmd)))
-> +            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile)
-> +            ret = self.daemon.expect(["Ready to rumble",
-> +                                      "Address already in use"])
-
- Shouldn't we add a timeout here, just to be safe?
-
- This can be fixed in a follow-up patch.
-
-> +            if ret == 0:
-> +                self.port = port
-> +                return
-> +        raise SystemError("Could not find a free port to run git remote")
-> +
-> +    def stop(self):
-> +        if self.daemon is None:
-> +            return
-> +        self.daemon.terminate(force=True)
-> diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
-> new file mode 100644
-> index 0000000000..14fc8e4da3
-> --- /dev/null
-> +++ b/support/testing/tests/download/test_git.py
-> @@ -0,0 +1,43 @@
-> +import os
-> +
-> +import infra
-> +from gitremote import GitRemote
-> +
-> +
-> +class GitTestBase(infra.basetest.BRTest):
-> +    config = \
-> +        """
-> +        BR2_BACKUP_SITE=""
-> +        """
-> +    gitremotedir = infra.filepath("tests/download/git-remote")
-> +    gitremote = None
-> +
-> +    def setUp(self):
-> +        super(GitTestBase, self).setUp()
-> +        self.gitremote = GitRemote(self.builddir, self.gitremotedir, self.logtofile)
-> +
-> +    def tearDown(self):
-> +        self.show_msg("Cleaning up")
-> +        if self.gitremote:
-> +            self.gitremote.stop()
-> +        if self.b and not self.keepbuilds:
-
- This is actually a bit useless, since self.b is not initialzed in
-BRTest.__init__ you'll actually get either an exception or self.b evaluates to
-True. But the same pattern is used in other places, so OK. Can be fixed in a
-follow-up patch.
-
- Regards,
- Arnout
-
-> +            self.b.delete()
-> +
-> +    def check_hash(self, package):
-> +        # store downloaded tarball inside the output dir so the test infra
-> +        # cleans it up at the end
-> +        env = {"BR2_DL_DIR": os.path.join(self.builddir, "dl"),
-> +               "GITREMOTE_PORT_NUMBER": str(self.gitremote.port)}
-> +        self.b.build(["{}-dirclean".format(package),
-> +                      "{}-source".format(package)],
-> +                     env)
-> +
-> +
-> +class TestGitHash(GitTestBase):
-> +    br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
-> +
-> +    def test_run(self):
-> +        with self.assertRaises(SystemError):
-> +            self.check_hash("bad")
-> +        self.check_hash("good")
-> +        self.check_hash("nohash")
-> 
+diff --git a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch b/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
+deleted file mode 100644
+index c0faec21b0..0000000000
+--- a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6cb15abfc00cb5e492175a9efc71bfdfd1aa457c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 9 Oct 2018 12:51:08 +0200
+-Subject: [PATCH] Makefile.in: fix installation with --disable-client
+-
+-The configure.ac script initializes the CLIENT variable this way:
+-
+-CLIENT=birdcl
+-if client enabled
+- CLIENT=$CLIENT birdc
+-fi
+-
+-This means that checking if @CLIENT@ is empty to decide whether birdc
+-should be installed or not doesn't work, and causes a failure at
+-installation time when --disable-client is passed.
+-
+-Instead, check if the birdc binary has been produced or not to decide
+-whether it should be installed.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: http://trubka.network.cz/pipermail/bird-users/2018-October/012763.html
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index c8168bbe..fea3683e 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -171,7 +171,7 @@ install: all
+- 	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/@runtimedir@
+- 	$(INSTALL_PROGRAM) $(exedir)/bird $(DESTDIR)/$(sbindir)/bird
+- 	$(INSTALL_PROGRAM) $(exedir)/birdcl $(DESTDIR)/$(sbindir)/birdcl
+--	if test -n "@CLIENT@" ; then								\
+-+	if test -f $(exedir)/birdc ; then							\
+- 		$(INSTALL_PROGRAM) $(exedir)/birdc $(DESTDIR)/$(sbindir)/birdc ;		\
+- 	fi
+- 	if ! test -f $(DESTDIR)/@CONFIG_FILE@ ; then						\
+--- 
+-2.14.4
+-
+diff --git a/package/bird/bird.hash b/package/bird/bird.hash
+index 449e8afd8d..3f3a93b964 100644
+--- a/package/bird/bird.hash
++++ b/package/bird/bird.hash
+@@ -1,2 +1,2 @@
+-sha256 bd42d48fbcc2c0046d544f1183cd98193ff15b792d332ff45f386b0180b09335  bird-v2.0.2.tar.gz
+-sha256 f018596a97af0108efc446320631e2fddc0c1d1f3ffab3129327ccdb4f0c29ed  README
++sha256 0f49b38327d3109553acfa662ac0cf0377719226a03c124cd2e0ea2265ecb1de  bird-2.0.3.tar.gz
++sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index 297e21dd95..da2f868070 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-BIRD_VERSION = v2.0.2
+-BIRD_SITE = $(call github,BIRD,bird,$(BIRD_VERSION))
++BIRD_VERSION = 2.0.3
++BIRD_SITE = ftp://bird.network.cz/pub/bird
+ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
+-# autoreconf is needed since the package is fetched from github
+-BIRD_AUTORECONF = YES
+ BIRD_DEPENDENCIES = host-flex host-bison
+ 
+ ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
