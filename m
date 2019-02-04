@@ -1,114 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 4 Feb 2019 11:22:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: bump version to 2.0.3
-In-Reply-To: <20190204091031.31600-1-adrien@gallouet.fr>
-References: <20190204091031.31600-1-adrien@gallouet.fr>
-Message-ID: <20190204092208.maeiwjvs23rtxdap@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 10:23:49 +0100
+Subject: [Buildroot] How can I install tkinter for python3 in Buildroot
+ 2018.11.x ?
+In-Reply-To: <CAD0+TpBEcnP4yOOSqCMgQgZqgXqh+4AhEH0BCfMtvmRZJPeb2w@mail.gmail.com>
+References: <CAD0+TpBEcnP4yOOSqCMgQgZqgXqh+4AhEH0BCfMtvmRZJPeb2w@mail.gmail.com>
+Message-ID: <20190204102349.6355dc61@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adrien,
+Hello,
 
-On Mon, Feb 04, 2019 at 09:10:31AM +0000, Adrien Gallou?t wrote:
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> ---
->  ...fix-installation-with-disable-client.patch | 41 -------------------
->  package/bird/bird.hash                        |  4 +-
->  package/bird/bird.mk                          |  5 ++-
->  3 files changed, 5 insertions(+), 45 deletions(-)
->  delete mode 100644 package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
+On Wed, 30 Jan 2019 09:22:12 +0100
+Fame Castle <famecastle@gmail.com> wrote:
 
-Please explain in the commit log why this patch is no longer needed.
-
+> I already enabled the tk and tcl packages inside "make menuconfig"
+> but had no luck with it. When I was using buildroot 2018.05.x, I used
+> this patch:
+> https://sourceforge.net/p/armadeus/code/ci/master/tree/patches/buildroot/2017.02/012-armadeus-add-tkinter-support-to-python.patch
+> in order to add a configuration option to python 3 which enables me
+> to include Tkinter into python3. This patch, however, has no effect
+> anymore on buildroot 2018.11.x . (I already tried changing
+> PYTHON_DEPENDENCIES to PYTHON3_DEPENDENCIES in the patch).
 > 
-> diff --git a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch b/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
-> deleted file mode 100644
-> index c0faec21b0..0000000000
-> --- a/package/bird/0001-Makefile.in-fix-installation-with-disable-client.patch
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -From 6cb15abfc00cb5e492175a9efc71bfdfd1aa457c Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -Date: Tue, 9 Oct 2018 12:51:08 +0200
-> -Subject: [PATCH] Makefile.in: fix installation with --disable-client
-> -
-> -The configure.ac script initializes the CLIENT variable this way:
-> -
-> -CLIENT=birdcl
-> -if client enabled
-> - CLIENT=$CLIENT birdc
-> -fi
-> -
-> -This means that checking if @CLIENT@ is empty to decide whether birdc
-> -should be installed or not doesn't work, and causes a failure at
-> -installation time when --disable-client is passed.
-> -
-> -Instead, check if the birdc binary has been produced or not to decide
-> -whether it should be installed.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -Upstream-status: http://trubka.network.cz/pipermail/bird-users/2018-October/012763.html
-> ----
-> - Makefile.in | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/Makefile.in b/Makefile.in
-> -index c8168bbe..fea3683e 100644
-> ---- a/Makefile.in
-> -+++ b/Makefile.in
-> -@@ -171,7 +171,7 @@ install: all
-> - 	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/@runtimedir@
-> - 	$(INSTALL_PROGRAM) $(exedir)/bird $(DESTDIR)/$(sbindir)/bird
-> - 	$(INSTALL_PROGRAM) $(exedir)/birdcl $(DESTDIR)/$(sbindir)/birdcl
-> --	if test -n "@CLIENT@" ; then								\
-> -+	if test -f $(exedir)/birdc ; then							\
-> - 		$(INSTALL_PROGRAM) $(exedir)/birdc $(DESTDIR)/$(sbindir)/birdc ;		\
-> - 	fi
-> - 	if ! test -f $(DESTDIR)/@CONFIG_FILE@ ; then						\
-> --- 
-> -2.14.4
-> -
-> diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-> index 449e8afd8d..0570373ad3 100644
-> --- a/package/bird/bird.hash
-> +++ b/package/bird/bird.hash
-> @@ -1,2 +1,2 @@
-> -sha256 bd42d48fbcc2c0046d544f1183cd98193ff15b792d332ff45f386b0180b09335  bird-v2.0.2.tar.gz
-> -sha256 f018596a97af0108efc446320631e2fddc0c1d1f3ffab3129327ccdb4f0c29ed  README
-> +sha256 54ec151518564f87e81de4ac19376689e5ba8dd9129f1e9a79086db3df0931f8  bird-v2.0.3.tar.gz
-> +sha256 94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
+> I have no idea what I should do now. Can you help me?
 
-Since you update the license file hash the commit log should say whether these 
-changes affect the license.
+I have tried to solve your issue using the below patch. Unfortunately,
+it triggers a circular dependency, which I'm not sure how to solve at
+this point:
 
-> diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-> index 297e21dd95..1253137afa 100644
-> --- a/package/bird/bird.mk
-> +++ b/package/bird/bird.mk
-> @@ -4,8 +4,9 @@
->  #
->  ################################################################################
->  
-> -BIRD_VERSION = v2.0.2
-> -BIRD_SITE = $(call github,BIRD,bird,$(BIRD_VERSION))
-> +BIRD_VERSION = v2.0.3
-> +BIRD_SOURCE = bird-$(BIRD_VERSION).tar.gz
+Recursion detected for  : fontconfig
+which is a dependency of: xlib_libXft
+which is a dependency of: tk
+which is a dependency of: python3
+which is a dependency of: util-linux
+which is a dependency of: fontconfig
 
-This is the value for <PKG>_SOURCE. You can drop it.
+We've already been bitten by this sort of circular dependencies in the
+past, where the dependency of util-linux on python was a problem.
 
-> +BIRD_SITE = https://gitlab.labs.nic.cz/labs/bird/-/archive/$(BIRD_VERSION)
->  BIRD_LICENSE = GPL-2.0+
->  BIRD_LICENSE_FILES = README
->  # autoreconf is needed since the package is fetched from github
+Here is the patch I have used:
 
-This comment is now outdated.
+  https://git.bootlin.com/users/thomas-petazzoni/buildroot/commit/?h=python-tkinter&id=7698e98b592bbd724903b8f657b672ee58ef8d11
 
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
