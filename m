@@ -1,32 +1,36 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 4 Feb 2019 05:07:10 -0600
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-build-time:
- replace confusing colors
-In-Reply-To: <20190130201156.5927-2-patrickdepinguin@gmail.com>
-References: <20190130201156.5927-1-patrickdepinguin@gmail.com>
- <20190130201156.5927-2-patrickdepinguin@gmail.com>
-Message-ID: <CANQCQpb-+jaQ6VdvOqQcOqbnRhjXE+5sMywG4-5qvkkXBCzazw@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  4 Feb 2019 06:09:06 -0600
+Subject: [Buildroot] [PATCH v3 2/2] package/sg3_utils: add host build
+In-Reply-To: <1549282146-5745-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1549282146-5745-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1549282146-5745-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De,
+Initially used by the host build of the utp_com package
 
-On Wed, Jan 30, 2019 at 2:12 PM Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
->
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> The color for 'extract' is very similar to the one for 'install-images'.
-> Both are cyan-like.
->
-> Replace the former by a pale blue to make all colors sufficiently distinct.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-A bit trickier to test and get a install images with enough time to
-visually see it :-)
+---
+Changes
 
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+v3
+ - New patch
+---
+ package/sg3_utils/sg3_utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index 0c17b30..b3a79d6 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -51,3 +51,4 @@ SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+1.9.1
