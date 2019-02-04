@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 09:25:48 +0100
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Mon, 4 Feb 2019 08:27:43 +0000
 Subject: [Buildroot] Prebuilt ARC tools are way too old
-In-Reply-To: <4881796E12491D4BB15146FE0209CE64681D2D2A@DE02WEMBXB.internal.synopsys.com>
+In-Reply-To: <20190204092548.15b42a23@windsurf>
 References: <4881796E12491D4BB15146FE0209CE64681D2D2A@DE02WEMBXB.internal.synopsys.com>
-Message-ID: <20190204092548.15b42a23@windsurf>
+ <20190204092548.15b42a23@windsurf>
+Message-ID: <4881796E12491D4BB15146FE0209CE64681D2DA7@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+Hi Thomas,
 
-On Mon, 4 Feb 2019 08:13:11 +0000
-Alexey Brodkin <alexey.brodkin@synopsys.com> wrote:
-
-> May I kindly ask you to create a newer prebuilt ARC toolchain
-> which uses arc-2018.09 GNU tools?
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Monday, February 4, 2019 11:26 AM
+> To: Alexey Brodkin <alexey.brodkin@synopsys.com>
+> Cc: ARC Maintainers <arc-buildroot@synopsys.com>; buildroot at buildroot.org
+> Subject: Re: [Buildroot] Prebuilt ARC tools are way too old
 > 
-> arc-2018.09 is based on GCC 8.2 and has a bunch of fixes as compared to
-> older tools.
+> Hello Alexey,
 > 
-> As of today the latest prebuilt ARC tools are br-arcle-hs38-full-2018.11-rc1.tar.bz2
-> and it's still based on arc-2018.03 (GCC 7.x based).
+> On Mon, 4 Feb 2019 08:13:11 +0000
+> Alexey Brodkin <alexey.brodkin@synopsys.com> wrote:
+
+[snip]
+
+> > Probably there's not much sense in updating br-arcle-hs38.config with still obsolete
+> > tools and better wait before GCC 8.x based tools are available in prebuilt form.
 > 
-> What's more in ARC config fragment even older tarball is mentioned 
-> https://git.buildroot.org/buildroot/tree/support/config-fragments/autobuild/br-arcle-hs38.config#n6
-> 
-> Probably there's not much sense in updating br-arcle-hs38.config with still obsolete
-> tools and better wait before GCC 8.x based tools are available in prebuilt form.
+> Thanks for pinging me on this! I'll rebuild the toolchain with 2018.11
+> for now, and once 2019.02-rc1 is released, I'll rebuild again.
 
-Thanks for pinging me on this! I'll rebuild the toolchain with 2018.11
-for now, and once 2019.02-rc1 is released, I'll rebuild again.
+Cool, thanks!
+Are you going to update the config fragment as well or should I do it myself?
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Alexey
