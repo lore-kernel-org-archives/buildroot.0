@@ -1,53 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 21:11:30 +0100
-Subject: [Buildroot] [PATCH v7 7/8] package/rtmpdump: Fix compilation
- issues with openssl 1.1.x
-In-Reply-To: <8a058fda-b1f8-4ed6-9570-b47669b37d8a@mind.be> (Arnout
- Vandecappelle's message of "Mon, 4 Feb 2019 19:15:19 +0100")
-References: <20190129093919.22060-1-patrick.havelange@essensium.com>
- <20190129093919.22060-7-patrick.havelange@essensium.com>
- <87va1zx3zr.fsf@dell.be.48ers.dk>
- <8a058fda-b1f8-4ed6-9570-b47669b37d8a@mind.be>
-Message-ID: <87ef8ns499.fsf@dell.be.48ers.dk>
+Date: Mon, 4 Feb 2019 21:11:39 +0100
+Subject: [Buildroot] [git commit] package/rtmpdump: drop openssl support
+Message-ID: <20190204201021.41F0983BE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4d001395fac944b476e342e06dd0a92a70de3bd2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 04/02/2019 11:06, Peter Korsgaard wrote:
- >>>>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
- >> 
- >> > From: Vadim Kochan <vadim4j@gmail.com>
- >> > Upstream is dead, other distros use gnutls exclusively,
- >> > so patch is not sent upstream.
- >> 
- >> So shouldn't we do the same?
- >> 
- >> What other distributions exactly?
+Rtmpdump does not support openssl 1.1.x, has not seen any changes upstream
+since 2015, is only used with the gnutls backend in Debian and Fedora.
 
- >  IIRC I checked at least Fedora and Debian, possibly also Gentoo and/or Arch.
-
-Ok, which probably makes sense for a binary distribution.
-
-It is not exactly clear to me where this patch comes from. Googling
-around I see a very similar patch on this github repo:
+There exists a 3rd party patch for openssl 1.1.x support:
 
 https://github.com/JudgeZarbi/RTMPDump-OpenSSL-1.1
 
-But that repo has an open issue about a crash in the handshake handling
-(code that gets changed by this patch) and the README states:
+But there is an open issue reported about a crash in the handshake code
+(which is modified by the patch):
 
-I modified a few of the files in the librtmp directory to conform to the
-new getters and setters in OpenSSL 1.1.0. I don't claim to be a security
-expert, and neither have I had any experience with OpenSSL in a
-programming sense, so I'm not sure exactly if it's correct, but it
-compiles and seems to work for what I use it for.
+https://github.com/JudgeZarbi/RTMPDump-OpenSSL-1.1/issues/1
 
-Which does not sound very reassuring to me, so I have instead pushed a
-patch to drop the openssl support for rtmpdump.
+And the README for the repo states:
 
--- 
-Bye, Peter Korsgaard
+I modified a few of the files in the librtmp directory to conform to the new
+getters and setters in OpenSSL 1.1.0.  I don't claim to be a security
+expert, and neither have I had any experience with OpenSSL in a programming
+sense, so I'm not sure exactly if it's correct, but it compiles and seems to
+work for what I use it for.
+
+Which does not sound very reassuring, so instead drop the openssl support.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtmpdump/rtmpdump.mk | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index f5d430ce36..03cdd9d00f 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -16,9 +16,6 @@ RTMPDUMP_DEPENDENCIES = zlib
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ RTMPDUMP_DEPENDENCIES += gnutls
+ RTMPDUMP_CRYPTO = GNUTLS
+-else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-RTMPDUMP_DEPENDENCIES += openssl
+-RTMPDUMP_CRYPTO = OPENSSL
+ else
+ # no crypto
+ RTMPDUMP_CRYPTO =
