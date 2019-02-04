@@ -1,31 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Feb 2019 14:03:29 +0100
-Subject: [Buildroot] [PATCH] qemu: remove host-python dependency.
-In-Reply-To: <20190204124323.2865-1-aduskett@gmail.com>
-References: <20190204124323.2865-1-aduskett@gmail.com>
-Message-ID: <20190204140329.79858e30@windsurf>
+Date: Mon, 4 Feb 2019 14:03:56 +0100
+Subject: [Buildroot] [git commit] package/libgeotiff: add optional proj
+ dependency
+Message-ID: <20190204130300.5F1037FAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a0cec02fdfb7cecf7b5de15736fe796d8a33421
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please use a prefix of "package/qemu:".
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgeotiff/libgeotiff.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Mon,  4 Feb 2019 07:43:23 -0500
-aduskett at gmail.com wrote:
-
-> Now that BuildRoot requires python >= 2.7, qemu no longer needs a host-python,
-
-We never use BuildRoot, but either Buildroot or buildroot. Preferably
-Buildroot in such situations.
-
-Applied with those two minor details fixed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index 522802cc94..a4606bc30c 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -26,4 +26,11 @@ else
+ LIBGEOTIFF_CONF_OPTS += --without-jpeg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROJ),y)
++LIBGEOTIFF_DEPENDENCIES += proj
++LIBGEOTIFF_CONF_OPTS += --with-proj=$(STAGING_DIR)/usr
++else
++LIBGEOTIFF_CONF_OPTS += --without-proj
++endif
++
+ $(eval $(autotools-package))
