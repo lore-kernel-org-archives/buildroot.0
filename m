@@ -1,90 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Feb 2019 21:57:45 +0100
-Subject: [Buildroot] [PATCH v7 8/8] libopenssl: bump version to 1.1.1a
-In-Reply-To: <20190129093919.22060-8-patrick.havelange@essensium.com> (Patrick
- Havelange's message of "Tue, 29 Jan 2019 10:39:19 +0100")
-References: <20190129093919.22060-1-patrick.havelange@essensium.com>
- <20190129093919.22060-8-patrick.havelange@essensium.com>
-Message-ID: <87womfqnjq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 22:00:31 +0100
+Subject: [Buildroot] [PATCH] xenomai: move arch restriction to Cobalt
+ core, no restriction for Mercury
+In-Reply-To: <20190121195005.17768-1-patrickdepinguin@gmail.com>
+References: <20190121195005.17768-1-patrickdepinguin@gmail.com>
+Message-ID: <20190204220031.19daf588@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
+On Mon, 21 Jan 2019 20:50:04 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
- > From: Peter Seiderer <ps.report@gmx.net>
- > - use BR2_TOOLCHAIN_HAS_UCONTEXT
- >     This is used to set -DOPENSSL_NO_ASYNC if needed.
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Xenomai has two mutually exclusive cores:
+> - Cobalt: dual-kernel approach: patched kernel + userland
+> - Mercury: only userland
+> 
+> In the Cobalt core, not all architectures are supported. This is the source
+> of the existing ARCH_SUPPORTS variable.
+> 
+> In the Mercury core, there is no imposed architecture restriction.
+> 
+> Rename the XENOMAI_ARCH_SUPPORTS flag to XENOMAI_COBALT_ARCH_SUPPORTS and
+> move its check from the Xenomai package to the Cobalt core.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  linux/Config.ext.in       | 4 ++--
+>  package/xenomai/Config.in | 5 ++---
+>  2 files changed, 4 insertions(+), 5 deletions(-)
 
- > - apply the CFLAGS correctly when compiling with -Os (bugfix).
+The patch looks good, but it needs more testing. Because it lifts all
+the architecture dependencies, one can now try to build Xenomai for
+funky architectures/configurations, and it doesn't always work. For
+example, building with our br-arm-cortex-m4-full configuration fails
+with a pthread_atfork issue.
 
- > - use -latomic when needed
- >     This fixes the build for br-sparc-uclibc-2018.05
+I think this requires running a test-pkg run to check a couple of
+architectures/configurations.
 
- > - don't use madvise() if no MMU
- >     Trying to do so results in undefined reference to madvise() as
- >     it is not available on uclibc without MMU.
- >     The original openssl code checks if a macro used in the madvise call
- >     is defined. The problem comes from the fact that the code in
- >     crypto/mem_sec.c also includes a kernel header defining the same macro
- >     unconditionally. Thus the check is always true in that case.
- >     Upstream: https://github.com/openssl/openssl/pull/8089
+Thanks!
 
- > - don't compile test/fuzzers
- >     These binaries introduced with 1.1.x sometimes do not compile.
- >     This is the case with the br-arm-cortex-m4-full toolchain
-
- > - don't build ocsp daemon if no MMU.
- >     Patch from  Richard Levitte.
-
- > - correctly enable cryptodev engine
- >     Thanks to Arnout Vandecappelle for spotting this.
-
- > - remove all parallel build patches (openssl build-system changed)
-
- > - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
- >   to apply to Configurations/unix-Makefile.tmpl (Makefile template)
-
- > - removed 0002-cryptodev-Fix-issue-with-signature-generation.patch
- >   (upstream applied)
-
- > - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
- >   apply to crypto/build.info (Makefile template)
-
- > - fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
-
- > - remove legacy enable-tlsext configure option
-
- > - remove target/host libdir configure options, fixes openssl.pc installation
- >   path, fixes wget compile
-
- > - change legacy INSTALL_PREFIX to DESTDIR
-
- > - remove 'libraries gets installed read only, so strip fails'
- >   workaround (not needed anymore)
-
- > - change engine directory from /usr/lib/engines to
- >   /usr/lib/engines-1.1
-
- > - change license file hash, no license change, only the following
- >   hint was removed:
-
- >     Actually both licenses are BSD-style Open Source licenses.
- >     In case of any license issues related to OpenSSL please
- >     contact openssl-core at openssl.org.
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > Tested-by: Ryan Coe <bluemrp9@gmail.com>
- > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
- > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-
- > ---
- > Changes v6 -> v7:
- >   - none
-
-Committed, thanks all!
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
