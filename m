@@ -1,82 +1,86 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon,  4 Feb 2019 14:30:04 +0100
-Subject: [Buildroot] [PATCH] docs/website: fixing query.yahooapis.com
- shutdown
-Message-ID: <1549287004-13747-1-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Feb 2019 14:20:02 +0100
+Subject: [Buildroot] [git commit] package/{clapack,
+ armadillo}: re-enable on MIPS
+Message-ID: <20190204133245.4792B837DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch rework the use of query.yahooapis.com to do the conversion
-from xml to json required by our script and moves to the use of a js
-library. Datas are therefore now converted in json format on the client.
+commit: https://git.buildroot.net/buildroot/commit/?id=b94e021004cfeb3029f373fcf1ed4f29c77126a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Unfortunately, cause of the CORS restriction on nabble and
-buildroot.org, we cannot retrieve directly the xml data from these
-servers and we need a CORS proxy to do that.
+Commit d2b52cebf3b8b4a922a54d38a44a8a183406c5f1 disabled clapack on MIPS
+platforms, to fix an autobuild failure (unfortunately, the results are no
+longer available). The argument was:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+    "Disable this package for MIPS because it needs IRIX headers and
+    libraries."
+
+Nevertheless, today compilation on MIPS seems to work fine. Testing was done
+with test-pkg (armadillo depends on clapack):
+
+$ echo "BR2_PACKAGE_ARMADILLO=y" > config.snippet;
+$ utils/test-pkg -p armadillo -a -c config.snippet
+                 br-mips32r6-el-hf-glibc [1/8]: OK
+                      br-mips64-n64-full [2/8]: OK
+                 br-mips64r6-el-hf-glibc [3/8]: OK
+                      br-mipsel-o32-full [4/8]: OK
+             mips64el-ctng_n32-linux-gnu [5/8]: OK
+             mips64el-ctng_n64-linux-gnu [6/8]: OK
+                         sourcery-mips64 [7/8]: OK
+                           sourcery-mips [8/8]: OK
+8 builds, 0 skipped, 0 build failed, 0 legal-info failed
+
+Manual build tests were also done for mips32r2 with gcc 4.9.x and gcc 7.x,
+and for M5150 with gcc 7.x (Buildroot-built toolchains in these three
+cases).
+
+Also building and running on Octeon III, using the toolchain provided by
+Cavium Networks / Marvell, works fine.
+
+Not seeing any problem (but also not understanding the original problem),
+re-enable clapack (and armadillo) on MIPS.  If any problems would pop up in
+the future, they should be investigated in detail and a more fine-grained
+solution should be taken than disabling on MIPS altogether.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-I'm in contact with anbble system administrator to give us access to
-cors request for their mailing archive so hopefully we can remove the
-call to an external service in a not so distant future.
+ package/armadillo/Config.in | 2 --
+ package/clapack/Config.in   | 1 -
+ 2 files changed, 3 deletions(-)
 
- docs/website/footer.html     |  1 +
- docs/website/js/buildroot.js | 19 +++++++++----------
- 2 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/docs/website/footer.html b/docs/website/footer.html
-index 5b18047..820c269 100644
---- a/docs/website/footer.html
-+++ b/docs/website/footer.html
-@@ -1,6 +1,7 @@
- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha256-Daf8GuI2eLKHJlOWLRR/zRy9Clqcj4TUSumbxYH9kGI=" crossorigin="anonymous"></script>
-+	<script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js" integrity="sha384-pEpOtyRrTt7XzQzg30fXkhig417px5mP0UbPdI8mjl2KehUX2bDT807mfjJkg1H2" crossorigin="anonymous"></script>
- 	<script type="text/javascript" src="js/buildroot.js"></script>
- </body>
- </html>
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index ec28cbb..fa5ad9a 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -1,17 +1,16 @@
- function load_activity(feedurl, divid) {
--    var yqlURL = "https://query.yahooapis.com/v1/public/yql";
--    var yqlQS = "?q=select%20entry%20from%20xml%20where%20url%20%3D%20'";
--    var yqlOPTS = "'%20limit%2010&format=json&callback=";
-     var container = document.getElementById(divid);
--    var url = yqlURL + yqlQS + encodeURIComponent(feedurl) + yqlOPTS;
--
--    $.getJSON(url, function(data){
--        var result = data.query.results;
-+    $.ajax({
-+      url: "https://cors.io/?" + feedurl
-+    })
-+    .done(function(data){
-+        var x2js = new X2JS();
-+        var result = x2js.xml_str2json(data);
-         var loaded = 0;
-         var nb_display = 8;
-         if (result==null) return;
--        for (var i = 0; i < result.feed.length; i++) {
--            var entry = result.feed[i].entry;
-+        for (var i = 0; i < result.feed.entry.length; i++) {
-+            var entry = result.feed.entry[i];
-             if (entry.title.indexOf("git commit") != -1)
-                 continue;
-             loaded += 1;
-@@ -24,7 +23,7 @@ function load_activity(feedurl, divid) {
-             var text = document.createTextNode(data);
-             link.appendChild(text);
-             link.title = entry.title;
--            link.href = entry.link.href;
-+            link.href = entry.link._href;
-             div.appendChild(link);
-             container.appendChild(div);
-         }
--- 
-2.7.4
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index 47c7cd9ffd..b2b61a3233 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -1,6 +1,5 @@
+ comment "armadillo needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	depends on !BR2_powerpc
+ 	depends on !BR2_m68k_cf
+ 
+@@ -11,7 +10,6 @@ comment "armadillo needs a glibc toolchain w/ C++"
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+ 	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
+ 	depends on !BR2_m68k_cf # clapack
+ 	select BR2_PACKAGE_CLAPACK
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index af7834d985..a912eb6c91 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -4,7 +4,6 @@ comment "clapack needs a glibc toolchain"
+ 
+ config BR2_PACKAGE_CLAPACK
+ 	bool "cblas/clapack"
+-	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	# _fpu_control is used on PowerPC, but not available with
+ 	# uClibc or musl
+ 	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
