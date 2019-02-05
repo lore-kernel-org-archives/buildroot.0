@@ -1,85 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Feb 2019 11:39:52 +0100
-Subject: [Buildroot] [PATCH 1/5] package/mender: adding a writable
- location
-In-Reply-To: <1549359793-12666-2-git-send-email-angelo@amarulasolutions.com>
-References: <1549359793-12666-1-git-send-email-angelo@amarulasolutions.com>
- <1549359793-12666-2-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20190205103952.GC18066@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Feb 2019 11:40:11 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
+ enable SRI
+In-Reply-To: <4f0406e1-aace-c31d-0683-dd99af63ae9a@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 5 Feb 2019 11:24:59 +0100")
+References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
+ <87y36vvij1.fsf@dell.be.48ers.dk>
+ <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
+ <87lg2vvepy.fsf@dell.be.48ers.dk>
+ <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
+ <CADvTj4oes1KgCv2TqLTnjPsJr+GZhCWZTS1DkTx3nGR5DiGmmg@mail.gmail.com>
+ <4f0406e1-aace-c31d-0683-dd99af63ae9a@mind.be>
+Message-ID: <87ef8mplh0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2019-02-05 10:43 +0100, Angelo Compagnucci spake thusly:
-> Mender needs /var/lib/mender to be writable at the service start, the
-> path is hardcoded and thus we cannot change it.
-> This patch solves the problem using the same approach we have for
-> dropbear.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > On 04/02/2019 23:30, James Hilliard wrote:
+ >> Using a CDN can speed up performance due to browsers caching assets
+ >> across different sites from my understanding.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >  Indeed, I think that is the main reason to use a CDN:
 
-Regards,
-Yann E. MORIN.
+ > 1. It is likely to be cached already on the browser, and
+ > 2. It avoids that the driver needs to open connections to various site, it can
+ > just open one (HTTP/2 or /3) connection do the CDN if it really does need to get
+ > the stuff.
 
-> ---
->  package/mender/mender.mk      |  2 ++
->  package/mender/mender.service | 12 +++++++++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-> index a5cece7..1f66615 100644
-> --- a/package/mender/mender.mk
-> +++ b/package/mender/mender.mk
-> @@ -49,6 +49,8 @@ define MENDER_INSTALL_CONFIG_FILES
->  		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
->  			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
->  	)
-> +
-> +	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
->  endef
->  
->  MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
-> diff --git a/package/mender/mender.service b/package/mender/mender.service
-> index 9ede55a..8b60a4f 100644
-> --- a/package/mender/mender.service
-> +++ b/package/mender/mender.service
-> @@ -6,7 +6,17 @@ After=systemd-resolved.service
->  Type=idle
->  User=root
->  Group=root
-> -ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
-> +ExecStartPre=/bin/sh -c '\
-> +if [ -L /var/lib/mender \
-> +     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]; then \
-> +    if rm -f /var/lib/mender >/dev/null 2>&1; then \
-> +        mkdir -p /var/lib/mender; \
-> +    else \
-> +        echo "No persistent location to store mender data. Data will be lost\
-> +        echo "at reboot. Are you sure this is what you want to do?"; \
-> +        mkdir -p "$(readlink /var/lib/mender)"; \
-> +    fi; \
-> +fi'
->  ExecStart=/usr/bin/mender -daemon
->  Restart=on-abort
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ >  That said, since these files are tiny, it's probably not important (definitely
+ > not important enough to bikeshed over :-).
+
+Agreed.
+
+ > The SRI, on the other hand, *is* important IMO.
+
+Agreed, if we refer to ressources out of our control we should
+definately use SRI.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
