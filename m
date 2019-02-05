@@ -1,47 +1,37 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  5 Feb 2019 11:23:48 +0100
-Subject: [Buildroot] [PATCH v2 5/5] package/mender: adding a readme file
-In-Reply-To: <1549362228-5731-1-git-send-email-angelo@amarulasolutions.com>
-References: <1549362228-5731-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549362228-5731-6-git-send-email-angelo@amarulasolutions.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Feb 2019 11:24:59 +0100
+Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
+ enable SRI
+In-Reply-To: <CADvTj4oes1KgCv2TqLTnjPsJr+GZhCWZTS1DkTx3nGR5DiGmmg@mail.gmail.com>
+References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
+ <87y36vvij1.fsf@dell.be.48ers.dk>
+ <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
+ <87lg2vvepy.fsf@dell.be.48ers.dk>
+ <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
+ <CADvTj4oes1KgCv2TqLTnjPsJr+GZhCWZTS1DkTx3nGR5DiGmmg@mail.gmail.com>
+Message-ID: <4f0406e1-aace-c31d-0683-dd99af63ae9a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a readme file with basic instructions to get mender up
-and running on a production system.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/mender/readme.txt | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/mender/readme.txt
 
-diff --git a/package/mender/readme.txt b/package/mender/readme.txt
-new file mode 100644
-index 0000000..329b2a4
---- /dev/null
-+++ b/package/mender/readme.txt
-@@ -0,0 +1,18 @@
-+=== Notes on using Mender on Buildroot
-+======================================
-+Default configurations files
-+----------------------------
-+
-+Buildroot comes with a default artifact_info and device_type configuration files
-+in /etc/mender. They contain default values, and thus they should be overridden
-+on a production system.
-+
-+The simplest way to do it is to change these files in an overlay or in a post
-+build script.
-+
-+Configuring mender with certificates
-+------------------------------------
-+
-+Mender uses TLS to communicate with the management server and, if you use a
-+CA-signed certificate on the server, you should select the ca-certificates
-+package otherwise it doesn't work.
--- 
-2.7.4
+On 04/02/2019 23:30, James Hilliard wrote:
+> Using a CDN can speed up performance due to browsers caching assets
+> across different sites from my understanding.
+
+ Indeed, I think that is the main reason to use a CDN:
+
+1. It is likely to be cached already on the browser, and
+2. It avoids that the driver needs to open connections to various site, it can
+just open one (HTTP/2 or /3) connection do the CDN if it really does need to get
+the stuff.
+
+ That said, since these files are tiny, it's probably not important (definitely
+not important enough to bikeshed over :-). The SRI, on the other hand, *is*
+important IMO.
+
+ Regards,
+ Arnout
