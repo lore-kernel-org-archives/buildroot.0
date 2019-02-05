@@ -1,38 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 20:27:31 +0100
-Subject: [Buildroot] [PATCH] package/dovecot: security bump to version
- 2.3.4.1
-In-Reply-To: <20190205165710.11918-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 5 Feb 2019 17:57:10 +0100")
-References: <20190205165710.11918-1-peter@korsgaard.com>
-Message-ID: <875ztykpcs.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 20:29:20 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump to 2.58.3
+In-Reply-To: <20190205185623.15717-1-aduskett@gmail.com>
+References: <20190205185623.15717-1-aduskett@gmail.com>
+Message-ID: <20190205202920.6036210a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Tue,  5 Feb 2019 19:56:23 +0100
+aduskett at gmail.com wrote:
 
- > Fixes the following security issues:
- >  * CVE-2019-3814: If imap/pop3/managesieve/submission client has
- >    trusted certificate with missing username field
- >    (ssl_cert_username_field), under some configurations Dovecot
- >    mistakenly trusts the username provided via authentication instead
- >    of failing.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> In addition:
+>  - Update second patch
+>  - Remove third and fifth patches (already in version)
+>  - Add a new patch to fix a missing header
+>  - Add LIBGLIB2_GTK_DOC_HOOK so autoreconf do not fail on the following
+>    error:
+>      automake: error: cannot open < gtk-doc.make: No such file or directory
+> 
+>  - Add a new patch: package/libglib2/0005-use-tooldir-in-pc-file.patch
+>    This patch fixes the previous autobuild errors by modifying the glib-2.0.pc
+>    file and adding a tooldir variable, of which the glib_genmarshal,
+>    gobject_query, and glib_mkenums of which will be prefixed. Then a
 
- >  * ssl_cert_username_field setting was ignored with external SMTP AUTH,
- >    because none of the MTAs (Postfix, Exim) currently send the
- >    cert_username field. This may have allowed users with trusted
- >    certificate to specify any username in the authentication. This bug
- >    didn't affect Dovecot's Submission service.
+I am confused by the double "of which" usage in this sentence.
 
- > For more details, see the announcement:
- > https://www.dovecot.org/list/dovecot-news/2019-February/000394.html
+> +define LIBGLIB2_FIX_PC_FILE
+> +$(SED) "s at toolsdir=.*@toolsdir=$(STAGING_DIR)/usr/bin at g" \
+> +	$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This kind of replacement with STAGING_DIR is a bit annoying for the
+upcoming per-package stuff. Options that I see:
 
-Committed, thanks.
+ (1) Add 'bindir' to the list of pkg-config variables that should be
+     sysroot-prefixed. Works, but impact unknown.
 
+ (2) Add 'toolsdir' to the list of pkg-config variables that should be
+     sysroot-prefixed. Works, but impact unknown.
+
+ (3) Make toolsdir=${libdir}/../bin. Works, but ugly.
+
+I don't have a good opinion on what is the best choice here. Let's see
+what Arnout says.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
