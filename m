@@ -1,110 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  5 Feb 2019 17:09:59 +0100
-Subject: [Buildroot] [PATCH] xenomai: move arch restriction to Cobalt core,
- no restriction for Mercury
-Message-ID: <20190205160959.25927-1-patrickdepinguin@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue,  5 Feb 2019 17:12:01 +0100
+Subject: [Buildroot] [PATCH] linux: bump Linux CIP to version v4.4.171-cip30
+Message-ID: <1549383121-29265-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+This patch bumps the Linux CIP version to v4.4.171-cip30 and updates the
+download url to the new official one.
 
-Xenomai has two mutually exclusive cores:
-- Cobalt: dual-kernel approach: patched kernel + userland
-- Mercury: only userland
-
-In the Cobalt core, not all architectures are supported. This is the source
-of the existing ARCH_SUPPORTS variable.
-
-In the Mercury core, there is no imposed architecture restriction.
-
-Rename the XENOMAI_ARCH_SUPPORTS flag to XENOMAI_COBALT_ARCH_SUPPORTS and
-move its check from the Xenomai package to the Cobalt core.
-
-Nevertheless, even for Mercury, there are some restrictions:
-- pthread_atfork is used, which requires an MMU
-- sync functions like __sync_sub_and_fetch and __sync_add_and_fetch are
-  expected.
-
-As the corresponding 'linux extension' selects Xenomai, we add the
-MMU and sync dependencies there too. They may or may not already be covered
-by XENOMAI_COBALT_ARCH_SUPPORTS flag.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- linux/Config.ext.in       | 12 ++++++++----
- package/xenomai/Config.in | 11 +++++++----
- 2 files changed, 15 insertions(+), 8 deletions(-)
+ linux/Config.in | 4 ++--
+ linux/linux.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-v2:
-- add MMU and SYNC_4 dependencies (tested with test-pkg on all toolchains)
-
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index acc8a04742..32dacbdf06 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -4,9 +4,11 @@ menu "Linux Kernel Extensions"
- # Xenomai
- config BR2_LINUX_KERNEL_EXT_XENOMAI
- 	bool "Adeos/Xenomai Real-time patch"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # xenomai
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xenomai
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # xenomai
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # xenomai
- 	select BR2_PACKAGE_XENOMAI
+diff --git a/linux/Config.in b/linux/Config.in
+index 8b04471..a1cdea1 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.19)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.154-cip28)"
++	bool "Latest CIP SLTS version (v4.4.171-cip30)"
  	help
- 	  Xenomai is split in two parts: a kernel part and a userspace
-@@ -34,7 +36,9 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
- 	  and verify that your kernel version in buildroot matches.
- 
- comment "xenomai needs a uClibc or glibc toolchain w/ threads"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
- 
- #-------------------------------------------------------------------------------
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index f3d8ea4baf..83ba8ca162 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -1,16 +1,18 @@
--config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
- 		BR2_powerpc
- 
--comment "xenomai needs an glibc or uClibc toolchain w/ threads"
-+comment "xenomai needs a glibc or uClibc toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_XENOMAI
- 	bool "Xenomai Userspace"
--	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# uses <error.h>, __WORDSIZE and bits/local_lim.h
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-@@ -67,6 +69,7 @@ config BR2_PACKAGE_XENOMAI_MERCURY
- 
- config BR2_PACKAGE_XENOMAI_COBALT
- 	bool "Cobalt"
-+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	help
- 	  Select Cobalt core (dual kernel) for the Xenomai
- 	  userspace. Use this if you use a Xenomai-patched
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -123,7 +123,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.19.18" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.171-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6206810..8c21bad 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -30,7 +30,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = svn
+ else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
+-LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git
++LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git
+ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+ # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
+ # older -rc kernels.
 -- 
-2.19.2
+2.7.4
