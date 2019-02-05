@@ -1,96 +1,142 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 5 Feb 2019 03:28:48 -0600
-Subject: [Buildroot] [PATCH v5 02/10] testing/infra: split runtime test
- from BRTest
-In-Reply-To: <CANQCQpbtW+uTx1pq4QNwwZWtNHU4eP57q6Y0j2ZGkKtb70NDdw@mail.gmail.com>
-References: <3f24bc0c-1e66-b4e5-760b-6ff354092c9e@mind.be>
- <5c58e02dcb189_290e3faf9e14bcec12638@ultri5.mail>
- <CANQCQpbtW+uTx1pq4QNwwZWtNHU4eP57q6Y0j2ZGkKtb70NDdw@mail.gmail.com>
-Message-ID: <CANQCQpaTai5T_Bt5Lf6v6+aScgVsnADW_QtWsAnb8MwBMSYd+g@mail.gmail.com>
+From: Kostya Porotchkin <kostap@marvell.com>
+Date: Tue, 5 Feb 2019 09:34:16 +0000
+Subject: [Buildroot] [EXT] Re: [PATCH v2 1/3]
+ package/arm-gnu-rm-toolchain: new package
+In-Reply-To: <20190205091940.GA18066@scaer>
+References: <20190205074324.8097-1-kostap@marvell.com>
+ <20190205074324.8097-2-kostap@marvell.com> <20190205091940.GA18066@scaer>
+Message-ID: <BYAPR18MB2360CDED4B3FB0DDAC921F3FCA6E0@BYAPR18MB2360.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo / Arnout,
+Hi, Yann,
 
-On Mon, Feb 4, 2019 at 7:12 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Ricardo,
-> On Mon, Feb 4, 2019 at 7:00 PM Ricardo Martincoski
-> <ricardo.martincoski@gmail.com> wrote:
+> -----Original Message-----
+> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E.
+> MORIN
+> Sent: Tuesday, February 5, 2019 11:20
+> To: Kostya Porotchkin <kostap@marvell.com>
+> Cc: buildroot at buildroot.org
+> Subject: [EXT] Re: [Buildroot] [PATCH v2 1/3] package/arm-gnu-rm-toolchain:
+> new package
+> 
+> External Email
+> 
+> ----------------------------------------------------------------------
+> Konstantin, All,
+> 
+> On 2019-02-05 09:43 +0200, kostap at marvell.com spake thusly:
+> > From: Konstantin Porotchkin <kostap@marvell.com>
 > >
-> > Hello,
+> > Add cross-compialtion ARM RM toolchain for supporting firmware builds
+> > for Armv8-based SoCs utilizing Cortex-M/Cortex-R service CPUs.
+> > The cross-toolchain used for building Armv8 application CPU code
+> > cannot be used for Cortex-M/Cortex-R 32-bit THUMB code generation.
+> > This patch installs pre-built bate metal ARM GNU-RM toolchain into the
+> > host file system folder $(HOST_DIR)/opt/gcc-arm-none-eabi for covering
+> > the above mentioned cases.
 > >
-> > + Matt
+> > Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+> > ---
+> >  .../arm-gnu-rm-toolchain.hash                    |  2 ++
+> >  .../arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk | 16
+> > ++++++++++++++++
+> >  2 files changed, 18 insertions(+)
+> >  create mode 100644
+> > package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> >  create mode 100644
+> > package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
 > >
-> > On Mon, Feb 04, 2019 at 01:55 PM, Arnout Vandecappelle wrote:
+> > diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > new file mode 100644
+> > index 0000000000..a08e8e6208
+> > --- /dev/null
+> > +++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally calculated
+> > +sha256
 > >
-> > > On 12/05/2018 04:58, Ricardo Martincoski wrote:
-> > >> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> > >>
-> > >> Move the setup of emulator to a new class, RuntimeTestBase, that bahaves
-> > >> exactly like BRTest currently does.
-> > >> It will avoid duplicating code when adding a common class to test the
-> > >> git download infra.
-> > >>
-> > >> Change all current test cases to use the new class.
-> > >> Do this by first using automatic replace:
-> > >> $ find support/testing/ -name '*.py' | \
-> > >>   xargs grep -l BRTest | \
-> > >>   xargs sed -i \
-> > >>     -e 's,import infra.basetest,\0\nimport infra.runtimetest,g' \
-> > >>     -e 's,infra.basetest.BRTest,infra.runtimetest.RuntimeTestBase,g'
-> > >> and then manually add code to import runtimetest in test_external.py to
-> > >> avoid this error:
-> > >>  AttributeError: 'module' object has no attribute 'LoadTestsFailure'
-> > >> This explicit import was not need before because run-tests imports
-> > >> BRTest and this is the only test file that do not use the defconfig
-> > >> fragments from basetest.py in its code.
-> > >>
-> > >> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> > >> Cc: Arnout Vandecappelle <arnout@mind.be>
-> > >> ---
-> > >> WARNING: this patch changes all current test cases, so if a new test case was
-> > >> applied after this patch was sent, 'git am' will apply this patch cleanly, yet
-> > >> any testcase created in the meantime will be broken.
-> > >> But I can refresh it if need. It will probably only need the automatic replace
-> > >> from the commit log to be re-run.
-> > >
-> > >  This seems to be an optimisation rather than a requirement for the other
-> > > patches, so I haven't applied this - it needs to be refreshed first.
+> +bb17109f0ee697254a5d4ae6e5e01440e3ea8f0277f2e8169bf95d07c7d5fe69
+> > +gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+> > diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > new file mode 100644
+> > index 0000000000..a72a172fce
+> > --- /dev/null
+> > +++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > @@ -0,0 +1,16 @@
 > >
-> > It's an optimisation, but I failed to describe why it should be done first...
+> +#########################################################
+> ############
+> > +###########
+> > +#
+> > +# arm-gnu-rm-toolchain
+> > +#
 > >
-> > The download test cases do not need to build anything before they run, so by
-> > splitting the two classes and making test_git to inherit from the new BRTest
-> > instead of RuntimeTestBase makes the download test cases to run really fast.
-> > The two test cases already on master, after applying and refreshing this patch,
-> > run in 35 seconds total in my machine.
-> > Less than 2 minutes each in the Gitlab CI auto-scale runners:
-> > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/156194310
-> > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/156194313
->
-> If I understand correctly those are the only two at this point that
-> should use the BRTest class instead of the RuntimeTestBase, right?
->
-> > Unfortunately there is still some problem in my WIP refresh of the patch, so I
-> > can't send it now.
-> >
-> > >
-> > >  If you do so before Wednesday, we might still apply it.
-> >
-> > Unfortunately it's unlikely I can do in time.
-> >
->
-> I might be in the same situation after looking at the build failures.
-> I'll spend a bit more on it tonight but there are a lot of tests to
-> either spot check or run all.  I'm not sure yet if it is my build
-> machine's OS and python version or qemu at this point.
->
+> +#########################################################
+> ############
+> > +###########
+> > +
+> > +ARM_GNU_RM_TOOLCHAIN_SITE =
+> > +https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
+> > +ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
+> > +ARM_GNU_RM_TOOLCHAIN_SOURCE =
+> > +gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-
+> linux.tar.bz2
+> 
+> You also need to provide the liense, and the URL to the source tarball(s), like:
+> 
+>     ARM_GNU_RM_TOOLCHAIN_LICENSE = so-and-so
+>     ARM_GNU_RM_TOOLCHAIN_LICENSE_FILES = some/file some/other/file
+>     ARM_GNU_RM_TOOLCHAIN_ACTUAL_SOURCE_TARBALL =
+> http://URL/of/source.tar
+> 
+> Note that you will need to also add a hash for the actual source tarball as
+> well.
+[KP] OK, will work on it
+> 
+> > +define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
+> > +	mkdir -p $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> > +	cp -a $(@D)/* $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> 
+> You should rather use a mv to avoid the size duplication, like we do in the
+> external-toolchain infra for the main toolchain.
+[KP] Yes, already doing so following Thomas review
+> 
+> Also, why do you not install them in $(HOST_DIR)? As it is as you did, other
+> packages have to know about this specific location, which is not entirely
+> nice... However, if installing in $(HOST_DIR), maybe we have to be carefull
+> about not causing name-clashing with other host stuff...
+[KP] Again, after Thomas review I am adding symbolic links from the toolchain executables in "bin" folder to the $(HOST_DIR)/bin
+Will it be enough? I am noty sure if it's good to just extract the entire package to the $(HOST_DIR)/.
+Please correct me if I am wrong.
 
-Here's the v6 and I'll start looking through the differences in the CI
-reports (looked similar enough I figured I'd get the patch out first).
-http://patchwork.ozlabs.org/patch/1036559/
+Regards
+Kosta
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > +endef
+> > +
+> > +$(eval $(host-generic-package))
+> > --
+> > 2.17.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> | conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
