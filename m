@@ -1,104 +1,48 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  5 Feb 2019 11:49:56 +0100
-Subject: [Buildroot] [PATCH v3 2/5] package/mender: adding systemv init file
+Date: Tue,  5 Feb 2019 11:49:59 +0100
+Subject: [Buildroot] [PATCH v3 5/5] package/mender: adding a readme file
 In-Reply-To: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
 References: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549363799-30840-3-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1549363799-30840-6-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a service file for the init system v.
+This patch adds a readme file with basic instructions to get mender up
+and running on a production system.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Acked-by: <aduskett@gmail.com>
 ---
-[v2 -> v3]:
-* Moved the service to s42 to have the network ready before running
-  Mender as pointed out by Titouan
+ package/mender/readme.txt | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/mender/readme.txt
 
- package/mender/S42mender | 56 ++++++++++++++++++++++++++++++++++++++++++++++++
- package/mender/mender.mk |  5 +++++
- 2 files changed, 61 insertions(+)
- create mode 100644 package/mender/S42mender
-
-diff --git a/package/mender/S42mender b/package/mender/S42mender
+diff --git a/package/mender/readme.txt b/package/mender/readme.txt
 new file mode 100644
-index 0000000..d5266aa
+index 0000000..329b2a4
 --- /dev/null
-+++ b/package/mender/S42mender
-@@ -0,0 +1,56 @@
-+#!/bin/sh
-+#
-+# Starts mender service.
-+#
++++ b/package/mender/readme.txt
+@@ -0,0 +1,18 @@
++=== Notes on using Mender on Buildroot
++======================================
++Default configurations files
++----------------------------
 +
-+start() {
-+	# If /var/lib/mender is a symlink to /var/run/mender, and
-+	#   - the filesystem is RO (i.e. we can not rm the symlink),
-+	#     create the directory pointed to by the symlink.
-+	#   - the filesystem is RW (i.e. we can rm the symlink),
-+	#     replace the symlink with an actual directory
-+	if [ -L /var/lib/mender \
-+	     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]
-+	then
-+		if rm -f /var/lib/mender >/dev/null 2>&1; then
-+			mkdir -p /var/lib/mender
-+		else
-+			echo "No persistent location to store mender data. Data will be lost"
-+			echo "at reboot. Are you sure this is what you want to do?"
-+			mkdir -p "$(readlink /var/lib/mender)"
-+		fi
-+	fi
++Buildroot comes with a default artifact_info and device_type configuration files
++in /etc/mender. They contain default values, and thus they should be overridden
++on a production system.
 +
-+	printf "Starting mender service: "
-+	umask 077
++The simplest way to do it is to change these files in an overlay or in a post
++build script.
 +
-+	start-stop-daemon -S -q -p /var/run/mender.pid \
-+		--exec /usr/bin/mender -- -daemon
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	printf "Stopping mender mender: "
-+	start-stop-daemon -K -q -p /var/run/mender.pid
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
++Configuring mender with certificates
++------------------------------------
 +
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit $?
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 3203df8..dc4a73b 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -63,4 +63,9 @@ define MENDER_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mender.service
- endef
- 
-+define MENDER_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/mender/S04mender \
-+		$(TARGET_DIR)/etc/init.d/S04mender
-+endef
-+
- $(eval $(golang-package))
++Mender uses TLS to communicate with the management server, and if you use a
++CA-signed certificate on the server, you should select the ca-certificates
++package otherwise it doesn't work.
 -- 
 2.7.4
