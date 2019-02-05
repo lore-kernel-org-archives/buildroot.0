@@ -1,173 +1,183 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue,  5 Feb 2019 19:56:23 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump to 2.58.3
-Message-ID: <20190205185623.15717-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  5 Feb 2019 20:01:09 +0100
+Subject: [Buildroot] [PATCH] package/tn520: remove package
+Message-ID: <20190205190110.13699-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+The latest (0.17.4) tn5250 release is from 2008, doesn't build with openssl
+1.1.x and was dropped from Debian in 2011 because nobody cared to maintain
+it:
 
-In addition:
- - Update second patch
- - Remove third and fifth patches (already in version)
- - Add a new patch to fix a missing header
- - Add LIBGLIB2_GTK_DOC_HOOK so autoreconf do not fail on the following
-   error:
-     automake: error: cannot open < gtk-doc.make: No such file or directory
+https://packages.qa.debian.org/t/tn5250.html
 
- - Add a new patch: package/libglib2/0005-use-tooldir-in-pc-file.patch
-   This patch fixes the previous autobuild errors by modifying the glib-2.0.pc
-   file and adding a tooldir variable, of which the glib_genmarshal,
-   gobject_query, and glib_mkenums of which will be prefixed. Then a
-   post_staging_install_hook sed's the path to point towards
-   $(STAGING_DIR)/usr/bin
+Given all of that, it is unlikely to be used much, so remove it.
 
-All tests passed with the packages: AT, libsoup, and dbus-glib selected:
-br-arm-full [1/6]: OK
-br-arm-cortex-a9-glibc [2/6]: OK
-br-arm-cortex-m4-full [3/6]: SKIPPED
-br-x86-64-musl [4/6]: OK
-br-arm-full-static [5/6]: OK
-armv5-ctng-linux-gnueabi [6/6]: OK
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - Instead of removing ${bindir}, add ${tooldir} and sed the location
-    in a post_staging_install_hook (Arnout)
-  - Add a more verbose commit message (Arnout)
+ Config.in.legacy                                   |  6 ++++
+ package/Config.in                                  |  1 -
+ package/tn5250/0001-ssldir.patch                   | 17 ------------
+ ...lding-against-OpenSSL-without-SSLv2_SSLv3.patch | 32 ----------------------
+ package/tn5250/Config.in                           |  8 ------
+ package/tn5250/tn5250.hash                         |  2 --
+ package/tn5250/tn5250.mk                           | 29 --------------------
+ 7 files changed, 6 insertions(+), 89 deletions(-)
+ delete mode 100644 package/tn5250/0001-ssldir.patch
+ delete mode 100644 package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
+ delete mode 100644 package/tn5250/Config.in
+ delete mode 100644 package/tn5250/tn5250.hash
+ delete mode 100644 package/tn5250/tn5250.mk
 
- package/libglib2/0002-disable-tests.patch     |  8 ++--
- .../0005-use-tooldir-in-pc-file.patch         | 37 +++++++++++++++++++
- package/libglib2/libglib2.hash                |  4 +-
- package/libglib2/libglib2.mk                  | 17 ++++++++-
- 4 files changed, 60 insertions(+), 6 deletions(-)
- create mode 100644 package/libglib2/0005-use-tooldir-in-pc-file.patch
-
-diff --git a/package/libglib2/0002-disable-tests.patch b/package/libglib2/0002-disable-tests.patch
-index 523ebb35ac..e03dc2fee2 100644
---- a/package/libglib2/0002-disable-tests.patch
-+++ b/package/libglib2/0002-disable-tests.patch
-@@ -8,6 +8,8 @@ gets mixed with distro python leading to build failures.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ef460752f3..59d8bf25fc 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
- Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Update for version 2.58.1]
- ---
-  Makefile.am      | 2 +-
-  gio/Makefile.am  | 2 +-
-@@ -22,9 +24,9 @@ index 008ad58..007332d 100644
-  
-  ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
-  
---SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
--+SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
-- DIST_SUBDIRS = $(SUBDIRS) build win32
-+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests subprojects
-++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs subprojects
-+ DIST_SUBDIRS = $(SUBDIRS) build
-  
-  bin_SCRIPTS = glib-gettextize
- diff --git a/gio/Makefile.am b/gio/Makefile.am
-diff --git a/package/libglib2/0005-use-tooldir-in-pc-file.patch b/package/libglib2/0005-use-tooldir-in-pc-file.patch
-new file mode 100644
-index 0000000000..4272ba364a
---- /dev/null
-+++ b/package/libglib2/0005-use-tooldir-in-pc-file.patch
-@@ -0,0 +1,37 @@
-+From 9170a9030683972677b2a04fea7f7f79f28dc349 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Tue, 5 Feb 2019 18:20:54 +0000
-+Subject: [PATCH] use tooldir in pc file
-+
-+Newer versions of pkg-config will not respect --variable.and instead will
-+try to point to the host directory structure.
-+
-+Instead, add a tools_prefix to the glib-2.0.pc.in file
-+and then sed the location in the .mk file to point to $(STAGING_DIR)/usr/bin
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ glib-2.0.pc.in | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-+index 3c5ea81..f4cfd4c 100644
-+--- a/glib-2.0.pc.in
-++++ b/glib-2.0.pc.in
-+@@ -4,9 +4,10 @@ libdir=@libdir@
-+ includedir=@includedir@
-+ 
-+ bindir=@bindir@
-+-glib_genmarshal=${bindir}/glib-genmarshal
-+-gobject_query=${bindir}/gobject-query
-+-glib_mkenums=${bindir}/glib-mkenums
-++toolsdir=@bindir@
-++glib_genmarshal=${toolsdir}/glib-genmarshal
-++gobject_query=${toolsdir}/gobject-query
-++glib_mkenums=${toolsdir}/glib-mkenums
-+ 
-+ Name: GLib
-+ Description: C Utility Library
-+-- 
-+2.19.1
-+
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 57403a2154..7aa4c6cc02 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
--sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
-+# http://ftp.gnome.org/pub/gnome/sources/glib/2.58/glib-2.58.3.sha256sum
-+sha256  8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481  glib-2.58.3.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index f602c371f5..b4b918bf50 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2019.02"
  
--LIBGLIB2_VERSION_MAJOR = 2.56
-+LIBGLIB2_VERSION_MAJOR = 2.58
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
-@@ -13,6 +13,15 @@ LIBGLIB2_LICENSE_FILES = COPYING
- # 0002-disable-tests.patch
- LIBGLIB2_AUTORECONF = YES
- 
-+# Copy what is done in autogen.sh when gtk-doc is not available
-+define LIBGLIB2_GTK_DOC_HOOK
-+	echo "EXTRA_DIST=" > $(@D)/gtk-doc.make
-+	echo "CLEANFILES=" >> $(@D)/gtk-doc.make
-+endef
++config BR2_PACKAGE_TN5250
++	bool "tn5250 package removed"
++	select BR2_LEGACY
++	help
++	  The tn5250 package was removed.
 +
-+LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-+HOST_LIBGLIB2_PRE_CONFIGURE_HOOKS += LIBGLIB2_GTK_DOC_HOOK
-+
- LIBGLIB2_INSTALL_STAGING = YES
- LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
- 
-@@ -154,6 +163,12 @@ endef
- 
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- 
-+define LIBGLIB2_FIX_PC_FILE
-+$(SED) "s at toolsdir=.*@toolsdir=$(STAGING_DIR)/usr/bin at g" \
-+	$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-+endef
-+LIBGLIB2_POST_INSTALL_STAGING_HOOKS += LIBGLIB2_FIX_PC_FILE
-+
- # Remove schema sources/DTDs, we use staging ones to compile them.
- # Do so at target finalization since other packages install additional
- # ones and we want to deal with it in a single place.
+ config BR2_PACKAGE_BOOST_SIGNALS
+ 	bool "Boost signals removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index bca61f14ed..6273ea8197 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2021,7 +2021,6 @@ endif
+ 	source "package/thttpd/Config.in"
+ 	source "package/tinc/Config.in"
+ 	source "package/tinyhttpd/Config.in"
+-	source "package/tn5250/Config.in"
+ 	source "package/tor/Config.in"
+ 	source "package/traceroute/Config.in"
+ 	source "package/transmission/Config.in"
+diff --git a/package/tn5250/0001-ssldir.patch b/package/tn5250/0001-ssldir.patch
+deleted file mode 100644
+index 6fc78deef2..0000000000
+--- a/package/tn5250/0001-ssldir.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Value is assigned to $with_ssl_dir but used from $with_ssl which is wrong.
+-Fix configure since it's a one-liner and avoid an autoreconf.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura tn5250-0.17.4.orig/configure tn5250-0.17.4/configure
+---- tn5250-0.17.4.orig/configure	2014-09-10 08:33:15.689519554 -0300
+-+++ tn5250-0.17.4/configure	2014-09-10 08:33:47.428613117 -0300
+-@@ -23258,7 +23258,7 @@
+- if test "${with_ssl_dir+set}" = set; then
+-   withval=$with_ssl_dir;
+-     if test "$with_ssl_dir" != "no"; then
+--         checksslinclude "$with_ssl"
+-+         checksslinclude "$with_ssl_dir"
+-     else
+-         for topdir in /usr/local /usr /usr/pkg /usr/lib /var/ssl /opt; do
+-             for subdir in $topdir $topdir/openssl $topdir/ssl; do
+diff --git a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
+deleted file mode 100644
+index 67f0fa63a1..0000000000
+--- a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-$OpenBSD: patch-lib5250_sslstream_c,v 1.1 2015/10/07 16:09:04 jca Exp $
+-
+-Allow building against OpenSSL without SSLv2/SSLv3 support.
+-
+-Download from:
+-http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tn5250/patches/patch-lib5250_sslstream_c
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---- a/lib5250/sslstream.c.orig	Fri Nov 21 09:12:21 2008
+-+++ b/lib5250/sslstream.c	Tue Oct  6 21:32:29 2015
+-@@ -368,13 +368,19 @@ int tn5250_ssl_stream_init (Tn5250Stream *This)
+-         methstr[4] = '\0';
+-    }
+- 
+-+#ifndef OPENSSL_NO_SSL2
+-    if (!strcmp(methstr, "ssl2")) {
+-         meth = SSLv2_client_method();         
+-         TN5250_LOG(("SSL Method = SSLv2_client_method()\n"));
+--   } else if (!strcmp(methstr, "ssl3")) {
+-+   } else
+-+#endif
+-+#ifndef OPENSSL_NO_SSL3
+-+   if (!strcmp(methstr, "ssl3")) {
+-         meth = SSLv3_client_method();         
+-         TN5250_LOG(("SSL Method = SSLv3_client_method()\n"));
+--   } else {
+-+   } else
+-+#endif
+-+   {
+-         meth = SSLv23_client_method();         
+-         TN5250_LOG(("SSL Method = SSLv23_client_method()\n"));
+-    }
+diff --git a/package/tn5250/Config.in b/package/tn5250/Config.in
+deleted file mode 100644
+index 01be40bb73..0000000000
+--- a/package/tn5250/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_TN5250
+-	bool "tn5250"
+-	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_NCURSES
+-	help
+-	  Telnet client that emulates 5250 terminals and printers.
+-
+-	  http://tn5250.sourceforge.net/
+diff --git a/package/tn5250/tn5250.hash b/package/tn5250/tn5250.hash
+deleted file mode 100644
+index ae65beab50..0000000000
+--- a/package/tn5250/tn5250.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed:
+-sha256  354237d400dc46af887cb3ffa4ed1f2c371f5b8bee8be046a683a4ac9db4f9c5  tn5250-0.17.4.tar.gz
+diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
+deleted file mode 100644
+index 4c457a5d97..0000000000
+--- a/package/tn5250/tn5250.mk
++++ /dev/null
+@@ -1,29 +0,0 @@
+-################################################################################
+-#
+-# tn5250
+-#
+-################################################################################
+-
+-TN5250_VERSION = 0.17.4
+-TN5250_SITE = http://downloads.sourceforge.net/project/tn5250/tn5250/$(TN5250_VERSION)
+-TN5250_MAKE_OPTS = CPPFLAGS=""
+-TN5250_DEPENDENCIES = ncurses
+-TN5250_LICENSE = LGPL-2.1+
+-TN5250_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-TN5250_CONF_OPTS += --with-ssl-dir=$(STAGING_DIR)/usr
+-TN5250_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
+-TN5250_DEPENDENCIES += openssl host-pkgconf
+-else
+-TN5250_CONF_OPTS += --without-ssl
+-endif
+-
+-define TN5250_INSTALL_FIXES
+-	rm -f $(TARGET_DIR)/usr/bin/5250keys
+-	rm -f $(TARGET_DIR)/usr/bin/xt5250
+-endef
+-
+-TN5250_POST_INSTALL_TARGET_HOOKS += TN5250_INSTALL_FIXES
+-
+-$(eval $(autotools-package))
 -- 
-2.17.2 (Apple Git-113)
+2.11.0
