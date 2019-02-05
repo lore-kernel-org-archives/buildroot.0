@@ -1,45 +1,133 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 11:40:11 +0100
-Subject: [Buildroot] [PATCH v2] docs/website: consolidate CDN's and
- enable SRI
-In-Reply-To: <4f0406e1-aace-c31d-0683-dd99af63ae9a@mind.be> (Arnout
- Vandecappelle's message of "Tue, 5 Feb 2019 11:24:59 +0100")
-References: <1549275445-11857-1-git-send-email-angelo@amarulasolutions.com>
- <87y36vvij1.fsf@dell.be.48ers.dk>
- <CA+_SqVbAV37MoGC64N3ai--f0Wv3-nXZ2vOqwvVW0EVLC6Ysqg@mail.gmail.com>
- <87lg2vvepy.fsf@dell.be.48ers.dk>
- <CA+_SqVZjokW23jK4j1aKqUtHFCbRAn2s8zXWvZ-2mFN3AoNTwQ@mail.gmail.com>
- <CADvTj4oes1KgCv2TqLTnjPsJr+GZhCWZTS1DkTx3nGR5DiGmmg@mail.gmail.com>
- <4f0406e1-aace-c31d-0683-dd99af63ae9a@mind.be>
-Message-ID: <87ef8mplh0.fsf@dell.be.48ers.dk>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue, 05 Feb 2019 11:40:16 +0100
+Subject: [Buildroot] [PATCH v2 2/5] package/mender: adding systemv init
+ file
+In-Reply-To: <CAFSsvmoV1QEkfTg0OnxsmxKvZ=TmRWGxU-2oTwS_TwA+YPAWOg@mail.gmail.com>
+References: <1549362228-5731-1-git-send-email-angelo@amarulasolutions.com>
+ <1549362228-5731-3-git-send-email-angelo@amarulasolutions.com>
+ <CAFSsvmoV1QEkfTg0OnxsmxKvZ=TmRWGxU-2oTwS_TwA+YPAWOg@mail.gmail.com>
+Message-ID: <1549363216.7318.59.camel@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Angelo, Adam,
 
- > On 04/02/2019 23:30, James Hilliard wrote:
- >> Using a CDN can speed up performance due to browsers caching assets
- >> across different sites from my understanding.
+About that one, I'm wondering if it could be problematic to start
+Mender before the network (as package/ifupdown-scripts installs
+S40network).
 
- >  Indeed, I think that is the main reason to use a CDN:
+Best regards,
 
- > 1. It is likely to be cached already on the browser, and
- > 2. It avoids that the driver needs to open connections to various site, it can
- > just open one (HTTP/2 or /3) connection do the CDN if it really does need to get
- > the stuff.
+Titouan
 
- >  That said, since these files are tiny, it's probably not important (definitely
- > not important enough to bikeshed over :-).
-
-Agreed.
-
- > The SRI, on the other hand, *is* important IMO.
-
-Agreed, if we refer to ressources out of our control we should
-definately use SRI.
-
--- 
-Bye, Peter Korsgaard
+On Tue, 2019-02-05 at 11:29 +0100, Adam Duskett wrote:
+> Acked-by: <aduskett@gmail.com>
+> 
+> On Tue, Feb 5, 2019 at 11:24 AM Angelo Compagnucci
+> <angelo@amarulasolutions.com> wrote:
+> > 
+> > This patch adds a service file for the init system v.
+> > 
+> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> > ---
+> >  package/mender/S04mender | 56
+> > ++++++++++++++++++++++++++++++++++++++++++++++++
+> >  package/mender/mender.mk |  5 +++++
+> >  2 files changed, 61 insertions(+)
+> >  create mode 100644 package/mender/S04mender
+> > 
+> > diff --git a/package/mender/S04mender b/package/mender/S04mender
+> > new file mode 100644
+> > index 0000000..d5266aa
+> > --- /dev/null
+> > +++ b/package/mender/S04mender
+> > @@ -0,0 +1,56 @@
+> > +#!/bin/sh
+> > +#
+> > +# Starts mender service.
+> > +#
+> > +
+> > +start() {
+> > +       # If /var/lib/mender is a symlink to /var/run/mender, and
+> > +       #   - the filesystem is RO (i.e. we can not rm the
+> > symlink),
+> > +       #     create the directory pointed to by the symlink.
+> > +       #   - the filesystem is RW (i.e. we can rm the symlink),
+> > +       #     replace the symlink with an actual directory
+> > +       if [ -L /var/lib/mender \
+> > +            -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]
+> > +       then
+> > +               if rm -f /var/lib/mender >/dev/null 2>&1; then
+> > +                       mkdir -p /var/lib/mender
+> > +               else
+> > +                       echo "No persistent location to store
+> > mender data. Data will be lost"
+> > +                       echo "at reboot. Are you sure this is what
+> > you want to do?"
+> > +                       mkdir -p "$(readlink /var/lib/mender)"
+> > +               fi
+> > +       fi
+> > +
+> > +       printf "Starting mender service: "
+> > +       umask 077
+> > +
+> > +       start-stop-daemon -S -q -p /var/run/mender.pid \
+> > +               --exec /usr/bin/mender -- -daemon
+> > +       [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +}
+> > +stop() {
+> > +       printf "Stopping mender mender: "
+> > +       start-stop-daemon -K -q -p /var/run/mender.pid
+> > +       [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +}
+> > +restart() {
+> > +       stop
+> > +       start
+> > +}
+> > +
+> > +case "$1" in
+> > +       start)
+> > +               start
+> > +               ;;
+> > +       stop)
+> > +               stop
+> > +               ;;
+> > +       restart|reload)
+> > +               restart
+> > +               ;;
+> > +       *)
+> > +               echo "Usage: $0 {start|stop|restart}"
+> > +               exit 1
+> > +esac
+> > +
+> > +exit $?
+> > diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+> > index 3203df8..dc4a73b 100644
+> > --- a/package/mender/mender.mk
+> > +++ b/package/mender/mender.mk
+> > @@ -63,4 +63,9 @@ define MENDER_INSTALL_INIT_SYSTEMD
+> >                 $(TARGET_DIR)/etc/systemd/system/multi-
+> > user.target.wants/mender.service
+> >  endef
+> > 
+> > +define MENDER_INSTALL_INIT_SYSV
+> > +       $(INSTALL) -D -m 755 package/mender/S04mender \
+> > +               $(TARGET_DIR)/etc/init.d/S04mender
+> > +endef
+> > +
+> >  $(eval $(golang-package))
+> > --
+> > 2.7.4
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
