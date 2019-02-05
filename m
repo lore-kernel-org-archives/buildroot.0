@@ -1,326 +1,229 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  5 Feb 2019 16:19:59 +0100
-Subject: [Buildroot] [PATCH v6] support/scripts/pkg-stats: add latest
- upstream version information
-Message-ID: <20190205152000.32032-1-thomas.petazzoni@bootlin.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 5 Feb 2019 09:38:54 -0600
+Subject: [Buildroot] [PATCH v2] package/softether: bump to
+ v4.28-9669-beta
+In-Reply-To: <1549367272-15431-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1549367272-15431-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpbA9rm-UyZkjVOdJqgw5=u6vDT4A2Y-PyJmp+RwejoVDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds fetching the latest upstream version of each package
-from release-monitoring.org.
+On Tue, Feb 5, 2019 at 5:47 AM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Source code is now compatible with OpenSSL 1.1.x.
+>
 
-The fetching process first tries to use the package mappings of the
-"Buildroot" distribution [1]. This mapping mechanism allows to tell
-release-monitoring.org what is the name of a package in a given
-distribution/build-system. For example, the package xutil_util-macros
-in Buildroot is named xorg-util-macros on release-monitoring.org. This
-mapping can be seen in the section "Mappings" of
-https://release-monitoring.org/project/15037/.
+To get his to apply with the line endings, I had to do the following
+locally.....
 
-If there is no mapping, then it does a regular search, and within the
-search results, looks for a package whose name matches the Buildroot
-name.
+git am --keep-cr < v2-0001-package-softether-bump-to-v4.28-9669-beta.patch
 
-Even though fetching from release-monitoring.org is a bit slow, using
-multiprocessing.Pool has proven to not be reliable, with some requests
-ending up with an exception. So we keep a serialized approach, but
-with a single HTTPSConnectionPool() for all queries. Long term, we
-hope to be able to use a database dump of release-monitoring.org
-instead.
+> Fixes
+> http://autobuild.buildroot.net/results/a6f/a6f1f326ce2525ee0f9d423f1b6d989a89e6b87e/build-end.log
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes
+> v1 -> v2
+>  - Added patch to fix RSA key size needing to be larger then 32bits for new openssl
+>  - Tested both host and target build
+> ---
+>  .../0003-use-fhs-install-directories.patch         | 19 ++----
+>  ...-default-RSA-key-size-to-1024-everywhere-.patch | 78 ++++++++++++++++++++++
+>  package/softether/softether.hash                   |  4 +-
+>  package/softether/softether.mk                     |  4 +-
+>  4 files changed, 86 insertions(+), 19 deletions(-)
+>  create mode 100644 package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch
+>
+> diff --git a/package/softether/0003-use-fhs-install-directories.patch b/package/softether/0003-use-fhs-install-directories.patch
+> index c489cc1..ba00d9b 100644
+> --- a/package/softether/0003-use-fhs-install-directories.patch
+> +++ b/package/softether/0003-use-fhs-install-directories.patch
+> @@ -15,20 +15,22 @@ https://github.com/dajhorn/SoftEtherVPN/commit/b9420c3bfc2a8b9d35d0c8e5f6849007c
+>
+>  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +[Updated for 4.28 build 9669 beta - src/Mayaqua/Encrypt.c dropped IsXRevoked()
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>  ---
+>   autotools/softether.am      |  1 +
+>   src/Cedar/Admin.c           |  2 +-
+>   src/Cedar/Command.c         |  6 +++++-
+>   src/Cedar/Logging.c         |  2 +-
+>   src/Cedar/Server.c          |  4 ++--
+> - src/Mayaqua/Encrypt.c       |  2 +-
+>   src/Mayaqua/FileIO.c        | 39 ++++++++++++++++++++++++++++++++++++---
+>   src/Mayaqua/FileIO.h        |  2 ++
+>   src/Mayaqua/Mayaqua.c       |  4 ++++
+>   src/Mayaqua/Table.c         |  6 +++++-
+>   src/Mayaqua/Unix.c          |  6 +++---
+>   src/bin/hamcore/Makefile.am |  8 ++++++--
+> - 12 files changed, 67 insertions(+), 15 deletions(-)
+> + 11 files changed, 66 insertions(+), 14 deletions(-)
+>
+>  Index: b/autotools/softether.am
+>  ===================================================================
+> @@ -115,19 +117,6 @@ Index: b/src/Cedar/Server.c
+>         Format(dir_full_path, sizeof(dir_full_path), "%s/%s", exe_dir, dirname);
+>
+>         dir = EnumDir(dir_full_path);
+> -Index: b/src/Mayaqua/Encrypt.c
+> -===================================================================
+> ---- a/src/Mayaqua/Encrypt.c
+> -+++ b/src/Mayaqua/Encrypt.c
+> -@@ -579,7 +579,7 @@
+> -               return false;
+> -       }
+> -
+> --      GetExeDir(dirname, sizeof(dirname));
+> -+      GetStateDir(dirname, sizeof(dirname));
+> -
+> -       // Search the CRL file
+> -       t = EnumDir(dirname);
+>  Index: b/src/Mayaqua/FileIO.c
+>  ===================================================================
+>  --- a/src/Mayaqua/FileIO.c
+> diff --git a/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch b/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch
+> new file mode 100644
+> index 0000000..20a1f06
+> --- /dev/null
+> +++ b/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch
+> @@ -0,0 +1,78 @@
+> +From 1fad008e1adba5cb596da6f9ec6a244d49a585cf Mon Sep 17 00:00:00 2001
+> +From: Davide Beatrici <davidebeatrici@gmail.com>
+> +Date: Mon, 9 Apr 2018 22:02:34 +0200
+> +Subject: [PATCH] Encrypt: set default RSA key size to 1024 everywhere, using
+> + the RSA_KEY_SIZE macro
+> +
+> +This commit also fixes the problem described in #31, which was caused by the test key generated in RsaCheck() being too small for newer OpenSSL versions.
+> +
+> +Failure looks like
+> +-- Alert: RsaCheck() --
+> +OpenSSL Library Init Failed. (too old?)
+> +Please install the latest version of OpenSSL.
+> +
+> +Upstream: https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/commit/1fad008e1adba5cb596da6f9ec6a244d49a585cf
+> +(Currently still on an active pull request https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/pull/1)
+> +
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +---
+> + src/Mayaqua/Encrypt.c | 8 ++++----
+> + src/Mayaqua/Encrypt.h | 2 +-
+> + 2 files changed, 5 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/src/Mayaqua/Encrypt.c b/src/Mayaqua/Encrypt.c
+> +index 381d1c5..a557052 100644
+> +--- a/src/Mayaqua/Encrypt.c
+> ++++ b/src/Mayaqua/Encrypt.c
+> +@@ -2194,7 +2194,7 @@ bool RsaVerifyEx(void *data, UINT data_size, void *sign, K *k, UINT bits)
+> +       }
+> +       if (bits == 0)
+> +       {
+> +-              bits = 1024;
+> ++              bits = RSA_KEY_SIZE;
+> +       }
+> +
+> +       // Hash the data
+> +@@ -2233,7 +2233,7 @@ bool RsaSignEx(void *dst, void *src, UINT size, K *k, UINT bits)
+> +       }
+> +       if (bits == 0)
+> +       {
+> +-              bits = 1024;
+> ++              bits = RSA_KEY_SIZE;
+> +       }
+> +
+> +       Zero(dst, bits / 8);
+> +@@ -2302,7 +2302,7 @@ bool RsaCheck()
+> +       BIO *bio;
+> +       char errbuf[MAX_SIZE];
+> +       UINT size = 0;
+> +-      UINT bit = 32;
+> ++      UINT bit = RSA_KEY_SIZE;
+> +       // Validate arguments
+> +
+> +       // Key generation
+> +@@ -2372,7 +2372,7 @@ bool RsaGen(K **priv, K **pub, UINT bit)
+> +       }
+> +       if (bit == 0)
+> +       {
+> +-              bit = 1024;
+> ++              bit = RSA_KEY_SIZE;
+> +       }
+> +
+> +       // Key generation
+> +diff --git a/src/Mayaqua/Encrypt.h b/src/Mayaqua/Encrypt.h
+> +index d795d2d..0c48161 100644
+> +--- a/src/Mayaqua/Encrypt.h
+> ++++ b/src/Mayaqua/Encrypt.h
+> +@@ -128,7 +128,7 @@ void RAND_Free_For_SoftEther();
+> + #define       DES_IV_SIZE                                     8                       // DES IV size
+> + #define DES_BLOCK_SIZE                                8                       // DES block size
+> + #define DES3_KEY_SIZE                         (8 * 3)         // 3DES key size
+> +-#define RSA_KEY_SIZE                          128                     // RSA key size
+> ++#define RSA_KEY_SIZE                          1024            // RSA key size
+> + #define DH_KEY_SIZE                                   128                     // DH key size
+> + #define       RSA_MIN_SIGN_HASH_SIZE          (15 + SHA1_HASH_SIZE)   // Minimum RSA hash size
+> + #define       RSA_SIGN_HASH_SIZE                      (RSA_MIN_SIGN_HASH_SIZE)        // RSA hash size
+> +--
+> +1.9.1
+> +
+> diff --git a/package/softether/softether.hash b/package/softether/softether.hash
+> index ec6e060..fdbbbca 100644
+> --- a/package/softether/softether.hash
+> +++ b/package/softether/softether.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 8e6310d36e579ea07171ce5fcb9ebe31235d218444c4e4836ca6c32aa49c1f93 softether-v4.22-9634-beta.tar.gz
+> -sha256 7aeb873293fa0e44425dabf68a8e46e26c848fe58efcfd3ac7c90a3386f3edd1 LICENSE
+> +sha256 fbf6e04c4451d0cb1555c3a53c178b5453c7d761119f82fd693538c9f115fecb softether-v4.28-9669-beta.tar.gz
+> +sha256 0a889e7e7a277397d0a2d56c37814eefd8c6b6129d8b74ee2d27fc3415fad561 LICENSE
+> diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+> index 05d2f20..31378e8 100644
+> --- a/package/softether/softether.mk
+> +++ b/package/softether/softether.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>
+> -SOFTETHER_VERSION = v4.22-9634-beta
+> -SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+> +SOFTETHER_VERSION = v4.28-9669-beta
+> +SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,$(SOFTETHER_VERSION))
+>  SOFTETHER_LICENSE = GPL-2.0
+>  SOFTETHER_LICENSE_FILES = LICENSE
+>  SOFTETHER_DEPENDENCIES = host-softether libopenssl readline
+> --
+> 1.9.1
+>
 
-From an output point of view, the latest version column:
 
- - Is green when the version in Buildroot matches the latest upstream
-   version
-
- - Is orange when the latest upstream version is unknown because the
-   package was not found on release-monitoring.org
-
- - Is red when the version in Buildroot doesn't match the latest
-   upstream version. Note that we are not doing anything smart here:
-   we are just testing if the strings are equal or not.
-
- - The cell contains the link to the project on release-monitoring.org
-   if found.
-
- - The cell indicates if the match was done using a distro mapping, or
-   through a regular search.
-
-[1] https://release-monitoring.org/distro/Buildroot/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Changes since v5:
-- Don't use bare "except", use HTTPError urrlib3 exception
-  instead. Fixes a flake8 warning, and suggested by Ricardo
-- Drop unused RELEASE_MONITORING_API global variable. Reported by
-  Matt Weber.
-- Drop bogus debug message.
-- Add missing newlines between functions.
-- Initialize self.latest_version to a correct tuple during object
-  construction, so we're sure we always have a correct tuple in this
-  field. Suggested by Arnout.
-- Add timeout to the HTTPSConnectionPool, as suggested by Matt Weber.
-- Use the "version" field instead of the "versions" list, as suggested
-  by Brandon Maier.
-- Sort by id the list of results returned by the search by
-  pattern. Indeed, release-monitoring.org returns the results in a
-  random order, causing the results to not be stable accross runs.
-
-Changes since v4:
-- Don't use multiprocessing.Pool(), stick to a serialized approach,
-  which is more reliable.
-- Handle errors/exceptions properly.
-- Improve the layout of the resulting table column.
-
-Changes since v3:
-- Use Pool(), like is done for the upstream URL checking added by Matt
-  Weber
-- Use the requests Python module instead of the urllib2 Python module,
-  so that we use the same module as the one used for the upstream URL
-  checking
-- Adjusted to work with the latest pkg-stats code
-
-Changes since v2:
-- Use the "timeout" argument of urllib2.urlopen() in order to make
-  sure that the requests terminate at some point, even if
-  release-monitoring.org is stuck.
-- Move a lot of the logic as methods of the Package() class.
-
-Changes since v1:
-- Fix flake8 warnings
-- Add missing newline in HTML
-
-stuff
----
- support/scripts/pkg-stats | 144 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d0b06b1e74..edc78b827b 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -25,11 +25,19 @@ import re
- import subprocess
- import sys
- import requests  # URL checking
-+import json
-+import certifi
-+from urllib3 import HTTPSConnectionPool
-+from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
- 
- INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile("\s*https?://\S*\s*$")
- 
-+RM_API_STATUS_ERROR = 1
-+RM_API_STATUS_FOUND_BY_DISTRO = 2
-+RM_API_STATUS_FOUND_BY_PATTERN = 3
-+RM_API_STATUS_NOT_FOUND = 4
- 
- class Package:
-     all_licenses = list()
-@@ -49,6 +57,7 @@ class Package:
-         self.url = None
-         self.url_status = None
-         self.url_worker = None
-+        self.latest_version = (RM_API_STATUS_ERROR, None, None)
- 
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -298,6 +307,73 @@ def check_package_urls(packages):
-         pkg.url_status = pkg.url_worker.get(timeout=3600)
- 
- 
-+def release_monitoring_get_latest_version_by_distro(pool, name):
-+    try:
-+        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
-+    except HTTPError:
-+        return (RM_API_STATUS_ERROR, None, None)
-+
-+    if req.status != 200:
-+        return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+    data = json.loads(req.data)
-+
-+    if 'version' in data:
-+        return (RM_API_STATUS_FOUND_BY_DISTRO, data['version'], data['id'])
-+    else:
-+        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
-+
-+
-+def release_monitoring_get_latest_version_by_guess(pool, name):
-+    try:
-+        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
-+    except HTTPError:
-+        return (RM_API_STATUS_ERROR, None, None)
-+
-+    if req.status != 200:
-+        return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+    data = json.loads(req.data)
-+
-+    projects = data['projects']
-+    projects.sort(key=lambda x: x['id'])
-+
-+    for p in projects:
-+        if p['name'] == name and 'version' in p:
-+            return (RM_API_STATUS_FOUND_BY_PATTERN, p['version'], p['id'])
-+
-+    return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+
-+def check_package_latest_version(packages):
-+    """
-+    Fills in the .latest_version field of all Package objects
-+
-+    This field has a special format:
-+      (status, version, id)
-+    with:
-+    - status: one of RM_API_STATUS_ERROR,
-+      RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
-+      RM_API_STATUS_NOT_FOUND
-+    - version: string containing the latest version known by
-+      release-monitoring.org for this package
-+    - id: string containing the id of the project corresponding to this
-+      package, as known by release-monitoring.org
-+    """
-+    pool = HTTPSConnectionPool('release-monitoring.org', port=443,
-+                               cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
-+                               timeout=30)
-+    count = 0
-+    for pkg in packages:
-+        v = release_monitoring_get_latest_version_by_distro(pool, pkg.name)
-+        if v[0] == RM_API_STATUS_NOT_FOUND:
-+            v = release_monitoring_get_latest_version_by_guess(pool, pkg.name)
-+
-+        pkg.latest_version = v
-+        print("[%d/%d] Package %s" % (count, len(packages), pkg.name))
-+        count += 1
-+
-+
- def calculate_stats(packages):
-     stats = defaultdict(int)
-     for pkg in packages:
-@@ -322,6 +398,16 @@ def calculate_stats(packages):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
-+        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+            stats["rmo-mapping"] += 1
-+        else:
-+            stats["rmo-no-mapping"] += 1
-+        if not pkg.latest_version[1]:
-+            stats["version-unknown"] += 1
-+        elif pkg.latest_version[1] == pkg.current_version:
-+            stats["version-uptodate"] += 1
-+        else:
-+            stats["version-not-uptodate"] += 1
-         stats["patches"] += pkg.patch_count
-     return stats
- 
-@@ -354,6 +440,7 @@ td.somepatches {
- td.lotsofpatches {
-   background: #ff9a69;
- }
-+
- td.good_url {
-   background: #d2ffc4;
- }
-@@ -363,6 +450,20 @@ td.missing_url {
- td.invalid_url {
-   background: #ff9a69;
- }
-+
-+td.version-good {
-+  background: #d2ffc4;
-+}
-+td.version-needs-update {
-+  background: #ff9a69;
-+}
-+td.version-unknown {
-+ background: #ffd870;
-+}
-+td.version-error {
-+ background: #ccc;
-+}
-+
- </style>
- <title>Statistics of Buildroot packages</title>
- </head>
-@@ -465,6 +566,36 @@ def dump_html_pkg(f, pkg):
-         current_version = pkg.current_version
-     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
- 
-+    # Latest version
-+    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+        td_class.append("version-error")
-+    if pkg.latest_version[1] is None:
-+        td_class.append("version-unknown")
-+    elif pkg.latest_version[1] != pkg.current_version:
-+        td_class.append("version-needs-update")
-+    else:
-+        td_class.append("version-good")
-+
-+    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+        latest_version_text = "<b>Error</b>"
-+    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
-+        latest_version_text = "<b>Not found</b>"
-+    else:
-+        if pkg.latest_version[1] is None:
-+            latest_version_text = "<b>Found, but no version</b>"
-+        else:
-+            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % (pkg.latest_version[2], str(pkg.latest_version[1]))
-+
-+        latest_version_text += "<br/>"
-+
-+        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+            latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
-+        else:
-+            latest_version_text += "found by guess"
-+
-+    f.write("  <td class=\"%s\">%s</td>\n" %
-+            (" ".join(td_class), latest_version_text))
-+
-     # Warnings
-     td_class = ["centered"]
-     if pkg.warnings == 0:
-@@ -502,6 +633,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">License files</td>
- <td class=\"centered\">Hash file</td>
- <td class=\"centered\">Current version</td>
-+<td class=\"centered\">Latest version</td>
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
- </tr>
-@@ -532,6 +664,16 @@ def dump_html_stats(f, stats):
-             stats["no-hash"])
-     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
-             stats["patches"])
-+    f.write("<tr><td>Packages having a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
-+            stats["rmo-mapping"])
-+    f.write("<tr><td>Packages lacking a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
-+            stats["rmo-no-mapping"])
-+    f.write("<tr><td>Packages that are up-to-date</td><td>%s</td></tr>\n" %
-+            stats["version-uptodate"])
-+    f.write("<tr><td>Packages that are not up-to-date</td><td>%s</td></tr>\n" %
-+            stats["version-not-uptodate"])
-+    f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>\n" %
-+            stats["version-unknown"])
-     f.write("</table>\n")
- 
- 
-@@ -587,6 +729,8 @@ def __main__():
-         pkg.set_url()
-     print("Checking URL status")
-     check_package_urls(packages)
-+    print("Getting latest versions ...")
-+    check_package_latest_version(packages)
-     print("Calculate stats")
-     stats = calculate_stats(packages)
-     print("Write HTML")
 -- 
-2.20.1
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
