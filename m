@@ -1,82 +1,60 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Feb 2019 22:12:24 +0100
-Subject: [Buildroot] [PATCHv2 2/2] utils/test-pkg: clean output dir for
- successful builds
-In-Reply-To: <20190205200922.7352-2-patrickdepinguin@gmail.com>
-References: <20190205200922.7352-1-patrickdepinguin@gmail.com>
- <20190205200922.7352-2-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LWdDXfy0Cu5yFT4u59T-uNTdYT4EbaEeP7HZwu-V77DGQ@mail.gmail.com>
+Date: Tue,  5 Feb 2019 22:15:44 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of dynamic
+ loader to ld*.so.*
+Message-ID: <20190205211544.26547-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 5 feb. 2019 a las 21:10, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
->
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> test-pkg will use gigabytes of space when testing all toolchains.
-> Nevertheless, you are normally only interested in the actual build / host
-> tree when there is a build failure.
->
-> Do a 'make clean' for successful builds to save disk space, unless the new
-> option '-k/--keep' is set.
-> Note that the logfile and configuration is always retained for inspection.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  utils/test-pkg | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
->
-> v2: make the feature optional via '--keep' (feedback Arnout and Peter)
->
->
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index 087f9ddca9..ef865c80fe 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -6,16 +6,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
->  main() {
->      local o O opts
->      local cfg dir pkg random toolchains_csv toolchain all number mode
-> -    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-> +    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
->      local -a toolchains
->
-> -    o='hac:d:n:p:r:t:'
-> -    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-> +    o='hakc:d:n:p:r:t:'
-> +    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
->      opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
->      eval set -- "${opts}"
->
->      random=0
->      all=0
-> +    keep=0
->      number=0
->      mode=0
->      toolchains_csv="${TOOLCHAINS_CSV}"
-> @@ -27,6 +28,9 @@ main() {
->          (-a|--all)
->              all=1; shift 1
->              ;;
-> +        (-k|--keep)
-> +            keep=1; shift 1
-> +            ;;
->          (-c|--config-snippet)
->              cfg="${2}"; shift 2
->              ;;
-> @@ -161,6 +165,12 @@ build_one() {
->      if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
->          return 3
->      fi
-> +
-> +    # If we get here, the build was successful. Clean up the build/host
-> +    # directories to save disk space, unless 'keep' was set.
-> +    if [ ${keep} -ne 1 ]; then
-> +        make O="${dir}" clean >> "${dir}/logfile" 2>&1
-> +    fi
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Grmbl, I forgot to update the help text...
+Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
+("toolchain-external: copy ld*.so* for all C libraries") changed (among
+other things) the glob pattern to catch the dynamic loader from
+    ld*.so.*
+to
+    ld*.so*
+
+thus now matching files like 'ld-2.20.so' in addition to files like
+'ld.so.1'.
+
+However, there is no apparent reason why that change was made. It is not
+explicitly mentioned in the commit message as to why that would be needed,
+nor is clear based on the rest of the changes in that commit.
+
+The consequence of the change is that more files than needed end up in the
+target root filesystem, adding extra unnecessary size to it.
+
+Therefore, revert the glob pattern back to what it was.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+Seems this patch slipped through the cracks for a while.
+See earlier discussion at: http://patchwork.ozlabs.org/patch/882583/
+but it seems I never submitted the patch I said I was going to.
+The code has been running successfully for almost a year in our different
+defconfigs/toolchains.
+
+
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index db3570d96f..e55cca539c 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -112,7 +112,7 @@ endif
+ # Definitions of the list of libraries that should be copied to the target.
+ #
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
++TOOLCHAIN_EXTERNAL_LIBS += ld*.so.* libgcc_s.so.* libatomic.so.*
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+-- 
+2.19.2
