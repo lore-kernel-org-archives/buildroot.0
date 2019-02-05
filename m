@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue,  5 Feb 2019 15:31:24 +0100
-Subject: [Buildroot] [PATCH v5 1/3] openjdk-bin: new package
-Message-ID: <20190205143126.13857-1-aduskett@gmail.com>
+Date: Tue,  5 Feb 2019 15:31:25 +0100
+Subject: [Buildroot] [PATCH v5 2/3] openjdk: new package
+In-Reply-To: <20190205143126.13857-1-aduskett@gmail.com>
+References: <20190205143126.13857-1-aduskett@gmail.com>
+Message-ID: <20190205143126.13857-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,119 +12,293 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Paradoxically, building OpenJDK requires a pre-existing JDK.
-This pre-existing JDK is called the "boot JDK."
+OpenJDK is a free and open-source implementation of the Java Platform.
+This package provides the option to build a client or a server JVM interpreter.
 
-The boot JDK for building JDK major version N should be a JDK of major
-version N-1, so for building JDK11, JDK10 would be needed. This requirement is
-an issue when building on most distributions, as the host JDK tends to be JDK8.
+The default option is the server option, as that is what the majority of users
+use. This JVM interpreter loads more slowly, putting more effort into JIT
+compilations to yield higher performance.
 
-The AdoptOpenJDK project provides binaries that can act as the boot JDK to
-build the target JDK, which is what this package provides.
+Unlike most autotools packages, OpenJDK is exceptionally different and has many
+quirks, some of which are documented below:
 
-Currently, only a x86_64 host is supported, for two reasons:
-1) A 32bit x86 binary distribution is not available from AdoptOpenJDK
-2) Access to a machine that is not x86_64 that can build Buildroot is not
-   avaliable.
+- X11, alsa, and cups are required to build Java, even if it's a headless build.
 
-The provided unpack200 has an invalid RPATH and relies on libzlib.
-When host-libzlib runs the install step, the following error is generated:
+- There is no autogen.sh file, instead, a user calls ./configure autogen.
 
-*** ERROR: package host-libzlib installs executables without proper RPATH:
-***   $(HOST_DIR)/bin/unpack200
+- If ccache is enabled, BuildRoot sets CC, CXX, and CPP to
+  the ccache binary, which causes OpenJDK to throw an error during the
+  configure step, so LD, CC, CXX, and CPP must set explicitly to the actual
+  binaries.
 
-Because unpack200 is a deprecated tool, removing it after installation
-is safe and fixes the issue.
+- Some variables are ignored unless set as a configure option. These variables
+  are OBJCOPY, OBJDUMP, NM, STRIP, and AR.
+
+- Other variables must be environment variables, these are PATH, LD, CC, CXX, and CPP.
+
+- Parallel make is possible, but not with make -jN, instead, one has to pass the
+  --with-jobs=$(PARALLEL_JOBS) to ./configure, or pass JOBS=$(PARALLEL_JOBS) to
+  make. The formner was chosen as it seems cleaner.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - No change
+  - Fixed the patch name.
 
 Changes v2 -> v3:
-  - Changed the location of the installed binaries to just $(HOST_DIR)/openjdk
+  - Changed the install location of the libraries and binaries to
+    $(TARGET_DIR)/bin and $(TARGET_DIR)/lib.
+
+  - Changed -with-boot-jdk location to $(HOST_DIR)/openjdk
 
   - Added a more in-depth commit message explaining some of the my reasoning
     for some of the quirks in the package files.
 
 Changes v3 -> v4:
-  - Removed first person wordage. (Thomas)
   - Changed GPLv2+ -> GPL-2.0+ (Thomas)
-  - Removed Config.in.host (Thomas)
+  - Added BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS to Config.in
+  - Removed first person wordage. (Thomas)
 
 Changes v4 -> v5:
-  - Changed the install location to just $(HOST_DIR)/bin and ${HOST_DIR}/lib
-  - Remove unpack200 from ${HOSt_DIR}/bin due to bad RPATHS in the binary.
-  - Remove support/testing/tests/package/br2-external/openjdk/ from DEVELOPERS
-    (Matthew)
+  - Add jpeg, giflib, libpng, and zlib as dependencies. (Thomas)
+  - Remove dependencies that aren't necessary. (Thomas)
+  - Add better comments in the openjdk.mk file. (Matthew)
+  - Change --with-boot-jdk location to just $(HOST_DIR)
+  - Use newer Oracle provided cpu port for aarch64.
   - Update version to 11.0.2+9
 
- DEVELOPERS                           |  1 +
- package/openjdk-bin/openjdk-bin.hash |  6 ++++++
- package/openjdk-bin/openjdk-bin.mk   | 30 ++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/openjdk-bin/openjdk-bin.hash
- create mode 100644 package/openjdk-bin/openjdk-bin.mk
+ DEVELOPERS                   |   1 +
+ package/Config.in            |   1 +
+ package/openjdk/Config.in    |  56 ++++++++++++++++
+ package/openjdk/openjdk.hash |   3 +
+ package/openjdk/openjdk.mk   | 122 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 183 insertions(+)
+ create mode 100644 package/openjdk/Config.in
+ create mode 100644 package/openjdk/openjdk.hash
+ create mode 100644 package/openjdk/openjdk.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 59e1f32ba9..460e4de7b9 100644
+index 460e4de7b9..e4f5ac6258 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -50,6 +50,7 @@ F:	package/libselinux/
  F:	package/libsemanage/
  F:	package/libsepol/
  F:	package/nginx-naxsi/
-+F:	package/openjdk-bin/
++F:	package/openjdk/
+ F:	package/openjdk-bin/
  F:	package/policycoreutils/
  F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+diff --git a/package/Config.in b/package/Config.in
+index bca61f14ed..e43770f7d2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -671,6 +671,7 @@ menu "Mono libraries/modules"
+ endmenu
+ endif
+ 	source "package/nodejs/Config.in"
++	source "package/openjdk/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
 new file mode 100644
-index 0000000000..d36a582a33
+index 0000000000..70cddc1ccc
 --- /dev/null
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -0,0 +1,6 @@
-+# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
-+sha256	d02089d834f7702ac1a9776d8d0d13ee174d0656cf036c6b68b9ffb71a6f610e	OpenJDK11U-jdk_x64_linux_hotspot_11.0.2_9.tar.gz
++++ b/package/openjdk/Config.in
+@@ -0,0 +1,56 @@
++config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "x86_64"
 +
-+# Locally calculated
-+sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
-+sha256	a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb	legal/java.prefs/ASSEMBLY_EXCEPTION
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
++config BR2_PACKAGE_OPENJDK
++	bool "OpenJDK"
++	depends on !BR2_SOFT_FLOAT
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_INSTALL_LIBSTDCPP # cups
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, cups, libusb
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_CUPS
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_GIFLIB
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_XLIB_LIBXRENDER
++	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_ZLIB
++	help
++	  OpenJDK is a free and open-source implementation of the
++	  Java Platform.
++
++	  http://openjdk.java.net/
++
++if BR2_PACKAGE_OPENJDK
++
++menu "JVM Variants"
++
++config BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT
++	bool "client"
++	help
++	  Quick loading, but slower run-time performance.
++
++config BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER
++	bool "server"
++	default y
++	help
++	  Slower loading, but faster run-time performance.
++
++endmenu
++endif
++
++comment "OpenJDK needs X11, glibc, and a toolchain w/ wchar, dynamic library, threads, C++"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++
++comment "OpenJDK does not support soft floats"
++	depends on BR2_SOFT_FLOAT
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
 new file mode 100644
-index 0000000000..390baad0c6
+index 0000000000..8b14609066
 --- /dev/null
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -0,0 +1,30 @@
++++ b/package/openjdk/openjdk.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 6c69a2c1b5177659d4263545cf83e0fbcd697669b0107481372be3648af7b89b  openjdk-jdk-11.0.2+9.tar.gz
++sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+new file mode 100644
+index 0000000000..8a4aaad3d0
+--- /dev/null
++++ b/package/openjdk/openjdk.mk
+@@ -0,0 +1,122 @@
 +################################################################################
 +#
-+# host-openjdk-bin
++# openjdk
 +#
 +################################################################################
 +
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.2
-+HOST_OPENJDK_BIN_VERSION_MINOR = 9
-+HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-+HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
-+HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
++OPENJDK_VERSION_MAJOR = 11.0.2
++OPENJDK_VERSION_MINOR = 9
++OPENJDK_VERSION=jdk-$(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
++OPENJDK_RELEASE = jdk11u
++OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk11u,$(OPENJDK_VERSION))
++OPENJDK_LICENSE = GPL-2.0+ with exception
++OPENJDK_LICENSE_FILES = LICENSE
 +
-+# If the files are installed to $(HOST_DIR)/bin and $(HOST_DIR)/lib
-+# the build will fail because the RPATH of java binaries do not have a proper
-+# RPATH
-+define HOST_OPENJDK_BIN_INSTALL_CMDS
-+	cp -aLrf $(@D)/bin/* $(HOST_DIR)/bin/
-+	cp -aLrf $(@D)/lib/* $(HOST_DIR)/lib/
-+	# unpack200 has an invalid RPATH and relies on libzlib. When host-libzlib
-+	# is installed on the system, the error
-+	# "ERROR: package host-libzlib installs executables without proper RPATH:
-+	# /home/buildroot/bropenjdk/output/host/bin/unpack200" will occure.
-+	# Because unpack200 is a deprecated tool, removing it to fix this issue is
-+	# safe.
-+	$(RM) $(HOST_DIR)/bin/unpack200
++OPENJDK_DEPENDENCIES = \
++	host-openjdk-bin \
++	host-pkgconf \
++	alsa-lib \
++	cups \
++	fontconfig \
++	giflib \
++	jpeg \
++	libpng \
++	libusb \
++	xlib_libXrender \
++	xlib_libXt \
++	xlib_libXtst \
++	zlib
++
++# JVM variants
++ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT),y)
++OPENJDK_JVM_VARIANTS += client
++endif
++
++ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER),y)
++OPENJDK_JVM_VARIANTS += server
++endif
++OPENJDK_JVM_VARIANT_LIST = $(subst $(space),$(comma),$(OPENJDK_JVM_VARIANTS))
++
++# Some environment variables will be ignored unless passed via environment
++# variables.
++# OpenJDK will default to ld, but will pass -Xlinker and -z as arguments,
++# which will cause compilation failures. Instead, tell OpenJDK to use gcc.
++# Furthermore, if ccache is enabled, BuildRoot will set CC,CXX, and CPP to
++# the ccache binary, which will cause OpenJDK to throw an error during the
++# configure step, so we must set these variables explicitly to the actual
++# binaries.
++OPENJDK_CONF_ENV = \
++	PATH=$(BR_PATH) \
++	LD=$(TARGET_CC) \
++	CC=$(TARGET_CC) \
++	CXX=$(TARGET_CXX) \
++	CPP=$(TARGET_CPP)
++
++OPENJDK_CONF_OPTS = \
++	--disable-full-docs \
++	--disable-hotspot-gtest \
++	--disable-manpages \
++	--disable-warnings-as-errors \
++	--enable-headless-only \
++	--enable-openjdk-only \
++	--enable-unlimited-crypto \
++	--openjdk-target=$(GNU_TARGET_NAME) \
++	--prefix=$(TARGET_DIR)/usr \
++	--with-boot-jdk=$(HOST_DIR) \
++	--with-debug-level=release \
++	--with-devkit=$(HOST_DIR) \
++	--with-extra-cflags="$(TARGET_CFLAGS)" \
++	--with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
++	--with-extra-path=$(HOST_DIR)/bin:$(HOST_DIR)/sbin \
++	--with-giflib=system \
++	--with-jobs=$(PARALLEL_JOBS) \
++	--with-jvm-variants=$(OPENJDK_JVM_VARIANT_LIST) \
++	--with-libjpeg=system \
++	--with-libpng=system \
++	--with-native-debug-symbols=none \
++	--with-sysroot=$(STAGING_DIR) \
++	--with-vendor-name="AdoptOpenJDK" \
++	--with-vendor-url="https://adoptopenjdk.net/" \
++	--with-vendor-version-string="AdoptOpenJDK" \
++	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
++	--with-version-string="$(OPENJDK_VERSION_MAJOR)" \
++	--with-zlib=system \
++	--without-version-pre \
++	OBJCOPY=$(TARGET_OBJCOPY) \
++	OBJDUMP=$(TARGET_OBJDUMP) \
++	NM=$(TARGET_NM) \
++	STRIP=$(TARGET_STRIP) \
++	AR=$(TARGET_AR)
++
++# Use the newer Oracle provided cpu port for aarch64
++ifeq ($(BR2_aarch64),y)
++OPENJDK_CONF_OPTS += --with-cpu-port=arm64 --with-abi-profile=arm64
++endif
++
++ifeq ($(BR2_CCACHE),y)
++OPENJDK_CONF_OPTS += \
++	--enable-ccache \
++	--with-ccache-dir=$(BR2_CCACHE_DIR)
++endif
++
++# Autogen and configure are done in a single step.
++define OPENJDK_CONFIGURE_CMDS
++	chmod +x $(@D)/configure
++	cd $(@D); $(OPENJDK_CONF_ENV) ./configure autogen $(OPENJDK_CONF_OPTS)
 +endef
 +
-+$(eval $(host-generic-package))
++# Build just the JRE image for the target.
++# Make -jn is unsupported, so $(MAKE1) is called and --with-jobs is specified
++# in the configure options.
++define OPENJDK_BUILD_CMDS
++	$(MAKE1) -C $(@D) legacy-jre-image
++endef
++
++# Calling make install will build and install the JDK instad of the JRE,
++# which makes manual installation necessary.
++define OPENJDK_INSTALL_TARGET_CMDS
++	cp -rf $(@D)/build/linux-*-release/images/jre/bin/* $(TARGET_DIR)/usr/bin/
++	cp -rf $(@D)/build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
++endef
++
++$(eval $(generic-package))
 -- 
 2.17.2 (Apple Git-113)
