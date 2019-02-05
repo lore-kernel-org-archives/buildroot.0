@@ -1,52 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Feb 2019 20:29:20 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump to 2.58.3
-In-Reply-To: <20190205185623.15717-1-aduskett@gmail.com>
-References: <20190205185623.15717-1-aduskett@gmail.com>
-Message-ID: <20190205202920.6036210a@windsurf>
+Date: Tue, 5 Feb 2019 20:29:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zbar: bump to version
+ 57d601e82089f2f31de9e1683c3834f237421f5d
+In-Reply-To: <20190204190015.30321-1-fontaine.fabrice@gmail.com>
+References: <20190204190015.30321-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190205202947.53a89b0f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 Feb 2019 19:56:23 +0100
-aduskett at gmail.com wrote:
+On Mon,  4 Feb 2019 20:00:15 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> When building statically zbar, build fails on:
+> configure: error: unable to find libv4l.so
 > 
-> In addition:
->  - Update second patch
->  - Remove third and fifth patches (already in version)
->  - Add a new patch to fix a missing header
->  - Add LIBGLIB2_GTK_DOC_HOOK so autoreconf do not fail on the following
->    error:
->      automake: error: cannot open < gtk-doc.make: No such file or directory
+> The following errors are raised in config.log:
+> configure:19371:
+> /home/buildroot/buildroot-test/instance-0/output/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g2  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lv4l2 -lpthread  >&5
+> /home/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libv4l2.a(libv4l2_la-libv4l2.o): In function `v4l2_set_src_and_dest_format':
+> /home/buildroot/buildroot-test/instance-0/output/build/libv4l-1.16.2/lib/libv4l2/libv4l2.c:952: undefined reference to `v4lconvert_supported_dst_format'
 > 
->  - Add a new patch: package/libglib2/0005-use-tooldir-in-pc-file.patch
->    This patch fixes the previous autobuild errors by modifying the glib-2.0.pc
->    file and adding a tooldir variable, of which the glib_genmarshal,
->    gobject_query, and glib_mkenums of which will be prefixed. Then a
+> To fix this error, bump to version
+> 57d601e82089f2f31de9e1683c3834f237421f5d to replace AC_CHECK_LIB by
+> PKG_CHECK_MODULES to find the correct library (-lv4lconvert but also
+> -ljpeg, ...)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/acf39e4754508d7ee49e21f08ff0a1fcac4fb7cd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/zbar/zbar.hash | 2 +-
+>  package/zbar/zbar.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-I am confused by the double "of which" usage in this sentence.
-
-> +define LIBGLIB2_FIX_PC_FILE
-> +$(SED) "s at toolsdir=.*@toolsdir=$(STAGING_DIR)/usr/bin at g" \
-> +	$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-
-This kind of replacement with STAGING_DIR is a bit annoying for the
-upcoming per-package stuff. Options that I see:
-
- (1) Add 'bindir' to the list of pkg-config variables that should be
-     sysroot-prefixed. Works, but impact unknown.
-
- (2) Add 'toolsdir' to the list of pkg-config variables that should be
-     sysroot-prefixed. Works, but impact unknown.
-
- (3) Make toolsdir=${libdir}/../bin. Works, but ugly.
-
-I don't have a good opinion on what is the best choice here. Let's see
-what Arnout says.
+Applied to master, thanks.
 
 Thomas
 -- 
