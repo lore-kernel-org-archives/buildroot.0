@@ -1,75 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 13:46:33 +0100
-Subject: [Buildroot] [PATCH v3 2/5] package/mender: adding systemv init
- file
-In-Reply-To: <1549363799-30840-3-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 5 Feb 2019 11:49:56 +0100")
-References: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
- <1549363799-30840-3-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <871s4mpfme.fsf@dell.be.48ers.dk>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  5 Feb 2019 06:54:32 -0600
+Subject: [Buildroot] [PATCH] package/moarvm: resolve libtommath name
+ collision
+Message-ID: <1549371272-5485-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+Fixes
+http://autobuild.buildroot.net/results/02f/02ff68698603ebdce5d13d3130a15b5a1ecc14d2/build-end.log
 
- > This patch adds a service file for the init system v.
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
- > Acked-by: <aduskett@gmail.com>
- > ---
- > [v2 -> v3]:
- > * Moved the service to s42 to have the network ready before running
- >   Mender as pointed out by Titouan
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ ...-Fix-Name-Collision-With-LibTomMath-Funcs.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch
 
- >  package/mender/S42mender | 56 ++++++++++++++++++++++++++++++++++++++++++++++++
- >  package/mender/mender.mk |  5 +++++
- >  2 files changed, 61 insertions(+)
- >  create mode 100644 package/mender/S42mender
-
- > diff --git a/package/mender/S42mender b/package/mender/S42mender
- > new file mode 100644
- > index 0000000..d5266aa
- > --- /dev/null
- > +++ b/package/mender/S42mender
- > @@ -0,0 +1,56 @@
- > +#!/bin/sh
- > +#
- > +# Starts mender service.
- > +#
- > +
- > +start() {
- > +	# If /var/lib/mender is a symlink to /var/run/mender, and
- > +	#   - the filesystem is RO (i.e. we can not rm the symlink),
- > +	#     create the directory pointed to by the symlink.
- > +	#   - the filesystem is RW (i.e. we can rm the symlink),
- > +	#     replace the symlink with an actual directory
- > +	if [ -L /var/lib/mender \
- > +	     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]
- > +	then
- > +		if rm -f /var/lib/mender >/dev/null 2>&1; then
- > +			mkdir -p /var/lib/mender
- > +		else
- > +			echo "No persistent location to store mender data. Data will be lost"
- > +			echo "at reboot. Are you sure this is what you want to do?"
- > +			mkdir -p "$(readlink /var/lib/mender)"
- > +		fi
- > +	fi
- > +
- > +	printf "Starting mender service: "
- > +	umask 077
- > +
- > +	start-stop-daemon -S -q -p /var/run/mender.pid \
- > +		--exec /usr/bin/mender -- -daemon
- > +	[ $? = 0 ] && echo "OK" || echo "FAIL"
- > +}
- > +stop() {
- > +	printf "Stopping mender mender: "
-
-Typo, s/mender mender/mender service/
-
-Committed with that fixed, thanks.
-
+diff --git a/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch b/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch
+new file mode 100644
+index 0000000..621a4b3
+--- /dev/null
++++ b/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch
+@@ -0,0 +1,63 @@
++From 588d4805097d01865538a2d5c52d59c99a1015e7 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Tue, 5 Feb 2019 06:48:41 -0600
++Subject: [PATCH] Fix Name Collision With LibTomMath Funcs
++
++Upstream: https://github.com/MoarVM/MoarVM/commit/f7204a3ee5199dd70f26d6fe133008cc86c63bbe
++(Similar but version difference has Buildroot only using a subset of the changes
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/math/bigintops.c | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/math/bigintops.c b/src/math/bigintops.c
++index 2275593..8ab7ed6 100644
++--- a/src/math/bigintops.c
+++++ b/src/math/bigintops.c
++@@ -45,7 +45,7 @@ int MVM_bigint_mp_set_uint64(mp_int * a, MVMuint64 b) {
++   return MP_OKAY;
++ }
++ 
++-static MVMnum64 mp_get_double(mp_int *a) {
+++static MVMnum64 MVM_mp_get_double(mp_int *a) {
++     MVMnum64 d    = 0.0;
++     MVMnum64 sign = SIGN(a) == MP_NEG ? -1.0 : 1.0;
++     int i;
++@@ -680,8 +680,8 @@ MVMObject * MVM_bigint_pow(MVMThreadContext *tc, MVMObject *a, MVMObject *b,
++         }
++     }
++     else {
++-        MVMnum64 f_base = mp_get_double(base);
++-        MVMnum64 f_exp = mp_get_double(exponent);
+++        MVMnum64 f_base = MVM_mp_get_double(base);
+++        MVMnum64 f_exp = MVM_mp_get_double(exponent);
++         r = MVM_repr_box_num(tc, num_type, pow(f_base, f_exp));
++     }
++     clear_temp_bigints(tmp, 2);
++@@ -880,7 +880,7 @@ MVMnum64 MVM_bigint_to_num(MVMThreadContext *tc, MVMObject *a) {
++ 
++     if (MVM_BIGINT_IS_BIG(ba)) {
++         mp_int *ia = ba->u.bigint;
++-        return mp_get_double(ia);
+++        return MVM_mp_get_double(ia);
++     } else {
++         return (double)ba->u.smallint.value;
++     }
++@@ -913,11 +913,11 @@ MVMnum64 MVM_bigint_div_num(MVMThreadContext *tc, MVMObject *a, MVMObject *b) {
++             mp_init(&reduced_b);
++             mp_div_2d(ia, max_size - 1023, &reduced_a, NULL);
++             mp_div_2d(ib, max_size - 1023, &reduced_b, NULL);
++-            c = mp_get_double(&reduced_a) / mp_get_double(&reduced_b);
+++            c = MVM_mp_get_double(&reduced_a) / MVM_mp_get_double(&reduced_b);
++             mp_clear(&reduced_a);
++             mp_clear(&reduced_b);
++         } else {
++-            c = mp_get_double(ia) / mp_get_double(ib);
+++            c = MVM_mp_get_double(ia) / MVM_mp_get_double(ib);
++         }
++         clear_temp_bigints(tmp, 2);
++     } else {
++-- 
++1.9.1
++
 -- 
-Bye, Peter Korsgaard
+1.9.1
