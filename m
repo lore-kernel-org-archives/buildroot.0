@@ -1,169 +1,81 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 5 Feb 2019 14:09:34 -0600
-Subject: [Buildroot] [PATCH] package/luacrypto: remove package
-In-Reply-To: <20190205200309.21377-1-peter@korsgaard.com>
-References: <20190205200309.21377-1-peter@korsgaard.com>
-Message-ID: <CANQCQpayNwa7TGHm5VybMMaKrHVFs4myrHfj-DcQ65XDxS7uBA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  5 Feb 2019 21:09:22 +0100
+Subject: [Buildroot] [PATCHv2 2/2] utils/test-pkg: clean output dir for
+ successful builds
+In-Reply-To: <20190205200922.7352-1-patrickdepinguin@gmail.com>
+References: <20190205200922.7352-1-patrickdepinguin@gmail.com>
+Message-ID: <20190205200922.7352-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+test-pkg will use gigabytes of space when testing all toolchains.
+Nevertheless, you are normally only interested in the actual build / host
+tree when there is a build failure.
+
+Do a 'make clean' for successful builds to save disk space, unless the new
+option '-k/--keep' is set.
+Note that the logfile and configuration is always retained for inspection.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ utils/test-pkg | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+v2: make the feature optional via '--keep' (feedback Arnout and Peter)
 
 
-On Tue, Feb 5, 2019 at 2:03 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Fixes:
-> http://autobuild.buildroot.net/results/afd/afdc598b80356a8301d890232466de421f7779d5/
->
-> Luacrypto fails to build with openssl 1.1.x.  The package has not seen any
-> functional changes since it was added in 2013 and has no reverse
-> dependencies.
->
-> The upstream repository (https://github.com/starius/luacrypto) explicitly
-> states:
->
-> this project is deprecated, use luaossl
->
-> So remove the package.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Cool!
-
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-> ---
->  Config.in.legacy                 |  6 ++++++
->  DEVELOPERS                       |  1 -
->  package/Config.in                |  1 -
->  package/luacrypto/Config.in      | 11 -----------
->  package/luacrypto/luacrypto.hash |  3 ---
->  package/luacrypto/luacrypto.mk   | 12 ------------
->  6 files changed, 6 insertions(+), 28 deletions(-)
->  delete mode 100644 package/luacrypto/Config.in
->  delete mode 100644 package/luacrypto/luacrypto.hash
->  delete mode 100644 package/luacrypto/luacrypto.mk
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 59d8bf25fc..79d74080e2 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->
->  comment "Legacy options removed in 2019.02"
->
-> +config BR2_PACKAGE_LUACRYPTO
-> +       bool "luacrypto package removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The luacrypto package was removed. Consider luaossl instead.
-> +
->  config BR2_PACKAGE_TN5250
->         bool "tn5250 package removed"
->         select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 59e1f32ba9..8e713f2d63 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -215,7 +215,6 @@ F:  package/ti-cgt-pru/
->  N:     Assaf Inbal <shmuelzon@gmail.com>
->  F:     package/lbase64/
->  F:     package/luabitop/
-> -F:     package/luacrypto/
->  F:     package/luaexpatutils/
->  F:     package/luaposix/
->  F:     package/luasec/
-> diff --git a/package/Config.in b/package/Config.in
-> index 6273ea8197..222857ad18 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -631,7 +631,6 @@ menu "Lua libraries/modules"
->         source "package/lua-testmore/Config.in"
->         source "package/lua-utf8/Config.in"
->         source "package/luabitop/Config.in"
-> -       source "package/luacrypto/Config.in"
->         source "package/luadbi/Config.in"
->         source "package/luadbi-sqlite3/Config.in"
->         source "package/luaexpat/Config.in"
-> diff --git a/package/luacrypto/Config.in b/package/luacrypto/Config.in
-> deleted file mode 100644
-> index cc5a8803a5..0000000000
-> --- a/package/luacrypto/Config.in
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -config BR2_PACKAGE_LUACRYPTO
-> -       bool "luacrypto"
-> -       select BR2_PACKAGE_OPENSSL
-> -       help
-> -         LuaCrypto provides a Lua frontend to the OpenSSL cryptographic
-> -         library.
-> -         The OpenSSL features that are currently exposed are digests
-> -         (MD5, SHA-1, HMAC, and more) and crypto-grade random number
-> -         generators communication.
-> -
-> -         http://mkottman.github.com/luacrypto/
-> diff --git a/package/luacrypto/luacrypto.hash b/package/luacrypto/luacrypto.hash
-> deleted file mode 100644
-> index 5d600b0547..0000000000
-> --- a/package/luacrypto/luacrypto.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# computed by luarocks/buildroot
-> -sha256 dc935c923b8851208d5d504b343448a9d5bd3e537bb8657875f12d72155600b8  luacrypto-0.3.2-1.src.rock
-> -sha256 f97651bcb248dff32f121ef7a904617b9252d80f4b911e4476806c512a268fa9  luacrypto-0.3.2/COPYING
-> diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
-> deleted file mode 100644
-> index b6dbb9999f..0000000000
-> --- a/package/luacrypto/luacrypto.mk
-> +++ /dev/null
-> @@ -1,12 +0,0 @@
-> -################################################################################
-> -#
-> -# luacrypto
-> -#
-> -################################################################################
-> -
-> -LUACRYPTO_VERSION = 0.3.2-1
-> -LUACRYPTO_LICENSE = MIT
-> -LUACRYPTO_LICENSE_FILES = $(LUACRYPTO_SUBDIR)/COPYING
-> -LUACRYPTO_DEPENDENCIES = openssl
-> -
-> -$(eval $(luarocks-package))
-> --
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 087f9ddca9..ef865c80fe 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -6,16 +6,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+ main() {
+     local o O opts
+     local cfg dir pkg random toolchains_csv toolchain all number mode
+-    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
++    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+     local -a toolchains
+ 
+-    o='hac:d:n:p:r:t:'
+-    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
++    o='hakc:d:n:p:r:t:'
++    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+     random=0
+     all=0
++    keep=0
+     number=0
+     mode=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+@@ -27,6 +28,9 @@ main() {
+         (-a|--all)
+             all=1; shift 1
+             ;;
++        (-k|--keep)
++            keep=1; shift 1
++            ;;
+         (-c|--config-snippet)
+             cfg="${2}"; shift 2
+             ;;
+@@ -161,6 +165,12 @@ build_one() {
+     if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
+         return 3
+     fi
++
++    # If we get here, the build was successful. Clean up the build/host
++    # directories to save disk space, unless 'keep' was set.
++    if [ ${keep} -ne 1 ]; then
++        make O="${dir}" clean >> "${dir}/logfile" 2>&1
++    fi
+ }
+ 
+ help() {
 -- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.19.2
