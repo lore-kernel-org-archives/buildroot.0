@@ -1,30 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Feb 2019 10:47:38 +0100
-Subject: [Buildroot] [WIP] support/testing: add test to verify 'scp'
- download via BR2_PRIMARY_SITE
-In-Reply-To: <20190205094603.28989-1-patrickdepinguin@gmail.com>
-References: <20190205094603.28989-1-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LU-0+xu8kNEC0Zm6SVPuAk_dGqvtmgBCECWQyUrXWc-Xw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Feb 2019 10:48:18 +0100
+Subject: [Buildroot] [PATCH v7 3/8] package/pound: Fix build with
+ OpenSSL 1.1.x
+In-Reply-To: <CAKKE0ZGLvU4BrbW=Lj+V4XN-3cbTo9epEJh2pXfjKnMZDqVO+Q@mail.gmail.com>
+ (Patrick Havelange's message of "Tue, 5 Feb 2019 10:19:20 +0100")
+References: <20190129093919.22060-1-patrick.havelange@essensium.com>
+ <20190129093919.22060-3-patrick.havelange@essensium.com>
+ <CANQCQpZqdy-GnH4WMOR3g98t0aZM4PScjb3qfTCQqZ5=Qe0MkQ@mail.gmail.com>
+ <CAKKE0ZGLvU4BrbW=Lj+V4XN-3cbTo9epEJh2pXfjKnMZDqVO+Q@mail.gmail.com>
+Message-ID: <87o97qpnvh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 5 feb. 2019 a las 10:46, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
->
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> Recently it was found that the scp download infrastructure was broken.
-> To avoid future failures, create a test that verifies that the scp command
-> receives the expected arguments.
->
+>>>>> "Patrick" == Patrick Havelange <patrick.havelange@essensium.com> writes:
 
-Note: this is marked WIP because:
+ > On Tue, Feb 5, 2019 at 2:26 AM Matthew Weber <matthew.weber@collins.com> wrote:
+ >> 
+ >> Patrick H,
+ >> On Tue, Jan 29, 2019 at 3:40 AM Patrick Havelange
+ >> <patrick.havelange@essensium.com> wrote:
+ >> >
+ >> > From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> >
+ >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+ >> >
+ >> 
+ >> Does this resolve:
+ >> http://autobuild.buildroot.net/results/613/61336369ebe69a57098edabdf94a47f776a0440f/build-end.log
+ >> ?
 
-1. it should be rebased when Ricardo's patches to refactor the
-testsuite into runtime and build-time tests is merged
-2. it relies on the scp fix to be merged
+ > Looking at the patch and the error in that build log, it matches, so I
+ > would say yes. (I didn't retry locally without the patch applied).
 
-/Thomas
+But the patch breaks builds against libressl:
+
+http://lists.busybox.net/pipermail/buildroot/2019-January/241827.html
+
+Care to fix that and send an updated patch?
+
+-- 
+Bye, Peter Korsgaard
