@@ -1,84 +1,259 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Feb 2019 10:00:44 +0100
-Subject: [Buildroot] [git commit] package/android-tools: Fix build with
- OpenSSL 1.1.x
-Message-ID: <20190205090445.A7A2F83F7B@busybox.osuosl.org>
+Date: Tue, 05 Feb 2019 10:13:10 +0100
+Subject: [Buildroot] [PATCH] support/testing: add docker /
+ docker-compose tests
+In-Reply-To: <CANQCQpZziEBsTFH_Vi8u9gGWpfCTxaJ+RSzcz9PKFy47eqdq7Q@mail.gmail.com>
+ (Matthew Weber's message of "Mon, 4 Feb 2019 11:11:31 -0600")
+References: <20190204165557.2160-1-peter@korsgaard.com>
+ <CANQCQpZziEBsTFH_Vi8u9gGWpfCTxaJ+RSzcz9PKFy47eqdq7Q@mail.gmail.com>
+Message-ID: <87womeppi1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf3a57acdc1ee7983b6821453da0bbbb5c1fa607
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-Use patch from:
+ > Peter,
+ > On Mon, Feb 4, 2019 at 10:56 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> Build for x86-64 as public containers in general are only available for
+ >> x86-64.  Docker needs a number of kernel options enabled, so use a custom
+ >> kernel config based on the qemu one.
+ >> 
+ >> Docker needs entropy at startup, so enable the virtio-rng-pci device to
+ >> expose entropy to the guest.
 
-	https://github.com/lede-project/source/commit/f63f20fb93c7e67775cb01d97fc88b5b29452b81
+ > Another option is enabling BR2_PACKAGE_HAVEGED to let the target compensate.
 
-which fixes compilation of adb with OpenSSL 1.1.x, and took only part
-for adb only.
+True, but given that most real systems have a hw rng, this is probably
+closer to real life.
 
-Fixes:
+ >> The default RAM amount (128M) is not enough to
+ >> run docker / docker-compose, so bump to 512MB.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-	http://autobuild.buildroot.net/results/66f/66f05eb9a56aa8526a1420334d68c7eda094e90e/
+ > Very cool, I was just setting up a similar test case.  Few notes below.
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ded-patch-for-openssl-1.1.0-compatibility.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ > Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
-new file mode 100644
-index 0000000000..2de338368f
---- /dev/null
-+++ b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
-@@ -0,0 +1,47 @@
-+From bb3da0e32be4f2260940edf3ee0f88103dfd0dcc Mon Sep 17 00:00:00 2001
-+From: Eneas U de Queiroz <cote2004-github@yahoo.com>
-+Date: Tue, 5 Feb 2019 01:12:19 +0200
-+Subject: [PATCH] adb: added patch for openssl 1.1.0 compatibility
-+
-+Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
-+
-+[Vadim: took only adb related part from
-+https://github.com/lede-project/source/commit/f63f20fb93c7e67775cb01d97fc88b5b29452b81]
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ core/adb/adb_auth_host.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/core/adb/adb_auth_host.c b/core/adb/adb_auth_host.c
-+index 9039d42..debd2ef 100644
-+--- a/core/adb/adb_auth_host.c
-++++ b/core/adb/adb_auth_host.c
-+@@ -79,7 +79,13 @@ static int RSA_to_RSAPublicKey(RSA *rsa, RSAPublicKey *pkey)
-+     }
-+ 
-+     BN_set_bit(r32, 32);
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    const BIGNUM *rsa_n, *rsa_e;
-++    RSA_get0_key(rsa, &rsa_n, &rsa_e, NULL);
-++    BN_copy(n, rsa_n);
-++#else
-+     BN_copy(n, rsa->n);
-++#endif
-+     BN_set_bit(r, RSANUMWORDS * 32);
-+     BN_mod_sqr(rr, r, n, ctx);
-+     BN_div(NULL, rem, n, r32, ctx);
-+@@ -93,7 +99,11 @@ static int RSA_to_RSAPublicKey(RSA *rsa, RSAPublicKey *pkey)
-+         BN_div(n, rem, n, r32, ctx);
-+         pkey->n[i] = BN_get_word(rem);
-+     }
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    pkey->exponent = BN_get_word(rsa_e);
-++#else
-+     pkey->exponent = BN_get_word(rsa->e);
-++#endif
-+ 
-+ out:
-+     BN_free(n0inv);
-+-- 
-+2.14.1
-+
+ > There is a script "./build/docker-engine*/contrib/check-config.sh"
+ > which could be copied over to the target and used to do a docker
+ > configuration check as part of the test case (would need config.gz
+ > enabled).  I had started to add this as a br2-external post script, I
+ > could send something after this merges.
+
+Yes, I had originally used this script to figure out the kernel options
+to use:
+
+From the moby check-config script:
+    (https://github.com/moby/moby/blob/e2de2123399f494cb41a4cb62392999c80c2e99c/contrib/check-config.sh)
+
+    info: reading kernel config from /proc/config.gz ...
+
+    Generally Necessary:
+    - cgroup hierarchy: properly mounted [/sys/fs/cgroup]
+    - CONFIG_NAMESPACES: enabled
+    - CONFIG_NET_NS: enabled
+    - CONFIG_PID_NS: enabled
+    - CONFIG_IPC_NS: enabled
+    - CONFIG_UTS_NS: enabled
+    - CONFIG_CGROUPS: enabled
+    - CONFIG_CGROUP_CPUACCT: enabled
+    - CONFIG_CGROUP_DEVICE: enabled
+    - CONFIG_CGROUP_FREEZER: enabled
+    - CONFIG_CGROUP_SCHED: enabled
+    - CONFIG_CPUSETS: enabled
+    - CONFIG_MEMCG: enabled
+    - CONFIG_KEYS: enabled
+    - CONFIG_VETH: enabled
+    - CONFIG_BRIDGE: enabled
+    - CONFIG_BRIDGE_NETFILTER: enabled
+    - CONFIG_NF_NAT_IPV4: enabled
+    - CONFIG_IP_NF_FILTER: enabled
+    - CONFIG_IP_NF_TARGET_MASQUERADE: enabled
+    - CONFIG_NETFILTER_XT_MATCH_ADDRTYPE: enabled
+    - CONFIG_NETFILTER_XT_MATCH_CONNTRACK: enabled
+    - CONFIG_NETFILTER_XT_MATCH_IPVS: enabled
+    - CONFIG_IP_NF_NAT: enabled
+    - CONFIG_NF_NAT: enabled
+    - CONFIG_NF_NAT_NEEDED: enabled
+    - CONFIG_POSIX_MQUEUE: enabled
+
+    Optional Features:
+    - CONFIG_USER_NS: missing
+    - CONFIG_SECCOMP: enabled
+    - CONFIG_CGROUP_PIDS: enabled
+    - CONFIG_MEMCG_SWAP: missing
+    - CONFIG_MEMCG_SWAP_ENABLED: missing
+    - CONFIG_LEGACY_VSYSCALL_NONE: enabled
+        (containers using eglibc <= 2.13 will not work. Switch to
+         "CONFIG_VSYSCALL_[NATIVE|EMULATE]" or use "vsyscall=[native|emulate]"
+         on kernel command line. Note that this will disable ASLR for the,
+         VDSO which may assist in exploiting security vulnerabilities.)
+    - CONFIG_BLK_CGROUP: enabled
+    - CONFIG_BLK_DEV_THROTTLING: missing
+    - CONFIG_IOSCHED_CFQ: missing
+    - CONFIG_CFQ_GROUP_IOSCHED: missing
+    - CONFIG_CGROUP_PERF: missing
+    - CONFIG_CGROUP_HUGETLB: missing
+    - CONFIG_NET_CLS_CGROUP: missing
+    - CONFIG_CGROUP_NET_PRIO: missing
+    - CONFIG_CFS_BANDWIDTH: missing
+    - CONFIG_FAIR_GROUP_SCHED: enabled
+    - CONFIG_RT_GROUP_SCHED: missing
+    - CONFIG_IP_VS: enabled
+    - CONFIG_IP_VS_NFCT: enabled
+    - CONFIG_IP_VS_RR: enabled
+    - CONFIG_EXT4_FS: enabled
+    - CONFIG_EXT4_FS_POSIX_ACL: missing
+    - CONFIG_EXT4_FS_SECURITY: missing
+        enable these ext4 configs if you are using ext3 or ext4 as backing filesystem
+    - Network Drivers:
+      - "overlay":
+        - CONFIG_VXLAN: enabled
+          Optional (for encrypted networks):
+          - CONFIG_CRYPTO: enabled
+          - CONFIG_CRYPTO_AEAD: missing
+          - CONFIG_CRYPTO_GCM: missing
+          - CONFIG_CRYPTO_SEQIV: missing
+          - CONFIG_CRYPTO_GHASH: missing
+          - CONFIG_XFRM: missing
+          - CONFIG_XFRM_USER: missing
+          - CONFIG_XFRM_ALGO: missing
+          - CONFIG_INET_ESP: missing
+          - CONFIG_INET_XFRM_MODE_TRANSPORT: missing
+      - "ipvlan":
+        - CONFIG_IPVLAN: missing
+      - "macvlan":
+        - CONFIG_MACVLAN: enabled
+        - CONFIG_DUMMY: enabled
+      - "ftp,tftp client in container":
+        - CONFIG_NF_NAT_FTP: missing
+        - CONFIG_NF_CONNTRACK_FTP: missing
+        - CONFIG_NF_NAT_TFTP: missing
+        - CONFIG_NF_CONNTRACK_TFTP: missing
+    - Storage Drivers:
+      - "aufs":
+        - CONFIG_AUFS_FS: missing
+      - "btrfs":
+        - CONFIG_BTRFS_FS: missing
+        - CONFIG_BTRFS_FS_POSIX_ACL: missing
+      - "devicemapper":
+        - CONFIG_BLK_DEV_DM: missing
+        - CONFIG_DM_THIN_PROVISIONING: missing
+      - "overlay":
+        - CONFIG_OVERLAY_FS: enabled
+      - "zfs":
+        - /dev/zfs: missing
+        - zfs command: missing
+        - zpool command: missing
+
+    Limits:
+    - /proc/sys/kernel/keys/root_maxkeys: 1000000
+
+I did indeed afterwards clean up the kernel config a bit, and dropped
+CONFIG_IKCONFIG.
+
+
+ >> diff --git a/support/testing/conf/docker-compose.yml b/support/testing/conf/docker-compose.yml
+ >> new file mode 100644
+ >> index 0000000000..49ff2677da
+ >> --- /dev/null
+ >> +++ b/support/testing/conf/docker-compose.yml
+ >> @@ -0,0 +1,4 @@
+ >> +version: '3'
+ >> +services:
+ >> +  busybox:
+ >> +    image: "busybox:latest"
+ >> diff --git a/support/testing/tests/package/test_docker_compose.py
+ >> b/support/testing/tests/package/test_docker_compose.py
+ >> new file mode 100644
+ >> index 0000000000..8bf3ae00b5
+ >> --- /dev/null
+ >> +++ b/support/testing/tests/package/test_docker_compose.py
+ >> @@ -0,0 +1,70 @@
+ >> +import os
+ >> +
+ >> +import infra.basetest
+ >> +
+ >> +
+ >> +class TestDockerCompose(infra.basetest.BRTest):
+ >> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+ >> +        """
+ >> +        BR2_x86_64=y
+ >> +        BR2_x86_core2=y
+ >> +        BR2_TOOLCHAIN_EXTERNAL=y
+ >> +        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+ >> +        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+ >> +
+ >> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2018.05.tar.bz2"
+ >> +        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+ >> +        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+ >> +        BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+ >> +        # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+ >> +        BR2_TOOLCHAIN_EXTERNAL_CXX=y
+ >> +        BR2_SYSTEM_DHCP="eth0"
+ >> +        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
+ >> +        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
+ >> +        BR2_LINUX_KERNEL=y
+ >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19"
+ >> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ >> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
+ >> +        BR2_PACKAGE_CA_CERTIFICATES=y
+ >> +        BR2_PACKAGE_CGROUPFS_MOUNT=y
+ >> +        BR2_PACKAGE_DOCKER_CLI=y
+ >> +        BR2_PACKAGE_DOCKER_COMPOSE=y
+ >> +        BR2_PACKAGE_DOCKER_ENGINE=y
+ >> +        BR2_TARGET_ROOTFS_EXT2=y
+ >> +        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+ >> +        # BR2_TARGET_ROOTFS_TAR is not set
+ >> +        """.format(
+ >> +            infra.filepath("tests/package/copy-sample-script-to-target.sh"),
+ >> +            infra.filepath("conf/docker-compose.yml"),
+ >> +            infra.filepath("conf/docker-compose-kernel.config"))
+ >> +
+ >> +    def wait_for_dockerd(self):
+ >> +        # dockerd takes a while to start up
+ >> +        _, _ = self.emulator.run('while [ ! -e /var/run/docker.sock ]; do sleep 1; done', 120)
+ >> +
+ >> +    def docker_test(self):
+ >> +        # will download container if not available, which may take some time
+ >> +        _, exit_code = self.emulator.run('docker run --rm busybox:latest /bin/true', 120)
+ >> +        self.assertEqual(exit_code, 0)
+
+ > Another way to test could be to directly grep /proc/self/cgroups for
+ > the presence of docker.  Does the return code cover that the container
+ > was all the way up?
+
+The return code is the return code from executing /bin/true inside the
+container, so it should only succeed if we were really able to
+successfully execute it.
+
+
+ > Unrelated to above, I ran into errors like the following but I was
+ > targeting my build for aarch64 in my runtime test.
+
+ > Building Go toolchain3 using go_bootstrap and Go toolchain2.
+ > Building packages and commands for host, linux/amd64.
+ > Building packages and commands for target, linux/arm64.
+ > # cmd/trace
+ > /accts/mlweber1/wip/TestDocker/build/host-go-1.11.5/pkg/tool/linux_amd64/link:
+ > running /accts/mlweber1/wip/TestDocker/host/bin/aarch64-linux-gnu-gcc
+ > failed: exit status 1
+ > aarch64-linux-gnu-gcc: error: unrecognized command line option
+ > '-Qunused-arguments'; did you mean '-Wunused-parameter'?
+ > make[1]: *** [package/pkg-generic.mk:233:
+ > /accts/mlweber1/wip/TestDocker/build/host-go-1.11.5/.stamp_built]
+ > Error 2
+
+Hmm, I haven't seen such error before. Googling around, it seems to be a
+command line argument supported by clang:
+
+https://github.com/Ericsson/codechecker/issues/985
+
+-- 
+Bye, Peter Korsgaard
