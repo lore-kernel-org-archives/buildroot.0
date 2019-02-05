@@ -1,26 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 19:04:45 +0100
-Subject: [Buildroot] [PATCH 3/3] support/testing: test_dropbear.py: drop
- ssh port forward to the host
-In-Reply-To: <20190205094542.12783-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 5 Feb 2019 10:45:42 +0100")
-References: <20190205094542.12783-1-peter@korsgaard.com>
- <20190205094542.12783-3-peter@korsgaard.com>
-Message-ID: <87imxykt6q.fsf@dell.be.48ers.dk>
+Date: Tue, 5 Feb 2019 19:01:55 +0100
+Subject: [Buildroot] [git commit] support/testing: test_dropbear.py: add
+ test for ssh connection to localhost
+Message-ID: <20190205180347.4F49A83B8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cc84a0dac6ef1a09503991aa5a16c9c996271ed3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > It is not used and may conflict with other services running on port 2222 on
- > the host machine.
+Use sshpass to pass the password on the command line.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/package/test_dropbear.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
+index 2a7a1bd8af..ad0f89316c 100644
+--- a/support/testing/tests/package/test_dropbear.py
++++ b/support/testing/tests/package/test_dropbear.py
+@@ -10,6 +10,7 @@ class TestDropbear(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_ROOT_PASSWD="{}"
+         BR2_SYSTEM_DHCP="eth0"
+         BR2_PACKAGE_DROPBEAR=y
++        BR2_PACKAGE_SSHPASS=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """.format(passwd)
+@@ -25,6 +26,7 @@ class TestDropbear(infra.basetest.BRTest):
+         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
+         _, exit_code = self.emulator.run(cmd)
+         self.assertEqual(exit_code, 0)
+-        # Would be useful to try to login through SSH here, through
+-        # localhost:2222, though it is not easy to pass the ssh
+-        # password on the command line.
++
++        cmd = "sshpass -p {} ssh -y localhost /bin/true".format(self.passwd)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
