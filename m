@@ -1,77 +1,64 @@
-From: kostap at marvell.com <kostap@marvell.com>
-Date: Tue, 5 Feb 2019 12:45:10 +0200
-Subject: [Buildroot] [PATCH v3 1/3] package/arm-gnu-rm-toolchain: new package
-In-Reply-To: <20190205104512.23718-1-kostap@marvell.com>
-References: <20190205104512.23718-1-kostap@marvell.com>
-Message-ID: <20190205104512.23718-2-kostap@marvell.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue,  5 Feb 2019 11:49:55 +0100
+Subject: [Buildroot] [PATCH v3 1/5] package/mender: adding a writable
+ location
+In-Reply-To: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
+References: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1549363799-30840-2-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Konstantin Porotchkin <kostap@marvell.com>
+Mender needs /var/lib/mender to be writable at the service start, the
+path is hardcoded and thus we cannot change it.
+This patch solves the problem using the same approach we have for
+dropbear.
 
-Add cross-compialtion ARM RM toolchain for supporting firmware
-builds for Armv8-based SoCs utilizing Cortex-M/Cortex-R
-service CPUs.
-The cross-toolchain used for building Armv8 application CPU
-code cannot be used for Cortex-M/Cortex-R 32-bit THUMB code
-generation.
-This patch installs pre-built bate metal ARM GNU-RM toolchain
-into the host file system folder $(HOST_DIR)/opt/gcc-arm-none-eabi
-for covering the above mentioned cases.
-
-Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: <aduskett@gmail.com>
 ---
- .../arm-gnu-rm-toolchain.hash                 |  3 ++
- .../arm-gnu-rm-toolchain.mk                   | 28 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
- create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
- create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+ package/mender/mender.mk      |  2 ++
+ package/mender/mender.service | 12 +++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
-new file mode 100644
-index 0000000000..d8797d9c13
---- /dev/null
-+++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
-@@ -0,0 +1,3 @@
-+# taken from the distribution site
-+md5 299ebd3f1c2c90930d28ab82e5d8d6c0 gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
-+md5 7f88d3f1d0285e73e116cc3428bc1e13 gcc-arm-none-eabi-7-2018-q2-update-src.tar.bz2
-diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
-new file mode 100644
-index 0000000000..4c77fbf50e
---- /dev/null
-+++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# arm-gnu-rm-toolchain
-+#
-+################################################################################
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index a5cece7..3203df8 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -49,6 +49,8 @@ define MENDER_INSTALL_CONFIG_FILES
+ 		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
+ 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
+ 	)
 +
-+ARM_GNU_RM_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
-+ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
-+ARM_GNU_RM_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-linux.tar.bz2
-+
-+ARM_GNU_RM_TOOLCHAIN_LICENSE = GPL-3.0+, GPL-2.0+, LGPL-2.1+, LGPL-2.0+, LGPL-3.0+
-+ARM_GNU_RM_TOOLCHAIN_LICENSE_FILES = license.txt
-+ARM_GNU_RM_TOOLCHAIN_ACTUAL_SOURCE_TARBALL = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-src.tar.bz2
-+
-+HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
-+
-+define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
-+	rm -rf $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)
-+	mkdir -p $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)
-+	mv $(@D)/* $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)/
-+
-+	cd $(HOST_DIR)/bin; \
-+	for i in $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)/bin/*; do \
-+		ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
-+	done
-+endef
-+
-+$(eval $(host-generic-package))
++	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
+ endef
+ 
+ MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
+diff --git a/package/mender/mender.service b/package/mender/mender.service
+index 9ede55a..8b60a4f 100644
+--- a/package/mender/mender.service
++++ b/package/mender/mender.service
+@@ -6,7 +6,17 @@ After=systemd-resolved.service
+ Type=idle
+ User=root
+ Group=root
+-ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
++ExecStartPre=/bin/sh -c '\
++if [ -L /var/lib/mender \
++     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]; then \
++    if rm -f /var/lib/mender >/dev/null 2>&1; then \
++        mkdir -p /var/lib/mender; \
++    else \
++        echo "No persistent location to store mender data. Data will be lost\
++        echo "at reboot. Are you sure this is what you want to do?"; \
++        mkdir -p "$(readlink /var/lib/mender)"; \
++    fi; \
++fi'
+ ExecStart=/usr/bin/mender -daemon
+ Restart=on-abort
+ 
 -- 
-2.17.1
+2.7.4
