@@ -1,60 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Feb 2019 20:13:26 +0100
-Subject: [Buildroot] [git commit] package/zbar: bump to version
- 57d601e82089f2f31de9e1683c3834f237421f5d
-Message-ID: <20190205191214.83196860F2@busybox.osuosl.org>
+Date: Tue, 5 Feb 2019 20:14:58 +0100
+Subject: [Buildroot] [PATCH] package/tn520: remove package
+In-Reply-To: <20190205190110.13699-1-peter@korsgaard.com>
+References: <20190205190110.13699-1-peter@korsgaard.com>
+Message-ID: <20190205201458.08283110@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa6217bc67ad8ed81cce25d35f66847e1ad3db5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When building statically zbar, build fails on:
-configure: error: unable to find libv4l.so
+Typo in the commit title
 
-The following errors are raised in config.log:
-configure:19371:
-/home/buildroot/buildroot-test/instance-0/output/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g2  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lv4l2 -lpthread  >&5
-/home/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libv4l2.a(libv4l2_la-libv4l2.o): In function `v4l2_set_src_and_dest_format':
-/home/buildroot/buildroot-test/instance-0/output/build/libv4l-1.16.2/lib/libv4l2/libv4l2.c:952: undefined reference to `v4lconvert_supported_dst_format'
+On Tue,  5 Feb 2019 20:01:09 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-To fix this error, bump to version
-57d601e82089f2f31de9e1683c3834f237421f5d to replace AC_CHECK_LIB by
-PKG_CHECK_MODULES to find the correct library (-lv4lconvert but also
--ljpeg, ...)
+> The latest (0.17.4) tn5250 release is from 2008, doesn't build with openssl
+> 1.1.x and was dropped from Debian in 2011 because nobody cared to maintain
+> it:
+> 
+> https://packages.qa.debian.org/t/tn5250.html
+> 
+> Given all of that, it is unlikely to be used much, so remove it.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/acf39e4754508d7ee49e21f08ff0a1fcac4fb7cd
+Otherwise:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zbar/zbar.hash | 2 +-
- package/zbar/zbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-index dcad1bd55c..6735bc67d6 100644
---- a/package/zbar/zbar.hash
-+++ b/package/zbar/zbar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 fac99e835c4ced03a5a3d9c94c99aea118aef9663ed86a0ac45c9b7162dac4b1 zbar-b3b4e32b55f570372fc3af473e51f0a13ee57869.tar.gz
-+sha256 94c71c6110c705f07ba5ba2803583d09b3853e8773169c86bdcf831443156aaa zbar-57d601e82089f2f31de9e1683c3834f237421f5d.tar.gz
- sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index fd56e94e70..6df069e001 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZBAR_VERSION = b3b4e32b55f570372fc3af473e51f0a13ee57869
-+ZBAR_VERSION = 57d601e82089f2f31de9e1683c3834f237421f5d
- ZBAR_SITE = git://linuxtv.org/zbar.git
- ZBAR_LICENSE = LGPL-2.1+
- ZBAR_LICENSE_FILES = LICENSE
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
