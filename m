@@ -1,49 +1,37 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  5 Feb 2019 11:49:58 +0100
-Subject: [Buildroot] [PATCH v3 4/5] package/mender: adding device_type file
-In-Reply-To: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
-References: <1549363799-30840-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549363799-30840-5-git-send-email-angelo@amarulasolutions.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Tue,  5 Feb 2019 10:56:31 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: add a unprivileged user
+Message-ID: <20190205105630.17008-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to have the mender package working out of the box, the
-/etc/mender/device_type should be present and should contain a
-valid device_type value.
-This patch provides a default file that can be overridden easily
-from an overlay.
+This commit add a specific unprivileged user for BIRD
+to avoid full root privileges while running.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Acked-by: <aduskett@gmail.com>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- package/mender/device_type | 1 +
- package/mender/mender.mk   | 3 +++
- 2 files changed, 4 insertions(+)
- create mode 100644 package/mender/device_type
+ package/bird/bird.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/mender/device_type b/package/mender/device_type
-new file mode 100644
-index 0000000..a097ef2
---- /dev/null
-+++ b/package/mender/device_type
-@@ -0,0 +1 @@
-+device_type=BUILDROOT_DEVICE
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 0377270..0d71938 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -53,6 +53,9 @@ define MENDER_INSTALL_CONFIG_FILES
- 	$(INSTALL) -D -m 0755 package/mender/artifact_info \
- 			$(TARGET_DIR)/etc/mender/artifact_info
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index da2f868070..8091644108 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -17,4 +17,12 @@ else
+ BIRD_CONF_OPTS += --disable-client
+ endif
  
-+	$(INSTALL) -D -m 0755 package/mender/device_type \
-+			$(TARGET_DIR)/etc/mender/device_type
++define BIRD_USERS
++	bird -1 bird -1 * - - - BIRD unprivileged user
++endef
 +
- 	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
- endef
- 
++define BIRD_PERMISSIONS
++	/etc/bird.conf r 600 bird bird - - - - -
++endef
++
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.19.1
