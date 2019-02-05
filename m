@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 04 Feb 2019 22:47:50 -0200
-Subject: [Buildroot] [PATCH] support/testing: add docker /
- docker-compose tests
-References: <87a7jbs3uc.fsf@dell.be.48ers.dk>
-Message-ID: <5c58dd3635099_290e2ab5f5537a0c12088@ultri5.mail>
+Date: Mon, 04 Feb 2019 22:52:21 -0200
+Subject: [Buildroot] [PATCH v5 04/10] testing/tests/download: add git
+ hash test
+References: <3493f835-d2c0-5d07-b33a-9bfd746b57d8@mind.be>
+Message-ID: <5c58de45509b7_290e2ab5f544b97c12228@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +12,81 @@ To: buildroot@busybox.net
 
 Hello,
 
-+ Yann
+On Mon, Feb 04, 2019 at 01:52 PM, Arnout Vandecappelle wrote:
 
-On Mon, Feb 04, 2019 at 06:20 PM, Peter Korsgaard wrote:
+> On 12/05/2018 04:58, Ricardo Martincoski wrote:
+> [snip]
+>>  support/testing/tests/download/gitremote.py   |  44 ++++++++++++++++++
+>>  support/testing/tests/download/test_git.py    |  43 +++++++++++++++++
+> 
+>  flake8 says:
+> 
+> support/testing/tests/download/gitremote.py:5:1: I100 Import statements are in
+> the wrong order. 'import infra' should be before 'import pexpect' and in a
+> different group.
+> support/testing/tests/download/test_git.py:4:1: I100 Import statements are in
+> the wrong order. 'from gitremote import GitRemote' should be before 'import
+> infra' and in a different group.
+> support/testing/tests/download/test_git.py:4:1: I201 Missing newline between
+> import groups. 'from gitremote import GitRemote' is identified as Third Party
+> and 'import infra' is identified as Third Party.
+> 
+>  I fixed this while applying.
 
->>>>>> "Thomas" == Thomas Petazzoni writes:
-> 
->  > On Mon,  4 Feb 2019 17:55:57 +0100
->  > Peter Korsgaard wrote:
-> 
->  >> Build for x86-64 as public containers in general are only available for
->  >> x86-64.  Docker needs a number of kernel options enabled, so use a custom
->  >> kernel config based on the qemu one.
-> 
->  > Do you need to duplicate the kernel config entirely, or can you use
->  > board/qemu/x86_64/linux.config + a fragment ?
-> 
-> I didn't really look closely. I recently setup docker / docker-compose at
-> $WORK, so I based the linux config on that.
-> 
-> I can have a look at basing it on the qemu config, but that means that
-> we have to be a bit careful when bumping the qemu config, so I'm not
-> sure if it makes sense.
-
-The nice thing of using a fragment is that we would have an example of the
-configs that one needs to enable in the kernel in order to use docker in the
-target.
-It should be *theoretically* straight-forward created from the docker
-documentation. I don't know how well it is documented.
-Any config that docker needs that is already in the base config (so showing in
-both the base config and the fragment) should be correctly set by the merge of
-configs, I guess.
-
-But maybe we find some practical problem when trying to accomplish this
-theoretical task, perhaps when changing the major version of the kernel.
-Or even you think that maintaining such example config is too much out-of-scope
-for the Buildroot source tree.
-
-So... up to you guys. And it can be done in a followup patch.
+So you have the plugin flake8-import-order.
+I don't have it locally and we don't have it yet in the docker image.
+But thank you for fixing.
 
 [snip]
->  >> +++ b/support/testing/conf/docker-compose.yml
->  >> @@ -0,0 +1,4 @@
->  >> +version: '3'
->  >> +services:
->  >> +  busybox:
->  >> +    image: "busybox:latest"
+>> +        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", "--listen=localhost", "--export-all",
 > 
->  > Is conf/ really the right place for this ? Don't we have some other
->  > place to store the per-tests artifacts that go on the target ? I don't
->  > think we have a good organization for this at the moment, so this will
->  > do for now.
-> 
-> Indeed. We have a number of more-or-less random files under conf/, and
-> then E.G. tests/package/test_python_*.py stores files for the target
-> also under tests/package/sample_*.py
+>  Line is too long. Fixed as well.
 
-I obviously prefer the fixtures besides the test cases, since I always send test
-cases in this way, AFAICR.
-I just never bothered to submit a patch changing all test cases to do so.
-We can choose one or another and standardize.
+But it is shorter than 132 (as we set in .flake8), no?
+
+Any chance you are using some version of flake8/pycodestyle that does not
+support configs in .flake8 or max-line-length=132 ?
 
 > 
-> I can move the files under tests/package if you prefer, but I'm not sure
-> if that is really cleaner.
+>> +                      "--base-path={}".format(serveddir)]
+>> +        for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
+>> +            cmd = daemon_cmd + ["--port={port}".format(port=port)]
+>> +            self.logfile.write("> starting git remote with '{}'\n".format(" ".join(cmd)))
+>> +            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile)
+>> +            ret = self.daemon.expect(["Ready to rumble",
+>> +                                      "Address already in use"])
+> 
+>  Shouldn't we add a timeout here, just to be safe?
 
-If we decide to apply that series that Yann once submitted changing the
-test cases to each package directory, I think it would make more sense to keep
-the fixtures also in the same directory.
+I think the expect() method uses the default from the class if not defined.
+And the default timeout for spawn is 30 seconds AFAICR.
+I did not double-checked the docs yet.
 
-package/pkg1/Config.in
-package/pkg1/pkg1.mk
-package/pkg1/test_pkg1.py
-package/pkg1/sample_pkg1.anything
-package/pkg1/S50_init_script
+[snip]
+>> +class GitTestBase(infra.basetest.BRTest):
+>> +    config = \
+>> +        """
+>> +        BR2_BACKUP_SITE=""
+>> +        """
+>> +    gitremotedir = infra.filepath("tests/download/git-remote")
+>> +    gitremote = None
+>> +
+>> +    def setUp(self):
+>> +        super(GitTestBase, self).setUp()
+>> +        self.gitremote = GitRemote(self.builddir, self.gitremotedir, self.logtofile)
+>> +
+>> +    def tearDown(self):
+>> +        self.show_msg("Cleaning up")
+>> +        if self.gitremote:
+>> +            self.gitremote.stop()
+>> +        if self.b and not self.keepbuilds:
+> 
+>  This is actually a bit useless, since self.b is not initialzed in
+> BRTest.__init__ you'll actually get either an exception or self.b evaluates to
+> True. But the same pattern is used in other places, so OK. Can be fixed in a
+> follow-up patch.
 
-Or something like this. I am not suggesting any naming convention.
+Probably some leftover from a rebase. I will look into it.
 
 
 Regards,
