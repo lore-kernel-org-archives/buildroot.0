@@ -1,181 +1,131 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Feb 2019 20:28:14 +0100
-Subject: [Buildroot] [git commit] package/tn5250: remove package
-Message-ID: <20190205193816.6193B83BE5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 20:45:13 +0100
+Subject: [Buildroot] [PATCH] configs/rock64: new defconfig
+In-Reply-To: <20190203204119.31934-1-michal.lyszczek@bofc.pl>
+References: <20190203204119.31934-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190205204513.20daa598@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0478beaaad6312cc345fabcbc90ce68b391e3fb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The latest (0.17.4) tn5250 release is from 2008, doesn't build with openssl
-1.1.x and was dropped from Debian in 2011 because nobody cared to maintain
-it:
+Thanks for this contribution! Please see a number of comments below.
 
-https://packages.qa.debian.org/t/tn5250.html
+On Sun,  3 Feb 2019 21:41:19 +0100
+Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
 
-Given all of that, it is unlikely to be used much, so remove it.
+>  board/pine64/rock64/build-uboot-itb.patch | 14 ++++
+>  board/pine64/rock64/extlinux.conf         |  4 +
+>  board/pine64/rock64/genimage.cfg          | 23 ++++++
+>  board/pine64/rock64/post-build.sh         |  9 +++
+>  board/pine64/rock64/readme.txt            | 93 +++++++++++++++++++++++
+>  configs/rock64_defconfig                  | 34 +++++++++
+>  6 files changed, 177 insertions(+)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                                   |  6 ++++
- package/Config.in                                  |  1 -
- package/tn5250/0001-ssldir.patch                   | 17 ------------
- ...lding-against-OpenSSL-without-SSLv2_SSLv3.patch | 32 ----------------------
- package/tn5250/Config.in                           |  8 ------
- package/tn5250/tn5250.hash                         |  2 --
- package/tn5250/tn5250.mk                           | 29 --------------------
- 7 files changed, 6 insertions(+), 89 deletions(-)
+Please add an entry in the DEVELOPERS file for this new board.
+> diff --git a/board/pine64/rock64/build-uboot-itb.patch b/board/pine64/rock64/build-uboot-itb.patch
+> new file mode 100644
+> index 0000000000..72baa2218f
+> --- /dev/null
+> +++ b/board/pine64/rock64/build-uboot-itb.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ef460752f3..59d8bf25fc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2019.02"
- 
-+config BR2_PACKAGE_TN5250
-+	bool "tn5250 package removed"
-+	select BR2_LEGACY
-+	help
-+	  The tn5250 package was removed.
-+
- config BR2_PACKAGE_BOOST_SIGNALS
- 	bool "Boost signals removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index bca61f14ed..6273ea8197 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2021,7 +2021,6 @@ endif
- 	source "package/thttpd/Config.in"
- 	source "package/tinc/Config.in"
- 	source "package/tinyhttpd/Config.in"
--	source "package/tn5250/Config.in"
- 	source "package/tor/Config.in"
- 	source "package/traceroute/Config.in"
- 	source "package/transmission/Config.in"
-diff --git a/package/tn5250/0001-ssldir.patch b/package/tn5250/0001-ssldir.patch
-deleted file mode 100644
-index 6fc78deef2..0000000000
---- a/package/tn5250/0001-ssldir.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Value is assigned to $with_ssl_dir but used from $with_ssl which is wrong.
--Fix configure since it's a one-liner and avoid an autoreconf.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura tn5250-0.17.4.orig/configure tn5250-0.17.4/configure
----- tn5250-0.17.4.orig/configure	2014-09-10 08:33:15.689519554 -0300
--+++ tn5250-0.17.4/configure	2014-09-10 08:33:47.428613117 -0300
--@@ -23258,7 +23258,7 @@
-- if test "${with_ssl_dir+set}" = set; then
--   withval=$with_ssl_dir;
--     if test "$with_ssl_dir" != "no"; then
---         checksslinclude "$with_ssl"
--+         checksslinclude "$with_ssl_dir"
--     else
--         for topdir in /usr/local /usr /usr/pkg /usr/lib /var/ssl /opt; do
--             for subdir in $topdir $topdir/openssl $topdir/ssl; do
-diff --git a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
-deleted file mode 100644
-index 67f0fa63a1..0000000000
---- a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--$OpenBSD: patch-lib5250_sslstream_c,v 1.1 2015/10/07 16:09:04 jca Exp $
--
--Allow building against OpenSSL without SSLv2/SSLv3 support.
--
--Download from:
--http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tn5250/patches/patch-lib5250_sslstream_c
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----- a/lib5250/sslstream.c.orig	Fri Nov 21 09:12:21 2008
--+++ b/lib5250/sslstream.c	Tue Oct  6 21:32:29 2015
--@@ -368,13 +368,19 @@ int tn5250_ssl_stream_init (Tn5250Stream *This)
--         methstr[4] = '\0';
--    }
-- 
--+#ifndef OPENSSL_NO_SSL2
--    if (!strcmp(methstr, "ssl2")) {
--         meth = SSLv2_client_method();         
--         TN5250_LOG(("SSL Method = SSLv2_client_method()\n"));
---   } else if (!strcmp(methstr, "ssl3")) {
--+   } else
--+#endif
--+#ifndef OPENSSL_NO_SSL3
--+   if (!strcmp(methstr, "ssl3")) {
--         meth = SSLv3_client_method();         
--         TN5250_LOG(("SSL Method = SSLv3_client_method()\n"));
---   } else {
--+   } else
--+#endif
--+   {
--         meth = SSLv23_client_method();         
--         TN5250_LOG(("SSL Method = SSLv23_client_method()\n"));
--    }
-diff --git a/package/tn5250/Config.in b/package/tn5250/Config.in
-deleted file mode 100644
-index 01be40bb73..0000000000
---- a/package/tn5250/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_TN5250
--	bool "tn5250"
--	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_NCURSES
--	help
--	  Telnet client that emulates 5250 terminals and printers.
--
--	  http://tn5250.sourceforge.net/
-diff --git a/package/tn5250/tn5250.hash b/package/tn5250/tn5250.hash
-deleted file mode 100644
-index ae65beab50..0000000000
---- a/package/tn5250/tn5250.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed:
--sha256  354237d400dc46af887cb3ffa4ed1f2c371f5b8bee8be046a683a4ac9db4f9c5  tn5250-0.17.4.tar.gz
-diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
-deleted file mode 100644
-index 4c457a5d97..0000000000
---- a/package/tn5250/tn5250.mk
-+++ /dev/null
-@@ -1,29 +0,0 @@
--################################################################################
--#
--# tn5250
--#
--################################################################################
--
--TN5250_VERSION = 0.17.4
--TN5250_SITE = http://downloads.sourceforge.net/project/tn5250/tn5250/$(TN5250_VERSION)
--TN5250_MAKE_OPTS = CPPFLAGS=""
--TN5250_DEPENDENCIES = ncurses
--TN5250_LICENSE = LGPL-2.1+
--TN5250_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--TN5250_CONF_OPTS += --with-ssl-dir=$(STAGING_DIR)/usr
--TN5250_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
--TN5250_DEPENDENCIES += openssl host-pkgconf
--else
--TN5250_CONF_OPTS += --without-ssl
--endif
--
--define TN5250_INSTALL_FIXES
--	rm -f $(TARGET_DIR)/usr/bin/5250keys
--	rm -f $(TARGET_DIR)/usr/bin/xt5250
--endef
--
--TN5250_POST_INSTALL_TARGET_HOOKS += TN5250_INSTALL_FIXES
--
--$(eval $(autotools-package))
+We want all patches to have a description + Signed-off-by, and be
+generated with "git format-patch". Also, you could please put this
+patch in:
+
+	board/pine64/rock64/patches/uboot/
+
+and use BR2_GLOBAL_PATCH_DIR=board/pine64/rock64/patches/ ?
+
+
+> diff --git a/board/pine64/rock64/post-build.sh b/board/pine64/rock64/post-build.sh
+> new file mode 100755
+> index 0000000000..26b53cba8e
+> --- /dev/null
+> +++ b/board/pine64/rock64/post-build.sh
+> @@ -0,0 +1,9 @@
+> +#!/bin/sh
+> +
+> +MKIMAGE=$HOST_DIR/bin/mkimage
+> +BOARD_DIR="$(dirname $0)"
+> +
+> +$MKIMAGE -n rk3328 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
+> +cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl.bin > $BINARIES_DIR/u-boot-tpl-spl.img
+
+OK. It's weird that the U-Boot build process doesn't do all of this,
+but I see board/amarula/vyasa/post-build.sh. At some point, it might
+make sense to move this logic inside uboot.mk itself. But OK, it's not
+really necessary for just two boards.
+
+
+> diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+> new file mode 100644
+> index 0000000000..c00d8dc25e
+> --- /dev/null
+> +++ b/configs/rock64_defconfig
+> @@ -0,0 +1,34 @@
+> +BR2_aarch64=y
+> +BR2_KERNEL_HEADERS_4_19=y
+
+Please use:
+
+  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+
+instead
+
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rock64/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rock64/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.19"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
+
+Normally, we want to use fixed versions for such low-level software
+components. But I see we don't have an option to select a specific
+upstream version. In the mean time, could you do like
+arm_juno_defconfig, and use Git to fetch from upstream a specific
+version of ATF ? Or alternatively, add an option to select a specific
+upstream version.
+
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
+> +BR2_TARGET_UBOOT_PATCH="board/pine64/rock64/build-uboot-itb.patch"
+
+As said above, use BR2_GLOBAL_PATCH_DIR instead.
+
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin tpl/u-boot-tpl.bin"
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+Other than that, looks good!
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
