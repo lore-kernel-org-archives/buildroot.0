@@ -1,63 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Feb 2019 08:15:09 +0100
-Subject: [Buildroot] [git commit] package/gnu-efi: fix build on armv5
-Message-ID: <20190205071432.7539983881@busybox.osuosl.org>
+From: kostap at marvell.com <kostap@marvell.com>
+Date: Tue, 5 Feb 2019 09:40:28 +0200
+Subject: [Buildroot] [PATCH 0/3] Support 32-bit code generation for Armv8
+ targets
+Message-ID: <20190205074031.7989-1-kostap@marvell.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37a1c59c4caaaf0460f958008c1e2985c6f97de8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Konstantin Porotchkin <kostap@marvell.com>
 
-Don't override the user-provided ARCH when cross-compiling otherwise
-ARCH won't be correct for armv5, aarch64 and x86_64
+This patch set adds support for building images for SoC that make usage
+of Armv8 application CPUs and Cortex-M/Cortex-R service CPUs.
+The application CPU cross-toolchain is unable to generate 32-bit THUMB
+code, therefore usage of secondary toolchain is needed.
+The required pre-built toolchain is taken from ARM developers site and
+installed in host filesystem only.
+The patch set makes use of dual toolchain for adding support for Marvell
+Armada 3700 SoC that uses both Cortex-A53 and Cortex-M3 CPUs for running
+system firmware.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
+V2 changes:
+patch #1 (arm-gnu-rm-toolchain)
+- Remove Config.in.host
+- Remove custom extract command
+- Set installation path to $(HOST_DIR)/opt//opt/gcc-arm-none-eabi
+- Update commit message according to review notes
+patch #2 (a3700-utils-marvell) - no changes
+patch #3 (a3700 boot image build support)
+- Update CROSS_CM3 path in arm-trusted-firmware to reflect patch #1 changes
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ts-don-t-override-ARCH-when-cross-compili.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Konstantin Porotchkin (3):
+  package: arm-gnu-rm-toolchain: Add ARM-RM toolchain
+  boot: a3700-utils-marvell: Add Armada-3700 utilities
+  boot: arm-trusted-firmware: add support for Marvell Armada 3700
 
-diff --git a/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-new file mode 100644
-index 0000000000..c256541781
---- /dev/null
-+++ b/package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
-@@ -0,0 +1,32 @@
-+From 3452721eafae90749f4af63264c412f398460b15 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 20 Jan 2019 21:07:11 +0100
-+Subject: [PATCH] Make.defaults: don't override ARCH when cross-compiling
-+
-+Don't override the user-provided ARCH when cross-compiling otherwise
-+ARCH won't be correct for armv5, aarch64 and x86_64
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Make.defaults | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Make.defaults b/Make.defaults
-+index ba743f1..a0e5632 100755
-+--- a/Make.defaults
-++++ b/Make.defaults
-+@@ -67,7 +67,7 @@ ARCH         ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[345678
-+ 
-+ # Get ARCH from the compiler if cross compiling 
-+ ifneq ($(CROSS_COMPILE),)
-+-  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
-++  ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
-+ endif
-+ 
-+ # FreeBSD (and possibly others) reports amd64 instead of x86_64
-+-- 
-+2.14.1
-+
+ boot/Config.in                                |  1 +
+ boot/a3700-utils-marvell/Config.in            | 46 +++++++++++++++++++
+ .../a3700-utils-marvell.hash                  |  2 +
+ .../a3700-utils-marvell.mk                    | 28 +++++++++++
+ .../arm-trusted-firmware.mk                   |  7 +++
+ package/Config.in.host                        |  1 +
+ package/arm-gnu-rm-toolchain/Config.in.host   | 13 ++++++
+ .../arm-gnu-rm-toolchain.hash                 |  2 +
+ .../arm-gnu-rm-toolchain.mk                   | 22 +++++++++
+ 9 files changed, 122 insertions(+)
+ create mode 100644 boot/a3700-utils-marvell/Config.in
+ create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.hash
+ create mode 100644 boot/a3700-utils-marvell/a3700-utils-marvell.mk
+ create mode 100644 package/arm-gnu-rm-toolchain/Config.in.host
+ create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+ create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+
+-- 
+2.17.1
