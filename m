@@ -1,75 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Feb 2019 21:06:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump to 2.58.3
-In-Reply-To: <20190205202920.6036210a@windsurf>
-References: <20190205185623.15717-1-aduskett@gmail.com>
- <20190205202920.6036210a@windsurf>
-Message-ID: <45ddc4a4-b196-ad26-b96a-e794f1c0b720@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 21:06:18 +0100
+Subject: [Buildroot] [git commit] package/liquid-dsp: drop support for
+ fftw-double and fftw-long-double
+Message-ID: <20190205200459.6880D817B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3256b273d31d5885b523483f906a79c8c22b1010
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+liquid-dsp has the following code:
 
-On 05/02/2019 20:29, Thomas Petazzoni wrote:
-> On Tue,  5 Feb 2019 19:56:23 +0100
-> aduskett at gmail.com wrote:
-> 
->> From: Adam Duskett <Aduskett@gmail.com>
->>
->> In addition:
->>  - Update second patch
->>  - Remove third and fifth patches (already in version)
->>  - Add a new patch to fix a missing header
->>  - Add LIBGLIB2_GTK_DOC_HOOK so autoreconf do not fail on the following
->>    error:
->>      automake: error: cannot open < gtk-doc.make: No such file or directory
->>
->>  - Add a new patch: package/libglib2/0005-use-tooldir-in-pc-file.patch
->>    This patch fixes the previous autobuild errors by modifying the glib-2.0.pc
->>    file and adding a tooldir variable, of which the glib_genmarshal,
->>    gobject_query, and glib_mkenums of which will be prefixed. Then a
-> 
-> I am confused by the double "of which" usage in this sentence.
-> 
->> +define LIBGLIB2_FIX_PC_FILE
->> +$(SED) "s at toolsdir=.*@toolsdir=$(STAGING_DIR)/usr/bin at g" \
->> +	$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-> 
-> This kind of replacement with STAGING_DIR is a bit annoying for the
-> upcoming per-package stuff. Options that I see:
+So, if it uses the external fftw library, it can only use the fftwf
+variant, i.e the fftw-single variant. Otherwise, it uses its internal
+FFT library.
 
- Why is it annoying? It will point to libglib2's staging dir, but that's fine,
-isn't it?
+There is no way for liquid-dsp to use fftw-double or fftw-long-double.
 
-> 
->  (1) Add 'bindir' to the list of pkg-config variables that should be
->      sysroot-prefixed. Works, but impact unknown.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/liquid-dsp/liquid-dsp.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
- With this option, the patch is not even needed!
-
- Unfortunately, it might result in runtime breakage too... if some .pc's bindir
-is used to set the path to some executable... Like
-
-CFLAGS += -DBASH_PATH=`pkg-config bash --variable=bindir`/bash
-
-
->  (2) Add 'toolsdir' to the list of pkg-config variables that should be
->      sysroot-prefixed. Works, but impact unknown.
-
- Something similar was in fact my plan, that in the pkg-config wrapper we add
---define-variable=toolsdir=$STAGING_DIR
-
- Regards,
- Arnout
-
-> 
->  (3) Make toolsdir=${libdir}/../bin. Works, but ugly.
-> 
-> I don't have a good opinion on what is the best choice here. Let's see
-> what Arnout says.
-> 
-> Thomas
-> 
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index db67893844..1f645bf33a 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
+@@ -40,16 +40,6 @@ ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+ LIQUID_DSP_CONF_OPTS += --enable-simdoverride
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFTW_PRECISION_DOUBLE),y)
+-LIQUID_DSP_LDFLAGS += -lfftw3
+-LIQUID_DSP_DEPENDENCIES += fftw
+-endif
+-
+-ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
+-LIQUID_DSP_LDFLAGS += -lfftw3l
+-LIQUID_DSP_DEPENDENCIES += fftw
+-endif
+-
+ LIQUID_DSP_CONF_OPTS += \
+ 	CFLAGS="$(LIQUID_DSP_CFLAGS)" \
+ 	LDFLAGS="$(LIQUID_DSP_LDFLAGS)"
