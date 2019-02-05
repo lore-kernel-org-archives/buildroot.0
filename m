@@ -1,60 +1,119 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Feb 2019 21:41:48 +0100
-Subject: [Buildroot] [PATCH v2 0/4] WPE WebKit
-Message-ID: <20190205204152.10376-1-francois.perrad@gadz.org>
+Date: Tue,  5 Feb 2019 21:41:49 +0100
+Subject: [Buildroot] [PATCH v2 1/4] libwpe: new package
+In-Reply-To: <20190205204152.10376-1-francois.perrad@gadz.org>
+References: <20190205204152.10376-1-francois.perrad@gadz.org>
+Message-ID: <20190205204152.10376-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Another port of WebKit (https://wpewebkit.org/), a project started in 2018.
-
-v1 -> v2
-  - wpewebkit : use WPEWEBKIT_ARCH_SUPPORTS variables (duplicated from webkitgtk)
-  - cog : use release 0.2.0
-  - cog : add dbus as mandatory dependency
-  - cog : use the default setting of COG_DBUS_SYSTEM_BUS
-
-rfc -> v1
-  - full refactor after Adrian's review
-  - libwpe : version 1.0.0 (stable) instead of 1.1.0 (instable)
-  - wbebackend-fdo : version 1.0.0 (stable) instead of 1.1.0 (instable)
-  - add cog, a WPE WebKit launcher
-
-Francois Perrad (4):
-  libwpe: new package
-  wpebackend-fdo: new package
-  wpewebkit: new package
-  cog: new package
-
- DEVELOPERS                                 |   8 ++
- package/Config.in                          |   4 +
- package/cog/Config.in                      |  21 ++++
- package/cog/cog.hash                       |   5 +
- package/cog/cog.mk                         |  17 +++
- package/libwpe/Config.in                   |  13 +++
- package/libwpe/libwpe.hash                 |   7 ++
- package/libwpe/libwpe.mk                   |  22 ++++
- package/wpebackend-fdo/Config.in           |  19 ++++
- package/wpebackend-fdo/wpebackend-fdo.hash |   7 ++
- package/wpebackend-fdo/wpebackend-fdo.mk   |  15 +++
- package/wpewebkit/Config.in                | 114 +++++++++++++++++++++
- package/wpewebkit/wpewebkit.hash           |   8 ++
- package/wpewebkit/wpewebkit.mk             |  61 +++++++++++
- 14 files changed, 321 insertions(+)
- create mode 100644 package/cog/Config.in
- create mode 100644 package/cog/cog.hash
- create mode 100644 package/cog/cog.mk
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ DEVELOPERS                 |  2 ++
+ package/Config.in          |  1 +
+ package/libwpe/Config.in   | 13 +++++++++++++
+ package/libwpe/libwpe.hash |  7 +++++++
+ package/libwpe/libwpe.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
  create mode 100644 package/libwpe/Config.in
  create mode 100644 package/libwpe/libwpe.hash
  create mode 100644 package/libwpe/libwpe.mk
- create mode 100644 package/wpebackend-fdo/Config.in
- create mode 100644 package/wpebackend-fdo/wpebackend-fdo.hash
- create mode 100644 package/wpebackend-fdo/wpebackend-fdo.mk
- create mode 100644 package/wpewebkit/Config.in
- create mode 100644 package/wpewebkit/wpewebkit.hash
- create mode 100644 package/wpewebkit/wpewebkit.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7a49852cd..c82ec889f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -67,6 +67,7 @@ F:	package/sngrep/
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
++F:	package/libwpe/
+ F:	package/webkitgtk/
+ F:	package/woff2/
+ 
+@@ -810,6 +811,7 @@ F:	package/gdbm/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libump/
++F:	package/libwpe/
+ F:	package/linenoise/
+ F:	package/ljlinenoise/
+ F:	package/lpeg/
+diff --git a/package/Config.in b/package/Config.in
+index 037e81e48..1c3080c24 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1286,6 +1286,7 @@ menu "Graphics"
+ 	source "package/libva-intel-driver/Config.in"
+ 	source "package/libvdpau/Config.in"
+ 	source "package/libvips/Config.in"
++	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opencv3/Config.in"
+diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
+new file mode 100644
+index 000000000..c11c85398
+--- /dev/null
++++ b/package/libwpe/Config.in
+@@ -0,0 +1,13 @@
++comment "libwpe needs a toolchain w/ C++, dynamic library and an OpenEGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++
++config BR2_PACKAGE_LIBWPE
++	bool "libwpe"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Base library for the WPE WebKit port.
++
++	  https://wpewebkit.org/
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+new file mode 100644
+index 000000000..58dba92e6
+--- /dev/null
++++ b/package/libwpe/libwpe.hash
+@@ -0,0 +1,7 @@
++# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
++md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
++sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
++sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719 libwpe-1.0.0.tar.xz
++
++# Hashes for license files:
++sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+new file mode 100644
+index 000000000..aad1214e1
+--- /dev/null
++++ b/package/libwpe/libwpe.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libwpe
++#
++################################################################################
++
++LIBWPE_VERSION = 1.0.0
++LIBWPE_SITE = https://wpewebkit.org/releases
++LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
++LIBWPE_INSTALL_STAGING = YES
++LIBWPE_LICENSE = BSD-2-Clause
++LIBWPE_LICENSE_FILES = COPYING
++LIBWPE_DEPENDENCIES = libegl libxkbcommon
++
++# Workaround for https://github.com/raspberrypi/userland/issues/316
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBWPE_CONF_OPTS += \
++	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE' \
++	-DCMAKE_CXX_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE'
++endif
++
++$(eval $(cmake-package))
 -- 
 2.17.1
