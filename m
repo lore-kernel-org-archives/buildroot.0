@@ -1,10 +1,9 @@
 From: kostap at marvell.com <kostap@marvell.com>
-Date: Tue, 5 Feb 2019 12:45:12 +0200
-Subject: [Buildroot] [PATCH v3 3/3] boot: arm-trusted-firmware: add support
- for Marvell Armada 3700
+Date: Tue, 5 Feb 2019 12:45:10 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/arm-gnu-rm-toolchain: new package
 In-Reply-To: <20190205104512.23718-1-kostap@marvell.com>
 References: <20190205104512.23718-1-kostap@marvell.com>
-Message-ID: <20190205104512.23718-4-kostap@marvell.com>
+Message-ID: <20190205104512.23718-2-kostap@marvell.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,66 @@ To: buildroot@busybox.net
 
 From: Konstantin Porotchkin <kostap@marvell.com>
 
-Add support for TF-A image builds for Marvell Armada 3700 family
+Add cross-compialtion ARM RM toolchain for supporting firmware
+builds for Armv8-based SoCs utilizing Cortex-M/Cortex-R
+service CPUs.
+The cross-toolchain used for building Armv8 application CPU
+code cannot be used for Cortex-M/Cortex-R 32-bit THUMB code
+generation.
+This patch installs pre-built bate metal ARM GNU-RM toolchain
+into the host file system folder $(HOST_DIR)/opt/gcc-arm-none-eabi
+for covering the above mentioned cases.
 
 Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../arm-gnu-rm-toolchain.hash                 |  3 ++
+ .../arm-gnu-rm-toolchain.mk                   | 28 +++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+ create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 23f493653d..3e490c03c4 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -52,6 +52,13 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
- endif
- 
-+ifeq ($(BR2_TARGET_A3700_UTILS_MARVELL),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += WTP=$(A3700_UTILS_MARVELL_DIR)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += CROSS_CM3=$(HOST_DIR)/bin/arm-none-eabi-
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += a3700-utils-marvell
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-rm-toolchain
-+endif
+diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+new file mode 100644
+index 0000000000..d8797d9c13
+--- /dev/null
++++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+@@ -0,0 +1,3 @@
++# taken from the distribution site
++md5 299ebd3f1c2c90930d28ab82e5d8d6c0 gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
++md5 7f88d3f1d0285e73e116cc3428bc1e13 gcc-arm-none-eabi-7-2018-q2-update-src.tar.bz2
+diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+new file mode 100644
+index 0000000000..4c77fbf50e
+--- /dev/null
++++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# arm-gnu-rm-toolchain
++#
++################################################################################
 +
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
++ARM_GNU_RM_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
++ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
++ARM_GNU_RM_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-linux.tar.bz2
++
++ARM_GNU_RM_TOOLCHAIN_LICENSE = GPL-3.0+, GPL-2.0+, LGPL-2.1+, LGPL-2.0+, LGPL-3.0+
++ARM_GNU_RM_TOOLCHAIN_LICENSE_FILES = license.txt
++ARM_GNU_RM_TOOLCHAIN_ACTUAL_SOURCE_TARBALL = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-src.tar.bz2
++
++HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
++
++define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
++	rm -rf $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)
++	mkdir -p $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)
++	mv $(@D)/* $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)/
++
++	cd $(HOST_DIR)/bin; \
++	for i in $(HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_DIR)/bin/*; do \
++		ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
++	done
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.17.1
