@@ -1,45 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 14:21:39 +0100
-Subject: [Buildroot] [PATCH v6] testing/infra: split runtime test from
- BRTest
-In-Reply-To: <1549358791-19797-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Tue, 5 Feb 2019 03:26:31 -0600")
-References: <1549358791-19797-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87o97qnzfg.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Feb 2019 14:25:04 +0100
+Subject: [Buildroot] [PATCH] Makefile: unexport 'PLATFORM' and 'OS'
+ environment variables
+In-Reply-To: <20190205110342.29725-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Tue, 5 Feb 2019 12:03:42 +0100")
+References: <20190205110342.29725-1-patrickdepinguin@gmail.com>
+Message-ID: <87k1ienz9r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
- > Move the setup of emulator to a new class, RuntimeTestBase, that bahaves
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Some package builds may fail when environment variables are present with the
+ > same names as make variables in a package. This is a bigger problem for
+ > environment variables with generic names, like 'PLATFORM' and 'OS'.
 
-s/bahaves/behaves/
+ > 'PLATFORM' is for example a problem for host-acl.
 
- > exactly like BRTest currently does.
- > It will avoid duplicating code when adding a common class to test the
- > git download infra.
+I'm OK with the patch, but what is the error exactly for host-acl? I
+don't seem to see any reference to the string 'PLATFORM' in host-acl:
 
-Sorry for the late feedback, but wouldn't it be a lot simpler/more
-pragmatic to keep the BRTest name for the "common" case, and instead add
-a new parent class with all the common stuff.
-
-E.G.:
-
-BaseTest <-- GitTest <- ..
-           |
-            - BRTest <-- TestATop
-                      |
-                       - TestDropbear
-                      |
-                       - ...
-
-I agree that RuntimeTestBase is maybe a nicer name, but BRTest for
-something where we run a Buildroot output under qemu isn't really bad
-either IMHO.
+make host-acl-patch
+grep -rs PLATFORM build/host-acl-2.2.53
+build/host-acl-2.2.53/build-aux/ltmain.sh:         v.dwPlatformId == VER_PLATFORM_WIN32_NT;
+build/host-acl-2.2.53/build-aux/ltmain.sh.orig:         v.dwPlatformId == VER_PLATFORM_WIN32_NT;
 
 -- 
 Bye, Peter Korsgaard
