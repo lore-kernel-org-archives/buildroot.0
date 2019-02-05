@@ -1,8 +1,7 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  5 Feb 2019 22:15:44 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of dynamic
- loader to ld*.so.*
-Message-ID: <20190205211544.26547-1-patrickdepinguin@gmail.com>
+Date: Tue,  5 Feb 2019 22:21:41 +0100
+Subject: [Buildroot] [PATCHv3 1/2] utils/test-pkg: fix long option parsing
+Message-ID: <20190205212142.2244-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +10,40 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
-("toolchain-external: copy ld*.so* for all C libraries") changed (among
-other things) the glob pattern to catch the dynamic loader from
-    ld*.so.*
-to
-    ld*.so*
+The long option parsing of test-pkg is broken because:
+- some long options are not declared
+- there should be a comma between long options, the colon does not replace
+it.
 
-thus now matching files like 'ld-2.20.so' in addition to files like
-'ld.so.1'.
-
-However, there is no apparent reason why that change was made. It is not
-explicitly mentioned in the commit message as to why that would be needed,
-nor is clear based on the rest of the changes in that commit.
-
-The consequence of the change is that more files than needed end up in the
-target root filesystem, adding extra unnecessary size to it.
-
-Therefore, revert the glob pattern back to what it was.
+This change also revealed that the declaration of 'toolchains-dir' should
+have been 'toolchains-csv', originally introduced in commit ed59f81a3cb4ddb.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/test-pkg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+v3: unchanged
+v2: new patch
 
-Seems this patch slipped through the cracks for a while.
-See earlier discussion at: http://patchwork.ozlabs.org/patch/882583/
-but it seems I never submitted the patch I said I was going to.
-The code has been running successfully for almost a year in our different
-defconfigs/toolchains.
-
-
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d96f..e55cca539c 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -112,7 +112,7 @@ endif
- # Definitions of the list of libraries that should be copied to the target.
- #
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1995fa8578..087f9ddca9 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -5,12 +5,12 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
  
--TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += ld*.so.* libgcc_s.so.* libatomic.so.*
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_dir toolchain all number mode
++    local cfg dir pkg random toolchains_csv toolchain all number mode
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+     o='hac:d:n:p:r:t:'
+-    O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
++    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
 -- 
 2.19.2
