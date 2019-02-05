@@ -1,80 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Feb 2019 22:09:40 +0100
-Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
- for fftw-double and fftw-long-double
-In-Reply-To: <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190205220940.3dbda336@windsurf>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 5 Feb 2019 22:12:24 +0100
+Subject: [Buildroot] [PATCHv2 2/2] utils/test-pkg: clean output dir for
+ successful builds
+In-Reply-To: <20190205200922.7352-2-patrickdepinguin@gmail.com>
+References: <20190205200922.7352-1-patrickdepinguin@gmail.com>
+ <20190205200922.7352-2-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LWdDXfy0Cu5yFT4u59T-uNTdYT4EbaEeP7HZwu-V77DGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Mon, 21 Jan 2019 14:51:11 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
-
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> liquid-dsp has the following code:
-> #if HAVE_FFTW3_H && !defined LIQUID_FFTOVERRIDE
-> #   include <fftw3.h>
-> #   define FFT_PLAN             fftwf_plan
-> #   define FFT_CREATE_PLAN      fftwf_plan_dft_1d
-> #   define FFT_DESTROY_PLAN     fftwf_destroy_plan
-> #   define FFT_EXECUTE          fftwf_execute
-> #   define FFT_DIR_FORWARD      FFTW_FORWARD
-> #   define FFT_DIR_BACKWARD     FFTW_BACKWARD
-> #   define FFT_METHOD           FFTW_ESTIMATE
-> #else
-> #   define FFT_PLAN             fftplan
-> #   define FFT_CREATE_PLAN      fft_create_plan
-> #   define FFT_DESTROY_PLAN     fft_destroy_plan
-> #   define FFT_EXECUTE          fft_execute
-> #   define FFT_DIR_FORWARD      LIQUID_FFT_FORWARD
-> #   define FFT_DIR_BACKWARD     LIQUID_FFT_BACKWARD
-> #   define FFT_METHOD           0
-> #endif
-> 
-> So, if it uses the external fftw library, it can only use the fftwf
-> variant, i.e the fftw-single variant. Otherwise, it uses its internal
-> FFT library.
-> 
-> There is no way for liquid-dsp to use fftw-double or fftw-long-double.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+El mar., 5 feb. 2019 a las 21:10, Thomas De Schampheleire
+(<patrickdepinguin@gmail.com>) escribi?:
+>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> test-pkg will use gigabytes of space when testing all toolchains.
+> Nevertheless, you are normally only interested in the actual build / host
+> tree when there is a build failure.
+>
+> Do a 'make clean' for successful builds to save disk space, unless the new
+> option '-k/--keep' is set.
+> Note that the logfile and configuration is always retained for inspection.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  package/liquid-dsp/liquid-dsp.mk | 10 ----------
->  1 file changed, 10 deletions(-)
+>  utils/test-pkg | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+>
+> v2: make the feature optional via '--keep' (feedback Arnout and Peter)
+>
+>
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index 087f9ddca9..ef865c80fe 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -6,16 +6,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+>  main() {
+>      local o O opts
+>      local cfg dir pkg random toolchains_csv toolchain all number mode
+> -    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+> +    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+>      local -a toolchains
+>
+> -    o='hac:d:n:p:r:t:'
+> -    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+> +    o='hakc:d:n:p:r:t:'
+> +    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+>      opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+>      eval set -- "${opts}"
+>
+>      random=0
+>      all=0
+> +    keep=0
+>      number=0
+>      mode=0
+>      toolchains_csv="${TOOLCHAINS_CSV}"
+> @@ -27,6 +28,9 @@ main() {
+>          (-a|--all)
+>              all=1; shift 1
+>              ;;
+> +        (-k|--keep)
+> +            keep=1; shift 1
+> +            ;;
+>          (-c|--config-snippet)
+>              cfg="${2}"; shift 2
+>              ;;
+> @@ -161,6 +165,12 @@ build_one() {
+>      if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
+>          return 3
+>      fi
+> +
+> +    # If we get here, the build was successful. Clean up the build/host
+> +    # directories to save disk space, unless 'keep' was set.
+> +    if [ ${keep} -ne 1 ]; then
+> +        make O="${dir}" clean >> "${dir}/logfile" 2>&1
+> +    fi
 
-Applied to master, thanks. I have applied *before* all other patches,
-because it's really a preparation fix that is useful independently from
-the rest of the FFTW rework.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Grmbl, I forgot to update the help text...
