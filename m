@@ -1,22 +1,22 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Feb 2019 09:46:07 +0100
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 5 Feb 2019 09:48:58 +0100
 Subject: [Buildroot] [PATCH v2 1/3] package/arm-gnu-rm-toolchain: new
  package
 In-Reply-To: <20190205074324.8097-2-kostap@marvell.com>
 References: <20190205074324.8097-1-kostap@marvell.com>
  <20190205074324.8097-2-kostap@marvell.com>
-Message-ID: <2e295546-f8d0-283d-6509-4ab9e751677c@mind.be>
+Message-ID: <CAAXf6LWVCMLLToobMTQA-QXMZo37jxZqEP=JAmd+5EULF6qg2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 05/02/2019 08:43, kostap at marvell.com wrote:
+Hello,
+El mar., 5 feb. 2019 a las 8:43, <kostap@marvell.com> escribi?:
+>
 > From: Konstantin Porotchkin <kostap@marvell.com>
-> 
+>
 > Add cross-compialtion ARM RM toolchain for supporting firmware
 > builds for Armv8-based SoCs utilizing Cortex-M/Cortex-R
 > service CPUs.
@@ -26,7 +26,7 @@ On 05/02/2019 08:43, kostap at marvell.com wrote:
 > This patch installs pre-built bate metal ARM GNU-RM toolchain
 > into the host file system folder $(HOST_DIR)/opt/gcc-arm-none-eabi
 > for covering the above mentioned cases.
-> 
+>
 > Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
 > ---
 >  .../arm-gnu-rm-toolchain.hash                    |  2 ++
@@ -34,7 +34,7 @@ On 05/02/2019 08:43, kostap at marvell.com wrote:
 >  2 files changed, 18 insertions(+)
 >  create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
 >  create mode 100644 package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
-> 
+>
 > diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
 > new file mode 100644
 > index 0000000000..a08e8e6208
@@ -58,33 +58,46 @@ On 05/02/2019 08:43, kostap at marvell.com wrote:
 > +ARM_GNU_RM_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
 > +ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
 > +ARM_GNU_RM_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-linux.tar.bz2
-
- I think the package name is not very intuitive. I would take one of the
-following names:
-
-arm-none-eabi-gcc (i.e. the name of the compiler in it)
-arm-none-eabi-toolchain
-gcc-arm-none-eabi (which is the upstream tarball name, what we usually prefer)
-
- Note that the 'gcc' bit is not really accurate, because it contains binutils
-and newlib as well.
-
- As observed by Yann, this patch is also missing:
-
-* _LICENSE
-* _LICENSE_FILES
-* hash for license files
-* _ACTUAL_SOURCE
-* Your entry in DEVELOPERS
-
- Regards,
- Arnout
-
 > +
 > +define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
-> +	mkdir -p $(HOST_DIR)/opt/gcc-arm-none-eabi/
-> +	cp -a $(@D)/* $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> +       mkdir -p $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> +       cp -a $(@D)/* $(HOST_DIR)/opt/gcc-arm-none-eabi/
 > +endef
 > +
 > +$(eval $(host-generic-package))
-> 
+> --
+
+Incidentally I did more or less the same thing locally.
+For reference, here is what I had:
+
+
+HOST_RTC_TOOLCHAIN_ARM_SITE =
+https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2
+HOST_RTC_TOOLCHAIN_ARM_SOURCE = gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+
+HOST_RTC_TOOLCHAIN_ARM_PREFIX = arm-none-eabi
+
+HOST_RTC_TOOLCHAIN_ARM_INSTALL_DIR = $(HOST_DIR)/opt/rtc-toolchain-arm
+define HOST_RTC_TOOLCHAIN_ARM_INSTALL_CMDS
+    rm -rf $(HOST_RTC_TOOLCHAIN_ARM_INSTALL_DIR)
+    mkdir -p $(HOST_RTC_TOOLCHAIN_ARM_INSTALL_DIR)
+    mv $(@D)/* $(HOST_RTC_TOOLCHAIN_ARM_INSTALL_DIR)/
+
+    cd $(HOST_DIR)/bin; \
+    for i in $(HOST_RTC_TOOLCHAIN_ARM_INSTALL_DIR)/bin/*; do \
+        ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+    done
+endef
+
+$(eval $(host-generic-package))
+
+
+So, basically I see following relevant differences:
+
+1. Instead of copying the toolchain I _move_ the files, just like the
+internal toolchain is doing. This prevents two copies of the files.
+2. I also create symlinks in output/host/bin so that the toolchain can
+easily be accessed from places external to Buildroot.
+
+Best regards,
+Thomas
