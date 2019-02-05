@@ -1,37 +1,39 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Tue,  5 Feb 2019 10:56:31 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: add a unprivileged user
-Message-ID: <20190205105630.17008-1-adrien@gallouet.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  5 Feb 2019 12:03:42 +0100
+Subject: [Buildroot] [PATCH] Makefile: unexport 'PLATFORM' and 'OS'
+ environment variables
+Message-ID: <20190205110342.29725-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit add a specific unprivileged user for BIRD
-to avoid full root privileges while running.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+Some package builds may fail when environment variables are present with the
+same names as make variables in a package. This is a bigger problem for
+environment variables with generic names, like 'PLATFORM' and 'OS'.
+
+'PLATFORM' is for example a problem for host-acl.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/bird/bird.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index da2f868070..8091644108 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -17,4 +17,12 @@ else
- BIRD_CONF_OPTS += --disable-client
- endif
+diff --git a/Makefile b/Makefile
+index 355a404e04..50a9f623b2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -419,6 +419,8 @@ unexport TERMINFO
+ unexport MACHINE
+ unexport O
+ unexport GCC_COLORS
++unexport PLATFORM
++unexport OS
  
-+define BIRD_USERS
-+	bird -1 bird -1 * - - - BIRD unprivileged user
-+endef
-+
-+define BIRD_PERMISSIONS
-+	/etc/bird.conf r 600 bird bird - - - - -
-+endef
-+
- $(eval $(autotools-package))
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ 
 -- 
-2.19.1
+2.19.2
