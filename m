@@ -1,62 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Feb 2019 11:03:46 +0100
-Subject: [Buildroot] [PATCH v5 07/10] testing/tests/download: test git
- submodules
-In-Reply-To: <20180512025833.22998-8-ricardo.martincoski@gmail.com>
-References: <20180512025833.22998-1-ricardo.martincoski@gmail.com>
- <20180512025833.22998-8-ricardo.martincoski@gmail.com>
-Message-ID: <76826781-d9bf-2733-c7b7-d2064f070677@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 05 Feb 2019 10:06:37 +0000
+Subject: [Buildroot] [Bug 11656] Device tree issues with BeagleBoneBlack and
+ LCD cape
+In-Reply-To: <bug-11656-163@https.bugs.busybox.net/>
+References: <bug-11656-163@https.bugs.busybox.net/>
+Message-ID: <bug-11656-163-1SRFSQB9Hb@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=11656
 
+--- Comment #1 from Tibor Stolz <tistolz@outlook.de> ---
+Created attachment 7941
+  --> https://bugs.busybox.net/attachment.cgi?id=7941&action=edit
+Device tree customization for the LCD cape
 
-On 12/05/2018 04:58, Ricardo Martincoski wrote:
-> +################################################################################
-> +#
-> +# git-submodule-enabled
-> +#
-> +################################################################################
-> +
-> +GIT_SUBMODULE_ENABLED_VERSION = a9dbc1e23c45e8e1b88c0448763f54d714eb6f8f
-> +GIT_SUBMODULE_ENABLED_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
-> +GIT_SUBMODULE_ENABLED_GIT_SUBMODULES = YES
-> +GIT_SUBMODULE_ENABLED_LICENSE_FILES = \
-> +	file \
-> +	refs-sub1/file \
-> +	refs-sub1/refs-sub2/file
-> +
-> +# Some versions of git client fill the .git file for the second level submodule
-> +# using the absolute path to the main .git directory, which in the case of the
-> +# buildroot download helper is always different since it uses a temporary
-> +# directory. This version of git have the issue:
-> +# - 2.7.4 included in Ubuntu 16.04;
-> +# The same does not occur using newer versions of git:
-> +# - 2.11.0 included in Debian 9;
-> +# - 2.14.2 latest at the time of writing;
-> +# In order to allow running this test case locally in many systems, do not check
-> +# for the hash of the tarball, but instead check the hash of each meaningful
-> +# file included in the tarball.
+Hello,
 
- This is a bug! Funny that we never hit it in the autobuilders, don't we have an
-Ubuntu 16.04 autobuilder and don't we have packages with submodules and a hash?
+I finally succeeded in building a Buildroot system that properly supports the
+gen4-4DCAPE-43T LCD screen. However, it required some "tricks" which are not
+properly supported by the Buildroot workflow.
 
- Anyway, I think maybe we should fix the bug first... Ideally there should be a
-test case for it as well, but that's difficult since it depends on the installed
-git version.
+First of all, the "dtc -I fs /proc/device-tree -o my-device-tree.dts" approach
+of getting the device tree from a running Debian system was rubbish. To quote
+#beagle IRC:
+> it's definitely not something that's intended to work in the first place
+> [...]
+> /proc/device-tree does not show the original DT as it was passed to the kernel
+> [...]
+> some kernel code modifies these data structures
 
- Yann, how about if we change the find command in the git helper to
+Therefore I created the attached device tree source code, which takes the
+am335x-boneblack.dts as a basis (#include) and adds the definitions from
+<https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-4D4R-01-00A1.dts>
+translated from "overlay fragment" syntax to normal dts code (reference:
+<https://pastebin.com/b8kZfhRG>).
 
-find . -name .git -prune -o -print
+This bug now boils down to Buildroot's handling of such out-of-tree device tree
+files. I included my am335x-withcapes-4d4r.dts in [make menuconfig --> Kernel
+--> Out-of-tree Device Tree Source file paths]. The problems are as follows:
 
-?
+1) I had to manually add
+output/build/linux-4.14.96/include/dt-bindings/board/am335x-bbw-bbb-base.h
+(downloaded from GitHub), after the kernel has been extracted. This is probably
+a use case outside of the goals of Buildroot, so maybe I'll inline that include
+file later.
 
- Regards,
- Arnout
+2) When building the Linux kernel, Buildroot will copy my
+am335x-withcapes-4d4r.dts into output/build/linux-4.14.96/arch/arm/boot/dts/,
+compile it there, and copy the compiled file to
+output/images/am335x-withcapes-4d4r.dtb.
+   However, !! the .dtb file is not included in output/images/boot.vfat !!
 
-> +BR_NO_CHECK_HASH_FOR += $(GIT_SUBMODULE_ENABLED_SOURCE)
-> +
-> +$(eval $(generic-package))
+3) The same problem occurs with a boot.scr file, which I included as of
+   [make menuconfig --> Bootloaders --> Generate a U-Boot boot script: ON]
+   [make menuconfig --> Bootloaders --> U-Boot boot script source:
+/path/to/boot.scr]
+   The result is that output/images/boot.scr is created, but boot.scr is not
+part of output/images/boot.vfat!
+
+My solution was to manually add am335x-withcapes-4d4r.dtb and boot.scr to the
+FAT partition once the sdcard.img was written to the SD card. In this
+configuration, the LCD is now working.
+
+I think that problems 2) and 3) are minor bugs of the Buildroot system which
+should be fixed.
+
+Best regards,
+Tibor Stolz
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
