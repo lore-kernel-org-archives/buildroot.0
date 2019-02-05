@@ -1,530 +1,361 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Feb 2019 19:09:06 +0100
-Subject: [Buildroot] [git commit] package/pound: Fix build with OpenSSL 1.1.x
-Message-ID: <20190205182003.88BD783B8B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 19:22:43 +0100
+Subject: [Buildroot] [PATCH v9 3/4] gobject-introspection: new package
+In-Reply-To: <20181215233555.98482-3-aduskett@gmail.com>
+References: <20181215233555.98482-1-aduskett@gmail.com>
+ <20181215233555.98482-3-aduskett@gmail.com>
+Message-ID: <20190205192243.720c9707@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d849e6cc7a25b9d8fe5411d9f2082227278b224d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The patches enable two new API configurations, one for OpenSSL 1.1.x
-and the other LibreSSL.
+Here are a number of other comments, in addition to the live
+discussion we had.
 
-A dependency is added to use the Buildroot host tool openssl to
-create headers (dh512.h).  This resolves a host OS mismatch with
-openssl versions. (The Makefile does this generation as part of
-the initial build)
+On Sat, 15 Dec 2018 18:35:54 -0500
+aduskett at gmail.com wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pound/0002-fix-openssl-1.1.0.patch         | 334 +++++++++++++++++++++
- ...or-libressl-coexisting-with-openssl-1.1.x.patch | 140 +++++++++
- package/pound/pound.mk                             |   2 +-
- 3 files changed, 475 insertions(+), 1 deletion(-)
+> diff --git a/Makefile b/Makefile
+> index c5b78b3274..7068bdb0ca 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -719,6 +719,8 @@ target-finalize: $(PACKAGES) host-finalize
+>  		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+>  		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+>  	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+> +	find $(TARGET_DIR)/usr/share/ -name '*.gir' -print0 | xargs -0 rm -f
+> +	find $(TARGET_DIR)/usr/share/ -name '*.rnc' -print0 | xargs -0 rm -f
 
-diff --git a/package/pound/0002-fix-openssl-1.1.0.patch b/package/pound/0002-fix-openssl-1.1.0.patch
-new file mode 100644
-index 0000000000..04eddb15d7
---- /dev/null
-+++ b/package/pound/0002-fix-openssl-1.1.0.patch
-@@ -0,0 +1,334 @@
-+From a2c9dde4d055ea8942afb150b7fc3a807d4e5d60 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Wed, 28 Feb 2018 13:44:01 +0000
-+Subject: [PATCH] Support for Openssl 1.1
-+
-+Fixes
-+http://autobuild.buildroot.net/results/ef2/ef2de6c280bf8622a00d4573bc5bd143e3baa002
-+
-+Downloaded from github fork:
-+https://github.com/graygnuorg/pound/commit/a2c9dde4d055ea8942afb150b7fc3a807d4e5d60
-+
-+This patch was announced on the upstream mailinglist:
-+http://www.apsis.ch/pound/pound_list/archive/2018/2018-03/1519920322000
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ .gitignore |  15 ++++++++
-+ config.c   |  17 +++++++--
-+ http.c     |  12 ++++++-
-+ pound.h    |   4 ++-
-+ svc.c      | 101 +++++++++++++++++++++++++++++++++++++++++++----------
-+ 5 files changed, 125 insertions(+), 24 deletions(-)
-+ create mode 100644 .gitignore
-+
-+diff --git a/config.c b/config.c
-+index d41a3ee..e8fec0f 100644
-+--- a/config.c
-++++ b/config.c
-+@@ -174,6 +174,16 @@ conf_fgets(char *buf, const int max)
-+     }
-+ }
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++# define general_name_string(n) \
-++	strndup(ASN1_STRING_get0_data(n->d.dNSName),	\
-++	        ASN1_STRING_length(n->d.dNSName) + 1)
-++#else
-++# define general_name_string(n) \
-++	strndup(ASN1_STRING_data(n->d.dNSName),	\
-++	       ASN1_STRING_length(n->d.dNSName) + 1)
-++#endif
-++
-+ unsigned char **
-+ get_subjectaltnames(X509 *x509, unsigned int *count)
-+ {
-+@@ -194,8 +204,7 @@ get_subjectaltnames(X509 *x509, unsigned int *count)
-+         name = sk_GENERAL_NAME_pop(san_stack);
-+         switch(name->type) {
-+             case GEN_DNS:
-+-                temp[local_count] = strndup(ASN1_STRING_data(name->d.dNSName), ASN1_STRING_length(name->d.dNSName)
-+-                                    + 1);
-++ 	        temp[local_count] = general_name_string(name);
-+                 if(temp[local_count] == NULL)
-+                     conf_err("out of memory");
-+                 local_count++;
-+@@ -565,7 +574,9 @@ parse_service(const char *svc_name)
-+     pthread_mutex_init(&res->mut, NULL);
-+     if(svc_name)
-+         strncpy(res->name, svc_name, KEY_SIZE);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    if((res->sessions = lh_TABNODE_new(t_hash, t_cmp)) == NULL)    
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res->sessions = LHM_lh_new(TABNODE, t)) == NULL)
-+ #else
-+     if((res->sessions = lh_new(LHASH_HASH_FN(t_hash), LHASH_COMP_FN(t_cmp))) == NULL)
-+diff --git a/http.c b/http.c
-+index dd211e4..c8e756a 100644
-+--- a/http.c
-++++ b/http.c
-+@@ -527,12 +527,22 @@ log_bytes(char *res, const LONG cnt)
-+ 
-+ /* Cleanup code. This should really be in the pthread_cleanup_push, except for bugs in some implementations */
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++# define clear_error()
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-++# define clear_error() \
-++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_thread_state(NULL); }
-++#else
-++# define clear_error() \
-++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); }
-++#endif
-++
-+ #define clean_all() {   \
-+     if(ssl != NULL) { BIO_ssl_shutdown(cl); } \
-+     if(be != NULL) { BIO_flush(be); BIO_reset(be); BIO_free_all(be); be = NULL; } \
-+     if(cl != NULL) { BIO_flush(cl); BIO_reset(cl); BIO_free_all(cl); cl = NULL; } \
-+     if(x509 != NULL) { X509_free(x509); x509 = NULL; } \
-+-    if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); } \
-++    clear_error(); \
-+ }
-+ 
-+ /*
-+diff --git a/pound.h b/pound.h
-+index fa22c36..9603b91 100644
-+--- a/pound.h
-++++ b/pound.h
-+@@ -344,7 +344,9 @@ typedef struct _tn {
-+ /* maximal session key size */
-+ #define KEY_SIZE    127
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++  DEFINE_LHASH_OF(TABNODE);
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+ DECLARE_LHASH_OF(TABNODE);
-+ #endif
-+ 
-+diff --git a/svc.c b/svc.c
-+index 60ba488..063b92c 100644
-+--- a/svc.c
-++++ b/svc.c
-+@@ -27,10 +27,17 @@
-+ 
-+ #include    "pound.h"
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++# define TABNODE_GET_DOWN_LOAD(t) lh_TABNODE_get_down_load(t)
-++# define TABNODE_SET_DOWN_LOAD(t,n) lh_TABNODE_set_down_load(t,n)
-++#else
-+ #ifndef LHASH_OF
-+ #define LHASH_OF(x) LHASH
-+ #define CHECKED_LHASH_OF(type, h) h
-+ #endif
-++# define TABNODE_GET_DOWN_LOAD(t) (CHECKED_LHASH_OF(TABNODE, t)->down_load)
-++# define TABNODE_SET_DOWN_LOAD(t,n) (CHECKED_LHASH_OF(TABNODE, t)->down_load = n)
-++#endif
-+ 
-+ /*
-+  * Add a new key/content pair to a hash table
-+@@ -58,7 +65,9 @@ t_add(LHASH_OF(TABNODE) *const tab, const char *key, const void *content, const
-+     }
-+     memcpy(t->content, content, cont_len);
-+     t->last_acc = time(NULL);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    if((old = lh_TABNODE_insert(tab, t)) != NULL) {
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((old = LHM_lh_insert(TABNODE, tab, t)) != NULL) {
-+ #else
-+     if((old = (TABNODE *)lh_insert(tab, t)) != NULL) {
-+@@ -82,7 +91,9 @@ t_find(LHASH_OF(TABNODE) *const tab, char *const key)
-+     TABNODE t, *res;
-+ 
-+     t.key = key;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    if((res = lh_TABNODE_retrieve(tab, &t)) != NULL) {
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res = (TABNODE *)LHM_lh_retrieve(TABNODE, tab, &t)) != NULL) {
-+ #else
-+     if((res = (TABNODE *)lh_retrieve(tab, &t)) != NULL) {
-+@@ -102,7 +113,9 @@ t_remove(LHASH_OF(TABNODE) *const tab, char *const key)
-+     TABNODE t, *res;
-+ 
-+     t.key = key;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    if((res = lh_TABNODE_delete(tab, &t)) != NULL) {    
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res = LHM_lh_delete(TABNODE, tab, &t)) != NULL) {
-+ #else
-+     if((res = (TABNODE *)lh_delete(tab, &t)) != NULL) {
-+@@ -127,7 +140,9 @@ t_old_doall_arg(TABNODE *t, ALL_ARG *a)
-+     TABNODE *res;
-+ 
-+     if(t->last_acc < a->lim)
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++        if((res = lh_TABNODE_delete(a->tab, t)) != NULL) {	    
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+         if((res = LHM_lh_delete(TABNODE, a->tab, t)) != NULL) {
-+ #else
-+         if((res = lh_delete(a->tab, t)) != NULL) {
-+@@ -145,6 +160,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE, ALL_ARG)
-+ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE *, ALL_ARG *)
-+ #endif
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,ALL_ARG);
-++#endif
-++
-+ /*
-+  * Expire all old nodes
-+  */
-+@@ -156,14 +175,16 @@ t_expire(LHASH_OF(TABNODE) *const tab, const time_t lim)
-+ 
-+     a.tab = tab;
-+     a.lim = lim;
-+-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
-+-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++    down_load = TABNODE_GET_DOWN_LOAD(tab);
-++    TABNODE_SET_DOWN_LOAD(tab, 0);
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    lh_TABNODE_doall_ALL_ARG(tab, t_old_doall_arg, &a);
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_old), ALL_ARG, &a);
-+ #else
-+     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_old), &a);
-+ #endif
-+-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
-++    TABNODE_SET_DOWN_LOAD(tab, down_load);
-+     return;
-+ }
-+ 
-+@@ -173,7 +194,9 @@ t_cont_doall_arg(TABNODE *t, ALL_ARG *arg)
-+     TABNODE *res;
-+ 
-+     if(memcmp(t->content, arg->content, arg->cont_len) == 0)
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++        if((res = lh_TABNODE_delete(arg->tab, t)) != NULL) {
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+         if((res = LHM_lh_delete(TABNODE, arg->tab, t)) != NULL) {
-+ #else
-+         if((res = lh_delete(arg->tab, t)) != NULL) {
-+@@ -203,15 +226,16 @@ t_clean(LHASH_OF(TABNODE) *const tab, void *const content, const size_t cont_len
-+     a.tab = tab;
-+     a.content = content;
-+     a.cont_len = cont_len;
-+-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
-+-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++    down_load = TABNODE_GET_DOWN_LOAD(tab);
-++    TABNODE_SET_DOWN_LOAD(tab, 0);
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    lh_TABNODE_doall_ALL_ARG(tab, t_cont_doall_arg, &a);
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_cont), ALL_ARG, &a);
-+ #else
-+     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_cont), &a);
-+ #endif
-+-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
-+-    return;
-++    TABNODE_SET_DOWN_LOAD(tab, down_load);
-+ }
-+ 
-+ /*
-+@@ -1262,6 +1286,31 @@ RSA_tmp_callback(/* not used */SSL *ssl, /* not used */int is_export, int keylen
-+     return res;
-+ }
-+ 
-++static int
-++generate_key(RSA **ret_rsa, unsigned long bits)
-++{
-++#if OPENSSL_VERSION_NUMBER > 0x00908000L
-++    int rc = 0;
-++    RSA *rsa;
-++
-++    rsa = RSA_new();
-++    if (rsa) {
-++	BIGNUM *bne = BN_new();
-++	if (BN_set_word(bne, RSA_F4))
-++	    rc = RSA_generate_key_ex(rsa, bits, bne, NULL);
-++	BN_free(bne);
-++	if (rc)
-++	    *ret_rsa = rsa;
-++	else
-++	    RSA_free(rsa);
-++    }
-++    return rc;
-++#else
-++    *ret_rsa = RSA_generate_key(bits, RSA_F4, NULL, NULL);
-++    return *ret_rsa != NULL;
-++#endif
-++}
-++
-+ /*
-+  * Periodically regenerate ephemeral RSA keys
-+  * runs every T_RSA_KEYS seconds
-+@@ -1274,8 +1323,9 @@ do_RSAgen(void)
-+     RSA *t_RSA1024_keys[N_RSA_KEYS];
-+ 
-+     for(n = 0; n < N_RSA_KEYS; n++) {
-+-        t_RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL);
-+-        t_RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL);
-++        /* FIXME: Error handling */
-++        generate_key(&t_RSA512_keys[n], 512);
-++	generate_key(&t_RSA1024_keys[n], 1024);
-+     }
-+     if(ret_val = pthread_mutex_lock(&RSA_mut))
-+         logmsg(LOG_WARNING, "thr_RSAgen() lock: %s", strerror(ret_val));
-+@@ -1329,11 +1379,11 @@ init_timer(void)
-+      * Pre-generate ephemeral RSA keys
-+      */
-+     for(n = 0; n < N_RSA_KEYS; n++) {
-+-        if((RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL)) == NULL) {
-++        if(!generate_key(&RSA512_keys[n], 512)) {
-+             logmsg(LOG_WARNING,"RSA_generate(%d, 512) failed", n);
-+             return;
-+         }
-+-        if((RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL)) == NULL) {
-++        if(!generate_key(&RSA1024_keys[n], 1024)) {
-+             logmsg(LOG_WARNING,"RSA_generate(%d, 1024) failed", n);
-+             return;
-+         }
-+@@ -1420,6 +1470,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE, DUMP_ARG)
-+ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE *, DUMP_ARG *)
-+ #endif
-+ 
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,DUMP_ARG);
-++#endif
-++	
-+ /*
-+  * write sessions to the control socket
-+  */
-+@@ -1430,7 +1484,9 @@ dump_sess(const int control_sock, LHASH_OF(TABNODE) *const sess, BACKEND *const
-+ 
-+     a.control_sock = control_sock;
-+     a.backends = backends;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++    lh_TABNODE_doall_DUMP_ARG(sess, t_dump_doall_arg, &a);
-++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, sess, LHASH_DOALL_ARG_FN(t_dump), DUMP_ARG, &a);
-+ #else
-+     lh_doall_arg(sess, LHASH_DOALL_ARG_FN(t_dump), &a);
-+@@ -1664,6 +1720,13 @@ thr_control(void *arg)
-+     }
-+ }
-+ 
-++#ifndef SSL3_ST_SR_CLNT_HELLO_A
-++# define SSL3_ST_SR_CLNT_HELLO_A (0x110|SSL_ST_ACCEPT)
-++#endif
-++#ifndef SSL23_ST_SR_CLNT_HELLO_A
-++# define SSL23_ST_SR_CLNT_HELLO_A (0x210|SSL_ST_ACCEPT)
-++#endif
-++		
-+ void
-+ SSLINFO_callback(const SSL *ssl, int where, int rc)
-+ {
-diff --git a/package/pound/0003-Support-for-libressl-coexisting-with-openssl-1.1.x.patch b/package/pound/0003-Support-for-libressl-coexisting-with-openssl-1.1.x.patch
-new file mode 100644
-index 0000000000..3befc271d7
---- /dev/null
-+++ b/package/pound/0003-Support-for-libressl-coexisting-with-openssl-1.1.x.patch
-@@ -0,0 +1,140 @@
-+From 145b88d0c1a71ba6f4d216768388e0c5853d3990 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Tue, 5 Feb 2019 10:34:55 -0600
-+Subject: [PATCH] Support for libressl coexisting with openssl 1.1.x
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libressl needs to not follow the 1.1.x path of APIs
-+
-+Resolves build failure like
-+In file included from svc.c:28:0:
-+pound.h:348:3: warning: data definition has no type or storage class
-+   DEFINE_LHASH_OF(TABNODE);
-+   ^~~~~~~~~~~~~~~
-+pound.h:348:3: warning: type defaults to ???int??? in declaration of ???DEFINE_LHASH_OF??? [-Wimplicit-int]
-+svc.c: In function ???t_add???:
-+svc.c:69:15: warning: implicit declaration of function ???lh_TABNODE_insert???; did you mean ???lh_OBJ_NAME_insert???? [-Wimplicit-function-declaration]
-+     if((old = lh_TABNODE_insert(tab, t)) != NULL) {
-+               ^~~~~~~~~~~~~~~~~
-+               lh_OBJ_NAME_insert
-+
-+Upstream: Site was down when I tried (http://www.apsis.ch/pound)
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ config.c |  2 +-
-+ svc.c    | 20 ++++++++++----------
-+ 2 files changed, 11 insertions(+), 11 deletions(-)
-+
-+diff --git a/config.c b/config.c
-+index 58b928e..3ad7fbb 100644
-+--- a/config.c
-++++ b/config.c
-+@@ -574,7 +574,7 @@ parse_service(const char *svc_name)
-+     pthread_mutex_init(&res->mut, NULL);
-+     if(svc_name)
-+         strncpy(res->name, svc_name, KEY_SIZE);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     if((res->sessions = lh_TABNODE_new(t_hash, t_cmp)) == NULL)    
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res->sessions = LHM_lh_new(TABNODE, t)) == NULL)
-+diff --git a/svc.c b/svc.c
-+index f125be4..8a2f62c 100644
-+--- a/svc.c
-++++ b/svc.c
-+@@ -27,7 +27,7 @@
-+ 
-+ #include    "pound.h"
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+ # define TABNODE_GET_DOWN_LOAD(t) lh_TABNODE_get_down_load(t)
-+ # define TABNODE_SET_DOWN_LOAD(t,n) lh_TABNODE_set_down_load(t,n)
-+ #else
-+@@ -65,7 +65,7 @@ t_add(LHASH_OF(TABNODE) *const tab, const char *key, const void *content, const
-+     }
-+     memcpy(t->content, content, cont_len);
-+     t->last_acc = time(NULL);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     if((old = lh_TABNODE_insert(tab, t)) != NULL) {
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((old = LHM_lh_insert(TABNODE, tab, t)) != NULL) {
-+@@ -91,7 +91,7 @@ t_find(LHASH_OF(TABNODE) *const tab, char *const key)
-+     TABNODE t, *res;
-+ 
-+     t.key = key;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     if((res = lh_TABNODE_retrieve(tab, &t)) != NULL) {
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res = (TABNODE *)LHM_lh_retrieve(TABNODE, tab, &t)) != NULL) {
-+@@ -113,7 +113,7 @@ t_remove(LHASH_OF(TABNODE) *const tab, char *const key)
-+     TABNODE t, *res;
-+ 
-+     t.key = key;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     if((res = lh_TABNODE_delete(tab, &t)) != NULL) {    
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     if((res = LHM_lh_delete(TABNODE, tab, &t)) != NULL) {
-+@@ -140,7 +140,7 @@ t_old_doall_arg(TABNODE *t, ALL_ARG *a)
-+     TABNODE *res;
-+ 
-+     if(t->last_acc < a->lim)
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+         if((res = lh_TABNODE_delete(a->tab, t)) != NULL) {	    
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+         if((res = LHM_lh_delete(TABNODE, a->tab, t)) != NULL) {
-+@@ -160,7 +160,7 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE, ALL_ARG)
-+ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE *, ALL_ARG *)
-+ #endif
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+ IMPLEMENT_LHASH_DOALL_ARG(TABNODE,ALL_ARG);
-+ #endif
-+ 
-+@@ -177,7 +177,7 @@ t_expire(LHASH_OF(TABNODE) *const tab, const time_t lim)
-+     a.lim = lim;
-+     down_load = TABNODE_GET_DOWN_LOAD(tab);
-+     TABNODE_SET_DOWN_LOAD(tab, 0);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     lh_TABNODE_doall_ALL_ARG(tab, t_old_doall_arg, &a);
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_old), ALL_ARG, &a);
-+@@ -194,7 +194,7 @@ t_cont_doall_arg(TABNODE *t, ALL_ARG *arg)
-+     TABNODE *res;
-+ 
-+     if(memcmp(t->content, arg->content, arg->cont_len) == 0)
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+         if((res = lh_TABNODE_delete(arg->tab, t)) != NULL) {
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+         if((res = LHM_lh_delete(TABNODE, arg->tab, t)) != NULL) {
-+@@ -228,7 +228,7 @@ t_clean(LHASH_OF(TABNODE) *const tab, void *const content, const size_t cont_len
-+     a.cont_len = cont_len;
-+     down_load = TABNODE_GET_DOWN_LOAD(tab);
-+     TABNODE_SET_DOWN_LOAD(tab, 0);
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     lh_TABNODE_doall_ALL_ARG(tab, t_cont_doall_arg, &a);
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_cont), ALL_ARG, &a);
-+@@ -1514,7 +1514,7 @@ dump_sess(const int control_sock, LHASH_OF(TABNODE) *const sess, BACKEND *const
-+ 
-+     a.control_sock = control_sock;
-+     a.backends = backends;
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined LIBRESSL_VERSION_NUMBER
-+     lh_TABNODE_doall_DUMP_ARG(sess, t_dump_doall_arg, &a);
-+ #elif OPENSSL_VERSION_NUMBER >= 0x10000000L
-+     LHM_lh_doall_arg(TABNODE, sess, LHASH_DOALL_ARG_FN(t_dump), DUMP_ARG, &a);
-+-- 
-+1.9.1
-+
-diff --git a/package/pound/pound.mk b/package/pound/pound.mk
-index 9a62cf7a58..d6839fc2e7 100644
---- a/package/pound/pound.mk
-+++ b/package/pound/pound.mk
-@@ -9,7 +9,7 @@ POUND_SITE = http://www.apsis.ch/pound
- POUND_SOURCE = Pound-$(POUND_VERSION).tgz
- POUND_LICENSE = GPL-3.0+
- POUND_LICENSE_FILES = GPL.txt
--POUND_DEPENDENCIES = openssl
-+POUND_DEPENDENCIES = openssl host-openssl
- 
- # Force owner/group to us, otherwise it will try proxy:proxy by
- # default.
+Probably this should be moved to gobject-introspection.mk into a
+GOBJECT_INTROSPECTION_TARGET_FINALIZE_HOOKS.
+
+
+> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+> new file mode 100644
+> index 0000000000..1da3cfa000
+> --- /dev/null
+> +++ b/package/gobject-introspection/Config.in
+> @@ -0,0 +1,31 @@
+> +config BR2_PACKAGE_GOBJECT_INTROSPECTION
+> +	bool "gobject-introspection"
+> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi, libglib2
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_USE_MMU # python3, libglib2
+> +	depends on BR2_USE_WCHAR # python3, libglib2 -> gettext
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_MIPS_NABI32
+
+A comment above this one to explain why ?
+
+> +	select BR2_PACKAGE_LIBFFI
+> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_HOST_PRELINK_CROSS
+> +	select BR2_PACKAGE_HOST_QEMU
+> +	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+> +	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+> +	help
+> +	  GObject introspection is a middleware layer between C
+> +	  libraries (using GObject) and language bindings. The C library
+> +	  can be scanned at compile time and generate a metadata file,
+> +	  in addition to the actual native C library. Then at runtime,
+> +	  language bindings can read this metadata and automatically
+> +	  provide bindings to call into the C library.
+> +
+> +	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
+> +
+> +comment "gobject-introspection needs a glibc toolchain w/ wchar, threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS_TARGET
+
+This option does not exist anywhere. It should be
+BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS + !BR2_MIPS_NABI32
+
+> diff --git a/package/gobject-introspection/g-ir-compiler.in b/package/gobject-introspection/g-ir-compiler.in
+> new file mode 100644
+> index 0000000000..b2f97ea870
+> --- /dev/null
+> +++ b/package/gobject-introspection/g-ir-compiler.in
+> @@ -0,0 +1,2 @@
+> +#!/bin/sh
+> +$STAGING_DIR/usr/bin/g-ir-scanner-qemuwrapper $STAGING_DIR/usr/bin/g-ir-compiler.real "$@"
+
+Instead of $STAGING_DIR/usr/bin, please use $(dirname $0)
+
+> diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+> new file mode 100644
+> index 0000000000..12b064e4ad
+> --- /dev/null
+> +++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+> @@ -0,0 +1,2 @@
+> +#!/bin/sh
+> +${HOST_DIR}/sbin/prelink-rtld --root=${STAGING_DIR} "$@"
+
+We also want to use paths based on $(dirname $0) so that those tools
+work even when HOST_DIR and STAGING_DIR are not defined.
+
+> diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+> new file mode 100644
+> index 0000000000..e793ce193f
+> --- /dev/null
+> +++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+> @@ -0,0 +1,10 @@
+> +#!/bin/sh
+> +# Use a modules directory which does not exist so we don't load random things
+> +# which may then get deleted (or their dependencies) and potentially segfault
+> +export GIO_MODULE_DIR=$STAGING_DIR/usr/lib/gio/modules-dummy
+
+Does this needs to be exported, instead of being passed on the command
+line below ?
+
+> +PSEUDO_UNLOAD=1 @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ -L $STAGING_DIR -E LD_LIBRARY_PATH=$GIR_EXTRA_LIBS_PATH:.libs:$STAGING_DIR/usr/lib:$STAGING_DIR/lib "$@"
+
+Is the PSEUDO_UNLOAD=1 variable really needed ? It seems to be related
+to the "pseudo" tool that OpenEmbedded is using, so we probably don't
+care.
+
+Maybe this line could be written as:
+
+GIO_MODULE_DIR=... \
+	-r ... \
+	-L ... \
+	-E ... \
+	"$@"
+
+Also, like the ther scripts above, I think we prefer to avoid using
+$STAGING_DIR.
+
+> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+> new file mode 100644
+> index 0000000000..71b1871cfd
+> --- /dev/null
+> +++ b/package/gobject-introspection/g-ir-scanner.in
+> @@ -0,0 +1,3 @@
+> +#!/bin/sh
+> +export GI_SCANNER_DISABLE_CACHE=1
+> +$HOST_DIR/bin/g-ir-scanner --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH --use-binary-wrapper=$STAGING_DIR/usr/bin/g-ir-scanner-qemuwrapper --use-ldd-wrapper=$STAGING_DIR/usr/bin/g-ir-scanner-lddwrapper --add-include-path=$STAGING_DIR/usr/share/gir-1.0 "$@"
+
+Same comments here.
+
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> new file mode 100644
+> index 0000000000..d36db1d66f
+> --- /dev/null
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -0,0 +1,101 @@
+> +################################################################################
+> +#
+> +# gobject-introspection
+> +#
+> +################################################################################
+> +
+> +GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.56
+> +GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).1
+> +GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+> +GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+> +GOBJECT_INTROSPECTION_DEPENDENCIES = libffi zlib libglib2 host-qemu host-gobject-introspection host-prelink-cross
+> +GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
+> +GOBJECT_INTROSPECTION_AUTORECONF = YES
+> +GOBJECT_INTROSPECTION_LICENSE = Dual LGPLv2+/GPLv2+
+
+LGPL-2.0+ or GPL-2.0+
+
+(but I haven't checked the actual licensing)
+
+> +GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL
+> +HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = host-libglib2 host-flex host-bison
+> +
+> +GOBJECT_INTROSPECTION_CONF_OPTS = \
+> +	--enable-host-gi \
+> +	--disable-static \
+
+As we discussed, this option should go away.
+
+> +	--enable-gi-cross-wrapper=$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper \
+> +	--enable-gi-ldd-wrapper=$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper \
+> +	--enable-introspection-data
+> +
+> +ifeq ($(BR2_PACKAGE_CAIRO),y)
+> +GOBJECT_INTROSPECTION_DEPENDENCIES += cairo
+
+Please add the appropriate with/without options.
+
+> +endif
+> +ifeq ($(BR2_PACKAGE_LIBFFI),y)
+> +GOBJECT_INTROSPECTION_DEPENDENCIES += libffi
+> +endif
+
+This is not needed, libffi is a mandatory dependency.
+
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +GOBJECT_INTROSPECTION_DEPENDENCIES += python
+> +HOST_GOBJECT_INTROSPECTION_DEPENDENCIES += host-python
+> +GOBJECT_INTROSPECTION_PYTHON_PATH="$(STAGING_DIR)/usr/bin/python2"
+
+Spaces around =, no need for double quotes. Please name
+this ...PYTHON_CONFIG, and make it point to python config. Calling this
+PYTHON_PATH is confusing, because PYTHON_PATH is generally "where
+Python modules are installed".
+
+> +else
+> +GOBJECT_INTROSPECTION_DEPENDENCIES += python3
+> +HOST_GOBJECT_INTROSPECTION_DEPENDENCIES += host-python3
+> +GOBJECT_INTROSPECTION_PYTHON_PATH="$(STAGING_DIR)/usr/bin/python3"
+
+Ditto.
+
+> +endif
+> +
+> +# GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to $HOME
+> +HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
+> +	GI_SCANNER_DISABLE_CACHE=1 \
+> +	HOST_GOBJECT_INTROSPECTION_GIR_EXTRA_LIBS_PATH=$(@D)/.libs
+
+Why HOST_GOBJECT_INTROSPECTION_CONF_ENV contains a variable that itself
+is prefixed with HOST_GOBJECT_INTROSPECTION ? this looks weird.
+
+> +
+> +# GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to $HOME
+> +GOBJECT_INTROSPECTION_CONF_ENV = \
+> +	GI_SCANNER_DISABLE_CACHE=1 \
+> +	GOBJECT_INTROSPECTION_GIR_EXTRA_LIBS_PATH=$(@D)/.libs \
+
+Same question.
+
+> +	PYTHON_INCLUDES="`$(GOBJECT_INTROSPECTION_PYTHON_PATH)-config --includes`"
+
+Use PYTHON_CONFIG as we discussed live.
+
+> +
+> +# Make sure g-ir-tool-template uses the host python.
+> +define GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
+> +	sed -i -e '1s,#!.*,#!$(HOST_DIR)/bin/python,' $(@D)/tools/g-ir-tool-template.in
+
+I'm not sure why you need this. g-ir-tool-template.in contains:
+
+#!/usr/bin/env @PYTHON@
+
+Where @PYTHON@ is I guess replaced by the autoconf machinery with the
+detected Python, which should be $(HOST_DIR)/bin/python.
+
+> +endef
+> +GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS = GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
+> +HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS = GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
+
+Use += when registering hooks.
+
+> +
+> +GOBJECT_INTROSPECTION_WRAPPERS = \
+> +	g-ir-compiler \
+> +	g-ir-scanner
+
+This list is only used once, I'm not sure it's really useful to have it
+as a separate variable.
+
+> +
+> +# These wrappers allow gobject-introspection to build the internal introspection
+> +# libraries during the build process.
+> +define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+> +	$(INSTALL) -D -m 755 package/gobject-introspection/g-ir-scanner-lddwrapper.in $(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
+> +	$(INSTALL) -D -m 755 package/gobject-introspection/g-ir-scanner-qemuwrapper.in $(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+> +	$(SED) "s|@QEMU_USER@|$(QEMU_USER)|g" $(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+> +	$(SED) "s|@TOOLCHAIN_HEADERS_VERSION@|$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)|g" $(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+
+Could you split those long lines ?
+
+I'm wondering if preparing those wrappers belong to the target variant
+or not, but the boundary between what the host variant and what the
+target variant does is still a bit fuzzy to me. Let's keep herere for
+now.
+
+> +	# Use a modules directory which does not exist so we don't load random things
+> +	# which may then get deleted (or their dependencies) and potentially segfault
+> +	mkdir -p $(STAGING_DIR)/usr/lib/gio/modules-dummy
+> +endef
+> +GOBJECT_INTROSPECTION_POST_PATCH_HOOKS = GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+
++=
+
+> +# In order for gobject-introspection to work, qemu needs to run temporarily
+> +# to create binaries on the fly by g-ir-scanner. This involves creating
+> +# several wrapper scripts to accomplish the task:
+> +# g-ir-scanner-qemuwrapper, g-ir-compiler-wrapper,
+> +# g-ir-scanner-lddwrapper, g-ir-scanner-wrapper, g-ir-compiler-wrapper.
+
+Well, the below only does something with g-ir-compiler and g-ir-scanner.
+
+> +define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+> +	# Move the real binaries to their names.real, then replace them with
+> +	# the wrappers.
+> +	$(foreach w,$(GOBJECT_INTROSPECTION_WRAPPERS),
+> +		mv $(STAGING_DIR)/usr/bin/$(w) $(STAGING_DIR)/usr/bin/$(w).real
+> +		$(INSTALL) -D -m 755 \
+> +		package/gobject-introspection/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+
+Indent this second line.
+
+> +	)
+> +	$(SED) "s at g_ir_scanner=.*@g_ir_scanner=/usr/bin/g-ir-scanner at g" \
+> +	$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
+
+Ditto.
+
+> +
+> +	# The pkgconfig file needs to point towards the wrappers instead of the native
+> +	# binaries.
+> +	$(SED) "s at g_ir_compiler=.*@g_ir_compiler=/usr/bin/g-ir-compiler at g" \
+> +	$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
+
+Ditto.
+
+Maybe you can standardize a bit on the SED separator, you're using
+comma, @ and | within this package.
+
+> +endef
+> +GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS = GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+
++=
+
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 45de99356f..06021f95c1 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -162,6 +162,7 @@ endif
+>  
+>  $(2)_CONF_ENV			?=
+>  $(2)_CONF_OPTS			?=
+> +$(2)_GIR_EXTRA_LIBS_PATH	?=
+
+Why ?
+
+>  $(2)_MAKE_ENV			?=
+>  $(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_OPTS                ?= install
+> @@ -239,6 +240,8 @@ endef
+>  endif
+>  endif
+>  
+> +export GIR_EXTRA_LIBS_PATH=$$($$(PKG)_GIR_EXTRA_LIBS_PATH)
+
+This is horrible and just doesn't work. You're going to export
+GIR_EXTRA_LIBS_PATH with the value of whatever is the last parsed
+package. I don't see how this can work, and it's anyway not the
+Buildroot way of doing things.
+
+Could you explain what you are trying to achieve ? Infrastructure
+changes also probably need to be split into a separate patch.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
