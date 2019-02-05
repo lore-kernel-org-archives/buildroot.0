@@ -1,32 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Feb 2019 21:03:24 +0100
-Subject: [Buildroot] [PATCH] package/pugixml: force-enable 'long long'
- support to support gcc<4.8
-In-Reply-To: <87sgx2j9h7.fsf@dell.be.48ers.dk>
-References: <20190205142826.18285-1-patrickdepinguin@gmail.com>
- <87sgx2j9h7.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LUCBNapYcA0cYixRB5uLeZwjURmvPGzksGNcnXq51yEVQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Feb 2019 21:06:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump to 2.58.3
+In-Reply-To: <20190205202920.6036210a@windsurf>
+References: <20190205185623.15717-1-aduskett@gmail.com>
+ <20190205202920.6036210a@windsurf>
+Message-ID: <45ddc4a4-b196-ad26-b96a-e794f1c0b720@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 5 feb. 2019 a las 20:55, Peter Korsgaard
-(<peter@korsgaard.com>) escribi?:
->
-> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
->  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->  > Although pugixml will enable 'long long' support automatically if it detects
->  > C++11 (gcc 4.8+), we would like to support older gcc compilers too.
->
->  > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> 4.8 is really old, but OK.
 
-Yes. The Marvell Octeon toolchain still has 4.7.0...
 
-Thanks for applying...
+On 05/02/2019 20:29, Thomas Petazzoni wrote:
+> On Tue,  5 Feb 2019 19:56:23 +0100
+> aduskett at gmail.com wrote:
+> 
+>> From: Adam Duskett <Aduskett@gmail.com>
+>>
+>> In addition:
+>>  - Update second patch
+>>  - Remove third and fifth patches (already in version)
+>>  - Add a new patch to fix a missing header
+>>  - Add LIBGLIB2_GTK_DOC_HOOK so autoreconf do not fail on the following
+>>    error:
+>>      automake: error: cannot open < gtk-doc.make: No such file or directory
+>>
+>>  - Add a new patch: package/libglib2/0005-use-tooldir-in-pc-file.patch
+>>    This patch fixes the previous autobuild errors by modifying the glib-2.0.pc
+>>    file and adding a tooldir variable, of which the glib_genmarshal,
+>>    gobject_query, and glib_mkenums of which will be prefixed. Then a
+> 
+> I am confused by the double "of which" usage in this sentence.
+> 
+>> +define LIBGLIB2_FIX_PC_FILE
+>> +$(SED) "s at toolsdir=.*@toolsdir=$(STAGING_DIR)/usr/bin at g" \
+>> +	$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
+> 
+> This kind of replacement with STAGING_DIR is a bit annoying for the
+> upcoming per-package stuff. Options that I see:
 
-/Thomas
+ Why is it annoying? It will point to libglib2's staging dir, but that's fine,
+isn't it?
+
+> 
+>  (1) Add 'bindir' to the list of pkg-config variables that should be
+>      sysroot-prefixed. Works, but impact unknown.
+
+ With this option, the patch is not even needed!
+
+ Unfortunately, it might result in runtime breakage too... if some .pc's bindir
+is used to set the path to some executable... Like
+
+CFLAGS += -DBASH_PATH=`pkg-config bash --variable=bindir`/bash
+
+
+>  (2) Add 'toolsdir' to the list of pkg-config variables that should be
+>      sysroot-prefixed. Works, but impact unknown.
+
+ Something similar was in fact my plan, that in the pkg-config wrapper we add
+--define-variable=toolsdir=$STAGING_DIR
+
+ Regards,
+ Arnout
+
+> 
+>  (3) Make toolsdir=${libdir}/../bin. Works, but ugly.
+> 
+> I don't have a good opinion on what is the best choice here. Let's see
+> what Arnout says.
+> 
+> Thomas
+> 
