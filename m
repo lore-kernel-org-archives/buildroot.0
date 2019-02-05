@@ -1,41 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Feb 2019 09:55:49 +0100
-Subject: [Buildroot] [PATCH v5 04/10] testing/tests/download: add git
- hash test
-In-Reply-To: <d27d3c06-dedf-7450-35fb-5bdf66845320@mind.be> (Arnout
- Vandecappelle's message of "Tue, 5 Feb 2019 09:09:38 +0100")
-References: <3493f835-d2c0-5d07-b33a-9bfd746b57d8@mind.be>
- <5c58de45509b7_290e2ab5f544b97c12228@ultri5.mail>
- <d27d3c06-dedf-7450-35fb-5bdf66845320@mind.be>
-Message-ID: <87a7jar4ve.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Feb 2019 10:05:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/android-tools: Fix build with
+ OpenSSL 1.1.x
+In-Reply-To: <20190204233029.1318-1-vadim4j@gmail.com> (Vadim Kochan's message
+ of "Tue, 5 Feb 2019 01:30:29 +0200")
+References: <20190204233029.1318-1-vadim4j@gmail.com>
+Message-ID: <871s4mr4f4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
-Hi,
+ > Use patch from:
+ > 	https://github.com/lede-project/source/commit/f63f20fb93c7e67775cb01d97fc88b5b29452b81
 
- >>> Shouldn't we add a timeout here, just to be safe?
- >> 
- >> I think the expect() method uses the default from the class if not defined.
- >> And the default timeout for spawn is 30 seconds AFAICR.
- >> I did not double-checked the docs yet.
+ > which fixes compilation of adb with OpenSSL 1.1.x, and took only part
+ > for adb only.
 
- >  I had only diagonally read the documentation and I saw that timeout in expect()
- > defaults to -1, so I assumed it was infinity... But in fact it indeed means
- > "inherit from the spawn class", and there it defaults to 30.
+ > Fixes:
 
-I got confused by that as well when I wrote the docker/compose
-tests.
+ > 	http://autobuild.buildroot.net/results/66f/66f05eb9a56aa8526a1420334d68c7eda094e90e/
 
-Notice that we set timeout to 5 in emulator.py:
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-   timeout=5 * self.timeout_multiplier
+Committed, thanks.
 
-So I believe -1 means 5 seconds, not 30.
+I did a quick build both with libressl and and openssl without
+issues. Longer term we might want to bump the version. Debian have
+patches for 1.1.1x support as well:
+
+https://sources.debian.org/patches/android-tools/5.1.1.r38-1.1/
 
 -- 
 Bye, Peter Korsgaard
