@@ -1,185 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Feb 2019 17:03:26 +0100
-Subject: [Buildroot] [git commit] package/softether: bump to v4.28-9669-beta
-Message-ID: <20190205160433.C12CF83732@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  5 Feb 2019 17:09:59 +0100
+Subject: [Buildroot] [PATCH] xenomai: move arch restriction to Cobalt core,
+ no restriction for Mercury
+Message-ID: <20190205160959.25927-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=797687ea10da1babf4621f1f76da2857cfb8580a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Source code is now compatible with OpenSSL 1.1.x.
+Xenomai has two mutually exclusive cores:
+- Cobalt: dual-kernel approach: patched kernel + userland
+- Mercury: only userland
 
-Fixes
-http://autobuild.buildroot.net/results/a6f/a6f1f326ce2525ee0f9d423f1b6d989a89e6b87e/build-end.log
+In the Cobalt core, not all architectures are supported. This is the source
+of the existing ARCH_SUPPORTS variable.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+In the Mercury core, there is no imposed architecture restriction.
+
+Rename the XENOMAI_ARCH_SUPPORTS flag to XENOMAI_COBALT_ARCH_SUPPORTS and
+move its check from the Xenomai package to the Cobalt core.
+
+Nevertheless, even for Mercury, there are some restrictions:
+- pthread_atfork is used, which requires an MMU
+- sync functions like __sync_sub_and_fetch and __sync_add_and_fetch are
+  expected.
+
+As the corresponding 'linux extension' selects Xenomai, we add the
+MMU and sync dependencies there too. They may or may not already be covered
+by XENOMAI_COBALT_ARCH_SUPPORTS flag.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- .../0003-use-fhs-install-directories.patch         | 19 ++----
- ...-default-RSA-key-size-to-1024-everywhere-.patch | 78 ++++++++++++++++++++++
- package/softether/softether.hash                   |  4 +-
- package/softether/softether.mk                     |  4 +-
- 4 files changed, 86 insertions(+), 19 deletions(-)
+ linux/Config.ext.in       | 12 ++++++++----
+ package/xenomai/Config.in | 11 +++++++----
+ 2 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/package/softether/0003-use-fhs-install-directories.patch b/package/softether/0003-use-fhs-install-directories.patch
-index c489cc1a6c..ba00d9b676 100644
---- a/package/softether/0003-use-fhs-install-directories.patch
-+++ b/package/softether/0003-use-fhs-install-directories.patch
-@@ -15,20 +15,22 @@ https://github.com/dajhorn/SoftEtherVPN/commit/b9420c3bfc2a8b9d35d0c8e5f6849007c
+v2:
+- add MMU and SYNC_4 dependencies (tested with test-pkg on all toolchains)
+
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index acc8a04742..32dacbdf06 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -4,9 +4,11 @@ menu "Linux Kernel Extensions"
+ # Xenomai
+ config BR2_LINUX_KERNEL_EXT_XENOMAI
+ 	bool "Adeos/Xenomai Real-time patch"
+-	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # xenomai
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xenomai
++	depends on BR2_TOOLCHAIN_HAS_THREADS # xenomai
++	depends on !BR2_TOOLCHAIN_USES_MUSL # xenomai
+ 	select BR2_PACKAGE_XENOMAI
+ 	help
+ 	  Xenomai is split in two parts: a kernel part and a userspace
+@@ -34,7 +36,9 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+ 	  and verify that your kernel version in buildroot matches.
  
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+[Updated for 4.28 build 9669 beta - src/Mayaqua/Encrypt.c dropped IsXRevoked()
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- ---
-  autotools/softether.am      |  1 +
-  src/Cedar/Admin.c           |  2 +-
-  src/Cedar/Command.c         |  6 +++++-
-  src/Cedar/Logging.c         |  2 +-
-  src/Cedar/Server.c          |  4 ++--
-- src/Mayaqua/Encrypt.c       |  2 +-
-  src/Mayaqua/FileIO.c        | 39 ++++++++++++++++++++++++++++++++++++---
-  src/Mayaqua/FileIO.h        |  2 ++
-  src/Mayaqua/Mayaqua.c       |  4 ++++
-  src/Mayaqua/Table.c         |  6 +++++-
-  src/Mayaqua/Unix.c          |  6 +++---
-  src/bin/hamcore/Makefile.am |  8 ++++++--
-- 12 files changed, 67 insertions(+), 15 deletions(-)
-+ 11 files changed, 66 insertions(+), 14 deletions(-)
+ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+-	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
  
- Index: b/autotools/softether.am
- ===================================================================
-@@ -115,19 +117,6 @@ Index: b/src/Cedar/Server.c
-  	Format(dir_full_path, sizeof(dir_full_path), "%s/%s", exe_dir, dirname);
-  
-  	dir = EnumDir(dir_full_path);
--Index: b/src/Mayaqua/Encrypt.c
--===================================================================
----- a/src/Mayaqua/Encrypt.c
--+++ b/src/Mayaqua/Encrypt.c
--@@ -579,7 +579,7 @@
-- 		return false;
-- 	}
-- 
---	GetExeDir(dirname, sizeof(dirname));
--+	GetStateDir(dirname, sizeof(dirname));
-- 
-- 	// Search the CRL file
-- 	t = EnumDir(dirname);
- Index: b/src/Mayaqua/FileIO.c
- ===================================================================
- --- a/src/Mayaqua/FileIO.c
-diff --git a/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch b/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch
-new file mode 100644
-index 0000000000..20a1f06229
---- /dev/null
-+++ b/package/softether/0010-Encrypt-set-default-RSA-key-size-to-1024-everywhere-.patch
-@@ -0,0 +1,78 @@
-+From 1fad008e1adba5cb596da6f9ec6a244d49a585cf Mon Sep 17 00:00:00 2001
-+From: Davide Beatrici <davidebeatrici@gmail.com>
-+Date: Mon, 9 Apr 2018 22:02:34 +0200
-+Subject: [PATCH] Encrypt: set default RSA key size to 1024 everywhere, using
-+ the RSA_KEY_SIZE macro
-+
-+This commit also fixes the problem described in #31, which was caused by the test key generated in RsaCheck() being too small for newer OpenSSL versions.
-+
-+Failure looks like
-+-- Alert: RsaCheck() --
-+OpenSSL Library Init Failed. (too old?)
-+Please install the latest version of OpenSSL.
-+
-+Upstream: https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/commit/1fad008e1adba5cb596da6f9ec6a244d49a585cf
-+(Currently still on an active pull request https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/pull/1)
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ src/Mayaqua/Encrypt.c | 8 ++++----
-+ src/Mayaqua/Encrypt.h | 2 +-
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/Mayaqua/Encrypt.c b/src/Mayaqua/Encrypt.c
-+index 381d1c5..a557052 100644
-+--- a/src/Mayaqua/Encrypt.c
-++++ b/src/Mayaqua/Encrypt.c
-+@@ -2194,7 +2194,7 @@ bool RsaVerifyEx(void *data, UINT data_size, void *sign, K *k, UINT bits)
-+ 	}
-+ 	if (bits == 0)
-+ 	{
-+-		bits = 1024;
-++		bits = RSA_KEY_SIZE;
-+ 	}
-+ 
-+ 	// Hash the data
-+@@ -2233,7 +2233,7 @@ bool RsaSignEx(void *dst, void *src, UINT size, K *k, UINT bits)
-+ 	}
-+ 	if (bits == 0)
-+ 	{
-+-		bits = 1024;
-++		bits = RSA_KEY_SIZE;
-+ 	}
-+ 
-+ 	Zero(dst, bits / 8);
-+@@ -2302,7 +2302,7 @@ bool RsaCheck()
-+ 	BIO *bio;
-+ 	char errbuf[MAX_SIZE];
-+ 	UINT size = 0;
-+-	UINT bit = 32;
-++	UINT bit = RSA_KEY_SIZE;
-+ 	// Validate arguments
-+ 
-+ 	// Key generation
-+@@ -2372,7 +2372,7 @@ bool RsaGen(K **priv, K **pub, UINT bit)
-+ 	}
-+ 	if (bit == 0)
-+ 	{
-+-		bit = 1024;
-++		bit = RSA_KEY_SIZE;
-+ 	}
-+ 
-+ 	// Key generation
-+diff --git a/src/Mayaqua/Encrypt.h b/src/Mayaqua/Encrypt.h
-+index d795d2d..0c48161 100644
-+--- a/src/Mayaqua/Encrypt.h
-++++ b/src/Mayaqua/Encrypt.h
-+@@ -128,7 +128,7 @@ void RAND_Free_For_SoftEther();
-+ #define	DES_IV_SIZE					8			// DES IV size
-+ #define DES_BLOCK_SIZE				8			// DES block size
-+ #define DES3_KEY_SIZE				(8 * 3)		// 3DES key size
-+-#define RSA_KEY_SIZE				128			// RSA key size
-++#define RSA_KEY_SIZE				1024		// RSA key size
-+ #define DH_KEY_SIZE					128			// DH key size
-+ #define	RSA_MIN_SIGN_HASH_SIZE		(15 + SHA1_HASH_SIZE)	// Minimum RSA hash size
-+ #define	RSA_SIGN_HASH_SIZE			(RSA_MIN_SIGN_HASH_SIZE)	// RSA hash size
-+-- 
-+1.9.1
-+
-diff --git a/package/softether/softether.hash b/package/softether/softether.hash
-index ec6e0603d7..fdbbbca39d 100644
---- a/package/softether/softether.hash
-+++ b/package/softether/softether.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 8e6310d36e579ea07171ce5fcb9ebe31235d218444c4e4836ca6c32aa49c1f93 softether-v4.22-9634-beta.tar.gz
--sha256 7aeb873293fa0e44425dabf68a8e46e26c848fe58efcfd3ac7c90a3386f3edd1 LICENSE
-+sha256 fbf6e04c4451d0cb1555c3a53c178b5453c7d761119f82fd693538c9f115fecb softether-v4.28-9669-beta.tar.gz
-+sha256 0a889e7e7a277397d0a2d56c37814eefd8c6b6129d8b74ee2d27fc3415fad561 LICENSE
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 05d2f20fe5..31378e8b70 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ #-------------------------------------------------------------------------------
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index f3d8ea4baf..83ba8ca162 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -1,16 +1,18 @@
+-config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
++config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+ 		BR2_powerpc
  
--SOFTETHER_VERSION = v4.22-9634-beta
--SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
-+SOFTETHER_VERSION = v4.28-9669-beta
-+SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,$(SOFTETHER_VERSION))
- SOFTETHER_LICENSE = GPL-2.0
- SOFTETHER_LICENSE_FILES = LICENSE
- SOFTETHER_DEPENDENCIES = host-softether libopenssl readline
+-comment "xenomai needs an glibc or uClibc toolchain w/ threads"
++comment "xenomai needs a glibc or uClibc toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+-	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_XENOMAI
+ 	bool "Xenomai Userspace"
+-	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# uses <error.h>, __WORDSIZE and bits/local_lim.h
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+@@ -67,6 +69,7 @@ config BR2_PACKAGE_XENOMAI_MERCURY
+ 
+ config BR2_PACKAGE_XENOMAI_COBALT
+ 	bool "Cobalt"
++	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+ 	help
+ 	  Select Cobalt core (dual kernel) for the Xenomai
+ 	  userspace. Use this if you use a Xenomai-patched
+-- 
+2.19.2
