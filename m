@@ -1,57 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  5 Feb 2019 09:30:37 +0100
-Subject: [Buildroot] [PATCH] package/netsurf: fix build
-Message-ID: <20190205083037.17170-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 09:42:30 +0100
+Subject: [Buildroot] [PATCH 1/1] gnu-efi: fix build on armv5
+In-Reply-To: <20190120202652.4419-1-fontaine.fabrice@gmail.com>
+References: <20190120202652.4419-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190205094230.32f69f80@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/a5b/a5bd8969c398fc3101ffaec4aa715a827aec5770/
-http://autobuild.buildroot.net/results/441/44112e8ad03f47125bbf4b231d800ebd5beef24b/
+On Sun, 20 Jan 2019 21:26:52 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-After commit 122089ad (package/netsurf: use TMP_PREFIX inside the build
-directory), the build fails with:
+> Don't override the user-provided ARCH when cross-compiling otherwise
+> ARCH won't be correct for armv5, aarch64 and x86_64
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/2dfc0e10da25a8382a43557420d7dc3444c02dbb
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ts-don-t-override-ARCH-when-cross-compili.patch | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/gnu-efi/0002-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
 
- COMPILE: src/stylesheet.c
-In file included from src/stylesheet.c:12:0:
-src/stylesheet.h:14:39: fatal error: libwapcaplet/libwapcaplet.h: No such file or directory
- #include <libwapcaplet/libwapcaplet.h>
+Applied to master, thanks.
 
-The reason is that netsurf installs its internal libraries to TMP_PREFIX
-during the build, and uses pkg-config to add the correct include/linker
-flags when building/linking the rest.  Unfortunately this fails badly, as we
-prefix STAGING_DIR to the paths returned by pkg-config, causing gcc to fail
-to find the header / library files.
-
-This worked (by accident) when we pointed TMP_PREFIX to STAGING_DIR/usr, as
-STAGING_DIR/usr/include and STAGING_DIR/usr/lib are in the standard
-include/library search paths.
-
-Fix it by adding TMP_PREFIX/include and TMP_PREFIX/lib to the
-include/library search paths.  We cannot easily add them to CFLAGS/LDFLAGS
-as the makefiles do not use override when appending to them, so instead pass
-both in CC (which is also used for linking).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netsurf/netsurf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index d1efd66f34..e617707ade 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -76,7 +76,7 @@ NETSURF_MAKE_OPTS = \
- 	FLEX="$(HOST_DIR)/bin/flex" \
- 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 	BUILD_CC="$(HOSTCC)" \
--	CC="$(TARGET_CC)" \
-+	CC="$(TARGET_CC) -I$(@D)/tmpusr/include -L$(@D)/tmpusr/lib" \
- 	AR="$(TARGET_AR)" \
- 	TMP_PREFIX=$(@D)/tmpusr \
- 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
