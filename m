@@ -1,119 +1,80 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Feb 2019 21:41:52 +0100
-Subject: [Buildroot] [PATCH v2 4/4] cog: new package
-In-Reply-To: <20190205204152.10376-1-francois.perrad@gadz.org>
-References: <20190205204152.10376-1-francois.perrad@gadz.org>
-Message-ID: <20190205204152.10376-5-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Feb 2019 22:09:40 +0100
+Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
+ for fftw-double and fftw-long-double
+In-Reply-To: <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
+References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-3-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-4-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-5-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-6-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20190205220940.3dbda336@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- DEVELOPERS            |  2 ++
- package/Config.in     |  1 +
- package/cog/Config.in | 21 +++++++++++++++++++++
- package/cog/cog.hash  |  5 +++++
- package/cog/cog.mk    | 17 +++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/cog/Config.in
- create mode 100644 package/cog/cog.hash
- create mode 100644 package/cog/cog.mk
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 938a9365a..3017b6e68 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -66,6 +66,7 @@ F:	package/sngrep/
- 
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
-+F:	package/cog/
- F:	package/libepoxy/
- F:	package/libwpe/
- F:	package/webkitgtk/
-@@ -807,6 +808,7 @@ F:	configs/olimex_a20_olinuxino_*
- F:	package/4th/
- F:	package/botan/
- F:	package/chipmunk/
-+F:	package/cog/
- F:	package/dado/
- F:	package/ficl/
- F:	package/gdbm/
-diff --git a/package/Config.in b/package/Config.in
-index 693de953d..08ee2094c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -259,6 +259,7 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
- 
- comment "Graphic applications"
-+	source "package/cog/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/ghostscript/Config.in"
- 	source "package/glmark2/Config.in"
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-new file mode 100644
-index 000000000..4aee4ac91
---- /dev/null
-+++ b/package/cog/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_COG
-+	bool "cog"
-+	depends on BR2_PACKAGE_WPEWEBKIT
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  Single "window" launcher for the WebKit WPE port, and
-+	  helper library for implementing WPE launcher. It does
-+	  not provide any chrome, and is suitable to be used
-+	  as a Web application container.
-+
-+if BR2_PACKAGE_COG
-+
-+config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
-+	string "home uri"
-+	default "https://wpewebkit.org"
-+	help
-+	  Default URI to open when "cog" is launched. If an empty
-+	  string is used, there is no default and the URI to open
-+	  must be always specified in the command line.
-+
-+endif
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-new file mode 100644
-index 000000000..97daf7274
---- /dev/null
-+++ b/package/cog/cog.hash
-@@ -0,0 +1,5 @@
-+# Locally generated
-+sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
-+
-+# Hashes for license files:
-+sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-new file mode 100644
-index 000000000..43f13152c
---- /dev/null
-+++ b/package/cog/cog.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# cog
-+#
-+################################################################################
-+
-+COG_VERSION = v0.2.0
-+COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
-+COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-+COG_LICENSE = MIT
-+COG_LICENSE_FILES = COPYING
-+COG_CONF_OPTS = \
-+	-DCOG_BUILD_PROGRAMS=ON \
-+	-DCOG_PLATFORM_FDO=ON \
-+	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
-+
-+$(eval $(cmake-package))
+On Mon, 21 Jan 2019 14:51:11 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> liquid-dsp has the following code:
+> #if HAVE_FFTW3_H && !defined LIQUID_FFTOVERRIDE
+> #   include <fftw3.h>
+> #   define FFT_PLAN             fftwf_plan
+> #   define FFT_CREATE_PLAN      fftwf_plan_dft_1d
+> #   define FFT_DESTROY_PLAN     fftwf_destroy_plan
+> #   define FFT_EXECUTE          fftwf_execute
+> #   define FFT_DIR_FORWARD      FFTW_FORWARD
+> #   define FFT_DIR_BACKWARD     FFTW_BACKWARD
+> #   define FFT_METHOD           FFTW_ESTIMATE
+> #else
+> #   define FFT_PLAN             fftplan
+> #   define FFT_CREATE_PLAN      fft_create_plan
+> #   define FFT_DESTROY_PLAN     fft_destroy_plan
+> #   define FFT_EXECUTE          fft_execute
+> #   define FFT_DIR_FORWARD      LIQUID_FFT_FORWARD
+> #   define FFT_DIR_BACKWARD     LIQUID_FFT_BACKWARD
+> #   define FFT_METHOD           0
+> #endif
+> 
+> So, if it uses the external fftw library, it can only use the fftwf
+> variant, i.e the fftw-single variant. Otherwise, it uses its internal
+> FFT library.
+> 
+> There is no way for liquid-dsp to use fftw-double or fftw-long-double.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/liquid-dsp/liquid-dsp.mk | 10 ----------
+>  1 file changed, 10 deletions(-)
+
+Applied to master, thanks. I have applied *before* all other patches,
+because it's really a preparation fix that is useful independently from
+the rest of the FFTW rework.
+
+Thanks,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
