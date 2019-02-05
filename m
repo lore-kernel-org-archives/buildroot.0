@@ -1,213 +1,129 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Feb 2019 11:13:46 +0100
-Subject: [Buildroot] [WIP] support/testing: add test to verify 'scp'
- download via BR2_PRIMARY_SITE
-In-Reply-To: <20190205094603.28989-1-patrickdepinguin@gmail.com>
-References: <20190205094603.28989-1-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LUBjfXW54pMZu9NVmRRmis6kua9tfJPs7BaR-pFJs_1Ng@mail.gmail.com>
+Date: Tue, 5 Feb 2019 11:15:09 +0100
+Subject: [Buildroot] [EXT] Re: [PATCH v2 1/3]
+ package/arm-gnu-rm-toolchain: new package
+In-Reply-To: <BYAPR18MB2360CDED4B3FB0DDAC921F3FCA6E0@BYAPR18MB2360.namprd18.prod.outlook.com>
+References: <20190205074324.8097-1-kostap@marvell.com>
+ <20190205074324.8097-2-kostap@marvell.com>
+ <20190205091940.GA18066@scaer>
+ <BYAPR18MB2360CDED4B3FB0DDAC921F3FCA6E0@BYAPR18MB2360.namprd18.prod.outlook.com>
+Message-ID: <CAAXf6LX=T_hPz05g6vmkfHFpH4HKuGnTfxva7YJxJ4YX8tojog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 5 feb. 2019 a las 10:46, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
+El mar., 5 feb. 2019 a las 10:34, Kostya Porotchkin
+(<kostap@marvell.com>) escribi?:
 >
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Hi, Yann,
 >
-> Recently it was found that the scp download infrastructure was broken.
-> To avoid future failures, create a test that verifies that the scp command
-> receives the expected arguments.
+> > -----Original Message-----
+> > From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E.
+> > MORIN
+> > Sent: Tuesday, February 5, 2019 11:20
+> > To: Kostya Porotchkin <kostap@marvell.com>
+> > Cc: buildroot at buildroot.org
+> > Subject: [EXT] Re: [Buildroot] [PATCH v2 1/3] package/arm-gnu-rm-toolchain:
+> > new package
+> >
+> > External Email
+> >
+> > ----------------------------------------------------------------------
+> > Konstantin, All,
+> >
+> > On 2019-02-05 09:43 +0200, kostap at marvell.com spake thusly:
+> > > From: Konstantin Porotchkin <kostap@marvell.com>
+> > >
+> > > Add cross-compialtion ARM RM toolchain for supporting firmware builds
+> > > for Armv8-based SoCs utilizing Cortex-M/Cortex-R service CPUs.
+> > > The cross-toolchain used for building Armv8 application CPU code
+> > > cannot be used for Cortex-M/Cortex-R 32-bit THUMB code generation.
+> > > This patch installs pre-built bate metal ARM GNU-RM toolchain into the
+> > > host file system folder $(HOST_DIR)/opt/gcc-arm-none-eabi for covering
+> > > the above mentioned cases.
+> > >
+> > > Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
+> > > ---
+> > >  .../arm-gnu-rm-toolchain.hash                    |  2 ++
+> > >  .../arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk | 16
+> > > ++++++++++++++++
+> > >  2 files changed, 18 insertions(+)
+> > >  create mode 100644
+> > > package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > >  create mode 100644
+> > > package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > >
+> > > diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > > b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > > new file mode 100644
+> > > index 0000000000..a08e8e6208
+> > > --- /dev/null
+> > > +++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.hash
+> > > @@ -0,0 +1,2 @@
+> > > +# Locally calculated
+> > > +sha256
+> > >
+> > +bb17109f0ee697254a5d4ae6e5e01440e3ea8f0277f2e8169bf95d07c7d5fe69
+> > > +gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+> > > diff --git a/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > > b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > > new file mode 100644
+> > > index 0000000000..a72a172fce
+> > > --- /dev/null
+> > > +++ b/package/arm-gnu-rm-toolchain/arm-gnu-rm-toolchain.mk
+> > > @@ -0,0 +1,16 @@
+> > >
+> > +#########################################################
+> > ############
+> > > +###########
+> > > +#
+> > > +# arm-gnu-rm-toolchain
+> > > +#
+> > >
+> > +#########################################################
+> > ############
+> > > +###########
+> > > +
+> > > +ARM_GNU_RM_TOOLCHAIN_SITE =
+> > > +https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2
+> > > +ARM_GNU_RM_TOOLCHAIN_VERSION = 7-2018-q2-update
+> > > +ARM_GNU_RM_TOOLCHAIN_SOURCE =
+> > > +gcc-arm-none-eabi-$(ARM_GNU_RM_TOOLCHAIN_VERSION)-
+> > linux.tar.bz2
+> >
+> > You also need to provide the liense, and the URL to the source tarball(s), like:
+> >
+> >     ARM_GNU_RM_TOOLCHAIN_LICENSE = so-and-so
+> >     ARM_GNU_RM_TOOLCHAIN_LICENSE_FILES = some/file some/other/file
+> >     ARM_GNU_RM_TOOLCHAIN_ACTUAL_SOURCE_TARBALL =
+> > http://URL/of/source.tar
+> >
+> > Note that you will need to also add a hash for the actual source tarball as
+> > well.
+> [KP] OK, will work on it
+> >
+> > > +define HOST_ARM_GNU_RM_TOOLCHAIN_INSTALL_CMDS
+> > > +   mkdir -p $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> > > +   cp -a $(@D)/* $(HOST_DIR)/opt/gcc-arm-none-eabi/
+> >
+> > You should rather use a mv to avoid the size duplication, like we do in the
+> > external-toolchain infra for the main toolchain.
+> [KP] Yes, already doing so following Thomas review
+> >
+> > Also, why do you not install them in $(HOST_DIR)? As it is as you did, other
+> > packages have to know about this specific location, which is not entirely
+> > nice... However, if installing in $(HOST_DIR), maybe we have to be carefull
+> > about not causing name-clashing with other host stuff...
+> [KP] Again, after Thomas review I am adding symbolic links from the toolchain executables in "bin" folder to the $(HOST_DIR)/bin
+> Will it be enough? I am noty sure if it's good to just extract the entire package to the $(HOST_DIR)/.
+> Please correct me if I am wrong.
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  .../tests/download/br2-external/scp/Config.in |  0
->  .../download/br2-external/scp/external.desc   |  1 +
->  .../download/br2-external/scp/external.mk     |  1 +
->  .../br2-external/scp/package/nohash/nohash.mk | 10 +++
->  support/testing/tests/download/scp-wrapper    | 62 +++++++++++++++++++
->  support/testing/tests/download/test_scp.py    | 45 ++++++++++++++
->  6 files changed, 119 insertions(+)
->  create mode 100644 support/testing/tests/download/br2-external/scp/Config.in
->  create mode 100644 support/testing/tests/download/br2-external/scp/external.desc
->  create mode 100644 support/testing/tests/download/br2-external/scp/external.mk
->  create mode 100644 support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
->  create mode 100755 support/testing/tests/download/scp-wrapper
->  create mode 100644 support/testing/tests/download/test_scp.py
->
-> diff --git a/support/testing/tests/download/br2-external/scp/Config.in b/support/testing/tests/download/br2-external/scp/Config.in
-> new file mode 100644
-> index 0000000000..e69de29bb2
-> diff --git a/support/testing/tests/download/br2-external/scp/external.desc b/support/testing/tests/download/br2-external/scp/external.desc
-> new file mode 100644
-> index 0000000000..0ca0389a32
-> --- /dev/null
-> +++ b/support/testing/tests/download/br2-external/scp/external.desc
-> @@ -0,0 +1 @@
-> +name: SCP
-> diff --git a/support/testing/tests/download/br2-external/scp/external.mk b/support/testing/tests/download/br2-external/scp/external.mk
-> new file mode 100644
-> index 0000000000..2636c7da24
-> --- /dev/null
-> +++ b/support/testing/tests/download/br2-external/scp/external.mk
-> @@ -0,0 +1 @@
-> +include $(sort $(wildcard $(BR2_EXTERNAL_SCP_PATH)/package/*/*.mk))
-> diff --git a/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk b/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
-> new file mode 100644
-> index 0000000000..cfd49370cd
-> --- /dev/null
-> +++ b/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
-> @@ -0,0 +1,10 @@
-> +################################################################################
-> +#
-> +# nohash
-> +#
-> +################################################################################
-> +
-> +NOHASH_VERSION = 123
-> +NOHASH_SITE = http://realsite.example.org/foo
-> +
-> +$(eval $(generic-package))
-> diff --git a/support/testing/tests/download/scp-wrapper b/support/testing/tests/download/scp-wrapper
-> new file mode 100755
-> index 0000000000..3d09ebb121
-> --- /dev/null
-> +++ b/support/testing/tests/download/scp-wrapper
-> @@ -0,0 +1,62 @@
-> +#!/usr/bin/env python
-> +import argparse
-> +import os
-> +import sys
-> +
-> +# expected command-line is:
-> +#   scp [options] <host:path> <target>
-> +#
-> +# environment variables set up by test suite:
-> +# - SCP_WRAPPER_EXPECTED_HOST
-> +# - SCP_WRAPPER_EXPECTED_BASEPATH
-> +# - SCP_WRAPPER_EXPECTED_FILEPATH
-> +
-> +def main():
-> +    parser = argparse.ArgumentParser(description='Scp wrapper for Buildroot tests')
-> +    parser.add_argument('source', help='source path')
-> +    parser.add_argument('target', help='target path')
-> +
-> +    args = parser.parse_args()
-> +
-> +    error = False
-> +
-> +    expected_source_host_basepath = '%s:%s' % (
-> +            os.environ['SCP_WRAPPER_EXPECTED_HOST'],
-> +            os.environ['SCP_WRAPPER_EXPECTED_BASEPATH'])
-> +    if not args.source.startswith(expected_source_host_basepath):
-> +        print("")
-> +        print("ERROR: unexpected source host and/or base path.")
-> +        print("Got     : '%s'" % args.source)
-> +        print("Expected: '%s...'" % expected_source_host_basepath)
-> +        print("")
-> +        error = True
-> +
-> +    expected_source_filepath = '%s' % (os.environ['SCP_WRAPPER_EXPECTED_FILEPATH'])
-> +    if not args.source.endswith(expected_source_filepath):
-> +        print("")
-> +        print("ERROR: unexpected source file path.")
-> +        print("Got     : '%s'" % args.source)
-> +        print("Expected: '...%s'" % expected_source_filepath)
-> +        print("")
-> +        error = True
-> +
-> +    # Really make sure that the source is a tarball.
-> +    # The test is using .tar.gz only so we don't check other extensions.
-> +    if not args.source.endswith('.tar.gz'):
-> +        print("")
-> +        print("ERROR: the source path does not seem like a tarball.")
-> +        print("Got     : '%s'" % args.source)
-> +        print("Expected: '*.tar.gz'")
-> +        print("")
-> +        error = True
-> +
-> +    if not error:
-> +        # create a dummy file to let the build succeed
-> +        open(args.target, 'a').close()
-> +
-> +    return error
-> +
-> +if __name__ == "__main__":
-> +    error = main()
-> +    if error:
-> +        sys.exit(1)
-> diff --git a/support/testing/tests/download/test_scp.py b/support/testing/tests/download/test_scp.py
-> new file mode 100644
-> index 0000000000..95f76b718e
-> --- /dev/null
-> +++ b/support/testing/tests/download/test_scp.py
-> @@ -0,0 +1,45 @@
-> +import infra
-> +import os
-> +
-> +class TestScpPrimarySite(infra.basetest.BRTest):
-> +    host = 'user at server.example.org'
-> +    basepath = 'some/directory'
-> +    scp_wrapper = infra.filepath("tests/download/scp-wrapper")
-> +    br2_external = [infra.filepath("tests/download/br2-external/scp")]
-> +
-> +    def __init__(self, names):
-> +        self.config = \
-> +        """
-> +        BR2_PRIMARY_SITE="scp://%s:%s"
-> +        BR2_PRIMARY_SITE_ONLY=y
-> +        BR2_BACKUP_SITE=""
-> +        BR2_SCP="%s"
-> +        """ % (self.host, self.basepath, self.scp_wrapper)
-> +
-> +        super(TestScpPrimarySite, self).__init__(names)
-> +
-> +    def tearDown(self):
-> +        self.show_msg("Cleaning up")
-> +        if self.b and not self.keepbuilds:
-> +            self.b.delete()
-> +
-> +    def test_download(self):
-> +        package = 'nohash'
-> +        # store downloaded tarball inside the output dir so the test infra
-> +        # cleans it up at the end
-> +        env = {
-> +            "BR2_DL_DIR": os.path.join(self.builddir, "dl"),
-> +            "SCP_WRAPPER_EXPECTED_HOST": self.host,
-> +            "SCP_WRAPPER_EXPECTED_BASEPATH": self.basepath,
-> +            "SCP_WRAPPER_EXPECTED_FILEPATH": '%s-123.tar.gz' % package
-> +        }
-> +        try:
-> +            self.b.build(["{}-dirclean".format(package),
-> +                          "{}-source".format(package)],
-> +                         env)
-> +        except SystemError as e: # FIXME: introduce specific Exception classes
-> +            if str(e) == 'Build failed':
-> +                self.assertFalse('Download error, search for ERROR in the log')
-> +            else:
-> +                # an unexpected error
-> +                raise
-> --
 
-Note about this FIXME:
-The tests currently raise the generic exception class 'SystemError'
-for all types of error, meaning that a test cannot differentiate
-between them without checking explicit strings. I think it would be
-better to create separate subclasses of Exception, e.g.
-
-class BuildFailureException(Exception):
-    pass
-
-class DownloadFailureException(Exception):
-    pass
-
-class ConfigureFailureException(Exception):
-    pass
-
-etc.
-
-and then tests can 'try...except' specific exceptions.
+Yes, I think that we should only have symlinks there, not the actual
+extracted tarball. This follows the same approach as the internal
+toolchain.
 
 Best regards,
 Thomas
