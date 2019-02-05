@@ -1,61 +1,99 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  5 Feb 2019 10:43:09 +0100
-Subject: [Buildroot] [PATCH 1/5] package/mender: adding a writable location
+Date: Tue,  5 Feb 2019 10:43:10 +0100
+Subject: [Buildroot] [PATCH 2/5] package/mender: adding systemv init file
 In-Reply-To: <1549359793-12666-1-git-send-email-angelo@amarulasolutions.com>
 References: <1549359793-12666-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549359793-12666-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1549359793-12666-3-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mender needs /var/lib/mender to be writable at the service start, the
-path is hardcoded and thus we cannot change it.
-This patch solves the problem using the same approach we have for
-dropbear.
+This patch adds a service file for the init system v.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/mender/mender.mk      |  2 ++
- package/mender/mender.service | 12 +++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/mender/S04mender | 56 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/mender/mender.mk |  5 +++++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 package/mender/S04mender
 
+diff --git a/package/mender/S04mender b/package/mender/S04mender
+new file mode 100644
+index 0000000..d5266aa
+--- /dev/null
++++ b/package/mender/S04mender
+@@ -0,0 +1,56 @@
++#!/bin/sh
++#
++# Starts mender service.
++#
++
++start() {
++	# If /var/lib/mender is a symlink to /var/run/mender, and
++	#   - the filesystem is RO (i.e. we can not rm the symlink),
++	#     create the directory pointed to by the symlink.
++	#   - the filesystem is RW (i.e. we can rm the symlink),
++	#     replace the symlink with an actual directory
++	if [ -L /var/lib/mender \
++	     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]
++	then
++		if rm -f /var/lib/mender >/dev/null 2>&1; then
++			mkdir -p /var/lib/mender
++		else
++			echo "No persistent location to store mender data. Data will be lost"
++			echo "at reboot. Are you sure this is what you want to do?"
++			mkdir -p "$(readlink /var/lib/mender)"
++		fi
++	fi
++
++	printf "Starting mender service: "
++	umask 077
++
++	start-stop-daemon -S -q -p /var/run/mender.pid \
++		--exec /usr/bin/mender -- -daemon
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping mender mender: "
++	start-stop-daemon -K -q -p /var/run/mender.pid
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit $?
 diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index a5cece7..1f66615 100644
+index 1f66615..655342c 100644
 --- a/package/mender/mender.mk
 +++ b/package/mender/mender.mk
-@@ -49,6 +49,8 @@ define MENDER_INSTALL_CONFIG_FILES
- 		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
- 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
- 	)
-+
-+	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
+@@ -63,4 +63,9 @@ define MENDER_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mender.service
  endef
  
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
-diff --git a/package/mender/mender.service b/package/mender/mender.service
-index 9ede55a..8b60a4f 100644
---- a/package/mender/mender.service
-+++ b/package/mender/mender.service
-@@ -6,7 +6,17 @@ After=systemd-resolved.service
- Type=idle
- User=root
- Group=root
--ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
-+ExecStartPre=/bin/sh -c '\
-+if [ -L /var/lib/mender \
-+     -a "$(readlink /var/lib/mender)" = "/var/run/mender" ]; then \
-+    if rm -f /var/lib/mender >/dev/null 2>&1; then \
-+        mkdir -p /var/lib/mender; \
-+    else \
-+        echo "No persistent location to store mender data. Data will be lost\
-+        echo "at reboot. Are you sure this is what you want to do?"; \
-+        mkdir -p "$(readlink /var/lib/mender)"; \
-+    fi; \
-+fi'
- ExecStart=/usr/bin/mender -daemon
- Restart=on-abort
- 
++define MENDER_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/mender/S04mender \
++		$(TARGET_DIR)/etc/init.d/S04mender
++endef
++
+ $(eval $(golang-package))
 -- 
 2.7.4
