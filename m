@@ -1,58 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  6 Feb 2019 15:10:54 +0100
-Subject: [Buildroot] [PATCH 12/16] package/qextserialport: remove qt4 support
+Date: Wed,  6 Feb 2019 15:10:50 +0100
+Subject: [Buildroot] [PATCH 08/16] package/poppler: remove qt option
 In-Reply-To: <20190206141058.24155-1-peter@korsgaard.com>
 References: <20190206141058.24155-1-peter@korsgaard.com>
-Message-ID: <20190206141058.24155-12-peter@korsgaard.com>
+Message-ID: <20190206141058.24155-8-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt4 support is about to be dropped, so remove the support from
-qextserialport as well.
+The qt option uses the obsolete qt4 package, which we are about to remove,
+so remove the poppler qt option as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qextserialport/Config.in         |  2 +-
- package/qextserialport/qextserialport.mk | 10 ++--------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ Config.in.legacy           | 6 ++++++
+ package/poppler/Config.in  | 8 --------
+ package/poppler/poppler.mk | 9 +--------
+ 3 files changed, 7 insertions(+), 16 deletions(-)
 
-diff --git a/package/qextserialport/Config.in b/package/qextserialport/Config.in
-index 4e7ef13784..f880d335e5 100644
---- a/package/qextserialport/Config.in
-+++ b/package/qextserialport/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QEXTSERIALPORT
- 	bool "qextserialport"
--	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5
- 	help
- 	  A Qt library to manage serial ports
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 67e3b0dc70..c137006948 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index e3e325ce6c..ecaff21efc 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -14,16 +14,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- QEXTSERIALPORT_CONF_OPTS += CONFIG+=qesp_static
+ comment "Legacy options removed in 2019.02"
+ 
++config BR2_PACKAGE_POPPLER_QT
++	bool "poppler qt option removed"
++	select BR2_LEGACY
++	help
++	  The poppler qt option was removed.
++
+ config BR2_PACKAGE_OPENCV3_WITH_QT
+ 	bool "opencv3 qt backend option removed"
+ 	select BR2_LEGACY
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index 9b03df8d27..4a553df721 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -13,14 +13,6 @@ config BR2_PACKAGE_POPPLER
+ 
+ if BR2_PACKAGE_POPPLER
+ 
+-config BR2_PACKAGE_POPPLER_QT
+-	bool "Qt support"
+-	depends on BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_GUI_MODULE
+-	select BR2_PACKAGE_QT_XML
+-	help
+-	  Build Qt support into the Poppler library
+-
+ config BR2_PACKAGE_POPPLER_QT5
+ 	bool "Qt5 support"
+ 	depends on BR2_PACKAGE_QT5
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index bad61a6613..be1c0e4821 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -12,7 +12,7 @@ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+-	--enable-xpdf-headers
++	--enable-xpdf-headers --disable-poppler-qt4
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
+@@ -84,13 +84,6 @@ else
+ POPPLER_CONF_OPTS += --without-x
  endif
  
--ifeq ($(BR2_PACKAGE_QT),y)
--QEXTSERIALPORT_DEPENDENCIES += qt
--QEXTSERIALPORT_QMAKE = $(QT_QMAKE)
--else ifeq ($(BR2_PACKAGE_QT5),y)
--QEXTSERIALPORT_DEPENDENCIES += qt5base
--QEXTSERIALPORT_QMAKE = $(QT5_QMAKE)
+-ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
+-POPPLER_DEPENDENCIES += qt
+-POPPLER_CONF_OPTS += --enable-poppler-qt4
+-else
+-POPPLER_CONF_OPTS += --disable-poppler-qt4
 -endif
-+QEXTSERIALPORT_DEPENDENCIES = qt5base
- 
- define QEXTSERIALPORT_CONFIGURE_CMDS
--	cd $(@D); $(TARGET_MAKE_ENV) $(QEXTSERIALPORT_QMAKE) $(QEXTSERIALPORT_CONF_OPTS)
-+	cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) $(QEXTSERIALPORT_CONF_OPTS)
- endef
- 
- define QEXTSERIALPORT_BUILD_CMDS
+-
+ ifeq ($(BR2_PACKAGE_POPPLER_QT5),y)
+ POPPLER_DEPENDENCIES += qt5base
+ POPPLER_CONF_OPTS += --enable-poppler-qt5
 -- 
 2.11.0
