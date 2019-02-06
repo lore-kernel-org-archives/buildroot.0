@@ -1,35 +1,59 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  6 Feb 2019 14:16:03 -0600
-Subject: [Buildroot] [PATCH] package/gnuradio: disable xml document
- generation
-Message-ID: <1549484163-54692-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 6 Feb 2019 21:18:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: introduce a 'small'
+ config option
+In-Reply-To: <20190206203207.0dc09362@windsurf>
+References: <20190206191305.18306-1-patrickdepinguin@gmail.com>
+ <20190206203207.0dc09362@windsurf>
+Message-ID: <CAAXf6LUxnkbW_gf6URLaVviJQzZNN8KonMpkzC_xKMCXrWa4PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/f94/f941d84c781b524530770f5b9360863a821e8ba1/
+El mi?., 6 feb. 2019 a las 20:32, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello,
+>
+> On Wed,  6 Feb 2019 20:13:05 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > +config BR2_PACKAGE_LIBCURL_SMALL
+> > +     bool "disable non-basic features to reduce size"
+> > +     help
+> > +       Compile libcurl only with basic features enabled, to save
+> > +       about 50 KiB in the root filesystem.
+> > +
+> > +       Following protocols/features are disabled:
+> > +       - LDAP / LDAPS
+> > +       - POP3 / IMAP / SMTP
+> > +       - Telnet
+> > +       - TFTP
+> > +       - RTSP
+> > +       - SMB / CIFS
+> > +       - DICT
+> > +       - Gopher
+> > +       - Proxy support
+> > +       - Cookie support
+>
+> Discussing with Yann, we think that it would make sense to keep Proxy
+> support and Cookie support, which are both kind of expected for curl as
+> a tool for HTTP interaction. All the other features are not HTTP
+> related, so indeed it makes sense to disable them in this "small"
+> variant.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/gnuradio/gnuradio.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index d6d07f6..202c221 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -26,7 +26,8 @@ GNURADIO_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
- 	-DENABLE_GNURADIO_RUNTIME=ON \
--	-DENABLE_GR_QTGUI=OFF
-+	-DENABLE_GR_QTGUI=OFF \
-+	-DXMLTO_EXECUTABLE=NOTFOUND
- 
- # For third-party blocks, the gnuradio libraries are mandatory at
- # compile time.
--- 
-1.9.1
+I understand your reasoning, but note that both together amount to
+about 25KB which is roughly half of what the 'small' feature saves
+today.
+
+Also, while cookies may be needed when interacting with 'real'
+websites, you would not normally need them to download standard files
+from a web server.
+
+Perhaps, we should introduce separate options for cookie (10 KB) and
+proxy (15 KB), given their size? I.e. three new options?
+
+/Thomas
