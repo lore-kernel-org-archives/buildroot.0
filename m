@@ -1,52 +1,42 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 6 Feb 2019 09:05:29 +0100
-Subject: [Buildroot] [PATCH v9 3/4] gobject-introspection: new package
-In-Reply-To: <0bef422c-fefc-ae71-3052-06fd98e9e86b@mind.be>
-References: <20181215233555.98482-1-aduskett@gmail.com>
- <20181215233555.98482-3-aduskett@gmail.com>
- <20190205192243.720c9707@windsurf>
- <0bef422c-fefc-ae71-3052-06fd98e9e86b@mind.be>
-Message-ID: <CAFSsvmrU+bhiK_f+MnStHaJ2eDm0fBW2L2_Y=7Gmc8DjOvVuKg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 09:36:52 +0100
+Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
+ for fftw-double and fftw-long-double
+In-Reply-To: <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
+References: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
+ <20190205220940.3dbda336@windsurf>
+ <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
+Message-ID: <20190206093652.2b711831@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Hello,
 
-On Tue, Feb 5, 2019 at 9:29 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 05/02/2019 19:22, Thomas Petazzoni wrote:
->
-> >> +export GIR_EXTRA_LIBS_PATH=$$($$(PKG)_GIR_EXTRA_LIBS_PATH)
-> >
-> > This is horrible and just doesn't work. You're going to export
-> > GIR_EXTRA_LIBS_PATH with the value of whatever is the last parsed
-> > package. I don't see how this can work, and it's anyway not the
-> > Buildroot way of doing things.
->
->  Of course it works - same way as exporting STAGING_DIR works in PPSH...
->
-Yes, this is why I use this syntax.
+On Wed, 6 Feb 2019 07:40:24 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
->  Both $(PKG) and $(<PKG>_GIR_EXTRA_LIBS_PATH) are only expanded when the
-> (configure, build, install) rule is executed. And those rules have a PKG=...
-> modifier to make sure it is set to the actual package name.
->
->
-> > Could you explain what you are trying to achieve ? Infrastructure
-> > changes also probably need to be split into a separate patch.
->
->  It makes it possible for an individual package using GIR to add extra libs. I
-> guess this will be required by some consumer.
->
-Gstreamer specifically needs this.
+> > Applied to master, thanks. I have applied *before* all other patches,
+> > because it's really a preparation fix that is useful independently from
+> > the rest of the FFTW rework.  
+> 
+> Unfortunately the '#' prefixed lines in the commit log were dropped again.
 
->  I would only add this as a follow-up patch, to prepare for a package that is
-> actually going to use it. That makes the use case much clearer.
->
->  Regards,
->  Arnout
+Yeah, Yann pointed this to me as well. Sadly now it's committed and
+pushed, so it's too late. Oh well.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
