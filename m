@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  6 Feb 2019 18:42:31 +0100
-Subject: [Buildroot] [PATCH 1/1] gerbera: bump to version 1.3.0
-Message-ID: <20190206174231.10457-1-fontaine.fabrice@gmail.com>
+Date: Wed,  6 Feb 2019 18:45:29 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/gerbera: bump to version 1.3.0
+Message-ID: <20190206174529.10725-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Add package in title
+
  package/gerbera/0001-Fix-atrailers-build.patch | 48 --------------------------
  package/gerbera/Config.in                      |  6 ++--
  package/gerbera/gerbera.hash                   |  2 +-
