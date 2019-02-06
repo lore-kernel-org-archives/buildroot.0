@@ -1,72 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  6 Feb 2019 15:10:45 +0100
-Subject: [Buildroot] [PATCH 03/16] package/python-sip: remove qt4 support
-In-Reply-To: <20190206141058.24155-1-peter@korsgaard.com>
-References: <20190206141058.24155-1-peter@korsgaard.com>
-Message-ID: <20190206141058.24155-3-peter@korsgaard.com>
+Date: Wed,  6 Feb 2019 15:10:43 +0100
+Subject: [Buildroot] [PATCH 01/16] package/gnuradio: remove qtgui option
+Message-ID: <20190206141058.24155-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-pyqt has been removed and qt4 support is about to be dropped, so
-remove the support from python-sip as well.
-
-Adjust the dependencies to match the dependencies of qt5, and ensure that
-qt5base is selected.
+The gr-qtgui option uses python-pyqt/Qt4, which we are about to remove, so
+remove the option.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-sip/Config.in     | 14 ++++++++------
- package/python-sip/python-sip.mk |  4 ----
- 2 files changed, 8 insertions(+), 10 deletions(-)
+ Config.in.legacy             |  6 ++++++
+ package/gnuradio/Config.in   | 10 ----------
+ package/gnuradio/gnuradio.mk | 10 ++--------
+ 3 files changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/package/python-sip/Config.in b/package/python-sip/Config.in
-index 1f8961d0df..4ce4f89b2a 100644
---- a/package/python-sip/Config.in
-+++ b/package/python-sip/Config.in
-@@ -2,17 +2,19 @@ comment "python-sip needs a toolchain w/ C++, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/Config.in.legacy b/Config.in.legacy
+index be2f722b05..c84a9239a7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--comment "python-sip needs qt or qt5"
-+comment "python-sip needs qt5"
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-+	depends on !BR2_PACKAGE_QT5
+ comment "Legacy options removed in 2019.02"
  
- config BR2_PACKAGE_PYTHON_SIP
- 	bool "python-sip"
--	depends on BR2_INSTALL_LIBSTDCPP # qt
--	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
--	depends on BR2_USE_MMU # qt
--	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-+	depends on BR2_INSTALL_LIBSTDCPP # qt5
-+	depends on BR2_USE_WCHAR # qt5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
-+	depends on !BR2_STATIC_LIBS # qt5
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
++config BR2_PACKAGE_GNURADIO_QTGUI
++	bool "gnuradio gr-qtgui option removed"
++	select BR2_LEGACY
++	help
++	  The gr-qtgui option was removed.
++
+ config BR2_PACKAGE_LUACRYPTO
+ 	bool "luacrypto package removed"
+ 	select BR2_LEGACY
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 533a49c81e..3fdaea850e 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -116,16 +116,6 @@ config BR2_PACKAGE_GNURADIO_PAGER
  	help
- 	  SIP is a tool that makes it very easy to create Python
- 	  bindings for C and C++ libraries. It was originally
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 76d7d04187..69019f5f19 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -10,11 +10,7 @@ PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON
- PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
- PYTHON_SIP_LICENSE_FILES = LICENSE LICENSE-GPL2 LICENSE-GPL3
+ 	  FLEX pager decoder implementation blocks
  
--ifeq ($(BR2_PACKAGE_QT5),y)
- PYTHON_SIP_DEPENDENCIES = qt5base
+-config BR2_PACKAGE_GNURADIO_QTGUI
+-	bool "gr-qtgui"
+-	depends on BR2_PACKAGE_PYTHON_PYQT
+-	depends on BR2_PACKAGE_QWT
+-	depends on BR2_PACKAGE_QT_STL
+-	select BR2_PACKAGE_GNURADIO_FFT
+-	select BR2_PACKAGE_GNURADIO_FILTER
+-	help
+-	  GNU Radio Qt scopes
+-
+ config BR2_PACKAGE_GNURADIO_TRELLIS
+ 	bool "gr-trellis support"
+ 	select BR2_PACKAGE_GNURADIO_DIGITAL
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 564ad8b2a4..d6d07f6566 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -25,7 +25,8 @@ endif
+ GNURADIO_CONF_OPTS = \
+ 	-DENABLE_DEFAULT=OFF \
+ 	-DENABLE_VOLK=ON \
+-	-DENABLE_GNURADIO_RUNTIME=ON
++	-DENABLE_GNURADIO_RUNTIME=ON \
++	-DENABLE_GR_QTGUI=OFF
+ 
+ # For third-party blocks, the gnuradio libraries are mandatory at
+ # compile time.
+@@ -126,13 +127,6 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
+-GNURADIO_DEPENDENCIES += python-pyqt qwt
+-GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
 -else
--PYTHON_SIP_DEPENDENCIES = qt
+-GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
 -endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON_SIP_DEPENDENCIES += python
+-
+ ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
+ else
 -- 
 2.11.0
