@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  6 Feb 2019 04:15:27 -0500
-Subject: [Buildroot] [PATCH v10 2/6] prelink-cross: new package
+Date: Wed,  6 Feb 2019 04:15:28 -0500
+Subject: [Buildroot] [PATCH v10 3/6] package/qemu: drop host kernel version
+ check
 In-Reply-To: <20190206091531.104591-1-aduskett@gmail.com>
 References: <20190206091531.104591-1-aduskett@gmail.com>
-Message-ID: <20190206091531.104591-2-aduskett@gmail.com>
+Message-ID: <20190206091531.104591-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,104 +13,49 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Prelink-cross emulates a runtime linker for a given sysroot. This is
-necessary to allow gobject-introspection to build it's typelib files
-during cross-compiling.
+There is no clean way to check if a program will actually run using host-qemu,
+making this check too restrictive.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v7:
-  - Add patch to series.
+Changes v1 -> v10:
+  - Add this patch to the series.
 
-Changes v7 -> v8:
-  - None
+ package/qemu/qemu.mk | 22 ----------------------
+ 1 file changed, 22 deletions(-)
 
-Changes v8 -> v9:
-  - Add the package to the DEVELOPERS file under my name.
-  - Bump version to a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-  - Add host-elfutils as a dependency.
-
-Changes v9 -> v10:
-  - None
-
- DEVELOPERS                               |  1 +
- package/Config.in.host                   |  1 +
- package/prelink-cross/Config.in.host     |  9 +++++++++
- package/prelink-cross/prelink-cross.hash |  3 +++
- package/prelink-cross/prelink-cross.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/prelink-cross/Config.in.host
- create mode 100644 package/prelink-cross/prelink-cross.hash
- create mode 100644 package/prelink-cross/prelink-cross.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 59e1f32ba9..ab55415d0e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -51,6 +51,7 @@ F:	package/libsemanage/
- F:	package/libsepol/
- F:	package/nginx-naxsi/
- F:	package/policycoreutils/
-+F:	package/prelink-cross/
- F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
- F:	package/python-pip/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3b75f23dd7..d38d9f4139 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -44,6 +44,7 @@ menu "Host utilities"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pkgconf/Config.in.host"
-+	source "package/prelink-cross/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-cython/Config.in.host"
-diff --git a/package/prelink-cross/Config.in.host b/package/prelink-cross/Config.in.host
-new file mode 100644
-index 0000000000..0c54f6a8c4
---- /dev/null
-+++ b/package/prelink-cross/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_PRELINK_CROSS
-+	bool "host prelink-cross"
-+	help
-+	  The prelink package contains a utility which modifies
-+	  ELF shared libraries and executables, so that far fewer
-+	  relocations need to be resolved at runtime and thus
-+	  programs come up faster.
-+
-+	  https://wiki.yoctoproject.org/wiki/Cross-Prelink
-diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
-new file mode 100644
-index 0000000000..3ac33ac3d0
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
-+sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
-new file mode 100644
-index 0000000000..ab7a967f95
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# host-prelink-cross
-+#
-+################################################################################
-+
-+HOST_PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-+HOST_PRELINK_CROSS_SITE = git://git.yoctoproject.org/prelink-cross
-+HOST_PRELINK_CROSS_SITE_METHOD = git
-+HOST_PRELINK_CROSS_LICENSE = GPL-2.0
-+HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
-+HOST_PRELINK_CROSS_AUTORECONF = YES
-+HOST_PRELINK_CROSS_DEPENDENCIES = host-binutils host-elfutils
-+
-+$(eval $(host-autotools-package))
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 30cd5972ef..4ce8c129ea 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -226,28 +226,6 @@ ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
+ $(error "qemu-user can only be used on Linux hosts")
+ endif
+ 
+-# kernel version as major*256 + minor
+-HOST_QEMU_HOST_SYSTEM_VERSION = $(shell uname -r | awk -F. '{ print $$1 * 256 + $$2 }')
+-HOST_QEMU_TARGET_SYSTEM_VERSION = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | awk -F. '{ print $$1 * 256 + $$2 }')
+-HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION) && echo OK)
+-
+-#
+-# The principle of qemu-user is that it emulates the instructions of
+-# the target architecture when running the binary, and then when this
+-# binary does a system call, it converts this system call into a
+-# system call on the host machine. This mechanism makes an assumption:
+-# that the target binary will not do system calls that do not exist on
+-# the host. This basically requires that the target binary should be
+-# built with kernel headers that are older or the same as the kernel
+-# version running on the host machine.
+-#
+-
+-ifeq ($(BR_BUILDING),y)
+-ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
+-$(error "Refusing to build qemu-user: target Linux version newer than host's.")
+-endif
+-endif # BR_BUILDING
+-
+ else # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+ HOST_QEMU_OPTS += --disable-linux-user
+ endif # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
 -- 
 2.20.1
