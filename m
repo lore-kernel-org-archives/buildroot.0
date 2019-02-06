@@ -1,980 +1,124 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  6 Feb 2019 04:15:29 -0500
-Subject: [Buildroot] [PATCH v10 4/6] gobject-introspection: new package
-In-Reply-To: <20190206091531.104591-1-aduskett@gmail.com>
-References: <20190206091531.104591-1-aduskett@gmail.com>
-Message-ID: <20190206091531.104591-4-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 10:16:00 +0100
+Subject: [Buildroot] [git commit] package/luacrypto: remove package
+Message-ID: <20190206091438.24EAF83F9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d540bdda33c21c3c20edfa93c910a874bd4df1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GObject introspection is a middleware layer between C
-libraries (using GObject) and language bindings. The C library
-can be scanned at compile time and generate a metadata file,
-in addition to the actual native C library. Then at runtime,
-language bindings can read this metadata and automatically
-provide bindings to call into the C library.
+Fixes:
+http://autobuild.buildroot.net/results/afd/afdc598b80356a8301d890232466de421f7779d5/
 
-There's an XML format called GIR used by GObject-Introspection.
-The purpose of it is to provide a standard structure to access the
-complete available API that a library or other unit of code exports.
-It is meant to be language agnostic using namespaces to separate
-core, language or library specific functionality.
+Luacrypto fails to build with openssl 1.1.x.  The package has not seen any
+functional changes since it was added in 2013 and has no reverse
+dependencies.
 
-Cross-compiling gobject-introspection is not an easy task. The main
-issue is that in the process of creating the XML files,
-gobject-introspection must first run and scan the binary, which, if the
-binary is cross-compiled, would not typically be possible from the host
-system.
+The upstream repository (https://github.com/starius/luacrypto) explicitly
+states:
 
-Because of this limitation, several wrappers are used to call instead
-first out qemu which will then run the native scanner to create the
-binaries.
+this project is deprecated, use luaossl
 
-There are seven total patches and four different wrapper files needed
-to successfully cross-compile and run this package, many of them are
-from open-embedded, but two of them are of my own doing.
+So remove the package.
 
-1) Revert a previous, incomplete attempt at adding cross-compiling support.
-
-2) Add support for the various wrappers. (See patch for details.)
-
-3) Add an option to use a binary wrapper; this patch will force
-   giscanner to use a wrapper executable to run binaries it's producing,
-   instead of attempting to run them from the host.
-
-4) Add an option to use an LDD wrapper, again, useful for cross-compiled
-   environments.
-
-5) Overwrite python includes during the initial configure stage.
-
-6) Add a --lib-dirs-envar option to pass to giscanner. (See patch for details.)
-
-7) Add rpath-links to ccompiler: when passing the PACKAGE_GIR_EXTRA_LIBS_PATH
-   to the ccompiler.py script, ccompiler.py needs to add -Wl,-rpath-link to the
-   environment for the package to correctly link against the passed on paths.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
-  - Fixed wrappers
-  - Added 0007-giscanner-add-a-lib-dirs-envvar-option.patch
-  - Added 0008-add-Float128.patch
+ Config.in.legacy                 |  6 ++++++
+ DEVELOPERS                       |  1 -
+ package/Config.in                |  1 -
+ package/luacrypto/Config.in      | 11 -----------
+ package/luacrypto/luacrypto.hash |  3 ---
+ package/luacrypto/luacrypto.mk   | 12 ------------
+ 6 files changed, 6 insertions(+), 28 deletions(-)
 
-Changes v2 -> v3:
-  - Removed Linux kernel dependency (baruch)
-  - Changed $(LINUX_VERSION) to $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) (baruch)
-  - Changed @LINUX_VERSION@ in g-ir-scanner-qemuwrapper.in to
-    @TOOLCHAIN_HEADERS_VERSION@ to match the above variable change.
-  - Added BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS_TARGET in Config.in
-    with only BR2_arm selected for now.
-  - Removed BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS in favor of the above change.
-  - Added two new lines in the base Makefile which removes any remaining .gir
-    or .rnc files from the target filing system, as these are not needed for
-    runtime, only compile time.
-
-Changes v3 -> v4:
-  - Removed RFC tag.
-  - Added 0007-Add-rpath-links-to-ccompiler.patch
-  - Removed config-paths-with-PKG_CONFIG_SYSROOT_DIR-.patch as it is not
-    Yocto specific.
-  - Added the _GIR_EXTRA_LIBS_PATH to pkg-autotools.mk. This allows package
-    specific Gir libraries to be passed on to g-ir-scanner-qemuwrapper.
-  - Fixed a typo in g-ir-scanner-qemuwrapper.in.
-  - Remove BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS_TARGET in favor of
-    BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-
-Changes v4 -> v5:
-  - Added a more detailed commit message (Yann)
-  - Removed  $HOST_DIR/bin/qemu- at HOST_QEMU_ARCH@ @HOST_QEMU_CPU_TUNE@
-    in favor of @QEMU_USER@ (Thanks Yann)
-
-Changes v5 -> v6:
-  - Update gobject-introspection to 1.56.1
-  - Remove upstreamed 0008-add-Float128.patch
-
-Changes v6 -> v7:
-  - Remove the cross-ldd script in favor of the prelink-cross package.
-  - Install the ldd and qemu wrappers in a post patch hook seperate of
-    the other wrappers.
-  - Set --enable-introspection-data in the configure options.
-
-Changes v7 -> v8:
-  - Add "select BR2_PACKAGE_HOST_PRELINK_CROSS" to Config.in
-
-Changes v8 -> v9:
-  - Create the $(STAGING_DIR)/usr/lib/gio/modules-dummy directory in the
-    GOBJECT_INTROSPECTION_POST_PATCH_HOOKS to prevent qemu from segfaulting
-    when g-ir-scanner-qemuwrapper is ran.
-  - Remove the $(STAGING_DIR) prefix from gobject-introspection-1.0.pc to
-    prevent pkg-config from appending a second staging_dir to the path of the
-    g-ir-compiler. This prevents packages such a gstreamer1 from trying to call
-    $(STAGING_DIR)/$(STAGING_DIR)/usr/bin/g-ir-compiler, which will break the
-    build.
-
-Changes v9 -> v10:
-  - Makefile cleanup
-  - Fix license syntax (Thomas)
-  - Add libffi as a mandatory dependency (Thomas)
-  - remove --disalbe-static (Thomas)
-  - add --with-cairo if the cairo package is selected (Thomas)
-  - Change PYTHON_INCLUDES to PYTHON_CONFIG in gobject-introspection.mk (Thomas)
-  - Use | for all sed functions (Thomas)
-  - Remove GOBJECT_INTROSPECTION_WRAPPERS (Thomas)
-  - Add GOBJECT_INTROSPECTION_REMOVE_DEVELOPMENT_FILES target finalize hook.
-   (Thomas)
-  - Use $(dirname $0) in wrappers instead of $STAGING_DIR (Thomas)
-  - Remove _GIR_EXTRA_LIBS_PATH in pkg-autotools.mk in favor of a seperate
-    patch. (Thomas)
-
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- ...lete-upstream-attempt-at-cross-compi.patch |  50 +++++
- ...-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++++++++
- ...canner-add-use-binary-wrapper-option.patch |  52 +++++
- ...scanner-add-a-use-ldd-wrapper-option.patch |  48 +++++
- ...-user-PYTHON_CONFIG-to-find-includes.patch |  31 +++
- ...scanner-add-a-lib-dirs-envvar-option.patch |  74 +++++++
- .../0007-Add-rpath-links-to-ccompiler.patch   |  29 +++
- .../0008-fix-gobject-pc.file.patch            |  41 ++++
- package/gobject-introspection/Config.in       |  30 +++
- .../gobject-introspection/g-ir-compiler.in    |   2 +
- .../g-ir-scanner-lddwrapper.in                |   2 +
- .../g-ir-scanner-qemuwrapper.in               |  17 ++
- package/gobject-introspection/g-ir-scanner.in |   7 +
- .../gobject-introspection.hash                |   4 +
- .../gobject-introspection.mk                  | 107 +++++++++
- 17 files changed, 699 insertions(+)
- create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
- create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
- create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0005-user-PYTHON_CONFIG-to-find-includes.patch
- create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
- create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
- create mode 100644 package/gobject-introspection/0008-fix-gobject-pc.file.patch
- create mode 100644 package/gobject-introspection/Config.in
- create mode 100644 package/gobject-introspection/g-ir-compiler.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner.in
- create mode 100644 package/gobject-introspection/gobject-introspection.hash
- create mode 100644 package/gobject-introspection/gobject-introspection.mk
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index db300db172..be2f722b05 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2019.02"
+ 
++config BR2_PACKAGE_LUACRYPTO
++	bool "luacrypto package removed"
++	select BR2_LEGACY
++	help
++	  The luacrypto package was removed. Consider luaossl instead.
++
+ config BR2_PACKAGE_TN5250
+ 	bool "tn5250 package removed"
+ 	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ab55415d0e..745dcfdeca 100644
+index 59e1f32ba9..8e713f2d63 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -34,6 +34,7 @@ F:	package/audit/
- F:	package/busybox/
- F:	package/checkpolicy/
- F:	package/cppdb/
-+F:	package/gobject-introspection/
- F:	package/gstreamer1/gstreamer1/
- F:	package/gstreamer1/gstreamer1-mm/
- F:	package/gstreamer1/gst1-plugins-bad/
+@@ -215,7 +215,6 @@ F:	package/ti-cgt-pru/
+ N:	Assaf Inbal <shmuelzon@gmail.com>
+ F:	package/lbase64/
+ F:	package/luabitop/
+-F:	package/luacrypto/
+ F:	package/luaexpatutils/
+ F:	package/luaposix/
+ F:	package/luasec/
 diff --git a/package/Config.in b/package/Config.in
-index 6273ea8197..02adfe0a68 100644
+index 6273ea8197..222857ad18 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1645,6 +1645,7 @@ menu "Other"
- 	source "package/glibmm/Config.in"
- 	source "package/glm/Config.in"
- 	source "package/gmp/Config.in"
-+	source "package/gobject-introspection/Config.in"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
- 	source "package/jemalloc/Config.in"
-diff --git a/package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch b/package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
-new file mode 100644
-index 0000000000..ecc7565b7a
---- /dev/null
-+++ b/package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
-@@ -0,0 +1,50 @@
-+From 3a9d1e5ee0aae56fafec0beba2014c19e4ff310c Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Wed, 23 Mar 2016 17:07:28 +0200
-+Subject: [PATCH] Revert an incomplete upstream attempt at cross-compile support
-+
-+Upstream-Status: Pending
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ common.mk                | 4 ----
-+ giscanner/gdumpparser.py | 6 ------
-+ 2 files changed, 10 deletions(-)
-+
-+diff --git a/common.mk b/common.mk
-+index b778f7a..e26c637 100644
-+--- a/common.mk
-++++ b/common.mk
-+@@ -24,12 +24,8 @@ INTROSPECTION_SCANNER_ARGS = \
-+     --add-include-path=$(top_builddir) \
-+     --add-include-path=$(top_builddir)/gir
-+
-+-# GI_CROSS_LAUNCHER is the command to use for executing g-ir-compiler.
-+-# Normally will be undefined but can be set (e.g. to wine or qemu)
-+-# when cross-compiling
-+ INTROSPECTION_COMPILER = \
-+     env PATH=".libs:$(PATH)" \
-+-        $(GI_CROSS_LAUNCHER) \
-+         $(top_builddir)/g-ir-compiler$(EXEEXT)
-+
-+ INTROSPECTION_COMPILER_ARGS = \
-+diff --git a/giscanner/gdumpparser.py b/giscanner/gdumpparser.py
-+index 1134f33..9bdc2bc 100644
-+--- a/giscanner/gdumpparser.py
-++++ b/giscanner/gdumpparser.py
-+@@ -162,12 +162,6 @@ blob containing data gleaned from GObject's primitive introspection."""
-+         out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
-+
-+         args = []
-+-
-+-        # Prepend the launcher command and arguments, if defined
-+-        launcher = os.environ.get('GI_CROSS_LAUNCHER')
-+-        if launcher:
-+-            args.extend(launcher.split())
-+-
-+         args.extend(self._binary.args)
-+         args.append('--introspect-dump=%s,%s' % (in_path, out_path))
-+ 
-+-- 
-+2.7.0
-+
-diff --git a/package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch b/package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
-new file mode 100644
-index 0000000000..80837abc44
---- /dev/null
-+++ b/package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
-@@ -0,0 +1,203 @@
-+From b1503fe2693d602b3e24e4b832dc0934960d5d22 Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Mon, 19 Oct 2015 18:29:21 +0300
-+Subject: [PATCH] configure.ac: add host-gi, gi-cross-wrapper, gi-ldd-wrapper and introspection-data options
-+
-+With the first option, gobject-introspection tools (g-ir-doc-tool and g-ir-scanner)
-+that are already installed in the host system will be used for building the source tree.
-+
-+With the second option, g-ir-scanner will be instructed to use an executable
-+wrapper to run binaries it's producing, and g-ir-compiler will be run
-+through the same wrapper (host system's g-ir-compiler cannot be used because
-+it's producing architecture-specific output).
-+
-+With the third option, giscanner will be instructed to use a special ldd
-+command instead of system's ldd (which does not work when the binary to inspect
-+is compiled for a different architecture).
-+
-+With the fourth option, it is possible to disable building of introspection data
-+(.gir and .typelib files), which may be difficult or impossible in cross-compilation
-+environments, because of lack of emulation (or native hardware) for the target architecture
-+on which the target binaries can be run.
-+
-+These options are useful when cross-compiling for a different target architecture.
-+
-+Upstream-Status: Pending [review on oe-core list]
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ Makefile.am       |  2 ++
-+ common.mk         | 39 +++++++++++++++++++++++++++++++++++++++
-+ configure.ac      | 42 ++++++++++++++++++++++++++++++++++++++++++
-+ tests/Makefile.am |  5 ++++-
-+ 4 files changed, 87 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index b080a89..ce8d29b 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -21,7 +21,9 @@ include Makefile-cmph.am
-+ include Makefile-girepository.am
-+ include Makefile-giscanner.am
-+ include Makefile-examples.am
-++if BUILD_INTROSPECTION_DATA
-+ include Makefile-gir.am
-++endif
-+ include Makefile-tools.am
-+ include Makefile-msvcproj.am
-+
-+diff --git a/common.mk b/common.mk
-+index e26c637..9f3a65f 100644
-+--- a/common.mk
-++++ b/common.mk
-+@@ -6,6 +6,15 @@
-+ # module itself.
-+ #
-+
-++if USE_HOST_GI
-++INTROSPECTION_SCANNER = \
-++    env PATH="$(PATH)" \
-++        LPATH=.libs \
-++        CC="$(CC)" \
-++        PYTHONPATH=$(top_builddir):$(top_srcdir) \
-++        UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-++        g-ir-scanner
-++else
-+ INTROSPECTION_SCANNER = \
-+     env PATH=".libs:$(PATH)" \
-+         LPATH=.libs \
-+@@ -14,9 +23,24 @@ INTROSPECTION_SCANNER = \
-+         UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
-+         UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-+         $(top_builddir)/g-ir-scanner
-++endif
-++
-++if USE_CROSS_WRAPPER
-++CROSS_WRAPPER_ARG = --use-binary-wrapper=$(GI_CROSS_WRAPPER)
-++else
-++CROSS_WRAPPER_ARG =
-++endif
-++
-++if USE_LDD_WRAPPER
-++LDD_WRAPPER_ARG = --use-ldd-wrapper=$(GI_LDD_WRAPPER)
-++else
-++LDD_WRAPPER_ARG =
-++endif
-+
-+ INTROSPECTION_SCANNER_ARGS = \
-+     --verbose \
-++    $(CROSS_WRAPPER_ARG) \
-++    $(LDD_WRAPPER_ARG) \
-+     -I$(top_srcdir) \
-+     --add-include-path=$(srcdir) \
-+     --add-include-path=$(top_srcdir)/gir \
-+@@ -24,9 +48,15 @@ INTROSPECTION_SCANNER_ARGS = \
-+     --add-include-path=$(top_builddir) \
-+     --add-include-path=$(top_builddir)/gir
-+
-++if USE_CROSS_WRAPPER
-++INTROSPECTION_COMPILER = \
-++    env PATH=".libs:$(PATH)" \
-++        $(GI_CROSS_WRAPPER) $(top_builddir)/g-ir-compiler$(EXEEXT)
-++else
-+ INTROSPECTION_COMPILER = \
-+     env PATH=".libs:$(PATH)" \
-+         $(top_builddir)/g-ir-compiler$(EXEEXT)
-++endif
-+
-+ INTROSPECTION_COMPILER_ARGS = \
-+     --includedir=$(srcdir) \
-+@@ -35,6 +65,14 @@ INTROSPECTION_COMPILER_ARGS = \
-+     --includedir=$(top_builddir) \
-+     --includedir=$(top_builddir)/gir
-+
-++if USE_HOST_GI
-++INTROSPECTION_DOCTOOL = \
-++    env PATH="$(PATH)" \
-++        LPATH=.libs \
-++        PYTHONPATH=$(top_builddir):$(top_srcdir) \
-++        UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-++        g-ir-doc-tool
-++else
-+ INTROSPECTION_DOCTOOL = \
-+     env PATH=".libs:$(PATH)" \
-+         LPATH=.libs \
-+@@ -42,6 +80,7 @@ INTROSPECTION_DOCTOOL = \
-+         UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
-+         UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-+         $(top_builddir)/g-ir-doc-tool
-++endif
-+
-+ INTROSPECTION_DOCTOOL_ARGS = \
-+     --add-include-path=$(srcdir) \
-+diff --git a/configure.ac b/configure.ac
-+index 6c91fa5..21340a5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -367,6 +367,48 @@ dnl
-+ AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
-+ AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
-+
-++AC_ARG_ENABLE([host-gi],
-++[AS_HELP_STRING([--enable-host-gi],[Use gobject introspection tools installed in the host system (useful when cross-compiling)])],
-++[case "${enableval}" in
-++  yes) host_gi=true ;;
-++  no)  host_gi=false ;;
-++  *) AC_MSG_ERROR([bad value ${enableval} for --enable-host-gi]) ;;
-++esac],[host_gi=false])
-++AM_CONDITIONAL([USE_HOST_GI], [test x$host_gi = xtrue])
-++
-++AC_ARG_ENABLE([gi-cross-wrapper],
-++[AS_HELP_STRING([--enable-gi-cross-wrapper=path],[Use a wrapper to run gicompiler and binaries produced by giscanner (useful when cross-compiling)])],
-++[
-++GI_CROSS_WRAPPER="${enableval}"
-++use_wrapper=true
-++],[
-++GI_CROSS_WRAPPER=""
-++use_wrapper=false
-++])
-++AC_SUBST(GI_CROSS_WRAPPER)
-++AM_CONDITIONAL([USE_CROSS_WRAPPER], [test x$use_wrapper = xtrue])
-++
-++AC_ARG_ENABLE([gi-ldd-wrapper],
-++[AS_HELP_STRING([--enable-gi-ldd-wrapper=path],[Use a ldd wrapper instead of system's ldd command in giscanner (useful when cross-compiling)])],
-++[
-++GI_LDD_WRAPPER="${enableval}"
-++use_ldd_wrapper=true
-++],[
-++GI_LDD_WRAPPER=""
-++use_ldd_wrapper=false
-++])
-++AC_SUBST(GI_LDD_WRAPPER)
-++AM_CONDITIONAL([USE_LDD_WRAPPER], [test x$use_ldd_wrapper = xtrue])
-++
-++AC_ARG_ENABLE([introspection-data],
-++[AS_HELP_STRING([--enable-introspection-data],[Build introspection data (.gir and .typelib files) in addition to library and tools])],
-++[case "${enableval}" in
-++  yes) introspection_data=true ;;
-++  no)  introspection_data=false ;;
-++  *) AC_MSG_ERROR([bad value ${enableval} for --enable-introspection-data]) ;;
-++esac],[introspection_data=true])
-++AM_CONDITIONAL([BUILD_INTROSPECTION_DATA], [test x$introspection_data = xtrue])
-++
-+ AC_CONFIG_FILES([
-+ Makefile
-+ tests/Makefile
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index bdd0fa7..75dd3c9 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -1,6 +1,9 @@
-+ include $(top_srcdir)/common.mk
-+
-+-SUBDIRS = . scanner repository offsets warn
-++SUBDIRS = . scanner repository warn
-++if BUILD_INTROSPECTION_DATA
-++SUBDIRS += offsets
-++endif
-+
-+ EXTRA_DIST=
-+ BUILT_SOURCES=
-+--
-+2.7.0
-+ 
-diff --git a/package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch b/package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
-new file mode 100644
-index 0000000000..0a8e6c032f
---- /dev/null
-+++ b/package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
-@@ -0,0 +1,52 @@
-+From 704b888d0abfb01067352c40156f49f655691c7c Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Mon, 19 Oct 2015 18:26:40 +0300
-+Subject: [PATCH] giscanner: add --use-binary-wrapper option
-+
-+With this option, giscanner will use a wrapper executable to run
-+binaries it's producing, instead of running them directly. This
-+is useful when binaries are cross-compiled and cannot be run directly,
-+but they can be run using for example QEMU emulation.
-+
-+Upstream-Status: Pending [review on oe-core list]
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ giscanner/scannermain.py | 14 ++++++++++++++
-+ 1 file changed, 14 insertions(+)
-+
-+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
-+index 633496f..d684cd0 100755
-+--- a/giscanner/scannermain.py
-++++ b/giscanner/scannermain.py
-+@@ -124,6 +124,9 @@ def _get_option_parser():
-+     parser.add_option("", "--program",
-+                       action="store", dest="program", default=None,
-+                       help="program to execute")
-++    parser.add_option("", "--use-binary-wrapper",
-++                      action="store", dest="wrapper", default=None,
-++                      help="wrapper to use for running programs (useful when cross-compiling)")
-+     parser.add_option("", "--program-arg",
-+                       action="append", dest="program_args", default=[],
-+                       help="extra arguments to program")
-+@@ -422,6 +425,17 @@ def create_binary(transformer, options, args):
-+                                               gdump_parser.get_error_quark_functions())
-+
-+     shlibs = resolve_shlibs(options, binary, options.libraries)
-++    if options.wrapper:
-++        # The wrapper needs the binary itself, not the libtool wrapper script,
-++        # so we check if libtool has sneaked the binary into .libs subdirectory
-++        # and adjust the path accordingly
-++        import os.path
-++        dir_name, binary_name  = os.path.split(binary.args[0])
-++        libtool_binary = os.path.join(dir_name, '.libs', binary_name)
-++        if os.path.exists(libtool_binary):
-++            binary.args[0] = libtool_binary
-++      # Then prepend the wrapper to the command line to execute
-++        binary.args = [options.wrapper] + binary.args
-+     gdump_parser.set_introspection_binary(binary)
-+     gdump_parser.parse()
-+     return shlibs
-+-- 
-+2.7.0
-+
-diff --git a/package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch b/package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
-new file mode 100644
-index 0000000000..97880ef51d
---- /dev/null
-+++ b/package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
-@@ -0,0 +1,48 @@
-+From d4ad57fd4a32c4f0d2f0522a3090ef940746431b Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Fri, 30 Oct 2015 16:28:46 +0200
-+Subject: [PATCH] giscanner: add a --use-ldd-wrapper option
-+
-+This is useful in cross-compile environments where system's ldd
-+command does not work on binaries built for a different architecture
-+
-+Upstream-Status: Pending [review in oe-core]
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ giscanner/scannermain.py | 3 +++
-+ giscanner/shlibs.py      | 4 +++-
-+ 2 files changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
-+index d684cd0..1b3b369 100755
-+--- a/giscanner/scannermain.py
-++++ b/giscanner/scannermain.py
-+@@ -127,6 +127,9 @@ def _get_option_parser():
-+     parser.add_option("", "--use-binary-wrapper",
-+                       action="store", dest="wrapper", default=None,
-+                       help="wrapper to use for running programs (useful when cross-compiling)")
-++    parser.add_option("", "--use-ldd-wrapper",
-++                      action="store", dest="ldd_wrapper", default=None,
-++                      help="wrapper to use instead of ldd (useful when cross-compiling)")
-+     parser.add_option("", "--program-arg",
-+                       action="append", dest="program_args", default=[],
-+                       help="extra arguments to program")
-+diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
-+index c93d20c..c5b5942 100644
-+--- a/giscanner/shlibs.py
-++++ b/giscanner/shlibs.py
-+@@ -105,7 +105,9 @@ def _resolve_non_libtool(options, binary, libraries):
-+             args.extend(libtool)
-+             args.append('--mode=execute')
-+         platform_system = platform.system()
-+-        if platform_system == 'Darwin':
-++        if options.ldd_wrapper:
-++            args.extend([options.ldd_wrapper, binary.args[0]])
-++        elif platform_system == 'Darwin':
-+             args.extend(['otool', '-L', binary.args[0]])
-+         else:
-+             args.extend(['ldd', binary.args[0]])
-+-- 
-+2.7.0
-+
-diff --git a/package/gobject-introspection/0005-user-PYTHON_CONFIG-to-find-includes.patch b/package/gobject-introspection/0005-user-PYTHON_CONFIG-to-find-includes.patch
-new file mode 100644
-index 0000000000..24802e3248
---- /dev/null
-+++ b/package/gobject-introspection/0005-user-PYTHON_CONFIG-to-find-includes.patch
-@@ -0,0 +1,31 @@
-+From cfb482d4fe2c42e201bc6277a130c172f765ec75 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Tue, 5 Feb 2019 11:49:27 -0500
-+Subject: [PATCH] use PYTHON_CONFIG to find includes
-+
-+Find the python includes from a passed PYTHON_CONFIG path.
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ m4/python.m4 | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/m4/python.m4 b/m4/python.m4
-+index ed5559d..cdaa665 100644
-+--- a/m4/python.m4
-++++ b/m4/python.m4
-+@@ -43,7 +43,10 @@ AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
-+ [AC_REQUIRE([AM_PATH_PYTHON])
-+ AC_MSG_CHECKING(for headers required to compile python extensions)
-+ dnl deduce PYTHON_INCLUDES
-+-PYTHON_INCLUDES=`$PYTHON-config --includes`
-++if test -z "${PYTHON_CONFIG}" ; then
-++   PYTHON_CONFIG=$PYTHON-config
-++fi
-++PYTHON_INCLUDES=`${PYTHON_CONFIG} --includes`
-+ AC_SUBST(PYTHON_INCLUDES)
-+ dnl check if the headers exist:
-+ save_CPPFLAGS="$CPPFLAGS"
-+-- 
-+2.20.1
-+
-diff --git a/package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch b/package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
-new file mode 100644
-index 0000000000..174ff61e18
---- /dev/null
-+++ b/package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
-@@ -0,0 +1,74 @@
-+From 3a9b3d8179b7eb9d2cc93da31578945bc03a45c3 Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Fri, 27 Apr 2018 12:56:15 -0400
-+Subject: [PATCH] giscanner: add a --lib-dirs-envvar option
-+
-+By default LD_LIBRARY_PATH is set to the list of target library paths;
-+this breaks down in cross-compilation environment, as we need to run a
-+native emulation wrapper rather than the target binary itself. This patch
-+allows exporting those paths to a different environment variable
-+which can be picked up and used by the wrapper.
-+
-+Upstream-Status: Pending
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+
-+---
-+ giscanner/ccompiler.py   | 4 ++--
-+ giscanner/dumper.py      | 3 ++-
-+ giscanner/scannermain.py | 3 +++
-+ 3 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py
-+index d10327c..6cf25d5 100644
-+--- a/giscanner/ccompiler.py
-++++ b/giscanner/ccompiler.py
-+@@ -109,7 +109,7 @@ class CCompiler(object):
-+ 
-+             self._cflags_no_deprecation_warnings = "-Wno-deprecated-declarations"
-+ 
-+-    def get_internal_link_flags(self, args, libtool, libraries, extra_libraries, libpaths):
-++    def get_internal_link_flags(self, args, libtool, libraries, extra_libraries, libpaths, lib_dirs_envvar):
-+         # An "internal" link is where the library to be introspected
-+         # is being built in the current directory.
-+ 
-+@@ -119,7 +119,7 @@ class CCompiler(object):
-+         if os.name == 'nt':
-+             runtime_path_envvar = ['LIB', 'PATH']
-+         else:
-+-            runtime_path_envvar = ['LD_LIBRARY_PATH', 'DYLD_LIBRARY_PATH']
-++            runtime_path_envvar = ['LD_LIBRARY_PATH'] if not lib_dirs_envvar else [lib_dirs_envvar]
-+             # Search the current directory first
-+             # (This flag is not supported nor needed for Visual C++)
-+             args.append('-L.')
-+diff --git a/giscanner/dumper.py b/giscanner/dumper.py
-+index 3c7220b..0abd565 100644
-+--- a/giscanner/dumper.py
-++++ b/giscanner/dumper.py
-+@@ -259,7 +259,8 @@ class DumpCompiler(object):
-+                                                    libtool,
-+                                                    self._options.libraries,
-+                                                    self._options.extra_libraries,
-+-                                                   self._options.library_paths)
-++                                                   self._options.library_paths,
-++                                                   self._options.lib_dirs_envvar)
-+             args.extend(pkg_config_libs)
-+ 
-+         else:
-+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
-+index d262785..51c9570 100755
-+--- a/giscanner/scannermain.py
-++++ b/giscanner/scannermain.py
-+@@ -130,6 +130,9 @@ def _get_option_parser():
-+     parser.add_option("", "--use-ldd-wrapper",
-+                       action="store", dest="ldd_wrapper", default=None,
-+                       help="wrapper to use instead of ldd (useful when cross-compiling)")
-++    parser.add_option("", "--lib-dirs-envvar",
-++                      action="store", dest="lib_dirs_envvar", default=None,
-++                      help="environment variable to write a list of library directories to (for running the transient binary), instead of standard LD_LIBRARY_PATH")
-+     parser.add_option("", "--program-arg",
-+                       action="append", dest="program_args", default=[],
-+                       help="extra arguments to program")
-+-- 
-+2.14.3
-+
-diff --git a/package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch b/package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
-new file mode 100644
-index 0000000000..02fcdbeb25
---- /dev/null
-+++ b/package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
-@@ -0,0 +1,29 @@
-+From 72a427bc50daee8f1ded0e9221e53dbbf2a80f08 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Wed, 14 Mar 2018 12:07:10 -0400
-+Subject: [PATCH] Add rpath links to ccompiler
-+
-+This patch allows gobject-introspection to process extra paths passed to the
-+compiler via the GIR_EXTRA_LIBS_PATH variable.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ giscanner/ccompiler.py | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py
-+index a8bd5b1..51bb9bc 100644
-+--- a/giscanner/ccompiler.py
-++++ b/giscanner/ccompiler.py
-+@@ -163,6 +163,8 @@ class CCompiler(object):
-+ 
-+         for envvar in runtime_path_envvar:
-+             if envvar in os.environ:
-++                for envvar_path in os.environ[envvar].split(':'):
-++                    args.append("-Wl,-rpath-link," + envvar_path)
-+                 os.environ[envvar] = \
-+                     os.pathsep.join(runtime_paths + [os.environ[envvar]])
-+             else:
-+-- 
-+2.14.3
-+
-diff --git a/package/gobject-introspection/0008-fix-gobject-pc.file.patch b/package/gobject-introspection/0008-fix-gobject-pc.file.patch
-new file mode 100644
-index 0000000000..63d825a012
---- /dev/null
-+++ b/package/gobject-introspection/0008-fix-gobject-pc.file.patch
-@@ -0,0 +1,41 @@
-+From d22e1e6e2a218660aece4b33644c0fcef8cb6baf Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Tue, 5 Feb 2019 10:49:19 -0500
-+Subject: [PATCH] fix gobject pc file
-+
-+Newer versions of pkg-config will not respect --variable.and instead will
-+try to point to the host directory structure.
-+
-+Instead, add a tools_prefix to the gobject-introspection-1.0.pc.in file
-+and then sed the location in the .mk file to point to $(STAGING_DIR)/usr/bin
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ gobject-introspection-1.0.pc.in | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/gobject-introspection-1.0.pc.in b/gobject-introspection-1.0.pc.in
-+index a08b5d2..9a92666 100644
-+--- a/gobject-introspection-1.0.pc.in
-++++ b/gobject-introspection-1.0.pc.in
-+@@ -1,14 +1,15 @@
-+ prefix=@prefix@
-+ exec_prefix=@exec_prefix@
-+ libdir=@libdir@
-+ bindir=@bindir@
-++toolsdir=@bindir@
-+ datarootdir=@datarootdir@
-+ datadir=@datadir@
-+ includedir=@includedir@
-+ 
-+-g_ir_scanner=${bindir}/g-ir-scanner
-+-g_ir_compiler=${bindir}/g-ir-compiler at EXEEXT@
-+-g_ir_generate=${bindir}/g-ir-generate at EXEEXT@
-++g_ir_scanner=${toolsdir}/g-ir-scanner
-++g_ir_compiler=${toolsdir}/g-ir-compiler at EXEEXT@
-++g_ir_generate=${toolsdir}/g-ir-generate at EXEEXT@
-+ gidatadir=${datadir}/gobject-introspection-1.0
-+ girdir=${datadir}/gir-1.0
-+ typelibdir=${libdir}/girepository-1.0
-+-- 
-+2.20.1
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-new file mode 100644
-index 0000000000..333a2bcc37
---- /dev/null
-+++ b/package/gobject-introspection/Config.in
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_GOBJECT_INTROSPECTION
-+	bool "gobject-introspection"
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi, libglib2
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_MMU # python3, libglib2
-+	depends on BR2_USE_WCHAR # python3, libglib2 -> gettext
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_HOST_PRELINK_CROSS
-+	select BR2_PACKAGE_HOST_QEMU
-+	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
-+	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-+	help
-+	  GObject introspection is a middleware layer between C
-+	  libraries (using GObject) and language bindings. The C library
-+	  can be scanned at compile time and generate a metadata file,
-+	  in addition to the actual native C library. Then at runtime,
-+	  language bindings can read this metadata and automatically
-+	  provide bindings to call into the C library.
-+
-+	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
-+
-+comment "gobject-introspection needs a glibc toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/gobject-introspection/g-ir-compiler.in b/package/gobject-introspection/g-ir-compiler.in
-new file mode 100644
-index 0000000000..579fd53fa4
---- /dev/null
-+++ b/package/gobject-introspection/g-ir-compiler.in
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
-diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-new file mode 100644
-index 0000000000..02f5c2883d
---- /dev/null
-+++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
-diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-new file mode 100644
-index 0000000000..b69222d27a
---- /dev/null
-+++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-@@ -0,0 +1,17 @@
-+#!/bin/sh
-+
-+# Pass -r to qemu-user as to trick glibc into not errorings out if the host kernel
-+# is older than the target kernel.
-+# Use a modules directory which does not exist so we don't load random things
-+# which may then get deleted (or their dependencies) and potentially segfault
-+GIO_MODULE_DIR=$(dirname $0)/../lib/gio/modules-dummy \
-+ at QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
-+-L $(dirname $0)/../../ \
-+-E LD_LIBRARY_PATH=$GIR_EXTRA_LIBS_PATH:.libs:$(dirname $0)/../lib:$(dirname $0)/../../lib \
-+"$@"
-+
-+if [ $? -ne 0 ]; then
-+    echo "If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help."
-+    echo '(typically like this: GIR_EXTRA_LIBS_PATH="$(@D)/.libs")'
-+    exit 1
-+fi
-diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-new file mode 100644
-index 0000000000..09530aad56
---- /dev/null
-+++ b/package/gobject-introspection/g-ir-scanner.in
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+export GI_SCANNER_DISABLE_CACHE=1
-+$HOST_DIR/bin/g-ir-scanner \
-+--lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
-+--use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
-+--use-ldd-wrapper=$(dirname $0)/g-ir-scanner-lddwrapper \
-+--add-include-path=$(dirname $0)/../share/gir-1.0 "$@"
-diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
-new file mode 100644
-index 0000000000..6524da8909
---- /dev/null
-+++ b/package/gobject-introspection/gobject-introspection.hash
-@@ -0,0 +1,4 @@
-+#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.56/gobject-introspection-1.56.1.sha256sum
-+sha256 5b2875ccff99ff7baab63a34b67f8c920def240e178ff50add809e267d9ea24b gobject-introspection-1.56.1.tar.xz
-+sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5 COPYING.LGPL
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING.GPL
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-new file mode 100644
-index 0000000000..49b91f9b64
---- /dev/null
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -0,0 +1,107 @@
-+################################################################################
-+#
-+# gobject-introspection
-+#
-+################################################################################
-+
-+GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.56
-+GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).1
-+GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
-+GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
-+GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
-+GOBJECT_INTROSPECTION_AUTORECONF = YES
-+GOBJECT_INTROSPECTION_LICENSE = LGPL-2.0+ or GPL-2.0+
-+GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL
-+
-+GOBJECT_INTROSPECTION_DEPENDENCIES = \
-+	host-gobject-introspection \
-+	host-prelink-cross \
-+	host-qemu \
-+	libffi \
-+	libglib2 \
-+	zlib
-+
-+HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
-+	host-bison \
-+	host-flex \
-+	host-libglib2
-+
-+# Use the host gi-scanner to prevent the scanner from generating incorrect
-+# elf classes.
-+GOBJECT_INTROSPECTION_CONF_OPTS = \
-+	--enable-host-gi \
-+	--enable-gi-cross-wrapper=$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper \
-+	--enable-gi-ldd-wrapper=$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper \
-+	--enable-introspection-data
-+
-+ifeq ($(BR2_PACKAGE_CAIRO),y)
-+GOBJECT_INTROSPECTION_DEPENDENCIES += cairo
-+GOBJECT_INTROSPECTION_CONF_OPTS += --with-cairo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+GOBJECT_INTROSPECTION_DEPENDENCIES += python
-+HOST_GOBJECT_INTROSPECTION_DEPENDENCIES += host-python
-+GOBJECT_INTROSPECTION_PYTHON_PATH = $(STAGING_DIR)/usr/bin/python2
-+else
-+GOBJECT_INTROSPECTION_DEPENDENCIES += python3
-+HOST_GOBJECT_INTROSPECTION_DEPENDENCIES += host-python3
-+GOBJECT_INTROSPECTION_PYTHON_PATH = $(STAGING_DIR)/usr/bin/python3
-+endif
-+
-+# GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to $HOME
-+HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
-+	GI_SCANNER_DISABLE_CACHE=1
-+
-+# GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to $HOME
-+GOBJECT_INTROSPECTION_CONF_ENV = \
-+	GI_SCANNER_DISABLE_CACHE=1 \
-+	PYTHON_CONFIG="$(GOBJECT_INTROSPECTION_PYTHON_PATH)-config"
-+
-+# Make sure g-ir-tool-template uses the host python.
-+define GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
-+	sed -i -e '1s|#!.*|#!$(HOST_DIR)/bin/python|' $(@D)/tools/g-ir-tool-template.in
-+endef
-+GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
-+HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
-+
-+# These wrappers allow gobject-introspection to build the internal introspection
-+# libraries during the build process.
-+define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
-+	$(INSTALL) -D -m 755 package/gobject-introspection/g-ir-scanner-lddwrapper.in \
-+		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
-+	$(INSTALL) -D -m 755 package/gobject-introspection/g-ir-scanner-qemuwrapper.in \
-+		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
-+	$(SED) "s|@QEMU_USER@|$(QEMU_USER)|g" \
-+		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
-+	$(SED) "s|@TOOLCHAIN_HEADERS_VERSION@|$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)|g" \
-+		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
-+	# Use a modules directory which does not exist so we don't load random things
-+	# which may then get deleted (or their dependencies) and potentially segfault
-+	mkdir -p $(STAGING_DIR)/usr/lib/gio/modules-dummy
-+endef
-+GOBJECT_INTROSPECTION_POST_PATCH_HOOKS += GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
-+
-+# Move the real compiler and scanner to .real, and replace them with the wrappers.
-+define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-+	# Move the real binaries to their names.real, then replace them with
-+	# the wrappers.
-+	$(foreach w,g-ir-compiler g-ir-scanner,
-+		mv $(STAGING_DIR)/usr/bin/$(w) $(STAGING_DIR)/usr/bin/$(w).real
-+		$(INSTALL) -D -m 755 \
-+			package/gobject-introspection/$(w).in $(STAGING_DIR)/usr/bin/$(w)
-+	)
-+	$(SED) "s|toolsdir=.*|toolsdir=$(STAGING_DIR)/usr/bin|g" \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
-+endef
-+GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-+
-+# Only .typelib files are needed to run.
-+define GOBJECT_INTROSPECTION_REMOVE_DEVELOPMENT_FILES
-+	find $(TARGET_DIR)/usr/share/ -name '*.gir' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/share/ -name '*.rnc' -print0 | xargs -0 rm -f
-+endef
-+GOBJECT_INTROSPECTION_TARGET_FINALIZE_HOOKS += GOBJECT_INTROSPECTION_REMOVE_DEVELOPMENT_FILES
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-2.20.1
+@@ -631,7 +631,6 @@ menu "Lua libraries/modules"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/lua-utf8/Config.in"
+ 	source "package/luabitop/Config.in"
+-	source "package/luacrypto/Config.in"
+ 	source "package/luadbi/Config.in"
+ 	source "package/luadbi-sqlite3/Config.in"
+ 	source "package/luaexpat/Config.in"
+diff --git a/package/luacrypto/Config.in b/package/luacrypto/Config.in
+deleted file mode 100644
+index cc5a8803a5..0000000000
+--- a/package/luacrypto/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LUACRYPTO
+-	bool "luacrypto"
+-	select BR2_PACKAGE_OPENSSL
+-	help
+-	  LuaCrypto provides a Lua frontend to the OpenSSL cryptographic
+-	  library.
+-	  The OpenSSL features that are currently exposed are digests
+-	  (MD5, SHA-1, HMAC, and more) and crypto-grade random number
+-	  generators communication.
+-
+-	  http://mkottman.github.com/luacrypto/
+diff --git a/package/luacrypto/luacrypto.hash b/package/luacrypto/luacrypto.hash
+deleted file mode 100644
+index 5d600b0547..0000000000
+--- a/package/luacrypto/luacrypto.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# computed by luarocks/buildroot
+-sha256 dc935c923b8851208d5d504b343448a9d5bd3e537bb8657875f12d72155600b8  luacrypto-0.3.2-1.src.rock
+-sha256 f97651bcb248dff32f121ef7a904617b9252d80f4b911e4476806c512a268fa9  luacrypto-0.3.2/COPYING
+diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
+deleted file mode 100644
+index b6dbb9999f..0000000000
+--- a/package/luacrypto/luacrypto.mk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-################################################################################
+-#
+-# luacrypto
+-#
+-################################################################################
+-
+-LUACRYPTO_VERSION = 0.3.2-1
+-LUACRYPTO_LICENSE = MIT
+-LUACRYPTO_LICENSE_FILES = $(LUACRYPTO_SUBDIR)/COPYING
+-LUACRYPTO_DEPENDENCIES = openssl
+-
+-$(eval $(luarocks-package))
