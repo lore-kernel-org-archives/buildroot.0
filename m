@@ -1,41 +1,425 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 11:31:19 +0100
-Subject: [Buildroot] [PATCH] gst1-shark: new package
-In-Reply-To: <1549282708.7318.38.camel@railnova.eu>
-References: <20190125091322.27522-1-judge.packham@gmail.com>
- <1549282708.7318.38.camel@railnova.eu>
-Message-ID: <20190206113119.529e7e1d@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 6 Feb 2019 11:34:00 +0100
+Subject: [Buildroot] [PATCH v5 10/10] support/testing: test extra
+ download with site method git
+In-Reply-To: <20180512025833.22998-11-ricardo.martincoski@gmail.com>
+References: <20180512025833.22998-1-ricardo.martincoski@gmail.com>
+ <20180512025833.22998-11-ricardo.martincoski@gmail.com>
+Message-ID: <77c083d4-1081-dfdd-6eeb-48a1ad5a3fe2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Titouan,
 
-On Mon, 04 Feb 2019 13:18:28 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-> > +GST1_SHARK_VERSION = v0.5.5
-> > +GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
-> > +GST1_SHARK_SITE_METHOD = git
-> > +GST1_SHARK_GIT_SUBMODULES =   
+On 12/05/2018 04:58, Ricardo Martincoski wrote:
+> Add one test case to ensure the use of extra download works for git
+> packages:
+>  - an extra download is correctly downloaded using wget after the main
+>    download finished using the git backend;
+>  - when the main download using the git backend fails, the build fails;
+>  - when the extra download using wget fails, the build fails.
 > 
-> You could use the github package site helper here (see https://buildroo
-> t.org/downloads/manual/manual.html#github-download-url) and get rid off this empty _GIT_SUBMODULES line (and benefit from the unified Buildroot infrastructure)
+> Reuse the commit in the static repo.
+> Add required infra and fixture:
+>  - a HttpServer class, that starts a http server in the host machine to
+>    emulate a remote http server under the control of the test;
+>  - a file to be served by the http server;
+>  - a br2-external (git-extra-download) with one package for each part of
+>    the test case.
+> Since the HttpServer is similar to GitRemote, extract the commonalities
+> to a new base class called Server.
 
-I'm not sure what happened, but the GIT_SUBMODULES variable is set to
-YES in Chris patch.
+ This one is a little too complicated to just apply, so I'm going to leave it
+here for the time being...
 
-BTW, your email client is badly configured:
+ It should for sure be split into two patches, one adding the common Server
+class to the infra, and the next one adding the http test.
 
- - It is rewrapping quotations
- - It is not wrapping long lines of your replies
+ Also I'd probably prefer first just adding an http download test case and only
+later adding the extra downloads test.
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ However, I also don't really like the approach of launching our own http
+server. I think it's much easier to rely on an existing one, perhaps using
+sources.buildroot.org. You could say that it makes it impossible to run the
+tests offline, but that's already the case for a most of them, because they
+download sources and kernel binaries etc.
+
+
+ So I've marked this one as Changes Requested in patchwork.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> Changes v4 -> v5:
+>   - no changes
+> 
+> Changes v3 -> v4:
+>   - new patch
+> 
+> I use docker only with the Buildroot image for the test infra.
+> Sorry, I give up for now on trying to run apache on the docker image.
+> 
+> As a midground solution between:
+>  - adding more files to http://autobuild.buildroot.net/artefacts/ that
+>    won't scale well if we need different files for different test cases;
+>  - installing a full web server to the docker image auto-loading as root
+>    when the container is started as user and allowing the test infra to
+>    copy files to the served path as user;
+> and inspired by this article:
+> https://www.pcsuggest.com/best-lightweight-web-server-linux/
+> I created this patch using SimpleHTTPServer being started by the test
+> infra as a user.
+> I know it is weird to use pexpect to fork a server written in Python,
+> but it has these advantages:
+>  - theoretically replacing SimpleHTTPServer with a similar solution (say
+>    the busybox httpd) in the future would require only small changes to
+>    the test infra code;
+>  - SimpleHTTPServer is already on the docker image, busybox isn't, so no
+>    need to change the Dockerfile, generate the image, publish it and
+>    update the docker image tag on .gitlab-ci.yml;
+>  - the log file generated by the server is handled in the same way as
+>    other log files generated by the test infra;
+> ---
+>  .gitlab-ci.yml                                |  1 +
+>  support/testing/infra/server.py               | 39 +++++++++++++++++
+>  .../br2-external/git-extra-download/Config.in |  0
+>  .../git-extra-download/external.desc          |  1 +
+>  .../git-extra-download/external.mk            |  6 +++
+>  .../package/extra-fails/extra-fails.hash      |  3 ++
+>  .../package/extra-fails/extra-fails.mk        | 12 ++++++
+>  .../package/main-fails/main-fails.hash        |  3 ++
+>  .../package/main-fails/main-fails.mk          | 12 ++++++
+>  .../git-extra-download/package/ok/ok.hash     |  3 ++
+>  .../git-extra-download/package/ok/ok.mk       | 12 ++++++
+>  support/testing/tests/download/gitremote.py   | 43 +++----------------
+>  .../testing/tests/download/http-server/extra  |  1 +
+>  support/testing/tests/download/httpserver.py  | 14 ++++++
+>  support/testing/tests/download/test_git.py    | 21 +++++++++
+>  15 files changed, 135 insertions(+), 36 deletions(-)
+>  create mode 100644 support/testing/infra/server.py
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/Config.in
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/external.desc
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/external.mk
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.hash
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.mk
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.hash
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.mk
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.hash
+>  create mode 100644 support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.mk
+>  create mode 100644 support/testing/tests/download/http-server/extra
+>  create mode 100644 support/testing/tests/download/httpserver.py
+> 
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 61ccfdfd2d..53f7c72ac3 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -263,6 +263,7 @@ tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+>  tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+>  tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: *runtime_test
+>  tests.core.test_timezone.TestNoTimezone: *runtime_test
+> +tests.download.test_git.TestGitExtraDownload: *runtime_test
+>  tests.download.test_git.TestGitHash: *runtime_test
+>  tests.download.test_git.TestGitRefs: *runtime_test
+>  tests.fs.test_ext.TestExt2: *runtime_test
+> diff --git a/support/testing/infra/server.py b/support/testing/infra/server.py
+> new file mode 100644
+> index 0000000000..0fbffdf846
+> --- /dev/null
+> +++ b/support/testing/infra/server.py
+> @@ -0,0 +1,39 @@
+> +# subprocess does not kill the child daemon when a test case fails by raising
+> +# an exception. So use pexpect instead.
+> +import pexpect
+> +
+> +import infra
+> +
+> +
+> +class Server(object):
+> +    def __init__(self, builddir, serveddir, logtofile, daemon_cmd, port_arg, port_initial, port_last, good_msg, bad_msg):
+> +        """
+> +        Start a local server.
+> +
+> +        In order to support test cases in parallel, select the port the
+> +        server will listen to in runtime. Since there is no reliable way
+> +        to allocate the port prior to starting the server (another
+> +        process in the host machine can use the port between it is
+> +        selected from a list and it is really allocated to the server)
+> +        try to start the server in a port and in the case it is already
+> +        in use, try the next one in the allowed range.
+> +        """
+> +        self.name = self.__class__.__name__.lower()
+> +        self.daemon = None
+> +        self.port = None
+> +        self.logfile = infra.open_log_file(builddir, self.name, logtofile)
+> +
+> +        for port in range(port_initial, port_last + 1):
+> +            cmd = daemon_cmd + [port_arg.format(port=port)]
+> +            self.logfile.write("> starting {} with 'cd {} && {}'\n".format(self.name, serveddir, " ".join(cmd)))
+> +            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile, cwd=serveddir)
+> +            ret = self.daemon.expect(good_msg + bad_msg)
+> +            if ret < len(good_msg):
+> +                self.port = port
+> +                return
+> +        raise SystemError("Could not find a free port to run {}".format(self.name))
+> +
+> +    def stop(self):
+> +        if self.daemon is None:
+> +            return
+> +        self.daemon.terminate(force=True)
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/Config.in b/support/testing/tests/download/br2-external/git-extra-download/Config.in
+> new file mode 100644
+> index 0000000000..e69de29bb2
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/external.desc b/support/testing/tests/download/br2-external/git-extra-download/external.desc
+> new file mode 100644
+> index 0000000000..6ebd5a534d
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/external.desc
+> @@ -0,0 +1 @@
+> +name: GIT_EXTRA_DOWNLOAD
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/external.mk b/support/testing/tests/download/br2-external/git-extra-download/external.mk
+> new file mode 100644
+> index 0000000000..c6080f571b
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/external.mk
+> @@ -0,0 +1,6 @@
+> +include $(sort $(wildcard $(BR2_EXTERNAL_GIT_EXTRA_DOWNLOAD_PATH)/package/*/*.mk))
+> +
+> +# Get the git server port number from the test infra
+> +GITREMOTE_PORT_NUMBER ?= 9418
+> +# Get the http server port number from the test infra
+> +HTTP_SERVER_PORT_NUMBER ?= 8000
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.hash b/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.hash
+> new file mode 100644
+> index 0000000000..89b1b1f682
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.hash
+> @@ -0,0 +1,3 @@
+> +sha256  1e6bc73fabdcce8857361e36e3c812c4ee42d8ffa30d56492bc56f8fcad7eb90  extra-fails-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
+> +sha256  b9e68e1bea3e5b19ca6b2f98b73a54b73daafaa250484902e09982e07a12e733  notfound
+> +sha256  da68f54607d5f5644954096ce1597c006c5bb9f2497e07441bf064b81003ef8a  file
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.mk b/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.mk
+> new file mode 100644
+> index 0000000000..dcf3ebe7a6
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/extra-fails/extra-fails.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# extra-fails
+> +#
+> +################################################################################
+> +
+> +EXTRA_FAILS_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
+> +EXTRA_FAILS_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
+> +EXTRA_FAILS_EXTRA_DOWNLOADS = http://localhost:$(HTTP_SERVER_PORT_NUMBER)/notfound
+> +EXTRA_FAILS_LICENSE_FILES = file
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.hash b/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.hash
+> new file mode 100644
+> index 0000000000..ad81243751
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.hash
+> @@ -0,0 +1,3 @@
+> +sha256  cd6851ef519a83345e4547f376b33d6bbd622d4ccbb234af9997c43854c602de  main-fails-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
+> +sha256  b9e68e1bea3e5b19ca6b2f98b73a54b73daafaa250484902e09982e07a12e733  extra
+> +sha256  da68f54607d5f5644954096ce1597c006c5bb9f2497e07441bf064b81003ef8a  file
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.mk b/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.mk
+> new file mode 100644
+> index 0000000000..022bb37cbb
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/main-fails/main-fails.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# main-fails
+> +#
+> +################################################################################
+> +
+> +MAIN_FAILS_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
+> +MAIN_FAILS_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/notfound.git
+> +MAIN_FAILS_EXTRA_DOWNLOADS = http://localhost:$(HTTP_SERVER_PORT_NUMBER)/extra
+> +MAIN_FAILS_LICENSE_FILES = file
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.hash b/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.hash
+> new file mode 100644
+> index 0000000000..366940754b
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.hash
+> @@ -0,0 +1,3 @@
+> +sha256  737b4fd21506dbaa34cedc93c53c1ebb1f950db2c7644572bb006ae9297961da  ok-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
+> +sha256  b9e68e1bea3e5b19ca6b2f98b73a54b73daafaa250484902e09982e07a12e733  extra
+> +sha256  da68f54607d5f5644954096ce1597c006c5bb9f2497e07441bf064b81003ef8a  file
+> diff --git a/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.mk b/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.mk
+> new file mode 100644
+> index 0000000000..ce102cb0de
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-extra-download/package/ok/ok.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# ok
+> +#
+> +################################################################################
+> +
+> +OK_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
+> +OK_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
+> +OK_EXTRA_DOWNLOADS = http://localhost:$(HTTP_SERVER_PORT_NUMBER)/extra
+> +OK_LICENSE_FILES = file
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
+> index 60bc49fbf8..9766b19ce0 100644
+> --- a/support/testing/tests/download/gitremote.py
+> +++ b/support/testing/tests/download/gitremote.py
+> @@ -1,44 +1,15 @@
+> -# subprocess does not kill the child daemon when a test case fails by raising
+> -# an exception. So use pexpect instead.
+> -import pexpect
+> -
+> -import infra
+> +from infra.server import Server
+>  
+>  GIT_REMOTE_PORT_INITIAL = 9418
+>  GIT_REMOTE_PORT_LAST = GIT_REMOTE_PORT_INITIAL + 99
+>  
+>  
+> -class GitRemote(object):
+> +class GitRemote(Server):
+>      def __init__(self, builddir, serveddir, logtofile):
+> -        """
+> -        Start a local git server.
+> -
+> -        In order to support test cases in parallel, select the port the
+> -        server will listen to in runtime. Since there is no reliable way
+> -        to allocate the port prior to starting the server (another
+> -        process in the host machine can use the port between it is
+> -        selected from a list and it is really allocated to the server)
+> -        try to start the server in a port and in the case it is already
+> -        in use, try the next one in the allowed range.
+> -        """
+> -        self.daemon = None
+> -        self.port = None
+> -        self.logfile = infra.open_log_file(builddir, "gitremote", logtofile)
+> -
+>          daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", "--listen=localhost", "--export-all",
+>                        "--base-path={}".format(serveddir)]
+> -        for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
+> -            cmd = daemon_cmd + ["--port={port}".format(port=port)]
+> -            self.logfile.write("> starting git remote with '{}'\n".format(" ".join(cmd)))
+> -            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile)
+> -            ret = self.daemon.expect(["Ready to rumble",
+> -                                      "Address already in use"])
+> -            if ret == 0:
+> -                self.port = port
+> -                return
+> -        raise SystemError("Could not find a free port to run git remote")
+> -
+> -    def stop(self):
+> -        if self.daemon is None:
+> -            return
+> -        self.daemon.terminate(force=True)
+> +        super(GitRemote, self).__init__(
+> +            builddir, serveddir, logtofile,
+> +            daemon_cmd, "--port={port}", GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST,
+> +            ["Ready to rumble"],
+> +            ["Address already in use"])
+> diff --git a/support/testing/tests/download/http-server/extra b/support/testing/tests/download/http-server/extra
+> new file mode 100644
+> index 0000000000..8e27be7d61
+> --- /dev/null
+> +++ b/support/testing/tests/download/http-server/extra
+> @@ -0,0 +1 @@
+> +text
+> diff --git a/support/testing/tests/download/httpserver.py b/support/testing/tests/download/httpserver.py
+> new file mode 100644
+> index 0000000000..9f4f947304
+> --- /dev/null
+> +++ b/support/testing/tests/download/httpserver.py
+> @@ -0,0 +1,14 @@
+> +from infra.server import Server
+> +
+> +HTTP_SERVER_PORT_INITIAL = 8000
+> +HTTP_SERVER_PORT_LAST = HTTP_SERVER_PORT_INITIAL + 99
+> +
+> +
+> +class HttpServer(Server):
+> +    def __init__(self, builddir, serveddir, logtofile):
+> +        daemon_cmd = ["python", "-m", "SimpleHTTPServer"]
+> +        super(HttpServer, self).__init__(
+> +            builddir, serveddir, logtofile,
+> +            daemon_cmd, "{port}", HTTP_SERVER_PORT_INITIAL, HTTP_SERVER_PORT_LAST,
+> +            ["Serving HTTP"],
+> +            ["Address already in use"])
+> diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
+> index 162c03623b..e0abc3fa65 100644
+> --- a/support/testing/tests/download/test_git.py
+> +++ b/support/testing/tests/download/test_git.py
+> @@ -3,6 +3,7 @@ import shutil
+>  
+>  import infra
+>  from gitremote import GitRemote
+> +from httpserver import HttpServer
+>  
+>  
+>  class GitTestBase(infra.basetest.BRTest):
+> @@ -12,13 +13,19 @@ class GitTestBase(infra.basetest.BRTest):
+>          """
+>      gitremotedir = infra.filepath("tests/download/git-remote")
+>      gitremote = None
+> +    httpserverdir = None
+> +    httpserver = None
+>  
+>      def setUp(self):
+>          super(GitTestBase, self).setUp()
+>          self.gitremote = GitRemote(self.builddir, self.gitremotedir, self.logtofile)
+> +        if self.httpserverdir:
+> +            self.httpserver = HttpServer(self.builddir, self.httpserverdir, self.logtofile)
+>  
+>      def tearDown(self):
+>          self.show_msg("Cleaning up")
+> +        if self.httpserver:
+> +            self.httpserver.stop()
+>          if self.gitremote:
+>              self.gitremote.stop()
+>          if self.b and not self.keepbuilds:
+> @@ -42,11 +49,25 @@ class GitTestBase(infra.basetest.BRTest):
+>              shutil.rmtree(dl_dir)
+>          env = {"BR2_DL_DIR": dl_dir,
+>                 "GITREMOTE_PORT_NUMBER": str(self.gitremote.port)}
+> +        if self.httpserver:
+> +            env["HTTP_SERVER_PORT_NUMBER"] = str(self.httpserver.port)
+>          self.b.build(["{}-dirclean".format(package),
+>                        "{}-legal-info".format(package)],
+>                       env)
+>  
+>  
+> +class TestGitExtraDownload(GitTestBase):
+> +    br2_external = [infra.filepath("tests/download/br2-external/git-extra-download")]
+> +    httpserverdir = infra.filepath("tests/download/http-server")
+> +
+> +    def test_run(self):
+> +        with self.assertRaises(SystemError):
+> +            self.check_download("extra-fails")
+> +        with self.assertRaises(SystemError):
+> +            self.check_download("main-fails")
+> +        self.check_download("ok")
+> +
+> +
+>  class TestGitHash(GitTestBase):
+>      br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
+>  
+> 
