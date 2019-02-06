@@ -1,65 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 18:01:27 +0100
-Subject: [Buildroot] [PATCH 1/2] package/opengl/libgbm: new virtual
- package
-In-Reply-To: <CABhNV20mHtyqjiPfq_c_nWjZfmZ8DB38dzsyhNovoxQratAiMw@mail.gmail.com>
-References: <20180913194410.24077-1-bernd.kuhls@t-online.de>
- <20181030221420.65c7aed3@windsurf> <20181105124735.3qbms4ymnrgpw3op@flea>
- <CABhNV23smKagYKYME1Na=Cyz0+hn2BPOEpKumruu3OyAmLt1fw@mail.gmail.com>
- <20181105164347.4bd8d103@windsurf>
- <CABhNV20QpHnRCEi=Ky-AKCVByGkNLRxOXfMHK5H9PCr3eBeAXA@mail.gmail.com>
- <CABhNV207WB2Jt11iFeWroxn7K3EDKYSiz12mhr-2+wF2hM3yJQ@mail.gmail.com>
- <20181130114648.439ceb94@windsurf>
- <CABhNV20mHtyqjiPfq_c_nWjZfmZ8DB38dzsyhNovoxQratAiMw@mail.gmail.com>
-Message-ID: <88568126-5814-c59e-990f-3580baa1cc9d@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 6 Feb 2019 18:03:51 +0100
+Subject: [Buildroot] [git commit] package/openssh: Add sysusers.d snippet
+Message-ID: <20190206170240.236C581534@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Einar, Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=9acbf811cd7028dba17a26ee23e8494b083b8cab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30/11/2018 13:02, Einar J?n wrote:
-> On Fri, 30 Nov 2018 at 11:46, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello Einar,
->>
->> On Fri, 30 Nov 2018 11:05:11 +0100, Einar J?n wrote:
->>
->>> I finally had time to play with the gbm branch on
->>> https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/
->>> I made 5 commits that add QT with EGLFS-GBM for all 2 setups.
->>
->> Cool! What are the results ? Can you build Qt with all eglfs/gbm
->> implementations (mesa3d, ti and mali) ?
-> 
-> Build: Yes
-> Run: ????
-> 
-> I don't have the hardware to test any of the setups (Maybe I can test
-> ti-sgx in December,
->  but since "tomorrow" took me over 3 weeks, I'm not going to promise anything).
-> But I do have QT with EGLFS on all 3 platforms. I disabled kmscube on
-> the 2 that are not MESA.
+Whether using the new sysusers.d snippet, or adding an entry to
+/etc/password, set the service's home directory to /var/empty.
+See README.privsep included as part of the openssh distribution.
 
- I think the conclusion from that series is that it does not make sense to make
-a virtual package of libgbm: kmscube only works with mesa, and even qt5 requires
-some provider-specific fixups to make it work.
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/openssh/openssh.mk         | 16 ++++++++++++----
+ package/openssh/sshd-sysusers.conf |  1 +
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
- So the proposal would be to (for now) drop the virtual package, and instead
-keep them as separate packages (which are mutually exclusive, of course).
-
- All these patches are marked as Changes Requested in patchwork.
-
- Regards,
- Arnout
-
-> 
->> You can either push your branch somewhere (on Github or elsewhere) or
->> otherwise post the patches on the mailing list, making it clear in the
->> cover letter that they depend on another set of patches.
-> 
-> I'll just push them to the mailing list. See cover letter for details
-> 
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4781cd3fbc..4fef5caedb 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -19,10 +19,6 @@ OPENSSH_CONF_OPTS = \
+ 	--disable-wtmpx \
+ 	--disable-strip
+ 
+-define OPENSSH_USERS
+-	sshd -1 sshd -1 * - - - SSH drop priv user
+-endef
+-
+ define OPENSSH_PERMISSIONS
+ 	/var/empty d 755 root root - - - - -
+ endef
+@@ -61,12 +57,24 @@ else
+ OPENSSH_CONF_OPTS += --without-selinux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
++define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
++	$(INSTALL) -m 0644 -D package/openssh/sshd-sysusers.conf \
++		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
++endef
++else
++define OPENSSH_USERS
++	sshd -1 sshd -1 * /var/empty - - SSH drop priv user
++endef
++endif
++
+ define OPENSSH_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
++	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+ endef
+ 
+ define OPENSSH_INSTALL_INIT_SYSV
+diff --git a/package/openssh/sshd-sysusers.conf b/package/openssh/sshd-sysusers.conf
+new file mode 100644
+index 0000000000..ac77aec065
+--- /dev/null
++++ b/package/openssh/sshd-sysusers.conf
+@@ -0,0 +1 @@
++u sshd - "SSH drop priv user" /var/empty
