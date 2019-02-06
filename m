@@ -1,37 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 14:16:22 +0100
-Subject: [Buildroot] [PATCH] package/systemd: set vconsole support
- option to default y
-In-Reply-To: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
-References: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
-Message-ID: <20190206141622.4fbbe0f6@windsurf>
+Date: Wed, 6 Feb 2019 14:18:01 +0100
+Subject: [Buildroot] [git commit] package/meson: fix RPATH patch
+Message-ID: <20190206131651.1660E814FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 4 Jan 2019 21:35:23 +0000
-"David J. Fogle" <Dave@exitstrategytech.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5c97f7387b1e508c5bd792bda75c4b9704d59a9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> package/systemd:? set vconsole support option to default y
-> 
-> Without this support option enabled, systemd does not allow vterm switching, and could possibly lead to user lockout on tty1. 
-> 
-> We prevent these scenarios by enabling the vconsole tool default y, as console login is much more prevalent than not. This allows the option to disable the tool if needed, but as this is a rare usage, it is better to let a user decide they do *not* need it than to expect them to know they *do*.
-> 
-> Any serial connections will not be impacted by absence of this tool, as there are no vconsoles on serial.
-> 
-> Signed-off-by: David Fogle <dave@exitstrategytech.com>
-> ---
-> ?package/systemd/Config.in | 1 +
-> ?1 file changed, 1 insertion(+)
+The re-added ([1]) patch missed to remove two lines of the original
+unconditional code.
 
-Applied to master with the reworked commit message proposed by Yann.
-Thanks!
+[1] https://git.buildroot.net/buildroot/commit/?id=5c939246a802c0ad9704dac1505105037542a1d3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...nly-fix-RPATH-if-install_rpath-is-not-empty.patch | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+index 0e59907a05..a7b66c1067 100644
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -1,21 +1,25 @@
+-From 649140f09d8a8805125830cd7b2327d35447ffe8 Mon Sep 17 00:00:00 2001
++From 4db4fd79d9bb2b98cea1117f22b6c97942ab2ecd Mon Sep 17 00:00:00 2001
+ From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ Date: Sat, 14 Jul 2018 11:18:45 +0200
+ Subject: [PATCH] Only fix RPATH if install_rpath is not empty
+ 
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++[Fix: remove leftover from original/unconditional code]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- mesonbuild/minstall.py | 8 ++++++++
+- 1 file changed, 8 insertions(+)
++ mesonbuild/minstall.py | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
+ 
+ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
+-index 1d721795..e04e1f6a 100644
++index 8ac6aab1..7ef04116 100644
+ --- a/mesonbuild/minstall.py
+ +++ b/mesonbuild/minstall.py
+-@@ -495,6 +495,14 @@ class Installer:
++@@ -478,8 +478,14 @@ class Installer:
++                         printed_symlink_error = True
++             if os.path.isfile(outname):
+                  try:
+-                     depfixer.fix_rpath(outname, install_rpath, final_path,
+-                                        install_name_mappings, verbose=False)
++-                    depfixer.fix_rpath(outname, install_rpath, final_path,
++-                                       install_name_mappings, verbose=False)
+ +                    # Buildroot check-host-rpath script expects RPATH
+ +                    # But if install_rpath is empty, it will stripped.
+ +                    # So, preserve it in this case
+@@ -28,5 +32,5 @@ index 1d721795..e04e1f6a 100644
+                      if isinstance(e.code, int) and e.code == 0:
+                          pass
+ -- 
+-2.14.4
++2.20.1
+ 
