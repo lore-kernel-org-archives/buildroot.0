@@ -1,39 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 09:36:52 +0100
-Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
- for fftw-double and fftw-long-double
-In-Reply-To: <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
-References: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
- <20190205220940.3dbda336@windsurf>
- <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
-Message-ID: <20190206093652.2b711831@windsurf>
+Date: Wed, 6 Feb 2019 09:40:42 +0100
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add new version
+In-Reply-To: <20190205221414.23720-1-michal.lyszczek@bofc.pl>
+References: <20190205221414.23720-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190206094042.101347d2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue,  5 Feb 2019 23:14:14 +0100
+Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
 
-On Wed, 6 Feb 2019 07:40:24 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+> +	bool "Latest (v2.0)"
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_2_0
+> +	bool "v2.0"
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_1_4
+>  	bool "v1.4"
 
-> > Applied to master, thanks. I have applied *before* all other patches,
-> > because it's really a preparation fix that is useful independently from
-> > the rest of the FFTW rework.  
-> 
-> Unfortunately the '#' prefixed lines in the commit log were dropped again.
+This is not really what I suggested, but maybe I wasn't clear. I
+suggested to do a similar thing to what we have for U-Boot:
 
-Yeah, Yann pointed this to me as well. Sadly now it's committed and
-pushed, so it's too late. Oh well.
+ - One option to select the latest stable
+
+ - One option to select an arbitrary stable version
+
+See boot/uboot/Config.in:
+
+choice
+        prompt "U-Boot Version"
+        help
+          Select the specific U-Boot version you want to use
+
+config BR2_TARGET_UBOOT_LATEST_VERSION
+        bool "2018.09"
+
+config BR2_TARGET_UBOOT_CUSTOM_VERSION
+        bool "Custom version"
+        help
+          This option allows to use a specific official versions
+
+config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+        bool "Custom tarball"
+
+config BR2_TARGET_UBOOT_CUSTOM_GIT
+        bool "Custom Git repository"
+
+config BR2_TARGET_UBOOT_CUSTOM_HG
+        bool "Custom Mercurial repository"
+
+config BR2_TARGET_UBOOT_CUSTOM_SVN
+        bool "Custom Subversion repository"
+
+endchoice
+
+Also, if you're bumping the default ATF version from 1.4 to 2.0, it
+should be a separate patch.
+
+Thanks!
 
 Thomas
 -- 
