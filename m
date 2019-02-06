@@ -1,72 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 14:10:21 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] package/googlefontdirectory: change
- to google repo
-In-Reply-To: <20190117211422.14576-1-b.bilas@grinn-global.com>
-References: <20190117211422.14576-1-b.bilas@grinn-global.com>
-Message-ID: <20190206141021.43b95bdb@windsurf>
+Date: Wed, 6 Feb 2019 14:11:13 +0100
+Subject: [Buildroot] [git commit] package/wine: add gettext dependency for
+ host-wine only with NLS enabled
+Message-ID: <20190206131005.E1AD7867CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bb0f65099b62fc51e920a2b974615536e944ec70
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Jan 2019 22:14:22 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Checked that host-wine compiles ok without host-gettext, so no needs
+to specify this dependency.
 
-> As because the current repository doesn't support new fonts
-> we need to change it to the new one official google github repository
-> which contains a lot of new available fonts.
-> 
-> Note: There are some things to improve like license files
-> because in the new repository every directory with font
-> contains separate license file however I have no idea
-> how to do it in proper way.
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  .../googlefontdirectory.hash                  |  2 +-
->  .../googlefontdirectory.mk                    | 23 +++++++++++--------
->  2 files changed, 15 insertions(+), 10 deletions(-)
+libgettextpo is required by tools/wrc
+(https://linux.die.net/man/1/wrc) which allows to convert windows
+resources also to *.po format, which is not needed if NLS is disabled.
 
-So, I've applied, but after doing a fair number of changes.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wine/wine.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-First, I've changed the semantic of the
-BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS so that the value it contains
-look like ufl/ubuntu, ofl/marvel, etc. rather than just the font name.
-
-Thanks to that, the installation logic could be simplified, and I could
-come up with a solution for the LICENSE and LICENSE_FILES variables.
-The solution looks like this:
-
-+ifneq ($(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
-+GOOGLEFONTDIRECTORY_LICENSE += Apache-2.0
-+GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENSE.txt,$(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 78c8e6ab63..7e44e3c81d 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -307,8 +307,12 @@ WINE_CONF_OPTS += --without-zlib
+ endif
+ 
+ # host-gettext is essential for .po file support in host-wine wrc
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ HOST_WINE_DEPENDENCIES += host-gettext
+ HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
++else
++HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
 +endif
-+
-+ifneq ($(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
-+GOOGLEFONTDIRECTORY_LICENSE += OFL-1.1
-+GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /OFL.txt,$(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
-+endif
-+
-+ifneq ($(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
-+GOOGLEFONTDIRECTORY_LICENSE += UFL-1.1
-+GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENCE.txt,$(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
-+endif
-+
-+GOOGLEFONTDIRECTORY_LICENSE := $(subst $(space),$(comma)$(space),$(GOOGLEFONTDIRECTORY_LICENSE))
-
-It's a bit tricky, but it works :-)
-
-I've also changed the .hash file to contain the hashes of all the
-license files.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ 
+ # Wine needs to enable 64-bit build tools on 64-bit host
+ ifeq ($(HOSTARCH),x86_64)
