@@ -1,239 +1,181 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  6 Feb 2019 14:23:57 +0100
-Subject: [Buildroot] [PATCH v3 1/3] package/go: refactor host/target
- dependencies
+Date: Wed,  6 Feb 2019 14:23:59 +0100
+Subject: [Buildroot] [PATCH v3 3/3] package/mender-artifact: new package
 In-Reply-To: <1549459439-2260-1-git-send-email-angelo@amarulasolutions.com>
 References: <1549459439-2260-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549459439-2260-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1549459439-2260-4-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to better handling the host/target dependencies of packages, we
-need to add the new configuration option
-BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS.
-All golang target packages should depends on this options.
-Host packages needs to depend instead on
-BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS.
+mender-artifact is a host tool to generate update images
+in the Mender artifact file format.
+This package uses the binary archive from github because it bundles the
+external dependencies.
+
+Example usage:
+
+    $ mender-artifact write rootfs-image \
+         --update rootfs.ext4 \
+         --output-path rootfs.mender \
+         --artifact-name "release-v1.0.0" \
+         --device-type "beaglebone"
+
+Above will generate a Mender artifact called "rootfs.mender"
+containing the "rootfs.ext4" image along with meta-data.
+
+One can read-out the meta-data with the following command:
+
+    $ mender-artifact read rootfs.mender
+      Mender artifact:
+      Name: release-v1.0.0
+      Format: mender
+      Version: 2
+      Signature: no signature
+      Compatible devices: '[beaglebone]'
+
+    Updates:
+      0000:
+        Type:   rootfs-image
+        Files:
+          name:     rootfs.ext4
+          size:     52428800
+          modified: 2018-08-27 09:10:55 +0200 CEST
+          checksum: e70b113fb0964a810a3043586eb4fc1c48e684ba78b02ba65fead4aa3e540d87
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- docs/manual/adding-packages-golang.txt | 8 +++++---
- package/docker-cli/Config.in           | 8 ++++----
- package/docker-containerd/Config.in    | 8 ++++----
- package/docker-engine/Config.in        | 8 ++++----
- package/docker-proxy/Config.in         | 8 ++++----
- package/flannel/Config.in              | 8 ++++----
- package/go/Config.in.host              | 7 ++++---
- package/mender/Config.in               | 8 ++++----
- package/runc/Config.in                 | 8 ++++----
- 9 files changed, 37 insertions(+), 34 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in.host                       |  1 +
+ package/mender-artifact/Config.in.host       | 18 ++++++++++++++++
+ package/mender-artifact/mender-artifact.hash | 28 ++++++++++++++++++++++++
+ package/mender-artifact/mender-artifact.mk   | 32 ++++++++++++++++++++++++++++
+ 5 files changed, 80 insertions(+)
+ create mode 100644 package/mender-artifact/Config.in.host
+ create mode 100644 package/mender-artifact/mender-artifact.hash
+ create mode 100644 package/mender-artifact/mender-artifact.mk
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index efcf696..1b46778 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -45,9 +45,11 @@ built.
- ==== +golang-package+ reference
- 
- In their +Config.in+ file, packages using the +golang-package+
--infrastructure should depend on +BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+
--and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
--automatically add a dependency on +host-go+ to such packages.
-+infrastructure should depend on +BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS+
-+because Buildroot will automatically add a dependency on +host-go+
-+to such packages.
-+If you need CGO support in your package, you can add a dependency on
-++BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
- 
- The main macro of the Go package infrastructure is
- +golang-package+. It is similar to the +generic-package+ macro. Only
-diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
-index 82c35c4..6f187c9 100644
---- a/package/docker-cli/Config.in
-+++ b/package/docker-cli/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DOCKER_CLI
- 	bool "docker-cli"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Docker is a platform to build, ship,
-@@ -20,6 +20,6 @@ config BR2_PACKAGE_DOCKER_CLI_STATIC
- endif
- 
- comment "docker-cli needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 851345f..5c0897d 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DOCKER_CONTAINERD
- 	bool "docker-containerd"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
-@@ -28,7 +28,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
- endif
- 
- comment "docker-containerd needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 2a0c130..6780769 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DOCKER_ENGINE
- 	bool "docker-engine"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-@@ -50,7 +50,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- endif
- 
- comment "docker-engine needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
-index 596e18a..7e40536 100644
---- a/package/docker-proxy/Config.in
-+++ b/package/docker-proxy/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DOCKER_PROXY
- 	bool "docker-proxy"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Libnetwork is a Container Network Model that provides a
-@@ -14,6 +14,6 @@ config BR2_PACKAGE_DOCKER_PROXY
- 	  https://github.com/docker/libnetwork
- 
- comment "docker-proxy needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/flannel/Config.in b/package/flannel/Config.in
-index 134111b..3263610 100644
---- a/package/flannel/Config.in
-+++ b/package/flannel/Config.in
-@@ -1,12 +1,12 @@
- comment "flannel needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
--		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_FLANNEL
- 	bool "flannel"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Flannel is a virtual network that gives a subnet to each
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index f619ca0..893a448 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -1,4 +1,5 @@
--config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+# Target go packages should depend on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
-@@ -10,10 +11,10 @@ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	# MIPS R6 support in Go has not yet been developed.
- 	depends on !BR2_MIPS_CPU_MIPS64R6
- 
--config BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	# Go doesn't support CGO linking on MIPS64x platforms
- 	# See: https://github.com/karalabe/xgo/issues/46
- 	depends on !BR2_mips64 && !BR2_mips64el
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index aeb0b26..5ab2304 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MENDER
- 	bool "mender"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_UBOOT_TOOLS # runtime
- 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
-@@ -14,6 +14,6 @@ config BR2_PACKAGE_MENDER
- 	  https://github.com/mendersoftware/mender
- 
- comment "mender needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index fd5dee7..9e06d2b 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_RUNC
- 	bool "runc"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  runC is a CLI tool for spawning and running containers
-@@ -10,6 +10,6 @@ config BR2_PACKAGE_RUNC
- 	  https://github.com/opencontainers/runc
- 
- comment "runc needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
--		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59e1f32..7a3147d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -152,6 +152,7 @@ F:	package/corkscrew/
+ F:	package/fail2ban/
+ F:	package/i2c-tools/
+ F:	package/mender/
++F:	package/mender-artifact/
+ F:	package/mono/
+ F:	package/mono-gtksharp3/
+ F:	package/monolite/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 3b75f23..9916114 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -33,6 +33,7 @@ menu "Host utilities"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
++	source "package/mender-artifact/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+ 	source "package/mtd/Config.in.host"
+diff --git a/package/mender-artifact/Config.in.host b/package/mender-artifact/Config.in.host
+new file mode 100644
+index 0000000..c7be0ed
+--- /dev/null
++++ b/package/mender-artifact/Config.in.host
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_HOST_MENDER_ARTIFACT
++	bool "host mender-artifact"
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	help
++	  The mender-artifact tool is a CLI implementation of the
++	  Mender artifacts library.
++
++	  A Mender artifact can be recognized by its .mender suffix.
++	  Mender artifacts can contain binaries, metadata, checksums,
++	  signatures and scripts that are used during a deployment.
++	  The artifact format acts as a wrapper, and uses the tar
++	  format to bundle several files into one.
++
++	  In its simplest form, an artifact contains just a rootfs
++	  image, along with its checksum, id and device type
++	  compatibility.
++
++	  https://github.com/mendersoftware/mender-artifact
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+new file mode 100644
+index 0000000..d44244d
+--- /dev/null
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -0,0 +1,28 @@
++# Locally computed:
++sha256 fde448af4811600a130b243d59e21b1f9cdd60fd991bd418246c913ebf945206 2.4.0.tar.gz
++
++# License hash extracted from LIC_FILES_CHKSUM.sha256 using the
++# following command:
++#
++#     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
++
++# Apache 2.0 licenses.
++sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
++sha256 ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680 vendor/github.com/mendersoftware/mendertesting/LICENSE
++#
++# BSD 2 Clause licenses.
++sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86 vendor/github.com/pkg/errors/LICENSE
++#
++# BSD 3 Clause licenses.
++sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477 vendor/github.com/pmezard/go-difflib/LICENSE
++sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067 vendor/golang.org/x/sys/LICENSE
++sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067 vendor/golang.org/x/crypto/LICENSE
++#
++# ISC licenses.
++sha256 3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25 vendor/github.com/davecgh/go-spew/LICENSE
++#
++# MIT licenses.
++sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f vendor/github.com/stretchr/testify/LICENSE
++sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f vendor/github.com/stretchr/testify/LICENSE
++sha256 da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7 vendor/github.com/urfave/cli/LICENSE
++sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b vendor/github.com/sirupsen/logrus/LICENSE
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+new file mode 100644
+index 0000000..90d0071
+--- /dev/null
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# host-mender-artifact
++#
++################################################################################
++
++HOST_MENDER_ARTIFACT_VERSION = 2.4.0
++HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
++HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
++HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
++HOST_MENDER_ARTIFACT_LICENSE_FILES = \
++	LICENSE \
++	LIC_FILES_CHKSUM.sha256 \
++	vendor/github.com/mendersoftware/mendertesting/LICENSE \
++	vendor/github.com/pkg/errors/LICENSE \
++	vendor/github.com/pmezard/go-difflib/LICENSE \
++	vendor/golang.org/x/sys/LICENSE \
++	vendor/golang.org/x/crypto/LICENSE \
++	vendor/github.com/davecgh/go-spew/LICENSE \
++	vendor/github.com/stretchr/testify/LICENSE \
++	vendor/github.com/stretchr/testify/LICENSE \
++	vendor/github.com/urfave/cli/LICENSE \
++	vendor/github.com/sirupsen/logrus/LICENSE
++
++HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
++
++HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
++
++HOST_MENDER_ARTIFACT_BIN_NAME = mender-artifact
++HOST_MENDER_ARTIFACT_INSTALL_BINS = $(HOST_MENDER_ARTIFACT_BIN_NAME)
++
++$(eval $(host-golang-package))
 -- 
 2.7.4
