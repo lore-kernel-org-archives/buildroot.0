@@ -1,36 +1,141 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 6 Feb 2019 10:14:46 +0100
-Subject: [Buildroot] [git commit] package/liquid-dsp: use the new
- fftw-single package
-Message-ID: <20190206091325.931F3803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fftw: break fftw-long-double into
+ a dedicated package
+Message-ID: <20190206091325.4336481387@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10b21a55b32013da2f6ca96e0e4681a0cd53e040
+commit: https://git.buildroot.net/buildroot/commit/?id=cab310b8fd4833d9f865368f7d958c77c82018ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+fftw's library name depends on the precision option. Consequently,
+it's possible to install multiple flavor on the same target.
+
+This patch breaks fftw long double precision into a new package and:
+
+- makes BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE select
+  BR2_PACKAGE_FFTW_LONG_DOUBLE to keep compatibility with packages
+  that use BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE. This option will be
+  removed in a follow-up commit;
+
+- makes fftw depend on fftw-long-double when this package is enabled.
+
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[Yann/Thomas:
+ - Force --disable-long-double in FFTW_CONF_OPTS, just for the sake of
+   clarity (fftw is no longer going to build the long double variant)
+ - Use FFTW_LONG_DOUBLE_DL_SUBDIR to avoid downloading fftw multiple times
+ - Minor reformatting tweaks in fftw-long-double.mk
+ - Do not deprecate BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE and instead
+   make it select BR2_PACKAGE_FFTW_LONG_DOUBLE, so that packages using
+   BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE continue to work.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liquid-dsp/liquid-dsp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/fftw/Config.in                             |  2 ++
+ package/fftw/fftw-long-double/Config.in            |  8 ++++++++
+ .../fftw/fftw-long-double/fftw-long-double.hash    |  1 +
+ package/fftw/fftw-long-double/fftw-long-double.mk  | 22 ++++++++++++++++++++++
+ package/fftw/fftw.mk                               |  6 +++++-
+ 5 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index 1f645bf33a..64c403e87f 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -30,9 +30,9 @@ LIQUID_DSP_CFLAGS += -ffast-math
- endif
+diff --git a/package/fftw/Config.in b/package/fftw/Config.in
+index f61784de50..4f37b43a60 100644
+--- a/package/fftw/Config.in
++++ b/package/fftw/Config.in
+@@ -40,6 +40,7 @@ config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
+ 	# long-double precision require long-double trigonometric routines
+ 	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
+ 		(BR2_arm || BR2_mips || BR2_mipsel))
++	select BR2_PACKAGE_FFTW_LONG_DOUBLE
+ 	help
+ 	  Compile fftw in long double precision, i.e. use 'long double'
+ 	  for floating point type.
+@@ -55,6 +56,7 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
+ endchoice
  
- # use FFTW instead of built-in FFT
--ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-+ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
- LIQUID_DSP_LDFLAGS += -lfftw3f
--LIQUID_DSP_DEPENDENCIES += fftw
-+LIQUID_DSP_DEPENDENCIES += fftw-single
- endif
+ source "package/fftw/fftw-single/Config.in"
++source "package/fftw/fftw-long-double/Config.in"
  
- # disable altivec, it has build issues
+ config BR2_PACKAGE_FFTW_FAST
+ 	bool "optimise for speed over accuracy"
+diff --git a/package/fftw/fftw-long-double/Config.in b/package/fftw/fftw-long-double/Config.in
+new file mode 100644
+index 0000000000..3ee1762850
+--- /dev/null
++++ b/package/fftw/fftw-long-double/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_FFTW_LONG_DOUBLE
++	bool "fftw-long-double"
++	# long-double precision require long-double trigonometric routines
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_arm || BR2_mips || BR2_mipsel))
++	help
++	  Compile fftw in long double precision, i.e. use 'long double'
++	  for floating point type.
+diff --git a/package/fftw/fftw-long-double/fftw-long-double.hash b/package/fftw/fftw-long-double/fftw-long-double.hash
+new file mode 120000
+index 0000000000..3ee7ecb3ba
+--- /dev/null
++++ b/package/fftw/fftw-long-double/fftw-long-double.hash
+@@ -0,0 +1 @@
++../fftw.hash
+\ No newline at end of file
+diff --git a/package/fftw/fftw-long-double/fftw-long-double.mk b/package/fftw/fftw-long-double/fftw-long-double.mk
+new file mode 100644
+index 0000000000..173050446c
+--- /dev/null
++++ b/package/fftw/fftw-long-double/fftw-long-double.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# fftw-long-double
++#
++################################################################################
++
++FFTW_LONG_DOUBLE_VERSION = $(FFTW_VERSION)
++FFTW_LONG_DOUBLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
++FFTW_LONG_DOUBLE_SITE = $(FFTW_SITE)
++FFTW_LONG_DOUBLE_DL_SUBDIR = fftw
++FFTW_LONG_DOUBLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
++FFTW_LONG_DOUBLE_LICENSE = $(FFTW_LICENSE)
++FFTW_LONG_DOUBLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
++
++FFTW_LONG_DOUBLE_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
++
++FFTW_LONG_DOUBLE_CONF_OPTS = \
++	$(FFTW_COMMON_CONF_OPTS) \
++	CFLAGS="$(FFTW_COMMON_CFLAGS)" \
++	--enable-long-double
++
++$(eval $(autotools-package))
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index b738928032..26137b9f7c 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -10,6 +10,10 @@ FFTW_INSTALL_STAGING = YES
+ FFTW_LICENSE = GPL-2.0+
+ FFTW_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
++FFTW_DEPENDENCIES += fftw-long-double
++endif
++
+ ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+ FFTW_DEPENDENCIES += fftw-single
+ endif
+@@ -44,7 +48,7 @@ FFTW_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
+ FFTW_CONF_OPTS += \
+ 	$(FFTW_COMMON_CONF_OPTS) \
+ 	--disable-single \
+-	$(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double \
++	--disable-long-double \
+ 	$(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision \
+ 	CFLAGS="$(FFTW_COMMON_CFLAGS)"
+ 
