@@ -1,74 +1,68 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 6 Feb 2019 07:40:24 +0200
-Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
- for fftw-double and fftw-long-double
-In-Reply-To: <20190205220940.3dbda336@windsurf>
-References: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
- <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
- <20190205220940.3dbda336@windsurf>
-Message-ID: <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
+Date: Wed, 6 Feb 2019 07:45:29 +0200
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add new version
+In-Reply-To: <20190205221414.23720-1-michal.lyszczek@bofc.pl>
+References: <20190205221414.23720-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190206054529.gmjy5a6q6cnyjld7@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Micha?,
 
-On Tue, Feb 05, 2019 at 10:09:40PM +0100, Thomas Petazzoni wrote:
-> On Mon, 21 Jan 2019 14:51:11 +0100
-> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+On Tue, Feb 05, 2019 at 11:14:14PM +0100, Micha? ?yszczek wrote:
+> Allow user to choose specific version of ATF apart from latest or custom
+> version.
 > 
-> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > 
-> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > 
-> > liquid-dsp has the following code:
-> > #if HAVE_FFTW3_H && !defined LIQUID_FFTOVERRIDE
-> > #   include <fftw3.h>
-> > #   define FFT_PLAN             fftwf_plan
-> > #   define FFT_CREATE_PLAN      fftwf_plan_dft_1d
-> > #   define FFT_DESTROY_PLAN     fftwf_destroy_plan
-> > #   define FFT_EXECUTE          fftwf_execute
-> > #   define FFT_DIR_FORWARD      FFTW_FORWARD
-> > #   define FFT_DIR_BACKWARD     FFTW_BACKWARD
-> > #   define FFT_METHOD           FFTW_ESTIMATE
-> > #else
-> > #   define FFT_PLAN             fftplan
-> > #   define FFT_CREATE_PLAN      fft_create_plan
-> > #   define FFT_DESTROY_PLAN     fft_destroy_plan
-> > #   define FFT_EXECUTE          fft_execute
-> > #   define FFT_DIR_FORWARD      LIQUID_FFT_FORWARD
-> > #   define FFT_DIR_BACKWARD     LIQUID_FFT_BACKWARD
-> > #   define FFT_METHOD           0
-> > #endif
-> > 
-> > So, if it uses the external fftw library, it can only use the fftwf
-> > variant, i.e the fftw-single variant. Otherwise, it uses its internal
-> > FFT library.
-> > 
-> > There is no way for liquid-dsp to use fftw-double or fftw-long-double.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > ---
-> >  package/liquid-dsp/liquid-dsp.mk | 10 ----------
-> >  1 file changed, 10 deletions(-)
+> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+> ---
+>  boot/arm-trusted-firmware/Config.in                 | 10 +++++++++-
+>  boot/arm-trusted-firmware/arm-trusted-firmware.hash |  1 +
+>  2 files changed, 10 insertions(+), 1 deletion(-)
 > 
-> Applied to master, thanks. I have applied *before* all other patches,
-> because it's really a preparation fix that is useful independently from
-> the rest of the FFTW rework.
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index 885d93e62f..646ca1dee2 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -14,6 +14,12 @@ choice
+>  	  Select the specific ATF version you want to use
+>  
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+> +	bool "Latest (v2.0)"
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_2_0
+> +	bool "v2.0"
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_1_4
+>  	bool "v1.4"
 
-Unfortunately the '#' prefixed lines in the commit log were dropped again.
+Any specific reason to keep 1.4 as a config choice?
 
 baruch
+
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+> @@ -33,7 +39,9 @@ endif
+>  
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
+>  	string
+> -	default "v1.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+> +	default "v2.0"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+> +	default "v2.0"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_2_0
+> +	default "v1.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_1_4
+>  	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+>  	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
+>  				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> index 394071865e..8154185301 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated
+> +sha256 7d699a1683bb7a5909de37b6eb91b6e38db32cd6fc5ae48a08eb0718d6504ae4 arm-trusted-firmware-v2.0.tar.gz
+>  sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
+>  sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
