@@ -1,32 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 11:05:13 +0100
-Subject: [Buildroot] [PATCH v5 09/10] testing/tests/download: test git
- special ref
-In-Reply-To: <20180512025833.22998-10-ricardo.martincoski@gmail.com>
-References: <20180512025833.22998-1-ricardo.martincoski@gmail.com>
- <20180512025833.22998-10-ricardo.martincoski@gmail.com>
-Message-ID: <cf2f9717-48a8-8616-b8ec-3d30bfbd9ab1@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 11:08:32 +0100
+Subject: [Buildroot] openssl 1.1.x deprecated option
+In-Reply-To: <CANQCQpYYxbhNZvvmzi7vjd+ZuWtxKqMZVxAwZwsjd-OzkQsgDw@mail.gmail.com>
+References: <CANQCQpYYxbhNZvvmzi7vjd+ZuWtxKqMZVxAwZwsjd-OzkQsgDw@mail.gmail.com>
+Message-ID: <20190206110832.5c5dc4b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed, 6 Feb 2019 04:03:09 -0600
+Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
 
-On 12/05/2018 04:58, Ricardo Martincoski wrote:
-> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> I was thinking about  how to manage the risk of a version bump vs
+> backport patches and found another possible solution.
 > 
-> Add a special ref to the static repo and check on the git refs test case
-> the download of a git package:
->  - with the name of a special ref as version;
+> For openssl 1.1.x there are a series of deprecated APIs for items like
+> EVP_MD_CTX* which are now disabled and seem to result in 1/2 of the
+> failures. Would we entertain on some packages adding the libopenssl
+> "enable-deprecated"  configure option [1] so that it re-enables those
+> options (could do this like we currently do with a kconfig package = y
+> condition in the libopenssl.mk)?   Both mongodb and sqlcipher which
+> are currently failing should be resolved with this approach.
+> 
+> Is this worth testing out / proposing?
 
- We might remove support for getting special refs by name, but keep on
-supporting getting special refs by sha1. So I've changed the test into getting
-it by sha1 instead.
+We could certainly have a BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED
+option that enables those deprecated APIs, and have the packages that
+need that do:
 
- Ideally there should also be a check for getting the parent of the special ref
-by sha1, but I think that actually does *not* work now.
+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED if BR2_PACKAGE_LIBOPENSSL
 
- Regards,
- Arnout
+Thanks to this option, a "git grep
+BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED" allows to quickly identify
+which are the remaining packages that still need those deprecated APIs.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
