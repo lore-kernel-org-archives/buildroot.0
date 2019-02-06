@@ -1,87 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:41:12 +0100
-Subject: [Buildroot] [git commit] package/poppler: remove qt option
-Message-ID: <20190206145216.E3E1B7FBDB@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:37:39 +0100
+Subject: [Buildroot] [git commit] package/python-sip: remove qt4 support
+Message-ID: <20190206145216.BD0307F952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f821fcc9c4398d0f549a04eecfc075aba7f413c
+commit: https://git.buildroot.net/buildroot/commit/?id=78449f011c221a56a5a10bbd0e18c11a3646a951
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qt option uses the obsolete qt4 package, which we are about to remove,
-so remove the poppler qt option as well.
+python-pyqt has been removed and qt4 support is about to be dropped, so
+remove the support from python-sip as well.
+
+The comments and dependencies are not how we normally do things: the
+dependency on Qt5 is obvious for a package which is essentially python
+bindings for Qt5, and the other dependencies are implied by Qt5. So
+remove all that and limit to a single dependency on Qt5.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Arnout: further simplify dependencies and comments]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy           | 6 ++++++
- package/poppler/Config.in  | 8 --------
- package/poppler/poppler.mk | 9 +--------
- 3 files changed, 7 insertions(+), 16 deletions(-)
+ package/python-sip/Config.in     | 14 +-------------
+ package/python-sip/python-sip.mk |  4 ----
+ 2 files changed, 1 insertion(+), 17 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 67e3b0dc70..c137006948 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2019.02"
- 
-+config BR2_PACKAGE_POPPLER_QT
-+	bool "poppler qt option removed"
-+	select BR2_LEGACY
-+	help
-+	  The poppler qt option was removed.
-+
- config BR2_PACKAGE_OPENCV3_WITH_QT
- 	bool "opencv3 qt backend option removed"
- 	select BR2_LEGACY
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 9b03df8d27..4a553df721 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -13,14 +13,6 @@ config BR2_PACKAGE_POPPLER
- 
- if BR2_PACKAGE_POPPLER
- 
--config BR2_PACKAGE_POPPLER_QT
--	bool "Qt support"
--	depends on BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_GUI_MODULE
--	select BR2_PACKAGE_QT_XML
--	help
--	  Build Qt support into the Poppler library
+diff --git a/package/python-sip/Config.in b/package/python-sip/Config.in
+index 1f8961d0df..8a43b8b17f 100644
+--- a/package/python-sip/Config.in
++++ b/package/python-sip/Config.in
+@@ -1,18 +1,6 @@
+-comment "python-sip needs a toolchain w/ C++, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -
- config BR2_PACKAGE_POPPLER_QT5
- 	bool "Qt5 support"
- 	depends on BR2_PACKAGE_QT5
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index bad61a6613..be1c0e4821 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -12,7 +12,7 @@ POPPLER_LICENSE = GPL-2.0+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_INSTALL_STAGING = YES
- POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
--	--enable-xpdf-headers
-+	--enable-xpdf-headers --disable-poppler-qt4
+-comment "python-sip needs qt or qt5"
+-	depends on BR2_USE_MMU
+-	depends on BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
+-
+ config BR2_PACKAGE_PYTHON_SIP
+ 	bool "python-sip"
+-	depends on BR2_INSTALL_LIBSTDCPP # qt
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
+-	depends on BR2_USE_MMU # qt
+-	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5
+ 	help
+ 	  SIP is a tool that makes it very easy to create Python
+ 	  bindings for C and C++ libraries. It was originally
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 76d7d04187..69019f5f19 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -10,11 +10,7 @@ PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON
+ PYTHON_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
+ PYTHON_SIP_LICENSE_FILES = LICENSE LICENSE-GPL2 LICENSE-GPL3
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- POPPLER_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-@@ -84,13 +84,6 @@ else
- POPPLER_CONF_OPTS += --without-x
- endif
- 
--ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
--POPPLER_DEPENDENCIES += qt
--POPPLER_CONF_OPTS += --enable-poppler-qt4
+-ifeq ($(BR2_PACKAGE_QT5),y)
+ PYTHON_SIP_DEPENDENCIES = qt5base
 -else
--POPPLER_CONF_OPTS += --disable-poppler-qt4
+-PYTHON_SIP_DEPENDENCIES = qt
 -endif
--
- ifeq ($(BR2_PACKAGE_POPPLER_QT5),y)
- POPPLER_DEPENDENCIES += qt5base
- POPPLER_CONF_OPTS += --enable-poppler-qt5
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON_SIP_DEPENDENCIES += python
