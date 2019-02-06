@@ -1,44 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 6 Feb 2019 10:14:46 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: use the new
- fftw-double package
-Message-ID: <20190206091325.7EE85803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: use the new fftw-single
+ package
+Message-ID: <20190206091325.62FE781387@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7eb196b1038cdfb6625ce3d232f22ccfcb6f8d2
+commit: https://git.buildroot.net/buildroot/commit/?id=294d17d9bfb7a69d246a15796a131d02fe9c2088
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch add an explicitly dependency to fftw-double (the only compatible
-fftw's flavor) instead of default behavior where the package do assumption
-about the compatible version.
+Thanks to the new fftw package organization, we can use a "select"
+instead of "depends on".
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imagemagick/imagemagick.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gnuradio/Config.in   | 8 ++------
+ package/gnuradio/gnuradio.mk | 2 +-
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 72482267ce..7678980582 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -113,11 +113,11 @@ else
- IMAGEMAGICK_CONF_OPTS += --without-lzma
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 56957d59e4..533a49c81e 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -78,11 +78,6 @@ config BR2_PACKAGE_GNURADIO_ZEROMQ
+ 	help
+ 	  zeromq communication support
+ 
+-comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
+-	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
+-
+-if BR2_PACKAGE_FFTW_PRECISION_SINGLE
+-
+ config BR2_PACKAGE_GNURADIO_ANALOG
+ 	bool "gr-analog support"
+ 	select BR2_PACKAGE_GNURADIO_FILTER
+@@ -103,6 +98,8 @@ config BR2_PACKAGE_GNURADIO_DIGITAL
+ 
+ config BR2_PACKAGE_GNURADIO_FFT
+ 	bool "gr-fft support"
++	select BR2_PACKAGE_FFTW
++	select BR2_PACKAGE_FFTW_SINGLE
+ 	select BR2_PACKAGE_GNURADIO_BLOCKS
+ 	help
+ 	  FFT signal processing blocks
+@@ -136,4 +133,3 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
+ 	  Trellis coded modulation blocks
+ 
+ endif
+-endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index ed537e3934..564ad8b2a4 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -101,7 +101,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=OFF
  endif
  
--ifeq ($(BR2_PACKAGE_FFTW),y)
-+ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
- # configure script misdetects these leading to build errors
- IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
- IMAGEMAGICK_CONF_OPTS += --with-fftw
--IMAGEMAGICK_DEPENDENCIES += fftw
-+IMAGEMAGICK_DEPENDENCIES += fftw-double
+ ifeq ($(BR2_PACKAGE_GNURADIO_FFT),y)
+-GNURADIO_DEPENDENCIES += fftw
++GNURADIO_DEPENDENCIES += fftw-single
+ GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=ON
  else
- IMAGEMAGICK_CONF_OPTS += --without-fftw
- endif
+ GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=OFF
