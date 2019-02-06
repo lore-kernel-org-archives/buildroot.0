@@ -1,43 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:54:54 +0100
-Subject: [Buildroot] [PATCH 01/16] package/gnuradio: remove qtgui option
-In-Reply-To: <20190206155211.6315edb3@windsurf>
-References: <20190206141058.24155-1-peter@korsgaard.com>
- <20190206153950.0ac9aa42@x230> <20190206155211.6315edb3@windsurf>
-Message-ID: <4a5bc7bb-5812-61b7-79f5-54101dc5d915@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 15:57:09 +0100
+Subject: [Buildroot] [git commit] package/dhcpcd: systemv and systemd
+ services conflict with NetworkManager
+Message-ID: <20190206145549.3BEAB7FE04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4b530daf42e1769018f4dd745b900841c40f8812
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When NetworkManager and dhcpcd packages are both enabled, dhcpcd
+services and NetworkManager both spawn dhcpcd. This causes the network
+port to retrieve an IP address and later lose it a few seconds after
+startup.
 
-On 06/02/2019 15:52, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 6 Feb 2019 15:39:50 +0100
-> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
-> 
->> I'm not really happy by removing QT support. It's true, current version use QT4
->> and python2.7 but github master uses QT5 and python3. Instead of removing this
->> option (with the need to re-add soon) it's maybe a better idea to use a more
->> recent hash (or backporting debian patch) to switch to QT5.
->> I don't know which version is better;
-> 
-> We have marked Qt4 obsolete a year ago, it's no longer maintained, and
-> it doesn't build with OpenSSL 1.1, it's really time to remove it.
-> 
-> We will happily take a follow-up patch that re-enables Qt support in
-> gnuradio once the gnuradio package in Buildroot uses a sufficiently
-> recent version of it that has Qt5 support.
+This patch prevents dhcpcd services from launching dhcpcd if
+NetworkManager is enabled.
 
- Also note that the qt5 integration in gnuradio.mk will anyway need to be very
-different from the current qt4 integration, so it's OK to remove it first and
-add later.
+Signed-off-by: Jim Brennan <jbrennan@impinj.com>
+[Thomas: add a comment in the code to explain the seemingly strange
+condition.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcpcd/dhcpcd.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- BTW, series applied to master, thanks.
-
-
- Regards,
- Arnout
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 92a78cd7ad..ae16c340d6 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -36,6 +36,10 @@ define DHCPCD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+ endef
+ 
++# When network-manager is enabled together with dhcpcd, it will use
++# dhcpcd as a DHCP client, and will be in charge of running, so we
++# don't want the init script or service file to be installed.
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER),)
+ define DHCPCD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/dhcpcd/S41dhcpcd \
+ 		$(TARGET_DIR)/etc/init.d/S41dhcpcd
+@@ -48,6 +52,7 @@ define DHCPCD_INSTALL_INIT_SYSTEMD
+ 	ln -sf ../../../../usr/lib/systemd/system/dhcpcd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpcd.service
+ endef
++endif
+ 
+ # NOTE: Even though this package has a configure script, it is not generated
+ # using the autotools, so we have to use the generic package infrastructure.
