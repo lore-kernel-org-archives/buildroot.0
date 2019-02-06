@@ -1,62 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:44:24 +0100
-Subject: [Buildroot] [git commit] package/quazip: remove qt4 support
-Message-ID: <20190206145217.1BDE68040D@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:47:13 +0100
+Subject: [Buildroot] [git commit] package/qt: remove package
+Message-ID: <20190206145217.2DDE1812EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=537948d06b5b62e47c7216f12172217bd444324c
+commit: https://git.buildroot.net/buildroot/commit/?id=5a8bc8083a5d0e18e34fa70c44c91cbdc5bf0c92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qt4 support is about to be dropped, so remove the support from quazip as
-well.
+Qt4 has been marked obsolete for close to 1 year, since commit 3538b5fb10
+(qt: mark as obsolete) and is no longer supported upstream since December
+2015:
 
-Also add an explicit depends on for qt5 for consistency with other packages.
+https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
+
+So now finally remove it as the in tree users have been removed.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/quazip/Config.in |  1 +
- package/quazip/quazip.mk | 11 ++---------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ Config.in.legacy                                   |   6 +
+ package/Config.in                                  |   3 +-
+ ...e-check-to-treat-alsalib-1.1.x-as-correct.patch |  29 -
+ package/qt/0002-configure.patch                    |  52 --
+ package/qt/0003-eglwsegl-use-system.patch          | 802 ---------------------
+ package/qt/0004-fix-const-atomics.patch            |  50 --
+ package/qt/0005-pthread_getattr_np.patch           | 107 ---
+ package/qt/0006-script-qtdbus-no-gui.patch         |  22 -
+ ...7-Add-initial-support-of-ARC-architecture.patch | 183 -----
+ .../qt/0008-Prevent-unaligned-access-on-ARC.patch  |  92 ---
+ ...ion-constructor-error-for-legacy-c-compil.patch | 163 -----
+ ...tform-socklen_t-on-other-C-libraries-than.patch |  43 --
+ ...with-ldl-option-only-when-it-is-supported.patch | 116 ---
+ ...012-OpenGL-EGL-Avoid-X11-header-collision.patch |  60 --
+ ...-arch-qatomic_arm.h-fix-build-on-ARMv8-32.patch |  37 -
+ .../qt/0014-Enable-QtWebKit-with-newer-GCC.patch   |  50 --
+ ...-configure-fix-build-on-non-x86-platforms.patch | 146 ----
+ package/qt/Config.gfx.in                           |  31 -
+ package/qt/Config.in                               | 543 --------------
+ package/qt/Config.keyboard.in                      |  12 -
+ package/qt/Config.mouse.in                         |  26 -
+ package/qt/Config.sql.in                           |  64 --
+ package/qt/powervr.ini                             |   2 -
+ package/qt/qt.hash                                 |   3 -
+ package/qt/qt.mk                                   | 725 -------------------
+ package/qt5/Config.in                              |   2 -
+ 26 files changed, 7 insertions(+), 3362 deletions(-)
 
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-index 83537d4613..e980297558 100644
---- a/package/quazip/Config.in
-+++ b/package/quazip/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QUAZIP
- 	bool "quazip"
-+	depends on BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 872340ab40..aba8274506 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -9,19 +9,12 @@ QUAZIP_SITE = $(call github,stachenov,quazip,$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = \
- 	zlib \
--	$(if $(BR2_PACKAGE_QT),qt) \
--	$(if $(BR2_PACKAGE_QT5),qt5base)
-+	qt5base
- QUAZIP_LICENSE = LGPL-2.1
- QUAZIP_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_QT5),y)
--QUAZIP_QMAKE = $(QT5_QMAKE)
--else
--QUAZIP_QMAKE = $(QT_QMAKE)
--endif
--
- define QUAZIP_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QUAZIP_QMAKE) PREFIX=/usr)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
- endef
- 
- define QUAZIP_BUILD_CMDS
+Patch is too large, so refusing to show it
