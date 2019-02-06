@@ -1,113 +1,97 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:41:18 +0100
-Subject: [Buildroot] [git commit] package/pinentry: remove qt4 option
-Message-ID: <20190206145216.EBFD67F98D@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:40:59 +0100
+Subject: [Buildroot] [git commit] package/amd-catalyst: remove control
+ center option
+Message-ID: <20190206145216.CB556800AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5de7c039d93e26b0594f0cef7149565bd194cdda
+commit: https://git.buildroot.net/buildroot/commit/?id=ef8427927568410693aa2f0ed611e0e771efad58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qt4 option uses the obsolete qt4 package, which we are about to remove,
-so remove the pinentry-qt4 option as well.
+The control center option uses the obsolete qt4 package, which we are about
+to remove, so remote the cccle option as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy             |  6 ++++++
- package/pinentry/Config.in   | 18 ------------------
- package/pinentry/pinentry.mk | 11 +++--------
- 3 files changed, 9 insertions(+), 26 deletions(-)
+ Config.in.legacy                     |  6 ++++++
+ package/amd-catalyst/Config.in       | 16 ----------------
+ package/amd-catalyst/amd-catalyst.mk | 10 ----------
+ 3 files changed, 6 insertions(+), 26 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c137006948..64f5d58bd7 100644
+index 0eb69361cc..dbd7450741 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.02"
  
-+config BR2_PACKAGE_PINENTRY_QT4
-+	bool "pinentry-qt4 option removed"
++config BR2_PACKAGE_AMD_CATALYST_CCCLE
++	bool "catalyst control center option removed"
 +	select BR2_LEGACY
 +	help
-+	  The pinentry-qt4 option was removed.
++	  The AMD Catalyst Control Center option was removed.
 +
- config BR2_PACKAGE_POPPLER_QT
- 	bool "poppler qt option removed"
+ config BR2_PACKAGE_SDL_QTOPIA
+ 	bool "sdl qtopia video driver option removed"
  	select BR2_LEGACY
-diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
-index 5f2cb58fbb..22bc2bb43d 100644
---- a/package/pinentry/Config.in
-+++ b/package/pinentry/Config.in
-@@ -7,7 +7,6 @@ menuconfig BR2_PACKAGE_PINENTRY
- 	# At least one backend is needed to avoid build breakage
- 	select BR2_PACKAGE_PINENTRY_NCURSES if \
- 		!BR2_PACKAGE_PINENTRY_GTK2 && \
--		!BR2_PACKAGE_PINENTRY_QT4 && \
- 		!BR2_PACKAGE_PINENTRY_QT5
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index 85551ed803..1a5bf02953 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -45,22 +45,6 @@ config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
  	help
- 	  A collection of simple PIN or pass-phrase entry dialogs
-@@ -42,28 +41,12 @@ comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++"
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 	  Build and install the AMD command line tools.
  
--config BR2_PACKAGE_PINENTRY_QT4
--	bool "pinentry-qt4"
--	depends on BR2_USE_MMU # fork
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_GUI_MODULE
+-comment "Catalyst Control Center needs Qt4 with X11 and PNG support"
+-	depends on !BR2_PACKAGE_QT || !BR2_PACKAGE_QT_X11 \
+-		|| BR2_PACKAGE_QT_NOPNG
+-
+-config BR2_PACKAGE_AMD_CATALYST_CCCLE
+-	bool "Catalyst Control Center"
+-	depends on BR2_PACKAGE_QT
+-	depends on BR2_PACKAGE_QT_X11
+-	depends on !BR2_PACKAGE_QT_NOPNG
+-	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
+-	select BR2_PACKAGE_PROCPS_NG # runtime
+-	select BR2_PACKAGE_QT_ACCESSIBILITY
 -	help
--	  The pinentry-qt4 tool
+-	  Installs the Catalyst Control Center, a Qt graphical tool to
+-	  control AMD graphics accelerators.
 -
--comment "pinentry-qt4 needs a toolchain w/ C++, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
- config BR2_PACKAGE_PINENTRY_QT5
- 	bool "pinentry-qt5"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_PACKAGE_PINENTRY_QT4
--	depends on !BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
-@@ -71,7 +54,6 @@ config BR2_PACKAGE_PINENTRY_QT5
- 	  The pinentry-qt5 tool
- 
- comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
--	depends on !BR2_PACKAGE_PINENTRY_QT4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index d0179728bd..ce82f1090a 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -52,15 +52,10 @@ else
- PINENTRY_CONF_OPTS += --disable-pinentry-gtk2
  endif
  
--# pinentry-qt4/5 backend
--ifeq ($(BR2_PACKAGE_PINENTRY_QT4)$(BR2_PACKAGE_PINENTRY_QT5),y)
--ifeq ($(BR2_PACKAGE_PINENTRY_QT4),y)
--# -pthread needs to be passed for certain toolchains
--# http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
--PINENTRY_CONF_OPTS += LIBS=-pthread MOC=$(HOST_DIR)/bin/moc
+ comment "amd-catalyst kernel module needs a kernel to be built"
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index d864095c31..fe8aa850f0 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -149,15 +149,6 @@ define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_AMD_CATALYST_CCCLE), y)
+-define AMD_CATALYST_INSTALL_CCCLE
+-	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/amdcccle \
+-		$(TARGET_DIR)/usr/bin/amdcccle
+-	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/amdnotifyui \
+-		$(TARGET_DIR)/usr/sbin/amdnotifyui
+-endef
 -endif
-+# pinentry-qt5 backend
-+ifeq ($(BR2_PACKAGE_PINENTRY_QT5),y)
- PINENTRY_CONF_OPTS += --enable-pinentry-qt
--PINENTRY_DEPENDENCIES += $(if $(BR2_PACKAGE_PINENTRY_QT4),qt,qt5base)
-+PINENTRY_DEPENDENCIES += qt5base
- else
- PINENTRY_CONF_OPTS += --disable-pinentry-qt
- endif
+-
+ define AMD_CATALYST_INSTALL_STAGING_CMDS
+ 	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
+ endef
+@@ -165,7 +156,6 @@ endef
+ define AMD_CATALYST_INSTALL_TARGET_CMDS
+ 	$(call AMD_CATALYST_INSTALL_XORG)
+ 	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+-	$(call AMD_CATALYST_INSTALL_CCCLE)
+ 	$(call AMD_CATALYST_INSTALL_OPENCL)
+ endef
+ 
