@@ -1,49 +1,76 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Wed,  6 Feb 2019 10:33:48 +0100 (CET)
-Subject: [Buildroot] [PATCH v3 3/4] package/ffmpeg: bump to version 4.1
-In-Reply-To: <20190206094727.24dfa441@windsurf>
-Message-ID: <ea-mime-5c5aa9fc-6f58-26e2ec99@www-1.netcourrier.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 10:35:06 +0100
+Subject: [Buildroot] [PATCH v2 00/10] Adding mender-artifact
+In-Reply-To: <1549382436-15177-1-git-send-email-angelo@amarulasolutions.com>
+References: <1549382436-15177-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20190206103506.5d5b6623@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Angelo,
 
-> De : Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ? : Louis-Paul Cordier <lpdev@cordier.org>
-> Sujet : Re: [Buildroot] [PATCH v3 3/4] package/ffmpeg: bump to version 4.1
-> Date : 06/02/2019 09:47:27 Europe/Paris
-> Copie ? : buildroot at buildroot.org;
->    Bernd Kuhls <bernd.kuhls@t-online.de>;
->    MahyarKoshkouei <mahyar.koshkouei@gmail.com>;
->    Martin Storsj?? <martin@martin.st>
->
-> On Tue, 5 Feb 2019 19:19:45 +0100
-> Louis-Paul Cordier <lpdev@cordier.org> wrote:
->
-> > FFserver is not supported anymore
-> > Remove patch 0001: fixed upstream in cae6f806a6367c7760ab6ed059d343d4a8eebd56
-> > Remove patch 0002 to 0004: accepted upstream
-> >
-> > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
->
-> As was previously discussed, we cannot merge this if all packages that
-> depend on ffmpeg are not compatible with ffmpeg 4.x.
->
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+On Tue,  5 Feb 2019 17:00:26 +0100
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-Hi again,
+> This patch tries to resurrect an effort of Mizra from August to porting
+> the mender-artifact tool to buildroot
+> (https://patchwork.ozlabs.org/cover/962487/).
+>  
+> Mender artifact is a tool to generate artifacts for the mender software,
+> it is therefore an host tool and it's the last piece to have mender
+> available on buildroot.
+> To have it compiled as an host tool, we need to enable support for host
+> packages in go.
+> So the intent of this patch is:
+> * Enabling host golang packages
+> * Refactoring dependencies to distinguish between host packages and
+>   target packages
+> * Adding mender-artifact
+> 
+> The initial patch for mender-artifact was from Mizra but I completely
+> rewrote it, so I removed the signoff.
+> 
+> Angelo Compagnucci (9):
+>   package/go: refactor host/target dependencies
+>   package/docker-cli: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/docker-containerd: using
+>     BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/docker-engine: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/docker-proxy: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/flannel: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/mender: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/runc: using BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>   package/mender-artifact: new package
+> 
+> Mirza Krak (1):
+>   package/pkg-golang: add support for building host packages
 
-What decision should be taken on this? We have 2 solutions has Bernd stated: either bumping GStreamer to a more recent version (that seems to be not welcomed by some people), or applying Bernd patch. What about the latter? 
 
-I can modify my patch serie to include Bernd's patch. Would it possibly convince everyone for a final merge?
+As we discussed live during the meeting, I'd like to see the following
+changes in this series:
 
-In the meantime, I think you can merge intel media driver and mediasdk patches. Thanks for your time!
+ - The patch renaming BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS to
+   BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS should go first in the
+   series, and should contain all the changes to the packages as well
+   (to not break bisectability). Of course, it should also contain the
+   BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS change.
 
-BR,
-Louis-Paul CORDIER
+ - The patch adding support for host go packages should add a
+   BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS option, and the manual should
+   be updated to explain how this option should be used.
+
+ - There should be a comment above both options in the Config.in.host
+   file to explain which option should be used for what.
+
+ - BR2_PACKAGE_HOST_GO_TARGET_SUPPORTS should be removed.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
