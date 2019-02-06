@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 16:56:05 +0100
-Subject: [Buildroot] [PATCH v3] uboot: add support for bundling ATF BL31
- in ELF format into U-Boot
-In-Reply-To: <20181111213942.3833-1-michal.lyszczek@bofc.pl>
-References: <20181111213942.3833-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190206165605.4cc9c43c@windsurf>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Wed, 6 Feb 2019 15:27:52 +0000
+Subject: [Buildroot] [RFC PATCH 1/2] annobin: New package
+In-Reply-To: <20190206160450.0b2a899c@windsurf>
+References: <20180503143147.5301-1-stefan.sorensen@spectralink.com>
+ <20180503143147.5301-2-stefan.sorensen@spectralink.com>
+ <20190206160450.0b2a899c@windsurf>
+Message-ID: <62ae845de2ae3fe09dbdb9c0cc00cddd92e86362.camel@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Micha?,
+On Wed, 2019-02-06 at 16:04 +0100, Thomas Petazzoni wrote:
 
-On Sun, 11 Nov 2018 22:39:42 +0100
-Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
+> This one is already in Buildroot, and is a lot easier to integrate
+> than a gcc plugin. So unless you see an issue with checksec that is
+> solved by annobin, we'll probably stick to using checksec.
 
-> Rockchip's rk3328 encapsulates the BL31 part of ATP but it needs
-> image in ELF format. This is extension to
-> 2c4809e6088660dc71de9de8cee0bba312aafbe4
-> 
-> This commit introduces a BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF variable
-> to achieve this.
-> 
-> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-> 
-> ---
-> Changes v2 -> v3:
->   - change 'config' to 'choice' in uboot/Config.in
+The issue with checksec is that is only checks if *some* of the code in
+the binary is compiled with the correct security options - it does not
+detect that the correct options has not been used for compiling all of
+the code.
 
-Applied to master, thanks. Could you please add a new test case in
-support/testing/tests/boot/test_atf.py to test this additional
-situation ?
+Unfortunately I do not have any time right now to spend on this, but I
+hope that I will be able to update this to a more recent annobin relase
+soon.
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Stefan
