@@ -1,53 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 15:37:46 +0100
-Subject: [Buildroot] [RFC] Getting run-time / defconfig testing
- maintainers feedback of failures
-In-Reply-To: <CANQCQpYBJ05wNamef9ZgdVBruMDUq5pY3x8XixGaww=10ertjw@mail.gmail.com>
-References: <CANQCQpYBJ05wNamef9ZgdVBruMDUq5pY3x8XixGaww=10ertjw@mail.gmail.com>
-Message-ID: <20190206153746.43291101@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  6 Feb 2019 15:37:51 +0100
+Subject: [Buildroot] [PATCH] core/pkg-infra: restore completeness of
+ packages files lists
+Message-ID: <20190206143751.5814-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+In commit 7fb6e782542f (core/instrumentation: shave minutes off the
+build time), the built stampfile is used as a reference to detect files
+installed by a package.
 
-On Wed, 6 Feb 2019 08:14:37 -0600
-Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+However, packages may install files keeping their mtime intact, and we
+end up not detecting this. For example, the internal skeleton package
+will install (e.g.) /etc/passwd with an mtime of when the file was
+created in $(TOP_DIR), which could be the time the git repository was
+checked out; that mtime is always older than the build stamp file, so
+files installed by the skeleton package are never accounted for to that
+package, or to any other package for that matters.
 
-> Has there been any ideas or proposals so far for giving more
-> visibility to the CI failures?  I definitely want to contribute if
-> there is something in progress, otherwise here's a proposal..........
-> 
-> One idea I had been throwing around was since you can personally fork
-> Buildroot in Gitlab and have your own personal Gitlab-runners doing
-> the CI builds.  Once the per job trigger series[1] merges, I'd like to
-> proposed adding a manual section which talks about the following
-> 1) How a user can setup a Buildroot fork on Gitlab
-> 2) Enable it to follow the main Gitlab Buildroot repo
-> 3) Create cron jobs for their test cases
-> 4) Manage notifications to track build failures
-> 5) Notes on Gitlab-runner setup
-> 
-> This doesn't replace the main CI testing and reporting, however it
-> would put more ownership of defconfigs/run-time test fixing on others.
+We switch to an alternate solution, which consists of storing some extra
+metadata per file, so that we can more reasily detect modifications to
+the files. Then we compare the state before the package is installed (by
+reusing the existing list) and after the package is installed, compare
+that to list any new file or modified files (in reality, ignoring
+untouched and removed files). Finally, we store the file->package
+association in the global list and store the new stat list as the global
+list.
 
-My idea, which puts less burden on the shoulder of individual
-contributors is to extend the daily-mail script [1] that is used today
-to send autobuilder results. The extension would consist in using the
-Gitlab CI API to analyze the results of the last pipelines, and if
-there's a failure on a defconfig or test, mail the corresponding
-person. Thanks to this, we would have a single mail per day sent out
-(to the mailing list and to participants) with autobuilder failures and
-gitlab CI failures.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Trent Piepho <tpiepho@impinj.com>
+---
+ package/pkg-generic.mk | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-What do you think ?
-
-Best regards,
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f5cab2b9c2..c07cb32349 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -63,13 +63,20 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): base directory to search in
+ # $(3): suffix of file  (optional)
+ define step_pkg_size_inner
++	@touch $(BUILD_DIR)/packages-file-list$(3).stat
+ 	@touch $(BUILD_DIR)/packages-file-list$(3).txt
+ 	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+ 	cd $(2); \
+-	find . \( -type f -o -type l \) \
+-		-newer $($(PKG)_DIR)/.stamp_built \
+-		-exec printf '$(1),%s\n' {} + \
++	LC_ALL=C find . -printf '%T@:%i:%#m:%y:%s,%p\n' \
++	|LC_ALL=C sort >$($(PKG)_BUILDDIR)/.files-list$(3).stat
++	comm -13 $(BUILD_DIR)/packages-file-list$(3).stat \
++		$($(PKG)_BUILDDIR)/.files-list$(3).stat \
++		>$($(PKG)_BUILDDIR)/.files-list$(3).new
++	sed -r -e 's/^[^,]+/$(1)/' \
++		$($(PKG)_BUILDDIR)/.files-list$(3).new \
+ 		>> $(BUILD_DIR)/packages-file-list$(3).txt
++	mv $($(PKG)_BUILDDIR)/.files-list$(3).stat \
++		$(BUILD_DIR)/packages-file-list$(3).stat
+ endef
+ 
+ define step_pkg_size
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
