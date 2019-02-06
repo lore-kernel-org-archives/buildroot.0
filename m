@@ -1,90 +1,113 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:12:55 +0100
-Subject: [Buildroot] [git commit] package/gnuradio: remove qtgui option
-Message-ID: <20190206145216.ADDBB7F952@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:41:18 +0100
+Subject: [Buildroot] [git commit] package/pinentry: remove qt4 option
+Message-ID: <20190206145216.EBFD67F98D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcd9c85475b65c6e8f22d5f9b4ac7c7ecb93dc6a
+commit: https://git.buildroot.net/buildroot/commit/?id=5de7c039d93e26b0594f0cef7149565bd194cdda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gr-qtgui option uses python-pyqt/Qt4, which we are about to remove, so
-remove the option.
+The qt4 option uses the obsolete qt4 package, which we are about to remove,
+so remove the pinentry-qt4 option as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  Config.in.legacy             |  6 ++++++
- package/gnuradio/Config.in   | 10 ----------
- package/gnuradio/gnuradio.mk | 10 ++--------
- 3 files changed, 8 insertions(+), 18 deletions(-)
+ package/pinentry/Config.in   | 18 ------------------
+ package/pinentry/pinentry.mk | 11 +++--------
+ 3 files changed, 9 insertions(+), 26 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index be2f722b05..c84a9239a7 100644
+index c137006948..64f5d58bd7 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.02"
  
-+config BR2_PACKAGE_GNURADIO_QTGUI
-+	bool "gnuradio gr-qtgui option removed"
++config BR2_PACKAGE_PINENTRY_QT4
++	bool "pinentry-qt4 option removed"
 +	select BR2_LEGACY
 +	help
-+	  The gr-qtgui option was removed.
++	  The pinentry-qt4 option was removed.
 +
- config BR2_PACKAGE_LUACRYPTO
- 	bool "luacrypto package removed"
+ config BR2_PACKAGE_POPPLER_QT
+ 	bool "poppler qt option removed"
  	select BR2_LEGACY
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 533a49c81e..3fdaea850e 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -116,16 +116,6 @@ config BR2_PACKAGE_GNURADIO_PAGER
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 5f2cb58fbb..22bc2bb43d 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -7,7 +7,6 @@ menuconfig BR2_PACKAGE_PINENTRY
+ 	# At least one backend is needed to avoid build breakage
+ 	select BR2_PACKAGE_PINENTRY_NCURSES if \
+ 		!BR2_PACKAGE_PINENTRY_GTK2 && \
+-		!BR2_PACKAGE_PINENTRY_QT4 && \
+ 		!BR2_PACKAGE_PINENTRY_QT5
  	help
- 	  FLEX pager decoder implementation blocks
+ 	  A collection of simple PIN or pass-phrase entry dialogs
+@@ -42,28 +41,12 @@ comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
  
--config BR2_PACKAGE_GNURADIO_QTGUI
--	bool "gr-qtgui"
--	depends on BR2_PACKAGE_PYTHON_PYQT
--	depends on BR2_PACKAGE_QWT
--	depends on BR2_PACKAGE_QT_STL
--	select BR2_PACKAGE_GNURADIO_FFT
--	select BR2_PACKAGE_GNURADIO_FILTER
+-config BR2_PACKAGE_PINENTRY_QT4
+-	bool "pinentry-qt4"
+-	depends on BR2_USE_MMU # fork
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_GUI_MODULE
 -	help
--	  GNU Radio Qt scopes
+-	  The pinentry-qt4 tool
 -
- config BR2_PACKAGE_GNURADIO_TRELLIS
- 	bool "gr-trellis support"
- 	select BR2_PACKAGE_GNURADIO_DIGITAL
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 564ad8b2a4..d6d07f6566 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -25,7 +25,8 @@ endif
- GNURADIO_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
--	-DENABLE_GNURADIO_RUNTIME=ON
-+	-DENABLE_GNURADIO_RUNTIME=ON \
-+	-DENABLE_GR_QTGUI=OFF
+-comment "pinentry-qt4 needs a toolchain w/ C++, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+ config BR2_PACKAGE_PINENTRY_QT5
+ 	bool "pinentry-qt5"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_PACKAGE_PINENTRY_QT4
+-	depends on !BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+@@ -71,7 +54,6 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	  The pinentry-qt5 tool
  
- # For third-party blocks, the gnuradio libraries are mandatory at
- # compile time.
-@@ -126,13 +127,6 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
+ comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+-	depends on !BR2_PACKAGE_PINENTRY_QT4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index d0179728bd..ce82f1090a 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -52,15 +52,10 @@ else
+ PINENTRY_CONF_OPTS += --disable-pinentry-gtk2
  endif
  
--ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
--GNURADIO_DEPENDENCIES += python-pyqt qwt
--GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
--else
--GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
+-# pinentry-qt4/5 backend
+-ifeq ($(BR2_PACKAGE_PINENTRY_QT4)$(BR2_PACKAGE_PINENTRY_QT5),y)
+-ifeq ($(BR2_PACKAGE_PINENTRY_QT4),y)
+-# -pthread needs to be passed for certain toolchains
+-# http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
+-PINENTRY_CONF_OPTS += LIBS=-pthread MOC=$(HOST_DIR)/bin/moc
 -endif
--
- ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
++# pinentry-qt5 backend
++ifeq ($(BR2_PACKAGE_PINENTRY_QT5),y)
+ PINENTRY_CONF_OPTS += --enable-pinentry-qt
+-PINENTRY_DEPENDENCIES += $(if $(BR2_PACKAGE_PINENTRY_QT4),qt,qt5base)
++PINENTRY_DEPENDENCIES += qt5base
  else
+ PINENTRY_CONF_OPTS += --disable-pinentry-qt
+ endif
