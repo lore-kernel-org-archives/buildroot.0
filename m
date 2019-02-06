@@ -1,73 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 14:51:50 +0100
-Subject: [Buildroot] [PATCH 0/2] Allow host python3 without a target
- python
-In-Reply-To: <20180430192359.15733-1-tpiepho@impinj.com>
-References: <20180430192359.15733-1-tpiepho@impinj.com>
-Message-ID: <678d57c9-bf33-eae5-d760-a5c1b0f2f9e9@mind.be>
+From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
+Date: Wed,  6 Feb 2019 14:58:58 +0100
+Subject: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: add option to
+ choose custom version
+Message-ID: <20190206135858.6707-1-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Trent,
+Allow user to choose specific, stable version from official ATF
+repository
 
- Thank you for these patches.
+Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
-On 30/04/2018 21:23, Trent Piepho wrote:
-> It's currently not possible to select the default host python to be
-> python3 without also turning on target python3.
-> 
-> There was a previous patch that attemped to resolve this
-> https://patchwork.ozlabs.org/patch/854602/ but there were issues.
-> 
-> This should solve those issues, using the approach I described in
-> comment #4.
-> 
-> This series does not yet hunt down every non-python-package that uses
-> host-python to make sure it gets the proper host python version.  I just
-> did the packages I needed to test with our project and will wait to see
-> if the approach is accepted before working on the remaining packages.
+---
+Changes v1 -> v2:
+  - add option to choose custom version as it is done in uboot
+---
+ boot/arm-trusted-firmware/Config.in               | 11 +++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk |  8 ++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
- We discussed this at the BR developer meeting. The problem is, this change is
-not very useful if you don't hunt down all the packages that use host-python.
-Now, that list is still somewhat reasonable (100-ish). However, remember that
-any package that uses host-python through the infra (e.g. meson-package) would
-also need to select a python version. We feel that this is going to add too much
-to the Config.in files everywhere, and that the potential gains from it are not
-worth the effort.
-
- Specifically for python, there were two cases where the
-host-python-if-no-target-python selection was relevant: setuptools and meson.
-The setuptools case is already handled through python3-setuptools. For the meson
-case, there is a really simple solution: make host-ninja depend on host-python3
-instead of host-python. host-ninja is currently *only* directly depended upon by
-host-meson, so in practice we *always* need host-python3...
-
- If there are other cases where we would really like to have a
-host-python-2-or-3 config option, it can probably also be worked around on a
-case-by-case basis.
-
-
- Therefore, these patches are marked as Rejected in patchwork. Thanks for
-working on it though, it was still useful!
-
- Regards,
- Arnout
-
-> 
-> Trent Piepho (2):
->   host-python: Select host python version when no target python
->   packages: Use PKG_PYTHON_HOST_PYTHON for host python
-> 
->  package/Config.in.host         | 1 +
->  package/gtest/gtest.mk         | 5 ++---
->  package/ninja/ninja.mk         | 3 +--
->  package/pkg-python.mk          | 6 +++++-
->  package/python/python.mk       | 2 +-
->  package/python3/Config.in.host | 8 ++++++++
->  package/python3/python3.mk     | 2 +-
->  7 files changed, 19 insertions(+), 8 deletions(-)
->  create mode 100644 package/python3/Config.in.host
-> 
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 885d93e62f..823a3510b5 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -16,6 +16,11 @@ choice
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+ 	bool "v1.4"
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official versions
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -31,12 +36,18 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION
+ 
+ endif
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
++	string "ATF version"
++	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
+ 	string
+ 	default "v1.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+ 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+ 	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
++	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE \
++				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
+ 
+ if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
+ 
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 23f493653d..9bac1319d7 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -13,13 +13,17 @@ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+ ARM_TRUSTED_FIRMWARE_TARBALL = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))
+ ARM_TRUSTED_FIRMWARE_SITE = $(patsubst %/,%,$(dir $(ARM_TRUSTED_FIRMWARE_TARBALL)))
+ ARM_TRUSTED_FIRMWARE_SOURCE = $(notdir $(ARM_TRUSTED_FIRMWARE_TARBALL))
+-BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
+ else ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT),y)
+ ARM_TRUSTED_FIRMWARE_SITE = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL))
+ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+-BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
+ else
++# Handle stable official ATF versions
+ ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
++ARM_TRUSTED_FIRMWARE_SOURCE = arm-trusted-firmware-$(ARM_TRUSTED_FIRMWARE_VERSION).tar.gz
++endif
++
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
+ endif
+ 
+ ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+-- 
+2.18.1
