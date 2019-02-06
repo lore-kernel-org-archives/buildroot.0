@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 11:30:25 +0100
+Date: Wed, 6 Feb 2019 11:31:19 +0100
 Subject: [Buildroot] [PATCH] gst1-shark: new package
-In-Reply-To: <20190125091322.27522-1-judge.packham@gmail.com>
+In-Reply-To: <1549282708.7318.38.camel@railnova.eu>
 References: <20190125091322.27522-1-judge.packham@gmail.com>
-Message-ID: <20190206113025.31155bfd@windsurf>
+ <1549282708.7318.38.camel@railnova.eu>
+Message-ID: <20190206113119.529e7e1d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Titouan,
 
-On Fri, 25 Jan 2019 22:13:22 +1300
-Chris Packham <judge.packham@gmail.com> wrote:
+On Mon, 04 Feb 2019 13:18:28 +0100
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-> GstShark leverages GStreamers newest instrumentation subsystem by
-> installing a set of custom hooks to the trace points. A variety of data
-> analytics are extracted and presented to the user in a graphical,
-> friendly way.
+> > +GST1_SHARK_VERSION = v0.5.5
+> > +GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
+> > +GST1_SHARK_SITE_METHOD = git
+> > +GST1_SHARK_GIT_SUBMODULES =   
 > 
-> https://developer.ridgerun.com/wiki/index.php?title=GstShark
-> https://github.com/RidgeRun/gst-shark
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Jo?o Victor Oliveira <jv.oliveirag@gmail.com>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Igor Miranda <igorcmiranda3110@gmail.com>
+> You could use the github package site helper here (see https://buildroo
+> t.org/downloads/manual/manual.html#github-download-url) and get rid off this empty _GIT_SUBMODULES line (and benefit from the unified Buildroot infrastructure)
 
-Applied, with the following changes:
+I'm not sure what happened, but the GIT_SUBMODULES variable is set to
+YES in Chris patch.
 
-    [Thomas:
-     - fix package prompt to be gtk1-shark in Config.in
-     - license is LGPL-2.1+, not LGPL-2.1
-     - add entry to DEVELOPERS file]
+BTW, your email client is badly configured:
 
-Thanks,
+ - It is rewrapping quotations
+ - It is not wrapping long lines of your replies
+
+Thanks!
 
 Thomas
 -- 
