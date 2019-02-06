@@ -1,100 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  6 Feb 2019 15:10:49 +0100
-Subject: [Buildroot] [PATCH 07/16] package/opencv3: remove qt backend option
+Date: Wed,  6 Feb 2019 15:10:54 +0100
+Subject: [Buildroot] [PATCH 12/16] package/qextserialport: remove qt4 support
 In-Reply-To: <20190206141058.24155-1-peter@korsgaard.com>
 References: <20190206141058.24155-1-peter@korsgaard.com>
-Message-ID: <20190206141058.24155-7-peter@korsgaard.com>
+Message-ID: <20190206141058.24155-12-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The qt backend option uses the obsolete qt4 package, which we are about to
-remove, so remove the qt backend option as well.
+Qt4 support is about to be dropped, so remove the support from
+qextserialport as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy           |  6 ++++++
- package/opencv3/Config.in  | 16 +---------------
- package/opencv3/opencv3.mk | 11 ++---------
- 3 files changed, 9 insertions(+), 24 deletions(-)
+ package/qextserialport/Config.in         |  2 +-
+ package/qextserialport/qextserialport.mk | 10 ++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cdf5f989b5..67e3b0dc70 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/qextserialport/Config.in b/package/qextserialport/Config.in
+index 4e7ef13784..f880d335e5 100644
+--- a/package/qextserialport/Config.in
++++ b/package/qextserialport/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_QEXTSERIALPORT
+ 	bool "qextserialport"
+-	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5
+ 	help
+ 	  A Qt library to manage serial ports
  
- comment "Legacy options removed in 2019.02"
- 
-+config BR2_PACKAGE_OPENCV3_WITH_QT
-+	bool "opencv3 qt backend option removed"
-+	select BR2_LEGACY
-+	help
-+	  The opencv3 qt backend option was removed.
-+
- config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "opencv qt backend option removed"
- 	select BR2_LEGACY
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 80a297a904..61405a7c64 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -82,20 +82,6 @@ comment "gtk3 support needs libgtk3"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_PACKAGE_LIBGTK3
- 
--config BR2_PACKAGE_OPENCV3_WITH_QT
--	bool "qt4"
--	depends on BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_STL
--	select BR2_PACKAGE_QT_GUI_MODULE
--	select BR2_PACKAGE_QT_TEST
--	help
--	  Use Qt4 with QtTest and QtGui modules and STL support, as
--	  GUI toolkit.
--
--comment "qt4 support needs qt"
--	depends on BR2_USE_MMU # qt
--	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
--
- config BR2_PACKAGE_OPENCV3_WITH_QT5
- 	bool "qt5"
- 	depends on BR2_PACKAGE_QT5
-@@ -108,7 +94,7 @@ config BR2_PACKAGE_OPENCV3_WITH_QT5
- 	  components, as GUI toolkit.
- 
- comment "qt5 support needs qt5"
--	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-+	depends on !BR2_PACKAGE_QT5
- 
- endchoice
- 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 978f38c143..3a2594b584 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -288,18 +288,11 @@ else
- OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index e3e325ce6c..ecaff21efc 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -14,16 +14,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ QEXTSERIALPORT_CONF_OPTS += CONFIG+=qesp_static
  endif
  
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT)$(BR2_PACKAGE_OPENCV3_WITH_QT5),)
--OPENCV3_CONF_OPTS += -DWITH_QT=OFF
+-ifeq ($(BR2_PACKAGE_QT),y)
+-QEXTSERIALPORT_DEPENDENCIES += qt
+-QEXTSERIALPORT_QMAKE = $(QT_QMAKE)
+-else ifeq ($(BR2_PACKAGE_QT5),y)
+-QEXTSERIALPORT_DEPENDENCIES += qt5base
+-QEXTSERIALPORT_QMAKE = $(QT5_QMAKE)
 -endif
--
--ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT),y)
--OPENCV3_CONF_OPTS += -DWITH_QT=4
--OPENCV3_DEPENDENCIES += qt
--endif
--
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
- OPENCV3_CONF_OPTS += -DWITH_QT=5
- OPENCV3_DEPENDENCIES += qt5base
-+else
-+OPENCV3_CONF_OPTS += -DWITH_QT=OFF
- endif
++QEXTSERIALPORT_DEPENDENCIES = qt5base
  
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_TIFF),y)
+ define QEXTSERIALPORT_CONFIGURE_CMDS
+-	cd $(@D); $(TARGET_MAKE_ENV) $(QEXTSERIALPORT_QMAKE) $(QEXTSERIALPORT_CONF_OPTS)
++	cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) $(QEXTSERIALPORT_CONF_OPTS)
+ endef
+ 
+ define QEXTSERIALPORT_BUILD_CMDS
 -- 
 2.11.0
