@@ -1,188 +1,76 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  5 Feb 2019 21:25:29 -0600
-Subject: [Buildroot] [PATCH v7 1/2] testing/infra: split runtime test into
- new class
-Message-ID: <1549423530-12795-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 6 Feb 2019 07:40:24 +0200
+Subject: [Buildroot] [PATCH v4 17/17] package/liquid-dsp: drop support
+ for fftw-double and fftw-long-double
+In-Reply-To: <20190205220940.3dbda336@windsurf>
+References: <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-17-git-send-email-gwenj@trabucayre.com>
+ <20190205220940.3dbda336@windsurf>
+Message-ID: <20190206054024.uynf5iyvgzap6u2x@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Hi Thomas,
 
-Move the setup of emulator to a new class, which takes the BRTest name.
-The original BRTest is renamed to BRConfigTest and is used as a base
-class for test cases that don't require a run-time target test. It will
-avoid duplicating code / execution time when adding a common class to
-test items like the git download infra.
+On Tue, Feb 05, 2019 at 10:09:40PM +0100, Thomas Petazzoni wrote:
+> On Mon, 21 Jan 2019 14:51:11 +0100
+> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+> 
+> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > 
+> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > 
+> > liquid-dsp has the following code:
+> > #if HAVE_FFTW3_H && !defined LIQUID_FFTOVERRIDE
+> > #   include <fftw3.h>
+> > #   define FFT_PLAN             fftwf_plan
+> > #   define FFT_CREATE_PLAN      fftwf_plan_dft_1d
+> > #   define FFT_DESTROY_PLAN     fftwf_destroy_plan
+> > #   define FFT_EXECUTE          fftwf_execute
+> > #   define FFT_DIR_FORWARD      FFTW_FORWARD
+> > #   define FFT_DIR_BACKWARD     FFTW_BACKWARD
+> > #   define FFT_METHOD           FFTW_ESTIMATE
+> > #else
+> > #   define FFT_PLAN             fftplan
+> > #   define FFT_CREATE_PLAN      fft_create_plan
+> > #   define FFT_DESTROY_PLAN     fft_destroy_plan
+> > #   define FFT_EXECUTE          fft_execute
+> > #   define FFT_DIR_FORWARD      LIQUID_FFT_FORWARD
+> > #   define FFT_DIR_BACKWARD     LIQUID_FFT_BACKWARD
+> > #   define FFT_METHOD           0
+> > #endif
+> > 
+> > So, if it uses the external fftw library, it can only use the fftwf
+> > variant, i.e the fftw-single variant. Otherwise, it uses its internal
+> > FFT library.
+> > 
+> > There is no way for liquid-dsp to use fftw-double or fftw-long-double.
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > ---
+> >  package/liquid-dsp/liquid-dsp.mk | 10 ----------
+> >  1 file changed, 10 deletions(-)
+> 
+> Applied to master, thanks. I have applied *before* all other patches,
+> because it's really a preparation fix that is useful independently from
+> the rest of the FFTW rework.
 
-The existing test cases are not impacted as the base and emulator class
-are still contained in basetest.
+Unfortunately the '#' prefixed lines in the commit log were dropped again.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes v6 -> v7:
-[Peter / Arnout
-  - Swapped the class structure to allow all the existing test cases to
-    not be impacted
+baruch
 
-Changes v5 -> v6:
-  - Fixed rebase which added extra args being passed to
-    self.b.configure() for br2-external support
-  - Added additional test cases with class updates committed since v5
-
-Changes v4 -> v5:
-  - no changes
-
-Changes v3 -> v4:
-  - re-run the automatic replace command
-
-Changes v2 -> v3:
-  - new patch
-  - search for "RuntimeTestBase" in
-    http://patchwork.ozlabs.org/patch/806161/
----
- support/testing/infra/basetest.py | 26 +++++++++++++++++++-------
- support/testing/run-tests         | 16 ++++++++--------
- 2 files changed, 27 insertions(+), 15 deletions(-)
-
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index e67bf1a..a176bc3 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -28,7 +28,7 @@ MINIMAL_CONFIG = \
-     """
- 
- 
--class BRTest(unittest.TestCase):
-+class BRConfigTest(unittest.TestCase):
-     config = None
-     br2_external = list()
-     downloaddir = None
-@@ -39,10 +39,9 @@ class BRTest(unittest.TestCase):
-     timeout_multiplier = 1
- 
-     def __init__(self, names):
--        super(BRTest, self).__init__(names)
-+        super(BRConfigTest, self).__init__(names)
-         self.testname = self.__class__.__name__
-         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
--        self.emulator = None
-         self.config += '\nBR2_DL_DIR="{}"\n'.format(self.downloaddir)
-         self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
- 
-@@ -58,8 +57,23 @@ class BRTest(unittest.TestCase):
-             self.b.delete()
- 
-         if not self.b.is_finished():
--            self.show_msg("Building")
-             self.b.configure(make_extra_opts=["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
-+
-+    def tearDown(self):
-+        self.show_msg("Cleaning up")
-+        if self.b and not self.keepbuilds:
-+            self.b.delete()
-+
-+
-+class BRTest(BRConfigTest):
-+    def __init__(self, names):
-+        super(BRTest, self).__init__(names)
-+        self.emulator = None
-+
-+    def setUp(self):
-+        super(BRTest, self).setUp()
-+        if not self.b.is_finished():
-+            self.show_msg("Building")
-             self.b.build()
-             self.show_msg("Building done")
- 
-@@ -67,8 +81,6 @@ class BRTest(unittest.TestCase):
-                                  self.logtofile, self.timeout_multiplier)
- 
-     def tearDown(self):
--        self.show_msg("Cleaning up")
-         if self.emulator:
-             self.emulator.stop()
--        if self.b and not self.keepbuilds:
--            self.b.delete()
-+        super(BRTest, self).tearDown()
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 76dd15e..813b927 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -5,7 +5,7 @@ import os
- import nose2
- import multiprocessing
- 
--from infra.basetest import BRTest
-+from infra.basetest import BRConfigTest
- 
- 
- def main():
-@@ -38,7 +38,7 @@ def main():
-     test_dir = os.path.dirname(script_path)
- 
-     if args.stdout:
--        BRTest.logtofile = False
-+        BRConfigTest.logtofile = False
- 
-     if args.list:
-         print("List of tests")
-@@ -57,7 +57,7 @@ def main():
-             parser.print_help()
-             return 1
- 
--    BRTest.downloaddir = os.path.abspath(args.download)
-+    BRConfigTest.downloaddir = os.path.abspath(args.download)
- 
-     if args.output is None:
-         print("Missing output directory, please use -o/--output")
-@@ -68,7 +68,7 @@ def main():
-     if not os.path.exists(args.output):
-         os.mkdir(args.output)
- 
--    BRTest.outputdir = os.path.abspath(args.output)
-+    BRConfigTest.outputdir = os.path.abspath(args.output)
- 
-     if args.all is False and len(args.testname) == 0:
-         print("No test selected")
-@@ -76,7 +76,7 @@ def main():
-         parser.print_help()
-         return 1
- 
--    BRTest.keepbuilds = args.keep
-+    BRConfigTest.keepbuilds = args.keep
- 
-     if args.testcases != 1:
-         if args.testcases < 1:
-@@ -89,7 +89,7 @@ def main():
-         each_testcase = br2_jlevel / args.testcases
-         if each_testcase < 1:
-             each_testcase = 1
--        BRTest.jlevel = each_testcase
-+        BRConfigTest.jlevel = each_testcase
- 
-     if args.jlevel:
-         if args.jlevel < 0:
-@@ -98,14 +98,14 @@ def main():
-             parser.print_help()
-             return 1
-         # the user can override the auto calculated value
--        BRTest.jlevel = args.jlevel
-+        BRConfigTest.jlevel = args.jlevel
- 
-     if args.timeout_multiplier < 1:
-         print("Invalid multiplier for timeout values")
-         print("")
-         parser.print_help()
-         return 1
--    BRTest.timeout_multiplier = args.timeout_multiplier
-+    BRConfigTest.timeout_multiplier = args.timeout_multiplier
- 
-     nose2_args = ["-v",
-                   "-N", str(args.testcases),
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
