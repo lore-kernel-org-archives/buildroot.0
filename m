@@ -1,72 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  6 Feb 2019 15:37:51 +0100
-Subject: [Buildroot] [PATCH] core/pkg-infra: restore completeness of
- packages files lists
-Message-ID: <20190206143751.5814-1-yann.morin.1998@free.fr>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 6 Feb 2019 15:39:50 +0100
+Subject: [Buildroot] [PATCH 01/16] package/gnuradio: remove qtgui option
+In-Reply-To: <20190206141058.24155-1-peter@korsgaard.com>
+References: <20190206141058.24155-1-peter@korsgaard.com>
+Message-ID: <20190206153950.0ac9aa42@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 7fb6e782542f (core/instrumentation: shave minutes off the
-build time), the built stampfile is used as a reference to detect files
-installed by a package.
+Peter, all.
+I'm not really happy by removing QT support. It's true, current version use QT4
+and python2.7 but github master uses QT5 and python3. Instead of removing this
+option (with the need to re-add soon) it's maybe a better idea to use a more
+recent hash (or backporting debian patch) to switch to QT5.
+I don't know which version is better;
 
-However, packages may install files keeping their mtime intact, and we
-end up not detecting this. For example, the internal skeleton package
-will install (e.g.) /etc/passwd with an mtime of when the file was
-created in $(TOP_DIR), which could be the time the git repository was
-checked out; that mtime is always older than the build stamp file, so
-files installed by the skeleton package are never accounted for to that
-package, or to any other package for that matters.
+Gwen
 
-We switch to an alternate solution, which consists of storing some extra
-metadata per file, so that we can more reasily detect modifications to
-the files. Then we compare the state before the package is installed (by
-reusing the existing list) and after the package is installed, compare
-that to list any new file or modified files (in reality, ignoring
-untouched and removed files). Finally, we store the file->package
-association in the global list and store the new stat list as the global
-list.
+ On Wed,  6 Feb 2019 15:10:43 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Trent Piepho <tpiepho@impinj.com>
----
- package/pkg-generic.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f5cab2b9c2..c07cb32349 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -63,13 +63,20 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # $(2): base directory to search in
- # $(3): suffix of file  (optional)
- define step_pkg_size_inner
-+	@touch $(BUILD_DIR)/packages-file-list$(3).stat
- 	@touch $(BUILD_DIR)/packages-file-list$(3).txt
- 	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
- 	cd $(2); \
--	find . \( -type f -o -type l \) \
--		-newer $($(PKG)_DIR)/.stamp_built \
--		-exec printf '$(1),%s\n' {} + \
-+	LC_ALL=C find . -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+	|LC_ALL=C sort >$($(PKG)_BUILDDIR)/.files-list$(3).stat
-+	comm -13 $(BUILD_DIR)/packages-file-list$(3).stat \
-+		$($(PKG)_BUILDDIR)/.files-list$(3).stat \
-+		>$($(PKG)_BUILDDIR)/.files-list$(3).new
-+	sed -r -e 's/^[^,]+/$(1)/' \
-+		$($(PKG)_BUILDDIR)/.files-list$(3).new \
- 		>> $(BUILD_DIR)/packages-file-list$(3).txt
-+	mv $($(PKG)_BUILDDIR)/.files-list$(3).stat \
-+		$(BUILD_DIR)/packages-file-list$(3).stat
- endef
- 
- define step_pkg_size
--- 
-2.14.1
+> The gr-qtgui option uses python-pyqt/Qt4, which we are about to remove, so
+> remove the option.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Config.in.legacy             |  6 ++++++
+>  package/gnuradio/Config.in   | 10 ----------
+>  package/gnuradio/gnuradio.mk | 10 ++--------
+>  3 files changed, 8 insertions(+), 18 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index be2f722b05..c84a9239a7 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
+>  
+>  comment "Legacy options removed in 2019.02"
+>  
+> +config BR2_PACKAGE_GNURADIO_QTGUI
+> +	bool "gnuradio gr-qtgui option removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The gr-qtgui option was removed.
+> +
+>  config BR2_PACKAGE_LUACRYPTO
+>  	bool "luacrypto package removed"
+>  	select BR2_LEGACY
+> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+> index 533a49c81e..3fdaea850e 100644
+> --- a/package/gnuradio/Config.in
+> +++ b/package/gnuradio/Config.in
+> @@ -116,16 +116,6 @@ config BR2_PACKAGE_GNURADIO_PAGER
+>  	help
+>  	  FLEX pager decoder implementation blocks
+>  
+> -config BR2_PACKAGE_GNURADIO_QTGUI
+> -	bool "gr-qtgui"
+> -	depends on BR2_PACKAGE_PYTHON_PYQT
+> -	depends on BR2_PACKAGE_QWT
+> -	depends on BR2_PACKAGE_QT_STL
+> -	select BR2_PACKAGE_GNURADIO_FFT
+> -	select BR2_PACKAGE_GNURADIO_FILTER
+> -	help
+> -	  GNU Radio Qt scopes
+> -
+>  config BR2_PACKAGE_GNURADIO_TRELLIS
+>  	bool "gr-trellis support"
+>  	select BR2_PACKAGE_GNURADIO_DIGITAL
+> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+> index 564ad8b2a4..d6d07f6566 100644
+> --- a/package/gnuradio/gnuradio.mk
+> +++ b/package/gnuradio/gnuradio.mk
+> @@ -25,7 +25,8 @@ endif
+>  GNURADIO_CONF_OPTS = \
+>  	-DENABLE_DEFAULT=OFF \
+>  	-DENABLE_VOLK=ON \
+> -	-DENABLE_GNURADIO_RUNTIME=ON
+> +	-DENABLE_GNURADIO_RUNTIME=ON \
+> +	-DENABLE_GR_QTGUI=OFF
+>  
+>  # For third-party blocks, the gnuradio libraries are mandatory at
+>  # compile time.
+> @@ -126,13 +127,6 @@ else
+>  GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
+> -GNURADIO_DEPENDENCIES += python-pyqt qwt
+> -GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
+> -else
+> -GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
+>  GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
+>  else
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
