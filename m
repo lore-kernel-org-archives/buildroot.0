@@ -1,57 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  6 Feb 2019 17:54:35 +0100
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.64.0
-Message-ID: <20190206165436.8652-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 6 Feb 2019 18:01:27 +0100
+Subject: [Buildroot] [PATCH 1/2] package/opengl/libgbm: new virtual
+ package
+In-Reply-To: <CABhNV20mHtyqjiPfq_c_nWjZfmZ8DB38dzsyhNovoxQratAiMw@mail.gmail.com>
+References: <20180913194410.24077-1-bernd.kuhls@t-online.de>
+ <20181030221420.65c7aed3@windsurf> <20181105124735.3qbms4ymnrgpw3op@flea>
+ <CABhNV23smKagYKYME1Na=Cyz0+hn2BPOEpKumruu3OyAmLt1fw@mail.gmail.com>
+ <20181105164347.4bd8d103@windsurf>
+ <CABhNV20QpHnRCEi=Ky-AKCVByGkNLRxOXfMHK5H9PCr3eBeAXA@mail.gmail.com>
+ <CABhNV207WB2Jt11iFeWroxn7K3EDKYSiz12mhr-2+wF2hM3yJQ@mail.gmail.com>
+ <20181130114648.439ceb94@windsurf>
+ <CABhNV20mHtyqjiPfq_c_nWjZfmZ8DB38dzsyhNovoxQratAiMw@mail.gmail.com>
+Message-ID: <88568126-5814-c59e-990f-3580baa1cc9d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+ Hi Einar, Bernd,
 
-CVE-2018-16890: NTLM type-2 out-of-bounds buffer read
-https://curl.haxx.se/docs/CVE-2018-16890.html
+On 30/11/2018 13:02, Einar J?n wrote:
+> On Fri, 30 Nov 2018 at 11:46, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello Einar,
+>>
+>> On Fri, 30 Nov 2018 11:05:11 +0100, Einar J?n wrote:
+>>
+>>> I finally had time to play with the gbm branch on
+>>> https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/
+>>> I made 5 commits that add QT with EGLFS-GBM for all 2 setups.
+>>
+>> Cool! What are the results ? Can you build Qt with all eglfs/gbm
+>> implementations (mesa3d, ti and mali) ?
+> 
+> Build: Yes
+> Run: ????
+> 
+> I don't have the hardware to test any of the setups (Maybe I can test
+> ti-sgx in December,
+>  but since "tomorrow" took me over 3 weeks, I'm not going to promise anything).
+> But I do have QT with EGLFS on all 3 platforms. I disabled kmscube on
+> the 2 that are not MESA.
 
-CVE-2019-3822: NTLMv2 type-3 header stack buffer overflow
-https://curl.haxx.se/docs/CVE-2019-3822.html
+ I think the conclusion from that series is that it does not make sense to make
+a virtual package of libgbm: kmscube only works with mesa, and even qt5 requires
+some provider-specific fixups to make it work.
 
-CVE-2019-3823: SMTP end-of-response out-of-bounds read
-https://curl.haxx.se/docs/CVE-2019-3823.html
+ So the proposal would be to (for now) drop the virtual package, and instead
+keep them as separate packages (which are mutually exclusive, of course).
 
-The copyright year changed in the COPYING file, so update the hash.
+ All these patches are marked as Changes Requested in patchwork.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 432943538a..b158600eca 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.62.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 dab5643a5fe775ae92570b9f3df6b0ef4bc2a827a959361fb130c73b721275c1  curl-7.62.0.tar.xz
--sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-+sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
-+sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3bc5207951..1fae41ea3a 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.62.0
-+LIBCURL_VERSION = 7.64.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
--- 
-2.11.0
+> 
+>> You can either push your branch somewhere (on Github or elsewhere) or
+>> otherwise post the patches on the mailing list, making it clear in the
+>> cover letter that they depend on another set of patches.
+> 
+> I'll just push them to the mailing list. See cover letter for details
+> 
