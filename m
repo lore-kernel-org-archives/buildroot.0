@@ -1,107 +1,60 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 6 Feb 2019 15:39:50 +0100
-Subject: [Buildroot] [PATCH 01/16] package/gnuradio: remove qtgui option
-In-Reply-To: <20190206141058.24155-1-peter@korsgaard.com>
-References: <20190206141058.24155-1-peter@korsgaard.com>
-Message-ID: <20190206153950.0ac9aa42@x230>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 6 Feb 2019 08:48:48 -0600
+Subject: [Buildroot] [RFC] Getting run-time / defconfig testing
+ maintainers feedback of failures
+In-Reply-To: <20190206153746.43291101@windsurf>
+References: <CANQCQpYBJ05wNamef9ZgdVBruMDUq5pY3x8XixGaww=10ertjw@mail.gmail.com>
+ <20190206153746.43291101@windsurf>
+Message-ID: <CANQCQpaQjygesoTOTHU7_Npvz8DCjcXO7J_V9MARHJNu-Kg0HA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, all.
-I'm not really happy by removing QT support. It's true, current version use QT4
-and python2.7 but github master uses QT5 and python3. Instead of removing this
-option (with the need to re-add soon) it's maybe a better idea to use a more
-recent hash (or backporting debian patch) to switch to QT5.
-I don't know which version is better;
+Thomas,
 
-Gwen
+On Wed, Feb 6, 2019 at 8:37 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Matt,
+>
+> On Wed, 6 Feb 2019 08:14:37 -0600
+> Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> > Has there been any ideas or proposals so far for giving more
+> > visibility to the CI failures?  I definitely want to contribute if
+> > there is something in progress, otherwise here's a proposal..........
+> >
+> > One idea I had been throwing around was since you can personally fork
+> > Buildroot in Gitlab and have your own personal Gitlab-runners doing
+> > the CI builds.  Once the per job trigger series[1] merges, I'd like to
+> > proposed adding a manual section which talks about the following
+> > 1) How a user can setup a Buildroot fork on Gitlab
+> > 2) Enable it to follow the main Gitlab Buildroot repo
+> > 3) Create cron jobs for their test cases
+> > 4) Manage notifications to track build failures
+> > 5) Notes on Gitlab-runner setup
+> >
+> > This doesn't replace the main CI testing and reporting, however it
+> > would put more ownership of defconfigs/run-time test fixing on others.
+>
+> My idea, which puts less burden on the shoulder of individual
+> contributors is to extend the daily-mail script [1] that is used today
+> to send autobuilder results. The extension would consist in using the
+> Gitlab CI API to analyze the results of the last pipelines, and if
+> there's a failure on a defconfig or test, mail the corresponding
+> person. Thanks to this, we would have a single mail per day sent out
+> (to the mailing list and to participants) with autobuilder failures and
+> gitlab CI failures.
+>
+> What do you think ?
 
- On Wed,  6 Feb 2019 15:10:43 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+That sounds good.
 
-> The gr-qtgui option uses python-pyqt/Qt4, which we are about to remove, so
-> remove the option.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  Config.in.legacy             |  6 ++++++
->  package/gnuradio/Config.in   | 10 ----------
->  package/gnuradio/gnuradio.mk | 10 ++--------
->  3 files changed, 8 insertions(+), 18 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index be2f722b05..c84a9239a7 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2019.02"
->  
-> +config BR2_PACKAGE_GNURADIO_QTGUI
-> +	bool "gnuradio gr-qtgui option removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The gr-qtgui option was removed.
-> +
->  config BR2_PACKAGE_LUACRYPTO
->  	bool "luacrypto package removed"
->  	select BR2_LEGACY
-> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> index 533a49c81e..3fdaea850e 100644
-> --- a/package/gnuradio/Config.in
-> +++ b/package/gnuradio/Config.in
-> @@ -116,16 +116,6 @@ config BR2_PACKAGE_GNURADIO_PAGER
->  	help
->  	  FLEX pager decoder implementation blocks
->  
-> -config BR2_PACKAGE_GNURADIO_QTGUI
-> -	bool "gr-qtgui"
-> -	depends on BR2_PACKAGE_PYTHON_PYQT
-> -	depends on BR2_PACKAGE_QWT
-> -	depends on BR2_PACKAGE_QT_STL
-> -	select BR2_PACKAGE_GNURADIO_FFT
-> -	select BR2_PACKAGE_GNURADIO_FILTER
-> -	help
-> -	  GNU Radio Qt scopes
-> -
->  config BR2_PACKAGE_GNURADIO_TRELLIS
->  	bool "gr-trellis support"
->  	select BR2_PACKAGE_GNURADIO_DIGITAL
-> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-> index 564ad8b2a4..d6d07f6566 100644
-> --- a/package/gnuradio/gnuradio.mk
-> +++ b/package/gnuradio/gnuradio.mk
-> @@ -25,7 +25,8 @@ endif
->  GNURADIO_CONF_OPTS = \
->  	-DENABLE_DEFAULT=OFF \
->  	-DENABLE_VOLK=ON \
-> -	-DENABLE_GNURADIO_RUNTIME=ON
-> +	-DENABLE_GNURADIO_RUNTIME=ON \
-> +	-DENABLE_GR_QTGUI=OFF
->  
->  # For third-party blocks, the gnuradio libraries are mandatory at
->  # compile time.
-> @@ -126,13 +127,6 @@ else
->  GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
-> -GNURADIO_DEPENDENCIES += python-pyqt qwt
-> -GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
-> -else
-> -GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
->  GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
->  else
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Related to getting more runners setup, maybe it would still be worth
+capturing that under the contributing section [2] ?
+
+Matt
+
+[2] https://buildroot.org/downloads/manual/manual.html#_contributing_to_buildroot
