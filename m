@@ -1,75 +1,57 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Wed, 6 Feb 2019 16:36:39 +0000
-Subject: [Buildroot] [PATCH v3] package/openssh: Add sysusers.d snippet
-Message-ID: <20190206163629.30683-1-chris.lesiak@licor.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  6 Feb 2019 17:54:35 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.64.0
+Message-ID: <20190206165436.8652-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Whether using the new sysusers.d snippet, or adding an entry to
-/etc/password, set the service's home directory to /var/empty.
-See README.privsep included as part of the openssh distribution.
+Fixes the following security issues:
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
----
-Changes v2 -> v3:
-  - Define OPENSSH_USERS or install snippet, but not both
-  - Configure home directory to /var/empty
-  - Rename snippet sshd-sysusers.conf
----
- package/openssh/openssh.mk         | 16 ++++++++++++----
- package/openssh/sshd-sysusers.conf |  1 +
- 2 files changed, 13 insertions(+), 4 deletions(-)
- create mode 100644 package/openssh/sshd-sysusers.conf
+CVE-2018-16890: NTLM type-2 out-of-bounds buffer read
+https://curl.haxx.se/docs/CVE-2018-16890.html
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 4781cd3fbc..4fef5caedb 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -19,10 +19,6 @@ OPENSSH_CONF_OPTS = \
- 	--disable-wtmpx \
- 	--disable-strip
+CVE-2019-3822: NTLMv2 type-3 header stack buffer overflow
+https://curl.haxx.se/docs/CVE-2019-3822.html
+
+CVE-2019-3823: SMTP end-of-response out-of-bounds read
+https://curl.haxx.se/docs/CVE-2019-3823.html
+
+The copyright year changed in the COPYING file, so update the hash.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 6 +++---
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 432943538a..b158600eca 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.62.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 dab5643a5fe775ae92570b9f3df6b0ef4bc2a827a959361fb130c73b721275c1  curl-7.62.0.tar.xz
+-sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
++sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
++sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 3bc5207951..1fae41ea3a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--define OPENSSH_USERS
--	sshd -1 sshd -1 * - - - SSH drop priv user
--endef
--
- define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
-@@ -61,12 +57,24 @@ else
- OPENSSH_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-+define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-+	$(INSTALL) -m 0644 -D package/openssh/sshd-sysusers.conf \
-+		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
-+endef
-+else
-+define OPENSSH_USERS
-+	sshd -1 sshd -1 * /var/empty - - SSH drop priv user
-+endef
-+endif
-+
- define OPENSSH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-+	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
- endef
- 
- define OPENSSH_INSTALL_INIT_SYSV
-diff --git a/package/openssh/sshd-sysusers.conf b/package/openssh/sshd-sysusers.conf
-new file mode 100644
-index 0000000000..ac77aec065
---- /dev/null
-+++ b/package/openssh/sshd-sysusers.conf
-@@ -0,0 +1 @@
-+u sshd - "SSH drop priv user" /var/empty
+-LIBCURL_VERSION = 7.62.0
++LIBCURL_VERSION = 7.64.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-2.17.2
+2.11.0
