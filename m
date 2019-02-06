@@ -1,91 +1,61 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 17:42:53 +0100
-Subject: [Buildroot] [git commit] weston: add weston-imx variant when using
- imx-gpu-viv
-Message-ID: <20190206164130.F063E88127@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 17:43:52 +0100
+Subject: [Buildroot] [PATCH v2] configs/pc: add a configuration to build
+ a UEFI+GPT image
+In-Reply-To: <20180929031609.8939-1-casantos@datacom.com.br>
+References: <20180929031609.8939-1-casantos@datacom.com.br>
+Message-ID: <20190206174352.7165ec29@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18fb3abad1ae4188ecd9342a005a58f940538757
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This variant contains various optimizations for i.MX processors.
+On Sat, 29 Sep 2018 00:16:09 -0300
+Carlos Santos <casantos@datacom.com.br> wrote:
 
-For instance, on i.MX6/7 devices with GPU, the gl-renderer needs to be
-enabled for the fbdev-backend which was removed from upstream weston
-long time ago.
+> This is an example of how to craft a disk image with GPT partitioning
+> instead of MBR. This is achieved by means of a post-image script which
+> uses mkdosfs+mcopy+sfdisk, since genimage is unable to deal with GPT.
+> 
+> The script was kept as simple as possible to make it easy to understand
+> and adapt for other purposes.
+> 
+> The root filesystem location is passed to the kernel by a partition
+> UUID, so it is possible to boot on QEMU, directly from the disk image,
+> or dump the image to a physical device.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Changes v1->v2:
+> Fix commit message ("ane", spurious "the").
+> ---
+>  board/pc/post-image-efi-gpt.sh      | 62 ++++++++++++++++++++++++++++
+>  board/pc/readme.txt                 |  6 ++-
+>  configs/pc_x86_64_efi_gpt_defconfig | 64 +++++++++++++++++++++++++++++
+>  3 files changed, 131 insertions(+), 1 deletion(-)
+>  create mode 100755 board/pc/post-image-efi-gpt.sh
+>  create mode 100644 configs/pc_x86_64_efi_gpt_defconfig
 
-Also, weston-imx adds support for G2D which is enabled by default, this
-patch makes sure to disable it when imx-gpu-g2d isn't selected.
+After discussing with Arnout, we decided that there was not much point
+in having an EFI configuration on one side and an EFI+GPT configuration
+on the other side. Indeed, all EFI systems support GPT partition
+tables. So I just took your configuration, and used it to replace the
+existing pc_x86_64_efi_defconfig. I did the related adjustements as
+well (hopefully correctly), such as dropping from
+board/pc/post-build.sh the bits that are no longer needed.
 
-The tag version rel_imx_4.9.51_8mq_ga proved to work fine on both
-i.MX6Q/DL and i.MX8MQ processors.
+Feel free to give it a test!
 
-Here are the commands used to start weston on i.MX6Q:
-- Using 3D GPU (gl-renderer):
- # weston --tty=1 --device=/dev/fb0
-- Using 2D GPU (G2D):
- # weston --tty=1 --device=/dev/fb0 --use-g2d=1
+Long term of course, having support for GPT in genimage would be nice.
 
-Upstream repository:
-https://source.codeaurora.org/external/imx/weston-imx/
+Thanks!
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: add comment why no --enable option is passed]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/weston/weston.hash |  2 ++
- package/weston/weston.mk   | 16 ++++++++++++++++
- 2 files changed, 18 insertions(+)
-
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index a44bbcb08b..799d371dc0 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -3,3 +3,5 @@ md5 752a04ce3c65af4884cfac4e57231bdb  weston-5.0.0.tar.xz
- sha1 56b42b1fbea9e120a8127736328e4c71ac781a57  weston-5.0.0.tar.xz
- sha256 15a23423bcfa45e31e1dedc0cd524ba71e2930df174fde9c99b71a537c4e4caf  weston-5.0.0.tar.xz
- sha512 b6f97eca014ea47f3de0c5ddd89712f896cd66423d0eb499e1d88d35aab616cef1e735ebb8e0cefd8b60085314b6ec3d56b39d7c4776188bb56d58efc84a52cf  weston-5.0.0.tar.xz
-+# locally computed
-+sha256 0f0de7b7b1f65870139c95dde7abc19ed305631ae7c5d37c386db40cde108632  weston-rel_imx_4.9.51_8mq_ga.tar.gz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 61b32d33a3..7fbe39b98e 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,9 +4,16 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
-+WESTON_VERSION = rel_imx_4.9.51_8mq_ga
-+WESTON_SITE = https://source.codeaurora.org/external/imx/weston-imx
-+WESTON_SITE_METHOD = git
-+WESTON_AUTORECONF = YES
-+else
- WESTON_VERSION = 5.0.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
-+endif
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
-@@ -50,6 +57,15 @@ else
- WESTON_CONF_OPTS += --disable-weston-launch
- endif
- 
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
-+ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
-+WESTON_DEPENDENCIES += imx-gpu-g2d
-+# --enable-imxg2d actually disables it, so no CONF_OPTS
-+else
-+WESTON_CONF_OPTS += --disable-imxg2d
-+endif
-+endif
-+
- ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
- WESTON_CONF_OPTS += --enable-egl
- WESTON_DEPENDENCIES += libegl libgles
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
