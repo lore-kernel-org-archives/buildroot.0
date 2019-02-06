@@ -1,43 +1,53 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 6 Feb 2019 10:13:47 -0600
-Subject: [Buildroot] [PATCH v4 1/2] package/sg3_utils: add host build
-In-Reply-To: <20190206161923.49ab5667@windsurf>
-References: <1549285823-41193-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20190206161923.49ab5667@windsurf>
-Message-ID: <CANQCQpasZsBk35uunHFt6DMbXRf0CTveJf8-1H8=izWNiKqDLw@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 6 Feb 2019 17:11:02 +0100
+Subject: [Buildroot] [git commit] Makefile: allow rootfs overlays to
+ override symbolic links
+Message-ID: <20190206161331.9DB918376B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c96bda11eb26ada660dcd31843fbc9523be6062
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Feb 6, 2019 at 9:19 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon,  4 Feb 2019 07:10:22 -0600
-> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > Initially used by the host build of the utp_com package
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >
-> > ---
-> > Changes
->
-> This patch causes some breakage:
->
->   http://autobuild.buildroot.net/results/2b3/2b30f4ae0074d7f89ed489dccf6b5eecdd40c909/build-end.log
->
+Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
+prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
+when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
+prevents replacing a symlink by a directory on purpose (e.g. /var/log,
+to persist system logs).
 
-I was unable to reproduce on a machine with..............
-Linux largo 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24
-21:16:20 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
-/lib/x86_64-linux-gnu/ld-2.19.so
-gcc (Ubuntu 4.9.4-2ubuntu1~14.04.1) 4.9.4
+Steps to reproduce:
 
-What's the bootlin autobuilder configuration?
+- enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
+- mkdir some_path/rootfs-overlay/var/log
+- enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
+- run 'make'
+- 'target/var/log' is still a symlink to '../tmp', not a directory
 
-Thanks!
-Matt
+The --keep-dirlinks option can be dropped, since we run sanity checks
+on overlays. Now the rsync invocation is identical to the SYSTEM_RSYNC
+logic we have in system/system.mk, so use that variable.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 752a850753..0d2659c46e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -800,9 +800,7 @@ endif # merged /usr
+ 
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+-		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
+-			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+-			$(d)/ $(TARGET_DIR)$(sep))
++		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
