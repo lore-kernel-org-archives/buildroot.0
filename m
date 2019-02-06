@@ -1,61 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 17:43:52 +0100
-Subject: [Buildroot] [PATCH v2] configs/pc: add a configuration to build
- a UEFI+GPT image
-In-Reply-To: <20180929031609.8939-1-casantos@datacom.com.br>
-References: <20180929031609.8939-1-casantos@datacom.com.br>
-Message-ID: <20190206174352.7165ec29@windsurf>
+From: Chris Lesiak <chris.lesiak@licor.com>
+Date: Wed, 6 Feb 2019 16:36:39 +0000
+Subject: [Buildroot] [PATCH v3] package/openssh: Add sysusers.d snippet
+Message-ID: <20190206163629.30683-1-chris.lesiak@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Whether using the new sysusers.d snippet, or adding an entry to
+/etc/password, set the service's home directory to /var/empty.
+See README.privsep included as part of the openssh distribution.
 
-On Sat, 29 Sep 2018 00:16:09 -0300
-Carlos Santos <casantos@datacom.com.br> wrote:
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+---
+Changes v2 -> v3:
+  - Define OPENSSH_USERS or install snippet, but not both
+  - Configure home directory to /var/empty
+  - Rename snippet sshd-sysusers.conf
+---
+ package/openssh/openssh.mk         | 16 ++++++++++++----
+ package/openssh/sshd-sysusers.conf |  1 +
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+ create mode 100644 package/openssh/sshd-sysusers.conf
 
-> This is an example of how to craft a disk image with GPT partitioning
-> instead of MBR. This is achieved by means of a post-image script which
-> uses mkdosfs+mcopy+sfdisk, since genimage is unable to deal with GPT.
-> 
-> The script was kept as simple as possible to make it easy to understand
-> and adapt for other purposes.
-> 
-> The root filesystem location is passed to the kernel by a partition
-> UUID, so it is possible to boot on QEMU, directly from the disk image,
-> or dump the image to a physical device.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Changes v1->v2:
-> Fix commit message ("ane", spurious "the").
-> ---
->  board/pc/post-image-efi-gpt.sh      | 62 ++++++++++++++++++++++++++++
->  board/pc/readme.txt                 |  6 ++-
->  configs/pc_x86_64_efi_gpt_defconfig | 64 +++++++++++++++++++++++++++++
->  3 files changed, 131 insertions(+), 1 deletion(-)
->  create mode 100755 board/pc/post-image-efi-gpt.sh
->  create mode 100644 configs/pc_x86_64_efi_gpt_defconfig
-
-After discussing with Arnout, we decided that there was not much point
-in having an EFI configuration on one side and an EFI+GPT configuration
-on the other side. Indeed, all EFI systems support GPT partition
-tables. So I just took your configuration, and used it to replace the
-existing pc_x86_64_efi_defconfig. I did the related adjustements as
-well (hopefully correctly), such as dropping from
-board/pc/post-build.sh the bits that are no longer needed.
-
-Feel free to give it a test!
-
-Long term of course, having support for GPT in genimage would be nice.
-
-Thanks!
-
-Thomas
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4781cd3fbc..4fef5caedb 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -19,10 +19,6 @@ OPENSSH_CONF_OPTS = \
+ 	--disable-wtmpx \
+ 	--disable-strip
+ 
+-define OPENSSH_USERS
+-	sshd -1 sshd -1 * - - - SSH drop priv user
+-endef
+-
+ define OPENSSH_PERMISSIONS
+ 	/var/empty d 755 root root - - - - -
+ endef
+@@ -61,12 +57,24 @@ else
+ OPENSSH_CONF_OPTS += --without-selinux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
++define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
++	$(INSTALL) -m 0644 -D package/openssh/sshd-sysusers.conf \
++		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
++endef
++else
++define OPENSSH_USERS
++	sshd -1 sshd -1 * /var/empty - - SSH drop priv user
++endef
++endif
++
+ define OPENSSH_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
++	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+ endef
+ 
+ define OPENSSH_INSTALL_INIT_SYSV
+diff --git a/package/openssh/sshd-sysusers.conf b/package/openssh/sshd-sysusers.conf
+new file mode 100644
+index 0000000000..ac77aec065
+--- /dev/null
++++ b/package/openssh/sshd-sysusers.conf
+@@ -0,0 +1 @@
++u sshd - "SSH drop priv user" /var/empty
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.2
