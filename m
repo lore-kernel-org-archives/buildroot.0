@@ -1,90 +1,87 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:41:04 +0100
-Subject: [Buildroot] [git commit] package/opencv: remove qt backend option
-Message-ID: <20190206145216.D461E7F98D@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:41:12 +0100
+Subject: [Buildroot] [git commit] package/poppler: remove qt option
+Message-ID: <20190206145216.E3E1B7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=882ab1c2dfb6e20b29d6b4504605ff33a0aabb47
+commit: https://git.buildroot.net/buildroot/commit/?id=3f821fcc9c4398d0f549a04eecfc075aba7f413c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qt backend option uses the obsolete qt4 package, which we are about to
-remove, so remove the qt backend option as well.
+The qt option uses the obsolete qt4 package, which we are about to remove,
+so remove the poppler qt option as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy         |  6 ++++++
- package/opencv/Config.in | 12 ------------
- package/opencv/opencv.mk |  8 +-------
- 3 files changed, 7 insertions(+), 19 deletions(-)
+ Config.in.legacy           | 6 ++++++
+ package/poppler/Config.in  | 8 --------
+ package/poppler/poppler.mk | 9 +--------
+ 3 files changed, 7 insertions(+), 16 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index dbd7450741..cdf5f989b5 100644
+index 67e3b0dc70..c137006948 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.02"
  
-+config BR2_PACKAGE_OPENCV_WITH_QT
-+	bool "opencv qt backend option removed"
++config BR2_PACKAGE_POPPLER_QT
++	bool "poppler qt option removed"
 +	select BR2_LEGACY
 +	help
-+	  The opencv qt backend option was removed.
++	  The poppler qt option was removed.
 +
- config BR2_PACKAGE_AMD_CATALYST_CCCLE
- 	bool "catalyst control center option removed"
+ config BR2_PACKAGE_OPENCV3_WITH_QT
+ 	bool "opencv3 qt backend option removed"
  	select BR2_LEGACY
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index b7c8c41682..54094b29ca 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -266,18 +266,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
- 	help
- 	  Use shared libpng from the target system.
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index 9b03df8d27..4a553df721 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -13,14 +13,6 @@ config BR2_PACKAGE_POPPLER
  
--config BR2_PACKAGE_OPENCV_WITH_QT
--	bool "qt backend support"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # qt
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
--	select BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_STL
+ if BR2_PACKAGE_POPPLER
+ 
+-config BR2_PACKAGE_POPPLER_QT
+-	bool "Qt support"
+-	depends on BR2_PACKAGE_QT
 -	select BR2_PACKAGE_QT_GUI_MODULE
--	select BR2_PACKAGE_QT_TEST
+-	select BR2_PACKAGE_QT_XML
 -	help
--	  Use Qt with QtTest module and STL support
+-	  Build Qt support into the Poppler library
 -
- config BR2_PACKAGE_OPENCV_WITH_TIFF
- 	bool "tiff support"
- 	select BR2_PACKAGE_TIFF
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index d9813a041d..ccc2d820da 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -160,6 +160,7 @@ OPENCV_CONF_OPTS += \
- 	-DWITH_OPENGL=OFF \
- 	-DWITH_OPENMP=OFF \
- 	-DWITH_OPENNI=OFF \
-+	-DWITH_QT=OFF \
- 	-DWITH_UNICAP=OFF \
- 	-DWITH_XINE=OFF
+ config BR2_PACKAGE_POPPLER_QT5
+ 	bool "Qt5 support"
+ 	depends on BR2_PACKAGE_QT5
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index bad61a6613..be1c0e4821 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -12,7 +12,7 @@ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+-	--enable-xpdf-headers
++	--enable-xpdf-headers --disable-poppler-qt4
  
-@@ -215,13 +216,6 @@ else
- OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
+@@ -84,13 +84,6 @@ else
+ POPPLER_CONF_OPTS += --without-x
  endif
  
--ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
--OPENCV_CONF_OPTS += -DWITH_QT=4
--OPENCV_DEPENDENCIES += qt
+-ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
+-POPPLER_DEPENDENCIES += qt
+-POPPLER_CONF_OPTS += --enable-poppler-qt4
 -else
--OPENCV_CONF_OPTS += -DWITH_QT=OFF
+-POPPLER_CONF_OPTS += --disable-poppler-qt4
 -endif
 -
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_TIFF),y)
- OPENCV_CONF_OPTS += -DWITH_TIFF=ON
- OPENCV_DEPENDENCIES += tiff
+ ifeq ($(BR2_PACKAGE_POPPLER_QT5),y)
+ POPPLER_DEPENDENCIES += qt5base
+ POPPLER_CONF_OPTS += --enable-poppler-qt5
