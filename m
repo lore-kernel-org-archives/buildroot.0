@@ -1,83 +1,87 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 6 Feb 2019 05:15:27 -0600
-Subject: [Buildroot] [PATCH v5 2/3] openjdk: new package
-In-Reply-To: <CANQCQpZxPpFRUTWt_MZEYuMTiH0R0+ezvjndoFNDH4OM1+B2rg@mail.gmail.com>
-References: <20190205143126.13857-1-aduskett@gmail.com>
- <20190205143126.13857-2-aduskett@gmail.com>
- <CANQCQpZxPpFRUTWt_MZEYuMTiH0R0+ezvjndoFNDH4OM1+B2rg@mail.gmail.com>
-Message-ID: <CANQCQpZKK0KwtGVmyxZKV3wXpx_QaT6yxA4_f85Z2YYCofCUsA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 12:54:17 +0100
+Subject: [Buildroot] [git commit] package/postgresql: change systemd service
+ type to notify
+Message-ID: <20190206115314.B5EE88810D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=eada187e77022f0da30884a826dc1767ba99abe8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Feb 6, 2019 at 4:11 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Adam.
->
-> On Tue, Feb 5, 2019 at 8:34 AM <aduskett@gmail.com> wrote:
-> >
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> [snip]
-> > +OPENJDK_CONF_OPTS = \
-> > +       --disable-full-docs \
-> > +       --disable-hotspot-gtest \
-> > +       --disable-manpages \
-> > +       --disable-warnings-as-errors \
-> > +       --enable-headless-only \
-> > +       --enable-openjdk-only \
-> > +       --enable-unlimited-crypto \
-> > +       --openjdk-target=$(GNU_TARGET_NAME) \
-> > +       --prefix=$(TARGET_DIR)/usr \
-> > +       --with-boot-jdk=$(HOST_DIR) \
-> > +       --with-debug-level=release \
-> > +       --with-devkit=$(HOST_DIR) \
-> > +       --with-extra-cflags="$(TARGET_CFLAGS)" \
-> > +       --with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
-> > +       --with-extra-path=$(HOST_DIR)/bin:$(HOST_DIR)/sbin \
-> > +       --with-giflib=system \
-> > +       --with-jobs=$(PARALLEL_JOBS) \
->
-> Got a build failure where I suspect PARALLEL_JOBS might be a fault.
-> I'm dropping my core count and seeing if things succeed.
->
-> Here's the pastebin
-> https://pastebin.com/FNehyafY
+During activation, pg_ctl uses exec to start the db server, which causes
+the service to never finish activating when Type=forking. Upstream
+recommends configuring --with-systemd and using Type=notify.
 
-No luck, same failure output with -j8.  My environment was a Ubuntu
-14.04 machine running the run-time test.
+https://www.postgresql.org/docs/10/static/server-start.html
 
-Matt
+Upstream says:
+    When using systemd, you can use the following service unit file
+    [...]
+    Using Type=notify requires that the server binary was built with
+    configure --with-systemd.
 
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/postgresql.mk      |  8 ++++++++
+ package/postgresql/postgresql.service | 12 ++++++++----
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-
--- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c4ba0daa17..fefbcf5f06 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -83,6 +83,14 @@ else
+ POSTGRESQL_CONF_OPTS += --without-libxml
+ endif
+ 
++# required for postgresql.service Type=notify
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++POSTGRESQL_DEPENDENCIES += systemd
++POSTGRESQL_CONF_OPTS += --with-systemd
++else
++POSTGRESQL_CONF_OPTS += --without-systemd
++endif
++
+ define POSTGRESQL_USERS
+ 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ endef
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+index 4a96258684..53e6f84f00 100644
+--- a/package/postgresql/postgresql.service
++++ b/package/postgresql/postgresql.service
+@@ -3,7 +3,7 @@ Description=PostgreSQL database server
+ After=network.target
+ 
+ [Service]
+-Type=forking
++Type=notify
+ 
+ # start timeout disabled because initdb may run a little
+ # longer (eg. 5 minutes on RaspberryPi)
+@@ -12,13 +12,17 @@ TimeoutStartSec=0
+ User=postgres
+ Group=postgres
+ 
++StandardOutput=syslog
++StandardError=syslog
+ SyslogIdentifier=postgres
+ PIDFile=/var/lib/pgsql/postmaster.pid
+ 
+ ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+-ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
+-ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
+-ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
++ExecStart=/usr/bin/postgres -D /var/lib/pgsql
++ExecReload=/usr/bin/kill -HUP $MAINPID
++KillMode=mixed
++KillSignal=SIGINT
++TimeoutSec=0
+ 
+ [Install]
+ WantedBy=multi-user.target
