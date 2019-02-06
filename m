@@ -1,32 +1,175 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 14:18:24 +0100
-Subject: [Buildroot] [PATCH v1] meson: fix RPATH patch
-In-Reply-To: <20190104193233.27527-1-ps.report@gmx.net>
-References: <20190104193233.27527-1-ps.report@gmx.net>
-Message-ID: <20190206141824.469c047b@windsurf>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 6 Feb 2019 14:22:42 +0100
+Subject: [Buildroot] [git commit] package/kodi: Rework windowing support
+ options
+Message-ID: <20190206132225.2EBCF80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  4 Jan 2019 20:32:33 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=80ba1ebd6083ff42cbe75f0b5155717c6afd3732
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The re-added ([1]) patch missed to remove two lines of the
-> original unconditional code.
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=5c939246a802c0ad9704dac1505105037542a1d3
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...-RPATH-if-install_rpath-is-not-empty.patch | 20 +++++++++++--------
->  1 file changed, 12 insertions(+), 8 deletions(-)
+To prepare the bump to the next Kodi version 18.0-Leia we rework the
+options to control the windowing platform Kodi is built for. An
+automatic choice will no longer be suitable after addition of support
+for wayland and gbm, the former also providing a choice to use either
+OpenGL or OpenGL ES.
 
-Applied to master, thanks.
+This patch introduces a new choice option by converting the current
+X11-based OpenGL support to the new scheme. Other windowing platforms
+will be added by subsequent patches.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/kodi/Config.in | 41 +++++++++++++++++++++++++++--------------
+ package/kodi/kodi.mk   | 19 +++++++++++--------
+ 2 files changed, 38 insertions(+), 22 deletions(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 700b1e459d..30cfea9a52 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -15,14 +15,19 @@ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, t
+ 		|| !BR2_PACKAGE_PYTHON \
+ 		|| BR2_PACKAGE_PYTHON_PYC_ONLY
+ 
+-config BR2_PACKAGE_KODI_GL_EGL
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++	bool
++
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 
+ comment "kodi needs an OpenGL EGL backend with OpenGL support"
+-	depends on !BR2_PACKAGE_KODI_GL_EGL
++	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 
+ menuconfig BR2_PACKAGE_KODI
+ 	bool "kodi"
+@@ -31,10 +36,10 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+-	depends on BR2_PACKAGE_KODI_GL_EGL
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS # gnutls, python and others
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+ 	select BR2_NEEDS_HOST_JAVA
+@@ -48,7 +53,6 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_LIBCROSSGUID
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBFRIBIDI
+-	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL_EGL
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBPLIST
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+@@ -70,8 +74,6 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TINYXML
+-	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL_EGL
+-	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_KODI_GL_EGL
+ 	select BR2_PACKAGE_YAJL
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+@@ -180,6 +182,19 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
+ 
++choice
++	prompt "platform"
++	default BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
++
++config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
++	bool "X11/OpenGL"
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++
++endchoice
++
+ config BR2_PACKAGE_KODI_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+@@ -230,25 +245,23 @@ config BR2_PACKAGE_KODI_LIBUSB
+ 
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+-	depends on BR2_PACKAGE_KODI_GL_EGL
+-	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+ 	select BR2_PACKAGE_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
+-comment "libva support needs X.org with an openGL backend"
+-	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_GL_EGL
++comment "libva support needs platform 'X11/OpenGL'"
++	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+ 
+ config BR2_PACKAGE_KODI_LIBVDPAU
+ 	bool "vdpau"
+-	depends on BR2_PACKAGE_KODI_GL_EGL
+-	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+ 	select BR2_PACKAGE_LIBVDPAU
+ 	help
+ 	  Enable libvdpau support.
+ 
+-comment "libvdpau support needs X.org with an openGL backend"
+-	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_GL_EGL
++comment "libvdpau support needs platform 'X11/OpenGL'"
++	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+ 
+ config BR2_PACKAGE_KODI_UPNP
+ 	bool "upnp"
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7039e35ed6..b7b12c57bc 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -165,6 +165,17 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ KODI_CXX_FLAGS += -latomic
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
++KODI_CONF_OPTS += \
++	-DENABLE_OPENGL=ON \
++	-DENABLE_OPENGLES=OFF \
++	-DENABLE_X11=ON
++KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
++	xlib_libXrandr libdrm
++else
++KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
+@@ -250,14 +261,6 @@ else
+ KODI_CONF_OPTS += -DENABLE_ALSA=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_GL_EGL),y)
+-KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
+-	xlib_libXrandr libdrm
+-KODI_CONF_OPTS += -DENABLE_OPENGL=ON -DENABLE_X11=ON -DENABLE_OPENGLES=OFF
+-else
+-KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_KODI_LIBMICROHTTPD),y)
+ KODI_CONF_OPTS += -DENABLE_MICROHTTPD=ON
+ KODI_DEPENDENCIES += libmicrohttpd
