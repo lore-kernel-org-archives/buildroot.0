@@ -1,420 +1,254 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 15:13:24 +0100
-Subject: [Buildroot] [git commit] package/python-pyqt: remove package
-Message-ID: <20190206145216.B76BB7F952@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 15:41:24 +0100
+Subject: [Buildroot] [git commit] package/qtuio: remove package
+Message-ID: <20190206145217.008AA7F98D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90bbfe58dd0945b1c9dda9e962e0761fdffc68cc
+commit: https://git.buildroot.net/buildroot/commit/?id=e228a9fe93ce05c89488375cf7a19ce759930e6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python-pyqt package uses the obsolete qt4 package, which we are about to
-remove, so remove python-pyqt as well.
+The qtuio package uses the obsolete qt4 package, which we are about to
+remove, so remove qtuio as well.
 
-CC: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+CC: Stephan Hoffmann <sho@relinux.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy                                   |   7 ++
- DEVELOPERS                                         |   1 -
- package/Config.in                                  |   1 -
- .../python-pyqt/0001-configure-skip-qtdetail.patch |  29 ------
- package/python-pyqt/0002-configure-set-qws.patch   |  43 --------
- package/python-pyqt/0003-sip-add_qws.patch         |  44 --------
- ...004-sip-QtGuit-hide-qfont-cachestatistics.patch |  18 ----
- package/python-pyqt/0005-sip-fix_qws_handle.patch  |  24 -----
- package/python-pyqt/Config.in                      |  21 ----
- package/python-pyqt/python-pyqt.hash               |   5 -
- package/python-pyqt/python-pyqt.mk                 | 113 ---------------------
- 11 files changed, 7 insertions(+), 299 deletions(-)
+ Config.in.legacy                                   |  6 ++
+ DEVELOPERS                                         |  1 -
+ package/Config.in                                  |  1 -
+ .../0001-TuioServer.cpp-add-missing-include.patch  | 28 ---------
+ package/qtuio/0002-dont-append-_d-for-debug.patch  | 29 ---------
+ package/qtuio/Config.in                            | 22 -------
+ package/qtuio/qtuio.hash                           |  2 -
+ package/qtuio/qtuio.mk                             | 72 ----------------------
+ 8 files changed, 6 insertions(+), 155 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c84a9239a7..5a330cada9 100644
+index 64f5d58bd7..9c38abdc41 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+@@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2019.02"
  
-+config BR2_PACKAGE_PYTHON_PYQT
-+	bool "python-pyqt package removed"
++config BR2_PACKAGE_QTUIO
++	bool "qtuio package removed"
 +	select BR2_LEGACY
 +	help
-+	  The python-pyqt package was removed. Consider python-pyqt5
-+	  instead.
++	  The qtuio package was removed.
 +
- config BR2_PACKAGE_GNURADIO_QTGUI
- 	bool "gnuradio gr-qtgui option removed"
+ config BR2_PACKAGE_PINENTRY_QT4
+ 	bool "pinentry-qt4 option removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 834b6ed62d..cc21364fb3 100644
+index cc21364fb3..e0340e851d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -940,7 +940,6 @@ F:	package/gr-osmosdr/
- F:	package/libusbgx/
- F:	package/python-cheetah/
- F:	package/python-markdown/
--F:	package/python-pyqt/
- F:	package/python-remi/
- F:	package/python-sip/
+@@ -2015,7 +2015,6 @@ F:	package/cache-calibrator/
+ F:	package/gtest/
+ F:	package/mtdev/
+ F:	package/mtdev2tuio/
+-F:	package/qtuio/
  
+ N:	Steve Calfee <stevecalfee@gmail.com>
+ F:	package/python-pymysql/
 diff --git a/package/Config.in b/package/Config.in
-index ebba7b4df2..9907221b68 100644
+index 9907221b68..250dbe7f0e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -989,7 +989,6 @@ menu "External python modules"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqrcode/Config.in"
--	source "package/python-pyqt/Config.in"
- 	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyratemp/Config.in"
- 	source "package/python-pyro/Config.in"
-diff --git a/package/python-pyqt/0001-configure-skip-qtdetail.patch b/package/python-pyqt/0001-configure-skip-qtdetail.patch
+@@ -321,7 +321,6 @@ comment "QT libraries and helper libraries"
+ 	source "package/grantlee/Config.in"
+ 	source "package/qextserialport/Config.in"
+ 	source "package/qjson/Config.in"
+-	source "package/qtuio/Config.in"
+ 	source "package/quazip/Config.in"
+ 	source "package/qwt/Config.in"
+ endif
+diff --git a/package/qtuio/0001-TuioServer.cpp-add-missing-include.patch b/package/qtuio/0001-TuioServer.cpp-add-missing-include.patch
 deleted file mode 100644
-index 08e99d026c..0000000000
---- a/package/python-pyqt/0001-configure-skip-qtdetail.patch
+index 99337026df..0000000000
+--- a/package/qtuio/0001-TuioServer.cpp-add-missing-include.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 4dd7cad8c95484a882eaa2aeaa74595a3dd93a07 Mon Sep 17 00:00:00 2001
+-From: Stephan Hoffmann <sho@relinux.de>
+-Date: Sun, 2 Dec 2012 13:36:41 +0100
+-Subject: [PATCH] TuioServer.cpp: add missing include
+-
+-If usleep() is used the header <unistd.h> has to be included
+-
+-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+----
+- src/3rdparty/tuio/TuioServer.cpp |    2 ++
+- 1 files changed, 2 insertions(+), 0 deletions(-)
+-
+-diff --git a/src/3rdparty/tuio/TuioServer.cpp b/src/3rdparty/tuio/TuioServer.cpp
+-index f17bef9..851144c 100644
+---- a/src/3rdparty/tuio/TuioServer.cpp
+-+++ b/src/3rdparty/tuio/TuioServer.cpp
+-@@ -25,6 +25,8 @@ using namespace TUIO;
+- using namespace osc;
+- 
+- #ifndef WIN32
+-+#include <unistd.h>
+-+
+- static void* ThreadFunc( void* obj )
+- #else
+- static DWORD WINAPI ThreadFunc( LPVOID obj )
+--- 
+-1.7.0.4
+-
+diff --git a/package/qtuio/0002-dont-append-_d-for-debug.patch b/package/qtuio/0002-dont-append-_d-for-debug.patch
+deleted file mode 100644
+index fbaaf19222..0000000000
+--- a/package/qtuio/0002-dont-append-_d-for-debug.patch
 +++ /dev/null
 @@ -1,29 +0,0 @@
--Do not run qtdetail
+-[PATCH] don't append _d to library name when Qt is built with debug support
 -
--qtdetail is a tool that generates qtdetail.out. Since this program is
--cross-compiled, it's not possible to run it on the host.
+-qtuio appends _d to the library name when Qt was built with debug support,
+-breaking linking step for examples and staging/target install.
 -
--Consequently, python-pyqt.mk generates the qtdetail.out file before
--calling configure-ng.py.
+-There's no real advantage to the _d suffix, so simply fix it by removing
+-the logic appending _d.
 -
--Therefore, this patch makes sure that the pre-generated qtdetail.out
--file is kept, and that qtdetail is not executed.
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
--Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ----
--Index: PyQt-x11-gpl-4.11.3/configure-ng.py
+- src/qTUIO.pro |    5 -----
+- 1 file changed, 5 deletions(-)
+-
+-Index: qtuio-abe4973ff6/src/qTUIO.pro
 -===================================================================
----- PyQt-x11-gpl-4.11.3.orig/configure-ng.py
--+++ PyQt-x11-gpl-4.11.3/configure-ng.py
--@@ -672,10 +672,6 @@ int main(int argc, char **argv)
--         if cmd is None:
--             error("Failed to determine the detail of your Qt installation. Try again using the --verbose flag to see more detail about the problem.")
+---- qtuio-abe4973ff6.orig/src/qTUIO.pro
+-+++ qtuio-abe4973ff6/src/qTUIO.pro
+-@@ -16,11 +16,6 @@
+- win32:LIBS += ws2_32.lib \
+-     winmm.lib
 - 
---        # Create the output file, first making sure it doesn't exist.
---        remove_file(out_file)
---        run_command(cmd, verbose)
---
--         if not os.access(out_file, os.F_OK):
--             error("%s failed to create %s. Make sure your Qt installation is correct." % (cmd, out_file))
+--# Changes the name of the target, when is debug mode
+--CONFIG( debug, debug|release ) { 
+--    TARGET = $${TARGET}_d
+--    BUILD_NAME = debug
+--}
+- CONFIG( release, debug|release ):BUILD_NAME = release
 - 
-diff --git a/package/python-pyqt/0002-configure-set-qws.patch b/package/python-pyqt/0002-configure-set-qws.patch
+- # Temporary folders for the auxiliar files
+diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
 deleted file mode 100644
-index 33a5648bee..0000000000
---- a/package/python-pyqt/0002-configure-set-qws.patch
+index f46f1dd407..0000000000
+--- a/package/qtuio/Config.in
 +++ /dev/null
-@@ -1,43 +0,0 @@
--Add support for several Qt flavors
--
--Qt has two flavors: X11 and embedded (QWS). QWS has some limitations
--compared to X11. This patch adds an option to select which version to
--use.
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-----
--Index: PyQt-x11-gpl-4.11.3/configure-ng.py
--===================================================================
----- PyQt-x11-gpl-4.11.3.orig/configure-ng.py
--+++ PyQt-x11-gpl-4.11.3/configure-ng.py
--@@ -960,6 +960,9 @@ int main(int argc, char **argv)
--         if opts.vendlibdir is not None:
--             self.vend_lib_dir = opts.vendlibdir
-- 
--+        if opts.qtflavor is not None:
--+            self.qt_flavor = opts.qtflavor
--+
--         # Handle any conflicts.
--         if self.qt_shared:
--             if len(self.static_plugins) != 0:
--@@ -1177,6 +1180,11 @@ def create_optparser(target_config):
--             dest="notools",
--             help="disable the building of pyuic5, pyrcc5 and pylupdate5 "
--                     "[default: enabled]")
--+    g.add_option("--qt-flavor", dest='qtflavor', type='string',
--+            default="WS_X11", metavar='QTFLAVOR', action='store',
--+            help="select Qt flavor beetween WS_X11 and WS_QWS "
--+                    "only available on Linux)"
--+                    "[default: WS_X11]")
--     p.add_option_group(g)
-- 
--     # Vendor ID.
--@@ -2088,7 +2096,7 @@ def get_sip_flags(target_config):
--     elif target_config.py_platform == 'darwin':
--         plattag = 'WS_MACX'
--     else:
---        plattag = 'WS_X11'
--+        plattag = target_config.qt_flavor
-- 
--     sip_flags.append('-t')
--     sip_flags.append(plattag)
-diff --git a/package/python-pyqt/0003-sip-add_qws.patch b/package/python-pyqt/0003-sip-add_qws.patch
-deleted file mode 100644
-index 1ff706f624..0000000000
---- a/package/python-pyqt/0003-sip-add_qws.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Add WS_QWS in the Platforms variable and to define some types
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
--Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-----
--Index: PyQt-x11-gpl-4.11.3/sip/QtCore/QtCoremod.sip
--===================================================================
----- PyQt-x11-gpl-4.11.3.orig/sip/QtCore/QtCoremod.sip
--+++ PyQt-x11-gpl-4.11.3/sip/QtCore/QtCoremod.sip
--@@ -29,7 +29,7 @@
-- 
-- %Timeline {Qt_4_1_0 Qt_4_1_1 Qt_4_1_2 Qt_4_1_3 Qt_4_2_0 Qt_4_2_1 Qt_4_2_2 Qt_4_2_3 Qt_4_3_0 Qt_4_3_1 Qt_4_3_2 Qt_4_3_3 Qt_4_3_4 Qt_4_4_0 Qt_4_4_1 Qt_4_4_2 Qt_4_5_0 Qt_4_5_1 Qt_4_5_2 Qt_4_5_3 Qt_4_6_0 Qt_4_6_1 Qt_4_6_2 Qt_4_6_3 Qt_4_7_0 Qt_4_7_1 Qt_4_7_2 Qt_4_7_3 Qt_4_7_4 Qt_4_8_0 Qt_4_8_1 Qt_4_8_2 Qt_4_8_3 Qt_4_8_4 Qt_4_8_5 Qt_4_8_6 Qt_5_0_0}
-- 
---%Platforms {WS_X11 WS_WIN WS_MACX}
--+%Platforms {WS_X11 WS_QWS WS_WIN WS_MACX}
-- 
-- %Feature PyQt_Accessibility
-- %Feature PyQt_SessionManager
--Index: PyQt-x11-gpl-4.11.3/sip/QtCore/qprocess.sip
--===================================================================
----- PyQt-x11-gpl-4.11.3.orig/sip/QtCore/qprocess.sip
--+++ PyQt-x11-gpl-4.11.3/sip/QtCore/qprocess.sip
--@@ -28,7 +28,7 @@
-- %If (WS_WIN)
-- typedef void *Q_PID;
-- %End
---%If (WS_X11 || WS_MACX)
--+%If (WS_X11 || WS_QWS || WS_MACX)
-- typedef qint64 Q_PID;
-- %End
-- 
--Index: PyQt-x11-gpl-4.11.3/sip/QtGui/qwindowdefs.sip
--===================================================================
----- PyQt-x11-gpl-4.11.3.orig/sip/QtGui/qwindowdefs.sip
--+++ PyQt-x11-gpl-4.11.3/sip/QtGui/qwindowdefs.sip
--@@ -27,7 +27,7 @@
-- 
-- typedef QList<QWidget*> QWidgetList;
-- %If (- Qt_5_0_0)
---%If (WS_X11)
--+%If (WS_X11 || WS_QWS)
-- // X11 specific definitions.
-- typedef unsigned long WId;
-- %End
-diff --git a/package/python-pyqt/0004-sip-QtGuit-hide-qfont-cachestatistics.patch b/package/python-pyqt/0004-sip-QtGuit-hide-qfont-cachestatistics.patch
-deleted file mode 100644
-index c07bea777f..0000000000
---- a/package/python-pyqt/0004-sip-QtGuit-hide-qfont-cachestatistics.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Hide QFont::cacheStatistics which isn't available in QWS
--
--Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-----
--
--diff -ur PyQt-x11-gpl-4.9.6/sip/QtGui/qfont.sip pyqt-4.9.6/sip/QtGui/qfont.sip
----- PyQt-x11-gpl-4.9.6/sip/QtGui/qfont.sip	2012-12-08 13:51:38.000000000 +0400
--+++ pyqt-4.9.6/sip/QtGui/qfont.sip	2013-05-22 14:06:38.335000022 +0400
--@@ -185,7 +185,9 @@
-- %End
--     static void initialize();
--     static void cleanup();
--+%If (!WS_QWS)
--     static void cacheStatistics();
--+%End
--     QString defaultFamily() const;
--     QString lastResortFamily() const;
--     QString lastResortFont() const;
-diff --git a/package/python-pyqt/0005-sip-fix_qws_handle.patch b/package/python-pyqt/0005-sip-fix_qws_handle.patch
-deleted file mode 100644
-index 80623d112a..0000000000
---- a/package/python-pyqt/0005-sip-fix_qws_handle.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fix build issue in QWS flavor
--
--Change HANDLE to void* to get rid of :
--buildroot/output/build/python-pyqt-4.11.3/QtCore/sipQtCoreQThread.cpp:318:50:
--error: invalid conversion from 'Qt::HANDLE {aka void*}' to 'long
--unsigned int' [-fpermissive] error during compilation.
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
--Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-----
--Index: PyQt-x11-gpl-4.11.3/sip/QtCore/qnamespace.sip
--===================================================================
----- PyQt-x11-gpl-4.11.3.orig/sip/QtCore/qnamespace.sip
--+++ PyQt-x11-gpl-4.11.3/sip/QtCore/qnamespace.sip
--@@ -1673,6 +1673,9 @@ namespace Qt
-- %If (WS_X11)
--     typedef unsigned long HANDLE;
-- %End
--+%If (WS_QWS)
--+    typedef void* HANDLE;
--+%End
-- %End
-- %If (PyQt_Deprecated_5_0)
--     typedef Qt::WindowFlags WFlags;
-diff --git a/package/python-pyqt/Config.in b/package/python-pyqt/Config.in
-deleted file mode 100644
-index 6934a4c4ab..0000000000
---- a/package/python-pyqt/Config.in
-+++ /dev/null
-@@ -1,21 +0,0 @@
--comment "python-pyqt needs Qt4"
--	depends on !BR2_PACKAGE_QT
--
--config BR2_PACKAGE_PYTHON_PYQT
--	bool "python-pyqt"
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_QTUIO
+-	bool "qtuio"
 -	depends on BR2_PACKAGE_QT
--	select BR2_PACKAGE_PYTHON_SIP
+-	depends on BR2_PACKAGE_QT_GUI_MODULE
 -	help
--	  PyQt4 for Qt Embedded 4 bindings.
+-	  Implementation of an interface connecting TUIO messages
+-	  and QT events
 -
--	  http://www.riverbankcomputing.com/software/pyqt/
+-	  https://github.com/x29a/qTUIO
 -
--if BR2_PACKAGE_PYTHON_PYQT
+-if BR2_PACKAGE_QTUIO
 -
--config BR2_PACKAGE_PYTHON_PYQT_ARCH_USES_QREAL_FLOAT
--	bool
--	default y if BR2_arm || BR2_armeb
--	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
--	default y if (BR2_mipsel || BR2_mips) && BR2_PACKAGE_QT_EMBEDDED
+-config BR2_QTUIO_EXAMPLES
+-	bool "qtuio examples"
+-	help
+-	  Build and install qtuio examples
 -
 -endif
-diff --git a/package/python-pyqt/python-pyqt.hash b/package/python-pyqt/python-pyqt.hash
-deleted file mode 100644
-index 1709b66ab8..0000000000
---- a/package/python-pyqt/python-pyqt.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/
--md5 997c3e443165a89a559e0d96b061bf70 PyQt-x11-gpl-4.11.3.tar.gz
 -
--# Locally calculated:
--sha256 853780dcdbe2e6ba785d703d059b096e1fc49369d3e8d41a060be874b8745686 PyQt-x11-gpl-4.11.3.tar.gz
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+-comment "qtuio depends on QT gui module"
+-	depends on BR2_PACKAGE_QT
+-	depends on !BR2_PACKAGE_QT_GUI_MODULE
+diff --git a/package/qtuio/qtuio.hash b/package/qtuio/qtuio.hash
 deleted file mode 100644
-index e8ae641662..0000000000
---- a/package/python-pyqt/python-pyqt.mk
+index bb9bdb1848..0000000000
+--- a/package/qtuio/qtuio.hash
 +++ /dev/null
-@@ -1,113 +0,0 @@
+@@ -1,2 +0,0 @@
+-# locally computed
+-sha256  65308adb59e910d552d4885772c7f99c7d19dec5e924d852a5a39a1972f8d223  qtuio-abe4973ff60654aad9df7037c4ca15c45f811d24.tar.gz
+diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
+deleted file mode 100644
+index 6b90a2c06f..0000000000
+--- a/package/qtuio/qtuio.mk
++++ /dev/null
+@@ -1,72 +0,0 @@
 -################################################################################
 -#
--# python-pyqt
+-# qtuio
 -#
 -################################################################################
 -
--PYTHON_PYQT_VERSION = 4.11.3
--PYTHON_PYQT_SOURCE = PyQt-x11-gpl-$(PYTHON_PYQT_VERSION).tar.gz
--PYTHON_PYQT_SITE = http://downloads.sourceforge.net/project/pyqt/PyQt4/PyQt-$(PYTHON_PYQT_VERSION)
--PYTHON_PYQT_LICENSE = GPL-2.0 or GPL-3.0
--PYTHON_PYQT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3
+-QTUIO_VERSION = abe4973ff60654aad9df7037c4ca15c45f811d24
+-QTUIO_SITE = $(call github,x29a,qTUIO,$(QTUIO_VERSION))
+-QTUIO_INSTALL_STAGING = YES
+-QTUIO_DEPENDENCIES = qt
 -
--PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
+-QTUIO_LICENSE = GPL-3.0+
+-QTUIO_LICENSE_FILES = COPYING
 -
--ifeq ($(BR2_PACKAGE_PYTHON),y)
--PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
--PYTHON_PYQT_RM_PORT_BASE = port_v3
--else ifeq ($(BR2_PACKAGE_PYTHON3),y)
--PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
--PYTHON_PYQT_RM_PORT_BASE = port_v2
+-# The pong example needs QtOpenGL support, which might become available
+-# some time in the future. Then add pong to the list of examples.
+-QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
+-
+-ifeq ($(BR2_QTUIO_EXAMPLES),y)
+-define QTUIO_CONFIGURE_EXAMPLES
+-	for example in $(QTUIO_EXAMPLES) ; do \
+-		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
+-	done
+-endef
 -endif
 -
--ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
--PYTHON_PYQT_QTFLAVOR = WS_QWS
+-define QTUIO_CONFIGURE_CMDS
+-	cd $(@D)/src && $(TARGET_MAKE_ENV) $(QT_QMAKE)
+-	$(QTUIO_CONFIGURE_EXAMPLES)
+-endef
+-
+-ifeq ($(BR2_QTUIO_EXAMPLES),y)
+-define QTUIO_BUILD_EXAMPLES
+-	for example in $(QTUIO_EXAMPLES) ; do \
+-		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/examples/$${example} || exit 1; \
+-	done
+-endef
+-endif
+-
+-define QTUIO_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
+-	$(QTUIO_BUILD_EXAMPLES)
+-endef
+-
+-# Unfortunately, there is no working "install" target available
+-ifeq ($(BR2_QTUIO_EXAMPLES),y)
+-define QTUIO_INSTALL_EXAMPLES
+-	for example in $(QTUIO_EXAMPLES) ; do \
+-		$(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1 ; \
+-	done
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QT_STATIC),y)
+-QTUIO_LIBRARY = libqTUIO.a
 -else
--PYTHON_PYQT_QTFLAVOR = WS_X11
+-QTUIO_LIBRARY = libqTUIO.so*
+-define QTUIO_INSTALL_TARGET_LIBRARY
+-	cp -dpf $(@D)/lib/$(QTUIO_LIBRARY) $(TARGET_DIR)/usr/lib
+-endef
 -endif
 -
--PYTHON_PYQT_QTDETAIL_LICENSE = Open Source
--
--ifeq ($(BR2_PACKAGE_QT_SHARED),y)
--PYTHON_PYQT_QTDETAIL_TYPE = shared
--endif
--
--# Turn off features that aren't available in QWS and current qt
--# configuration.
--PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES = \
--	PyQt_Accessibility PyQt_SessionManager \
--	PyQt_Shortcut PyQt_RawFont
--
--ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
--PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
--endif
--
--# Yes, this looks a bit weird: when OpenGL ES is available, we have to
--# disable the feature that consists in not having OpenGL ES support.
--ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
--PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_NoOpenGLES
--endif
--
--# PyQt_qreal_double must be disabled on a number of architectures that
--# use float for qreal.
--ifeq ($(BR2_PACKAGE_PYTHON_PYQT_ARCH_USES_QREAL_FLOAT),y)
--PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_qreal_double
--endif
--
--define PYTHON_PYQT_QTDETAIL
--	echo $(1) >> $(2)/qtdetail.out
+-define QTUIO_INSTALL_TARGET_CMDS
+-	$(QTUIO_INSTALL_TARGET_LIBRARY)
+-	$(QTUIO_INSTALL_EXAMPLES)
 -endef
 -
--# Since we can't run generate qtdetail.out by running qtdetail on target device
--# we must generate the configuration.
--define PYTHON_PYQT_GENERATE_QTDETAIL
--	$(RM) -f $(1)/qtdetail.out
--	$(call PYTHON_PYQT_QTDETAIL,$(PYTHON_PYQT_QTDETAIL_LICENSE),$(1))
--	$(call PYTHON_PYQT_QTDETAIL,$(PYTHON_PYQT_QTDETAIL_TYPE),$(1))
--	$(foreach f,$(PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES),
--		$(call PYTHON_PYQT_QTDETAIL,$(f),$(1)) \
--	)
--endef
--
--PYTHON_PYQT_CONF_OPTS = \
--	--bindir $(TARGET_DIR)/usr/bin \
--	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages \
--	--qmake $(HOST_DIR)/bin/qmake \
--	--sysroot $(STAGING_DIR)/usr \
--	-w --confirm-license \
--	--no-designer-plugin \
--	--no-docstrings \
--	--no-sip-files \
--	--qt-flavor=$(PYTHON_PYQT_QTFLAVOR)
--
--# The VendorID related information is only needed for Python 2.x, not
--# Python 3.x.
--ifeq ($(BR2_PACKAGE_PYTHON),y)
--PYTHON_PYQT_CONF_OPTS += \
--	--vendorid-incdir $(STAGING_DIR)/usr/include/$(PYTHON_PYQT_PYTHON_DIR) \
--	--vendorid-libdir $(STAGING_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/config
--endif
--
--define PYTHON_PYQT_CONFIGURE_CMDS
--	$(call PYTHON_PYQT_GENERATE_QTDETAIL,$(@D))
--	(cd $(@D); \
--		$(TARGET_MAKE_ENV) \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(HOST_DIR)/bin/python configure-ng.py \
--			$(PYTHON_PYQT_CONF_OPTS) \
--	)
--endef
--
--define PYTHON_PYQT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
--endef
--
--# __init__.py is needed to import PyQt4
--# __init__.pyc is needed if BR2_PACKAGE_PYTHON_PYC_ONLY is set
--define PYTHON_PYQT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
--	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
--	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
+-define QTUIO_INSTALL_STAGING_CMDS
+-	cp -dpf $(@D)/lib/$(QTUIO_LIBRARY) $(STAGING_DIR)/usr/lib
 -endef
 -
 -$(eval $(generic-package))
