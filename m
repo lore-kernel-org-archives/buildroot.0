@@ -1,169 +1,202 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 6 Feb 2019 10:14:46 +0100
-Subject: [Buildroot] [git commit] package/fftw: remove as regular package
-Message-ID: <20190206091325.9B060803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fftw: break fftw-single into a
+ dedicated package
+Message-ID: <20190206091325.3BD4981497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7883e559991c766c9373204ae3995fc476dad97f
+commit: https://git.buildroot.net/buildroot/commit/?id=fca8b60f8697a6be9660672547688736b8128519
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fftw is no longer a package: only fftw-single, fftw-double,
-fftw-long-double and fftw-quad are. fftw.mk only contains some common
-definitions that are used by the different fftw variants.
+fftw's library name depends on the precision option. Consequently,
+it's possible to install multiple flavor on the same target.
 
-The old BR2_PACKAGE_FFTW_PRECISION_* options, which are no longer used
-anywhere, are moved to Config.in.legacy.
+This patch breaks fftw single precision into a new package and:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+- makes BR2_PACKAGE_FFTW_PRECISION_SINGLE select
+  BR2_PACKAGE_FFTW_SINGLE to keep compatibility with packages that use
+  BR2_PACKAGE_FFTW_PRECISION_SINGLE. This option will be removed in a
+  follow-up commit;
+
+- removes the BR2_PACKAGE_FFTW_USE_SSE and BR2_PACKAGE_FFTW_USE_NEON
+  otpions since they are only used for single precision. The
+  corresponding CPU-capability options are directly handled in
+  the fftw-single package;
+
+- makes fftw depend on fftw-single when this package is enabled.
+
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[Yann/Thomas:
+ - Force --disable-single in FFTW_CONF_OPTS, just for the sake of
+   clarity (fftw is no longer going to build the single variant)
+ - Use FFTW_SINGLE_DL_SUBDIR to avoid downloading fftw multiple times
+ - Minor reformatting tweaks in fftw-single.mk
+ - Do not deprecate BR2_PACKAGE_FFTW_PRECISION_SINGLE and instead make
+   it select BR2_PACKAGE_FFTW_SINGLE, so that packages using
+   BR2_PACKAGE_FFTW_PRECISION_SINGLE continue to work.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy       | 35 +++++++++++++++++++++++++++++++++++
- package/fftw/Config.in | 43 ++-----------------------------------------
- package/fftw/fftw.mk   | 18 ------------------
- 3 files changed, 37 insertions(+), 59 deletions(-)
+ package/fftw/Config.in                    | 12 +++-------
+ package/fftw/fftw-single/Config.in        |  5 +++++
+ package/fftw/fftw-single/fftw-single.hash |  1 +
+ package/fftw/fftw-single/fftw-single.mk   | 37 +++++++++++++++++++++++++++++++
+ package/fftw/fftw.mk                      | 14 +++++++-----
+ 5 files changed, 54 insertions(+), 15 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 59d8bf25fc..db300db172 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -160,6 +160,41 @@ config BR2_PACKAGE_BOOST_SIGNALS
- 	  was announced in 1.54. Users are encouraged to use Signals2
- 	  instead.
- 
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_SINGLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_SINGLE.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
-+	bool "double"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_DOUBLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_DOUBLE.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double"
-+	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
-+		(BR2_arm || BR2_mips || BR2_mipsel))
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_LONG_DOUBLE
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_LONG_DOUBLE.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad"
-+	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FFTW_QUAD
-+	help
-+	  This option has been removed in favor of
-+	  BR2_PACKAGE_FFTW_QUAD.
-+
- config BR2_PACKAGE_LUA_5_2
- 	bool "Lua 5.2.x version removed"
- 	select BR2_LEGACY
 diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index ed87de1a70..69dc6559a0 100644
+index d51f8f3c51..f61784de50 100644
 --- a/package/fftw/Config.in
 +++ b/package/fftw/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_FFTW
- 	bool "fftw"
-+	select BR2_PACKAGE_FFTW_DOUBLE if !BR2_PACKAGE_FFTW_SINGLE \
-+		&& !BR2_PACKAGE_FFTW_LONG_DOUBLE && !BR2_PACKAGE_FFTW_QUAD
- 	help
- 	  Library for computing Fast Fourier Transforms.
- 
-@@ -12,47 +14,6 @@ config BR2_PACKAGE_FFTW
+@@ -12,15 +12,9 @@ config BR2_PACKAGE_FFTW
  
  if BR2_PACKAGE_FFTW
  
--choice
--	prompt "fftw precision"
--	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
--	help
--	  Selects fftw precision
+-config BR2_PACKAGE_FFTW_USE_SSE
+-	bool
 -
--config BR2_PACKAGE_FFTW_PRECISION_SINGLE
--	bool "single"
--	select BR2_PACKAGE_FFTW_SINGLE
--	help
--	  Compile fftw in single precision, i.e. use 'float' for
--	  floating point type.
+ config BR2_PACKAGE_FFTW_USE_SSE2
+ 	bool
+ 
+-config BR2_PACKAGE_FFTW_USE_NEON
+-	bool
 -
--config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
--	bool "double"
--	select BR2_PACKAGE_FFTW_DOUBLE
--	help
--	  Compile fftw in double precision (the default), i.e. use
--	  'double' for floating point type.
--
--config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
--	bool "long double"
--	# long-double precision require long-double trigonometric routines
--	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
--		(BR2_arm || BR2_mips || BR2_mipsel))
--	select BR2_PACKAGE_FFTW_LONG_DOUBLE
--	help
--	  Compile fftw in long double precision, i.e. use 'long double'
--	  for floating point type.
--
--config BR2_PACKAGE_FFTW_PRECISION_QUAD
--	bool "quad"
--	# quad-precision needs to have a gcc with libquadmath
--	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
--	select BR2_PACKAGE_FFTW_QUAD
--	help
--	  Compile fftw in quadruple precision, i.e. use '__float128' for
--	  floating point type.
--
--endchoice
--
- source "package/fftw/fftw-single/Config.in"
- source "package/fftw/fftw-double/Config.in"
- source "package/fftw/fftw-long-double/Config.in"
+ choice
+ 	prompt "fftw precision"
+ 	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+@@ -29,9 +23,7 @@ choice
+ 
+ config BR2_PACKAGE_FFTW_PRECISION_SINGLE
+ 	bool "single"
+-	select BR2_PACKAGE_FFTW_USE_SSE if BR2_X86_CPU_HAS_SSE
+-	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+-	select BR2_PACKAGE_FFTW_USE_NEON if BR2_ARM_CPU_HAS_NEON && !BR2_ARM_SOFT_FLOAT
++	select BR2_PACKAGE_FFTW_SINGLE
+ 	help
+ 	  Compile fftw in single precision, i.e. use 'float' for
+ 	  floating point type.
+@@ -62,6 +54,8 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
+ 
+ endchoice
+ 
++source "package/fftw/fftw-single/Config.in"
++
+ config BR2_PACKAGE_FFTW_FAST
+ 	bool "optimise for speed over accuracy"
+ 	help
+diff --git a/package/fftw/fftw-single/Config.in b/package/fftw/fftw-single/Config.in
+new file mode 100644
+index 0000000000..ff1486871d
+--- /dev/null
++++ b/package/fftw/fftw-single/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_FFTW_SINGLE
++	bool "fftw-single"
++	help
++	  Compile fftw in single precision, i.e. use 'float'
++	  for floating point type.
+diff --git a/package/fftw/fftw-single/fftw-single.hash b/package/fftw/fftw-single/fftw-single.hash
+new file mode 120000
+index 0000000000..3ee7ecb3ba
+--- /dev/null
++++ b/package/fftw/fftw-single/fftw-single.hash
+@@ -0,0 +1 @@
++../fftw.hash
+\ No newline at end of file
+diff --git a/package/fftw/fftw-single/fftw-single.mk b/package/fftw/fftw-single/fftw-single.mk
+new file mode 100644
+index 0000000000..1e26ff7a38
+--- /dev/null
++++ b/package/fftw/fftw-single/fftw-single.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# fftw-single
++#
++################################################################################
++
++FFTW_SINGLE_VERSION = $(FFTW_VERSION)
++FFTW_SINGLE_SOURCE = fftw-$(FFTW_VERSION).tar.gz
++FFTW_SINGLE_SITE = $(FFTW_SITE)
++FFTW_SINGLE_DL_SUBDIR = fftw
++FFTW_SINGLE_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
++FFTW_SINGLE_LICENSE = $(FFTW_LICENSE)
++FFTW_SINGLE_LICENSE_FILES = $(FFTW_LICENSE_FILES)
++
++FFTW_SINGLE_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
++
++FFTW_SINGLE_CONF_OPTS = \
++	$(FFTW_COMMON_CONF_OPTS) \
++	CFLAGS="$(FFTW_SINGLE_CFLAGS)" \
++	--enable-single
++
++FFTW_SINGLE_CFLAGS = $(FFTW_COMMON_CFLAGS)
++
++# x86 optimisations
++FFTW_SINGLE_CONF_OPTS += \
++	$(if $(BR2_X86_CPU_HAS_SSE),--enable,--disable)-sse \
++	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
++
++# ARM optimisations
++ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
++FFTW_SINGLE_CONF_OPTS += --enable-neon
++FFTW_SINGLE_CFLAGS += -mfpu=neon
++else
++FFTW_SINGLE_CONF_OPTS += --disable-neon
++endif
++
++$(eval $(autotools-package))
 diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 862ad5edc0..bcfdb9c96a 100644
+index 8b76b7c190..b738928032 100644
 --- a/package/fftw/fftw.mk
 +++ b/package/fftw/fftw.mk
-@@ -10,22 +10,6 @@ FFTW_INSTALL_STAGING = YES
+@@ -10,6 +10,10 @@ FFTW_INSTALL_STAGING = YES
  FFTW_LICENSE = GPL-2.0+
  FFTW_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
--FFTW_DEPENDENCIES += fftw-double
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
--FFTW_DEPENDENCIES += fftw-long-double
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
--FFTW_DEPENDENCIES += fftw-quad
--endif
--
--ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
--FFTW_DEPENDENCIES += fftw-single
--endif
--
++ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
++FFTW_DEPENDENCIES += fftw-single
++endif
++
  # fortran support only enables generation and installation of fortran sources
  ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
  FFTW_COMMON_CONF_OPTS += --enable-fortran
-@@ -49,6 +33,4 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
+@@ -19,18 +23,14 @@ FFTW_COMMON_CONF_OPTS += --disable-fortran
  endif
- FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
  
--$(eval $(generic-package))
+ FFTW_COMMON_CFLAGS = $(TARGET_CFLAGS)
++
+ ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+ FFTW_COMMON_CFLAGS += -O3 -ffast-math
+ endif
+ 
+ # x86 optimisations
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE),--enable,--disable)-sse
+ FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE2),--enable,--disable)-sse2
+ 
+-# ARM optimisations
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),--enable,--disable)-neon
+-FFTW_COMMON_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
 -
- include $(sort $(wildcard package/fftw/*/*.mk))
+ # Generic optimisations
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ FFTW_COMMON_CONF_OPTS += --enable-threads
+@@ -43,9 +43,11 @@ FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openm
+ FFTW_CONF_ENV = $(FFTW_COMMON_CONF_ENV)
+ FFTW_CONF_OPTS += \
+ 	$(FFTW_COMMON_CONF_OPTS) \
+-	$(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single \
++	--disable-single \
+ 	$(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double \
+ 	$(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision \
+ 	CFLAGS="$(FFTW_COMMON_CFLAGS)"
+ 
+ $(eval $(autotools-package))
++
++include $(sort $(wildcard package/fftw/*/*.mk))
