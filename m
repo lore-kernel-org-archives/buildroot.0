@@ -1,55 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Feb 2019 12:01:20 +0100
-Subject: [Buildroot] openssl 1.1.x deprecated option
-In-Reply-To: <20190206110832.5c5dc4b6@windsurf> (Thomas Petazzoni's message of
- "Wed, 6 Feb 2019 11:08:32 +0100")
-References: <CANQCQpYYxbhNZvvmzi7vjd+ZuWtxKqMZVxAwZwsjd-OzkQsgDw@mail.gmail.com>
- <20190206110832.5c5dc4b6@windsurf>
-Message-ID: <87ftt1ji4f.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 6 Feb 2019 05:15:27 -0600
+Subject: [Buildroot] [PATCH v5 2/3] openjdk: new package
+In-Reply-To: <CANQCQpZxPpFRUTWt_MZEYuMTiH0R0+ezvjndoFNDH4OM1+B2rg@mail.gmail.com>
+References: <20190205143126.13857-1-aduskett@gmail.com>
+ <20190205143126.13857-2-aduskett@gmail.com>
+ <CANQCQpZxPpFRUTWt_MZEYuMTiH0R0+ezvjndoFNDH4OM1+B2rg@mail.gmail.com>
+Message-ID: <CANQCQpZKK0KwtGVmyxZKV3wXpx_QaT6yxA4_f85Z2YYCofCUsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Adam,
 
- > Hello,
- > On Wed, 6 Feb 2019 04:03:09 -0600
- > Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+On Wed, Feb 6, 2019 at 4:11 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Adam.
+>
+> On Tue, Feb 5, 2019 at 8:34 AM <aduskett@gmail.com> wrote:
+> >
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> [snip]
+> > +OPENJDK_CONF_OPTS = \
+> > +       --disable-full-docs \
+> > +       --disable-hotspot-gtest \
+> > +       --disable-manpages \
+> > +       --disable-warnings-as-errors \
+> > +       --enable-headless-only \
+> > +       --enable-openjdk-only \
+> > +       --enable-unlimited-crypto \
+> > +       --openjdk-target=$(GNU_TARGET_NAME) \
+> > +       --prefix=$(TARGET_DIR)/usr \
+> > +       --with-boot-jdk=$(HOST_DIR) \
+> > +       --with-debug-level=release \
+> > +       --with-devkit=$(HOST_DIR) \
+> > +       --with-extra-cflags="$(TARGET_CFLAGS)" \
+> > +       --with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
+> > +       --with-extra-path=$(HOST_DIR)/bin:$(HOST_DIR)/sbin \
+> > +       --with-giflib=system \
+> > +       --with-jobs=$(PARALLEL_JOBS) \
+>
+> Got a build failure where I suspect PARALLEL_JOBS might be a fault.
+> I'm dropping my core count and seeing if things succeed.
+>
+> Here's the pastebin
+> https://pastebin.com/FNehyafY
 
- >> I was thinking about  how to manage the risk of a version bump vs
- >> backport patches and found another possible solution.
- >> 
- >> For openssl 1.1.x there are a series of deprecated APIs for items like
- >> EVP_MD_CTX* which are now disabled and seem to result in 1/2 of the
- >> failures. Would we entertain on some packages adding the libopenssl
- >> "enable-deprecated"  configure option [1] so that it re-enables those
- >> options (could do this like we currently do with a kconfig package = y
- >> condition in the libopenssl.mk)?   Both mongodb and sqlcipher which
- >> are currently failing should be resolved with this approach.
- >> 
- >> Is this worth testing out / proposing?
+No luck, same failure output with -j8.  My environment was a Ubuntu
+14.04 machine running the run-time test.
 
- > We could certainly have a BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED
- > option that enables those deprecated APIs, and have the packages that
- > need that do:
+Matt
 
- > 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED if BR2_PACKAGE_LIBOPENSSL
 
- > Thanks to this option, a "git grep
- > BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED" allows to quickly identify
- > which are the remaining packages that still need those deprecated APIs.
-
-Yes, that may be the most pragmatic option. Based on the statement in
-https://github.com/openssl/openssl/issues/4985 it does sound like we
-need to adjust the code (or CFLAGS) of each package using this option to
-add:
-
-#define OPENSSL_USE_DEPRECATED 1
-
-Before including any openssl headers, which isn't nice - But still
-better than complicated patches.
 
 -- 
-Bye, Peter Korsgaard
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
