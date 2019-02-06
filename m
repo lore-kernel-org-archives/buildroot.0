@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 10:14:46 +0100
-Subject: [Buildroot] [git commit] package/pulseaudio: use the new
- fftw-single package
-Message-ID: <20190206091325.8C86C803B6@busybox.osuosl.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed,  6 Feb 2019 04:15:26 -0500
+Subject: [Buildroot] [PATCH v10 1/6] binutils: install libiberty for host
+ build
+Message-ID: <20190206091531.104591-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f47d4181d975d56177fae0f5544d973b04cd74c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Adam Duskett <Aduskett@gmail.com>
 
-This patch add an explicitly dependency to fftw-single (the only compatible
-fftw's flavor) instead of default behavior where the package do assumption
-about the compatible version.
+Add --enable-install-libiberty to HOST_BINUTILS_CONF_OPTS to allow
+prelink-cross to build properly.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/pulseaudio/pulseaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v7:
+  - Add patch to series.
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index d1c35654cf..c91af22935 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -21,7 +21,7 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
- 	$(if $(BR2_PACKAGE_DBUS),dbus) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
--	$(if $(BR2_PACKAGE_FFTW),fftw) \
-+	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
- 
- ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
+Changes v7 -> v10:
+  - None
+
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4531b8d9c8..388e2192b4 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -84,6 +84,7 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--disable-shared \
+ 	--enable-static \
++	--enable-install-libiberty \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--enable-poison-system-directories \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+-- 
+2.20.1
