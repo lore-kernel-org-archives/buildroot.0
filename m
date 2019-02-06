@@ -1,53 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 11:11:46 +0100
-Subject: [Buildroot] [PATCH 1/1] gerbera: new package
-In-Reply-To: <20180520082853.6753-1-fontaine.fabrice@gmail.com>
-References: <20180520082853.6753-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190206111146.3cc28843@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 6 Feb 2019 04:11:58 -0600
+Subject: [Buildroot] [PATCH v5 2/3] openjdk: new package
+In-Reply-To: <20190205143126.13857-2-aduskett@gmail.com>
+References: <20190205143126.13857-1-aduskett@gmail.com>
+ <20190205143126.13857-2-aduskett@gmail.com>
+Message-ID: <CANQCQpZxPpFRUTWt_MZEYuMTiH0R0+ezvjndoFNDH4OM1+B2rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 May 2018 10:28:53 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Adam.
 
-> A free media server.
-> Stream your media to devices on your home network.
-> 
-> https://gerbera.io
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  DEVELOPERS                                     |   1 +
->  package/Config.in                              |   1 +
->  package/gerbera/0001-Fix-atrailers-build.patch |  48 +++++++++
->  package/gerbera/Config.in                      |  27 +++++
->  package/gerbera/S99gerbera                     |  38 +++++++
->  package/gerbera/config.xml                     | 139 +++++++++++++++++++++++++
->  package/gerbera/gerbera.hash                   |   3 +
->  package/gerbera/gerbera.mk                     | 114 ++++++++++++++++++++
->  8 files changed, 371 insertions(+)
->  create mode 100644 package/gerbera/0001-Fix-atrailers-build.patch
->  create mode 100644 package/gerbera/Config.in
->  create mode 100644 package/gerbera/S99gerbera
->  create mode 100644 package/gerbera/config.xml
->  create mode 100644 package/gerbera/gerbera.hash
->  create mode 100644 package/gerbera/gerbera.mk
+On Tue, Feb 5, 2019 at 8:34 AM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+[snip]
+> +OPENJDK_CONF_OPTS = \
+> +       --disable-full-docs \
+> +       --disable-hotspot-gtest \
+> +       --disable-manpages \
+> +       --disable-warnings-as-errors \
+> +       --enable-headless-only \
+> +       --enable-openjdk-only \
+> +       --enable-unlimited-crypto \
+> +       --openjdk-target=$(GNU_TARGET_NAME) \
+> +       --prefix=$(TARGET_DIR)/usr \
+> +       --with-boot-jdk=$(HOST_DIR) \
+> +       --with-debug-level=release \
+> +       --with-devkit=$(HOST_DIR) \
+> +       --with-extra-cflags="$(TARGET_CFLAGS)" \
+> +       --with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
+> +       --with-extra-path=$(HOST_DIR)/bin:$(HOST_DIR)/sbin \
+> +       --with-giflib=system \
+> +       --with-jobs=$(PARALLEL_JOBS) \
 
-Applied to master with the following changes:
+Got a build failure where I suspect PARALLEL_JOBS might be a fault.
+I'm dropping my core count and seeing if things succeed.
 
-    [Thomas:
-     - fix S99gerbera to be compliant with the init script pattern
-       that was recently put in place
-     - add -l option in init script for logging
-     - license code is GPL-2.0]
+Here's the pastebin
+https://pastebin.com/FNehyafY
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
