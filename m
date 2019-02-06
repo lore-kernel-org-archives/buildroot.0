@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 11:08:32 +0100
-Subject: [Buildroot] openssl 1.1.x deprecated option
-In-Reply-To: <CANQCQpYYxbhNZvvmzi7vjd+ZuWtxKqMZVxAwZwsjd-OzkQsgDw@mail.gmail.com>
-References: <CANQCQpYYxbhNZvvmzi7vjd+ZuWtxKqMZVxAwZwsjd-OzkQsgDw@mail.gmail.com>
-Message-ID: <20190206110832.5c5dc4b6@windsurf>
+Date: Wed, 6 Feb 2019 11:11:46 +0100
+Subject: [Buildroot] [PATCH 1/1] gerbera: new package
+In-Reply-To: <20180520082853.6753-1-fontaine.fabrice@gmail.com>
+References: <20180520082853.6753-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190206111146.3cc28843@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 20 May 2018 10:28:53 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Wed, 6 Feb 2019 04:03:09 -0600
-Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
-
-> I was thinking about  how to manage the risk of a version bump vs
-> backport patches and found another possible solution.
+> A free media server.
+> Stream your media to devices on your home network.
 > 
-> For openssl 1.1.x there are a series of deprecated APIs for items like
-> EVP_MD_CTX* which are now disabled and seem to result in 1/2 of the
-> failures. Would we entertain on some packages adding the libopenssl
-> "enable-deprecated"  configure option [1] so that it re-enables those
-> options (could do this like we currently do with a kconfig package = y
-> condition in the libopenssl.mk)?   Both mongodb and sqlcipher which
-> are currently failing should be resolved with this approach.
+> https://gerbera.io
 > 
-> Is this worth testing out / proposing?
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  DEVELOPERS                                     |   1 +
+>  package/Config.in                              |   1 +
+>  package/gerbera/0001-Fix-atrailers-build.patch |  48 +++++++++
+>  package/gerbera/Config.in                      |  27 +++++
+>  package/gerbera/S99gerbera                     |  38 +++++++
+>  package/gerbera/config.xml                     | 139 +++++++++++++++++++++++++
+>  package/gerbera/gerbera.hash                   |   3 +
+>  package/gerbera/gerbera.mk                     | 114 ++++++++++++++++++++
+>  8 files changed, 371 insertions(+)
+>  create mode 100644 package/gerbera/0001-Fix-atrailers-build.patch
+>  create mode 100644 package/gerbera/Config.in
+>  create mode 100644 package/gerbera/S99gerbera
+>  create mode 100644 package/gerbera/config.xml
+>  create mode 100644 package/gerbera/gerbera.hash
+>  create mode 100644 package/gerbera/gerbera.mk
 
-We could certainly have a BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED
-option that enables those deprecated APIs, and have the packages that
-need that do:
+Applied to master with the following changes:
 
-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED if BR2_PACKAGE_LIBOPENSSL
+    [Thomas:
+     - fix S99gerbera to be compliant with the init script pattern
+       that was recently put in place
+     - add -l option in init script for logging
+     - license code is GPL-2.0]
 
-Thanks to this option, a "git grep
-BR2_PACKAGE_LIBOPENSSL_ENABLE_DEPRECATED" allows to quickly identify
-which are the remaining packages that still need those deprecated APIs.
+Thanks!
 
 Thomas
 -- 
