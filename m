@@ -1,173 +1,82 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 14:22:42 +0100
-Subject: [Buildroot] [git commit] package/kodi: Rework windowing support
- options
-Message-ID: <20190206132225.2EBCF80279@busybox.osuosl.org>
+Date: Wed, 6 Feb 2019 14:22:28 +0100
+Subject: [Buildroot] [git commit] package/kodi: remove X11-based OpenGL ES
+ support
+Message-ID: <20190206132225.25E82814E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80ba1ebd6083ff42cbe75f0b5155717c6afd3732
+commit: https://git.buildroot.net/buildroot/commit/?id=382cb50306dffa1d81f81808b7b65341d414f05a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To prepare the bump to the next Kodi version 18.0-Leia we rework the
-options to control the windowing platform Kodi is built for. An
-automatic choice will no longer be suitable after addition of support
-for wayland and gbm, the former also providing a choice to use either
-OpenGL or OpenGL ES.
-
-This patch introduces a new choice option by converting the current
-X11-based OpenGL support to the new scheme. Other windowing platforms
-will be added by subsequent patches.
+To prepare the bump to the next Kodi version 18.0-Leia we remove the
+current OpenGL ES support options. Kodi 18.0 will bring a major
+overhaul of the supported windowing platforms, x11-based gles support
+was removed, see upstream PR 12196.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi/Config.in | 41 +++++++++++++++++++++++++++--------------
- package/kodi/kodi.mk   | 19 +++++++++++--------
- 2 files changed, 38 insertions(+), 22 deletions(-)
+ package/kodi/Config.in | 13 +++----------
+ package/kodi/kodi.mk   | 10 ----------
+ 2 files changed, 3 insertions(+), 20 deletions(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 700b1e459d..30cfea9a52 100644
+index e84f5c4014..700b1e459d 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -15,14 +15,19 @@ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, t
+@@ -15,21 +15,14 @@ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, t
  		|| !BR2_PACKAGE_PYTHON \
  		|| BR2_PACKAGE_PYTHON_PYC_ONLY
  
--config BR2_PACKAGE_KODI_GL_EGL
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+	bool
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
+-config BR2_PACKAGE_KODI_EGL_GLES
+-	bool
+-	default y
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_PACKAGE_HAS_LIBGLES
+-	depends on !BR2_PACKAGE_KODI_GL_EGL # prefer GL if available
+-
+ config BR2_PACKAGE_KODI_GL_EGL
  	bool
  	default y
  	depends on BR2_PACKAGE_HAS_LIBEGL
  	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
  
- comment "kodi needs an OpenGL EGL backend with OpenGL support"
--	depends on !BR2_PACKAGE_KODI_GL_EGL
-+	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+-comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
+-	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
++comment "kodi needs an OpenGL EGL backend with OpenGL support"
++	depends on !BR2_PACKAGE_KODI_GL_EGL
  
  menuconfig BR2_PACKAGE_KODI
  	bool "kodi"
-@@ -31,10 +36,10 @@ menuconfig BR2_PACKAGE_KODI
+@@ -38,7 +31,7 @@ menuconfig BR2_PACKAGE_KODI
  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
  	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on !BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_PACKAGE_KODI_GL_EGL
+-	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL_EGL
++	depends on BR2_PACKAGE_KODI_GL_EGL
  	depends on BR2_USE_WCHAR
  	depends on !BR2_STATIC_LIBS # gnutls, python and others
  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
- 	select BR2_NEEDS_HOST_JAVA
-@@ -48,7 +53,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_LIBCROSSGUID
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBFRIBIDI
--	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL_EGL
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBPLIST
- 	select BR2_PACKAGE_LIBSAMPLERATE
-@@ -70,8 +74,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_TAGLIB
- 	select BR2_PACKAGE_TINYXML
--	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL_EGL
--	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_KODI_GL_EGL
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
-@@ -180,6 +182,19 @@ config BR2_PACKAGE_KODI_NONFREE
- 	  Enable components with non-free licenses. This option
- 	  currently only controls support for RAR archives.
- 
-+choice
-+	prompt "platform"
-+	default BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+
-+config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+	bool "X11/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+
-+endchoice
-+
- config BR2_PACKAGE_KODI_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-@@ -230,25 +245,23 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on BR2_PACKAGE_KODI_GL_EGL
--	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVA
- 	help
- 	  Enable libva support.
- 
--comment "libva support needs X.org with an openGL backend"
--	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_GL_EGL
-+comment "libva support needs platform 'X11/OpenGL'"
-+	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
--	depends on BR2_PACKAGE_KODI_GL_EGL
--	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVDPAU
- 	help
- 	  Enable libvdpau support.
- 
--comment "libvdpau support needs X.org with an openGL backend"
--	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_GL_EGL
-+comment "libvdpau support needs platform 'X11/OpenGL'"
-+	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 
- config BR2_PACKAGE_KODI_UPNP
- 	bool "upnp"
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 7039e35ed6..b7b12c57bc 100644
+index 8d2430ea55..7039e35ed6 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -165,6 +165,17 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- KODI_CXX_FLAGS += -latomic
+@@ -258,16 +258,6 @@ else
+ KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
-+KODI_CONF_OPTS += \
-+	-DENABLE_OPENGL=ON \
-+	-DENABLE_OPENGLES=OFF \
-+	-DENABLE_X11=ON
-+KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
-+	xlib_libXrandr libdrm
-+else
-+KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
- KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
- KODI_DEPENDENCIES += mysql
-@@ -250,14 +261,6 @@ else
- KODI_CONF_OPTS += -DENABLE_ALSA=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_KODI_GL_EGL),y)
--KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
--	xlib_libXrandr libdrm
--KODI_CONF_OPTS += -DENABLE_OPENGL=ON -DENABLE_X11=ON -DENABLE_OPENGLES=OFF
+-ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+-KODI_DEPENDENCIES += libegl libgles
+-KODI_CONF_OPTS += \
+-	-DENABLE_OPENGLES=ON
+-KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
+-KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`
 -else
--KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
+-KODI_CONF_OPTS += -DENABLE_OPENGLES=OFF
 -endif
 -
  ifeq ($(BR2_PACKAGE_KODI_LIBMICROHTTPD),y)
