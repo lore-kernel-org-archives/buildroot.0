@@ -1,53 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 16:04:50 +0100
-Subject: [Buildroot] [RFC PATCH 1/2] annobin: New package
-In-Reply-To: <20180503143147.5301-2-stefan.sorensen@spectralink.com>
-References: <20180503143147.5301-1-stefan.sorensen@spectralink.com>
- <20180503143147.5301-2-stefan.sorensen@spectralink.com>
-Message-ID: <20190206160450.0b2a899c@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  6 Feb 2019 16:11:14 +0100
+Subject: [Buildroot] [PATCH 1/3] utils/genrandconfig: drop qt4 fixups
+Message-ID: <20190206151116.8012-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+Now that Qt4 is removed, these fixups can be removed as well.
 
-On Thu,  3 May 2018 16:31:46 +0200
-Stefan S?rensen <stefan.sorensen@spectralink.com> wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/genrandconfig | 8 --------
+ 1 file changed, 8 deletions(-)
 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-
-In the mean time, the package checksec was added, which is able to do
-the same sort of checks on binaries to verify if they have been built
-with specific security hardening options:
-
-config BR2_PACKAGE_HOST_CHECKSEC
-        bool "host checksec"
-        help
-          This tool provides a shell script to check the
-          properties of executables
-          (PIE,RELRO,Stack Canaries,Fortify Source).
-          It also has a kernel test mode that can run on target
-          for testing of PaX, ASLR, heap and config hardening.
-
-          NOTE: when using this tool as a host tool, the tool
-          can offline check a target folder of elf files for
-          hardening features enabled in those elf files.  There
-          are other features of this tool, like the kernel test
-          feature that are not functional offline, but require the
-          user to execute in a chroot or on target.
-
-          https://github.com/slimm609/checksec.sh.git
-
-This one is already in Buildroot, and is a lot easier to integrate than
-a gcc plugin. So unless you see an issue with checksec that is solved
-by annobin, we'll probably stick to using checksec.
-
-Thanks,
-
-Thomas
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 047740a411..a2190d6d25 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -311,16 +311,8 @@ def fixup_config(configfile):
+         return False
+     # The cs nios2 2017.02 toolchain is affected by binutils PR19405
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+-       'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
+-        return False
+-    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
+-    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+        'BR2_PACKAGE_FLANN=y\n' in configlines:
+         return False
+-    # or1k affected by binutils PR21464
+-    if 'BR2_or1k=y\n' in configlines and \
+-       'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
+-        return False
+ 
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
