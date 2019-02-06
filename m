@@ -1,28 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 17:16:24 +0100
-Subject: [Buildroot] [PATCH v3 1/5] skeleton-custom: use a script to
- check merged usr structure
-In-Reply-To: <20180507144431.14488-2-casantos@datacom.ind.br>
-References: <20180507144431.14488-1-casantos@datacom.ind.br>
- <20180507144431.14488-2-casantos@datacom.ind.br>
-Message-ID: <3753c7fe-2b3c-b5d2-6d8e-dd95ea8b936c@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 17:19:38 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zeromq: Allow building with
+ draft APIs enabled
+In-Reply-To: <20190205102814.11288-1-lionel@svkt.org>
+References: <20190205102814.11288-1-lionel@svkt.org>
+Message-ID: <20190206171938.7ab69799@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Lionel,
 
+On Tue,  5 Feb 2019 11:28:13 +0100
+Lionel Flandrin <lionel@svkt.org> wrote:
 
-On 07/05/2018 16:44, Carlos Santos wrote:
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  package/zeromq/Config.in | 7 +++++++
+>  package/zeromq/zeromq.mk | 4 ++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+> index 69be9f002c..fdcdebc691 100644
+> --- a/package/zeromq/Config.in
+> +++ b/package/zeromq/Config.in
+> @@ -52,4 +52,11 @@ config BR2_PACKAGE_ZEROMQ_PGM
+>  	  3208) implemented either over raw IP packets or UDP
+>  	  datagrams (encapsulated PGM).
+>  
+> +config BR2_PACKAGE_ZEROMQ_DRAFTS
+> +	bool "Enable ZeroMQ draft APIs"
 
-> +SKELETON_CUSTOM_NOT_MERGED_USR_DIRS = $(shell support/scripts/check-merged-usr.sh $(SKELETON_CUSTOM_PATH))
+Changed to:
 
- This line was too long.
+	bool "Draft APIs support"
 
+> +ifeq ($(BR2_PACKAGE_ZEROMQ_DRAFTS),y)
+> +ZEROMQ_CONF_OPTS += --enable-drafts
 
-> +# Output: the list non-compliant paths (empty if compliant).
-                     ^of
+Added:
 
- Regards,
- Arnout
+else
+ZEROMQ_CONF_OPTS += --disable-drafts
+
+Applied with those changes!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
