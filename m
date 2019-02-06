@@ -1,59 +1,98 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Feb 2019 17:15:30 +0100
-Subject: [Buildroot] [PATCH v3 0/5] Improve verification of custom
- rootfs skeletons and overlays
-In-Reply-To: <20180507144431.14488-1-casantos@datacom.ind.br>
-References: <20180507144431.14488-1-casantos@datacom.ind.br>
-Message-ID: <9161231b-4bb6-7a7b-f348-28c52306fd3f@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 17:16:17 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnfsidmap: new package
+In-Reply-To: <20190206160601.6360-1-kostap@marvell.com>
+References: <20190206160601.6360-1-kostap@marvell.com>
+Message-ID: <20190206171617.6faea825@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Kostya,
+
+On Wed, 6 Feb 2019 18:06:00 +0200
+<kostap@marvell.com> wrote:
+
+> From: Konstantin Porotchkin <kostap@marvell.com>
+> 
+> Reqired for NFSv4 support.
+
+Required
+
+> Taken from git at github.com:openstack/manila-test-image.git
+> /patches/nfs-utils-enable-nfsv4.patch
+
+What is taken from there ?
+
+>  package/Config.in                  |  1 +
+>  package/libnfsidmap/Config.in      |  7 +++++++
+>  package/libnfsidmap/libnfsidmap.mk | 13 +++++++++++++
+>  3 files changed, 21 insertions(+)
+
+An entry to the DEVELOPERS file should be added, and a .hash file is
+needed.
 
 
-On 07/05/2018 16:44, Carlos Santos wrote:
-> This series makes some improvements in the verification of custom rootfs
-> skeletons and overlays, regarding mergerd /usr:
-> 
-> Patch 1 adds a script to check if a given path complies to the merged /usr
-> requirements and makes skeleton-custom.mk use it instead of a bunch of
-> variables filled by $(shell ...) macros.
-> 
-> Patch 2 ensures that /bin, /lib and /sbin are created for custom skeletons,
-> either as directories or symlinks, according to BR2_ROOTFS_MERGED_USR. 
-> 
-> Patch 3 uses the script added in patch 1 to check rootfs overlays, in
-> target-finalize.
-> 
-> Patch 4 allows rootfs overlays to override symbolic links on purpose (e.g.
-> /var/log, to persist system logs).
-> 
-> Patch 5 removes the restriction of using merged /usr only with the default
-> skeleton or when systemd is selected.
-> 
-> Carlos Santos (5):
->   skeleton-custom: use a script to check merged usr structure
->   skeleton-custom: install /bin, /lib, and /sbin
->   Makefile: check rootfs overlays with BR2_ROOTFS_MERGED_USR enabled
->   Makefile: allow rootfs overlays to override symbolic links
->   system: allow selecting merged /usr along with custom rootfs skeleton
+> diff --git a/package/libnfsidmap/Config.in b/package/libnfsidmap/Config.in
+> new file mode 100644
+> index 0000000000..12dbf505a5
+> --- /dev/null
+> +++ b/package/libnfsidmap/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_LIBNFSIDMAP
+> +	bool "libnfsidmap"
 
+No dependencies at all ? Did you test this package
+with ./utils/test-pkg ?
 
- Series applied to master, thanks.
+> +	help
+> +	  Library used by the NFSv4 server to do userid mapping.
+> +
+> +	  http://www.citi.umich.edu/projects/nfsv4/linux/libnfsidmap
+> +
 
- I still have a few individual comments on some of the patches.
+Unneeded empty new line at the end of the file.
 
- Regards,
- Arnout
+> diff --git a/package/libnfsidmap/libnfsidmap.mk b/package/libnfsidmap/libnfsidmap.mk
+> new file mode 100644
+> index 0000000000..2c3bd812de
+> --- /dev/null
+> +++ b/package/libnfsidmap/libnfsidmap.mk
+> @@ -0,0 +1,13 @@
+> +#
+> +# libnfsidmap
+> +#
 
-> 
->  Makefile                                   | 20 ++++++++++++---
->  docs/manual/customize-rootfs.txt           | 17 +++++++++++++
->  package/skeleton-custom/skeleton-custom.mk | 25 +++----------------
->  support/scripts/check-merged-usr.sh        | 39 ++++++++++++++++++++++++++++++
->  system/Config.in                           |  8 ++----
->  5 files changed, 78 insertions(+), 31 deletions(-)
->  create mode 100755 support/scripts/check-merged-usr.sh
-> 
+Please use the standard header for packages.
+
+> +
+> +LIBNFSIDMAP_VERSION = 0.25
+> +LIBNFSIDMAP_SITE = http://www.citi.umich.edu/projects/nfsv4/linux/libnfsidmap
+> +LIBNFSIDMAP_SOURCE = libnfsidmap-$(LIBNFSIDMAP_VERSION).tar.gz
+
+Not needed, this is the default value. Have you run "make
+check-package" ?
+
+> +LIBNFSIDMAP_INSTALL_STAGING = YES
+> +LIBNFSIDMAP_LICENSE = BSD-like
+
+This is not a proper license, see https://spdx.org/licenses/ for a
+proper list of SPDX license codes.
+
+> +LIBNFSIDMAP_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+You're not using the host version of this package, so it shouldn't be
+added.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
