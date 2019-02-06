@@ -1,286 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 15:57:09 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add latest
+Date: Wed, 6 Feb 2019 15:57:19 +0100
+Subject: [Buildroot] [PATCH v6] support/scripts/pkg-stats: add latest
  upstream version information
-Message-ID: <20190206145549.42DAF7FE04@busybox.osuosl.org>
+In-Reply-To: <20190205152000.32032-1-thomas.petazzoni@bootlin.com>
+References: <20190205152000.32032-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190206155719.7dc6b306@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c74d0aabb11a23a0a3e86827795a223b61cf42e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  5 Feb 2019 16:19:59 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-This commit adds fetching the latest upstream version of each package
-from release-monitoring.org.
+> This commit adds fetching the latest upstream version of each package
+> from release-monitoring.org.
+> 
+> The fetching process first tries to use the package mappings of the
+> "Buildroot" distribution [1]. This mapping mechanism allows to tell
+> release-monitoring.org what is the name of a package in a given
+> distribution/build-system. For example, the package xutil_util-macros
+> in Buildroot is named xorg-util-macros on release-monitoring.org. This
+> mapping can be seen in the section "Mappings" of
+> https://release-monitoring.org/project/15037/.
+> 
+> If there is no mapping, then it does a regular search, and within the
+> search results, looks for a package whose name matches the Buildroot
+> name.
+> 
+> Even though fetching from release-monitoring.org is a bit slow, using
+> multiprocessing.Pool has proven to not be reliable, with some requests
+> ending up with an exception. So we keep a serialized approach, but
+> with a single HTTPSConnectionPool() for all queries. Long term, we
+> hope to be able to use a database dump of release-monitoring.org
+> instead.
+> 
+> From an output point of view, the latest version column:
+> 
+>  - Is green when the version in Buildroot matches the latest upstream
+>    version
+> 
+>  - Is orange when the latest upstream version is unknown because the
+>    package was not found on release-monitoring.org
+> 
+>  - Is red when the version in Buildroot doesn't match the latest
+>    upstream version. Note that we are not doing anything smart here:
+>    we are just testing if the strings are equal or not.
+> 
+>  - The cell contains the link to the project on release-monitoring.org
+>    if found.
+> 
+>  - The cell indicates if the match was done using a distro mapping, or
+>    through a regular search.
+> 
+> [1] https://release-monitoring.org/distro/Buildroot/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Changes since v5:
+> - Don't use bare "except", use HTTPError urrlib3 exception
+>   instead. Fixes a flake8 warning, and suggested by Ricardo
+> - Drop unused RELEASE_MONITORING_API global variable. Reported by
+>   Matt Weber.
+> - Drop bogus debug message.
+> - Add missing newlines between functions.
+> - Initialize self.latest_version to a correct tuple during object
+>   construction, so we're sure we always have a correct tuple in this
+>   field. Suggested by Arnout.
+> - Add timeout to the HTTPSConnectionPool, as suggested by Matt Weber.
+> - Use the "version" field instead of the "versions" list, as suggested
+>   by Brandon Maier.
+> - Sort by id the list of results returned by the search by
+>   pattern. Indeed, release-monitoring.org returns the results in a
+>   random order, causing the results to not be stable accross runs.
 
-The fetching process first tries to use the package mappings of the
-"Buildroot" distribution [1]. This mapping mechanism allows to tell
-release-monitoring.org what is the name of a package in a given
-distribution/build-system. For example, the package xutil_util-macros
-in Buildroot is named xorg-util-macros on release-monitoring.org. This
-mapping can be seen in the section "Mappings" of
-https://release-monitoring.org/project/15037/.
+Applied to master, thanks.
 
-If there is no mapping, then it does a regular search, and within the
-search results, looks for a package whose name matches the Buildroot
-name.
-
-Even though fetching from release-monitoring.org is a bit slow, using
-multiprocessing.Pool has proven to not be reliable, with some requests
-ending up with an exception. So we keep a serialized approach, but
-with a single HTTPSConnectionPool() for all queries. Long term, we
-hope to be able to use a database dump of release-monitoring.org
-instead.
-
-From an output point of view, the latest version column:
-
- - Is green when the version in Buildroot matches the latest upstream
-   version
-
- - Is orange when the latest upstream version is unknown because the
-   package was not found on release-monitoring.org
-
- - Is red when the version in Buildroot doesn't match the latest
-   upstream version. Note that we are not doing anything smart here:
-   we are just testing if the strings are equal or not.
-
- - The cell contains the link to the project on release-monitoring.org
-   if found.
-
- - The cell indicates if the match was done using a distro mapping, or
-   through a regular search.
-
-[1] https://release-monitoring.org/distro/Buildroot/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/pkg-stats | 144 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d0b06b1e74..edc78b827b 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -25,11 +25,19 @@ import re
- import subprocess
- import sys
- import requests  # URL checking
-+import json
-+import certifi
-+from urllib3 import HTTPSConnectionPool
-+from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
- 
- INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile("\s*https?://\S*\s*$")
- 
-+RM_API_STATUS_ERROR = 1
-+RM_API_STATUS_FOUND_BY_DISTRO = 2
-+RM_API_STATUS_FOUND_BY_PATTERN = 3
-+RM_API_STATUS_NOT_FOUND = 4
- 
- class Package:
-     all_licenses = list()
-@@ -49,6 +57,7 @@ class Package:
-         self.url = None
-         self.url_status = None
-         self.url_worker = None
-+        self.latest_version = (RM_API_STATUS_ERROR, None, None)
- 
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -298,6 +307,73 @@ def check_package_urls(packages):
-         pkg.url_status = pkg.url_worker.get(timeout=3600)
- 
- 
-+def release_monitoring_get_latest_version_by_distro(pool, name):
-+    try:
-+        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
-+    except HTTPError:
-+        return (RM_API_STATUS_ERROR, None, None)
-+
-+    if req.status != 200:
-+        return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+    data = json.loads(req.data)
-+
-+    if 'version' in data:
-+        return (RM_API_STATUS_FOUND_BY_DISTRO, data['version'], data['id'])
-+    else:
-+        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
-+
-+
-+def release_monitoring_get_latest_version_by_guess(pool, name):
-+    try:
-+        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
-+    except HTTPError:
-+        return (RM_API_STATUS_ERROR, None, None)
-+
-+    if req.status != 200:
-+        return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+    data = json.loads(req.data)
-+
-+    projects = data['projects']
-+    projects.sort(key=lambda x: x['id'])
-+
-+    for p in projects:
-+        if p['name'] == name and 'version' in p:
-+            return (RM_API_STATUS_FOUND_BY_PATTERN, p['version'], p['id'])
-+
-+    return (RM_API_STATUS_NOT_FOUND, None, None)
-+
-+
-+def check_package_latest_version(packages):
-+    """
-+    Fills in the .latest_version field of all Package objects
-+
-+    This field has a special format:
-+      (status, version, id)
-+    with:
-+    - status: one of RM_API_STATUS_ERROR,
-+      RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
-+      RM_API_STATUS_NOT_FOUND
-+    - version: string containing the latest version known by
-+      release-monitoring.org for this package
-+    - id: string containing the id of the project corresponding to this
-+      package, as known by release-monitoring.org
-+    """
-+    pool = HTTPSConnectionPool('release-monitoring.org', port=443,
-+                               cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
-+                               timeout=30)
-+    count = 0
-+    for pkg in packages:
-+        v = release_monitoring_get_latest_version_by_distro(pool, pkg.name)
-+        if v[0] == RM_API_STATUS_NOT_FOUND:
-+            v = release_monitoring_get_latest_version_by_guess(pool, pkg.name)
-+
-+        pkg.latest_version = v
-+        print("[%d/%d] Package %s" % (count, len(packages), pkg.name))
-+        count += 1
-+
-+
- def calculate_stats(packages):
-     stats = defaultdict(int)
-     for pkg in packages:
-@@ -322,6 +398,16 @@ def calculate_stats(packages):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
-+        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+            stats["rmo-mapping"] += 1
-+        else:
-+            stats["rmo-no-mapping"] += 1
-+        if not pkg.latest_version[1]:
-+            stats["version-unknown"] += 1
-+        elif pkg.latest_version[1] == pkg.current_version:
-+            stats["version-uptodate"] += 1
-+        else:
-+            stats["version-not-uptodate"] += 1
-         stats["patches"] += pkg.patch_count
-     return stats
- 
-@@ -354,6 +440,7 @@ td.somepatches {
- td.lotsofpatches {
-   background: #ff9a69;
- }
-+
- td.good_url {
-   background: #d2ffc4;
- }
-@@ -363,6 +450,20 @@ td.missing_url {
- td.invalid_url {
-   background: #ff9a69;
- }
-+
-+td.version-good {
-+  background: #d2ffc4;
-+}
-+td.version-needs-update {
-+  background: #ff9a69;
-+}
-+td.version-unknown {
-+ background: #ffd870;
-+}
-+td.version-error {
-+ background: #ccc;
-+}
-+
- </style>
- <title>Statistics of Buildroot packages</title>
- </head>
-@@ -465,6 +566,36 @@ def dump_html_pkg(f, pkg):
-         current_version = pkg.current_version
-     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
- 
-+    # Latest version
-+    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+        td_class.append("version-error")
-+    if pkg.latest_version[1] is None:
-+        td_class.append("version-unknown")
-+    elif pkg.latest_version[1] != pkg.current_version:
-+        td_class.append("version-needs-update")
-+    else:
-+        td_class.append("version-good")
-+
-+    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+        latest_version_text = "<b>Error</b>"
-+    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
-+        latest_version_text = "<b>Not found</b>"
-+    else:
-+        if pkg.latest_version[1] is None:
-+            latest_version_text = "<b>Found, but no version</b>"
-+        else:
-+            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % (pkg.latest_version[2], str(pkg.latest_version[1]))
-+
-+        latest_version_text += "<br/>"
-+
-+        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+            latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
-+        else:
-+            latest_version_text += "found by guess"
-+
-+    f.write("  <td class=\"%s\">%s</td>\n" %
-+            (" ".join(td_class), latest_version_text))
-+
-     # Warnings
-     td_class = ["centered"]
-     if pkg.warnings == 0:
-@@ -502,6 +633,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">License files</td>
- <td class=\"centered\">Hash file</td>
- <td class=\"centered\">Current version</td>
-+<td class=\"centered\">Latest version</td>
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
- </tr>
-@@ -532,6 +664,16 @@ def dump_html_stats(f, stats):
-             stats["no-hash"])
-     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
-             stats["patches"])
-+    f.write("<tr><td>Packages having a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
-+            stats["rmo-mapping"])
-+    f.write("<tr><td>Packages lacking a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>\n" %
-+            stats["rmo-no-mapping"])
-+    f.write("<tr><td>Packages that are up-to-date</td><td>%s</td></tr>\n" %
-+            stats["version-uptodate"])
-+    f.write("<tr><td>Packages that are not up-to-date</td><td>%s</td></tr>\n" %
-+            stats["version-not-uptodate"])
-+    f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>\n" %
-+            stats["version-unknown"])
-     f.write("</table>\n")
- 
- 
-@@ -587,6 +729,8 @@ def __main__():
-         pkg.set_url()
-     print("Checking URL status")
-     check_package_urls(packages)
-+    print("Getting latest versions ...")
-+    check_package_latest_version(packages)
-     print("Calculate stats")
-     stats = calculate_stats(packages)
-     print("Write HTML")
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
