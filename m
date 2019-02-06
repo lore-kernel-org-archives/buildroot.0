@@ -1,36 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Feb 2019 10:16:52 +0100
-Subject: [Buildroot] [PATCH v4 01/17] package/fftw: prepare for
- splitting into multiple packages
-In-Reply-To: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
-References: <1548078671-63318-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20190206101652.376fbf92@windsurf>
+Date: Wed, 6 Feb 2019 10:23:03 +0100
+Subject: [Buildroot] [PATCH v4 16/17] package/fftw: remove as regular
+ package
+In-Reply-To: <20190202171641.GH6663@scaer>
+References: <1548078671-63318-7-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-8-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-9-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-10-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-11-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-12-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-13-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-14-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-15-git-send-email-gwenj@trabucayre.com>
+ <1548078671-63318-16-git-send-email-gwenj@trabucayre.com>
+ <20190202171641.GH6663@scaer>
+Message-ID: <20190206102303.067c3f63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Jan 2019 14:50:55 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+Hello,
 
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> In preparation for splitting into multiple packages, this commit
-> changes the fftw.mk package to use FFTW_COMMON_CONF_OPTS,
-> FFTW_COMMON_CONF_ENV and FFTW_COMMON_CFLAGS, which will be re-used by
-> the soon-to-be-introduced per-precision packages.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/fftw/fftw.mk | 40 +++++++++++++++++++++-------------------
->  1 file changed, 21 insertions(+), 19 deletions(-)
+On Sat, 2 Feb 2019 18:16:41 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Entire series applied. Thanks!
+> > -ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
+> > -FFTW_DEPENDENCIES += fftw-double
+> > -endif
+> > -
+> > -ifeq ($(BR2_PACKAGE_FFTW_LONG_DOUBLE),y)
+> > -FFTW_DEPENDENCIES += fftw-long-double
+> > -endif
+> > -
+> > -ifeq ($(BR2_PACKAGE_FFTW_QUAD),y)
+> > -FFTW_DEPENDENCIES += fftw-quad
+> > -endif
+> > -
+> > -ifeq ($(BR2_PACKAGE_FFTW_SINGLE),y)
+> > -FFTW_DEPENDENCIES += fftw-single
+> > -endif  
+> 
+> Actually, I think these dependencies should stay. This would allow a
+> package that needs any fftw variant to just select BR2_PACKAGE_FFTW
+> and add FOO_DEPENDENCIES = fftw.
+
+As far as I know, we don't have any such package in the tree today, so
+that would be a bit of dead code.
+
+In addition, I believe such a situation is pretty unlikely to happen.
+Those 4 variants are separate libraries with different filenames, and
+the functions provided by those libraries are different. So it's pretty
+unlikely that a package will be able to use "any fftw variant". Should
+that happen one day, it will always be time to revisit this.
+
+Best regards,
 
 Thomas
 -- 
