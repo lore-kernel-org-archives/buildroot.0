@@ -1,81 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 6 Feb 2019 17:03:43 +0100
-Subject: [Buildroot] [git commit] skeleton-custom: install /bin, /lib,
- and /sbin
-Message-ID: <20190206160819.7A9FE821ED@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 6 Feb 2019 10:13:47 -0600
+Subject: [Buildroot] [PATCH v4 1/2] package/sg3_utils: add host build
+In-Reply-To: <20190206161923.49ab5667@windsurf>
+References: <1549285823-41193-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20190206161923.49ab5667@windsurf>
+Message-ID: <CANQCQpasZsBk35uunHFt6DMbXRf0CTveJf8-1H8=izWNiKqDLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efc974e6860484753ae6f1a86f1962d2300c3c16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-skeleton-custom does not install the required /bin, /lib and /sbin
-directories (or symlinks), which may result in an imcomplete tree, The
-user could add the required directories/symlinks to the skeleton but
-they may be invalid, depending on the state of BR2_ROOTFS_MERGED_USR.
+On Wed, Feb 6, 2019 at 9:19 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Mon,  4 Feb 2019 07:10:22 -0600
+> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> > Initially used by the host build of the utp_com package
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >
+> > ---
+> > Changes
+>
+> This patch causes some breakage:
+>
+>   http://autobuild.buildroot.net/results/2b3/2b30f4ae0074d7f89ed489dccf6b5eecdd40c909/build-end.log
+>
 
-Steps to reproduce:
+I was unable to reproduce on a machine with..............
+Linux largo 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24
+21:16:20 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+/lib/x86_64-linux-gnu/ld-2.19.so
+gcc (Ubuntu 4.9.4-2ubuntu1~14.04.1) 4.9.4
 
-- Enable BR2_ROOTFS_MERGED_USR and BR2_INIT_SYSTEMD
-- Set BR2_ROOTFS_SKELETON_CUSTOM_PATH to "system/skeleton"
-- Run "make skeleton"
-- target/{bin.lib,sbin} will not exist
+What's the bootlin autobuilder configuration?
 
-Add calls to SYSTEM_USR_SYMLINKS_OR_DIRS to INSTALL_TARGET_CMDS and
-INSTALL_STAGING_CMDS, so the required directories or symlinks are
-created.
-
-Add a paragraph to the documentation clarifying that custom skeletons
-don't need to contain /bin, /lib or /sbin and must not contain them when
-BR2_ROOTFS_MERGED_USR is enabled.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- docs/manual/customize-rootfs.txt           | 9 +++++++++
- package/skeleton-custom/skeleton-custom.mk | 2 ++
- 2 files changed, 11 insertions(+)
-
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 44fc460670..9d3a62ddaf 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -100,6 +100,15 @@ To enable this feature, enable config option
-   +System configuration+ menu. If you specify a relative path, it will
-   be relative to the root of the Buildroot tree.
- +
-+Custom skeletons don't need to contain the '/bin', '/lib' or '/sbin'
-+  directories, since they are created automatically during the build.
-+  When +BR2_ROOTFS_MERGED_USR+ is enabled, then the custom skeleton must
-+  not contain the '/bin', '/lib' or '/sbin' directories, as Buildroot
-+  will create them as symbolic links to the relevant folders in '/usr'.
-+  In such a situation, should the skeleton have any programs or
-+  libraries, they should be placed in '/usr/bin', '/usr/sbin' and
-+  '/usr/lib'.
-++
- This method is not recommended because it duplicates the entire
-   skeleton, which prevents taking advantage of the fixes or improvements
-   brought to the default skeleton in later Buildroot releases.
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index 6301bc1b91..b05c834b94 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -42,6 +42,7 @@ endif
- # things we customise in the custom skeleton.
- define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
-@@ -53,6 +54,7 @@ endef
- # skeleton to staging.
- define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
- 
+Thanks!
+Matt
