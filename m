@@ -1,149 +1,129 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  6 Feb 2019 14:23:58 +0100
-Subject: [Buildroot] [PATCH v3 2/3] package/pkg-golang: add support for
- building host packages
-In-Reply-To: <1549459439-2260-1-git-send-email-angelo@amarulasolutions.com>
-References: <1549459439-2260-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1549459439-2260-3-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Feb 2019 14:34:05 +0100
+Subject: [Buildroot] [PATCH 1/1] Has been added configs for
+ OrangePI-2G-IOT
+In-Reply-To: <20180421121900.16492-1-aleksey.kislitsa@gmail.com>
+References: <20180421121900.16492-1-aleksey.kislitsa@gmail.com>
+Message-ID: <20190206143405.49892786@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mirza Krak <mirza.krak@northern.tech>
+Hello,
 
-With this you can add:
+Thanks for your contribution, and sorry for the huge delay in getting
+back to you. See below for a number of comments about your patch.
 
-    $(eval $(host-golang-package))
+First, the commit title should be:
 
-to a package .mk file to build for host.
+	configs/orangepi_2g-iot: new defconfig
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- docs/manual/adding-packages-golang.txt |  7 +++++--
- package/go/Config.in.host              |  6 ++++++
- package/pkg-golang.mk                  | 37 +++++++++++++++++++++++++++++++---
- 3 files changed, 45 insertions(+), 5 deletions(-)
+On Sat, 21 Apr 2018 15:19:00 +0300
+Aleksey Kislitsa <aleksey.kislitsa@gmail.com> wrote:
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index 1b46778..f6aed39 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -52,8 +52,11 @@ If you need CGO support in your package, you can add a dependency on
- +BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
- 
- The main macro of the Go package infrastructure is
--+golang-package+. It is similar to the +generic-package+ macro. Only
--target packages are supported with +golang-package+.
-++golang-package+. It is similar to the +generic-package+ macro. The
-+ability to build host packages is also available, with the
-++host-golang-package+ macro.
-+Host packages built by +host-golang-package+ macro should depend on
-+BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS.
- 
- Just like the generic infrastructure, the Go infrastructure works
- by defining a number of variables before calling the +golang-package+.
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 893a448..3f16dba 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -18,3 +18,9 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	# Go doesn't support CGO linking on MIPS64x platforms
- 	# See: https://github.com/karalabe/xgo/issues/46
- 	depends on !BR2_mips64 && !BR2_mips64el
-+
-+# Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 4f2c7e7..b4e8a53 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -25,12 +25,18 @@ GO_BIN = $(HOST_DIR)/bin/go
- 
- # We pass an empty GOBIN, otherwise "go install: cannot install
- # cross-compiled binaries when GOBIN is set"
--GO_TARGET_ENV = \
--	$(HOST_GO_TARGET_ENV) \
-+GO_COMMON_ENV = \
- 	PATH=$(BR_PATH) \
- 	GOBIN= \
- 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
- 
-+GO_TARGET_ENV = \
-+	$(HOST_GO_TARGET_ENV) \
-+	$(GO_COMMON_ENV)
-+
-+GO_HOST_ENV = \
-+	$(GO_COMMON_ENV)
-+
- ################################################################################
- # inner-golang-package -- defines how the configuration, compilation and
- # installation of a Go package should be done, implements a few hooks to tune
-@@ -44,7 +50,6 @@ GO_TARGET_ENV = \
- #             packages
- #  argument 4 is the type (target or host)
- #
--# NOTE Only type target is supported at the moment
- ################################################################################
- 
- define inner-golang-package
-@@ -98,6 +103,8 @@ endif
- # Build step. Only define it if not already defined by the package .mk
- # file.
- ifndef $(2)_BUILD_CMDS
-+ifeq ($(4),target)
-+# Build package for target
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
- 		cd $$($(2)_SRC_PATH); \
-@@ -109,6 +116,20 @@ define $(2)_BUILD_CMDS
- 			./$$(d)
- 	)
- endef
-+else
-+# Build package for host
-+define $(2)_BUILD_CMDS
-+	$$(foreach d,$$($(2)_BUILD_TARGETS),\
-+		cd $$($(2)_SRC_PATH); \
-+		$$(GO_HOST_ENV) \
-+			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
-+			$$($(2)_GO_ENV) \
-+			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-+			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
-+			./$$(d)
-+	)
-+endef
-+endif
- endif
- 
- # Target installation step. Only define it if not already defined by the
-@@ -121,6 +142,15 @@ define $(2)_INSTALL_TARGET_CMDS
- endef
- endif
- 
-+# Host installation step
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	$$(foreach d,$$($(2)_INSTALL_BINS),\
-+		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
-+	)
-+endef
-+endif
-+
- # Call the generic package infrastructure to generate the necessary make
- # targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
-@@ -132,3 +162,4 @@ endef # inner-golang-package
- ################################################################################
- 
- golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+>  .gitignore                                         |   2 +
+
+This file should not be changed.
+
+>  board/orangepi/orangepi-2g-iot/boot.cmd            |  18 +++
+>  board/orangepi/orangepi-2g-iot/genimage.cfg        |  36 +++++
+>  .../linux/0002-linux-add-support-for-gcc6.patch    |  82 +++++++++++
+>  .../linux/0003-linux-use-static-inline.patch       |  38 +++++
+>  ...ux-removed-defined-but-not-used-functions.patch | 153 +++++++++++++++++++++
+>  .../u-boot/0001-orangepi2giot-fatload.patch        |  22 +++
+>  board/orangepi/orangepi-2g-iot/post-build.sh       |  15 ++
+>  board/orangepi/orangepi-2g-iot/post-image.sh       |  14 ++
+>  board/orangepi/orangepi-2g-iot/readme.txt          |  29 ++++
+>  configs/orangepi_2g-iot_defconfig                  |  44 ++++++
+>  11 files changed, 453 insertions(+)
+
+Please add an entry in the DEVELOPERS file for this board.
+
+> diff --git a/board/orangepi/orangepi-2g-iot/boot.cmd b/board/orangepi/orangepi-2g-iot/boot.cmd
+> new file mode 100644
+> index 0000000000..2951de6f00
+> --- /dev/null
+> +++ b/board/orangepi/orangepi-2g-iot/boot.cmd
+> @@ -0,0 +1,18 @@
+> +if test "${boot_device}" = "mmc"; then
+> +
+> +	setenv rootdev "/dev/mmcblk0p2"
+> +	setenv rootfstype "ext4"
+
+Is it really useful to have separate variables for this, instead of
+just putting the right values in bootargs ?
+
+> +
+> +	setenv bootargs "root=${rootdev} rootwait rootfstype=${rootfstype} console=ttyS0,921600 kgdboc=ttyS0,921600 panic=10 consoleblank=0 earlyprintk"
+
+This seems like a complicated kernel command line for a default
+configuration. Could you drop kgdboc=ttyS0,921600 panic=10
+consoleblank=0 earlyprintk from it ?
+
+> +	fatload mmc 0:1 ${kernel_addr} zImage
+> +	fatload mmc 0:1 ${modem_addr} modem.bin
+> +else
+> +	echo "NAND boot is not implemented yet"
+
+If it's not implemented, then is this condition really necessary ?
+
+
+> diff --git a/board/orangepi/orangepi-2g-iot/patches/linux/0002-linux-add-support-for-gcc6.patch b/board/orangepi/orangepi-2g-iot/patches/linux/0002-linux-add-support-for-gcc6.patch
+> new file mode 100644
+> index 0000000000..f674211c62
+> --- /dev/null
+> +++ b/board/orangepi/orangepi-2g-iot/patches/linux/0002-linux-add-support-for-gcc6.patch
+> @@ -0,0 +1,82 @@
+> +From 8ae7d1e028c8adb1db187d1940d31fc7aebae15e Mon Sep 17 00:00:00 2001
+> +From: Leo Soares <leojrfs@gmail.com>
+> +Date: Tue, 13 Jun 2017 17:20:24 +0100
+> +Subject: [PATCH] add support for GCC 6
+> +
+> +---
+> + include/linux/compiler-gcc6.h | 66 +++++++++++++++++++++++++++++++++++++++++++
+> + 1 file changed, 66 insertions(+)
+> + create mode 100644 include/linux/compiler-gcc6.h
+
+There's no newer kernel version for this platform that would build out
+of the box with gcc 6.x?
+
+In any case, the patch needs to have your Signed-off-by (comment
+applicable to all patches).
+
+Generally speaking, the support for this board seems to require quite a
+few patches. Can some of these be avoided by using more recent upstream
+U-Boot/Linux code ?
+
+
+> diff --git a/board/orangepi/orangepi-2g-iot/post-build.sh b/board/orangepi/orangepi-2g-iot/post-build.sh
+> new file mode 100755
+> index 0000000000..cde8ad85a6
+> --- /dev/null
+> +++ b/board/orangepi/orangepi-2g-iot/post-build.sh
+> @@ -0,0 +1,15 @@
+> +#!/bin/sh
+> +# post-build.sh for OrangePi taken from CubieBoard's post-build.sh
+> +# 2013, Carlo Caione <carlo.caione@gmail.com>
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
+> +BOOT_CMD=$BOARD_DIR/boot.cmd
+> +BOOT_CMD_H=$BINARIES_DIR/boot.scr
+> +
+> +git clone https://github.com/orangepi-xunlong/OrangePiRDA_external.git /tmp/OrangePiRDA_external
+
+Doing a git clone in a post-build script is definitely not good, as it
+circumvents the download and legal-info mechanisms of Buildroot. If you
+need to download something, create a package.
+
+Could you fix the above comments and submit an updated version ?
+
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
