@@ -1,128 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  7 Feb 2019 21:55:09 +0100
-Subject: [Buildroot] [PATCHv2 1/1] package/libcurl: introduce options to
- reduce feature set
-Message-ID: <20190207205510.11172-1-patrickdepinguin@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 7 Feb 2019 22:09:55 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8
+ errors
+Message-ID: <20190207210833.7B6D48120D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3f6587266e6cef81918f24c0c1c2bf9a654a2ac1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
-About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
-that are not commonly needed:
+Fixes the following flake8 warnings:
 
-- proxy support: 15 KiB
-- cookies support: 10 KiB
-- various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
+support/scripts/pkg-stats:34:2: W605 invalid escape sequence '\$'
+support/scripts/pkg-stats:34:4: W605 invalid escape sequence '\('
+support/scripts/pkg-stats:34:11: W605 invalid escape sequence '\$'
+support/scripts/pkg-stats:34:13: W605 invalid escape sequence '\('
+support/scripts/pkg-stats:34:32: W605 invalid escape sequence '\)'
+support/scripts/pkg-stats:34:34: W605 invalid escape sequence '\)'
+support/scripts/pkg-stats:35:2: W605 invalid escape sequence '\s'
+support/scripts/pkg-stats:35:14: W605 invalid escape sequence '\S'
+support/scripts/pkg-stats:35:17: W605 invalid escape sequence '\s'
+support/scripts/pkg-stats:42:1: E302 expected 2 blank lines, found 1
+support/scripts/pkg-stats:587:133: E501 line too long (157 > 132 characters)
 
-Note that the exact amount of space saved depends on the architecture,
-toolchain, and other factors (for example the 'reduced' set disables the
---libcurl option which only has impact on the curl binary).
+Note that the "invalid escape sequence" errors work because Python
+leaves the \ in place if it doesn't recognise the escape sequence. But
+it's better practice to use a raw string for regular expressions.
 
-Other packages that are selecting libcurl could be incompatible with these
-reduced options. But, there is no clear way to find out which packages are in
-this situation, in particular because issues may only be visible at runtime.
-
-Note: remove the text 'enable' on the option for 'verbose strings' as that
-is more common in Buildroot.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libcurl/Config.in  | 30 +++++++++++++++++++++++++++++-
- package/libcurl/libcurl.mk | 28 ++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-
-v2:
-- steer proxy and cookies support via separate options
-- reword option and help text
-
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 9c62539e4d..8e2af61f7d 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -15,10 +15,38 @@ config BR2_PACKAGE_CURL
- 	  Install curl binary as well
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index edc78b827b..b0be7d919b 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -31,14 +31,15 @@ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
  
- config BR2_PACKAGE_LIBCURL_VERBOSE
--	bool "enable verbose strings"
-+	bool "verbose strings"
- 	help
- 	  Enable verbose text strings
+-INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
+-URL_RE = re.compile("\s*https?://\S*\s*$")
++INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
++URL_RE = re.compile(r"\s*https?://\S*\s*$")
  
-+config BR2_PACKAGE_LIBCURL_PROXY_SUPPORT
-+	bool "proxy support"
-+	default y
-+	help
-+	  Enable proxy support.
-+
-+config BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT
-+	bool "cookies support"
-+	default y
-+	help
-+	  Enable support for cookies.
-+
-+config BR2_PACKAGE_LIBCURL_SMALL
-+	bool "reduced protocol/feature selection"
-+	help
-+	  Reduce the selection of supported protocols and features.
-+	  Following protocols/features are disabled:
-+	  - LDAP / LDAPS
-+	  - POP3 / IMAP / SMTP
-+	  - Telnet
-+	  - TFTP
-+	  - RTSP
-+	  - SMB / CIFS
-+	  - DICT
-+	  - Gopher
-+	  - The --libcurl option of the curl binary to generate C
-+	    programs
-+
- config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
- 	bool
- 	default y if BR2_PACKAGE_OPENSSL
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3bc5207951..8c5bc4a485 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -108,6 +108,34 @@ else
- LIBCURL_CONF_OPTS += --without-nghttp2
- endif
+ RM_API_STATUS_ERROR = 1
+ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
  
-+ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
-+LIBCURL_CONF_OPTS += --enable-cookies
-+else
-+LIBCURL_CONF_OPTS += --disable-cookies
-+endif
 +
-+ifeq ($(BR2_PACKAGE_LIBCURL_PROXY_SUPPORT),y)
-+LIBCURL_CONF_OPTS += --enable-proxy
-+else
-+LIBCURL_CONF_OPTS += --disable-proxy
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL_SMALL),y)
-+LIBCURL_CONF_OPTS += \
-+	--disable-dict \
-+	--disable-gopher \
-+	--disable-imap \
-+	--disable-ldap \
-+	--disable-ldaps \
-+	--disable-libcurl-option \
-+	--disable-pop3 \
-+	--disable-rtsp \
-+	--disable-smb \
-+	--disable-smtp \
-+	--disable-telnet \
-+	--disable-tftp
-+endif
-+
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
--- 
-2.19.2
+ class Package:
+     all_licenses = list()
+     all_license_files = list()
+@@ -584,7 +585,8 @@ def dump_html_pkg(f, pkg):
+         if pkg.latest_version[1] is None:
+             latest_version_text = "<b>Found, but no version</b>"
+         else:
+-            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % (pkg.latest_version[2], str(pkg.latest_version[1]))
++            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
++                (pkg.latest_version[2], str(pkg.latest_version[1]))
+ 
+         latest_version_text += "<br/>"
+ 
