@@ -1,24 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Feb 2019 22:43:44 +0100
-Subject: [Buildroot] [git commit] configs/pc: fix grub-efi.cfg permissions
-Message-ID: <20190207214424.5F52583F76@busybox.osuosl.org>
+Date: Thu, 7 Feb 2019 22:45:37 +0100
+Subject: [Buildroot] [git commit] package/gnuradio: disable xml document
+ generation
+Message-ID: <20190207214424.6690683F76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a3ec5dc2f06c5b86b0c351825255d371051fb9f
+commit: https://git.buildroot.net/buildroot/commit/?id=e43cbb3cc1c3da692563549287a4e0433dfc3f4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It does not need the execute bits.
+Fixes
+http://autobuild.buildroot.net/results/f94/f941d84c781b524530770f5b9360863a821e8ba1/
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/pc/grub-efi.cfg | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
+ package/gnuradio/gnuradio.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
-old mode 100755
-new mode 100644
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index d6d07f6566..202c2213a7 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -26,7 +26,8 @@ GNURADIO_CONF_OPTS = \
+ 	-DENABLE_DEFAULT=OFF \
+ 	-DENABLE_VOLK=ON \
+ 	-DENABLE_GNURADIO_RUNTIME=ON \
+-	-DENABLE_GR_QTGUI=OFF
++	-DENABLE_GR_QTGUI=OFF \
++	-DXMLTO_EXECUTABLE=NOTFOUND
+ 
+ # For third-party blocks, the gnuradio libraries are mandatory at
+ # compile time.
