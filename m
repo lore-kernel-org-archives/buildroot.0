@@ -1,855 +1,157 @@
-From: Gerome Burlats <gerome.burlats@smile.fr>
-Date: Wed,  6 Feb 2019 23:14:41 +0100
-Subject: [Buildroot] [PATCH] qemu: Update defconfigs to Linux 4.19.16
-Message-ID: <20190206221441.11654-1-gerome.burlats@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 07 Feb 2019 07:00:33 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-02-06
+Message-ID: <20190207070044.ADA3E227B1@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linux version are changed to 4.19.16 (LTS) for all qemu defconfigs, except for riscv.
-riscv are left unchanged because they have a custom Linux repository causing more difficulties when upgrading to 4.19 for riscv32.
-And for the riscv64, it has been updated recently to Linux 4.20 by another contributor.
+Hello,
 
-Patch for arm-versatile-nommu is changed into a git format
+Build statistics for 2019-02-06
+===============================
 
-Add cache attributes for xtensa-lx60-nommu config because the commit https://github.com/torvalds/linux/commit/7bb516ca5424e12b42124fab2906b6da9c81ba9c added a new config variable for memory cache attribute: CONFIG_MEMMAP_CACHEATTR
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  21 |   1 |   1 |  23 |
+   2018.11.x |  16 |   2 |   1 |  19 |
+      master | 194 |  59 |   1 | 254 |
 
-All these updated configs have been built successfully.
+Results for branch '2018.02.x'
+==============================
 
-Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
----
-I did not make Qemu tests for all the configs yet. I am looking over the Bootlin toolchains-builder project in order to make these tests with Gitlab CI
----
- .../patches/linux/versatile-nommu.patch       | 72 +++++++++++++------
- board/qemu/xtensa-lx60/linux-nommu.config     |  1 +
- configs/qemu_aarch64_virt_defconfig           |  6 +-
- configs/qemu_arm_versatile_defconfig          |  6 +-
- configs/qemu_arm_versatile_nommu_defconfig    |  6 +-
- configs/qemu_arm_vexpress_defconfig           |  6 +-
- configs/qemu_m68k_mcf5208_defconfig           |  6 +-
- configs/qemu_m68k_q800_defconfig              |  6 +-
- configs/qemu_microblazebe_mmu_defconfig       |  6 +-
- configs/qemu_microblazeel_mmu_defconfig       |  6 +-
- configs/qemu_mips32r2_malta_defconfig         |  6 +-
- configs/qemu_mips32r2el_malta_defconfig       |  6 +-
- configs/qemu_mips32r6_malta_defconfig         |  6 +-
- configs/qemu_mips32r6el_malta_defconfig       |  6 +-
- configs/qemu_mips64_malta_defconfig           |  6 +-
- configs/qemu_mips64el_malta_defconfig         |  6 +-
- configs/qemu_mips64r6_malta_defconfig         |  6 +-
- configs/qemu_mips64r6el_malta_defconfig       |  6 +-
- configs/qemu_nios2_10m50_defconfig            |  6 +-
- configs/qemu_or1k_defconfig                   |  6 +-
- configs/qemu_ppc64_e5500_defconfig            |  4 +-
- configs/qemu_ppc64_pseries_defconfig          |  6 +-
- configs/qemu_ppc64le_pseries_defconfig        |  6 +-
- configs/qemu_ppc_g3beige_defconfig            |  6 +-
- configs/qemu_ppc_mpc8544ds_defconfig          |  6 +-
- configs/qemu_ppc_virtex_ml507_defconfig       |  6 +-
- configs/qemu_sh4_r2d_defconfig                |  6 +-
- configs/qemu_sh4eb_r2d_defconfig              |  6 +-
- configs/qemu_sparc64_sun4u_defconfig          |  6 +-
- configs/qemu_sparc_ss10_defconfig             |  6 +-
- configs/qemu_x86_64_defconfig                 |  6 +-
- configs/qemu_x86_defconfig                    |  6 +-
- configs/qemu_xtensa_lx60_defconfig            |  6 +-
- configs/qemu_xtensa_lx60_nommu_defconfig      |  6 +-
- 34 files changed, 145 insertions(+), 118 deletions(-)
+Classification of failures by reason
+------------------------------------
 
-diff --git a/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch b/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
-index 883bd0de6e..246a96aa37 100644
---- a/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
-+++ b/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
-@@ -1,10 +1,27 @@
--Signed-Off-by: Waldemar Brodkorb <wbx@openadk.org>
--From LKML.
-+From 150e839cfcc35fc1c09f3d8eaa0b331e98683e2f Mon Sep 17 00:00:00 2001
-+From: Gerome Burlats <gerome.burlats@smile.fr>
-+Date: Fri, 1 Feb 2019 11:36:20 +0100
-+Subject: [PATCH] arm-versatile-nommu: Linux patch
- 
--diff -Nur linux-4.15.13.orig/arch/arm/Kconfig linux-4.15.13/arch/arm/Kconfig
----- linux-4.15.13.orig/arch/arm/Kconfig	2018-03-24 11:02:53.000000000 +0100
--+++ linux-4.15.13/arch/arm/Kconfig	2018-04-01 03:47:33.415078244 +0100
--@@ -355,6 +355,17 @@
-+Originally made by Waldemar Brodkorb <wbx@openadk.org> from LKML.
-+And reformated as a Git patch
-+
-+Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
-+---
-+ arch/arm/Kconfig                       | 11 +++++++++++
-+ arch/arm/Kconfig.debug                 |  3 ++-
-+ arch/arm/include/asm/mach/map.h        |  1 +
-+ arch/arm/mach-versatile/Kconfig        |  5 +++--
-+ arch/arm/mach-versatile/Makefile.boot  |  3 +++
-+ arch/arm/mach-versatile/versatile_dt.c |  4 ++++
-+ 6 files changed, 24 insertions(+), 3 deletions(-)
-+ create mode 100644 arch/arm/mach-versatile/Makefile.boot
-+
-+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-+index e8cd55a5b04c..fc2dbff70394 100644
-+--- a/arch/arm/Kconfig
-++++ b/arch/arm/Kconfig
-+@@ -353,6 +353,17 @@ config ARM_SINGLE_ARMV7M
-  	select SPARSE_IRQ
-  	select USE_OF
-  
-@@ -22,10 +39,11 @@ diff -Nur linux-4.15.13.orig/arch/arm/Kconfig linux-4.15.13/arch/arm/Kconfig
-  config ARCH_EBSA110
-  	bool "EBSA-110"
-  	select ARCH_USES_GETTIMEOFFSET
--diff -Nur linux-4.15.13.orig/arch/arm/Kconfig.debug linux-4.15.13/arch/arm/Kconfig.debug
----- linux-4.15.13.orig/arch/arm/Kconfig.debug	2018-03-24 11:02:53.000000000 +0100
--+++ linux-4.15.13/arch/arm/Kconfig.debug	2018-04-01 03:47:33.416078232 +0100
--@@ -1795,7 +1795,8 @@
-+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-+index f6fcb8a79889..92fc637d3db8 100644
-+--- a/arch/arm/Kconfig.debug
-++++ b/arch/arm/Kconfig.debug
-+@@ -1843,7 +1843,8 @@ config DEBUG_UNCOMPRESS
-  config UNCOMPRESS_INCLUDE
-  	string
-  	default "debug/uncompress.h" if ARCH_MULTIPLATFORM || ARCH_MSM || \
-@@ -35,10 +53,11 @@ diff -Nur linux-4.15.13.orig/arch/arm/Kconfig.debug linux-4.15.13/arch/arm/Kconf
-  	default "mach/uncompress.h"
-  
-  config EARLY_PRINTK
--diff -Nur linux-4.15.13.orig/arch/arm/include/asm/mach/map.h linux-4.15.13/arch/arm/include/asm/mach/map.h
----- linux-4.15.13.orig/arch/arm/include/asm/mach/map.h	2018-03-24 11:02:53.000000000 +0100
--+++ linux-4.15.13/arch/arm/include/asm/mach/map.h	2018-04-01 03:47:17.587276119 +0100
--@@ -62,6 +62,7 @@
-+diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
-+index 9b7c328fb207..b1fe9c8b5c3e 100644
-+--- a/arch/arm/include/asm/mach/map.h
-++++ b/arch/arm/include/asm/mach/map.h
-+@@ -62,6 +62,7 @@ extern int ioremap_page(unsigned long virt, unsigned long phys,
-  #else
-  #define iotable_init(map,num)	do { } while (0)
-  #define vm_reserve_area_early(a,s,c)	do { } while (0)
-@@ -46,9 +65,10 @@ diff -Nur linux-4.15.13.orig/arch/arm/include/asm/mach/map.h linux-4.15.13/arch/
-  #endif
-  
-  #endif
--diff -Nur linux-4.15.13.orig/arch/arm/mach-versatile/Kconfig linux-4.15.13/arch/arm/mach-versatile/Kconfig
----- linux-4.15.13.orig/arch/arm/mach-versatile/Kconfig	2018-03-24 11:02:53.000000000 +0100
--+++ linux-4.15.13/arch/arm/mach-versatile/Kconfig	2018-04-01 03:47:33.417078219 +0100
-+diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
-+index f5c275434d6c..06ad999d5978 100644
-+--- a/arch/arm/mach-versatile/Kconfig
-++++ b/arch/arm/mach-versatile/Kconfig
- @@ -1,7 +1,8 @@
-  # SPDX-License-Identifier: GPL-2.0
-  config ARCH_VERSATILE
-@@ -60,16 +80,19 @@ diff -Nur linux-4.15.13.orig/arch/arm/mach-versatile/Kconfig linux-4.15.13/arch/
-  	select ARM_AMBA
-  	select ARM_TIMER_SP804
-  	select ARM_VIC
--diff -Nur linux-4.15.13.orig/arch/arm/mach-versatile/Makefile.boot linux-4.15.13/arch/arm/mach-versatile/Makefile.boot
----- linux-4.15.13.orig/arch/arm/mach-versatile/Makefile.boot	1970-01-01 01:00:00.000000000 +0100
--+++ linux-4.15.13/arch/arm/mach-versatile/Makefile.boot	2018-04-01 03:47:25.644175394 +0100
-+diff --git a/arch/arm/mach-versatile/Makefile.boot b/arch/arm/mach-versatile/Makefile.boot
-+new file mode 100644
-+index 000000000000..eacfc3f5c33e
-+--- /dev/null
-++++ b/arch/arm/mach-versatile/Makefile.boot
- @@ -0,0 +1,3 @@
- +# Empty file waiting for deletion once Makefile.boot isn't needed any more.
- +# Patch waits for application at
- +# http://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=7889/1 .
--diff -Nur linux-4.15.13.orig/arch/arm/mach-versatile/versatile_dt.c linux-4.15.13/arch/arm/mach-versatile/versatile_dt.c
----- linux-4.15.13.orig/arch/arm/mach-versatile/versatile_dt.c	2018-03-24 11:02:53.000000000 +0100
--+++ linux-4.15.13/arch/arm/mach-versatile/versatile_dt.c	2018-04-01 03:47:10.913359555 +0100
-+diff --git a/arch/arm/mach-versatile/versatile_dt.c b/arch/arm/mach-versatile/versatile_dt.c
-+index 3c8d39c12909..8cfa05a37295 100644
-+--- a/arch/arm/mach-versatile/versatile_dt.c
-++++ b/arch/arm/mach-versatile/versatile_dt.c
- @@ -37,7 +37,11 @@
-  #include <asm/mach/map.h>
-  
-@@ -82,3 +105,6 @@ diff -Nur linux-4.15.13.orig/arch/arm/mach-versatile/versatile_dt.c linux-4.15.1
-  #define __io_address(n)		((void __iomem __force *)IO_ADDRESS(n))
-  
-  /*
-+-- 
-+2.20.1
-+
-diff --git a/board/qemu/xtensa-lx60/linux-nommu.config b/board/qemu/xtensa-lx60/linux-nommu.config
-index 10f7ee125c..8077645eec 100644
---- a/board/qemu/xtensa-lx60/linux-nommu.config
-+++ b/board/qemu/xtensa-lx60/linux-nommu.config
-@@ -6,6 +6,7 @@ CONFIG_XTENSA_VARIANT_CUSTOM_NAME="dc233c"
- # CONFIG_XTENSA_VARIANT_MMU is not set
- CONFIG_XTENSA_UNALIGNED_USER=y
- CONFIG_PREEMPT=y
-+CONFIG_MEMMAP_CACHEATTR=0x2cccccc7
- CONFIG_KERNEL_LOAD_ADDRESS=0x00003000
- # CONFIG_PCI is not set
- CONFIG_XTENSA_PLATFORM_XTFPGA=y
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index a7b097ef40..638e18beb7 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 348b91bc96..ce7cb5efe4 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
-index 910c382439..81fb5b6ca4 100644
---- a/configs/qemu_arm_versatile_nommu_defconfig
-+++ b/configs/qemu_arm_versatile_nommu_defconfig
-@@ -21,13 +21,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-nommu.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 34a50aa8d5..66f198ac5d 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -13,13 +13,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
-index 8f8d0a048a..44fd918ec0 100644
---- a/configs/qemu_m68k_mcf5208_defconfig
-+++ b/configs/qemu_m68k_mcf5208_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_INITRAMFS=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index d9238b650f..0dd90a97b3 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 3055a0f8cd..95fdfeda6c 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 073a7173fa..7400dafa5f 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
-index d07bc11003..0ee7a58888 100644
---- a/configs/qemu_mips32r2_malta_defconfig
-+++ b/configs/qemu_mips32r2_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
-index 55e68b1fdc..075088df82 100644
---- a/configs/qemu_mips32r2el_malta_defconfig
-+++ b/configs/qemu_mips32r2el_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
-index 5802393368..b0bf94ce7b 100644
---- a/configs/qemu_mips32r6_malta_defconfig
-+++ b/configs/qemu_mips32r6_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
-index 93e2a86509..077d836da3 100644
---- a/configs/qemu_mips32r6el_malta_defconfig
-+++ b/configs/qemu_mips32r6el_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index 99b457a9f8..12502eac6a 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index f2dacbd760..5ddb759bbe 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
-index d291213db7..bfa32f657e 100644
---- a/configs/qemu_mips64r6_malta_defconfig
-+++ b/configs/qemu_mips64r6_malta_defconfig
-@@ -10,13 +10,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
-index 4740bdee28..2fd855d79b 100644
---- a/configs/qemu_mips64r6el_malta_defconfig
-+++ b/configs/qemu_mips64r6el_malta_defconfig
-@@ -10,13 +10,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
-index cff219257a..d7e7c335a3 100644
---- a/configs/qemu_nios2_10m50_defconfig
-+++ b/configs/qemu_nios2_10m50_defconfig
-@@ -1,10 +1,10 @@
- BR2_nios2=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="10m50"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux.fragment"
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
-index 636a0d25b1..3fc53f4186 100644
---- a/configs/qemu_or1k_defconfig
-+++ b/configs/qemu_or1k_defconfig
-@@ -5,12 +5,12 @@ BR2_or1k=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4,16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4,19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-index 7a325a5070..59b8636918 100644
---- a/configs/qemu_ppc64_e5500_defconfig
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -6,12 +6,12 @@ BR2_powerpc_e5500=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # Linux headers same as the kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index d2d69f1c3c..5f55b246f7 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
-index 9a85f76dd9..8356e4e250 100644
---- a/configs/qemu_ppc64le_pseries_defconfig
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -10,12 +10,12 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 451a9b52d8..4b2f3ed2fe 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 38e41a7fa2..d6ebef7561 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -9,13 +9,13 @@ BR2_SYSTEM_DHCP="eth0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index 6824afca3c..c71465dd56 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -6,8 +6,8 @@ BR2_powerpc_440=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Use soft float
- BR2_SOFT_FLOAT=y
-@@ -15,7 +15,7 @@ BR2_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index ec4a91c999..e194d7ecf2 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index e7dbd46a2b..f1aad8b64f 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
-index baa8dbfb59..f4da2bc08d 100644
---- a/configs/qemu_sparc64_sun4u_defconfig
-+++ b/configs/qemu_sparc64_sun4u_defconfig
-@@ -9,12 +9,12 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 9943781a5b..e027b73ebf 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -9,12 +9,12 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 12b30bf764..afa2396931 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 985ff32b44..3441ad5cb1 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index a735c991c7..6bf48a2ada 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index f4d6837bc1..5ff9646270 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -15,13 +15,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+                host-libsodium | 1 
+                  libftdi1-1.4 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/58bf4a611746e4dd52981974da887bd7b7bd4855 |     
+ powerpc64le |                   libftdi1-1.4 | NOK | http://autobuild.buildroot.net/results/8ada47b9d7af1de678e10abcc194b2f39e80a883 |     
+
+Results for branch '2018.11.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                     efivar-35 | 1 
+                host-libsodium | 1 
+               wireshark-2.6.6 | 1 
+
+
+Detail of failures
+------------------
+
+      mipsel |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/d19e86126202a2ca361d25c0dd9362ff120f4f60 |     
+      xtensa |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/5205b2450001befd2df97668882800c669a40c72 |     
+     sparc64 |                wireshark-2.6.6 | NOK | http://autobuild.buildroot.net/results/ca5e673c3e8c7d287cbf0d23e0d7c9178dc786d9 | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                 qt5base-5.6.3 | 8 
+                mongodb-r3.3.4 | 7 
+             luacrypto-0.3.2-1 | 6 
+                   netsnmp-5.8 | 5 
+                      qt-4.8.7 | 5 
+                     efivar-35 | 4 
+              sqlcipher-v3.2.0 | 3 
+            host-thrift-0.12.0 | 2 
+                clamav-0.101.1 | 1 
+                gnuchess-6.2.5 | 1 
+             gnuradio-3.7.13.3 | 1 
+       gst-plugins-bad-0.10.23 | 1 
+             gst1-shark-v0.5.5 | 1 
+                 haproxy-1.9.1 | 1 
+           host-sg3_utils-1.44 | 1 
+                 ibrdtnd-1.0.1 | 1 
+             libopenssl-1.1.1a | 1 
+                  libssh-0.8.6 | 1 
+                  linuxptp-2.0 | 1 
+                   luvi-v2.7.6 | 1 
+                 mesa3d-18.3.2 | 1 
+                   netsurf-3.8 | 1 
+               openldap-2.4.46 | 1 
+                          opus | 1 
+                     pcre-8.42 | 1 
+                qt5base-5.11.3 | 1 
+                   strace-4.26 | 1 
+              swupdate-2018.11 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                 clamav-0.101.1 | NOK | http://autobuild.buildroot.net/results/b40496731d3d615f87bdf930bb93094fd85257f1 |     
+         arm |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/f658faeab28587642dc5f90fb580e28c4374a8dd |     
+    mips64el |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/4b86c363cd0c18c2af425f9f06c34211ec722979 |     
+      mipsel |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/3bade8c45735e15beca682c06390d557f251232d |     
+      mipsel |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/afb0a00555df010335bf084e38bd4f0fb0267425 |     
+         arm |                 gnuchess-6.2.5 | NOK | http://autobuild.buildroot.net/results/3173d30c2da00ce09476937945589edaf809d82d | ORPH
+   powerpc64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/f941d84c781b524530770f5b9360863a821e8ba1 |     
+    mips64el |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/292b28bab0f31b25abccb34c9c07ef178f188890 | ORPH
+  aarch64_be |              gst1-shark-v0.5.5 | NOK | http://autobuild.buildroot.net/results/09b894b0775df2dd87d8fb2d53c6a243d8668aba |     
+       nios2 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/8a5a5f6bd51f4090cf11a10aa08dd193d74bb826 |     
+     riscv64 |            host-sg3_utils-1.44 | NOK | http://autobuild.buildroot.net/results/2b30f4ae0074d7f89ed489dccf6b5eecdd40c909 |     
+     powerpc |             host-thrift-0.12.0 | NOK | http://autobuild.buildroot.net/results/4c6d621a9f0a6334eddb94b8a05d4296cd65eb71 | ORPH
+      mipsel |             host-thrift-0.12.0 | NOK | http://autobuild.buildroot.net/results/158d8cd58f6da496c25d8957b9f6c6e2947d60b4 | ORPH
+        i686 |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/8681447e9b173853cc1942243c7e720e6e0d9535 | ORPH
+        m68k |              libopenssl-1.1.1a | NOK | http://autobuild.buildroot.net/results/39e5911dd0b3f173965ad38b16fc6059780e1bfd |     
+    mips64el |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/e8e898c721afe8f2069eab0fb97c582193700873 |     
+     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/8326c9f24712d3c4edc509bfbfdda6479ce273b5 |     
+         arm |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/c2caa0a58a88fb584a91bece9f8a81c184c93422 |     
+         arm |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/7770b14f12008a0d2869fd2bf70c30d1276266a3 |     
+    mips64el |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/efabb0382cad901dfebd94dad10ab06f115e2b08 |     
+         arm |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/1e8c46a7df14dd373adfe8b1391fcb2017203e29 |     
+        or1k |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/d874e5cc21975279ee3bbab910de8d39cb06170a |     
+       nios2 |              luacrypto-0.3.2-1 | NOK | http://autobuild.buildroot.net/results/91ef0cb0ebf4e56dab71c954ed535489650c72d8 |     
+        i686 |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/9da17b5a51a10dd53f4b43cd7c85e9f031b6c177 |     
+         sh4 |                  mesa3d-18.3.2 | NOK | http://autobuild.buildroot.net/results/2f2b34ee7efaa001fc8a46031cf739608df28995 |     
+     aarch64 |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/26e8f651651305c6dd3c2338e2afbb36eb1af924 |     
+        i686 |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/af951f8a55500445b4ca0fa58978df2bff4f9b96 |     
+     aarch64 |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/3fd5bc4113acf19a9f3243a6bcb121ccfc8645c0 |     
+         arm |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/707bc7790ff72b9927c3e6f6fc765fd1b1db1a56 |     
+         arm |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/e5bdf7fa78f76afc8e1aab10e209476d0ffb6f2f |     
+        i686 |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/57d5632ebebeeed0ee7f5ee53942d34398dec16c |     
+         arm |                 mongodb-r3.3.4 | NOK | http://autobuild.buildroot.net/results/dd412fae45a84e44e7e6a49f8cdb124d0851c1df |     
+     powerpc |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/4eb38221dbcccaf2a3bf431df09a7110d7dcb101 | ORPH
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/89d163c640562d1cea96875c529c7b28d88d8f18 | ORPH
+microblazeel |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/492998874665771fd2eed4b1ef98282488f0e6e6 | ORPH
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/fdbc54fcaa6b315a8bdcb15dee9e147d5d03933e | ORPH
+        or1k |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/6f1ba601d8706a00412b0c2ad5ab0af07c2ebd3e | ORPH
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/34d31930fc5df42a717f95ab60b7d56e04a2e873 |     
+        m68k |                openldap-2.4.46 | NOK | http://autobuild.buildroot.net/results/6843fd39a114148ce338095baccc9b7708fcb36f |     
+microblazeel |                           opus | TIM | http://autobuild.buildroot.net/results/ee0d5de3e512c3e69a80f18fcb61adac9726aa8a |     
+      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/6dc80f91718e7f5d7ca447f411457d186d4c4ec9 | ORPH
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/28c3dd01c0fcda543a54bb405fc25ed16072e50c |     
+        mips |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/813d0306f1078ba767c21acc3ed6b55ef842652a |     
+microblazeel |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/eadb73c8bb11bc273b2cd6a2e8f0fed60fec7034 |     
+        m68k |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/92981da3e8d7bfc020f5903e4dfb98790cb4b142 |     
+        i686 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a5f18945c2e0850eaf0b9a4cc9d52223be5e185a |     
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/9d7417f2cbad03b805e850ea67f19c6c7d848ad6 |     
+      xtensa |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/39053f7a2666268630fcbb72d20f6cbb63f4137c |     
+     powerpc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/dc94a8f35961b5bb93ceeb03931162671d9db81f |     
+    mips64el |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/909e7be4336805d89720e6e6abde95425fc63564 |     
+      x86_64 |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/eded29531d668d02fcae374761418c05d0388738 |     
+         arc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/a7f1549c96d123df6dc6d3c9625532b89fb96e9e |     
+         arc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/ff06693ae0c8770483f8e3bd16bb63ebdef7e023 |     
+         arm |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/33e766a3175042f737cfb715b8bef8cbae305638 |     
+      xtensa |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/0b87dbb414d7818ed6a6a42d5cc4f304da2346ec |     
+         arm |               sqlcipher-v3.2.0 | NOK | http://autobuild.buildroot.net/results/3dd6f959781248904d24222df045826c05fddd2a |     
+    mips64el |               sqlcipher-v3.2.0 | NOK | http://autobuild.buildroot.net/results/d145f4d6674ca8f2521d3598d3e5f18c8e3e9b33 |     
+      xtensa |               sqlcipher-v3.2.0 | NOK | http://autobuild.buildroot.net/results/5e2c3178d8a6e11b1af1c37144737097730ba222 |     
+      xtensa |                    strace-4.26 | NOK | http://autobuild.buildroot.net/results/1cc97d813f14e1a7927a3df8faec43a58c0c6b6d |     
+        m68k |               swupdate-2018.11 | NOK | http://autobuild.buildroot.net/results/182c0081b9f30f4107f720536e8996cadeb7086f |     
+
+
 -- 
-2.20.1
+http://autobuild.buildroot.net
