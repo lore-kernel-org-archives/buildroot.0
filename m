@@ -1,64 +1,128 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  7 Feb 2019 21:21:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tss: fix build with gcc <= 4.8
-Message-ID: <20190207202105.15056-1-fontaine.fabrice@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu,  7 Feb 2019 21:55:09 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/libcurl: introduce options to
+ reduce feature set
+Message-ID: <20190207205510.11172-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d7b6dad6602fe67338abc696bc4752dda8e9717
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
+About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
+that are not commonly needed:
+
+- proxy support: 15 KiB
+- cookies support: 10 KiB
+- various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
+
+Note that the exact amount of space saved depends on the architecture,
+toolchain, and other factors (for example the 'reduced' set disables the
+--libcurl option which only has impact on the curl binary).
+
+Other packages that are selecting libcurl could be incompatible with these
+reduced options. But, there is no clear way to find out which packages are in
+this situation, in particular because issues may only be visible at runtime.
+
+Note: remove the text 'enable' on the option for 'verbose strings' as that
+is more common in Buildroot.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- ...m2b-types.c-fix-maybe-uninitialized-error.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/tpm2-tss/0001-tpm2b-types.c-fix-maybe-uninitialized-error.patch
+ package/libcurl/Config.in  | 30 +++++++++++++++++++++++++++++-
+ package/libcurl/libcurl.mk | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+), 1 deletion(-)
 
-diff --git a/package/tpm2-tss/0001-tpm2b-types.c-fix-maybe-uninitialized-error.patch b/package/tpm2-tss/0001-tpm2b-types.c-fix-maybe-uninitialized-error.patch
-new file mode 100644
-index 0000000000..7125835711
---- /dev/null
-+++ b/package/tpm2-tss/0001-tpm2b-types.c-fix-maybe-uninitialized-error.patch
-@@ -0,0 +1,37 @@
-+From 815f2bcbdfe5d9aff2cd3acbbb105daf1f5e9d7f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 7 Feb 2019 09:58:07 +0100
-+Subject: [PATCH] tpm2b-types.c: fix maybe-uninitialized error
+
+v2:
+- steer proxy and cookies support via separate options
+- reword option and help text
+
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 9c62539e4d..8e2af61f7d 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -15,10 +15,38 @@ config BR2_PACKAGE_CURL
+ 	  Install curl binary as well
+ 
+ config BR2_PACKAGE_LIBCURL_VERBOSE
+-	bool "enable verbose strings"
++	bool "verbose strings"
+ 	help
+ 	  Enable verbose text strings
+ 
++config BR2_PACKAGE_LIBCURL_PROXY_SUPPORT
++	bool "proxy support"
++	default y
++	help
++	  Enable proxy support.
 +
-+src/tss2-mu/tpm2b-types.c: In function 'Tss2_MU_TPM2B_ECC_POINT_Marshal':
-+src/tss2-mu/tpm2b-types.c:201:24: error: 'ptr' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+         *(UINT16 *)ptr = HOST_TO_BE_16(buffer + local_offset - ptr - 2); \
-+                        ^
-+src/tss2-mu/tpm2b-types.c:152:12: note: 'ptr' was declared here
-+     UINT8 *ptr; \
++config BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT
++	bool "cookies support"
++	default y
++	help
++	  Enable support for cookies.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8d7b6dad6602fe67338abc696bc4752dda8e9717
++config BR2_PACKAGE_LIBCURL_SMALL
++	bool "reduced protocol/feature selection"
++	help
++	  Reduce the selection of supported protocols and features.
++	  Following protocols/features are disabled:
++	  - LDAP / LDAPS
++	  - POP3 / IMAP / SMTP
++	  - Telnet
++	  - TFTP
++	  - RTSP
++	  - SMB / CIFS
++	  - DICT
++	  - Gopher
++	  - The --libcurl option of the curl binary to generate C
++	    programs
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/tpm2-software/tpm2-tss/pull/1265]
-+---
-+ src/tss2-mu/tpm2b-types.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
+ 	bool
+ 	default y if BR2_PACKAGE_OPENSSL
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 3bc5207951..8c5bc4a485 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -108,6 +108,34 @@ else
+ LIBCURL_CONF_OPTS += --without-nghttp2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
++LIBCURL_CONF_OPTS += --enable-cookies
++else
++LIBCURL_CONF_OPTS += --disable-cookies
++endif
 +
-+diff --git a/src/tss2-mu/tpm2b-types.c b/src/tss2-mu/tpm2b-types.c
-+index 9c1003ab..7632febb 100644
-+--- a/src/tss2-mu/tpm2b-types.c
-++++ b/src/tss2-mu/tpm2b-types.c
-+@@ -150,7 +150,7 @@ TSS2_RC Tss2_MU_##type##_Marshal(type const *src, uint8_t buffer[], \
-+                                  size_t buffer_size, size_t *offset) \
-+ { \
-+     size_t local_offset = 0; \
-+-    UINT8 *ptr; \
-++    UINT8 *ptr = NULL; \
-+     TSS2_RC rc; \
-+ \
-+     if (src == NULL) { \
-+-- 
-+2.14.1
++ifeq ($(BR2_PACKAGE_LIBCURL_PROXY_SUPPORT),y)
++LIBCURL_CONF_OPTS += --enable-proxy
++else
++LIBCURL_CONF_OPTS += --disable-proxy
++endif
 +
++ifeq ($(BR2_PACKAGE_LIBCURL_SMALL),y)
++LIBCURL_CONF_OPTS += \
++	--disable-dict \
++	--disable-gopher \
++	--disable-imap \
++	--disable-ldap \
++	--disable-ldaps \
++	--disable-libcurl-option \
++	--disable-pop3 \
++	--disable-rtsp \
++	--disable-smb \
++	--disable-smtp \
++	--disable-telnet \
++	--disable-tftp
++endif
++
+ define LIBCURL_FIX_DOT_PC
+ 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
+ endef
 -- 
-2.14.1
+2.19.2
