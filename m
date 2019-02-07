@@ -1,37 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Feb 2019 22:45:37 +0100
-Subject: [Buildroot] [git commit] package/gnuradio: disable xml document
- generation
-Message-ID: <20190207214424.6690683F76@busybox.osuosl.org>
+Date: Thu, 07 Feb 2019 22:47:40 +0100
+Subject: [Buildroot] [PATCH] core/pkg-infra: restore completeness of
+ packages files lists
+In-Reply-To: <CAAXf6LXhHQZGK_py7hou1LbYw=cpYA_tp-ZBk1PrDE2U0KaRqQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 6 Feb 2019 21:12:01
+ +0100")
+References: <20190206143751.5814-1-yann.morin.1998@free.fr>
+ <CAAXf6LXhHQZGK_py7hou1LbYw=cpYA_tp-ZBk1PrDE2U0KaRqQ@mail.gmail.com>
+Message-ID: <874l9f1dab.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43cbb3cc1c3da692563549287a4e0433dfc3f4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/f94/f941d84c781b524530770f5b9360863a821e8ba1/
+Hi,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnuradio/gnuradio.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Observations:
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index d6d07f6566..202c2213a7 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -26,7 +26,8 @@ GNURADIO_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
- 	-DENABLE_GNURADIO_RUNTIME=ON \
--	-DENABLE_GR_QTGUI=OFF
-+	-DENABLE_GR_QTGUI=OFF \
-+	-DXMLTO_EXECUTABLE=NOTFOUND
- 
- # For third-party blocks, the gnuradio libraries are mandatory at
- # compile time.
+ > 1. The call to 'comm' should also happen with LC_ALL=C or comm may
+ > complain that a file is not sorted. This is noticed in tzdata, where
+ > there are two files differing only in a '+' and '-' sign in their
+ > name. Depending on the locale, the sort order is different:
+
+Correct.
+
+ > 2. This is more an observation than a change-request: the directories
+ > where a package installs files, e.g. usr/bin, usr/lib, ... are
+ > attributed for that package. This means that 'usr/lib' is for example
+ > attributed to each and every library.
+ > In a way I like this, because it means that with the output for one
+ > package you have both all files and all directories that it touches,
+ > regardless of who created the directory first.
+ > But it should be checked whether other users of the output can cope
+ > with it, like graph-size.
+
+Yes, I noticed as well that Yann dropped the -type f argument to find. I
+think the easiest/safest is just to add that back.
+
+-- 
+Bye, Peter Korsgaard
