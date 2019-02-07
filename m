@@ -1,50 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 7 Feb 2019 10:06:57 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-02-06 (m68k openssl1.1.x failure)
-In-Reply-To: <20190207070043.3896460D38@crulimr01.rockwellcollins.com>
-References: <20190207070043.3896460D38@crulimr01.rockwellcollins.com>
-Message-ID: <CANQCQpYwYqhA0DW9EoaSsfzegEqOsgdacdzics2dtCahD6zzPQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 Feb 2019 19:52:15 +0100
+Subject: [Buildroot] [PATCH] package/mongodb: remove package
+In-Reply-To: <20190206120656.9936-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 6 Feb 2019 13:06:55 +0100")
+References: <20190206120656.9936-1-peter@korsgaard.com>
+Message-ID: <87r2cj1leo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Thu, Feb 7, 2019 at 1:00 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2019-02-06, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->         m68k |              libopenssl-1.1.1a | http://autobuild.buildroot.net/results/39e5911dd0b3f173965ad38b16fc6059780e1bfd
+ > Fixes:
+ > http://autobuild.buildroot.net/results/dd4/dd412fae45a84e44e7e6a49f8cdb124d0851c1df/
 
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2018.05.tar.bz2"
-    GCC6
-    Binutils 2.29.1 or 2.30 (didn't specifically check yet)
-    UCLIBC
-    Linux 4.16 headers
+ > The mongodb version used (3.3.4) is no longer supported by upstream and
+ > fails to build with openssl 1.1.1x.  On top of that it uses internal copies
+ > of boost, pcre and zlib instead of the system ones.
 
+ > Bumping the version to 3.4.19 (which is still supported until September
+ > 2019) has been tried, but it:
 
-/tmp/ccndwfFs.s: Assembler messages:
-/tmp/ccndwfFs.s:11167: Error: value -32790 out of range
-Makefile:1603: recipe for target 'crypto/blake2/blake2b.o' failed
-make[2]: *** [crypto/blake2/blake2b.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[2]: Leaving directory
-'/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-5/output/build/libopenssl-1.1.1a'
+ > - No longer builds for 32bit ARM
 
+ > - Doesn't build without extra patches, E.G.:
+ >   https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/mongodb/mongodb/0002-d_state.cpp-Add-missing-dependenncy-on-local_shardin.patch?h=rocko
 
-Waldemar / Yann / Thomas, have we seen one like this before with m68k?
+ > - Doesn't build with the system version of boost (1.69.0)
+
+ > - Also fails to build with openssl-1.1.1x
+
+ > So it looks like mongodb needs to be bumped to the 3.6.x series (which
+ > changes the license to the SSPL) - Or simply dropped.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
