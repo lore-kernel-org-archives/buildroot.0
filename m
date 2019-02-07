@@ -1,25 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Feb 2019 22:45:43 +0100
-Subject: [Buildroot] [PATCH] package/gnuradio: disable xml document
- generation
-In-Reply-To: <1549484163-54692-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Wed, 6 Feb 2019 14:16:03 -0600")
-References: <1549484163-54692-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <878syr1ddk.fsf@dell.be.48ers.dk>
+Date: Thu, 7 Feb 2019 22:43:44 +0100
+Subject: [Buildroot] [git commit] configs/pc: fix grub-efi.cfg permissions
+Message-ID: <20190207214424.5F52583F76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2a3ec5dc2f06c5b86b0c351825255d371051fb9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes
- > http://autobuild.buildroot.net/results/f94/f941d84c781b524530770f5b9360863a821e8ba1/
+It does not need the execute bits.
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/pc/grub-efi.cfg | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
+old mode 100755
+new mode 100644
