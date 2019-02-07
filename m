@@ -1,54 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 07 Feb 2019 09:37:08 +0000
-Subject: [Buildroot] [Bug 11666] Touchscreen with (Py)Qt5 should use tslib
- instead of evdev
-In-Reply-To: <bug-11666-163@https.bugs.busybox.net/>
-References: <bug-11666-163@https.bugs.busybox.net/>
-Message-ID: <bug-11666-163-hQoigulprS@https.bugs.busybox.net/>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 7 Feb 2019 10:06:57 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-02-06 (m68k openssl1.1.x failure)
+In-Reply-To: <20190207070043.3896460D38@crulimr01.rockwellcollins.com>
+References: <20190207070043.3896460D38@crulimr01.rockwellcollins.com>
+Message-ID: <CANQCQpYwYqhA0DW9EoaSsfzegEqOsgdacdzics2dtCahD6zzPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11666
+Hi,
 
-Tibor Stolz <tistolz@outlook.de> changed:
+On Thu, Feb 7, 2019 at 1:00 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2019-02-06, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>         m68k |              libopenssl-1.1.1a | http://autobuild.buildroot.net/results/39e5911dd0b3f173965ad38b16fc6059780e1bfd
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
-
---- Comment #1 from Tibor Stolz <tistolz@outlook.de> ---
-Hello,
-
-I found <http://doc.qt.io/qt-5/embedded-linux.html#touch>, which mentions some
-more settings to be done by means of environment variables:
-
-~> QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS='inverty' ./qt5test.py
-
-This works for me, I get proper touchscreen input. (Hardware: BeagleBoneBlack
-with 4D Systems gen4-4DCAPE-43T LCD)
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2018.05.tar.bz2"
+    GCC6
+    Binutils 2.29.1 or 2.30 (didn't specifically check yet)
+    UCLIBC
+    Linux 4.16 headers
 
 
-There are two options to enable tslib:
+/tmp/ccndwfFs.s: Assembler messages:
+/tmp/ccndwfFs.s:11167: Error: value -32790 out of range
+Makefile:1603: recipe for target 'crypto/blake2/blake2b.o' failed
+make[2]: *** [crypto/blake2/blake2b.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory
+'/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-5/output/build/libopenssl-1.1.1a'
 
-~> QT_QPA_FB_TSLIB=1 ./qt5test.py
 
-This seems to completely disable touchscreen input.
-
-~> QT_QPA_EGLFS_TSLIB=1 ./qt5test.py
-
-This seems to have no effect, i.e. touchscreen input works but is still y-wise
-inverted.
-
-Since there is no need for tslib in my configuration, as y-wise inversion can
-be done without it, I declare this bug as RESOLVED WORKSFORME.
-
-Best regards,
-Tibor Stolz
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Waldemar / Yann / Thomas, have we seen one like this before with m68k?
