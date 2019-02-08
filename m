@@ -1,37 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Feb 2019 22:42:19 +0100
-Subject: [Buildroot] [PATCH] package/libopenssl: m68x use
- SMALL_FOOTPRINT mode
-In-Reply-To: <1549651619-2551-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Fri, 8 Feb 2019 12:46:59 -0600")
-References: <1549651619-2551-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <8736oyyn2c.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 8 Feb 2019 23:02:50 +0100
+Subject: [Buildroot] [PATCH 08/19] support/check-uniq-files: decode as
+ many strings as possible
+In-Reply-To: <20190208212258.GF3079@scaer>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <fcf8eccf9d275bd95c7e61099722c1a3b22a6da9.1546898693.git.yann.morin.1998@free.fr>
+ <11fc1785-c180-a8fc-7a90-46d487218b7c@mind.be> <20190208172521.GC3079@scaer>
+ <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be> <20190208212258.GF3079@scaer>
+Message-ID: <5c8696f3-6ec3-aadb-5bc4-af8aec3e2bd7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > OPENSSL_SMALL_FOOTPRINT mode selects alternate paths in the sha512 and
- > blake2 algorithms which resolves a assembler issue like the following.
 
- > /tmp/ccfnLhKQ.s: Assembler messages:
- > /tmp/ccfnLhKQ.s:11167: Error: value -32790 out of range
- > make[2]: *** [crypto/blake2/blake2b.o] Error 1
+On 08/02/2019 22:22, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-02-08 21:42 +0100, Arnout Vandecappelle spake thusly:
+>> On 08/02/2019 18:25, Yann E. MORIN wrote:
+>>> On 2019-02-08 00:40 +0100, Arnout Vandecappelle spake thusly:
+>>>> On 07/01/2019 23:05, Yann E. MORIN wrote:
+>>>>> +def str_decode(s):
+>>>>> +    try:
+>>>>> +        return s.decode()
+>>>>> +    except UnicodeDecodeError:
+>>>>> +        return repr(s)
+>>>>
+>>>>  I think s.decode(errors='replace') is exactly what we want: it prints the
+>>>> question mark character for things that can't be represented, just like ls does.
+> [--SNIP--]
+>>>     >>> lines[0].decode(errors='replace')
+>>>     u'\ufffd\n'
+>>>     >>> print('{}'.format(lines[0].decode(errors='replace')))
+>>>     Traceback (most recent call last):
+>>>       File "<stdin>", line 1, in <module>
+>>>     UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 0: ordinal not in range(128)
+>>
+>>  Meh, Python2 unicode handling always confuses the hell out of me...
+>>
+>>  So, to do it well, in python3 you need to do:
+>> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(),errors='replace'))
+>>
+>> while in python2 the proper thing to do is
+>>
+>> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(), \
+>> 	errors='replace').encode(sys.getfilesystemencoding(),errors='replace'))
+>>
+>> (sys.getfilesystemencoding() makes sure we use the user's encoding so stuff that
+>> can be printed gets properly printed).
+>>
+>>  I couldn't find a way to do the right thing both in python2 and python3...
+> 
+> At which point, my proposal is much simpler, and more understandable,
+> don't you think?
 
- > This issue was found after the OpenSSL1.1.x bump.
+ Absolutely. Well, it's imperfect because it prints the ugly b'....' in case
+there is an non-decodable character, but it's good enough.
 
- > Fixes
- > http://autobuild.buildroot.net/results/533e817695cde321b725145112cfd83c092d9d75
-
- > Upstream ticket
- > https://github.com/openssl/openssl/issues/8190
-
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
