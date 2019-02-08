@@ -1,50 +1,77 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  8 Feb 2019 12:46:59 -0600
-Subject: [Buildroot] [PATCH] package/libopenssl: m68x use SMALL_FOOTPRINT
- mode
-Message-ID: <1549651619-2551-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 8 Feb 2019 20:27:27 +0100
+Subject: [Buildroot] [TO-BE-TESTED] support/download/hg: implement
+ repository cache
+In-Reply-To: <20190208165403.GA3079@scaer>
+References: <20190205202433.25292-1-patrickdepinguin@gmail.com>
+ <5f0e55d2-99e2-bc68-4017-334dbafa35a9@mind.be> <20190208165403.GA3079@scaer>
+Message-ID: <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OPENSSL_SMALL_FOOTPRINT mode selects alternate paths in the sha512 and
-blake2 algorithms which resolves a assembler issue like the following.
 
-/tmp/ccfnLhKQ.s: Assembler messages:
-/tmp/ccfnLhKQ.s:11167: Error: value -32790 out of range
-make[2]: *** [crypto/blake2/blake2b.o] Error 1
 
-This issue was found after the OpenSSL1.1.x bump.
+On 08/02/2019 17:54, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-02-07 22:33 +0100, Arnout Vandecappelle spake thusly:
+>> On 05/02/2019 21:24, Thomas De Schampheleire wrote:
+>>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>
+>>> Similar to the git download helper, implement a repository cache for
+>>> Mercurial repositories.
+>>>
+>>> The code is mostly guided by the implementation for git, with certain parts
+>>> copied almost verbatim.
+>>>
+>>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>> ---
+>>> index efb515fca5..bb5cc87969 100755
+>>> --- a/support/download/hg
+>>> +++ b/support/download/hg
+>>> @@ -1,7 +1,7 @@
+>>>  #!/usr/bin/env bash
+>>>  
+>>>  # We want to catch any unexpected failure, and exit immediately
+>>> -set -e
+>>> +set -E
+>>
+>>  If you do this, the comment above is no longer valid...
+>>       -e  Exit immediately if a command exits with a non-zero status.
+>>       -E  If set, the ERR trap is inherited by shell functions.
+>> are not the same thing!
+>>
+>>  However, since AFAICS the only function in this file is the trap handler
+>> itself, this seems to be a mistake, no?
+>>
+>>  Ow, this really is inherited from git, introduced by commit b7efb43e86da96.
+>> Yann, care to explain?
+> 
+> Yes, I care to explain. Even though I do write some crap most of the
+> time,
 
-Fixes
-http://autobuild.buildroot.net/results/533e817695cde321b725145112cfd83c092d9d75
+ I never said that!
 
-Upstream ticket
-https://github.com/openssl/openssl/issues/8190
+> there are in fact two functions in the git backend.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/libopenssl/libopenssl.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Oh yes, I missed the _git/_hg function.
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 0bfc74e..a845f1d 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -16,9 +16,11 @@ LIBOPENSSL_TARGET_ARCH = generic32
- LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
- LIBOPENSSL_PROVIDES = openssl
- 
--# relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
-+# relocation truncated to fit: R_68K_GOT16O
- LIBOPENSSL_CFLAGS += -mxgot
-+# resolves an assembler "out of range error" with blake2 and sha512 algorithms
-+LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
- endif
- 
- ifeq ($(BR2_USE_MMU),)
--- 
-1.9.1
+> 
+> Like all backends, the actual tool is wrapped into a _git() function,
+> which was introduced more than three years ago, by commit 3f2bdd070
+> (support/download: protect from custom commands with spaces in args), as
+> a way to actually fix a bug actually reported by Thomas DS.
+> 
+> Yes, this makes it that the set -E is needed, after all.
+
+ But then the comment is wrong, no? Because -E does not imply -e and without -e
+there is no immediate exit. Or am I missing something else?
+
+
+ Regards,
+ Arnout
+
+[snip]
