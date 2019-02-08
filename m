@@ -1,34 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 8 Feb 2019 13:39:29 +0100
-Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
-In-Reply-To: <20190208103753.7D6468149C@busybox.osuosl.org>
-References: <20190208103753.7D6468149C@busybox.osuosl.org>
-Message-ID: <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 8 Feb 2019 13:49:49 +0100
+Subject: [Buildroot] [git commit] docs/website: correct association e-mail
+ address
+Message-ID: <20190208124831.0B946885DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=326d21a44e4896f1a98fe8ea439595c4cac59856
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
+It is buildroot-association at buildroot.org, not @lists.buildroot.org.
 
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ docs/website/association.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-I was not really paying attention when this was discussed. Why does it not
-matter what the permission in the repo is?
-Where is the executable permission set, if not already in the repo?
-
-Thanks
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190208/f1670589/attachment.html>
+diff --git a/docs/website/association.html b/docs/website/association.html
+index d626d376dd..0215f85874 100644
+--- a/docs/website/association.html
++++ b/docs/website/association.html
+@@ -109,7 +109,7 @@
+ 	  receipt.</p>
+ 
+ 	  <p>Please
+-	  contact <a href="mailto:buildroot-association@lists.buildroot.org">buildroot-association at lists.buildroot.org</a>
++	  contact <a href="mailto:buildroot-association@buildroot.org">buildroot-association at buildroot.org</a>
+ 	  if you are a company interested in making a donation.</p>
+ 
+ 	</div>
