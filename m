@@ -1,58 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 8 Feb 2019 15:28:30 -0600
-Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
-In-Reply-To: <CAAXf6LXfCRqQsZbpZDwMX2izUwzTEma0TOROnQ54ZHp6ZxfJMQ@mail.gmail.com>
-References: <20190208103753.7D6468149C@busybox.osuosl.org>
- <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
- <87h8dezazs.fsf@dell.be.48ers.dk>
- <CAAXf6LXfCRqQsZbpZDwMX2izUwzTEma0TOROnQ54ZHp6ZxfJMQ@mail.gmail.com>
-Message-ID: <CANQCQpZZG4DbqJ-dz2f_eyRVfY8SrQXJPzxEZ36bSufzCZO+HA@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri,  8 Feb 2019 22:31:18 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2019.01
+Message-ID: <20190208213119.15004-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, Feb 8, 2019 at 3:25 PM Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
->
-> El vie., 8 feb. 2019 a las 14:05, Peter Korsgaard
-> (<peter@korsgaard.com>) escribi?:
-> >
-> > >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
-> >
-> >  > Hello,
-> >  > On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
-> >
-> >  >> commit:
-> >  >> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
-> >  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> >  >>
-> >  >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> >  >>
-> >
-> >
-> >  > I was not really paying attention when this was discussed. Why does it not
-> >  > matter what the permission in the repo is?
-> >
-> > It doesn't really, but consistency is nice. We had a big mix of
-> > executable/not executable.
-> >
-> > > Where is the executable permission set, if not already in the repo?
-> >
-> > During the installation step, E.G.:
-> >
-> > define DROPBEAR_INSTALL_INIT_SYSV
-> >         $(INSTALL) -D -m 755 package/dropbear/S50dropbear \
-> >                 $(TARGET_DIR)/etc/init.d/S50dropbear
-> > endef
->
-> Ok, thanks, so init scripts in rootfs overlays still need the right
-> permission bits.
->
-
-They should use a permissions file so they on each target finalize it
-consistently gets re-applied.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index bd1b248e94..d4a93615ee 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -39,7 +39,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2018.09"
++	bool "2019.01"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -87,7 +87,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2018.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2019.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index ea07fb584d..df2b8caf89 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  839bf23cfe8ce613a77e583a60375179d0ad324e92c82fbdd07bebf0fd142268  u-boot-2018.09.tar.bz2
++sha256  50bd7e5a466ab828914d080d5f6a432345b500e8fba1ad3b7b61e95e60d51c22  u-boot-2019.01.tar.bz2
+-- 
+2.20.1
