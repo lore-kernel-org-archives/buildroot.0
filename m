@@ -1,109 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Feb 2019 23:38:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/brcm-patchram-plus: fix build on
- sparc
-Message-ID: <20190208223856.11302-1-fontaine.fabrice@gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Sat,  9 Feb 2019 07:46:54 +0800
+Subject: [Buildroot] [PATCH 1/1] package/zbar: bump to version
+ 681b0f305fb5c5bb0df8437f7d740b29a93a7889
+Message-ID: <1549669614-19662-1-git-send-email-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On SPARC, the definitions of B2500000, B3000000, B3500000 and B4000000
-are not necessarily available, so use those values only if defined in
-the kernel headers.
+From: James Hilliard <james.hilliard1@gmail.com>
 
-It fixes SPARC build failures such as:
-main.c:382:13: error: 'B2500000' undeclared here (not in a function)
-  { 2500000, B2500000 },
-             ^~~~~~~~
-main.c:383:13: error: 'B3000000' undeclared here (not in a function)
-  { 3000000, B3000000 },
-             ^~~~~~~~
-main.c:385:13: error: 'B3500000' undeclared here (not in a function)
-  { 3500000, B3500000 },
-             ^~~~~~~~
-main.c:386:13: error: 'B4000000' undeclared here (not in a function)
-  { 4000000, B4000000 }
+Zbar now has a dbus API which we should enable when dbus is present.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f7012c08c935c3a6ccae50b84170190af5cd5cba
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../0001-src-main.c-fix-build-on-SPARC.patch       | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch
+ package/zbar/zbar.hash | 2 +-
+ package/zbar/zbar.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch b/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch
-new file mode 100644
-index 0000000000..5567284cdf
---- /dev/null
-+++ b/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch
-@@ -0,0 +1,64 @@
-+From 8ff9d421372a7cb780fbafd8b1d556ee549bf109 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 8 Feb 2019 23:21:04 +0100
-+Subject: [PATCH] src/main.c: fix build on SPARC
+diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
+index 6735bc6..47a080a 100644
+--- a/package/zbar/zbar.hash
++++ b/package/zbar/zbar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 94c71c6110c705f07ba5ba2803583d09b3853e8773169c86bdcf831443156aaa zbar-57d601e82089f2f31de9e1683c3834f237421f5d.tar.gz
++sha256 7eb73c180c787184ede0f98806c52b23eb9c24609673e1ed51210504ea2937f5 zbar-681b0f305fb5c5bb0df8437f7d740b29a93a7889.tar.gz
+ sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index 6df069e..fea2332 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZBAR_VERSION = 57d601e82089f2f31de9e1683c3834f237421f5d
++ZBAR_VERSION = 681b0f305fb5c5bb0df8437f7d740b29a93a7889
+ ZBAR_SITE = git://linuxtv.org/zbar.git
+ ZBAR_LICENSE = LGPL-2.1+
+ ZBAR_LICENSE_FILES = LICENSE
+@@ -23,4 +23,11 @@ ZBAR_CONF_OPTS = \
+ 	--without-x \
+ 	--without-java
+ 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++ZBAR_DEPENDENCIES += dbus
++ZBAR_CONF_OPTS += --with-dbus
++else
++ZBAR_CONF_OPTS += --without-dbus
++endif
 +
-+On SPARC, the definitions of B2500000, B3000000, B3500000 and B4000000
-+are not necessarily available, so use those values only if defined in
-+the kernel headers.
-+
-+It fixes SPARC build failures such as:
-+main.c:382:13: error: 'B2500000' undeclared here (not in a function)
-+  { 2500000, B2500000 },
-+             ^~~~~~~~
-+main.c:383:13: error: 'B3000000' undeclared here (not in a function)
-+  { 3000000, B3000000 },
-+             ^~~~~~~~
-+main.c:385:13: error: 'B3500000' undeclared here (not in a function)
-+  { 3500000, B3500000 },
-+             ^~~~~~~~
-+main.c:386:13: error: 'B4000000' undeclared here (not in a function)
-+  { 4000000, B4000000 }
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f7012c08c935c3a6ccae50b84170190af5cd5cba
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/AsteroidOS/brcm-patchram-plus/pull/1]
-+---
-+ src/main.c | 18 +++++++++++++-----
-+ 1 file changed, 13 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/main.c b/src/main.c
-+index 040cfe1..17c5191 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -378,12 +378,20 @@ tBaudRates baud_rates[] = {
-+ 	{ 1000000, B1000000 },
-+ 	{ 1152000, B1152000 },
-+ 	{ 1500000, B1500000 },
-+-	{ 2000000, B2000000 },
-+-	{ 2500000, B2500000 },
-+-	{ 3000000, B3000000 },
-++	{ 2000000, B2000000 }
-++#ifdef B2500000
-++	,{ 2500000, B2500000 }
-++#endif
-++#ifdef B3000000
-++	,{ 3000000, B3000000 }
-++#endif
-+ #ifndef __CYGWIN__
-+-	{ 3500000, B3500000 },
-+-	{ 4000000, B4000000 }
-++#ifdef B3500000
-++	,{ 3500000, B3500000 }
-++#endif
-++#ifdef B4000000
-++	,{ 4000000, B4000000 }
-++#endif
-+ #endif
-+ };
-+ 
-+-- 
-+2.14.1
-+
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.7.4
