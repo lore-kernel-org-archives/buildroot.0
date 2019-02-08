@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Feb 2019 14:05:27 +0100
-Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
-In-Reply-To: <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
- (Thomas De Schampheleire's message of "Fri, 8 Feb 2019 13:39:29
- +0100")
-References: <20190208103753.7D6468149C@busybox.osuosl.org>
- <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
-Message-ID: <87h8dezazs.fsf@dell.be.48ers.dk>
+Date: Fri, 8 Feb 2019 15:05:44 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: fix comments
+Message-ID: <20190208140417.DC7D08849D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea989ad2b2c2361c47e269dd89cb559edf561db4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
+The toplevel mosquitto comment should go after the sub options to ensure
+they get indented, and the broker comment should be hidden if mosquitto
+isn't enabled.
 
- >> commit:
- >> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
- >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-
- > I was not really paying attention when this was discussed. Why does it not
- > matter what the permission in the repo is?
-
-It doesn't really, but consistency is nice. We had a big mix of
-executable/not executable.
-
-> Where is the executable permission set, if not already in the repo?
-
-During the installation step, E.G.:
-
-define DROPBEAR_INSTALL_INIT_SYSV
-        $(INSTALL) -D -m 755 package/dropbear/S50dropbear \
-                $(TARGET_DIR)/etc/init.d/S50dropbear
-endef
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 9052b3059b..11b6d7891b 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -12,9 +12,6 @@ config BR2_PACKAGE_MOSQUITTO
+ 
+ 	  http://mosquitto.org/
+ 
+-comment "mosquitto needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_MOSQUITTO_BROKER
+ 	bool "install the mosquitto broker"
+ 	default y
+@@ -24,4 +21,7 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
+ 	  Build and install the mosquitto broker onto target.
+ 
+ comment "mosquitto broker needs a system with MMU"
+-	depends on !BR2_USE_MMU
++	depends on BR2_PACKAGE_MOSQUTTO && !BR2_USE_MMU
++
++comment "mosquitto needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
