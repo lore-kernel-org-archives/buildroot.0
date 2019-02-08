@@ -1,94 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Feb 2019 20:54:44 +0100
-Subject: [Buildroot] [TO-BE-TESTED] support/download/hg: implement
- repository cache
-In-Reply-To: <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be>
-References: <20190205202433.25292-1-patrickdepinguin@gmail.com>
- <5f0e55d2-99e2-bc68-4017-334dbafa35a9@mind.be>
- <20190208165403.GA3079@scaer>
- <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be>
-Message-ID: <20190208195444.GD3079@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 8 Feb 2019 21:42:23 +0100
+Subject: [Buildroot] [PATCH 08/19] support/check-uniq-files: decode as
+ many strings as possible
+In-Reply-To: <20190208172521.GC3079@scaer>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <fcf8eccf9d275bd95c7e61099722c1a3b22a6da9.1546898693.git.yann.morin.1998@free.fr>
+ <11fc1785-c180-a8fc-7a90-46d487218b7c@mind.be> <20190208172521.GC3079@scaer>
+Message-ID: <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2019-02-08 20:27 +0100, Arnout Vandecappelle spake thusly:
-> On 08/02/2019 17:54, Yann E. MORIN wrote:
-> > On 2019-02-07 22:33 +0100, Arnout Vandecappelle spake thusly:
-> >> On 05/02/2019 21:24, Thomas De Schampheleire wrote:
-> >>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>>
-> >>> Similar to the git download helper, implement a repository cache for
-> >>> Mercurial repositories.
-> >>>
-> >>> The code is mostly guided by the implementation for git, with certain parts
-> >>> copied almost verbatim.
-> >>>
-> >>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >>> ---
-> >>> index efb515fca5..bb5cc87969 100755
-> >>> --- a/support/download/hg
-> >>> +++ b/support/download/hg
-> >>> @@ -1,7 +1,7 @@
-> >>>  #!/usr/bin/env bash
-> >>>  
-> >>>  # We want to catch any unexpected failure, and exit immediately
-> >>> -set -e
-> >>> +set -E
-> >>  Ow, this really is inherited from git, introduced by commit b7efb43e86da96.
-> >> Yann, care to explain?
-> > 
-> > Yes, I care to explain. Even though I do write some crap most of the
-> > time,
->  I never said that!
 
-I said it! :-)
-
-[--SNIP--]
-> > Like all backends, the actual tool is wrapped into a _git() function,
-> > which was introduced more than three years ago, by commit 3f2bdd070
-> > (support/download: protect from custom commands with spaces in args), as
-> > a way to actually fix a bug actually reported by Thomas DS.
-> > 
-> > Yes, this makes it that the set -E is needed, after all.
+On 08/02/2019 18:25, Yann E. MORIN wrote:
+> Arnout, All,
 > 
->  But then the comment is wrong, no? Because -E does not imply -e and without -e
-> there is no immediate exit. Or am I missing something else?
+> On 2019-02-08 00:40 +0100, Arnout Vandecappelle spake thusly:
+>> On 07/01/2019 23:05, Yann E. MORIN wrote:
+>>> +# If possible, try to decode the binary string s with the user's locale.
+>>> +# If s contains characters that can't be decoded with that locale, return
+>>> +# the representation (in the user's locale) of the un-decoded string.
+>>> +def str_decode(s):
+>>> +    try:
+>>> +        return s.decode()
+>>> +    except UnicodeDecodeError:
+>>> +        return repr(s)
+>>
+>>  I think s.decode(errors='replace') is exactly what we want: it prints the
+>> question mark character for things that can't be represented, just like ls does.
+> 
+> In the case I used as example, i.e. ? (LATIN SMALL LIGATURE OE) as encoded
+> in iso8859-15, i.e. \xbd (e.g. stored in a file named 'meh'), with python
+> 2.7:
+> 
+>     >>> with open('meh', 'rb') as f:
+>     ...    lines = f.readlines()
+>     ...
+>     >>> lines
+>     ['\xbd\n']
+>     >>> lines[0].decode(errors='replace')
+>     u'\ufffd\n'
+>     >>> print('{}'.format(lines[0].decode(errors='replace')))
+>     Traceback (most recent call last):
+>       File "<stdin>", line 1, in <module>
+>     UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 0: ordinal not in range(128)
 
-Yes, it is partly incorrect. But consider that, with the ERR trap, we
-_do_ catch unexpected failures, but we no longer _immediately_ exit
-anymore, indeed. We just postpone the exit to after the second
-tentative, in which case we do exit immediately from the ERR trap.
+ Meh, Python2 unicode handling always confuses the hell out of me...
 
-However, I was thinking that maybe we could revisit this try-again code,
-and just exit on the first error and rely on the user to actually clean
-the git tree if it ever gets corrupted.
+ So, to do it well, in python3 you need to do:
 
-We initially added that, in case the repository was uterly broken,
-because our backend itself  was creating situations where it _could_
-leave the repo in an inconsistent state, or the autobuilder code would
-do that (e.g. timeout-kill-9 the build right in the middle of a git
-action).
+print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(),errors='replace'))
 
-However, the git backend was fixed to supposedly always leave the tree
-in a consistent state now, and the autobuilder code now timeouts from
-the last step, not from the build start, so we can assume that not git
-action would now be interrupted abruptely anymore...
+while in python2 the proper thing to do is
 
-Yet, I am a bit contrived, as the git backend is partly my fault, and so
-I'm not entirely happy with it...
+print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(), \
+	errors='replace').encode(sys.getfilesystemencoding(),errors='replace'))
 
-Regards,
-Yann E. MORIN.
+(sys.getfilesystemencoding() makes sure we use the user's encoding so stuff that
+can be printed gets properly printed).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ I couldn't find a way to do the right thing both in python2 and python3...
+
+ Regards,
+ Arnout
+
+>     >>>
+> 
+> The output with python3 is indeed what you believe will happen, but I
+> don't think it is so nice:
+> 
+>     >>> lines
+>     [b'\xbd\n']
+>     >>> lines[0].decode(errors='replace')
+>     '?\n'
+>     >>> print('{}'.format(lines[0].decode(errors='replace')))
+>     ?
+> 
+>     >>> 
+> 
+> And anyway, check-uniq file should work with python 2.7, since it is part
+> of the build tools, and python 2.7 is what we require.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
