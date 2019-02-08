@@ -1,45 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Feb 2019 13:31:10 +0100
-Subject: [Buildroot] [git commit] configs/rock64: needs U-Boot pylibfdt
-Message-ID: <20190208122958.5D9C688632@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 8 Feb 2019 13:39:29 +0100
+Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
+In-Reply-To: <20190208103753.7D6468149C@busybox.osuosl.org>
+References: <20190208103753.7D6468149C@busybox.osuosl.org>
+Message-ID: <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34ce67f4175c9b5628519e4da26a747d537ce043
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The build currently fails with:
+On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
 
-*** dtoc needs the Python libfdt library. Either
-*** install it on your system, or try:
-***
-*** sudo apt-get install swig libpython-dev
-***
-*** to have U-Boot build its own version.
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>
 
-Adding BR2_TARGET_UBOOT_NEEDS_PYLIBFDT should fix this build issue,
-which was reported at:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295223
+I was not really paying attention when this was discussed. Why does it not
+matter what the permission in the repo is?
+Where is the executable permission set, if not already in the repo?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/rock64_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
-index 29b8e9d3c5..50ffc0474f 100644
---- a/configs/rock64_defconfig
-+++ b/configs/rock64_defconfig
-@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+Thanks
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190208/f1670589/attachment.html>
