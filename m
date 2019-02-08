@@ -1,15 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Feb 2019 22:18:12 +0100
-Subject: [Buildroot] [TO-BE-TESTED] support/download/hg: implement
- repository cache
-In-Reply-To: <66a358dd-c8ef-e6bb-815a-b1579d45baf3@mind.be>
-References: <20190205202433.25292-1-patrickdepinguin@gmail.com>
- <5f0e55d2-99e2-bc68-4017-334dbafa35a9@mind.be>
- <20190208165403.GA3079@scaer>
- <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be>
- <20190208195444.GD3079@scaer>
- <66a358dd-c8ef-e6bb-815a-b1579d45baf3@mind.be>
-Message-ID: <20190208211812.GE3079@scaer>
+Date: Fri, 8 Feb 2019 22:22:58 +0100
+Subject: [Buildroot] [PATCH 08/19] support/check-uniq-files: decode as
+ many strings as possible
+In-Reply-To: <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be>
+References: <cover.1546898693.git.yann.morin.1998@free.fr>
+ <fcf8eccf9d275bd95c7e61099722c1a3b22a6da9.1546898693.git.yann.morin.1998@free.fr>
+ <11fc1785-c180-a8fc-7a90-46d487218b7c@mind.be>
+ <20190208172521.GC3079@scaer>
+ <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be>
+Message-ID: <20190208212258.GF3079@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,72 +17,43 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2019-02-08 21:54 +0100, Arnout Vandecappelle spake thusly:
-> On 08/02/2019 20:54, Yann E. MORIN wrote:
+On 2019-02-08 21:42 +0100, Arnout Vandecappelle spake thusly:
+> On 08/02/2019 18:25, Yann E. MORIN wrote:
+> > On 2019-02-08 00:40 +0100, Arnout Vandecappelle spake thusly:
+> >> On 07/01/2019 23:05, Yann E. MORIN wrote:
+> >>> +def str_decode(s):
+> >>> +    try:
+> >>> +        return s.decode()
+> >>> +    except UnicodeDecodeError:
+> >>> +        return repr(s)
+> >>
+> >>  I think s.decode(errors='replace') is exactly what we want: it prints the
+> >> question mark character for things that can't be represented, just like ls does.
 [--SNIP--]
-> > Yes, it is partly incorrect. But consider that, with the ERR trap, we
-> > _do_ catch unexpected failures, 
+> >     >>> lines[0].decode(errors='replace')
+> >     u'\ufffd\n'
+> >     >>> print('{}'.format(lines[0].decode(errors='replace')))
+> >     Traceback (most recent call last):
+> >       File "<stdin>", line 1, in <module>
+> >     UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 0: ordinal not in range(128)
 > 
->  It seems I'm unable to interpret documentation correctly, because I read the
-> trap help text as stating that trap ERR only works if -e is set...
+>  Meh, Python2 unicode handling always confuses the hell out of me...
 > 
->                                                                 A SIGNAL_SPEC
->     of ERR means to execute ARG each time a command's failure would cause the
->     shell to exit when the -e option is enabled.
-
-Yes, the sentence is ambiguous. But reading it carefully, they wrote
-"would cause", i.e.:  "do A if B would cause C" does not require "B".
-
-And indeed:
-
-    $ cat ess.sh
-    #!/bin/bash
-    set -E
-    foo() { echo Trying...; false; echo Bummer; }
-    foo
-    trap '{ echo ERR; exit 42; }' ERR
-    foo
-
-    $ ./ess.sh
-    Trying...
-    Bummer
-    Trying...
-    ERR
-
-    $ echo $?
-    42
-
-> > but we no longer _immediately_ exit
-> > anymore, indeed. We just postpone the exit to after the second
-> > tentative, in which case we do exit immediately from the ERR trap.
-> > 
-> > However, I was thinking that maybe we could revisit this try-again code,
-> > and just exit on the first error and rely on the user to actually clean
-> > the git tree if it ever gets corrupted.
-> > 
-> > We initially added that, in case the repository was uterly broken,
-> > because our backend itself  was creating situations where it _could_
-> > leave the repo in an inconsistent state, or the autobuilder code would
-> > do that (e.g. timeout-kill-9 the build right in the middle of a git
-> > action).
+>  So, to do it well, in python3 you need to do:
+> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(),errors='replace'))
 > 
->  Kill -9 of git should never leave the repo in an inconsistent state anyway. The
+> while in python2 the proper thing to do is
+> 
+> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(), \
+> 	errors='replace').encode(sys.getfilesystemencoding(),errors='replace'))
+> 
+> (sys.getfilesystemencoding() makes sure we use the user's encoding so stuff that
+> can be printed gets properly printed).
+> 
+>  I couldn't find a way to do the right thing both in python2 and python3...
 
-Well, not sure what caused it, in the end, but we did have random git
-failures, and not ncessarily caused by the autobuilders removing files
-in .git/ (but that was quite some tiem ago now, so I don't recall the
-details...)
-
-> only reasonable way to get an inconsistent repo state is randomly deleting files
-> from it (and disk failure, of course). But doesn't the autobuilder do that,
-> randomly delete files?
-
-It used to, but no longer does, descend into sub-directopries, so could
-remove files in BR2_DL_DIR/pkg/git/.git/
-
-    https://git.buildroot.org/buildroot-test/tree/scripts/autobuild-run#n291
-
-    https://git.buildroot.org/buildroot-test/commit/scripts/autobuild-run?id=cb1c4829b1d1ab660736811101fb6d988a8d14e7
+At which point, my proposal is much simpler, and more understandable,
+don't you think?
 
 Regards,
 Yann E. MORIN.
