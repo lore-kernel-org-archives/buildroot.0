@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Feb 2019 12:47:18 +0100
-Subject: [Buildroot] U-Boot update needed in imx23evk_defconfig
-Message-ID: <20190208124718.650e4d42@windsurf>
+Date: Fri,  8 Feb 2019 13:01:24 +0100
+Subject: [Buildroot] [PATCH] configs/rock64: needs U-Boot pylibfdt
+Message-ID: <20190208120124.8909-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+The build currently fails with:
 
-The imx23evk_defconfig no longer builds:
+*** dtoc needs the Python libfdt library. Either
+*** install it on your system, or try:
+***
+*** sudo apt-get install swig libpython-dev
+***
+*** to have U-Boot build its own version.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
+Adding BR2_TARGET_UBOOT_NEEDS_PYLIBFDT should fix this build issue,
+which was reported at:
 
-This is due to the bump of OpenSSL to 1.1.x. This issue seems to have
-been fixed in U-Boot commit 7bae13b7579a6bc42330427496330fe2a29cbd56,
-which is part of U-Boot since 2017.01, but the defconfig is using
-2016.09.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295223
 
-Do you think you could update U-Boot in this defconfig to at least
-2017.01 ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/rock64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks!
-
-Thomas
+diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+index 29b8e9d3c5..50ffc0474f 100644
+--- a/configs/rock64_defconfig
++++ b/configs/rock64_defconfig
+@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
