@@ -1,52 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Feb 2019 22:39:50 +0100
-Subject: [Buildroot] [git commit] package/libopenssl: m68x use
+Date: Fri, 08 Feb 2019 22:42:19 +0100
+Subject: [Buildroot] [PATCH] package/libopenssl: m68x use
  SMALL_FOOTPRINT mode
-Message-ID: <20190208214043.EE6B6885E3@busybox.osuosl.org>
+In-Reply-To: <1549651619-2551-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Fri, 8 Feb 2019 12:46:59 -0600")
+References: <1549651619-2551-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <8736oyyn2c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aba0a29a06d16b5a0a5c556fea2150b316fe036
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-OPENSSL_SMALL_FOOTPRINT mode selects alternate paths in the sha512 and
-blake2 algorithms which resolves a assembler issue like the following.
+ > OPENSSL_SMALL_FOOTPRINT mode selects alternate paths in the sha512 and
+ > blake2 algorithms which resolves a assembler issue like the following.
 
-/tmp/ccfnLhKQ.s: Assembler messages:
-/tmp/ccfnLhKQ.s:11167: Error: value -32790 out of range
-make[2]: *** [crypto/blake2/blake2b.o] Error 1
+ > /tmp/ccfnLhKQ.s: Assembler messages:
+ > /tmp/ccfnLhKQ.s:11167: Error: value -32790 out of range
+ > make[2]: *** [crypto/blake2/blake2b.o] Error 1
 
-This issue was found after the OpenSSL1.1.x bump.
+ > This issue was found after the OpenSSL1.1.x bump.
 
-Fixes
-http://autobuild.buildroot.net/results/533e817695cde321b725145112cfd83c092d9d75
+ > Fixes
+ > http://autobuild.buildroot.net/results/533e817695cde321b725145112cfd83c092d9d75
 
-Upstream ticket
-https://github.com/openssl/openssl/issues/8190
+ > Upstream ticket
+ > https://github.com/openssl/openssl/issues/8190
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 0bfc74ed0e..a845f1da53 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -16,9 +16,11 @@ LIBOPENSSL_TARGET_ARCH = generic32
- LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
- LIBOPENSSL_PROVIDES = openssl
- 
--# relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
-+# relocation truncated to fit: R_68K_GOT16O
- LIBOPENSSL_CFLAGS += -mxgot
-+# resolves an assembler "out of range error" with blake2 and sha512 algorithms
-+LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
- endif
- 
- ifeq ($(BR2_USE_MMU),)
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
