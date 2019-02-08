@@ -1,51 +1,55 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 8 Feb 2019 22:25:11 +0100
-Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
-In-Reply-To: <87h8dezazs.fsf@dell.be.48ers.dk>
-References: <20190208103753.7D6468149C@busybox.osuosl.org>
- <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
- <87h8dezazs.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LXfCRqQsZbpZDwMX2izUwzTEma0TOROnQ54ZHp6ZxfJMQ@mail.gmail.com>
+Date: Fri, 8 Feb 2019 22:25:59 +0100
+Subject: [Buildroot] [PATCHv2 1/1] package/libcurl: introduce options to
+ reduce feature set
+In-Reply-To: <87mun71dl7.fsf@dell.be.48ers.dk>
+References: <20190207205510.11172-1-patrickdepinguin@gmail.com>
+ <87mun71dl7.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LXKdHeUJ694L0cnfePQ68OFbvXwxkXyog3V8DxH9O7_Zg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El vie., 8 feb. 2019 a las 14:05, Peter Korsgaard
+El jue., 7 feb. 2019 a las 22:41, Peter Korsgaard
 (<peter@korsgaard.com>) escribi?:
 >
 > >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
->  > Hello,
->  > On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
+>  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>  > Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
+>  > About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
+>  > that are not commonly needed:
 >
->  >> commit:
->  >> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
->  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->  >>
->  >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  >>
+>  > - proxy support: 15 KiB
+>  > - cookies support: 10 KiB
+>  > - various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
 >
+>  > Note that the exact amount of space saved depends on the architecture,
+>  > toolchain, and other factors (for example the 'reduced' set disables the
+>  > --libcurl option which only has impact on the curl binary).
 >
->  > I was not really paying attention when this was discussed. Why does it not
->  > matter what the permission in the repo is?
+>  > Other packages that are selecting libcurl could be incompatible with these
+>  > reduced options. But, there is no clear way to find out which packages are in
+>  > this situation, in particular because issues may only be visible at runtime.
 >
-> It doesn't really, but consistency is nice. We had a big mix of
-> executable/not executable.
+> That is not really nice :/
 >
-> > Where is the executable permission set, if not already in the repo?
+>  > +config BR2_PACKAGE_LIBCURL_SMALL
+>  > +    bool "reduced protocol/feature selection"
 >
-> During the installation step, E.G.:
+> I know I proposed this option myself, but having a negative option like
+> this is not really nice. What should a package that needs libcurl built
+> without the _SMALL option do? Depending on !BR2_PACKAGE_LIBCURL_SMALL
+> isn't really nice.
 >
-> define DROPBEAR_INSTALL_INIT_SYSV
->         $(INSTALL) -D -m 755 package/dropbear/S50dropbear \
->                 $(TARGET_DIR)/etc/init.d/S50dropbear
-> endef
+> Could we perhaps invert the option and call it BR2_PACKAGE_LIBCURL_EXTRA or
+> something like that? (with default y)
 
-Ok, thanks, so init scripts in rootfs overlays still need the right
-permission bits.
+Ok, sure.
+I sent a v3 that does that. Feel free to rename the option name to
+what suits you.
 
 Best regards,
 Thomas
