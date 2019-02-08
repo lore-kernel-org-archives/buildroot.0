@@ -1,34 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Feb 2019 13:31:15 +0100
-Subject: [Buildroot] [PATCH] configs/rock64: needs U-Boot pylibfdt
-In-Reply-To: <20190208120124.8909-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 8 Feb 2019 13:01:24 +0100")
-References: <20190208120124.8909-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87mun6zcks.fsf@dell.be.48ers.dk>
+Date: Fri, 8 Feb 2019 13:30:48 +0100
+Subject: [Buildroot] [git commit] configs/orangepi_lite2: fix kernel headers
+ option
+Message-ID: <20190208122958.5756B885F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=85f4bd9425b4ee74839202ab012d193a0175c5fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The build currently fails with:
- > *** dtoc needs the Python libfdt library. Either
- > *** install it on your system, or try:
- > ***
- > *** sudo apt-get install swig libpython-dev
- > ***
- > *** to have U-Boot build its own version.
+Contrary to what the comment in the defconfig says, the
+orangepi_lite2_defconfig was not using the "same as kernel" option for
+kernel headers, but really selecting explicitly Linux 4.18 headers,
+independently from the kernel version.
 
- > Adding BR2_TARGET_UBOOT_NEEDS_PYLIBFDT should fix this build issue,
- > which was reported at:
+Except that in the mean time, BR2_KERNEL_HEADERS_4_18 has been
+removed, causing a build failure due to the legacy checking:
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295223
+Makefile.legacy:9: *** "You have legacy configuration in your .config! Please check your configuration.".  Stop.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This commit fixes that by using the proper
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18 option.
 
-Committed, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295163
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/orangepi_lite2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/orangepi_lite2_defconfig b/configs/orangepi_lite2_defconfig
+index 16d73e14ae..2d4ae70eab 100644
+--- a/configs/orangepi_lite2_defconfig
++++ b/configs/orangepi_lite2_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+ # Linux headers same as kernel, a 4.18 series
+-BR2_KERNEL_HEADERS_4_18=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
