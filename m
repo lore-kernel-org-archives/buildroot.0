@@ -1,51 +1,109 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  8 Feb 2019 21:50:41 +0100
-Subject: [Buildroot] [PATCH] package/opentracing-cpp: needs dynamic library
- support
-Message-ID: <20190208205042.12833-1-patrickdepinguin@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 8 Feb 2019 21:54:55 +0100
+Subject: [Buildroot] [TO-BE-TESTED] support/download/hg: implement
+ repository cache
+In-Reply-To: <20190208195444.GD3079@scaer>
+References: <20190205202433.25292-1-patrickdepinguin@gmail.com>
+ <5f0e55d2-99e2-bc68-4017-334dbafa35a9@mind.be> <20190208165403.GA3079@scaer>
+ <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be> <20190208195444.GD3079@scaer>
+Message-ID: <66a358dd-c8ef-e6bb-815a-b1579d45baf3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-opentracing-cpp requires dlfcn.h from src/dynamic_load_unix.cpp.
-This file is compiled unconditionally.
 
-Disable opentracing-cpp on BR2_STATIC_LIBS configurations.
+On 08/02/2019 20:54, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-02-08 20:27 +0100, Arnout Vandecappelle spake thusly:
+>> On 08/02/2019 17:54, Yann E. MORIN wrote:
+>>> On 2019-02-07 22:33 +0100, Arnout Vandecappelle spake thusly:
+>>>> On 05/02/2019 21:24, Thomas De Schampheleire wrote:
+>>>>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>>
+>>>>> Similar to the git download helper, implement a repository cache for
+>>>>> Mercurial repositories.
+>>>>>
+>>>>> The code is mostly guided by the implementation for git, with certain parts
+>>>>> copied almost verbatim.
+>>>>>
+>>>>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> ---
+>>>>> index efb515fca5..bb5cc87969 100755
+>>>>> --- a/support/download/hg
+>>>>> +++ b/support/download/hg
+>>>>> @@ -1,7 +1,7 @@
+>>>>>  #!/usr/bin/env bash
+>>>>>  
+>>>>>  # We want to catch any unexpected failure, and exit immediately
+>>>>> -set -e
+>>>>> +set -E
+>>>>  Ow, this really is inherited from git, introduced by commit b7efb43e86da96.
+>>>> Yann, care to explain?
+>>>
+>>> Yes, I care to explain. Even though I do write some crap most of the
+>>> time,
+>>  I never said that!
+> 
+> I said it! :-)
+> 
+> [--SNIP--]
+>>> Like all backends, the actual tool is wrapped into a _git() function,
+>>> which was introduced more than three years ago, by commit 3f2bdd070
+>>> (support/download: protect from custom commands with spaces in args), as
+>>> a way to actually fix a bug actually reported by Thomas DS.
+>>>
+>>> Yes, this makes it that the set -E is needed, after all.
+>>
+>>  But then the comment is wrong, no? Because -E does not imply -e and without -e
+>> there is no immediate exit. Or am I missing something else?
+> 
+> Yes, it is partly incorrect. But consider that, with the ERR trap, we
+> _do_ catch unexpected failures, 
 
-Fixes: http://autobuild.buildroot.net/results/454173aef9ff7c808294a974088d7682cad240a8/
+ It seems I'm unable to interpret documentation correctly, because I read the
+trap help text as stating that trap ERR only works if -e is set...
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/opentracing-cpp/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+                                                                A SIGNAL_SPEC
+    of ERR means to execute ARG each time a command's failure would cause the
+    shell to exit when the -e option is enabled.
 
-diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
-index ebcce35aa8..ff3067b7d1 100644
---- a/package/opentracing-cpp/Config.in
-+++ b/package/opentracing-cpp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENTRACING_CPP
- 	bool "opentracing-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	help
-@@ -9,8 +10,9 @@ config BR2_PACKAGE_OPENTRACING_CPP
- 
- 	  http://opentracing.io
- 
--comment "opentracing-cpp needs a toolchain w/ C++, threads, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "opentracing-cpp needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--- 
-2.19.2
+
+> but we no longer _immediately_ exit
+> anymore, indeed. We just postpone the exit to after the second
+> tentative, in which case we do exit immediately from the ERR trap.
+> 
+> However, I was thinking that maybe we could revisit this try-again code,
+> and just exit on the first error and rely on the user to actually clean
+> the git tree if it ever gets corrupted.
+> 
+> We initially added that, in case the repository was uterly broken,
+> because our backend itself  was creating situations where it _could_
+> leave the repo in an inconsistent state, or the autobuilder code would
+> do that (e.g. timeout-kill-9 the build right in the middle of a git
+> action).
+
+ Kill -9 of git should never leave the repo in an inconsistent state anyway. The
+only reasonable way to get an inconsistent repo state is randomly deleting files
+from it (and disk failure, of course). But doesn't the autobuilder do that,
+randomly delete files?
+
+
+ Regards,
+ Arnout
+
+> 
+> However, the git backend was fixed to supposedly always leave the tree
+> in a consistent state now, and the autobuilder code now timeouts from
+> the last step, not from the build start, so we can assume that not git
+> action would now be interrupted abruptely anymore...
+> 
+> Yet, I am a bit contrived, as the git backend is partly my fault, and so
+> I'm not entirely happy with it...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
