@@ -1,67 +1,145 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Feb 2019 22:22:58 +0100
-Subject: [Buildroot] [PATCH 08/19] support/check-uniq-files: decode as
- many strings as possible
-In-Reply-To: <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be>
-References: <cover.1546898693.git.yann.morin.1998@free.fr>
- <fcf8eccf9d275bd95c7e61099722c1a3b22a6da9.1546898693.git.yann.morin.1998@free.fr>
- <11fc1785-c180-a8fc-7a90-46d487218b7c@mind.be>
- <20190208172521.GC3079@scaer>
- <214715e2-cb18-31d0-45b1-e67d6953dec4@mind.be>
-Message-ID: <20190208212258.GF3079@scaer>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri,  8 Feb 2019 22:23:11 +0100
+Subject: [Buildroot] [PATCHv3] package/libcurl: introduce options to
+ extend/reduce feature set
+Message-ID: <20190208212311.29304-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On 2019-02-08 21:42 +0100, Arnout Vandecappelle spake thusly:
-> On 08/02/2019 18:25, Yann E. MORIN wrote:
-> > On 2019-02-08 00:40 +0100, Arnout Vandecappelle spake thusly:
-> >> On 07/01/2019 23:05, Yann E. MORIN wrote:
-> >>> +def str_decode(s):
-> >>> +    try:
-> >>> +        return s.decode()
-> >>> +    except UnicodeDecodeError:
-> >>> +        return repr(s)
-> >>
-> >>  I think s.decode(errors='replace') is exactly what we want: it prints the
-> >> question mark character for things that can't be represented, just like ls does.
-[--SNIP--]
-> >     >>> lines[0].decode(errors='replace')
-> >     u'\ufffd\n'
-> >     >>> print('{}'.format(lines[0].decode(errors='replace')))
-> >     Traceback (most recent call last):
-> >       File "<stdin>", line 1, in <module>
-> >     UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 0: ordinal not in range(128)
-> 
->  Meh, Python2 unicode handling always confuses the hell out of me...
-> 
->  So, to do it well, in python3 you need to do:
-> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(),errors='replace'))
-> 
-> while in python2 the proper thing to do is
-> 
-> print(b'\xc5\x93\xff'.decode(sys.getfilesystemencoding(), \
-> 	errors='replace').encode(sys.getfilesystemencoding(),errors='replace'))
-> 
-> (sys.getfilesystemencoding() makes sure we use the user's encoding so stuff that
-> can be printed gets properly printed).
-> 
->  I couldn't find a way to do the right thing both in python2 and python3...
+Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
+About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
+that are not commonly needed:
 
-At which point, my proposal is much simpler, and more understandable,
-don't you think?
+- proxy support: 15 KiB
+- cookies support: 10 KiB
+- various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
 
-Regards,
-Yann E. MORIN.
+Note that the exact amount of space saved depends on the architecture,
+toolchain, and other factors (for example the 'extra' set enables the
+--libcurl option which only has impact on the curl binary).
 
+Other packages that are selecting libcurl might require protocols from the
+'extra' set. But, there is no clear way to find out which packages are in
+this situation, in particular because issues may only be visible at runtime.
+
+Note: remove the text 'enable' on the option for 'verbose strings' as that
+is more common in Buildroot.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/libcurl/Config.in  | 30 ++++++++++++++++++++++++++-
+ package/libcurl/libcurl.mk | 42 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 1 deletion(-)
+
+
+v3: (feedback Peter Korsgaard)
+- change from negative 'reduce' option to positive 'enable extra'.
+
+v2:
+- steer proxy and cookies support via separate options
+- reword option and help text
+
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 9c62539e4d..4e06144722 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -15,10 +15,38 @@ config BR2_PACKAGE_CURL
+ 	  Install curl binary as well
+ 
+ config BR2_PACKAGE_LIBCURL_VERBOSE
+-	bool "enable verbose strings"
++	bool "verbose strings"
+ 	help
+ 	  Enable verbose text strings
+ 
++config BR2_PACKAGE_LIBCURL_PROXY_SUPPORT
++	bool "proxy support"
++	default y
++	help
++	  Enable proxy support.
++
++config BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT
++	bool "cookies support"
++	default y
++	help
++	  Enable support for cookies.
++
++config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
++	bool "enable extra protocols and features"
++	default y
++	help
++	  Enable the following extra protocols and features:
++	  - LDAP / LDAPS
++	  - POP3 / IMAP / SMTP
++	  - Telnet
++	  - TFTP
++	  - RTSP
++	  - SMB / CIFS
++	  - DICT
++	  - Gopher
++	  - The --libcurl option of the curl binary to generate C
++	    programs
++
+ config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
+ 	bool
+ 	default y if BR2_PACKAGE_OPENSSL
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 3bc5207951..add1baeaa5 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -108,6 +108,48 @@ else
+ LIBCURL_CONF_OPTS += --without-nghttp2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
++LIBCURL_CONF_OPTS += --enable-cookies
++else
++LIBCURL_CONF_OPTS += --disable-cookies
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL_PROXY_SUPPORT),y)
++LIBCURL_CONF_OPTS += --enable-proxy
++else
++LIBCURL_CONF_OPTS += --disable-proxy
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES),y)
++LIBCURL_CONF_OPTS += \
++	--enable-dict \
++	--enable-gopher \
++	--enable-imap \
++	--enable-ldap \
++	--enable-ldaps \
++	--enable-libcurl-option \
++	--enable-pop3 \
++	--enable-rtsp \
++	--enable-smb \
++	--enable-smtp \
++	--enable-telnet \
++	--enable-tftp
++else
++LIBCURL_CONF_OPTS += \
++	--disable-dict \
++	--disable-gopher \
++	--disable-imap \
++	--disable-ldap \
++	--disable-ldaps \
++	--disable-libcurl-option \
++	--disable-pop3 \
++	--disable-rtsp \
++	--disable-smb \
++	--disable-smtp \
++	--disable-telnet \
++	--disable-tftp
++endif
++
+ define LIBCURL_FIX_DOT_PC
+ 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.19.2
