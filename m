@@ -1,49 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Feb 2019 22:40:48 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/ncmpc: add pcre optional dependency
-In-Reply-To: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
-References: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190208214048.11835-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 8 Feb 2019 22:39:50 +0100
+Subject: [Buildroot] [git commit] package/libopenssl: m68x use
+ SMALL_FOOTPRINT mode
+Message-ID: <20190208214043.EE6B6885E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pcre dependency has been added in version 0.32:
-https://github.com/MusicPlayerDaemon/ncmpc/commit/0b3169510014f0f336de58864b97a3cc0f308500
+commit: https://git.buildroot.net/buildroot/commit/?id=8aba0a29a06d16b5a0a5c556fea2150b316fe036
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+OPENSSL_SMALL_FOOTPRINT mode selects alternate paths in the sha512 and
+blake2 algorithms which resolves a assembler issue like the following.
+
+/tmp/ccfnLhKQ.s: Assembler messages:
+/tmp/ccfnLhKQ.s:11167: Error: value -32790 out of range
+make[2]: *** [crypto/blake2/blake2b.o] Error 1
+
+This issue was found after the OpenSSL1.1.x bump.
+
+Fixes
+http://autobuild.buildroot.net/results/533e817695cde321b725145112cfd83c092d9d75
+
+Upstream ticket
+https://github.com/openssl/openssl/issues/8190
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncmpc/ncmpc.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/libopenssl/libopenssl.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 4167974490..2e52be27d5 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -14,8 +14,7 @@ NCMPC_LICENSE_FILES = COPYING
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 0bfc74ed0e..a845f1da53 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -16,9 +16,11 @@ LIBOPENSSL_TARGET_ARCH = generic32
+ LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ LIBOPENSSL_PROVIDES = openssl
  
- NCMPC_CONF_OPTS = \
- 	-Dcurses=ncurses \
--	-Ddocumentation=disabled \
--	-Dregex=disabled
-+	-Ddocumentation=disabled
- 
- ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
- NCMPC_DEPENDENCIES += lirc-tools
-@@ -24,4 +23,11 @@ else
- NCMPC_CONF_OPTS += -Dlirc=disabled
+-# relocation truncated to fit: R_68K_GOT16O
+ ifeq ($(BR2_m68k_cf),y)
++# relocation truncated to fit: R_68K_GOT16O
+ LIBOPENSSL_CFLAGS += -mxgot
++# resolves an assembler "out of range error" with blake2 and sha512 algorithms
++LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
  endif
  
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+NCMPC_DEPENDENCIES += pcre
-+NCMPC_CONF_OPTS += -Dregex=enabled
-+else
-+NCMPC_CONF_OPTS += -Dregex=disabled
-+endif
-+
- $(eval $(meson-package))
--- 
-2.14.1
+ ifeq ($(BR2_USE_MMU),)
