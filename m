@@ -1,35 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Feb 2019 10:51:16 +0100
-Subject: [Buildroot] [git commit] docs/website: fix Paypal account address
-Message-ID: <20190208095032.EBBC987F50@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Feb 2019 11:38:57 +0100
+Subject: [Buildroot] [PATCH] packages: update sysv S* scripts to 644
+In-Reply-To: <1549394618-37338-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 5 Feb 2019 13:23:38 -0600")
+References: <1549394618-37338-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87va1uzhry.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72461d9af32cdbed820b1bc5cae81818c502f47f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-As noticed by Yann E. Morin, the address of the Paypal account is
-@buildroot.org, not @lists.buildroot.org.
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
 
-Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/website/association.html | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Nothing fancy but here's my command to do it in the packages folder.
+ > chmod 644 $(find . -type f -name "S*" -exec ls -l "{}" \; | grep "x 1" | cut -d ' ' -f10)
 
-diff --git a/docs/website/association.html b/docs/website/association.html
-index 9dec865314..d626d376dd 100644
---- a/docs/website/association.html
-+++ b/docs/website/association.html
-@@ -87,7 +87,7 @@
- 
- 	    <li>A Paypal payment to the association Paypal account,
- 	    whose address
--	    is <code>buildroot-association at lists.buildroot.org</code>.</li>
-+	    is <code>buildroot-association at buildroot.org</code>.</li>
- 
- 	  </ul>
- 
+A simpler solution is using the -perm /u+x option, E.G.:
+
+find -type f -name S\* -perm /u+x | xargs chmod 644
+
+ >  package/input-event-daemon/S99input-event-daemon | 0
+
+Strangely enough this file was still 755 after git-am'ing the patch, so
+I manually added it and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
