@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 8 Feb 2019 21:54:55 +0100
-Subject: [Buildroot] [TO-BE-TESTED] support/download/hg: implement
- repository cache
-In-Reply-To: <20190208195444.GD3079@scaer>
-References: <20190205202433.25292-1-patrickdepinguin@gmail.com>
- <5f0e55d2-99e2-bc68-4017-334dbafa35a9@mind.be> <20190208165403.GA3079@scaer>
- <3e9d7a7a-9904-c2ab-0bb2-eb95a32895eb@mind.be> <20190208195444.GD3079@scaer>
-Message-ID: <66a358dd-c8ef-e6bb-815a-b1579d45baf3@mind.be>
+Date: Fri, 8 Feb 2019 22:15:12 +0100
+Subject: [Buildroot] [PATCH 0/8] board/raspberrypi: post-image
+ customisations.
+In-Reply-To: <413514e4-ab4a-9e64-3110-9bfb73bedb75@codethink.co.uk>
+References: <20190129132309.3455-1-robert.heywood@codethink.co.uk>
+ <bda143a4-0e98-773a-2eed-3cbbad26b7c5@mind.be>
+ <413514e4-ab4a-9e64-3110-9bfb73bedb75@codethink.co.uk>
+Message-ID: <f1b3bf83-23a7-ea4f-c552-25d25824a0ab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +15,159 @@ To: buildroot@busybox.net
 
 
 
-On 08/02/2019 20:54, Yann E. MORIN wrote:
-> Arnout, All,
+On 08/02/2019 12:41, Robert Heywood wrote:
 > 
-> On 2019-02-08 20:27 +0100, Arnout Vandecappelle spake thusly:
->> On 08/02/2019 17:54, Yann E. MORIN wrote:
->>> On 2019-02-07 22:33 +0100, Arnout Vandecappelle spake thusly:
->>>> On 05/02/2019 21:24, Thomas De Schampheleire wrote:
->>>>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>>>>
->>>>> Similar to the git download helper, implement a repository cache for
->>>>> Mercurial repositories.
->>>>>
->>>>> The code is mostly guided by the implementation for git, with certain parts
->>>>> copied almost verbatim.
->>>>>
->>>>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>>>> ---
->>>>> index efb515fca5..bb5cc87969 100755
->>>>> --- a/support/download/hg
->>>>> +++ b/support/download/hg
->>>>> @@ -1,7 +1,7 @@
->>>>>  #!/usr/bin/env bash
->>>>>  
->>>>>  # We want to catch any unexpected failure, and exit immediately
->>>>> -set -e
->>>>> +set -E
->>>>  Ow, this really is inherited from git, introduced by commit b7efb43e86da96.
->>>> Yann, care to explain?
->>>
->>> Yes, I care to explain. Even though I do write some crap most of the
->>> time,
->>  I never said that!
+> Hi Arnout.
 > 
-> I said it! :-)
+> Thanks for your reply.
+> In retrospect I probably should have reached out and asked if any of this would
+> be wanted prior to submitting it. c?est la vie.
 > 
-> [--SNIP--]
->>> Like all backends, the actual tool is wrapped into a _git() function,
->>> which was introduced more than three years ago, by commit 3f2bdd070
->>> (support/download: protect from custom commands with spaces in args), as
->>> a way to actually fix a bug actually reported by Thomas DS.
->>>
->>> Yes, this makes it that the set -E is needed, after all.
+> On 06/02/2019 12:36, Arnout Vandecappelle wrote:
+>> ? Hi Robert,
 >>
->>  But then the comment is wrong, no? Because -E does not imply -e and without -e
->> there is no immediate exit. Or am I missing something else?
+>> ? Thank you for this work, excellent to see the raspberrypi support improved. We
+>> discussed this at the Buildroot developer meeting.
+>>
+>> ? However, we would like to suggest a slightly different approach that is more
+>> amenable to reuse in other context and also simplifies things in general, we
+>> think. See below for our thoughts and suggestions. Thus, the series is marked as
+>> Changes Requested in patchwork.
+>>
+>> On 29/01/2019 14:23, Robert J. Heywood wrote:
+>>> Hi all.
+>>>
+>>> I wanted to do use u-boot and mainline kernel sources with my raspies
+>>> but in trying to do so, found that doing it required a lot of changes
+>>> to the genimage cfg files.
+>>
+>> ? Note that the intention is actually that when you change the configuration of
+>> your target, you also change the genimage.cfg file.
 > 
-> Yes, it is partly incorrect. But consider that, with the ERR trap, we
-> _do_ catch unexpected failures, 
+> This is something that I found pretty confusing. It seems illogical to have to
+> set the same options in two distinct places.
 
- It seems I'm unable to interpret documentation correctly, because I read the
-trap help text as stating that trap ERR only works if -e is set...
-
-                                                                A SIGNAL_SPEC
-    of ERR means to execute ARG each time a command's failure would cause the
-    shell to exit when the -e option is enabled.
+ True, but this patch series doesn't really change that, does it? E.g. for the
+zImage/image kernel, you still have to select both the correct
+BR2_LINUX_KERNEL_xxIMAGE option and pass --kernel= (rather than updating
+config.txt).
 
 
-> but we no longer _immediately_ exit
-> anymore, indeed. We just postpone the exit to after the second
-> tentative, in which case we do exit immediately from the ERR trap.
+>> That said, if it is easy to
+>> support more use cases with a single genimage.cfg file (especially if there are
+>> in-tree use cases as well), that is something we might want to support in the
+>> provided genimage.cfg files.
+>>
 > 
-> However, I was thinking that maybe we could revisit this try-again code,
-> and just exit on the first error and rely on the user to actually clean
-> the git tree if it ever gets corrupted.
-> 
-> We initially added that, in case the repository was uterly broken,
-> because our backend itself  was creating situations where it _could_
-> leave the repo in an inconsistent state, or the autobuilder code would
-> do that (e.g. timeout-kill-9 the build right in the middle of a git
-> action).
+> It would be better if the genimage config file could contain a placeholder, such
+> as "devicetree" or "kernel" which could then be specified on the commandline.
+> Then when buildroot calls genimage, it could fill in the relevant parameters.
 
- Kill -9 of git should never leave the repo in an inconsistent state anyway. The
-only reasonable way to get an inconsistent repo state is randomly deleting files
-from it (and disk failure, of course). But doesn't the autobuilder do that,
-randomly delete files?
+ That is indeed a good idea! Maybe both better and easier to implement than
+wildcard support in genimage...
+
+> 
+> It would simplify a lot of the cfg files across all of the boards.
+> 
+>>> --snip--
+>>> I've improved the situation by first removing the replication in the
+>>> cfg files (consolidating them into a single generic file). And then
+>>> parsing the .config file for the board specific pieces; like the
+>>> device tree files, and the kernel target (zimage vs image).
+>>
+>> ? This .config approach we don't like. Instead, we think it is more appropriate
+>> to add support for wildcards to genimage itself (and send that change upstream
+>> to pengutronix as well). That way, you can add "*.dtb" to genimage.cfg instead
+>> of the current board-specific names.
+>>
+> 
+> genimage sort of already has this feature for directories. It's a shame we cant
+> use that feature here, since the pi's bootloader uses device trees in the root
+> of the partition. It would have been nice to have a dtb folder.
+> 
+>> ? This approach can then be reused for other boards as well, like the freescale
+>> boards on which you probably based this approach. Back in the day that approach
+>> of a post-image script that autodiscovers things looked like the right thing to
+>> do, but it is actually somewhat complicated and confusing.
+> 
+> I wasn't aware the freescale configs did something similar. That's pretty
+> interesting.
+> 
+>>
+>> ? If you want to do something like this, I really think it's more appropriate to
+>> make a custom genimage.cfg and config.txt that includes everything you want.
+>> Note that if you make a custom genimage.cfg, you also don't need to use the
+>> raspberrypi post-image script. Instead, use support/scripts/genimage.sh as the
+>> post-image script.
+>>
+>> ? For the zImage vs. image, you could use "*mage" but I actually think it's more
+>> appropriate to keep separate genimage.cfg files for them.
+>>
+>>> - Changing the kernel in the config.txt file,
+>>> ?? Allowing me to boot uboot.bin.
+>>
+>> ? Cfr. above.
+> 
+> I was really hoping I'd be able to get away with not having to maintain a
+> separate set of files outside of buildroot that basically just replicate
+> functionality already inside of it.
+> But I guess what I could do is setup my CI such that it watches the buildroot
+> genimage.cfg files and alerts me if any incompatible changes happen.
+> 
+>>
+>> ? In fact, I don't really like the way the post-image script is updating the
+>> config.txt. I think it makes much more sense to have a different config.txt for
+>> each board instead of SEDing it. There are two options to handle this: either
+>> copy the board-specific config.txt in the post-image script, or (more
+>> generically) extend support/scripts/genimage.cfg with options that point to
+>> directories/files that have to be copied to IMAGES_DIR before running genimage.
+> 
+> I enjoy the sed approach. It means buildroot is able to take advantage of
+> upstream changes to the config.txt file, and we're not made to maintain a hoard
+> of copies with minor changes.
+
+ Only, config.txt doesn't come from upstream; it comes from
+package/rpi-firmware/config.txt and it says "we recommend you to change it to
+fit your needs".
+
+ Okay, it goes on saying to override it in a post-build script, but that's
+because there is no other way to put a file into genimage.cfg.
 
 
  Regards,
  Arnout
 
+>>> - Specifying a different rootfs file,
+>>> ?? Since i would like to use btrfs instead of ext4.
+>>
+>> ? This one certainly is better done in a custom genimage.cfg.
+>>
+>>> - An option to skip creating the full sdimg.
+>>> ?? As I'm using btrfs, in some cases I only need the vfat boot blob
+>>> ?? from genimage.
+>>
+>> ? Again, make a custom genimage.cfg.
+>>
 > 
-> However, the git backend was fixed to supposedly always leave the tree
-> in a consistent state now, and the autobuilder code now timeouts from
-> the last step, not from the build start, so we can assume that not git
-> action would now be interrupted abruptely anymore...
+> very well.
 > 
-> Yet, I am a bit contrived, as the git backend is partly my fault, and so
-> I'm not entirely happy with it...
+> I have a script that configures buildroot as I want it, from defconfigs and
+> fragments. I'll also make it spit out a genimage file.
+> It'll be easy to do there since that script has access to the devicetree/kernel
+> variables from the defconfig anyway.
 > 
-> Regards,
-> Yann E. MORIN.
+> 
+>>
+>>> I'm using a conbination of grep and eval to pull specific values out
+>>> of the .config file and get them into the script. That might not be
+>>> best practice.
+>>
+>> ? I personally prefer to use 'make printvars VARS=...' because you can also
+>> extract make-derived variables that way (e.g. LINUX_IMAGE_NAME to get the
+>> zImage/image). But either way is fine.
+> 
+> I think I'll use that from now on. I find the eval approach confusing to look
+> at. :)
+> 
+> kind regards, rob.
 > 
