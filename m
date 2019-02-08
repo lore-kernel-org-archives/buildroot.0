@@ -1,145 +1,51 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  8 Feb 2019 22:23:11 +0100
-Subject: [Buildroot] [PATCHv3] package/libcurl: introduce options to
- extend/reduce feature set
-Message-ID: <20190208212311.29304-1-patrickdepinguin@gmail.com>
+Date: Fri, 8 Feb 2019 22:25:11 +0100
+Subject: [Buildroot] [git commit] packages: update sysv S* scripts to 644
+In-Reply-To: <87h8dezazs.fsf@dell.be.48ers.dk>
+References: <20190208103753.7D6468149C@busybox.osuosl.org>
+ <CAAXf6LUte5x22eChjKBKoPoupntP8LnC-OHR7VgMrqc1ajUTrg@mail.gmail.com>
+ <87h8dezazs.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LXfCRqQsZbpZDwMX2izUwzTEma0TOROnQ54ZHp6ZxfJMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+El vie., 8 feb. 2019 a las 14:05, Peter Korsgaard
+(<peter@korsgaard.com>) escribi?:
+>
+> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+>  > Hello,
+>  > On Fri, Feb 8, 2019, 11:39 Peter Korsgaard <peter@korsgaard.com wrote:
+>
+>  >> commit:
+>  >> https://git.buildroot.net/buildroot/commit/?id=590e9e05b683ee521d4984b5cb77a590ebb3fd17
+>  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  >>
+>  >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  >>
+>
+>
+>  > I was not really paying attention when this was discussed. Why does it not
+>  > matter what the permission in the repo is?
+>
+> It doesn't really, but consistency is nice. We had a big mix of
+> executable/not executable.
+>
+> > Where is the executable permission set, if not already in the repo?
+>
+> During the installation step, E.G.:
+>
+> define DROPBEAR_INSTALL_INIT_SYSV
+>         $(INSTALL) -D -m 755 package/dropbear/S50dropbear \
+>                 $(TARGET_DIR)/etc/init.d/S50dropbear
+> endef
 
-Libcurl is more than 250 KiB (libcurl) / 100 KiB (curl binary) in size.
-About 50 KiB / 15 KiB of this can be saved by disabling features/protocols
-that are not commonly needed:
+Ok, thanks, so init scripts in rootfs overlays still need the right
+permission bits.
 
-- proxy support: 15 KiB
-- cookies support: 10 KiB
-- various less common protocols: 25 KiB (libcurl) + 15 KiB (curl binary)
-
-Note that the exact amount of space saved depends on the architecture,
-toolchain, and other factors (for example the 'extra' set enables the
---libcurl option which only has impact on the curl binary).
-
-Other packages that are selecting libcurl might require protocols from the
-'extra' set. But, there is no clear way to find out which packages are in
-this situation, in particular because issues may only be visible at runtime.
-
-Note: remove the text 'enable' on the option for 'verbose strings' as that
-is more common in Buildroot.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/libcurl/Config.in  | 30 ++++++++++++++++++++++++++-
- package/libcurl/libcurl.mk | 42 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 71 insertions(+), 1 deletion(-)
-
-
-v3: (feedback Peter Korsgaard)
-- change from negative 'reduce' option to positive 'enable extra'.
-
-v2:
-- steer proxy and cookies support via separate options
-- reword option and help text
-
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 9c62539e4d..4e06144722 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -15,10 +15,38 @@ config BR2_PACKAGE_CURL
- 	  Install curl binary as well
- 
- config BR2_PACKAGE_LIBCURL_VERBOSE
--	bool "enable verbose strings"
-+	bool "verbose strings"
- 	help
- 	  Enable verbose text strings
- 
-+config BR2_PACKAGE_LIBCURL_PROXY_SUPPORT
-+	bool "proxy support"
-+	default y
-+	help
-+	  Enable proxy support.
-+
-+config BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT
-+	bool "cookies support"
-+	default y
-+	help
-+	  Enable support for cookies.
-+
-+config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
-+	bool "enable extra protocols and features"
-+	default y
-+	help
-+	  Enable the following extra protocols and features:
-+	  - LDAP / LDAPS
-+	  - POP3 / IMAP / SMTP
-+	  - Telnet
-+	  - TFTP
-+	  - RTSP
-+	  - SMB / CIFS
-+	  - DICT
-+	  - Gopher
-+	  - The --libcurl option of the curl binary to generate C
-+	    programs
-+
- config BR2_PACKAGE_LIBCURL_TLS_SUPPORT
- 	bool
- 	default y if BR2_PACKAGE_OPENSSL
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3bc5207951..add1baeaa5 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -108,6 +108,48 @@ else
- LIBCURL_CONF_OPTS += --without-nghttp2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
-+LIBCURL_CONF_OPTS += --enable-cookies
-+else
-+LIBCURL_CONF_OPTS += --disable-cookies
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL_PROXY_SUPPORT),y)
-+LIBCURL_CONF_OPTS += --enable-proxy
-+else
-+LIBCURL_CONF_OPTS += --disable-proxy
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES),y)
-+LIBCURL_CONF_OPTS += \
-+	--enable-dict \
-+	--enable-gopher \
-+	--enable-imap \
-+	--enable-ldap \
-+	--enable-ldaps \
-+	--enable-libcurl-option \
-+	--enable-pop3 \
-+	--enable-rtsp \
-+	--enable-smb \
-+	--enable-smtp \
-+	--enable-telnet \
-+	--enable-tftp
-+else
-+LIBCURL_CONF_OPTS += \
-+	--disable-dict \
-+	--disable-gopher \
-+	--disable-imap \
-+	--disable-ldap \
-+	--disable-ldaps \
-+	--disable-libcurl-option \
-+	--disable-pop3 \
-+	--disable-rtsp \
-+	--disable-smb \
-+	--disable-smtp \
-+	--disable-telnet \
-+	--disable-tftp
-+endif
-+
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
--- 
-2.19.2
+Best regards,
+Thomas
