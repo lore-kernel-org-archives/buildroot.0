@@ -1,51 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 8 Feb 2019 08:53:34 +0100
-Subject: [Buildroot] [PATCH] docs/website: add page for the Buildroot
- Association
-In-Reply-To: <f8b4c0fe-5cde-185d-6aaf-949c1c082f85@mind.be>
-References: <20190207220912.30484-1-thomas.petazzoni@bootlin.com>
- <f8b4c0fe-5cde-185d-6aaf-949c1c082f85@mind.be>
-Message-ID: <20190208085334.7332651e@windsurf>
+Date: Fri, 8 Feb 2019 08:54:50 +0100
+Subject: [Buildroot] git tarball hashes [was: Report of Buildroot
+ developer meeting FOSDEM 2019]
+In-Reply-To: <78472b2d-4adc-b110-273e-ddce78316dc2@mind.be>
+References: <bc55cb82-c939-78c9-30ee-8c02c39fe425@mind.be>
+ <78472b2d-4adc-b110-273e-ddce78316dc2@mind.be>
+Message-ID: <20190208085450.6306509e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Thanks for the review. I obviously agree on all points, except one
-where I have a comment (not really a full disagreement).
-
-On Fri, 8 Feb 2019 00:19:08 +0100
+On Thu, 7 Feb 2019 23:55:24 +0100
 Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> > diff --git a/docs/website/foundation.html b/docs/website/foundation.html
-> > new file mode 100644
-> > index 0000000000..c25eb42f96
-> > --- /dev/null
-> > +++ b/docs/website/foundation.html  
->                      ^^^^^^^^^^association + in other places
-
-Actually, it was intentional to use the term "foundation" in as many
-places as possible. Even if the french authorities rejected the legal
-name "Buildroot Foundation", because "foundation" has a very specific
-meaning in terms of legal entity in France, I thought "foundation" was
-the english word that carried best what this organization was. Is
-"association" really the proper word in english to describe a
-not-for-profit legal entity ?
-
-> > +	  <p>To become a member, an individual or a company simply has
-> > +	  to pay its yearly membership. For an individual, the minimum  
+> On 07/02/2019 23:51, Arnout Vandecappelle wrote:
+> > making sure the git backend
+> > produces reproducible tarballs by using the pax archive format (Yann started
+> > working on an implementation for that)  
 > 
->  Should we mention somewhere that the board can veto that?
+> ?I realized while writing this: how does this approach fix the instability of
+> gzip? Or do we assume that that was a one-off?
 
-I don't think it's really needed. It's pretty common for
-associations/foundations to have the possibility of vetoing
-memberships, and it's a sufficiently rare event that it's probably not
-worth mentioning on this page.
+Which gzip issue are you talking about ? I think we never had a
+*version* issue with gzip, only with installations where gzip is a
+symlink to pigz.
 
-Thanks,
+Best regards,
 
 Thomas
 -- 
