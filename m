@@ -1,87 +1,131 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  9 Feb 2019 21:23:49 +0100
-Subject: [Buildroot] [PATCHv3 7/7] support/download/{bzr, cvs, git,
- svn}: highlight unimplemented source-check
-In-Reply-To: <20190209202350.4984-1-patrickdepinguin@gmail.com>
-References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
-Message-ID: <20190209202350.4984-7-patrickdepinguin@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat,  9 Feb 2019 15:47:14 -0500
+Subject: [Buildroot] [PATCH v6 1/3] openjdk-bin: new package
+Message-ID: <20190209204716.38581-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Adam Duskett <Aduskett@gmail.com>
 
-For bzr, cvs, git and svn, there is no method of checking whether the
-revision exists remotely, without actually cloning the repository.
-Therefore, there is no actual implementation for '-C' (checkonly) for these
-download helpers. The script will fall back to the normal download logic,
-which would effectively fail if the revision does not exist.
+Paradoxically, building OpenJDK requires a pre-existing JDK.
+This pre-existing JDK is called the "boot JDK."
 
-For completeness, mention this unimplemented feature in the usage text.
+The boot JDK for building JDK major version N should be a JDK of major
+version N-1, so for building JDK11, JDK10 would be needed. This requirement is
+an issue when building on most distributions, as the host JDK tends to be JDK8.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+The AdoptOpenJDK project provides binaries that can act as the boot JDK to
+build the target JDK, which is what this package provides.
+
+Currently, only a x86_64 host is supported, for two reasons:
+1) A 32bit x86 binary distribution is not available from AdoptOpenJDK
+2) Access to a machine that is not x86_64 that can build Buildroot is not
+   avaliable.
+
+The provided unpack200 has an invalid RPATH and relies on libzlib.
+When host-libzlib runs the install step, the following error is generated:
+
+*** ERROR: package host-libzlib installs executables without proper RPATH:
+***   $(HOST_DIR)/bin/unpack200
+
+Because unpack200 is a deprecated tool, removing it after installation
+is safe and fixes the issue.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- support/download/bzr | 2 ++
- support/download/cvs | 2 ++
- support/download/git | 2 ++
- support/download/svn | 2 ++
- 4 files changed, 8 insertions(+)
+Changes v1 -> v2:
+  - No change
 
-v3: no changes
+Changes v2 -> v3:
+  - Changed the location of the installed binaries to just $(HOST_DIR)/openjdk
 
-diff --git a/support/download/bzr b/support/download/bzr
-index 5289a421cd..278d8778af 100755
---- a/support/download/bzr
-+++ b/support/download/bzr
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Clone from repository at URI.
- #   -c CSET     Use changeset (or revision) CSET.
-diff --git a/support/download/cvs b/support/download/cvs
-index 9d0dc3cb3a..d9a586293a 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
-diff --git a/support/download/git b/support/download/git
-index 17ca04eb98..e9c02d6712 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -7,6 +7,8 @@ set -E
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -r          Clone and archive sub-modules.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Clone from repository at URI.
-diff --git a/support/download/svn b/support/download/svn
-index 542b25c0a2..5fff064683 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -7,6 +7,8 @@ set -e
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          (unimplemented) Only check that the revision exists in the
-+#               remote repository.
- #   -o FILE     Generate archive in FILE.
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
+  - Added a more in-depth commit message explaining some of the my reasoning
+    for some of the quirks in the package files.
+
+Changes v3 -> v4:
+  - Removed first person wordage. (Thomas)
+  - Changed GPLv2+ -> GPL-2.0+ (Thomas)
+  - Removed Config.in.host (Thomas)
+
+Changes v4 -> v5:
+  - Changed the install location to just $(HOST_DIR)/bin and ${HOST_DIR}/lib
+  - Remove unpack200 from ${HOSt_DIR}/bin due to bad RPATHS in the binary.
+  - Remove support/testing/tests/package/br2-external/openjdk/ from DEVELOPERS
+    (Matthew)
+  - Update version to 11.0.2+9
+
+Changes v5 -> v6:
+  - Fix error message in comments in openjdk-bin.mk.
+
+ DEVELOPERS                           |  1 +
+ package/openjdk-bin/openjdk-bin.hash |  6 ++++++
+ package/openjdk-bin/openjdk-bin.mk   | 30 ++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/openjdk-bin/openjdk-bin.hash
+ create mode 100644 package/openjdk-bin/openjdk-bin.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f2e69cc041..e7ab584be6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -50,6 +50,7 @@ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
+ F:	package/nginx-naxsi/
++F:	package/openjdk-bin/
+ F:	package/policycoreutils/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+new file mode 100644
+index 0000000000..d36a582a33
+--- /dev/null
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -0,0 +1,6 @@
++# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
++sha256	d02089d834f7702ac1a9776d8d0d13ee174d0656cf036c6b68b9ffb71a6f610e	OpenJDK11U-jdk_x64_linux_hotspot_11.0.2_9.tar.gz
++
++# Locally calculated
++sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
++sha256	a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb	legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+new file mode 100644
+index 0000000000..49764f9485
+--- /dev/null
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# host-openjdk-bin
++#
++################################################################################
++
++HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.2
++HOST_OPENJDK_BIN_VERSION_MINOR = 9
++HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
++HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
++HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
++
++# If the files are installed to $(HOST_DIR)/bin and $(HOST_DIR)/lib
++# the build will fail because the RPATH of java binaries do not have a proper
++# RPATH
++define HOST_OPENJDK_BIN_INSTALL_CMDS
++	cp -aLrf $(@D)/bin/* $(HOST_DIR)/bin/
++	cp -aLrf $(@D)/lib/* $(HOST_DIR)/lib/
++	# unpack200 has an invalid RPATH and relies on libzlib. When host-libzlib
++	# is installed on the system, the error
++	# "ERROR: package host-libzlib installs executables without proper RPATH:
++	#     output/host/bin/unpack200"
++	# will occure. Because unpack200 is a deprecated tool, removing it to fix
++	# this issue is safe.
++	$(RM) $(HOST_DIR)/bin/unpack200
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.19.2
+2.20.1
