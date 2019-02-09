@@ -1,214 +1,126 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat,  9 Feb 2019 15:47:16 -0500
-Subject: [Buildroot] [PATCH v6 3/3] openjdk-hello-world: new test
-In-Reply-To: <20190209204716.38581-1-aduskett@gmail.com>
-References: <20190209204716.38581-1-aduskett@gmail.com>
-Message-ID: <20190209204716.38581-3-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 9 Feb 2019 22:53:19 +0100
+Subject: [Buildroot] [PATCHv3 2/7] support/download/hg: implement
+ source-check
+In-Reply-To: <20190209202350.4984-2-patrickdepinguin@gmail.com>
+References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
+ <20190209202350.4984-2-patrickdepinguin@gmail.com>
+Message-ID: <20190209215319.GH3079@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Daniel J. Leach <dleach@belcan.com>
+Thomas, All,
 
-This test is a simple "Hello, World" integration test of the OpenJDK package.
+On 2019-02-09 21:23 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Note: the implementation is different (better) than what used to be in
+> Buildroot before source-check was removed.
+> 
+> The original implementation:
+>     hg incoming --force -l1 <URL>
+> would only verify that the repository exists, not that the requested
+> revision is present.
+> 
+> An already better implementation is:
+>     hg incoming --force -l1 -r <revision> <URL>
+> but compared to the next solution it has a large resource consumption on the
+> local machine. In the background, the full repository is first downloaded.
+> 
+> The implemented solution is:
+>     hg identify -r <revision> <URL>
+> which operates directly on the remote repository.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  support/download/hg | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> v3: no changes
+> 
+> diff --git a/support/download/hg b/support/download/hg
+> index efb515fca5..ed8dcfbcff 100755
+> --- a/support/download/hg
+> +++ b/support/download/hg
+> @@ -7,6 +7,7 @@ set -e
+>  #
+>  # Options:
+>  #   -q          Be quiet.
+> +#   -C          Only check that the changeset exists in the remote repository.
+>  #   -o FILE     Generate archive in FILE.
+>  #   -u URI      Clone from repository at URI.
+>  #   -c CSET     Use changeset (or revision) CSET.
+> @@ -19,6 +20,7 @@ verbose=
+>  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+>      case "${OPT}" in
+>      q)  verbose=-q;;
+> +    C)  checkonly=1;;
 
-It compiles the Java app on the host, then runs it on an emulated AARCH64
-target and verifies "Hello, World" is printed.
+I've come to like an alternate solution to handle boolean options:
 
-Signed-off-by: Daniel J. Leach <dleach@belcan.com>
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v3:
-  - Added this patch to the series.
+    checkonly=false
+    while getopts ...; do
+        case "${OPT}" in
+            C)  checkonly=true;;
+        esac
+    done
 
-Changes v3 -> v5:
-  - None
+Which allows to write nicer conditions:
 
-Changes v5 -> v6:
-  - Updated .gitlab-ci.yml entry.
-  - Fixed From: and SOB line.
+    if ${checkonly}; then
+        ...
+    fi
 
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- .../package/br2-external/openjdk/Config.in    |  1 +
- .../br2-external/openjdk/external.desc        |  1 +
- .../package/br2-external/openjdk/external.mk  |  1 +
- .../package/openjdk-hello-world/Config.in     | 26 ++++++++++++
- .../openjdk-hello-world/HelloWorld.java       |  7 ++++
- .../openjdk-hello-world.mk                    | 18 ++++++++
- support/testing/tests/package/test_openjdk.py | 42 +++++++++++++++++++
- 9 files changed, 98 insertions(+)
- create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
- create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
- create mode 100644 support/testing/tests/package/test_openjdk.py
+>      o)  output="${OPTARG}";;
+>      u)  uri="${OPTARG}";;
+>      c)  cset="${OPTARG}";;
+> @@ -36,6 +38,11 @@ _hg() {
+>      eval ${HG} "${@}"
+>  }
+>  
+> +if [ -n "${checkonly}" ]; then
+> +    _hg identify ${verbose} "${@}" --rev "'${cset}'" "'${uri}'" > /dev/null
+> +    exit ${?}
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2f0ebaa25c..b055d08634 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -328,6 +328,7 @@ tests.package.test_ipython.TestIPythonPy2: { extends: .runtime_test }
- tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
- tests.package.test_lua.TestLua: { extends: .runtime_test }
- tests.package.test_lua.TestLuajit: { extends: .runtime_test }
-+tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
- tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
- tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6606205f7d..56213c5307 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1475,6 +1475,7 @@ F:	package/valijson/
- F:	package/wpa_supplicant/
- F:	package/wireless_tools/
- F:	package/xen/
-+F:	support/testing/tests/package/br2-external/openjdk/
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
-diff --git a/support/testing/tests/package/br2-external/openjdk/Config.in b/support/testing/tests/package/br2-external/openjdk/Config.in
-new file mode 100644
-index 0000000000..00c7fd4799
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-hello-world/Config.in"
-diff --git a/support/testing/tests/package/br2-external/openjdk/external.desc b/support/testing/tests/package/br2-external/openjdk/external.desc
-new file mode 100644
-index 0000000000..f28ba5060c
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/external.desc
-@@ -0,0 +1 @@
-+name: OPENJDK
-diff --git a/support/testing/tests/package/br2-external/openjdk/external.mk b/support/testing/tests/package/br2-external/openjdk/external.mk
-new file mode 100644
-index 0000000000..54c24e8c64
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_OPENJDK_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
-new file mode 100644
-index 0000000000..4f9022fb92
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_OPENJDK_HELLO_WORLD
-+	bool "openjdk hello world"
-+	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # gtk2 -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gtk2 -> glib2
-+	depends on BR2_USE_MMU # gtk2 -> glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # gtk2, cups
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # gtk2 -> pango -> harfbuzz
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENJDK
-+	help
-+	  Simple class for testing openjdk
-+
-+comment "OpenJDK-hello-world needs a glibc toolchain w/ wchar, dynamic library, threads, C++, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_USE_WCHAR || \
-+		BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
-new file mode 100644
-index 0000000000..37489e44c3
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
-@@ -0,0 +1,7 @@
-+public class HelloWorld
-+{
-+    public static void main(String[] args)
-+    {
-+        System.out.println("Hello, World");
-+    }
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-new file mode 100644
-index 0000000000..998117b8e2
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# openjdk hello world
-+#
-+################################################################################
-+
-+OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
-+
-+define OPENJDK_HELLO_WORLD_BUILD_CMDS
-+	$(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
-+	$(HOST_DIR)/bin/javac $(@D)/HelloWorld.java
-+endef
-+
-+define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/HelloWorld.class $(TARGET_DIR)/usr/bin/HelloWorld.class
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-new file mode 100644
-index 0000000000..ed8a1f1be4
---- /dev/null
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -0,0 +1,42 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOpenJdk(infra.basetest.BRTest):
-+    br2_external = [infra.filepath("tests/package/br2-external/openjdk")]
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_XORG7=y
-+        BR2_PACKAGE_OPENJDK=y
-+        BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
-+        """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        cmd = "java -cp /usr/bin HelloWorld"
-+        output, exit_code = self.emulator.run(cmd)
-+        print(output)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["Hello, World"])
+Incorrect use of exit. The script has a 'set -e' at the beginning, so a
+command that exits in error will cause the script to abort. So, if the
+script reaches the exit clause, it means the call to _hg did not fail.
+Ditto the other backends, of course.
+
+Also, I think it always makes sense to check that the revision exists,
+even if doing the actual download: it allows for a fastpath even in case
+the user wants to do the actual download anyway:
+
+    if ! _hg identify ${verbose} "${@}" --rev "'${cset}'" "'${uri}'" > /dev/null; then
+        printf 'error blabla no such revision blabla\n'
+        exit 1
+    fi
+    if ${checkonly}; then exit 0; fi
+
+Note that we did use to have a similar test with git, but it was nt
+reliable (i.e. old git servers and/or configuration of git server that
+did not behave when ls-remote was fed some forms of refs, like a sha1 or
+susch)
+
+Regards,
+Yann E. MORIN.
+
+> +fi
+> +
+>  _hg clone ${verbose} "${@}" --noupdate "'${uri}'" "'${basename}'"
+>  
+>  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+> -- 
+> 2.19.2
+> 
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
