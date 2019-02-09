@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  9 Feb 2019 21:23:46 +0100
-Subject: [Buildroot] [PATCHv3 4/7] support/download/file: implement
+Date: Sat,  9 Feb 2019 21:23:44 +0100
+Subject: [Buildroot] [PATCHv3 2/7] support/download/hg: implement
  source-check
 In-Reply-To: <20190209202350.4984-1-patrickdepinguin@gmail.com>
 References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
-Message-ID: <20190209202350.4984-4-patrickdepinguin@gmail.com>
+Message-ID: <20190209202350.4984-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,61 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
+Note: the implementation is different (better) than what used to be in
+Buildroot before source-check was removed.
+
+The original implementation:
+    hg incoming --force -l1 <URL>
+would only verify that the repository exists, not that the requested
+revision is present.
+
+An already better implementation is:
+    hg incoming --force -l1 -r <revision> <URL>
+but compared to the next solution it has a large resource consumption on the
+local machine. In the background, the full repository is first downloaded.
+
+The implemented solution is:
+    hg identify -r <revision> <URL>
+which operates directly on the remote repository.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/file | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ support/download/hg | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 v3: no changes
 
-diff --git a/support/download/file b/support/download/file
-index e52fcf2c8c..bf3c428cbe 100755
---- a/support/download/file
-+++ b/support/download/file
+diff --git a/support/download/hg b/support/download/hg
+index efb515fca5..ed8dcfbcff 100755
+--- a/support/download/hg
++++ b/support/download/hg
 @@ -7,6 +7,7 @@ set -e
  #
  # Options:
  #   -q          Be quiet.
-+#   -C          Only check that the source file exists.
- #   -o FILE     Copy to file FILE.
- #   -f FILE     Copy from basename file FILE.
- #   -u DIR      Copy from FILE in DIR.
-@@ -23,6 +24,7 @@ verbose=-v
++#   -C          Only check that the changeset exists in the remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+ #   -c CSET     Use changeset (or revision) CSET.
+@@ -19,6 +20,7 @@ verbose=
  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
      case "${OPT}" in
-     q)  verbose=;;
+     q)  verbose=-q;;
 +    C)  checkonly=1;;
      o)  output="${OPTARG}";;
-     f)  file="${OPTARG}";;
-     u)  dir="${OPTARG}";;
-@@ -39,4 +41,12 @@ _localfiles() {
-     eval ${LOCALFILES} "${@}"
+     u)  uri="${OPTARG}";;
+     c)  cset="${OPTARG}";;
+@@ -36,6 +38,11 @@ _hg() {
+     eval ${HG} "${@}"
  }
  
--_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
-+# Remove any scheme prefix
-+dir="${dir##file://}"
-+
 +if [ -n "${checkonly}" ]; then
-+    test -e "'${dir}/${file}'"
++    _hg identify ${verbose} "${@}" --rev "'${cset}'" "'${uri}'" > /dev/null
 +    exit ${?}
 +fi
 +
-+_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
+ _hg clone ${verbose} "${@}" --noupdate "'${uri}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
 -- 
 2.19.2
