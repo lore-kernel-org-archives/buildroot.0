@@ -1,151 +1,170 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  9 Feb 2019 19:20:58 +0100
-Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
- 1.5.6
-Message-ID: <20190209182058.5653-1-peter@korsgaard.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 9 Feb 2019 21:08:51 +0100
+Subject: [Buildroot] [PATCHv2 2/8] support/download: reintroduce
+ 'source-check' target
+In-Reply-To: <2d4ae398-9060-1a6a-7567-71b0166db297@mind.be>
+References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
+ <20190204180553.18394-3-patrickdepinguin@gmail.com>
+ <2d4ae398-9060-1a6a-7567-71b0166db297@mind.be>
+Message-ID: <CAAXf6LXvrT5WDe8B977doh3whUNX1XezNLzjd34pa+J6Tq6Aow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+El s?b., 9 feb. 2019 a las 17:47, Arnout Vandecappelle
+(<arnout@mind.be>) escribi?:
+>
+>  Hi Thomas,
+>
+>  As mentioned in the developer meeting, I agree that your use case is important
+> enough to bring source-check back. I do still have some feedback on the
+> implementation.
+>
+> On 04/02/2019 19:05, Thomas De Schampheleire wrote:
+> [snip]
+> > +define SOURCE_CHECK
+> > +     $(Q)mkdir -p $($(PKG)_DL_DIR)
+> > +     $(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+> > +             -C \
+>
+>  Except for the -C, this is identical to the DOWNLOAD macro and should stay that
+> way. So I'd propose to add a second argument to DOWNLOAD in which you can pass -C.
 
-CVE-2018-12551: If Mosquitto is configured to use a password file for
-authentication, any malformed data in the password file will be treated as
-valid. This typically means that the malformed data becomes a username and
-no password.  If this occurs, clients can circumvent authentication and get
-access to the broker by using the malformed username.  In particular, a
-blank line will be treated as a valid empty username.  Other security
-measures are unaffected.  Users who have only used the mosquitto_passwd
-utility to create and modify their password files are unaffected by this
-vulnerability.  Affects version 1.0 to 1.5.5 inclusive.
+Ok, will do.
+I will keep a separate SOURCE_CHECK which forwards directly to
+DOWNLOAD with extra argument, for clarity for callers.
 
-CVE-2018-12550: If an ACL file is empty, or has only blank lines or
-comments, then mosquitto treats the ACL file as not being defined, which
-means that no topic access is denied.  Although denying access to all topics
-is not a useful configuration, this behaviour is unexpected and could lead
-to access being incorrectly granted in some circumstances.  Affects versions
-1.0 to 1.5.5 inclusive.
+>
+> > +             -c '$($(PKG)_DL_VERSION)' \
+> > +             -d '$($(PKG)_DL_DIR)' \
+> > +             -D '$(DL_DIR)' \
+> > +             -f '$(notdir $(1))' \
+> > +             -H '$($(PKG)_HASH_FILE)' \
+> > +             -n '$($(PKG)_BASENAME_RAW)' \
+> > +             -N '$($(PKG)_RAWNAME)' \
+> > +             -o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
+> > +             $(if $($(PKG)_GIT_SUBMODULES),-r) \
+> > +             $(DOWNLOAD_URIS) \
+> > +             $(QUIET) \
+> > +             -- \
+> > +             $($(PKG)_DL_OPTS)
+> > +endef
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index f5cab2b9c2..707996e384 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -780,6 +780,10 @@ $(1)-legal-source:       $$($(2)_TARGET_ACTUAL_SOURCE)
+> >  endif # actual sources != sources
+> >  endif # actual sources != ""
+> >
+> > +$(1)-source-check: PKG=$(2)
+> > +$(1)-source-check:
+> > +     $$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+>
+>  Hm, I wonder if the pre/post download hooks shouldn't be called as well... We
+> don't have any in-tree consumers of them, so it's hard to be sure.
 
-CVE-2018-12546: If a client publishes a retained message to a topic that
-they have access to, and then their access to that topic is revoked, the
-retained message will still be delivered to future subscribers.  This
-behaviour may be undesirable in some applications, so a configuration option
-check_retain_source has been introduced to enforce checking of the retained
-message source on publish.
+Yes, it could go both ways.
+Hooks could assume there is an actual download and behave that way.
+But in theory they could also be required to, say, open up a firewall
+port, and thus also be needed for source-check.
 
-Add two upstream post-1.5.6 patches to fix a build error in the bridge code
-when ADNS is enabled and when building with older toolchains not defaulting
-to C99 mode.
+I tend to think that any 'DOWNLOAD_HOOK' would actually expect
+downloads. Also because until now source-check was gone.
+If someone comes up with a source-check-hook use case, we would need
+to see whether it should be inside DOWNLOAD_HOOKs (which may need
+differentiation between downloads and source-checks) or in a separate
+SOURCE_CHECK_HOOK.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ix-build-failure-when-using-WITH_ADNS-yes.patch | 27 +++++++++++++++++
- .../0002-Don-t-require-C99-compiler.patch          | 35 ++++++++++++++++++++++
- package/mosquitto/mosquitto.hash                   |  2 +-
- package/mosquitto/mosquitto.mk                     |  2 +-
- 4 files changed, 64 insertions(+), 2 deletions(-)
- create mode 100644 package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
- create mode 100644 package/mosquitto/0002-Don-t-require-C99-compiler.patch
+>
+> [snip]
+> >
+> >      # Look through all the uris that we were given to download the package
+> > @@ -127,7 +130,7 @@ main() {
+> >                  -f "${filename}" \
+> >                  -u "${uri}" \
+> >                  -o "${tmpf}" \
+> > -                ${quiet} ${recurse} -- "${@}"
+> > +                ${quiet} ${recurse} ${checkonly} -- "${@}"
+> >          then
+> >              # cd back to keep path coherence
+> >              cd "${OLDPWD}"
+>
+>  Hm, I wonder if this is the correct semantics for source-check. It will check
+> if the package can be found in any of the URLs, but in practice, don't you want
+> to to be in the first one only? For the primary case, yhou'll pass PRIMARY_ONLY
+> of course; but if you use it to check if the upstream URL is still correct, then
+> you want it to fail if you can't get it there. Of course, you can do that by
+> clearing the SECONDARY. But is there ever any reason to check if the package
+> exists at any of the URLs?
+>
+>  That said, special-casing the checkonly here again will only make the control
+> flow even more complicated...
 
-diff --git a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
-new file mode 100644
-index 0000000000..3e79a1750a
---- /dev/null
-+++ b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
-@@ -0,0 +1,27 @@
-+From 9378016b19521aa6c281f475267c5cb67ea967d1 Mon Sep 17 00:00:00 2001
-+From: "Roger A. Light" <roger@atchoo.org>
-+Date: Fri, 8 Feb 2019 21:34:08 +0000
-+Subject: [PATCH] Fix build failure when using WITH_ADNS=yes
-+
-+[Peter: drop ChangeLog.txt modification]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/bridge.c  | 2 +-
-+ 1 files changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/bridge.c b/src/bridge.c
-+index 6e4b94f..d9611f0 100644
-+--- a/src/bridge.c
-++++ b/src/bridge.c
-+@@ -228,7 +228,7 @@ int bridge__connect_step3(struct mosquitto_db *db, struct mosquitto *context)
-+ {
-+ 	int rc;
-+ 
-+-	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address, context->bridge->addresses[context->bridge->cur_address].port, NULL, false);
-++	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address);
-+ 	if(rc > 0){
-+ 		if(rc == MOSQ_ERR_TLS){
-+ 			net__socket_close(db, context);
-+-- 
-+2.11.0
-+
-diff --git a/package/mosquitto/0002-Don-t-require-C99-compiler.patch b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
-new file mode 100644
-index 0000000000..7ca40903eb
---- /dev/null
-+++ b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
-@@ -0,0 +1,35 @@
-+From 04e89450c0aeb0e6fdff58aca3cffce10b29fb98 Mon Sep 17 00:00:00 2001
-+From: "Roger A. Light" <roger@atchoo.org>
-+Date: Sat, 9 Feb 2019 13:52:09 +0000
-+Subject: [PATCH] Don't require C99 compiler.
-+
-+[Peter: drop ChangeLog.txt modification]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/persist.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/persist.c b/src/persist.c
-+index 2f40086..13b34d2 100644
-+--- a/src/persist.c
-++++ b/src/persist.c
-+@@ -720,6 +720,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
-+ 	struct mosquitto_msg_store *stored = NULL;
-+ 	struct mosquitto_msg_store_load *load;
-+ 	char *err;
-++	int i;
-+ 
-+ 	payload.ptr = NULL;
-+ 
-+@@ -749,7 +750,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
-+ 		read_e(db_fptr, &i16temp, sizeof(uint16_t));
-+ 		source_port = ntohs(i16temp);
-+ 		if(source_port){
-+-			for(int i=0; i<db->config->listener_count; i++){
-++			for(i=0; i<db->config->listener_count; i++){
-+ 				if(db->config->listeners[i].port == source_port){
-+ 					source.listener = &db->config->listeners[i];
-+ 					break;
-+-- 
-+2.11.0
-+
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 831171c082..da28c4f67f 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 fcdb47e340864c545146681af7253399cc292e41775afd76400fda5b0d23d668  mosquitto-1.5.5.tar.gz
-+sha256 d5bdc13cc668350026376d57fc14de10aaee029f6840707677637d15e0751a40  mosquitto-1.5.6.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 1536a5ef26..962fe66049 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.5
-+MOSQUITTO_VERSION = 1.5.6
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
--- 
-2.11.0
+dl-wrapper just gets a list of URIs to try, without metadata about the
+type of URI this is. So knowledge about primary-site, backup-site,
+etc. is not known here.
+
+Even if you're going for the primary site, assuming that you'd need
+the first URL only is not correct: the download is first attempted
+from a per-package subdir, e.g. 'busybox/busybox-1.29.tar.gz', and
+then falls back to the old flat scheme 'busybox-1.29.tar.gz'. This is
+an implementation detail that the dl-wrapper should not rely on IMHO.
+
+So yes, the user of source-check needs to decide what exactly they
+want to check and set/clear BR2_PRIMARY_SITE, BR2_PRIMARY_SITE_ONLY,
+and BR2_BACKUP_SITE accordingly.
+
+>
+> > @@ -138,19 +141,21 @@ main() {
+> >          # cd back to free the temp-dir, so we can remove it later
+> >          cd "${OLDPWD}"
+> >
+> > -        # Check if the downloaded file is sane, and matches the stored hashes
+> > -        # for that file
+> > -        if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
+> > -            rc=0
+> > -        else
+> > -            if [ ${?} -ne 3 ]; then
+> > -                rm -rf "${tmpd}"
+> > -                continue
+> > +        if [ -z "${checkonly}" ]; then
+> > +            # Check if the downloaded file is sane, and matches the stored hashes
+> > +            # for that file
+> > +            if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
+> > +                rc=0
+> > +            else
+> > +                if [ ${?} -ne 3 ]; then
+> > +                    rm -rf "${tmpd}"
+> > +                    continue
+> > +                fi
+> > +
+> > +                # the hash file exists and there was no hash to check the file
+> > +                # against
+> > +                rc=1
+> >              fi
+> > -
+> > -            # the hash file exists and there was no hash to check the file
+> > -            # against
+> > -            rc=1
+> >          fi
+> >          download_and_check=1
+> >          break
+> > @@ -163,6 +168,12 @@ main() {
+> >          exit 1
+> >      fi
+> >
+> > +    # If we only need to check the presence of sources, stop here.
+> > +    # No need to handle output files.
+>
+>  So, without the subsequent patches, it actually *will* have downloaded
+> something (and even with the subsequent patches it will have done that for
+> git/svn/...). So shouldn't the downloaded file be removed again? I'm not sure
+> though...
+
+Yes, indeed. There should be a 'rm -rf ${tmpd}' here.
+
+Thanks for the feedback,
+Thomas
