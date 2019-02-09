@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  9 Feb 2019 21:23:45 +0100
-Subject: [Buildroot] [PATCHv3 3/7] support/download/wget: implement
+Date: Sat,  9 Feb 2019 21:23:46 +0100
+Subject: [Buildroot] [PATCHv3 4/7] support/download/file: implement
  source-check
 In-Reply-To: <20190209202350.4984-1-patrickdepinguin@gmail.com>
 References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
-Message-ID: <20190209202350.4984-3-patrickdepinguin@gmail.com>
+Message-ID: <20190209202350.4984-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +15,44 @@ From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/wget | 7 +++++++
- 1 file changed, 7 insertions(+)
+ support/download/file | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 v3: no changes
 
-diff --git a/support/download/wget b/support/download/wget
-index c69e6071aa..7f631ebb61 100755
---- a/support/download/wget
-+++ b/support/download/wget
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..bf3c428cbe 100755
+--- a/support/download/file
++++ b/support/download/file
 @@ -7,6 +7,7 @@ set -e
  #
  # Options:
  #   -q          Be quiet.
-+#   -C          Only check that the file exists remotely.
- #   -o FILE     Save into file FILE.
- #   -f FILENAME The filename of the tarball to get at URL
- #   -u URL      Download file at URL.
-@@ -19,6 +20,7 @@ verbose=
++#   -C          Only check that the source file exists.
+ #   -o FILE     Copy to file FILE.
+ #   -f FILE     Copy from basename file FILE.
+ #   -u DIR      Copy from FILE in DIR.
+@@ -23,6 +24,7 @@ verbose=-v
  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
      case "${OPT}" in
-     q)  verbose=-q;;
+     q)  verbose=;;
 +    C)  checkonly=1;;
      o)  output="${OPTARG}";;
-     f)  filename="${OPTARG}";;
-     u)  url="${OPTARG}";;
-@@ -40,4 +42,9 @@ _wget() {
- # mirror
- [ -n "${encode}" ] && filename=${filename//\?/%3F}
+     f)  file="${OPTARG}";;
+     u)  dir="${OPTARG}";;
+@@ -39,4 +41,12 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
  
+-_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
++# Remove any scheme prefix
++dir="${dir##file://}"
++
 +if [ -n "${checkonly}" ]; then
-+    _wget --spider ${verbose} "${@}" "'${url}/${filename}'"
++    test -e "'${dir}/${file}'"
 +    exit ${?}
 +fi
 +
- _wget ${verbose} "${@}" -O "'${output}'" "'${url}/${filename}'"
++_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
 -- 
 2.19.2
