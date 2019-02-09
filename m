@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  9 Feb 2019 21:23:47 +0100
-Subject: [Buildroot] [PATCHv3 5/7] Config.in: reintroduce BR2_SSH
+Date: Sat,  9 Feb 2019 21:23:49 +0100
+Subject: [Buildroot] [PATCHv3 7/7] support/download/{bzr, cvs, git,
+ svn}: highlight unimplemented source-check
 In-Reply-To: <20190209202350.4984-1-patrickdepinguin@gmail.com>
 References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
-Message-ID: <20190209202350.4984-5-patrickdepinguin@gmail.com>
+Message-ID: <20190209202350.4984-7-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,75 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The BR2_SSH command was removed in commit
-db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
-command") but will be needed again to support 'source-check' for the scp
-download backend.
+For bzr, cvs, git and svn, there is no method of checking whether the
+revision exists remotely, without actually cloning the repository.
+Therefore, there is no actual implementation for '-C' (checkonly) for these
+download helpers. The script will fall back to the normal download logic,
+which would effectively fail if the revision does not exist.
+
+For completeness, mention this unimplemented feature in the usage text.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in               | 4 ++++
- package/pkg-download.mk | 1 +
- 2 files changed, 5 insertions(+)
+ support/download/bzr | 2 ++
+ support/download/cvs | 2 ++
+ support/download/git | 2 ++
+ support/download/svn | 2 ++
+ 4 files changed, 8 insertions(+)
 
 v3: no changes
 
-diff --git a/Config.in b/Config.in
-index d58d8dc04a..91d56907fe 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,6 +136,10 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
- 
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 5384fc2af4..17d1ca99ee 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
-+export SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
+diff --git a/support/download/bzr b/support/download/bzr
+index 5289a421cd..278d8778af 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -7,6 +7,8 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+ #   -c CSET     Use changeset (or revision) CSET.
+diff --git a/support/download/cvs b/support/download/cvs
+index 9d0dc3cb3a..d9a586293a 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -7,6 +7,8 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Checkout from repository at URI.
+ #   -c REV      Use revision REV.
+diff --git a/support/download/git b/support/download/git
+index 17ca04eb98..e9c02d6712 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -7,6 +7,8 @@ set -E
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -r          Clone and archive sub-modules.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+diff --git a/support/download/svn b/support/download/svn
+index 542b25c0a2..5fff064683 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -7,6 +7,8 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Checkout from repository at URI.
+ #   -c REV      Use revision REV.
 -- 
 2.19.2
