@@ -1,47 +1,50 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  9 Feb 2019 17:05:20 +0200
-Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.5
-Message-ID: <20190209150522.10460-1-asafka7@gmail.com>
+Date: Sat,  9 Feb 2019 17:05:21 +0200
+Subject: [Buildroot] [PATCH 1/1] python-lxml: bump to version 4.3.1
+In-Reply-To: <20190209150522.10460-1-asafka7@gmail.com>
+References: <20190209150522.10460-1-asafka7@gmail.com>
+Message-ID: <20190209150522.10460-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+iso-schematron.rng change: update RNG schema to 2016 specification.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
+ package/python-lxml/python-lxml.hash | 4 ++--
+ package/python-lxml/python-lxml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index db0549c2d2..39ce8963b2 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 6558f107e3..19c30f3ac6 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	867c8b48f15a5249f476dc5a2cb58758  Cython-0.29.4.tar.gz
--sha256	d1ee3d39c73a094ae5b6e2f9263ae0dc61af1b549a0869ade8c3c30325ed9f26  Cython-0.29.4.tar.gz
-+md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
-+sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index fbe11e8087..9ab4ebb2a9 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256  7035d9361f3ceec9ccc1dd3482094d1174580e7e1bf6870b77ea758f7cad15d2  lxml-4.2.6.tar.gz
++sha256  da5e7e941d6e71c9c9a717c93725cda0708c2474f532e3680ac5e39ec57d224d  lxml-4.3.1.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+-sha256  705bdfece6dbb87879d9ec40a8c9530651aefb98ae387da9134584464742d539  src/lxml/isoschematron/resources/rng/iso-schematron.rng
++sha256  56c5b13f28b78958890c36e3249c34c169041e42ebcfdce8080f3324ba2bf4de  src/lxml/isoschematron/resources/rng/iso-schematron.rng
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 1b46670ffd..29c77dd351 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.4
-+PYTHON_CYTHON_VERSION = 0.29.5
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/cf/e2/03af631ca4a2cf7bc392dd8785c7cc427bff3af4bf5864cdde734f80d052
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_LXML_VERSION = 4.2.6
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/b0/06/37437e348cd296c56a8bac0396007960abb2bcdaf77e8a3bde52bb68e550
++PYTHON_LXML_VERSION = 4.3.1
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/0f/bd/bb1464d1f363dbd805862c8a1ea258b9a4f4d2049c376d1c4790b6545691
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
 -- 
 2.19.1
