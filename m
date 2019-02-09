@@ -1,42 +1,87 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Feb 2019 17:28:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: needs wchar
-Message-ID: <20190209162814.19327-1-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat,  9 Feb 2019 17:35:55 +0100
+Subject: [Buildroot] [PATCH] wine: Bump to version 4.0
+Message-ID: <20190209163555.17097-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/77c/77cd536a0fab78eabe27e055d28db2da354008d7/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/clamav/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/wine/wine.hash |  2 +-
+ package/wine/wine.mk   | 19 ++++++++++++++++---
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 56bf0af38c..2017011b67 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CLAMAV
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_CLAMAV
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index ba007142e8..6993d6ecbc 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d45a88edbe7db363e297cacedc94e66df3464504a01c2eccf04f518066a6fb0c wine-3.0.4.tar.xz
++sha256 6736cdee95b2b8bb021ec0c19497ed8cad5ae2c8bfdb7ab5dc687ff92a480d4d wine-4.0.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 7e44e3c81d..78fa860ecf 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://www.clamav.net
+-WINE_VERSION = 3.0.4
++WINE_VERSION = 4.0
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+-WINE_SITE = https://dl.winehq.org/wine/source/3.0
++WINE_SITE = https://dl.winehq.org/wine/source/4.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+@@ -25,7 +25,9 @@ WINE_CONF_OPTS = \
+ 	--without-gsm \
+ 	--without-hal \
+ 	--without-opencl \
+-	--without-oss
++	--without-oss \
++	--without-vkd3d \
++	--without-vulkan
  
--comment "clamav needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "clamav needs a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
+ # Wine uses a wrapper around gcc, and uses the value of --host to
+ # construct the filename of the gcc to call.  But for external
+@@ -222,6 +224,13 @@ else
+ WINE_CONF_OPTS += --without-sane
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2),y)
++WINE_CONF_OPTS += --with-sdl
++WINE_DEPENDENCIES += sdl2
++else
++WINE_CONF_OPTS += --without-sdl
++endif
++
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ WINE_CONF_OPTS += --with-tiff
+ WINE_DEPENDENCIES += tiff
+@@ -356,6 +365,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-glu \
+ 	--without-gnutls \
+ 	--without-gsm \
++	--without-gssapi \
+ 	--without-gstreamer \
+ 	--without-hal \
+ 	--without-jpeg \
+@@ -372,8 +382,11 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-pulse \
+ 	--without-png \
+ 	--without-sane \
++	--without-sdl \
+ 	--without-tiff \
+ 	--without-v4l \
++	--without-vkd3d \
++	--without-vulkan \
+ 	--without-x \
+ 	--without-xcomposite \
+ 	--without-xcursor \
 -- 
-2.20.1
+2.17.1
