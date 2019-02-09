@@ -1,126 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Feb 2019 22:53:19 +0100
-Subject: [Buildroot] [PATCHv3 2/7] support/download/hg: implement
- source-check
-In-Reply-To: <20190209202350.4984-2-patrickdepinguin@gmail.com>
-References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
- <20190209202350.4984-2-patrickdepinguin@gmail.com>
-Message-ID: <20190209215319.GH3079@scaer>
+From: Bastian Breit <basti171@gmail.com>
+Date: Sat,  9 Feb 2019 22:53:51 +0100
+Subject: [Buildroot] [PATCH] add library xmlsec1
+Message-ID: <20190209215351.29395-1-basti171@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+---
+ package/Config.in                  |  1 +
+ package/libxmlsec1/COPYING         |  1 +
+ package/libxmlsec1/Config.in       | 11 +++++++++++
+ package/libxmlsec1/libxmlsec1.hash |  1 +
+ package/libxmlsec1/libxmlsec1.mk   | 17 +++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/libxmlsec1/COPYING
+ create mode 100644 package/libxmlsec1/Config.in
+ create mode 100644 package/libxmlsec1/libxmlsec1.hash
+ create mode 100644 package/libxmlsec1/libxmlsec1.mk
 
-On 2019-02-09 21:23 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Note: the implementation is different (better) than what used to be in
-> Buildroot before source-check was removed.
-> 
-> The original implementation:
->     hg incoming --force -l1 <URL>
-> would only verify that the repository exists, not that the requested
-> revision is present.
-> 
-> An already better implementation is:
->     hg incoming --force -l1 -r <revision> <URL>
-> but compared to the next solution it has a large resource consumption on the
-> local machine. In the background, the full repository is first downloaded.
-> 
-> The implemented solution is:
->     hg identify -r <revision> <URL>
-> which operates directly on the remote repository.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  support/download/hg | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> v3: no changes
-> 
-> diff --git a/support/download/hg b/support/download/hg
-> index efb515fca5..ed8dcfbcff 100755
-> --- a/support/download/hg
-> +++ b/support/download/hg
-> @@ -7,6 +7,7 @@ set -e
->  #
->  # Options:
->  #   -q          Be quiet.
-> +#   -C          Only check that the changeset exists in the remote repository.
->  #   -o FILE     Generate archive in FILE.
->  #   -u URI      Clone from repository at URI.
->  #   -c CSET     Use changeset (or revision) CSET.
-> @@ -19,6 +20,7 @@ verbose=
->  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
->      case "${OPT}" in
->      q)  verbose=-q;;
-> +    C)  checkonly=1;;
-
-I've come to like an alternate solution to handle boolean options:
-
-    checkonly=false
-    while getopts ...; do
-        case "${OPT}" in
-            C)  checkonly=true;;
-        esac
-    done
-
-Which allows to write nicer conditions:
-
-    if ${checkonly}; then
-        ...
-    fi
-
->      o)  output="${OPTARG}";;
->      u)  uri="${OPTARG}";;
->      c)  cset="${OPTARG}";;
-> @@ -36,6 +38,11 @@ _hg() {
->      eval ${HG} "${@}"
->  }
->  
-> +if [ -n "${checkonly}" ]; then
-> +    _hg identify ${verbose} "${@}" --rev "'${cset}'" "'${uri}'" > /dev/null
-> +    exit ${?}
-
-Incorrect use of exit. The script has a 'set -e' at the beginning, so a
-command that exits in error will cause the script to abort. So, if the
-script reaches the exit clause, it means the call to _hg did not fail.
-Ditto the other backends, of course.
-
-Also, I think it always makes sense to check that the revision exists,
-even if doing the actual download: it allows for a fastpath even in case
-the user wants to do the actual download anyway:
-
-    if ! _hg identify ${verbose} "${@}" --rev "'${cset}'" "'${uri}'" > /dev/null; then
-        printf 'error blabla no such revision blabla\n'
-        exit 1
-    fi
-    if ${checkonly}; then exit 0; fi
-
-Note that we did use to have a similar test with git, but it was nt
-reliable (i.e. old git servers and/or configuration of git server that
-did not behave when ls-remote was fed some forms of refs, like a sha1 or
-susch)
-
-Regards,
-Yann E. MORIN.
-
-> +fi
-> +
->  _hg clone ${verbose} "${@}" --noupdate "'${uri}'" "'${basename}'"
->  
->  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
-> -- 
-> 2.19.2
-> 
-
+diff --git a/package/Config.in b/package/Config.in
+index 29862c478c..18acfd9db8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1428,6 +1428,7 @@ menu "JSON/XML"
+ 	source "package/libxml2/Config.in"
+ 	source "package/libxmlpp/Config.in"
+ 	source "package/libxmlrpc/Config.in"
++	source "package/libxmlsec1/Config.in"
+ 	source "package/libxslt/Config.in"
+ 	source "package/libyaml/Config.in"
+ 	source "package/mxml/Config.in"
+diff --git a/package/libxmlsec1/COPYING b/package/libxmlsec1/COPYING
+new file mode 100644
+index 0000000000..9f0da96c81
+--- /dev/null
++++ b/package/libxmlsec1/COPYING
+@@ -0,0 +1 @@
++prop lic do not copy
+diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
+new file mode 100644
+index 0000000000..836d4db674
+--- /dev/null
++++ b/package/libxmlsec1/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBXMLSEC1
++	bool "libxmlsec1"
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
++	select BR2_PACKAGE_OPENSSL
++	help
++	XMLSec library provides C based implementation for major XML
++	Security standards:
++	- XML Signature Syntax and Processing
++	- XML Encryption Syntax and Processing
++	https://www.aleksey.com/xmlsec/
+diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
+new file mode 100644
+index 0000000000..ce44e23ac5
+--- /dev/null
++++ b/package/libxmlsec1/libxmlsec1.hash
+@@ -0,0 +1 @@
++md5  508bee7e4f1b99f2d50aaa7d38ede56e  xmlsec1-1.2.27.tar.gz
+diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
+new file mode 100644
+index 0000000000..6bf8944f1e
+--- /dev/null
++++ b/package/libxmlsec1/libxmlsec1.mk
+@@ -0,0 +1,17 @@
++LIBXMLSEC1_VERSION = 1.2.27
++LIBXMLSEC1_SOURCE = xmlsec1-${LIBXMLSEC1_VERSION}.tar.gz
++LIBXMLSEC1_SITE = http://www.aleksey.com/xmlsec/download
++LIBXMLSEC1_INSTALL_STAGING = YES
++LIBXMLSEC1_INSTALL_TARGET = YES
++LIBXMLSEC1_LICENSE = MIT
++LIBXMLSEC1_LICENSE_FILES = Copyright
++
++LIBXMLSEC1_CONF_OPTS += --disable-static
++LIBXMLSEC1_CONF_OPTS += --enable-crypto-dl=no
++LIBXMLSEC1_CONF_OPTS += --with-openssl=${STAGING_DIR}/usr
++LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
++LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
++LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
++LIBXMLSEC1_DEPENDENCIES = libxml2 libxslt openssl
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
