@@ -1,66 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Feb 2019 16:17:07 +0100
-Subject: [Buildroot] [PATCH v3 3/3] boot: arm-trusted-firmware: add
- support for Marvell Armada 3700
-In-Reply-To: <20190205104512.23718-4-kostap@marvell.com>
-References: <20190205104512.23718-1-kostap@marvell.com>
- <20190205104512.23718-4-kostap@marvell.com>
-Message-ID: <20190209161707.5ac029ca@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  9 Feb 2019 17:18:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: fix static build
+Message-ID: <20190209161812.30610-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+A static build fails at configure
 
-Commit title should be:
+checking for SSL_SESSION_get_master_key... no
 
-	boot/arm-trusted-firmware: add support for Marvell Armada 3700
+This activates code incompatible with libopenssl in tortls_internal.h
+which leads to a build error:
 
-On Tue, 5 Feb 2019 12:45:12 +0200
-<kostap@marvell.com> wrote:
+In file included from src/lib/tls/tortls_openssl.c:61:0:
+./src/lib/tls/tortls_internal.h:48:8: error: conflicting types for
+ 'SSL_SESSION_get_master_key'
+ size_t SSL_SESSION_get_master_key(struct ssl_session_st *s,
 
-> From: Konstantin Porotchkin <kostap@marvell.com>
-> 
-> Add support for TF-A image builds for Marvell Armada 3700 family
-> 
-> Signed-off-by: Konstantin Porotchkin <kostap@marvell.com>
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 23f493653d..3e490c03c4 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -52,6 +52,13 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
->  endif
->  
-> +ifeq ($(BR2_TARGET_A3700_UTILS_MARVELL),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += WTP=$(A3700_UTILS_MARVELL_DIR)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += CROSS_CM3=$(HOST_DIR)/bin/arm-none-eabi-
+The configure check fails because libz is not used for linking:
+http://autobuild.buildroot.net/results/ad2/ad213cc1c2fb1849e8b46223be6d159fa3dcddc8//tor-0.3.5.7/config.log
 
-One assignment:
+/data/buildroot/buildroot-test/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o): In function `zlib_stateful_expand_block':
+c_zlib.c:(.text+0x40): undefined reference to `inflate'
 
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-	WTP=$(A3700_UTILS_MARVELL_DIR) \
-	CROSS_CM3=$(HOST_DIR)/bin/arm-none-eabi-
+This patch add -lz when needed and fixes
 
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += a3700-utils-marvell
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-rm-toolchain
+http://autobuild.buildroot.net/results/ad2/ad213cc1c2fb1849e8b46223be6d159fa3dcddc8/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-One assignment:
-
-ARM_TRUSTED_FIRMWARE_DEPENDENCIES += \
-	a3700-utils-marvell \
-	host-arm-gnu-rm-toolchain
-
-Thanks!
-
-Thomas
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 99568fe1b2..98ab246171 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -24,6 +24,7 @@ TOR_CONF_OPTS += \
+ 	--enable-static-openssl \
+ 	--enable-static-tor \
+ 	--enable-static-zlib
++TOR_LIBS += -lz
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+@@ -48,8 +49,9 @@ endif
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-TOR_CONF_ENV += LIBS=-latomic
++TOR_LIBS += -latomic
+ endif
++TOR_CONF_ENV += LIBS="$(TOR_LIBS)"
+ 
+ define TOR_INSTALL_CONF
+ 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
