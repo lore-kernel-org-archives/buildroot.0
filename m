@@ -1,43 +1,68 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Sun, 10 Feb 2019 21:07:32 +1300
-Subject: [Buildroot] [PATCH] gst1-shark: select
- BR2_PACKAGE_GSTREAMER1_GST_DEBUG
-Message-ID: <20190210080732.4651-1-judge.packham@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2019 09:48:40 +0100
+Subject: [Buildroot] [PATCH] core/pkg-infra: tweak only .la files that need
+ it
+Message-ID: <20190210084840.309-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst-shark needs gstreamer to be compiled with debugging support enabled.
-Make this selection automatically when the gst-shark package is
-selected.
+Currently, when we tweak the .la files, we do so unconditionally on all
+.la files, even those we already fixed in a previous run.
 
-Fixes:
- - http://autobuild.buildroot.net/results/09b894b0775df2dd87d8fb2d53c6a243d8668aba/
- - and many more
+This has the nasty side effect that each .la file will be reported as
+being touched by all packages that are installed after the package that
+actually installed said .la file.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Since we can't easily know what fiels were isntalled by a package (that
+is an instrumetnation hook, and comes after the mangling), we use a
+trick (like is done in libtool?): we do mangle all files, each in into a
+temporary location; if the result is identical to the input, we remove
+the temporary, while if the resiult differes from the output, we move
+the temporary to the input.
+
+Reported-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
-I'm not entirely sure how I didn't notice this originally. I swear I did
-compile it before submitting it, still I can't dispute the fact that
-BR2_PACKAGE_GSTREAMER1_GST_DEBUG has been there since gstreamer1 was
-introduced.
+ package/pkg-generic.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
- package/gstreamer1/gst1-shark/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/gstreamer1/gst1-shark/Config.in b/package/gstreamer1/gst1-shark/Config.in
-index 9d656e2419..ad6b6fb9bd 100644
---- a/package/gstreamer1/gst1-shark/Config.in
-+++ b/package/gstreamer1/gst1-shark/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GST1_SHARK
- 	select BR2_PACKAGE_GSTREAMER1_CHECK
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+	select BR2_PACKAGE_GSTREAMER1_GST_DEBUG # gst_debug_log_valist, GST_CAT_STATES
- 	help
- 	  GstShark leverages GStreamers newest instrumentation subsystem
- 	  by installing a set of custom hooks to the trace points. A
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6168b40e89..afd0d41e2a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -294,7 +294,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
+ 	@$(call MESSAGE,"Fixing libtool files")
+-	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
++	$(Q)for la in $(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
++		cp -a "$${la}" "$${la}.fixed" && \
+ 		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+@@ -303,7 +304,14 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+ 				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
+-			-e "s:@BASE_DIR@:$(BASE_DIR):g"
++			-e "s:@BASE_DIR@:$(BASE_DIR):g"; \
++			"$${la}.fixed" && \
++		if cmp "$${la}" "$${la}.fixed"; then \
++			rm -f "$${la}.fixed"; \
++		else \
++			mv "$${la}.fixed" "$${la}"; \
++		fi || exit 1; \
++	done
+ 	@$(call step_end,install-staging)
+ 	$(Q)touch $@
+ 
 -- 
-2.20.1
+2.14.1
