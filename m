@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Feb 2019 14:18:59 +0100
-Subject: [Buildroot] [git commit] package/brcm-patchram-plus: fix license
- file hash
-Message-ID: <20190210131838.AFABA83771@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Feb 2019 14:22:39 +0100
+Subject: [Buildroot] [PATCH 9/12] package/mongodb: add boost mandatory
+ dependency
+In-Reply-To: <20190210140655.6b6ce932@windsurf.home>
+References: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
+ <20190210114528.1753-9-fontaine.fabrice@gmail.com>
+ <20190210140655.6b6ce932@windsurf.home>
+Message-ID: <CAPi7W81_SdnBOb2qUXac4K614Wqmk9_+1whpps99UDe9vXXnaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35dde6de1fc23bcc5a56eed30cac46d201b7104a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-Commit 684bcc45e52a8300a2115799e96017b180695a14
-("package/brcm-patchram-plus: fix build on sparc") added a patch that
-modifies the src/main.c file, without paying attention to the fact
-that this file is used as the license file for the package, and
-therefore the .hash had to be updated at the same time. This commit
-updates the license file hash as needed. There are obviously no
-licensing related changes in the SPARC build fixes.
+Le dim. 10 f?vr. 2019 ? 14:06, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Sun, 10 Feb 2019 12:45:25 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> I don't understand PATCH 9/12, 10/12 and 11/12. If those are mandatory
+> dependencies, mongodb will not build after PATCH 8/12 is applied.
+mongodb will build after patch 8/12 because it embeds all its external
+dependencies in src/third_party. Path 9 to 12 enable the system
+libraries instead of the embededded ones.
 
-Fixes:
+However, as suggested by Yann in a separate email, I'll create a
+mongodb-4 package and put all the mongodb related changes in a single
+"new mongodb-4 package" patch.
+>
+> Could you make sure this patch series is bisectable ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-  http://autobuild.buildroot.net/results/083ce1c3100b10e40480e6330ce0c29dde51f5e0/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/brcm-patchram-plus/brcm-patchram-plus.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-index fb7a91f114..0da680cd85 100644
---- a/package/brcm-patchram-plus/brcm-patchram-plus.hash
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-@@ -1,3 +1,3 @@
- # locally computed
- sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
--sha256  3bbeac0dc9f456695e692687c9d90a3c4ffc0253b0476d487d8cede207a8dc5b  src/main.c
-+sha256  2ba6b830c7d2186f6d5e4470ce5ffe73d97faf69b0d967f2455b725809dfca7b  src/main.c
+Fabrice
