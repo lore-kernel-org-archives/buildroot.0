@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Feb 2019 15:16:58 +0100
-Subject: [Buildroot] [PATCH v2,1/2] package/ncmpc: bump to version 0.33
-In-Reply-To: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
-References: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190210151658.7d250276@windsurf.home>
+Date: Sun, 10 Feb 2019 15:20:19 +0100
+Subject: [Buildroot] [PATCH] add library xmlsec1
+In-Reply-To: <CACHoAdp2+4-E8_KroYibuYxoFeT2groW-3-H+WS-M0aQDFvCDA@mail.gmail.com>
+References: <20190209215351.29395-1-basti171@gmail.com>
+ <20190210103749.50caf547@windsurf.home>
+ <CACHoAdp2+4-E8_KroYibuYxoFeT2groW-3-H+WS-M0aQDFvCDA@mail.gmail.com>
+Message-ID: <20190210152019.353bc305@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Feb 2019 22:40:47 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Bastian,
 
-> - Remove second patch (already in version)
-> - Replace true/false by enabled/disabled, see:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/67d96543e64ec2eff2d3e9907c570ca09918c893
-> - Add new boost system dependency:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/74cc24bdfcfd0ba288b78f0fb75f409832d7586d
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/bef9017712da31b750799e6c7fb9d2829fa5e69c
-> - Remove glib dependency:
->   https://github.com/MusicPlayerDaemon/ncmpc/commit/dfcb3ab0216d6c9ae35d06060cee806bd919c2ba
-> - Disable new regex option (based on pcre)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Add a select on BR2_PACKAGE_BOOST_SYSTEM
->  - Fix patch so that it applies on current master
+On Sun, 10 Feb 2019 15:12:48 +0100
+Bastian Breit <bastian.breit.buildroot@gmail.com> wrote:
 
-Both applied to next. Thanks!
+> I locally fixed the formatting and licence part.
+
+Great, thanks!
+
+> I had some trouble with the mailing list and will use
+> bastian.breit.buildroot at gmail.com from now on. 
+
+Which trouble did you encounter ?
+
+> We use libxmlsec1 in
+> this context and haven't used another configuration. I am not sure,
+> how the library works in other configuration. I would create config
+> options for each option based on that list at
+> https://www.aleksey.com/xmlsec/faq.html
+
+No you don't have to support all options. If you don't support an
+option (like gnutls or gcrypt), then do like you did: disable support
+for it explicitly in the .mk file.
+
+> Should I send changes for formatting & licences with a different patch
+> or should I send an all in one patch?
+
+Send all in one patch, labeled as "v2", with a changelog below the
+"---" sign:
+
+	git format-patch -v2 HEAD^
+
+Edit the 0001-...patch file, and below the --- sign, add some notes
+that explains what you changed since v1.
+
+Thanks!
 
 Thomas
 -- 
