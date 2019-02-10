@@ -1,25 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Feb 2019 11:06:53 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/libopenssl: add runtime
- fixes for tor
-References: <20190209161953.30820-1-bernd.kuhls@t-online.de>
- <874l9cx96o.fsf@dell.be.48ers.dk>
-Message-ID: <tm95jfxr7e.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Feb 2019 11:16:06 +0100
+Subject: [Buildroot] [git commit] package/gst1-shark: select
+ BR2_PACKAGE_GSTREAMER1_GST_DEBUG
+Message-ID: <20190210101443.AC759884AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 10 Feb 2019 10:51:59 +0100 schrieb Peter Korsgaard:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9d8a31100f08cb591ded583288b20d07769bcba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Your v1 patch had 4 patches in a single file, but now you are only
-> adding 2 patches? Are the other 2 not needed?
+gst-shark needs gstreamer to be compiled with debugging support enabled.
+Make this selection automatically when the gst-shark package is
+selected.
 
-Hi Peter,
+Fixes:
+ - http://autobuild.buildroot.net/results/09b894b0775df2dd87d8fb2d53c6a243d8668aba/
+ - and many more
 
-v1 was downloaded from the github pull request, it contained four 
-commits, v2 was created using git format-patch from the master branch 
-were only two commits are present, the other two were squashed.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-shark/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards, Bernd
+diff --git a/package/gstreamer1/gst1-shark/Config.in b/package/gstreamer1/gst1-shark/Config.in
+index 9d656e2419..ad6b6fb9bd 100644
+--- a/package/gstreamer1/gst1-shark/Config.in
++++ b/package/gstreamer1/gst1-shark/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GST1_SHARK
+ 	select BR2_PACKAGE_GSTREAMER1_CHECK
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_GSTREAMER1_GST_DEBUG # gst_debug_log_valist, GST_CAT_STATES
+ 	help
+ 	  GstShark leverages GStreamers newest instrumentation subsystem
+ 	  by installing a set of custom hooks to the trace points. A
