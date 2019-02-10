@@ -1,56 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Feb 2019 15:20:19 +0100
-Subject: [Buildroot] [PATCH] add library xmlsec1
-In-Reply-To: <CACHoAdp2+4-E8_KroYibuYxoFeT2groW-3-H+WS-M0aQDFvCDA@mail.gmail.com>
-References: <20190209215351.29395-1-basti171@gmail.com>
- <20190210103749.50caf547@windsurf.home>
- <CACHoAdp2+4-E8_KroYibuYxoFeT2groW-3-H+WS-M0aQDFvCDA@mail.gmail.com>
-Message-ID: <20190210152019.353bc305@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Feb 2019 15:26:16 +0100
+Subject: [Buildroot] [PATCH v2,1/4] package/libyaml: add host variant
+Message-ID: <20190210142619.8207-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bastian,
+host-libyaml is needed for host-python-pyyaml
 
-On Sun, 10 Feb 2019 15:12:48 +0100
-Bastian Breit <bastian.breit.buildroot@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libyaml/libyaml.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> I locally fixed the formatting and licence part.
-
-Great, thanks!
-
-> I had some trouble with the mailing list and will use
-> bastian.breit.buildroot at gmail.com from now on. 
-
-Which trouble did you encounter ?
-
-> We use libxmlsec1 in
-> this context and haven't used another configuration. I am not sure,
-> how the library works in other configuration. I would create config
-> options for each option based on that list at
-> https://www.aleksey.com/xmlsec/faq.html
-
-No you don't have to support all options. If you don't support an
-option (like gnutls or gcrypt), then do like you did: disable support
-for it explicitly in the .mk file.
-
-> Should I send changes for formatting & licences with a different patch
-> or should I send an all in one patch?
-
-Send all in one patch, labeled as "v2", with a changelog below the
-"---" sign:
-
-	git format-patch -v2 HEAD^
-
-Edit the 0001-...patch file, and below the --- sign, add some notes
-that explains what you changed since v1.
-
-Thanks!
-
-Thomas
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index 26e318736c..dc7368a168 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -12,3 +12,4 @@ LIBYAML_LICENSE = MIT
+ LIBYAML_LICENSE_FILES = LICENSE
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
