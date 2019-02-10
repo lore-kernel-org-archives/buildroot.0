@@ -1,106 +1,54 @@
-From: Bastian Breit <bastian.breit.buildroot@gmail.com>
-Date: Sun, 10 Feb 2019 16:12:07 +0100
-Subject: [Buildroot] [PATCH v2] package/xmlsec1: new package
-Message-ID: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2019 16:48:15 +0100
+Subject: [Buildroot] [PATCH] package/googlefontdirectory: better solution to
+ avoid check-package warning
+Message-ID: <20190210154815.25334-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes spaces and tab formatting in the package folder.
-Therefore an enty in DEVELOPERS is created.
-Change from md5 to sha256 for checksums.
-Remove unneeded libxslt dependency.
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/libxmlsec1/Config.in       | 11 +++++++++++
- package/libxmlsec1/libxmlsec1.hash |  4 ++++
- package/libxmlsec1/libxmlsec1.mk   | 20 ++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/libxmlsec1/Config.in
- create mode 100644 package/libxmlsec1/libxmlsec1.hash
- create mode 100644 package/libxmlsec1/libxmlsec1.mk
+Rather than tell check-package to ignore a false-positive issue, just
+avoid the issue to begin with, by using an intermediate variable to
+construct the list of licenses.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f2e69cc041..2bcd561805 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -250,6 +250,9 @@ F:	package/tcpdump/
- F:	package/ti-uim/
- F:	package/uhubctl/
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/googlefontdirectory/googlefontdirectory.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
+index cf918ac4ae..8773390f0c 100644
+--- a/package/googlefontdirectory/googlefontdirectory.mk
++++ b/package/googlefontdirectory/googlefontdirectory.mk
+@@ -11,22 +11,21 @@ GOOGLEFONTDIRECTORY_FONTS = \
+ 	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
  
-+N: Bastian Breit <bastian.breit.buildroot@gmail.com>
-+F: package/libxmlsec1/
-+
- N:	Ben Boeckel <mathstuf@gmail.com>
- F:	package/taskd/
+ ifneq ($(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += Apache-2.0
++GOOGLEFONTDIRECTORY_ALL_LICENSES += Apache-2.0
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENSE.txt,$(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
  
-diff --git a/package/Config.in b/package/Config.in
-index 29862c478c..18acfd9db8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1428,6 +1428,7 @@ menu "JSON/XML"
- 	source "package/libxml2/Config.in"
- 	source "package/libxmlpp/Config.in"
- 	source "package/libxmlrpc/Config.in"
-+	source "package/libxmlsec1/Config.in"
- 	source "package/libxslt/Config.in"
- 	source "package/libyaml/Config.in"
- 	source "package/mxml/Config.in"
-diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
-new file mode 100644
-index 0000000000..ce3384e7b7
---- /dev/null
-+++ b/package/libxmlsec1/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBXMLSEC1
-+	bool "libxmlsec1"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  XMLSec library provides C based implementation for major XML
-+	  Security standards:
-+	  - XML Signature Syntax and Processing
-+	  - XML Encryption Syntax and Processing
-+
-+	  https://www.aleksey.com/xmlsec/
-diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
-new file mode 100644
-index 0000000000..9ff3b35454
---- /dev/null
-+++ b/package/libxmlsec1/libxmlsec1.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256 97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6  xmlsec1-1.2.27.tar.gz
-+# Locally calculated
-+sha256 526285395dd39627199ba20fd7f70a2608c8c8c70e4fea04aceddd71baa53d07  Copyright
-diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
-new file mode 100644
-index 0000000000..e6a0a375e9
---- /dev/null
-+++ b/package/libxmlsec1/libxmlsec1.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# libxmlsec1
-+#
-+################################################################################
-+
-+LIBXMLSEC1_VERSION = 1.2.27
-+LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
-+LIBXMLSEC1_SITE = http://www.aleksey.com/xmlsec/download
-+LIBXMLSEC1_LICENSE = MIT
-+LIBXMLSEC1_LICENSE_FILES = Copyright
-+
-+LIBXMLSEC1_CONF_OPTS += --enable-crypto-dl=no
-+LIBXMLSEC1_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-+LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
-+LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
-+LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
-+LIBXMLSEC1_DEPENDENCIES = libxml2 openssl
-+
-+$(eval $(autotools-package))
+ ifneq ($(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += OFL-1.1
++GOOGLEFONTDIRECTORY_ALL_LICENSES += OFL-1.1
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /OFL.txt,$(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
+ 
+ ifneq ($(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += UFL-1.1
++GOOGLEFONTDIRECTORY_ALL_LICENSES += UFL-1.1
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENCE.txt,$(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
+ 
+-# check-package OverriddenVariable
+-GOOGLEFONTDIRECTORY_LICENSE := $(subst $(space),$(comma)$(space),$(GOOGLEFONTDIRECTORY_LICENSE))
++GOOGLEFONTDIRECTORY_LICENSE = $(subst $(space),$(comma)$(space),$(GOOGLEFONTDIRECTORY_ALL_LICENSES))
+ 
+ define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
+ 	$(foreach d,$(GOOGLEFONTDIRECTORY_FONTS), \
 -- 
-2.17.1
+2.14.1
