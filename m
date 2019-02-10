@@ -1,47 +1,38 @@
-From: Bastian Breit <bastian.breit.buildroot@gmail.com>
-Date: Sun, 10 Feb 2019 15:12:48 +0100
-Subject: [Buildroot] [PATCH] add library xmlsec1
-In-Reply-To: <20190210103749.50caf547@windsurf.home>
-References: <20190209215351.29395-1-basti171@gmail.com>
- <20190210103749.50caf547@windsurf.home>
-Message-ID: <CACHoAdp2+4-E8_KroYibuYxoFeT2groW-3-H+WS-M0aQDFvCDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Feb 2019 15:16:58 +0100
+Subject: [Buildroot] [PATCH v2,1/2] package/ncmpc: bump to version 0.33
+In-Reply-To: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
+References: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190210151658.7d250276@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Fri,  8 Feb 2019 22:40:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> > +LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
->
-> Why ? You have a dependency on libxslt. Also, if this dependency is not
-> mandatory, it should be made optional.
->
-> > +LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
-> > +LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
->
-> So OpenSSL is not mandatory and GnuTLS or GCrypt could be used ? If
-> that is the case, then it should be supported.
->
-> > +LIBXMLSEC1_DEPENDENCIES = libxml2 libxslt openssl
-> > +
-> > +$(eval $(autotools-package))
->
-> Could you rework your package to address those comments ?
->
-> Thanks a lot!
+> - Remove second patch (already in version)
+> - Replace true/false by enabled/disabled, see:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/67d96543e64ec2eff2d3e9907c570ca09918c893
+> - Add new boost system dependency:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/74cc24bdfcfd0ba288b78f0fb75f409832d7586d
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/bef9017712da31b750799e6c7fb9d2829fa5e69c
+> - Remove glib dependency:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/dfcb3ab0216d6c9ae35d06060cee806bd919c2ba
+> - Disable new regex option (based on pcre)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Add a select on BR2_PACKAGE_BOOST_SYSTEM
+>  - Fix patch so that it applies on current master
 
-I locally fixed the formatting and licence part.
-I had some trouble with the mailing list and will use
-bastian.breit.buildroot at gmail.com from now on. We use libxmlsec1 in
-this context and haven't used another configuration. I am not sure,
-how the library works in other configuration. I would create config
-options for each option based on that list at
-https://www.aleksey.com/xmlsec/faq.html
-Should I send changes for formatting & licences with a different patch
-or should I send an all in one patch?
+Both applied to next. Thanks!
 
-Sincerely
-
-Bastian
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
