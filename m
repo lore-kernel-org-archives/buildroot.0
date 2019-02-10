@@ -1,150 +1,523 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Feb 2019 10:49:26 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: security bump to
- version 1.5.6
-Message-ID: <20190210095304.784CF810FF@busybox.osuosl.org>
+Date: Sun, 10 Feb 2019 10:50:36 +0100
+Subject: [Buildroot] [git commit] package/libopenssl: add runtime fixes for
+ tor
+Message-ID: <20190210095304.80F7F885E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4789770712ff88cf36ae6b97741d9a006e47d3c
+commit: https://git.buildroot.net/buildroot/commit/?id=e2726ecaa613e108fbf44ded4bfb095304c14950
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+For details see https://bugs.archlinux.org/task/61623
 
-CVE-2018-12551: If Mosquitto is configured to use a password file for
-authentication, any malformed data in the password file will be treated as
-valid. This typically means that the malformed data becomes a username and
-no password.  If this occurs, clients can circumvent authentication and get
-access to the broker by using the malformed username.  In particular, a
-blank line will be treated as a valid empty username.  Other security
-measures are unaffected.  Users who have only used the mosquitto_passwd
-utility to create and modify their password files are unaffected by this
-vulnerability.  Affects version 1.0 to 1.5.5 inclusive.
-
-CVE-2018-12550: If an ACL file is empty, or has only blank lines or
-comments, then mosquitto treats the ACL file as not being defined, which
-means that no topic access is denied.  Although denying access to all topics
-is not a useful configuration, this behaviour is unexpected and could lead
-to access being incorrectly granted in some circumstances.  Affects versions
-1.0 to 1.5.5 inclusive.
-
-CVE-2018-12546: If a client publishes a retained message to a topic that
-they have access to, and then their access to that topic is revoked, the
-retained message will still be delivered to future subscribers.  This
-behaviour may be undesirable in some applications, so a configuration option
-check_retain_source has been introduced to enforce checking of the retained
-message source on publish.
-
-Add two upstream post-1.5.6 patches to fix a build error in the bridge code
-when ADNS is enabled and when building with older toolchains not defaulting
-to C99 mode.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-build-failure-when-using-WITH_ADNS-yes.patch | 27 +++++++++++++++++
- .../0002-Don-t-require-C99-compiler.patch          | 35 ++++++++++++++++++++++
- package/mosquitto/mosquitto.hash                   |  2 +-
- package/mosquitto/mosquitto.mk                     |  2 +-
- 4 files changed, 64 insertions(+), 2 deletions(-)
+ ...t-Reduce-stack-usage-in-tls13_hkdf_expand.patch |  62 +++
+ ...ix-some-SSL_export_keying_material-issues.patch | 426 +++++++++++++++++++++
+ 2 files changed, 488 insertions(+)
 
-diff --git a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+diff --git a/package/libopenssl/0005-Revert-Reduce-stack-usage-in-tls13_hkdf_expand.patch b/package/libopenssl/0005-Revert-Reduce-stack-usage-in-tls13_hkdf_expand.patch
 new file mode 100644
-index 0000000000..3e79a1750a
+index 0000000000..104fa476a2
 --- /dev/null
-+++ b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
-@@ -0,0 +1,27 @@
-+From 9378016b19521aa6c281f475267c5cb67ea967d1 Mon Sep 17 00:00:00 2001
-+From: "Roger A. Light" <roger@atchoo.org>
-+Date: Fri, 8 Feb 2019 21:34:08 +0000
-+Subject: [PATCH] Fix build failure when using WITH_ADNS=yes
++++ b/package/libopenssl/0005-Revert-Reduce-stack-usage-in-tls13_hkdf_expand.patch
+@@ -0,0 +1,62 @@
++From 56e0f123dc17cb99f50efbae4bbbab77f360818f Mon Sep 17 00:00:00 2001
++From: Matt Caswell <matt@openssl.org>
++Date: Mon, 3 Dec 2018 18:14:57 +0000
++Subject: [PATCH] Revert "Reduce stack usage in tls13_hkdf_expand"
 +
-+[Peter: drop ChangeLog.txt modification]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++This reverts commit ec0c5f5693e39c5a013f81e6dd9dfd09ec65162d.
++
++SSL_export_keying_material() may use longer label lengths.
++
++Fixes #7712
++
++Reviewed-by: Tim Hudson <tjh@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/7755)
++
++(cherry picked from commit ed371b8cbac0d0349667558c061c1ae380cf75eb)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ src/bridge.c  | 2 +-
-+ 1 files changed, 1 insertion(+), 1 deletion(-)
++ ssl/tls13_enc.c | 16 ++++------------
++ 1 file changed, 4 insertions(+), 12 deletions(-)
 +
-+diff --git a/src/bridge.c b/src/bridge.c
-+index 6e4b94f..d9611f0 100644
-+--- a/src/bridge.c
-++++ b/src/bridge.c
-+@@ -228,7 +228,7 @@ int bridge__connect_step3(struct mosquitto_db *db, struct mosquitto *context)
++diff --git a/ssl/tls13_enc.c b/ssl/tls13_enc.c
++index b6825d20c2..f7ab0fa470 100644
++--- a/ssl/tls13_enc.c
+++++ b/ssl/tls13_enc.c
++@@ -13,14 +13,7 @@
++ #include <openssl/evp.h>
++ #include <openssl/kdf.h>
++ 
++-/*
++- * RFC 8446, 7.1 Key Schedule, says:
++- * Note: With common hash functions, any label longer than 12 characters
++- * requires an additional iteration of the hash function to compute.
++- * The labels in this specification have all been chosen to fit within
++- * this limit.
++- */
++-#define TLS13_MAX_LABEL_LEN     12
+++#define TLS13_MAX_LABEL_LEN     246
++ 
++ /* Always filled with zeros */
++ static const unsigned char default_zeros[EVP_MAX_MD_SIZE];
++@@ -36,15 +29,14 @@ int tls13_hkdf_expand(SSL *s, const EVP_MD *md, const unsigned char *secret,
++                              const unsigned char *data, size_t datalen,
++                              unsigned char *out, size_t outlen)
 + {
-+ 	int rc;
-+ 
-+-	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address, context->bridge->addresses[context->bridge->cur_address].port, NULL, false);
-++	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address);
-+ 	if(rc > 0){
-+ 		if(rc == MOSQ_ERR_TLS){
-+ 			net__socket_close(db, context);
++-    static const unsigned char label_prefix[] = "tls13 ";
+++    const unsigned char label_prefix[] = "tls13 ";
++     EVP_PKEY_CTX *pctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
++     int ret;
++     size_t hkdflabellen;
++     size_t hashlen;
++     /*
++-     * 2 bytes for length of derived secret + 1 byte for length of combined
++-     * prefix and label + bytes for the label itself + 1 byte length of hash
++-     * + bytes for the hash itself
+++     * 2 bytes for length of whole HkdfLabel + 1 byte for length of combined
+++     * prefix and label + bytes for the label itself + bytes for the hash
++      */
++     unsigned char hkdflabel[sizeof(uint16_t) + sizeof(uint8_t) +
++                             + sizeof(label_prefix) + TLS13_MAX_LABEL_LEN
 +-- 
-+2.11.0
++2.20.1
 +
-diff --git a/package/mosquitto/0002-Don-t-require-C99-compiler.patch b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
+diff --git a/package/libopenssl/0006-Fix-some-SSL_export_keying_material-issues.patch b/package/libopenssl/0006-Fix-some-SSL_export_keying_material-issues.patch
 new file mode 100644
-index 0000000000..7ca40903eb
+index 0000000000..242ec7a8cd
 --- /dev/null
-+++ b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
-@@ -0,0 +1,35 @@
-+From 04e89450c0aeb0e6fdff58aca3cffce10b29fb98 Mon Sep 17 00:00:00 2001
-+From: "Roger A. Light" <roger@atchoo.org>
-+Date: Sat, 9 Feb 2019 13:52:09 +0000
-+Subject: [PATCH] Don't require C99 compiler.
++++ b/package/libopenssl/0006-Fix-some-SSL_export_keying_material-issues.patch
+@@ -0,0 +1,426 @@
++From db860ea3dcf56a1993c66da22bd44460d7ac4914 Mon Sep 17 00:00:00 2001
++From: Matt Caswell <matt@openssl.org>
++Date: Tue, 4 Dec 2018 08:37:04 +0000
++Subject: [PATCH] Fix some SSL_export_keying_material() issues
 +
-+[Peter: drop ChangeLog.txt modification]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Fix some issues in tls13_hkdf_expand() which impact the above function
++for TLSv1.3. In particular test that we can use the maximum label length
++in TLSv1.3.
++
++Reviewed-by: Tim Hudson <tjh@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/7755)
++
++(cherry picked from commit 0fb2815b873304d145ed00283454fc9f3bd35e6b)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ src/persist.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ doc/man3/SSL_export_keying_material.pod |  3 +-
++ ssl/ssl_locl.h                          |  2 +-
++ ssl/statem/extensions.c                 |  2 +-
++ ssl/statem/statem_clnt.c                |  2 +-
++ ssl/statem/statem_srvr.c                |  2 +-
++ ssl/tls13_enc.c                         | 73 +++++++++++++++++--------
++ test/sslapitest.c                       | 48 ++++++++++++----
++ test/tls13secretstest.c                 |  2 +-
++ 8 files changed, 92 insertions(+), 42 deletions(-)
 +
-+diff --git a/src/persist.c b/src/persist.c
-+index 2f40086..13b34d2 100644
-+--- a/src/persist.c
-++++ b/src/persist.c
-+@@ -720,6 +720,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
-+ 	struct mosquitto_msg_store *stored = NULL;
-+ 	struct mosquitto_msg_store_load *load;
-+ 	char *err;
-++	int i;
++diff --git a/doc/man3/SSL_export_keying_material.pod b/doc/man3/SSL_export_keying_material.pod
++index abebf911fc..4c81a60ffb 100644
++--- a/doc/man3/SSL_export_keying_material.pod
+++++ b/doc/man3/SSL_export_keying_material.pod
++@@ -59,7 +59,8 @@ B<label> and should be B<llen> bytes long. Typically this will be a value from
++ the IANA Exporter Label Registry
++ (L<https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#exporter-labels>).
++ Alternatively labels beginning with "EXPERIMENTAL" are permitted by the standard
++-to be used without registration.
+++to be used without registration. TLSv1.3 imposes a maximum label length of
+++249 bytes.
 + 
-+ 	payload.ptr = NULL;
++ Note that this function is only defined for TLSv1.0 and above, and DTLSv1.0 and
++ above. Attempting to use it in SSLv3 will result in an error.
++diff --git a/ssl/ssl_locl.h b/ssl/ssl_locl.h
++index 70e5a1740f..307131de93 100644
++--- a/ssl/ssl_locl.h
+++++ b/ssl/ssl_locl.h
++@@ -2461,7 +2461,7 @@ __owur int tls13_hkdf_expand(SSL *s, const EVP_MD *md,
++                              const unsigned char *secret,
++                              const unsigned char *label, size_t labellen,
++                              const unsigned char *data, size_t datalen,
++-                             unsigned char *out, size_t outlen);
+++                             unsigned char *out, size_t outlen, int fatal);
++ __owur int tls13_derive_key(SSL *s, const EVP_MD *md,
++                             const unsigned char *secret, unsigned char *key,
++                             size_t keylen);
++diff --git a/ssl/statem/extensions.c b/ssl/statem/extensions.c
++index 63e61c6184..716d6d23e0 100644
++--- a/ssl/statem/extensions.c
+++++ b/ssl/statem/extensions.c
++@@ -1506,7 +1506,7 @@ int tls_psk_do_binder(SSL *s, const EVP_MD *md, const unsigned char *msgstart,
 + 
-+@@ -749,7 +750,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
-+ 		read_e(db_fptr, &i16temp, sizeof(uint16_t));
-+ 		source_port = ntohs(i16temp);
-+ 		if(source_port){
-+-			for(int i=0; i<db->config->listener_count; i++){
-++			for(i=0; i<db->config->listener_count; i++){
-+ 				if(db->config->listeners[i].port == source_port){
-+ 					source.listener = &db->config->listeners[i];
-+ 					break;
++     /* Generate the binder key */
++     if (!tls13_hkdf_expand(s, md, early_secret, label, labelsize, hash,
++-                           hashsize, binderkey, hashsize)) {
+++                           hashsize, binderkey, hashsize, 1)) {
++         /* SSLfatal() already called */
++         goto err;
++     }
++diff --git a/ssl/statem/statem_clnt.c b/ssl/statem/statem_clnt.c
++index 5a8f1163df..a0e495d8e8 100644
++--- a/ssl/statem/statem_clnt.c
+++++ b/ssl/statem/statem_clnt.c
++@@ -2740,7 +2740,7 @@ MSG_PROCESS_RETURN tls_process_new_session_ticket(SSL *s, PACKET *pkt)
++                                PACKET_data(&nonce),
++                                PACKET_remaining(&nonce),
++                                s->session->master_key,
++-                               hashlen)) {
+++                               hashlen, 1)) {
++             /* SSLfatal() already called */
++             goto err;
++         }
++diff --git a/ssl/statem/statem_srvr.c b/ssl/statem/statem_srvr.c
++index e7c11c4bea..a8e862ced5 100644
++--- a/ssl/statem/statem_srvr.c
+++++ b/ssl/statem/statem_srvr.c
++@@ -4099,7 +4099,7 @@ int tls_construct_new_session_ticket(SSL *s, WPACKET *pkt)
++                                tick_nonce,
++                                TICKET_NONCE_SIZE,
++                                s->session->master_key,
++-                               hashlen)) {
+++                               hashlen, 1)) {
++             /* SSLfatal() already called */
++             goto err;
++         }
++diff --git a/ssl/tls13_enc.c b/ssl/tls13_enc.c
++index f7ab0fa470..c3021d18aa 100644
++--- a/ssl/tls13_enc.c
+++++ b/ssl/tls13_enc.c
++@@ -13,7 +13,7 @@
++ #include <openssl/evp.h>
++ #include <openssl/kdf.h>
++ 
++-#define TLS13_MAX_LABEL_LEN     246
+++#define TLS13_MAX_LABEL_LEN     249
++ 
++ /* Always filled with zeros */
++ static const unsigned char default_zeros[EVP_MAX_MD_SIZE];
++@@ -22,30 +22,47 @@ static const unsigned char default_zeros[EVP_MAX_MD_SIZE];
++  * Given a |secret|; a |label| of length |labellen|; and |data| of length
++  * |datalen| (e.g. typically a hash of the handshake messages), derive a new
++  * secret |outlen| bytes long and store it in the location pointed to be |out|.
++- * The |data| value may be zero length. Returns 1 on success  0 on failure.
+++ * The |data| value may be zero length. Any errors will be treated as fatal if
+++ * |fatal| is set. Returns 1 on success  0 on failure.
++  */
++ int tls13_hkdf_expand(SSL *s, const EVP_MD *md, const unsigned char *secret,
++                              const unsigned char *label, size_t labellen,
++                              const unsigned char *data, size_t datalen,
++-                             unsigned char *out, size_t outlen)
+++                             unsigned char *out, size_t outlen, int fatal)
++ {
++-    const unsigned char label_prefix[] = "tls13 ";
+++    static const unsigned char label_prefix[] = "tls13 ";
++     EVP_PKEY_CTX *pctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
++     int ret;
++     size_t hkdflabellen;
++     size_t hashlen;
++     /*
++-     * 2 bytes for length of whole HkdfLabel + 1 byte for length of combined
++-     * prefix and label + bytes for the label itself + bytes for the hash
+++     * 2 bytes for length of derived secret + 1 byte for length of combined
+++     * prefix and label + bytes for the label itself + 1 byte length of hash
+++     * + bytes for the hash itself
++      */
++     unsigned char hkdflabel[sizeof(uint16_t) + sizeof(uint8_t) +
++                             + sizeof(label_prefix) + TLS13_MAX_LABEL_LEN
++-                            + EVP_MAX_MD_SIZE];
+++                            + 1 + EVP_MAX_MD_SIZE];
++     WPACKET pkt;
++ 
++     if (pctx == NULL)
++         return 0;
++ 
+++    if (labellen > TLS13_MAX_LABEL_LEN) {
+++        if (fatal) {
+++            SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS13_HKDF_EXPAND,
+++                     ERR_R_INTERNAL_ERROR);
+++        } else {
+++            /*
+++             * Probably we have been called from SSL_export_keying_material(),
+++             * or SSL_export_keying_material_early().
+++             */
+++            SSLerr(SSL_F_TLS13_HKDF_EXPAND, SSL_R_TLS_ILLEGAL_EXPORTER_LABEL);
+++        }
+++        EVP_PKEY_CTX_free(pctx);
+++        return 0;
+++    }
+++
++     hashlen = EVP_MD_size(md);
++ 
++     if (!WPACKET_init_static_len(&pkt, hkdflabel, sizeof(hkdflabel), 0)
++@@ -59,8 +76,11 @@ int tls13_hkdf_expand(SSL *s, const EVP_MD *md, const unsigned char *secret,
++             || !WPACKET_finish(&pkt)) {
++         EVP_PKEY_CTX_free(pctx);
++         WPACKET_cleanup(&pkt);
++-        SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS13_HKDF_EXPAND,
++-                 ERR_R_INTERNAL_ERROR);
+++        if (fatal)
+++            SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS13_HKDF_EXPAND,
+++                     ERR_R_INTERNAL_ERROR);
+++        else
+++            SSLerr(SSL_F_TLS13_HKDF_EXPAND, ERR_R_INTERNAL_ERROR);
++         return 0;
++     }
++ 
++@@ -74,9 +94,13 @@ int tls13_hkdf_expand(SSL *s, const EVP_MD *md, const unsigned char *secret,
++ 
++     EVP_PKEY_CTX_free(pctx);
++ 
++-    if (ret != 0)
++-        SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS13_HKDF_EXPAND,
++-                 ERR_R_INTERNAL_ERROR);
+++    if (ret != 0) {
+++        if (fatal)
+++            SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS13_HKDF_EXPAND,
+++                     ERR_R_INTERNAL_ERROR);
+++        else
+++            SSLerr(SSL_F_TLS13_HKDF_EXPAND, ERR_R_INTERNAL_ERROR);
+++    }
++ 
++     return ret == 0;
++ }
++@@ -91,7 +115,7 @@ int tls13_derive_key(SSL *s, const EVP_MD *md, const unsigned char *secret,
++     static const unsigned char keylabel[] = "key";
++ 
++     return tls13_hkdf_expand(s, md, secret, keylabel, sizeof(keylabel) - 1,
++-                             NULL, 0, key, keylen);
+++                             NULL, 0, key, keylen, 1);
++ }
++ 
++ /*
++@@ -104,7 +128,7 @@ int tls13_derive_iv(SSL *s, const EVP_MD *md, const unsigned char *secret,
++     static const unsigned char ivlabel[] = "iv";
++ 
++     return tls13_hkdf_expand(s, md, secret, ivlabel, sizeof(ivlabel) - 1,
++-                             NULL, 0, iv, ivlen);
+++                             NULL, 0, iv, ivlen, 1);
++ }
++ 
++ int tls13_derive_finishedkey(SSL *s, const EVP_MD *md,
++@@ -114,7 +138,7 @@ int tls13_derive_finishedkey(SSL *s, const EVP_MD *md,
++     static const unsigned char finishedlabel[] = "finished";
++ 
++     return tls13_hkdf_expand(s, md, secret, finishedlabel,
++-                             sizeof(finishedlabel) - 1, NULL, 0, fin, finlen);
+++                             sizeof(finishedlabel) - 1, NULL, 0, fin, finlen, 1);
++ }
++ 
++ /*
++@@ -177,7 +201,7 @@ int tls13_generate_secret(SSL *s, const EVP_MD *md,
++         if (!tls13_hkdf_expand(s, md, prevsecret,
++                                (unsigned char *)derived_secret_label,
++                                sizeof(derived_secret_label) - 1, hash, mdlen,
++-                               preextractsec, mdlen)) {
+++                               preextractsec, mdlen, 1)) {
++             /* SSLfatal() already called */
++             EVP_PKEY_CTX_free(pctx);
++             return 0;
++@@ -337,7 +361,7 @@ static int derive_secret_key_and_iv(SSL *s, int sending, const EVP_MD *md,
++     hashlen = (size_t)hashleni;
++ 
++     if (!tls13_hkdf_expand(s, md, insecret, label, labellen, hash, hashlen,
++-                           secret, hashlen)) {
+++                           secret, hashlen, 1)) {
++         /* SSLfatal() already called */
++         goto err;
++     }
++@@ -517,7 +541,8 @@ int tls13_change_cipher_state(SSL *s, int which)
++                                    early_exporter_master_secret,
++                                    sizeof(early_exporter_master_secret) - 1,
++                                    hashval, hashlen,
++-                                   s->early_exporter_master_secret, hashlen)) {
+++                                   s->early_exporter_master_secret, hashlen,
+++                                   1)) {
++                 SSLfatal(s, SSL_AD_INTERNAL_ERROR,
++                          SSL_F_TLS13_CHANGE_CIPHER_STATE, ERR_R_INTERNAL_ERROR);
++                 goto err;
++@@ -604,7 +629,7 @@ int tls13_change_cipher_state(SSL *s, int which)
++                                resumption_master_secret,
++                                sizeof(resumption_master_secret) - 1,
++                                hashval, hashlen, s->resumption_master_secret,
++-                               hashlen)) {
+++                               hashlen, 1)) {
++             /* SSLfatal() already called */
++             goto err;
++         }
++@@ -624,7 +649,7 @@ int tls13_change_cipher_state(SSL *s, int which)
++                                exporter_master_secret,
++                                sizeof(exporter_master_secret) - 1,
++                                hash, hashlen, s->exporter_master_secret,
++-                               hashlen)) {
+++                               hashlen, 1)) {
++             /* SSLfatal() already called */
++             goto err;
++         }
++@@ -738,10 +763,10 @@ int tls13_export_keying_material(SSL *s, unsigned char *out, size_t olen,
++             || EVP_DigestFinal_ex(ctx, data, &datalen) <= 0
++             || !tls13_hkdf_expand(s, md, s->exporter_master_secret,
++                                   (const unsigned char *)label, llen,
++-                                  data, datalen, exportsecret, hashsize)
+++                                  data, datalen, exportsecret, hashsize, 0)
++             || !tls13_hkdf_expand(s, md, exportsecret, exporterlabel,
++                                   sizeof(exporterlabel) - 1, hash, hashsize,
++-                                  out, olen))
+++                                  out, olen, 0))
++         goto err;
++ 
++     ret = 1;
++@@ -797,10 +822,10 @@ int tls13_export_keying_material_early(SSL *s, unsigned char *out, size_t olen,
++             || EVP_DigestFinal_ex(ctx, data, &datalen) <= 0
++             || !tls13_hkdf_expand(s, md, s->early_exporter_master_secret,
++                                   (const unsigned char *)label, llen,
++-                                  data, datalen, exportsecret, hashsize)
+++                                  data, datalen, exportsecret, hashsize, 0)
++             || !tls13_hkdf_expand(s, md, exportsecret, exporterlabel,
++                                   sizeof(exporterlabel) - 1, hash, hashsize,
++-                                  out, olen))
+++                                  out, olen, 0))
++         goto err;
++ 
++     ret = 1;
++diff --git a/test/sslapitest.c b/test/sslapitest.c
++index 108d57e478..a4bbb4fead 100644
++--- a/test/sslapitest.c
+++++ b/test/sslapitest.c
++@@ -4028,20 +4028,25 @@ static int test_serverinfo(int tst)
++  * no test vectors so all we do is test that both sides of the communication
++  * produce the same results for different protocol versions.
++  */
+++#define SMALL_LABEL_LEN 10
+++#define LONG_LABEL_LEN  249
++ static int test_export_key_mat(int tst)
++ {
++     int testresult = 0;
++     SSL_CTX *cctx = NULL, *sctx = NULL, *sctx2 = NULL;
++     SSL *clientssl = NULL, *serverssl = NULL;
++-    const char label[] = "test label";
+++    const char label[LONG_LABEL_LEN + 1] = "test label";
++     const unsigned char context[] = "context";
++     const unsigned char *emptycontext = NULL;
++     unsigned char ckeymat1[80], ckeymat2[80], ckeymat3[80];
++     unsigned char skeymat1[80], skeymat2[80], skeymat3[80];
+++    size_t labellen;
++     const int protocols[] = {
++         TLS1_VERSION,
++         TLS1_1_VERSION,
++         TLS1_2_VERSION,
+++        TLS1_3_VERSION,
+++        TLS1_3_VERSION,
++         TLS1_3_VERSION
++     };
++ 
++@@ -4058,7 +4063,7 @@ static int test_export_key_mat(int tst)
++         return 1;
++ #endif
++ #ifdef OPENSSL_NO_TLS1_3
++-    if (tst == 3)
+++    if (tst >= 3)
++         return 1;
++ #endif
++     if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(), TLS_client_method(),
++@@ -4076,33 +4081,52 @@ static int test_export_key_mat(int tst)
++                                                 SSL_ERROR_NONE)))
++         goto end;
++ 
+++    if (tst == 5) {
+++        /*
+++         * TLSv1.3 imposes a maximum label len of 249 bytes. Check we fail if we
+++         * go over that.
+++         */
+++        if (!TEST_int_le(SSL_export_keying_material(clientssl, ckeymat1,
+++                                                    sizeof(ckeymat1), label,
+++                                                    LONG_LABEL_LEN + 1, context,
+++                                                    sizeof(context) - 1, 1), 0))
+++            goto end;
+++
+++        testresult = 1;
+++        goto end;
+++    } else if (tst == 4) {
+++        labellen = LONG_LABEL_LEN;
+++    } else {
+++        labellen = SMALL_LABEL_LEN;
+++    }
+++
++     if (!TEST_int_eq(SSL_export_keying_material(clientssl, ckeymat1,
++                                                 sizeof(ckeymat1), label,
++-                                                sizeof(label) - 1, context,
+++                                                labellen, context,
++                                                 sizeof(context) - 1, 1), 1)
++             || !TEST_int_eq(SSL_export_keying_material(clientssl, ckeymat2,
++                                                        sizeof(ckeymat2), label,
++-                                                       sizeof(label) - 1,
+++                                                       labellen,
++                                                        emptycontext,
++                                                        0, 1), 1)
++             || !TEST_int_eq(SSL_export_keying_material(clientssl, ckeymat3,
++                                                        sizeof(ckeymat3), label,
++-                                                       sizeof(label) - 1,
+++                                                       labellen,
++                                                        NULL, 0, 0), 1)
++             || !TEST_int_eq(SSL_export_keying_material(serverssl, skeymat1,
++                                                        sizeof(skeymat1), label,
++-                                                       sizeof(label) - 1,
+++                                                       labellen,
++                                                        context,
++                                                        sizeof(context) -1, 1),
++                             1)
++             || !TEST_int_eq(SSL_export_keying_material(serverssl, skeymat2,
++                                                        sizeof(skeymat2), label,
++-                                                       sizeof(label) - 1,
+++                                                       labellen,
++                                                        emptycontext,
++                                                        0, 1), 1)
++             || !TEST_int_eq(SSL_export_keying_material(serverssl, skeymat3,
++                                                        sizeof(skeymat3), label,
++-                                                       sizeof(label) - 1,
+++                                                       labellen,
++                                                        NULL, 0, 0), 1)
++                /*
++                 * Check that both sides created the same key material with the
++@@ -4131,10 +4155,10 @@ static int test_export_key_mat(int tst)
++      * Check that an empty context and no context produce different results in
++      * protocols less than TLSv1.3. In TLSv1.3 they should be the same.
++      */
++-    if ((tst != 3 && !TEST_mem_ne(ckeymat2, sizeof(ckeymat2), ckeymat3,
+++    if ((tst < 3 && !TEST_mem_ne(ckeymat2, sizeof(ckeymat2), ckeymat3,
++                                   sizeof(ckeymat3)))
++-            || (tst ==3 && !TEST_mem_eq(ckeymat2, sizeof(ckeymat2), ckeymat3,
++-                                        sizeof(ckeymat3))))
+++            || (tst >= 3 && !TEST_mem_eq(ckeymat2, sizeof(ckeymat2), ckeymat3,
+++                                         sizeof(ckeymat3))))
++         goto end;
++ 
++     testresult = 1;
++@@ -5909,7 +5933,7 @@ int setup_tests(void)
++     ADD_ALL_TESTS(test_custom_exts, 3);
++ #endif
++     ADD_ALL_TESTS(test_serverinfo, 8);
++-    ADD_ALL_TESTS(test_export_key_mat, 4);
+++    ADD_ALL_TESTS(test_export_key_mat, 6);
++ #ifndef OPENSSL_NO_TLS1_3
++     ADD_ALL_TESTS(test_export_key_mat_early, 3);
++ #endif
++diff --git a/test/tls13secretstest.c b/test/tls13secretstest.c
++index 724c170c56..66a0582887 100644
++--- a/test/tls13secretstest.c
+++++ b/test/tls13secretstest.c
++@@ -236,7 +236,7 @@ static int test_secret(SSL *s, unsigned char *prk,
++     }
++ 
++     if (!tls13_hkdf_expand(s, md, prk, label, labellen, hash, hashsize,
++-                           gensecret, hashsize)) {
+++                           gensecret, hashsize, 1)) {
++         TEST_error("Secret generation failed");
++         return 0;
++     }
 +-- 
-+2.11.0
++2.20.1
 +
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 831171c082..da28c4f67f 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 fcdb47e340864c545146681af7253399cc292e41775afd76400fda5b0d23d668  mosquitto-1.5.5.tar.gz
-+sha256 d5bdc13cc668350026376d57fc14de10aaee029f6840707677637d15e0751a40  mosquitto-1.5.6.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 1536a5ef26..962fe66049 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.5
-+MOSQUITTO_VERSION = 1.5.6
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
