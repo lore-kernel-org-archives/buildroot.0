@@ -1,54 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Feb 2019 14:44:20 +0100
-Subject: [Buildroot] [PATCH 9/12] package/mongodb: add boost mandatory
- dependency
-In-Reply-To: <20190210143358.321d5bd8@windsurf.home>
-References: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
- <20190210114528.1753-9-fontaine.fabrice@gmail.com>
- <20190210140655.6b6ce932@windsurf.home>
- <CAPi7W81_SdnBOb2qUXac4K614Wqmk9_+1whpps99UDe9vXXnaA@mail.gmail.com>
- <20190210143358.321d5bd8@windsurf.home>
-Message-ID: <20190210134420.GL3079@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Feb 2019 14:51:30 +0100
+Subject: [Buildroot] [PATCH] package/sg3_utils: ensure to build against
+ librt when needed
+Message-ID: <20190210135130.15117-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The sg3_utils has provisions to build against librt when needed, but
+forgot to use that mechanism for the sg_turs program. This commit
+fixes that. The patch has been submitted upstream to the sg3_utils
+author.
 
-On 2019-02-10 14:33 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 10 Feb 2019 14:22:39 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
-> > > I don't understand PATCH 9/12, 10/12 and 11/12. If those are mandatory
-> > > dependencies, mongodb will not build after PATCH 8/12 is applied.  
-> > mongodb will build after patch 8/12 because it embeds all its external
-> > dependencies in src/third_party. Path 9 to 12 enable the system
-> > libraries instead of the embededded ones.
-> 
-> OK.
-> 
-> > However, as suggested by Yann in a separate email, I'll create a
-> > mongodb-4 package and put all the mongodb related changes in a single
-> > "new mongodb-4 package" patch.
-> 
-> Why should it be named mongodb-4 and not just mongodb, since we're
-> anyway no longer going to have a mongodb package that provides the 3.x
-> version ?
+Fixes:
 
-Right, I just used 'mongodb-4' as a way to identify that it was mongodb
-4.x I was talking about. The package should indeed be named 'mongodb'.
+  http://autobuild.buildroot.net/results/67b890a41d05497820ea4f44e187257dd6818b0b/
 
-Sorry for the confusion.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...le.am-add-missing-RT_LIB-for-sg_turs.patch | 29 +++++++++++++++++++
+ package/sg3_utils/sg3_utils.mk                |  2 +-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch b/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch
+new file mode 100644
+index 0000000000..34a4e114ec
+--- /dev/null
++++ b/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch
+@@ -0,0 +1,29 @@
++From 68b0591cf37760e09e358533bbcecf36eddfceed Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 10 Feb 2019 14:46:41 +0100
++Subject: [PATCH] src/Makefile.am: add missing @RT_LIB@ for sg_turs
++
++The sg_turs program uses clock_gettime(), so it should link against
++librt, as provided by @RT_LIB at .
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 881cf29..0eba680 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -170,7 +170,7 @@ sg_test_rwbuf_LDADD = ../lib/libsgutils2.la
++ 
++ sg_timestamp_LDADD = ../lib/libsgutils2.la
++ 
++-sg_turs_LDADD = ../lib/libsgutils2.la
+++sg_turs_LDADD = ../lib/libsgutils2.la @RT_LIB@
++ 
++ sg_unmap_LDADD = ../lib/libsgutils2.la
++ 
++-- 
++2.20.1
++
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index b3a79d68ee..79521fd06e 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -14,7 +14,7 @@ SG3_UTILS_LICENSE := $(SG3_UTILS_LICENSE), GPL-2.0+ (programs), BSD-3-Clause (pr
+ endif
+ SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
+ 
+-# Patching configure.ac
++# Patching configure.ac/Makefile.am
+ SG3_UTILS_AUTORECONF = YES
+ 
+ # install the libsgutils2 library
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
