@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Feb 2019 14:06:55 +0100
-Subject: [Buildroot] [PATCH 9/12] package/mongodb: add boost mandatory
+Date: Sun, 10 Feb 2019 14:07:22 +0100
+Subject: [Buildroot] [git commit] package/systemd: add optional valgrind
  dependency
-In-Reply-To: <20190210114528.1753-9-fontaine.fabrice@gmail.com>
-References: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
- <20190210114528.1753-9-fontaine.fabrice@gmail.com>
-Message-ID: <20190210140655.6b6ce932@windsurf.home>
+Message-ID: <20190210130640.7CD108444C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=e0f3138f819f29fcd5d37b429ccc3626fd15afe8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 Feb 2019 12:45:25 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-I don't understand PATCH 9/12, 10/12 and 11/12. If those are mandatory
-dependencies, mongodb will not build after PATCH 8/12 is applied.
-
-Could you make sure this patch series is bisectable ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f9df66b039..5b2abdc3fe 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -117,6 +117,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dpam=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_VALGRIND),y)
++SYSTEMD_DEPENDENCIES += valgrind
++SYSTEMD_CONF_OPTS += -Dvalgrind=true
++else
++SYSTEMD_CONF_OPTS += -Dvalgrind=false
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ SYSTEMD_DEPENDENCIES += xz
+ SYSTEMD_CONF_OPTS += -Dxz=true
