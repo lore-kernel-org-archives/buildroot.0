@@ -1,123 +1,150 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Feb 2019 10:48:51 +0100
-Subject: [Buildroot] [git commit] package/php: security bump to version 7.3.2
-Message-ID: <20190210095304.71AD3814E4@busybox.osuosl.org>
+Date: Sun, 10 Feb 2019 10:49:26 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: security bump to
+ version 1.5.6
+Message-ID: <20190210095304.784CF810FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5e40c94b3ff1881f2296fdcf8f1d85e48c788c8
+commit: https://git.buildroot.net/buildroot/commit/?id=e4789770712ff88cf36ae6b97741d9a006e47d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebased patch 0004.
+Fixes the following security issues:
 
-This bump fixes https://bugs.php.net/bug.php?id=77369,
-status of CVE-ID: needed
+CVE-2018-12551: If Mosquitto is configured to use a password file for
+authentication, any malformed data in the password file will be treated as
+valid. This typically means that the malformed data becomes a username and
+no password.  If this occurs, clients can circumvent authentication and get
+access to the broker by using the malformed username.  In particular, a
+blank line will be treated as a valid empty username.  Other security
+measures are unaffected.  Users who have only used the mosquitto_passwd
+utility to create and modify their password files are unaffected by this
+vulnerability.  Affects version 1.0 to 1.5.5 inclusive.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+CVE-2018-12550: If an ACL file is empty, or has only blank lines or
+comments, then mosquitto treats the ACL file as not being defined, which
+means that no topic access is denied.  Although denying access to all topics
+is not a useful configuration, this behaviour is unexpected and could lead
+to access being incorrectly granted in some circumstances.  Affects versions
+1.0 to 1.5.5 inclusive.
+
+CVE-2018-12546: If a client publishes a retained message to a topic that
+they have access to, and then their access to that topic is revoked, the
+retained message will still be delivered to future subscribers.  This
+behaviour may be undesirable in some applications, so a configuration option
+check_retain_source has been introduced to enforce checking of the retained
+message source on publish.
+
+Add two upstream post-1.5.6 patches to fix a build error in the bridge code
+when ADNS is enabled and when building with older toolchains not defaulting
+to C99 mode.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-mechanism-is-obviously-linux-so-force-.patch | 36 +++++++++++++++++-----
- package/php/php.hash                               |  2 +-
- package/php/php.mk                                 |  2 +-
- 3 files changed, 30 insertions(+), 10 deletions(-)
+ ...ix-build-failure-when-using-WITH_ADNS-yes.patch | 27 +++++++++++++++++
+ .../0002-Don-t-require-C99-compiler.patch          | 35 ++++++++++++++++++++++
+ package/mosquitto/mosquitto.hash                   |  2 +-
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 4 files changed, 64 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-index 280d5ee47b..5c3814f619 100644
---- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-+++ b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: update for 7.2.12]
-+[Bernd: update for 7.2.12 & 7.3.2]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [aduskett at gmail.com: Update for 7.3.0]
- ---
-@@ -16,12 +16,30 @@ diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
- index fbb9b21..ffddc8e 100644
- --- a/ext/opcache/config.m4
- +++ b/ext/opcache/config.m4
--@@ -341,38 +341,8 @@ int main() {
-+@@ -334,58 +334,8 @@ int main() {
-      msg=yes],[msg=no],[msg=no])
-    AC_MSG_RESULT([$msg])
-  
- -flock_type=unknown
---AC_MSG_CHECKING("whether flock struct is linux ordered")
-+-AC_MSG_CHECKING(for struct flock layout)
-+-
-+-if test "$flock_type" = "unknown"; then
-+-AC_RUN_IFELSE([AC_LANG_SOURCE([[
-+-  #include <fcntl.h>
-+-  struct flock lock = { 1, 2, 3, 4, 5, 6, 7 };
-+-  int main() {
-+-    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 6 && lock.l_len== 7) {
-+-		return 0;
-+-    }
-+-    return 1;
-+-  }
-+-]])], [
-+-    flock_type=aix64
-+-    AC_DEFINE([HAVE_FLOCK_AIX64], [], [Struct flock is 64-bit AIX-type])
-+-], [])
-+-fi
-+-
-+-if test "$flock_type" = "unknown"; then
- -AC_RUN_IFELSE([AC_LANG_SOURCE([[
- -  #include <fcntl.h>
- -  struct flock lock = { 1, 2, 3, 4, 5 };
-@@ -34,10 +52,10 @@ index fbb9b21..ffddc8e 100644
- -]])], [
- -	flock_type=linux
- -    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
---    AC_MSG_RESULT("yes")
---], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([no])])
-+-], [])
-+-fi
- -
---AC_MSG_CHECKING("whether flock struct is BSD ordered")
-+-if test "$flock_type" = "unknown"; then
- -AC_RUN_IFELSE([AC_LANG_SOURCE([[
- -  #include <fcntl.h>
- -  struct flock lock = { 1, 2, 3, 4, 5 };
-@@ -50,8 +68,10 @@ index fbb9b21..ffddc8e 100644
- -]])], [
- -	flock_type=bsd
- -    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
---    AC_MSG_RESULT("yes")
---], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([no])])
-+-], [])
-+-fi
-+-
-+-AC_MSG_RESULT([$flock_type])
- +flock_type=linux
- +AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
-  
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 2cb89e0366..5d74a28bc7 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+new file mode 100644
+index 0000000000..3e79a1750a
+--- /dev/null
++++ b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+@@ -0,0 +1,27 @@
++From 9378016b19521aa6c281f475267c5cb67ea967d1 Mon Sep 17 00:00:00 2001
++From: "Roger A. Light" <roger@atchoo.org>
++Date: Fri, 8 Feb 2019 21:34:08 +0000
++Subject: [PATCH] Fix build failure when using WITH_ADNS=yes
++
++[Peter: drop ChangeLog.txt modification]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/bridge.c  | 2 +-
++ 1 files changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/bridge.c b/src/bridge.c
++index 6e4b94f..d9611f0 100644
++--- a/src/bridge.c
+++++ b/src/bridge.c
++@@ -228,7 +228,7 @@ int bridge__connect_step3(struct mosquitto_db *db, struct mosquitto *context)
++ {
++ 	int rc;
++ 
++-	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address, context->bridge->addresses[context->bridge->cur_address].port, NULL, false);
+++	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address);
++ 	if(rc > 0){
++ 		if(rc == MOSQ_ERR_TLS){
++ 			net__socket_close(db, context);
++-- 
++2.11.0
++
+diff --git a/package/mosquitto/0002-Don-t-require-C99-compiler.patch b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
+new file mode 100644
+index 0000000000..7ca40903eb
+--- /dev/null
++++ b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
+@@ -0,0 +1,35 @@
++From 04e89450c0aeb0e6fdff58aca3cffce10b29fb98 Mon Sep 17 00:00:00 2001
++From: "Roger A. Light" <roger@atchoo.org>
++Date: Sat, 9 Feb 2019 13:52:09 +0000
++Subject: [PATCH] Don't require C99 compiler.
++
++[Peter: drop ChangeLog.txt modification]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/persist.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/persist.c b/src/persist.c
++index 2f40086..13b34d2 100644
++--- a/src/persist.c
+++++ b/src/persist.c
++@@ -720,6 +720,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
++ 	struct mosquitto_msg_store *stored = NULL;
++ 	struct mosquitto_msg_store_load *load;
++ 	char *err;
+++	int i;
++ 
++ 	payload.ptr = NULL;
++ 
++@@ -749,7 +750,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
++ 		read_e(db_fptr, &i16temp, sizeof(uint16_t));
++ 		source_port = ntohs(i16temp);
++ 		if(source_port){
++-			for(int i=0; i<db->config->listener_count; i++){
+++			for(i=0; i<db->config->listener_count; i++){
++ 				if(db->config->listeners[i].port == source_port){
++ 					source.listener = &db->config->listeners[i];
++ 					break;
++-- 
++2.11.0
++
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 831171c082..da28c4f67f 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 cfe93e40be0350cd53c4a579f52fe5d8faf9c6db047f650a4566a2276bf33362  php-7.3.1.tar.xz
-+sha256 010b868b4456644ae227d05ad236c8b0a1f57dc6320e7e5ad75e86c5baf0a9a8  php-7.3.2.tar.xz
+ # Locally calculated after checking gpg signature
+-sha256 fcdb47e340864c545146681af7253399cc292e41775afd76400fda5b0d23d668  mosquitto-1.5.5.tar.gz
++sha256 d5bdc13cc668350026376d57fc14de10aaee029f6840707677637d15e0751a40  mosquitto-1.5.6.tar.gz
  
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index be7e9b3c89..061b2f2609 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 1536a5ef26..962fe66049 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.3.1
-+PHP_VERSION = 7.3.2
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-MOSQUITTO_VERSION = 1.5.5
++MOSQUITTO_VERSION = 1.5.6
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
