@@ -1,30 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Feb 2019 12:45:21 +0100
-Subject: [Buildroot] [PATCH 5/12] package/libyaml: add host variant
+Date: Sun, 10 Feb 2019 12:45:22 +0100
+Subject: [Buildroot] [PATCH 6/12] package/python-pyyaml: add host variant
 In-Reply-To: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
 References: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190210114528.1753-5-fontaine.fabrice@gmail.com>
+Message-ID: <20190210114528.1753-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-libyaml is needed for host-python-pyyaml
+host-python-pyyaml is needed for mongodb 4.1.7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libyaml/libyaml.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pyyaml/python-pyyaml.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index 26e318736c..dc7368a168 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
-@@ -12,3 +12,4 @@ LIBYAML_LICENSE = MIT
- LIBYAML_LICENSE_FILES = LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 95f0f0bb9e..961a3135db 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -11,5 +11,7 @@ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
+ PYTHON_PYYAML_DEPENDENCIES = libyaml
++HOST_PYTHON_DEPENDENCIES = host-libyaml
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.14.1
