@@ -1,76 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Feb 2019 14:43:48 +0100
-Subject: [Buildroot] [PATCH v5 1/3] openjdk-bin: new package
-In-Reply-To: <20190205143126.13857-1-aduskett@gmail.com>
-References: <20190205143126.13857-1-aduskett@gmail.com>
-Message-ID: <20190210144348.09780c93@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Feb 2019 14:44:20 +0100
+Subject: [Buildroot] [PATCH 9/12] package/mongodb: add boost mandatory
+ dependency
+In-Reply-To: <20190210143358.321d5bd8@windsurf.home>
+References: <20190210114528.1753-1-fontaine.fabrice@gmail.com>
+ <20190210114528.1753-9-fontaine.fabrice@gmail.com>
+ <20190210140655.6b6ce932@windsurf.home>
+ <CAPi7W81_SdnBOb2qUXac4K614Wqmk9_+1whpps99UDe9vXXnaA@mail.gmail.com>
+ <20190210143358.321d5bd8@windsurf.home>
+Message-ID: <20190210134420.GL3079@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue,  5 Feb 2019 15:31:24 +0100
-aduskett at gmail.com wrote:
-
-> From: Adam Duskett <Aduskett@gmail.com>
+On 2019-02-10 14:33 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 10 Feb 2019 14:22:39 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 > 
-> Paradoxically, building OpenJDK requires a pre-existing JDK.
-> This pre-existing JDK is called the "boot JDK."
+> > > I don't understand PATCH 9/12, 10/12 and 11/12. If those are mandatory
+> > > dependencies, mongodb will not build after PATCH 8/12 is applied.  
+> > mongodb will build after patch 8/12 because it embeds all its external
+> > dependencies in src/third_party. Path 9 to 12 enable the system
+> > libraries instead of the embededded ones.
 > 
-> The boot JDK for building JDK major version N should be a JDK of major
-> version N-1, so for building JDK11, JDK10 would be needed. This requirement is
-> an issue when building on most distributions, as the host JDK tends to be JDK8.
+> OK.
 > 
-> The AdoptOpenJDK project provides binaries that can act as the boot JDK to
-> build the target JDK, which is what this package provides.
+> > However, as suggested by Yann in a separate email, I'll create a
+> > mongodb-4 package and put all the mongodb related changes in a single
+> > "new mongodb-4 package" patch.
 > 
-> Currently, only a x86_64 host is supported, for two reasons:
-> 1) A 32bit x86 binary distribution is not available from AdoptOpenJDK
-> 2) Access to a machine that is not x86_64 that can build Buildroot is not
->    avaliable.
-> 
-> The provided unpack200 has an invalid RPATH and relies on libzlib.
-> When host-libzlib runs the install step, the following error is generated:
-> 
-> *** ERROR: package host-libzlib installs executables without proper RPATH:
-> ***   $(HOST_DIR)/bin/unpack200
-> 
-> Because unpack200 is a deprecated tool, removing it after installation
-> is safe and fixes the issue.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Why should it be named mongodb-4 and not just mongodb, since we're
+> anyway no longer going to have a mongodb package that provides the 3.x
+> version ?
 
-I've applied to next.
+Right, I just used 'mongodb-4' as a way to identify that it was mongodb
+4.x I was talking about. The package should indeed be named 'mongodb'.
 
-> +# If the files are installed to $(HOST_DIR)/bin and $(HOST_DIR)/lib
-> +# the build will fail because the RPATH of java binaries do not have a proper
-> +# RPATH
+Sorry for the confusion.
 
-This comment was no longer true.
+Regards,
+Yann E. MORIN.
 
-> +define HOST_OPENJDK_BIN_INSTALL_CMDS
-> +	cp -aLrf $(@D)/bin/* $(HOST_DIR)/bin/
-> +	cp -aLrf $(@D)/lib/* $(HOST_DIR)/lib/
-
-I used "cp -dpfr" instead, which we use more commonly in other packages.
-
-> +	# unpack200 has an invalid RPATH and relies on libzlib. When host-libzlib
-> +	# is installed on the system, the error
-> +	# "ERROR: package host-libzlib installs executables without proper RPATH:
-> +	# /home/buildroot/bropenjdk/output/host/bin/unpack200" will occure.
-> +	# Because unpack200 is a deprecated tool, removing it to fix this issue is
-> +	# safe.
-
-I moved the comment above the INSTALL_CMDS variable definition, so that
-the comment doesn't appear in the build log when building.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
