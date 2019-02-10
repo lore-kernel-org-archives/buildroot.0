@@ -1,65 +1,123 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Feb 2019 10:52:26 +0100
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.22.6
-Message-ID: <20190210095304.877D1814E4@busybox.osuosl.org>
+Date: Sun, 10 Feb 2019 10:48:51 +0100
+Subject: [Buildroot] [git commit] package/php: security bump to version 7.3.2
+Message-ID: <20190210095304.71AD3814E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=971afefaab6848e5ca691d60ed465f7760f7d796
+commit: https://git.buildroot.net/buildroot/commit/?id=e5e40c94b3ff1881f2296fdcf8f1d85e48c788c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains security fixes for CVE identifiers: CVE-2019-6212,
-CVE-2019-6215, CVE-2019-6216, CVE-2019-6217, CVE-2019-6226,
-CVE-2019-6227, CVE-2019-6229, CVE-2019-6233, and CVE-2019-6234.
-Additionally, it contains a few minor fixes.
+Rebased patch 0004.
 
-Release notes can be found in the announcement:
+This bump fixes https://bugs.php.net/bug.php?id=77369,
+status of CVE-ID: needed
 
-  https://webkitgtk.org/2019/02/09/webkitgtk2.22.6-released.html
-
-More details on the issues covered by securit fixes can be found
-in the corresponding security advisory:
-
-  https://webkitgtk.org/security/WSA-2019-0001.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...ck-mechanism-is-obviously-linux-so-force-.patch | 36 +++++++++++++++++-----
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 3 files changed, 30 insertions(+), 10 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 4cdefa75b7..ed2511976d 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.22.5.tar.xz.sums
--md5 96a731522b800f38e70f85c22f8de477 webkitgtk-2.22.5.tar.xz
--sha1 809b067a1672a81a4ce31363a0872c668cc72953 webkitgtk-2.22.5.tar.xz
--sha256 99d3863f418a7c3a3e37e5062950dbf2d91fb106ec1633459b0ef6f2d5f6cb13 webkitgtk-2.22.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.22.6.tar.xz.sums
-+md5 7c21a30f7f078f0b712caf0c7ee966a4 webkitgtk-2.22.6.tar.xz
-+sha1 26a8f8951da03aa4dfc2c25257b6899ea3c2558f webkitgtk-2.22.6.tar.xz
-+sha256 df90db9c0db0a2072b945fa3e1d45865922bd686c4659cce6cb5897ce357c85b webkitgtk-2.22.6.tar.xz
+diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+index 280d5ee47b..5c3814f619 100644
+--- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
++++ b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 152f42bd7c..c17bbc8028 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: update for 7.2.12]
++[Bernd: update for 7.2.12 & 7.3.2]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
+ ---
+@@ -16,12 +16,30 @@ diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
+ index fbb9b21..ffddc8e 100644
+ --- a/ext/opcache/config.m4
+ +++ b/ext/opcache/config.m4
+-@@ -341,38 +341,8 @@ int main() {
++@@ -334,58 +334,8 @@ int main() {
+      msg=yes],[msg=no],[msg=no])
+    AC_MSG_RESULT([$msg])
+  
+ -flock_type=unknown
+--AC_MSG_CHECKING("whether flock struct is linux ordered")
++-AC_MSG_CHECKING(for struct flock layout)
++-
++-if test "$flock_type" = "unknown"; then
++-AC_RUN_IFELSE([AC_LANG_SOURCE([[
++-  #include <fcntl.h>
++-  struct flock lock = { 1, 2, 3, 4, 5, 6, 7 };
++-  int main() {
++-    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 6 && lock.l_len== 7) {
++-		return 0;
++-    }
++-    return 1;
++-  }
++-]])], [
++-    flock_type=aix64
++-    AC_DEFINE([HAVE_FLOCK_AIX64], [], [Struct flock is 64-bit AIX-type])
++-], [])
++-fi
++-
++-if test "$flock_type" = "unknown"; then
+ -AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ -  #include <fcntl.h>
+ -  struct flock lock = { 1, 2, 3, 4, 5 };
+@@ -34,10 +52,10 @@ index fbb9b21..ffddc8e 100644
+ -]])], [
+ -	flock_type=linux
+ -    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+--    AC_MSG_RESULT("yes")
+--], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([no])])
++-], [])
++-fi
+ -
+--AC_MSG_CHECKING("whether flock struct is BSD ordered")
++-if test "$flock_type" = "unknown"; then
+ -AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ -  #include <fcntl.h>
+ -  struct flock lock = { 1, 2, 3, 4, 5 };
+@@ -50,8 +68,10 @@ index fbb9b21..ffddc8e 100644
+ -]])], [
+ -	flock_type=bsd
+ -    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
+--    AC_MSG_RESULT("yes")
+--], [AC_MSG_RESULT("no")], [AC_MSG_RESULT([no])])
++-], [])
++-fi
++-
++-AC_MSG_RESULT([$flock_type])
+ +flock_type=linux
+ +AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 2cb89e0366..5d74a28bc7 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 cfe93e40be0350cd53c4a579f52fe5d8faf9c6db047f650a4566a2276bf33362  php-7.3.1.tar.xz
++sha256 010b868b4456644ae227d05ad236c8b0a1f57dc6320e7e5ad75e86c5baf0a9a8  php-7.3.2.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index be7e9b3c89..061b2f2609 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.22.5
-+WEBKITGTK_VERSION = 2.22.6
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-PHP_VERSION = 7.3.1
++PHP_VERSION = 7.3.2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
