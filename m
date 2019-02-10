@@ -1,55 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Feb 2019 08:14:43 +0100
-Subject: [Buildroot] Buildroot-2.18.11 fails?
-In-Reply-To: <e40ef8db-c9df-c6db-7e61-aac0f190712a@lamiaworks.com.au>
-References: <e40ef8db-c9df-c6db-7e61-aac0f190712a@lamiaworks.com.au>
-Message-ID: <20190210081443.348c14be@gmx.net>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 10 Feb 2019 21:07:32 +1300
+Subject: [Buildroot] [PATCH] gst1-shark: select
+ BR2_PACKAGE_GSTREAMER1_GST_DEBUG
+Message-ID: <20190210080732.4651-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello scsijon,
+gst-shark needs gstreamer to be compiled with debugging support enabled.
+Make this selection automatically when the gst-shark package is
+selected.
 
-On Sun, 10 Feb 2019 15:20:45 +1100, scsijon <scsijon@lamiaworks.com.au> wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/09b894b0775df2dd87d8fb2d53c6a243d8668aba/
+ - and many more
 
-> I thought i'd try it after so many years.
-> I thought i'd try the last complete version before trying a snapshot.
-> 
-> So, what I did was to download and unpacked the 2018.11 package from 
-> your site.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+I'm not entirely sure how I didn't notice this originally. I swear I did
+compile it before submitting it, still I can't dispute the fact that
+BR2_PACKAGE_GSTREAMER1_GST_DEBUG has been there since gstreamer1 was
+introduced.
 
-2018.11.2, 2018.11.1 or 2018.11?
+ package/gstreamer1/gst1-shark/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Went into make menuconfig and changed (to match what I am use to working 
-> with)>  
-> target Architecture to x86_64;
-> toolchain to glibc;
-> gcc version to 8.x;
-> linux kernel to 4.18 and added a defcon name;
-> exited.
-> 
-> make source (to download the packages required so I could build offline);
-> 
-> make.
-> 
-> All went well until host-gcc-final-8.2.0 where it errored, failed and 
-> exited.
-
-Should not happen ;-), mind to share your .config/defconfig file?
-
-Regards,
-Peter
-
-> 
-> Before I consider proceeding further, could I have some help and advice 
-> with this please. I would have thought this should have been ok.
-> 
-> I have attached the relevant section of the log file.
-> 
-> thanks
-> scsijon
-> 
-> 
+diff --git a/package/gstreamer1/gst1-shark/Config.in b/package/gstreamer1/gst1-shark/Config.in
+index 9d656e2419..ad6b6fb9bd 100644
+--- a/package/gstreamer1/gst1-shark/Config.in
++++ b/package/gstreamer1/gst1-shark/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GST1_SHARK
+ 	select BR2_PACKAGE_GSTREAMER1_CHECK
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_GSTREAMER1_GST_DEBUG # gst_debug_log_valist, GST_CAT_STATES
+ 	help
+ 	  GstShark leverages GStreamers newest instrumentation subsystem
+ 	  by installing a set of custom hooks to the trace points. A
+-- 
+2.20.1
