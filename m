@@ -1,70 +1,116 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Feb 2019 22:00:11 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/ncmpc: fix build on sparc
-Message-ID: <20190211210011.8789-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Feb 2019 21:37:42 +0100
+Subject: [Buildroot] [git commit branch/next] package/libwpe: new package
+Message-ID: <20190211212604.AC83C88E78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
+commit: https://git.buildroot.net/buildroot/commit/?id=7d0203387e4a7afa93773170e04e8850cde5c631
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...son.build-add-atomic-dependency-for-sparc.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
+ DEVELOPERS                 |  2 ++
+ package/Config.in          |  1 +
+ package/libwpe/Config.in   | 13 +++++++++++++
+ package/libwpe/libwpe.hash |  7 +++++++
+ package/libwpe/libwpe.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
 
-diff --git a/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 89a8e2d2a2..50e4ffe6a9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -68,6 +68,7 @@ F:	package/sngrep/
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
++F:	package/libwpe/
+ F:	package/webkitgtk/
+ F:	package/woff2/
+ 
+@@ -827,6 +828,7 @@ F:	package/gdbm/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libump/
++F:	package/libwpe/
+ F:	package/linenoise/
+ F:	package/ljlinenoise/
+ F:	package/lpeg/
+diff --git a/package/Config.in b/package/Config.in
+index 29862c478c..84ccb0358f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1302,6 +1302,7 @@ menu "Graphics"
+ 	source "package/libva-intel-driver/Config.in"
+ 	source "package/libvdpau/Config.in"
+ 	source "package/libvips/Config.in"
++	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opencv3/Config.in"
+diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
 new file mode 100644
-index 0000000000..59a5ee36e4
+index 0000000000..c11c853985
 --- /dev/null
-+++ b/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
-@@ -0,0 +1,43 @@
-+From a0876452aff8462d923b634b13fe657fc6703b80 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 11 Feb 2019 21:42:01 +0100
-+Subject: [PATCH] meson.build: add atomic dependency for sparc
++++ b/package/libwpe/Config.in
+@@ -0,0 +1,13 @@
++comment "libwpe needs a toolchain w/ C++, dynamic library and an OpenEGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
 +
-+Linking with libatomic is needed on sparc otherwise build fails on:
-+ncmpc at exe/src_Main.cxx.o: In function `std::__atomic_base<long>::operator++()':
-+/home/buildroot/autobuild/instance-1/output/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/6.4.0/bits/atomic_base.h:296: undefined reference to `__atomic_fetch_add_4'
++config BR2_PACKAGE_LIBWPE
++	bool "libwpe"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Base library for the WPE WebKit port.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
++	  https://wpewebkit.org/
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+new file mode 100644
+index 0000000000..58dba92e6f
+--- /dev/null
++++ b/package/libwpe/libwpe.hash
+@@ -0,0 +1,7 @@
++# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
++md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
++sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
++sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719 libwpe-1.0.0.tar.xz
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Uptream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/45]
-+---
-+ meson.build | 4 ++++
-+ 1 file changed, 4 insertions(+)
++# Hashes for license files:
++sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+new file mode 100644
+index 0000000000..aad1214e1d
+--- /dev/null
++++ b/package/libwpe/libwpe.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libwpe
++#
++################################################################################
 +
-+diff --git a/meson.build b/meson.build
-+index 2e6defc..f6c1614 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -174,6 +174,9 @@ else
-+   pcre_dep = declare_dependency()
-+ endif
-+ 
-++# Needed on sparc 
-++atomic_dep = cc.find_library('atomic')
-++
-+ inc = include_directories(
-+   'src',
-+ 
-+@@ -352,6 +355,7 @@ ncmpc = executable('ncmpc',
-+   sources,
-+   include_directories: inc,
-+   dependencies: [
-++    atomic_dep,
-+     thread_dep,
-+     boost_dep,
-+     pcre_dep,
-+-- 
-+2.14.1
++LIBWPE_VERSION = 1.0.0
++LIBWPE_SITE = https://wpewebkit.org/releases
++LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
++LIBWPE_INSTALL_STAGING = YES
++LIBWPE_LICENSE = BSD-2-Clause
++LIBWPE_LICENSE_FILES = COPYING
++LIBWPE_DEPENDENCIES = libegl libxkbcommon
 +
--- 
-2.14.1
++# Workaround for https://github.com/raspberrypi/userland/issues/316
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBWPE_CONF_OPTS += \
++	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE' \
++	-DCMAKE_CXX_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE'
++endif
++
++$(eval $(cmake-package))
