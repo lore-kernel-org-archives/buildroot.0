@@ -1,51 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 12:11:25 +0100
-Subject: [Buildroot] [git commit branch/next] package/opentracing-cpp: needs
- dynamic library support
-Message-ID: <20190213214530.52AC98A34D@busybox.osuosl.org>
+Date: Mon, 11 Feb 2019 21:18:35 +0100
+Subject: [Buildroot] [git commit branch/next] package/libva-utils: fix build
+ failure when x11 support is disabled
+Message-ID: <20190213214530.757D38A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7690d3bfa4edde7e06e9ef457e765d0f6148923
+commit: https://git.buildroot.net/buildroot/commit/?id=e9029aa1889a1b8d86ea321dd09f499ea369750a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-opentracing-cpp requires dlfcn.h from src/dynamic_load_unix.cpp.
-This file is compiled unconditionally.
+Fixes
+http://autobuild.buildroot.net/results/2f8/2f89e41f79e8bec1c0561b486ae5750fc87a6320/
 
-Disable opentracing-cpp on BR2_STATIC_LIBS configurations.
-
-Fixes: http://autobuild.buildroot.net/results/454173aef9ff7c808294a974088d7682cad240a8/
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opentracing-cpp/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...uild-failure-when-x11-support-is-disabled.patch | 33 ++++++++++++++++++++++
+ package/libva-utils/libva-utils.mk                 |  1 +
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
-index ebcce35aa8..ff3067b7d1 100644
---- a/package/opentracing-cpp/Config.in
-+++ b/package/opentracing-cpp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENTRACING_CPP
- 	bool "opentracing-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	help
-@@ -9,8 +10,9 @@ config BR2_PACKAGE_OPENTRACING_CPP
+diff --git a/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch b/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch
+new file mode 100644
+index 0000000000..b14b662abf
+--- /dev/null
++++ b/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch
+@@ -0,0 +1,33 @@
++From ad66d3c202eb72ac5808f13a0489ac836dc55aac Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 11 Feb 2019 20:31:42 +0100
++Subject: [PATCH] Fix build failure when x11 support is disabled
++
++Patch suggested on upstream bug tracker:
++https://github.com/intel/libva-utils/issues/150#issuecomment-462059528
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index d28175a..12da79e 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -24,10 +24,10 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
++ 
++ AUTOMAKE_OPTIONS = foreign
++ 
++-SUBDIRS = common decode encode vainfo videoprocess vendor/intel vendor/intel/sfcsample
+++SUBDIRS = common decode encode vainfo videoprocess vendor/intel
++ 
++ if USE_X11
++-SUBDIRS += putsurface
+++SUBDIRS += putsurface vendor/intel/sfcsample
++ else
++ if USE_WAYLAND
++ SUBDIRS += putsurface
++-- 
++2.20.1
++
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index fab3894b18..be857bb4f1 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -10,6 +10,7 @@ LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBV
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
+ # 0001-check-ssp.patch
++# 0002-Fix-build-failure-when-x11-support-is-disabled.patch
+ LIBVA_UTILS_AUTORECONF = YES
+ LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
  
- 	  http://opentracing.io
- 
--comment "opentracing-cpp needs a toolchain w/ C++, threads, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+comment "opentracing-cpp needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "opentracing-cpp needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
