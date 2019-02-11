@@ -1,79 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 15:37:24 +0100
-Subject: [Buildroot] [git commit branch/next] package/sg3_utils: ensure to
- build against librt when needed
-Message-ID: <20190213214530.6B9D28A34D@busybox.osuosl.org>
+Date: Mon, 11 Feb 2019 15:35:33 +0100
+Subject: [Buildroot] [git commit branch/next] package/libupnp18: fix static
+ linking with mpd
+Message-ID: <20190213214530.62C738A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb912b4ab0ca3d9620a63f96d65d03cda6aff34a
+commit: https://git.buildroot.net/buildroot/commit/?id=2f67573373c7ee52b28771c8ed0fffb3dfcd5fbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The sg3_utils has provisions to build against librt when needed, but
-forgot to use that mechanism for the sg_turs program. This commit
-fixes that. The patch has been submitted upstream to the sg3_utils
-author.
+- Add a call to PKG_CHECK_MODULES in configure.ac to get openssl
+  libraries and its dependencies if openssl support is enabled
+- Add OPENSSL_LIBS to libupnp.pc.in so that applications linking with
+  pupnp (such as mpd) will be able to retrieve openssl libraries
 
 Fixes:
+ - http://autobuild.buildroot.org/results/a4148e516070b79816769f3443fc24d6d8192073
 
-  http://autobuild.buildroot.net/results/67b890a41d05497820ea4f44e187257dd6818b0b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...akefile.am-add-missing-RT_LIB-for-sg_turs.patch | 29 ++++++++++++++++++++++
- package/sg3_utils/sg3_utils.mk                     |  2 +-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ .../0001-configure.ac-fix-build-with-openssl.patch | 51 ++++++++++++++++++++++
+ package/libupnp18/libupnp18.mk                     |  3 +-
+ 2 files changed, 53 insertions(+), 1 deletion(-)
 
-diff --git a/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch b/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch
+diff --git a/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch b/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch
 new file mode 100644
-index 0000000000..34a4e114ec
+index 0000000000..6a09821dae
 --- /dev/null
-+++ b/package/sg3_utils/0002-src-Makefile.am-add-missing-RT_LIB-for-sg_turs.patch
-@@ -0,0 +1,29 @@
-+From 68b0591cf37760e09e358533bbcecf36eddfceed Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 10 Feb 2019 14:46:41 +0100
-+Subject: [PATCH] src/Makefile.am: add missing @RT_LIB@ for sg_turs
++++ b/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch
+@@ -0,0 +1,51 @@
++From c70d326f3ae88aa2dca903fb17a1f18d3b45a2ca Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 8 Feb 2019 16:45:32 +0100
++Subject: [PATCH] configure.ac: fix build with openssl
 +
-+The sg_turs program uses clock_gettime(), so it should link against
-+librt, as provided by @RT_LIB at .
++- Add a call to PKG_CHECK_MODULES to get openssl libraries and its
++  dependencies if openssl support is enabled
++- Add OPENSSL_LIBS to libupnp.pc.in so that applications linking with
++  pupnp (such as mpd) will be able to retrieve openssl libraries
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Fixes:
++ - http://autobuild.buildroot.org/results/a4148e516070b79816769f3443fc24d6d8192073
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mrjimenez/pupnp/pull/105]
 +---
-+ src/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ configure.ac  | 5 +++++
++ libupnp.pc.in | 2 +-
++ 2 files changed, 6 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 881cf29..0eba680 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -170,7 +170,7 @@ sg_test_rwbuf_LDADD = ../lib/libsgutils2.la
++diff --git a/configure.ac b/configure.ac
++index 670d363..190b30c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -722,6 +722,11 @@ AC_COMPILE_IFELSE(
++ 			AC_MSG_ERROR([pthread_rwlock_t not available])])])
++ echo "-------------------------------------------------------------------------------"
 + 
-+ sg_timestamp_LDADD = ../lib/libsgutils2.la
+++if test "x$enable_open_ssl" = xyes ; then
+++	PKG_CHECK_MODULES(OPENSSL, libssl,
+++		[LIBS="$LIBS $OPENSSL_LIBS" CFLAGS="$CFLAGS $OPENSSL_CFLAGS"],
+++		[AC_MSG_ERROR([openssl not found])])
+++fi
 + 
-+-sg_turs_LDADD = ../lib/libsgutils2.la
-++sg_turs_LDADD = ../lib/libsgutils2.la @RT_LIB@
-+ 
-+ sg_unmap_LDADD = ../lib/libsgutils2.la
++ AC_CONFIG_FILES([
++ 	Makefile
++diff --git a/libupnp.pc.in b/libupnp.pc.in
++index bd2d7b3..54cba90 100644
++--- a/libupnp.pc.in
+++++ b/libupnp.pc.in
++@@ -6,6 +6,6 @@ includedir=@includedir@
++ Name: libupnp
++ Description: Linux SDK for UPnP Devices
++ Version: @VERSION@
++-Libs: @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ -L${libdir} -lupnp -lixml
+++Libs: @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ -L${libdir} -lupnp -lixml @OPENSSL_LIBS@
++ Cflags: @PTHREAD_CFLAGS@ -I${includedir}/upnp
 + 
 +-- 
-+2.20.1
++2.14.1
 +
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index b3a79d68ee..79521fd06e 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -14,7 +14,7 @@ SG3_UTILS_LICENSE := $(SG3_UTILS_LICENSE), GPL-2.0+ (programs), BSD-3-Clause (pr
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index 13536b8f7a..5154be5316 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -11,11 +11,12 @@ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = COPYING
++# We're patching configure.ac
++LIBUPNP18_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+ LIBUPNP18_DEPENDENCIES += host-pkgconf openssl
+-LIBUPNP18_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
+ else
+ LIBUPNP18_CONF_OPTS += --disable-open-ssl
  endif
- SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
- 
--# Patching configure.ac
-+# Patching configure.ac/Makefile.am
- SG3_UTILS_AUTORECONF = YES
- 
- # install the libsgutils2 library
