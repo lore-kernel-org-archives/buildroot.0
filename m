@@ -1,76 +1,104 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 11 Feb 2019 08:31:17 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-02-10
-In-Reply-To: <20190211070049.9583F86786@whitealder.osuosl.org>
-References: <20190211070049.9583F86786@whitealder.osuosl.org>
-Message-ID: <CANQCQpYqP9n_xOTth+fHANhCO0uR-XCs8-E3TnmXJUr9Q6Exfw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Feb 2019 15:35:33 +0100
+Subject: [Buildroot] [git commit] package/libupnp18: fix static linking with
+ mpd
+Message-ID: <20190211143431.8BC21815FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f67573373c7ee52b28771c8ed0fffb3dfcd5fbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Feb 11, 2019 at 1:01 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Build statistics for 2019-02-10
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  29 |   3 |   0 |  32 |
->    2018.11.x |  30 |   2 |   0 |  32 |
->       master | 267 |  77 |   4 | 348 |
->         next |  28 |  12 |   0 |  40 |
->
-> Results for branch '2018.02.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                    attr-2.4.48 | 1
->                host-efl-1.20.6 | 1
-> neardal-33b54a55032b047fd88... | 1
->
->
-> Detail of failures
-> ------------------
->
->         bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/38a79d1c22931fcab4a45b3413f0a45ed1795703 |
->          arm |                host-efl-1.20.6 | NOK | http://autobuild.buildroot.net/results/05e8fdd28450a5961941b18d4f13827ed05b3aa8 |
->          arm | neardal-33b54a55032b047fd88... | NOK | http://autobuild.buildroot.net/results/7ae0a9f887d79380581ee8331f871bc3040fa7d5 |
->
-> Results for branch '2018.11.x'
-> ==============================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                      efivar-35 | 2
->
->
-> Detail of failures
-> ------------------
->
->     mips64el |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/0b9ae8e039598bd533ff586bce7c99f5de450f1c |
->       mipsel |                      efivar-35 | NOK | http://autobuild.buildroot.net/results/3dc9438feab7f90f9aa16f1c6c516dcd38821748 |
->
-> Results for branch 'master'
-> ===========================
->
-> Classification of failures by reason
-> ------------------------------------
->
->  brcm-patchram-plus-legal-info | 13
->                  qt5base-5.6.3 | 12
+- Add a call to PKG_CHECK_MODULES in configure.ac to get openssl
+  libraries and its dependencies if openssl support is enabled
+- Add OPENSSL_LIBS to libupnp.pc.in so that applications linking with
+  pupnp (such as mpd) will be able to retrieve openssl libraries
 
-Anyone looking at this one?  If not, I'll continue figuring it out
-this week when I've got time.
+Fixes:
+ - http://autobuild.buildroot.org/results/a4148e516070b79816769f3443fc24d6d8192073
 
-Thanks!
-Matt
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-configure.ac-fix-build-with-openssl.patch | 51 ++++++++++++++++++++++
+ package/libupnp18/libupnp18.mk                     |  3 +-
+ 2 files changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch b/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch
+new file mode 100644
+index 0000000000..6a09821dae
+--- /dev/null
++++ b/package/libupnp18/0001-configure.ac-fix-build-with-openssl.patch
+@@ -0,0 +1,51 @@
++From c70d326f3ae88aa2dca903fb17a1f18d3b45a2ca Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 8 Feb 2019 16:45:32 +0100
++Subject: [PATCH] configure.ac: fix build with openssl
++
++- Add a call to PKG_CHECK_MODULES to get openssl libraries and its
++  dependencies if openssl support is enabled
++- Add OPENSSL_LIBS to libupnp.pc.in so that applications linking with
++  pupnp (such as mpd) will be able to retrieve openssl libraries
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a4148e516070b79816769f3443fc24d6d8192073
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mrjimenez/pupnp/pull/105]
++---
++ configure.ac  | 5 +++++
++ libupnp.pc.in | 2 +-
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 670d363..190b30c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -722,6 +722,11 @@ AC_COMPILE_IFELSE(
++ 			AC_MSG_ERROR([pthread_rwlock_t not available])])])
++ echo "-------------------------------------------------------------------------------"
++ 
+++if test "x$enable_open_ssl" = xyes ; then
+++	PKG_CHECK_MODULES(OPENSSL, libssl,
+++		[LIBS="$LIBS $OPENSSL_LIBS" CFLAGS="$CFLAGS $OPENSSL_CFLAGS"],
+++		[AC_MSG_ERROR([openssl not found])])
+++fi
++ 
++ AC_CONFIG_FILES([
++ 	Makefile
++diff --git a/libupnp.pc.in b/libupnp.pc.in
++index bd2d7b3..54cba90 100644
++--- a/libupnp.pc.in
+++++ b/libupnp.pc.in
++@@ -6,6 +6,6 @@ includedir=@includedir@
++ Name: libupnp
++ Description: Linux SDK for UPnP Devices
++ Version: @VERSION@
++-Libs: @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ -L${libdir} -lupnp -lixml
+++Libs: @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ -L${libdir} -lupnp -lixml @OPENSSL_LIBS@
++ Cflags: @PTHREAD_CFLAGS@ -I${includedir}/upnp
++ 
++-- 
++2.14.1
++
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index 13536b8f7a..5154be5316 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -11,11 +11,12 @@ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = COPYING
++# We're patching configure.ac
++LIBUPNP18_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+ LIBUPNP18_DEPENDENCIES += host-pkgconf openssl
+-LIBUPNP18_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
+ else
+ LIBUPNP18_CONF_OPTS += --disable-open-ssl
+ endif
