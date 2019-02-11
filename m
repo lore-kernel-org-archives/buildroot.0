@@ -1,40 +1,56 @@
-From: Nylon Chen <nylon7@andestech.com>
-Date: Mon, 11 Feb 2019 15:45:05 +0800
-Subject: [Buildroot] [PATCH v2 3/3] support/config-fragments: add Andes
- 32-bit (nds32) to autobuild configs
-In-Reply-To: <20190204210232.0e99d517@windsurf>
-References: <20190123123947.5084-1-nylon7@andestech.com>
- <20190123123947.5084-4-nylon7@andestech.com>
- <20190204210232.0e99d517@windsurf>
-Message-ID: <20190211074505.GA17179@app09>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Feb 2019 09:08:48 +0100
+Subject: [Buildroot] [git commit] package/googlefontdirectory: better
+ solution to avoid check-package warning
+Message-ID: <20190211080720.30C6981136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 05, 2019 at 04:02:32AM +0800, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 23 Jan 2019 20:39:47 +0800
-> Nylon Chen <nylon7@andestech.com> wrote:
-> 
-> > Add a minimal nds32 autobuild configuration for the
-> > internal toolchain with glibc.
-> 
-> This autobuild configuration is using an external toolchain, so it is
-> not at all testing "internal toolchain with glibc".
->
-Ok, next patch I will fix commit described avoid confusing.
-> Also, are you ok with analyzing the build failures that will be
-> reported by our autobuilders for the nds32 architecture, investigate
-> them and provide fixes ?
-> 
-no problem, I'll help as mush as i can.
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=12a3bd853e9340a0d1000d5e696d505c6fff9e72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Rather than tell check-package to ignore a false-positive issue, just
+avoid the issue to begin with, by using an intermediate variable to
+construct the list of licenses.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/googlefontdirectory/googlefontdirectory.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
+index cf918ac4ae..8773390f0c 100644
+--- a/package/googlefontdirectory/googlefontdirectory.mk
++++ b/package/googlefontdirectory/googlefontdirectory.mk
+@@ -11,22 +11,21 @@ GOOGLEFONTDIRECTORY_FONTS = \
+ 	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
+ 
+ ifneq ($(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += Apache-2.0
++GOOGLEFONTDIRECTORY_ALL_LICENSES += Apache-2.0
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENSE.txt,$(filter apache/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
+ 
+ ifneq ($(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += OFL-1.1
++GOOGLEFONTDIRECTORY_ALL_LICENSES += OFL-1.1
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /OFL.txt,$(filter ofl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
+ 
+ ifneq ($(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)),)
+-GOOGLEFONTDIRECTORY_LICENSE += UFL-1.1
++GOOGLEFONTDIRECTORY_ALL_LICENSES += UFL-1.1
+ GOOGLEFONTDIRECTORY_LICENSE_FILES += $(addsuffix /LICENCE.txt,$(filter ufl/%,$(GOOGLEFONTDIRECTORY_FONTS)))
+ endif
+ 
+-# check-package OverriddenVariable
+-GOOGLEFONTDIRECTORY_LICENSE := $(subst $(space),$(comma)$(space),$(GOOGLEFONTDIRECTORY_LICENSE))
++GOOGLEFONTDIRECTORY_LICENSE = $(subst $(space),$(comma)$(space),$(GOOGLEFONTDIRECTORY_ALL_LICENSES))
+ 
+ define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
+ 	$(foreach d,$(GOOGLEFONTDIRECTORY_FONTS), \
