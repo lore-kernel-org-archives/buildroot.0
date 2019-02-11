@@ -1,35 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 13:07:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libva-utils: bump version to
- 2.4.0
-In-Reply-To: <20190210100313.19591-1-bernd.kuhls@t-online.de>
-References: <20190210100313.19591-1-bernd.kuhls@t-online.de>
-Message-ID: <20190211130743.6607a22a@windsurf>
+Date: Mon, 11 Feb 2019 13:08:20 +0100
+Subject: [Buildroot] [PATCH v2,1/2] package/ncmpc: bump to version 0.33
+In-Reply-To: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
+References: <20190208214048.11835-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190211130820.7b006f7a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Feb 2019 11:03:13 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello Fabrice,
 
-> Removed patch 0002, applied upstream.
-> Follow upstream switch of release tarball to bz2 and new location.
+On Fri,  8 Feb 2019 22:40:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> - Remove second patch (already in version)
+> - Replace true/false by enabled/disabled, see:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/67d96543e64ec2eff2d3e9907c570ca09918c893
+> - Add new boost system dependency:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/74cc24bdfcfd0ba288b78f0fb75f409832d7586d
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/bef9017712da31b750799e6c7fb9d2829fa5e69c
+> - Remove glib dependency:
+>   https://github.com/MusicPlayerDaemon/ncmpc/commit/dfcb3ab0216d6c9ae35d06060cee806bd919c2ba
+> - Disable new regex option (based on pcre)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0002-KJSL-fix-up-C99-issue.patch          | 120 ------------------
->  package/libva-utils/libva-utils.hash          |   4 +-
->  package/libva-utils/libva-utils.mk            |   5 +-
->  3 files changed, 5 insertions(+), 124 deletions(-)
->  delete mode 100644 package/libva-utils/0002-KJSL-fix-up-C99-issue.patch
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Add a select on BR2_PACKAGE_BOOST_SYSTEM
+>  - Fix patch so that it applies on current master
 
-This bump breaks the build quite badly:
-http://autobuild.buildroot.net/?reason=libva-utils-2.4.0. Could you
-have a look ?
+We have some build failures following this bump:
+http://autobuild.buildroot.net/?reason=ncmpc-0.33.
 
-Thanks,
+Best regards,
 
 Thomas
 -- 
