@@ -1,57 +1,258 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Mon, 11 Feb 2019 11:05:58 -0500
-Subject: [Buildroot] make: write error: stdout
-Message-ID: <CAF_dkJB9s1Um95exFi70ucmr4t3bmUohhm2dcj5558n7cuEdcg@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 11 Feb 2019 11:30:34 -0600
+Subject: [Buildroot] [PATCH v6 3/3] openjdk-hello-world: new test
+In-Reply-To: <20190209204716.38581-3-aduskett@gmail.com>
+References: <20190209204716.38581-1-aduskett@gmail.com>
+ <20190209204716.38581-3-aduskett@gmail.com>
+Message-ID: <CANQCQpbVF9s24WLA6D5rn8do0LXxpA0w8hi8qQsU_y8kQjP=gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has anybody else run into this error?  I just noticed it today (after
-upgrading my Ubuntu build host to a 4.15.0.45-generic kernel).  When I
-attempt to build, I keep getting errors of the form:
+Adam,
 
-make[4]: write error: stdout
-Makefile:215: recipe for target 'resource/subdir_lib' failed
-make[3]: *** [resource/subdir_lib] Error 1
-Makefile:9: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:247: recipe for target
-'/home/wpd/src/d2logger/buildroot-6.0/buildroot-external-microchip/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_built'
-failed
-make[1]: *** [/home/wpd/src/d2logger/buildroot-6.0/buildroot-external-microchip/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_built]
-Error 2
-Makefile:16: recipe for target '_all' failed
-make: *** [_all] Error 2
+On Sat, Feb 9, 2019 at 2:47 PM <aduskett@gmail.com> wrote:
+>
+> From: Daniel J. Leach <dleach@belcan.com>
+>
+> This test is a simple "Hello, World" integration test of the OpenJDK package.
+>
+> It compiles the Java app on the host, then runs it on an emulated AARCH64
+> target and verifies "Hello, World" is printed.
+>
+> Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v3:
+>   - Added this patch to the series.
+>
+> Changes v3 -> v5:
+>   - None
+>
+> Changes v5 -> v6:
+>   - Updated .gitlab-ci.yml entry.
+>   - Fixed From: and SOB line.
+>
+>  .gitlab-ci.yml                                |  1 +
+>  DEVELOPERS                                    |  1 +
+>  .../package/br2-external/openjdk/Config.in    |  1 +
+>  .../br2-external/openjdk/external.desc        |  1 +
+>  .../package/br2-external/openjdk/external.mk  |  1 +
+>  .../package/openjdk-hello-world/Config.in     | 26 ++++++++++++
+>  .../openjdk-hello-world/HelloWorld.java       |  7 ++++
+>  .../openjdk-hello-world.mk                    | 18 ++++++++
+>  support/testing/tests/package/test_openjdk.py | 42 +++++++++++++++++++
+>  9 files changed, 98 insertions(+)
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/Config.in
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.desc
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/external.mk
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+>  create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+>  create mode 100644 support/testing/tests/package/test_openjdk.py
+>
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 2f0ebaa25c..b055d08634 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -328,6 +328,7 @@ tests.package.test_ipython.TestIPythonPy2: { extends: .runtime_test }
+>  tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
+>  tests.package.test_lua.TestLua: { extends: .runtime_test }
+>  tests.package.test_lua.TestLuajit: { extends: .runtime_test }
+> +tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
+>  tests.package.test_perl.TestPerl: { extends: .runtime_test }
+>  tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
+>  tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: { extends: .runtime_test }
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 6606205f7d..56213c5307 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1475,6 +1475,7 @@ F:        package/valijson/
+>  F:     package/wpa_supplicant/
+>  F:     package/wireless_tools/
+>  F:     package/xen/
+> +F:     support/testing/tests/package/br2-external/openjdk/
+>
+>  N:     Mauro Condarelli <mc5686@mclink.it>
+>  F:     package/mc/
+> diff --git a/support/testing/tests/package/br2-external/openjdk/Config.in b/support/testing/tests/package/br2-external/openjdk/Config.in
+> new file mode 100644
+> index 0000000000..00c7fd4799
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/Config.in
+> @@ -0,0 +1 @@
+> +source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-hello-world/Config.in"
+> diff --git a/support/testing/tests/package/br2-external/openjdk/external.desc b/support/testing/tests/package/br2-external/openjdk/external.desc
+> new file mode 100644
+> index 0000000000..f28ba5060c
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/external.desc
+> @@ -0,0 +1 @@
+> +name: OPENJDK
+> diff --git a/support/testing/tests/package/br2-external/openjdk/external.mk b/support/testing/tests/package/br2-external/openjdk/external.mk
+> new file mode 100644
+> index 0000000000..54c24e8c64
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/external.mk
+> @@ -0,0 +1 @@
+> +include $(sort $(wildcard $(BR2_EXTERNAL_OPENJDK_PATH)/package/*/*.mk))
+> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+> new file mode 100644
+> index 0000000000..4f9022fb92
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_OPENJDK_HELLO_WORLD
+> +       bool "openjdk hello world"
+> +       depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> +       depends on BR2_PACKAGE_XORG7
+> +       depends on BR2_USE_WCHAR # gtk2 -> glib2
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # gtk2 -> glib2
+> +       depends on BR2_USE_MMU # gtk2 -> glib2
+> +       depends on BR2_INSTALL_LIBSTDCPP # gtk2, cups
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # gtk2 -> pango -> harfbuzz
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_OPENJDK
+> +       help
+> +         Simple class for testing openjdk
+> +
+> +comment "OpenJDK-hello-world needs a glibc toolchain w/ wchar, dynamic library, threads, C++, gcc >= 4.9"
+> +       depends on BR2_USE_MMU
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +       depends on BR2_PACKAGE_XORG7
+> +       depends on !BR2_USE_WCHAR || \
+> +               BR2_STATIC_LIBS || \
+> +               !BR2_INSTALL_LIBSTDCPP || \
+> +               !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+> +               !BR2_TOOLCHAIN_HAS_THREADS || \
+> +               !BR2_TOOLCHAIN_USES_GLIBC
+> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+> new file mode 100644
+> index 0000000000..37489e44c3
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/HelloWorld.java
+> @@ -0,0 +1,7 @@
+> +public class HelloWorld
+> +{
+> +    public static void main(String[] args)
+> +    {
+> +        System.out.println("Hello, World");
+> +    }
+> +}
+> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+> new file mode 100644
+> index 0000000000..998117b8e2
+> --- /dev/null
+> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# openjdk hello world
+> +#
+> +################################################################################
+> +
+> +OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
+> +
+> +define OPENJDK_HELLO_WORLD_BUILD_CMDS
+> +       $(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
+> +       $(HOST_DIR)/bin/javac $(@D)/HelloWorld.java
+> +endef
+> +
+> +define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 755 $(@D)/HelloWorld.class $(TARGET_DIR)/usr/bin/HelloWorld.class
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
+> new file mode 100644
+> index 0000000000..ed8a1f1be4
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_openjdk.py
+> @@ -0,0 +1,42 @@
+> +import os
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestOpenJdk(infra.basetest.BRTest):
+> +    br2_external = [infra.filepath("tests/package/br2-external/openjdk")]
+> +    config = \
+> +        """
+> +        BR2_aarch64=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +        BR2_PACKAGE_XORG7=y
+> +        BR2_PACKAGE_OPENJDK=y
+> +        BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
+> +        """
+> +
+> +    def login(self):
+> +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+> +        kern = os.path.join(self.builddir, "images", "Image")
+> +        self.emulator.boot(arch="aarch64",
+> +                           kernel=kern,
+> +                           kernel_cmdline=["console=ttyAMA0"],
+> +                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
+> +        self.emulator.login()
+> +
+> +    def test_run(self):
+> +        self.login()
+> +
+> +        cmd = "java -cp /usr/bin HelloWorld"
+> +        output, exit_code = self.emulator.run(cmd)
 
-I found this very odd, so I do what I always do when I find my
-computer doing very odd things... I asked the Google.  And it found
-this:
+Suggest updating to include a longer time out.  120sec worked on my
+machine with slow disks :-)
 
-https://www.mail-archive.com/kernel-packages at lists.launchpad.net/msg322537.html
+output, exit_code = self.emulator.run(cmd, 120)
 
-Apparently, somebody else has ran into this problem with her/his
-buildroot build on Ubuntu on 2/9/19.  So it appears to be a very
-recent, very specific issue.
+> +        print(output)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output, ["Hello, World"])
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Has anybody else run into it?  Have you managed to address it with
-something less drastic than rolling back to an older kernel version?
 
-As an aside, I can issue a second "make" command, and the build
-continues... until it fails again.
 
-I suppose I could change BR2_JLEVEL from 0 to 1, and just take the
-long compile time hit.
+-- 
 
-Hmmm... I just noticed that I don't have BR2_CCACHE enabled for this
-particular target.  (I wonder why I forgot to do that?)  Anyway, I'll
-mention that if it helps anybody else.
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
 
-Also, I'll mention that I am running:
+COLLINS AEROSPACE
 
-$ uname -a
-Linux wpd-p910 4.15.0-45-generic #48~16.04.1-Ubuntu SMP Tue Jan 29
-18:03:48 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
 
---wpd
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
