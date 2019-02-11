@@ -1,75 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 21:18:35 +0100
-Subject: [Buildroot] [git commit branch/next] package/libva-utils: fix build
- failure when x11 support is disabled
-Message-ID: <20190213214530.757D38A34D@busybox.osuosl.org>
+Date: Mon, 11 Feb 2019 09:09:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/brcm-patchram-plus:
+ bump to version 95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042
+Message-ID: <20190213214530.4AAD48A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9029aa1889a1b8d86ea321dd09f499ea369750a
+commit: https://git.buildroot.net/buildroot/commit/?id=0a99f298a5a8f74962a99eda60f437b58c44736f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/2f8/2f89e41f79e8bec1c0561b486ae5750fc87a6320/
+- Remove patch (already in version)
+- Use COPYING as license file as COPYING has been fixed by:
+  https://github.com/AsteroidOS/brcm-patchram-plus/commit/95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...uild-failure-when-x11-support-is-disabled.patch | 33 ++++++++++++++++++++++
- package/libva-utils/libva-utils.mk                 |  1 +
- 2 files changed, 34 insertions(+)
+ .../0001-src-main.c-fix-build-on-SPARC.patch       | 64 ----------------------
+ package/brcm-patchram-plus/brcm-patchram-plus.hash |  4 +-
+ package/brcm-patchram-plus/brcm-patchram-plus.mk   |  4 +-
+ 3 files changed, 4 insertions(+), 68 deletions(-)
 
-diff --git a/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch b/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch
-new file mode 100644
-index 0000000000..b14b662abf
---- /dev/null
-+++ b/package/libva-utils/0002-Fix-build-failure-when-x11-support-is-disabled.patch
-@@ -0,0 +1,33 @@
-+From ad66d3c202eb72ac5808f13a0489ac836dc55aac Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 11 Feb 2019 20:31:42 +0100
-+Subject: [PATCH] Fix build failure when x11 support is disabled
-+
-+Patch suggested on upstream bug tracker:
-+https://github.com/intel/libva-utils/issues/150#issuecomment-462059528
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index d28175a..12da79e 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -24,10 +24,10 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
-+ 
-+ AUTOMAKE_OPTIONS = foreign
-+ 
-+-SUBDIRS = common decode encode vainfo videoprocess vendor/intel vendor/intel/sfcsample
-++SUBDIRS = common decode encode vainfo videoprocess vendor/intel
-+ 
-+ if USE_X11
-+-SUBDIRS += putsurface
-++SUBDIRS += putsurface vendor/intel/sfcsample
-+ else
-+ if USE_WAYLAND
-+ SUBDIRS += putsurface
-+-- 
-+2.20.1
-+
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index fab3894b18..be857bb4f1 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -10,6 +10,7 @@ LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBV
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
- # 0001-check-ssp.patch
-+# 0002-Fix-build-failure-when-x11-support-is-disabled.patch
- LIBVA_UTILS_AUTORECONF = YES
- LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
+diff --git a/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch b/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch
+deleted file mode 100644
+index 5567284cdf..0000000000
+--- a/package/brcm-patchram-plus/0001-src-main.c-fix-build-on-SPARC.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 8ff9d421372a7cb780fbafd8b1d556ee549bf109 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 8 Feb 2019 23:21:04 +0100
+-Subject: [PATCH] src/main.c: fix build on SPARC
+-
+-On SPARC, the definitions of B2500000, B3000000, B3500000 and B4000000
+-are not necessarily available, so use those values only if defined in
+-the kernel headers.
+-
+-It fixes SPARC build failures such as:
+-main.c:382:13: error: 'B2500000' undeclared here (not in a function)
+-  { 2500000, B2500000 },
+-             ^~~~~~~~
+-main.c:383:13: error: 'B3000000' undeclared here (not in a function)
+-  { 3000000, B3000000 },
+-             ^~~~~~~~
+-main.c:385:13: error: 'B3500000' undeclared here (not in a function)
+-  { 3500000, B3500000 },
+-             ^~~~~~~~
+-main.c:386:13: error: 'B4000000' undeclared here (not in a function)
+-  { 4000000, B4000000 }
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/f7012c08c935c3a6ccae50b84170190af5cd5cba
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/AsteroidOS/brcm-patchram-plus/pull/1]
+----
+- src/main.c | 18 +++++++++++++-----
+- 1 file changed, 13 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/main.c b/src/main.c
+-index 040cfe1..17c5191 100644
+---- a/src/main.c
+-+++ b/src/main.c
+-@@ -378,12 +378,20 @@ tBaudRates baud_rates[] = {
+- 	{ 1000000, B1000000 },
+- 	{ 1152000, B1152000 },
+- 	{ 1500000, B1500000 },
+--	{ 2000000, B2000000 },
+--	{ 2500000, B2500000 },
+--	{ 3000000, B3000000 },
+-+	{ 2000000, B2000000 }
+-+#ifdef B2500000
+-+	,{ 2500000, B2500000 }
+-+#endif
+-+#ifdef B3000000
+-+	,{ 3000000, B3000000 }
+-+#endif
+- #ifndef __CYGWIN__
+--	{ 3500000, B3500000 },
+--	{ 4000000, B4000000 }
+-+#ifdef B3500000
+-+	,{ 3500000, B3500000 }
+-+#endif
+-+#ifdef B4000000
+-+	,{ 4000000, B4000000 }
+-+#endif
+- #endif
+- };
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
+index 0da680cd85..f6910e714b 100644
+--- a/package/brcm-patchram-plus/brcm-patchram-plus.hash
++++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  7d63f3a0c79cb5d187a0f2647734601f9c97d4eb8e545ce9ace7653c1f3f9a58  brcm-patchram-plus-94fb127e614b19a9a95561b8c1a0716e2e1e6293.tar.gz
+-sha256  2ba6b830c7d2186f6d5e4470ce5ffe73d97faf69b0d967f2455b725809dfca7b  src/main.c
++sha256  febad69fbc9185b4c6a31188cf381fd280b88d93cb7f5a40dfdbab9c599c29a7  brcm-patchram-plus-95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042.tar.gz
++sha256  26324f5c563b7e338c2876c8abe90c3681c1e9a6163fc59b494c94ad6493eda4  COPYING
+diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+index 511ec991bc..329571d9a9 100644
+--- a/package/brcm-patchram-plus/brcm-patchram-plus.mk
++++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
+-BRCM_PATCHRAM_PLUS_VERSION = 94fb127e614b19a9a95561b8c1a0716e2e1e6293
++BRCM_PATCHRAM_PLUS_VERSION = 95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042
+ BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
+ BRCM_PATCHRAM_PLUS_LICENSE = Apache-2.0
+-BRCM_PATCHRAM_PLUS_LICENSE_FILES = src/main.c
++BRCM_PATCHRAM_PLUS_LICENSE_FILES = COPYING
+ BRCM_PATCHRAM_PLUS_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
