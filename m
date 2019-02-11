@@ -1,116 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 21:45:44 +0100
-Subject: [Buildroot] [git commit branch/next] package/wpebackend-fdo: new
- package
-Message-ID: <20190211212604.B688A88E78@busybox.osuosl.org>
+Date: Mon, 11 Feb 2019 22:26:48 +0100
+Subject: [Buildroot] [git commit branch/next] package/cog: new package
+Message-ID: <20190211212604.CADFE800B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82f1c43aa458a357535eff6adc4bf1f7972a63d5
+commit: https://git.buildroot.net/buildroot/commit/?id=3d34daf3926f6735703b4548b618cd28273481ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  2 ++
- package/Config.in                          |  1 +
- package/wpebackend-fdo/Config.in           | 19 +++++++++++++++++++
- package/wpebackend-fdo/wpebackend-fdo.hash |  7 +++++++
- package/wpebackend-fdo/wpebackend-fdo.mk   | 15 +++++++++++++++
- 5 files changed, 44 insertions(+)
+ DEVELOPERS            |  2 ++
+ package/Config.in     |  1 +
+ package/cog/Config.in | 27 +++++++++++++++++++++++++++
+ package/cog/cog.hash  |  5 +++++
+ package/cog/cog.mk    | 17 +++++++++++++++++
+ 5 files changed, 52 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 50e4ffe6a9..f5d302d286 100644
+index 9746ba6792..45b59de276 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -71,6 +71,7 @@ F:	package/libepoxy/
+@@ -67,6 +67,7 @@ F:	package/sngrep/
+ 
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
++F:	package/cog/
+ F:	package/libepoxy/
  F:	package/libwpe/
  F:	package/webkitgtk/
- F:	package/woff2/
-+F:	package/wpebackend-fdo/
- 
- N:	Adrien Gallou??t <adrien@gallouet.fr>
- F:	package/bird/
-@@ -847,6 +848,7 @@ F:	package/qemu/
- F:	package/sdl2_mixer/
- F:	package/sdl2_net/
- F:	package/tekui/
-+F:	package/wpebackend-fdo/
- F:	package/wsapi-fcgi/
- F:	package/wsapi-xavante/
- F:	utils/scancpan
+@@ -824,6 +825,7 @@ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+ F:	package/botan/
+ F:	package/chipmunk/
++F:	package/cog/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/gdbm/
 diff --git a/package/Config.in b/package/Config.in
-index 84ccb0358f..61ae22db02 100644
+index 0a5180a238..1b5d5c9d7f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1321,6 +1321,7 @@ menu "Graphics"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
- 	source "package/woff2/Config.in"
-+	source "package/wpebackend-fdo/Config.in"
- 	source "package/zbar/Config.in"
- 	source "package/zxing-cpp/Config.in"
- endmenu
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+@@ -263,6 +263,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
++	source "package/cog/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+diff --git a/package/cog/Config.in b/package/cog/Config.in
 new file mode 100644
-index 0000000000..2f5f965403
+index 0000000000..768fcefaac
 --- /dev/null
-+++ b/package/wpebackend-fdo/Config.in
-@@ -0,0 +1,19 @@
-+comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++++ b/package/cog/Config.in
+@@ -0,0 +1,27 @@
++comment "cog needs wpewebkit and a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_WPEWEBKIT || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+config BR2_PACKAGE_WPEBACKEND_FDO
-+	bool "wpebackend-fdo"
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBWPE
-+	select BR2_PACKAGE_WAYLAND
++config BR2_PACKAGE_COG
++	bool "cog"
++	depends on BR2_PACKAGE_WPEWEBKIT
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS
 +	help
-+	  WPEBackend interface using freedesktop.org API.
++	  Single "window" launcher for the WebKit WPE port, and
++	  helper library for implementing WPE launcher. It does
++	  not provide any chrome, and is suitable to be used
++	  as a Web application container.
 +
-+	  https://wpewebkit.org/
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
++if BR2_PACKAGE_COG
++
++config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
++	string "home uri"
++	default "https://wpewebkit.org"
++	help
++	  Default URI to open when "cog" is launched. If an empty
++	  string is used, there is no default and the URI to open
++	  must be always specified in the command line.
++
++endif
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
 new file mode 100644
-index 0000000000..20c89d324c
+index 0000000000..97daf72744
 --- /dev/null
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -0,0 +1,7 @@
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.0.tar.xz.sums
-+md5 5318728afb3bf7417293af67ce427963 wpebackend-fdo-1.0.0.tar.xz
-+sha1 7ee22bc1d585616f4ad2047d8be54ec396486211 wpebackend-fdo-1.0.0.tar.xz
-+sha256 7a747f87a1ae46d30144369050e3ce348b58986d04e1a139ba75c198fa636729 wpebackend-fdo-1.0.0.tar.xz
++++ b/package/cog/cog.hash
+@@ -0,0 +1,5 @@
++# Locally generated
++sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
 +
 +# Hashes for license files:
-+sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
++sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
 new file mode 100644
-index 0000000000..06c87cb9bf
+index 0000000000..43f13152c8
 --- /dev/null
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -0,0 +1,15 @@
++++ b/package/cog/cog.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# wpebackend-fdo
++# cog
 +#
 +################################################################################
 +
-+WPEBACKEND_FDO_VERSION = 1.0.0
-+WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
-+WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
-+WPEBACKEND_FDO_INSTALL_STAGING = YES
-+WPEBACKEND_FDO_LICENSE = BSD-2-Clause
-+WPEBACKEND_FDO_LICENSE_FILES = COPYING
-+WPEBACKEND_FDO_DEPENDENCIES = libglib2 libwpe wayland
++COG_VERSION = v0.2.0
++COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
++COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
++COG_LICENSE = MIT
++COG_LICENSE_FILES = COPYING
++COG_CONF_OPTS = \
++	-DCOG_BUILD_PROGRAMS=ON \
++	-DCOG_PLATFORM_FDO=ON \
++	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
 +
 +$(eval $(cmake-package))
