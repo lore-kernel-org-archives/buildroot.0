@@ -1,73 +1,73 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Feb 2019 22:43:57 +0100
-Subject: [Buildroot] [PATCH/next v2,1/1] package/ncmpc: fix build on sparc
-Message-ID: <20190211214357.22726-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Feb 2019 23:22:02 +0100
+Subject: [Buildroot] [PATCH] utils/scanpypi: protect against zip-slip
+ vulnerability in zip/tar handling
+Message-ID: <20190211222202.10786-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
+For details, see https://github.com/snyk/zip-slip-vulnerability
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Older python versions do not validate that the extracted files are inside
+the target directory.  Detect and error out on evil paths before extracting
+.zip / .tar file.
+
+Given the scope of this (zip issue was fixed in python 2.7.4, released
+2013-04-06, scanpypi is only used by a developer when adding a new python
+package), the security impact is fairly minimal, but it is good to get it
+fixed anyway.
+
+Reported-by: Bas van Schaik <security-reports@semmle.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
- - Make atomic dependency optional
+ utils/scanpypi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
- ...son.build-add-atomic-dependency-for-sparc.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
-
-diff --git a/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
-new file mode 100644
-index 0000000000..fd24589760
---- /dev/null
-+++ b/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
-@@ -0,0 +1,43 @@
-+From d2bd33ec18c146b27fb5aff7dd0089faa195ef9b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 11 Feb 2019 21:42:01 +0100
-+Subject: [PATCH] meson.build: add atomic dependency for sparc
+diff --git a/utils/scanpypi b/utils/scanpypi
+index a75d696222..bdce6924b6 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -225,6 +225,22 @@ class BuildrootPackage():
+         self.filename = self.used_url['filename']
+         self.url = self.used_url['url']
+ 
++    def check_archive(self, members):
++        """
++        Check archive content before extracting
 +
-+Linking with libatomic is needed on sparc otherwise build fails on:
-+ncmpc at exe/src_Main.cxx.o: In function `std::__atomic_base<long>::operator++()':
-+/home/buildroot/autobuild/instance-1/output/host/opt/ext-toolchain/sparc-buildroot-linux-uclibc/include/c++/6.4.0/bits/atomic_base.h:296: undefined reference to `__atomic_fetch_add_4'
++        Keyword arguments:
++        members -- list of archive members
++        """
++        # Protect against https://github.com/snyk/zip-slip-vulnerability
++        # Older python versions do not validate that the extracted files are
++        # inside the target directory. Detect and error out on evil paths
++        evil = [e for e in members if os.path.relpath(e).startswith(('/', '..'))]
++        if evil:
++            print('ERROR: Refusing to extract {} with suspicious members {}'.format(
++                self.filename, evil))
++            sys.exit(1)
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/45]
-+---
-+ meson.build | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/meson.build b/meson.build
-+index 2e6defc..b393e39 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -174,6 +174,9 @@ else
-+   pcre_dep = declare_dependency()
-+ endif
-+ 
-++# Needed on sparc 
-++atomic_dep = cc.find_library('atomic', required: false)
-++
-+ inc = include_directories(
-+   'src',
-+ 
-+@@ -352,6 +355,7 @@ ncmpc = executable('ncmpc',
-+   sources,
-+   include_directories: inc,
-+   dependencies: [
-++    atomic_dep,
-+     thread_dep,
-+     boost_dep,
-+     pcre_dep,
-+-- 
-+2.14.1
-+
+     def extract_package(self, tmp_path):
+         """
+         Extract the package contents into a directrory
+@@ -249,6 +265,7 @@ class BuildrootPackage():
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
++                self.check_archive(as_zipfile.namelist())
+                 as_zipfile.extractall(tmp_pkg)
+                 pkg_filename = self.filename.split(".zip")[0]
+         else:
+@@ -264,6 +281,7 @@ class BuildrootPackage():
+                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
+                     shutil.rmtree(tmp_pkg)
+                     os.makedirs(tmp_pkg)
++                self.check_archive(as_tarfile.getnames())
+                 as_tarfile.extractall(tmp_pkg)
+                 pkg_filename = self.filename.split(".tar")[0]
+ 
 -- 
-2.14.1
+2.11.0
