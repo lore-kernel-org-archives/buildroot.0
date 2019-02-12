@@ -1,105 +1,37 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 12 Feb 2019 23:21:48 +0100
-Subject: [Buildroot] [PATCH] qemu: Update defconfigs to Linux 4.19.16
-In-Reply-To: <20190207094156.106ebb0c@windsurf>
-References: <20190206221441.11654-1-gerome.burlats@smile.fr>
- <20190207094156.106ebb0c@windsurf>
-Message-ID: <d93f0671-7695-1604-272d-4145a4ad2182@smile.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 Feb 2019 23:45:46 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/libcpprestsdk: add optional
+ websocketpp dependency
+Message-ID: <20190212224547.19315-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Le 07/02/2019 ? 09:41, Thomas Petazzoni a ?crit?:
-> Hello Gerome,
-> 
-> Thanks a lot for working on this, it's very useful to have our qemu
-> defconfigs regularly updated and tested!
-> 
-> On Wed,  6 Feb 2019 23:14:41 +0100
-> Gerome Burlats <gerome.burlats@smile.fr> wrote:
-> 
->> Linux version are changed to 4.19.16 (LTS) for all qemu defconfigs, except for riscv.
->> riscv are left unchanged because they have a custom Linux repository causing more difficulties when upgrading to 4.19 for riscv32.
-> 
-> Word missing at the beginning: "riscv *defconfigs* are left"
-> 
->> And for the riscv64, it has been updated recently to Linux 4.20 by another contributor.
->>
->> Patch for arm-versatile-nommu is changed into a git format
->>
->> Add cache attributes for xtensa-lx60-nommu config because the commit https://github.com/torvalds/linux/commit/7bb516ca5424e12b42124fab2906b6da9c81ba9c added a new config variable for memory cache attribute: CONFIG_MEMMAP_CACHEATTR
->>
->> All these updated configs have been built successfully.
->>
->> Signed-off-by: Gerome Burlats <gerome.burlats@smile.fr>
->> Cc: Romain Naour <romain.naour@smile.fr>
-> 
-> Also, please wrap the lines of the commit log to 72 characters.
-> 
->> I did not make Qemu tests for all the configs yet. I am looking over the Bootlin toolchains-builder project in order to make these tests with Gitlab CI
-> 
-> Actually, maybe it would make sense for those qemu defconfigs to be
-> runtime tested as part of the .gitlab-ci.yml that is in Buildroot
-> itself ?
-
-Actually we discussed about that with Gerome. Maybe we needs something like in
-toolchain-builder project that retrieve the Qemu command line from the
-readme.txt file present in each board/qemu/<target>/readme.txt.
-
-> 
-> This would probably require extending:
-> 
-> .defconfig_script:
->     script:
->         - echo 'Configure Buildroot'
->         - make ${CI_JOB_NAME}
->         - echo 'Build buildroot'
->         - |
->             make > >(tee build.log |grep '>>>') 2>&1 || {
->                 echo 'Failed build last output'
->                 tail -200 build.log
->                 exit 1
->             }
-> 
-> with some additional commands to see if it is a qemu defconfig, and if
-> it is, run it under Qemu.
-
-Maybe we should use host-qemu build by Buildroot instead of qemu from the host
-distribution. Some Qemu configs (ex aarch64) requires a recent qemu version.
-
-Also we need to handle the m68k_q800 specific case to skip it since it require a
-custom Qemu which is not upstream yet.
-
-Gerome, tested the network device emulation by trying to login to the target
-using ssh. But we are not sure what was the network test used by [1] (ping, ssh,
-iperf etc...).
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=03fb00f2175cdb4565e26fcb9b3da1c1059de1bd
-
-Best regards,
-Romain
-
-> 
-> 
->> diff --git a/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch b/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
->> index 883bd0de6e..246a96aa37 100644
->> --- a/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
->> +++ b/board/qemu/arm-versatile/patches/linux/versatile-nommu.patch
->> @@ -1,10 +1,27 @@
->> -Signed-Off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> Why is this line removed ?
-> 
->> -From LKML.
->> +From 150e839cfcc35fc1c09f3d8eaa0b331e98683e2f Mon Sep 17 00:00:00 2001
->> +From: Gerome Burlats <gerome.burlats@smile.fr>
-> 
-> Please assign the authorship to Waldemar, who did the patch.
-> 
-> Thomas
-> 
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index be9ca292c5..6f5fb41999 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -10,6 +10,13 @@ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+-LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
++LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
++
++ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
++LIBCPPRESTSDK_DEPENDENCIES += websocketpp
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
++else
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
++endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.14.1
