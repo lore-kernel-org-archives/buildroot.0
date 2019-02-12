@@ -1,30 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:13:15 +0100
-Subject: [Buildroot] [git commit] package/python-typing: add host variant
-Message-ID: <20190212191441.A35887FC1D@busybox.osuosl.org>
+Date: Tue, 12 Feb 2019 20:08:45 +0100
+Subject: [Buildroot] [git commit] package/libyaml: add host variant
+Message-ID: <20190212191441.95F9D7FC1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbbba13e718957a6ac3cf95dd3242db4dbdb4ce8
+commit: https://git.buildroot.net/buildroot/commit/?id=e35fb626991527938078113b8bba07bd1fba9ba0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-python-typing is needed for mongodb 4.0.6
+host-libyaml is needed for host-python-pyyaml
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-typing/python-typing.mk | 1 +
+ package/libyaml/libyaml.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-typing/python-typing.mk b/package/python-typing/python-typing.mk
-index acb5316129..663227dfc9 100644
---- a/package/python-typing/python-typing.mk
-+++ b/package/python-typing/python-typing.mk
-@@ -12,3 +12,4 @@ PYTHON_TYPING_LICENSE = Python-2.0, others
- PYTHON_TYPING_LICENSE_FILES = LICENSE
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index 26e318736c..dc7368a168 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -12,3 +12,4 @@ LIBYAML_LICENSE = MIT
+ LIBYAML_LICENSE_FILES = LICENSE
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
