@@ -1,30 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:00:32 +0100
-Subject: [Buildroot] [PATCH] package/jpeg-turbo: add upstream security
- fixes
-In-Reply-To: <3e10488a1e8d65fddcd891ddc8188512aa955edc.1549978107.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Feb 2019 15:28:27 +0200")
-References: <3e10488a1e8d65fddcd891ddc8188512aa955edc.1549978107.git.baruch@tkos.co.il>
-Message-ID: <87r2ccvnlb.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Feb 2019 20:01:23 +0100
+Subject: [Buildroot] [PATCH] package/sqlcipher: force libopenssl
+In-Reply-To: <1549982190-34082-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 12 Feb 2019 08:36:30 -0600")
+References: <1549982190-34082-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87mun0vnjw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > CVE-2018-20330: Integer overflow causing segfault occurred when
- > attempting to load a BMP file with more than 1 billion pixels using the
- > `tjLoadImage()` function.
+ > v3.2.0 has a bug in the configure step which causes it to fail when being
+ > built against libressl. As libopenssl is selected as the default, the
+ > autobuilders have not uncovered this failure. The issue has been confirmed
+ > in LTS 2018.02.10 (probably broken prior to that as well) and is not
+ > related to the Openssl bump to 1.1.x.
 
-That is a _BIG_ picture! ;)
+ > Thread with more details
+ > http://lists.busybox.net/pipermail/buildroot/2019-February/243133.html
 
- > CVE-2018-19664: Buffer overrun occurred when attempting to decompress a
- > specially-crafted malformed JPEG image to a 256-color BMP using djpeg.
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ > Ideally a package bump should occur prior to fixing this compatibility
+ > issue.
 
- > Cc: Murat Demirten <mdemirten@yh.com.tr>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Please challenge my assumption about the autobuilder, I believe it is
+ > correct based on my understanding and looking at genrandconfig.
 
 Committed, thanks.
 
