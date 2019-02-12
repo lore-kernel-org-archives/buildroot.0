@@ -1,34 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:01:23 +0100
-Subject: [Buildroot] [PATCH] package/sqlcipher: force libopenssl
-In-Reply-To: <1549982190-34082-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Tue, 12 Feb 2019 08:36:30 -0600")
-References: <1549982190-34082-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87mun0vnjw.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Feb 2019 20:01:51 +0100
+Subject: [Buildroot] [PATCH 1/1] board/pc: fix typo in
+ board/pc/post-build.sh
+In-Reply-To: <20190212170514.8533-1-greg@quimbo.fr> (=?utf-8?Q?=22Gr=C3=A9?=
+ =?utf-8?Q?goire?= Delattre"'s
+ message of "Tue, 12 Feb 2019 18:05:15 +0100")
+References: <20190212170514.8533-1-greg@quimbo.fr>
+Message-ID: <87imxovnj4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Gr?goire" == Gr?goire Delattre <greg@quimbo.fr> writes:
 
- > v3.2.0 has a bug in the configure step which causes it to fail when being
- > built against libressl. As libopenssl is selected as the default, the
- > autobuilders have not uncovered this failure. The issue has been confirmed
- > in LTS 2018.02.10 (probably broken prior to that as well) and is not
- > related to the Openssl bump to 1.1.x.
-
- > Thread with more details
- > http://lists.busybox.net/pipermail/buildroot/2019-February/243133.html
-
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > From: Gr?goire Delattre <gregoire.delattre@gmail.com>
+ > Signed-off-by: Gr?goire Delattre <gregoire.delattre@gmail.com>
  > ---
- > Ideally a package bump should occur prior to fixing this compatibility
- > issue.
 
- > Please challenge my assumption about the autobuilder, I believe it is
- > correct based on my understanding and looking at genrandconfig.
+ > Hello, this is indeed a typo ! This looks like an unwanted Ctrl-a in vim !
+ > Here's the patch.
+ > Sorry for the inconvenience,
 
 Committed, thanks.
 
