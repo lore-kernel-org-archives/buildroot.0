@@ -1,109 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Feb 2019 21:33:43 +0100
-Subject: [Buildroot] [PATCH] utils/scanpypi: protect against zip-slip
- vulnerability in zip/tar handling
-In-Reply-To: <20190211222202.10786-1-peter@korsgaard.com>
-References: <20190211222202.10786-1-peter@korsgaard.com>
-Message-ID: <20190212203343.GQ3079@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 12 Feb 2019 21:42:30 +0100
+Subject: [Buildroot] [PATCH v1] package/libv4l: bump version to 1.16.3
+Message-ID: <20190212204230.27913-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-02-11 23:22 +0100, Peter Korsgaard spake thusly:
-> For details, see https://github.com/snyk/zip-slip-vulnerability
-> 
-> Older python versions do not validate that the extracted files are inside
-> the target directory.  Detect and error out on evil paths before extracting
-> .zip / .tar file.
-> 
-> Given the scope of this (zip issue was fixed in python 2.7.4, released
-> 2013-04-06, scanpypi is only used by a developer when adding a new python
-> package), the security impact is fairly minimal, but it is good to get it
-> fixed anyway.
-> 
-> Reported-by: Bas van Schaik <security-reports@semmle.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  utils/scanpypi | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/utils/scanpypi b/utils/scanpypi
-> index a75d696222..bdce6924b6 100755
-> --- a/utils/scanpypi
-> +++ b/utils/scanpypi
-> @@ -225,6 +225,22 @@ class BuildrootPackage():
->          self.filename = self.used_url['filename']
->          self.url = self.used_url['url']
->  
-> +    def check_archive(self, members):
-> +        """
-> +        Check archive content before extracting
-> +
-> +        Keyword arguments:
-> +        members -- list of archive members
-> +        """
-> +        # Protect against https://github.com/snyk/zip-slip-vulnerability
-> +        # Older python versions do not validate that the extracted files are
-> +        # inside the target directory. Detect and error out on evil paths
-> +        evil = [e for e in members if os.path.relpath(e).startswith(('/', '..'))]
+Changes since 1.16.2:
+  - Makefile.am: don't use relative paths for include
+  - keytable: do not install bpf protocols decoders with execute permission
 
-As I said on IRC: I would really prefer if we could reject archive that
-do have paths merely containiug /../ components, because those are
-already fishy, even if they still point in-tree, e.g. foo/../bar is
-still technically OK, but why the heck would it be constructed that way
-to begin with? Normal archivers do not do that.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libv4l/libv4l.hash | 4 ++--
+ package/libv4l/libv4l.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-But making the path canonical with relpath() is already better than the
-current situation, so:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Yet, a little tiny comment, below:
-
-> +        if evil:
-> +            print('ERROR: Refusing to extract {} with suspicious members {}'.format(
-> +                self.filename, evil))
-
-I would have sent that to stderr: print(..., file=sys.stderr)
-
-Regards,
-Yann E. MORIN.
-
-> +            sys.exit(1)
-> +
->      def extract_package(self, tmp_path):
->          """
->          Extract the package contents into a directrory
-> @@ -249,6 +265,7 @@ class BuildrootPackage():
->                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
->                      shutil.rmtree(tmp_pkg)
->                      os.makedirs(tmp_pkg)
-> +                self.check_archive(as_zipfile.namelist())
->                  as_zipfile.extractall(tmp_pkg)
->                  pkg_filename = self.filename.split(".zip")[0]
->          else:
-> @@ -264,6 +281,7 @@ class BuildrootPackage():
->                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
->                      shutil.rmtree(tmp_pkg)
->                      os.makedirs(tmp_pkg)
-> +                self.check_archive(as_tarfile.getnames())
->                  as_tarfile.extractall(tmp_pkg)
->                  pkg_filename = self.filename.split(".tar")[0]
->  
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 2b01c1a713..231a471b9e 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking signature
+-# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.2.tar.bz2.asc
+-sha256 6c3208c9a1c73455d30bae83096d161e57bec5008594f270a2a67df8c86d8e47  v4l-utils-1.16.2.tar.bz2
++# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.3.tar.bz2.asc
++sha256 7c5c0d49c130cf65d384f28e9f3a53c5f7d17bf18740c48c40810e0fbbed5b54  v4l-utils-1.16.3.tar.bz2
+ # Locally calculated
+ sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
+ sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 71011d9102..fe1ffbcf5d 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBV4L_VERSION = 1.16.2
++LIBV4L_VERSION = 1.16.3
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
