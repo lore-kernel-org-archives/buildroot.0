@@ -1,53 +1,57 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 12 Feb 2019 15:09:06 +0200
-Subject: [Buildroot] [PATCH next 1/2] package/wpebackend-fdo: bump to
- version 1.0.1
-Message-ID: <20190212130907.54658-1-aperez@igalia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Feb 2019 14:15:03 +0100
+Subject: [Buildroot] [PATCH 1/2] support/testing: build a glibc toolchain
+ for docker / docker-compose tests
+Message-ID: <20190212131504.28231-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release fixes contains a small fix which allows calling the
-backend initialization routine more than once. Release notes:
+runc (which is a reverse dependency of docker-engine) is about to gain a
+!uclibc dependency, so move to a glibc toolchain instead.
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.0.1.html
+There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
+so instead use the internal toolchain backend to build one.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+While we are at it, drop the infra.basetest.BASIC_TOOLCHAIN_CONFIG
+reference, as that ARM toolchain configuration doesn't make any sense for
+this x86-64 based test.
+
+add docker / docker-compose tests
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/testing/tests/package/test_docker_compose.py | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 20c89d324c..6e6f9f0e3f 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.0.tar.xz.sums
--md5 5318728afb3bf7417293af67ce427963 wpebackend-fdo-1.0.0.tar.xz
--sha1 7ee22bc1d585616f4ad2047d8be54ec396486211 wpebackend-fdo-1.0.0.tar.xz
--sha256 7a747f87a1ae46d30144369050e3ce348b58986d04e1a139ba75c198fa636729 wpebackend-fdo-1.0.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
-+md5 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
-+sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
-+sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8 wpebackend-fdo-1.0.1.tar.xz
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 8bf3ae00b5..de53a3da14 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -4,19 +4,12 @@ import infra.basetest
  
- # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 06c87cb9bf..5842861bac 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.0.0
-+WPEBACKEND_FDO_VERSION = 1.0.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+ class TestDockerCompose(infra.basetest.BRTest):
+-    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++    config = \
+         """
+         BR2_x86_64=y
+         BR2_x86_core2=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2018.05.tar.bz2"
+-        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+-        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+-        BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+-        # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+-        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++        BR2_KERNEL_HEADERS_4_19=y
+         BR2_SYSTEM_DHCP="eth0"
+         BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
+         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
 -- 
-2.20.1
+2.11.0
