@@ -1,57 +1,82 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 12 Feb 2019 21:56:46 +0100
-Subject: [Buildroot] [PATCH v1] package/edid-decode: bump version to 6def7bc
-Message-ID: <20190212205646.31071-1-ps.report@gmx.net>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 12 Feb 2019 23:55:18 +0200
+Subject: [Buildroot] [PATCH v3 0/2] Add gettext-tiny package
+Message-ID: <20190212215520.7422-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since f56f329:
+Add lightweight alternative for the GNU gettext package - gettext-tiny.
+The sources are used from sabotage-linux project. Some files are used
+from the original gettext gnu like po/*, gettextize and some m4 files.
 
-  0a454bc makefile: also honor LDFLAGS
-  9e59ba9 edid-decode: update links, add README
-  7684918 edid-decode: README: updates
-  bc1e846 edid-decode: reformat to linux kernel coding style
-  9cb3744 edid-decode: fix spurious warning about string termination
-  3b26b8a edid-decode: fix wrong sample rate unit
-  4437dd9 edid-decode: use const for unsigned char pointers to the EDID
-  eee377b edid-decode: add support for QuantumData 980 EDID file format
-  7d8f41f edid-decode: simplify data block parsing
-  8c81ccf Add Samsung UE49KS8005 EDID
-  ab18bef edid-decode: add HDMI Forum VSDB fields for HDMI 2.1b
-  e9ffafc edid-decode: add options and new output formats
-  b2da151 edid-decode: add --extract and --check options
-  5eeb151 edid-decode: replace AdobeYCC/RGB by opYCC/RGB
-  6def7bc edid-decode: make it easier to find the out-of-range monitor values
+The original gettext package is renamed to gettext-gnu because now gettext is
+a virtual package and gettext-gnu and gettext-tiny became as gettext providers.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/edid-decode/edid-decode.hash | 2 +-
- package/edid-decode/edid-decode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The main purpose of gettext-tiny is to be used only for the host if NLS
+is not enabled.
 
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-index 437dcf4a66..12cd30e818 100644
---- a/package/edid-decode/edid-decode.hash
-+++ b/package/edid-decode/edid-decode.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 94f43f93285eb5cf8133061295bcdf72b6897bf5372879c2e4032a08d359af12  edid-decode-f56f329ed23a25d002352dedba1e8f092a47286f.tar.gz
-+sha256 27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36 edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index b412a77a13..c43f1ae7da 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
-+EDID_DECODE_VERSION = 6def7bc83dfb0338632e06a8b14c93faa6af8879
- EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
+There was issue with using gettext-tiny for "wine" because it requires
+libgettextpo for wrc tool to be able translate Windows's resource files
+to *.pot, but this option might be disabled if NLS is disabled (done in
+patch 0001.
+
+v3:
+    1) Rebased on master.
+
+    2) Drop wine related patch which is already applied.
+
+
+v2:
+    1) Add patch to disable gettext option for "wine" if NLS is disabled.
+
+    2) Fix build issue with libuio by adding config.rpath by separate package
+       patch:
+
+           0002-Add-config.rpath-from-gettext-gnu-distro-0.19.8.1.patch
+
+    3) Use gettext-tiny only as for HOST alternative and if NLS is disabled.
+       There is no option to manually select gettext-gnu or gettext-tiny which
+       is controlled by gettext virtual package.
+
+    4) Drop "files" folder with copied files from original gettext gnu, but
+       download them from:
+
+           https://git.savannah.gnu.org/cgit/gettext.git
+
+       Thanks to Yann E. Morin for help with this.
+
+    5) gettextize is preprocessed from the original gettextize.in
+
+    6) Use only host-generic-package for gettext-tiny, hence remove "target"
+       related stuff.
+
+Vadim Kochan (2):
+  package/gettext: Turn into virtual package
+  package/gettext-tiny: Add new package
+
+ DEVELOPERS                                         |   1 +
+ .../0001-error_print_progname.patch                |   0
+ .../0002-Update-after-gnulib-changed.patch         |   0
+ .../gettext.hash => gettext-gnu/gettext-gnu.hash}  |   0
+ package/gettext-gnu/gettext-gnu.mk                 | 103 +++
+ ...-format-not-a-string-literal-error-for-gc.patch |  55 ++
+ ...ig.rpath-from-gettext-gnu-distro-0.19.8.1.patch | 709 +++++++++++++++++++++
+ package/gettext-tiny/gettext-tiny.hash             |  14 +
+ package/gettext-tiny/gettext-tiny.mk               | 104 +++
+ package/gettext/Config.in                          |  27 +-
+ package/gettext/gettext.mk                         |  96 +--
+ 11 files changed, 1010 insertions(+), 99 deletions(-)
+ rename package/{gettext => gettext-gnu}/0001-error_print_progname.patch (100%)
+ rename package/{gettext => gettext-gnu}/0002-Update-after-gnulib-changed.patch (100%)
+ rename package/{gettext/gettext.hash => gettext-gnu/gettext-gnu.hash} (100%)
+ create mode 100644 package/gettext-gnu/gettext-gnu.mk
+ create mode 100644 package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
+ create mode 100644 package/gettext-tiny/0002-Add-config.rpath-from-gettext-gnu-distro-0.19.8.1.patch
+ create mode 100644 package/gettext-tiny/gettext-tiny.hash
+ create mode 100644 package/gettext-tiny/gettext-tiny.mk
+
 -- 
-2.20.1
+2.14.1
