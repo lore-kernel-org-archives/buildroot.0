@@ -1,230 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Feb 2019 12:12:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/sqlcipher: add OpenSSL
- 1.1.x compatibility
-Message-ID: <20190213214530.5AA288A34D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Feb 2019 19:59:46 +0100
+Subject: [Buildroot] [git commit branch/next] package/jpeg-turbo: add
+ upstream security fixes
+Message-ID: <20190213214530.960BF835F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c96156add9b83e5f381edd89301ffb89ea9e0a86
+commit: https://git.buildroot.net/buildroot/commit/?id=f60925beda57b67d0ce9c8bd5fc4b237f09e2024
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/5e2/5e2c3178d8a6e11b1af1c37144737097730ba222/
+CVE-2018-20330: Integer overflow causing segfault occurred when
+attempting to load a BMP file with more than 1 billion pixels using the
+`tjLoadImage()` function.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CVE-2018-19664: Buffer overrun occurred when attempting to decompress a
+specially-crafted malformed JPEG image to a 256-color BMP using djpeg.
+
+Cc: Murat Demirten <mdemirten@yh.com.tr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Support-OpenSSL-1.1.0-and-prior.patch     | 97 ++++++++++++++++++++++
- ...SL-init-and-cleanup-routines-on-versions-.patch | 42 ++++++++++
- ...3-correct-compliation-under-openssl-1.1.x.patch | 48 +++++++++++
- 3 files changed, 187 insertions(+)
+ ...Image-Fix-int-overflow-segfault-w-big-BMP.patch | 51 ++++++++++++++++++++++
+ ...p.c-Don-t-allow-quantization-w-non-RGB-CS.patch | 39 +++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-diff --git a/package/sqlcipher/0001-Support-OpenSSL-1.1.0-and-prior.patch b/package/sqlcipher/0001-Support-OpenSSL-1.1.0-and-prior.patch
+diff --git a/package/jpeg-turbo/0001-tjLoadImage-Fix-int-overflow-segfault-w-big-BMP.patch b/package/jpeg-turbo/0001-tjLoadImage-Fix-int-overflow-segfault-w-big-BMP.patch
 new file mode 100644
-index 0000000000..4fa3e3c768
+index 0000000000..a10fcf62af
 --- /dev/null
-+++ b/package/sqlcipher/0001-Support-OpenSSL-1.1.0-and-prior.patch
-@@ -0,0 +1,97 @@
-+From 43f71fa7b4c6a20f4078b9098369abb8d38a5617 Mon Sep 17 00:00:00 2001
-+From: Nick Parker <nparker@zetetic.net>
-+Date: Fri, 9 Dec 2016 11:47:39 -0600
-+Subject: [PATCH] Support OpenSSL 1.1.0 and prior
++++ b/package/jpeg-turbo/0001-tjLoadImage-Fix-int-overflow-segfault-w-big-BMP.patch
+@@ -0,0 +1,51 @@
++From 3d9c64e9f8aa1ee954d1d0bb3390fc894bb84da3 Mon Sep 17 00:00:00 2001
++From: DRC <information@libjpeg-turbo.org>
++Date: Tue, 1 Jan 2019 18:57:36 -0600
++Subject: [PATCH] tjLoadImage(): Fix int overflow/segfault w/big BMP
 +
-+(cherry picked from commit 939c83a007e4724436c3955ae2afd8b11b92d867)
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
++Fixes #304
++
++[baruch: drop the ChangeLog.md hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ src/crypto_openssl.c | 53 +++++++++++++++++++++++++++++++++++++---------------
-+ 1 file changed, 38 insertions(+), 15 deletions(-)
++Upstream status: commit 3d9c64e9f8aa
 +
-+diff --git a/src/crypto_openssl.c b/src/crypto_openssl.c
-+index 150ab92..6822325 100644
-+--- a/src/crypto_openssl.c
-++++ b/src/crypto_openssl.c
-+@@ -47,6 +47,29 @@ static unsigned int openssl_external_init = 0;
-+ static unsigned int openssl_init_count = 0;
-+ static sqlite3_mutex* openssl_rand_mutex = NULL;
-+ 
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++static HMAC_CTX *HMAC_CTX_new(void)
-++{
-++  HMAC_CTX *ctx = OPENSSL_malloc(sizeof(*ctx));
-++  if (ctx != NULL) {
-++    HMAC_CTX_init(ctx);
-++  }
-++  return ctx;
-++}
-++
-++// Per 1.1.0 (https://wiki.openssl.org/index.php/1.1_API_Changes)
-++// HMAC_CTX_free should call HMAC_CTX_cleanup, then EVP_MD_CTX_Cleanup.
-++// HMAC_CTX_cleanup internally calls EVP_MD_CTX_cleanup so these
-++// calls are not needed.
-++static void HMAC_CTX_free(HMAC_CTX *ctx)
-++{
-++  if (ctx != NULL) {
-++    HMAC_CTX_cleanup(ctx);
-++    OPENSSL_free(ctx);
-++  }
-++}
-++#endif
-++
-+ static int sqlcipher_openssl_add_random(void *ctx, void *buffer, int length) {
-+ #ifndef SQLCIPHER_OPENSSL_NO_MUTEX_RAND
-+   sqlite3_mutex_enter(openssl_rand_mutex);
-+@@ -143,14 +166,14 @@ static int sqlcipher_openssl_random (void *ctx, void *buffer, int length) {
-+ }
-+ 
-+ static int sqlcipher_openssl_hmac(void *ctx, unsigned char *hmac_key, int key_sz, unsigned char *in, int in_sz, unsigned char *in2, int in2_sz, unsigned char *out) {
-+-  HMAC_CTX hctx;
-+   unsigned int outlen;
-+-  HMAC_CTX_init(&hctx);
-+-  HMAC_Init_ex(&hctx, hmac_key, key_sz, EVP_sha1(), NULL);
-+-  HMAC_Update(&hctx, in, in_sz);
-+-  HMAC_Update(&hctx, in2, in2_sz);
-+-  HMAC_Final(&hctx, out, &outlen);
-+-  HMAC_CTX_cleanup(&hctx);
-++  HMAC_CTX* hctx = HMAC_CTX_new();
-++  if(hctx == NULL) return SQLITE_ERROR;
-++  HMAC_Init_ex(hctx, hmac_key, key_sz, EVP_sha1(), NULL);
-++  HMAC_Update(hctx, in, in_sz);
-++  HMAC_Update(hctx, in2, in2_sz);
-++  HMAC_Final(hctx, out, &outlen);
-++  HMAC_CTX_free(hctx);
-+   return SQLITE_OK; 
-+ }
-+ 
-+@@ -160,18 +183,18 @@ static int sqlcipher_openssl_kdf(void *ctx, const unsigned char *pass, int pass_
-+ }
-+ 
-+ static int sqlcipher_openssl_cipher(void *ctx, int mode, unsigned char *key, int key_sz, unsigned char *iv, unsigned char *in, int in_sz, unsigned char *out) {
-+-  EVP_CIPHER_CTX ectx;
-+   int tmp_csz, csz;
-+- 
-+-  EVP_CipherInit(&ectx, ((openssl_ctx *)ctx)->evp_cipher, NULL, NULL, mode);
-+-  EVP_CIPHER_CTX_set_padding(&ectx, 0); // no padding
-+-  EVP_CipherInit(&ectx, NULL, key, iv, mode);
-+-  EVP_CipherUpdate(&ectx, out, &tmp_csz, in, in_sz);
-++  EVP_CIPHER_CTX* ectx = EVP_CIPHER_CTX_new();
-++  if(ectx == NULL) return SQLITE_ERROR;
-++  EVP_CipherInit_ex(ectx, ((openssl_ctx *)ctx)->evp_cipher, NULL, NULL, NULL, mode);
-++  EVP_CIPHER_CTX_set_padding(ectx, 0); // no padding
-++  EVP_CipherInit_ex(ectx, NULL, NULL, key, iv, mode);
-++  EVP_CipherUpdate(ectx, out, &tmp_csz, in, in_sz);
-+   csz = tmp_csz;  
-+   out += tmp_csz;
-+-  EVP_CipherFinal(&ectx, out, &tmp_csz);
-++  EVP_CipherFinal_ex(ectx, out, &tmp_csz);
-+   csz += tmp_csz;
-+-  EVP_CIPHER_CTX_cleanup(&ectx);
-++  EVP_CIPHER_CTX_free(ectx);
-+   assert(in_sz == csz);
-+   return SQLITE_OK; 
-+ }
-+-- 
-+1.9.1
++ ChangeLog.md | 4 ++++
++ turbojpeg.c  | 9 ++++++---
++ 2 files changed, 10 insertions(+), 3 deletions(-)
 +
-diff --git a/package/sqlcipher/0002-Guard-OpenSSL-init-and-cleanup-routines-on-versions-.patch b/package/sqlcipher/0002-Guard-OpenSSL-init-and-cleanup-routines-on-versions-.patch
-new file mode 100644
-index 0000000000..1585b8d450
---- /dev/null
-+++ b/package/sqlcipher/0002-Guard-OpenSSL-init-and-cleanup-routines-on-versions-.patch
-@@ -0,0 +1,42 @@
-+From 6b4dbecbcfe35d36fea264c04c41b338852d4e88 Mon Sep 17 00:00:00 2001
-+From: Nick Parker <nparker@zetetic.net>
-+Date: Wed, 1 Mar 2017 15:35:43 -0600
-+Subject: [PATCH] Guard OpenSSL init and cleanup routines on versions less
-+ than 1.1.0
-+
-+(cherry picked from commit 1c495b933cee3381f1ea6a70edcbcda1754d7409)
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+
-+Conflicts:
-+	src/crypto_openssl.c
-+---
-+ src/crypto_openssl.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/crypto_openssl.c b/src/crypto_openssl.c
-+index 6822325..09bc2a2 100644
-+--- a/src/crypto_openssl.c
-++++ b/src/crypto_openssl.c
-+@@ -102,7 +102,9 @@ static int sqlcipher_openssl_activate(void *ctx) {
-+ 
-+   if(openssl_init_count == 0 && openssl_external_init == 0)  {
-+     /* if the library was not externally initialized, then should be now */
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-+     OpenSSL_add_all_algorithms();
-++#endif
-+   } 
-+ 
-+ #ifndef SQLCIPHER_OPENSSL_NO_MUTEX_RAND
-+@@ -131,7 +133,9 @@ static int sqlcipher_openssl_deactivate(void *ctx) {
-+        Note: this code will only be reached if OpensSSL_add_all_algorithms()
-+        is called by SQLCipher internally. This should prevent SQLCipher from 
-+        "cleaning up" openssl when it was initialized externally by the program */
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-+       EVP_cleanup();
-++#endif
-+     }
-+ #ifndef SQLCIPHER_OPENSSL_NO_MUTEX_RAND
-+     sqlite3_mutex_free(openssl_rand_mutex);
-+-- 
-+1.9.1
-+
-diff --git a/package/sqlcipher/0003-correct-compliation-under-openssl-1.1.x.patch b/package/sqlcipher/0003-correct-compliation-under-openssl-1.1.x.patch
-new file mode 100644
-index 0000000000..b15fabcbec
---- /dev/null
-+++ b/package/sqlcipher/0003-correct-compliation-under-openssl-1.1.x.patch
-@@ -0,0 +1,48 @@
-+From 3da532754fb2bb7d379d4386a8c3339742edfb0b Mon Sep 17 00:00:00 2001
-+From: Stephen Lombardo <sjlombardo@zetetic.net>
-+Date: Wed, 10 Oct 2018 15:55:49 -0400
-+Subject: [PATCH] correct compliation under openssl 1.1.x
-+
-+(cherry picked from commit 57ea35296ce7f2c1c93ce79194eea19a008b69ae)
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+
-+Conflicts:
-+	src/crypto_openssl.c
-+---
-+ src/crypto_openssl.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/crypto_openssl.c b/src/crypto_openssl.c
-+index 09bc2a2..57a1104 100644
-+--- a/src/crypto_openssl.c
-++++ b/src/crypto_openssl.c
-+@@ -47,7 +47,7 @@ static unsigned int openssl_external_init = 0;
-+ static unsigned int openssl_init_count = 0;
-+ static sqlite3_mutex* openssl_rand_mutex = NULL;
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+ static HMAC_CTX *HMAC_CTX_new(void)
++diff --git a/turbojpeg.c b/turbojpeg.c
++index 90a9ce6a0be8..3f7cd640677f 100644
++--- a/turbojpeg.c
+++++ b/turbojpeg.c
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C)2009-2018 D. R. Commander.  All Rights Reserved.
+++ * Copyright (C)2009-2019 D. R. Commander.  All Rights Reserved.
++  *
++  * Redistribution and use in source and binary forms, with or without
++  * modification, are permitted provided that the following conditions are met:
++@@ -1960,7 +1960,8 @@ DLLEXPORT unsigned char *tjLoadImage(const char *filename, int *width,
++                                      int align, int *height, int *pixelFormat,
++                                      int flags)
 + {
-+   HMAC_CTX *ctx = OPENSSL_malloc(sizeof(*ctx));
-+@@ -102,7 +102,7 @@ static int sqlcipher_openssl_activate(void *ctx) {
++-  int retval = 0, tempc, pitch;
+++  int retval = 0, tempc;
+++  size_t pitch;
++   tjhandle handle = NULL;
++   tjinstance *this;
++   j_compress_ptr cinfo = NULL;
++@@ -2013,7 +2014,9 @@ DLLEXPORT unsigned char *tjLoadImage(const char *filename, int *width,
++   *pixelFormat = cs2pf[cinfo->in_color_space];
 + 
-+   if(openssl_init_count == 0 && openssl_external_init == 0)  {
-+     /* if the library was not externally initialized, then should be now */
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+     OpenSSL_add_all_algorithms();
-+ #endif
-+   } 
-+@@ -133,7 +133,7 @@ static int sqlcipher_openssl_deactivate(void *ctx) {
-+        Note: this code will only be reached if OpensSSL_add_all_algorithms()
-+        is called by SQLCipher internally. This should prevent SQLCipher from 
-+        "cleaning up" openssl when it was initialized externally by the program */
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if (defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+       EVP_cleanup();
-+ #endif
-+     }
++   pitch = PAD((*width) * tjPixelSize[*pixelFormat], align);
++-  if ((dstBuf = (unsigned char *)malloc(pitch * (*height))) == NULL)
+++  if ((unsigned long long)pitch * (unsigned long long)(*height) >
+++      (unsigned long long)((size_t)-1) ||
+++      (dstBuf = (unsigned char *)malloc(pitch * (*height))) == NULL)
++     _throwg("tjLoadImage(): Memory allocation failure");
++ 
++   if (setjmp(this->jerr.setjmp_buffer)) {
 +-- 
-+1.9.1
++2.20.1
++
+diff --git a/package/jpeg-turbo/0002-wrbmp.c-Don-t-allow-quantization-w-non-RGB-CS.patch b/package/jpeg-turbo/0002-wrbmp.c-Don-t-allow-quantization-w-non-RGB-CS.patch
+new file mode 100644
+index 0000000000..3e4e5bd082
+--- /dev/null
++++ b/package/jpeg-turbo/0002-wrbmp.c-Don-t-allow-quantization-w-non-RGB-CS.patch
+@@ -0,0 +1,39 @@
++From f8cca819a4fb42aafa5f70df43c45e8c416d716f Mon Sep 17 00:00:00 2001
++From: DRC <information@libjpeg-turbo.org>
++Date: Tue, 1 Jan 2019 20:32:40 -0600
++Subject: [PATCH] wrbmp.c: Don't allow quantization w/ non-RGB CS
++
++If cinfo->quantize_colors == 1, then jpeg_calc_output_dimensions() will
++set cinfo->output_components to 1, and if cinfo->out_color_space is not
++RGB (or extended RGB), hilarity will ensue.
++
++Fixes #305
++
++[baruch: drop the ChangeLog.md hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit f8cca819a4
++
++ ChangeLog.md | 4 ++++
++ wrbmp.c      | 5 +++--
++ 2 files changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/wrbmp.c b/wrbmp.c
++index 4bf81426b0ef..239f64eb3c3f 100644
++--- a/wrbmp.c
+++++ b/wrbmp.c
++@@ -502,8 +502,9 @@ jinit_write_bmp(j_decompress_ptr cinfo, boolean is_os2,
++       dest->pub.put_pixel_rows = put_gray_rows;
++     else
++       dest->pub.put_pixel_rows = put_pixel_rows;
++-  } else if (cinfo->out_color_space == JCS_RGB565 ||
++-             cinfo->out_color_space == JCS_CMYK) {
+++  } else if (!cinfo->quantize_colors &&
+++             (cinfo->out_color_space == JCS_RGB565 ||
+++              cinfo->out_color_space == JCS_CMYK)) {
++     dest->pub.put_pixel_rows = put_pixel_rows;
++   } else {
++     ERREXIT(cinfo, JERR_BMP_COLORSPACE);
++-- 
++2.20.1
 +
