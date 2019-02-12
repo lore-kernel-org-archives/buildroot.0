@@ -1,31 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 21:27:06 +0100
-Subject: [Buildroot] [PATCH 4/4] docker-engine: fix runc version check
- warning
-In-Reply-To: <20190212093531.13145-4-christian@paral.in> (Christian Stewart's
- message of "Tue, 12 Feb 2019 01:35:31 -0800")
-References: <20190212093531.13145-1-christian@paral.in>
- <20190212093531.13145-4-christian@paral.in>
-Message-ID: <87zhr0sqg5.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Feb 2019 21:27:45 +0100
+Subject: [Buildroot] [PATCH] utils/scanpypi: protect against zip-slip
+ vulnerability in zip/tar handling
+In-Reply-To: <20190211222202.10786-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Feb 2019 23:22:02 +0100")
+References: <20190211222202.10786-1-peter@korsgaard.com>
+Message-ID: <87va1osqf2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the startup warning from Docker:
- > failed to retrieve runc version: unknown output format: runc version commit ...
+ > For details, see https://github.com/snyk/zip-slip-vulnerability
+ > Older python versions do not validate that the extracted files are inside
+ > the target directory.  Detect and error out on evil paths before extracting
+ > .zip / .tar file.
 
- > Introduces a patch to replace the faulty version detection logic in the Docker
- > engine.
+ > Given the scope of this (zip issue was fixed in python 2.7.4, released
+ > 2013-04-06, scanpypi is only used by a developer when adding a new python
+ > package), the security impact is fairly minimal, but it is good to get it
+ > fixed anyway.
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Reported-by: Bas van Schaik <security-reports@semmle.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
-
-Please submit the patch upstream.
 
 -- 
 Bye, Peter Korsgaard
