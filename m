@@ -1,58 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:03:46 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing: build a glibc
- toolchain for docker / docker-compose tests
-Message-ID: <20190213214530.BF8898A34D@busybox.osuosl.org>
+Date: Tue, 12 Feb 2019 20:12:14 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-pyyaml: add
+ host variant
+Message-ID: <20190213214530.D7B568A34D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11c55c94da9a51f0448a1ae869065736993e1787
+commit: https://git.buildroot.net/buildroot/commit/?id=66d618cadacce9a8d66e3f7084610e69067a428f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-runc (which is a reverse dependency of docker-engine) is about to gain a
-!uclibc dependency, so move to a glibc toolchain instead.
+host-python-pyyaml is needed for mongodb 4.0.6
 
-There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
-so instead use the internal toolchain backend to build one.
-
-While we are at it, drop the infra.basetest.BASIC_TOOLCHAIN_CONFIG
-reference, as that ARM toolchain configuration doesn't make any sense for
-this x86-64 based test.
-
-add docker / docker-compose tests
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: s/HOST_PYTHON/HOST_PYTHON_PYYAML/]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_docker_compose.py | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ package/python-pyyaml/python-pyyaml.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 8bf3ae00b5..de53a3da14 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -4,19 +4,12 @@ import infra.basetest
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 95f0f0bb9e..b73b4356a0 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -11,5 +11,7 @@ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
+ PYTHON_PYYAML_DEPENDENCIES = libyaml
++HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
  
- 
- class TestDockerCompose(infra.basetest.BRTest):
--    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+    config = \
-         """
-         BR2_x86_64=y
-         BR2_x86_core2=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2018.05.tar.bz2"
--        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
--        BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--        # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+        BR2_KERNEL_HEADERS_4_19=y
-         BR2_SYSTEM_DHCP="eth0"
-         BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
+ $(eval $(python-package))
++$(eval $(host-python-package))
