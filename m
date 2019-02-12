@@ -1,57 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 15:14:16 +0100
-Subject: [Buildroot] [PATCH] package/sqlcipher: add OpenSSL 1.1.x
- compatibility
-In-Reply-To: <CANQCQpbkwrmsXzopxo+aqK8NTmce9YHoPdRfsa3BguOWeALJpw@mail.gmail.com>
- (Matthew Weber's message of "Tue, 12 Feb 2019 07:25:47 -0600")
-References: <1549454958-648-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87pnryvu39.fsf@dell.be.48ers.dk>
- <CANQCQpbkwrmsXzopxo+aqK8NTmce9YHoPdRfsa3BguOWeALJpw@mail.gmail.com>
-Message-ID: <87zhr1um9z.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Feb 2019 15:27:39 +0100
+Subject: [Buildroot] [PATCH 1/2] support/testing: build a glibc
+ toolchain for docker / docker-compose tests
+In-Reply-To: <874l99w0wo.fsf@dell.be.48ers.dk>
+References: <20190212131504.28231-1-peter@korsgaard.com>
+ <20190212143142.0372ad03@windsurf>
+ <874l99w0wo.fsf@dell.be.48ers.dk>
+Message-ID: <20190212152739.4e96f968@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+On Tue, 12 Feb 2019 15:12:55 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Peter,
- > On Mon, Feb 11, 2019 at 4:27 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
- >> 
- >> > Fixes
- >> > http://autobuild.buildroot.net/results/5e2/5e2c3178d8a6e11b1af1c37144737097730ba222/
- >> 
- >> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- >> > ---
- >> > Tested using autobuilder failure setup for libopenssl.
- >> 
- >> > For libressl the build fails. The sqlcipher pkg version really should
- >> > be bumped before investigating the build failure as there are a number
- >> > of commits that should be picked up.
- >> > Currently the pkg build won't pass the configure stage.
- >> > Should I open a bug for this or send something for "next"?
- >> 
- >> What do we do about the libressl issue for 2019.02? Just select
- >> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL?
- >> 
+>  >> runc (which is a reverse dependency of docker-engine) is about to gain a
+>  >> !uclibc dependency, so move to a glibc toolchain instead.
+>  >> 
+>  >> There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
+>  >> so instead use the internal toolchain backend to build one.  
+> 
+>  > One option would be to use:  
+> 
+>  >   https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2  
+> 
+> Yes, I can change it to that. Do we want to use bootlin toolchains for
+> our tests?
 
- > I did some builds and this libressl compatibility was broken before
- > the openssl bump but never found.  (Tested with 2018.02.x and tip)
+Not necessarily, I was just stating another possibility. I'm fine
+either way.
 
-Ahh, ok.
-
- > I can add that force dependency for this release cycle.  Would it make
- > sense to open a bug capturing the notes and suggesting a bump or just
- > leave this limitation in until someone maintains the package
- > (currently we're at a ~2014 version with commits by Gustavo and
- > Maxime)?
-
-Either that or just explain it in the commit message that adds the
-select. I guess both will be visible for someone wanting to use
-sqlcipher with libressl.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
