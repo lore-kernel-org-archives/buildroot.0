@@ -1,39 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Feb 2019 15:27:39 +0100
-Subject: [Buildroot] [PATCH 1/2] support/testing: build a glibc
- toolchain for docker / docker-compose tests
-In-Reply-To: <874l99w0wo.fsf@dell.be.48ers.dk>
-References: <20190212131504.28231-1-peter@korsgaard.com>
- <20190212143142.0372ad03@windsurf>
- <874l99w0wo.fsf@dell.be.48ers.dk>
-Message-ID: <20190212152739.4e96f968@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 12 Feb 2019 08:36:30 -0600
+Subject: [Buildroot] [PATCH] package/sqlcipher: force libopenssl
+Message-ID: <1549982190-34082-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Feb 2019 15:12:55 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+v3.2.0 has a bug in the configure step which causes it to fail when being
+built against libressl. As libopenssl is selected as the default, the
+autobuilders have not uncovered this failure. The issue has been confirmed
+in LTS 2018.02.10 (probably broken prior to that as well) and is not
+related to the Openssl bump to 1.1.x.
 
->  >> runc (which is a reverse dependency of docker-engine) is about to gain a
->  >> !uclibc dependency, so move to a glibc toolchain instead.
->  >> 
->  >> There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
->  >> so instead use the internal toolchain backend to build one.  
-> 
->  > One option would be to use:  
-> 
->  >   https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2  
-> 
-> Yes, I can change it to that. Do we want to use bootlin toolchains for
-> our tests?
+Thread with more details
+http://lists.busybox.net/pipermail/buildroot/2019-February/243133.html
 
-Not necessarily, I was just stating another possibility. I'm fine
-either way.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Ideally a package bump should occur prior to fixing this compatibility
+issue.
 
-Thomas
+Please challenge my assumption about the autobuilder, I believe it is
+correct based on my understanding and looking at genrandconfig.
+---
+ package/sqlcipher/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
+index 332754b..b26bc77 100644
+--- a/package/sqlcipher/Config.in
++++ b/package/sqlcipher/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SQLCIPHER
+ 	depends on !BR2_PACKAGE_SQLITE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  SQLCipher is an SQLite extension that provides 256 bits AES
+ 	  encryption of database files. Note that it is a fork of
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+1.9.1
