@@ -1,35 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Feb 2019 14:31:42 +0100
-Subject: [Buildroot] [PATCH 1/2] support/testing: build a glibc
- toolchain for docker / docker-compose tests
-In-Reply-To: <20190212131504.28231-1-peter@korsgaard.com>
-References: <20190212131504.28231-1-peter@korsgaard.com>
-Message-ID: <20190212143142.0372ad03@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Feb 2019 14:10:26 +0000
+Subject: [Buildroot] [Bug 11671] russian locale ru_RU:145: LC_TIME: syntax
+ error
+In-Reply-To: <bug-11671-163@https.bugs.busybox.net/>
+References: <bug-11671-163@https.bugs.busybox.net/>
+Message-ID: <bug-11671-163-ixSXDOEOv8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11671
 
-On Tue, 12 Feb 2019 14:15:03 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+--- Comment #2 from Alexey <skif@skif-web.ru> ---
+Thanks a lot,Peter!
 
-> runc (which is a reverse dependency of docker-engine) is about to gain a
-> !uclibc dependency, so move to a glibc toolchain instead.
-> 
-> There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
-> so instead use the internal toolchain backend to build one.
+I applied your patches, and now building is comlited successful. 
+But in don't have "locale" command in builded system.
+May be anyone know, hot to set locale in system and how to add LOCALE command ?
 
-One option would be to use:
-
-  https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
