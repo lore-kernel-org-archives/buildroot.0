@@ -1,452 +1,508 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:04:14 +0100
-Subject: [Buildroot] [git commit] package/runc: add upstream security fix
- for CVE-2019-5736
-Message-ID: <20190212190320.2006188F2E@busybox.osuosl.org>
+Date: Tue, 12 Feb 2019 19:59:11 +0100
+Subject: [Buildroot] [git commit] openssh: add upstream security fixes
+Message-ID: <20190212190319.D899B88F2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e3f7fbc072c88ab344f2ffa39e402464b566f19
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe3741bc4197f6bff48236f357f5db1269586c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The vulnerability allows a malicious container to (with minimal user
-interaction) overwrite the host runc binary and thus gain root-level
-code execution on the host. The level of user interaction is being able
-to run any command (it doesn't matter if the command is not
-attacker-controlled) as root within a container in either of these
-contexts:
+CVE-2019-6109: Due to missing character encoding in the progress
+display, a malicious server (or Man-in-The-Middle attacker) can employ
+crafted object names to manipulate the client output, e.g., by using
+ANSI control codes to hide additional files being transferred. This
+affects refresh_progress_meter() in progressmeter.c.
 
-  * Creating a new container using an attacker-controlled image.
-  * Attaching (docker exec) into an existing container which the
-    attacker had previous write access to.
+CVE-2019-6111: Due to the scp implementation being derived from 1983
+rcp, the server chooses which files/directories are sent to the client.
+However, the scp client only performs cursory validation of the object
+name returned (only directory traversal attacks are prevented). A
+malicious scp server (or Man-in-The-Middle attacker) can overwrite
+arbitrary files in the scp client target directory. If recursive
+operation (-r) is performed, the server can manipulate subdirectories as
+well (for example, to overwrite the .ssh/authorized_keys file).
 
-For more details, see the advisory:
-
-https://www.openwall.com/lists/oss-security/2019/02/11/2
-
-The fix for this issue uses fexecve(3), which isn't available on uClibc, so
-add a dependency on !uclibc to runc and propagate to the reverse
-dependencies (containerd/docker-engine).
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in                |   5 +-
- package/docker-engine/Config.in                    |   5 +-
- ...ne-proc-self-exe-to-avoid-exposing-host-b.patch | 338 +++++++++++++++++++++
- package/runc/Config.in                             |   5 +-
- 4 files changed, 347 insertions(+), 6 deletions(-)
+ ...nitize-scp-filenames-via-snmprintf.-To-do.patch | 275 +++++++++++++++++++++
+ ...eck-in-scp-client-that-filenames-sent-dur.patch | 186 ++++++++++++++
+ 2 files changed, 461 insertions(+)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 851345f73e..bdb5dd7b80 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-@@ -27,8 +28,8 @@ config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
- 
- endif
- 
--comment "docker-containerd needs a toolchain w/ threads"
-+comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 2a0c130fce..3c97310484 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
-@@ -49,8 +50,8 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 
- endif
- 
--comment "docker-engine needs a toolchain w/ threads"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch b/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
+diff --git a/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch b/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch
 new file mode 100644
-index 0000000000..a0bc7ba300
+index 0000000000..e5d137ef11
 --- /dev/null
-+++ b/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
-@@ -0,0 +1,338 @@
-+From 0a8e4117e7f715d5fbeef398405813ce8e88558b Mon Sep 17 00:00:00 2001
-+From: Aleksa Sarai <asarai@suse.de>
-+Date: Wed, 9 Jan 2019 13:40:01 +1100
-+Subject: [PATCH] nsenter: clone /proc/self/exe to avoid exposing host binary
-+ to container
++++ b/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch
+@@ -0,0 +1,275 @@
++From 5979bdfeca813dd7e997a1edb0f928d77ce70304 Mon Sep 17 00:00:00 2001
++From: "dtucker at openbsd.org" <dtucker@openbsd.org>
++Date: Wed, 23 Jan 2019 08:01:46 +0000
++Subject: [PATCH] upstream: Sanitize scp filenames via snmprintf. To do this we
++ move
 +
-+There are quite a few circumstances where /proc/self/exe pointing to a
-+pretty important container binary is a _bad_ thing, so to avoid this we
-+have to make a copy (preferably doing self-clean-up and not being
-+writeable).
++the progressmeter formatting outside of signal handler context and have the
++atomicio callback called for EINTR too.  bz#2434 with contributions from djm
++and jjelen at redhat.com, ok djm@
 +
-+We require memfd_create(2) -- though there is an O_TMPFILE fallback --
-+but we can always extend this to use a scratch MNT_DETACH overlayfs or
-+tmpfs. The main downside to this approach is no page-cache sharing for
-+the runc binary (which overlayfs would give us) but this is far less
-+complicated.
-+
-+This is only done during nsenter so that it happens transparently to the
-+Go code, and any libcontainer users benefit from it. This also makes
-+ExtraFiles and --preserve-fds handling trivial (because we don't need to
-+worry about it).
-+
-+Fixes: CVE-2019-5736
-+Co-developed-by: Christian Brauner <christian.brauner@ubuntu.com>
-+Signed-off-by: Aleksa Sarai <asarai@suse.de>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++OpenBSD-Commit-ID: 1af61c1f70e4f3bd8ab140b9f1fa699481db57d8
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ libcontainer/nsenter/cloned_binary.c | 268 +++++++++++++++++++++++++++++++++++
-+ libcontainer/nsenter/nsexec.c        |  11 ++
-+ 2 files changed, 279 insertions(+)
-+ create mode 100644 libcontainer/nsenter/cloned_binary.c
++Upstream status (openssh-portable): backported from commit 8976f1c4b27
++---
++ atomicio.c      | 20 ++++++++++++++-----
++ progressmeter.c | 53 ++++++++++++++++++++++---------------------------
++ progressmeter.h |  3 ++-
++ scp.c           |  1 +
++ sftp-client.c   | 16 ++++++++-------
++ 5 files changed, 51 insertions(+), 42 deletions(-)
 +
-+diff --git a/libcontainer/nsenter/cloned_binary.c b/libcontainer/nsenter/cloned_binary.c
-+new file mode 100644
-+index 00000000..c8a42c23
-+--- /dev/null
-++++ b/libcontainer/nsenter/cloned_binary.c
-+@@ -0,0 +1,268 @@
-++/*
-++ * Copyright (C) 2019 Aleksa Sarai <cyphar@cyphar.com>
-++ * Copyright (C) 2019 SUSE LLC
-++ *
-++ * Licensed under the Apache License, Version 2.0 (the "License");
-++ * you may not use this file except in compliance with the License.
-++ * You may obtain a copy of the License at
-++ *
-++ *     http://www.apache.org/licenses/LICENSE-2.0
-++ *
-++ * Unless required by applicable law or agreed to in writing, software
-++ * distributed under the License is distributed on an "AS IS" BASIS,
-++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-++ * See the License for the specific language governing permissions and
-++ * limitations under the License.
-++ */
++diff --git a/atomicio.c b/atomicio.c
++index f854a06f5f50..d91bd7621c12 100644
++--- a/atomicio.c
+++++ b/atomicio.c
++@@ -1,4 +1,4 @@
++-/* $OpenBSD: atomicio.c,v 1.28 2016/07/27 23:18:12 djm Exp $ */
+++/* $OpenBSD: atomicio.c,v 1.29 2019/01/23 08:01:46 dtucker Exp $ */
++ /*
++  * Copyright (c) 2006 Damien Miller. All rights reserved.
++  * Copyright (c) 2005 Anil Madhavapeddy. All rights reserved.
++@@ -65,9 +65,14 @@ atomicio6(ssize_t (*f) (int, void *, size_t), int fd, void *_s, size_t n,
++ 		res = (f) (fd, s + pos, n - pos);
++ 		switch (res) {
++ 		case -1:
++-			if (errno == EINTR)
+++			if (errno == EINTR) {
+++				/* possible SIGALARM, update callback */
+++				if (cb != NULL && cb(cb_arg, 0) == -1) {
+++					errno = EINTR;
+++					return pos;
+++				}
++ 				continue;
++-			if (errno == EAGAIN || errno == EWOULDBLOCK) {
+++			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
++ #ifndef BROKEN_READ_COMPARISON
++ 				(void)poll(&pfd, 1, -1);
++ #endif
++@@ -122,9 +127,14 @@ atomiciov6(ssize_t (*f) (int, const struct iovec *, int), int fd,
++ 		res = (f) (fd, iov, iovcnt);
++ 		switch (res) {
++ 		case -1:
++-			if (errno == EINTR)
+++			if (errno == EINTR) {
+++				/* possible SIGALARM, update callback */
+++				if (cb != NULL && cb(cb_arg, 0) == -1) {
+++					errno = EINTR;
+++					return pos;
+++				}
++ 				continue;
++-			if (errno == EAGAIN || errno == EWOULDBLOCK) {
+++			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
++ #ifndef BROKEN_READV_COMPARISON
++ 				(void)poll(&pfd, 1, -1);
++ #endif
++diff --git a/progressmeter.c b/progressmeter.c
++index fe9bf52e4c90..add462dde500 100644
++--- a/progressmeter.c
+++++ b/progressmeter.c
++@@ -1,4 +1,4 @@
++-/* $OpenBSD: progressmeter.c,v 1.45 2016/06/30 05:17:05 dtucker Exp $ */
+++/* $OpenBSD: progressmeter.c,v 1.46 2019/01/23 08:01:46 dtucker Exp $ */
++ /*
++  * Copyright (c) 2003 Nils Nordman.  All rights reserved.
++  *
++@@ -31,6 +31,7 @@
++ 
++ #include <errno.h>
++ #include <signal.h>
+++#include <stdarg.h>
++ #include <stdio.h>
++ #include <string.h>
++ #include <time.h>
++@@ -39,6 +40,7 @@
++ #include "progressmeter.h"
++ #include "atomicio.h"
++ #include "misc.h"
+++#include "utf8.h"
++ 
++ #define DEFAULT_WINSIZE 80
++ #define MAX_WINSIZE 512
++@@ -61,7 +63,7 @@ static void setscreensize(void);
++ void refresh_progress_meter(void);
++ 
++ /* signal handler for updating the progress meter */
++-static void update_progress_meter(int);
+++static void sig_alarm(int);
++ 
++ static double start;		/* start progress */
++ static double last_update;	/* last progress update */
++@@ -74,6 +76,7 @@ static long stalled;		/* how long we have been stalled */
++ static int bytes_per_second;	/* current speed in bytes per second */
++ static int win_size;		/* terminal window size */
++ static volatile sig_atomic_t win_resized; /* for window resizing */
+++static volatile sig_atomic_t alarm_fired;
++ 
++ /* units for format_size */
++ static const char unit[] = " KMGT";
++@@ -126,9 +129,17 @@ refresh_progress_meter(void)
++ 	off_t bytes_left;
++ 	int cur_speed;
++ 	int hours, minutes, seconds;
++-	int i, len;
++ 	int file_len;
++ 
+++	if ((!alarm_fired && !win_resized) || !can_output())
+++		return;
+++	alarm_fired = 0;
 ++
-++#define _GNU_SOURCE
-++#include <unistd.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include <stdbool.h>
-++#include <string.h>
-++#include <limits.h>
-++#include <fcntl.h>
-++#include <errno.h>
-++
-++#include <sys/types.h>
-++#include <sys/stat.h>
-++#include <sys/vfs.h>
-++#include <sys/mman.h>
-++#include <sys/sendfile.h>
-++#include <sys/syscall.h>
-++
-++/* Use our own wrapper for memfd_create. */
-++#if !defined(SYS_memfd_create) && defined(__NR_memfd_create)
-++#  define SYS_memfd_create __NR_memfd_create
-++#endif
-++#ifdef SYS_memfd_create
-++#  define HAVE_MEMFD_CREATE
-++/* memfd_create(2) flags -- copied from <linux/memfd.h>. */
-++#  ifndef MFD_CLOEXEC
-++#    define MFD_CLOEXEC       0x0001U
-++#    define MFD_ALLOW_SEALING 0x0002U
-++#  endif
-++int memfd_create(const char *name, unsigned int flags)
-++{
-++	return syscall(SYS_memfd_create, name, flags);
-++}
-++#endif
-++
-++/* This comes directly from <linux/fcntl.h>. */
-++#ifndef F_LINUX_SPECIFIC_BASE
-++#  define F_LINUX_SPECIFIC_BASE 1024
-++#endif
-++#ifndef F_ADD_SEALS
-++#  define F_ADD_SEALS (F_LINUX_SPECIFIC_BASE + 9)
-++#  define F_GET_SEALS (F_LINUX_SPECIFIC_BASE + 10)
-++#endif
-++#ifndef F_SEAL_SEAL
-++#  define F_SEAL_SEAL   0x0001	/* prevent further seals from being set */
-++#  define F_SEAL_SHRINK 0x0002	/* prevent file from shrinking */
-++#  define F_SEAL_GROW   0x0004	/* prevent file from growing */
-++#  define F_SEAL_WRITE  0x0008	/* prevent writes */
-++#endif
-++
-++#define RUNC_SENDFILE_MAX 0x7FFFF000 /* sendfile(2) is limited to 2GB. */
-++#ifdef HAVE_MEMFD_CREATE
-++#  define RUNC_MEMFD_COMMENT "runc_cloned:/proc/self/exe"
-++#  define RUNC_MEMFD_SEALS \
-++	(F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_WRITE)
-++#endif
-++
-++static void *must_realloc(void *ptr, size_t size)
-++{
-++	void *old = ptr;
-++	do {
-++		ptr = realloc(old, size);
-++	} while(!ptr);
-++	return ptr;
-++}
-++
-++/*
-++ * Verify whether we are currently in a self-cloned program (namely, is
-++ * /proc/self/exe a memfd). F_GET_SEALS will only succeed for memfds (or rather
-++ * for shmem files), and we want to be sure it's actually sealed.
-++ */
-++static int is_self_cloned(void)
-++{
-++	int fd, ret, is_cloned = 0;
-++
-++	fd = open("/proc/self/exe", O_RDONLY|O_CLOEXEC);
-++	if (fd < 0)
-++		return -ENOTRECOVERABLE;
-++
-++#ifdef HAVE_MEMFD_CREATE
-++	ret = fcntl(fd, F_GET_SEALS);
-++	is_cloned = (ret == RUNC_MEMFD_SEALS);
-++#else
-++	struct stat statbuf = {0};
-++	ret = fstat(fd, &statbuf);
-++	if (ret >= 0)
-++		is_cloned = (statbuf.st_nlink == 0);
-++#endif
-++	close(fd);
-++	return is_cloned;
-++}
-++
-++/*
-++ * Basic wrapper around mmap(2) that gives you the file length so you can
-++ * safely treat it as an ordinary buffer. Only gives you read access.
-++ */
-++static char *read_file(char *path, size_t *length)
-++{
-++	int fd;
-++	char buf[4096], *copy = NULL;
-++
-++	if (!length)
-++		return NULL;
-++
-++	fd = open(path, O_RDONLY | O_CLOEXEC);
-++	if (fd < 0)
-++		return NULL;
-++
-++	*length = 0;
-++	for (;;) {
-++		int n;
-++
-++		n = read(fd, buf, sizeof(buf));
-++		if (n < 0)
-++			goto error;
-++		if (!n)
-++			break;
-++
-++		copy = must_realloc(copy, (*length + n) * sizeof(*copy));
-++		memcpy(copy + *length, buf, n);
-++		*length += n;
+++	if (win_resized) {
+++		setscreensize();
+++		win_resized = 0;
 ++	}
-++	close(fd);
-++	return copy;
 ++
-++error:
-++	close(fd);
-++	free(copy);
-++	return NULL;
-++}
-++
-++/*
-++ * A poor-man's version of "xargs -0". Basically parses a given block of
-++ * NUL-delimited data, within the given length and adds a pointer to each entry
-++ * to the array of pointers.
-++ */
-++static int parse_xargs(char *data, int data_length, char ***output)
-++{
-++	int num = 0;
-++	char *cur = data;
-++
-++	if (!data || *output != NULL)
-++		return -1;
-++
-++	while (cur < data + data_length) {
-++		num++;
-++		*output = must_realloc(*output, (num + 1) * sizeof(**output));
-++		(*output)[num - 1] = cur;
-++		cur += strlen(cur) + 1;
-++	}
-++	(*output)[num] = NULL;
-++	return num;
-++}
-++
-++/*
-++ * "Parse" out argv and envp from /proc/self/cmdline and /proc/self/environ.
-++ * This is necessary because we are running in a context where we don't have a
-++ * main() that we can just get the arguments from.
-++ */
-++static int fetchve(char ***argv, char ***envp)
-++{
-++	char *cmdline = NULL, *environ = NULL;
-++	size_t cmdline_size, environ_size;
-++
-++	cmdline = read_file("/proc/self/cmdline", &cmdline_size);
-++	if (!cmdline)
-++		goto error;
-++	environ = read_file("/proc/self/environ", &environ_size);
-++	if (!environ)
-++		goto error;
-++
-++	if (parse_xargs(cmdline, cmdline_size, argv) <= 0)
-++		goto error;
-++	if (parse_xargs(environ, environ_size, envp) <= 0)
-++		goto error;
-++
-++	return 0;
-++
-++error:
-++	free(environ);
-++	free(cmdline);
-++	return -EINVAL;
-++}
-++
-++static int clone_binary(void)
-++{
-++	int binfd, memfd;
-++	ssize_t sent = 0;
-++
-++#ifdef HAVE_MEMFD_CREATE
-++	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
-++#else
-++	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
-++#endif
-++	if (memfd < 0)
-++		return -ENOTRECOVERABLE;
-++
-++	binfd = open("/proc/self/exe", O_RDONLY | O_CLOEXEC);
-++	if (binfd < 0)
-++		goto error;
-++
-++	sent = sendfile(memfd, binfd, NULL, RUNC_SENDFILE_MAX);
-++	close(binfd);
-++	if (sent < 0)
-++		goto error;
-++
-++#ifdef HAVE_MEMFD_CREATE
-++	int err = fcntl(memfd, F_ADD_SEALS, RUNC_MEMFD_SEALS);
-++	if (err < 0)
-++		goto error;
-++#else
-++	/* Need to re-open "memfd" as read-only to avoid execve(2) giving -EXTBUSY. */
-++	int newfd;
-++	char *fdpath = NULL;
-++
-++	if (asprintf(&fdpath, "/proc/self/fd/%d", memfd) < 0)
-++		goto error;
-++	newfd = open(fdpath, O_RDONLY | O_CLOEXEC);
-++	free(fdpath);
-++	if (newfd < 0)
-++		goto error;
-++
-++	close(memfd);
-++	memfd = newfd;
-++#endif
-++	return memfd;
-++
-++error:
-++	close(memfd);
-++	return -EIO;
-++}
-++
-++int ensure_cloned_binary(void)
-++{
-++	int execfd;
-++	char **argv = NULL, **envp = NULL;
-++
-++	/* Check that we're not self-cloned, and if we are then bail. */
-++	int cloned = is_self_cloned();
-++	if (cloned > 0 || cloned == -ENOTRECOVERABLE)
-++		return cloned;
-++
-++	if (fetchve(&argv, &envp) < 0)
-++		return -EINVAL;
-++
-++	execfd = clone_binary();
-++	if (execfd < 0)
-++		return -EIO;
-++
-++	fexecve(execfd, argv, envp);
-++	return -ENOEXEC;
-++}
-+diff --git a/libcontainer/nsenter/nsexec.c b/libcontainer/nsenter/nsexec.c
-+index 28269dfc..7750af35 100644
-+--- a/libcontainer/nsenter/nsexec.c
-++++ b/libcontainer/nsenter/nsexec.c
-+@@ -534,6 +534,9 @@ void join_namespaces(char *nslist)
-+ 	free(namespaces);
++ 	transferred = *counter - (cur_pos ? cur_pos : start_pos);
++ 	cur_pos = *counter;
++ 	now = monotime_double();
++@@ -158,16 +169,11 @@ refresh_progress_meter(void)
++ 
++ 	/* filename */
++ 	buf[0] = '\0';
++-	file_len = win_size - 35;
+++	file_len = win_size - 36;
++ 	if (file_len > 0) {
++-		len = snprintf(buf, file_len + 1, "\r%s", file);
++-		if (len < 0)
++-			len = 0;
++-		if (len >= file_len + 1)
++-			len = file_len;
++-		for (i = len; i < file_len; i++)
++-			buf[i] = ' ';
++-		buf[file_len] = '\0';
+++		buf[0] = '\r';
+++		snmprintf(buf+1, sizeof(buf)-1 , &file_len, "%*s",
+++		    file_len * -1, file);
++ 	}
++ 
++ 	/* percent of transfer done */
++@@ -228,22 +234,11 @@ refresh_progress_meter(void)
++ 
++ /*ARGSUSED*/
++ static void
++-update_progress_meter(int ignore)
+++sig_alarm(int ignore)
++ {
++-	int save_errno;
++-
++-	save_errno = errno;
++-
++-	if (win_resized) {
++-		setscreensize();
++-		win_resized = 0;
++-	}
++-	if (can_output())
++-		refresh_progress_meter();
++-
++-	signal(SIGALRM, update_progress_meter);
+++	signal(SIGALRM, sig_alarm);
+++	alarm_fired = 1;
++ 	alarm(UPDATE_INTERVAL);
++-	errno = save_errno;
 + }
 + 
-++/* Defined in cloned_binary.c. */
-++extern int ensure_cloned_binary(void);
-++
-+ void nsexec(void)
++ void
++@@ -259,10 +254,9 @@ start_progress_meter(const char *f, off_t filesize, off_t *ctr)
++ 	bytes_per_second = 0;
++ 
++ 	setscreensize();
++-	if (can_output())
++-		refresh_progress_meter();
+++	refresh_progress_meter();
++ 
++-	signal(SIGALRM, update_progress_meter);
+++	signal(SIGALRM, sig_alarm);
++ 	signal(SIGWINCH, sig_winch);
++ 	alarm(UPDATE_INTERVAL);
++ }
++@@ -286,6 +280,7 @@ stop_progress_meter(void)
++ static void
++ sig_winch(int sig)
 + {
-+ 	int pipenum;
-+@@ -549,6 +552,14 @@ void nsexec(void)
-+ 	if (pipenum == -1)
-+ 		return;
+++	signal(SIGWINCH, sig_winch);
++ 	win_resized = 1;
++ }
 + 
-++	/*
-++	 * We need to re-exec if we are not in a cloned binary. This is necessary
-++	 * to ensure that containers won't be able to access the host binary
-++	 * through /proc/self/exe. See CVE-2019-5736.
-++	 */
-++	if (ensure_cloned_binary() < 0)
-++		bail("could not ensure we are a cloned binary");
-++
-+ 	/* Parse all of the netlink configuration. */
-+ 	nl_parse(pipenum, &config);
++diff --git a/progressmeter.h b/progressmeter.h
++index bf179dca6518..8f6678060195 100644
++--- a/progressmeter.h
+++++ b/progressmeter.h
++@@ -1,4 +1,4 @@
++-/* $OpenBSD: progressmeter.h,v 1.3 2015/01/14 13:54:13 djm Exp $ */
+++/* $OpenBSD: progressmeter.h,v 1.4 2019/01/23 08:01:46 dtucker Exp $ */
++ /*
++  * Copyright (c) 2002 Nils Nordman.  All rights reserved.
++  *
++@@ -24,4 +24,5 @@
++  */
 + 
++ void	start_progress_meter(const char *, off_t, off_t *);
+++void	refresh_progress_meter(void);
++ void	stop_progress_meter(void);
++diff --git a/scp.c b/scp.c
++index 4f3fdcd3db89..4a342a63873c 100644
++--- a/scp.c
+++++ b/scp.c
++@@ -585,6 +585,7 @@ scpio(void *_cnt, size_t s)
++ 	off_t *cnt = (off_t *)_cnt;
++ 
++ 	*cnt += s;
+++	refresh_progress_meter();
++ 	if (limit_kbps > 0)
++ 		bandwidth_limit(&bwlimit, s);
++ 	return 0;
++diff --git a/sftp-client.c b/sftp-client.c
++index 4986d6d8d291..2bc698f868bc 100644
++--- a/sftp-client.c
+++++ b/sftp-client.c
++@@ -101,7 +101,9 @@ sftpio(void *_bwlimit, size_t amount)
++ {
++ 	struct bwlimit *bwlimit = (struct bwlimit *)_bwlimit;
++ 
++-	bandwidth_limit(bwlimit, amount);
+++	refresh_progress_meter();
+++	if (bwlimit != NULL)
+++		bandwidth_limit(bwlimit, amount);
++ 	return 0;
++ }
++ 
++@@ -121,8 +123,8 @@ send_msg(struct sftp_conn *conn, struct sshbuf *m)
++ 	iov[1].iov_base = (u_char *)sshbuf_ptr(m);
++ 	iov[1].iov_len = sshbuf_len(m);
++ 
++-	if (atomiciov6(writev, conn->fd_out, iov, 2,
++-	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_out) !=
+++	if (atomiciov6(writev, conn->fd_out, iov, 2, sftpio,
+++	    conn->limit_kbps > 0 ? &conn->bwlimit_out : NULL) !=
++ 	    sshbuf_len(m) + sizeof(mlen))
++ 		fatal("Couldn't send packet: %s", strerror(errno));
++ 
++@@ -138,8 +140,8 @@ get_msg_extended(struct sftp_conn *conn, struct sshbuf *m, int initial)
++ 
++ 	if ((r = sshbuf_reserve(m, 4, &p)) != 0)
++ 		fatal("%s: buffer error: %s", __func__, ssh_err(r));
++-	if (atomicio6(read, conn->fd_in, p, 4,
++-	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_in) != 4) {
+++	if (atomicio6(read, conn->fd_in, p, 4, sftpio,
+++	    conn->limit_kbps > 0 ? &conn->bwlimit_in : NULL) != 4) {
++ 		if (errno == EPIPE || errno == ECONNRESET)
++ 			fatal("Connection closed");
++ 		else
++@@ -157,8 +159,8 @@ get_msg_extended(struct sftp_conn *conn, struct sshbuf *m, int initial)
++ 
++ 	if ((r = sshbuf_reserve(m, msg_len, &p)) != 0)
++ 		fatal("%s: buffer error: %s", __func__, ssh_err(r));
++-	if (atomicio6(read, conn->fd_in, p, msg_len,
++-	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_in)
+++	if (atomicio6(read, conn->fd_in, p, msg_len, sftpio,
+++	    conn->limit_kbps > 0 ? &conn->bwlimit_in : NULL)
++ 	    != msg_len) {
++ 		if (errno == EPIPE)
++ 			fatal("Connection closed");
 +-- 
-+2.11.0
++2.20.1
 +
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index fd5dee7c5b..47c850ef30 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -3,13 +3,14 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCP specification.
- 
- 	  https://github.com/opencontainers/runc
- 
--comment "runc needs a toolchain w/ threads"
-+comment "runc needs a glibc or musl toolchain toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
- 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
+diff --git a/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch b/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch
+new file mode 100644
+index 0000000000..98ce5cd876
+--- /dev/null
++++ b/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch
+@@ -0,0 +1,186 @@
++From f853123eda6b279a87be48e18bbea8dec82a94f2 Mon Sep 17 00:00:00 2001
++From: "djm at openbsd.org" <djm@openbsd.org>
++Date: Sat, 26 Jan 2019 22:41:28 +0000
++Subject: [PATCH] upstream: check in scp client that filenames sent during
++
++remote->local directory copies satisfy the wildcard specified by the user.
++
++This checking provides some protection against a malicious server
++sending unexpected filenames, but it comes at a risk of rejecting wanted
++files due to differences between client and server wildcard expansion rules.
++
++For this reason, this also adds a new -T flag to disable the check.
++
++reported by Harry Sintonen
++fix approach suggested by markus@;
++has been in snaps for ~1wk courtesy deraadt@
++
++OpenBSD-Commit-ID: 00f44b50d2be8e321973f3c6d014260f8f7a8eda
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status (openssh-portable): backported from commit 8976f1c4b2
++---
++ scp.1 | 12 +++++++++++-
++ scp.c | 37 +++++++++++++++++++++++++++++--------
++ 2 files changed, 40 insertions(+), 9 deletions(-)
++
++diff --git a/scp.1 b/scp.1
++index 0e5cc1b2d675..397e7709195a 100644
++--- a/scp.1
+++++ b/scp.1
++@@ -18,7 +18,7 @@
++ .Nd secure copy (remote file copy program)
++ .Sh SYNOPSIS
++ .Nm scp
++-.Op Fl 346BCpqrv
+++.Op Fl 346BCpqrTv
++ .Op Fl c Ar cipher
++ .Op Fl F Ar ssh_config
++ .Op Fl i Ar identity_file
++@@ -208,6 +208,16 @@ to use for the encrypted connection.
++ The program must understand
++ .Xr ssh 1
++ options.
+++.It Fl T
+++Disable strict filename checking.
+++By default when copying files from a remote host to a local directory
+++.Nm
+++checks that the received filenames match those requested on the command-line
+++to prevent the remote end from sending unexpected or unwanted files.
+++Because of differences in how various operating systems and shells interpret
+++filename wildcards, these checks may cause wanted files to be rejected.
+++This option disables these checks at the expense of fully trusting that
+++the server will not send unexpected filenames.
++ .It Fl v
++ Verbose mode.
++ Causes
++diff --git a/scp.c b/scp.c
++index 4a342a63873c..7b0a08efb274 100644
++--- a/scp.c
+++++ b/scp.c
++@@ -94,6 +94,7 @@
++ #include <dirent.h>
++ #include <errno.h>
++ #include <fcntl.h>
+++#include <fnmatch.h>
++ #include <limits.h>
++ #include <locale.h>
++ #include <pwd.h>
++@@ -375,14 +376,14 @@ void verifydir(char *);
++ struct passwd *pwd;
++ uid_t userid;
++ int errs, remin, remout;
++-int pflag, iamremote, iamrecursive, targetshouldbedirectory;
+++int Tflag, pflag, iamremote, iamrecursive, targetshouldbedirectory;
++ 
++ #define	CMDNEEDS	64
++ char cmd[CMDNEEDS];		/* must hold "rcp -r -p -d\0" */
++ 
++ int response(void);
++ void rsource(char *, struct stat *);
++-void sink(int, char *[]);
+++void sink(int, char *[], const char *);
++ void source(int, char *[]);
++ void tolocal(int, char *[]);
++ void toremote(int, char *[]);
++@@ -421,8 +422,9 @@ main(int argc, char **argv)
++ 	addargs(&args, "-oRemoteCommand=none");
++ 	addargs(&args, "-oRequestTTY=no");
++ 
++-	fflag = tflag = 0;
++-	while ((ch = getopt(argc, argv, "dfl:prtvBCc:i:P:q12346S:o:F:")) != -1)
+++	fflag = Tflag = tflag = 0;
+++	while ((ch = getopt(argc, argv,
+++	    "dfl:prtTvBCc:i:P:q12346S:o:F:")) != -1) {
++ 		switch (ch) {
++ 		/* User-visible flags. */
++ 		case '1':
++@@ -501,9 +503,13 @@ main(int argc, char **argv)
++ 			setmode(0, O_BINARY);
++ #endif
++ 			break;
+++		case 'T':
+++			Tflag = 1;
+++			break;
++ 		default:
++ 			usage();
++ 		}
+++	}
++ 	argc -= optind;
++ 	argv += optind;
++ 
++@@ -534,7 +540,7 @@ main(int argc, char **argv)
++ 	}
++ 	if (tflag) {
++ 		/* Receive data. */
++-		sink(argc, argv);
+++		sink(argc, argv, NULL);
++ 		exit(errs != 0);
++ 	}
++ 	if (argc < 2)
++@@ -792,7 +798,7 @@ tolocal(int argc, char **argv)
++ 			continue;
++ 		}
++ 		free(bp);
++-		sink(1, argv + argc - 1);
+++		sink(1, argv + argc - 1, src);
++ 		(void) close(remin);
++ 		remin = remout = -1;
++ 	}
++@@ -968,7 +974,7 @@ rsource(char *name, struct stat *statp)
++ 	 (sizeof(type) != 4 && sizeof(type) != 8))
++ 
++ void
++-sink(int argc, char **argv)
+++sink(int argc, char **argv, const char *src)
++ {
++ 	static BUF buffer;
++ 	struct stat stb;
++@@ -984,6 +990,7 @@ sink(int argc, char **argv)
++ 	unsigned long long ull;
++ 	int setimes, targisdir, wrerrno = 0;
++ 	char ch, *cp, *np, *targ, *why, *vect[1], buf[2048], visbuf[2048];
+++	char *src_copy = NULL, *restrict_pattern = NULL;
++ 	struct timeval tv[2];
++ 
++ #define	atime	tv[0]
++@@ -1008,6 +1015,17 @@ sink(int argc, char **argv)
++ 	(void) atomicio(vwrite, remout, "", 1);
++ 	if (stat(targ, &stb) == 0 && S_ISDIR(stb.st_mode))
++ 		targisdir = 1;
+++	if (src != NULL && !iamrecursive && !Tflag) {
+++		/*
+++		 * Prepare to try to restrict incoming filenames to match
+++		 * the requested destination file glob.
+++		 */
+++		if ((src_copy = strdup(src)) == NULL)
+++			fatal("strdup failed");
+++		if ((restrict_pattern = strrchr(src_copy, '/')) != NULL) {
+++			*restrict_pattern++ = '\0';
+++		}
+++	}
++ 	for (first = 1;; first = 0) {
++ 		cp = buf;
++ 		if (atomicio(read, remin, cp, 1) != 1)
++@@ -1112,6 +1130,9 @@ sink(int argc, char **argv)
++ 			run_err("error: unexpected filename: %s", cp);
++ 			exit(1);
++ 		}
+++		if (restrict_pattern != NULL &&
+++		    fnmatch(restrict_pattern, cp, 0) != 0)
+++			SCREWUP("filename does not match request");
++ 		if (targisdir) {
++ 			static char *namebuf;
++ 			static size_t cursize;
++@@ -1149,7 +1170,7 @@ sink(int argc, char **argv)
++ 					goto bad;
++ 			}
++ 			vect[0] = xstrdup(np);
++-			sink(1, vect);
+++			sink(1, vect, src);
++ 			if (setimes) {
++ 				setimes = 0;
++ 				if (utimes(vect[0], tv) < 0)
++-- 
++2.20.1
++
