@@ -1,27 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 20:01:51 +0100
-Subject: [Buildroot] [PATCH 1/1] board/pc: fix typo in
- board/pc/post-build.sh
-In-Reply-To: <20190212170514.8533-1-greg@quimbo.fr> (=?utf-8?Q?=22Gr=C3=A9?=
- =?utf-8?Q?goire?= Delattre"'s
- message of "Tue, 12 Feb 2019 18:05:15 +0100")
-References: <20190212170514.8533-1-greg@quimbo.fr>
-Message-ID: <87imxovnj4.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Feb 2019 20:02:22 +0100
+Subject: [Buildroot] [PATCH] package/libarchive: add upstream security
+ fixes
+In-Reply-To: <48b0da1a4cac4ea9e12d0a7c6a42c8bcdb3fdfc6.1549990649.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 12 Feb 2019 18:57:29 +0200")
+References: <48b0da1a4cac4ea9e12d0a7c6a42c8bcdb3fdfc6.1549990649.git.baruch@tkos.co.il>
+Message-ID: <87ef8cvni9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gr?goire" == Gr?goire Delattre <greg@quimbo.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > From: Gr?goire Delattre <gregoire.delattre@gmail.com>
- > Signed-off-by: Gr?goire Delattre <gregoire.delattre@gmail.com>
- > ---
+ > CVE-2019-1000019: Crash when parsing some 7zip archives.
+ > CVE-2019-1000020: A corrupted or malicious ISO9660 image can cause
+ > read_CE() to loop forever.
 
- > Hello, this is indeed a typo ! This looks like an unwanted Ctrl-a in vim !
- > Here's the patch.
- > Sorry for the inconvenience,
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
