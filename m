@@ -1,37 +1,33 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 12 Feb 2019 01:14:21 -0800
-Subject: [Buildroot] [PATCH 1/1] go: explicitly disable modules to avoid
- unintended network lookup
-In-Reply-To: <20190126102355.24766-1-christian@paral.in>
-References: <20190126102355.24766-1-christian@paral.in>
-Message-ID: <87va1pgyhe.fsf@paral.in>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Feb 2019 10:20:55 +0100
+Subject: [Buildroot] [PATCH 1/1] runc: bump to 6635b4f,
+ fixes critical CVE-2019-5736
+In-Reply-To: <20190212083818.20746-1-christian@paral.in> (Christian Stewart's
+ message of "Tue, 12 Feb 2019 00:38:18 -0800")
+References: <20190212083818.20746-1-christian@paral.in>
+Message-ID: <87d0nxwefc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anisse,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Christian Stewart <christian@paral.in> writes:
-> Go "modules" refers to the dependency fetching, verification (hashing), and
-> version control system built into Go as of 1.11.
->
-> In the absence of the GO111MODULE environment variable, the Go compiler will
-> correctly compile using the "vendor" version of dependencies downloaded by
-> Buildroot during the compilation process for Go-based packages.
+ > Runc has a bug and related CVE which enables code running in a container to
+ > overwrite the runc binary, taking root control of the host system and escaping
+ > containment. This commit upgrades Runc to fix the vulnerability.
 
-You suggested instead setting GOPROXY=off, this would not have the
-intended effect.
+ > Fixes: CVE-2019-5736
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-It is indeed correct to disable modules altogether as this patch does.
-Disabling modules is not something that breaks Go or hinders it in any
-way. It simply disables the versioning and network dependency fetch
-mechanism. This is the correct approach to ensuring that the Go compiler
-will always use the vendor and gopaths correctly as set up by the
-Buildroot build system.
+I am working on this as well. The fix (I would prefer to just add commit
+0a8e4117e7f715d as a patch for easy backport) uses fexecve, which isn't
+available on uClibc, so we need to propagate that dependency to the
+reverse dependencies.
 
-I still recommend to merge this patch as is.
+I also recently added a unit test for docker / compose. This test uses a
+prebuilt uClibc based toolchain, so the test needs to be updated.
 
-Best,
-Christian 
+-- 
+Bye, Peter Korsgaard
