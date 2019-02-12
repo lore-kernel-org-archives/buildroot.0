@@ -1,62 +1,36 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Tue, 12 Feb 2019 17:57:59 +0100
-Subject: [Buildroot] [PATCH 1/1] go: explicitly disable modules to avoid
- unintended network lookup
-In-Reply-To: <87va1pgyhe.fsf@paral.in>
-References: <20190126102355.24766-1-christian@paral.in>
- <87va1pgyhe.fsf@paral.in>
-Message-ID: <20190212165759.euozased2t6zrmka@bifrost>
+From: =?UTF-8?q?Gr=C3=A9goire=20Delattre?= <greg@quimbo.fr>
+Date: Tue, 12 Feb 2019 18:05:15 +0100
+Subject: [Buildroot] [PATCH 1/1] board/pc: fix typo in board/pc/post-build.sh
+Message-ID: <20190212170514.8533-1-greg@quimbo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+From: Gr?goire Delattre <gregoire.delattre@gmail.com>
 
-On Tue, Feb 12, 2019 at 01:14:21AM -0800, Christian Stewart wrote:
-> Anisse,
-> 
-> Christian Stewart <christian@paral.in> writes:
-> > Go "modules" refers to the dependency fetching, verification (hashing), and
-> > version control system built into Go as of 1.11.
-> >
-> > In the absence of the GO111MODULE environment variable, the Go compiler will
-> > correctly compile using the "vendor" version of dependencies downloaded by
-> > Buildroot during the compilation process for Go-based packages.
-> 
-> You suggested instead setting GOPROXY=off, this would not have the
-> intended effect.
+Signed-off-by: Gr?goire Delattre <gregoire.delattre@gmail.com>
+---
 
-What do you mean ? Isn't blocking any network fetching the goal ?
+Hello, this is indeed a typo ! This looks like an unwanted Ctrl-a in vim !
+Here's the patch.
+Sorry for the inconvenience,
 
-> 
-> It is indeed correct to disable modules altogether as this patch does.
-> Disabling modules is not something that breaks Go or hinders it in any
-> way. It simply disables the versioning and network dependency fetch
-> mechanism. This is the correct approach to ensuring that the Go compiler
-> will always use the vendor and gopaths correctly as set up by the
-> Buildroot build system.
+Greg
 
-So does setting GOPATH, if I'm reading the doc correctly. Which is
-already done in pkg-golang.mk
+ board/pc/post-build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> I still recommend to merge this patch as is.
-> 
+diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+index 346f29ab6a..b245cc00c6 100755
+--- a/board/pc/post-build.sh
++++ b/board/pc/post-build.sh
+@@ -7,4 +7,4 @@ BOARD_DIR=$(dirname "$0")
+ cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
 
-Merging this as-is isn't a bad idea in the short term. It makes explicit
-a decision that is currently implicit (we use GOPATH).
-
-I'm more worried how we can deal with this if we start adding packages
-that rely on go.mod or go-get-ability for building, and don't have any
-vendoring. It seems that no in-tree package are currently depending on
-other go packages, so we can say that this is a problem to be handled
-once we have a few of those.
-
-In summary, I agree it should be merged, I just wanted to discuss the
-implications.
-
-Regards,
-
-Anisse
+ # Copy grub 1st stage to binaries, required for genimage
+-cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
++cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
+--
+2.20.1
