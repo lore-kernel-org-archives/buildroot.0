@@ -1,74 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 21:27:35 +0100
-Subject: [Buildroot] [git commit] utils/scanpypi: protect against zip-slip
- vulnerability in zip/tar handling
-Message-ID: <20190212202655.CE4F280435@busybox.osuosl.org>
+Date: Tue, 12 Feb 2019 20:21:44 +0100
+Subject: [Buildroot] [git commit] docker-engine: fix runc version check
+ warning
+Message-ID: <20190212202655.C500688FF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a83e30ad63e00d6c81a6409161c2d3010d98d373
+commit: https://git.buildroot.net/buildroot/commit/?id=424a90241c07fd15cd1caadd707f751461cf11fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details, see https://github.com/snyk/zip-slip-vulnerability
+Fixes the startup warning from Docker:
 
-Older python versions do not validate that the extracted files are inside
-the target directory.  Detect and error out on evil paths before extracting
-.zip / .tar file.
+failed to retrieve runc version: unknown output format: runc version commit ...
 
-Given the scope of this (zip issue was fixed in python 2.7.4, released
-2013-04-06, scanpypi is only used by a developer when adding a new python
-package), the security impact is fairly minimal, but it is good to get it
-fixed anyway.
+Introduces a patch to replace the faulty version detection logic in the Docker
+engine.
 
-Reported-by: Bas van Schaik <security-reports@semmle.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/scanpypi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ ...001-Fix-faulty-runc-version-commit-scrape.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index a75d696222..bdce6924b6 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -225,6 +225,22 @@ class BuildrootPackage():
-         self.filename = self.used_url['filename']
-         self.url = self.used_url['url']
- 
-+    def check_archive(self, members):
-+        """
-+        Check archive content before extracting
+diff --git a/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch b/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
+new file mode 100644
+index 0000000000..dc47a8f9ef
+--- /dev/null
++++ b/package/docker-engine/0001-Fix-faulty-runc-version-commit-scrape.patch
+@@ -0,0 +1,45 @@
++From 324e7be4b252c13002bca6a9d82e7b2e43664634 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Mon, 26 Nov 2018 22:59:32 -0800
++Subject: [PATCH] Fix faulty runc version commit scrape
 +
-+        Keyword arguments:
-+        members -- list of archive members
-+        """
-+        # Protect against https://github.com/snyk/zip-slip-vulnerability
-+        # Older python versions do not validate that the extracted files are
-+        # inside the target directory. Detect and error out on evil paths
-+        evil = [e for e in members if os.path.relpath(e).startswith(('/', '..'))]
-+        if evil:
-+            print('ERROR: Refusing to extract {} with suspicious members {}'.format(
-+                self.filename, evil))
-+            sys.exit(1)
++This commit replaces faulty logic to determine the runc version commit hash.
 +
-     def extract_package(self, tmp_path):
-         """
-         Extract the package contents into a directrory
-@@ -249,6 +265,7 @@ class BuildrootPackage():
-                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
-                     shutil.rmtree(tmp_pkg)
-                     os.makedirs(tmp_pkg)
-+                self.check_archive(as_zipfile.namelist())
-                 as_zipfile.extractall(tmp_pkg)
-                 pkg_filename = self.filename.split(".zip")[0]
-         else:
-@@ -264,6 +281,7 @@ class BuildrootPackage():
-                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
-                     shutil.rmtree(tmp_pkg)
-                     os.makedirs(tmp_pkg)
-+                self.check_archive(as_tarfile.getnames())
-                 as_tarfile.extractall(tmp_pkg)
-                 pkg_filename = self.filename.split(".tar")[0]
- 
++The original logic takes the second line of the output of "runc --version" and
++does not work if there are a different number of lines printed from the command
++than expected. The buildroot version of runc outputs two lines instead of the
++expected three, causing the error:
++
++unknown output format: runc version commit: ...
++
++This patch replaces this logic with a simple scan of the "runc --version"
++output, searching for the "runc version commit" prefixed line.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ daemon/info_unix.go | 9 +++++----
++ 1 file changed, 5 insertions(+), 4 deletions(-)
++
++diff --git a/daemon/info_unix.go b/daemon/info_unix.go
++index 60b2f99870..688a510796 100644
++--- a/daemon/info_unix.go
+++++ b/daemon/info_unix.go
++@@ -32,10 +32,11 @@ func (daemon *Daemon) fillPlatformInfo(v *types.Info, sysInfo *sysinfo.SysInfo)
++ 	defaultRuntimeBinary := daemon.configStore.GetRuntime(v.DefaultRuntime).Path
++ 	if rv, err := exec.Command(defaultRuntimeBinary, "--version").Output(); err == nil {
++ 		parts := strings.Split(strings.TrimSpace(string(rv)), "\n")
++-		if len(parts) == 3 {
++-			parts = strings.Split(parts[1], ": ")
++-			if len(parts) == 2 {
++-				v.RuncCommit.ID = strings.TrimSpace(parts[1])
+++		for _, pt := range parts {
+++			ptKv := strings.Split(pt, ":")
+++			if strings.HasSuffix(strings.TrimSpace(ptKv[0]), "commit") {
+++				v.RuncCommit.ID = strings.TrimSpace(ptKv[1])
+++				break
++ 			}
++ 		}
++ 
++-- 
++2.18.1
++
