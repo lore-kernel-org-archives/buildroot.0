@@ -1,34 +1,19 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Feb 2019 23:27:54 +0100
-Subject: [Buildroot] [PATCH] package/sqlcipher: add OpenSSL 1.1.x
- compatibility
-In-Reply-To: <1549454958-648-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Wed, 6 Feb 2019 06:09:18 -0600")
-References: <1549454958-648-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87pnryvu39.fsf@dell.be.48ers.dk>
+From: Chuck Tuffli <ctuffli@gmail.com>
+Date: Mon, 11 Feb 2019 16:20:44 -0800
+Subject: [Buildroot] PC post-build.sh issue
+Message-ID: <CAKAYmMKFmVTyZau57e-WPUeriPrUAQ_W7w9Ypd8gKf6rQeh6ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+I've been using buildroot to generate a BIOS-based disk image for an
+x86_64 system and seem to need to change the file:
+   board/pc/post-build.sh
+to copy from the i386-pc directory instead of the i387-pc directory.
+I.e. the last line in the else clause is:
+    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
+Is this an indication I've mis-configured something else or is 'i387' a typo?
 
- > Fixes
- > http://autobuild.buildroot.net/results/5e2/5e2c3178d8a6e11b1af1c37144737097730ba222/
-
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- > ---
- > Tested using autobuilder failure setup for libopenssl.
-
- > For libressl the build fails. The sqlcipher pkg version really should
- > be bumped before investigating the build failure as there are a number
- > of commits that should be picked up.
- > Currently the pkg build won't pass the configure stage.
- > Should I open a bug for this or send something for "next"?
-
-What do we do about the libressl issue for 2019.02? Just select
-BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL?
-
--- 
-Bye, Peter Korsgaard
+--chuck
