@@ -1,57 +1,454 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Feb 2019 14:15:03 +0100
-Subject: [Buildroot] [PATCH 1/2] support/testing: build a glibc toolchain
- for docker / docker-compose tests
-Message-ID: <20190212131504.28231-1-peter@korsgaard.com>
+Date: Tue, 12 Feb 2019 14:15:04 +0100
+Subject: [Buildroot] [PATCH 2/2] package/runc: add upstream security fix for
+ CVE-2019-5736
+In-Reply-To: <20190212131504.28231-1-peter@korsgaard.com>
+References: <20190212131504.28231-1-peter@korsgaard.com>
+Message-ID: <20190212131504.28231-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-runc (which is a reverse dependency of docker-engine) is about to gain a
-!uclibc dependency, so move to a glibc toolchain instead.
+The vulnerability allows a malicious container to (with minimal user
+interaction) overwrite the host runc binary and thus gain root-level
+code execution on the host. The level of user interaction is being able
+to run any command (it doesn't matter if the command is not
+attacker-controlled) as root within a container in either of these
+contexts:
 
-There are currently no prebuilt x86_64 / core2 / glibc toolchains available,
-so instead use the internal toolchain backend to build one.
+  * Creating a new container using an attacker-controlled image.
+  * Attaching (docker exec) into an existing container which the
+    attacker had previous write access to.
 
-While we are at it, drop the infra.basetest.BASIC_TOOLCHAIN_CONFIG
-reference, as that ARM toolchain configuration doesn't make any sense for
-this x86-64 based test.
+For more details, see the advisory:
 
-add docker / docker-compose tests
+https://www.openwall.com/lists/oss-security/2019/02/11/2
+
+The fix for this issue uses fexecve(3), which isn't available on uClibc, so
+add a dependency on !uclibc to runc and propagate to the reverse
+dependencies (containerd/docker-engine).
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_docker_compose.py | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ package/docker-containerd/Config.in                |   5 +-
+ package/docker-engine/Config.in                    |   5 +-
+ ...ne-proc-self-exe-to-avoid-exposing-host-b.patch | 338 +++++++++++++++++++++
+ package/runc/Config.in                             |   5 +-
+ 4 files changed, 347 insertions(+), 6 deletions(-)
+ create mode 100644 package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 8bf3ae00b5..de53a3da14 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -4,19 +4,12 @@ import infra.basetest
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index 851345f73e..bdb5dd7b80 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_TOOLCHAIN_USES_UCLIBC # runc
+ 	depends on BR2_USE_MMU # util-linux
+ 	select BR2_PACKAGE_RUNC # runtime dependency
+ 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
+@@ -27,8 +28,8 @@ config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
  
+ endif
  
- class TestDockerCompose(infra.basetest.BRTest):
--    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+    config = \
-         """
-         BR2_x86_64=y
-         BR2_x86_core2=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2018.05.tar.bz2"
--        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
--        BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--        # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+        BR2_KERNEL_HEADERS_4_19=y
-         BR2_SYSTEM_DHCP="eth0"
-         BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
+-comment "docker-containerd needs a toolchain w/ threads"
++comment "docker-containerd needs a glibc or musl toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 2a0c130fce..3c97310484 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
+ 	depends on BR2_USE_MMU # docker-containerd
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+@@ -49,8 +50,8 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+ 
+ endif
+ 
+-comment "docker-engine needs a toolchain w/ threads"
++comment "docker-engine needs a glibc or musl toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_USE_MMU
+diff --git a/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch b/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
+new file mode 100644
+index 0000000000..a0bc7ba300
+--- /dev/null
++++ b/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
+@@ -0,0 +1,338 @@
++From 0a8e4117e7f715d5fbeef398405813ce8e88558b Mon Sep 17 00:00:00 2001
++From: Aleksa Sarai <asarai@suse.de>
++Date: Wed, 9 Jan 2019 13:40:01 +1100
++Subject: [PATCH] nsenter: clone /proc/self/exe to avoid exposing host binary
++ to container
++
++There are quite a few circumstances where /proc/self/exe pointing to a
++pretty important container binary is a _bad_ thing, so to avoid this we
++have to make a copy (preferably doing self-clean-up and not being
++writeable).
++
++We require memfd_create(2) -- though there is an O_TMPFILE fallback --
++but we can always extend this to use a scratch MNT_DETACH overlayfs or
++tmpfs. The main downside to this approach is no page-cache sharing for
++the runc binary (which overlayfs would give us) but this is far less
++complicated.
++
++This is only done during nsenter so that it happens transparently to the
++Go code, and any libcontainer users benefit from it. This also makes
++ExtraFiles and --preserve-fds handling trivial (because we don't need to
++worry about it).
++
++Fixes: CVE-2019-5736
++Co-developed-by: Christian Brauner <christian.brauner@ubuntu.com>
++Signed-off-by: Aleksa Sarai <asarai@suse.de>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libcontainer/nsenter/cloned_binary.c | 268 +++++++++++++++++++++++++++++++++++
++ libcontainer/nsenter/nsexec.c        |  11 ++
++ 2 files changed, 279 insertions(+)
++ create mode 100644 libcontainer/nsenter/cloned_binary.c
++
++diff --git a/libcontainer/nsenter/cloned_binary.c b/libcontainer/nsenter/cloned_binary.c
++new file mode 100644
++index 00000000..c8a42c23
++--- /dev/null
+++++ b/libcontainer/nsenter/cloned_binary.c
++@@ -0,0 +1,268 @@
+++/*
+++ * Copyright (C) 2019 Aleksa Sarai <cyphar@cyphar.com>
+++ * Copyright (C) 2019 SUSE LLC
+++ *
+++ * Licensed under the Apache License, Version 2.0 (the "License");
+++ * you may not use this file except in compliance with the License.
+++ * You may obtain a copy of the License at
+++ *
+++ *     http://www.apache.org/licenses/LICENSE-2.0
+++ *
+++ * Unless required by applicable law or agreed to in writing, software
+++ * distributed under the License is distributed on an "AS IS" BASIS,
+++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+++ * See the License for the specific language governing permissions and
+++ * limitations under the License.
+++ */
+++
+++#define _GNU_SOURCE
+++#include <unistd.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include <stdbool.h>
+++#include <string.h>
+++#include <limits.h>
+++#include <fcntl.h>
+++#include <errno.h>
+++
+++#include <sys/types.h>
+++#include <sys/stat.h>
+++#include <sys/vfs.h>
+++#include <sys/mman.h>
+++#include <sys/sendfile.h>
+++#include <sys/syscall.h>
+++
+++/* Use our own wrapper for memfd_create. */
+++#if !defined(SYS_memfd_create) && defined(__NR_memfd_create)
+++#  define SYS_memfd_create __NR_memfd_create
+++#endif
+++#ifdef SYS_memfd_create
+++#  define HAVE_MEMFD_CREATE
+++/* memfd_create(2) flags -- copied from <linux/memfd.h>. */
+++#  ifndef MFD_CLOEXEC
+++#    define MFD_CLOEXEC       0x0001U
+++#    define MFD_ALLOW_SEALING 0x0002U
+++#  endif
+++int memfd_create(const char *name, unsigned int flags)
+++{
+++	return syscall(SYS_memfd_create, name, flags);
+++}
+++#endif
+++
+++/* This comes directly from <linux/fcntl.h>. */
+++#ifndef F_LINUX_SPECIFIC_BASE
+++#  define F_LINUX_SPECIFIC_BASE 1024
+++#endif
+++#ifndef F_ADD_SEALS
+++#  define F_ADD_SEALS (F_LINUX_SPECIFIC_BASE + 9)
+++#  define F_GET_SEALS (F_LINUX_SPECIFIC_BASE + 10)
+++#endif
+++#ifndef F_SEAL_SEAL
+++#  define F_SEAL_SEAL   0x0001	/* prevent further seals from being set */
+++#  define F_SEAL_SHRINK 0x0002	/* prevent file from shrinking */
+++#  define F_SEAL_GROW   0x0004	/* prevent file from growing */
+++#  define F_SEAL_WRITE  0x0008	/* prevent writes */
+++#endif
+++
+++#define RUNC_SENDFILE_MAX 0x7FFFF000 /* sendfile(2) is limited to 2GB. */
+++#ifdef HAVE_MEMFD_CREATE
+++#  define RUNC_MEMFD_COMMENT "runc_cloned:/proc/self/exe"
+++#  define RUNC_MEMFD_SEALS \
+++	(F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_WRITE)
+++#endif
+++
+++static void *must_realloc(void *ptr, size_t size)
+++{
+++	void *old = ptr;
+++	do {
+++		ptr = realloc(old, size);
+++	} while(!ptr);
+++	return ptr;
+++}
+++
+++/*
+++ * Verify whether we are currently in a self-cloned program (namely, is
+++ * /proc/self/exe a memfd). F_GET_SEALS will only succeed for memfds (or rather
+++ * for shmem files), and we want to be sure it's actually sealed.
+++ */
+++static int is_self_cloned(void)
+++{
+++	int fd, ret, is_cloned = 0;
+++
+++	fd = open("/proc/self/exe", O_RDONLY|O_CLOEXEC);
+++	if (fd < 0)
+++		return -ENOTRECOVERABLE;
+++
+++#ifdef HAVE_MEMFD_CREATE
+++	ret = fcntl(fd, F_GET_SEALS);
+++	is_cloned = (ret == RUNC_MEMFD_SEALS);
+++#else
+++	struct stat statbuf = {0};
+++	ret = fstat(fd, &statbuf);
+++	if (ret >= 0)
+++		is_cloned = (statbuf.st_nlink == 0);
+++#endif
+++	close(fd);
+++	return is_cloned;
+++}
+++
+++/*
+++ * Basic wrapper around mmap(2) that gives you the file length so you can
+++ * safely treat it as an ordinary buffer. Only gives you read access.
+++ */
+++static char *read_file(char *path, size_t *length)
+++{
+++	int fd;
+++	char buf[4096], *copy = NULL;
+++
+++	if (!length)
+++		return NULL;
+++
+++	fd = open(path, O_RDONLY | O_CLOEXEC);
+++	if (fd < 0)
+++		return NULL;
+++
+++	*length = 0;
+++	for (;;) {
+++		int n;
+++
+++		n = read(fd, buf, sizeof(buf));
+++		if (n < 0)
+++			goto error;
+++		if (!n)
+++			break;
+++
+++		copy = must_realloc(copy, (*length + n) * sizeof(*copy));
+++		memcpy(copy + *length, buf, n);
+++		*length += n;
+++	}
+++	close(fd);
+++	return copy;
+++
+++error:
+++	close(fd);
+++	free(copy);
+++	return NULL;
+++}
+++
+++/*
+++ * A poor-man's version of "xargs -0". Basically parses a given block of
+++ * NUL-delimited data, within the given length and adds a pointer to each entry
+++ * to the array of pointers.
+++ */
+++static int parse_xargs(char *data, int data_length, char ***output)
+++{
+++	int num = 0;
+++	char *cur = data;
+++
+++	if (!data || *output != NULL)
+++		return -1;
+++
+++	while (cur < data + data_length) {
+++		num++;
+++		*output = must_realloc(*output, (num + 1) * sizeof(**output));
+++		(*output)[num - 1] = cur;
+++		cur += strlen(cur) + 1;
+++	}
+++	(*output)[num] = NULL;
+++	return num;
+++}
+++
+++/*
+++ * "Parse" out argv and envp from /proc/self/cmdline and /proc/self/environ.
+++ * This is necessary because we are running in a context where we don't have a
+++ * main() that we can just get the arguments from.
+++ */
+++static int fetchve(char ***argv, char ***envp)
+++{
+++	char *cmdline = NULL, *environ = NULL;
+++	size_t cmdline_size, environ_size;
+++
+++	cmdline = read_file("/proc/self/cmdline", &cmdline_size);
+++	if (!cmdline)
+++		goto error;
+++	environ = read_file("/proc/self/environ", &environ_size);
+++	if (!environ)
+++		goto error;
+++
+++	if (parse_xargs(cmdline, cmdline_size, argv) <= 0)
+++		goto error;
+++	if (parse_xargs(environ, environ_size, envp) <= 0)
+++		goto error;
+++
+++	return 0;
+++
+++error:
+++	free(environ);
+++	free(cmdline);
+++	return -EINVAL;
+++}
+++
+++static int clone_binary(void)
+++{
+++	int binfd, memfd;
+++	ssize_t sent = 0;
+++
+++#ifdef HAVE_MEMFD_CREATE
+++	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
+++#else
+++	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
+++#endif
+++	if (memfd < 0)
+++		return -ENOTRECOVERABLE;
+++
+++	binfd = open("/proc/self/exe", O_RDONLY | O_CLOEXEC);
+++	if (binfd < 0)
+++		goto error;
+++
+++	sent = sendfile(memfd, binfd, NULL, RUNC_SENDFILE_MAX);
+++	close(binfd);
+++	if (sent < 0)
+++		goto error;
+++
+++#ifdef HAVE_MEMFD_CREATE
+++	int err = fcntl(memfd, F_ADD_SEALS, RUNC_MEMFD_SEALS);
+++	if (err < 0)
+++		goto error;
+++#else
+++	/* Need to re-open "memfd" as read-only to avoid execve(2) giving -EXTBUSY. */
+++	int newfd;
+++	char *fdpath = NULL;
+++
+++	if (asprintf(&fdpath, "/proc/self/fd/%d", memfd) < 0)
+++		goto error;
+++	newfd = open(fdpath, O_RDONLY | O_CLOEXEC);
+++	free(fdpath);
+++	if (newfd < 0)
+++		goto error;
+++
+++	close(memfd);
+++	memfd = newfd;
+++#endif
+++	return memfd;
+++
+++error:
+++	close(memfd);
+++	return -EIO;
+++}
+++
+++int ensure_cloned_binary(void)
+++{
+++	int execfd;
+++	char **argv = NULL, **envp = NULL;
+++
+++	/* Check that we're not self-cloned, and if we are then bail. */
+++	int cloned = is_self_cloned();
+++	if (cloned > 0 || cloned == -ENOTRECOVERABLE)
+++		return cloned;
+++
+++	if (fetchve(&argv, &envp) < 0)
+++		return -EINVAL;
+++
+++	execfd = clone_binary();
+++	if (execfd < 0)
+++		return -EIO;
+++
+++	fexecve(execfd, argv, envp);
+++	return -ENOEXEC;
+++}
++diff --git a/libcontainer/nsenter/nsexec.c b/libcontainer/nsenter/nsexec.c
++index 28269dfc..7750af35 100644
++--- a/libcontainer/nsenter/nsexec.c
+++++ b/libcontainer/nsenter/nsexec.c
++@@ -534,6 +534,9 @@ void join_namespaces(char *nslist)
++ 	free(namespaces);
++ }
++ 
+++/* Defined in cloned_binary.c. */
+++extern int ensure_cloned_binary(void);
+++
++ void nsexec(void)
++ {
++ 	int pipenum;
++@@ -549,6 +552,14 @@ void nsexec(void)
++ 	if (pipenum == -1)
++ 		return;
++ 
+++	/*
+++	 * We need to re-exec if we are not in a cloned binary. This is necessary
+++	 * to ensure that containers won't be able to access the host binary
+++	 * through /proc/self/exe. See CVE-2019-5736.
+++	 */
+++	if (ensure_cloned_binary() < 0)
+++		bail("could not ensure we are a cloned binary");
+++
++ 	/* Parse all of the netlink configuration. */
++ 	nl_parse(pipenum, &config);
++ 
++-- 
++2.11.0
++
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+index fd5dee7c5b..47c850ef30 100644
+--- a/package/runc/Config.in
++++ b/package/runc/Config.in
+@@ -3,13 +3,14 @@ config BR2_PACKAGE_RUNC
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	help
+ 	  runC is a CLI tool for spawning and running containers
+ 	  according to the OCP specification.
+ 
+ 	  https://github.com/opencontainers/runc
+ 
+-comment "runc needs a toolchain w/ threads"
++comment "runc needs a glibc or musl toolchain toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
+ 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
 -- 
 2.11.0
