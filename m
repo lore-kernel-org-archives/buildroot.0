@@ -1,79 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Feb 2019 09:40:02 +0100
-Subject: [Buildroot] [PATCH] package/efivar: needs host gcc >= 4.8
-Message-ID: <20190213084003.30318-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Feb 2019 09:48:42 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add entry for zynq_zybo_defconfig
+Message-ID: <20190213084842.18937-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The efivar code compiled for the host machine uses
-__builtin_bswap16(), which is only available starting from gcc 4.8:
-
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52624
-
-So let's add a dependency on host gcc >= 4.8 to efivar and its unique
-reverse dependency, efibootmgr.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/48ba906bb6f4dc0c8af43ec11be64f7168dd62fd/
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/efibootmgr/Config.in | 6 ++++--
- package/efivar/Config.in     | 7 +++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index d31f9b13ee..6644d26b6c 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_EFIBOOTMGR
- 	depends on !BR2_STATIC_LIBS # efivar
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	select BR2_PACKAGE_EFIVAR
- 	select BR2_PACKAGE_POPT
-@@ -15,9 +16,10 @@ config BR2_PACKAGE_EFIBOOTMGR
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c17ba6db99..13f67f69f0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1925,6 +1925,10 @@ F:	package/python-flask-jsonrpc/
+ F:	package/python-flask-login/
+ F:	package/qt5/qt5charts/
  
- 	  https://github.com/rhboot/efibootmgr
- 
--comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
-+comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
-diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-index 74f2bb5abb..545962ed70 100644
---- a/package/efivar/Config.in
-+++ b/package/efivar/Config.in
-@@ -17,14 +17,17 @@ config BR2_PACKAGE_EFIVAR
- 	# toolchains.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	# needs __builtin_bswap16
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
- 	help
- 	  Tools and libraries to manipulate EFI variables
- 
- 	  https://github.com/rhboot/efivar
- 
--comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
-+comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
++N:	Sebastien Van Cauwenberghe <svancau@gmail.com>
++F:	board/digilent/zybo/
++F:	configs/zynq_zybo_defconfig
++
+ N:	Semyon Kolganov <semenak94@mail.ru>
+ F:	package/fmt/
+ F:	package/libbson/
 -- 
 2.20.1
