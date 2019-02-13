@@ -1,55 +1,48 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 13 Feb 2019 20:05:47 +0100
-Subject: [Buildroot] [PATCH v1] package/pulseaudio: fix S50pulseaudio init
- script
-Message-ID: <20190213190547.6383-1-ps.report@gmx.net>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 13 Feb 2019 22:05:04 +0100
+Subject: [Buildroot] [PATCH] package/mender: change to use release archive
+In-Reply-To: <y>
+References: <y>
+Message-ID: <20190213210504.18032-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- fix the following start warnings:
+Relase archive is distributed with depencies, this prevents the go
+build system to download them.
 
-  W: [pulseaudio] main.c: Running in system mode, but --disallow-exit not set.
-  W: [pulseaudio] main.c: Running in system mode, but --disallow-module-loading not set.
-  N: [pulseaudio] main.c: Running in system mode, forcibly disabling SHM mode.
-  N: [pulseaudio] main.c: Running in system mode, forcibly disabling exit idle time.
-
-- fix the following stop error:
-
-  E: [pulseaudio] main.c: Failed to kill daemon: No such process
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/pulseaudio/S50pulseaudio | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/mender/mender.hash | 2 +-
+ package/mender/mender.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/pulseaudio/S50pulseaudio b/package/pulseaudio/S50pulseaudio
-index c1d88626f4..ea343a716d 100755
---- a/package/pulseaudio/S50pulseaudio
-+++ b/package/pulseaudio/S50pulseaudio
-@@ -7,12 +7,19 @@
- start() {
- 	printf "Starting pulseaudio: "
- 	umask 077
--	/usr/bin/pulseaudio --system --daemonize
-+	/usr/bin/pulseaudio \
-+		--system \
-+		--daemonize \
-+		--disallow-module-loading \
-+		--disallow-exit \
-+		--exit-idle-time=-1 \
-+		--use-pid-file \
-+		--disable-shm
- 	echo "OK"
- }
- stop() {
- 	printf "Stopping pulseaudio: "
--	pulseaudio --kill
-+	PULSE_RUNTIME_PATH=/var/run/pulse /usr/bin/pulseaudio --kill
- 	echo "OK"
- }
- restart() {
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index d1531d5d7d..89aec239b1 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 mender-1.7.0.tar.gz
++sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 1.7.0.tar.gz
+ 
+ # Apache-2.0 license, locally computed
+ sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index ae5bcb8101..cd18c0055a 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ MENDER_VERSION = 1.7.0
+-MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
++MENDER_SITE = https://github.com/mendersoftware/mender/archive
++MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+ 
+ # Vendor license paths generated with:
 -- 
-2.20.1
+2.17.1
