@@ -1,97 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Feb 2019 22:12:41 +0100
-Subject: [Buildroot] [PATCH] package/qemu: fix build of host-qemu on systems
- with old kernel headers
-Message-ID: <20190213211242.19981-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Feb 2019 22:25:33 +0100
+Subject: [Buildroot] Runtime test issues
+Message-ID: <20190213222533.35cac79e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qemu assumes that when <linux/usbdevice_fs.h> is available, it can
-build its USBFS code. However, some systems have
-<linux/usbdevice_fs.h>, but it doesn't provide all the definitions
-that Qemu needs, causing a build failure.
+Hello,
 
-In order to fix this, we introduce a Qemu patch that improves the
-check that determines whether USBFS support should be enabled or not.
+Fran?ois, Ricardo, Yann: you are in Cc because some of the runtime test
+cases you added have some issues.
 
-Fixes:
+Fran?ois, the following tests are failing:
 
-  http://autobuild.buildroot.net/results/c4af5505f80e1e6185df70d191e85d9393df5795/
+ - tests.package.test_perl_dbd_mysql.TestPerlDBDmysql
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295305
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-configure-improve-usbfs-check.patch  | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/qemu/0002-configure-improve-usbfs-check.patch
+ - tests.package.test_prosody.TestProsodyLuajit
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295315
 
-diff --git a/package/qemu/0002-configure-improve-usbfs-check.patch b/package/qemu/0002-configure-improve-usbfs-check.patch
-new file mode 100644
-index 0000000000..d693b5d7ef
---- /dev/null
-+++ b/package/qemu/0002-configure-improve-usbfs-check.patch
-@@ -0,0 +1,60 @@
-+From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 5 Feb 2019 15:07:43 +0100
-+Subject: [PATCH] configure: improve usbfs check
-+
-+The current check to test if usbfs support should be compiled or not
-+solely relies on the presence of <linux/usbdevice_fs.h>, without
-+actually checking that all definition used by Qemu are provided by
-+this header file.
-+
-+With sufficiently old kernel headers, <linux/usbdevice_fs.h> may be
-+present, but some of the definitions needed by Qemu may not be
-+available.
-+
-+This commit improves the check by building a small program that
-+actually tests whether the necessary definitions are available.
-+
-+In addition, it fixes a bug where have_usbfs was set to "yes"
-+regardless of the result of the test.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ configure | 19 +++++++++++++++++--
-+ 1 file changed, 17 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 3d89870d99..799c8e3b08 100755
-+--- a/configure
-++++ b/configure
-+@@ -4266,10 +4266,25 @@ fi
-+ # check for usbfs
-+ have_usbfs=no
-+ if test "$linux_user" = "yes"; then
-+-  if check_include linux/usbdevice_fs.h; then
-++  cat > $TMPC << EOF
-++#include <linux/usbdevice_fs.h>
-++
-++#ifndef USBDEVFS_GET_CAPABILITIES
-++#error "USBDEVFS_GET_CAPABILITIES undefined"
-++#endif
-++
-++#ifndef USBDEVFS_DISCONNECT_CLAIM
-++#error "USBDEVFS_DISCONNECT_CLAIM undefined"
-++#endif
-++
-++int main(void)
-++{
-++    return 0;
-++}
-++EOF
-++  if compile_prog "" ""; then
-+     have_usbfs=yes
-+   fi
-+-  have_usbfs=yes
-+ fi
-+ 
-+ # check for fallocate
-+-- 
-+2.20.1
-+
+ - tests.package.test_prosody.TestProsodyLua51
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295314
+
+Ricardo, the following test is failing:
+
+ - tests.download.test_git.TestGitRefs
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295269
+
+Yann, the following tests are failing:
+
+ - tests.init.test_systemd.TestInitSystemSystemdRoFull
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295290
+
+ - tests.init.test_systemd.TestInitSystemSystemdRwFull
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295293
+
+ - tests.init.test_systemd.TestInitSystemSystemdRoNetworkd
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295292
+
+ - tests.init.test_systemd.TestInitSystemSystemdRwNetworkd 	
+   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295295
+
+Could you have a look at those test failures ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
