@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Feb 2019 09:48:42 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add entry for zynq_zybo_defconfig
-Message-ID: <20190213084842.18937-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Feb 2019 09:51:28 +0100
+Subject: [Buildroot] Update needed for Buildroot zynq_zybo_defconfig
+Message-ID: <20190213095128.6c7c159b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Hello Sebastian,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c17ba6db99..13f67f69f0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1925,6 +1925,10 @@ F:	package/python-flask-jsonrpc/
- F:	package/python-flask-login/
- F:	package/qt5/qt5charts/
- 
-+N:	Sebastien Van Cauwenberghe <svancau@gmail.com>
-+F:	board/digilent/zybo/
-+F:	configs/zynq_zybo_defconfig
-+
- N:	Semyon Kolganov <semenak94@mail.ru>
- F:	package/fmt/
- F:	package/libbson/
+In 2016, you contributed support for the Zynq Zybo platform to
+Buildroot, by adding the zynq_zybo_defconfig. This defconfig now fails
+to build:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295251
+
+The build failure is due to the update of OpenSSL to 1.1.x, which
+U-Boot 2016.05 is not compatible with.
+
+Could you look at updating U-Boot to at least version v2017.07, which
+contains commit c3b4328166b03d6749b86eb0fbb21a10e4395cfd that should
+fix this problem ?
+
+Thanks a lot,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
