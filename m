@@ -1,48 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Feb 2019 22:10:53 +0100
-Subject: [Buildroot] [PATCH] configs/orangepi_one_plus: fix kernel headers
- option
-Message-ID: <20190213211053.19755-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Feb 2019 22:12:41 +0100
+Subject: [Buildroot] [PATCH] package/qemu: fix build of host-qemu on systems
+ with old kernel headers
+Message-ID: <20190213211242.19981-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contrary to what the comment in the defconfig says, the
-orangepi_one_plus_defconfig was not using the "same as kernel" option
-for kernel headers, but really selecting explicitly Linux 4.18
-headers, independently from the kernel version.
+Qemu assumes that when <linux/usbdevice_fs.h> is available, it can
+build its USBFS code. However, some systems have
+<linux/usbdevice_fs.h>, but it doesn't provide all the definitions
+that Qemu needs, causing a build failure.
 
-Except that in the mean time, BR2_KERNEL_HEADERS_4_18 has been
-removed, causing a build failure due to the legacy checking:
-
-Makefile.legacy:9: *** "You have legacy configuration in your .config! Please check your configuration.".  Stop.
-
-This commit fixes that by using the proper
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18 option.
+In order to fix this, we introduce a Qemu patch that improves the
+check that determines whether USBFS support should be enabled or not.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295166
+  http://autobuild.buildroot.net/results/c4af5505f80e1e6185df70d191e85d9393df5795/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/orangepi_one_plus_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0002-configure-improve-usbfs-check.patch  | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/qemu/0002-configure-improve-usbfs-check.patch
 
-diff --git a/configs/orangepi_one_plus_defconfig b/configs/orangepi_one_plus_defconfig
-index d950f16610..30c422efc2 100644
---- a/configs/orangepi_one_plus_defconfig
-+++ b/configs/orangepi_one_plus_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
- # Linux headers same as kernel, a 4.18 series
--BR2_KERNEL_HEADERS_4_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+diff --git a/package/qemu/0002-configure-improve-usbfs-check.patch b/package/qemu/0002-configure-improve-usbfs-check.patch
+new file mode 100644
+index 0000000000..d693b5d7ef
+--- /dev/null
++++ b/package/qemu/0002-configure-improve-usbfs-check.patch
+@@ -0,0 +1,60 @@
++From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 5 Feb 2019 15:07:43 +0100
++Subject: [PATCH] configure: improve usbfs check
++
++The current check to test if usbfs support should be compiled or not
++solely relies on the presence of <linux/usbdevice_fs.h>, without
++actually checking that all definition used by Qemu are provided by
++this header file.
++
++With sufficiently old kernel headers, <linux/usbdevice_fs.h> may be
++present, but some of the definitions needed by Qemu may not be
++available.
++
++This commit improves the check by building a small program that
++actually tests whether the necessary definitions are available.
++
++In addition, it fixes a bug where have_usbfs was set to "yes"
++regardless of the result of the test.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure | 19 +++++++++++++++++--
++ 1 file changed, 17 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 3d89870d99..799c8e3b08 100755
++--- a/configure
+++++ b/configure
++@@ -4266,10 +4266,25 @@ fi
++ # check for usbfs
++ have_usbfs=no
++ if test "$linux_user" = "yes"; then
++-  if check_include linux/usbdevice_fs.h; then
+++  cat > $TMPC << EOF
+++#include <linux/usbdevice_fs.h>
+++
+++#ifndef USBDEVFS_GET_CAPABILITIES
+++#error "USBDEVFS_GET_CAPABILITIES undefined"
+++#endif
+++
+++#ifndef USBDEVFS_DISCONNECT_CLAIM
+++#error "USBDEVFS_DISCONNECT_CLAIM undefined"
+++#endif
+++
+++int main(void)
+++{
+++    return 0;
+++}
+++EOF
+++  if compile_prog "" ""; then
++     have_usbfs=yes
++   fi
++-  have_usbfs=yes
++ fi
++ 
++ # check for fallocate
++-- 
++2.20.1
++
 -- 
 2.20.1
