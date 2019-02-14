@@ -1,56 +1,124 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Feb 2019 09:39:47 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-02-13
-In-Reply-To: <20190214100244.GB15212@momiji>
-References: <20190214070044.6825F2152B@silver.osuosl.org>
- <20190214100244.GB15212@momiji>
-Message-ID: <20190214093947.3949384d@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 14 Feb 2019 09:41:16 +0100
+Subject: [Buildroot] [PATCH] package/mosquitto: bump to version 1.5.7
+Message-ID: <20190214084116.14431-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bugfix release, fixing a number of issues discovered post-1.5.6.
 
-On Thu, 14 Feb 2019 10:02:44 +0200
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+Drop patches as they are now included upstream.
 
-> On Thu, 14 Feb 2019 07:00:39 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> > [...]
-> >
-> > microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/1b6e6c5fddf3538ed7f150294c3d8fa94b3e4c59 |       
-> 
-> This seems to be the following upstream GCC bug:
-> 
->   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78380
-> 
-> and likely related to this other one reported by Thomas:
-> 
->   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69401
-> 
-> Apparently GCC 8.x does not have the issue, so I wonder if it would make
-> sense to add a depends on BR2_TOOLCHAIN_GCC_AT_LEAST_{8 or 7} in the brotli
-> package when the target is Microblaze.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ix-build-failure-when-using-WITH_ADNS-yes.patch | 27 -----------------
+ .../0002-Don-t-require-C99-compiler.patch          | 35 ----------------------
+ package/mosquitto/mosquitto.hash                   |  2 +-
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 4 files changed, 2 insertions(+), 64 deletions(-)
+ delete mode 100644 package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+ delete mode 100644 package/mosquitto/0002-Don-t-require-C99-compiler.patch
 
-Did you verify that the issue is fixed with gcc 7.x or gcc 8.x ?
-
-> Only woff2 need brotli (libcurl has an optional dependency), and woff2
-> itself is only used by WebKit for Web fonts, and if WOFF2 support is at
-> build time in WebKit the rest of Web fonts formats (WOFF1, TTF, etc.)
-> still work fine, so I think the disruption would be minimal.
-> 
-> Does the above sound reasonable to do?
-
-Yes, if the issue no longer happens with gcc >= 7.x, it seems like a
-reasonable option.
-
-Best regards,
-
-Thomas
+diff --git a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+deleted file mode 100644
+index 3e79a1750a..0000000000
+--- a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 9378016b19521aa6c281f475267c5cb67ea967d1 Mon Sep 17 00:00:00 2001
+-From: "Roger A. Light" <roger@atchoo.org>
+-Date: Fri, 8 Feb 2019 21:34:08 +0000
+-Subject: [PATCH] Fix build failure when using WITH_ADNS=yes
+-
+-[Peter: drop ChangeLog.txt modification]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/bridge.c  | 2 +-
+- 1 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/bridge.c b/src/bridge.c
+-index 6e4b94f..d9611f0 100644
+---- a/src/bridge.c
+-+++ b/src/bridge.c
+-@@ -228,7 +228,7 @@ int bridge__connect_step3(struct mosquitto_db *db, struct mosquitto *context)
+- {
+- 	int rc;
+- 
+--	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address, context->bridge->addresses[context->bridge->cur_address].port, NULL, false);
+-+	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address);
+- 	if(rc > 0){
+- 		if(rc == MOSQ_ERR_TLS){
+- 			net__socket_close(db, context);
+--- 
+-2.11.0
+-
+diff --git a/package/mosquitto/0002-Don-t-require-C99-compiler.patch b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
+deleted file mode 100644
+index 7ca40903eb..0000000000
+--- a/package/mosquitto/0002-Don-t-require-C99-compiler.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 04e89450c0aeb0e6fdff58aca3cffce10b29fb98 Mon Sep 17 00:00:00 2001
+-From: "Roger A. Light" <roger@atchoo.org>
+-Date: Sat, 9 Feb 2019 13:52:09 +0000
+-Subject: [PATCH] Don't require C99 compiler.
+-
+-[Peter: drop ChangeLog.txt modification]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/persist.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/persist.c b/src/persist.c
+-index 2f40086..13b34d2 100644
+---- a/src/persist.c
+-+++ b/src/persist.c
+-@@ -720,6 +720,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
+- 	struct mosquitto_msg_store *stored = NULL;
+- 	struct mosquitto_msg_store_load *load;
+- 	char *err;
+-+	int i;
+- 
+- 	payload.ptr = NULL;
+- 
+-@@ -749,7 +750,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
+- 		read_e(db_fptr, &i16temp, sizeof(uint16_t));
+- 		source_port = ntohs(i16temp);
+- 		if(source_port){
+--			for(int i=0; i<db->config->listener_count; i++){
+-+			for(i=0; i<db->config->listener_count; i++){
+- 				if(db->config->listeners[i].port == source_port){
+- 					source.listener = &db->config->listeners[i];
+- 					break;
+--- 
+-2.11.0
+-
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index da28c4f67f..17a467a721 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 d5bdc13cc668350026376d57fc14de10aaee029f6840707677637d15e0751a40  mosquitto-1.5.6.tar.gz
++sha256 d4024c3388502d50be4192991e90d66dfb344376104df3f63846c9f201779955  mosquitto-1.5.7.tar.gz
+ 
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 962fe66049..d17fae5df6 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.5.6
++MOSQUITTO_VERSION = 1.5.7
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
