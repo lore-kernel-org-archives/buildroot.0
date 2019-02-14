@@ -1,49 +1,123 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Feb 2019 21:47:23 +0100
-Subject: [Buildroot] [git commit] package/mender: change to use release
- archive
-Message-ID: <20190214205206.0EA4088FEA@busybox.osuosl.org>
+Date: Thu, 14 Feb 2019 21:51:08 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: bump to version 1.5.7
+Message-ID: <20190214205206.269EE81207@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b29c68ea27a56766fc247cd71d2a5c2b0c457e3
+commit: https://git.buildroot.net/buildroot/commit/?id=640153775bafb4873940b96a5ef5a8fc1895a72e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Relase archive is distributed with depencies, this prevents the go
-build system to download them.
+Bugfix release, fixing a number of issues discovered post-1.5.6.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Drop patches as they are now included upstream.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mender/mender.hash | 2 +-
- package/mender/mender.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...ix-build-failure-when-using-WITH_ADNS-yes.patch | 27 -----------------
+ .../0002-Don-t-require-C99-compiler.patch          | 35 ----------------------
+ package/mosquitto/mosquitto.hash                   |  2 +-
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 4 files changed, 2 insertions(+), 64 deletions(-)
 
-diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-index d1531d5d7d..89aec239b1 100644
---- a/package/mender/mender.hash
-+++ b/package/mender/mender.hash
+diff --git a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch b/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
+deleted file mode 100644
+index 3e79a1750a..0000000000
+--- a/package/mosquitto/0001-Fix-build-failure-when-using-WITH_ADNS-yes.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 9378016b19521aa6c281f475267c5cb67ea967d1 Mon Sep 17 00:00:00 2001
+-From: "Roger A. Light" <roger@atchoo.org>
+-Date: Fri, 8 Feb 2019 21:34:08 +0000
+-Subject: [PATCH] Fix build failure when using WITH_ADNS=yes
+-
+-[Peter: drop ChangeLog.txt modification]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/bridge.c  | 2 +-
+- 1 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/bridge.c b/src/bridge.c
+-index 6e4b94f..d9611f0 100644
+---- a/src/bridge.c
+-+++ b/src/bridge.c
+-@@ -228,7 +228,7 @@ int bridge__connect_step3(struct mosquitto_db *db, struct mosquitto *context)
+- {
+- 	int rc;
+- 
+--	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address, context->bridge->addresses[context->bridge->cur_address].port, NULL, false);
+-+	rc = net__socket_connect_step3(context, context->bridge->addresses[context->bridge->cur_address].address);
+- 	if(rc > 0){
+- 		if(rc == MOSQ_ERR_TLS){
+- 			net__socket_close(db, context);
+--- 
+-2.11.0
+-
+diff --git a/package/mosquitto/0002-Don-t-require-C99-compiler.patch b/package/mosquitto/0002-Don-t-require-C99-compiler.patch
+deleted file mode 100644
+index 7ca40903eb..0000000000
+--- a/package/mosquitto/0002-Don-t-require-C99-compiler.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 04e89450c0aeb0e6fdff58aca3cffce10b29fb98 Mon Sep 17 00:00:00 2001
+-From: "Roger A. Light" <roger@atchoo.org>
+-Date: Sat, 9 Feb 2019 13:52:09 +0000
+-Subject: [PATCH] Don't require C99 compiler.
+-
+-[Peter: drop ChangeLog.txt modification]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/persist.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/persist.c b/src/persist.c
+-index 2f40086..13b34d2 100644
+---- a/src/persist.c
+-+++ b/src/persist.c
+-@@ -720,6 +720,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
+- 	struct mosquitto_msg_store *stored = NULL;
+- 	struct mosquitto_msg_store_load *load;
+- 	char *err;
+-+	int i;
+- 
+- 	payload.ptr = NULL;
+- 
+-@@ -749,7 +750,7 @@ static int persist__msg_store_chunk_restore(struct mosquitto_db *db, FILE *db_fp
+- 		read_e(db_fptr, &i16temp, sizeof(uint16_t));
+- 		source_port = ntohs(i16temp);
+- 		if(source_port){
+--			for(int i=0; i<db->config->listener_count; i++){
+-+			for(i=0; i<db->config->listener_count; i++){
+- 				if(db->config->listeners[i].port == source_port){
+- 					source.listener = &db->config->listeners[i];
+- 					break;
+--- 
+-2.11.0
+-
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index da28c4f67f..17a467a721 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 mender-1.7.0.tar.gz
-+sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 1.7.0.tar.gz
+ # Locally calculated after checking gpg signature
+-sha256 d5bdc13cc668350026376d57fc14de10aaee029f6840707677637d15e0751a40  mosquitto-1.5.6.tar.gz
++sha256 d4024c3388502d50be4192991e90d66dfb344376104df3f63846c9f201779955  mosquitto-1.5.7.tar.gz
  
- # Apache-2.0 license, locally computed
- sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index ae5bcb8101..cd18c0055a 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -5,7 +5,8 @@
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 962fe66049..d17fae5df6 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MENDER_VERSION = 1.7.0
--MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
-+MENDER_SITE = https://github.com/mendersoftware/mender/archive
-+MENDER_SOURCE = $(MENDER_VERSION).tar.gz
- MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
- 
- # Vendor license paths generated with:
+-MOSQUITTO_VERSION = 1.5.6
++MOSQUITTO_VERSION = 1.5.7
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
