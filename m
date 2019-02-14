@@ -1,78 +1,44 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 14 Feb 2019 10:20:58 +0100
-Subject: [Buildroot] [PATCH] package/luvi: add patch to fix build issue
- with OpenSSL 1.1.1a
-In-Reply-To: <20190214094306.0a28abb3@windsurf>
-References: <20190213220812.29978-1-joerg.krause@embedded.rocks>
- <20190214094306.0a28abb3@windsurf>
-Message-ID: <6d2c8c692f78f39ea34fa31f728054845a7b2d87.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 14 Feb 2019 11:06:02 +0100
+Subject: [Buildroot] [git commit] package/docker-containerd: fix typo in
+ uclibc dependency
+Message-ID: <20190214100459.14D3988FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=17c7b9337989092ee3659aaa01fb508efd144c16
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 2019-02-14 at 09:43 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 13 Feb 2019 23:08:11 +0100
-> J?rg Krause <joerg.krause@embedded.rocks> wrote:
-> 
-> > Bump the bundled lua-openssl version to 0.7.4 for compatibility with
-> > OpenSSL 1.1.1a.
-> > 
-> > Note, that luvi 2.7.6 is the latest version providing a release tarball.
-> > 
-> > Runtime tested on Banana Pro, note that version string for lua-openssl
-> > does not match the tag name (0.7.4):
-> > 
-> > ```
-> > luvi v2.7.6
-> > zlib: 1.2.11
-> > libuv: 1.25.0
-> > ssl: OpenSSL 1.1.1a  20 Nov 2018, lua-openssl 0.7.3
-> > ```
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/e87994a3dc987f5aa101a5e721ac927e21453373
-> > http://autobuild.buildroot.net/results/ea725ad90cfcd3c5e242268a593dcabd7297fe70
-> > http://autobuild.buildroot.net/results/f2fb9eea0044e4a5f674742d29ea95af49cf5a45
-> > http://autobuild.buildroot.net/results/de4daa1b930f907f06640dc98a708016217ddea5
-> > .. and many more.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> This is really a huge patch.
+Commit 6e3f7fbc072c88ab344f2ffa39e402464b566f19 ("package/runc: add
+upstream security fix for CVE-2019-5736") added a dependency of
+docker-containerd to uclibc (inherited from runc), but the depends on
+has a typo that makes it ineffective. Due to this, docker-containerd
+can still be selected in uClibc configurations, causing runc to be
+build, and failing to build due fexecve() being missing in uClibc.
 
-Yes, unfortunately!
+Fixes:
 
-> Why is luvi using a bundled lua-openssl version instead of some
-> external lua-openssl package ?
+  http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504/
 
-I spent some time trying to make lua-openssl an external package. It is
-certainly feasible to get luvi to work to use an external lua-openssl
-package, but it requires some changes in lua-openssl first, as
-installing header files in staging, naming convention for the shared
-library, etc.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-containerd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Right now, it was easier for me, to just bump the bundled lua-openssl
-version.
-
-> I see that the change has been applied upstream
-> (https://github.com/luvit/luvi/commit/0d5959a33cde81ed49314bd6c56f6906a83d2fa1),
-> which is good.
-
-Yes, there was a commit [1] on the master branch before, which bumped
-lua-openssl to version 0.7.3. However, this version does not build with
-OpenSSL 1.1.1.
-
-Unfortunately, the luvi maintainers are not able to create new releases
-right now. Hopefully, someone of the maintainers with push rights will
-have the time soon to do so.
-
-[1] https://github.com/luvit/luvi/commit/a981c704b960e52974ec5746a25b86de40b2cb67
-
-Best regards
-J?rg
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index bdb5dd7b80..5e0cc1e877 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_PACKAGE_TOOLCHAIN_USES_UCLIBC # runc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
+ 	depends on BR2_USE_MMU # util-linux
+ 	select BR2_PACKAGE_RUNC # runtime dependency
+ 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
