@@ -1,98 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Feb 2019 21:49:06 +0100
-Subject: [Buildroot] [git commit] package/qemu: fix build of host-qemu on
- systems with old kernel headers
-Message-ID: <20190214205206.1EBCA81207@busybox.osuosl.org>
+Date: Thu, 14 Feb 2019 21:53:19 +0100
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: use
+ external toolchains in RISC-V configs
+Message-ID: <20190214205206.3955B81207@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a52848f82db08b5edf433d5360434618e2ef683
+commit: https://git.buildroot.net/buildroot/commit/?id=78596e38516ff9d8eea8f8dea6159841f421c896
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qemu assumes that when <linux/usbdevice_fs.h> is available, it can
-build its USBFS code. However, some systems have
-<linux/usbdevice_fs.h>, but it doesn't provide all the definitions
-that Qemu needs, causing a build failure.
-
-In order to fix this, we introduce a Qemu patch that improves the
-check that determines whether USBFS support should be enabled or not.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/c4af5505f80e1e6185df70d191e85d9393df5795/
+This commit replaces the two RISC-V configurations used for the
+autobuilders to use pre-built external toolchains rather than internal
+toolchains. This saves quite a bit of build time in the autobuilders,
+and also allows people to reproduce build issues in a much more
+efficient way, since rebuilding the toolchain is not needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../qemu/0002-configure-improve-usbfs-check.patch  | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ .../config-fragments/autobuild/br-riscv32-internal-glibc.config   | 3 ---
+ support/config-fragments/autobuild/br-riscv32.config              | 8 ++++++++
+ .../config-fragments/autobuild/br-riscv64-internal-glibc.config   | 3 ---
+ support/config-fragments/autobuild/br-riscv64.config              | 7 +++++++
+ support/config-fragments/autobuild/toolchain-configs.csv          | 4 ++--
+ 5 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/package/qemu/0002-configure-improve-usbfs-check.patch b/package/qemu/0002-configure-improve-usbfs-check.patch
+diff --git a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
+deleted file mode 100644
+index c5348a28da..0000000000
+--- a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BR2_riscv=y
+-BR2_RISCV_32=y
+-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/support/config-fragments/autobuild/br-riscv32.config b/support/config-fragments/autobuild/br-riscv32.config
 new file mode 100644
-index 0000000000..d693b5d7ef
+index 0000000000..9565a0b70b
 --- /dev/null
-+++ b/package/qemu/0002-configure-improve-usbfs-check.patch
-@@ -0,0 +1,60 @@
-+From 9672cccd64c446369b5649fe23d575917638be46 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 5 Feb 2019 15:07:43 +0100
-+Subject: [PATCH] configure: improve usbfs check
-+
-+The current check to test if usbfs support should be compiled or not
-+solely relies on the presence of <linux/usbdevice_fs.h>, without
-+actually checking that all definition used by Qemu are provided by
-+this header file.
-+
-+With sufficiently old kernel headers, <linux/usbdevice_fs.h> may be
-+present, but some of the definitions needed by Qemu may not be
-+available.
-+
-+This commit improves the check by building a small program that
-+actually tests whether the necessary definitions are available.
-+
-+In addition, it fixes a bug where have_usbfs was set to "yes"
-+regardless of the result of the test.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ configure | 19 +++++++++++++++++--
-+ 1 file changed, 17 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 3d89870d99..799c8e3b08 100755
-+--- a/configure
-++++ b/configure
-+@@ -4266,10 +4266,25 @@ fi
-+ # check for usbfs
-+ have_usbfs=no
-+ if test "$linux_user" = "yes"; then
-+-  if check_include linux/usbdevice_fs.h; then
-++  cat > $TMPC << EOF
-++#include <linux/usbdevice_fs.h>
-++
-++#ifndef USBDEVFS_GET_CAPABILITIES
-++#error "USBDEVFS_GET_CAPABILITIES undefined"
-++#endif
-++
-++#ifndef USBDEVFS_DISCONNECT_CLAIM
-++#error "USBDEVFS_DISCONNECT_CLAIM undefined"
-++#endif
-++
-++int main(void)
-++{
-++    return 0;
-++}
-++EOF
-++  if compile_prog "" ""; then
-+     have_usbfs=yes
-+   fi
-+-  have_usbfs=yes
-+ fi
-+ 
-+ # check for fallocate
-+-- 
-+2.20.1
-+
++++ b/support/config-fragments/autobuild/br-riscv32.config
+@@ -0,0 +1,8 @@
++BR2_riscv=y
++BR2_RISCV_32=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-2019.02-rc1.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
+deleted file mode 100644
+index d952c73a86..0000000000
+--- a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BR2_riscv=y
+-BR2_RISCV_64=y
+-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
+new file mode 100644
+index 0000000000..61912cfd7b
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-riscv64.config
+@@ -0,0 +1,7 @@
++BR2_riscv=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-2019.02-rc1.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 3681bc519f..c51335ac63 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -51,8 +51,8 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+-support/config-fragments/autobuild/br-riscv32-internal-glibc.config,any
+-support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
++support/config-fragments/autobuild/br-riscv32.config,x86_64
++support/config-fragments/autobuild/br-riscv64.config,x86_64
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
