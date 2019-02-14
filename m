@@ -1,58 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Feb 2019 09:43:06 +0100
-Subject: [Buildroot] [PATCH] package/luvi: add patch to fix build issue
- with OpenSSL 1.1.1a
-In-Reply-To: <20190213220812.29978-1-joerg.krause@embedded.rocks>
-References: <20190213220812.29978-1-joerg.krause@embedded.rocks>
-Message-ID: <20190214094306.0a28abb3@windsurf>
+Date: Thu, 14 Feb 2019 09:53:10 +0100
+Subject: [Buildroot] [PATCH] package/docker-containerd: fix typo in uclibc
+ dependency
+Message-ID: <20190214085310.25955-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit 6e3f7fbc072c88ab344f2ffa39e402464b566f19 ("package/runc: add
+upstream security fix for CVE-2019-5736") added a dependency of
+docker-containerd to uclibc (inherited from runc), but the depends on
+has a typo that makes it ineffective. Due to this, docker-containerd
+can still be selected in uClibc configurations, causing runc to be
+build, and failing to build due fexecve() being missing in uClibc.
 
-On Wed, 13 Feb 2019 23:08:11 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+Fixes:
 
-> Bump the bundled lua-openssl version to 0.7.4 for compatibility with
-> OpenSSL 1.1.1a.
-> 
-> Note, that luvi 2.7.6 is the latest version providing a release tarball.
-> 
-> Runtime tested on Banana Pro, note that version string for lua-openssl
-> does not match the tag name (0.7.4):
-> 
-> ```
-> luvi v2.7.6
-> zlib: 1.2.11
-> libuv: 1.25.0
-> ssl: OpenSSL 1.1.1a  20 Nov 2018, lua-openssl 0.7.3
-> ```
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e87994a3dc987f5aa101a5e721ac927e21453373
-> http://autobuild.buildroot.net/results/ea725ad90cfcd3c5e242268a593dcabd7297fe70
-> http://autobuild.buildroot.net/results/f2fb9eea0044e4a5f674742d29ea95af49cf5a45
-> http://autobuild.buildroot.net/results/de4daa1b930f907f06640dc98a708016217ddea5
-> .. and many more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+  http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504/
 
-This is really a huge patch.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-containerd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why is luvi using a bundled lua-openssl version instead of some
-external lua-openssl package ?
-
-I see that the change has been applied upstream
-(https://github.com/luvit/luvi/commit/0d5959a33cde81ed49314bd6c56f6906a83d2fa1),
-which is good.
-
-Thanks,
-
-Thomas
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index bdb5dd7b80..5e0cc1e877 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_PACKAGE_TOOLCHAIN_USES_UCLIBC # runc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
+ 	depends on BR2_USE_MMU # util-linux
+ 	select BR2_PACKAGE_RUNC # runtime dependency
+ 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
