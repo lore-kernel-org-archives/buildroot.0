@@ -1,28 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Feb 2019 22:43:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/madplay: add hash for license files
-In-Reply-To: <20190214214321.31854-1-fontaine.fabrice@gmail.com>
-References: <20190214214321.31854-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190214214321.31854-2-fontaine.fabrice@gmail.com>
+Date: Thu, 14 Feb 2019 22:53:15 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libmad: remove
+ LIBMAD_LIBTOOL_PATCH=NO
+Message-ID: <20190214215315.8491-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since commit eae18d01abc737182fe171c908462499d5f1aaf0 "libmad: needs
+autoreconf", autoreconf builds an up to date ltmain.sh so remove
+LIBMAD_LIBTOOL_PATCH = NO which is not needed anymore
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/madplay/madplay.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmad/libmad.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/madplay/madplay.hash b/package/madplay/madplay.hash
-index 99487b5ecd..227702976b 100644
---- a/package/madplay/madplay.hash
-+++ b/package/madplay/madplay.hash
-@@ -1,2 +1,4 @@
- # Locally computed:
- sha256  5a79c7516ff7560dffc6a14399a389432bc619c905b13d3b73da22fa65acede0  madplay-0.15.2b.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  915bfd70548f31d11f9b4ffb21f343d1196af96c79d6aaac5663ea46c39dd3a3  COPYRIGHT
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 108c4f641b..b1c9cee5ac 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -7,7 +7,6 @@
+ LIBMAD_VERSION = 0.15.1b
+ LIBMAD_SITE = http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
+ LIBMAD_INSTALL_STAGING = YES
+-LIBMAD_LIBTOOL_PATCH = NO
+ LIBMAD_LICENSE = GPL-2.0+
+ LIBMAD_LICENSE_FILES = COPYING
+ LIBMAD_PATCH = \
 -- 
 2.14.1
