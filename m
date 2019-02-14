@@ -1,91 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Feb 2019 21:53:19 +0100
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild: use
- external toolchains in RISC-V configs
-Message-ID: <20190214205206.3955B81207@busybox.osuosl.org>
+Date: Thu, 14 Feb 2019 21:46:22 +0100
+Subject: [Buildroot] [git commit] package/efivar: needs host gcc >= 4.8
+Message-ID: <20190214205205.F1D3488FEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78596e38516ff9d8eea8f8dea6159841f421c896
+commit: https://git.buildroot.net/buildroot/commit/?id=2135e869a04e95da2372074884eb3f55fd728352
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit replaces the two RISC-V configurations used for the
-autobuilders to use pre-built external toolchains rather than internal
-toolchains. This saves quite a bit of build time in the autobuilders,
-and also allows people to reproduce build issues in a much more
-efficient way, since rebuilding the toolchain is not needed.
+The efivar code compiled for the host machine uses
+__builtin_bswap16(), which is only available starting from gcc 4.8:
+
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52624
+
+So let's add a dependency on host gcc >= 4.8 to efivar and its unique
+reverse dependency, efibootmgr.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/48ba906bb6f4dc0c8af43ec11be64f7168dd62fd/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../config-fragments/autobuild/br-riscv32-internal-glibc.config   | 3 ---
- support/config-fragments/autobuild/br-riscv32.config              | 8 ++++++++
- .../config-fragments/autobuild/br-riscv64-internal-glibc.config   | 3 ---
- support/config-fragments/autobuild/br-riscv64.config              | 7 +++++++
- support/config-fragments/autobuild/toolchain-configs.csv          | 4 ++--
- 5 files changed, 17 insertions(+), 8 deletions(-)
+ package/efibootmgr/Config.in | 6 ++++--
+ package/efivar/Config.in     | 7 +++++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config b/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
-deleted file mode 100644
-index c5348a28da..0000000000
---- a/support/config-fragments/autobuild/br-riscv32-internal-glibc.config
-+++ /dev/null
-@@ -1,3 +0,0 @@
--BR2_riscv=y
--BR2_RISCV_32=y
--BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-diff --git a/support/config-fragments/autobuild/br-riscv32.config b/support/config-fragments/autobuild/br-riscv32.config
-new file mode 100644
-index 0000000000..9565a0b70b
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-riscv32.config
-@@ -0,0 +1,8 @@
-+BR2_riscv=y
-+BR2_RISCV_32=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config b/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
-deleted file mode 100644
-index d952c73a86..0000000000
---- a/support/config-fragments/autobuild/br-riscv64-internal-glibc.config
-+++ /dev/null
-@@ -1,3 +0,0 @@
--BR2_riscv=y
--BR2_RISCV_64=y
--BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
-new file mode 100644
-index 0000000000..61912cfd7b
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-riscv64.config
-@@ -0,0 +1,7 @@
-+BR2_riscv=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 3681bc519f..c51335ac63 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -51,8 +51,8 @@ support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
- support/config-fragments/autobuild/br-powerpc-internal-full.config,any
--support/config-fragments/autobuild/br-riscv32-internal-glibc.config,any
--support/config-fragments/autobuild/br-riscv64-internal-glibc.config,any
-+support/config-fragments/autobuild/br-riscv32.config,x86_64
-+support/config-fragments/autobuild/br-riscv64.config,x86_64
- support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index d31f9b13ee..6644d26b6c 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 	depends on !BR2_STATIC_LIBS # efivar
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # efivar
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	select BR2_PACKAGE_EFIVAR
+ 	select BR2_PACKAGE_POPT
+@@ -15,9 +16,10 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 
+ 	  https://github.com/rhboot/efibootmgr
+ 
+-comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index 74f2bb5abb..545962ed70 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -17,14 +17,17 @@ config BR2_PACKAGE_EFIVAR
+ 	# toolchains.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	# needs __builtin_bswap16
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
+ 	help
+ 	  Tools and libraries to manipulate EFI variables
+ 
+ 	  https://github.com/rhboot/efivar
+ 
+-comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
