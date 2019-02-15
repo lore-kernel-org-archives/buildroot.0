@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:58:20 +0100
-Subject: [Buildroot] [git commit] package/mender: fix missing /var/lib
-Message-ID: <20190215215703.F3D6B885E1@busybox.osuosl.org>
+Date: Fri, 15 Feb 2019 23:00:00 +0100
+Subject: [Buildroot] [PATCH] package/mender: fix missing /var/lib
+In-Reply-To: <20190215214253.28202-1-angelo@amarulasolutions.com>
+References: <20190215214253.28202-1-angelo@amarulasolutions.com>
+Message-ID: <20190215230000.43280704@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd97b055b11b8708438974555d1746a18924ceba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Angelo,
 
-Mender needs /var/lib directory to be available: on some configurations
-/var/lib is not available and thus the mender package installation fails.
-This patch does a mkdir to ensure the /var/lib directory is always
-available.
+On Fri, 15 Feb 2019 22:42:53 +0100
+Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
-Fixes:
+> Mender needs /var/lib directory to be available: on some configurations
+> /var/lib is not available and thus the mender package installation fails.
+> This patch does a mkdir to ensure the /var/lib directory is always
+> available.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/02fde80f6b4bc57d5f2833bd979bf166252eab16
 
-  http://autobuild.buildroot.net/results/d2237083a13ab7688dd2b6dc8dbcd4226ed5651a/
+This reference was a build failure on the "next" branch, so one might
+think that the issue only exists on the next branch. So I've replaced
+this with a reference to a build failure that happens on the "master"
+branch, which makes it clear this patch should be applied on master.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mender/mender.mk | 1 +
- 1 file changed, 1 insertion(+)
+Also for future patches: please always leave one blank line before your
+SoB.
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index cd18c0055a..07f6e5e5f9 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -57,6 +57,7 @@ define MENDER_INSTALL_CONFIG_FILES
- 	$(INSTALL) -D -m 0755 package/mender/device_type \
- 			$(TARGET_DIR)/etc/mender/device_type
- 
-+	mkdir -p $(TARGET_DIR)/var/lib
- 	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
- endef
- 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  package/mender/mender.mk | 1 +
+>  1 file changed, 1 insertion(+)
+
+Applied to master, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
