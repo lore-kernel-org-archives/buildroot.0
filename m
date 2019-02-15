@@ -1,45 +1,37 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 15 Feb 2019 10:37:56 +0100
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.2.1
-Message-ID: <20190215093756.22229-1-brgl@bgdev.pl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Feb 2019 12:06:26 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-13
+In-Reply-To: <20190215021300.GB25351@momiji> (Adrian Perez de Castro's message
+ of "Fri, 15 Feb 2019 02:13:00 +0200")
+References: <20190214070044.6825F2152B@silver.osuosl.org>
+ <20190214100244.GB15212@momiji> <20190214093947.3949384d@windsurf>
+ <20190215021300.GB25351@momiji>
+Message-ID: <87a7ixgvkd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-This is a bugfix release fixing two problems with C++ bindings.
+Hi,
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> Yes, if the issue no longer happens with gcc >= 7.x, it seems like a
+ >> reasonable option.
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 318a107adf..e68ebdb8c7 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 b6b9079c933f7c8524815437937dda6b795a16141bca202a9eec70ba5844b5ba  libgpiod-1.2.tar.xz
-+sha256 736d8b511ad247c2acb01b592f2bbe5e757e14e1d8347b2d80683081ab4b31b8  libgpiod-1.2.1.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 545526515f..c46ffa871c 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 1.2
-+LIBGPIOD_VERSION = 1.2.1
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+ > At this point I don't know what to do; I don't see any proposed patch to
+ > apply to GCC, and I never touched Microblaze before.
+
+ > I guess disabling the Brotli package for Microblaze wouldn't be an option...
+ > or would it?
+
+If it doesn't build, then that is IMHO the only sensible thing to
+do. Given that brotli has very few reverse dependencies (and there is
+probably no realistic usecase for webkit on microblaze) it is OK.
+
+Will you send a patch?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
