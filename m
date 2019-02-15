@@ -1,32 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:43:50 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libmad: remove
- LIBMAD_LIBTOOL_PATCH=NO
-In-Reply-To: <20190214215315.8491-1-fontaine.fabrice@gmail.com>
-References: <20190214215315.8491-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190215224350.34663370@windsurf.home>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 15 Feb 2019 22:44:10 +0100
+Subject: [Buildroot] [PATCH] package/mender: fix sysv startup script
+Message-ID: <20190215214410.29132-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Feb 2019 22:53:15 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Mender is a service explicitly written for systemd and so it doesn't
+fork on background, doesn't redirect outputs and doesn't create a pid
+file by itself.
+To make the service running correctly is therefore necessary to use the
+-m switch of start-stop-daemon to create the pid file and -b option to
+send the process to background.
+Logging is preserved because the service will log anyway on syslog.
 
-> Since commit eae18d01abc737182fe171c908462499d5f1aaf0 "libmad: needs
-> autoreconf", autoreconf builds an up to date ltmain.sh so remove
-> LIBMAD_LIBTOOL_PATCH = NO which is not needed anymore
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libmad/libmad.mk | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/mender/S42mender | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/mender/S42mender b/package/mender/S42mender
+index 665a9dd74a..108fecfea9 100644
+--- a/package/mender/S42mender
++++ b/package/mender/S42mender
+@@ -24,7 +24,7 @@ start() {
+ 	printf "Starting mender service: "
+ 	umask 077
+ 
+-	start-stop-daemon -S -q -p /var/run/mender.pid \
++	start-stop-daemon -S -q -b -m -p /var/run/mender.pid \
+ 		--exec /usr/bin/mender -- -daemon
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
