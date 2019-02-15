@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:43:33 +0100
-Subject: [Buildroot] [git commit branch/next] package/libmad: remove
+Date: Fri, 15 Feb 2019 22:43:50 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libmad: remove
  LIBMAD_LIBTOOL_PATCH=NO
-Message-ID: <20190215214154.0A79B89130@busybox.osuosl.org>
+In-Reply-To: <20190214215315.8491-1-fontaine.fabrice@gmail.com>
+References: <20190214215315.8491-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190215224350.34663370@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c4d56a1cc2ec6201d2928a41b156dbd6fdb73c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 14 Feb 2019 22:53:15 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Since commit eae18d01abc737182fe171c908462499d5f1aaf0 "libmad: needs
-autoreconf", autoreconf builds an up to date ltmain.sh so remove
-LIBMAD_LIBTOOL_PATCH = NO which is not needed anymore
+> Since commit eae18d01abc737182fe171c908462499d5f1aaf0 "libmad: needs
+> autoreconf", autoreconf builds an up to date ltmain.sh so remove
+> LIBMAD_LIBTOOL_PATCH = NO which is not needed anymore
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libmad/libmad.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libmad/libmad.mk | 1 -
- 1 file changed, 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 108c4f641b..b1c9cee5ac 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -7,7 +7,6 @@
- LIBMAD_VERSION = 0.15.1b
- LIBMAD_SITE = http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
- LIBMAD_INSTALL_STAGING = YES
--LIBMAD_LIBTOOL_PATCH = NO
- LIBMAD_LICENSE = GPL-2.0+
- LIBMAD_LICENSE_FILES = COPYING
- LIBMAD_PATCH = \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
