@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Feb 2019 17:07:00 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/python3: add
+Date: Fri, 15 Feb 2019 16:02:28 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/python3: add
  upstream security fix for CVE-2019-5010
-Message-ID: <20190215161250.839FF7FF3B@busybox.osuosl.org>
+Message-ID: <20190215161259.E51DA88E62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e715c9c3c54071e7ea2379f78b6ed3e0c8b4eb93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c517779fcbb5fd802f8d2a439e0a35de5c3798c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2019-5010: NULL pointer dereference using a specially crafted X509
 certificate
@@ -19,8 +19,6 @@ https://bugs.python.org/issue35746
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit 3191d1624e6b4964f35675542bf68235a3dbdb08)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c517779fcbb5fd802f8d2a439e0a35de5c3798c0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...ix-segfault-in-ssl-s-cert-parser-GH-11569.patch | 121 +++++++++++++++++++++
