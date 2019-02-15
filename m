@@ -1,42 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Feb 2019 20:15:52 +0100
-Subject: [Buildroot] [PATCHv3 7/7] support/download/{bzr, cvs, git,
- svn}: highlight unimplemented source-check
-In-Reply-To: <20190209221337.GJ3079@scaer>
-References: <20190209202350.4984-1-patrickdepinguin@gmail.com>
- <20190209202350.4984-7-patrickdepinguin@gmail.com>
- <20190209221337.GJ3079@scaer>
-Message-ID: <CAAXf6LVTKiHnhMOnMnMQmKup4-XMPN9LDfr_yFYE1fxxphUksQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 15 Feb 2019 20:49:49 +0100
+Subject: [Buildroot] [PATCH/next v1 2/2] package/meson: bump version to
+ 0.49.2
+In-Reply-To: <20190215194949.15118-1-ps.report@gmx.net>
+References: <20190215194949.15118-1-ps.report@gmx.net>
+Message-ID: <20190215194949.15118-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El s?b., 9 feb. 2019 a las 23:13, Yann E. MORIN
-(<yann.morin.1998@free.fr>) escribi?:
->
-> Thomas, All,
->
-> On 2019-02-09 21:23 +0100, Thomas De Schampheleire spake thusly:
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > For bzr, cvs, git and svn, there is no method of checking whether the
->
-> Acutally, for svn this is realtively trivial:
->
->     svn ls -r ${rev} ${remote}
->
-> We have two packages in Buildroot that use svn, fis and open2300, so you
-> cn use them to test:
->
->     $ svn ls -r 2892 http://svn.chezphil.org/utils/trunk
->     Redirecting to URL 'https://svn.chezphil.org/utils/trunk':
->     Makefile
->     apexctl.cc
->     [...]
->
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks a lot, will double-check at my end and adapt.
-
-/Thomas
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 3a5c7dd438..fadef6df8a 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz.asc
+-sha256 fb0395c4ac208eab381cd1a20571584bdbba176eb562a7efa9cb17cace0e1551 meson-0.49.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.49.2/meson-0.49.2.tar.gz.asc
++sha256 ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd meson-0.49.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d76541cc93..49e27f5527 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.49.0
++MESON_VERSION = 0.49.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
+-- 
+2.20.1
