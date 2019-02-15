@@ -1,75 +1,57 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Fri, 15 Feb 2019 23:53:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ecryptfs-utils: Use echo-dummy
- gettext script if NLS is not enabled
-In-Reply-To: <20190215224759.522c3207@windsurf.home>
-References: <1550084055-9176-1-git-send-email-email@gmail.com>
- <20190215224759.522c3207@windsurf.home>
-Message-ID: <20190215215311.GA20783@lwo1-lhp-f71841>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Feb 2019 22:49:21 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5base: handle
+ sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
+Message-ID: <20190215215703.ECB4E885E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f9009e5bd14fac29038bf6728c1e019d2b2ffc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Feb 15, 2019 at 10:47:59PM +0100, Thomas Petazzoni wrote:
-> Hello Vadim,
-> 
-> On Wed, 13 Feb 2019 20:54:15 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > From: Vadim Kochan <vadim4j@gmail.com>
-> > 
-> > gettext is used only as external tool in ecryptfs utils which can easy
-> > be replaced by 'echo' if NLS is not required. So changed a bit semantic
-> > of Config file - select gettext package only if NLS is enabled,
-> > otherwise a dummy-echo script is generated as 'gettext' replacement.
-> > 
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> >  package/ecryptfs-utils/Config.in         |  2 +-
-> >  package/ecryptfs-utils/ecryptfs-utils.mk | 10 ++++++++++
-> >  2 files changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-> > index 6652d33..1438c17 100644
-> > --- a/package/ecryptfs-utils/Config.in
-> > +++ b/package/ecryptfs-utils/Config.in
-> > @@ -12,7 +12,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
-> >  	select BR2_PACKAGE_LIBNSS
-> >  	# runtime dependency only, some scripts are using the
-> >  	# 'gettext' program to get translations
-> > -	select BR2_PACKAGE_GETTEXT
-> > +	select BR2_PACKAGE_GETTEXT if BR2_SYSTEM_ENABLE_NLS
-> >  	# runtime dependency only
-> >  	select BR2_PACKAGE_GETENT
-> >  	help
-> > diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-> > index eb3194b..a2a0af6 100644
-> > --- a/package/ecryptfs-utils/ecryptfs-utils.mk
-> > +++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-> > @@ -25,4 +25,14 @@ else
-> >  ECRYPTFS_UTILS_CONF_OPTS += --disable-openssl
-> >  endif
-> >  
-> > +ifneq ($(BR2_SYSTEM_ENABLE_NLS),y)
-> > +define ECRYPTFS_UTILS_GETTEXT_DUMMY_INSTALL
-> > +	echo '#! /bin/sh' > $(@D)/gettext
-> > +	echo 'echo $$@' >> $(@D)/gettext
-> > +
-> > +	$(INSTALL) -m 0755 -D $(@D)/gettext $(TARGET_DIR)/usr/bin/gettext
-> 
-> I understand the idea, but I don't think it's good for ecryptfs-utils
-> to install a tool called "gettext". Maybe some gettext-tiny package
-> should provide this dummy target gettext program ?
-> 
+The Qt configure auto detection (and announced runtime detection
+feature) failes (see e.g. [1]), so override the configuration
+with the buildroot determined settings.
 
-Yeah, gettext-tiny sounds like a better place for this, in case if
-gettext-tiny will be not merged then it is better to contribute changes
-to the ecryptfs-utils project and provide 'gettext' alternative as
-function, in case the 'gettext' binary does not exist.
+[1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
 
-Regards,
-Vadim Kochan
+Reported-by: David Picard <dplamp@gmx.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5base/qt5base.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d10f233b46..11c6684812 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -33,6 +33,25 @@ else
+ QT5BASE_DEPENDENCIES += pcre2
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE2),)
++QT5BASE_CONFIGURE_OPTS += -no-sse2
++else ifeq ($(BR2_X86_CPU_HAS_SSE3),)
++QT5BASE_CONFIGURE_OPTS += -no-sse3
++else ifeq ($(BR2_X86_CPU_HAS_SSSE3),)
++QT5BASE_CONFIGURE_OPTS += -no-ssse3
++else ifeq ($(BR2_X86_CPU_HAS_SSE4),)
++QT5BASE_CONFIGURE_OPTS += -no-sse4.1
++else ifeq ($(BR2_X86_CPU_HAS_SSE42),)
++QT5BASE_CONFIGURE_OPTS += -no-sse4.2
++else ifeq ($(BR2_X86_CPU_HAS_AVX),)
++QT5BASE_CONFIGURE_OPTS += -no-avx
++else ifeq ($(BR2_X86_CPU_HAS_AVX2),)
++QT5BASE_CONFIGURE_OPTS += -no-avx2
++else
++# no buildroot BR2_X86_CPU_HAS_AVX512 option yet for qt configure
++# option '-no-avx512' (available for latest only)
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
