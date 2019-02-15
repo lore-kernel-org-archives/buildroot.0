@@ -1,35 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 23:00:26 +0100
-Subject: [Buildroot] [PATCH] package/mender: fix sysv startup script
-In-Reply-To: <20190215214410.29132-1-angelo@amarulasolutions.com>
-References: <20190215214410.29132-1-angelo@amarulasolutions.com>
-Message-ID: <20190215230026.6b1e4857@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 15 Feb 2019 23:01:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/botan: link with libatomic when
+ needed
+Message-ID: <20190215220110.13519-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Feb 2019 22:44:10 +0100
-Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-> Mender is a service explicitly written for systemd and so it doesn't
-> fork on background, doesn't redirect outputs and doesn't create a pid
-> file by itself.
-> To make the service running correctly is therefore necessary to use the
-> -m switch of start-stop-daemon to create the pid file and -b option to
-> send the process to background.
-> Logging is preserved because the service will log anyway on syslog.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/mender/S42mender | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
-Applied to master, thanks.
+This is often for example the case on sparcv8 32 bit.
 
-Thomas
+Fixes:
+ - http://autobuild.buildroot.org/results/a442734c570e4a02854014d831ba3aab9f592430
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index e07b786c85..a96a12178b 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -17,9 +17,16 @@ BOTAN_CONF_OPTS = \
+ 	--os=linux \
+ 	--cc=gcc \
+ 	--cc-bin="$(TARGET_CXX)" \
++	--ldflags="$(BOTAN_LDFLAGS)" \
+ 	--prefix=/usr \
+ 	--without-documentation
+ 
++BOTAN_LDFLAGS = $(TARGET_LDFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++BOTAN_LDFLAGS += -latomic
++endif
++
+ ifeq ($(BR2_SHARED_LIBS),y)
+ BOTAN_CONF_OPTS += \
+ 	--disable-static-library \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
