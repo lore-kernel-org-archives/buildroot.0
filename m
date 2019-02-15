@@ -1,50 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 15 Feb 2019 23:01:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: link with libatomic when
- needed
-Message-ID: <20190215220110.13519-1-fontaine.fabrice@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 15 Feb 2019 23:02:57 +0100
+Subject: [Buildroot] [PATCH] package/openssh: adding a way to install only
+ sftp-server
+Message-ID: <20190215220257.12430-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
+This patch adds a way to install only sftp-server in case it is
+needed by other packages (like dropbear) or a full openssh installation is
+not needed.
 
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-
-This is often for example the case on sparcv8 32 bit.
-
-Fixes:
- - http://autobuild.buildroot.org/results/a442734c570e4a02854014d831ba3aab9f592430
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/botan/botan.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/openssh/Config.in  |  9 +++++++++
+ package/openssh/openssh.mk | 10 ++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index e07b786c85..a96a12178b 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -17,9 +17,16 @@ BOTAN_CONF_OPTS = \
- 	--os=linux \
- 	--cc=gcc \
- 	--cc-bin="$(TARGET_CXX)" \
-+	--ldflags="$(BOTAN_LDFLAGS)" \
- 	--prefix=/usr \
- 	--without-documentation
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 683a9c0e51..ba0dc62f83 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -9,3 +9,12 @@ config BR2_PACKAGE_OPENSSH
+ 	  friends.
  
-+BOTAN_LDFLAGS = $(TARGET_LDFLAGS)
+ 	  http://www.openssh.com/
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+BOTAN_LDFLAGS += -latomic
++if BR2_PACKAGE_OPENSSH
++
++config BR2_PACKAGE_OPENSSH_SFTP_ONLY
++	bool "install only sftp"
++	help
++	  Install only sftp binary (ex: dropbear sftp support)
++
++endif
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4fef5caedb..bfd93845d9 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -88,4 +88,14 @@ endef
+ 
+ OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
+ 
++ifeq ($(BR2_PACKAGE_OPENSSH_SFTP_ONLY),y)
++define OPENSSH_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/sftp-server \
++		$(TARGET_DIR)/usr/libexec/sftp-server
++endef
++undefine OPENSSH_INSTALL_INIT_SYSTEMD
++undefine OPENSSH_INSTALL_INIT_SYSV
++undefine OPENSSH_POST_INSTALL_TARGET_HOOKS
 +endif
 +
- ifeq ($(BR2_SHARED_LIBS),y)
- BOTAN_CONF_OPTS += \
- 	--disable-static-library \
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.17.1
