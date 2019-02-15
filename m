@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:49:37 +0100
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: handle
- sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
-In-Reply-To: <20190205214122.25115-1-ps.report@gmx.net>
-References: <20190205214122.25115-1-ps.report@gmx.net>
-Message-ID: <20190215224937.067eaacf@windsurf.home>
+Date: Fri, 15 Feb 2019 22:53:01 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of
+ dynamic loader to ld*.so.*
+In-Reply-To: <20190205211544.26547-1-patrickdepinguin@gmail.com>
+References: <20190205211544.26547-1-patrickdepinguin@gmail.com>
+Message-ID: <20190215225301.4d66f516@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 Feb 2019 22:41:22 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hello,
 
-> The Qt configure auto detection (and announced runtime detection
-> feature) failes (see e.g. [1]), so override the configuration
-> with the buildroot determined settings.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
-> 
-> Reported-by: David Picard <dplamp@gmx.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - use 'else ifeq' (suggested by Thomas Petazzoni)
->   - fix typo (anounced vs. announced)
->   - clarify no-avx512 comment
+On Tue,  5 Feb 2019 22:15:44 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-Applied to master, thanks.
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
+> ("toolchain-external: copy ld*.so* for all C libraries") changed (among
+> other things) the glob pattern to catch the dynamic loader from
+>     ld*.so.*
+> to
+>     ld*.so*
+> 
+> thus now matching files like 'ld-2.20.so' in addition to files like
+> 'ld.so.1'.
+
+I'm curious what is the problem with matching ld-2.20.so, and how can
+this bring more files than needed ?
+
+(Note: I think the change is OK, I just want to understand how you
+noticed.)
+
+Thanks!
 
 Thomas
 -- 
