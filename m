@@ -1,55 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:45:12 +0100
-Subject: [Buildroot] [git commit branch/next] package/wpebackend-fdo: bump
- to version 1.0.1
-Message-ID: <20190215214335.2294D83A4E@busybox.osuosl.org>
+Date: Fri, 15 Feb 2019 22:45:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: security
+ bump to version 2.22.4
+Message-ID: <20190215214335.2C9FE7FA18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33f0fd27fadb568740f100978f859d4967cc6dc0
+commit: https://git.buildroot.net/buildroot/commit/?id=5546dfd095df4f874ff3bc46e3a2cffda3693340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This release fixes contains a small fix which allows calling the
-backend initialization routine more than once. Release notes:
+This is a maintenance release of the current stable WPE WebKit version,
+which contains security fixes for CVE identifiers: CVE-2019-6212,
+CVE-2019-6215, CVE-2019-6216, CVE-2019-6217, CVE-2019-6226,
+CVE-2019-6227, CVE-2019-6229, CVE-2019-6233, and CVE-2019-6234.
+Additionally, it contains a few minor fixes.
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.0.1.html
+Release notes can be found in the announcement:
+
+  https://wpewebkit.org/release/wpe-2.22.4.html
+
+More details on the issues covered by securit fixes can be found
+in the corresponding security advisory:
+
+  https://wpewebkit.org/security/WSA-2019-0001.html
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 20c89d324c..6e6f9f0e3f 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 39937a3465..27c6cdf33e 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.0.tar.xz.sums
--md5 5318728afb3bf7417293af67ce427963 wpebackend-fdo-1.0.0.tar.xz
--sha1 7ee22bc1d585616f4ad2047d8be54ec396486211 wpebackend-fdo-1.0.0.tar.xz
--sha256 7a747f87a1ae46d30144369050e3ce348b58986d04e1a139ba75c198fa636729 wpebackend-fdo-1.0.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
-+md5 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
-+sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
-+sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8 wpebackend-fdo-1.0.1.tar.xz
+-# From https://wpewebkit.org/releases/wpewebkit-2.22.3.tar.xz.sums
+-md5 6d0c693ea49a93fc9e701cf784245ea5 wpewebkit-2.22.3.tar.xz
+-sha1 d8a22bec787f38939c7922dc43bf27c9144cef74 wpewebkit-2.22.3.tar.xz
+-sha256 241f177cded1a4ba3088716650eaaac25588878882170789b3c630ac45dbb2fa wpewebkit-2.22.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.22.4.tar.xz.sums
++md5 6e5c668473c57906bdec1c641bac4579 wpewebkit-2.22.4.tar.xz
++sha1 002b8b25f4fc26bfef68767b3ff1eba1aac53fa5 wpewebkit-2.22.4.tar.xz
++sha256 871e86b7e989de0c1224ac7ab8ed6d8b52756cf793a8c253b56ab8ba8d288c96 wpewebkit-2.22.4.tar.xz
  
  # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 06c87cb9bf..5842861bac 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 6b3d56ab0c..89df9b725c 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.0.0
-+WPEBACKEND_FDO_VERSION = 1.0.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+-WPEWEBKIT_VERSION = 2.22.3
++WPEWEBKIT_VERSION = 2.22.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
