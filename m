@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:17:45 +0100
-Subject: [Buildroot] [git commit] package/libcpprestsdk: disable samples
-Message-ID: <20190215212924.BA8538A6BB@busybox.osuosl.org>
+Date: Fri, 15 Feb 2019 22:31:40 +0100
+Subject: [Buildroot] [PATCH/next 2/2] package/libcpprestsdk: disable
+ samples
+In-Reply-To: <20190212224547.19315-2-fontaine.fabrice@gmail.com>
+References: <20190212224547.19315-1-fontaine.fabrice@gmail.com>
+ <20190212224547.19315-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190215223140.3b2a9a58@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3105754bc38246976a86ffe5e046c439881c6519
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcpprestsdk/libcpprestsdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 12 Feb 2019 23:45:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index be9ca292c5..74c8eec46f 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -10,6 +10,6 @@ LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
--LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-+LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON -DBUILD_SAMPLES=OFF
- 
- $(eval $(cmake-package))
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libcpprestsdk/libcpprestsdk.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Explicitly disabling the build of examples definitely makes sense to
+have in master, so I've applied this patch to master. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
