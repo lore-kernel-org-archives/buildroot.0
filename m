@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:48:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/meson: bump version to
- 0.49.2
-Message-ID: <20190215214647.751808A548@busybox.osuosl.org>
+Date: Fri, 15 Feb 2019 22:49:37 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: handle
+ sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
+In-Reply-To: <20190205214122.25115-1-ps.report@gmx.net>
+References: <20190205214122.25115-1-ps.report@gmx.net>
+Message-ID: <20190215224937.067eaacf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05bbdb876d621285783b1d71a4fd492c84cc11d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue,  5 Feb 2019 22:41:22 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> The Qt configure auto detection (and announced runtime detection
+> feature) failes (see e.g. [1]), so override the configuration
+> with the buildroot determined settings.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
+> 
+> Reported-by: David Picard <dplamp@gmx.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - use 'else ifeq' (suggested by Thomas Petazzoni)
+>   - fix typo (anounced vs. announced)
+>   - clarify no-avx512 comment
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 3a5c7dd438..fadef6df8a 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz.asc
--sha256 fb0395c4ac208eab381cd1a20571584bdbba176eb562a7efa9cb17cace0e1551 meson-0.49.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.49.2/meson-0.49.2.tar.gz.asc
-+sha256 ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd meson-0.49.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index d76541cc93..49e27f5527 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.49.0
-+MESON_VERSION = 0.49.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
