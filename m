@@ -1,28 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Feb 2019 22:18:20 +0000
-Subject: [Buildroot] [Bug 11501] compile sdl2 with enable wayland
-In-Reply-To: <bug-11501-163@https.bugs.busybox.net/>
-References: <bug-11501-163@https.bugs.busybox.net/>
-Message-ID: <bug-11501-163-t5DbblPPks@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 15 Feb 2019 23:42:06 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libid3tag: fix id3tag.pc
+Message-ID: <20190215224207.15546-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11501
+Add -lz to id3tag.pc, this fix is needed to be able to use pkg-config in
+madplay to find id3tag dependencies
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libid3tag/id3tag.pc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
-
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-No feedback for several months, and Wayland support in SDL2 is disabled in the
-current Buildroot.
-
+diff --git a/package/libid3tag/id3tag.pc b/package/libid3tag/id3tag.pc
+index 845eb3276b..c8b248766c 100644
+--- a/package/libid3tag/id3tag.pc
++++ b/package/libid3tag/id3tag.pc
+@@ -7,5 +7,5 @@ Name: id3tag
+ Description: ID3 tag reading library
+ Version: 0.15.1b
+ Requires:
+-Libs: -L${libdir} -lid3tag
++Libs: -L${libdir} -lid3tag -lz
+ Cflags: -I${includedir}
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
