@@ -1,39 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:31:50 +0100
-Subject: [Buildroot] [git commit branch/next] package/libcpprestsdk: add
+Date: Fri, 15 Feb 2019 22:38:53 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/libcpprestsdk: add
  optional websocketpp dependency
-Message-ID: <20190215213520.716378B48E@busybox.osuosl.org>
+In-Reply-To: <20190212224547.19315-1-fontaine.fabrice@gmail.com>
+References: <20190212224547.19315-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190215223853.7f272da3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a36842af3bc9449803c73ffc7cee5e67890f2a8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 12 Feb 2019 23:45:46 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index be9ca292c5..6f5fb41999 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -10,6 +10,13 @@ LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
--LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-+LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
-+
-+ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
-+LIBCPPRESTSDK_DEPENDENCIES += websocketpp
-+LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
-+else
-+LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-+endif
- 
- $(eval $(cmake-package))
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
