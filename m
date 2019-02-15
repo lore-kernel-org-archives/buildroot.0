@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Feb 2019 22:08:00 +0100
-Subject: [Buildroot] [PATCHv4 5/8] Config.in: reintroduce BR2_SSH
+Date: Fri, 15 Feb 2019 22:08:01 +0100
+Subject: [Buildroot] [PATCHv4 6/8] support/download/scp: implement
+ source-check
 In-Reply-To: <20190215210803.8969-1-patrickdepinguin@gmail.com>
 References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
-Message-ID: <20190215210803.8969-5-patrickdepinguin@gmail.com>
+Message-ID: <20190215210803.8969-6-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +13,67 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The BR2_SSH command was removed in commit
-db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
-command") but will be needed again to support 'source-check' for the scp
-download backend.
+We use 'test -f' rather than 'ls' because 'test' is a mandatory POSIX
+utility while 'ls' is not.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in               | 4 ++++
- package/pkg-download.mk | 1 +
- 2 files changed, 5 insertions(+)
+ support/download/scp | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-v4: no changes
+v4: (feedback Yann E. Morin)
+- use true/false as values to 'checkonly'
+- replace incorrect 'exit $?' by explicit 'exit 0'
+- use 'test -f' instead of 'ls' which is more certain to be present (POSIX
+  mandatory utility)
+
 v3: no changes
 
-diff --git a/Config.in b/Config.in
-index d58d8dc04a..91d56907fe 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,6 +136,10 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
+diff --git a/support/download/scp b/support/download/scp
+index 80cf495c4e..52ccf06d6e 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -7,17 +7,21 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          Only check that the file exists remotely.
+ #   -o FILE     Copy to local file FILE.
+ #   -f FILE     Copy from remote file FILE.
+ #   -u URI      Download file at URI.
+ #
+ # Environment:
+ #   SCP       : the scp command to call
++#   SSH       : the ssh command to use for checkonly
  
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
+ verbose=
++checkonly=false
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    C)  checkonly=true;;
+     o)  output="${OPTARG}";;
+     f)  filename="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+@@ -33,8 +37,19 @@ shift $((OPTIND-1)) # Get rid of our options
+ _scp() {
+     eval ${SCP} "${@}"
+ }
++_ssh() {
++    eval ${SSH} "${@}"
++}
+ 
+ # Remove any scheme prefix
+ uri="${uri##scp://}"
+ 
++if ${checkonly}; then
++    # uri now looks like:  foo.example.org:some/directory
++    domain="${uri%%:*}"
++    path="${uri#*:}/${filename}"
++    _ssh ${verbose} "${@}" "'${domain}'" test -f "'${path}'" > /dev/null
++    exit 0
++fi
 +
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 5384fc2af4..17d1ca99ee 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
-+export SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
+ _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
 -- 
 2.19.2
