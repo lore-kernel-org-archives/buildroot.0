@@ -1,43 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:53:01 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: restrict copying of
- dynamic loader to ld*.so.*
-In-Reply-To: <20190205211544.26547-1-patrickdepinguin@gmail.com>
-References: <20190205211544.26547-1-patrickdepinguin@gmail.com>
-Message-ID: <20190215225301.4d66f516@windsurf.home>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Fri, 15 Feb 2019 23:53:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ecryptfs-utils: Use echo-dummy
+ gettext script if NLS is not enabled
+In-Reply-To: <20190215224759.522c3207@windsurf.home>
+References: <1550084055-9176-1-git-send-email-email@gmail.com>
+ <20190215224759.522c3207@windsurf.home>
+Message-ID: <20190215215311.GA20783@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Tue,  5 Feb 2019 22:15:44 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Fri, Feb 15, 2019 at 10:47:59PM +0100, Thomas Petazzoni wrote:
+> Hello Vadim,
 > 
-> Commit 32bec8ee2fb00c6750fa842bbb0eb79b0c081fa2
-> ("toolchain-external: copy ld*.so* for all C libraries") changed (among
-> other things) the glob pattern to catch the dynamic loader from
->     ld*.so.*
-> to
->     ld*.so*
+> On Wed, 13 Feb 2019 20:54:15 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
 > 
-> thus now matching files like 'ld-2.20.so' in addition to files like
-> 'ld.so.1'.
+> > From: Vadim Kochan <vadim4j@gmail.com>
+> > 
+> > gettext is used only as external tool in ecryptfs utils which can easy
+> > be replaced by 'echo' if NLS is not required. So changed a bit semantic
+> > of Config file - select gettext package only if NLS is enabled,
+> > otherwise a dummy-echo script is generated as 'gettext' replacement.
+> > 
+> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> > ---
+> >  package/ecryptfs-utils/Config.in         |  2 +-
+> >  package/ecryptfs-utils/ecryptfs-utils.mk | 10 ++++++++++
+> >  2 files changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+> > index 6652d33..1438c17 100644
+> > --- a/package/ecryptfs-utils/Config.in
+> > +++ b/package/ecryptfs-utils/Config.in
+> > @@ -12,7 +12,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+> >  	select BR2_PACKAGE_LIBNSS
+> >  	# runtime dependency only, some scripts are using the
+> >  	# 'gettext' program to get translations
+> > -	select BR2_PACKAGE_GETTEXT
+> > +	select BR2_PACKAGE_GETTEXT if BR2_SYSTEM_ENABLE_NLS
+> >  	# runtime dependency only
+> >  	select BR2_PACKAGE_GETENT
+> >  	help
+> > diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+> > index eb3194b..a2a0af6 100644
+> > --- a/package/ecryptfs-utils/ecryptfs-utils.mk
+> > +++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+> > @@ -25,4 +25,14 @@ else
+> >  ECRYPTFS_UTILS_CONF_OPTS += --disable-openssl
+> >  endif
+> >  
+> > +ifneq ($(BR2_SYSTEM_ENABLE_NLS),y)
+> > +define ECRYPTFS_UTILS_GETTEXT_DUMMY_INSTALL
+> > +	echo '#! /bin/sh' > $(@D)/gettext
+> > +	echo 'echo $$@' >> $(@D)/gettext
+> > +
+> > +	$(INSTALL) -m 0755 -D $(@D)/gettext $(TARGET_DIR)/usr/bin/gettext
+> 
+> I understand the idea, but I don't think it's good for ecryptfs-utils
+> to install a tool called "gettext". Maybe some gettext-tiny package
+> should provide this dummy target gettext program ?
+> 
 
-I'm curious what is the problem with matching ld-2.20.so, and how can
-this bring more files than needed ?
+Yeah, gettext-tiny sounds like a better place for this, in case if
+gettext-tiny will be not merged then it is better to contribute changes
+to the ecryptfs-utils project and provide 'gettext' alternative as
+function, in case the 'gettext' binary does not exist.
 
-(Note: I think the change is OK, I just want to understand how you
-noticed.)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Vadim Kochan
