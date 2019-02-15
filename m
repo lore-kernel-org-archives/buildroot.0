@@ -1,45 +1,66 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 15 Feb 2019 14:49:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-02-13
-In-Reply-To: <87a7ixgvkd.fsf@dell.be.48ers.dk>
-References: <20190214070044.6825F2152B@silver.osuosl.org>
- <20190214100244.GB15212@momiji> <20190214093947.3949384d@windsurf>
- <20190215021300.GB25351@momiji> <87a7ixgvkd.fsf@dell.be.48ers.dk>
-Message-ID: <20190215144942.GB27633@momiji>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Feb 2019 14:32:01 +0100
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 2.1.7
+Message-ID: <20190215133202.27313-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Feb 2019 12:06:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> 
-> Hi,
-> 
->  >> Yes, if the issue no longer happens with gcc >= 7.x, it seems like a
->  >> reasonable option.
-> 
->  > At this point I don't know what to do; I don't see any proposed patch to
->  > apply to GCC, and I never touched Microblaze before.
-> 
->  > I guess disabling the Brotli package for Microblaze wouldn't be an option...
->  > or would it?
-> 
-> If it doesn't build, then that is IMHO the only sensible thing to
-> do. Given that brotli has very few reverse dependencies (and there is
-> probably no realistic usecase for webkit on microblaze) it is OK.
-> 
-> Will you send a patch?
+Fixes the following security issues:
 
-Will do, thanks for the feedback :)
+CVE-2019-6975: Memory exhaustion in django.utils.numberformat.format()
 
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190215/fdedb98c/attachment.asc>
+If django.utils.numberformat.format() ? used by contrib.admin as well as the
+the floatformat, filesizeformat, and intcomma templates filters ? received a
+Decimal with a large number of digits or a large exponent, it could lead to
+significant memory usage due to a call to '{:f}'.format().
+
+To avoid this, decimals with more than 200 digits are now formatted using
+scientific notation.
+
+https://docs.djangoproject.com/en/2.1/releases/2.1.6/
+
+2.1.6 contained a packaging error, fixed by 2.1.7:
+
+https://docs.djangoproject.com/en/2.1/releases/2.1.7/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 4b932ac907..93ca1080c5 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	9309c48c8b92503b8969a7603a97e2a1  Django-2.1.5.tar.gz
+-sha256	d6393918da830530a9516bbbcbf7f1214c3d733738779f06b0f649f49cc698c3  Django-2.1.5.tar.gz
++md5	a042e6ba117d2e01950d842cceb5eee0  Django-2.1.7.tar.gz
++sha256	939652e9d34d7d53d74d5d8ef82a19e5f8bb2de75618f7e5360691b6e9667963  Django-2.1.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 53e8f20e87..5922a6c07c 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 2.1.5
++PYTHON_DJANGO_VERSION = 2.1.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/7f/4c750e09b246621e5e90fa08f93dec1b991f5c203b0ff615d62a891c8f41
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/7e/ae/29c28f6afddae0e305326078f31372f03d7f2e6d6210c9963843196ce67e
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
+-- 
+2.11.0
