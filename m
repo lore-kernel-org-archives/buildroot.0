@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Feb 2019 22:07:58 +0100
-Subject: [Buildroot] [PATCHv4 3/8] support/download/wget: implement
+Date: Fri, 15 Feb 2019 22:07:59 +0100
+Subject: [Buildroot] [PATCHv4 4/8] support/download/file: implement
  source-check
 In-Reply-To: <20190215210803.8969-1-patrickdepinguin@gmail.com>
 References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
-Message-ID: <20190215210803.8969-3-patrickdepinguin@gmail.com>
+Message-ID: <20190215210803.8969-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,53 @@ From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/wget | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ support/download/file | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-v4: (feedback Yann E. Morin)
-- use true/false as values to 'checkonly'
-- replace incorrect 'exit $?' by explicit 'exit 0'
+v4:
+- use true/false as values to 'checkonly' (Yann E. Morin)
+- replace incorrect 'exit $?' by explicit 'exit 0' (Yann E. Morin)
+- replace 'test -e' by 'test -f' which is more specific
 
 v3: no changes
 
-diff --git a/support/download/wget b/support/download/wget
-index c69e6071aa..277eab6660 100755
---- a/support/download/wget
-+++ b/support/download/wget
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..059a8dde4c 100755
+--- a/support/download/file
++++ b/support/download/file
 @@ -7,6 +7,7 @@ set -e
  #
  # Options:
  #   -q          Be quiet.
-+#   -C          Only check that the file exists remotely.
- #   -o FILE     Save into file FILE.
- #   -f FILENAME The filename of the tarball to get at URL
- #   -u URL      Download file at URL.
-@@ -16,9 +17,11 @@ set -e
- #   WGET     : the wget command to call
++#   -C          Only check that the source file exists.
+ #   -o FILE     Copy to file FILE.
+ #   -f FILE     Copy from basename file FILE.
+ #   -u DIR      Copy from FILE in DIR.
+@@ -20,9 +21,11 @@ set -e
+ # Make 'cp' verbose by default, so it behaves a bit like the others.
+ verbose=-v
  
- verbose=
 +checkonly=false
  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
      case "${OPT}" in
-     q)  verbose=-q;;
+     q)  verbose=;;
 +    C)  checkonly=true;;
      o)  output="${OPTARG}";;
-     f)  filename="${OPTARG}";;
-     u)  url="${OPTARG}";;
-@@ -40,4 +43,9 @@ _wget() {
- # mirror
- [ -n "${encode}" ] && filename=${filename//\?/%3F}
+     f)  file="${OPTARG}";;
+     u)  dir="${OPTARG}";;
+@@ -39,4 +42,12 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
  
+-_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
++# Remove any scheme prefix
++dir="${dir##file://}"
++
 +if ${checkonly}; then
-+    _wget --spider ${verbose} "${@}" "'${url}/${filename}'"
++    test -f "'${dir}/${file}'"
 +    exit 0
 +fi
 +
- _wget ${verbose} "${@}" -O "'${output}'" "'${url}/${filename}'"
++_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
 -- 
 2.19.2
