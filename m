@@ -1,94 +1,66 @@
-From: Artem Panfilov <panfilov.artyom@gmail.com>
-Date: Sat, 16 Feb 2019 02:20:59 +0300
-Subject: [Buildroot] [PATCH 2/2] package/php: fix how external PCRE2 JIT is
- enabled
-In-Reply-To: <20190215232059.31440-1-panfilov.artyom@gmail.com>
-References: <20190215232059.31440-1-panfilov.artyom@gmail.com>
-Message-ID: <20190215232059.31440-2-panfilov.artyom@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri, 15 Feb 2019 15:20:06 -0800
+Subject: [Buildroot] [PATCH] tar: add Config.in.host
+Message-ID: <20190215232006.4990-1-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the external PCRE2 library is used, PHP JIT option is enabled
-based on architecture. If the external library was compiled without
-JIT support runtime will fail.
+Add a config option to build tar for the host, so the user can choose
+to build it, even if Buildroot wouldn't do so ordinarily.
 
-When I call "php -m" command, I have the following error message:
-PHP Fatal error:  Unable to start pcre module in Unknown on line 0
-
-Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- ...0006-pcre2-tweak-pcre2-jit-detection.patch | 41 +++++++++++++++++++
- package/php/php.mk                            |  7 ++++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/php/0006-pcre2-tweak-pcre2-jit-detection.patch
 
-diff --git a/package/php/0006-pcre2-tweak-pcre2-jit-detection.patch b/package/php/0006-pcre2-tweak-pcre2-jit-detection.patch
+Since Buildroot can only work with three tar version (1.27-1.29), the
+likelihood that system tar is too old or too new is quite high -- and
+increasing. Ubuntu 16.04 and 18.04 ship with an acceptabe version of
+tar. As of Ubuntu 18.10, system tar is already too recent.
+
+Our main build machines are Ubuntu 16.04, but we need to support other
+platforms. We need build machines of different flavours to be able to
+build buildroot without requiring an Internet connection, using only
+pre-downloaded package tar-balls (downloaded during the master build).
+
+We can't rely that the tar sources have been downloaded automatically
+based on what was detected on the master build machine, because it may
+not require host-tar while a different build machine might.
+
+A manual config option will give us the choice to build and bundle
+host-tar regardless of what Buildroot finds on the master.
+
+ package/Config.in.host     | 1 +
+ package/tar/Config.in.host | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+ create mode 100644 package/tar/Config.in.host
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b4c501a33b32..6fa37c33732b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -60,6 +60,7 @@ menu "Host utilities"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/swig/Config.in.host"
++	source "package/tar/Config.in.host"
+ 	source "package/tegrarcm/Config.in.host"
+ 	source "package/ti-cgt-pru/Config.in.host"
+ 	source "package/uboot-tools/Config.in.host"
+diff --git a/package/tar/Config.in.host b/package/tar/Config.in.host
 new file mode 100644
-index 0000000000..492abf008b
+index 000000000000..ef3bdf30de89
 --- /dev/null
-+++ b/package/php/0006-pcre2-tweak-pcre2-jit-detection.patch
-@@ -0,0 +1,41 @@
-+diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
-+index b9542f0113..f4c66a8369 100644
-+--- a/ext/pcre/config0.m4
-++++ b/ext/pcre/config0.m4
-+@@ -53,35 +53,7 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
-+     AC_DEFINE(HAVE_PCRE, 1, [ ])
-+ 
-+     if test "$PHP_PCRE_JIT" != "no"; then
-+-      AC_MSG_CHECKING([for JIT support in PCRE2])
-+-      AC_RUN_IFELSE([
-+-        AC_LANG_SOURCE([[
-+-            #include <pcre2.h>
-+-            #include <stdlib.h>
-+-            int main(void) {
-+-              uint32_t have_jit;
-+-              pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
-+-              return !have_jit;
-+-            }
-+-        ]])], [
-+-        AC_MSG_RESULT([yes])
-+-        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-+-      ],
-+-      [
-+-        AC_MSG_RESULT([no])
-+-      ],
-+-      [
-+-        AC_CANONICAL_HOST
-+-        case $host_cpu in
-+-        arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
-+-          AC_MSG_RESULT([yes])
-+-          AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-+-          ;;
-+-        *)
-+-          AC_MSG_RESULT([no])
-+-          ;;
-+-        esac
-+-      ])
-++      AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-+     fi
-+ 
-+     PHP_NEW_EXTENSION(pcre, php_pcre.c, no,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 061b2f2609..eb6907972b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -246,6 +246,13 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
- ifeq ($(BR2_PACKAGE_PCRE2),y)
- PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += pcre2
++++ b/package/tar/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_TAR
++	bool "host tar"
++	help
++	  A program that saves many files together into a single tape
++	  or disk archive, and can restore individual files from the
++	  archive.
 +
-+ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
-+PHP_CONF_OPTS += --with-pcre-jit
-+else
-+PHP_CONF_OPTS += --without-pcre-jit
-+endif
-+
- else
- # The bundled pcre library is not configurable through ./configure options,
- # and by default is configured to be thread-safe, so it wants pthreads. So
++	  http://www.gnu.org/software/tar/
 -- 
-2.19.1
+2.17.1
