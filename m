@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Feb 2019 22:08:02 +0100
-Subject: [Buildroot] [PATCHv4 7/8] support/download/svn: implement
- source-check
+Date: Fri, 15 Feb 2019 22:08:03 +0100
+Subject: [Buildroot] [PATCHv4 8/8] support/download/{bzr, cvs,
+ git}: highlight unimplemented source-check
 In-Reply-To: <20190215210803.8969-1-patrickdepinguin@gmail.com>
 References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
-Message-ID: <20190215210803.8969-7-patrickdepinguin@gmail.com>
+Message-ID: <20190215210803.8969-8-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +13,63 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Suggested-by: "Yann E. Morin" <yann.morin.1998@free.fr>
+For bzr, cvs and git, there is no method of checking whether the
+revision exists remotely, without actually cloning the repository.
+Therefore, there is no actual implementation for '-C' (checkonly) for these
+download helpers. The script will fall back to the normal download logic,
+which would effectively fail if the revision does not exist.
+
+For completeness, mention this unimplemented feature in the usage text.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/svn | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ support/download/bzr | 2 ++
+ support/download/cvs | 2 ++
+ support/download/git | 2 ++
+ 3 files changed, 6 insertions(+)
 
-v4: new patch
+v4: remove 'svn' which now has an actual implementation
 
-diff --git a/support/download/svn b/support/download/svn
-index 542b25c0a2..93984b6c45 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -7,6 +7,7 @@ set -e
+v3: no changes
+
+diff --git a/support/download/bzr b/support/download/bzr
+index 5289a421cd..278d8778af 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -7,6 +7,8 @@ set -e
  #
  # Options:
- #   -q          Be quiet.
-+#   -C          Only check that the revision exists in the remote repository.
+ #   -q          Be quiet
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+ #   -c CSET     Use changeset (or revision) CSET.
+diff --git a/support/download/cvs b/support/download/cvs
+index 9d0dc3cb3a..d9a586293a 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -7,6 +7,8 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
  #   -o FILE     Generate archive in FILE.
  #   -u URI      Checkout from repository at URI.
  #   -c REV      Use revision REV.
-@@ -16,9 +17,11 @@ set -e
- #   SVN      : the svn command to call
- 
- verbose=
-+checkonly=false
- while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  verbose=-q;;
-+    C)  checkonly=true;;
-     o)  output="${OPTARG}";;
-     u)  uri="${OPTARG}";;
-     c)  rev="${OPTARG}";;
-@@ -36,6 +39,15 @@ _svn() {
-     eval ${SVN} "${@}"
- }
- 
-+if ! _svn ls ${verbose} -r "'${rev}'" "'${uri}'" > /dev/null; then
-+    printf "Revision '%s' does not exist in this repository\n." "${rev}"
-+    exit 1
-+fi
-+
-+if ${checkonly}; then
-+    exit 0
-+fi
-+
- _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
- 
- tar czf "${output}" "${basename}"
+diff --git a/support/download/git b/support/download/git
+index 17ca04eb98..e9c02d6712 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -7,6 +7,8 @@ set -E
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          (unimplemented) Only check that the revision exists in the
++#               remote repository.
+ #   -r          Clone and archive sub-modules.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
 -- 
 2.19.2
