@@ -1,10 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Feb 2019 22:35:49 +0100
-Subject: [Buildroot] [PATCH 2/2] support/testing: introduce specific error
- classes
-In-Reply-To: <20190215213549.8476-1-patrickdepinguin@gmail.com>
-References: <20190215213549.8476-1-patrickdepinguin@gmail.com>
-Message-ID: <20190215213549.8476-2-patrickdepinguin@gmail.com>
+Date: Fri, 15 Feb 2019 22:35:48 +0100
+Subject: [Buildroot] [PATCH 1/2] support/testing: add test to verify 'scp'
+ download via BR2_PRIMARY_SITE
+Message-ID: <20190215213549.8476-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,209 +11,177 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Rather than using 'SystemError' with a text string, introduce specific error
-classes. These can now be caught specifically, without having to check the
-error string, like was done in tests.download.test_scp, or without catching
-too much like in the case of tests.download.test_git.
+Recently it was found that the scp download infrastructure was broken.
+To avoid future failures, create a test that verifies that the scp command
+receives the expected arguments.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/testing/infra/__init__.py           |  3 +++
- support/testing/infra/builder.py            |  4 +--
- support/testing/infra/emulator.py           |  4 +--
- support/testing/infra/exceptions.py         | 27 +++++++++++++++++++++
- support/testing/tests/download/gitremote.py |  2 +-
- support/testing/tests/download/test_git.py  |  6 ++---
- support/testing/tests/download/test_scp.py  |  8 ++----
- support/testing/tests/init/test_none.py     |  4 +--
- support/testing/tests/package/test_rust.py  |  4 +--
- 9 files changed, 44 insertions(+), 18 deletions(-)
- create mode 100644 support/testing/infra/exceptions.py
+ .../tests/download/br2-external/scp/Config.in |  0
+ .../download/br2-external/scp/external.desc   |  1 +
+ .../download/br2-external/scp/external.mk     |  1 +
+ .../br2-external/scp/package/nohash/nohash.mk | 10 +++
+ support/testing/tests/download/scp-wrapper    | 62 +++++++++++++++++++
+ support/testing/tests/download/test_scp.py    | 45 ++++++++++++++
+ 6 files changed, 119 insertions(+)
+ create mode 100644 support/testing/tests/download/br2-external/scp/Config.in
+ create mode 100644 support/testing/tests/download/br2-external/scp/external.desc
+ create mode 100644 support/testing/tests/download/br2-external/scp/external.mk
+ create mode 100644 support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
+ create mode 100755 support/testing/tests/download/scp-wrapper
+ create mode 100644 support/testing/tests/download/test_scp.py
 
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index e229e90852..0e4b871c8b 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -5,6 +5,9 @@ import tempfile
- import subprocess
- from urllib2 import urlopen, HTTPError, URLError
- 
-+# make exceptions available to all tests with just 'import infra'
-+import infra.exceptions
-+
- ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
- 
- 
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index 018747555d..6cf6551bc5 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -45,7 +45,7 @@ class Builder(object):
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-                               env=env)
-         if ret != 0:
--            raise SystemError("Cannot olddefconfig")
-+            raise infra.exceptions.ConfigurationError("Cannot olddefconfig")
- 
-     def build(self, make_extra_opts=[], make_extra_env={}):
-         """Perform the build.
-@@ -72,7 +72,7 @@ class Builder(object):
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-                               env=env)
-         if ret != 0:
--            raise SystemError("Build failed")
-+            raise infra.exceptions.BuildError
- 
-         open(self.stamp_path(), 'a').close()
- 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 802e89d4b4..5e5fc6c47b 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -84,7 +84,7 @@ class Emulator(object):
-                                  timeout=60 * self.timeout_multiplier)
-         if index != 0:
-             self.logfile.write("==> System does not boot")
--            raise SystemError("System does not boot")
-+            raise infra.exceptions.BootError
- 
-         self.qemu.sendline("root")
-         if password:
-@@ -92,7 +92,7 @@ class Emulator(object):
-             self.qemu.sendline(password)
-         index = self.qemu.expect(["# ", pexpect.TIMEOUT])
-         if index != 0:
--            raise SystemError("Cannot login")
-+            raise infra.exceptions.LoginError
-         self.run("dmesg -n 1")
- 
-     # Run the given 'cmd' with a 'timeout' on the target
-diff --git a/support/testing/infra/exceptions.py b/support/testing/infra/exceptions.py
+diff --git a/support/testing/tests/download/br2-external/scp/Config.in b/support/testing/tests/download/br2-external/scp/Config.in
 new file mode 100644
-index 0000000000..2d32d819e3
+index 0000000000..e69de29bb2
+diff --git a/support/testing/tests/download/br2-external/scp/external.desc b/support/testing/tests/download/br2-external/scp/external.desc
+new file mode 100644
+index 0000000000..0ca0389a32
 --- /dev/null
-+++ b/support/testing/infra/exceptions.py
-@@ -0,0 +1,27 @@
-+"""Custom exception classes for use by the test suite."""
++++ b/support/testing/tests/download/br2-external/scp/external.desc
+@@ -0,0 +1 @@
++name: SCP
+diff --git a/support/testing/tests/download/br2-external/scp/external.mk b/support/testing/tests/download/br2-external/scp/external.mk
+new file mode 100644
+index 0000000000..2636c7da24
+--- /dev/null
++++ b/support/testing/tests/download/br2-external/scp/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_SCP_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk b/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
+new file mode 100644
+index 0000000000..cfd49370cd
+--- /dev/null
++++ b/support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
+@@ -0,0 +1,10 @@
++################################################################################
++#
++# nohash
++#
++################################################################################
 +
-+class BootError(Exception):
-+    """System does not boot correctly."""
-+    pass
++NOHASH_VERSION = 123
++NOHASH_SITE = http://realsite.example.org/foo
 +
++$(eval $(generic-package))
+diff --git a/support/testing/tests/download/scp-wrapper b/support/testing/tests/download/scp-wrapper
+new file mode 100755
+index 0000000000..016a15a5bc
+--- /dev/null
++++ b/support/testing/tests/download/scp-wrapper
+@@ -0,0 +1,62 @@
++#!/usr/bin/env python
++import argparse
++import os
++import sys
 +
-+class LoginError(Exception):
-+    """Cannot login to system."""
-+    pass
++# expected command-line is:
++#   scp [options] <host:path> <target>
++#
++# environment variables set up by test suite:
++# - SCP_WRAPPER_EXPECTED_HOST
++# - SCP_WRAPPER_EXPECTED_BASEPATH
++# - SCP_WRAPPER_EXPECTED_FILEPATH
 +
++def main():
++    parser = argparse.ArgumentParser(description='Scp wrapper for Buildroot tests')
++    parser.add_argument('source', help='source path')
++    parser.add_argument('target', help='target path')
 +
-+class ConfigurationError(Exception):
-+    """Cannot set Buildroot configuration."""
-+    pass
++    args = parser.parse_args()
 +
++    error = False
 +
-+class BuildError(Exception):
-+    """Build failed."""
-+    pass
++    expected_source_host_basepath = '%s:%s' % (
++            os.environ['SCP_WRAPPER_EXPECTED_HOST'],
++            os.environ['SCP_WRAPPER_EXPECTED_BASEPATH'])
++    if not args.source.startswith(expected_source_host_basepath):
++        print("")
++        print("ERROR: unexpected source host and/or base path.")
++        print("Got     : '%s'" % args.source)
++        print("Expected: '%s...'" % expected_source_host_basepath)
++        print("")
++        error = True
 +
++    expected_source_filepath = '%s' % (os.environ['SCP_WRAPPER_EXPECTED_FILEPATH'])
++    if not args.source.endswith(expected_source_filepath):
++        print("")
++        print("ERROR: unexpected source file path.")
++        print("Got     : '%s'" % args.source)
++        print("Expected: '...%s'" % expected_source_filepath)
++        print("")
++        error = True
 +
-+class TestError(Exception):
-+    """Something went wrong while executing a test.
++    # Really make sure that the source is a tarball.
++    # The test is using .tar.gz only so we don't check other extensions.
++    if not args.source.endswith('.tar.gz'):
++        print("")
++        print("ERROR: the source path does not seem like a tarball.")
++        print("Got     : '%s'" % args.source)
++        print("Expected: '....tar.gz'")
++        print("")
++        error = True
 +
-+    The exact cause of this problem should be specified by the caller."""
-+    pass
-diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
-index 3b35456dd1..874b1ff791 100644
---- a/support/testing/tests/download/gitremote.py
-+++ b/support/testing/tests/download/gitremote.py
-@@ -38,7 +38,7 @@ class GitRemote(object):
-             if ret == 0:
-                 self.port = port
-                 return
--        raise SystemError("Could not find a free port to run git remote")
-+        raise infra.exceptions.TestError("Could not find a free port to run git remote")
- 
-     def stop(self):
-         if self.daemon is None:
-diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
-index 40cf1afe05..1ce676cdd2 100644
---- a/support/testing/tests/download/test_git.py
-+++ b/support/testing/tests/download/test_git.py
-@@ -52,7 +52,7 @@ class TestGitHash(GitTestBase):
-     br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
- 
-     def test_run(self):
--        with self.assertRaises(SystemError):
-+        with self.assertRaises(infra.exceptions.BuildError):
-             self.check_hash("bad")
-         self.check_hash("good")
-         self.check_hash("nohash")
-@@ -62,9 +62,9 @@ class TestGitRefs(GitTestBase):
-     br2_external = [infra.filepath("tests/download/br2-external/git-refs")]
- 
-     def test_run(self):
--        with self.assertRaises(SystemError):
-+        with self.assertRaises(infra.exceptions.BuildError):
-             self.check_download("git-wrong-content")
--        with self.assertRaises(SystemError):
-+        with self.assertRaises(infra.exceptions.BuildError):
-             self.check_download("git-wrong-sha1")
-         self.check_download("git-partial-sha1-branch-head")
-         self.check_download("git-partial-sha1-reachable-by-branch")
++    if not error:
++        # create a dummy file to let the build succeed
++        open(args.target, 'a').close()
++
++    return error
++
++if __name__ == "__main__":
++    error = main()
++    if error:
++        sys.exit(1)
 diff --git a/support/testing/tests/download/test_scp.py b/support/testing/tests/download/test_scp.py
-index 0cc9ecdd50..908b637af9 100644
---- a/support/testing/tests/download/test_scp.py
+new file mode 100644
+index 0000000000..0cc9ecdd50
+--- /dev/null
 +++ b/support/testing/tests/download/test_scp.py
-@@ -37,9 +37,5 @@ class TestScpPrimarySite(infra.basetest.BRConfigTest):
-             self.b.build(["{}-dirclean".format(package),
-                           "{}-source".format(package)],
-                          env)
--        except SystemError as e: # FIXME: introduce specific Exception classes
--            if str(e) == 'Build failed':
--                self.assertFalse('Download error, search for ERROR in the log')
--            else:
--                # an unexpected error
--                raise
-+        except infra.exceptions.BuildError:
-+            self.assertFalse('Download error, search for ERROR in the log')
-diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
-index 5b9b4e43f1..5c9e8ded03 100644
---- a/support/testing/tests/init/test_none.py
-+++ b/support/testing/tests/init/test_none.py
-@@ -17,11 +17,11 @@ class TestInitSystemNone(InitSystemBase):
-         index = self.emulator.qemu.expect(["/bin/sh: can't access tty; job control turned off", pexpect.TIMEOUT], timeout=60)
-         if index != 0:
-             self.emulator.logfile.write("==> System does not boot")
--            raise SystemError("System does not boot")
-+            raise infra.exceptions.BootError
-         index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT], timeout=60)
-         if index != 0:
-             self.emulator.logfile.write("==> System does not boot")
--            raise SystemError("System does not boot")
-+            raise infra.exceptions.BootError
- 
-         out, exit_code = self.emulator.run("sh -c 'echo $PPID'")
-         self.assertEqual(exit_code, 0)
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 9854c3692e..0ab92fddfb 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -37,7 +37,7 @@ class TestRustBase(infra.basetest.BRTest):
-                               stderr=self.b.logfile,
-                               env=env)
-         if ret != 0:
--            raise SystemError("Cargo init failed")
-+            raise infra.exceptions.TestError("Cargo init failed")
- 
-         cmd = [
-             cargo, 'build', '-vv', '--target', self.target,
-@@ -48,7 +48,7 @@ class TestRustBase(infra.basetest.BRTest):
-                               stderr=self.b.logfile,
-                               env=env)
-         if ret != 0:
--            raise SystemError("Cargo build failed")
-+            raise infra.exceptions.TestError("Cargo build failed")
- 
-         shutil.copy(prog, os.path.join(self.builddir, 'target', 'usr', 'bin'))
-         self.b.build()
+@@ -0,0 +1,45 @@
++import infra
++import os
++
++class TestScpPrimarySite(infra.basetest.BRConfigTest):
++    host = 'user at server.example.org'
++    basepath = 'some/directory'
++    scp_wrapper = infra.filepath("tests/download/scp-wrapper")
++    br2_external = [infra.filepath("tests/download/br2-external/scp")]
++
++    def __init__(self, names):
++        self.config = \
++        """
++        BR2_PRIMARY_SITE="scp://%s:%s"
++        BR2_PRIMARY_SITE_ONLY=y
++        BR2_BACKUP_SITE=""
++        BR2_SCP="%s"
++        """ % (self.host, self.basepath, self.scp_wrapper)
++
++        super(TestScpPrimarySite, self).__init__(names)
++
++    def tearDown(self):
++        self.show_msg("Cleaning up")
++        if self.b and not self.keepbuilds:
++            self.b.delete()
++
++    def test_download(self):
++        package = 'nohash'
++        # store downloaded tarball inside the output dir so the test infra
++        # cleans it up at the end
++        env = {
++            "BR2_DL_DIR": os.path.join(self.builddir, "dl"),
++            "SCP_WRAPPER_EXPECTED_HOST": self.host,
++            "SCP_WRAPPER_EXPECTED_BASEPATH": self.basepath,
++            "SCP_WRAPPER_EXPECTED_FILEPATH": '%s-123.tar.gz' % package
++        }
++        try:
++            self.b.build(["{}-dirclean".format(package),
++                          "{}-source".format(package)],
++                         env)
++        except SystemError as e: # FIXME: introduce specific Exception classes
++            if str(e) == 'Build failed':
++                self.assertFalse('Download error, search for ERROR in the log')
++            else:
++                # an unexpected error
++                raise
 -- 
 2.19.2
