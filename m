@@ -1,57 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:49:21 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5base: handle
- sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
-Message-ID: <20190215215703.ECB4E885E1@busybox.osuosl.org>
+Date: Fri, 15 Feb 2019 22:58:20 +0100
+Subject: [Buildroot] [git commit] package/mender: fix missing /var/lib
+Message-ID: <20190215215703.F3D6B885E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f9009e5bd14fac29038bf6728c1e019d2b2ffc7
+commit: https://git.buildroot.net/buildroot/commit/?id=dd97b055b11b8708438974555d1746a18924ceba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Qt configure auto detection (and announced runtime detection
-feature) failes (see e.g. [1]), so override the configuration
-with the buildroot determined settings.
+Mender needs /var/lib directory to be available: on some configurations
+/var/lib is not available and thus the mender package installation fails.
+This patch does a mkdir to ensure the /var/lib directory is always
+available.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
+Fixes:
 
-Reported-by: David Picard <dplamp@gmx.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+  http://autobuild.buildroot.net/results/d2237083a13ab7688dd2b6dc8dbcd4226ed5651a/
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/mender/mender.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index d10f233b46..11c6684812 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -33,6 +33,25 @@ else
- QT5BASE_DEPENDENCIES += pcre2
- endif
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index cd18c0055a..07f6e5e5f9 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -57,6 +57,7 @@ define MENDER_INSTALL_CONFIG_FILES
+ 	$(INSTALL) -D -m 0755 package/mender/device_type \
+ 			$(TARGET_DIR)/etc/mender/device_type
  
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse2
-+else ifeq ($(BR2_X86_CPU_HAS_SSE3),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse3
-+else ifeq ($(BR2_X86_CPU_HAS_SSSE3),)
-+QT5BASE_CONFIGURE_OPTS += -no-ssse3
-+else ifeq ($(BR2_X86_CPU_HAS_SSE4),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse4.1
-+else ifeq ($(BR2_X86_CPU_HAS_SSE42),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse4.2
-+else ifeq ($(BR2_X86_CPU_HAS_AVX),)
-+QT5BASE_CONFIGURE_OPTS += -no-avx
-+else ifeq ($(BR2_X86_CPU_HAS_AVX2),)
-+QT5BASE_CONFIGURE_OPTS += -no-avx2
-+else
-+# no buildroot BR2_X86_CPU_HAS_AVX512 option yet for qt configure
-+# option '-no-avx512' (available for latest only)
-+endif
-+
- QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
++	mkdir -p $(TARGET_DIR)/var/lib
+ 	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
+ endef
  
- ifeq ($(BR2_PACKAGE_LIBDRM),y)
