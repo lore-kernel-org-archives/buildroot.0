@@ -1,73 +1,28 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 15 Feb 2019 21:58:59 +0100
-Subject: [Buildroot] [PATCH v1] package/qwt: needs qt5base gui support
-In-Reply-To: <20190215214343.68c0b057@windsurf.home>
-References: <20190215202504.24205-1-ps.report@gmx.net>
- <20190215214343.68c0b057@windsurf.home>
-Message-ID: <20190215215859.3ef24917@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Feb 2019 21:49:15 +0100
+Subject: [Buildroot] [git commit] package/madplay: add hash for license files
+Message-ID: <20190215205748.275AE8390E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=c4211a7d64a7756bee15b88e8211511d5bbd4c27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Feb 2019 21:43:43 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/madplay/madplay.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Hello Peter,
-> 
-> On Fri, 15 Feb 2019 21:25:04 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Fixes the following qt5base configure error ([1]):
-> > 
-> >   ERROR: Feature 'widgets' was enabled, but the pre-condition 'features.gui' failed.
-> > 
-> > [1] http://autobuild.buildroot.net/results/c771c2d5aac3e21f908e5a118f3755dbc9301a47
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  package/qwt/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-> > index f4132c8638..2e9cec19d7 100644
-> > --- a/package/qwt/Config.in
-> > +++ b/package/qwt/Config.in
-> > @@ -2,6 +2,7 @@ config BR2_PACKAGE_QWT
-> >  	bool "qwt"
-> >  	depends on BR2_PACKAGE_QT5
-> >  	select BR2_PACKAGE_QT5BASE
-> > +	select BR2_PACKAGE_QT5BASE_GUI  
-> 
-> Hm, the build error happens in qt5base, and to me reads as "if you have
-> widgets support enabled in qt5base, you must have gui support enabled
-> in qt5base". If that is what is happening, then what you want to do is
-> have BR2_PACKAGE_QT5BASE_WIDGETS sleect BR2_PACKAGE_QT5BASE_GUI, and
-> not touch qwt.
-
-Because until  now qwt is the only package selecting widgets without gui
-(most packages directly, pulseview via qt5svg and qt5cinex via qt5base
-eglfs)...and from qt5base/Config.in:
-
-  if BR2_PACKAGE_QT5BASE_GUI
-
-  config BR2_PACKAGE_QT5BASE_WIDGETS
-          bool "widgets module"
-  [...]
-  endif
-
-> 
-> Indeed, to me, it seems like any other package that uses qt5 widgets
-> without selecting qt5 gui would fall into the same build failure.
-> 
-> Also, any idea why this is popping up only now ?
-
-No, did not search the autobuild database, but maybe since 'package/qwt: remove qt4 support'?
-
-Regards,
-Peter
-
-> 
-> Thomas
+diff --git a/package/madplay/madplay.hash b/package/madplay/madplay.hash
+index 99487b5ecd..227702976b 100644
+--- a/package/madplay/madplay.hash
++++ b/package/madplay/madplay.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  5a79c7516ff7560dffc6a14399a389432bc619c905b13d3b73da22fa65acede0  madplay-0.15.2b.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  915bfd70548f31d11f9b4ffb21f343d1196af96c79d6aaac5663ea46c39dd3a3  COPYRIGHT
