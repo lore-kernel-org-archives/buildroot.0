@@ -1,74 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Feb 2019 22:40:22 +0100
-Subject: [Buildroot] [PATCH v1] package/qwt: needs qt5base gui support
-In-Reply-To: <20190215215859.3ef24917@gmx.net>
-References: <20190215202504.24205-1-ps.report@gmx.net>
- <20190215214343.68c0b057@windsurf.home>
- <20190215215859.3ef24917@gmx.net>
-Message-ID: <20190215224022.7a1ccf4c@windsurf.home>
+Date: Fri, 15 Feb 2019 22:41:01 +0100
+Subject: [Buildroot] [git commit] package/qwt: needs qt5base gui support
+Message-ID: <20190215214105.01A9688DA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c80a4d3501dee67c59c608b57f81b7453e6378b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Feb 2019 21:58:59 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+In commit 3e99c8418af904b14b01455d68c84d7b5afd261f ("package/qwt:
+remove qt4 support"), the following line was incorrectly dropped:
 
-> Because until  now qwt is the only package selecting widgets without gui
-> (most packages directly, pulseview via qt5svg and qt5cinex via qt5base
-> eglfs)...and from qt5base/Config.in:
-> 
->   if BR2_PACKAGE_QT5BASE_GUI
-> 
->   config BR2_PACKAGE_QT5BASE_WIDGETS
->           bool "widgets module"
->   [...]
->   endif
+  select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
 
-Ah, so there is already a "depends on" between widgets and gui in
-qt5base, which is good.
+Due to this, qt5base can now be configured with widgets enabled but
+gui disabled, causing the following build issue:
 
-So it's indeed qwt that is bogus: it should not select QT5BASE_WIDGETS
-without selecting QT5BASE_GUI (or depending on it). So your patch is
-good, I'll apply.
+  ERROR: Feature 'widgets' was enabled, but the pre-condition 'features.gui' failed.
 
-> > Indeed, to me, it seems like any other package that uses qt5 widgets
-> > without selecting qt5 gui would fall into the same build failure.
-> > 
-> > Also, any idea why this is popping up only now ?  
-> 
-> No, did not search the autobuild database, but maybe since 'package/qwt: remove qt4 support'?
+Re-introduce the proper select, but slightly simplified since only Qt5
+is supported now.
 
-It's indeed a bug from that patch! Look carefully at the diff of
-3e99c8418af904b14b01455d68c84d7b5afd261f:
+Fixes:
 
- config BR2_PACKAGE_QWT
-        bool "qwt"
--       depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
--       select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
--       select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
--       select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5 # printsupport
--       select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
-+       depends on BR2_PACKAGE_QT5
-+       select BR2_PACKAGE_QT5BASE
-+       select BR2_PACKAGE_QT5BASE_WIDGETS # printsupport
-+       select BR2_PACKAGE_QT5BASE_CONCURRENT
+  http://autobuild.buildroot.net/results/c771c2d5aac3e21f908e5a118f3755dbc9301a47
 
-See how the line:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qwt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
--       select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-
-gets removed ?
-
-So I'll apply your patch after adjusting the commit log. Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index f4132c8638..2e9cec19d7 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_QWT
+ 	bool "qwt"
+ 	depends on BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS # printsupport
+ 	select BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	help
