@@ -1,73 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Feb 2019 23:29:04 +0100
-Subject: [Buildroot] [PATCHv4 5/8] Config.in: reintroduce BR2_SSH
-In-Reply-To: <CAAXf6LXAyeN6u=TqHrUjVgYWEhFHohvx_zb-CUiq27-mzprDwg@mail.gmail.com>
-References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
- <20190215210803.8969-5-patrickdepinguin@gmail.com>
- <20190216123420.GS3079@scaer>
- <CAAXf6LXAyeN6u=TqHrUjVgYWEhFHohvx_zb-CUiq27-mzprDwg@mail.gmail.com>
-Message-ID: <20190216222904.GW3079@scaer>
+From: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Date: Sun, 17 Feb 2019 00:14:57 +0100
+Subject: [Buildroot] [PATCH] linux: don't check hashes for user-supplied
+ patches
+In-Reply-To: <20190216183426.17548-1-yann.morin.1998@free.fr>
+References: <20190216183426.17548-1-yann.morin.1998@free.fr>
+Message-ID: <CAKDzfnqsQxZKDxgR=A-Vb3MgUheqwLpUV+qT8rtYEY9k3zyDWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sat, Feb 16, 2019 at 7:34 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> We have virtually no way to know the hashes for user-supplied patches,
+> so we should just ignore them.
+>
+> Reported-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+>
+> ---
+> Peter: this is a candidate for backporting to 2018.11.x and 2018.02.x
+> ---
+>  linux/linux.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 8c21bad067..2b5d096e14 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -55,6 +55,9 @@ endif
+>
+>  LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+>
+> +# We have no way to know the hashes for user-supplied patches.
+> +BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
+> +
+>  # We rely on the generic package infrastructure to download and apply
+>  # remote patches (downloaded from ftp, http or https). For local
+>  # patches, we can't rely on that infrastructure, because there might
+> --
+> 2.14.1
+>
 
-On 2019-02-16 22:23 +0100, Thomas De Schampheleire spake thusly:
-> El s?b., 16 feb. 2019 a las 13:34, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > On 2019-02-15 22:08 +0100, Thomas De Schampheleire spake thusly:
-> > > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > >
-> > > The BR2_SSH command was removed in commit
-> > > db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
-> > > command") but will be needed again to support 'source-check' for the scp
-> > > download backend.
-> >
-> > Rather than do a new commit, why did you not use "git revert"?
-> 
-> How does this make a difference when sending patches via email?
+Did a test build with this patch applied and the kernel patches are
+now correctly applied without failing the hash check :)
+Thanks for the quick fix!
 
-git-revert prepares the git commit with appropriate information about
-the revert:
-
-    Revert "core/download: drop the SSH command"
-
-    This reverts commit db9473bf6cd7bd12aa1f9faad0a917c973c33827.
-
-And then you can amend the commit log to explain why it is reverted.
-
-> The background is that originally this change was put together with
-> the scp source-check implementation, which was based on the
-> implementation I had in my work repository, where BR2_SSH was not yet
-> removed. Only later I split this patch apart and didn't think of using
-> 'git revert'.
-
-OK, that explains it.
-
-> > > +export SSH := $(call qstrip,$(BR2_SSH))
-> > To be noted: the commit you are (manually) reverting did not export SSH,
-> > but now you do need to do so, because it will now be used from one of a
-> > download backends, when the original use of SSH was done in Makefile
-> > code.
-> Yes indeed, that is true.
-
-And hence, as you are not reinstating the code exactly as it was prior
-to the "reverted" commit, that should have been part of the commit log.
-
-Anyway:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Simon
