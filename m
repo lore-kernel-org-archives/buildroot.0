@@ -1,59 +1,124 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 16 Feb 2019 15:49:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-02-13
-In-Reply-To: <20190215144942.GB27633@momiji>
-References: <20190214070044.6825F2152B@silver.osuosl.org>
- <20190214100244.GB15212@momiji> <20190214093947.3949384d@windsurf>
- <20190215021300.GB25351@momiji> <87a7ixgvkd.fsf@dell.be.48ers.dk>
- <20190215144942.GB27633@momiji>
-Message-ID: <20190216154934.GC9363@momiji>
+From: Bastian Breit <bastian.breit.buildroot@gmail.com>
+Date: Sat, 16 Feb 2019 13:53:55 +0100
+Subject: [Buildroot] [PATCH v2] package/xmlsec1: new package
+In-Reply-To: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
+References: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
+Message-ID: <CACHoAdqZw6PWGdq34XmbUcK-hkCJspPrNio7hY+Q4NPpBU5fcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Fri, 15 Feb 2019 14:49:42 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> On Fri, 15 Feb 2019 12:06:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
-> > >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> > 
-> > Hi,
-> > 
-> >  >> Yes, if the issue no longer happens with gcc >= 7.x, it seems like a
-> >  >> reasonable option.
-> > 
-> >  > At this point I don't know what to do; I don't see any proposed patch to
-> >  > apply to GCC, and I never touched Microblaze before.
-> > 
-> >  > I guess disabling the Brotli package for Microblaze wouldn't be an option...
-> >  > or would it?
-> > 
-> > If it doesn't build, then that is IMHO the only sensible thing to
-> > do. Given that brotli has very few reverse dependencies (and there is
-> > probably no realistic usecase for webkit on microblaze) it is OK.
-> > 
-> > Will you send a patch?
-> 
-> Will do, thanks for the feedback :)
+it would be nice if you could review the patch.
+I have some more patches which I wanted to contribute (e.g. chrome,
+libwebsocket, netcat6, etc), which I will do, if I know everything is
+okay with the libxmlsec.
 
-Sent: https://patchwork.ozlabs.org/project/buildroot/list/?series=92432
 
-This would be worth merging to ?next? as well, and in there it would be
-good to also disable the WOFF2 support for th wpewebkit package. Is it
-better to merge to apply this same patch set to ?next? and then I submit
-a follow up for that, or is it better that I prepare a version of this
-patch set with one extra commit for the wpewebkit package?
+sincerely
 
-Cheers,
+Bastian
 
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190216/68923be2/attachment.asc>
+Am So., 10. Feb. 2019 um 16:12 Uhr schrieb Bastian Breit
+<bastian.breit.buildroot@gmail.com>:
+>
+> This fixes spaces and tab formatting in the package folder.
+> Therefore an enty in DEVELOPERS is created.
+> Change from md5 to sha256 for checksums.
+> Remove unneeded libxslt dependency.
+> ---
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/libxmlsec1/Config.in       | 11 +++++++++++
+>  package/libxmlsec1/libxmlsec1.hash |  4 ++++
+>  package/libxmlsec1/libxmlsec1.mk   | 20 ++++++++++++++++++++
+>  5 files changed, 39 insertions(+)
+>  create mode 100644 package/libxmlsec1/Config.in
+>  create mode 100644 package/libxmlsec1/libxmlsec1.hash
+>  create mode 100644 package/libxmlsec1/libxmlsec1.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index f2e69cc041..2bcd561805 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -250,6 +250,9 @@ F:  package/tcpdump/
+>  F:     package/ti-uim/
+>  F:     package/uhubctl/
+>
+> +N: Bastian Breit <bastian.breit.buildroot@gmail.com>
+> +F: package/libxmlsec1/
+> +
+>  N:     Ben Boeckel <mathstuf@gmail.com>
+>  F:     package/taskd/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 29862c478c..18acfd9db8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1428,6 +1428,7 @@ menu "JSON/XML"
+>         source "package/libxml2/Config.in"
+>         source "package/libxmlpp/Config.in"
+>         source "package/libxmlrpc/Config.in"
+> +       source "package/libxmlsec1/Config.in"
+>         source "package/libxslt/Config.in"
+>         source "package/libyaml/Config.in"
+>         source "package/mxml/Config.in"
+> diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
+> new file mode 100644
+> index 0000000000..ce3384e7b7
+> --- /dev/null
+> +++ b/package/libxmlsec1/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBXMLSEC1
+> +       bool "libxmlsec1"
+> +       select BR2_PACKAGE_LIBXML2
+> +       select BR2_PACKAGE_OPENSSL
+> +       help
+> +         XMLSec library provides C based implementation for major XML
+> +         Security standards:
+> +         - XML Signature Syntax and Processing
+> +         - XML Encryption Syntax and Processing
+> +
+> +         https://www.aleksey.com/xmlsec/
+> diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
+> new file mode 100644
+> index 0000000000..9ff3b35454
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated
+> +sha256 97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6  xmlsec1-1.2.27.tar.gz
+> +# Locally calculated
+> +sha256 526285395dd39627199ba20fd7f70a2608c8c8c70e4fea04aceddd71baa53d07  Copyright
+> diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
+> new file mode 100644
+> index 0000000000..e6a0a375e9
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# libxmlsec1
+> +#
+> +################################################################################
+> +
+> +LIBXMLSEC1_VERSION = 1.2.27
+> +LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
+> +LIBXMLSEC1_SITE = http://www.aleksey.com/xmlsec/download
+> +LIBXMLSEC1_LICENSE = MIT
+> +LIBXMLSEC1_LICENSE_FILES = Copyright
+> +
+> +LIBXMLSEC1_CONF_OPTS += --enable-crypto-dl=no
+> +LIBXMLSEC1_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+> +LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
+> +LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
+> +LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
+> +LIBXMLSEC1_DEPENDENCIES = libxml2 openssl
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.17.1
+>
