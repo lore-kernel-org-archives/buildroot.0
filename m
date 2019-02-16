@@ -1,74 +1,59 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 16 Feb 2019 15:45:30 +0200
-Subject: [Buildroot] [PATCH 3/3] package/webkitgtk: propagate microblaze
- dependency
-In-Reply-To: <20190216134530.14717-1-aperez@igalia.com>
-References: <20190216134530.14717-1-aperez@igalia.com>
-Message-ID: <20190216134530.14717-4-aperez@igalia.com>
+Date: Sat, 16 Feb 2019 15:49:34 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-13
+In-Reply-To: <20190215144942.GB27633@momiji>
+References: <20190214070044.6825F2152B@silver.osuosl.org>
+ <20190214100244.GB15212@momiji> <20190214093947.3949384d@windsurf>
+ <20190215021300.GB25351@momiji> <87a7ixgvkd.fsf@dell.be.48ers.dk>
+ <20190215144942.GB27633@momiji>
+Message-ID: <20190216154934.GC9363@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The woff2 package is disabled for Microblaze, therefore disable
-the support for WOFF2 web fonts in webkitgtk and make it optional.
-Note that the support for other web fonts formats (OTF, TTF, WOFF1)
-will still work normally and only WOFF2 gets disabled.
+Hello,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/Config.in    |  2 +-
- package/webkitgtk/webkitgtk.mk | 12 +++++++++---
- 2 files changed, 10 insertions(+), 4 deletions(-)
+On Fri, 15 Feb 2019 14:49:42 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> On Fri, 15 Feb 2019 12:06:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+> > >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+> > 
+> > Hi,
+> > 
+> >  >> Yes, if the issue no longer happens with gcc >= 7.x, it seems like a
+> >  >> reasonable option.
+> > 
+> >  > At this point I don't know what to do; I don't see any proposed patch to
+> >  > apply to GCC, and I never touched Microblaze before.
+> > 
+> >  > I guess disabling the Brotli package for Microblaze wouldn't be an option...
+> >  > or would it?
+> > 
+> > If it doesn't build, then that is IMHO the only sensible thing to
+> > do. Given that brotli has very few reverse dependencies (and there is
+> > probably no realistic usecase for webkit on microblaze) it is OK.
+> > 
+> > Will you send a patch?
+> 
+> Will do, thanks for the feedback :)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 8714677b6a..2f466a37d4 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -59,7 +59,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
--	select BR2_PACKAGE_WOFF2
-+	select BR2_PACKAGE_WOFF2 if !BR2_microblaze # woff2 -> brotli
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c17bbc8028..54159d7f47 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
--	libtasn1 libxml2 libxslt sqlite webp woff2
-+	libtasn1 libxml2 libxslt sqlite webp
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
-@@ -24,8 +24,7 @@ WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_SPELLCHECK=ON \
- 	-DPORT=GTK \
- 	-DUSE_LIBNOTIFY=OFF \
--	-DUSE_LIBHYPHEN=OFF \
--	-DUSE_WOFF2=ON
-+	-DUSE_LIBHYPHEN=OFF
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
-@@ -98,4 +97,11 @@ else
- WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_WOFF2),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=ON
-+WEBKITGTK_DEPENDENCIES += woff2
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=OFF
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.20.1
+Sent: https://patchwork.ozlabs.org/project/buildroot/list/?series=92432
+
+This would be worth merging to ?next? as well, and in there it would be
+good to also disable the WOFF2 support for th wpewebkit package. Is it
+better to merge to apply this same patch set to ?next? and then I submit
+a follow up for that, or is it better that I prepare a version of this
+patch set with one extra commit for the wpewebkit package?
+
+Cheers,
+
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190216/68923be2/attachment.asc>
