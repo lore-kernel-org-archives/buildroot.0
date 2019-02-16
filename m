@@ -1,43 +1,74 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 16 Feb 2019 15:45:28 +0200
-Subject: [Buildroot] [PATCH 1/3] package/brotli: disable for microblaze
+Date: Sat, 16 Feb 2019 15:45:30 +0200
+Subject: [Buildroot] [PATCH 3/3] package/webkitgtk: propagate microblaze
+ dependency
 In-Reply-To: <20190216134530.14717-1-aperez@igalia.com>
 References: <20190216134530.14717-1-aperez@igalia.com>
-Message-ID: <20190216134530.14717-2-aperez@igalia.com>
+Message-ID: <20190216134530.14717-4-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The brotli package cannot be currently built due to a compiler bug. Not
-many packages use it so the impact of disabling it for Microblaze will
-be small: only libcurl and woff2 use it; and woff2 is used by webkitgtk
-which itself can be built without the woff2 support.
-
-This fixes the following autobuilder failure:
-
-  http://autobuild.buildroot.net/results/1b6e6c5fddf3538ed7f150294c3d8fa94b3e4c59/
+The woff2 package is disabled for Microblaze, therefore disable
+the support for WOFF2 web fonts in webkitgtk and make it optional.
+Note that the support for other web fonts formats (OTF, TTF, WOFF1)
+will still work normally and only WOFF2 gets disabled.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/brotli/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/webkitgtk/Config.in    |  2 +-
+ package/webkitgtk/webkitgtk.mk | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/brotli/Config.in b/package/brotli/Config.in
-index e40f5b6b9f..f2a4bdd8e9 100644
---- a/package/brotli/Config.in
-+++ b/package/brotli/Config.in
-@@ -1,5 +1,10 @@
- config BR2_PACKAGE_BROTLI
- 	bool "brotli"
-+	# Building on Microblaze is currently broken due to the following
-+	# GCC bugs, which affect all versions currently available:
-+	#   - https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78380
-+	#   - https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69401
-+	depends on !BR2_microblaze
- 	help
- 	  Generic-purpose lossless compression library. The algorithm
- 	  compresses data using a combination of a modern variant of
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 8714677b6a..2f466a37d4 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -59,7 +59,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_WEBP_DEMUX
+-	select BR2_PACKAGE_WOFF2
++	select BR2_PACKAGE_WOFF2 if !BR2_microblaze # woff2 -> brotli
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index c17bbc8028..54159d7f47 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+-	libtasn1 libxml2 libxslt sqlite webp woff2
++	libtasn1 libxml2 libxslt sqlite webp
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+@@ -24,8 +24,7 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_SPELLCHECK=ON \
+ 	-DPORT=GTK \
+ 	-DUSE_LIBNOTIFY=OFF \
+-	-DUSE_LIBHYPHEN=OFF \
+-	-DUSE_WOFF2=ON
++	-DUSE_LIBHYPHEN=OFF
+ 
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
+ WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
+@@ -98,4 +97,11 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WOFF2),y)
++WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=ON
++WEBKITGTK_DEPENDENCIES += woff2
++else
++WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.20.1
