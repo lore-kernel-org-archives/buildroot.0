@@ -1,124 +1,67 @@
-From: Bastian Breit <bastian.breit.buildroot@gmail.com>
-Date: Sat, 16 Feb 2019 13:53:55 +0100
-Subject: [Buildroot] [PATCH v2] package/xmlsec1: new package
-In-Reply-To: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
-References: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
-Message-ID: <CACHoAdqZw6PWGdq34XmbUcK-hkCJspPrNio7hY+Q4NPpBU5fcQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 16 Feb 2019 19:20:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: add resolutionkms
+ option
+Message-ID: <20190216182048.12331-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+resolutionkms has been added in version 10.2.5 and
+https://github.com/vmware/open-vm-tools/commit/dc95efcb7d4bb7d865b7d37f9aaafe6fb8009e59
 
-it would be nice if you could review the patch.
-I have some more patches which I wanted to contribute (e.g. chrome,
-libwebsocket, netcat6, etc), which I will do, if I know everything is
-okay with the libxmlsec.
+It depends on udev and libdrm's vmwgfx option
 
+Fixes:
+ - http://autobuild.buildroot.org/results/92f7c88917066b1d3e15ee0d1baafe01c0cb29c8
 
-sincerely
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/openvmtools/Config.in      | 11 +++++++++++
+ package/openvmtools/openvmtools.mk |  7 +++++++
+ 2 files changed, 18 insertions(+)
 
-Bastian
-
-Am So., 10. Feb. 2019 um 16:12 Uhr schrieb Bastian Breit
-<bastian.breit.buildroot@gmail.com>:
->
-> This fixes spaces and tab formatting in the package folder.
-> Therefore an enty in DEVELOPERS is created.
-> Change from md5 to sha256 for checksums.
-> Remove unneeded libxslt dependency.
-> ---
->  DEVELOPERS                         |  3 +++
->  package/Config.in                  |  1 +
->  package/libxmlsec1/Config.in       | 11 +++++++++++
->  package/libxmlsec1/libxmlsec1.hash |  4 ++++
->  package/libxmlsec1/libxmlsec1.mk   | 20 ++++++++++++++++++++
->  5 files changed, 39 insertions(+)
->  create mode 100644 package/libxmlsec1/Config.in
->  create mode 100644 package/libxmlsec1/libxmlsec1.hash
->  create mode 100644 package/libxmlsec1/libxmlsec1.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f2e69cc041..2bcd561805 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -250,6 +250,9 @@ F:  package/tcpdump/
->  F:     package/ti-uim/
->  F:     package/uhubctl/
->
-> +N: Bastian Breit <bastian.breit.buildroot@gmail.com>
-> +F: package/libxmlsec1/
-> +
->  N:     Ben Boeckel <mathstuf@gmail.com>
->  F:     package/taskd/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 29862c478c..18acfd9db8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1428,6 +1428,7 @@ menu "JSON/XML"
->         source "package/libxml2/Config.in"
->         source "package/libxmlpp/Config.in"
->         source "package/libxmlrpc/Config.in"
-> +       source "package/libxmlsec1/Config.in"
->         source "package/libxslt/Config.in"
->         source "package/libyaml/Config.in"
->         source "package/mxml/Config.in"
-> diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
-> new file mode 100644
-> index 0000000000..ce3384e7b7
-> --- /dev/null
-> +++ b/package/libxmlsec1/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LIBXMLSEC1
-> +       bool "libxmlsec1"
-> +       select BR2_PACKAGE_LIBXML2
-> +       select BR2_PACKAGE_OPENSSL
-> +       help
-> +         XMLSec library provides C based implementation for major XML
-> +         Security standards:
-> +         - XML Signature Syntax and Processing
-> +         - XML Encryption Syntax and Processing
-> +
-> +         https://www.aleksey.com/xmlsec/
-> diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
-> new file mode 100644
-> index 0000000000..9ff3b35454
-> --- /dev/null
-> +++ b/package/libxmlsec1/libxmlsec1.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated
-> +sha256 97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6  xmlsec1-1.2.27.tar.gz
-> +# Locally calculated
-> +sha256 526285395dd39627199ba20fd7f70a2608c8c8c70e4fea04aceddd71baa53d07  Copyright
-> diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
-> new file mode 100644
-> index 0000000000..e6a0a375e9
-> --- /dev/null
-> +++ b/package/libxmlsec1/libxmlsec1.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# libxmlsec1
-> +#
-> +################################################################################
-> +
-> +LIBXMLSEC1_VERSION = 1.2.27
-> +LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
-> +LIBXMLSEC1_SITE = http://www.aleksey.com/xmlsec/download
-> +LIBXMLSEC1_LICENSE = MIT
-> +LIBXMLSEC1_LICENSE_FILES = Copyright
-> +
-> +LIBXMLSEC1_CONF_OPTS += --enable-crypto-dl=no
-> +LIBXMLSEC1_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-> +LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
-> +LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
-> +LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
-> +LIBXMLSEC1_DEPENDENCIES = libxml2 openssl
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.17.1
->
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 72c0293de7..f63d691e01 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -45,6 +45,17 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ comment "PAM support needs a glibc toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
++	bool "resolutionkms support"
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_VMWGFX
++	help
++	  Enable support for resolutionkms
++
++comment "resolutionkms needs udev"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ endif
+ 
+ comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 0dc2956d02..145ee61895 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -47,6 +47,13 @@ else
+ OPENVMTOOLS_CONF_OPTS += --without-pam
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS),y)
++OPENVMTOOLS_CONF_OPTS += --enable-resolutionkms
++OPENVMTOOLS_DEPENDENCIES += libdrm udev
++else
++OPENVMTOOLS_CONF_OPTS += --disable-resolutionkms
++endif
++
+ # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
+ # defined in lib/misc/hostinfoPosix.c
+ # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
+-- 
+2.14.1
