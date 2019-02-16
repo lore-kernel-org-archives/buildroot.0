@@ -1,40 +1,131 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 16 Feb 2019 11:50:27 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/wavemon: remove NPTL dependency
-Message-ID: <20190216105027.26055-1-fontaine.fabrice@gmail.com>
+Date: Sat, 16 Feb 2019 12:23:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ibrcommon: fix static build with
+ openssl
+Message-ID: <20190216112319.4769-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wavemon does not use pthread_mutexattr_setrobust since version 0.8.2 and
-https://github.com/uoaerg/wavemon/commit/d271685e03bc896829d8cc01ca0de28cd7b6ba72
+gf_mul is already defined in libcrypto (openssl) so rename it into
+ibrdtn_gf_mul to fix the following build failure in ibrdtnd package:
+
+/home/buildroot/autobuild/instance-3/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(f_impl.o): In function `gf_mul':
+f_impl.c:(.text+0x0): multiple definition of `gf_mul'
+/home/buildroot/autobuild/instance-3/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libibrcommon.a(gf128mul.o):gf128mul.cpp:(.text+0x30): first defined here
+collect2: error: ld returned 1 exit status
+Makefile:560: recipe for target 'dtnd' failed
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1d3b4b6cf043a3e185ce758b617a0a18c3d36cdb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wavemon/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...mon-ssl-gcm-fix-static-build-with-openssl.patch | 94 ++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
 
-diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
-index b72a617759..0cb4cb5c69 100644
---- a/package/wavemon/Config.in
-+++ b/package/wavemon/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_WAVEMON
- 	bool "wavemon"
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBNL
- 	help
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_WAVEMON
- 
- 	  https://github.com/uoaerg/wavemon
- 
--comment "wavemon needs a toolchain w/ NPTL"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+comment "wavemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
+new file mode 100644
+index 0000000000..c55b227c0c
+--- /dev/null
++++ b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
+@@ -0,0 +1,94 @@
++From 8118c43a53271ba2dd31ce3913a3cd21bc7dcca7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 Feb 2019 11:58:34 +0100
++Subject: [PATCH] ibrcommon/ssl/gcm: fix static build with openssl
++
++gf_mul is already defined in libcrypto (openssl) so rename it into
++ibrdtn_gf_mul to fix following build failure:
++
++/home/buildroot/autobuild/instance-3/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(f_impl.o): In function `gf_mul':
++f_impl.c:(.text+0x0): multiple definition of `gf_mul'
++/home/buildroot/autobuild/instance-3/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libibrcommon.a(gf128mul.o):gf128mul.cpp:(.text+0x30): first defined here
++collect2: error: ld returned 1 exit status
++Makefile:560: recipe for target 'dtnd' failed
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1d3b4b6cf043a3e185ce758b617a0a18c3d36cdb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ibrdtn/ibrdtn/pull/269]
++---
++ ibrcommon/ibrcommon/ssl/gcm/gcm.cpp      | 10 +++++-----
++ ibrcommon/ibrcommon/ssl/gcm/gf128mul.cpp |  2 +-
++ ibrcommon/ibrcommon/ssl/gcm/gf128mul.h   |  2 +-
++ 3 files changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/ibrcommon/ssl/gcm/gcm.cpp b/ibrcommon/ssl/gcm/gcm.cpp
++index 8a5745b4..6097b43e 100644
++--- a/ibrcommon/ssl/gcm/gcm.cpp
+++++ b/ibrcommon/ssl/gcm/gcm.cpp
++@@ -89,7 +89,7 @@ ret_type gcm_init_and_key(                      /* initialise mode and set key
++ #elif defined( TABLES_256 )
++ #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
++ #else
++-#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
+++#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
++ #endif
++ 
++ ret_type gcm_init_message(                      /* initialise a new message     */
++@@ -334,9 +334,9 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
++         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
++         for( ; ; )
++         {
++-            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+++            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
++             if(!(ln >>= 1)) break;
++-            gf_mul(tbuf, tbuf);
+++            ibrdtn_gf_mul(tbuf, tbuf);
++         }
++     }
++ #else   /* this one seems slower on x86 and x86_64 :-( */
++@@ -348,12 +348,12 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
++         tbuf[0] = 0x80;
++         while(i)
++         {
++-            gf_mul(tbuf, tbuf);
+++            ibrdtn_gf_mul(tbuf, tbuf);
++             if(i & ln)
++                 gf_mul_hh(tbuf, ctx, scratch);
++             i >>= 1;
++         }
++-        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+++        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
++     }
++ #endif
++     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
++diff --git a/ibrcommon/ssl/gcm/gf128mul.cpp b/ibrcommon/ssl/gcm/gf128mul.cpp
++index a553a044..d0c460c3 100644
++--- a/ibrcommon/ssl/gcm/gf128mul.cpp
+++++ b/ibrcommon/ssl/gcm/gf128mul.cpp
++@@ -103,7 +103,7 @@
++ 
++ const unsigned short gf_tab[256] = gf_dat(xda);
++ 
++-void gf_mul(void *a, const void* b)
+++void ibrdtn_gf_mul(void *a, const void* b)
++ {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
++     int i;
++ 
++diff --git a/ibrcommon/ssl/gcm/gf128mul.h b/ibrcommon/ssl/gcm/gf128mul.h
++index 4645c7fe..65fba54b 100644
++--- a/ibrcommon/ssl/gcm/gf128mul.h
+++++ b/ibrcommon/ssl/gcm/gf128mul.h
++@@ -619,7 +619,7 @@ gf_inline void mul_x(void *r, const void *x)
++ 
++ /*  A slow generic version of gf_mul (a = a * b) */
++ 
++-void gf_mul(void *a, const void* b);
+++void ibrdtn_gf_mul(void *a, const void* b);
++ 
++ /*  This version uses 64k bytes of table space on the stack.
++     A 16 byte buffer has to be multiplied by a 16 byte key
++-- 
++2.14.1
++
 -- 
 2.14.1
