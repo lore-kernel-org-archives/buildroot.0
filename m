@@ -1,118 +1,73 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 16 Feb 2019 22:44:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc 8
-Message-ID: <20190216214456.4568-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Feb 2019 23:29:04 +0100
+Subject: [Buildroot] [PATCHv4 5/8] Config.in: reintroduce BR2_SSH
+In-Reply-To: <CAAXf6LXAyeN6u=TqHrUjVgYWEhFHohvx_zb-CUiq27-mzprDwg@mail.gmail.com>
+References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
+ <20190215210803.8969-5-patrickdepinguin@gmail.com>
+ <20190216123420.GS3079@scaer>
+ <CAAXf6LXAyeN6u=TqHrUjVgYWEhFHohvx_zb-CUiq27-mzprDwg@mail.gmail.com>
+Message-ID: <20190216222904.GW3079@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/3a53f54476828ee878602da9adddf1e1e70f7a69
+Thomas, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...erminated-destination-buffer-with-strncpy.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+On 2019-02-16 22:23 +0100, Thomas De Schampheleire spake thusly:
+> El s?b., 16 feb. 2019 a las 13:34, Yann E. MORIN
+> (<yann.morin.1998@free.fr>) escribi?:
+> > On 2019-02-15 22:08 +0100, Thomas De Schampheleire spake thusly:
+> > > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > >
+> > > The BR2_SSH command was removed in commit
+> > > db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
+> > > command") but will be needed again to support 'source-check' for the scp
+> > > download backend.
+> >
+> > Rather than do a new commit, why did you not use "git revert"?
+> 
+> How does this make a difference when sending patches via email?
 
-diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-new file mode 100644
-index 0000000000..f91a31daaf
---- /dev/null
-+++ b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-@@ -0,0 +1,91 @@
-+From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
-+From: Philippe Gerum <rpm@xenomai.org>
-+Date: Wed, 24 Oct 2018 11:28:49 +0200
-+Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
-+ strncpy()
-+
-+GCC 8.x introduced -Wstringop-truncation to help detecting likely
-+unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
-+character into the destination buffer whenever n < sizeof(src).
-+
-+Fix unsafe strncpy() calls when we do expect a null-terminated
-+destination buffer.
-+
-+Signed-off-by: Philippe Gerum <rpm@xenomai.org>
-+[Retrieved from
-+https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ demo/posix/cobalt/can-rtt.c        | 4 ++--
-+ demo/posix/cobalt/eth_p_all.c      | 3 ++-
-+ demo/posix/cyclictest/cyclictest.c | 4 ++--
-+ 3 files changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
-+index 61cad05e5..dd212d804 100644
-+--- a/demo/posix/cobalt/can-rtt.c
-++++ b/demo/posix/cobalt/can-rtt.c
-+@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
-+ 	return -1;
-+     }
-+ 
-+-    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
-++    namecpy(ifr.ifr_name, rxdev);
-+     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
-+ 
-+     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
-+@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
-+ 	    goto failure1;
-+ 	}
-+ 
-+-	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
-++	namecpy(ifr.ifr_name, txdev);
-+ 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
-+ 
-+ 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
-+diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
-+index 6ac12ab3e..91aef9fbd 100644
-+--- a/demo/posix/cobalt/eth_p_all.c
-++++ b/demo/posix/cobalt/eth_p_all.c
-+@@ -40,6 +40,7 @@
-+ #include <net/if.h>
-+ #include <arpa/inet.h>
-+ #include <netinet/ether.h>
-++#include <boilerplate/ancillaries.h>
-+ 
-+ char buffer[10*1024];
-+ int sock;
-+@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
-+ 	if (argc > 1) {
-+ 		struct ifreq ifr;
-+ 
-+-		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
-++		namecpy(ifr.ifr_name, argv[1]);
-+ 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
-+ 			perror("cannot get interface index");
-+ 			close(sock);
-+diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
-+index ebe5461db..76983bd02 100644
-+--- a/demo/posix/cyclictest/cyclictest.c
-++++ b/demo/posix/cyclictest/cyclictest.c
-+@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-+ 		case 'F':
-+ 		case OPT_FIFO:
-+ 			use_fifo = 1;
-+-			strncpy(fifopath, optarg, strlen(optarg));
-++			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
-+ 			break;
-+ 
-+ 		case 'H':
-+@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-+ 		case 'T':
-+ 		case OPT_TRACER:
-+ 			tracetype = CUSTOM;
-+-			strncpy(tracer, optarg, sizeof(tracer));
-++			strncpy(tracer, optarg, sizeof(tracer) - 1);
-+ 			break;
-+ 		case 'u':
-+ 		case OPT_UNBUFFERED:
-+-- 
-+2.18.1
-+
+git-revert prepares the git commit with appropriate information about
+the revert:
+
+    Revert "core/download: drop the SSH command"
+
+    This reverts commit db9473bf6cd7bd12aa1f9faad0a917c973c33827.
+
+And then you can amend the commit log to explain why it is reverted.
+
+> The background is that originally this change was put together with
+> the scp source-check implementation, which was based on the
+> implementation I had in my work repository, where BR2_SSH was not yet
+> removed. Only later I split this patch apart and didn't think of using
+> 'git revert'.
+
+OK, that explains it.
+
+> > > +export SSH := $(call qstrip,$(BR2_SSH))
+> > To be noted: the commit you are (manually) reverting did not export SSH,
+> > but now you do need to do so, because it will now be used from one of a
+> > download backends, when the original use of SSH was done in Makefile
+> > code.
+> Yes indeed, that is true.
+
+And hence, as you are not reinstating the code exactly as it was prior
+to the "reverted" commit, that should have been part of the commit log.
+
+Anyway:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
