@@ -1,44 +1,81 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 16 Feb 2019 13:02:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/log4cplus: link with libatomic when
- needed
-Message-ID: <20190216120210.16988-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Feb 2019 13:34:20 +0100
+Subject: [Buildroot] [PATCHv4 5/8] Config.in: reintroduce BR2_SSH
+In-Reply-To: <20190215210803.8969-5-patrickdepinguin@gmail.com>
+References: <20190215210803.8969-1-patrickdepinguin@gmail.com>
+ <20190215210803.8969-5-patrickdepinguin@gmail.com>
+Message-ID: <20190216123420.GS3079@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
+Thomas, All,
 
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+On 2019-02-15 22:08 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> The BR2_SSH command was removed in commit
+> db9473bf6cd7bd12aa1f9faad0a917c973c33827 ("core/download: drop the SSH
+> command") but will be needed again to support 'source-check' for the scp
+> download backend.
 
-This is often for example the case on sparcv8 32 bit.
+Rather than do a new commit, why did you not use "git revert"?
 
-Fixes:
- - http://autobuild.buildroot.org/results/16e360cb91afff7655f459a3d1fb906ca48f8464
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  Config.in               | 4 ++++
+>  package/pkg-download.mk | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> v4: no changes
+> v3: no changes
+> 
+> diff --git a/Config.in b/Config.in
+> index d58d8dc04a..91d56907fe 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -136,6 +136,10 @@ config BR2_SCP
+>  	string "Secure copy (scp) command"
+>  	default "scp"
+>  
+> +config BR2_SSH
+> +	string "Secure shell (ssh) command"
+> +	default "ssh"
+> +
+>  config BR2_HG
+>  	string "Mercurial (hg) command"
+>  	default "hg"
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 5384fc2af4..17d1ca99ee 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
+>  export GIT := $(call qstrip,$(BR2_GIT))
+>  export HG := $(call qstrip,$(BR2_HG))
+>  export SCP := $(call qstrip,$(BR2_SCP))
+> +export SSH := $(call qstrip,$(BR2_SSH))
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/log4cplus/log4cplus.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+To be noted: the commit you are (manually) reverting did not export SSH,
+but now you do need to do so, because it will now be used from one of a
+download backends, when the original use of SSH was done in Makefile
+code.
 
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index ac89d2c4b7..33eca1ca26 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -11,6 +11,10 @@ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
- LOG4CPLUS_LICENSE_FILES = LICENSE
- LOG4CPLUS_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LOG4CPLUS_CONF_ENV += LIBS='-latomic'
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- LOG4CPLUS_DEPENDENCIES += libiconv
- LOG4CPLUS_CONF_OPTS += --with-iconv
+Regards,
+Yann E. MORIN.
+
+>  export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+>  
+>  DL_WRAPPER = support/download/dl-wrapper
+> -- 
+> 2.19.2
+> 
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
