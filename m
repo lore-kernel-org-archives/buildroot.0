@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Feb 2019 18:52:57 +0100
-Subject: [Buildroot] [PATCH 1/1] swupdate: update license files
-Message-ID: <20190217175257.3087-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Feb 2019 18:55:37 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/swupdate: update license files
+Message-ID: <20190217175537.20091-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,6 +19,9 @@ https://github.com/sbabic/swupdate/commit/66d0dbe80f49eb49f8999c9d738579651fc381
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Add package prefix in title
+
  package/swupdate/swupdate.hash | 5 ++++-
  package/swupdate/swupdate.mk   | 5 +++--
  2 files changed, 7 insertions(+), 3 deletions(-)
