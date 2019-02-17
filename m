@@ -1,56 +1,46 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 17 Feb 2019 20:18:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: needs NPTL
-In-Reply-To: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
-References: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
-Message-ID: <20139c84b00941198fea0b7391bac4ef6cdc2351.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Feb 2019 20:56:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ipmiutil: fix build with
+ openssl 1.1.x
+In-Reply-To: <20190217162432.20396-1-fontaine.fabrice@gmail.com>
+References: <20190217162432.20396-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190217205631.650b61b7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2019-02-16 at 11:42 +0100, Fabrice Fontaine wrote:
-> The software uses pthread_mutexattr_setrobust which isn't available in
-> uClibc-ng Linuxthreads support.
-> 
+Hello,
+
+On Sun, 17 Feb 2019 17:24:32 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
 > Fixes:
->  - http://autobuild.buildroot.org/results/197615ad077b0a719954024c3ba182dac43a0555
+>  - http://autobuild.buildroot.org/results/1d868798c5b80d7b41123f988449ef548dd95490
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/upmpdcli/Config.in | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  package/ipmiutil/ipmiutil.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-> index 938024e8a2..74eb768830 100644
-> --- a/package/upmpdcli/Config.in
-> +++ b/package/upmpdcli/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_UPMPDCLI
->  	bool "upmpdcli"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11, libupnpp
->  	select BR2_PACKAGE_JSONCPP
->  	select BR2_PACKAGE_LIBMICROHTTPD
-> @@ -15,6 +15,8 @@ config BR2_PACKAGE_UPMPDCLI
->  
->  	  http://www.lesbonscomptes.com/upmpdcli/
->  
-> -comment "upmpdcli needs a toolchain w/ C++, threads, gcc >= 4.9"
-> +comment "upmpdcli needs a toolchain w/ C++, NPTL, gcc >= 4.9"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +	depends on !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+> index 5d8c45665d..0d9a4509b3 100644
+> --- a/package/ipmiutil/ipmiutil.mk
+> +++ b/package/ipmiutil/ipmiutil.mk
+> @@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+>  # tests against distro libcrypto so it might get a false positive when
+>  # the openssl version is old, so force it off
+>  # SKIP_MD2 can be used only if ALLOW_GNU is defined.
+> -IPMIUTIL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
+> +IPMIUTIL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2 -DSSL11"
 
-pthread_mutexattr_setrobust and PTHREAD_MUTEXATTR_FLAG_ROBUST are only
-available in NPTL [1]. Therefore:
+How does that play with LibreSSL instead of OpenSSL ?
 
-Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
+Thanks,
 
-
-[1] https://elixir.bootlin.com/uclibc-ng/v1.0.31/ident/PTHREAD_MUTEXATTR_FLAG_ROBUST
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
