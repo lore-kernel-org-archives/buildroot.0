@@ -1,103 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 15:12:04 +0100
-Subject: [Buildroot] [PATCH v3 0/5] Update Qt5 to 5.12.1
-Message-ID: <20190217141209.22182-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Feb 2019 15:12:06 +0100
+Subject: [Buildroot] [PATCH v3 2/5] package/qt5/qt5webengine: generate
+ chromium-latest.inc automatically
+In-Reply-To: <20190217141209.22182-1-thomas.petazzoni@bootlin.com>
+References: <20190217141209.22182-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190217141209.22182-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As a preparation to the bump of qt5webengine, this commit changes to a
+mechanism where it is generated automatically. We use a fairly
+convoluted 'find' expression to retrieve almost the same list of files
+as the exist ones.
 
-I wanted to apply Peter Seiderer's patch bumping qt5 to 5.12.1, but
-found some issues with the qt5webengine license files that required
-too many changes for me to apply without resending the patches.
+Two files are removed that are not really license files:
 
-qt5webengine has a complicated set of license files, so in this patch
-series, I start with some preparation commits that:
+ - src/3rdparty/chromium/third_party/WebKit/Source/build/scripts/license.py
+ - src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/NonCopyingSort.h
 
- 1. Sort the list of license files.
+Three files are added, which are license files:
 
- 2. Generate the list of license files automatically.
+ - src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY
+ - src/3rdparty/chromium/third_party/libxml/src/Copyright
+ - src/3rdparty/chromium/third_party/libxslt/src/Copyright
 
-Then, I used that when bumping to 5.12.1 to regenerate the list of
-license files automatically. And finally, I had the hashes for those
-license files.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5webengine/chromium-latest.inc | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Another thing I fixed is that a patch for qt5location needs to be
-dropped during the bump, since it has been merged upstream.
-
-Please review :-)
-
-Thanks,
-
-Thomas
-
-Peter Seiderer (1):
-  package/qt5: bump latest version to 5.12.1
-
-Thomas Petazzoni (4):
-  package/qt5/qt5webengine: sort chromium-{latest,lts}.inc files
-  package/qt5/qt5webengine: generate chromium-latest.inc automatically
-  package/qt5/qt5webengine: generate chromium-lts.inc automatically
-  package/qt5/qt5webengine: add hashes for license files
-
- package/qt5/Config.in                         |   4 +-
- package/qt5/qt5.mk                            |   4 +-
- package/qt5/qt53d/qt53d.hash                  |   4 +-
- ...ble-conversion-enable-for-aarch64_be.patch |  26 -
- ...03-double-conversion-enable-for-or1k.patch |  27 -
- ...tbase-Fix-build-error-when-using-EGL.patch |   0
- ...ble-conversion-enable-for-microblaze.patch |  20 +-
- .../qt5base/{5.11.3 => 5.12.1}/qt5base.hash   |   4 +-
- package/qt5/qt5canvas3d/qt5canvas3d.hash      |   4 +-
- package/qt5/qt5charts/qt5charts.hash          |   4 +-
- .../{5.11.3 => 5.12.1}/qt5connectivity.hash   |   4 +-
- ...gtexture-fix-debug-build-with-uclibc.patch |   0
- .../qt5/qt5declarative/qt5declarative.hash    |   4 +-
- .../qt5graphicaleffects.hash                  |   4 +-
- .../qt5/qt5imageformats/qt5imageformats.hash  |   4 +-
- ...tivegeomap-fix-building-with-GCC-5.x.patch |  48 --
- package/qt5/qt5location/qt5location.hash      |   4 +-
- package/qt5/qt5multimedia/qt5multimedia.hash  |   4 +-
- .../qt5quickcontrols/qt5quickcontrols.hash    |   4 +-
- .../{5.11.3 => 5.12.1}/qt5quickcontrols2.hash |   4 +-
- package/qt5/qt5script/qt5script.hash          |   4 +-
- package/qt5/qt5scxml/qt5scxml.hash            |   4 +-
- package/qt5/qt5sensors/qt5sensors.hash        |   4 +-
- .../{5.11.3 => 5.12.1}/qt5serialbus.hash      |   4 +-
- .../{5.11.3 => 5.12.1}/qt5serialport.hash     |   4 +-
- package/qt5/qt5svg/qt5svg.hash                |   4 +-
- package/qt5/qt5tools/qt5tools.hash            |   4 +-
- .../qt5virtualkeyboard.hash                   |   4 +-
- package/qt5/qt5wayland/qt5wayland.hash        |   4 +-
- package/qt5/qt5webchannel/qt5webchannel.hash  |   4 +-
- .../qt5/qt5webengine/5.12.1/qt5webengine.hash | 456 ++++++++++
- .../qt5/qt5webengine/5.6.3/qt5webengine.hash  | 258 ++++++
- package/qt5/qt5webengine/chromium-latest.inc  | 780 +++++++++---------
- package/qt5/qt5webengine/chromium-lts.inc     | 417 +++++-----
- package/qt5/qt5webengine/qt5webengine.hash    |   5 -
- package/qt5/qt5websockets/qt5websockets.hash  |   4 +-
- .../{5.11.3 => 5.12.1}/qt5x11extras.hash      |   4 +-
- .../qt5/qt5xmlpatterns/qt5xmlpatterns.hash    |   4 +-
- 38 files changed, 1389 insertions(+), 756 deletions(-)
- delete mode 100644 package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
- delete mode 100644 package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/0001-qtbase-Fix-build-error-when-using-EGL.patch (100%)
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/0004-double-conversion-enable-for-microblaze.patch (60%)
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/qt5base.hash (73%)
- rename package/qt5/qt5connectivity/{5.11.3 => 5.12.1}/qt5connectivity.hash (65%)
- rename package/qt5/qt5declarative/{5.11.3 => 5.12.1}/0001-qsgtexture-fix-debug-build-with-uclibc.patch (100%)
- delete mode 100644 package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
- rename package/qt5/qt5quickcontrols2/{5.11.3 => 5.12.1}/qt5quickcontrols2.hash (54%)
- rename package/qt5/qt5serialbus/{5.11.3 => 5.12.1}/qt5serialbus.hash (60%)
- rename package/qt5/qt5serialport/{5.11.3 => 5.12.1}/qt5serialport.hash (65%)
- rename package/qt5/qt5virtualkeyboard/{5.11.3 => 5.12.1}/qt5virtualkeyboard.hash (70%)
- create mode 100644 package/qt5/qt5webengine/5.12.1/qt5webengine.hash
- create mode 100644 package/qt5/qt5webengine/5.6.3/qt5webengine.hash
- delete mode 100644 package/qt5/qt5webengine/qt5webengine.hash
- rename package/qt5/qt5x11extras/{5.11.3 => 5.12.1}/qt5x11extras.hash (65%)
-
+diff --git a/package/qt5/qt5webengine/chromium-latest.inc b/package/qt5/qt5webengine/chromium-latest.inc
+index 4fc1ae5ecf..9e4b7d6356 100644
+--- a/package/qt5/qt5webengine/chromium-latest.inc
++++ b/package/qt5/qt5webengine/chromium-latest.inc
+@@ -1,3 +1,8 @@
++# (echo "QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \\" ; \
++# 	find src/3rdparty/ -type f \
++#	\( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) \
++#	-a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' | \
++#	sort | sed 's%^\(.*\)$%\t\1 \\%') > package/qt5/qt5webengine/chromium-latest.inc
+ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE \
+ 	src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE \
+@@ -268,8 +273,10 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT \
+ 	src/3rdparty/chromium/third_party/libwebp/LICENSE \
+ 	src/3rdparty/chromium/third_party/libxml/src/COPYING \
++	src/3rdparty/chromium/third_party/libxml/src/Copyright \
+ 	src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE \
+ 	src/3rdparty/chromium/third_party/libxslt/linux/COPYING \
++	src/3rdparty/chromium/third_party/libxslt/src/Copyright \
+ 	src/3rdparty/chromium/third_party/libyuv/LICENSE \
+ 	src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY \
+ 	src/3rdparty/chromium/third_party/lzma_sdk/LICENSE \
+@@ -380,7 +387,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/webdriver/COPYING \
+ 	src/3rdparty/chromium/third_party/webdriver/LICENSE \
+ 	src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS \
+-	src/3rdparty/chromium/third_party/WebKit/Source/build/scripts/license.py \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2 \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1 \
+@@ -395,7 +401,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/COPYING \
+ 	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/LICENSE \
+-	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/NonCopyingSort.h \
+ 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING \
+ 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE.md \
+ 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/html5lib/LICENSE \
+@@ -406,6 +411,7 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCMobile/third_party/SocketRocket/LICENSE \
+ 	src/3rdparty/chromium/third_party/webrtc/LICENSE \
+ 	src/3rdparty/chromium/third_party/webrtc/license_template.txt \
++	src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY \
+ 	src/3rdparty/chromium/third_party/woff2/LICENSE \
+ 	src/3rdparty/chromium/third_party/xdg-utils/LICENSE \
+ 	src/3rdparty/chromium/third_party/xstream/LICENSE \
 -- 
 2.20.1
