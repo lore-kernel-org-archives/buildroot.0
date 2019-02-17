@@ -1,31 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 15:54:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/safeclib: fix build with gcc 7
-In-Reply-To: <20190217100117.23098-1-fontaine.fabrice@gmail.com>
-References: <20190217100117.23098-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190217155407.6bce42c1@windsurf.home>
+Date: Sun, 17 Feb 2019 15:22:42 +0100
+Subject: [Buildroot] [git commit] linux: don't check hashes for
+ user-supplied patches
+Message-ID: <20190217144829.F178788F39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Feb 2019 11:01:17 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3ae8dab9e91055b6f674b0287bcb8b1aa90d16e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f4fe6bf54d213ca75bc1f16df61f8f92e648288e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch | 62 ++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 package/safeclib/0002-add-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch
+We have virtually no way to know the hashes for user-supplied patches,
+so we should just ignore them.
 
-Applied to master, thanks.
+Reported-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Tested-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8c21bad067..2b5d096e14 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,6 +55,9 @@ endif
+ 
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
++# We have no way to know the hashes for user-supplied patches.
++BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
++
+ # We rely on the generic package infrastructure to download and apply
+ # remote patches (downloaded from ftp, http or https). For local
+ # patches, we can't rely on that infrastructure, because there might
