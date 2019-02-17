@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 15:22:42 +0100
-Subject: [Buildroot] [git commit] linux: don't check hashes for
- user-supplied patches
-Message-ID: <20190217144829.F178788F39@busybox.osuosl.org>
+Date: Sun, 17 Feb 2019 15:54:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/glm: bump to version 0.9.9.3
+In-Reply-To: <20190217093529.5634-1-fontaine.fabrice@gmail.com>
+References: <20190217093529.5634-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190217155457.25581467@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ae8dab9e91055b6f674b0287bcb8b1aa90d16e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-We have virtually no way to know the hashes for user-supplied patches,
-so we should just ignore them.
+On Sun, 17 Feb 2019 10:35:29 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Reported-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Tested-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+> - Disable tests as they are enabled by default since version 0.9.9.1:
+>   https://github.com/g-truc/glm/commit/d307d390193f4027faec48ac79d7f74b2bec6e56
+> - Static and shared libraries are always built since version 0.9.9.1:
+>   https://github.com/g-truc/glm/commit/a23dd2f800185a5e233534fed82fc5c2840fbe5c
+>   So, add a patch to fix this behavior and disable them as GLM is
+>   header-ony
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8c21bad067..2b5d096e14 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -55,6 +55,9 @@ endif
- 
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
-+# We have no way to know the hashes for user-supplied patches.
-+BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
-+
- # We rely on the generic package infrastructure to download and apply
- # remote patches (downloaded from ftp, http or https). For local
- # patches, we can't rely on that infrastructure, because there might
+I don't understand this. Why does the glm CMakeLists.txt has provision
+to build static and shared libraries if it's a header-only library ?
+
+> ++if(BUILD_STATIC_LIBS)
+> + add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
+> + 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
+> + 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
+> +@@ -51,7 +52,9 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
+> + 	${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
+> + 	${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
+> + 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
+
+I.e, what is this code doing ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
