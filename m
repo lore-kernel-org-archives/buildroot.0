@@ -1,58 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Feb 2019 18:55:37 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/swupdate: update license files
-Message-ID: <20190217175537.20091-1-fontaine.fabrice@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 17 Feb 2019 20:18:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: needs NPTL
+In-Reply-To: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
+References: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
+Message-ID: <20139c84b00941198fea0b7391bac4ef6cdc2351.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-COPYING contains only the license for GPL-2.0 so use the new license
-files that have been added in the Licenses directory since version
-2018.03 and
-https://github.com/sbabic/swupdate/commit/32c1f98eaca69e362be074197f84a59d994c0876
+On Sat, 2019-02-16 at 11:42 +0100, Fabrice Fontaine wrote:
+> The software uses pthread_mutexattr_setrobust which isn't available in
+> uClibc-ng Linuxthreads support.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/197615ad077b0a719954024c3ba182dac43a0555
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/upmpdcli/Config.in | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+> index 938024e8a2..74eb768830 100644
+> --- a/package/upmpdcli/Config.in
+> +++ b/package/upmpdcli/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_UPMPDCLI
+>  	bool "upmpdcli"
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11, libupnpp
+>  	select BR2_PACKAGE_JSONCPP
+>  	select BR2_PACKAGE_LIBMICROHTTPD
+> @@ -15,6 +15,8 @@ config BR2_PACKAGE_UPMPDCLI
+>  
+>  	  http://www.lesbonscomptes.com/upmpdcli/
+>  
+> -comment "upmpdcli needs a toolchain w/ C++, threads, gcc >= 4.9"
+> +comment "upmpdcli needs a toolchain w/ C++, NPTL, gcc >= 4.9"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +	depends on !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 
-Also update GPL-2.0+ to "GPL-2.0+ with OpenSSL exception" and add
-Exceptions file, see:
-https://github.com/sbabic/swupdate/commit/66d0dbe80f49eb49f8999c9d738579651fc38134
+pthread_mutexattr_setrobust and PTHREAD_MUTEXATTR_FLAG_ROBUST are only
+available in NPTL [1]. Therefore:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Add package prefix in title
+Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
 
- package/swupdate/swupdate.hash | 5 ++++-
- package/swupdate/swupdate.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 339f40e1bb..138bd6d305 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,3 +1,6 @@
- # Locally calculated
- sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
--sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-+sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-+sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  Licenses/mit.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index b7ef09c924..78f23ec239 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -6,8 +6,9 @@
- 
- SWUPDATE_VERSION = 2018.11
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
--SWUPDATE_LICENSE = GPL-2.0+, LGPL-2.1+, MIT
--SWUPDATE_LICENSE_FILES = COPYING
-+SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
-+SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
-+	Licenses/lgpl-2.1.txt Licenses/mit.txt
- 
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
--- 
-2.14.1
+[1] https://elixir.bootlin.com/uclibc-ng/v1.0.31/ident/PTHREAD_MUTEXATTR_FLAG_ROBUST
