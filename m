@@ -1,927 +1,766 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 15:12:08 +0100
-Subject: [Buildroot] [PATCH v3 4/5] package/qt5: bump latest version to
- 5.12.1
+Date: Sun, 17 Feb 2019 15:12:09 +0100
+Subject: [Buildroot] [PATCH v3 5/5] package/qt5/qt5webengine: add hashes for
+ license files
 In-Reply-To: <20190217141209.22182-1-thomas.petazzoni@bootlin.com>
 References: <20190217141209.22182-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190217141209.22182-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20190217141209.22182-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Seiderer <ps.report@gmx.net>
+This commit adds hashes for all licenses files found in
+qt5webengine. In order to do this, it moves the hash file into a
+per-version folder.
 
-qt5base:
-  - removed 0002-double-conversion-enable-for-aarch64_be.patch
-    (superseded by upstream commits [1] and [2])
-  - removed 0003-double-conversion-enable-for-or1k.patch
-    (superseded by upstream commits [1] and [2])
-  - rebased 0004-double-conversion-enable-for-microblaze.patch
-
-qt5location:
-
-  - removed 0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
-    (superseded by upstream commit [3])
-
-[1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=6a39e49a6cdeb28a04a3657bb6a22f848d5dfa9d
-[2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4d40f09a45202dff901d4f970a6a7e939797138b
-[3] https://code.qt.io/cgit/qt/qtlocation.git/commit/?id=7bafbdc91f83165710ed74639b76b48b4494937a
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Thomas:
- - update chromium-latest.inc with the list of license files that
-   match qt5webengine 5.12.1
- - drop patch in qt5location that has been upstreamed and therefore no
-   longer applies to 5.12.1]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/Config.in                         |  4 +-
- package/qt5/qt5.mk                            |  4 +-
- package/qt5/qt53d/qt53d.hash                  |  4 +-
- ...ble-conversion-enable-for-aarch64_be.patch | 26 ------
- ...03-double-conversion-enable-for-or1k.patch | 27 -------
- ...tbase-Fix-build-error-when-using-EGL.patch |  0
- ...ble-conversion-enable-for-microblaze.patch | 20 ++---
- .../qt5base/{5.11.3 => 5.12.1}/qt5base.hash   |  4 +-
- package/qt5/qt5canvas3d/qt5canvas3d.hash      |  4 +-
- package/qt5/qt5charts/qt5charts.hash          |  4 +-
- .../{5.11.3 => 5.12.1}/qt5connectivity.hash   |  4 +-
- ...gtexture-fix-debug-build-with-uclibc.patch |  0
- .../qt5/qt5declarative/qt5declarative.hash    |  4 +-
- .../qt5graphicaleffects.hash                  |  4 +-
- .../qt5/qt5imageformats/qt5imageformats.hash  |  4 +-
- ...tivegeomap-fix-building-with-GCC-5.x.patch | 48 -----------
- package/qt5/qt5location/qt5location.hash      |  4 +-
- package/qt5/qt5multimedia/qt5multimedia.hash  |  4 +-
- .../qt5quickcontrols/qt5quickcontrols.hash    |  4 +-
- .../{5.11.3 => 5.12.1}/qt5quickcontrols2.hash |  4 +-
- package/qt5/qt5script/qt5script.hash          |  4 +-
- package/qt5/qt5scxml/qt5scxml.hash            |  4 +-
- package/qt5/qt5sensors/qt5sensors.hash        |  4 +-
- .../{5.11.3 => 5.12.1}/qt5serialbus.hash      |  4 +-
- .../{5.11.3 => 5.12.1}/qt5serialport.hash     |  4 +-
- package/qt5/qt5svg/qt5svg.hash                |  4 +-
- package/qt5/qt5tools/qt5tools.hash            |  4 +-
- .../qt5virtualkeyboard.hash                   |  4 +-
- package/qt5/qt5wayland/qt5wayland.hash        |  4 +-
- package/qt5/qt5webchannel/qt5webchannel.hash  |  4 +-
- package/qt5/qt5webengine/chromium-latest.inc  | 80 +++++++++++--------
- package/qt5/qt5webengine/qt5webengine.hash    |  4 +-
- package/qt5/qt5websockets/qt5websockets.hash  |  4 +-
- .../{5.11.3 => 5.12.1}/qt5x11extras.hash      |  4 +-
- .../qt5/qt5xmlpatterns/qt5xmlpatterns.hash    |  4 +-
- 35 files changed, 113 insertions(+), 200 deletions(-)
- delete mode 100644 package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
- delete mode 100644 package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/0001-qtbase-Fix-build-error-when-using-EGL.patch (100%)
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/0004-double-conversion-enable-for-microblaze.patch (60%)
- rename package/qt5/qt5base/{5.11.3 => 5.12.1}/qt5base.hash (73%)
- rename package/qt5/qt5connectivity/{5.11.3 => 5.12.1}/qt5connectivity.hash (65%)
- rename package/qt5/qt5declarative/{5.11.3 => 5.12.1}/0001-qsgtexture-fix-debug-build-with-uclibc.patch (100%)
- delete mode 100644 package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
- rename package/qt5/qt5quickcontrols2/{5.11.3 => 5.12.1}/qt5quickcontrols2.hash (54%)
- rename package/qt5/qt5serialbus/{5.11.3 => 5.12.1}/qt5serialbus.hash (60%)
- rename package/qt5/qt5serialport/{5.11.3 => 5.12.1}/qt5serialport.hash (65%)
- rename package/qt5/qt5virtualkeyboard/{5.11.3 => 5.12.1}/qt5virtualkeyboard.hash (70%)
- rename package/qt5/qt5x11extras/{5.11.3 => 5.12.1}/qt5x11extras.hash (65%)
+ .../qt5/qt5webengine/5.12.1/qt5webengine.hash | 456 ++++++++++++++++++
+ .../qt5/qt5webengine/5.6.3/qt5webengine.hash  | 258 ++++++++++
+ package/qt5/qt5webengine/qt5webengine.hash    |   5 -
+ 3 files changed, 714 insertions(+), 5 deletions(-)
+ create mode 100644 package/qt5/qt5webengine/5.12.1/qt5webengine.hash
+ create mode 100644 package/qt5/qt5webengine/5.6.3/qt5webengine.hash
+ delete mode 100644 package/qt5/qt5webengine/qt5webengine.hash
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index a50b57a821..b9598b2be7 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -33,14 +33,14 @@ choice
- 	prompt "Qt5 version"
- 
- config BR2_PACKAGE_QT5_VERSION_LATEST
--	bool "Latest (5.11)"
-+	bool "Latest (5.12)"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
- 	# no built-in double-conversion support
- 	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
- 	help
--	  This option builds Qt 5.11, which is licensed under
-+	  This option builds Qt 5.12, which is licensed under
- 	  (L)GPL-3.0+.
- 
- comment "Latest Qt version needs host/toolchain w/ gcc >= 4.8"
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 88ba1958dd..d8012a913d 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
--QT5_VERSION_MAJOR = 5.11
--QT5_VERSION = $(QT5_VERSION_MAJOR).3
-+QT5_VERSION_MAJOR = 5.12
-+QT5_VERSION = $(QT5_VERSION_MAJOR).1
- QT5_SOURCE_TARBALL_PREFIX = everywhere-src
- else
- QT5_VERSION_MAJOR = 5.6
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index 2da5500505..f135173bb7 100644
---- a/package/qt5/qt53d/qt53d.hash
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qt3d-everywhere-src-5.11.3.tar.xz.sha256
--sha256 04a55c21f365d897ec75042ee83f9ad59a847992c6f55fae0763ad2701d99eab qt3d-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qt3d-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 ce51ed3fe403672db2c874cbaa60f3a139ec817abd1270dc5e4255d35fd64bf1 qt3d-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPL
-diff --git a/package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch b/package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
-deleted file mode 100644
-index 838f4dd7ad..0000000000
---- a/package/qt5/qt5base/5.11.3/0002-double-conversion-enable-for-aarch64_be.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From e81ba4e0de16ff741417ae7ed7dfe7b5a83d66e2 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 13 Aug 2018 20:15:05 +0200
--Subject: [PATCH] double-conversion: enable for aarch64_be
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- .../double-conversion/include/double-conversion/utils.h         | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--index 20bfd36c84..77baa2861a 100644
----- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
--+++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--@@ -65,7 +65,7 @@
--     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
--     defined(__SH4__) || defined(__alpha__) || \
--     defined(_MIPS_ARCH_MIPS32R2) || \
---    defined(__AARCH64EL__)
--+    defined(__AARCH64EL__) || defined(__AARCH64EB__)
-- #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-- #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-- #if defined(_WIN32)
---- 
--2.18.0
--
-diff --git a/package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch b/package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
-deleted file mode 100644
-index 53c5a31832..0000000000
---- a/package/qt5/qt5base/5.11.3/0003-double-conversion-enable-for-or1k.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From f9920819e6600a68829fb4600f11b70ebc2a33e7 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 18 Aug 2018 23:44:20 +0200
--Subject: [PATCH] double-conversion: enable for or1k
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- .../double-conversion/include/double-conversion/utils.h        | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--index 77baa2861a..b0a7d5d4f4 100644
----- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
--+++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--@@ -65,7 +65,8 @@
--     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
--     defined(__SH4__) || defined(__alpha__) || \
--     defined(_MIPS_ARCH_MIPS32R2) || \
---    defined(__AARCH64EL__) || defined(__AARCH64EB__)
--+    defined(__AARCH64EL__) || defined(__AARCH64EB__) || \
--+    defined(__or1k__)
-- #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-- #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-- #if defined(_WIN32)
---- 
--2.18.0
--
-diff --git a/package/qt5/qt5base/5.11.3/0001-qtbase-Fix-build-error-when-using-EGL.patch b/package/qt5/qt5base/5.12.1/0001-qtbase-Fix-build-error-when-using-EGL.patch
-similarity index 100%
-rename from package/qt5/qt5base/5.11.3/0001-qtbase-Fix-build-error-when-using-EGL.patch
-rename to package/qt5/qt5base/5.12.1/0001-qtbase-Fix-build-error-when-using-EGL.patch
-diff --git a/package/qt5/qt5base/5.11.3/0004-double-conversion-enable-for-microblaze.patch b/package/qt5/qt5base/5.12.1/0004-double-conversion-enable-for-microblaze.patch
-similarity index 60%
-rename from package/qt5/qt5base/5.11.3/0004-double-conversion-enable-for-microblaze.patch
-rename to package/qt5/qt5base/5.12.1/0004-double-conversion-enable-for-microblaze.patch
-index 2d7164b67c..c91d812695 100644
---- a/package/qt5/qt5base/5.11.3/0004-double-conversion-enable-for-microblaze.patch
-+++ b/package/qt5/qt5base/5.12.1/0004-double-conversion-enable-for-microblaze.patch
-@@ -1,27 +1,29 @@
--From 372d33fbe549ea73318c187505716ac99fbf3054 Mon Sep 17 00:00:00 2001
-+From 014958d2d17045dd63d93cb3061d1e40b15725b7 Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Tue, 21 Aug 2018 21:11:40 +0200
- Subject: [PATCH] double-conversion: enable for microblaze
- 
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased for Qt5.12.0]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  .../double-conversion/include/double-conversion/utils.h        | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--index b0a7d5d4f4..485f680180 100644
-+index 7622fe6162..d29de95094 100644
- --- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
- +++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
--@@ -66,7 +66,8 @@
--     defined(__SH4__) || defined(__alpha__) || \
-+@@ -94,7 +94,8 @@ int main(int argc, char** argv) {
-      defined(_MIPS_ARCH_MIPS32R2) || \
--     defined(__AARCH64EL__) || defined(__AARCH64EB__) || \
-+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-+     defined(__riscv) || defined(__EMSCRIPTEN__) || \
- -    defined(__or1k__)
--+    defined(__or1k__) || \
-++    defined(__or1k__)  || \
- +    defined(__microblaze__)
-  #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-- #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-- #if defined(_WIN32)
-+ #elif defined(__mc68000__) || \
-+     defined(__pnacl__) || defined(__native_client__)
- -- 
--2.18.0
-+2.19.2
- 
-diff --git a/package/qt5/qt5base/5.11.3/qt5base.hash b/package/qt5/qt5base/5.12.1/qt5base.hash
-similarity index 73%
-rename from package/qt5/qt5base/5.11.3/qt5base.hash
-rename to package/qt5/qt5base/5.12.1/qt5base.hash
-index 964bcf1ab9..29148fa080 100644
---- a/package/qt5/qt5base/5.11.3/qt5base.hash
-+++ b/package/qt5/qt5base/5.12.1/qt5base.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtbase-everywhere-src-5.11.3.tar.xz.sha256
--sha256 c6bf887732b83ce072eb72eddb7497bedcdf9ca794e7ed91261a93f063623e1c qtbase-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtbase-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 533078ce02678988576e224cb3844979907950cf83e0fda3364bc1d5701c9049 qtbase-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-index 4fc7c613b0..fe31ba3867 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcanvas3d-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 e99e0e159f2fba539b7947a1921072f6807f20958d32809edbf12aac571f56ff qtcanvas3d-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtcanvas3d-everywhere-src-5.11.3.tar.xz.sha256
--sha256 d5a004848588c1c53ea7ed9d36bb5bfe3a813ffc45290066d2f6cfcace072138 qtcanvas3d-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtcanvas3d-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 c7c940a06062b1e5078fd697e1da0cdaeaa315b6fcea81de15308a9d3f8ac254 qtcanvas3d-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
-index 2519b8f13c..02e01cac2a 100644
---- a/package/qt5/qt5charts/qt5charts.hash
-+++ b/package/qt5/qt5charts/qt5charts.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
- sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtcharts-everywhere-src-5.11.3.tar.xz.sha256
--sha256 4798f3ebc4d937d1c190db7ff718ad5affa907caa56b5557e593f6b5a60d95dc qtcharts-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtcharts-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 142eb2b87a0bc2220a9f12e56bf390b846968c201d135b1a2a2338545692fdc0 qtcharts-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-diff --git a/package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash b/package/qt5/qt5connectivity/5.12.1/qt5connectivity.hash
-similarity index 65%
-rename from package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash
-rename to package/qt5/qt5connectivity/5.12.1/qt5connectivity.hash
-index 54fda648cd..a46de7f3c6 100644
---- a/package/qt5/qt5connectivity/5.11.3/qt5connectivity.hash
-+++ b/package/qt5/qt5connectivity/5.12.1/qt5connectivity.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtconnectivity-everywhere-src-5.11.3.tar.xz.sha256
--sha256 148cfcbceb3d0a70059f4d92fa069baf56babb627b16a4203b318ca6f0d0b32a qtconnectivity-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtconnectivity-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 0edd0bd784a71809540dc23d24a842bd88dee2cdb5394b69c9e704f7e1ac8d6c qtconnectivity-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5declarative/5.11.3/0001-qsgtexture-fix-debug-build-with-uclibc.patch b/package/qt5/qt5declarative/5.12.1/0001-qsgtexture-fix-debug-build-with-uclibc.patch
-similarity index 100%
-rename from package/qt5/qt5declarative/5.11.3/0001-qsgtexture-fix-debug-build-with-uclibc.patch
-rename to package/qt5/qt5declarative/5.12.1/0001-qsgtexture-fix-debug-build-with-uclibc.patch
-diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
-index 3ce4e50250..d583ab15d5 100644
---- a/package/qt5/qt5declarative/qt5declarative.hash
-+++ b/package/qt5/qt5declarative/qt5declarative.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtdeclarative-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 f63fc053d0d16b8a9ca9308f8ead77874b470ae31b66057e2bd336bf648191fc qtdeclarative-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtdeclarative-everywhere-src-5.11.3.tar.xz.sha256
--sha256 8e263621d706f1c4def5d71212a6ae37b0d3c378da89d9e3e5fc0b5557721ae6 qtdeclarative-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtdeclarative-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 a384a734d94f28a98aa74e076d50fa6b9724af83526feb6c371945545d8cb409 qtdeclarative-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 36dd345268..e570531629 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtgraphicaleffects-everywhere-src-5.11.3.tar.xz.sha256
--sha256 14d86983fcdd119daefad235ffee7d8ca691e6074ef360cb6347b8aae66f57e2 qtgraphicaleffects-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtgraphicaleffects-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 2e63abf6b02b86461b73b317eba00b6721601a9469c22da28e3f4ea1d5df68d7 qtgraphicaleffects-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
-index 1c1f81bbed..3fd6ba46e5 100644
---- a/package/qt5/qt5imageformats/qt5imageformats.hash
-+++ b/package/qt5/qt5imageformats/qt5imageformats.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtimageformats-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 efe4da3c90c976c9b9a2eb6b081d2b8e1435935695104456276ce98e8a5848c3 qtimageformats-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtimageformats-everywhere-src-5.11.3.tar.xz.sha256
--sha256 04b261bc3d7a277fbe9ac8619ecd037d7089b356eaee41b2d41d7a2ff58b087f qtimageformats-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtimageformats-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 0425f35dbcc83cd5840e2d3a73ed4c57c426af9d6ac7b9fe3a40d23560653421 qtimageformats-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-diff --git a/package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch b/package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
-deleted file mode 100644
-index f893c33d50..0000000000
---- a/package/qt5/qt5location/5.11.3/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From ad78b1a671edac369ede86bff376ec8af2cafbf2 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Date: Wed, 5 Sep 2018 12:51:41 +0200
--Subject: [PATCH] qdeclarativegeomap: fix building with GCC < 5.x
--
--With GCC < 5.x implicit casts don't work as expected, in particular
--QPointer<QGeoMap> in m_map QDeclarativeGeoMap class when passed to
--connect(m_map, ...) should directly cast to m_map.data().
--
--Workaround this using connect(m_map.data(), ...).
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- src/location/declarativemaps/qdeclarativegeomap.cpp | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/location/declarativemaps/qdeclarativegeomap.cpp b/src/location/declarativemaps/qdeclarativegeomap.cpp
--index 09f9d01c..dc5a32ed 100644
----- a/src/location/declarativemaps/qdeclarativegeomap.cpp
--+++ b/src/location/declarativemaps/qdeclarativegeomap.cpp
--@@ -694,11 +694,11 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
--     QImage copyrightImage;
--     if (!m_initialized && width() > 0 && height() > 0) {
--         QMetaObject::Connection copyrightStringCatcherConnection =
---                connect(m_map,
--+                connect(m_map.data(),
--                         QOverload<const QString &>::of(&QGeoMap::copyrightsChanged),
--                         [&copyrightString](const QString &copy){ copyrightString = copy; });
--         QMetaObject::Connection copyrightImageCatcherConnection =
---                connect(m_map,
--+                connect(m_map.data(),
--                         QOverload<const QImage &>::of(&QGeoMap::copyrightsChanged),
--                         [&copyrightImage](const QImage &copy){ copyrightImage = copy; });
--         m_map->setViewportSize(QSize(width(), height()));
--@@ -719,8 +719,8 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
--         emit m_map->copyrightsChanged(copyrightImage);
-- 
-- 
---    connect(m_map, &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
---    connect(m_map, &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
--+    connect(m_map.data(), &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
--+    connect(m_map.data(), &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
-- 
--     // This prefetches a buffer around the map
--     m_map->prefetchData();
---- 
--2.17.1
--
-diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
-index be0ac7c31f..e79eb611b4 100644
---- a/package/qt5/qt5location/qt5location.hash
-+++ b/package/qt5/qt5location/qt5location.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtlocation-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 b7a81c58cc331fb15bea8fba21d3c9a59f6dc6ad2e4855e30a14ce59a2af1466 qtlocation-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtlocation-everywhere-src-5.11.3.tar.xz.sha256
--sha256 58e498a5b496e3a38925398b244bbd57ba68cbb482f2a0d2ae51572e037100eb qtlocation-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtlocation-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 8b922373e6eefd1b0e2a993dbf3d0b3f3df777bc720d40cad3ccb46e1936bc50 qtlocation-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
-index 851cbc3539..5911c24c3d 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.hash
-+++ b/package/qt5/qt5multimedia/qt5multimedia.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtmultimedia-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46 qtmultimedia-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtmultimedia-everywhere-src-5.11.3.tar.xz.sha256
--sha256 728078eff7dc21495d704a7cd17c604d74604604b45a3c58271608f90dea3c41 qtmultimedia-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtmultimedia-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 9c5ba11225f57d3a8124f109514443e290a9eb94e063a5b1f78e63edfb5f0b18 qtmultimedia-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-index 25c41c6e34..240f4b4c8c 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 31bb0fc8f21b855af6ff02c415be3246128b523d0ef7c05e248e92281ab0db8e qtquickcontrols-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtquickcontrols-everywhere-src-5.11.3.tar.xz.sha256
--sha256 4e4e5da02ab0b06d35b09356170013cfe36a773d15f92281f7e6d085c3f07537 qtquickcontrols-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtquickcontrols-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 15164b00921352b5145a4fc3be0015b8521138a0cb1ecfb9811f39fd35ecd62c qtquickcontrols-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-diff --git a/package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/5.12.1/qt5quickcontrols2.hash
-similarity index 54%
-rename from package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash
-rename to package/qt5/qt5quickcontrols2/5.12.1/qt5quickcontrols2.hash
-index b1caf464a1..73cb76b53f 100644
---- a/package/qt5/qt5quickcontrols2/5.11.3/qt5quickcontrols2.hash
-+++ b/package/qt5/qt5quickcontrols2/5.12.1/qt5quickcontrols2.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtquickcontrols2-everywhere-src-5.11.3.tar.xz.sha256
--sha256 f45630b652585b62204405b28432977e67c148ca5f1789a794654fd6c1bad086 qtquickcontrols2-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtquickcontrols2-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 caa47b6d771b11c65d595fdd0f0942c3d78cda2884d318e3b1da8ec67155a8e7 qtquickcontrols2-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca LICENSE.GPLv3
-diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-index 245d66be63..c5458b5517 100644
---- a/package/qt5/qt5script/qt5script.hash
-+++ b/package/qt5/qt5script/qt5script.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtscript-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 f08720dd0e3a70377c1cb7fa3b129e24f4cdedade279e51b67c9271ab470b389 qtscript-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtscript-everywhere-src-5.11.3.tar.xz.sha256
--sha256 bb84f3cc581078df4ff76705c5623cd88287f70f7405cbccf99e6fb6dedbec08 qtscript-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtscript-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 e5c158fb85799404d20d1ec5dd33a25d5f5736807e1008ce626f666a52c80624 qtscript-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-diff --git a/package/qt5/qt5scxml/qt5scxml.hash b/package/qt5/qt5scxml/qt5scxml.hash
-index d2184c94e6..bd37c9ee8b 100644
---- a/package/qt5/qt5scxml/qt5scxml.hash
-+++ b/package/qt5/qt5scxml/qt5scxml.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtscxml-everywhere-src-5.11.3.tar.xz.sha256
--sha256 13172767eda404f1b71ab35998a95af6633d700d2417fff3648d8c6dc6af68d7 qtscxml-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtscxml-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 59a2aa1000fe03b0a3eff6fddd21f782e305408fcdd7af1f564a382331cb20b7 qtscxml-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- 
-diff --git a/package/qt5/qt5sensors/qt5sensors.hash b/package/qt5/qt5sensors/qt5sensors.hash
-index a8d325d32a..6f5d02033f 100644
---- a/package/qt5/qt5sensors/qt5sensors.hash
-+++ b/package/qt5/qt5sensors/qt5sensors.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsensors-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 7502d4dc5571865a7eea2a4180c3be396dfb8ce22df4c4f3d7e9ff32ab334973 qtsensors-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtsensors-everywhere-src-5.11.3.tar.xz.sha256
--sha256 a75753d1d5607d4cb27b1849ea9612a65bb3a5271bb31bf0817edd143b620859 qtsensors-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtsensors-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 ebc8b4bcfacf10c3bea3f400da7bf3fc7f44f90fa9eb0320c3b87f17307a63e4 qtsensors-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash b/package/qt5/qt5serialbus/5.12.1/qt5serialbus.hash
-similarity index 60%
-rename from package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash
-rename to package/qt5/qt5serialbus/5.12.1/qt5serialbus.hash
-index 7d8d9b3419..429232c45e 100644
---- a/package/qt5/qt5serialbus/5.11.3/qt5serialbus.hash
-+++ b/package/qt5/qt5serialbus/5.12.1/qt5serialbus.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtserialbus-everywhere-src-5.11.3.tar.xz.sha256
--sha256 5664def35d4ad4aedef14bc529679851450262ea81477a69031ba81aa614c16d qtserialbus-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtserialbus-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 97f0c690c77b0e19a8c90e376ecc94d59b21adb20a90179700d1c514a4c50d74 qtserialbus-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-diff --git a/package/qt5/qt5serialport/5.11.3/qt5serialport.hash b/package/qt5/qt5serialport/5.12.1/qt5serialport.hash
-similarity index 65%
-rename from package/qt5/qt5serialport/5.11.3/qt5serialport.hash
-rename to package/qt5/qt5serialport/5.12.1/qt5serialport.hash
-index 63e0cb61c1..6adcaaff61 100644
---- a/package/qt5/qt5serialport/5.11.3/qt5serialport.hash
-+++ b/package/qt5/qt5serialport/5.12.1/qt5serialport.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtserialport-everywhere-src-5.11.3.tar.xz.mirrorlist
--sha256 96c45e6d0d470626815f82b38ee48bf941e1bbfc10863087b69cc5f7bb766bda qtserialport-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtserialport-everywhere-src-5.12.1.tar.xz.mirrorlist
-+sha256 243b2502283c45f5163d68c3f23c787d46eb0e3ba58f3d9a0560dc7968a6ce19 qtserialport-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
-index 3c2f0fe474..ddc059aa99 100644
---- a/package/qt5/qt5svg/qt5svg.hash
-+++ b/package/qt5/qt5svg/qt5svg.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsvg-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 100f183517b46554079beabd8d2cabe3070a74dd0a2e64b6a304eac71cfadcec qtsvg-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtsvg-everywhere-src-5.11.3.tar.xz.sha256
--sha256 21ea2c9c4e78101e98163bc19e463b8d8cdffa20e1ccd523ccc925b9f2cd4491 qtsvg-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtsvg-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 5bc1f744d32c06f5aa4eff33759568106a995ce21fa1326a247dfa5f783f63c8 qtsvg-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
-index 94f1254b03..06e2127dba 100644
---- a/package/qt5/qt5tools/qt5tools.hash
-+++ b/package/qt5/qt5tools/qt5tools.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qttools-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 1a63ba838058d73cb540040589b235ded77f76402693decfd6d4d3c75ea67926 qttools-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qttools-everywhere-src-5.11.3.tar.xz.sha256
--sha256 c205e81bba9b87c6186604a05ab48e4e6cac0cd511525749dfd00b107b6f9f8e qttools-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qttools-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 ab1da4fbd84a9d3873e4ed212a0ae614c6059b8e7dca2f0a599a6f7e61f6cbf3 qttools-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/5.12.1/qt5virtualkeyboard.hash
-similarity index 70%
-rename from package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash
-rename to package/qt5/qt5virtualkeyboard/5.12.1/qt5virtualkeyboard.hash
-index c7d27870b2..0e6860f3d6 100644
---- a/package/qt5/qt5virtualkeyboard/5.11.3/qt5virtualkeyboard.hash
-+++ b/package/qt5/qt5virtualkeyboard/5.12.1/qt5virtualkeyboard.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtvirtualkeyboard-everywhere-src-5.11.3.tar.xz.sha256
--sha256 8c5c40245a9dd2e9e504ce2d47d45079d8280436146797b24b8115ef163b4b9e qtvirtualkeyboard-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtvirtualkeyboard-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 a9e3ed4786d603314144c7ad29a9fdeb6e5c3f2ea5a27f6545cc9777244cd683 qtvirtualkeyboard-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-index 40d1bb0b26..5b898bd3da 100644
---- a/package/qt5/qt5wayland/qt5wayland.hash
-+++ b/package/qt5/qt5wayland/qt5wayland.hash
-@@ -1,8 +1,8 @@
- # hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwayland-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 5a475278b2db73aa7fa7f3ba6d98d8d72774f5c77e172495007d79f91d09daa3 qtwayland-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwayland-everywhere-src-5.11.3.tar.xz.sha256
--sha256 62c94f29e461c849e479f39d21577b0c72f0f084250e126021edcf0719271fb2 qtwayland-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtwayland-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 88f0507628b3697b0d59349d27b5e60a313a3138927722d6cf981089fff02553 qtwayland-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
-index 7c87683ba8..1bbb8fbf20 100644
---- a/package/qt5/qt5webchannel/qt5webchannel.hash
-+++ b/package/qt5/qt5webchannel/qt5webchannel.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebchannel-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 8eb1b0ac2286653c7932758c21e7760788a5d7cfd6162da09afa926d5be50713 qtwebchannel-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebchannel-everywhere-src-5.11.3.tar.xz.sha256
--sha256 3c254fa41b1af09c1e951131f3a1336dee70a15cbb8a82112488b38d29572df3 qtwebchannel-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtwebchannel-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 40c3e74347c67a9864d0d54f14120555860e4ce529746407325b3cd6e9aeb5bf qtwebchannel-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5webengine/chromium-latest.inc b/package/qt5/qt5webengine/chromium-latest.inc
-index 9e4b7d6356..7c5aca81d4 100644
---- a/package/qt5/qt5webengine/chromium-latest.inc
-+++ b/package/qt5/qt5webengine/chromium-latest.inc
-@@ -15,14 +15,13 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE \
- 	src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE \
- 	src/3rdparty/chromium/buildtools/LICENSE \
--	src/3rdparty/chromium/chrome/third_party/chromevox/LICENSE \
--	src/3rdparty/chromium/chrome/third_party/chromevox/third_party/closure-library/LICENSE \
- 	src/3rdparty/chromium/LICENSE \
- 	src/3rdparty/chromium/LICENSE.chromium_os \
- 	src/3rdparty/chromium/mojo/public/LICENSE \
- 	src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE \
- 	src/3rdparty/chromium/net/third_party/nss/LICENSE \
- 	src/3rdparty/chromium/ppapi/LICENSE \
-+	src/3rdparty/chromium/third_party/abseil-cpp/LICENSE \
- 	src/3rdparty/chromium/third_party/accessibility_test_framework/LICENSE \
- 	src/3rdparty/chromium/third_party/angle/LICENSE \
- 	src/3rdparty/chromium/third_party/angle/src/common/third_party/smhasher/LICENSE \
-@@ -31,13 +30,34 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/apache-portable-runtime/LICENSE \
- 	src/3rdparty/chromium/third_party/apk-patch-size-estimator/LICENSE \
- 	src/3rdparty/chromium/third_party/apple_apsl/LICENSE \
-+	src/3rdparty/chromium/third_party/arcore-android-sdk/LICENSE \
- 	src/3rdparty/chromium/third_party/axe-core/LICENSE \
- 	src/3rdparty/chromium/third_party/bazel/LICENSE \
- 	src/3rdparty/chromium/third_party/blanketjs/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-APPLE \
-+	src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-LGPL-2 \
-+	src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-LGPL-2.1 \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/audits2/lighthouse/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/audits2_worker/lighthouse/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm/LICENSE_python \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm_modes/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/formatter_worker/acorn/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/terminal/xterm.js/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/renderer/devtools/scripts/closure/COPYING \
-+	src/3rdparty/chromium/third_party/blink/renderer/platform/testing/data/third_party/Roboto/LICENSE.txt \
-+	src/3rdparty/chromium/third_party/blink/renderer/platform/wtf/dtoa/COPYING \
-+	src/3rdparty/chromium/third_party/blink/renderer/platform/wtf/dtoa/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/LICENSE.md \
-+	src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/third_party/html5lib/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/third_party/six/LICENSE \
-+	src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/wptserve/LICENSE \
- 	src/3rdparty/chromium/third_party/boringssl/src/LICENSE \
- 	src/3rdparty/chromium/third_party/boringssl/src/third_party/android-cmake/LICENSE \
- 	src/3rdparty/chromium/third_party/boringssl/src/third_party/fiat/LICENSE \
- 	src/3rdparty/chromium/third_party/boringssl/src/third_party/googletest/LICENSE \
-+	src/3rdparty/chromium/third_party/boringssl/src/third_party/wycheproof_testvectors/LICENSE \
- 	src/3rdparty/chromium/third_party/bouncycastle/LICENSE \
- 	src/3rdparty/chromium/third_party/breakpad/breakpad/LICENSE \
- 	src/3rdparty/chromium/third_party/breakpad/breakpad/src/third_party/curl/COPYING \
-@@ -51,11 +71,14 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/chaijs/LICENSE \
- 	src/3rdparty/chromium/third_party/checkstyle/LICENSE \
- 	src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20 \
-+	src/3rdparty/chromium/third_party/chromevox/LICENSE \
-+	src/3rdparty/chromium/third_party/chromevox/third_party/closure-library/LICENSE \
-+	src/3rdparty/chromium/third_party/chromevox/third_party/sre/LICENSE \
- 	src/3rdparty/chromium/third_party/cld_3/LICENSE \
- 	src/3rdparty/chromium/third_party/cld_3/src/LICENSE \
--	src/3rdparty/chromium/third_party/content_shell_fonts/LICENSE \
- 	src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE \
- 	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE \
-+	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/cpp-httplib/cpp-httplib/LICENSE \
- 	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE \
- 	src/3rdparty/chromium/third_party/crc32c/src/LICENSE \
- 	src/3rdparty/chromium/third_party/cros_system_api/LICENSE \
-@@ -193,6 +216,7 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/errorprone/LICENSE \
- 	src/3rdparty/chromium/third_party/espresso/LICENSE \
- 	src/3rdparty/chromium/third_party/expat/files/COPYING \
-+	src/3rdparty/chromium/third_party/feed/LICENSE \
- 	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/full_lgpl.txt \
- 	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/jpeg.txt \
- 	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/mips.txt \
-@@ -213,7 +237,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/fontconfig/LICENSE \
- 	src/3rdparty/chromium/third_party/fontconfig/src/COPYING \
- 	src/3rdparty/chromium/third_party/freetype/src/docs/LICENSE.TXT \
--	src/3rdparty/chromium/third_party/gardiner_mod/LICENSE \
- 	src/3rdparty/chromium/third_party/gestures/gestures/LICENSE \
- 	src/3rdparty/chromium/third_party/gestures/LICENSE \
- 	src/3rdparty/chromium/third_party/gif_player/LICENSE \
-@@ -222,13 +245,15 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/googletest/src/googlemock/scripts/generator/LICENSE \
- 	src/3rdparty/chromium/third_party/googletest/src/googletest/LICENSE \
- 	src/3rdparty/chromium/third_party/googletest/src/LICENSE \
-+	src/3rdparty/chromium/third_party/google-truth/LICENSE \
- 	src/3rdparty/chromium/third_party/gson/LICENSE \
- 	src/3rdparty/chromium/third_party/guava/LICENSE \
- 	src/3rdparty/chromium/third_party/gvr-android-keyboard/LICENSE \
- 	src/3rdparty/chromium/third_party/gvr-android-sdk/LICENSE \
- 	src/3rdparty/chromium/third_party/haha/LICENSE \
- 	src/3rdparty/chromium/third_party/hamcrest/LICENSE \
--	src/3rdparty/chromium/third_party/harfbuzz-ng/COPYING \
-+	src/3rdparty/chromium/third_party/harfbuzz-ng/src/COPYING \
-+	src/3rdparty/chromium/third_party/harfbuzz-ng/src/src/hb-ucdn/COPYING \
- 	src/3rdparty/chromium/third_party/hunspell/COPYING \
- 	src/3rdparty/chromium/third_party/hunspell/COPYING.LESSER \
- 	src/3rdparty/chromium/third_party/hunspell/COPYING.MPL \
-@@ -269,6 +294,7 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/libvpx/source/libvpx/LICENSE \
- 	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/googletest/src/LICENSE \
- 	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/libwebm/LICENSE.TXT \
-+	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/libyuv/LICENSE \
- 	src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/x86inc/LICENSE \
- 	src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT \
- 	src/3rdparty/chromium/third_party/libwebp/LICENSE \
-@@ -278,7 +304,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/libxslt/linux/COPYING \
- 	src/3rdparty/chromium/third_party/libxslt/src/Copyright \
- 	src/3rdparty/chromium/third_party/libyuv/LICENSE \
--	src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY \
- 	src/3rdparty/chromium/third_party/lzma_sdk/LICENSE \
- 	src/3rdparty/chromium/third_party/mach_override/LICENSE \
- 	src/3rdparty/chromium/third_party/markupsafe/LICENSE \
-@@ -297,7 +322,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/molokocacao/LICENSE \
- 	src/3rdparty/chromium/third_party/motemplate/LICENSE \
- 	src/3rdparty/chromium/third_party/mozilla/LICENSE \
--	src/3rdparty/chromium/third_party/mt19937ar/LICENSE \
- 	src/3rdparty/chromium/third_party/netty4/LICENSE \
- 	src/3rdparty/chromium/third_party/netty-tcnative/LICENSE \
- 	src/3rdparty/chromium/third_party/node/LICENSE \
-@@ -316,6 +340,7 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/pexpect/LICENSE \
- 	src/3rdparty/chromium/third_party/ply/LICENSE \
- 	src/3rdparty/chromium/third_party/ply/license.patch \
-+	src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer2/LICENSE.txt \
- 	src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt \
- 	src/3rdparty/chromium/third_party/proguard/LICENSE \
- 	src/3rdparty/chromium/third_party/protobuf/LICENSE \
-@@ -323,15 +348,19 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE \
- 	src/3rdparty/chromium/third_party/pyelftools/LICENSE \
- 	src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE \
-+	src/3rdparty/chromium/third_party/pyjson5/src/LICENSE \
- 	src/3rdparty/chromium/third_party/pymock/LICENSE.txt \
- 	src/3rdparty/chromium/third_party/pystache/LICENSE \
- 	src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md \
- 	src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE \
- 	src/3rdparty/chromium/third_party/qcms/src/COPYING \
-+	src/3rdparty/chromium/third_party/quic_trace/src/LICENSE \
- 	src/3rdparty/chromium/third_party/qunit/LICENSE \
-+	src/3rdparty/chromium/third_party/r8/LICENSE \
- 	src/3rdparty/chromium/third_party/re2/LICENSE \
- 	src/3rdparty/chromium/third_party/re2/src/LICENSE \
- 	src/3rdparty/chromium/third_party/requests/LICENSE \
-+	src/3rdparty/chromium/third_party/rnnoise/COPYING \
- 	src/3rdparty/chromium/third_party/robolectric/LICENSE \
- 	src/3rdparty/chromium/third_party/robolectric/licenses/extreme.indiana.edu.license.txt \
- 	src/3rdparty/chromium/third_party/robolectric/licenses/javolution.license.txt \
-@@ -339,22 +368,22 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/s2cellid/LICENSE \
- 	src/3rdparty/chromium/third_party/sfntly/COPYING.txt \
- 	src/3rdparty/chromium/third_party/sfntly/src/cpp/COPYING.txt \
--	src/3rdparty/chromium/third_party/shaderc/LICENSE \
- 	src/3rdparty/chromium/third_party/shaderc/src/LICENSE \
- 	src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.glslang \
- 	src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.spirv-tools \
- 	src/3rdparty/chromium/third_party/simplejson/LICENSE.txt \
- 	src/3rdparty/chromium/third_party/sinonjs/LICENSE \
- 	src/3rdparty/chromium/third_party/skia/LICENSE \
--	src/3rdparty/chromium/third_party/skia/third_party/etc1/LICENSE \
- 	src/3rdparty/chromium/third_party/skia/third_party/gif/LICENSE \
-+	src/3rdparty/chromium/third_party/skia/third_party/skcms/LICENSE \
-+	src/3rdparty/chromium/third_party/skia/third_party/vulkanmemoryallocator/include/LICENSE.txt \
-+	src/3rdparty/chromium/third_party/skia/third_party/vulkanmemoryallocator/LICENSE \
- 	src/3rdparty/chromium/third_party/smhasher/LICENSE \
- 	src/3rdparty/chromium/third_party/snappy/src/COPYING \
- 	src/3rdparty/chromium/third_party/SPIRV-Tools/LICENSE \
- 	src/3rdparty/chromium/third_party/SPIRV-Tools/src/LICENSE \
- 	src/3rdparty/chromium/third_party/sqlite4java/LICENSE \
- 	src/3rdparty/chromium/third_party/sqlite/LICENSE \
--	src/3rdparty/chromium/third_party/sqlite/sqlite-src-3210000/autoconf/tea/license.terms \
- 	src/3rdparty/chromium/third_party/sqlite/src/autoconf/tea/license.terms \
- 	src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE \
- 	src/3rdparty/chromium/third_party/swiftshader/LICENSE.txt \
-@@ -366,20 +395,19 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/utils/unittest/googletest/LICENSE.TXT \
- 	src/3rdparty/chromium/third_party/swiftshader/third_party/PowerVR_SDK/License.txt \
- 	src/3rdparty/chromium/third_party/swiftshader/third_party/subzero/LICENSE.TXT \
-+	src/3rdparty/chromium/third_party/tcmalloc/gperftools-2.0/vendor/COPYING \
- 	src/3rdparty/chromium/third_party/tcmalloc/LICENSE \
- 	src/3rdparty/chromium/third_party/tcmalloc/vendor/COPYING \
-+	src/3rdparty/chromium/third_party/test_fonts/LICENSE \
- 	src/3rdparty/chromium/third_party/tlslite/LICENSE \
--	src/3rdparty/chromium/third_party/typ/LICENSE \
- 	src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE \
-+	src/3rdparty/chromium/third_party/unrar/LICENSE \
-+	src/3rdparty/chromium/third_party/unrar/src/license.txt \
- 	src/3rdparty/chromium/third_party/usb_ids/LICENSE \
- 	src/3rdparty/chromium/third_party/usrsctp/LICENSE \
- 	src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md \
- 	src/3rdparty/chromium/third_party/v4l-utils/COPYING.libv4l \
- 	src/3rdparty/chromium/third_party/visualmetrics/src/LICENSE \
--	src/3rdparty/chromium/third_party/vulkan/LICENSE \
--	src/3rdparty/chromium/third_party/wayland/LICENSE \
--	src/3rdparty/chromium/third_party/wayland-protocols/LICENSE \
--	src/3rdparty/chromium/third_party/wayland-protocols/src/COPYING \
- 	src/3rdparty/chromium/third_party/wds/LICENSE \
- 	src/3rdparty/chromium/third_party/wds/src/COPYING \
- 	src/3rdparty/chromium/third_party/web-animations-js/LICENSE \
-@@ -387,25 +415,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/webdriver/COPYING \
- 	src/3rdparty/chromium/third_party/webdriver/LICENSE \
- 	src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2 \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1 \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/audits2/lighthouse/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/audits2_worker/lighthouse/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE_python \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm_modes/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/formatter_worker/acorn/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/terminal/xterm.js/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE.md \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/html5lib/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/six/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/wptserve/LICENSE \
- 	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE \
- 	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md \
- 	src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCMobile/third_party/SocketRocket/LICENSE \
-@@ -432,6 +441,9 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/v8/src/third_party/utf8-decoder/LICENSE \
- 	src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE \
- 	src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE \
-+	src/3rdparty/chromium/v8/third_party/antlr4/LICENSE.txt \
- 	src/3rdparty/chromium/v8/third_party/colorama/LICENSE \
- 	src/3rdparty/chromium/v8/third_party/inspector_protocol/LICENSE \
-+	src/3rdparty/gn/base/third_party/icu/LICENSE \
-+	src/3rdparty/gn/LICENSE \
- 	src/3rdparty/ninja/COPYING
-diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
-index 730352611a..4cbc1ce4fb 100644
---- a/package/qt5/qt5webengine/qt5webengine.hash
-+++ b/package/qt5/qt5webengine/qt5webengine.hash
-@@ -1,5 +1,5 @@
- # Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebengine-everywhere-src-5.11.3.tar.xz.sha256
--sha256 5bb49ead71b851db4dc56f8fd97e0db72a268b22104129a06bac201d55d3b8fe qtwebengine-everywhere-src-5.11.3.tar.xz
+diff --git a/package/qt5/qt5webengine/5.12.1/qt5webengine.hash b/package/qt5/qt5webengine/5.12.1/qt5webengine.hash
+new file mode 100644
+index 0000000000..cf0152b06e
+--- /dev/null
++++ b/package/qt5/qt5webengine/5.12.1/qt5webengine.hash
+@@ -0,0 +1,456 @@
 +# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtwebengine-everywhere-src-5.12.1.tar.xz.sha256
 +sha256 43e91e06bc4a60ef0f91d15ae06425cf9c6b4f7dafe960259a5b013c687c3bd0 qtwebengine-everywhere-src-5.12.1.tar.xz
-diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
-index 0df4ac98fa..3b2f4fa3c3 100644
---- a/package/qt5/qt5websockets/qt5websockets.hash
-+++ b/package/qt5/qt5websockets/qt5websockets.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebsockets-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 a2439045616c89dfe06333734ff4726075c92e01db6e6b6863bc138e39c028eb qtwebsockets-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtwebsockets-everywhere-src-5.11.3.tar.xz.sha256
--sha256 021090c1a92f11fcf2914168741c1364235896793685b7fae2bc23e3dd55d5b9 qtwebsockets-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtwebsockets-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 2fd0627916d817599c5f855a97156113ed3625b90b350603be6f668762abfc79 qtwebsockets-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash b/package/qt5/qt5x11extras/5.12.1/qt5x11extras.hash
-similarity index 65%
-rename from package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash
-rename to package/qt5/qt5x11extras/5.12.1/qt5x11extras.hash
-index 9a0e85d8fd..b065234f4c 100644
---- a/package/qt5/qt5x11extras/5.11.3/qt5x11extras.hash
-+++ b/package/qt5/qt5x11extras/5.12.1/qt5x11extras.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtx11extras-everywhere-src-5.11.3.tar.xz.mirrorlist
--sha256 f99eebe685f7cdbb71cd62903c2b2511548345535841bcc3f6b662205815cd85 qtx11extras-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtx11extras-everywhere-src-5.12.1.tar.xz.mirrorlist
-+sha256 08fb1c40e1562d43087368a5efa39569fa1ad52b72d2360f9fc1fe18b00da366 qtx11extras-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index 5c66a54eeb..f22e4e54ff 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-@@ -1,8 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtxmlpatterns-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 a461ff9f0d7310de9b9904ff9cd34919e958bf4071a6fc7096450b8990ab51f6 qtxmlpatterns-opensource-src-5.6.3.tar.xz
- 
--# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.3/submodules/qtxmlpatterns-everywhere-src-5.11.3.tar.xz.sha256
--sha256 8bd00be30722570d22382b99679d07787a2d62d4891d1c47d738d634e2db0eee qtxmlpatterns-everywhere-src-5.11.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtxmlpatterns-everywhere-src-5.12.1.tar.xz.sha256
-+sha256 76988ca9a7a184b9013b8a5864dad150e4603890c7eb7aecad4baad071802ecb qtxmlpatterns-everywhere-src-5.12.1.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
++
++# Locally calculated
++sha256 f34787ef0342c614b667186a6ec2f5d6b9d650e30142a2788a589a89743e88e9  LICENSE.Chromium
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPL3
++
++# Locally calculated with:
++# for i in $(find src/3rdparty/ -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before') ; do echo -n "sha256 " ; sha256sum $i ; done
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/mojo/public/LICENSE
++sha256 18351de3d7e2dc469cc83e77d38a3e25d010251e34eb348bbd1a76275e313997  src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE
++sha256 d55a403514532af12dc2fbfb2e41900090a5dd6c7c76c8e4d9b20bcc737eac35  src/3rdparty/chromium/base/third_party/nspr/LICENSE
++sha256 538edc6f52c563cf06eca1bac8dd785ff60ef5a371a950265700d5d40386db6e  src/3rdparty/chromium/base/third_party/symbolize/LICENSE
++sha256 d04360743ae3338bb08ab2106b51e24309e3ca4b1c6b1186139531ade351b7e3  src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE
++sha256 5d85142a5609ad177a2d7a2e7cae060b886b8b42f25c5b9803cf0cb5ee04ad2f  src/3rdparty/chromium/base/third_party/icu/LICENSE
++sha256 c45766baef552c59eeb1fdfbbc690e52e4cd5b135dfd325f21bdfe8ddfe28ce6  src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE
++sha256 9ad1d4223b80349f3d3ab9cec92f93431b9da14a1b5d41de468ce054a28cf8aa  src/3rdparty/chromium/base/third_party/libevent/LICENSE
++sha256 79955cd80438f041387eb080f2675394e36a806b8b17eca63a4bc568d839509e  src/3rdparty/chromium/base/third_party/valgrind/LICENSE
++sha256 90b2201c340cee36b40a443f949d9eb416f0a0d204c32d350aff87fedeb67ae8  src/3rdparty/chromium/base/third_party/superfasthash/LICENSE
++sha256 96e7ccbf8d17e319dd77c4ebd4965b64a820bbcc3142a2478fbf95af77417b6a  src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE
++sha256 63f0c0039b477857e54708d9501ed91b7a46e828ac3c623bedbc318129ceb174  src/3rdparty/chromium/tools/origin_trials/third_party/ed25519/LICENSE
++sha256 4fde1ca31ffe4e16a76098f56170166c61a5493d3bafcc6a5903d3cb60aa7560  src/3rdparty/chromium/tools/symsrc/COPYING-pefile
++sha256 70eb89e4cb460d1b27173348c9f9fca5cf67c09d722ddaa07c5d0fcd6262a97e  src/3rdparty/chromium/tools/gyp/LICENSE
++sha256 7389900fb68d920c6cb21b70702a2bc240523472a3fd091023d6135cf01d1c5c  src/3rdparty/chromium/tools/win/ChromeDebug/ChromeDebug/LICENSE
++sha256 f5b244982699ca9fe5cc8fa8a7c08cf5dee5d3a0c8896892899e5df13316e1b7  src/3rdparty/chromium/tools/page_cycler/acid3/LICENSE
++sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/chromium/LICENSE
++sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  src/3rdparty/chromium/third_party/opus/src/COPYING
++sha256 7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d  src/3rdparty/chromium/third_party/opus/src/LICENSE_PLEASE_READ.txt
++sha256 d18e75f216f177d41304f5e94c2cba7d1bf9f8f8583a0777cceb5cca0c5ad137  src/3rdparty/chromium/third_party/icu4j/LICENSE
++sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  src/3rdparty/chromium/third_party/snappy/src/COPYING
++sha256 bf4da21bd20bcfb5b60b7ecc67fa864a79be049e21d6178076887f178dd6c71a  src/3rdparty/chromium/third_party/angle/LICENSE
++sha256 3f6f1b520bc53e878ccbb698ad0bacef3752a5f4e4b50a26552bd70f60b40748  src/3rdparty/chromium/third_party/angle/src/common/third_party/smhasher/LICENSE
++sha256 a08ba10adec47027ef8078848729837b1c5a42f140718d7afd65c23f1eeec392  src/3rdparty/chromium/third_party/angle/src/third_party/compiler/LICENSE
++sha256 31346421254a3e6e12687cf17f19f6357ee73a617fa7b3d3ccefdcbabe49bdd3  src/3rdparty/chromium/third_party/angle/src/third_party/libXNVCtrl/LICENSE
++sha256 923e74e5ae41345038da0a56dfdc983356917fbbb139176e654d1b33100b723f  src/3rdparty/chromium/third_party/jmake/LICENSE
++sha256 0d74de3c3cd3196a9ed1bc612cfd5f81d7509d66c4be34a50f99d61bd1ad00d4  src/3rdparty/chromium/third_party/ots/LICENSE
++sha256 795f8d76eade6130129b680ac72ea81cb3e143467a65ea1f5f64946151d7fa20  src/3rdparty/chromium/third_party/yasm/source/patched-yasm/COPYING
++sha256 d600ff20c150a675461dde76752e35f4cc3be6e7d8e70b8da3e775ea7e5ec4aa  src/3rdparty/chromium/third_party/test_fonts/LICENSE
++sha256 294f58267c6f473c4ce7270bf5c8d34b2003cb43804552459654c36553431276  src/3rdparty/chromium/third_party/proguard/LICENSE
++sha256 dd4930c619afd8527591353c7d3d1c1d7f4bf62ed1cb411f4f507dbdee7738a2  src/3rdparty/chromium/third_party/ply/LICENSE
++sha256 685b3b09870f1361f8db2d3f37acdb765d5da1722a18b182765da4b79a8f63ff  src/3rdparty/chromium/third_party/ply/license.patch
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/libprotobuf-mutator/src/LICENSE
++sha256 f56ff606104d4ef18e617921a75c73ad73b5a1a1d70c69590c29de16919e04ad  src/3rdparty/chromium/third_party/openvr/src/LICENSE
++sha256 cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  src/3rdparty/chromium/third_party/pyjson5/src/LICENSE
++sha256 d51b39e7ed0391e75e0add75d1a162fdf4a0d6b49fba7635ed0ac4e16f324773  src/3rdparty/chromium/third_party/webdriver/COPYING
++sha256 6d83e980b9b843cf6fe24cb94714d00f9b0cf69cb00d0e3b0bed018d49d6f24f  src/3rdparty/chromium/third_party/webdriver/LICENSE
++sha256 71a19392a0eb3255ab2055ed978bb0f93865cea84d31a3510eaffb74d8981e7f  src/3rdparty/chromium/third_party/khronos/LICENSE
++sha256 a412a53925efc6b50800bf8519a2e033949243d5a5a8c5422bae8a5007ad09c8  src/3rdparty/chromium/third_party/iccjpeg/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/feed/LICENSE
++sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/isimpledom/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/guava/LICENSE
++sha256 60bd7c54856bf9387221bde5ab55d516d7cea15870d0fed69406bcd1c8ec7c9d  src/3rdparty/chromium/third_party/boringssl/src/LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/boringssl/src/third_party/wycheproof_testvectors/LICENSE
++sha256 201d494a3f42450a28df2f0919a147e9a5296e841df5d415172a0ca8b558d0a8  src/3rdparty/chromium/third_party/boringssl/src/third_party/android-cmake/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/boringssl/src/third_party/googletest/LICENSE
++sha256 0c125a4dab5ab869473e6491db22f6c0a7f8a4de58588d03bb2b16c0c8ebd7de  src/3rdparty/chromium/third_party/boringssl/src/third_party/fiat/LICENSE
++sha256 942755efa272dbfbcd7afea7a38556801e36c16dcad002d572378367094a2593  src/3rdparty/chromium/third_party/zlib/LICENSE
++sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  src/3rdparty/chromium/third_party/libsrtp/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/errorprone/LICENSE
++sha256 29028ec63522121b5545046e0c4d3ccc1e01fc8d9aaa3272554f74829cdacf84  src/3rdparty/chromium/third_party/apache-portable-runtime/LICENSE
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/shaderc/src/LICENSE
++sha256 19096ed2f05a693b92433405a6bf1018044b31ed5fa8883ab865cf2cd166f6e9  src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.spirv-tools
++sha256 b5a00e94f058edc87e05978329b55730d8689abe61205d9018443d03de4f07da  src/3rdparty/chromium/third_party/shaderc/src/third_party/LICENSE.glslang
++sha256 af67c58de2e18677a0b8cb5fffbe2232aabb8eb2930e8cd684769cef3d74a262  src/3rdparty/chromium/third_party/protobuf/LICENSE
++sha256 e2f59ff41d9d03adc3dcf3deff170f8c8cf4a6eb4a9b174762a7656d23200ffa  src/3rdparty/chromium/third_party/rnnoise/COPYING
++sha256 721cb11de618fcf9bbb7d25a389207bf2227357e6694bc326ab32a6699f9b951  src/3rdparty/chromium/third_party/libFuzzer/LICENSE.TXT
++sha256 43452b94e6aa0c2d076ad25b87f580c11571689d52f3aa1a1f7bdcab31a0bd15  src/3rdparty/chromium/third_party/decklink/LICENSE
++sha256 f8c8ccecdbb044fd6fa1a586c596a055fb2b14fb3e335d8ed282db58d80b7410  src/3rdparty/chromium/third_party/pyelftools/LICENSE
++sha256 f8d0c347a0dcc6ebe1671640dfae8d2411b6ded892e06a6764f8208b218b2af4  src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE
++sha256 3d1d2669d0ba87069b5e202f106193c4eb0e140a2aead31dca9670a0581dd979  src/3rdparty/chromium/third_party/chaijs/LICENSE
++sha256 e075583a46bca13a3f25af4181e2a0064f442c1f55c4312275cbcf05b892d3f4  src/3rdparty/chromium/third_party/mocha/LICENSE
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/sqlite4java/LICENSE
++sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/chromium/third_party/harfbuzz-ng/src/COPYING
++sha256 ec20cbe051200fc846caf4dc253cf660e874a2d9e4f3a682e08354b567fae409  src/3rdparty/chromium/third_party/harfbuzz-ng/src/src/hb-ucdn/COPYING
++sha256 ef5b39dfcafe08323262e3f51a3a9de649978a55ed8ef8eef3c451f2c1e78a53  src/3rdparty/chromium/third_party/ced/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/ced/src/LICENSE
++sha256 fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  src/3rdparty/chromium/third_party/freetype/src/docs/LICENSE.TXT
++sha256 d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978  src/3rdparty/chromium/third_party/skia/LICENSE
++sha256 3e3a91ec5c3fa243ad1f5a25cedee0abafd9824d061378cd3c81c541b044bf09  src/3rdparty/chromium/third_party/skia/third_party/gif/LICENSE
++sha256 e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36  src/3rdparty/chromium/third_party/skia/third_party/skcms/LICENSE
++sha256 d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978  src/3rdparty/chromium/third_party/skia/third_party/vulkanmemoryallocator/LICENSE
++sha256 e21477eed484b07902a861a1b18d1e4ecd3e6f22fa81e2410f0770cfb67290e8  src/3rdparty/chromium/third_party/skia/third_party/vulkanmemoryallocator/include/LICENSE.txt
++sha256 b5730da9a26472a405b0b1c61d3d166714d9d654ab3282e54e4a01a5f66316c3  src/3rdparty/chromium/third_party/objenesis/LICENSE
++sha256 c2d13ec3b431617beb314705c0f42d17ca579eed00032ed8a13dbcd23fc9bdd5  src/3rdparty/chromium/third_party/cld_3/LICENSE
++sha256 c2d13ec3b431617beb314705c0f42d17ca579eed00032ed8a13dbcd23fc9bdd5  src/3rdparty/chromium/third_party/cld_3/src/LICENSE
++sha256 a1f30b77c01e0995fa32a00119e00749e8731ee8a3c4c3549bce74083c72b0b6  src/3rdparty/chromium/third_party/crc32c/src/LICENSE
++sha256 6e3e0a978f1e136cb3efb89702f4314671581a0c70c9a52447669e00f7b129e8  src/3rdparty/chromium/third_party/lzma_sdk/LICENSE
++sha256 fa53711b25af4b9a9b8dadfea3cb38166ec4b96760c8d62b284055554537d9ef  src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md
++sha256 7a4a31e05391919c05a996f09fc20ffc80c69af72cb3e69ac71b70c825fbdd1d  src/3rdparty/chromium/third_party/usrsctp/LICENSE
++sha256 9f45b3cf29b76b5bf4ad467938b0e61a720eec6ef6c219c566f7c262b0cc7854  src/3rdparty/chromium/third_party/haha/LICENSE
++sha256 87642305968765a4030fd202ff7006afa67274da7f9bde84506e51ae58ecc2b4  src/3rdparty/chromium/third_party/minizip/src/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/netty-tcnative/LICENSE
++sha256 6629d6edceffa9c68f4245b817137d2265fdab1e98068893420edb6689ccce9e  src/3rdparty/chromium/third_party/usb_ids/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/woff2/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/google-truth/LICENSE
++sha256 c93465d6a75e6ade8785edb4ec125ece083ab0910ed0417b4ff346792ba0f851  src/3rdparty/chromium/third_party/mesa/LICENSE
++sha256 e8800bd573e8f844a5b87cf43cc4d55767314b4e95a6092cf26ce9c6ed00b877  src/3rdparty/chromium/third_party/mesa/src/docs/COPYING
++sha256 1efd6dec259877be94db3dbd005c93a5c94a73a492bd85eede6e14885e480e0e  src/3rdparty/chromium/third_party/mesa/src/docs/license.html
++sha256 704179825bb7c4600acbff3d1fcd95f1eb61b2c4a11b66bb150d7cefea8f6371  src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT
++sha256 8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  src/3rdparty/chromium/third_party/ijar/LICENSE
++sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/src/cpp/COPYING.txt
++sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/COPYING.txt
++sha256 0a90947436dc17f047f8c95b64593e2cc9a2b6d4ff6618f2f0beba5a9b568c14  src/3rdparty/chromium/third_party/unrar/LICENSE
++sha256 6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  src/3rdparty/chromium/third_party/unrar/src/license.txt
++sha256 846f295f64194ebcf615d6e35e445990645583764b52295177fc09a69051df1f  src/3rdparty/chromium/third_party/visualmetrics/src/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/libaddressinput/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/libaddressinput/src/LICENSE
++sha256 c9a5bd7c8cc1267ddacdc5228c68ecd811cf6d74286e9141bc80d8af2eb1a025  src/3rdparty/chromium/third_party/libaddressinput/src/cpp/LICENSE.chromium
++sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  src/3rdparty/chromium/third_party/v4l-utils/COPYING.libv4l
++sha256 83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  src/3rdparty/chromium/third_party/minigbm/LICENSE
++sha256 8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  src/3rdparty/chromium/third_party/minigbm/src/LICENSE
++sha256 10054db83ace18e5a455749d0d247857ec50508cecda79a5abe66fe4778d7721  src/3rdparty/chromium/third_party/d3/src/LICENSE
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/libusb/src/COPYING
++sha256 a661d10f8f194b1963a75bb4d308f17b078cc064624313a556902d89705f6876  src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS
++sha256 9f5db2544e04e3e0fb39ea277b9bb6f8efcc8bb84f6264630978ce4708495535  src/3rdparty/chromium/third_party/gestures/gestures/LICENSE
++sha256 4bd9e329f9b268bd0dec2df0560a03382fe426adf83daa7b314d2f46b9b22c9a  src/3rdparty/chromium/third_party/gestures/LICENSE
++sha256 46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76  src/3rdparty/chromium/third_party/expat/files/COPYING
++sha256 0518cf49c09398259d54fcfff0b5fd36456162c6439886660e53627b3073ef22  src/3rdparty/chromium/third_party/blanketjs/LICENSE
++sha256 e9427cf6abc4eaeda0bcd094fca46af4067970079f426b65d5cbacb87bff6366  src/3rdparty/chromium/third_party/cros_system_api/LICENSE
++sha256 7975c0027cfa5d08253fbb6ff4676acc38248bd5e046d0dbab3d810971e97970  src/3rdparty/chromium/third_party/jinja2/LICENSE
++sha256 0cd1bd4b934ffdc5e7f1bcfa9d08bd17295e5414bdca99c06b1036278b01f0b1  src/3rdparty/chromium/third_party/node/LICENSE
++sha256 f9752a0a4ac5215eaa3a4f0ec29cd52563c883de5d7870525cc0bc3a21cb8e15  src/3rdparty/chromium/third_party/breakpad/breakpad/LICENSE
++sha256 4d03f91b94e0db3bdc9ddaf0060dd41cc94a2096094fbc1417713a2f059658c7  src/3rdparty/chromium/third_party/breakpad/breakpad/src/third_party/curl/COPYING
++sha256 d8eaba95b8d03c5912da9b5823de2c920e84a993133039a22fc8100f9edb33a1  src/3rdparty/chromium/third_party/breakpad/breakpad/src/third_party/libdisasm/LICENSE
++sha256 015b2d5cedb3024339446a63963d073fa831544cf253c5ddd713fccc8d83e939  src/3rdparty/chromium/third_party/breakpad/LICENSE
++sha256 946b733afbaa20a192c8dc022b4e43090e78f28fd293494d1b307f7301552c9b  src/3rdparty/chromium/third_party/flac/COPYING.Xiph
++sha256 f45cc81b400a048b56c9edbd4c3317f7a8958463dfd55aa96f268ecfd6baa12c  src/3rdparty/chromium/third_party/flac/COPYING.FDL
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/flac/COPYING.LGPL
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  src/3rdparty/chromium/third_party/flac/COPYING.GPL
++sha256 3f6f1b520bc53e878ccbb698ad0bacef3752a5f4e4b50a26552bd70f60b40748  src/3rdparty/chromium/third_party/smhasher/LICENSE
++sha256 09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  src/3rdparty/chromium/third_party/custom_tabs_client/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/netty4/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/libsync/LICENSE
++sha256 19c9b910bec5a4f2c420747d1bf81e975ffdb1377ad91c5d9b1e8dd3e38f4c17  src/3rdparty/chromium/third_party/robolectric/licenses/extreme.indiana.edu.license.txt
++sha256 5b6ac717e37db4f6d17bda7791f4ce3f99947aeb21e6e72b705aa3d1ee2de480  src/3rdparty/chromium/third_party/robolectric/licenses/pivotal.labs.license.txt
++sha256 a7436c952fa2dc0701860cf4187d1e8e8e6de6720dec0ae9e0b641bc50eebced  src/3rdparty/chromium/third_party/robolectric/licenses/javolution.license.txt
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/robolectric/LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/material_design_icons/LICENSE
++sha256 19af539b1ec692ea9ccf71b6ea97d602bcf7187eab27b0ea806aea1cd10b0b13  src/3rdparty/chromium/third_party/libjpeg/LICENSE
++sha256 68834f116f8ff545f05d14753357b620748156d60ee36b26beab4cb3f317efe4  src/3rdparty/chromium/third_party/r8/LICENSE
++sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  src/3rdparty/chromium/third_party/openh264/src/LICENSE
++sha256 d47e8390fb0d7ad4a18f26aedd6283c7ab6b5b4fabab536ccb4db7f9f6d90c08  src/3rdparty/chromium/third_party/modp_b64/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/javax_inject/LICENSE
++sha256 4f5753ce8acf3feafc758599058746d30bda07bc0d4cc3a6a1eb8e039fdba1dc  src/3rdparty/chromium/third_party/dom_distiller_js/LICENSE
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/gif_player/LICENSE
++sha256 0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5  src/3rdparty/chromium/third_party/markupsafe/LICENSE
++sha256 913b3eb6f19defc77c00e2bebbbce464326331b0b59eb6d1d1b23d68a8c27f6b  src/3rdparty/chromium/third_party/libpng/LICENSE
++sha256 4eac19453ddf356478db3be6b101a6d872d0046cdc8222df1ff5c997dd4b9fbe  src/3rdparty/chromium/third_party/icu/LICENSE
++sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/chromium/third_party/icu/scripts/LICENSE
++sha256 c62d7697c03979f5056d28b338fafc7a1152820f7b379adf4a9d88cd37160f96  src/3rdparty/chromium/third_party/icu/license.html
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv3
++sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv2.1
++sha256 b4c85cce2b772f27d83f4562c20787057dc6949fcecc820a82c1d2e7047e89c3  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/oggparse_ahlberg_rullgayrd_2005.txt
++sha256 857d5f537af3aa164e7a27eda60147d34195e5781abe7b1d358d9fb01e222ae0  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/mips.txt
++sha256 d9c904abd0ead61b3fbaef0a609285548076ff9c3f814cc1cf019c5d7150736d  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/full_lgpl.txt
++sha256 a8579e3fc40c11ab147bc299257733eb749cd455010385f7c117f70d7aef24e4  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/jpeg.txt
++sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  src/3rdparty/chromium/third_party/ffmpeg/LICENSE.md
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv3
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20
++sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  src/3rdparty/chromium/third_party/checkstyle/LICENSE
++sha256 984fb04a16a9f1e0145ffd891125dc366a01cd921f58c9b0369be400c720790d  src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt
++sha256 a5adc2955c0dd848c97aa6afb14e0047a610f0fcfa6ce0011efad01a0e051406  src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer2/LICENSE.txt
++sha256 33c9a2fe619e1200937629f318895898ffcd1bf7d0ddd39adc382c030925e61e  src/3rdparty/chromium/third_party/simplejson/LICENSE.txt
++sha256 5a12a0c01bfcdbc90b550c9cd8bfc3e90e6be9c9bbfdb58bfb5daaf6817eb78f  src/3rdparty/chromium/third_party/chromevox/LICENSE
++sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  src/3rdparty/chromium/third_party/chromevox/third_party/closure-library/LICENSE
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/chromevox/third_party/sre/LICENSE
++sha256 e479bcdfa777738226b4282bf8536cc5416a25cec3100cbe210b8be4d1e2ed84  src/3rdparty/chromium/third_party/requests/LICENSE
++sha256 d3e2f59e1d71176dfdb555ece6a41f7a5aa0f52ff21211010ace314f57695f6b  src/3rdparty/chromium/third_party/abseil-cpp/LICENSE
++sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/chromium/third_party/metrics_proto/LICENSE
++sha256 5a2ed53cc5975569e9fa146c4245eaf53377dc1a88bdcb923da6487e53cba55e  src/3rdparty/chromium/third_party/devscripts/COPYING
++sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/mozilla/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/quic_trace/src/LICENSE
++sha256 5740985669353ef52e0f320413ff68dc62b6c23a596cd78b6d6b80764f1c50ab  src/3rdparty/chromium/third_party/bouncycastle/LICENSE
++sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/LICENSE
++sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/src/LICENSE
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  src/3rdparty/chromium/third_party/libudev/LICENSE
++sha256 f54c49d3ff865458c5d3c68c3367a1f6e0d7b3f686f8c88a6a563ef90f84ad9e  src/3rdparty/chromium/third_party/gvr-android-sdk/LICENSE
++sha256 5d0c892ea452c3828f1e311637cde4e3a04eb6431554308b3fcdac8c1b330168  src/3rdparty/chromium/third_party/fips181/COPYING
++sha256 81ebf38708899097aacaac9723679b3ffa17640c14cd3193c46b75197de18b2c  src/3rdparty/chromium/third_party/tcmalloc/gperftools-2.0/vendor/COPYING
++sha256 ad4672b403488876635d2b455918f74b829d478da868ffc0c621a00fc99195f5  src/3rdparty/chromium/third_party/tcmalloc/LICENSE
++sha256 81ebf38708899097aacaac9723679b3ffa17640c14cd3193c46b75197de18b2c  src/3rdparty/chromium/third_party/tcmalloc/vendor/COPYING
++sha256 b9be92f13356083392d97da13cab8ae543c7911f44eff5289b693da8b17b9e08  src/3rdparty/chromium/third_party/inspector_protocol/LICENSE
++sha256 b23e682fda7310afe43505ed6041919ccff8f9e0c6799ebd7542cbcef11102e3  src/3rdparty/chromium/third_party/apple_apsl/LICENSE
++sha256 e88ae39d2e7c9ae8f5470bb23fdd7ce55fe58aca06f3d4399182f5bb0ffcf1dd  src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/gson/LICENSE
++sha256 23681c6986fb33d57957660543f6e9dcbbcf6d2ae2f9fa2dbdb5efec5aa0d95f  src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE
++sha256 b578cdd2345840ada550bd12519533812320d5f1d21cf4c1c7e1b1b0a31c98b7  src/3rdparty/chromium/third_party/pdfium/LICENSE
++sha256 32759d1397d8f7b9e15ece146e4038b22b90e93b4935b5a840bcef4d2ba5ea55  src/3rdparty/chromium/third_party/pdfium/third_party/bigint/LICENSE
++sha256 c5b14f5a3814d2e57b9bb9520dcf57a2c3817b65c4f989e5c82e332c82af1038  src/3rdparty/chromium/third_party/pdfium/third_party/pymock/LICENSE.txt
++sha256 584e795ba5833279c327245594d6dc216fc664144fa3626a0bdf136bc00af76c  src/3rdparty/chromium/third_party/arcore-android-sdk/LICENSE
++sha256 7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  src/3rdparty/chromium/third_party/libxslt/src/Copyright
++sha256 7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  src/3rdparty/chromium/third_party/libxslt/linux/COPYING
++sha256 2ab28b982a7f3150e1597befaa87e1636b9973c80aef3752597945d270c4c4e4  src/3rdparty/chromium/third_party/pycoverage/LICENSE
++sha256 c5b14f5a3814d2e57b9bb9520dcf57a2c3817b65c4f989e5c82e332c82af1038  src/3rdparty/chromium/third_party/pymock/LICENSE.txt
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/motemplate/LICENSE
++sha256 3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  src/3rdparty/chromium/third_party/brotli/LICENSE
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  src/3rdparty/chromium/third_party/hunspell/COPYING
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  src/3rdparty/chromium/third_party/hunspell/COPYING.LESSER
++sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  src/3rdparty/chromium/third_party/hunspell/COPYING.MPL
++sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/3rdparty/chromium/third_party/webrtc/LICENSE
++sha256 1f7a086c17fa2bdbe27d3eb6424a64b9bea9d7db89a4e220fef52ca24addb9e9  src/3rdparty/chromium/third_party/webrtc/license_template.txt
++sha256 21a742dd8cceebb1d5df7c6f945c75ccf1ad4f0d4c17e404517500c1a7de86a4  src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCMobile/third_party/SocketRocket/LICENSE
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE
++sha256 26d2d16d48825edf1194cb3907c5c0b7d01f9c5527eb0fefb949c51f304635e9  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md
++sha256 3ee0b54b13060355b0f5d0d1476536d25ad10552211098cc4086a46fb8c61f42  src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE
++sha256 fb3ab1e1621c6c469499a6ba1e926c027f32af3063c0456282f89382591cc46a  src/3rdparty/chromium/third_party/libevdev/LICENSE
++sha256 b5730da9a26472a405b0b1c61d3d166714d9d654ab3282e54e4a01a5f66316c3  src/3rdparty/chromium/third_party/byte_buddy/LICENSE
++sha256 31346421254a3e6e12687cf17f19f6357ee73a617fa7b3d3ccefdcbabe49bdd3  src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE
++sha256 610809f1586ee4d22468f1e97c256153cea8be7a662193db70d6ca424e0f17c8  src/3rdparty/chromium/third_party/iaccessible2/LICENSE
++sha256 c903100da706172066fa1b6f02eba60f202fea63036492d2c4a01267e32aa7a8  src/3rdparty/chromium/third_party/qcms/src/COPYING
++sha256 376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  src/3rdparty/chromium/third_party/wds/LICENSE
++sha256 376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  src/3rdparty/chromium/third_party/wds/src/COPYING
++sha256 9f98bab33648b77578d85ac0f1d1c3941a72aa6d7e65015ba181f2fe804bb85d  src/3rdparty/chromium/third_party/pexpect/LICENSE
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/ocmock/License.txt
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/googletest/src/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/googletest/src/googlemock/LICENSE
++sha256 5e0df8c845c742e76f2f64d2d9ce1b7e74a2422fddbc577ae6a56319083de0bf  src/3rdparty/chromium/third_party/googletest/src/googlemock/scripts/generator/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/googletest/src/googletest/LICENSE
++sha256 76c45ece83a26117f86f4e349e7df118708e061e87225328fb478ce1e8b3eb86  src/3rdparty/chromium/third_party/jsoncpp/LICENSE
++sha256 a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  src/3rdparty/chromium/third_party/libsecret/LICENSE
++sha256 1599cc232dbd003e6691c7f4e360f2068f84ebaef6510a26ab919c3a7fec27fd  src/3rdparty/chromium/third_party/openmax_dl/LICENSE
++sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/3rdparty/chromium/third_party/libjingle_xmpp/LICENSE
++sha256 956c3b678228a216142df38d039bba56ee6509d3298e7a4b8dd5bc3eaa80fe33  src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md
++sha256 23353f4505b1c8ce4f8f72fc3b11dc74b4a8a7bf95921d93ff77f227c171a710  src/3rdparty/chromium/third_party/glslang/LICENSE
++sha256 c55ce1e876843853a8a2e5c936df6dc8dd3d185f83d85e6d113143b8c24f542e  src/3rdparty/chromium/third_party/swiftshader/third_party/subzero/LICENSE.TXT
++sha256 0a731c5e376f4b604b9fd099d4797d64a5c0bc6e3770baf17b55988cb7737e2e  src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/LICENSE.TXT
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/utils/unittest/googletest/LICENSE.TXT
++sha256 a63ee63574ed21e930765c4418a4fa2fa571b72c47cd023ee588dbf8b21fb4ee  src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/projects/sample/autoconf/LICENSE.TXT
++sha256 a63ee63574ed21e930765c4418a4fa2fa571b72c47cd023ee588dbf8b21fb4ee  src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/autoconf/LICENSE.TXT
++sha256 a012d664e4e01df52a65b2eeafdfb8aeb856fec0e6c372265d01b0109c3f5e2a  src/3rdparty/chromium/third_party/swiftshader/third_party/LLVM/include/llvm/Support/LICENSE.TXT
++sha256 b2d24d77041fbf66b93519758cd80671425c55614b2f65262046fdbe8c3247a8  src/3rdparty/chromium/third_party/swiftshader/third_party/PowerVR_SDK/License.txt
++sha256 9c9a05118ed1b6d96781a2e52335f7d4ec3dd6e7139340a8aa95fbf7eb4f199a  src/3rdparty/chromium/third_party/swiftshader/third_party/llvm-subzero/LICENSE.TXT
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/swiftshader/LICENSE.txt
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/sources/COPYING
++sha256 9021fdb5341ebbb2eb5c771ac5cfac527790673179d3b21a42de1ab2798ec30f  src/3rdparty/chromium/third_party/espresso/LICENSE
++sha256 ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  src/3rdparty/chromium/third_party/leveldatabase/src/LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/leakcanary/LICENSE
++sha256 f98f3db81b4dd3873d8672117e409286142cfae9b7673ab6d7aab4bae1527d20  src/3rdparty/chromium/third_party/qunit/LICENSE
++sha256 fffd497be5f4ae0a10b8258e191125fb58b90250ecbf3c79398d79604dd00b7d  src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.md
++sha256 b25948e48c44312d04ffc626a9d52cae7c04539a1a8e0c1be47b7bfa0da03e1d  src/3rdparty/chromium/third_party/sinonjs/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE
++sha256 f40ee07401827b6ac9cf0aee1aaffb00e42a3f2c729f9c83f96a3daafef5d944  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE
++sha256 4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/cpp-httplib/cpp-httplib/LICENSE
++sha256 212846e0145aa50fb3a5aef254a370311a93acf6c1e792e47e0068d64c8c3885  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/accessibility_test_framework/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/apk-patch-size-estimator/LICENSE
++sha256 9dd8d2fb95ba862a5d166a167682c1c67a209acd3bf09b6fd03f76d3579729bc  src/3rdparty/chromium/third_party/ow2_asm/LICENSE
++sha256 98f8746a39f9a42da35df7046a15b56d0e2f4f76eefc352d67f1bf76e85360b4  src/3rdparty/chromium/third_party/bspatch/LICENSE
++sha256 5f593432ef4e7ecefa6326042babb8a03d8d6ce502b4f0b78b105e18d19f8052  src/3rdparty/chromium/third_party/molokocacao/LICENSE
++sha256 b244f73c3d21edaf44ec253b9a7c389ec43313c417f52f8b71914b0c40d87325  src/3rdparty/chromium/third_party/xdg-utils/LICENSE
++sha256 7973776647df23457a9910075547e3f345fbc5e0e41147b4586d714582dfdd76  src/3rdparty/chromium/third_party/mach_override/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/s2cellid/LICENSE
++sha256 06545a6ec25fbbff6c62f205f94a35be49e38f33bea827a8cfb07d7b82e4b083  src/3rdparty/chromium/third_party/sqlite/LICENSE
++sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  src/3rdparty/chromium/third_party/sqlite/src/autoconf/tea/license.terms
++sha256 ca382aa537f8923d6c0991fb976d184a2009eb76080313bf10dcecdc9311f0dd  src/3rdparty/chromium/third_party/gvr-android-keyboard/LICENSE
++sha256 c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  src/3rdparty/chromium/third_party/libxml/src/Copyright
++sha256 c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  src/3rdparty/chromium/third_party/libxml/src/COPYING
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/jstemplate/COPYING
++sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT
++sha256 af175b9d96ee93c21a036152e1b905b0b95304d4ae8c2c921c7609100ba8df7e  src/3rdparty/chromium/third_party/axe-core/LICENSE
++sha256 1cf71700f3403ca26f002e2dc1d1861dcb3d2af9bb9d98d529a903be9d7f06fc  src/3rdparty/chromium/third_party/xstream/LICENSE
++sha256 380893a2f01aea5c3328b1a8b08cdc488bf236916abac3af0d1f1a5d2634c31a  src/3rdparty/chromium/third_party/mockito/LICENSE
++sha256 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  src/3rdparty/chromium/third_party/intellij/LICENSE
++sha256 7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3  src/3rdparty/chromium/third_party/flatbuffers/LICENSE
++sha256 7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3  src/3rdparty/chromium/third_party/flatbuffers/src/LICENSE.txt
++sha256 bb04dd22ee55fe3c24ee2a3c82bd1efdebbd965f7c178224a2977edc2457bb2f  src/3rdparty/chromium/third_party/tlslite/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/bazel/LICENSE
++sha256 6de6fe48ff7b249a51ec5522d1af618dd50effc6f030fd24e17878566ad2ca5d  src/3rdparty/chromium/third_party/libwebp/LICENSE
++sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  src/3rdparty/chromium/third_party/libvpx/source/libvpx/LICENSE
++sha256 719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8  src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/x86inc/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/googletest/src/LICENSE
++sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/libwebm/LICENSE.TXT
++sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  src/3rdparty/chromium/third_party/libvpx/source/libvpx/third_party/libyuv/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/devtools-node-modules/LICENSE
++sha256 f2042f3634c4136d06b5139c9c6aefb81a3a462b514548bc1845953233dfba98  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/deep-is/LICENSE
++sha256 162413c61e0982abe89a06bf7a02ec760dc49a7364d838bd9f01daebb5b95954  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/tmp/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/minimatch/LICENSE
++sha256 11f2aafb37d06b3ee5bdaf06e9811141d0da05263c316f3d627f45c20d43261b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/string_decoder/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/onetime/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ansi-escapes/LICENSE
++sha256 33b734d60042d0fe0c92dd1fc1e874193a1c899ec3e276a2eb935d2d0bf5b710  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/core-util-is/LICENSE
++sha256 a4cdda44b5adea4731d53dcae78fb5124f8fd853e994f01e25d8c33a7daf818b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/sprintf-js/LICENSE
++sha256 2fc5460f1526810979054ecd18cd01349b57f38ea56d1e920afdea34d104540c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/graceful-fs/LICENSE
++sha256 6273faa0d14a54972c0341a724010eb8cd928ee486745a9eea8cf80680ba5098  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/espree/LICENSE
++sha256 05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/inflight/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ansi-regex/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/resolve-from/LICENSE
++sha256 a1bd5deadb6a06dd74efa852c1b8b23f63b67f2214fbe9c8bd591da51da69268  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/balanced-match/LICENSE
++sha256 942a98cb8846a6354266193f173c1354615827fbb7d67f68399599dff12c4d6a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/fast-levenshtein/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/path-is-absolute/LICENSE
++sha256 96b29c9aaa611a05349b362d48c2ffce0966fe408401a2d1a157be312c035b5f  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/concat-stream/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/array-union/LICENSE
++sha256 94bcb9959136723aa4fb36e1a6c4d5c662a2369978cfae344dabfb83ae619e79  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/esprima/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/del/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/globby/LICENSE
++sha256 e159c6d48c989185448658f276375bfb2300362ec6d4ae5525a2d49c4bcb947d  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/lodash/LICENSE
++sha256 ecdccbcf39024f624ded480c01c0b25458e1eca8f26ecf040933865ce56d9a4f  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/process-nextick-args/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/mimic-fn/LICENSE
++sha256 b1344bd78ebcbf8a359225ec444d038a653c6a5f9ecf405a50d4a5c11fbf27d1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/cross-spawn/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/escape-string-regexp/LICENSE
++sha256 693866fc419c6f61c8570438ec00659d156ec2b4d4a4d04091711f5f11a365d4  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/color-convert/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/is-fullwidth-code-point/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/semver/LICENSE
++sha256 ef088ddea300fe4ea038bc47db929e320033b66981cf12a20b517d6b66a2fa3e  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/table/LICENSE
++sha256 aa7c48d39d3bb837efa4fce39f971fa6ae8e5cb148724af8867a7a4a7121ad6a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/circular-json/LICENSE
++sha256 44191656d296391e0ec97e32f5385f0d02b6f2992694082d22ea04ba0f66f9e4  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/is-promise/LICENSE
++sha256 5822e0d816e53e3537b306a4132cb7a70881897cf51bf483282148a602979076  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/pluralize/LICENSE
++sha256 7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/fast-deep-equal/LICENSE
++sha256 db83f2ede67f36cfab1ea0721ea2ee97515863e9a65346881f305e430451cc91  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/eslint/LICENSE
++sha256 b9eb082c39fe245e38793699074c394c43a722c51fce031c3c165cb92a31035c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/optionator/LICENSE
++sha256 4969b0ff94c4f2ad3f1613d95b3966cb4c3147d8b893654aced81029241de176  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ajv/LICENSE
++sha256 7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/json-schema-traverse/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/rimraf/LICENSE
++sha256 e6fdf7ac2af533b4436d99aa75df32aa78690510f7d68a3e73e8576967298d2f  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/shebang-command/LICENSE
++sha256 7d043a9e52b7e1e3acab9ca3377e30ca72d25d39ad6e6c5a22b407fe39c6d703  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/chardet/LICENSE
++sha256 e2ddad70d6b6bcfec887c32d7143a77ccbdb58e38d9c43f5b7f30f715b874b80  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/acorn/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/wrappy/LICENSE
++sha256 e33b7bc13a0e5ea9ed6718e12e99a5b0b60276162f0195aa7f342397f4b0155d  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/external-editor/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/shebang-regex/LICENSE
++sha256 0e74697a68cebdcd61502c30fe80ab7f9e341d995dcd452023654d57133534b1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/estraverse/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/restore-cursor/LICENSE
++sha256 a25dce9c94c3ad622574cffbefd4b8845b418aa65df966d97e3204ad276ed240  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ajv-keywords/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/has-ansi/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/require-uncached/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/strip-ansi/node_modules/ansi-regex/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/strip-ansi/LICENSE
++sha256 c8c8324aff32c44f9e501aac5b3b97540c26af7d6dd6af8bce5e34300596e27d  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/flat-cache/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/supports-color/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/which/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/text-table/LICENSE
++sha256 0e74697a68cebdcd61502c30fe80ab7f9e341d995dcd452023654d57133534b1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/esutils/LICENSE
++sha256 b9eb082c39fe245e38793699074c394c43a722c51fce031c3c165cb92a31035c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/type-check/LICENSE
++sha256 c7cc929b57080f4b9d0c6cf57669f0463fc5b39906344dfc8d3bc43426b30eac  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/safe-buffer/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/yallist/LICENSE
++sha256 c8442419dc614089ea022b3da6bfc089b41a58fb7b9030d1e651f2f36189dce2  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/argparse/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/is-path-inside/LICENSE
++sha256 6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/pinkie-promise/LICENSE
++sha256 6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/pinkie/LICENSE
++sha256 e5c1364118b39fa98b959138ce4aa4d0e68cfbee12d115e69730579fecb1dc1b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/run-async/LICENSE
++sha256 c8c8324aff32c44f9e501aac5b3b97540c26af7d6dd6af8bce5e34300596e27d  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/file-entry-cache/LICENSE
++sha256 33fa5470b2195e410b075a32516b6ad27784b8a8ff74ae90cfd60c14b76e6644  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/cli-width/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/strip-json-comments/LICENSE
++sha256 e05b1eaf5b5f99b7ad75cd1f38858ff9a311780b97715ead67936d60bf96aa7e  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/signal-exit/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/arrify/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/concat-map/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/pseudomap/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/has-flag/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ansi-styles/LICENSE
++sha256 5ffe28e7ade7d8f10d85d5337a73fd793dac5c462fb9a28fbf8c5046c7fbca3b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/inherits/LICENSE
++sha256 8be44da6cc59e890c406d6d05c3ce1850f29bb2e0da2a2d686d593e5ad3ecf59  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/eslint-scope/LICENSE
++sha256 e8734448285a2dd773d40136ed5d5e8163a70701dd540cdc796cfca232f67d55  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/through/LICENSE
++sha256 d72dea1a8cdf3f4dfa2f594253d0c5b37baefc76e806f5ecb0e426393edcd505  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/through/LICENSE.MIT
++sha256 4ceea53e36c7ff67a946e9905e50b41f350ef7b107c59afec9b91cbe97fbcaea  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/is-resolvable/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/cli-cursor/LICENSE
++sha256 e8d64ff1e54883c69759db53d10adfaa8e09b6ef628788885fe8068bc1fdb1b7  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/js-tokens/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/array-uniq/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/wordwrap/LICENSE
++sha256 b9eb082c39fe245e38793699074c394c43a722c51fce031c3c165cb92a31035c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/prelude-ls/LICENSE
++sha256 491b4012bfc95982e66859c59641be20f4fd2c9b3bc2b6a7f26b6166e462dda1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/acorn-jsx/node_modules/acorn/LICENSE
++sha256 a19859c623cc60b717560cafb5fe64244735022c1200b65a649a3c2eef912fb4  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/acorn-jsx/LICENSE
++sha256 8465b04b67f473341171b5c9c8b2c741a4a395b3f6ed58339b3a4f4db3db7472  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/fs.realpath/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/lru-cache/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/chalk/node_modules/supports-color/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/chalk/node_modules/ansi-styles/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/chalk/LICENSE
++sha256 29f4d474804f60aae177d7fed67d0d613d00006640cc9cf80077eef03fb9a2cc  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/co/LICENSE
++sha256 d7d2a7786de7c7cfd96f920c6f12927d74e1d2a861ca4498bf465c3bc3f4c21c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/progress/LICENSE
++sha256 a07bc24468b9654ce76a547d47a2db282d07733b715db4c73a98bd63961f9550  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/js-yaml/LICENSE
++sha256 e67aed7df22dc8031e4fcf5338fe91cb33e3817e5c58a99a2a2802eea9069791  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/functional-red-black-tree/LICENSE
++sha256 daca23d50b0f54d36d6da1b16c82dfea6461e2ae20de0e869957e44cc6d34781  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/write/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/doctrine/LICENSE
++sha256 0e74697a68cebdcd61502c30fe80ab7f9e341d995dcd452023654d57133534b1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/doctrine/LICENSE.esprima
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/string-width/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/minimist/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/mute-stream/LICENSE
++sha256 ec62dc96da0099b87f4511736c87309335527fb7031639493e06c95728dc8c54  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/readable-stream/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/glob/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/pify/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/figures/LICENSE
++sha256 26181ebee1063f3dc6766a3b6d05999a0da058f172eadf2ca5d15105ffd9735a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/typedarray/LICENSE
++sha256 05991c2e8f070b69ec5b656c2c12fd07cd0153dd157d39b050b82af59b319a01  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/mkdirp/LICENSE
++sha256 0154425673db15cdfa80ecba2c9b1f1a867f7197a006764712849bfc3a93cbb7  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/util-deprecate/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/os-tmpdir/LICENSE
++sha256 b9eb082c39fe245e38793699074c394c43a722c51fce031c3c165cb92a31035c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/levn/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/babel-code-frame/node_modules/strip-ansi/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/babel-code-frame/node_modules/chalk/LICENSE
++sha256 0e356f8c0a756758ce04a143b1871585402b6bcf8f8e6a26873beb9992242e7a  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/path-is-inside/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/json-stable-stringify-without-jsonify/LICENSE
++sha256 6fb9754611c20f6649f68805e8c990e83261f29316e29de9e6cedae607b8634c  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/object-assign/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/isexe/LICENSE
++sha256 ac779f7314c74f232ef847ea86e714abe25cf6eeb5cc97b69451b74e2af6492d  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/iconv-lite/LICENSE
++sha256 48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/globals/LICENSE
++sha256 435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/fast-json-stable-stringify/LICENSE
++sha256 7357445bac398c76c0aef75a587009fe406d40de6a79789eb5b7ecbbad317ef2  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/color-name/LICENSE
++sha256 3dc3b3d3a284d871f7f307655c90fb101d73abbf87bbddeefd2f67883353bdbc  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/slice-ansi/LICENSE
++sha256 6652830c2607c722b66f1b57de15877ab8fc5dca406cc5b335afeb365d0f32c1  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/ms/LICENSE
++sha256 4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/once/LICENSE
++sha256 ac68116ae73740de4190892f334992e449a124600924ec761e64319d3aac9e6e  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/esquery/LICENSE
++sha256 98c970de440dcfc77471610aec2377c9d9b0db2b3be6d1add524a586e1d7f422  src/3rdparty/chromium/third_party/devtools-node-modules/third_party/node_modules/debug/LICENSE
++sha256 318cea263a2fb726d767e2777771a431a3220008e6940dd5138a235a1fc498fc  src/3rdparty/chromium/third_party/pystache/LICENSE
++sha256 96e5bbd81970983d666e702fa56f67dfd2fdaa363b8a4266e8d98847374cd7c8  src/3rdparty/chromium/third_party/hamcrest/LICENSE
++sha256 23353f4505b1c8ce4f8f72fc3b11dc74b4a8a7bf95921d93ff77f227c171a710  src/3rdparty/chromium/third_party/SPIRV-Tools/LICENSE
++sha256 23353f4505b1c8ce4f8f72fc3b11dc74b4a8a7bf95921d93ff77f227c171a710  src/3rdparty/chromium/third_party/SPIRV-Tools/src/LICENSE
++sha256 e09d954054165670b6a669e6da59673d9e85f343b9983e92a220623ff0198f8c  src/3rdparty/chromium/third_party/flot/LICENSE.txt
++sha256 7cdb44aabddbdd78998119d68a39c87424119b663945c79891fc1b022301824c  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/formatter_worker/acorn/LICENSE
++sha256 7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/audits2/lighthouse/LICENSE
++sha256 13110d66c514a7890c4b388a353bc08fa094fe13d5ed7f3a222cc0a0caa3fd17  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm_modes/LICENSE
++sha256 a3f2fe2ac6b471aa80c737c5d283dd049bdc903a73835ee6d4d2cac02fdd53bf  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm/LICENSE
++sha256 c6daa4e8737d15aa7140b4f7eb82b9d4829bd2fd27132c43e282203b9c67dfc4  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/cm/LICENSE_python
++sha256 1490793b8913f0fa78af7bf2e70076f54272748e278f065c50794529eaed8e74  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/terminal/xterm.js/LICENSE
++sha256 7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3  src/3rdparty/chromium/third_party/blink/renderer/devtools/front_end/audits2_worker/lighthouse/LICENSE
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/third_party/blink/renderer/devtools/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/blink/renderer/devtools/scripts/closure/COPYING
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/blink/renderer/platform/wtf/dtoa/COPYING
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/blink/renderer/platform/wtf/dtoa/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/blink/renderer/platform/testing/data/third_party/Roboto/LICENSE.txt
++sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-LGPL-2
++sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-APPLE
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  src/3rdparty/chromium/third_party/blink/renderer/core/LICENSE-LGPL-2.1
++sha256 63478682e84e8c98f4c46308995f1f521a6886976e25421827d2a2be03581328  src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/third_party/six/LICENSE
++sha256 16a39991619e92f18680932da2a9199fdf7d95df3ecaedc52ea06218aabafd6f  src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/third_party/html5lib/LICENSE
++sha256 df336397e09e764416fc33b555703b1cdddd3a0cfea8a013ad1cad565c8be2f5  src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/tools/wptserve/LICENSE
++sha256 4165ae4c9c71da3e655a9acee8ee3368bba20f0702f4dcc994da315132ab90de  src/3rdparty/chromium/third_party/blink/tools/blinkpy/third_party/wpt/wpt/LICENSE.md
++sha256 3bf128851aff9f392953276ea8ade3e41da0f40b853fde58ec21034aa91ccc31  src/3rdparty/chromium/third_party/libovr/LICENSE
++sha256 efdabc1c1f655528b8c3a59b03668d446746d87273fab76f8af800b6e8891bd2  src/3rdparty/chromium/third_party/yara/src/COPYING
++sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/LICENSE
++sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/src/COPYING
++sha256 28113a6e9e2fd7584187c738a7c5484452a1c383307a1741bec50a73262fac08  src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE
++sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  src/3rdparty/chromium/third_party/libyuv/LICENSE
++sha256 bed70fc84f1bea2b4b144564b9a0f9a5a3bc7b0d78f6e62092aeb689cac56bdd  src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE
++sha256 a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  src/3rdparty/chromium/net/third_party/nss/LICENSE
++sha256 212c5a071f61512786b5e5840b3d70c85e017f3f82939ad4d4a870fc48b33477  src/3rdparty/chromium/LICENSE.chromium_os
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/buildtools/LICENSE
++sha256 834ee20e8fc3235722ed801bae30cc539c2775be656ff9cc2810fe674e53d5ec  src/3rdparty/chromium/ppapi/LICENSE
++sha256 5426333ff30d2ba9127bfe11ba51ca98be02d704ddac48afd19de47dc7748ee6  src/3rdparty/chromium/v8/LICENSE
++sha256 b1b379fcaf3219593a4c433feb1b35c780bed23fafaae440b1ae2771a9521e3a  src/3rdparty/chromium/v8/third_party/antlr4/LICENSE.txt
++sha256 b9be92f13356083392d97da13cab8ae543c7911f44eff5289b693da8b17b9e08  src/3rdparty/chromium/v8/third_party/inspector_protocol/LICENSE
++sha256 15137d6c822e3ab097093a33c3a39a9df699f373f6438867ad534ff60762a947  src/3rdparty/chromium/v8/third_party/colorama/LICENSE
++sha256 e7115e18444dae09d17f361ddc365fb1d342640fe500796209c63f7c80dfae10  src/3rdparty/chromium/v8/LICENSE.fdlibm
++sha256 6a585a9f466654abc8fc0829d56b1bc987e3a073d31faa03bba37d33640a23cd  src/3rdparty/chromium/v8/LICENSE.strongtalk
++sha256 3f712e5fbdfdbd5ee7d9b8c8152580220df55de47f4eba2f26c95c4de19ad096  src/3rdparty/chromium/v8/src/third_party/utf8-decoder/LICENSE
++sha256 ebf25b8ce59c9e8883acd1ca75b6fc121937ca034f666c4077d2be739d2e1622  src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE
++sha256 cfe7599e45f340a35b4635090382897ca1526bc49b5e1889047f0168d131c415  src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE
++sha256 cae8c00ca6e90a682c321ec11e7a5a345d0d317aa0b8f038e03ef03a18095b2f  src/3rdparty/chromium/v8/LICENSE.valgrind
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/v8/LICENSE.v8
++sha256 284545e873c704952e5b1b39d457dd83a3b115a51d9f1eb5175137bd69b8fa1b  src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt
++sha256 5d85142a5609ad177a2d7a2e7cae060b886b8b42f25c5b9803cf0cb5ee04ad2f  src/3rdparty/gn/base/third_party/icu/LICENSE
++sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/gn/LICENSE
++sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  src/3rdparty/ninja/COPYING
+diff --git a/package/qt5/qt5webengine/5.6.3/qt5webengine.hash b/package/qt5/qt5webengine/5.6.3/qt5webengine.hash
+new file mode 100644
+index 0000000000..e59d8c57cc
+--- /dev/null
++++ b/package/qt5/qt5webengine/5.6.3/qt5webengine.hash
+@@ -0,0 +1,258 @@
++# Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
++sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
++
++# Locally calculated
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPL3
++
++# Locally calculated with:
++# for i in $(find src/3rdparty/ -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before') ; do echo -n "sha256 " ; sha256sum $i ; done
++sha256 5a12a0c01bfcdbc90b550c9cd8bfc3e90e6be9c9bbfdb58bfb5daaf6817eb78f  src/3rdparty/chromium/chrome/third_party/chromevox/LICENSE
++sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  src/3rdparty/chromium/chrome/third_party/chromevox/third_party/closure-library/LICENSE
++sha256 891970cf216f708de2bfd77184b3e32d5cdba8dc4c3a75e60628c0375f5657e4  src/3rdparty/chromium/sdch/open-vcdiff/COPYING
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/mojo/public/LICENSE
++sha256 18351de3d7e2dc469cc83e77d38a3e25d010251e34eb348bbd1a76275e313997  src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE
++sha256 d55a403514532af12dc2fbfb2e41900090a5dd6c7c76c8e4d9b20bcc737eac35  src/3rdparty/chromium/base/third_party/nspr/LICENSE
++sha256 538edc6f52c563cf06eca1bac8dd785ff60ef5a371a950265700d5d40386db6e  src/3rdparty/chromium/base/third_party/symbolize/LICENSE
++sha256 d04360743ae3338bb08ab2106b51e24309e3ca4b1c6b1186139531ade351b7e3  src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE
++sha256 4074881f47972aedda83940935bb1d03fa74a56f94445945ce80fe952eed6834  src/3rdparty/chromium/base/third_party/icu/LICENSE
++sha256 c45766baef552c59eeb1fdfbbc690e52e4cd5b135dfd325f21bdfe8ddfe28ce6  src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE
++sha256 9ad1d4223b80349f3d3ab9cec92f93431b9da14a1b5d41de468ce054a28cf8aa  src/3rdparty/chromium/base/third_party/libevent/LICENSE
++sha256 79955cd80438f041387eb080f2675394e36a806b8b17eca63a4bc568d839509e  src/3rdparty/chromium/base/third_party/valgrind/LICENSE
++sha256 90b2201c340cee36b40a443f949d9eb416f0a0d204c32d350aff87fedeb67ae8  src/3rdparty/chromium/base/third_party/superfasthash/LICENSE
++sha256 96e7ccbf8d17e319dd77c4ebd4965b64a820bbcc3142a2478fbf95af77417b6a  src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE
++sha256 70eb89e4cb460d1b27173348c9f9fca5cf67c09d722ddaa07c5d0fcd6262a97e  src/3rdparty/chromium/tools/gyp/LICENSE
++sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/chromium/LICENSE
++sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  src/3rdparty/chromium/third_party/opus/src/COPYING
++sha256 7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d  src/3rdparty/chromium/third_party/opus/src/LICENSE_PLEASE_READ.txt
++sha256 5221a36a801b981fbdfda7b87db64cff231a3b88223a066c325411b539df796f  src/3rdparty/chromium/third_party/snappy/src/COPYING
++sha256 1df4adc57d45b1639d3edb2127ee9e33e54b5a4b0809e9dc83ddaff5a62d9ae1  src/3rdparty/chromium/third_party/x86inc/LICENSE
++sha256 77af9c9fc2710ee66b8282291a9392a9a61f1d5b3ad6e478d0b6c544de5f9aca  src/3rdparty/chromium/third_party/angle/LICENSE
++sha256 a08ba10adec47027ef8078848729837b1c5a42f140718d7afd65c23f1eeec392  src/3rdparty/chromium/third_party/angle/src/third_party/compiler/LICENSE
++sha256 d8a0f4dab052ff6f56e9d6fa68efb66de8ff3956a805110930f8ee297376047f  src/3rdparty/chromium/third_party/angle/src/third_party/murmurhash/LICENSE
++sha256 923e74e5ae41345038da0a56dfdc983356917fbbb139176e654d1b33100b723f  src/3rdparty/chromium/third_party/jmake/LICENSE
++sha256 984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  src/3rdparty/chromium/third_party/ots/LICENSE
++sha256 9dc0f229412e40d7f1fc4d94de07fcc812a6f31e27718b4dae315305408160fa  src/3rdparty/chromium/third_party/yasm/source/patched-yasm/COPYING
++sha256 294f58267c6f473c4ce7270bf5c8d34b2003cb43804552459654c36553431276  src/3rdparty/chromium/third_party/proguard/LICENSE
++sha256 dd4930c619afd8527591353c7d3d1c1d7f4bf62ed1cb411f4f507dbdee7738a2  src/3rdparty/chromium/third_party/ply/LICENSE
++sha256 685b3b09870f1361f8db2d3f37acdb765d5da1722a18b182765da4b79a8f63ff  src/3rdparty/chromium/third_party/ply/license.patch
++sha256 d51b39e7ed0391e75e0add75d1a162fdf4a0d6b49fba7635ed0ac4e16f324773  src/3rdparty/chromium/third_party/webdriver/COPYING
++sha256 6d83e980b9b843cf6fe24cb94714d00f9b0cf69cb00d0e3b0bed018d49d6f24f  src/3rdparty/chromium/third_party/webdriver/LICENSE
++sha256 71a19392a0eb3255ab2055ed978bb0f93865cea84d31a3510eaffb74d8981e7f  src/3rdparty/chromium/third_party/khronos/LICENSE
++sha256 28d1d994f6f85ce2f605e214609a3a7925278039aa7a870b5cd089ef95b82445  src/3rdparty/chromium/third_party/iccjpeg/LICENSE
++sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/isimpledom/LICENSE
++sha256 def7352915ac84bea5e2ed16f6fff712d35de519799777bf927e2a567ab53b7e  src/3rdparty/chromium/third_party/boringssl/src/LICENSE
++sha256 282644c64aa8c4f0a4a589fd38d2213e41f37b4e0e4f639e01149d09b67117db  src/3rdparty/chromium/third_party/zlib/LICENSE
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/third_party/mojo/LICENSE
++sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  src/3rdparty/chromium/third_party/libsrtp/srtp/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/errorprone/LICENSE
++sha256 31c7505c31a1ea8557a5362cd69946dc9f5ee80fac8fa1d1b1531c08530497b0  src/3rdparty/chromium/third_party/protobuf/COPYING.txt
++sha256 43452b94e6aa0c2d076ad25b87f580c11571689d52f3aa1a1f7bdcab31a0bd15  src/3rdparty/chromium/third_party/decklink/LICENSE
++sha256 f8c8ccecdbb044fd6fa1a586c596a055fb2b14fb3e335d8ed282db58d80b7410  src/3rdparty/chromium/third_party/pyelftools/LICENSE
++sha256 f8d0c347a0dcc6ebe1671640dfae8d2411b6ded892e06a6764f8208b218b2af4  src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE
++sha256 3d1d2669d0ba87069b5e202f106193c4eb0e140a2aead31dca9670a0581dd979  src/3rdparty/chromium/third_party/chaijs/LICENSE
++sha256 1f194a987fa1dc60e4bcf5e04e0fc03fff8f2ee587c52136adb2cebb397250b8  src/3rdparty/chromium/third_party/mocha/LICENSE
++sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/chromium/third_party/harfbuzz-ng/COPYING
++sha256 1f04103e3a61b91343b3f9d2ed2cc8543062917e2cc7d52a739ffe6429ccaf61  src/3rdparty/chromium/third_party/skia/LICENSE
++sha256 5366e97b4478f15a1e2fd7e6094337426597df28de50cd9fed3f2e7e87f1229e  src/3rdparty/chromium/third_party/skia/third_party/etc1/LICENSE
++sha256 99750e3fa5e132e1b93a56538ab9c585f8fc62b9e11ab62adec0cd3803315c70  src/3rdparty/chromium/third_party/skia/third_party/libpng/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/skia/platform_tools/android/third_party/ashmem/LICENSE
++sha256 0eff14f27fd948e2382ef5751b9b6ed596fc59369260510bd9230d08f9404f3e  src/3rdparty/chromium/third_party/talloc/LICENSE
++sha256 6e3e0a978f1e136cb3efb89702f4314671581a0c70c9a52447669e00f7b129e8  src/3rdparty/chromium/third_party/lzma_sdk/LICENSE
++sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  src/3rdparty/chromium/third_party/libexif/sources/COPYING
++sha256 fa53711b25af4b9a9b8dadfea3cb38166ec4b96760c8d62b284055554537d9ef  src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md
++sha256 7a4a31e05391919c05a996f09fc20ffc80c69af72cb3e69ac71b70c825fbdd1d  src/3rdparty/chromium/third_party/usrsctp/LICENSE
++sha256 6629d6edceffa9c68f4245b817137d2265fdab1e98068893420edb6689ccce9e  src/3rdparty/chromium/third_party/usb_ids/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/woff2/LICENSE
++sha256 c93465d6a75e6ade8785edb4ec125ece083ab0910ed0417b4ff346792ba0f851  src/3rdparty/chromium/third_party/mesa/LICENSE
++sha256 e8800bd573e8f844a5b87cf43cc4d55767314b4e95a6092cf26ce9c6ed00b877  src/3rdparty/chromium/third_party/mesa/src/docs/COPYING
++sha256 1efd6dec259877be94db3dbd005c93a5c94a73a492bd85eede6e14885e480e0e  src/3rdparty/chromium/third_party/mesa/src/docs/license.html
++sha256 704179825bb7c4600acbff3d1fcd95f1eb61b2c4a11b66bb150d7cefea8f6371  src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT
++sha256 8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  src/3rdparty/chromium/third_party/ijar/LICENSE
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/sfntly/src/java/COPYING
++sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/src/cpp/COPYING.txt
++sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/COPYING.txt
++sha256 778a9c936b9fa24f3842b6071e3cc5c794d3f7cc6d6fddbf356b6f2202afb6a0  src/3rdparty/chromium/third_party/wayland/LICENSE
++sha256 6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  src/3rdparty/chromium/third_party/wayland/src/COPYING
++sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  src/3rdparty/chromium/third_party/webtreemap/src/COPYING
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/webpagereplay/COPYING
++sha256 ac611349a262c2ceab06cd7c4fa104b794986486d3898c4d234a0fbc49e9bf07  src/3rdparty/chromium/third_party/webpagereplay/third_party/dns/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/webpagereplay/third_party/ipaddr/COPYING
++sha256 b3055a036e3bc37a1b9ff2b8316723d06df3997273aa9cb79223a85a48ad6dee  src/3rdparty/chromium/third_party/webpagereplay/third_party/ipfw_win32/LICENSE
++sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  src/3rdparty/chromium/third_party/v4l-utils/COPYING.libv4l
++sha256 83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  src/3rdparty/chromium/third_party/minigbm/LICENSE
++sha256 10054db83ace18e5a455749d0d247857ec50508cecda79a5abe66fe4778d7721  src/3rdparty/chromium/third_party/d3/src/LICENSE
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/libusb/src/COPYING
++sha256 df336397e09e764416fc33b555703b1cdddd3a0cfea8a013ad1cad565c8be2f5  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/LICENSE
++sha256 df336397e09e764416fc33b555703b1cdddd3a0cfea8a013ad1cad565c8be2f5  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/wptserve/LICENSE
++sha256 32b824d99c7e31f7035b6a9b39eac8e8205bfc54cf8573cfe830a367a8735161  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE
++sha256 23681c6986fb33d57957660543f6e9dcbbcf6d2ae2f9fa2dbdb5efec5aa0d95f  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/COPYING
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/LICENSE
++sha256 c7bae4ff453a099c61e5906014d3644319181834a47db839696dca0a85a76378  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm_modes/LICENSE
++sha256 2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/acorn/LICENSE
++sha256 c7bae4ff453a099c61e5906014d3644319181834a47db839696dca0a85a76378  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE
++sha256 c6daa4e8737d15aa7140b4f7eb82b9d4829bd2fd27132c43e282203b9c67dfc4  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE_python
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING
++sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2
++sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1
++sha256 7de3660b411bdcb1c690c0e0a907ed94626792a1b5139f1cedd3d919b968ecc8  src/3rdparty/chromium/third_party/WebKit/LICENSE
++sha256 a661d10f8f194b1963a75bb4d308f17b078cc064624313a556902d89705f6876  src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS
++sha256 650cb519e09f781bf4fbd65fa6fc64449ea0d86d62d95172acdf5da74ca0eaf6  src/3rdparty/chromium/third_party/v4l2capture/LICENSE
++sha256 e2fa3a3e38af6d7d0cb374883a89b3507fe3b053faef16485f37ff3c9d93a5d2  src/3rdparty/chromium/third_party/expat/files/COPYING
++sha256 0518cf49c09398259d54fcfff0b5fd36456162c6439886660e53627b3073ef22  src/3rdparty/chromium/third_party/blanketjs/LICENSE
++sha256 e9427cf6abc4eaeda0bcd094fca46af4067970079f426b65d5cbacb87bff6366  src/3rdparty/chromium/third_party/cros_system_api/LICENSE
++sha256 7975c0027cfa5d08253fbb6ff4676acc38248bd5e046d0dbab3d810971e97970  src/3rdparty/chromium/third_party/jinja2/LICENSE
++sha256 6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a  src/3rdparty/chromium/third_party/typ/LICENSE
++sha256 eafd0d3fac93964d4274a2f99be928d41c167a925a9ddb8621ab9aee065f8fee  src/3rdparty/chromium/third_party/flac/COPYING.Xiph
++sha256 f45cc81b400a048b56c9edbd4c3317f7a8958463dfd55aa96f268ecfd6baa12c  src/3rdparty/chromium/third_party/flac/COPYING.FDL
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/flac/COPYING.LGPL
++sha256 0b1975de0a048180c5ea7179be1a3e751e05f79d225ac4be6481141970527e69  src/3rdparty/chromium/third_party/flac/COPYING.GPL
++sha256 3f6f1b520bc53e878ccbb698ad0bacef3752a5f4e4b50a26552bd70f60b40748  src/3rdparty/chromium/third_party/smhasher/LICENSE
++sha256 0382f4433a2b1b0b5c0af8cc769de0c7302c1b663ea569e67c0b5452e374e142  src/3rdparty/chromium/third_party/libjingle/source/talk/COPYING
++sha256 dea8cf0d3604b861d3a89dd1d193b02404414957b6ee7ab6ebeacf47daece976  src/3rdparty/chromium/third_party/libjingle/source/talk/LICENSE_THIRD_PARTY
++sha256 09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  src/3rdparty/chromium/third_party/custom_tabs_client/LICENSE
++sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/LICENSE
++sha256 719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/x86inc/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/googletest/src/LICENSE
++sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/libwebm/LICENSE.TXT
++sha256 0acbdae3346bc7593c57471aaf47fb45326a26b3c29cfbbf8ce729d99a7e458a  src/3rdparty/chromium/third_party/class-dump/LICENSE
++sha256 9b17bd282aac6d5729c700c823ddaaa6fa0e048d88e321f46252646f28791752  src/3rdparty/chromium/third_party/py_trace_event/src/LICENSE
++sha256 1af74cc402d50be09edd134ed5c31ade063fc0e7546670bc23ceeecc0004c142  src/3rdparty/chromium/third_party/safe_browsing/testing/LICENSE
++sha256 fddff1da5115ebb2f735b31fd17bac3166bf0c67d941287dfd490a111bca1c52  src/3rdparty/chromium/third_party/appurify-python/LICENSE
++sha256 19c9b910bec5a4f2c420747d1bf81e975ffdb1377ad91c5d9b1e8dd3e38f4c17  src/3rdparty/chromium/third_party/robolectric/licenses/extreme.indiana.edu.license.txt
++sha256 5b6ac717e37db4f6d17bda7791f4ce3f99947aeb21e6e72b705aa3d1ee2de480  src/3rdparty/chromium/third_party/robolectric/licenses/pivotal.labs.license.txt
++sha256 a7436c952fa2dc0701860cf4187d1e8e8e6de6720dec0ae9e0b641bc50eebced  src/3rdparty/chromium/third_party/robolectric/licenses/javolution.license.txt
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/robolectric/LICENSE
++sha256 246491bb21ec320b0396d218339305d8b7073c7cb94fa5adb77ebb9c84a87a0b  src/3rdparty/chromium/third_party/freetype2/src/docs/LICENSE.TXT
++sha256 19af539b1ec692ea9ccf71b6ea97d602bcf7187eab27b0ea806aea1cd10b0b13  src/3rdparty/chromium/third_party/libjpeg/LICENSE
++sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  src/3rdparty/chromium/third_party/openh264/src/LICENSE
++sha256 d47e8390fb0d7ad4a18f26aedd6283c7ab6b5b4fabab536ccb4db7f9f6d90c08  src/3rdparty/chromium/third_party/modp_b64/LICENSE
++sha256 8545f6c8d9497acf953ca93b9264032616e6430eb536e21142a381455c8085df  src/3rdparty/chromium/third_party/drmemory/LICENSE
++sha256 4f5753ce8acf3feafc758599058746d30bda07bc0d4cc3a6a1eb8e039fdba1dc  src/3rdparty/chromium/third_party/dom_distiller_js/LICENSE
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/gif_player/LICENSE
++sha256 bd2368428b63facfc9586d4be1bd6efb6abce76a9339ba058dd9f399f3efb3b4  src/3rdparty/chromium/third_party/speech-dispatcher/COPYING
++sha256 0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5  src/3rdparty/chromium/third_party/markupsafe/LICENSE
++sha256 5fe714f37f27dcc5d59dee2601ac3e7fe1cf2e497e5fcdba00ddb9b1297f61cb  src/3rdparty/chromium/third_party/libpng/LICENSE
++sha256 d18e75f216f177d41304f5e94c2cba7d1bf9f8f8583a0777cceb5cca0c5ad137  src/3rdparty/chromium/third_party/icu/LICENSE
++sha256 7d149647f825d89af1268d9a53ebb414af1354a1815e26f8e44ef99820ba21db  src/3rdparty/chromium/third_party/icu/license.html
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv3
++sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv2.1
++sha256 b4c85cce2b772f27d83f4562c20787057dc6949fcecc820a82c1d2e7047e89c3  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/oggparse_ahlberg_rullgayrd_2005.txt
++sha256 857d5f537af3aa164e7a27eda60147d34195e5781abe7b1d358d9fb01e222ae0  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/mips.txt
++sha256 d9c904abd0ead61b3fbaef0a609285548076ff9c3f814cc1cf019c5d7150736d  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/full_lgpl.txt
++sha256 a8579e3fc40c11ab147bc299257733eb749cd455010385f7c117f70d7aef24e4  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/jpeg.txt
++sha256 cb77a08f3ee3deb5240a8b3d197436710621ee87f4f0fed03947f825e082fb28  src/3rdparty/chromium/third_party/ffmpeg/LICENSE.md
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv3
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20
++sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  src/3rdparty/chromium/third_party/checkstyle/LICENSE
++sha256 ef5b39dfcafe08323262e3f51a3a9de649978a55ed8ef8eef3c451f2c1e78a53  src/3rdparty/chromium/third_party/cld/LICENSE
++sha256 984fb04a16a9f1e0145ffd891125dc366a01cd921f58c9b0369be400c720790d  src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt
++sha256 33c9a2fe619e1200937629f318895898ffcd1bf7d0ddd39adc382c030925e61e  src/3rdparty/chromium/third_party/simplejson/LICENSE.txt
++sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  src/3rdparty/chromium/third_party/nss/nspr/LICENSE
++sha256 a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  src/3rdparty/chromium/third_party/nss/nss/COPYING
++sha256 e479bcdfa777738226b4282bf8536cc5416a25cec3100cbe210b8be4d1e2ed84  src/3rdparty/chromium/third_party/requests/LICENSE
++sha256 5a2ed53cc5975569e9fa146c4245eaf53377dc1a88bdcb923da6487e53cba55e  src/3rdparty/chromium/third_party/devscripts/COPYING
++sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/mozilla/LICENSE
++sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/LICENSE
++sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/src/LICENSE
++sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  src/3rdparty/chromium/third_party/wayland-protocols/LICENSE
++sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  src/3rdparty/chromium/third_party/wayland-protocols/src/COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  src/3rdparty/chromium/third_party/libudev/LICENSE
++sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  src/3rdparty/chromium/third_party/closure_linter/LICENSE
++sha256 5d0c892ea452c3828f1e311637cde4e3a04eb6431554308b3fcdac8c1b330168  src/3rdparty/chromium/third_party/fips181/COPYING
++sha256 ad4672b403488876635d2b455918f74b829d478da868ffc0c621a00fc99195f5  src/3rdparty/chromium/third_party/tcmalloc/LICENSE
++sha256 81ebf38708899097aacaac9723679b3ffa17640c14cd3193c46b75197de18b2c  src/3rdparty/chromium/third_party/tcmalloc/vendor/COPYING
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/closure_compiler/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/closure_compiler/compiler/COPYING
++sha256 b23e682fda7310afe43505ed6041919ccff8f9e0c6799ebd7542cbcef11102e3  src/3rdparty/chromium/third_party/apple_apsl/LICENSE
++sha256 e88ae39d2e7c9ae8f5470bb23fdd7ce55fe58aca06f3d4399182f5bb0ffcf1dd  src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE
++sha256 7c7f6dc97beb9eac776c285bee22a58b83aba1d26e1d4e949e509717b5124540  src/3rdparty/chromium/third_party/npapi/LICENSE
++sha256 23681c6986fb33d57957660543f6e9dcbbcf6d2ae2f9fa2dbdb5efec5aa0d95f  src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE
++sha256 7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  src/3rdparty/chromium/third_party/libxslt/Copyright
++sha256 2ab28b982a7f3150e1597befaa87e1636b9973c80aef3752597945d270c4c4e4  src/3rdparty/chromium/third_party/pycoverage/LICENSE
++sha256 c5b14f5a3814d2e57b9bb9520dcf57a2c3817b65c4f989e5c82e332c82af1038  src/3rdparty/chromium/third_party/pymock/LICENSE.txt
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/motemplate/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/brotli/LICENSE
++sha256 1e33ef99129bb6e84b6bb84e8c9edb4c6dba9f876bc16bc143cb9a136627cdeb  src/3rdparty/chromium/third_party/hunspell/COPYING
++sha256 93720ce4be6cca7dbfdd55f9cc9e1614865a4578b474612713fdbe06c3d34002  src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.hunspell
++sha256 dcda061adeed22b26f276c01ec374f930789ae0d684e5aa8f8be309dd680ff20  src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.myspell
++sha256 5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  src/3rdparty/chromium/third_party/hunspell/COPYING.LGPL
++sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  src/3rdparty/chromium/third_party/hunspell/COPYING.MPL
++sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/3rdparty/chromium/third_party/webrtc/LICENSE
++sha256 21a742dd8cceebb1d5df7c6f945c75ccf1ad4f0d4c17e404517500c1a7de86a4  src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCDemo/third_party/SocketRocket/LICENSE
++sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE
++sha256 26d2d16d48825edf1194cb3907c5c0b7d01f9c5527eb0fefb949c51f304635e9  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md
++sha256 2feb814384635271a0a43dec65955439a8b659ddf0a5adae5b5333264dc6518a  src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE
++sha256 31346421254a3e6e12687cf17f19f6357ee73a617fa7b3d3ccefdcbabe49bdd3  src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE
++sha256 610809f1586ee4d22468f1e97c256153cea8be7a662193db70d6ca424e0f17c8  src/3rdparty/chromium/third_party/iaccessible2/LICENSE
++sha256 c903100da706172066fa1b6f02eba60f202fea63036492d2c4a01267e32aa7a8  src/3rdparty/chromium/third_party/qcms/src/COPYING
++sha256 d415cefbadc3a8083475e30d8690a1103a2601226f725abf43a263c516345190  src/3rdparty/chromium/third_party/cardboard-java/LICENSE
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  src/3rdparty/chromium/third_party/lcov/COPYING
++sha256 9f98bab33648b77578d85ac0f1d1c3941a72aa6d7e65015ba181f2fe804bb85d  src/3rdparty/chromium/third_party/pexpect/LICENSE
++sha256 74ab31565472f8347d36849b6b330e5f741f6e2dff5d9147b93ba0a900a4a577  src/3rdparty/chromium/third_party/ocmock/License.txt
++sha256 76c45ece83a26117f86f4e349e7df118708e061e87225328fb478ce1e8b3eb86  src/3rdparty/chromium/third_party/jsoncpp/LICENSE
++sha256 a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  src/3rdparty/chromium/third_party/libsecret/LICENSE
++sha256 1599cc232dbd003e6691c7f4e360f2068f84ebaef6510a26ab919c3a7fec27fd  src/3rdparty/chromium/third_party/openmax_dl/LICENSE
++sha256 956c3b678228a216142df38d039bba56ee6509d3298e7a4b8dd5bc3eaa80fe33  src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md
++sha256 0cd682f22d04b97de1a6ce05c27c4ae5fddec1e330babc46f5f4f6c586c19f17  src/3rdparty/chromium/third_party/swiftshader/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/sources/COPYING
++sha256 ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  src/3rdparty/chromium/third_party/leveldatabase/src/LICENSE
++sha256 f98f3db81b4dd3873d8672117e409286142cfae9b7673ab6d7aab4bae1527d20  src/3rdparty/chromium/third_party/qunit/LICENSE
++sha256 0570fc4ebfee96ed20720ed8f2cd5b928930bdd7340dfdfa96bb00e8c4f89677  src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.txt
++sha256 b25948e48c44312d04ffc626a9d52cae7c04539a1a8e0c1be47b7bfa0da03e1d  src/3rdparty/chromium/third_party/sinonjs/LICENSE
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE
++sha256 f40ee07401827b6ac9cf0aee1aaffb00e42a3f2c729f9c83f96a3daafef5d944  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE
++sha256 212846e0145aa50fb3a5aef254a370311a93acf6c1e792e47e0068d64c8c3885  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE
++sha256 e5881019d8766c1e88a5fe1dbca4ba40c78011d41fcb18f6e9f50df60182685b  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cctools/cctools/APPLE_LICENSE
++sha256 c69a473064e2246a3123066eaec702b454422b2701934187f0e433f773c57305  src/3rdparty/chromium/third_party/mt19937ar/LICENSE
++sha256 f53f4201f4bd4b7a07b5e5830d89d75219211fa76214b761bcb181e5c95a56ce  src/3rdparty/chromium/third_party/bintrees/LICENSE.txt
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/third_party/hwcplus/LICENSE
++sha256 0af2a39b2cb31f540a1178f176367761751454779431be92a73a62f87df91440  src/3rdparty/chromium/third_party/bspatch/LICENSE
++sha256 5f593432ef4e7ecefa6326042babb8a03d8d6ce502b4f0b78b105e18d19f8052  src/3rdparty/chromium/third_party/molokocacao/LICENSE
++sha256 b244f73c3d21edaf44ec253b9a7c389ec43313c417f52f8b71914b0c40d87325  src/3rdparty/chromium/third_party/xdg-utils/LICENSE
++sha256 7973776647df23457a9910075547e3f345fbc5e0e41147b4586d714582dfdd76  src/3rdparty/chromium/third_party/mach_override/LICENSE
++sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  src/3rdparty/chromium/third_party/python_gflags/COPYING
++sha256 06545a6ec25fbbff6c62f205f94a35be49e38f33bea827a8cfb07d7b82e4b083  src/3rdparty/chromium/third_party/sqlite/LICENSE
++sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  src/3rdparty/chromium/third_party/sqlite/src/autoconf/tea/license.terms
++sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  src/3rdparty/chromium/third_party/sqlite/sqlite-src-3080704/autoconf/tea/license.terms
++sha256 c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  src/3rdparty/chromium/third_party/libxml/src/Copyright
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/jstemplate/COPYING
++sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT
++sha256 380893a2f01aea5c3328b1a8b08cdc488bf236916abac3af0d1f1a5d2634c31a  src/3rdparty/chromium/third_party/mockito/LICENSE
++sha256 bb04dd22ee55fe3c24ee2a3c82bd1efdebbd965f7c178224a2977edc2457bb2f  src/3rdparty/chromium/third_party/tlslite/LICENSE
++sha256 6de6fe48ff7b249a51ec5522d1af618dd50effc6f030fd24e17878566ad2ca5d  src/3rdparty/chromium/third_party/libwebp/LICENSE
++sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  src/3rdparty/chromium/third_party/libva/COPYING
++sha256 32ce83e370dc31db74f20d8bb0febbb5f61b099f0e0212587e81fdc11ae7fcbc  src/3rdparty/chromium/third_party/gardiner_mod/LICENSE
++sha256 e09d954054165670b6a669e6da59673d9e85f343b9983e92a220623ff0198f8c  src/3rdparty/chromium/third_party/flot/LICENSE.txt
++sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/LICENSE
++sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/src/COPYING
++sha256 28113a6e9e2fd7584187c738a7c5484452a1c383307a1741bec50a73262fac08  src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE
++sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  src/3rdparty/chromium/third_party/libyuv/LICENSE
++sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  src/3rdparty/chromium/third_party/libyuv/third_party/gflags/LICENSE
++sha256 d62df95ee2ada2637151bc125cadbe2703ef07ed5d9cbe163eaa53bda3949af4  src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY
++sha256 bed70fc84f1bea2b4b144564b9a0f9a5a3bc7b0d78f6e62092aeb689cac56bdd  src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE
++sha256 a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  src/3rdparty/chromium/net/third_party/nss/LICENSE
++sha256 212c5a071f61512786b5e5840b3d70c85e017f3f82939ad4d4a870fc48b33477  src/3rdparty/chromium/LICENSE.chromium_os
++sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/buildtools/LICENSE
++sha256 dd6019aa7edc5b25a220306cd480da21c206964f86b30d08b8db8e4659b65c58  src/3rdparty/chromium/crypto/third_party/nss/LICENSE
++sha256 834ee20e8fc3235722ed801bae30cc539c2775be656ff9cc2810fe674e53d5ec  src/3rdparty/chromium/ppapi/LICENSE
++sha256 2337a9caeb13854242af8d0022f8e57389e5eae56fa3bf7887f5f38492b57199  src/3rdparty/chromium/v8/LICENSE
++sha256 6a585a9f466654abc8fc0829d56b1bc987e3a073d31faa03bba37d33640a23cd  src/3rdparty/chromium/v8/LICENSE.strongtalk
++sha256 e7115e18444dae09d17f361ddc365fb1d342640fe500796209c63f7c80dfae10  src/3rdparty/chromium/v8/src/third_party/fdlibm/LICENSE
++sha256 ebf25b8ce59c9e8883acd1ca75b6fc121937ca034f666c4077d2be739d2e1622  src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE
++sha256 cfe7599e45f340a35b4635090382897ca1526bc49b5e1889047f0168d131c415  src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE
++sha256 cae8c00ca6e90a682c321ec11e7a5a345d0d317aa0b8f038e03ef03a18095b2f  src/3rdparty/chromium/v8/LICENSE.valgrind
++sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/v8/LICENSE.v8
++sha256 284545e873c704952e5b1b39d457dd83a3b115a51d9f1eb5175137bd69b8fa1b  src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/testing/gmock/LICENSE
++sha256 5e0df8c845c742e76f2f64d2d9ce1b7e74a2422fddbc577ae6a56319083de0bf  src/3rdparty/chromium/testing/gmock/scripts/generator/LICENSE
++sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/testing/gtest/LICENSE
++sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  src/3rdparty/ninja/COPYING
+diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
+deleted file mode 100644
+index 4cbc1ce4fb..0000000000
+--- a/package/qt5/qt5webengine/qt5webengine.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
+-
+-# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.1/submodules/qtwebengine-everywhere-src-5.12.1.tar.xz.sha256
+-sha256 43e91e06bc4a60ef0f91d15ae06425cf9c6b4f7dafe960259a5b013c687c3bd0 qtwebengine-everywhere-src-5.12.1.tar.xz
 -- 
 2.20.1
