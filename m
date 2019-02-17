@@ -1,135 +1,89 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Feb 2019 10:35:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glm: bump to version 0.9.9.3
-Message-ID: <20190217093529.5634-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Feb 2019 11:01:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/safeclib: fix build with gcc 7
+Message-ID: <20190217100117.23098-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable tests as they are enabled by default since version 0.9.9.1:
-  https://github.com/g-truc/glm/commit/d307d390193f4027faec48ac79d7f74b2bec6e56
-- Static and shared libraries are always built since version 0.9.9.1:
-  https://github.com/g-truc/glm/commit/a23dd2f800185a5e233534fed82fc5c2840fbe5c
-  So, add a patch to fix this behavior and disable them as GLM is
-  header-ony
-- Add hash for license file (now in manual.md#section0)
-
 Fixes:
- - http://autobuild.buildroot.org/results/3cf1fd3387bd4952470edcfcb93d44f58c9e7ff7
+ - http://autobuild.buildroot.org/results/f4fe6bf54d213ca75bc1f16df61f8f92e648288e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ts-add-BUILD_-SHARED-STATIC-_LIBS-options.patch | 62 ++++++++++++++++++++++
- package/glm/glm.hash                               |  3 +-
- package/glm/glm.mk                                 | 10 +++-
- 3 files changed, 72 insertions(+), 3 deletions(-)
- create mode 100644 package/glm/0001-CMakeLists-add-BUILD_-SHARED-STATIC-_LIBS-options.patch
+ ...-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/safeclib/0002-add-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch
 
-diff --git a/package/glm/0001-CMakeLists-add-BUILD_-SHARED-STATIC-_LIBS-options.patch b/package/glm/0001-CMakeLists-add-BUILD_-SHARED-STATIC-_LIBS-options.patch
+diff --git a/package/safeclib/0002-add-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch b/package/safeclib/0002-add-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch
 new file mode 100644
-index 0000000000..8f4acdc2fa
+index 0000000000..f4f4eaab96
 --- /dev/null
-+++ b/package/glm/0001-CMakeLists-add-BUILD_-SHARED-STATIC-_LIBS-options.patch
++++ b/package/safeclib/0002-add-pic_flag-to-RETPOLINE-cflags-and-ldflags.patch
 @@ -0,0 +1,62 @@
-+From efd91329baae4ceeac47307c6634af999a07bb2e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 16 Feb 2019 23:45:21 +0100
-+Subject: [PATCH] CMakeLists: add BUILD_{SHARED,STATIC}_LIBS options
++From 23ae79fe84a3fa5d995b8c6b9be70587e37a6cd8 Mon Sep 17 00:00:00 2001
++From: Reini Urban <rurban@cpan.org>
++Date: Mon, 26 Mar 2018 18:31:30 +0200
++Subject: [PATCH] add pic_flag to RETPOLINE cflags and ldflags
 +
-+Add BUILD_SHARED_LIBS and BUILD_STATIC_LIBS options to allow the user
-+to enable/disable building of shared and static library
-+
-+This is especially useful when cross-compiling as some toolchains are
-+not always able to build a shared or a static library
++This fixes the linke probe, and fixes #55.
++Also: libtool is stripping pic_flags from the shared link cmd.
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/g-truc/glm/pull/871]
++[Retrieved from:
++https://github.com/rurban/safeclib/commit/23ae79fe84a3fa5d995b8c6b9be70587e37a6cd8]
 +---
-+ CMakeLists.txt     | 2 ++
-+ glm/CMakeLists.txt | 4 ++++
-+ 2 files changed, 6 insertions(+)
++ configure.ac                    | 2 +-
++ m4/ax_compiler_flags_cflags.m4  | 4 ++--
++ m4/ax_compiler_flags_ldflags.m4 | 2 +-
++ 3 files changed, 4 insertions(+), 4 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index ceccb1e1..10bb1af0 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -12,6 +12,8 @@ include(CMakePackageConfigHelpers)
-+ enable_testing()
++diff --git a/configure.ac b/configure.ac
++index 33ed7326..10325dc6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -4,7 +4,7 @@
++ # 2017  Reini Urban <rurban@cpan.org>
++ #
++ # Copyright (c) 2012, 2013 Cisco Systems
++-# Copyright (c) 2017 Reini Urban
+++# Copyright (c) 2017, 2018 Reini Urban
++ # All rights reserved.
++ #
++ # Permission is hereby granted, free of charge, to any person
++diff --git a/m4/ax_compiler_flags_cflags.m4 b/m4/ax_compiler_flags_cflags.m4
++index 31e3ba8c..1dec00b2 100644
++--- a/m4/ax_compiler_flags_cflags.m4
+++++ b/m4/ax_compiler_flags_cflags.m4
++@@ -66,12 +66,12 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
++     ])
 + 
-+ option(GLM_QUIET "No CMake Message" OFF)
-++option(BUILD_SHARED_LIBS "Build shared library" ON)
-++option(BUILD_STATIC_LIBS "Build static library" ON)
-+ option(GLM_TEST_ENABLE_CXX_98 "Enable C++ 98" OFF)
-+ option(GLM_TEST_ENABLE_CXX_11 "Enable C++ 11" OFF)
-+ option(GLM_TEST_ENABLE_CXX_14 "Enable C++ 14" OFF)
-+diff --git a/glm/CMakeLists.txt b/glm/CMakeLists.txt
-+index 01c594f4..032340d4 100644
-+--- a/glm/CMakeLists.txt
-++++ b/glm/CMakeLists.txt
-+@@ -44,6 +44,7 @@ source_group("SIMD Files" FILES ${SIMD_HEADER})
++     # retpoline: clang-7. Note: requires lld-7 linker support
++-    AX_APPEND_COMPILE_FLAGS(["-mretpoline -DRETPOLINE"],
+++    AX_APPEND_COMPILE_FLAGS(["-mretpoline -DRETPOLINE $lt_prog_compiler_pic"],
++         [RETPOLINE_CFLAGS],[$ax_compiler_flags_test])
++     # or the equivalent gcc-7.3 variant
++     if test -z "$RETPOLINE_CFLAGS"; then
++         AX_APPEND_COMPILE_FLAGS(
++-          ["-mindirect-branch=thunk-extern -mfunction-return=thunk-extern -mindirect-branch-register -DRETPOLINE"],
+++          ["-mindirect-branch=thunk-extern -mfunction-return=thunk-extern -mindirect-branch-register $lt_prog_compiler_pic -DRETPOLINE"],
++           [RETPOLINE_CFLAGS],[$ax_compiler_flags_test])
++     fi
 + 
-+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
-+ 
-++if(BUILD_STATIC_LIBS)
-+ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-+ 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
-+ 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
-+@@ -51,7 +52,9 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-+ 	${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
-+ 	${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
-+ 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
-++endif()
-+ 
-++if(BUILD_SHARED_LIBS)
-+ add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-+ 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
-+ 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
-+@@ -59,4 +62,5 @@ add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
-+ 	${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
-+ 	${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
-+ 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
-++endif()
-+ 
-+-- 
-+2.14.1
-+
-diff --git a/package/glm/glm.hash b/package/glm/glm.hash
-index c87d4ca2f6..87401111c5 100644
---- a/package/glm/glm.hash
-+++ b/package/glm/glm.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 a220e60f8711265595be3221e530d632d5823641ecd46a3a54bc174933bff14c  glm-0.9.8.4.tar.gz
-+sha256 fba9fd177073a36c5a7798c74b28e79ba6deb8f4bb0d2dbfc0e207c27da7e12c  glm-0.9.9.3.tar.gz
-+sha256 7b27b9d9be8ef1ad8d51d58eaefca1babc4287227c90344390a1759c86dc6d6f  manual.md
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-index 1f23146dda..4c789e75d7 100644
---- a/package/glm/glm.mk
-+++ b/package/glm/glm.mk
-@@ -4,14 +4,20 @@
- #
- ################################################################################
- 
--GLM_VERSION = 0.9.8.4
-+GLM_VERSION = 0.9.9.3
- GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
- GLM_LICENSE = MIT
--GLM_LICENSE_FILES = copying.txt
-+GLM_LICENSE_FILES = manual.md
- 
- # GLM is a header-only library, it only makes sense
- # to have it installed into the staging directory.
- GLM_INSTALL_STAGING = YES
- GLM_INSTALL_TARGET = NO
- 
-+# Don't build libraries as GLM is header-only
-+GLM_CONF_OPTS = \
-+	-DGLM_TEST_ENABLE=OFF \
-+	-DBUILD_SHARED_LIBS=OFF \
-+	-DBUILD_STATIC_LIBS=OFF
-+
- $(eval $(cmake-package))
++diff --git a/m4/ax_compiler_flags_ldflags.m4 b/m4/ax_compiler_flags_ldflags.m4
++index d0287852..193f412e 100644
++--- a/m4/ax_compiler_flags_ldflags.m4
+++++ b/m4/ax_compiler_flags_ldflags.m4
++@@ -66,7 +66,7 @@ AC_DEFUN([AX_COMPILER_FLAGS_LDFLAGS],[
++     dnl /usr/bin/ld: warning: -z retpolineplt ignored.
++     case $RETPOLINE_CFLAGS in
++         *-mretpoline*|*-mindirect-branch=thunk-extern*)
++-            AX_APPEND_LINK_FLAGS([-Wl,-z,retpolineplt],
+++            AX_APPEND_LINK_FLAGS(["$RETPOLINE_CFLAGS -Wl,-z,retpolineplt"],
++                 [RETPOLINE_LDFLAGS],[$ax_compiler_flags_test])
++             if test -n "$RETPOLINE_LDFLAGS"; then
++                 AM_CFLAGS="$AM_CFLAGS $RETPOLINE_CFLAGS"
 -- 
 2.14.1
