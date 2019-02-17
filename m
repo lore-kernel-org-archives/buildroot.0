@@ -1,142 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 21:52:19 +0100
-Subject: [Buildroot] [PATCH v4 2/7] optee-client: new package
-In-Reply-To: <1548845249-28201-2-git-send-email-etienne.carriere@linaro.org>
-References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
- <1548845249-28201-2-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <20190217215219.5df6d7a0@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Feb 2019 21:56:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libssh: fix build with gcc 4.8
+In-Reply-To: <87pnrq8v7d.fsf@tarshish>
+References: <20190217113558.27053-1-fontaine.fabrice@gmail.com>
+ <87pnrq8v7d.fsf@tarshish>
+Message-ID: <CAPi7W80pibGnV_XB0PWh=LLcJxVusrzJ66ERAc==eN4iTgd6mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello ?tienne,
+Dear Baruch,
+Le dim. 17 f?vr. 2019 ? 20:26, Baruch Siach <baruch@tkos.co.il> a ?crit :
+>
+> Hi Fabrice,
+>
+> On Sun, Feb 17 2019, Fabrice Fontaine wrote:
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/a56c515746874549714270c9a635f8a2ef303e67
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...pt-fix-strict-overflow-error-with-gcc-4.8.patch | 34 ++++++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >  create mode 100644 package/libssh/0005-pki_gcrypt-fix-strict-overflow-error-with-gcc-4.8.patch
+> >
+> > diff --git a/package/libssh/0005-pki_gcrypt-fix-strict-overflow-error-with-gcc-4.8.patch b/package/libssh/0005-pki_gcrypt-fix-strict-overflow-error-with-gcc-4.8.patch
+> > new file mode 100644
+> > index 0000000000..9187a612e7
+> > --- /dev/null
+> > +++ b/package/libssh/0005-pki_gcrypt-fix-strict-overflow-error-with-gcc-4.8.patch
+> > @@ -0,0 +1,34 @@
+> > +From aaebb96688cfcb9dc32fcfbb80a499cf2de25536 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Sun, 17 Feb 2019 12:20:45 +0100
+> > +Subject: [PATCH] pki_gcrypt: fix strict-overflow error with gcc 4.8
+> > +
+> > +/home/buildroot/autobuild/instance-1/output/build/libssh-0.8.6/src/pki_gcrypt.c: In function 'privatekey_string_to_buffer':
+> > +/home/buildroot/autobuild/instance-1/output/build/libssh-0.8.6/src/pki_gcrypt.c:485:10: error: assuming signed overflow does not occur when simplifying conditional to constant [-Werror=strict-overflow]
+> > +     while(len > 0 && strncmp(p, header_end, header_end_size) != 0) {
+> > +          ^
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/a56c515746874549714270c9a635f8a2ef303e67
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +[Upstream status: https://bugs.libssh.org/T132]
+> > +---
+> > + src/pki_gcrypt.c | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/src/pki_gcrypt.c b/src/pki_gcrypt.c
+> > +index c0cf5926..e7b26fe6 100644
+> > +--- a/src/pki_gcrypt.c
+> > ++++ b/src/pki_gcrypt.c
+> > +@@ -409,7 +409,7 @@ static ssh_buffer privatekey_string_to_buffer(const char *pkey, int type,
+> > +     unsigned int iv_len = 0;
+> > +     int algo = 0;
+> > +     int mode = 0;
+> > +-    int len;
+> > ++    size_t len;
+>
+> I don't think you can do that. size_t is unsigned. len is passed to the
+> get_next_line() macro that does this:
+>
+>         if(p[len] == '\0')    /* EOL */    \
+>             len = -1;
+>
+> Callers of get_next_line() rely on this behavior.
+Indeed, you're right, I was too quick on this one :-/. I'll send a new
+patch to disable -Werror.
+>
+> > +
+> > +     buffer = ssh_buffer_new();
+> > +     if (buffer == NULL) {
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Best Regards,
 
-I have applied to the next branch after a few changes (see below), but
-there are some build failures with some configurations, which will have
-to be fixed. I'm giving more details below as well.
-
-On Wed, 30 Jan 2019 11:47:24 +0100
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
-
-> diff --git a/package/optee-client/3.4.0/optee-client.hash b/package/optee-client/3.4.0/optee-client.hash
-> new file mode 100644
-> index 0000000..0da25ce
-> --- /dev/null
-> +++ b/package/optee-client/3.4.0/optee-client.hash
-> @@ -0,0 +1,4 @@
-> +# From https://github.com/OP-TEE/optee_client/archive/3.4.0.tar.gz
-> +sha256 7c131a44f4d73acb8816fba88bcd7e6a18537f0a522ae426a20e2ca7dc46a6ec  optee-client-3.4.0.tar.gz
-> +# Locally computed
-> +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-> diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-> new file mode 100644
-> index 0000000..99cac63
-> --- /dev/null
-> +++ b/package/optee-client/Config.in
-> @@ -0,0 +1,55 @@
-> +config BR2_PACKAGE_OPTEE_CLIENT
-> +	bool "optee-client"
-
-The following dependency:
-
-	depends on !BR2_STATIC_LIBS
-
-is needed, because optee-client tries to unconditionally build a shared
-library, instead of obeying to the standard
-BUILD_SHARED_LIBS/BUILD_STATIC_LIBS CMake variables.
-
-> +if BR2_PACKAGE_OPTEE_CLIENT
-> +
-> +choice
-> +	prompt "version"
-> +	default BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> +	help
-> +	  Select the version of OP-TEE client you want to use
-> +
-> +config BR2_PACKAGE_OPTEE_CLIENT_LATEST
-> +	bool "3.4.0"
-> +	help
-> +	  This fetches the registered release tag from the
-> +	  OP-TEE official Git repository.
-> +
-> +config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_GIT
-> +	bool "Custom Git repository"
-> +	help
-> +	  Sync with a specific OP-TEE Git repository.
-> +
-> +endchoice
-
-I don't really see why a version selection was needed, so I've dropped
-it entirely. Is there anything really HW/SoC specific in optee-client ?
-
-There are two build failures that I noticed.
-
-With the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_OPTEE_CLIENT=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-You will get:
-
-/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-                            ^
-cc1: all warnings being treated as errors
-
-With this other defconfig:
-
-BR2_or1k=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_OPTEE_CLIENT=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-You will get this failure:
-
-/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-  arg = (struct tee_ioctl_open_session_arg *)buf;
-        ^
-/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-  arg = (struct tee_ioctl_invoke_arg *)buf;
-        ^
-cc1: all warnings being treated as errors
-
-Since I wanted to move forward with merging the OP-TEE support, I
-applied this patch despite these build failures (a number of other
-configurations are building fine), but we will need those build issues
-to be resolved.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
