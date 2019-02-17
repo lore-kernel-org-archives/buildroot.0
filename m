@@ -1,45 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Feb 2019 16:01:15 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/log4cplus: link with libatomic when needed
-In-Reply-To: <20190217093326.5528-1-fontaine.fabrice@gmail.com>
-References: <20190217093326.5528-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190217160115.49390fbe@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Feb 2019 17:24:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ipmiutil: fix build with openssl
+ 1.1.x
+Message-ID: <20190217162432.20396-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/1d868798c5b80d7b41123f988449ef548dd95490
 
-On Sun, 17 Feb 2019 10:33:26 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ipmiutil/ipmiutil.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On some architectures, atomic binutils are provided by the libatomic
-> library from gcc. Linking with libatomic is therefore necessary,
-> otherwise the build fails with:
-> 
-> sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-> 
-> This is often for example the case on sparcv8 32 bit.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/16e360cb91afff7655f459a3d1fb906ca48f8464
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Fix patch so that it applies on current master
-
-Applied to master, thanks. However, as usual, I would prefer an
-upstreamable solution that relies on changing the CMakeLists.txt so
-that it checks if linking against libatomic is needed.
-
-Thanks,
-
-Thomas
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 5d8c45665d..0d9a4509b3 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ # tests against distro libcrypto so it might get a false positive when
+ # the openssl version is old, so force it off
+ # SKIP_MD2 can be used only if ALLOW_GNU is defined.
+-IPMIUTIL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
++IPMIUTIL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2 -DSSL11"
+ IPMIUTIL_DEPENDENCIES += openssl
+ else
+ IPMIUTIL_CONF_OPTS += --disable-lanplus
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
