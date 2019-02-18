@@ -1,34 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Feb 2019 23:12:28 +0100
-Subject: [Buildroot] [PATCH] package/postgresql: bump to version 11.2
-In-Reply-To: <20190217171908.30080-1-peter@korsgaard.com>
-References: <20190217171908.30080-1-peter@korsgaard.com>
-Message-ID: <20190218231228.3a6988cd@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Feb 2019 23:20:43 +0100
+Subject: [Buildroot] [PATCHv2 1/8] support/download/scp: fix download
+ with scheme prefix 'scp://'
+In-Reply-To: <20190204180553.18394-2-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Mon, 4 Feb 2019 19:05:46 +0100")
+References: <20190204180553.18394-1-patrickdepinguin@gmail.com>
+ <20190204180553.18394-2-patrickdepinguin@gmail.com>
+Message-ID: <87wolwbux0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Feb 2019 18:19:07 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-> Fixes a long standing fsync issue and a number of other bugs:
-> https://www.postgresql.org/docs/11/release-11-2.html
-> 
-> https://wiki.postgresql.org/wiki/Fsync_Errors
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/postgresql/postgresql.hash | 10 +++++-----
->  package/postgresql/postgresql.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > The scp download helper is broken when the server URL starts with 'scp://'.
+ > Such prefix is used in two situations:
+ > 1. to let FOO_SITE point to an scp location without explicitly having to set
+ >    'FOO_SITE_METHOD = scp'
 
-Applied to master after adding in the commit log an explanation about
-the change in the license file hash. Thanks!
+ > 2. when BR2_PRIMARY_SITE or BR2_BACKUP_SITE points to an scp location. In
+ >    this case, there is no equivalent of 'SITE_METHOD'.
 
-Thomas
+ > Strip out the scheme prefix, similarly to how the 'file' download helper
+ > does it. That helper has the same cases as above.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2018.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
