@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:23:43 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump CIP to
- version v4.4.154-cip28
-Message-ID: <20190218162256.2A1E78196D@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 17:24:30 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump Linux CIP to
+ version v4.4.171-cip30
+Message-ID: <20190218162256.304BE7FB25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d66510b7b8341039c58b5f7df2074358b26c5950
+commit: https://git.buildroot.net/buildroot/commit/?id=533115f4d4a7864072b15d5a2f55a9d5b4f65bd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This patch bumps the Linux CIP kernel to version v4.4.154-cip28
+This patch bumps the Linux CIP version to v4.4.171-cip30 and updates the
+download url to the new official one.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a91db4044feefc4512a3d0dafb711924a3c43237)
+(cherry picked from commit fb26b85b90bd84af38f54fa5464d30cedd4967af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index e931bd4136..9240dcd4f0 100644
+index 9240dcd4f0..fd1dec3722 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
  	bool "Latest version (4.15)"
  
  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.138-cip25)"
-+	bool "Latest CIP SLTS version (v4.4.154-cip28)"
+-	bool "Latest CIP SLTS version (v4.4.154-cip28)"
++	bool "Latest CIP SLTS version (v4.4.171-cip30)"
  	help
  	  CIP launched in the spring of 2016 to address the needs of
  	  organizations in industries such as power generation and
@@ -39,8 +41,21 @@ index e931bd4136..9240dcd4f0 100644
  config BR2_LINUX_KERNEL_VERSION
  	string
  	default "4.15.16" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.171-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
  	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f1a34d4fe0..bcd5e9cff1 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -30,7 +30,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = svn
+ else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
+-LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git
++LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git
+ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+ # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
+ # older -rc kernels.
