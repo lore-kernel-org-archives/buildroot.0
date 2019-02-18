@@ -1,85 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Feb 2019 23:10:10 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: add renaming
- functionality to barebox image copy
-In-Reply-To: <2748BB04F99E7E45A3203C831E8B20FE34D35B88@SERBE4I2.intra.erbe-med.de>
-References: <2748BB04F99E7E45A3203C831E8B20FE34D35B88@SERBE4I2.intra.erbe-med.de>
-Message-ID: <20190218231010.00e29a8d@windsurf.home>
+Date: Mon, 18 Feb 2019 23:10:51 +0100
+Subject: [Buildroot] [git commit] package/postgresql: bump to version 11.2
+Message-ID: <20190218221002.A48068B7F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Markus,
+commit: https://git.buildroot.net/buildroot/commit/?id=d04a1efcb56cbdc9b906d375fdebe30f00c9d752
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Feb 2019 13:59:42 +0000
-"Steinhilber, Markus" <Markus.Steinhilber@erbe-med.com> wrote:
+Fixes a long standing fsync issue and a number of other bugs:
+https://www.postgresql.org/docs/11/release-11-2.html
 
-> Until now barebox images are copied to the output/images directory
-> with their default name. This is a problem if the barebox and
-> barebox-aux images have the same name.
+https://wiki.postgresql.org/wiki/Fsync_Errors
 
-Could you describe a specific case/situation where this would happen ?
-The main reason we have barebox vs. barebox-aux is because you
-sometimes need to build a full-blown Barebox, and a smaller Barebox
-that serves a first stage bootloader. From what I remember the
-generated images had different names, don't they ?
+The hash of the license file is only changed due to a year update:
 
-> Also, you need to rename the images in a post-build script if you need
-> certain file names.
+-Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
++Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
 
-That is a pretty normal thing in Buildroot. We just install things as
-they are installed by the upstream build system, and leave it up to
-custom post-build script to further rename/move/adjust to match the
-specific requirements of the project/user.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas: update commit log to explain why the license file hash has
+changed, as repoted by Peter Seiderer]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/postgresql.hash | 10 +++++-----
+ package/postgresql/postgresql.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-> +config BR2_TARGET_BAREBOX_AUX_IMAGE_FILE_TARGETS
-> +       string "Image file copy target names"
-> +       help
-> +         Space-separated list of target file names used when copying
-> +         the image files from BR2_TARGET_BAREBOX_IMAGE_FILE to the
-> +         images directory.
-> +
-> +         The target names are applied in their order in the list. So the
-> +         first file in BR2_TARGET_BAREBOX_IMAGE_FILE is named after the
-> +         first entry in this list and so on.
-
-I don't think there is any other option in Buildroot where we have two
-space-separated lists where there is a mapping between each item in one
-list with the corresponding item in the other list. It's a pretty weird
-semantic.
-
-Perhaps a less weird semantic (which would also simplify the
-implementation I believe) would be to have:
-
-	name1:target-name1 name2:target-name2
-
-in the existing BR2_TARGET_BAREBOX_IMAGE_FILE option.
-
-Then you can do:
-
-	$(foreach f,$(BR2_TARGET_BAREBOX_IMAGE_FILE),
-		$(if $(findstring,:,$(f),
-			cp $(@D)/$(word 0,$(subst :,$(space),$(f)) $(BINARIES_DIR)/$(word 1,$(subst :,$(space),$(f),
-			cp $(@D)/$(f) $(BINARIES_DIR)/$(f)
-		)
-	)
-
-Well, it's not that simple and of course completely untested :) And
-perhaps it doesn't fit well with the existing shell code in barebox.mk.
-
->  define $(1)_INSTALL_IMAGES_CMDS
-> +       image_files_array=($$($(1)_IMAGE_FILES)); \
-> +       image_targets_array=($$($(1)_IMAGE_FILES_TARGETS)); \
-
-We don't use bash arrays anywhere else in the make code in Buildroot,
-so this would also be a precedent.
-
-Best regardsn
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 28d4a988d2..c4d7ab55bb 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.md5
+-md5 5e45f6d5b859cc76b5d62f1e328e9711  postgresql-11.1.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.sha256
+-sha256 90815e812874831e9a4bf6e1136bf73bc2c5a0464ef142e2dfea40cda206db08  postgresql-11.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.md5
++md5 19d43be679cb0d55363feb8926af3a0f  postgresql-11.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.sha256
++sha256 2676b9ce09c21978032070b6794696e0aa5a476e3d21d60afc036dc0a9c09405  postgresql-11.2.tar.bz2
+ 
+ # License file, Locally calculated
+-sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
++sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index fefbcf5f06..c7e9f526fc 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 11.1
++POSTGRESQL_VERSION = 11.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
