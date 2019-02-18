@@ -1,37 +1,41 @@
-From: Artem Senichev <artemsen@gmail.com>
-Date: Mon, 18 Feb 2019 11:17:19 +0300
-Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64le platforms
-In-Reply-To: <20190215220144.73a6097b@windsurf.home>
-References: <20190213085111.uuar2ehi7k2htdfg@gmail.com>
- <20190215220144.73a6097b@windsurf.home>
-Message-ID: <20190218081719.esrkqjaajpj3pvz2@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Feb 2019 12:32:19 +0100
+Subject: [Buildroot] [PATCH v2] package/kexec: enable powerpc64le
+ platforms
+In-Reply-To: <20190218081556.fsdiur6kimxac7oe@gmail.com>
+References: <20190218081556.fsdiur6kimxac7oe@gmail.com>
+Message-ID: <20190218123219.01e8babc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 15, 2019 at 10:01:44PM +0100, Thomas Petazzoni wrote:
-> Hello Artem,
-> 
-> Thanks for the patch.
-> 
-> On Wed, 13 Feb 2019 11:51:11 +0300
-> Artem Senichev <artemsen@gmail.com> wrote:
-> 
-> > kexec has fully support of ppc64 platform:
-> > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
-> > 
-> > Signed-off-by: Artem Senichev <artemsen@gmail.com>
-> > ---
-> >  package/kexec/Config.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Applied to next. What about ppc64 big endian, i.e BR2_powerpc64 ?
+Hello Artem,
 
-I have just checked big endian ppc, it looks like kexec works fine.
-v2 patch: https://patchwork.ozlabs.org/patch/1043815/
+On Mon, 18 Feb 2019 11:15:56 +0300
+Artem Senichev <artemsen@gmail.com> wrote:
 
+> kexec has fully support of ppc64 platform:
+> https://www.kernel.org/doc/Documentation/kdump/kdump.txt
+> 
+> Signed-off-by: Artem Senichev <artemsen@gmail.com>
+
+I have already applied your patch adding BR2_powerpc64le to the list of
+supported architectures:
+
+  https://git.buildroot.org/buildroot/commit/?h=next&id=46a4af5214ccafa6cca39e2d9136f4822f40f3a6
+
+Note: it has been applied to the "next" branch and not the "master"
+branch. Maybe this explains why you missed it.
+
+So this patch should be based on the next branch and only enable kexec
+for BR2_powerpc64.
+
+Thanks!
+
+Thomas
 -- 
-Regards,
-Artem Senichev
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
