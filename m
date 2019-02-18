@@ -1,80 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Feb 2019 22:43:57 +0100
-Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
- emulation with TrustZone services
-In-Reply-To: <CAN5uoS-BaiDX8y2-LAsWLjahMtqGNBTvNajW0BReA_0QDEGtCQ@mail.gmail.com>
-References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
- <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
- <20190217231234.321ec6e4@windsurf.home>
- <20190218181437.GA30645@scaer>
- <CAN5uoS-BaiDX8y2-LAsWLjahMtqGNBTvNajW0BReA_0QDEGtCQ@mail.gmail.com>
-Message-ID: <20190218224357.7f3032f6@windsurf.home>
+Date: Mon, 18 Feb 2019 22:47:36 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-websockets:
+ bump to version 7.0
+Message-ID: <20190218214549.0195F8B7F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=634be864d9be9cac302d479bc1d7dd2c5df15d3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 18 Feb 2019 22:28:10 +0100
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-websockets/python-websockets.hash | 4 ++--
+ package/python-websockets/python-websockets.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> > However, I would not be opposed to having _one_ defconfig that can be
-> > used as a reference / starting-point.  
-> 
-> Is the Qemu emulator the best candidate for such starting point.
-> I think it is as one can use it to experience Arm specific OP-TEE
-> package without needing specific HW but a standard Linux host.
-> 
-> I would have preferred proposing a change in the already available
-> Qemu Armv7 as qemu_arm_vexpress_defconfig is but I fear enabling
-> TrustZone support in Qemu will break other nice Qemu features ones
-> are used to (graphics?).
-> 
-> Maybe I can find a real HW for which BR can store a defconfig that
-> enables OP-TEE.
-
-I think Yann didn't say that a Qemu defconfig was not good, he said
-quite the opposite: that having one Qemu defconfig that uses OP-TEE
-would be useful.
-
-Note: I am not sure I agree because if we go down this road, we would
-have lots of Qemu defconfigs demonstrating lots of different features.
-
-> > > Etienne, would you be willing to convert those two configurations to
-> > > the runtime test infrastructure ?  
-> 
-> I think I can prepare that. Or I will ask few help on the ML if I
-> can't find my way.
-
-Sure, feel free to ask questions. The runtime test infrastructure is
-not documented, but there are numerous existing test cases that you
-should help you getting started.
-
-You can list existing tests by doing:
-
-./support/testing/run-tests -l
-
-and run one specific test by doing:
-
- ./support/testing/run-tests -d /path/to/some/build/dir tests.fs.test_ext.TestExt2
-
-Option -k is really useful during development, as it keeps the build
-artifacts instead of removing them once the test is completed.
-
-> The initial intention when adding these defconfig to my patch series
-> was to answer a request from patch v3 (i think) review where Thomas
-> asked for something that could b used to check OP-TEE at least
-> builds, if possible boots, from a BR build. I understand that maybe
-> you though more of such runtime test, rather than a defconfig.
-
-Yeah, maybe I wasn't clear back then, sorry about that.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+index 4939c7834f..024b83d908 100644
+--- a/package/python-websockets/python-websockets.hash
++++ b/package/python-websockets/python-websockets.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/websockets/json
+-md5	76cf931a525a3415f5a4f59c133e89c3  websockets-6.0.tar.gz
+-sha256	8f3b956d11c5b301206382726210dc1d3bee1a9ccf7aadf895aaf31f71c3716c  websockets-6.0.tar.gz
++md5	e3b5f2e257de0371e7b4d0b6ef7bc29e  websockets-7.0.tar.gz
++sha256	08e3c3e0535befa4f0c4443824496c03ecc25062debbcf895874f8a0b4c97c9f  websockets-7.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+index 4d547ada81..30c35d3baa 100644
+--- a/package/python-websockets/python-websockets.mk
++++ b/package/python-websockets/python-websockets.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEBSOCKETS_VERSION = 6.0
++PYTHON_WEBSOCKETS_VERSION = 7.0
+ PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
+-PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/4e/2a/56e60bb4c3696bc736998cc13c3fa1a36210609d7e1a3f2519857b420245
++PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/ba/60/59844a5cef2428cb752bd4f446b72095b1edee404a58c27e87cd12a141e2
+ PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
