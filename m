@@ -1,44 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 16:42:31 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: Set
- /var/empty permissions
-Message-ID: <20190218160648.C37777F9A4@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 16:43:53 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libgeotiff: fix
+ build without C++
+Message-ID: <20190218160648.CA2958B677@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebdf6ec46d85d8e4426951114d60f08c1f69e31e
+commit: https://git.buildroot.net/buildroot/commit/?id=d0af3400db6c9ad5db950bfb886b2b39a67b4499
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-The openssh privilege separation feature, enabled by default,
-requires that the path /var/empty exists and has certain permissions
-(not writable by the sshd user). Note that nothing ever gets writting
-in this directory, so it works fine on a readonly rootfs.
+Do not check for C++ compiler as libgeotiff is written in C otherwise
+build will fail on toolchains without a working C++ compiler:
 
-See README.privsep included as part of the openssh distribution.
+checking how to run the C++ preprocessor... /lib/cpp
+configure: error: in
+`/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f85665c58562a967e3dcb5f72fa8af0a606c9274)
+Fixes:
+ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2693362a04912462c0b8c02348607fb110f667f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 07f3e0d663..9175f9589d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -22,6 +22,10 @@ define OPENSSH_USERS
- 	sshd -1 sshd -1 * - - - SSH drop priv user
- endef
- 
-+define OPENSSH_PERMISSIONS
-+	/var/empty d 755 root root - - - - -
-+endef
+diff --git a/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+new file mode 100644
+index 0000000000..68082dd023
+--- /dev/null
++++ b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
+@@ -0,0 +1,65 @@
++From edc9ec69b43c27955ee4f24db2e6808bb1a8974d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 Feb 2019 23:20:43 +0100
++Subject: [PATCH] libgeotiff/configure.ac: do not check for C++
 +
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- OPENSSH_CONF_OPTS += --without-pie
- endif
++Do not check for C++ compiler as libgeotiff is written in C otherwise
++build will fail on toolchains without a working C++ compiler:
++
++checking how to run the C++ preprocessor... /lib/cpp
++configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
++configure: error: C++ preprocessor "/lib/cpp" fails sanity check
++
++Fixes:
++ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OSGeo/libgeotiff/pull/9]
++---
++ libgeotiff/configure.ac | 6 ------
++ 1 file changed, 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index a334416..4ebbd6f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,8 +25,6 @@ dnl #########################################################################
++ AM_INIT_AUTOMAKE
++ AM_MAINTAINER_MODE
++ AC_PROG_CC
++-AC_PROG_CXX
++-AC_PROG_CXXCPP
++ AC_PROG_INSTALL
++ AC_PROG_LN_S
++ AC_PROG_MAKE_SET
++@@ -46,7 +44,6 @@ dnl #########################################################################
++ m4_define([debug_default],[no])
++ 
++ CFLAGS="$CFLAGS"
++-CXXFLAGS="$CXXFLAGS"
++ 
++ dnl We want to honor the users wishes with regard to linking.
++ LIBS="$LDFLAGS $LIBS"
++@@ -82,11 +79,9 @@ AC_MSG_CHECKING([for debug enabled])
++ 
++ if test "x$enable_debug" = "xyes"; then
++     CFLAGS="$CFLAGS -g -DDEBUG -Wall"
++-    CXXFLAGS="$CXXFLAGS -g -DDEBUG -Wall"
++     AC_MSG_RESULT(yes)
++ else
++     CFLAGS="$CFLAGS -O3 -DNDEBUG"
++-    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
++     AC_MSG_RESULT(no)
++ fi
++ 
++@@ -367,7 +362,6 @@ LOC_MSG()
++ LOC_MSG([  Version..................: ${RELEASE_VERSION}])
++ LOC_MSG([  Installation directory...: ${prefix}])
++ LOC_MSG([  C compiler...............: ${CC} ${CFLAGS}])
++-LOC_MSG([  C++ compiler.............: ${CXX} ${CXXFLAGS}])
++ 
++ LOC_MSG([  Debugging support........: ${enable_debug}])
++ LOC_MSG()
++-- 
++2.14.1
++
