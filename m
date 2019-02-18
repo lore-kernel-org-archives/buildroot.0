@@ -1,157 +1,47 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Mon, 18 Feb 2019 21:48:07 +0100
-Subject: [Buildroot] [PATCH/next v3 6/6] configs/freescale_imx8qxpmek: New
- defconfig
-In-Reply-To: <20190218204807.16815-1-nerv@dawncrow.de>
-References: <20190218204807.16815-1-nerv@dawncrow.de>
-Message-ID: <20190218204807.16815-7-nerv@dawncrow.de>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 18 Feb 2019 13:23:15 -0800
+Subject: [Buildroot] [PATCH 1/1] python-xlib: bump to version 0.25
+Message-ID: <20190218212315.13841-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Andr? Hentschel <andre.hentschel@zf.com>
-
-Signed-off-by: Andr? Hentschel <andre.hentschel@zf.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- .gitlab-ci.yml                         |  1 +
- board/freescale/imx8qxpmek/readme.txt  | 67 ++++++++++++++++++++++++++
- configs/freescale_imx8qxpmek_defconfig | 40 +++++++++++++++
- 3 files changed, 108 insertions(+)
- create mode 100644 board/freescale/imx8qxpmek/readme.txt
- create mode 100644 configs/freescale_imx8qxpmek_defconfig
+ package/python-xlib/python-xlib.hash | 7 ++++---
+ package/python-xlib/python-xlib.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2f0ebaa25c..3f7d2e2d7d 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -144,6 +144,7 @@ freescale_imx6qsabresd_defconfig: { extends: .defconfig }
- freescale_imx6sxsabresd_defconfig: { extends: .defconfig }
- freescale_imx7dsabresd_defconfig: { extends: .defconfig }
- freescale_imx8mqevk_defconfig: { extends: .defconfig }
-+freescale_imx8qxpmek_defconfig: { extends: .defconfig }
- freescale_p1025twr_defconfig: { extends: .defconfig }
- freescale_t1040d4rdb_defconfig: { extends: .defconfig }
- friendlyarm_nanopi_a64_defconfig: { extends: .defconfig }
-diff --git a/board/freescale/imx8qxpmek/readme.txt b/board/freescale/imx8qxpmek/readme.txt
-new file mode 100644
-index 0000000000..45f7915fe4
---- /dev/null
-+++ b/board/freescale/imx8qxpmek/readme.txt
-@@ -0,0 +1,67 @@
-+***************************
-+Freescale i.MX8QXP MEK board
-+***************************
-+
-+This file documents the Buildroot support for the Freescale i.MX8QXP
-+MEK board.
-+
-+Build
-+=====
-+
-+First, configure Buildroot for the i.MX8QXP MEK board:
-+
-+  make freescale_imx8qxpmek_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ the following files:
-+  - ahab-container.img
-+  - bl31.bin
-+  - boot.vfat
-+  - fsl-imx8qxp-mek.dtb
-+  - Image
-+  - imx8-boot-sd.bin
-+  - mkimg.commit
-+  - mx8qx-mek-scfw-tcm.bin
-+  - mx8qx-val-scfw-tcm.bin
-+  - rootfs.ext2
-+  - rootfs.ext4
-+  - rootfs.tar
-+  - sdcard.img
-+  - u-boot-atf.bin
-+  - u-boot.bin
-+  - u-boot-hash.bin
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template_imx8.
-+
-+Boot the i.MX8QXP MEK board
-+==========================
-+
-+To boot your newly created system:
-+- insert the SD card in the SD slot of the board;
-+- Configure the boot switch as follows:
-+SW2:	ON	ON	OFF	OFF
-+- put a micro USB cable into the Debug USB Port and connect using a terminal
-+  emulator at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
-new file mode 100644
-index 0000000000..33e2a50dd7
---- /dev/null
-+++ b/configs/freescale_imx8qxpmek_defconfig
-@@ -0,0 +1,40 @@
-+BR2_aarch64=y
-+BR2_cortex_a35=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8qxp-mek"
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_IMX_SC_FIRMWARE=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qxp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+diff --git a/package/python-xlib/python-xlib.hash b/package/python-xlib/python-xlib.hash
+index 2c4861af5c..3a22e1ac52 100644
+--- a/package/python-xlib/python-xlib.hash
++++ b/package/python-xlib/python-xlib.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/python-xlib/json, sha256 locally computed
+-md5 cdf342aa145c2be0ccae46cfb7b62551 python-xlib-0.21.tar.bz2
+-sha256 25aad0056172920552c01a163e979b02336abaf47b0792dae9c93ecb29500431 python-xlib-0.21.tar.bz2
++# md5, sha256 from https://pypi.org/pypi/python-xlib/json
++md5 ded820dc8e943106bd660801ed7a82f7 python-xlib-0.25.tar.bz2
++sha256 204f280b549352af6cbdaff43405186822ae05749518dd9be209bd88a0088f99 python-xlib-0.25.tar.bz2
++# Locally computed sha256 checksums
+ sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9 LICENSE
+diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
+index 0ce6e43422..3ffc4e2ee1 100644
+--- a/package/python-xlib/python-xlib.mk
++++ b/package/python-xlib/python-xlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_XLIB_VERSION = 0.21
++PYTHON_XLIB_VERSION = 0.25
+ PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
+-PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
++PYTHON_XLIB_SITE = https://files.pythonhosted.org/packages/3c/d9/51fc07ae57f6a44e62e2ee04bd501d763ac169ff05c838403ec7ae556992
+ PYTHON_XLIB_SETUP_TYPE = setuptools
+ PYTHON_XLIB_LICENSE = LGPL-2.1+
+ PYTHON_XLIB_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.20.1
