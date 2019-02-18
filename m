@@ -1,32 +1,45 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 18 Feb 2019 07:57:20 -0600
-Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
-In-Reply-To: <20190218121508.htf6s7bazcggmozg@gmail.com>
-References: <20190218121508.htf6s7bazcggmozg@gmail.com>
-Message-ID: <CANQCQpZCkCE1y0fzB5qKKjZ7PnVyS5XXVzOEM3DKveMXQUmsgQ@mail.gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 18 Feb 2019 15:05:24 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-17
+In-Reply-To: <20190218070048.D838922270@silver.osuosl.org>
+References: <20190218070048.D838922270@silver.osuosl.org>
+Message-ID: <20190218150524.58b7f1a1@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Artem,
+Hello,
 
+On Mon, 18 Feb 2019 07:00:43 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Mon, Feb 18, 2019 at 6:17 AM Artem Senichev <artemsen@gmail.com> wrote:
->
-> kexec has fully support of ppc64 platform:
-> https://www.kernel.org/doc/Documentation/kdump/kdump.txt
-> Added BR2_powerpc64 platform support.
+> Hello,
+> 
+[...]    
+> 
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+[...]
+>                fftw-quad-3.3.8 | 1 
+[...]
+> 
+> Detail of failures
+> ------------------
+> 
+[...]
+> | x86_64 |                fftw-quad-3.3.8 | NOK |
+> http://autobuild.buildroot.net/results/bbefc1533570b123dfc5213f99ba7c8c6bd8177f
+[...]
+fftw is unable to find libquadmath.so but this library is  missing in
+x86_64-ctng_locales-linux-gnu.tar.xz.
 
-Curious, which power arch/sub-arch are you testing?  (Power 5/6/7/8?)
-(NXP or IBM)
+Regards.
 
->
-> Signed-off-by: Artem Senichev <artemsen@gmail.com>
-
-Looks like when the arch were last adjusted for support, powerpc64 was
-just left off the list but mentioned as a supported. (Commit:
-3116742e8f0c45e5ca06b32f91e481763356e03e)
-
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Gwen
