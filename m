@@ -1,139 +1,115 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 18 Feb 2019 19:17:16 +0200
-Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for GTK
- and WPE WebKit components
+Date: Mon, 18 Feb 2019 19:17:18 +0200
+Subject: [Buildroot] [PATCH RFC/next 3/4] package/webkit: factor out common
+ bits of .mk files
 In-Reply-To: <20190218171719.18721-1-aperez@igalia.com>
 References: <20190218171719.18721-1-aperez@igalia.com>
-Message-ID: <20190218171719.18721-2-aperez@igalia.com>
+Message-ID: <20190218171719.18721-4-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
-libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
-subbdirectory as the first step to unify some of their configuration.
+Move the commen set of dependencies and CMake configuration options into
+webkit.mk, as well, as well as test for BR2_WEBKIT_ARCH_SUPPORTS_JIT
+(which was duplicated). While at it, the changes make the list of
+dependencies common to both packages (WEBKIT_DEPENDENCIES) more correct
+and thorough.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/Config.in                                       | 8 ++++----
- package/{ => webkit}/libwpe/Config.in                   | 0
- package/{ => webkit}/libwpe/libwpe.hash                 | 0
- package/{ => webkit}/libwpe/libwpe.mk                   | 0
- package/webkit/webkit.mk                                | 7 +++++++
- package/{ => webkit}/webkitgtk/Config.in                | 0
- package/{ => webkit}/webkitgtk/webkitgtk.hash           | 0
- package/{ => webkit}/webkitgtk/webkitgtk.mk             | 0
- package/{ => webkit}/wpebackend-fdo/Config.in           | 0
- package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash | 0
- package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk   | 0
- package/{ => webkit}/wpewebkit/Config.in                | 0
- package/{ => webkit}/wpewebkit/wpewebkit.hash           | 0
- package/{ => webkit}/wpewebkit/wpewebkit.mk             | 0
- 14 files changed, 11 insertions(+), 4 deletions(-)
- rename package/{ => webkit}/libwpe/Config.in (100%)
- rename package/{ => webkit}/libwpe/libwpe.hash (100%)
- rename package/{ => webkit}/libwpe/libwpe.mk (100%)
- create mode 100644 package/webkit/webkit.mk
- rename package/{ => webkit}/webkitgtk/Config.in (100%)
- rename package/{ => webkit}/webkitgtk/webkitgtk.hash (100%)
- rename package/{ => webkit}/webkitgtk/webkitgtk.mk (100%)
- rename package/{ => webkit}/wpebackend-fdo/Config.in (100%)
- rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash (100%)
- rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk (100%)
- rename package/{ => webkit}/wpewebkit/Config.in (100%)
- rename package/{ => webkit}/wpewebkit/wpewebkit.hash (100%)
- rename package/{ => webkit}/wpewebkit/wpewebkit.mk (100%)
+ package/webkit/webkit.mk              | 14 ++++++++++++++
+ package/webkit/webkitgtk/webkitgtk.mk | 15 +++------------
+ package/webkit/wpewebkit/wpewebkit.mk | 14 +++-----------
+ 3 files changed, 20 insertions(+), 23 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 420e6e95a3..65faf1fcd6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1304,7 +1304,6 @@ menu "Graphics"
- 	source "package/libva-intel-driver/Config.in"
- 	source "package/libvdpau/Config.in"
- 	source "package/libvips/Config.in"
--	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opencv3/Config.in"
-@@ -1320,11 +1319,12 @@ menu "Graphics"
- 	source "package/wayland/Config.in"
- 	source "package/wayland-protocols/Config.in"
- 	source "package/waylandpp/Config.in"
--	source "package/webkitgtk/Config.in"
-+	source "package/webkit/webkitgtk/Config.in"
-+	source "package/webkit/libwpe/Config.in"
-+	source "package/webkit/wpebackend-fdo/Config.in"
-+	source "package/webkit/wpewebkit/Config.in"
- 	source "package/webp/Config.in"
- 	source "package/woff2/Config.in"
--	source "package/wpebackend-fdo/Config.in"
--	source "package/wpewebkit/Config.in"
- 	source "package/zbar/Config.in"
- 	source "package/zxing-cpp/Config.in"
- endmenu
-diff --git a/package/libwpe/Config.in b/package/webkit/libwpe/Config.in
-similarity index 100%
-rename from package/libwpe/Config.in
-rename to package/webkit/libwpe/Config.in
-diff --git a/package/libwpe/libwpe.hash b/package/webkit/libwpe/libwpe.hash
-similarity index 100%
-rename from package/libwpe/libwpe.hash
-rename to package/webkit/libwpe/libwpe.hash
-diff --git a/package/libwpe/libwpe.mk b/package/webkit/libwpe/libwpe.mk
-similarity index 100%
-rename from package/libwpe/libwpe.mk
-rename to package/webkit/libwpe/libwpe.mk
 diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-new file mode 100644
-index 0000000000..47e94d72f6
---- /dev/null
+index 47e94d72f6..96ca7a109d 100644
+--- a/package/webkit/webkit.mk
 +++ b/package/webkit/webkit.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# Common definitions for the GTK and WPE WebKit ports.
-+#
-+################################################################################
+@@ -4,4 +4,18 @@
+ #
+ ################################################################################
+ 
++WEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
++	cairo harfbuzz icu jpeg libgcrypt libsoup libpng libtasn1 \
++	libxml2 libxslt sqlite webp
++WEBKIT_CONF_OPTS = \
++	-DENABLE_API_TESTS=OFF \
++	-DENABLE_GTKDOC=OFF \
++	-DENABLE_INTROSPECTION=OFF
 +
-+include $(sort $(wildcard package/webkit/*/*.mk))
-diff --git a/package/webkitgtk/Config.in b/package/webkit/webkitgtk/Config.in
-similarity index 100%
-rename from package/webkitgtk/Config.in
-rename to package/webkit/webkitgtk/Config.in
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkit/webkitgtk/webkitgtk.hash
-similarity index 100%
-rename from package/webkitgtk/webkitgtk.hash
-rename to package/webkit/webkitgtk/webkitgtk.hash
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkit/webkitgtk/webkitgtk.mk
-similarity index 100%
-rename from package/webkitgtk/webkitgtk.mk
-rename to package/webkit/webkitgtk/webkitgtk.mk
-diff --git a/package/wpebackend-fdo/Config.in b/package/webkit/wpebackend-fdo/Config.in
-similarity index 100%
-rename from package/wpebackend-fdo/Config.in
-rename to package/webkit/wpebackend-fdo/Config.in
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/webkit/wpebackend-fdo/wpebackend-fdo.hash
-similarity index 100%
-rename from package/wpebackend-fdo/wpebackend-fdo.hash
-rename to package/webkit/wpebackend-fdo/wpebackend-fdo.hash
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/webkit/wpebackend-fdo/wpebackend-fdo.mk
-similarity index 100%
-rename from package/wpebackend-fdo/wpebackend-fdo.mk
-rename to package/webkit/wpebackend-fdo/wpebackend-fdo.mk
-diff --git a/package/wpewebkit/Config.in b/package/webkit/wpewebkit/Config.in
-similarity index 100%
-rename from package/wpewebkit/Config.in
-rename to package/webkit/wpewebkit/Config.in
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/webkit/wpewebkit/wpewebkit.hash
-similarity index 100%
-rename from package/wpewebkit/wpewebkit.hash
-rename to package/webkit/wpewebkit/wpewebkit.hash
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/webkit/wpewebkit/wpewebkit.mk
-similarity index 100%
-rename from package/wpewebkit/wpewebkit.mk
-rename to package/webkit/wpewebkit/wpewebkit.mk
++ifeq ($(BR2_WEBKIT_ARCH_SUPPORTS_JIT),y)
++WEBKIT_CONF_OPTS += -DENABLE_JIT=ON
++else
++WEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
++endif
++
+ include $(sort $(wildcard package/webkit/*/*.mk))
+diff --git a/package/webkit/webkitgtk/webkitgtk.mk b/package/webkit/webkitgtk/webkitgtk.mk
+index 1834108bcc..fefb52eeaa 100644
+--- a/package/webkit/webkitgtk/webkitgtk.mk
++++ b/package/webkit/webkitgtk/webkitgtk.mk
+@@ -12,14 +12,11 @@ WEBKITGTK_LICENSE = LGPL-2.1+, BSD-2-Clause
+ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+-WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+-	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+-	libtasn1 libxml2 libxslt sqlite webp woff2
++WEBKITGTK_DEPENDENCIES = $(WEBKIT_DEPENDENCIES) \
++	enchant libgtk3 libsecret woff2
+ WEBKITGTK_CONF_OPTS = \
+-	-DENABLE_API_TESTS=OFF \
++	$(WEBKIT_CONF_OPTS)
+ 	-DENABLE_GEOLOCATION=OFF \
+-	-DENABLE_GTKDOC=OFF \
+-	-DENABLE_INTROSPECTION=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+ 	-DENABLE_SPELLCHECK=ON \
+ 	-DPORT=GTK \
+@@ -27,12 +24,6 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DUSE_LIBHYPHEN=OFF \
+ 	-DUSE_WOFF2=ON
+ 
+-ifeq ($(BR2_WEBKIT_ARCH_SUPPORTS_JIT),y)
+-WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
+-else
+-WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
+ WEBKITGTK_CONF_OPTS += \
+ 	-DENABLE_VIDEO=ON \
+diff --git a/package/webkit/wpewebkit/wpewebkit.mk b/package/webkit/wpewebkit/wpewebkit.mk
+index 3877dcfbb0..e36dadd359 100644
+--- a/package/webkit/wpewebkit/wpewebkit.mk
++++ b/package/webkit/wpewebkit/wpewebkit.mk
+@@ -12,21 +12,13 @@ WPEWEBKIT_LICENSE = LGPL-2.1+, BSD-2-Clause
+ WPEWEBKIT_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+-WPEWEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
+-	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
+-	libpng libxslt wayland-protocols webp wpebackend-fdo
+-
++WPEWEBKIT_DEPENDENCIES = $(WEBKIT_DEPENDENCIES) \
++	libepoxy libgles wayland-protocols wpebackend-fdo
+ WPEWEBKIT_CONF_OPTS = \
++	$(WEBKIT_CONF_OPTS) \
+ 	-DPORT=WPE \
+-	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_MINIBROWSER=OFF
+ 
+-ifeq ($(BR2_WEBKIT_ARCH_SUPPORTS_JIT),y)
+-WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=ON
+-else
+-WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA),y)
+ WPEWEBKIT_CONF_OPTS += \
+ 	-DENABLE_VIDEO=ON \
 -- 
 2.20.1
