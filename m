@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 23:26:19 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/systemd: set
+Date: Mon, 18 Feb 2019 23:26:14 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: set
  vconsole support option to default y
-Message-ID: <20190218222426.583B9821ED@busybox.osuosl.org>
+Message-ID: <20190218222432.6D856821ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8f80ebb4d0eb0c5c7689a3c1532314a9e560f96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=17e740380b28b7cf8cfbac73600192a7e210b0e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Without support for vconsole, systemd will abruptly kill anything
 spawned on the console, thus preventing users from loging in from
@@ -34,10 +34,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 7b613df02c..807269b385 100644
+index 25f322e8f3..920b65db44 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -321,6 +321,7 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
+@@ -325,6 +325,7 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
  
  config BR2_PACKAGE_SYSTEMD_VCONSOLE
  	bool "enable vconsole tool"
