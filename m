@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:24:30 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump Linux CIP to
+Date: Mon, 18 Feb 2019 17:22:35 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] linux: bump Linux CIP to
  version v4.4.171-cip30
-Message-ID: <20190218162256.304BE7FB25@busybox.osuosl.org>
+Message-ID: <20190218162302.EE65680FA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=533115f4d4a7864072b15d5a2f55a9d5b4f65bd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f267c07967e84c004c7e3df9ed2e46c081e23e3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 This patch bumps the Linux CIP version to v4.4.171-cip30 and updates the
 download url to the new official one.
@@ -25,11 +25,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 9240dcd4f0..fd1dec3722 100644
+index efce31c7e1..e9272237c6 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.15)"
+ 	bool "Latest version (4.18)"
  
  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 -	bool "Latest CIP SLTS version (v4.4.154-cip28)"
@@ -40,14 +40,14 @@ index 9240dcd4f0..fd1dec3722 100644
 @@ -121,7 +121,7 @@ endif
  config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "4.15.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.18.20" if BR2_LINUX_KERNEL_LATEST_VERSION
 -	default "v4.4.154-cip28" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 +	default "v4.4.171-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
  	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 diff --git a/linux/linux.mk b/linux/linux.mk
-index f1a34d4fe0..bcd5e9cff1 100644
+index bc688fca92..ce0b371734 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
 @@ -30,7 +30,7 @@ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
