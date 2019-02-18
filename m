@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 14:30:30 +0100
-Subject: [Buildroot] [git commit] package/python-pyzmq: bump to version
- 18.0.0
-Message-ID: <20190305095736.4F8B58E504@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 22:55:26 +0100
+Subject: [Buildroot] [git commit] package/stm32flash: bump to version 0.5
+Message-ID: <20190305095736.32F408E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e77e873abba32dadef1898e8f9968b376f526fa
+commit: https://git.buildroot.net/buildroot/commit/?id=40d3f6e85cc95fb0e16086b64c14318ed840e859
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Bump to latest official version.
+
+Signed-off-by: Markus Steinhilber <markus.steinhilber@erbe-med.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyzmq/python-pyzmq.hash | 6 +++---
- package/python-pyzmq/python-pyzmq.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/stm32flash/stm32flash.hash | 2 ++
+ package/stm32flash/stm32flash.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index eb8cf0923b..58d5fa1f56 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pyzmq/json, sha256 locally computed
--md5  6f5d77cb5ec1617ce9b6e5ad7c6174fb  pyzmq-17.1.2.tar.gz
--sha256  a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf  pyzmq-17.1.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyzmq/json
-+md5    81d643d1e9eb9238960a18b6b0989db2  pyzmq-18.0.0.tar.gz
-+sha256 b30c339eb58355f51f4f54dd61d785f1ff58c86bca1c3a5916977631d121867b  pyzmq-18.0.0.tar.gz
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index b977cca927..5d772b9fa3 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/stm32flash/stm32flash.hash b/package/stm32flash/stm32flash.hash
+new file mode 100644
+index 0000000000..d12b9354b2
+--- /dev/null
++++ b/package/stm32flash/stm32flash.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 73afcbd317ca3eb080c14b6ed1451e5a74a3bbae8f8fb5fe24ea496333f03ead stm32flash-1f934ae86babdeea47afdfae1d856d5fd5da6c53.tar.gz
+diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+index c41fc76d01..9bb05ab730 100644
+--- a/package/stm32flash/stm32flash.mk
++++ b/package/stm32flash/stm32flash.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYZMQ_VERSION = 17.1.2
-+PYTHON_PYZMQ_VERSION = 18.0.0
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/b9/6a/bc9277b78f5c3236e36b8c16f4d2701a7fd4fa2eb697159d3e0a3a991573
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/64/8d/78975da77627fd863c08e8ea3c7cebce7e51bed2936be5118de6b0050638
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+-STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
++STM32FLASH_VERSION = 1f934ae86babdeea47afdfae1d856d5fd5da6c53
+ STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
+ STM32FLASH_LICENSE = GPL-2.0+
+ STM32FLASH_LICENSE_FILES = gpl-2.0.txt
