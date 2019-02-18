@@ -1,45 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 23:19:01 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] support/download/scp: fix
- download with scheme prefix 'scp://'
-Message-ID: <20190218221917.1911E88E83@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 23:25:13 +0100
+Subject: [Buildroot] [PATCH 1/1] postgresql: change systemd service type
+ to notify
+In-Reply-To: <20190204185340.3689-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Mon, 4 Feb 2019 19:53:40 +0100")
+References: <20180629183101.9705-1-joseph.kogut@gmail.com>
+ <20190204185340.3689-1-titouan.christophe@railnova.eu>
+Message-ID: <87sgwkbupi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb8928b34e021dd09c034bae986812c3973d9fdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-The scp download helper is broken when the server URL starts with 'scp://'.
-Such prefix is used in two situations:
-1. to let FOO_SITE point to an scp location without explicitly having to set
-   'FOO_SITE_METHOD = scp'
+ > From: Joseph Kogut <joseph.kogut@gmail.com>
+ > During activation, pg_ctl uses exec to start the db server, which causes
+ > the service to never finish activating when Type=forking. Upstream
+ > recommends configuring --with-systemd and using Type=notify.
 
-2. when BR2_PRIMARY_SITE or BR2_BACKUP_SITE points to an scp location. In
-   this case, there is no equivalent of 'SITE_METHOD'.
+ > https://www.postgresql.org/docs/10/static/server-start.html
 
-Strip out the scheme prefix, similarly to how the 'file' download helper
-does it. That helper has the same cases as above.
+ > Upstream says:
+ >     When using systemd, you can use the following service unit file
+ >     [...]
+ >     Using Type=notify requires that the server binary was built with
+ >     configure --with-systemd.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa62b36456d143e4d2b7f1acd9a61d6bad52d3e5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/download/scp | 3 +++
- 1 file changed, 3 insertions(+)
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-diff --git a/support/download/scp b/support/download/scp
-index 49cfff2b9f..80cf495c4e 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -34,4 +34,7 @@ _scp() {
-     eval ${SCP} "${@}"
- }
+Committed to 2018.11.x, thanks.
+
+> ---
+ >  package/postgresql/postgresql.mk      |  8 ++++++++
+ >  package/postgresql/postgresql.service | 12 ++++++++----
+ >  2 files changed, 16 insertions(+), 4 deletions(-)
+
+ > diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+ > index c4ba0daa17..fefbcf5f06 100644
+ > --- a/package/postgresql/postgresql.mk
+ > +++ b/package/postgresql/postgresql.mk
+ > @@ -83,6 +83,14 @@ else
+ >  POSTGRESQL_CONF_OPTS += --without-libxml
+ >  endif
  
-+# Remove any scheme prefix
-+uri="${uri##scp://}"
-+
- _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
+ > +# required for postgresql.service Type=notify
+ > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ > +POSTGRESQL_DEPENDENCIES += systemd
+ > +POSTGRESQL_CONF_OPTS += --with-systemd
+ > +else
+ > +POSTGRESQL_CONF_OPTS += --without-systemd
+ > +endif
+ > +
+ >  define POSTGRESQL_USERS
+ >  	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ >  endef
+ > diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+ > index 4a96258684..53e6f84f00 100644
+ > --- a/package/postgresql/postgresql.service
+ > +++ b/package/postgresql/postgresql.service
+ > @@ -3,7 +3,7 @@ Description=PostgreSQL database server
+ >  After=network.target
+ 
+ >  [Service]
+ > -Type=forking
+ > +Type=notify
+ 
+ >  # start timeout disabled because initdb may run a little
+ >  # longer (eg. 5 minutes on RaspberryPi)
+ > @@ -12,13 +12,17 @@ TimeoutStartSec=0
+ >  User=postgres
+ >  Group=postgres
+ 
+ > +StandardOutput=syslog
+ > +StandardError=syslog
+ >  SyslogIdentifier=postgres
+ >  PIDFile=/var/lib/pgsql/postmaster.pid
+ 
+ >  ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+ > -ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
+ > -ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
+ > -ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
+ > +ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+ > +ExecReload=/usr/bin/kill -HUP $MAINPID
+ > +KillMode=mixed
+ > +KillSignal=SIGINT
+ > +TimeoutSec=0
+ 
+ >  [Install]
+ >  WantedBy=multi-user.target
+ > -- 
+ > 2.19.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
