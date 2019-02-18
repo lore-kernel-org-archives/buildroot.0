@@ -1,32 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 16:51:34 +0100
-Subject: [Buildroot] [PATCH] package/openssh: adding a way to install
- only sftp-server
-In-Reply-To: <20190215231725.07f05798@windsurf.home> (Thomas Petazzoni's
- message of "Fri, 15 Feb 2019 23:17:25 +0100")
-References: <20190215220257.12430-1-angelo@amarulasolutions.com>
- <20190215231725.07f05798@windsurf.home>
-Message-ID: <87k1hxayd5.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Feb 2019 16:52:20 +0100
+Subject: [Buildroot] [PATCH] package/openssh: Set /var/empty permissions
+In-Reply-To: <a7847e0d-f51a-0000-c3c4-3d53d85b2db3@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 3 Feb 2019 21:53:04 +0100")
+References: <20181217222522.13499-1-chris.lesiak@licor.com>
+ <a7847e0d-f51a-0000-c3c4-3d53d85b2db3@mind.be>
+Message-ID: <87ftslaybv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Hello Angelo,
- > On Fri, 15 Feb 2019 23:02:57 +0100
- > Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+ > On 17/12/2018 23:25, Chris Lesiak wrote:
+ >> The openssh privilege separation feature, enabled by default,
+ >> requires that the path /var/empty exist and have certain permission.
+ >> See README.privsep included as part of the openssh distribution.
+ >> 
+ >> Use OPENSSH_PERMISSIONS to ensure this is done correctly.
 
- >> This patch adds a way to install only sftp-server in case it is
- >> needed by other packages (like dropbear) or a full openssh installation is
- >> not needed.
+ >  I've added some of the discussion to the commit message and applied to master,
+ > thanks.
 
- > Why not using package/gesftpserver/ if you need a sftp server in a
- > dropbear-only environment ?
-
-Yes, my thoughts exactly!
+Committed to 2018.02.x and 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
