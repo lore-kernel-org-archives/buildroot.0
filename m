@@ -1,94 +1,52 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 18 Feb 2019 22:28:10 +0100
-Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
- emulation with TrustZone services
-In-Reply-To: <20190218181437.GA30645@scaer>
-References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
- <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
- <20190217231234.321ec6e4@windsurf.home> <20190218181437.GA30645@scaer>
-Message-ID: <CAN5uoS-BaiDX8y2-LAsWLjahMtqGNBTvNajW0BReA_0QDEGtCQ@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 18 Feb 2019 13:29:53 -0800
+Subject: [Buildroot] [PATCH 1/1] python-cython: bump to version 0.29.5
+Message-ID: <20190218212953.21179-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Updated license file checksums after a minor change to URLs.
 
-On Mon, 18 Feb 2019 at 19:14, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Thomas, Etienne, All,
->
-> On 2019-02-17 23:12 +0100, Thomas Petazzoni spake thusly:
-> > On Wed, 30 Jan 2019 11:47:28 +0100
-> > Etienne Carriere <etienne.carriere@linaro.org> wrote:
-> > > This change introduces a Qemu board for an Armv7-A target executing
-> > > with OP-TEE secure world services.
-> > I don't know what is the opinion of Peter, Arnout and Yann, but I think
-> > this PATCH 6/7 and PATCH 7/7, instead of adding more defconfigs should
-> > instead add test cases to our runtime test infrastructure in
-> > support/testing/. Indeed:
-> >
-> >  - We probably don't want to have Qemu defconfigs for every possible
-> >    feature in Buildroot
->
-> However, I would not be opposed to having _one_ defconfig that can be
-> used as a reference / starting-point.
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
 
-Is the Qemu emulator the best candidate for such starting point.
-I think it is as one can use it to experience Arm specific OP-TEE
-package without needing specific HW but a standard Linux host.
+ package/python-cython/python-cython.hash | 8 ++++----
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-I would have preferred proposing a change in the already available
-Qemu Armv7 as qemu_arm_vexpress_defconfig is but I fear enabling
-TrustZone support in Qemu will break other nice Qemu features ones
-are used to (graphics?).
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index db0549c2d2..54e4d1d257 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	867c8b48f15a5249f476dc5a2cb58758  Cython-0.29.4.tar.gz
+-sha256	d1ee3d39c73a094ae5b6e2f9263ae0dc61af1b549a0869ade8c3c30325ed9f26  Cython-0.29.4.tar.gz
++md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
++sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
+ # Locally computed sha256 checksums
+-sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+-sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
++sha256	e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
++sha256	a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index fbe11e8087..9ab4ebb2a9 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
 
-Maybe I can find a real HW for which BR can store a defconfig that
-enables OP-TEE.
-
-> >  - A runtime test case, even if it's indeed a bit less visible than a
-> >    defconfig, still documents a configuration that "works" for a given
-> >    feature.
-> >  - A runtime test case allows to really runtime test the feature by
-> >    booting Qemu.
->
-> Agreed: adding a runtiem test should indeed be provided, whether we have
-> a defconfig or not.
->
->
-> Regards,
-> Yann E. MORIN.
->
-> > Etienne, would you be willing to convert those two configurations to
-> > the runtime test infrastructure ?
-
-I think I can prepare that. Or I will ask few help on the ML if I
-can't find my way.
-
-The initial intention when adding these defconfig to my patch series was to
-answer a request from patch v3 (i think) review where Thomas asked for
-something that could b used to check OP-TEE at least builds, if possible boots,
-from a BR build. I understand that maybe you though more of such
-runtime test, rather than a defconfig.
-
-Regards,
-etienne
-
->
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+-PYTHON_CYTHON_VERSION = 0.29.4
++PYTHON_CYTHON_VERSION = 0.29.5
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/cf/e2/03af631ca4a2cf7bc392dd8785c7cc427bff3af4bf5864cdde734f80d052
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+--
+2.20.1
