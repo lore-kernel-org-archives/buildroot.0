@@ -1,50 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:12:41 +0100
+Date: Mon, 18 Feb 2019 17:12:46 +0100
 Subject: [Buildroot] [git commit branch/2018.11.x]
- support/scripts/setlocalversion: fix detection of hg revision when _not_ on
- branch 'default'
-Message-ID: <20190218161137.CCBF088F3E@busybox.osuosl.org>
+ support/scripts/setlocalversion: ignore user settings for Mercurial
+Message-ID: <20190218161137.D2EA188F3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4fea6d9ffdc9c7e717ee0c208f1e837c5706e8c
+commit: https://git.buildroot.net/buildroot/commit/?id=6c0df3ee21d470fde08053b5feac98dc47572776
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-When Buildroot is stored in a Mercurial repository on a branch other than
-'default' ('master' in git terms), setlocalversion (used to populate
-/etc/os-release) will incorrectly think that this is a tagged version and
-will NOT print out the revision hash.
+setlocalversion will use 'hg id' to determine whether or not the current
+revision is tagged. If there is no tag, the Mercurial revision is printed,
+otherwise nothing is printed.
 
-This is due to the fact that the output of 'hg id' is assumed to be
-    "<revision> <tags-if-any>"
-but when on a branch it actually is:
-    "<revision> (<branch>) <tags-if-any>"
+The problem is that the user may have custom configuration settings (in
+their ~/.hgrc file or similar) that changes the output of 'hg id' in a way
+that the script does not expect. In such cases, the Mercurial revision may
+not be printed or printed incorrectly.
 
-To let setlocalversion receive the output it expects, explicitly ask 'hg id'
-to retrieve only the revision hash and any tags, ommitting any branch
-information.
+It is good practice to ignore the user environment when calling Mercurial
+commands from a well-defined script, by setting the environment variable
+HGRCPATH to the empty string. See also 'hg help environment'.
+
+In the particular case of Nokia, a custom extension adds dynamic tags in the
+repository, i.e. tags that are stored in a file external to the repository
+and only visible when the extension is active. These tags should not
+influence the behavior of setlocalversion as they are not official Buildroot
+tags, i.e. even if a revision is tagged, the Mercurial revision should still
+be printed.
+
+Note that this still does not solve the problem where an organization adds
+_real_ tags in their Buildroot repository. For example, there might be a
+moving tag 'last-validated' or tags indicating in which product release that
+Buildroot revision was used. In these cases, setlocalversion will still not
+behave as expected, i.e. show the Mercurial revision.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 57e6dcf5fbdbdd2079d92c8f6029ec7385e96e71)
+(cherry picked from commit 44084aa98147cce8fc3cf598f9b9da1f97b20689)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  support/scripts/setlocalversion | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index 33cd605bf3..45f4283bb1 100755
+index 45f4283bb1..b39b751f03 100755
 --- a/support/scripts/setlocalversion
 +++ b/support/scripts/setlocalversion
 @@ -53,7 +53,7 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
  fi
  
  # Check for mercurial and a mercurial repo.
--if hgid=`hg id 2>/dev/null`; then
-+if hgid=`hg id --id --tags 2>/dev/null`; then
+-if hgid=`hg id --id --tags 2>/dev/null`; then
++if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
  	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
  
  	# Do we have an untagged version?
