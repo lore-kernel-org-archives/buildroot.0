@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 16:42:39 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/openssh: Set
+Date: Mon, 18 Feb 2019 16:42:31 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: Set
  /var/empty permissions
-Message-ID: <20190218160638.DC775821F3@busybox.osuosl.org>
+Message-ID: <20190218160648.C37777F9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4174904272e073c0a42d1e1a09dda35e892b33b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ebdf6ec46d85d8e4426951114d60f08c1f69e31e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The openssh privilege separation feature, enabled by default,
 requires that the path /var/empty exists and has certain permissions
