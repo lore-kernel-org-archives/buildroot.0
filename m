@@ -1,69 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 22:33:09 +0100
-Subject: [Buildroot] [PATCH] package/postgresql: bump to version 11.2
-In-Reply-To: <20190218210818.1e93e0ca@gmx.net> (Peter Seiderer's message of
- "Mon, 18 Feb 2019 21:08:18 +0100")
-References: <20190217171908.30080-1-peter@korsgaard.com>
- <20190218210818.1e93e0ca@gmx.net>
-Message-ID: <871s44dboq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Feb 2019 22:43:57 +0100
+Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <CAN5uoS-BaiDX8y2-LAsWLjahMtqGNBTvNajW0BReA_0QDEGtCQ@mail.gmail.com>
+References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
+ <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
+ <20190217231234.321ec6e4@windsurf.home>
+ <20190218181437.GA30645@scaer>
+ <CAN5uoS-BaiDX8y2-LAsWLjahMtqGNBTvNajW0BReA_0QDEGtCQ@mail.gmail.com>
+Message-ID: <20190218224357.7f3032f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Hello,
 
- > Hello Peter,
- > On Sun, 17 Feb 2019 18:19:07 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 18 Feb 2019 22:28:10 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
- >> Fixes a long standing fsync issue and a number of other bugs:
- >> https://www.postgresql.org/docs/11/release-11-2.html
- >> 
- >> https://wiki.postgresql.org/wiki/Fsync_Errors
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> package/postgresql/postgresql.hash | 10 +++++-----
- >> package/postgresql/postgresql.mk   |  2 +-
- >> 2 files changed, 6 insertions(+), 6 deletions(-)
- >> 
- >> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
- >> index 28d4a988d2..c4d7ab55bb 100644
- >> --- a/package/postgresql/postgresql.hash
- >> +++ b/package/postgresql/postgresql.hash
- >> @@ -1,7 +1,7 @@
- >> -# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.md5
- >> -md5 5e45f6d5b859cc76b5d62f1e328e9711  postgresql-11.1.tar.bz2
- >> -# From https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.bz2.sha256
- >> -sha256 90815e812874831e9a4bf6e1136bf73bc2c5a0464ef142e2dfea40cda206db08  postgresql-11.1.tar.bz2
- >> +# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.md5
- >> +md5 19d43be679cb0d55363feb8926af3a0f  postgresql-11.2.tar.bz2
- >> +# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.sha256
- >> +sha256 2676b9ce09c21978032070b6794696e0aa5a476e3d21d60afc036dc0a9c09405  postgresql-11.2.tar.bz2
- >> 
- >> # License file, Locally calculated
- >> -sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
- >> +sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+> > However, I would not be opposed to having _one_ defconfig that can be
+> > used as a reference / starting-point.  
+> 
+> Is the Qemu emulator the best candidate for such starting point.
+> I think it is as one can use it to experience Arm specific OP-TEE
+> package without needing specific HW but a standard Linux host.
+> 
+> I would have preferred proposing a change in the already available
+> Qemu Armv7 as qemu_arm_vexpress_defconfig is but I fear enabling
+> TrustZone support in Qemu will break other nice Qemu features ones
+> are used to (graphics?).
+> 
+> Maybe I can find a real HW for which BR can store a defconfig that
+> enables OP-TEE.
 
- > 	$ diff -u  build/postgresql-11.1/COPYRIGHT build/postgresql-11.2/COPYRIGHT 
- > --- build/postgresql-11.1/COPYRIGHT	2018-11-07 00:56:26.000000000 +0100
- > +++ build/postgresql-11.2/COPYRIGHT	2019-02-11 22:17:27.000000000 +0100
- > @@ -1,7 +1,7 @@
- >  PostgreSQL Database Management System
- >  (formerly known as Postgres, then as Postgres95)
- 
- > -Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
- > +Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
- 
- >  Portions Copyright (c) 1994, The Regents of the University of California
+I think Yann didn't say that a Qemu defconfig was not good, he said
+quite the opposite: that having one Qemu defconfig that uses OP-TEE
+would be useful.
 
- > Only update of the copyright year (worth mentioning in the commit log?)...
+Note: I am not sure I agree because if we go down this road, we would
+have lots of Qemu defconfigs demonstrating lots of different features.
 
-Ups, indeed - I was planning on adding that, but forgot. I'll fix that
-when I apply.
+> > > Etienne, would you be willing to convert those two configurations to
+> > > the runtime test infrastructure ?  
+> 
+> I think I can prepare that. Or I will ask few help on the ML if I
+> can't find my way.
 
- > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Sure, feel free to ask questions. The runtime test infrastructure is
+not documented, but there are numerous existing test cases that you
+should help you getting started.
 
+You can list existing tests by doing:
+
+./support/testing/run-tests -l
+
+and run one specific test by doing:
+
+ ./support/testing/run-tests -d /path/to/some/build/dir tests.fs.test_ext.TestExt2
+
+Option -k is really useful during development, as it keeps the build
+artifacts instead of removing them once the test is completed.
+
+> The initial intention when adding these defconfig to my patch series
+> was to answer a request from patch v3 (i think) review where Thomas
+> asked for something that could b used to check OP-TEE at least
+> builds, if possible boots, from a BR build. I understand that maybe
+> you though more of such runtime test, rather than a defconfig.
+
+Yeah, maybe I wasn't clear back then, sorry about that.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
