@@ -1,70 +1,63 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 19 Feb 2019 07:05:40 +1300
-Subject: [Buildroot] [PATCH 1/2] package/syslog-ng: add optional
- rabbitmq-c dependency
-In-Reply-To: <20190218114434.10741-1-fontaine.fabrice@gmail.com>
-References: <20190218114434.10741-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFOYHZBr-LaQcbJ+0-Gc3Ksf7b76_c9P-t0e8Zbw5QHSFGppkQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Feb 2019 19:14:37 +0100
+Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <20190217231234.321ec6e4@windsurf.home>
+References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
+ <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
+ <20190217231234.321ec6e4@windsurf.home>
+Message-ID: <20190218181437.GA30645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Feb 2019 00:45 Fabrice Fontaine <fontaine.fabrice@gmail.com
-wrote:
+Thomas, Etienne, All,
 
-> rabbitmq-c is not an embedded submodule since version 3.16.1 and
->
-> https://github.com/balabit/syslog-ng/commit/c0559593c377f04662368dbecf282d2670aad12f
->
-> So enable/disable amqp depending on rabbitmq-c availability and remove
-> uneeded -lrt from LIBS
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
+On 2019-02-17 23:12 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 30 Jan 2019 11:47:28 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> > This change introduces a Qemu board for an Armv7-A target executing
+> > with OP-TEE secure world services.
+> I don't know what is the opinion of Peter, Arnout and Yann, but I think
+> this PATCH 6/7 and PATCH 7/7, instead of adding more defconfigs should
+> instead add test cases to our runtime test infrastructure in
+> support/testing/. Indeed:
+> 
+>  - We probably don't want to have Qemu defconfigs for every possible
+>    feature in Buildroot
 
-Looks good to me
+However, I would not be opposed to having _one_ defconfig that can be
+used as a reference / starting-point.
 
-Reviewed-by: Chris Packham <judge.packham@gmail.com>
+>  - A runtime test case, even if it's indeed a bit less visible than a
+>    defconfig, still documents a configuration that "works" for a given
+>    feature.
+>  - A runtime test case allows to really runtime test the feature by
+>    booting Qemu.
 
----
->  package/syslog-ng/syslog-ng.mk | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/
-> syslog-ng.mk
-> index 0c92b091b4..4ac25a675b 100644
-> --- a/package/syslog-ng/syslog-ng.mk
-> +++ b/package/syslog-ng/syslog-ng.mk
-> @@ -14,8 +14,6 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex
-> host-pkgconf \
->         eventlog libglib2 openssl pcre
->  # We're patching configure.ac
->  SYSLOG_NG_AUTORECONF = YES
-> -# rabbit-mq needs -lrt
-> -SYSLOG_NG_CONF_ENV = LIBS=-lrt
->  SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
->         --disable-java --disable-java-modules --disable-mongodb
->
-> @@ -83,6 +81,13 @@ else
->  SYSLOG_NG_CONF_OPTS += --disable-http
->  endif
->
-> +ifeq ($(BR2_PACKAGE_RABBITMQ_C),y)
-> +SYSLOG_NG_DEPENDENCIES += rabbitmq-c
-> +SYSLOG_NG_CONF_OPTS += --enable-amqp
-> +else
-> +SYSLOG_NG_CONF_OPTS += --disable-amqp
-> +endif
-> +
->  ifeq ($(BR2_INIT_SYSTEMD),y)
->  SYSLOG_NG_DEPENDENCIES += systemd
->  SYSLOG_NG_CONF_OPTS += \
-> --
-> 2.14.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190219/f05d83aa/attachment.html>
+Agreed: adding a runtiem test should indeed be provided, whether we have
+a defconfig or not.
+
+Regards,
+Yann E. MORIN.
+
+> Etienne, would you be willing to convert those two configurations to
+> the runtime test infrastructure ?
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
