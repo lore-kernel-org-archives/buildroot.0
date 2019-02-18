@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 23:26:14 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: set
- vconsole support option to default y
-Message-ID: <20190218222432.6D856821ED@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 23:26:43 +0100
+Subject: [Buildroot] [PATCH] package/systemd: set vconsole support
+ option to default y
+In-Reply-To: <20190206141622.4fbbe0f6@windsurf> (Thomas Petazzoni's message of
+ "Wed, 6 Feb 2019 14:16:22 +0100")
+References: <1dc021862b1041c3990d6ce25bb331ca@exitstrategytech.com>
+ <20190206141622.4fbbe0f6@windsurf>
+Message-ID: <87o978bun0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17e740380b28b7cf8cfbac73600192a7e210b0e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Without support for vconsole, systemd will abruptly kill anything
-spawned on the console, thus preventing users from loging in from
-the console, effectively locking them out if the target does not
-have another mean of logging in (no sshd, no serial line...)
+ > On Fri, 4 Jan 2019 21:35:23 +0000
+ > "David J. Fogle" <Dave@exitstrategytech.com> wrote:
 
-We fix that by making support for vconsole default to y, since
-logging in from the console if more frequent than not. Users can
-still de-activate it when they know they don't need it.
+ >> package/systemd:? set vconsole support option to default y
+ >> 
+ >> Without this support option enabled, systemd does not allow vterm
+ >> switching, and could possibly lead to user lockout on tty1.
+ >> 
+ >> We prevent these scenarios by enabling the vconsole tool default y,
+ >> as console login is much more prevalent than not. This allows the
+ >> option to disable the tool if needed, but as this is a rare usage,
+ >> it is better to let a user decide they do *not* need it than to
+ >> expect them to know they *do*.
+ >> 
+ >> Any serial connections will not be impacted by absence of this tool, as there are no vconsoles on serial.
+ >> 
+ >> Signed-off-by: David Fogle <dave@exitstrategytech.com>
+ >> ---
+ >> ?package/systemd/Config.in | 1 +
+ >> ?1 file changed, 1 insertion(+)
 
-Note that logging from a serial line is not impacted, and still
-works whether vconsole is enabled or not.
+ > Applied to master with the reworked commit message proposed by Yann.
+ > Thanks!
 
-Signed-off-by: David Fogle <david.j.fogle@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fc0787e76ea236a5e7469df4e26c1ca61624b873)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Committed to 2018.02.x and 2018.11.x, thanks.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 25f322e8f3..920b65db44 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -325,6 +325,7 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
- 
- config BR2_PACKAGE_SYSTEMD_VCONSOLE
- 	bool "enable vconsole tool"
-+	default y
- 	help
- 	  systemd-vconsole-setup is an early boot service that
- 	  configures the virtual console font and console keymap.
+-- 
+Bye, Peter Korsgaard
