@@ -1,72 +1,139 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 18 Feb 2019 19:17:15 +0200
-Subject: [Buildroot] [PATCH RFC/next 0/4] Unify configuration/makefiles for
- the GTK and WPE WebKit packages
-Message-ID: <20190218171719.18721-1-aperez@igalia.com>
+Date: Mon, 18 Feb 2019 19:17:16 +0200
+Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for GTK
+ and WPE WebKit components
+In-Reply-To: <20190218171719.18721-1-aperez@igalia.com>
+References: <20190218171719.18721-1-aperez@igalia.com>
+Message-ID: <20190218171719.18721-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+subbdirectory as the first step to unify some of their configuration.
 
-Both the GTK and WPE WebKit ports share many dependencies (usage of GLib,
-libsoup, GStreamer, Cairo, etc.), their supported platforms, and both
-receive releases from the same stable branch following the same schedule:
-major releases twice a year, around the release dates for GNOME.
-
-Because of the above, it is possible to factor out commonalities from
-the packaging for both the GTK and WPE WebKit ports. This patch set tries
-to explore a possible way of doing it by moving both packages (plus libwpe
-and wpebackend-fdo, which are specific to the WPE port) into a new
-package/webkit/ subdirectory, where common parts live in a webkit.mk
-and a Config.in file.
-
-I would really like to make it easier to maintain both the webkitgtk
-and wpewebkit packages by factoring out the commonalities, so I am looking
-forward to read you feedback on this patch set :-)
-
-Regards,
-
-
-Adrian Perez de Castro (4):
-  package/webkit: new home for GTK and WPE WebKit components
-  package/webkit: unify *_ARCH_SUPPORTS{,_JIT}
-  package/webkit: factor out common bits of .mk files
-  package/webkit: factor out check for woff2
-
- package/Config.in                             |  9 ++---
- package/midori/Config.in                      |  4 +--
- package/webkit/Config.in                      | 29 +++++++++++++++
- package/{ => webkit}/libwpe/Config.in         |  0
- package/{ => webkit}/libwpe/libwpe.hash       |  0
- package/{ => webkit}/libwpe/libwpe.mk         |  0
- package/webkit/webkit.mk                      | 28 +++++++++++++++
- package/{ => webkit}/webkitgtk/Config.in      | 34 ++----------------
- package/{ => webkit}/webkitgtk/webkitgtk.hash |  0
- package/{ => webkit}/webkitgtk/webkitgtk.mk   | 18 +++-------
- package/{ => webkit}/wpebackend-fdo/Config.in |  0
- .../wpebackend-fdo/wpebackend-fdo.hash        |  0
- .../wpebackend-fdo/wpebackend-fdo.mk          |  0
- package/{ => webkit}/wpewebkit/Config.in      | 36 ++-----------------
- package/{ => webkit}/wpewebkit/wpewebkit.hash |  0
- package/{ => webkit}/wpewebkit/wpewebkit.mk   | 21 ++---------
- 16 files changed, 76 insertions(+), 103 deletions(-)
- create mode 100644 package/webkit/Config.in
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/Config.in                                       | 8 ++++----
+ package/{ => webkit}/libwpe/Config.in                   | 0
+ package/{ => webkit}/libwpe/libwpe.hash                 | 0
+ package/{ => webkit}/libwpe/libwpe.mk                   | 0
+ package/webkit/webkit.mk                                | 7 +++++++
+ package/{ => webkit}/webkitgtk/Config.in                | 0
+ package/{ => webkit}/webkitgtk/webkitgtk.hash           | 0
+ package/{ => webkit}/webkitgtk/webkitgtk.mk             | 0
+ package/{ => webkit}/wpebackend-fdo/Config.in           | 0
+ package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash | 0
+ package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk   | 0
+ package/{ => webkit}/wpewebkit/Config.in                | 0
+ package/{ => webkit}/wpewebkit/wpewebkit.hash           | 0
+ package/{ => webkit}/wpewebkit/wpewebkit.mk             | 0
+ 14 files changed, 11 insertions(+), 4 deletions(-)
  rename package/{ => webkit}/libwpe/Config.in (100%)
  rename package/{ => webkit}/libwpe/libwpe.hash (100%)
  rename package/{ => webkit}/libwpe/libwpe.mk (100%)
  create mode 100644 package/webkit/webkit.mk
- rename package/{ => webkit}/webkitgtk/Config.in (71%)
+ rename package/{ => webkit}/webkitgtk/Config.in (100%)
  rename package/{ => webkit}/webkitgtk/webkitgtk.hash (100%)
- rename package/{ => webkit}/webkitgtk/webkitgtk.mk (85%)
+ rename package/{ => webkit}/webkitgtk/webkitgtk.mk (100%)
  rename package/{ => webkit}/wpebackend-fdo/Config.in (100%)
  rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash (100%)
  rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk (100%)
- rename package/{ => webkit}/wpewebkit/Config.in (71%)
+ rename package/{ => webkit}/wpewebkit/Config.in (100%)
  rename package/{ => webkit}/wpewebkit/wpewebkit.hash (100%)
- rename package/{ => webkit}/wpewebkit/wpewebkit.mk (70%)
+ rename package/{ => webkit}/wpewebkit/wpewebkit.mk (100%)
 
+diff --git a/package/Config.in b/package/Config.in
+index 420e6e95a3..65faf1fcd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1304,7 +1304,6 @@ menu "Graphics"
+ 	source "package/libva-intel-driver/Config.in"
+ 	source "package/libvdpau/Config.in"
+ 	source "package/libvips/Config.in"
+-	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opencv3/Config.in"
+@@ -1320,11 +1319,12 @@ menu "Graphics"
+ 	source "package/wayland/Config.in"
+ 	source "package/wayland-protocols/Config.in"
+ 	source "package/waylandpp/Config.in"
+-	source "package/webkitgtk/Config.in"
++	source "package/webkit/webkitgtk/Config.in"
++	source "package/webkit/libwpe/Config.in"
++	source "package/webkit/wpebackend-fdo/Config.in"
++	source "package/webkit/wpewebkit/Config.in"
+ 	source "package/webp/Config.in"
+ 	source "package/woff2/Config.in"
+-	source "package/wpebackend-fdo/Config.in"
+-	source "package/wpewebkit/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+diff --git a/package/libwpe/Config.in b/package/webkit/libwpe/Config.in
+similarity index 100%
+rename from package/libwpe/Config.in
+rename to package/webkit/libwpe/Config.in
+diff --git a/package/libwpe/libwpe.hash b/package/webkit/libwpe/libwpe.hash
+similarity index 100%
+rename from package/libwpe/libwpe.hash
+rename to package/webkit/libwpe/libwpe.hash
+diff --git a/package/libwpe/libwpe.mk b/package/webkit/libwpe/libwpe.mk
+similarity index 100%
+rename from package/libwpe/libwpe.mk
+rename to package/webkit/libwpe/libwpe.mk
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+new file mode 100644
+index 0000000000..47e94d72f6
+--- /dev/null
++++ b/package/webkit/webkit.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# Common definitions for the GTK and WPE WebKit ports.
++#
++################################################################################
++
++include $(sort $(wildcard package/webkit/*/*.mk))
+diff --git a/package/webkitgtk/Config.in b/package/webkit/webkitgtk/Config.in
+similarity index 100%
+rename from package/webkitgtk/Config.in
+rename to package/webkit/webkitgtk/Config.in
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkit/webkitgtk/webkitgtk.hash
+similarity index 100%
+rename from package/webkitgtk/webkitgtk.hash
+rename to package/webkit/webkitgtk/webkitgtk.hash
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkit/webkitgtk/webkitgtk.mk
+similarity index 100%
+rename from package/webkitgtk/webkitgtk.mk
+rename to package/webkit/webkitgtk/webkitgtk.mk
+diff --git a/package/wpebackend-fdo/Config.in b/package/webkit/wpebackend-fdo/Config.in
+similarity index 100%
+rename from package/wpebackend-fdo/Config.in
+rename to package/webkit/wpebackend-fdo/Config.in
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/webkit/wpebackend-fdo/wpebackend-fdo.hash
+similarity index 100%
+rename from package/wpebackend-fdo/wpebackend-fdo.hash
+rename to package/webkit/wpebackend-fdo/wpebackend-fdo.hash
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/webkit/wpebackend-fdo/wpebackend-fdo.mk
+similarity index 100%
+rename from package/wpebackend-fdo/wpebackend-fdo.mk
+rename to package/webkit/wpebackend-fdo/wpebackend-fdo.mk
+diff --git a/package/wpewebkit/Config.in b/package/webkit/wpewebkit/Config.in
+similarity index 100%
+rename from package/wpewebkit/Config.in
+rename to package/webkit/wpewebkit/Config.in
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/webkit/wpewebkit/wpewebkit.hash
+similarity index 100%
+rename from package/wpewebkit/wpewebkit.hash
+rename to package/webkit/wpewebkit/wpewebkit.hash
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/webkit/wpewebkit/wpewebkit.mk
+similarity index 100%
+rename from package/wpewebkit/wpewebkit.mk
+rename to package/webkit/wpewebkit/wpewebkit.mk
 -- 
 2.20.1
