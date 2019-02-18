@@ -1,61 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:12:46 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
- support/scripts/setlocalversion: ignore user settings for Mercurial
-Message-ID: <20190218161137.D2EA188F3E@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 17:15:27 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] Makefile: unexport
+ 'PLATFORM' and 'OS' environment variables
+Message-ID: <20190218161333.3D9947FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c0df3ee21d470fde08053b5feac98dc47572776
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7539ab6c5bb02142079286003573a6bfbf1f67bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-setlocalversion will use 'hg id' to determine whether or not the current
-revision is tagged. If there is no tag, the Mercurial revision is printed,
-otherwise nothing is printed.
+Some package builds may fail when environment variables are present with the
+same names as make variables in a package. This is a bigger problem for
+environment variables with generic names, like 'PLATFORM' and 'OS'.
 
-The problem is that the user may have custom configuration settings (in
-their ~/.hgrc file or similar) that changes the output of 'hg id' in a way
-that the script does not expect. In such cases, the Mercurial revision may
-not be printed or printed incorrectly.
-
-It is good practice to ignore the user environment when calling Mercurial
-commands from a well-defined script, by setting the environment variable
-HGRCPATH to the empty string. See also 'hg help environment'.
-
-In the particular case of Nokia, a custom extension adds dynamic tags in the
-repository, i.e. tags that are stored in a file external to the repository
-and only visible when the extension is active. These tags should not
-influence the behavior of setlocalversion as they are not official Buildroot
-tags, i.e. even if a revision is tagged, the Mercurial revision should still
-be printed.
-
-Note that this still does not solve the problem where an organization adds
-_real_ tags in their Buildroot repository. For example, there might be a
-moving tag 'last-validated' or tags indicating in which product release that
-Buildroot revision was used. In these cases, setlocalversion will still not
-behave as expected, i.e. show the Mercurial revision.
+'PLATFORM' is for example a problem for host-acl.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 44084aa98147cce8fc3cf598f9b9da1f97b20689)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d3e535a839a893d4721240278fada4652544b60c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index 45f4283bb1..b39b751f03 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -53,7 +53,7 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
+diff --git a/Makefile b/Makefile
+index c07ff3dae5..2ee7f92aa9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -431,6 +431,8 @@ unexport TERMINFO
+ unexport MACHINE
+ unexport O
+ unexport GCC_COLORS
++unexport PLATFORM
++unexport OS
  
- # Check for mercurial and a mercurial repo.
--if hgid=`hg id --id --tags 2>/dev/null`; then
-+if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
  
- 	# Do we have an untagged version?
