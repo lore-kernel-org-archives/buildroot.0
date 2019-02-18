@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:12:53 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x]
+Date: Mon, 18 Feb 2019 17:12:41 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x]
  support/scripts/setlocalversion: fix detection of hg revision when _not_ on
  branch 'default'
-Message-ID: <20190218161132.9091381456@busybox.osuosl.org>
+Message-ID: <20190218161137.CCBF088F3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=809a4ad11d2adb6c989d0504816052a3539a79ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a4fea6d9ffdc9c7e717ee0c208f1e837c5706e8c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 When Buildroot is stored in a Mercurial repository on a branch other than
 'default' ('master' in git terms), setlocalversion (used to populate
