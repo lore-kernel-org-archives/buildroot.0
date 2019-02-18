@@ -1,110 +1,44 @@
-From: Leach, Daniel J. <dleach@belcan.com>
-Date: Mon, 18 Feb 2019 21:55:03 +0000
-Subject: [Buildroot] [PATCH 1/1] dacapo: new package
-Message-ID: <7B9EA298F6C566489E909E1B85615FB80186965B3A@AWHMBX02.belcan.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Feb 2019 22:55:26 +0100
+Subject: [Buildroot] [git commit branch/next] package/stm32flash: bump to
+ version 0.5
+Message-ID: <20190218215339.559B683776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The DaCapo benchmark suite is intended as a tool for Java benchmarking
-by the programming language, memory management and computer architecture
-communities.
+commit: https://git.buildroot.net/buildroot/commit/?id=40d3f6e85cc95fb0e16086b64c14318ed840e859
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Depends on the OpenJDK package for Java runtime environment.
+Bump to latest official version.
 
-Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+Signed-off-by: Markus Steinhilber <markus.steinhilber@erbe-med.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This package depends on openjdk v7 (https://patchwork.ozlabs.org/patch/1040100/) and therefore openjdk-bin v6 (https://patchwork.ozlabs.org/patch/1039292/)
+ package/stm32flash/stm32flash.hash | 2 ++
+ package/stm32flash/stm32flash.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/dacapo/Config.in   | 12 ++++++++++++
- package/dacapo/dacapo.hash |  3 +++
- package/dacapo/dacapo.mk   | 21 +++++++++++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/dacapo/Config.in
- create mode 100644 package/dacapo/dacapo.hash
- create mode 100644 package/dacapo/dacapo.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index baa325eead..a64a671b56 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1405,6 +1405,7 @@ F:        package/checksec/
- F:      package/cgroupfs-mount/
- F:      package/crda/
- F:      package/cunit/
-+F:     package/dacapo
- F:      package/devmem2/
- F:      package/dnsmasq/
- F:      package/dosfstools/
-diff --git a/package/Config.in b/package/Config.in
-index e150e32563..86df6352cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
-         source "package/bonnie/Config.in"
-         source "package/cache-calibrator/Config.in"
-         source "package/clinfo/Config.in"
-+       source "package/dacapo/Config.in"
-         source "package/dhrystone/Config.in"
-         source "package/dieharder/Config.in"
-         source "package/dmalloc/Config.in"
-diff --git a/package/dacapo/Config.in b/package/dacapo/Config.in
+diff --git a/package/stm32flash/stm32flash.hash b/package/stm32flash/stm32flash.hash
 new file mode 100644
-index 0000000000..02dcab9e72
+index 0000000000..d12b9354b2
 --- /dev/null
-+++ b/package/dacapo/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_DACAPO
-+       bool "dacapo"
-+       depends on BR2_PACKAGE_OPENJDK
-+       help
-+         The DaCapo benchmark suite is intended as a tool for Java
-+         benchmarking by the programming language, memory
-+         management and computer architecture communities.
-+
-+         http://dacapobench.org/
-+
-+comment "dacapo needs OpenJDK"
-+       depends on !BR2_PACKAGE_OPENJDK
-diff --git a/package/dacapo/dacapo.hash b/package/dacapo/dacapo.hash
-new file mode 100644
-index 0000000000..ca7ad46383
---- /dev/null
-+++ b/package/dacapo/dacapo.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 be3db084adcb2867760e1197b3ccf541c3213d918daa19386d8e236648d24be8  dacapo-9.12-MR1-bach.jar
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/dacapo/dacapo.mk b/package/dacapo/dacapo.mk
-new file mode 100644
-index 0000000000..32d0cc0701
---- /dev/null
-+++ b/package/dacapo/dacapo.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# dacapo
-+#
-+################################################################################
-+
-+DACAPO_VERSION = 9.12-MR1-bach
-+DACAPO_SOURCE = dacapo-$(DACAPO_VERSION).jar
-+DACAPO_SITE = http://sourceforge.net/projects/dacapobench/files/9.12-bach-MR1
-+DACAPO_LICENSE = Apache-2.0
-+DACAPO_LICENSE_FILES = LICENSE
-+
-+define DACAPO_EXTRACT_CMDS
-+       unzip $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) LICENSE -d $(@D)
-+endef
-+
-+define DACAPO_INSTALL_TARGET_CMDS
-+       $(INSTALL) -D -m 755 $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.1
++++ b/package/stm32flash/stm32flash.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 73afcbd317ca3eb080c14b6ed1451e5a74a3bbae8f8fb5fe24ea496333f03ead stm32flash-1f934ae86babdeea47afdfae1d856d5fd5da6c53.tar.gz
+diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+index c41fc76d01..9bb05ab730 100644
+--- a/package/stm32flash/stm32flash.mk
++++ b/package/stm32flash/stm32flash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
++STM32FLASH_VERSION = 1f934ae86babdeea47afdfae1d856d5fd5da6c53
+ STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
+ STM32FLASH_LICENSE = GPL-2.0+
+ STM32FLASH_LICENSE_FILES = gpl-2.0.txt
