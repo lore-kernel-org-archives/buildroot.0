@@ -1,80 +1,74 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 18 Feb 2019 19:17:19 +0200
-Subject: [Buildroot] [PATCH RFC/next 4/4] package/webkit: factor out check
- for woff2
-In-Reply-To: <20190218171719.18721-1-aperez@igalia.com>
-References: <20190218171719.18721-1-aperez@igalia.com>
-Message-ID: <20190218171719.18721-5-aperez@igalia.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 18 Feb 2019 19:02:24 +0100
+Subject: [Buildroot] Runtime test issues
+In-Reply-To: <20190213222533.35cac79e@windsurf>
+References: <20190213222533.35cac79e@windsurf>
+Message-ID: <CAB0FRsticHy9FC5md08XVERv2rppQaXcU1yngQBcBvp++5L73g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Usage of woff2 os configurable at build time for both wpewebkit
-and webkitgtk.
+Le mer. 13 f?vr. 2019 ? 22:25, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkit/webkit.mk              | 7 +++++++
- package/webkit/webkitgtk/webkitgtk.mk | 5 ++---
- package/webkit/wpewebkit/wpewebkit.mk | 7 -------
- 3 files changed, 9 insertions(+), 10 deletions(-)
+> Hello,
+>
+> Fran?ois, Ricardo, Yann: you are in Cc because some of the runtime test
+> cases you added have some issues.
+>
+> Fran?ois, the following tests are failing:
+>
+>  - tests.package.test_perl_dbd_mysql.TestPerlDBDmysql
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295305
+>
+>  - tests.package.test_prosody.TestProsodyLuajit
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295315
+>
+>  - tests.package.test_prosody.TestProsodyLua51
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295314
+>
+>
+The problem with prosody comes from LuaExpat, see
+https://github.com/tomasguisasola/luaexpat/issues/3
+I will send a patch soon.
 
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 96ca7a109d..8dda16854a 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -18,4 +18,11 @@ else
- WEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_WOFF2),y)
-+WEBKIT_CONF_OPTS += -DUSE_WOFF2=ON
-+WEBKIT_DEPENDENCIES += woff2
-+else
-+WEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
-+endif
-+
- include $(sort $(wildcard package/webkit/*/*.mk))
-diff --git a/package/webkit/webkitgtk/webkitgtk.mk b/package/webkit/webkitgtk/webkitgtk.mk
-index fefb52eeaa..3009249762 100644
---- a/package/webkit/webkitgtk/webkitgtk.mk
-+++ b/package/webkit/webkitgtk/webkitgtk.mk
-@@ -13,7 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = $(WEBKIT_DEPENDENCIES) \
--	enchant libgtk3 libsecret woff2
-+	enchant libgtk3 libsecret
- WEBKITGTK_CONF_OPTS = \
- 	$(WEBKIT_CONF_OPTS)
- 	-DENABLE_GEOLOCATION=OFF \
-@@ -21,8 +21,7 @@ WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_SPELLCHECK=ON \
- 	-DPORT=GTK \
- 	-DUSE_LIBNOTIFY=OFF \
--	-DUSE_LIBHYPHEN=OFF \
--	-DUSE_WOFF2=ON
-+	-DUSE_LIBHYPHEN=OFF
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
- WEBKITGTK_CONF_OPTS += \
-diff --git a/package/webkit/wpewebkit/wpewebkit.mk b/package/webkit/wpewebkit/wpewebkit.mk
-index e36dadd359..b8f35e605c 100644
---- a/package/webkit/wpewebkit/wpewebkit.mk
-+++ b/package/webkit/wpewebkit/wpewebkit.mk
-@@ -43,11 +43,4 @@ else
- WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_WOFF2),y)
--WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=ON
--WPEWEBKIT_DEPENDENCIES += woff2
--else
--WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
--endif
--
- $(eval $(cmake-package))
--- 
-2.20.1
+Fran?ois
+
+Ricardo, the following test is failing:
+>
+>  - tests.download.test_git.TestGitRefs
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295269
+>
+> Yann, the following tests are failing:
+>
+>  - tests.init.test_systemd.TestInitSystemSystemdRoFull
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295290
+>
+>  - tests.init.test_systemd.TestInitSystemSystemdRwFull
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295293
+>
+>  - tests.init.test_systemd.TestInitSystemSystemdRoNetworkd
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295292
+>
+>  - tests.init.test_systemd.TestInitSystemSystemdRwNetworkd
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/158295295
+>
+> Could you have a look at those test failures ?
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190218/51533b6a/attachment.html>
