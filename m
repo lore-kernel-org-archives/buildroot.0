@@ -1,104 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 16:43:53 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libgeotiff: fix
- build without C++
-Message-ID: <20190218160648.CA2958B677@busybox.osuosl.org>
+Date: Mon, 18 Feb 2019 17:13:16 +0100
+Subject: [Buildroot] [PATCH 1/2] support/scripts/setlocalversion: fix
+ detection of hg revision when _not_ on branch 'default'
+In-Reply-To: <20190130201508.10304-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 30 Jan 2019 21:15:07 +0100")
+References: <20190130201508.10304-1-patrickdepinguin@gmail.com>
+Message-ID: <877edxaxcz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0af3400db6c9ad5db950bfb886b2b39a67b4499
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Do not check for C++ compiler as libgeotiff is written in C otherwise
-build will fail on toolchains without a working C++ compiler:
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > When Buildroot is stored in a Mercurial repository on a branch other than
+ > 'default' ('master' in git terms), setlocalversion (used to populate
+ > /etc/os-release) will incorrectly think that this is a tagged version and
+ > will NOT print out the revision hash.
 
-checking how to run the C++ preprocessor... /lib/cpp
-configure: error: in
-`/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
-configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+ > This is due to the fact that the output of 'hg id' is assumed to be
+ >     "<revision> <tags-if-any>"
+ > but when on a branch it actually is:
+ >     "<revision> (<branch>) <tags-if-any>"
 
-Fixes:
- - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
+ > To let setlocalversion receive the output it expects, explicitly ask 'hg id'
+ > to retrieve only the revision hash and any tags, ommitting any branch
+ > information.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2693362a04912462c0b8c02348607fb110f667f5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ibgeotiff-configure.ac-do-not-check-for-C.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-diff --git a/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
-new file mode 100644
-index 0000000000..68082dd023
---- /dev/null
-+++ b/package/libgeotiff/0003-libgeotiff-configure.ac-do-not-check-for-C.patch
-@@ -0,0 +1,65 @@
-+From edc9ec69b43c27955ee4f24db2e6808bb1a8974d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 3 Feb 2019 23:20:43 +0100
-+Subject: [PATCH] libgeotiff/configure.ac: do not check for C++
-+
-+Do not check for C++ compiler as libgeotiff is written in C otherwise
-+build will fail on toolchains without a working C++ compiler:
-+
-+checking how to run the C++ preprocessor... /lib/cpp
-+configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/libgeotiff-1.4.2':
-+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/72f1c5c1b8fc337a1cff4b280abe99afd65f945b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OSGeo/libgeotiff/pull/9]
-+---
-+ libgeotiff/configure.ac | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a334416..4ebbd6f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -25,8 +25,6 @@ dnl #########################################################################
-+ AM_INIT_AUTOMAKE
-+ AM_MAINTAINER_MODE
-+ AC_PROG_CC
-+-AC_PROG_CXX
-+-AC_PROG_CXXCPP
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-+ AC_PROG_MAKE_SET
-+@@ -46,7 +44,6 @@ dnl #########################################################################
-+ m4_define([debug_default],[no])
-+ 
-+ CFLAGS="$CFLAGS"
-+-CXXFLAGS="$CXXFLAGS"
-+ 
-+ dnl We want to honor the users wishes with regard to linking.
-+ LIBS="$LDFLAGS $LIBS"
-+@@ -82,11 +79,9 @@ AC_MSG_CHECKING([for debug enabled])
-+ 
-+ if test "x$enable_debug" = "xyes"; then
-+     CFLAGS="$CFLAGS -g -DDEBUG -Wall"
-+-    CXXFLAGS="$CXXFLAGS -g -DDEBUG -Wall"
-+     AC_MSG_RESULT(yes)
-+ else
-+     CFLAGS="$CFLAGS -O3 -DNDEBUG"
-+-    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
-+     AC_MSG_RESULT(no)
-+ fi
-+ 
-+@@ -367,7 +362,6 @@ LOC_MSG()
-+ LOC_MSG([  Version..................: ${RELEASE_VERSION}])
-+ LOC_MSG([  Installation directory...: ${prefix}])
-+ LOC_MSG([  C compiler...............: ${CC} ${CFLAGS}])
-+-LOC_MSG([  C++ compiler.............: ${CXX} ${CXXFLAGS}])
-+ 
-+ LOC_MSG([  Debugging support........: ${enable_debug}])
-+ LOC_MSG()
-+-- 
-+2.14.1
-+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
