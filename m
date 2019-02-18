@@ -1,27 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 17:15:53 +0100
-Subject: [Buildroot] [PATCH] Makefile: unexport 'PLATFORM' and 'OS'
- environment variables
-In-Reply-To: <20190205110342.29725-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Tue, 5 Feb 2019 12:03:42 +0100")
-References: <20190205110342.29725-1-patrickdepinguin@gmail.com>
-Message-ID: <87y36d9io6.fsf@dell.be.48ers.dk>
+Date: Mon, 18 Feb 2019 17:24:44 +0100
+Subject: [Buildroot] [PATCH] linux: bump Linux CIP to version
+ v4.4.171-cip30
+In-Reply-To: <1549383121-29265-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 5 Feb 2019 17:12:01 +0100")
+References: <1549383121-29265-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87tvh19i9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Some package builds may fail when environment variables are present with the
- > same names as make variables in a package. This is a bigger problem for
- > environment variables with generic names, like 'PLATFORM' and 'OS'.
+ > This patch bumps the Linux CIP version to v4.4.171-cip30 and updates the
+ > download url to the new official one.
 
- > 'PLATFORM' is for example a problem for host-acl.
-
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
 Committed to 2018.02.x and 2018.11.x, thanks.
 
