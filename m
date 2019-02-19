@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Feb 2019 20:49:08 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libcurl: security
+Date: Tue, 19 Feb 2019 20:48:47 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libcurl: security
  bump to version 7.64.0
-Message-ID: <20190219194718.0B14A8295C@busybox.osuosl.org>
+Message-ID: <20190219194724.35C6188667@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86b8b0265dcef2872327defddc160548af06d8ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=781ade9217bf8faa6d663cceb62919f56bead159
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes the following security issues:
 
@@ -48,7 +48,7 @@ index 432943538a..b158600eca 100644
 +sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
 +sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
 diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3dc04b15ed..ca662c803c 100644
+index 8a5ab6dead..6d0639a0f7 100644
 --- a/package/libcurl/libcurl.mk
 +++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
