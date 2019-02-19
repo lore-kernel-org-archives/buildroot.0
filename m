@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Feb 2019 21:03:58 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] core/pkg-infra: restore
+Date: Tue, 19 Feb 2019 21:03:51 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] core/pkg-infra: restore
  completeness of packages files lists
-Message-ID: <20190219200739.A8ECC81270@busybox.osuosl.org>
+Message-ID: <20190219200744.C324388F39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc4bf0c323dd6157d57641529190e03a601d827d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8e1e909a70d42a4ef3a35e2e76501ae75ed3e824
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 In commit 7fb6e782542f (core/instrumentation: shave minutes off the
 build time), the built stampfile is used as a reference to detect files
@@ -55,7 +55,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7a95ea19cc..e7fd26c5c3 100644
+index d25f0f9afe..18c2d2cf6d 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -63,13 +63,21 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
