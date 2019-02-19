@@ -1,61 +1,73 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 19 Feb 2019 08:26:23 +0100
-Subject: [Buildroot] [PATCH v4 5/7] optee-benchmark: new package
-In-Reply-To: <20190217230800.6206adaa@windsurf.home>
-References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
- <1548845249-28201-5-git-send-email-etienne.carriere@linaro.org>
- <20190217230800.6206adaa@windsurf.home>
-Message-ID: <CAN5uoS_3Rdqi2xsSJdwiKVNsKAo1KZy2P_4Apcj36x=eQ18+QQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Feb 2019 08:28:23 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] core/sdk: don't mangle
+ symlinks with '.' or '..' at start
+Message-ID: <20190219072655.06CFD88E5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Feb 2019 at 23:08, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 30 Jan 2019 11:47:27 +0100
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
->
-> > OP-TEE performance benchmark tools for the OP-TEE project.
-> >
-> > This packages generates embedded Linux based OS materials used
-> > to retrieve execution timing information on invocation of the
-> > OP-TEE secure services.
-> >
-> > It is added next to the OP-TEE client package in BR configuration.
-> >
-> > This change references in Buildroot the today's latest OP-TEE
-> > revision release tagged 3.4.0.
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> >
-> > ---
-> > Changes v3 -> v4:
-> >   - Upgrade from OP-TEE release 3.3.0 to 3.4.0. No local patch required.
->
-> I have applied to next with the following changes:
->
->     [Thomas:
->      - drop version selection
->      - propagate the dependency of optee-client]
->
-> Another thing I noticed is that your .hash files do not have the hashes
-> for the license files. Could you send a patch adding those ?
+commit: https://git.buildroot.net/buildroot/commit/?id=95133ebdbcc7d045b6321fb2c259c7b740285ab8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Sure, will do.
+The current transform changes any '.' at the start of a filename to
+$(BR2_SDK_PREFIX). This also applies to the target of a symlink, when
+it is relative.
 
-Thanks,
-etienne
+We thus might end up with something like:
+    $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
+    $(BR2_SDK_PREFIX)./opt/ext-toolchain/bin/aarch64-linux-gnu-ar
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+when it should be:
+    $(BR2_SDK_PREFIX)/bin/aarch64-linux-gnu-ar ->
+    ../opt/ext-toolchain/bin/aarch64-linux-gnu-ar
+
+We fix that by making sure we always remove a known prefix, i.e. we
+remove the path to host dir. The obvious solution would be to cd into
+$(HOST_DIR)/.. , then tar ./host/ and finally use a --transfrom pattern
+as 's,^\./$(notdir $(HOST_DIR)),$(BR2_SDK_PREFIX)'.
+
+Since $(HOST_DIR) can point to a user-supplied location, we don't know
+very well how the pattern may patch.
+
+Instead, we cd into / and tar the full path to $(HOST_DIR).
+
+Since tar removes any leading '/', it would spurr a warning message,
+which is annoying. So we explicitly remove the leading '/' from
+$(HOST_DIR) when we tar it.
+
+Finally, we transform all filenames to replace a leading $(HOST_DIR)
+(without a leading /) to the prefix to use.
+
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+[yann.morin.1998 at free.fr:
+  - use a single transform pattern
+  - use full HOST_DIR path as pattern to replace
+  - update commit log accordingly
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 8fed1629878bfe620c533558ae3959a76588aec6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c16499808c..e2d016403b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -604,8 +604,8 @@ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
+ 	$(Q)mkdir -p $(BINARIES_DIR)
+ 	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
+ 		--owner=0 --group=0 --numeric-owner \
+-		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
+-		-C $(HOST_DIR) "."
++		--transform='s#^$(patsubst /%,%,$(HOST_DIR))#$(BR2_SDK_PREFIX)#' \
++		-C / $(patsubst /%,%,$(HOST_DIR))
+ 
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
