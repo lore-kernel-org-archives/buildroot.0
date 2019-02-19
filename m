@@ -1,39 +1,323 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Feb 2019 10:14:52 +0100
-Subject: [Buildroot] git send-email with Outlook / NTLM ?
-In-Reply-To: <2748BB04F99E7E45A3203C831E8B20FE34D35C13@SERBE4I2.intra.erbe-med.de>
-References: <2748BB04F99E7E45A3203C831E8B20FE34D35B97@SERBE4I2.intra.erbe-med.de>
- <20190218225858.05f8d246@windsurf.home>
- <2748BB04F99E7E45A3203C831E8B20FE34D35C13@SERBE4I2.intra.erbe-med.de>
-Message-ID: <20190219101452.5145a2b9@windsurf.home>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 19 Feb 2019 11:38:31 +0100
+Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
+ 'source-check' target
+Message-ID: <20190219103839.25409-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-I've re-added the Buildroot mailing list in Cc, please keep the list
-Cc'ed for this discussion.
+Commit bf28a165d992681a85b43a886005e669b3cb579b removed the source-check
+target to allow easier refactoring of the download infrastructure.
+It was partly based on the fact that no-one really used this target.
 
-On Tue, 19 Feb 2019 09:01:43 +0000
-"Steinhilber, Markus" <Markus.Steinhilber@erbe-med.com> wrote:
+However, it turns out that there _are_ good uses for it. In a work
+environment where many people are submitting changes to a Buildroot
+repository, one cannot always blindly trust every change. A typical case
+of human error is when bumping the version of a package but forgetting to
+upload the tarball to the internal BR2_PRIMARY_SITE or (in case of a
+repository) pushing the new changesets to the repository.
+If a user cannot directly push to the Buildroot repository but needs to
+queue their change via an automatic validation system, that validation
+system can use 'make source-check' on the relevant defconfigs to protect
+against such errors. A full download would also be possible but takes
+longer and unnecessarily uses internal network bandwidth.
 
-> The mismatch and also the line wrapping was most likely happening
-> because I needed to send the mail with Outlook. Our SMTP server only
-> allows NTLM auth and I couldn't get git-email-send to work with it
-> (The git-email-send-ntlm project is also not working for me). I don't
-> think I can change the From: within outlook. But I could change the
-> Signed-off-by: to match it if this is better. If you know any way to
-> use git-email-send with NTLM please let me know.
+With that use case in mind, this commit reintroduces the 'source-check'
+target, but embedded in the current situation with a dl-wrapper.  The
+changes to the wrapper are minimal (not considering additional indentation).
+A new option '-C' means 'check only' and will be passed to the download
+backends. If the backend supports the option, no download will happen. If it
+does not, then the backend will actually perform a download as a means of
+checking that the source exists (a form of graceful degradation). In neither
+case, though, hash checking is performed (as the standard case is without
+download thus without file to calculate hashes on).
 
-I am in the lucky situation that I don't have to use an Outlook e-mail
-server, so I have no idea if git send-email can work with NTLM. Perhaps
-other people in the list will know ?
+Subsequent commits will actually implement -C in the backends.
 
-Thomas
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ Makefile                    |   7 +++
+ package/pkg-download.mk     |   6 +++
+ package/pkg-generic.mk      |  14 ++++-
+ support/download/dl-wrapper | 100 ++++++++++++++++++++----------------
+ 4 files changed, 82 insertions(+), 45 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f736ecfb3e..de1ffa9d0e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -131,6 +131,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
+ # (default target is to build), or when MAKECMDGOALS contains
+ # something else than one of the nobuild_targets.
+ nobuild_targets := source %-source \
++	source-check %-source-check %-all-source-check \
+ 	legal-info %-legal-info external-deps _external-deps \
+ 	clean distclean help show-targets graph-depends \
+ 	%-graph-depends %-show-depends %-show-version \
+@@ -818,6 +819,9 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ .PHONY: source
+ source: $(foreach p,$(PACKAGES),$(p)-all-source)
+ 
++.PHONY: source-check
++source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
++
+ .PHONY: _external-deps external-deps
+ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
+@@ -1103,6 +1107,8 @@ help:
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
++	@echo '  <pkg>-source-check     - Check package for valid download URLs'
++	@echo '  <pkg>-all-source-check - Check package and its dependencies for valid download URLs'
+ 	$(foreach p,$(HELP_PACKAGES), \
+ 		@echo $(sep) \
+ 		@echo '$($(p)_NAME):' $(sep) \
+@@ -1122,6 +1128,7 @@ help:
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
++	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+ 	@echo '  printvars              - dump all the internal variables'
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 7cd87c38ff..5384fc2af4 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -70,6 +70,7 @@ export BR_NO_CHECK_HASH_FOR =
+ # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+ #
+ # Argument 1 is the source location
++# Argument 2 (optionally) provides extra arguments to pass to DL_WRAPPER
+ #
+ ################################################################################
+ 
+@@ -92,6 +93,7 @@ endif
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+ 	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
++		$(2) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
+@@ -106,3 +108,7 @@ define DOWNLOAD
+ 		-- \
+ 		$($(PKG)_DL_OPTS)
+ endef
++
++define SOURCE_CHECK
++	$(call DOWNLOAD,$(1),-C)
++endef
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6168b40e89..bc57956867 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -788,6 +788,10 @@ $(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
+ endif # actual sources != sources
+ endif # actual sources != ""
+ 
++$(1)-source-check: PKG=$(2)
++$(1)-source-check:
++	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
++
+ $(1)-external-deps:
+ 	@for p in $$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS) ; do \
+ 		echo `basename $$$$p` ; \
+@@ -812,6 +816,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+ $(1)-source:
+ $(1)-legal-source:
+ 
++$(1)-source-check:
++	test -d $$($(2)_OVERRIDE_SRCDIR)
++
+ $(1)-external-deps:
+ 	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
+ endif
+@@ -846,6 +853,9 @@ $(1)-graph-rdepends: graph-depends-requirements
+ $(1)-all-source:	$(1)-source
+ $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+ 
++$(1)-all-source-check:	$(1)-source-check
++$(1)-all-source-check:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source-check)
++
+ $(1)-all-external-deps:	$(1)-external-deps
+ $(1)-all-external-deps:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-external-deps)
+ 
+@@ -1044,6 +1054,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-all-external-deps \
+ 	$(1)-all-legal-info \
+ 	$(1)-all-source \
++	$(1)-all-source-check \
+ 	$(1)-build \
+ 	$(1)-clean-for-rebuild \
+ 	$(1)-clean-for-reconfigure \
+@@ -1068,7 +1079,8 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-rsync \
+ 	$(1)-show-depends \
+ 	$(1)-show-version \
+-	$(1)-source
++	$(1)-source \
++	$(1)-source-check
+ 
+ ifneq ($$($(2)_SOURCE),)
+ ifeq ($$($(2)_SITE),)
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 3315bd410e..920699e51d 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -17,7 +17,7 @@
+ # We want to catch any unexpected failure, and exit immediately.
+ set -e
+ 
+-export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
++export BR_BACKEND_DL_GETOPTS=":hc:Cd:o:n:N:H:ru:qf:e"
+ 
+ main() {
+     local OPT OPTARG
+@@ -25,9 +25,10 @@ main() {
+     local -a uris
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
++    while getopts ":c:Cd:D:o:n:N:H:rf:u:q" OPT; do
+         case "${OPT}" in
+         c)  cset="${OPTARG}";;
++        C)  checkonly=-C;;
+         d)  dl_dir="${OPTARG}";;
+         D)  old_dl_dir="${OPTARG}";;
+         o)  output="${OPTARG}";;
+@@ -46,38 +47,40 @@ main() {
+     # Forget our options, and keep only those for the backend
+     shift $((OPTIND-1))
+ 
+-    if [ -z "${output}" ]; then
+-        error "no output specified, use -o\n"
+-    fi
++    if [ -z "${checkonly}" ]; then
++        if [ -z "${output}" ]; then
++            error "no output specified, use -o\n"
++        fi
+ 
+-    # Legacy handling: check if the file already exists in the global
+-    # download directory. If it does, hard-link it. If it turns out it
+-    # was an incorrect download, we'd still check it below anyway.
+-    # If we can neither link nor copy, fallback to doing a download.
+-    # NOTE! This is not atomic, is subject to TOCTTOU, but the whole
+-    # dl-wrapper runs under an flock, so we're safe.
+-    if [ ! -e "${output}" -a -e "${old_dl_dir}/${filename}" ]; then
+-        ln "${old_dl_dir}/${filename}" "${output}" || \
+-        cp "${old_dl_dir}/${filename}" "${output}" || \
+-        true
+-    fi
++        # Legacy handling: check if the file already exists in the global
++        # download directory. If it does, hard-link it. If it turns out it
++        # was an incorrect download, we'd still check it below anyway.
++        # If we can neither link nor copy, fallback to doing a download.
++        # NOTE! This is not atomic, is subject to TOCTTOU, but the whole
++        # dl-wrapper runs under an flock, so we're safe.
++        if [ ! -e "${output}" -a -e "${old_dl_dir}/${filename}" ]; then
++            ln "${old_dl_dir}/${filename}" "${output}" || \
++            cp "${old_dl_dir}/${filename}" "${output}" || \
++            true
++        fi
+ 
+-    # If the output file already exists and:
+-    # - there's no .hash file: do not download it again and exit promptly
+-    # - matches all its hashes: do not download it again and exit promptly
+-    # - fails at least one of its hashes: force a re-download
+-    # - there's no hash (but a .hash file): consider it a hard error
+-    if [ -e "${output}" ]; then
+-        if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
+-            exit 0
+-        elif [ ${?} -ne 2 ]; then
+-            # Do not remove the file, otherwise it might get re-downloaded
+-            # from a later location (i.e. primary -> upstream -> mirror).
+-            # Do not print a message, check-hash already did.
+-            exit 1
++        # If the output file already exists and:
++        # - there's no .hash file: do not download it again and exit promptly
++        # - matches all its hashes: do not download it again and exit promptly
++        # - fails at least one of its hashes: force a re-download
++        # - there's no hash (but a .hash file): consider it a hard error
++        if [ -e "${output}" ]; then
++            if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
++                exit 0
++            elif [ ${?} -ne 2 ]; then
++                # Do not remove the file, otherwise it might get re-downloaded
++                # from a later location (i.e. primary -> upstream -> mirror).
++                # Do not print a message, check-hash already did.
++                exit 1
++            fi
++            rm -f "${output}"
++            warn "Re-downloading '%s'...\n" "${output##*/}"
+         fi
+-        rm -f "${output}"
+-        warn "Re-downloading '%s'...\n" "${output##*/}"
+     fi
+ 
+     # Look through all the uris that we were given to download the package
+@@ -127,7 +130,7 @@ main() {
+                 -f "${filename}" \
+                 -u "${uri}" \
+                 -o "${tmpf}" \
+-                ${quiet} ${recurse} -- "${@}"
++                ${quiet} ${recurse} ${checkonly} -- "${@}"
+         then
+             # cd back to keep path coherence
+             cd "${OLDPWD}"
+@@ -138,19 +141,21 @@ main() {
+         # cd back to free the temp-dir, so we can remove it later
+         cd "${OLDPWD}"
+ 
+-        # Check if the downloaded file is sane, and matches the stored hashes
+-        # for that file
+-        if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
+-            rc=0
+-        else
+-            if [ ${?} -ne 3 ]; then
+-                rm -rf "${tmpd}"
+-                continue
++        if [ -z "${checkonly}" ]; then
++            # Check if the downloaded file is sane, and matches the stored hashes
++            # for that file
++            if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
++                rc=0
++            else
++                if [ ${?} -ne 3 ]; then
++                    rm -rf "${tmpd}"
++                    continue
++                fi
++
++                # the hash file exists and there was no hash to check the file
++                # against
++                rc=1
+             fi
+-
+-            # the hash file exists and there was no hash to check the file
+-            # against
+-            rc=1
+         fi
+         download_and_check=1
+         break
+@@ -163,6 +168,13 @@ main() {
+         exit 1
+     fi
+ 
++    # If we only need to check the presence of sources, stop here.
++    # No need to handle output files.
++    if [ -n "${checkonly}" ]; then
++        rm -rf "${tmpd}"
++        exit 0
++    fi
++
+     # tmp_output is in the same directory as the final output, so we can
+     # later move it atomically.
+     tmp_output="$(mktemp "${output}.XXXXXX")"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
