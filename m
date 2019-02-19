@@ -1,103 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Feb 2019 11:53:27 +0100
-Subject: [Buildroot] git send-email with Outlook / NTLM ?
-In-Reply-To: <20190219101452.5145a2b9@windsurf.home>
-References: <2748BB04F99E7E45A3203C831E8B20FE34D35B97@SERBE4I2.intra.erbe-med.de>
- <20190218225858.05f8d246@windsurf.home>
- <2748BB04F99E7E45A3203C831E8B20FE34D35C13@SERBE4I2.intra.erbe-med.de>
- <20190219101452.5145a2b9@windsurf.home>
-Message-ID: <CAAXf6LUvTfdU4Ei_2nd-GJ-uMYyNPjR+rbjCCs5vYjO73B2JfA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Feb 2019 12:03:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix static build with
+ openssl
+Message-ID: <20190219110334.18185-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/8f6fdbf8a21967363b737bc771252bcded4278a9
 
-El mar., 19 feb. 2019 a las 10:15, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> Hello,
->
-> I've re-added the Buildroot mailing list in Cc, please keep the list
-> Cc'ed for this discussion.
->
-> On Tue, 19 Feb 2019 09:01:43 +0000
-> "Steinhilber, Markus" <Markus.Steinhilber@erbe-med.com> wrote:
->
-> > The mismatch and also the line wrapping was most likely happening
-> > because I needed to send the mail with Outlook. Our SMTP server only
-> > allows NTLM auth and I couldn't get git-email-send to work with it
-> > (The git-email-send-ntlm project is also not working for me). I don't
-> > think I can change the From: within outlook. But I could change the
-> > Signed-off-by: to match it if this is better. If you know any way to
-> > use git-email-send with NTLM please let me know.
->
-> I am in the lucky situation that I don't have to use an Outlook e-mail
-> server, so I have no idea if git send-email can work with NTLM. Perhaps
-> other people in the list will know ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ..._IFELSE-BIO_dgram_get_peer-when-static-li.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
 
-First question is: do you really need to use your company's SMTP
-server for sending to the Buildroot mailing list. You might be better
-off using e.g. gmail SMTP.
-
-You probably have a proxy server that you need to route through, but
-it is not impossible.
-
-Previously I used socat to set up a tunnel through the proxy, to gmail smtp.
-
-remotehost=smtp.gmail.com
-remoteport=587
-localport=10587
-proxy=your.proxy.com # or IP address
-proxyport=8080
-socat TCP4-LISTEN:$localport,reuseaddr,fork
-PROXY:$proxy:$remotehost:$remoteport,proxyport=$proxyport,resolve
-
-
-In your gitconfig, you would then specify 'localhost' and port 10587
-as smtp server.
-
-For some reason, this no longer works for me, with error:
-STARTTLS failed! hostname verification failed at
-/usr/libexec/git-core/git-send-email line 1503.
-
-
-
-But git-send-email also allows to specify an external program to send
-email. For example, use '/usr/bin/msmtp' as 'smtpserver'. Additional
-options can be specified as 'smtpserveroption'.
-In my case, I can also use a socks proxy. In .msmtprc I have:
-
-
-account gmail
-host smtp.gmail.com
-port 587
-tls on
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
-logfile /home/user/msmtp.log
-proxy_host your-socks-proxy
-auth on
-from user at gmail.com
-user user at gmail.com
-password your-app-password-for-gmail
-
-and then in .gitconfig
-
-[sendemail]
-  smtpserver = /usr/bin/msmtp
-  smtpserveroption = -agmail
-
-
-
-If gmail is not an option,  you might be able to configure msmtp to
-autenticate using NTLM to your company SMTP. The internet suggests
-that msmtp supports NTLM via GNU SASL, which in turn uses libntlm.
-See:
-https://marlam.de/msmtp/
-http://josefsson.org/libgsasl/
-
-
-Best regards,
-Thomas
+diff --git a/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch b/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
+new file mode 100644
+index 0000000000..5ec4de3f9e
+--- /dev/null
++++ b/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
+@@ -0,0 +1,30 @@
++From 9df00594114f3bd9ca8eab4e6d715ceaa7110dc5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 19 Feb 2019 11:54:29 +0100
++Subject: [PATCH] fix AC_LINK_IFELSE(BIO_dgram_get_peer) when static linking
++
++When building as a static library, AC_LINK_IFELSE(BIO_dgram_get_peer)
++fails because $LIBS (that contains -lz) is added before -lcrypto so
++invert both variables.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.d/config_os_functions | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.d/config_os_functions b/configure.d/config_os_functions
++index ba39069fe..813fda644 100644
++--- a/configure.d/config_os_functions
+++++ b/configure.d/config_os_functions
++@@ -337,7 +337,7 @@ if echo " $transport_result_list " | $GREP "DTLS" > /dev/null; then
++        AC_MSG_CHECKING([[for BIO_dgram_get_peer]])
++        [
++         oldLIBS="$LIBS"
++-        LIBS="$LIBS -lcrypto"
+++        LIBS="-lcrypto $LIBS"
++         AC_LINK_IFELSE(
++           [AC_LANG_PROGRAM(
++             [[#include <openssl/bio.h>]],
++-- 
++2.14.1
++
+-- 
+2.14.1
