@@ -1,58 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Feb 2019 12:03:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix static build with
- openssl
-Message-ID: <20190219110334.18185-1-fontaine.fabrice@gmail.com>
+From: Steinhilber, Markus <Markus.Steinhilber@erbe-med.com>
+Date: Tue, 19 Feb 2019 11:03:52 +0000
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: add renaming
+ functionality to barebox image copy
+Message-ID: <2748BB04F99E7E45A3203C831E8B20FE34D35E84@SERBE4I2.intra.erbe-med.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8f6fdbf8a21967363b737bc771252bcded4278a9
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._IFELSE-BIO_dgram_get_peer-when-static-li.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
+>> Until now barebox images are copied to the output/images directory
+>> with their default name. This is a problem if the barebox and
+>> barebox-aux images have the same name.
+> Could you describe a specific case/situation where this would happen ?
+> The main reason we have barebox vs. barebox-aux is because you sometimes need to build a full-blown Barebox, and a smaller Barebox that serves a first stage bootloader. From what I remember the generated images had different names, don't they ?
 
-diff --git a/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch b/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
-new file mode 100644
-index 0000000000..5ec4de3f9e
---- /dev/null
-+++ b/package/netsnmp/0005-fix-AC_LINK_IFELSE-BIO_dgram_get_peer-when-static-li.patch
-@@ -0,0 +1,30 @@
-+From 9df00594114f3bd9ca8eab4e6d715ceaa7110dc5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 19 Feb 2019 11:54:29 +0100
-+Subject: [PATCH] fix AC_LINK_IFELSE(BIO_dgram_get_peer) when static linking
-+
-+When building as a static library, AC_LINK_IFELSE(BIO_dgram_get_peer)
-+fails because $LIBS (that contains -lz) is added before -lcrypto so
-+invert both variables.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.d/config_os_functions | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.d/config_os_functions b/configure.d/config_os_functions
-+index ba39069fe..813fda644 100644
-+--- a/configure.d/config_os_functions
-++++ b/configure.d/config_os_functions
-+@@ -337,7 +337,7 @@ if echo " $transport_result_list " | $GREP "DTLS" > /dev/null; then
-+        AC_MSG_CHECKING([[for BIO_dgram_get_peer]])
-+        [
-+         oldLIBS="$LIBS"
-+-        LIBS="$LIBS -lcrypto"
-++        LIBS="-lcrypto $LIBS"
-+         AC_LINK_IFELSE(
-+           [AC_LANG_PROGRAM(
-+             [[#include <openssl/bio.h>]],
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+In our case it's happening, because we are building a barebox to be used with the device normally and use the barebox-aux to build a barebox which we use with the serial downloader mode of our board to do initial setup and programming. Those images have the same name and the second file overwrites the first without this patch. I understand that the usual case for barebox-aux may be to build a first stage bootloader, but I think it should not be limited to that case. The description of the barebox-aux package is " Build barebox with an auxiliary configuration" and for this, you can't be sure that the image files have different names. As soon as you are building 2 barebox images of the same type(SPL/TPL), but different config (which I think is quite useful) you will have this problem. I don't know if you may also have it in some cases when the type is different. Also, you can leave the setting empty and it will work just like before.
+
+>> Also, you need to rename the images in a post-build script if you need
+>> certain file names.
+> That is a pretty normal thing in Buildroot. We just install things as they are installed by the upstream build system, and leave it up to custom post-build script to further rename/move/adjust to match the specific requirements of the project/user.
+
+I understand. In this case I see it as some kind of nice-to-have function you can achieve. The main reason is the one above.
+
+Thanks,
+Markus
+________________________________
+
+Erbe Elektromedizin GmbH Firmensitz: 72072 Tuebingen Geschaeftsfuehrer: Christian O. Erbe, Reiner Thede Registergericht: Stuttgart HRB 380137
