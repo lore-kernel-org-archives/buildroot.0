@@ -1,103 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Feb 2019 23:25:14 +0100
-Subject: [Buildroot] [PATCH 3/3] package/webkitgtk: propagate microblaze
- dependency
-In-Reply-To: <20190216134530.14717-4-aperez@igalia.com>
-References: <20190216134530.14717-1-aperez@igalia.com>
- <20190216134530.14717-4-aperez@igalia.com>
-Message-ID: <9ddacf76-1bdc-4b69-06b0-2cf23b57b282@mind.be>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 19 Feb 2019 14:35:28 -0800
+Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11 for
+ O_TMPFILE
+Message-ID: <20190219223530.15956-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adrian,
+Add dependency on headers >= 3.11. O_TMPFILE, required by runc, was not
+available until this version.
 
-On 16/02/2019 14:45, Adrian Perez de Castro wrote:
-> The woff2 package is disabled for Microblaze, therefore disable
-> the support for WOFF2 web fonts in webkitgtk and make it optional.
-> Note that the support for other web fonts formats (OTF, TTF, WOFF1)
-> will still work normally and only WOFF2 gets disabled.
+Fixes:
 
- This patch conflicts with your series refactoring the webkit packages...
+http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
 
- I think the proper approach is.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/runc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-1. Patch for webkitgtk to make woff2 an optional dependency (i.e., [1] but
-without the refactoring, so duplicate work for the two webkits). To be applied
-to master.
-
-2. Patches 1+2 of this series, but squashed (when you add a dependency to a
-package, you have to propagate it in the same commit, otherwise it's not
-bisectable). For master, obviously.
-
-3-5 The rest of the RFC series, for next.
-
-
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  package/webkitgtk/Config.in    |  2 +-
->  package/webkitgtk/webkitgtk.mk | 12 +++++++++---
->  2 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-> index 8714677b6a..2f466a37d4 100644
-> --- a/package/webkitgtk/Config.in
-> +++ b/package/webkitgtk/Config.in
-> @@ -59,7 +59,7 @@ config BR2_PACKAGE_WEBKITGTK
->  	select BR2_PACKAGE_SQLITE
->  	select BR2_PACKAGE_WEBP
->  	select BR2_PACKAGE_WEBP_DEMUX
-> -	select BR2_PACKAGE_WOFF2
-> +	select BR2_PACKAGE_WOFF2 if !BR2_microblaze # woff2 -> brotli
-
- If woff2 is optional, then this should be removed entirely. That is also
-missing in [1].
-
- Regards,
- Arnout
-
-
-[1] http://patchwork.ozlabs.org/patch/1044194/
-
->  	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
->  	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
->  	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index c17bbc8028..54159d7f47 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
->  	Source/WebCore/LICENSE-LGPL-2.1
->  WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
->  	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
-> -	libtasn1 libxml2 libxslt sqlite webp woff2
-> +	libtasn1 libxml2 libxslt sqlite webp
->  WEBKITGTK_CONF_OPTS = \
->  	-DENABLE_API_TESTS=OFF \
->  	-DENABLE_GEOLOCATION=OFF \
-> @@ -24,8 +24,7 @@ WEBKITGTK_CONF_OPTS = \
->  	-DENABLE_SPELLCHECK=ON \
->  	-DPORT=GTK \
->  	-DUSE_LIBNOTIFY=OFF \
-> -	-DUSE_LIBHYPHEN=OFF \
-> -	-DUSE_WOFF2=ON
-> +	-DUSE_LIBHYPHEN=OFF
->  
->  ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
->  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
-> @@ -98,4 +97,11 @@ else
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WOFF2),y)
-> +WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=ON
-> +WEBKITGTK_DEPENDENCIES += woff2
-> +else
-> +WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
-> 
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+index 47c850ef30..44713222e4 100644
+--- a/package/runc/Config.in
++++ b/package/runc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RUNC
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	help
+ 	  runC is a CLI tool for spawning and running containers
+@@ -10,7 +11,8 @@ config BR2_PACKAGE_RUNC
+ 
+ 	  https://github.com/opencontainers/runc
+ 
+-comment "runc needs a glibc or musl toolchain toolchain w/ threads"
++comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
+ 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++  	!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
+-- 
+2.19.2
