@@ -1,7 +1,10 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 19 Feb 2019 14:15:28 +0100
-Subject: [Buildroot] [PATCH 1/3] package/imagemagick: fixup help text layout
-Message-ID: <10082_1550582141_5C6C017D_10082_180_1_2ca105eb-cb6f-44fa-94bb-4a2ffe2b6507@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
+Date: Tue, 19 Feb 2019 14:15:29 +0100
+Subject: [Buildroot] [PATCH 2/3] package/imagemagick: add prompt for host
+ variant
+In-Reply-To: <20190219131530.16364-1-yann.morin@orange.com>
+References: <20190219131530.16364-1-yann.morin@orange.com>
+Message-ID: <3833_1550582141_5C6C017D_3833_428_1_8b3762a4-694a-45cd-8cac-301fd3ba7526@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +13,63 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
+Sometimes, it is required to call imagemagick from a posr-build script
+or the likes, so we have to allow the user to enable the host variant
+for imagemagick.
+
+Update the linux package to select the host variant now.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 ---
- package/imagemagick/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                    |  1 +
+ package/Config.in.host             |  1 +
+ package/imagemagick/Config.in.host | 13 +++++++++++++
+ 3 files changed, 15 insertions(+)
+ create mode 100644 package/imagemagick/Config.in.host
 
-diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
-index 4bd81dbd79..8b795d89e5 100644
---- a/package/imagemagick/Config.in
-+++ b/package/imagemagick/Config.in
-@@ -9,8 +9,8 @@ config BR2_PACKAGE_IMAGEMAGICK
- 	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
- 	  Use ImageMagick to translate, flip, mirror, rotate, scale,
- 	  shear and transform images, adjust image colors, apply various
--	  special effects, or draw text,
--	  lines, polygons, ellipses and B?zier curves.
+diff --git a/linux/Config.in b/linux/Config.in
+index 323ba38d72..8466332dfe 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -2,6 +2,7 @@ menu "Kernel"
+ 
+ config BR2_LINUX_KERNEL
+ 	bool "Linux Kernel"
++	select BR2_PACKAGE_HOST_IMAGEMAGICK if BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH != ""
+ 	help
+ 	  Enable this option if you want to build a Linux kernel for
+ 	  your embedded device
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b4c501a33b..48f4f7e61d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -27,6 +27,7 @@ menu "Host utilities"
+ 	source "package/go-bootstrap/Config.in.host"
+ 	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
++	source "package/imagemagick/Config.in.host"
+ 	source "package/imx-mkimage/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
+new file mode 100644
+index 0000000000..b6d2a379f8
+--- /dev/null
++++ b/package/imagemagick/Config.in.host
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_HOST_IMAGEMAGICK
++	bool "host-imagemagick"
++	help
++	  ImageMagick(R) is a software suite to create, edit, and
++	  compose bitmap images. It can read, convert and write images
++	  in a variety of formats (about 100) including DPX, EXR, GIF,
++	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
++	  Use ImageMagick to translate, flip, mirror, rotate, scale,
++	  shear and transform images, adjust image colors, apply various
 +	  special effects, or draw text, lines, polygons, ellipses and
 +	  B?zier curves.
- 
- 	  http://www.imagemagick.org/
- 
++
++	  http://www.imagemagick.org/
 -- 
 2.17.1
 
