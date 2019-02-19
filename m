@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Feb 2019 08:25:21 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libb64: fix
+Date: Tue, 19 Feb 2019 08:24:37 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libb64: fix
  integer overflow and uninitialized C++ objects
-Message-ID: <20190219072358.EF95D8B6E3@busybox.osuosl.org>
+Message-ID: <20190219072403.84F018B6E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc80a84aa5fd679cb0f9ae6b9ae53b0809a8fb1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=716f7a9759991b0ff5c971d70c0a72954fbef33e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes a runtime bug on compilers where unsigned char is the default.
 Fixes a runtime bug where _state variable in the encoder and decoder
