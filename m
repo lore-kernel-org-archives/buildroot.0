@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Feb 2019 11:38:36 +0100
-Subject: [Buildroot] [PATCHv5 6/9] package/pkg-download: export 'SSH' for
- use in the download backends
+Date: Tue, 19 Feb 2019 11:38:37 +0100
+Subject: [Buildroot] [PATCHv5 7/9] support/download/scp: implement
+ source-check
 In-Reply-To: <20190219103839.25409-1-patrickdepinguin@gmail.com>
 References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
-Message-ID: <20190219103839.25409-6-patrickdepinguin@gmail.com>
+Message-ID: <20190219103839.25409-7-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,69 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Originally, the tools defined in pkg-download.mk were used from Makefiles
-and were directly available. Due to the introduction of the download
-infrastructure in shell scripts, these variables now need to be exported in
-order for the scripts to see them.
+We use 'test -f' rather than 'ls' because 'test' is a mandatory POSIX
+utility while 'ls' is not.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/download/scp | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-v5: new patch
+v5: no changes
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index dfc4460c6a..17d1ca99ee 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -15,7 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG))
- export SCP := $(call qstrip,$(BR2_SCP))
--SSH := $(call qstrip,$(BR2_SSH))
-+export SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+v4: (feedback Yann E. Morin)
+- use true/false as values to 'checkonly'
+- replace incorrect 'exit $?' by explicit 'exit 0'
+- use 'test -f' instead of 'ls' which is more certain to be present (POSIX
+  mandatory utility)
+
+v3: no changes
+
+diff --git a/support/download/scp b/support/download/scp
+index 80cf495c4e..52ccf06d6e 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -7,17 +7,21 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          Only check that the file exists remotely.
+ #   -o FILE     Copy to local file FILE.
+ #   -f FILE     Copy from remote file FILE.
+ #   -u URI      Download file at URI.
+ #
+ # Environment:
+ #   SCP       : the scp command to call
++#   SSH       : the ssh command to use for checkonly
  
- DL_WRAPPER = support/download/dl-wrapper
+ verbose=
++checkonly=false
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    C)  checkonly=true;;
+     o)  output="${OPTARG}";;
+     f)  filename="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+@@ -33,8 +37,19 @@ shift $((OPTIND-1)) # Get rid of our options
+ _scp() {
+     eval ${SCP} "${@}"
+ }
++_ssh() {
++    eval ${SSH} "${@}"
++}
+ 
+ # Remove any scheme prefix
+ uri="${uri##scp://}"
+ 
++if ${checkonly}; then
++    # uri now looks like:  foo.example.org:some/directory
++    domain="${uri%%:*}"
++    path="${uri#*:}/${filename}"
++    _ssh ${verbose} "${@}" "'${domain}'" test -f "'${path}'" > /dev/null
++    exit 0
++fi
++
+ _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
 -- 
 2.19.2
