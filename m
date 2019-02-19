@@ -1,74 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Feb 2019 08:30:44 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: Add
- sysusers.d snippet
-Message-ID: <20190219073006.A7D1E8B900@busybox.osuosl.org>
+From: Artem Senichev <artemsen@gmail.com>
+Date: Tue, 19 Feb 2019 11:10:12 +0300
+Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
+In-Reply-To: <CANQCQpZCkCE1y0fzB5qKKjZ7PnVyS5XXVzOEM3DKveMXQUmsgQ@mail.gmail.com>
+References: <20190218121508.htf6s7bazcggmozg@gmail.com>
+ <CANQCQpZCkCE1y0fzB5qKKjZ7PnVyS5XXVzOEM3DKveMXQUmsgQ@mail.gmail.com>
+Message-ID: <20190219081012.uwwbztwqv4ml6lq7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a849d26e06d09daca1206405953a93f746de25a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+On Mon, Feb 18, 2019 at 07:57:20AM -0600, Matthew Weber wrote:
+> On Mon, Feb 18, 2019 at 6:17 AM Artem Senichev <artemsen@gmail.com> wrote:
+> >
+> > kexec has fully support of ppc64 platform:
+> > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
+> > Added BR2_powerpc64 platform support.
+> 
+> Curious, which power arch/sub-arch are you testing?  (Power 5/6/7/8?)
+> (NXP or IBM)
 
-Whether using the new sysusers.d snippet, or adding an entry to
-/etc/password, set the service's home directory to /var/empty.
-See README.privsep included as part of the openssh distribution.
+I have checked kexec on POWER8, Little- and Big-Endian (VESNIN
+server).
+Linux kernel 5.0-rc6, kexec-tools 2.0.17 (from Buildroot).
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9acbf811cd7028dba17a26ee23e8494b083b8cab)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssh/openssh.mk         | 16 ++++++++++++----
- package/openssh/sshd-sysusers.conf |  1 +
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 9175f9589d..cbf2e92920 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -18,10 +18,6 @@ OPENSSH_CONF_OPTS = \
- 	--disable-wtmpx \
- 	--disable-strip
- 
--define OPENSSH_USERS
--	sshd -1 sshd -1 * - - - SSH drop priv user
--endef
--
- define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
-@@ -60,12 +56,24 @@ else
- OPENSSH_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-+define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-+	$(INSTALL) -m 0644 -D package/openssh/sshd-sysusers.conf \
-+		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
-+endef
-+else
-+define OPENSSH_USERS
-+	sshd -1 sshd -1 * /var/empty - - SSH drop priv user
-+endef
-+endif
-+
- define OPENSSH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-+	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
- endef
- 
- define OPENSSH_INSTALL_INIT_SYSV
-diff --git a/package/openssh/sshd-sysusers.conf b/package/openssh/sshd-sysusers.conf
-new file mode 100644
-index 0000000000..ac77aec065
---- /dev/null
-+++ b/package/openssh/sshd-sysusers.conf
-@@ -0,0 +1 @@
-+u sshd - "SSH drop priv user" /var/empty
+Artem
