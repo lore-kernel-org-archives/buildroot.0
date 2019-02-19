@@ -1,43 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Feb 2019 09:25:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-xlib: bump to version
- 0.25
-In-Reply-To: <20190219003956.112503-1-joseph.kogut@gmail.com>
-References: <20190219003956.112503-1-joseph.kogut@gmail.com>
-Message-ID: <20190219092550.3653fd3a@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Feb 2019 09:31:52 +0100
+Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <20190217231234.321ec6e4@windsurf.home>
+References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
+ <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
+ <20190217231234.321ec6e4@windsurf.home>
+Message-ID: <8d23dabb-4270-9c5f-4432-84cebee42c5a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
 
-Thanks for this new iteration!
 
-This patch should be [PATCH v2], you can use "git format-patch -v2" to
-do this. Having such versions in the subject prefix is really useful
-for the people reviewing/merging the patches.
+On 17/02/2019 23:12, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 30 Jan 2019 11:47:28 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> 
+>> This change introduces a Qemu board for an Armv7-A target executing
+>> with OP-TEE secure world services.
+>>
+>> The target Linux based normal world embeds the standard minimal
+>> filesystem with OP-TEE non-secure components embedded files from
+>> OP-TEE test, examples and benchmark packages.
+>>
+>> The Linux custom configuration is dumped from the vexpress_defconfig
+>> with few added fragments: OP-TEE driver and 9p for virtual filesystem to
+>> ease file manipulation and exchanges through Qemu virtfs support.
+>>
+>> The standard way for booting OP-TEE with a non-secure world companion
+>> use the Arm Trusted Firmware-A as bootloader. OP-TEE OS provides the
+>> BL32 image and U-boot the BL33 image. The proposed board enables OP-TEE
+>> and U-boot build for this. However package boot/arm-trusted-firmware
+>> needs few change support building Armv7-A targets.
+>>
+>> Therefore the proposed board allows one to build the images but not
+>> yet to run the target with the built Qemu host tool.
+>>
+>> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> 
+> I don't know what is the opinion of Peter, Arnout and Yann, but I think
+> this PATCH 6/7 and PATCH 7/7, instead of adding more defconfigs should
+> instead add test cases to our runtime test infrastructure in
+> support/testing/. Indeed:
+> 
+>  - We probably don't want to have Qemu defconfigs for every possible
+>    feature in Buildroot
 
-On Mon, 18 Feb 2019 16:39:56 -0800
-Joseph Kogut <joseph.kogut@gmail.com> wrote:
+ I don't quite agree. I think we *do* want to have defconfigs that demonstrate
+major features. For example, I like that we have qt5 defconfigs for several
+platforms.
 
-> Changes v1 -> v2:
-> - Fix LICENSE checksum
+ And for those defconfigs, obviously it is great if it can be qemu-based, as
+Etienne pointed out. (For the Qt5 ones obviously they can't be qemu-based, and
+indeed currently we don't have any qemu-based feature defconfigs.)
 
-And what are the changes in the license file ? The entire reason for
-having those hashes is to notice when the license terms are changed. If
-we blindly update the hash without looking at the license file changes,
-the hash is a bit useless.
+ So IMO this TrustZone defconfig is a good thing.
 
-Could you update the commit log to explain that the hash of the license
-file is changed, and what are the changes in the license file ? If it's
-just a simple update of the copyright date, just say so.
+> 
+>  - A runtime test case, even if it's indeed a bit less visible than a
+>    defconfig, still documents a configuration that "works" for a given
+>    feature.
 
-Thanks a lot!
+ So I would propose a runtime test that uses that defconfig.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+ Regards,
+ Arnout
+
+
+> 
+>  - A runtime test case allows to really runtime test the feature by
+>    booting Qemu.
+> 
+> Etienne, would you be willing to convert those two configurations to
+> the runtime test infrastructure ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
