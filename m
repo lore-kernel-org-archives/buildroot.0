@@ -1,56 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Feb 2019 23:41:37 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/dhcpcd: systemv
- and systemd services conflict with NetworkManager
-Message-ID: <20190219072214.6F11F83F84@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 19 Feb 2019 08:24:09 +0100
+Subject: [Buildroot] [PATCH] luaexpat: restore getcurrentbytecount (required
+ by prosody)
+Message-ID: <20190219072409.22957-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfbd3557b0495962076dd609a3a26c9035e15f22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+fix https://gitlab.com/buildroot.org/buildroot/-/jobs/158295314
 
-When NetworkManager and dhcpcd packages are both enabled, dhcpcd
-services and NetworkManager both spawn dhcpcd. This causes the network
-port to retrieve an IP address and later lose it a few seconds after
-startup.
-
-This patch prevents dhcpcd services from launching dhcpcd if
-NetworkManager is enabled.
-
-Signed-off-by: Jim Brennan <jbrennan@impinj.com>
-[Thomas: add a comment in the code to explain the seemingly strange
-condition.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit 4b530daf42e1769018f4dd745b900841c40f8812)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/dhcpcd/dhcpcd.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../0001-restore-getcurrentbytecount.patch    | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/luaexpat/0001-restore-getcurrentbytecount.patch
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 92a78cd7ad..ae16c340d6 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -36,6 +36,10 @@ define DHCPCD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
- endef
- 
-+# When network-manager is enabled together with dhcpcd, it will use
-+# dhcpcd as a DHCP client, and will be in charge of running, so we
-+# don't want the init script or service file to be installed.
-+ifeq ($(BR2_PACKAGE_NETWORK_MANAGER),)
- define DHCPCD_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/dhcpcd/S41dhcpcd \
- 		$(TARGET_DIR)/etc/init.d/S41dhcpcd
-@@ -48,6 +52,7 @@ define DHCPCD_INSTALL_INIT_SYSTEMD
- 	ln -sf ../../../../usr/lib/systemd/system/dhcpcd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpcd.service
- endef
-+endif
- 
- # NOTE: Even though this package has a configure script, it is not generated
- # using the autotools, so we have to use the generic package infrastructure.
+diff --git a/package/luaexpat/0001-restore-getcurrentbytecount.patch b/package/luaexpat/0001-restore-getcurrentbytecount.patch
+new file mode 100644
+index 000000000..6cf219267
+--- /dev/null
++++ b/package/luaexpat/0001-restore-getcurrentbytecount.patch
+@@ -0,0 +1,40 @@
++From 77cb691f781918908dfe34785f00a5ff75d5cc20 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 16 Feb 2019 15:56:00 +0100
++Subject: [PATCH] restore getcurrentbytecount
++
++see https://github.com/tomasguisasola/luaexpat/issues/3
++
++Fetch from: https://github.com/tomasguisasola/luaexpat/commit/0926f2d705109b7d35b721344264b39c1169e0de
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ src/lxplib.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/luaexpat-1.3.3/src/lxplib.c b/luaexpat-1.3.3/src/lxplib.c
++index 7726913..35bec3c 100644
++--- a/luaexpat-1.3.3/src/lxplib.c
+++++ b/luaexpat-1.3.3/src/lxplib.c
++@@ -538,11 +538,18 @@ static int lxp_stop (lua_State *L) {
++   return 1;
++ }
++ 
+++static int lxp_getcurrentbytecount (lua_State* L) {
+++  lxp_userdata *xpu = checkparser(L, 1);
+++  lua_pushinteger(L, XML_GetCurrentByteCount(xpu->parser));
+++  return 1;
+++}
+++
++ static const luaL_Reg lxp_meths[] = {
++   {"parse", lxp_parse},
++   {"close", lxp_close},
++   {"__gc", parser_gc},
++   {"pos", lxp_pos},
+++  {"getcurrentbytecount", lxp_getcurrentbytecount},
++   {"setencoding", lxp_setencoding},
++   {"getcallbacks", getcallbacks},
++   {"getbase", getbase},
++-- 
++2.17.1
++
+-- 
+2.17.1
