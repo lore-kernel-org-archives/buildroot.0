@@ -1,59 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Date: Tue, 19 Feb 2019 11:38:34 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-02-17
-In-Reply-To: <20190218150524.58b7f1a1@x230>
-References: <20190218070048.D838922270@silver.osuosl.org>
- <20190218150524.58b7f1a1@x230>
-Message-ID: <20190219113834.073a4630@windsurf.home>
+Subject: [Buildroot] [PATCHv5 4/9] support/download/file: implement
+ source-check
+In-Reply-To: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+Message-ID: <20190219103839.25409-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On Mon, 18 Feb 2019 15:05:24 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ support/download/file | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> fftw is unable to find libquadmath.so but this library is  missing in
-> x86_64-ctng_locales-linux-gnu.tar.xz.
+v5: no changes
 
-Grmfmfm. We currently have:
+v4:
+- use true/false as values to 'checkonly' (Yann E. Morin)
+- replace incorrect 'exit $?' by explicit 'exit 0' (Yann E. Morin)
+- replace 'test -e' by 'test -f' which is more specific
 
-config BR2_TOOLCHAIN_HAS_LIBQUADMATH
-        bool
-        default y if BR2_i386 || BR2_x86_64
+v3: no changes
 
-However, it turns out that libquadmath can be disabled in gcc, and
-guess what, the gcc in the toolchain causing the failure has been built
-with --disable-libquadmath.
-
-So it seems like we need to turn this into a real Config.in option:
-
- - BR2_TOOLCHAIN_HAS_LIBQUADMATH remains a hidden option, has no
-   default value, and a depends on BR2_i386 || BR2_x86_64
-
- - The internal toolchain backend selects it because we always enable
-   it for internal toolchains (to be checked)
-
- - All pre-defined external toolchain packages must be updated to
-   select it
-
- - toolchain-external-custom needs to be extended with a
-   BR2_TOOLCHAIN_EXTERNAL_LIBQUADMATH option that users can set/unset.
-   It should depends on BR2_i386 / BR2_x86_64, default to yes, and
-   select BR2_TOOLCHAIN_HAS_LIBQUADMATH.
-
- - A check needs to be added in toolchain/helpers.mk to verify that the
-   value of BR2_TOOLCHAIN_HAS_LIBQUADMATH matches the presence/absence
-   of libquadmath in the toolchain.
-
-Best regards,
-
-Thomas
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..059a8dde4c 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -7,6 +7,7 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -C          Only check that the source file exists.
+ #   -o FILE     Copy to file FILE.
+ #   -f FILE     Copy from basename file FILE.
+ #   -u DIR      Copy from FILE in DIR.
+@@ -20,9 +21,11 @@ set -e
+ # Make 'cp' verbose by default, so it behaves a bit like the others.
+ verbose=-v
+ 
++checkonly=false
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=;;
++    C)  checkonly=true;;
+     o)  output="${OPTARG}";;
+     f)  file="${OPTARG}";;
+     u)  dir="${OPTARG}";;
+@@ -39,4 +42,12 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+-_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
++# Remove any scheme prefix
++dir="${dir##file://}"
++
++if ${checkonly}; then
++    test -f "'${dir}/${file}'"
++    exit 0
++fi
++
++_localfiles ${verbose} "'${dir}/${file}'" "'${output}'"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.2
