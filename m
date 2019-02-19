@@ -1,54 +1,103 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Feb 2019 23:14:33 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-02-14
-In-Reply-To: <87d0no1w9p.fsf@paral.in>
-References: <5c666398.1c69fb81.1f9f6.2db0SMTPIN_ADDED_MISSING@mx.google.com>
- <87d0no1w9p.fsf@paral.in>
-Message-ID: <a1b02faf-5b05-b7fd-a311-4dc0a5bc8fd4@mind.be>
+Date: Tue, 19 Feb 2019 23:25:14 +0100
+Subject: [Buildroot] [PATCH 3/3] package/webkitgtk: propagate microblaze
+ dependency
+In-Reply-To: <20190216134530.14717-4-aperez@igalia.com>
+References: <20190216134530.14717-1-aperez@igalia.com>
+ <20190216134530.14717-4-aperez@igalia.com>
+Message-ID: <9ddacf76-1bdc-4b69-06b0-2cf23b57b282@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Adrian,
+
+On 16/02/2019 14:45, Adrian Perez de Castro wrote:
+> The woff2 package is disabled for Microblaze, therefore disable
+> the support for WOFF2 web fonts in webkitgtk and make it optional.
+> Note that the support for other web fonts formats (OTF, TTF, WOFF1)
+> will still work normally and only WOFF2 gets disabled.
+
+ This patch conflicts with your series refactoring the webkit packages...
+
+ I think the proper approach is.
+
+1. Patch for webkitgtk to make woff2 an optional dependency (i.e., [1] but
+without the refactoring, so duplicate work for the two webkits). To be applied
+to master.
+
+2. Patches 1+2 of this series, but squashed (when you add a dependency to a
+package, you have to propagate it in the same commit, otherwise it's not
+bisectable). For master, obviously.
+
+3-5 The rest of the RFC series, for next.
 
 
-On 19/02/2019 01:01, Christian Stewart wrote:
 > 
-> Hi Thomas, all,
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/webkitgtk/Config.in    |  2 +-
+>  package/webkitgtk/webkitgtk.mk | 12 +++++++++---
+>  2 files changed, 10 insertions(+), 4 deletions(-)
 > 
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
->>         i686 |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/f71ddcd17f4991a3caeaac42c81ed97bdf847718
->>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504
->>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/c359954d671e338997615d3a2f3aca168a53cb91
->>
-> 
-> This is relating to O_TMPFILE not being available with this configuration:
-> 
-> libcontainer/nsenter/cloned_binary.c:206
-> #ifdef HAVE_MEMFD_CREATE
-> 	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
-> #else
-> 	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
-> #endif
-> 
-> I'm not aware of what the best alternative to O_TMPFILE in this system
-> setup would be. Do you (or anyone else) know a good solution to patch in
-> here for compatibility?
+> diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+> index 8714677b6a..2f466a37d4 100644
+> --- a/package/webkitgtk/Config.in
+> +++ b/package/webkitgtk/Config.in
+> @@ -59,7 +59,7 @@ config BR2_PACKAGE_WEBKITGTK
+>  	select BR2_PACKAGE_SQLITE
+>  	select BR2_PACKAGE_WEBP
+>  	select BR2_PACKAGE_WEBP_DEMUX
+> -	select BR2_PACKAGE_WOFF2
+> +	select BR2_PACKAGE_WOFF2 if !BR2_microblaze # woff2 -> brotli
 
- O_TMPFILE was added in Linux 3.11, memfd some time later IIRC. So depending on
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 seems the correct approach.
+ If woff2 is optional, then this should be removed entirely. That is also
+missing in [1].
 
  Regards,
  Arnout
 
-> 
-> Thanks,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+[1] http://patchwork.ozlabs.org/patch/1044194/
+
+>  	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+>  	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+>  	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index c17bbc8028..54159d7f47 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+>  	Source/WebCore/LICENSE-LGPL-2.1
+>  WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+>  	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+> -	libtasn1 libxml2 libxslt sqlite webp woff2
+> +	libtasn1 libxml2 libxslt sqlite webp
+>  WEBKITGTK_CONF_OPTS = \
+>  	-DENABLE_API_TESTS=OFF \
+>  	-DENABLE_GEOLOCATION=OFF \
+> @@ -24,8 +24,7 @@ WEBKITGTK_CONF_OPTS = \
+>  	-DENABLE_SPELLCHECK=ON \
+>  	-DPORT=GTK \
+>  	-DUSE_LIBNOTIFY=OFF \
+> -	-DUSE_LIBHYPHEN=OFF \
+> -	-DUSE_WOFF2=ON
+> +	-DUSE_LIBHYPHEN=OFF
+>  
+>  ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
+>  WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
+> @@ -98,4 +97,11 @@ else
+>  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_WOFF2),y)
+> +WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=ON
+> +WEBKITGTK_DEPENDENCIES += woff2
+> +else
+> +WEBKITGTK_CONF_OPTS += -DUSE_WOFF2=OFF
+> +endif
+> +
+>  $(eval $(cmake-package))
 > 
