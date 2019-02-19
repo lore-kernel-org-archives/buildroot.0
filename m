@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Feb 2019 11:38:35 +0100
-Subject: [Buildroot] [PATCHv5 5/9] Revert "core/download: drop the SSH
- command"
+Date: Tue, 19 Feb 2019 11:38:36 +0100
+Subject: [Buildroot] [PATCHv5 6/9] package/pkg-download: export 'SSH' for
+ use in the download backends
 In-Reply-To: <20190219103839.25409-1-patrickdepinguin@gmail.com>
 References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
-Message-ID: <20190219103839.25409-5-patrickdepinguin@gmail.com>
+Message-ID: <20190219103839.25409-6-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +13,28 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-This reverts commit db9473bf6cd7bd12aa1f9faad0a917c973c33827.
-
-The SSH command will again be needed to support source-check for the 'scp'
-download backend.
+Originally, the tools defined in pkg-download.mk were used from Makefiles
+and were directly available. Due to the introduction of the download
+infrastructure in shell scripts, these variables now need to be exported in
+order for the scripts to see them.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in               | 4 ++++
- package/pkg-download.mk | 1 +
- 2 files changed, 5 insertions(+)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v5: use 'git revert' instead
-v4: no changes
-v3: no changes
+v5: new patch
 
-diff --git a/Config.in b/Config.in
-index d58d8dc04a..91d56907fe 100644
---- a/Config.in
-+++ b/Config.in
-@@ -136,6 +136,10 @@ config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
- 
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
- config BR2_HG
- 	string "Mercurial (hg) command"
- 	default "hg"
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 5384fc2af4..dfc4460c6a 100644
+index dfc4460c6a..17d1ca99ee 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -15,6 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
+@@ -15,7 +15,7 @@ export BZR := $(call qstrip,$(BR2_BZR))
  export GIT := $(call qstrip,$(BR2_GIT))
  export HG := $(call qstrip,$(BR2_HG))
  export SCP := $(call qstrip,$(BR2_SCP))
-+SSH := $(call qstrip,$(BR2_SSH))
+-SSH := $(call qstrip,$(BR2_SSH))
++export SSH := $(call qstrip,$(BR2_SSH))
  export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
  DL_WRAPPER = support/download/dl-wrapper
