@@ -1,64 +1,59 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Feb 2019 11:38:33 +0100
-Subject: [Buildroot] [PATCHv5 3/9] support/download/wget: implement
- source-check
-In-Reply-To: <20190219103839.25409-1-patrickdepinguin@gmail.com>
-References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
-Message-ID: <20190219103839.25409-3-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Feb 2019 11:38:34 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-17
+In-Reply-To: <20190218150524.58b7f1a1@x230>
+References: <20190218070048.D838922270@silver.osuosl.org>
+ <20190218150524.58b7f1a1@x230>
+Message-ID: <20190219113834.073a4630@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hello,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- support/download/wget | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Mon, 18 Feb 2019 15:05:24 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-v5: no changes
+> fftw is unable to find libquadmath.so but this library is  missing in
+> x86_64-ctng_locales-linux-gnu.tar.xz.
 
-v4: (feedback Yann E. Morin)
-- use true/false as values to 'checkonly'
-- replace incorrect 'exit $?' by explicit 'exit 0'
+Grmfmfm. We currently have:
 
-v3: no changes
+config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+        bool
+        default y if BR2_i386 || BR2_x86_64
 
-diff --git a/support/download/wget b/support/download/wget
-index c69e6071aa..277eab6660 100755
---- a/support/download/wget
-+++ b/support/download/wget
-@@ -7,6 +7,7 @@ set -e
- #
- # Options:
- #   -q          Be quiet.
-+#   -C          Only check that the file exists remotely.
- #   -o FILE     Save into file FILE.
- #   -f FILENAME The filename of the tarball to get at URL
- #   -u URL      Download file at URL.
-@@ -16,9 +17,11 @@ set -e
- #   WGET     : the wget command to call
- 
- verbose=
-+checkonly=false
- while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  verbose=-q;;
-+    C)  checkonly=true;;
-     o)  output="${OPTARG}";;
-     f)  filename="${OPTARG}";;
-     u)  url="${OPTARG}";;
-@@ -40,4 +43,9 @@ _wget() {
- # mirror
- [ -n "${encode}" ] && filename=${filename//\?/%3F}
- 
-+if ${checkonly}; then
-+    _wget --spider ${verbose} "${@}" "'${url}/${filename}'"
-+    exit 0
-+fi
-+
- _wget ${verbose} "${@}" -O "'${output}'" "'${url}/${filename}'"
+However, it turns out that libquadmath can be disabled in gcc, and
+guess what, the gcc in the toolchain causing the failure has been built
+with --disable-libquadmath.
+
+So it seems like we need to turn this into a real Config.in option:
+
+ - BR2_TOOLCHAIN_HAS_LIBQUADMATH remains a hidden option, has no
+   default value, and a depends on BR2_i386 || BR2_x86_64
+
+ - The internal toolchain backend selects it because we always enable
+   it for internal toolchains (to be checked)
+
+ - All pre-defined external toolchain packages must be updated to
+   select it
+
+ - toolchain-external-custom needs to be extended with a
+   BR2_TOOLCHAIN_EXTERNAL_LIBQUADMATH option that users can set/unset.
+   It should depends on BR2_i386 / BR2_x86_64, default to yes, and
+   select BR2_TOOLCHAIN_HAS_LIBQUADMATH.
+
+ - A check needs to be added in toolchain/helpers.mk to verify that the
+   value of BR2_TOOLCHAIN_HAS_LIBQUADMATH matches the presence/absence
+   of libquadmath in the toolchain.
+
+Best regards,
+
+Thomas
 -- 
-2.19.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
