@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Feb 2019 08:31:01 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/openssh: Add
+Date: Tue, 19 Feb 2019 08:30:44 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/openssh: Add
  sysusers.d snippet
-Message-ID: <20190219073000.E998E8B6D6@busybox.osuosl.org>
+Message-ID: <20190219073006.A7D1E8B900@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8df0a10c51ed855ccda68a17594f5cedd3aa654c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5a849d26e06d09daca1206405953a93f746de25a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Whether using the new sysusers.d snippet, or adding an entry to
 /etc/password, set the service's home directory to /var/empty.
