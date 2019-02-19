@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Feb 2019 11:38:37 +0100
-Subject: [Buildroot] [PATCHv5 7/9] support/download/scp: implement
+Date: Tue, 19 Feb 2019 11:38:38 +0100
+Subject: [Buildroot] [PATCHv5 8/9] support/download/svn: implement
  source-check
 In-Reply-To: <20190219103839.25409-1-patrickdepinguin@gmail.com>
 References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
-Message-ID: <20190219103839.25409-7-patrickdepinguin@gmail.com>
+Message-ID: <20190219103839.25409-8-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,30 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-We use 'test -f' rather than 'ls' because 'test' is a mandatory POSIX
-utility while 'ls' is not.
-
+Suggested-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/download/scp | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ support/download/svn | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 v5: no changes
 
-v4: (feedback Yann E. Morin)
-- use true/false as values to 'checkonly'
-- replace incorrect 'exit $?' by explicit 'exit 0'
-- use 'test -f' instead of 'ls' which is more certain to be present (POSIX
-  mandatory utility)
+v4: new patch
 
-v3: no changes
-
-diff --git a/support/download/scp b/support/download/scp
-index 80cf495c4e..52ccf06d6e 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -7,17 +7,21 @@ set -e
+diff --git a/support/download/svn b/support/download/svn
+index 542b25c0a2..93984b6c45 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -7,6 +7,7 @@ set -e
  #
  # Options:
  #   -q          Be quiet.
-+#   -C          Only check that the file exists remotely.
- #   -o FILE     Copy to local file FILE.
- #   -f FILE     Copy from remote file FILE.
- #   -u URI      Download file at URI.
- #
- # Environment:
- #   SCP       : the scp command to call
-+#   SSH       : the ssh command to use for checkonly
++#   -C          Only check that the revision exists in the remote repository.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Checkout from repository at URI.
+ #   -c REV      Use revision REV.
+@@ -16,9 +17,11 @@ set -e
+ #   SVN      : the svn command to call
  
  verbose=
 +checkonly=false
@@ -55,27 +45,23 @@ index 80cf495c4e..52ccf06d6e 100755
      q)  verbose=-q;;
 +    C)  checkonly=true;;
      o)  output="${OPTARG}";;
-     f)  filename="${OPTARG}";;
      u)  uri="${OPTARG}";;
-@@ -33,8 +37,19 @@ shift $((OPTIND-1)) # Get rid of our options
- _scp() {
-     eval ${SCP} "${@}"
+     c)  rev="${OPTARG}";;
+@@ -36,6 +39,15 @@ _svn() {
+     eval ${SVN} "${@}"
  }
-+_ssh() {
-+    eval ${SSH} "${@}"
-+}
  
- # Remove any scheme prefix
- uri="${uri##scp://}"
- 
++if ! _svn ls ${verbose} -r "'${rev}'" "'${uri}'" > /dev/null; then
++    printf "Revision '%s' does not exist in this repository\n." "${rev}"
++    exit 1
++fi
++
 +if ${checkonly}; then
-+    # uri now looks like:  foo.example.org:some/directory
-+    domain="${uri%%:*}"
-+    path="${uri#*:}/${filename}"
-+    _ssh ${verbose} "${@}" "'${domain}'" test -f "'${path}'" > /dev/null
 +    exit 0
 +fi
 +
- _scp ${verbose} "${@}" "'${uri}/${filename}'" "'${output}'"
+ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+ 
+ tar czf "${output}" "${basename}"
 -- 
 2.19.2
