@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 19 Feb 2019 16:43:02 +0100
-Subject: [Buildroot] [next/testing Lua modules 02/11] support/testing: add
- lpeg test
+Date: Tue, 19 Feb 2019 16:43:05 +0100
+Subject: [Buildroot] [next/testing Lua modules 05/11] support/testing: add
+ lua-utf8 test
 In-Reply-To: <20190219154311.22173-1-francois.perrad@gadz.org>
 References: <20190219154311.22173-1-francois.perrad@gadz.org>
-Message-ID: <20190219154311.22173-2-francois.perrad@gadz.org>
+Message-ID: <20190219154311.22173-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .gitlab-ci.yml                             |  2 ++
- support/testing/tests/package/test_lpeg.py | 25 ++++++++++++++++++++++
+ .gitlab-ci.yml                                |  2 ++
+ .../testing/tests/package/test_lua_utf8.py    | 25 +++++++++++++++++++
  2 files changed, 27 insertions(+)
- create mode 100644 support/testing/tests/package/test_lpeg.py
+ create mode 100644 support/testing/tests/package/test_lua_utf8.py
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2f0ebaa25..1730f3906 100644
+index e4e9dcb23..ad7186a98 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -326,6 +326,8 @@ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
- tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
- tests.package.test_ipython.TestIPythonPy2: { extends: .runtime_test }
- tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
-+tests.package.test_lpeg.TestLuaLPeg: { extends: .runtime_test }
-+tests.package.test_lpeg.TestLuajitLPeg: { extends: .runtime_test }
- tests.package.test_lua.TestLua: { extends: .runtime_test }
+@@ -334,6 +334,8 @@ tests.package.test_lua.TestLua: { extends: .runtime_test }
  tests.package.test_lua.TestLuajit: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
++tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
++tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
  tests.package.test_perl.TestPerl: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_lpeg.py b/support/testing/tests/package/test_lpeg.py
+ tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
+ tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_lua_utf8.py b/support/testing/tests/package/test_lua_utf8.py
 new file mode 100644
-index 000000000..e57415735
+index 000000000..3eab19dd4
 --- /dev/null
-+++ b/support/testing/tests/package/test_lpeg.py
++++ b/support/testing/tests/package/test_lua_utf8.py
 @@ -0,0 +1,25 @@
 +from tests.package.test_lua import TestLuaBase
 +
 +
-+class TestLuaLPeg(TestLuaBase):
++class TestLuaUtf8(TestLuaBase):
 +    config = TestLuaBase.config + \
 +        """
 +        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LPEG=y
++        BR2_PACKAGE_LUA_UTF8=y
 +        """
 +
 +    def test_run(self):
 +        self.login()
-+        self.module_test("lpeg", script="print(require[[lpeg]].version())")
++        self.module_test("utf8")
 +
 +
-+class TestLuajitLPeg(TestLuaBase):
++class TestLuajitUtf8(TestLuaBase):
 +    config = TestLuaBase.config + \
 +        """
 +        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LPEG=y
++        BR2_PACKAGE_LUA_UTF8=y
 +        """
 +
 +    def test_run(self):
 +        self.login()
-+        self.module_test("lpeg", script="print(require[[lpeg]].version())")
++        self.module_test("utf8")
 -- 
 2.17.1
