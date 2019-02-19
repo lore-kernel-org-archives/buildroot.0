@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Feb 2019 09:31:52 +0100
-Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
- emulation with TrustZone services
-In-Reply-To: <20190217231234.321ec6e4@windsurf.home>
-References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
- <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
- <20190217231234.321ec6e4@windsurf.home>
-Message-ID: <8d23dabb-4270-9c5f-4432-84cebee42c5a@mind.be>
+Date: Tue, 19 Feb 2019 10:01:31 +0100
+Subject: [Buildroot] [PATCH v5 09/10] testing/tests/download: test git
+ special ref
+In-Reply-To: <5c6a1c8d830d8_778d3fe400187698100087@ultri5.mail>
+References: <cf2f9717-48a8-8616-b8ec-3d30bfbd9ab1@mind.be>
+ <5c6a1c8d830d8_778d3fe400187698100087@ultri5.mail>
+Message-ID: <33cac50f-5203-03fa-4231-183863741c18@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +14,65 @@ To: buildroot@busybox.net
 
 
 
-On 17/02/2019 23:12, Thomas Petazzoni wrote:
+On 18/02/2019 03:46, Ricardo Martincoski wrote:
 > Hello,
 > 
-> On Wed, 30 Jan 2019 11:47:28 +0100
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> On Wed, Feb 06, 2019 at 08:05 AM, Arnout Vandecappelle wrote:
 > 
->> This change introduces a Qemu board for an Armv7-A target executing
->> with OP-TEE secure world services.
+>> On 12/05/2018 04:58, Ricardo Martincoski wrote:
+>>> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+>>>
+>>> Add a special ref to the static repo and check on the git refs test case
+>>> the download of a git package:
+>>>  - with the name of a special ref as version;
 >>
->> The target Linux based normal world embeds the standard minimal
->> filesystem with OP-TEE non-secure components embedded files from
->> OP-TEE test, examples and benchmark packages.
->>
->> The Linux custom configuration is dumped from the vexpress_defconfig
->> with few added fragments: OP-TEE driver and 9p for virtual filesystem to
->> ease file manipulation and exchanges through Qemu virtfs support.
->>
->> The standard way for booting OP-TEE with a non-secure world companion
->> use the Arm Trusted Firmware-A as bootloader. OP-TEE OS provides the
->> BL32 image and U-boot the BL33 image. The proposed board enables OP-TEE
->> and U-boot build for this. However package boot/arm-trusted-firmware
->> needs few change support building Armv7-A targets.
->>
->> Therefore the proposed board allows one to build the images but not
->> yet to run the target with the built Qemu host tool.
->>
->> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>>  We might remove support for getting special refs by name, but keep on
+>> supporting getting special refs by sha1. So I've changed the test into getting
+>> it by sha1 instead.
 > 
-> I don't know what is the opinion of Peter, Arnout and Yann, but I think
-> this PATCH 6/7 and PATCH 7/7, instead of adding more defconfigs should
-> instead add test cases to our runtime test infrastructure in
-> support/testing/. Indeed:
+> OK... but it depends on a recent git version to work.
+
+ Ah, darn, I forgot that...
+
+> The same does not occur when getting special refs by name.
 > 
->  - We probably don't want to have Qemu defconfigs for every possible
->    feature in Buildroot
+> When using recent versions of git the download of the sha1 of a special ref
+> works because of this line in support/download/git:
+>   _git fetch origin "'${cset}:${cset}'"
 
- I don't quite agree. I think we *do* want to have defconfigs that demonstrate
-major features. For example, I like that we have qt5 defconfigs for several
-platforms.
+ So, IIRC, Yann had an idea for how to rewrite this in a way that we would (1)
+no longer support branch names and (2) we would support hashes that refer to
+special refs or ancestors of special refs. But I don't remember what it was.
+Maybe it was
 
- And for those defconfigs, obviously it is great if it can be qemu-based, as
-Etienne pointed out. (For the Qt5 ones obviously they can't be qemu-based, and
-indeed currently we don't have any qemu-based feature defconfigs.)
+_git fetch origin '+refs/*:refs/remotes/origin/*' '+refs/tags/*:refs/tags/*'
 
- So IMO this TrustZone defconfig is a good thing.
+That way (I think) a branch name would no longer be usable (because when doing
+the checkout the origin/ bit would be missing), but a tag name still would be
+usable.
 
+> I tested using:
+> git version 2.17.1
 > 
->  - A runtime test case, even if it's indeed a bit less visible than a
->    defconfig, still documents a configuration that "works" for a given
->    feature.
+> The git version installed in our docker image does not support it.
+> 
+> I am not sure what is the best fix for the TestGitRefs failure in GitLab CI.
+> I would change the test to use special ref by name, and *when* we change the
+> behavior, we change the test in the same commit to expect it to fail.
 
- So I would propose a runtime test that uses that defconfig.
+ Or maybe just remove the test for now.
 
 
  Regards,
  Arnout
 
-
 > 
->  - A runtime test case allows to really runtime test the feature by
->    booting Qemu.
+>>
+>>  Ideally there should also be a check for getting the parent of the special ref
+>> by sha1, but I think that actually does *not* work now.
 > 
-> Etienne, would you be willing to convert those two configurations to
-> the runtime test infrastructure ?
+> I expect it to not work. But I didn't tested recently.
 > 
-> Thanks!
-> 
-> Thomas
+> Regards,
+> Ricardo
 > 
