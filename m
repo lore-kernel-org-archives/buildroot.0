@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Feb 2019 22:30:26 +0100
-Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11
- for O_TMPFILE
-In-Reply-To: <20190220090108.6e2d1e9a@windsurf>
+Date: Wed, 20 Feb 2019 22:31:37 +0100
+Subject: [Buildroot] [PATCH 2/3] docker-containerd: propagate runc
+ headers >= 3.11 dependency
+In-Reply-To: <20190219223530.15956-2-christian@paral.in>
 References: <20190219223530.15956-1-christian@paral.in>
- <20190220090108.6e2d1e9a@windsurf>
-Message-ID: <0f51e6e8-4a4d-faf1-ef58-9c3685a83c1d@mind.be>
+ <20190219223530.15956-2-christian@paral.in>
+Message-ID: <289f7e1d-c549-272a-f46f-b454d838da2d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +14,38 @@ To: buildroot@busybox.net
 
 
 
-On 20/02/2019 09:01, Thomas Petazzoni wrote:
-> Hello Christian,
+On 19/02/2019 23:35, Christian Stewart wrote:
+> Add runc dependency on Linux headers >= 3.11 for O_TMPFILE.
 > 
-> On Tue, 19 Feb 2019 14:35:28 -0800
-> Christian Stewart <christian@paral.in> wrote:
-> 
->> Add dependency on headers >= 3.11. O_TMPFILE, required by runc, was not
->> available until this version.
->>
->> Fixes:
->>
->> http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
-> 
-> I don't see how it can fix this build issue, because the defconfig for
-> this failure has:
-> 
-> BR2_TOOLCHAIN_HEADERS_AT_LEAST="3.12"
-> 
-> so it *is* using kernel headers more recent than 3.11.
-> 
-> I had a look at your build issue following your e-mail yesterday, and
-> indeed O_TMPFILE was added in the kernel headers in 3.11, but
-> apparently having 3.11 kernel headers is not sufficient. I suppose some
-> code is also needed in the C library, and because the toolchain used by
-> this configuration has an old glibc, it doesn't have everything needed
-> for O_TMPFILE.
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
- Darn. So how do we handle that? We don't have anything for GLIBC_AT_LEAST (much
-less MUSL_AT_LEAST or UCLIBC_AT_LEAST...). I don't really want to start adding
-*those* either...
-
-> 
-> So, your patch is OK in the sense that indeed >= 3.11 is needed, but it
-> is wrong in the sense that it is not going to fix the build issue
-> you're pointing to.
-
- If it doesn't fix the autobuild issue, it's kind of useless, so I've marked
-this patch as Changes Requested.
+ By the way, this patch and the following one should be squashed into the first
+one, otherwise the first patch breaks bisectability.
 
  Regards,
  Arnout
+
+> ---
+>  package/docker-containerd/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+> index 5e0cc1e877..4065b8e3be 100644
+> --- a/package/docker-containerd/Config.in
+> +++ b/package/docker-containerd/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+>  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
+>  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
+>  	depends on BR2_USE_MMU # util-linux
+>  	select BR2_PACKAGE_RUNC # runtime dependency
+> @@ -32,4 +33,5 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
+>  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+> +  	!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
+> 
