@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Feb 2019 09:01:08 +0100
-Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11
- for O_TMPFILE
-In-Reply-To: <20190219223530.15956-1-christian@paral.in>
-References: <20190219223530.15956-1-christian@paral.in>
-Message-ID: <20190220090108.6e2d1e9a@windsurf>
+Date: Wed, 20 Feb 2019 09:08:29 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-02-14
+In-Reply-To: <a1b02faf-5b05-b7fd-a311-4dc0a5bc8fd4@mind.be>
+References: <5c666398.1c69fb81.1f9f6.2db0SMTPIN_ADDED_MISSING@mx.google.com>
+ <87d0no1w9p.fsf@paral.in>
+ <a1b02faf-5b05-b7fd-a311-4dc0a5bc8fd4@mind.be>
+Message-ID: <20190220090829.6cb610b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Arnout,
 
-On Tue, 19 Feb 2019 14:35:28 -0800
-Christian Stewart <christian@paral.in> wrote:
+On Tue, 19 Feb 2019 23:14:33 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> Add dependency on headers >= 3.11. O_TMPFILE, required by runc, was not
-> available until this version.
+> > Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
+> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
+> >>         i686 |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/f71ddcd17f4991a3caeaac42c81ed97bdf847718
+> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504
+> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/c359954d671e338997615d3a2f3aca168a53cb91
+> >>  
+> > 
+> > This is relating to O_TMPFILE not being available with this configuration:
+> > 
+> > libcontainer/nsenter/cloned_binary.c:206
+> > #ifdef HAVE_MEMFD_CREATE
+> > 	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
+> > #else
+> > 	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
+> > #endif
+> > 
+> > I'm not aware of what the best alternative to O_TMPFILE in this system
+> > setup would be. Do you (or anyone else) know a good solution to patch in
+> > here for compatibility?  
 > 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
+>  O_TMPFILE was added in Linux 3.11, memfd some time later IIRC. So depending on
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 seems the correct approach.
 
-I don't see how it can fix this build issue, because the defconfig for
-this failure has:
-
-BR2_TOOLCHAIN_HEADERS_AT_LEAST="3.12"
-
-so it *is* using kernel headers more recent than 3.11.
-
-I had a look at your build issue following your e-mail yesterday, and
-indeed O_TMPFILE was added in the kernel headers in 3.11, but
-apparently having 3.11 kernel headers is not sufficient. I suppose some
-code is also needed in the C library, and because the toolchain used by
-this configuration has an old glibc, it doesn't have everything needed
-for O_TMPFILE.
-
-So, your patch is OK in the sense that indeed >= 3.11 is needed, but it
-is wrong in the sense that it is not going to fix the build issue
-you're pointing to.
+Those failures are happening with a toolchain that uses 3.12 kernel
+headers.
 
 Best regards,
 
