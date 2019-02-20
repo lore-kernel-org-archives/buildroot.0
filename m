@@ -1,46 +1,97 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 19 Feb 2019 14:35:30 -0800
-Subject: [Buildroot] [PATCH 3/3] docker-engine: propagate runc headers >=
- 3.11 dependency
-In-Reply-To: <20190219223530.15956-1-christian@paral.in>
-References: <20190219223530.15956-1-christian@paral.in>
-Message-ID: <20190219223530.15956-3-christian@paral.in>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 20 Feb 2019 03:27:37 +0200
+Subject: [Buildroot] [RFT 1/1] package/sunxi-tools: Fix build meminfo with
+ musl
+Message-ID: <20190220012737.19571-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add runc dependency on Linux headers >= 3.11 for O_TMPFILE.
+musl does not provide inx/outx API for ARM arch, so use
+io memory access via pointers which is actually done this
+way in glibc/ulibc.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Fixes:
+    http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/docker-engine/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 3c97310484..87dc86b35b 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-@@ -50,8 +51,9 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 
- endif
- 
--comment "docker-engine needs a glibc or musl toolchain w/ threads"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+  	!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
+Actually the changes are simple and might be taken w/o testing,
+but it would be great if someone can test it as I need some time
+to obtain board with Allwinner's SoC, so I mark this patch with
+RFT (Request For Testing).
+
+ ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+
+diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+new file mode 100644
+index 0000000000..1d158e7309
+--- /dev/null
++++ b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+@@ -0,0 +1,59 @@
++From b29c34772db38ce1386d316a7a08093fa0913447 Mon Sep 17 00:00:00 2001
++From: Vadim Kochan <vadim4j@gmail.com>
++Date: Wed, 20 Feb 2019 02:48:43 +0200
++Subject: [PATCH] meminfo: Access to io memory via pointers
++
++The main reason for this is to be able compile with musl library,
++because there is no support of inx/outx functions for ARM platform.
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ meminfo.c | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/meminfo.c b/meminfo.c
++index 0b0ff23..d1c619a 100644
++--- a/meminfo.c
+++++ b/meminfo.c
++@@ -22,7 +22,6 @@
++ #include <sys/mman.h>
++ #include <stdint.h>
++ #include <errno.h>
++-#include <sys/io.h>
++ #include <stdbool.h>
++ 
++ #include "common.h"
++@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
++ unsigned int
++ sunxi_io_read(void *base, int offset)
++ {
++-	return inl((unsigned long) (base + offset));
+++	unsigned long port = (unsigned long) (base + offset);
+++	return *((volatile unsigned long *) port);
++ }
++ 
++ void
++ sunxi_io_write(void *base, int offset, unsigned int value)
++ {
++-	outl(value, (unsigned long) (base + offset));
+++	unsigned long port = (unsigned long) (base + offset);
+++	*((volatile unsigned long *) port) = value;
++ }
++ 
++ void
++ sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
++ {
++-	unsigned int tmp = inl((unsigned long) (base + offset));
+++	unsigned int tmp = sunxi_io_read(base, offset);
++ 
++ 	tmp &= ~mask;
++ 	tmp |= value & mask;
++ 
++-	outl(tmp, (unsigned long) (base + offset));
+++	sunxi_io_write(tmp, base, offset);
++ }
++ 
++ 
++-- 
++2.14.1
++
 -- 
-2.19.2
+2.14.1
