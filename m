@@ -1,45 +1,60 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Wed, 20 Feb 2019 12:20:16 +0000
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump to version 0.1.0
-Message-ID: <20190220122015.19229-1-adrien@gallouet.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Feb 2019 13:47:08 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-17
+In-Reply-To: <20190219113834.073a4630@windsurf.home>
+References: <20190218070048.D838922270@silver.osuosl.org>
+ <20190218150524.58b7f1a1@x230> <20190219113834.073a4630@windsurf.home>
+Message-ID: <23ee4267-a989-942d-4101-15d834008801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hash of the license file is only changed due to a year update:
 
--Copyright (c) 2015-2016, angt
-+Copyright (c) 2015-2019, angt
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/glorytun/glorytun.hash | 4 ++--
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 19/02/2019 11:38, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 18 Feb 2019 15:05:24 +0100
+> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+> 
+>> fftw is unable to find libquadmath.so but this library is  missing in
+>> x86_64-ctng_locales-linux-gnu.tar.xz.
+> 
+> Grmfmfm. We currently have:
+> 
+> config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+>         bool
+>         default y if BR2_i386 || BR2_x86_64
+> 
+> However, it turns out that libquadmath can be disabled in gcc, and
+> guess what, the gcc in the toolchain causing the failure has been built
+> with --disable-libquadmath.
+> 
+> So it seems like we need to turn this into a real Config.in option:
+> 
+>  - BR2_TOOLCHAIN_HAS_LIBQUADMATH remains a hidden option, has no
+>    default value, and a depends on BR2_i386 || BR2_x86_64
+> 
+>  - The internal toolchain backend selects it because we always enable
+>    it for internal toolchains (to be checked)
+> 
+>  - All pre-defined external toolchain packages must be updated to
+>    select it
+> 
+>  - toolchain-external-custom needs to be extended with a
+>    BR2_TOOLCHAIN_EXTERNAL_LIBQUADMATH option that users can set/unset.
+>    It should depends on BR2_i386 / BR2_x86_64, default to yes, and
+>    select BR2_TOOLCHAIN_HAS_LIBQUADMATH.
+> 
+>  - A check needs to be added in toolchain/helpers.mk to verify that the
+>    value of BR2_TOOLCHAIN_HAS_LIBQUADMATH matches the presence/absence
+>    of libquadmath in the toolchain.
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 59a5f09c0e..85ae338c48 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
--sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
-+sha256 65adee2945f377ec41c1384745d5676c99768bba8fd4456755ee4c7d73915ede  glorytun-0.1.0.tar.gz
-+sha256 051ef5a4c3c8fe64f8641e0ed50b4cd35c64703d972130f9725c8fee7976f90b  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index f6d87c2605..9fed5d260d 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLORYTUN_VERSION = 0.0.99-mud
-+GLORYTUN_VERSION = 0.1.0
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
--- 
-2.19.1
+ Or we can say that this is an exceptional situation and exclude this toolchain
+in genrandconfig. fftw-quad is the only package that depends on quadmath.
+
+ Regards,
+ Arnout
