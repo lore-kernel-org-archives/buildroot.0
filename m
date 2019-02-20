@@ -1,53 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Feb 2019 09:08:29 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-02-14
-In-Reply-To: <a1b02faf-5b05-b7fd-a311-4dc0a5bc8fd4@mind.be>
-References: <5c666398.1c69fb81.1f9f6.2db0SMTPIN_ADDED_MISSING@mx.google.com>
- <87d0no1w9p.fsf@paral.in>
- <a1b02faf-5b05-b7fd-a311-4dc0a5bc8fd4@mind.be>
-Message-ID: <20190220090829.6cb610b0@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Feb 2019 09:45:26 +0000
+Subject: [Buildroot] [Bug 11681] New:
+ .../buildroot/output/host/bin/x86_64-buildroot-linux-gnu-ld:
+ arch/x86/kernel/head_64.o: unable to initialize decompress status for
+ section .debug_line
+Message-ID: <bug-11681-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+https://bugs.busybox.net/show_bug.cgi?id=11681
 
-On Tue, 19 Feb 2019 23:14:33 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+            Bug ID: 11681
+           Summary: .../buildroot/output/host/bin/x86_64-buildroot-linux-g
+                    nu-ld: arch/x86/kernel/head_64.o: unable to initialize
+                    decompress status for section .debug_line
+           Product: buildroot
+           Version: 2018.11.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: janusz.krzysztofik at intel.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> > Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
-> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
-> >>         i686 |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/f71ddcd17f4991a3caeaac42c81ed97bdf847718
-> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504
-> >>          arm |                runc-v1.0.0-rc6 | http://autobuild.buildroot.net/results/c359954d671e338997615d3a2f3aca168a53cb91
-> >>  
-> > 
-> > This is relating to O_TMPFILE not being available with this configuration:
-> > 
-> > libcontainer/nsenter/cloned_binary.c:206
-> > #ifdef HAVE_MEMFD_CREATE
-> > 	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
-> > #else
-> > 	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
-> > #endif
-> > 
-> > I'm not aware of what the best alternative to O_TMPFILE in this system
-> > setup would be. Do you (or anyone else) know a good solution to patch in
-> > here for compatibility?  
-> 
->  O_TMPFILE was added in Linux 3.11, memfd some time later IIRC. So depending on
-> BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 seems the correct approach.
+Hi,
 
-Those failures are happening with a toolchain that uses 3.12 kernel
-headers.
+Buildroot 2018.11.2 hosted on Fedora 29 here. The failure started appearing
+during kernel build surprisingly after elfutils RPMs had been upgraded from
+0.174 to 0.176.
 
-Best regards,
+Two workarounds worked for me:
+- downgrading elfutils RPMs back to 0.174,
+- symlinking .../buildroot/output/host/bin/x86_64-buildroot-linux-gnu-ld to a
+fixed one provided by Fedora 29 RPM bintuils-2.31.1-18.fc19 (see Changelog on
+https://koji.fedoraproject.org/koji/buildinfo?buildID=1211905).
 
-Thomas
+For more details, please see:
+https://bugzilla.redhat.com/show_bug.cgi?id=1678204#c11
+https://sourceware.org/bugzilla/show_bug.cgi?id=23919
+
+My conclusion is, something under output/ (probably
+output/build/linux-xxx/tools/objtool/objtool) used for building the kernel is
+using host provided libelf.
+
+$ ldd ./output/build/linux-custom/tools/objtool/objtool
+        linux-vdso.so.1 (0x00007ffc5bed4000)
+        libelf.so.1 => /lib64/libelf.so.1 (0x00007f1c23c78000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f1c23ab2000)
+        libz.so.1 => /home/jkrzyszt/git/buildroot/output/host/lib/libz.so.1
+(0x00007f1c23a98000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f1c23cb7000)
+
+I can see 2 possible ways of fixing the issue:
+a) making objtool (or other executable which exposes the issue if that's not
+objtool) use libelf provided by buildroot (the preferred way, I believe),
+or
+b) applying the fix from
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=88739f776b733b0b84600b283417f862a010bb5d
+on binutils so it doesn't suffer from the issue whatever libelf version is
+installed on a host.
+
+BTW, the bug also exists in 2019.02-rc1.
+
+Thanks,
+Janusz
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
