@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Feb 2019 22:23:09 +0100
-Subject: [Buildroot] [PATCH] package/luvi: bump to version 2.9.0 to fix
- build with OpenSSL 1.1.1a
-In-Reply-To: <20190219204401.5326-1-joerg.krause@embedded.rocks>
-References: <20190219204401.5326-1-joerg.krause@embedded.rocks>
-Message-ID: <58f352e4-4bed-ff13-70e0-929029a8574a@mind.be>
+Date: Wed, 20 Feb 2019 22:30:26 +0100
+Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11
+ for O_TMPFILE
+In-Reply-To: <20190220090108.6e2d1e9a@windsurf>
+References: <20190219223530.15956-1-christian@paral.in>
+ <20190220090108.6e2d1e9a@windsurf>
+Message-ID: <0f51e6e8-4a4d-faf1-ef58-9c3685a83c1d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,44 @@ To: buildroot@busybox.net
 
 
 
-On 19/02/2019 21:44, J?rg Krause wrote:
-> Bump to latest release that bundles lua-openssl 0.7.4 to fix compatibility
-> with OpenSSL 1.1.1a.
+On 20/02/2019 09:01, Thomas Petazzoni wrote:
+> Hello Christian,
 > 
-> Drop patches 0001 and 0002 that are included in the new release.
+> On Tue, 19 Feb 2019 14:35:28 -0800
+> Christian Stewart <christian@paral.in> wrote:
 > 
-> Successfully build and runtime tested on Banana Pro, note that version string
-> for lua-openssl does not match the tag name (0.7.4):
+>> Add dependency on headers >= 3.11. O_TMPFILE, required by runc, was not
+>> available until this version.
+>>
+>> Fixes:
+>>
+>> http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
 > 
-> ```
-> luvi v2.9.0
-> zlib: 1.2.11
-> libuv: 1.25.0
-> ssl: OpenSSL 1.1.1a  20 Nov 2018, lua-openssl 0.7.3
-> ```
+> I don't see how it can fix this build issue, because the defconfig for
+> this failure has:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/e87994a3dc987f5aa101a5e721ac927e21453373
-> http://autobuild.buildroot.net/results/ea725ad90cfcd3c5e242268a593dcabd7297fe70
-> http://autobuild.buildroot.net/results/f2fb9eea0044e4a5f674742d29ea95af49cf5a45
-> http://autobuild.buildroot.net/results/de4daa1b930f907f06640dc98a708016217ddea5
-> .. and many more.
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST="3.12"
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> so it *is* using kernel headers more recent than 3.11.
+> 
+> I had a look at your build issue following your e-mail yesterday, and
+> indeed O_TMPFILE was added in the kernel headers in 3.11, but
+> apparently having 3.11 kernel headers is not sufficient. I suppose some
+> code is also needed in the C library, and because the toolchain used by
+> this configuration has an old glibc, it doesn't have everything needed
+> for O_TMPFILE.
 
- Bumping 2 years worth of versions during the -rc cycle is not something we
-normally do, but most changes are anyway bumps of the submodules, and there is
-no trivial way to fix it otherwise, so I've applied to master, thanks.
+ Darn. So how do we handle that? We don't have anything for GLIBC_AT_LEAST (much
+less MUSL_AT_LEAST or UCLIBC_AT_LEAST...). I don't really want to start adding
+*those* either...
+
+> 
+> So, your patch is OK in the sense that indeed >= 3.11 is needed, but it
+> is wrong in the sense that it is not going to fix the build issue
+> you're pointing to.
+
+ If it doesn't fix the autobuild issue, it's kind of useless, so I've marked
+this patch as Changes Requested.
 
  Regards,
  Arnout
