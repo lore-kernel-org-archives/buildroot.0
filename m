@@ -1,40 +1,36 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 20 Feb 2019 21:51:09 +0100
-Subject: [Buildroot] [git commit] package/poco: disable build for riscv
-Message-ID: <20190220204935.E68CC8847E@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Feb 2019 21:17:54 +0000
+Subject: [Buildroot] [Bug 11681]
+ .../buildroot/output/host/bin/x86_64-buildroot-linux-gnu-ld:
+ arch/x86/kernel/head_64.o: unable to initialize decompress status for
+ section .debug_line
+In-Reply-To: <bug-11681-163@https.bugs.busybox.net/>
+References: <bug-11681-163@https.bugs.busybox.net/>
+Message-ID: <bug-11681-163-yPfbFwiRMz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0737f48c5f8f502cd16123c5251d4ccaaee900ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11681
 
-poco does not support the riscv target.
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-Fixes:
-http://autobuild.buildroot.net/results/9a8/9a8213c502df53222eafc3ecd2fcfa36db20950b/
-http://autobuild.buildroot.net/results/dd4/dd48cac70e8cb697b42ee51561902df81edcea40/
-http://autobuild.buildroot.net/results/030/030c6cc8e2a59b015f8f3793d76234a2ef4ab772/
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/poco/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+You need to set BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y.
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 75e31b7e1e..7e1257146c 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_POCO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
--		|| BR2_or1k || BR2_xtensa)
-+		|| BR2_or1k || BR2_riscv || BR2_xtensa)
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	help
+Perhaps we should add a check in linux.mk that detects that the kernel build
+will use libelf, and error out before building if
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF is not set.
+
+For now, however, I'm marking this as WORKSFORME.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
