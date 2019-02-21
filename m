@@ -1,28 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 17:21:02 +0100
-Subject: [Buildroot] [PATCH v2,1/2] package/libid3tag: fix id3tag.pc
-In-Reply-To: <20190216134017.3083-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 16 Feb 2019 14:40:16 +0100")
-References: <20190216134017.3083-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d0nlqfip.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Feb 2019 17:14:00 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/madplay: add hash
+ for license files
+Message-ID: <20190221161919.041837F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2e0921cc80668e5dd9b71ca9bc089cbe5ce85c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Add -lz to id3tag.pc, this fix is needed to be able to use pkg-config in
- > madplay to find id3tag dependencies
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c4211a7d64a7756bee15b88e8211511d5bbd4c27)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/madplay/madplay.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Move -lz from Libs to Libs.private
-
-Ups, to be clear - I've cherry picked v2, and not v1 for 2018.02.x /
-2018.11.x.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/madplay/madplay.hash b/package/madplay/madplay.hash
+index 99487b5ecd..227702976b 100644
+--- a/package/madplay/madplay.hash
++++ b/package/madplay/madplay.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  5a79c7516ff7560dffc6a14399a389432bc619c905b13d3b73da22fa65acede0  madplay-0.15.2b.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  915bfd70548f31d11f9b4ffb21f343d1196af96c79d6aaac5663ea46c39dd3a3  COPYRIGHT
