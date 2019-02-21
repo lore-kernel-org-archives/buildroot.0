@@ -1,33 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 17:26:15 +0100
-Subject: [Buildroot] 2019.02-rc1 doesn't boot properly
-In-Reply-To: <20190220163206.GB9224@smile.fi.intel.com> (Andy Shevchenko's
- message of "Wed, 20 Feb 2019 18:32:06 +0200")
-References: <20190220163206.GB9224@smile.fi.intel.com>
-Message-ID: <878sy9qfa0.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 21 Feb 2019 14:23:55 -0600
+Subject: [Buildroot] [PATCH] package/proftpd: require threads
+In-Reply-To: <ba989973-2303-ddda-ca3c-bceb90ea6bec@mind.be>
+References: <1550694551-61136-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <ba989973-2303-ddda-ca3c-bceb90ea6bec@mind.be>
+Message-ID: <CANQCQpZozfmuWOa9yo6AG5PssJtPMkvgU83qouPacCJ3M5ArMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@intel.com> writes:
+Arnout,
 
- > Hello,
- > Recently I had tried to boot 2019-02.rc1 on my Intel Edison board (after few
- > iterations I confirm that the issue somewhere in Buildroot,
- > since 2018.11.x works with the same configuration), but it went unsuccessfully.
 
- > It's a bit hard for me and time consuming to debug right now, though here are
- > the symptoms. Since I have SSH and network enabled it looks like ssh-keygen
- > goes to endless wait for entropy / random generator (?) and never becomes back
- > that prevents to have a shell. Everything from kernel till daemons and modules
- > works. (I have USB OTG enabled and I see dmesg when I switched USB roles).
- > Is it known issue?
+On Wed, Feb 20, 2019 at 3:57 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 20/02/2019 21:29, Matt Weber wrote:
+> > Fixes
+> > http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
+>
+>  proftpd hasn't been updated in a long time, yet this issue only appeared
+> recently. It was triggered by the update of the toolchains.
 
-Not that I am aware of. Are you using the same kernel version as for
-2018.11? The kernel recently(-ish) changed the way lack of entropy is
-handled, leading to hangs / very slow boot.
+Yep,  I also noticed I could not reproduce it by explicitly building
+the package (make proftpd).  Had to let things fall into some
+undefined order to get it to fail. (make all)
 
--- 
-Bye, Peter Korsgaard
+>
+>  I'm not sure what exactly differs between the previous toolchains and the
+> current toolchains, but it is clear that proftpd incorrectly links with
+> -lpthread. It doesn't actually use threads itself. It only adds -lpthread if it
+> is required for mysql, postgresql or openssl.
+>
+>  mysql depends on threads, so that's not it.
+>
+>  postgresql is not selected in the failing build, so I didn't look at that.
+>
+>  openssl is selected, so that's the culprit. configure.in contains the following
+> fragment for it:
+>
+
+[snip]
+
+>
+>  I *think* we can get away with just passing --without-openssl-cmdline due to
+> the strange and intricate way that that option ends up being used by the
+> configure script. But it would have to be tested :-)
+
+I'll kick something off and see.
+
+Matt
