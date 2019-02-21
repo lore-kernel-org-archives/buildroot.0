@@ -1,27 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Feb 2019 08:05:37 +0000
-Subject: [Buildroot] [Bug 11681]
- .../buildroot/output/host/bin/x86_64-buildroot-linux-gnu-ld:
- arch/x86/kernel/head_64.o: unable to initialize decompress status for
- section .debug_line
-In-Reply-To: <bug-11681-163@https.bugs.busybox.net/>
-References: <bug-11681-163@https.bugs.busybox.net/>
-Message-ID: <bug-11681-163-WWZ94OmFNs@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 21 Feb 2019 09:30:57 +0100
+Subject: [Buildroot] [git commit] package/poco: disable build for riscv
+In-Reply-To: <20190220204935.E68CC8847E@busybox.osuosl.org>
+References: <20190220204935.E68CC8847E@busybox.osuosl.org>
+Message-ID: <20190221093057.648e0836@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11681
+On Wed, 20 Feb 2019 21:51:09 +0100
+Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
 
---- Comment #2 from Janusz Krzysztofik <janusz.krzysztofik@intel.com> ---
-Thanks for the solution, now I see my request should really go to a user
-support list not to bugzilla, sorry for spamming your bug tracking system.
+> diff --git a/package/poco/Config.in b/package/poco/Config.in
+> index 75e31b7e1e..7e1257146c 100644
+> --- a/package/poco/Config.in
+> +++ b/package/poco/Config.in
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_POCO
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	depends on !BR2_STATIC_LIBS # dlopen()
+>  	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+> -		|| BR2_or1k || BR2_xtensa)
+> +		|| BR2_or1k || BR2_riscv || BR2_xtensa)
 
-Thanks,
-Janusz
+Perhaps at some point we should invert this logic and move to an option
+like this:
 
+config BR2_PACKAGE_POCO_ARCH_SUPPORTS
+	bool
+	default y if ...
+	default y if ...
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
