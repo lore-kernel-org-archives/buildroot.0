@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:46:29 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ghostscript: add
+Date: Thu, 21 Feb 2019 11:46:13 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/ghostscript: add
  upstream security fixes
-Message-ID: <20190221104428.3DC20885CD@busybox.osuosl.org>
+Message-ID: <20190221104432.164AA88F40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf542edfe10b864c30ec9436413e9d2119d5cb46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ed3d05594149c5703750ff8d421f9b98e728c12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 CVE-2019-6116: Remote code execution.
 
