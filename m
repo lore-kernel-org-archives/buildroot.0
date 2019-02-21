@@ -1,84 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 17:19:33 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/madplay: fix
- static build
-Message-ID: <20190221161919.1A40C80257@busybox.osuosl.org>
+Date: Thu, 21 Feb 2019 17:14:59 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/madplay: add hash
+ for license files
+Message-ID: <20190221161923.2ABFC860B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95f394bc119c873b1ea51c4d622c32c47d07ea04
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
-
-Add a patch to use pkg-config to find id3tag dependency (-lz)
-
-Fixes:
- - http://autobuild.buildroot.org/results/5e4882ddacf205a92a3ff1e79649cf16e4b6c0ae
+commit: https://git.buildroot.net/buildroot/commit/?id=9d27255a4e03ec02c4a8046d1fdae7a1df6077de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Arnout: add comment to AUTORECONF to refer to the patch]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit da304a832b9a0f5f5ef62c244f67e5f5ae39748e)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c4211a7d64a7756bee15b88e8211511d5bbd4c27)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...onfigure-ac-use-pkg-config-to-find-id3tag.patch | 23 ++++++++++++++++++++++
- package/madplay/madplay.mk                         |  5 +++--
- 2 files changed, 26 insertions(+), 2 deletions(-)
+ package/madplay/madplay.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch b/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch
-new file mode 100644
-index 0000000000..47645edd4c
---- /dev/null
-+++ b/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch
-@@ -0,0 +1,23 @@
-+configure.ac: use pkg-config to find id3tag
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -durN madplay-0.15.2b-orig/configure.ac madplay-0.15.2b/configure.ac
-+--- madplay-0.15.2b-orig/configure.ac	2019-02-14 21:34:01.507212449 +0100
-++++ madplay-0.15.2b/configure.ac	2019-02-15 23:24:00.079876087 +0100
-+@@ -182,12 +182,13 @@
-+ *** environment variable to specify its installed location, e.g. -L<dir>.])
-+ ])
-+ 
-+-AC_CHECK_LIB(id3tag, id3_tag_parse, :, [
-++PKG_CHECK_MODULES(ID3TAG, id3tag, [
-++	CFLAGS="$CFLAGS $ID3TAG_CFLAGS" LIBS="$LIBS $ID3TAG_LIBS"], [
-+ 	AC_MSG_ERROR([libid3tag was not found
-+ *** You must first install libid3tag before you can build this package.
-+ *** If libid3tag is already installed, you may need to use the LDFLAGS
-+ *** environment variable to specify its installed location, e.g. -L<dir>.])
-+-], [-lz])
-++])
-+ 
-+ AC_FUNC_VPRINTF
-+ AC_CHECK_FUNCS(madvise localeconv)
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index dd54e2e78f..e1a78bd7d7 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -8,17 +8,18 @@ MADPLAY_VERSION = 0.15.2b
- MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
- MADPLAY_LICENSE = GPL-2.0+
- MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
--MADPLAY_DEPENDENCIES = libmad libid3tag $(TARGET_NLS_DEPENDENCIES)
-+MADPLAY_DEPENDENCIES = host-pkgconf libmad libid3tag $(TARGET_NLS_DEPENDENCIES)
- 
- # Force autoreconf to be able to use a more recent libtool script, that
- # is able to properly behave in the face of a missing C++ compiler.
-+# Also 0003-configure-ac-use-pkg-config-to-find-id3tag.patch
- MADPLAY_AUTORECONF = YES
- 
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
- MADPLAY_CONF_OPTS += --with-alsa
--MADPLAY_DEPENDENCIES += host-pkgconf alsa-lib
-+MADPLAY_DEPENDENCIES += alsa-lib
- MADPLAY_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs alsa`"
- endif
- 
+diff --git a/package/madplay/madplay.hash b/package/madplay/madplay.hash
+index 99487b5ecd..227702976b 100644
+--- a/package/madplay/madplay.hash
++++ b/package/madplay/madplay.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  5a79c7516ff7560dffc6a14399a389432bc619c905b13d3b73da22fa65acede0  madplay-0.15.2b.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  915bfd70548f31d11f9b4ffb21f343d1196af96c79d6aaac5663ea46c39dd3a3  COPYRIGHT
