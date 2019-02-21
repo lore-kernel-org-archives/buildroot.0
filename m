@@ -1,28 +1,65 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 21 Feb 2019 17:27:24 -0300
-Subject: [Buildroot] [PATCH 0/2] package/snort: bump to version 2.9.12
-Message-ID: <1550780846-7463-1-git-send-email-sergio.prado@e-labworks.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 21 Feb 2019 14:36:56 -0600
+Subject: [Buildroot] [PATCH] package/proftpd: require threads
+In-Reply-To: <CANQCQpZozfmuWOa9yo6AG5PssJtPMkvgU83qouPacCJ3M5ArMw@mail.gmail.com>
+References: <1550694551-61136-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <ba989973-2303-ddda-ca3c-bceb90ea6bec@mind.be>
+ <CANQCQpZozfmuWOa9yo6AG5PssJtPMkvgU83qouPacCJ3M5ArMw@mail.gmail.com>
+Message-ID: <CANQCQpYSn1rNFMceihbe7iHwmEo-1frwBPAbMSe8k1fm-Wm3Sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series will bump snort version to 2.9.12.
+Arnout,
 
-Since in this version OpenAppID is enabled by default, let's build it
-only of its dependencies are enabled (luajit and openssl).
+On Thu, Feb 21, 2019 at 2:23 PM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Arnout,
+>
+>
+> On Wed, Feb 20, 2019 at 3:57 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> >
+> > On 20/02/2019 21:29, Matt Weber wrote:
+> > > Fixes
+> > > http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
+> >
+> >  proftpd hasn't been updated in a long time, yet this issue only appeared
+> > recently. It was triggered by the update of the toolchains.
+>
+> Yep,  I also noticed I could not reproduce it by explicitly building
+> the package (make proftpd).  Had to let things fall into some
+> undefined order to get it to fail. (make all)
+>
+> >
+> >  I'm not sure what exactly differs between the previous toolchains and the
+> > current toolchains, but it is clear that proftpd incorrectly links with
+> > -lpthread. It doesn't actually use threads itself. It only adds -lpthread if it
+> > is required for mysql, postgresql or openssl.
+> >
+> >  mysql depends on threads, so that's not it.
+> >
+> >  postgresql is not selected in the failing build, so I didn't look at that.
+> >
+> >  openssl is selected, so that's the culprit. configure.in contains the following
+> > fragment for it:
+> >
+>
+> [snip]
+>
+> >
+> >  I *think* we can get away with just passing --without-openssl-cmdline due to
+> > the strange and intricate way that that option ends up being used by the
+> > configure script. But it would have to be tested :-)
+>
+> I'll kick something off and see.
 
-Sergio Prado (2):
-  package/snort: bump to version 2.9.12
-  package/snort: build with OpenAppID support if luajit/openssl is
-    enabled
+I was able to recreate a quick failure with "make openssl host-openssl
+proftpd".  Then with --without-openssl-cmdline added to
+PROFTPD_CONF_OPTS, it did resolve the build failure.  I'll spin a v2.
 
- ...-error-when-building-against-uclibc-or-mu.patch | 34 ++++++++++++++++++++++
- package/snort/snort.hash                           |  2 +-
- package/snort/snort.mk                             | 11 ++++++-
- 3 files changed, 45 insertions(+), 2 deletions(-)
- create mode 100644 package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
-
--- 
-2.7.4
+Matt
