@@ -1,46 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 13:49:48 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
- package/docker-containerd: fix typo in uclibc dependency
-Message-ID: <20190221125148.A92EF7FA18@busybox.osuosl.org>
+Date: Thu, 21 Feb 2019 13:48:46 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/runc: bump to
+ version 1.0.0-rc6
+Message-ID: <20190221125148.9C2938CA4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80375ba988d2a8e3d6ab7a6c3a410197ac8850eb
+commit: https://git.buildroot.net/buildroot/commit/?id=0011277a9db12a26f17cb3494a28ee0cabad3092
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Commit 6e3f7fbc072c88ab344f2ffa39e402464b566f19 ("package/runc: add
-upstream security fix for CVE-2019-5736") added a dependency of
-docker-containerd to uclibc (inherited from runc), but the depends on
-has a typo that makes it ineffective. Due to this, docker-containerd
-can still be selected in uClibc configurations, causing runc to be
-build, and failing to build due fexecve() being missing in uClibc.
+Previously, a specific commit hash from the Docker runc.installer was
+used to determine the required runc version for the Docker
+Engine. This old commit hash used was a untagged pre-1.0.0 release of
+runc, closer to an earlier release candidate.
 
-Fixes:
+The runc version used in the Debian distribution is not the pinned
+version previously used by Buildroot. It is the latest release
+candidate. The latest release candidate is known to be compatible with
+the Docker Engine, and there is no justification for pinning to an
+older RC anymore.
 
-  http://autobuild.buildroot.net/results/64ecdb1e007106fdb05979b10b42b90591255504/
+This commit bumps to the latest RC, 1.0.0-rc6. A v1.0.0 is expected
+soon.
 
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 17c7b9337989092ee3659aaa01fb508efd144c16)
+(cherry picked from commit 247bb52b9c87bbf6535928fdba7df6efd8d165ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index bdb5dd7b80..5e0cc1e877 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_PACKAGE_TOOLCHAIN_USES_UCLIBC # runc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 853cbb1465..1636e5b8e9 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	994a3a0447fcbf7e37614b02aa5604d2d6b9fdb41e6870d8d3ff1138ed6e61ef  runc-69663f0bd4b60df09991c08812a60108003fa340.tar.gz
++sha256	a221f8380e7b5806031f54d423af6dde24c305dad49868056cf70e5f5f4ef771  runc-v1.0.0-rc6.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 7f42c962f3..0539661266 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
+ 
+-# docker-engine/hack/dockerfile/install/runc.installer:4 RUNC_COMMIT=...
+-RUNC_VERSION = 69663f0bd4b60df09991c08812a60108003fa340
++RUNC_VERSION = v1.0.0-rc6
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
