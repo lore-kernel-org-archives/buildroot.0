@@ -1,65 +1,98 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 21 Feb 2019 14:36:56 -0600
-Subject: [Buildroot] [PATCH] package/proftpd: require threads
-In-Reply-To: <CANQCQpZozfmuWOa9yo6AG5PssJtPMkvgU83qouPacCJ3M5ArMw@mail.gmail.com>
-References: <1550694551-61136-1-git-send-email-matthew.weber@rockwellcollins.com>
- <ba989973-2303-ddda-ca3c-bceb90ea6bec@mind.be>
- <CANQCQpZozfmuWOa9yo6AG5PssJtPMkvgU83qouPacCJ3M5ArMw@mail.gmail.com>
-Message-ID: <CANQCQpYSn1rNFMceihbe7iHwmEo-1frwBPAbMSe8k1fm-Wm3Sw@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Thu, 21 Feb 2019 17:27:26 -0300
+Subject: [Buildroot] [PATCH 2/2] package/snort: build with OpenAppID support
+ if luajit/openssl is enabled
+In-Reply-To: <1550780846-7463-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1550780846-7463-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <1550780846-7463-3-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Since version 2.9.12, OpenAppID [1] is enabled by default.
 
-On Thu, Feb 21, 2019 at 2:23 PM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Arnout,
->
->
-> On Wed, Feb 20, 2019 at 3:57 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 20/02/2019 21:29, Matt Weber wrote:
-> > > Fixes
-> > > http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
-> >
-> >  proftpd hasn't been updated in a long time, yet this issue only appeared
-> > recently. It was triggered by the update of the toolchains.
->
-> Yep,  I also noticed I could not reproduce it by explicitly building
-> the package (make proftpd).  Had to let things fall into some
-> undefined order to get it to fail. (make all)
->
-> >
-> >  I'm not sure what exactly differs between the previous toolchains and the
-> > current toolchains, but it is clear that proftpd incorrectly links with
-> > -lpthread. It doesn't actually use threads itself. It only adds -lpthread if it
-> > is required for mysql, postgresql or openssl.
-> >
-> >  mysql depends on threads, so that's not it.
-> >
-> >  postgresql is not selected in the failing build, so I didn't look at that.
-> >
-> >  openssl is selected, so that's the culprit. configure.in contains the following
-> > fragment for it:
-> >
->
-> [snip]
->
-> >
-> >  I *think* we can get away with just passing --without-openssl-cmdline due to
-> > the strange and intricate way that that option ends up being used by the
-> > configure script. But it would have to be tested :-)
->
-> I'll kick something off and see.
+OpenAppID depends on luajit and openssl. If we leave it enabled by
+default, snort would require luajit. Since luajit is not available on
+all architectures, that would limit the usage of the snort package.
 
-I was able to recreate a quick failure with "make openssl host-openssl
-proftpd".  Then with --without-openssl-cmdline added to
-PROFTPD_CONF_OPTS, it did resolve the build failure.  I'll spin a v2.
+Since not all users will need/use OpenAppID, let's leave it disabled by
+default. To build with OpenAppID support, the user will need to enable
+luajit and libssl.
 
-Matt
+Also, it is necessary to apply a patch to fix a compile error when
+building OpenAppID with uclibc and musl. The build fails when
+dereferencing the rpcent structure because rpc.h is not been included.
+
+[1] https://www.snort.org/downloads/openappid/9553
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ ...-error-when-building-against-uclibc-or-mu.patch | 34 ++++++++++++++++++++++
+ package/snort/snort.mk                             |  9 ++++++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
+
+diff --git a/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch b/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
+new file mode 100644
+index 000000000000..ce9d5526c841
+--- /dev/null
++++ b/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
+@@ -0,0 +1,34 @@
++From dc2f54097da3cd493b8f4d06a14ef40be484d24f Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Thu, 21 Feb 2019 15:02:08 -0300
++Subject: [PATCH] Fix compile error when building against uclibc or musl
++
++The build fails when dereferencing the rpcent structure with uclibc or musl C libraries.
++
++../../../src/dynamic-preprocessors/appid/service_plugins/service_rpc.c:241:20:
++error: dereferencing pointer to incomplete type ?struct rpcent?
++             if (rpc->r_name)
++
++That's because rpc.h should be included when using these C libraries.
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ src/dynamic-preprocessors/appid/service_plugins/service_rpc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c b/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
++index 81bc8a5db8ab..2e45246083a8 100644
++--- a/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
+++++ b/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
++@@ -32,7 +32,7 @@
++ #include "flow.h"
++ #include "service_api.h"
++ 
++-#if defined(FREEBSD) || defined(OPENBSD)
+++#if defined(FREEBSD) || defined(OPENBSD) || (defined(LINUX) && defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__) || !defined(__GLIBC__))
++ #include "rpc/rpc.h"
++ #endif
++ 
++-- 
++2.7.4
++
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 30de02b3a8b1..c767d7c5458a 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -26,6 +26,15 @@ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+ endif
+ 
++# luajit and openssl should be enabled to build with
++# OpenAppID support
++ifeq ($(BR2_PACKAGE_LUAJIT)$(BR2_PACKAGE_OPENSSL),yy)
++SNORT_DEPENDENCIES += luajit openssl
++SNORT_CONF_OPTS += --enable-open-appid
++else
++SNORT_CONF_OPTS += --disable-open-appid
++endif
++
+ SNORT_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) $(SNORT_CFLAGS)" \
+ 	LIBS="$(SNORT_LIBS)" \
+-- 
+2.7.4
