@@ -1,35 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 17:18:21 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libid3tag: fix
- id3tag.pc
-Message-ID: <20190221161923.37B97860B6@busybox.osuosl.org>
+Date: Thu, 21 Feb 2019 17:26:15 +0100
+Subject: [Buildroot] 2019.02-rc1 doesn't boot properly
+In-Reply-To: <20190220163206.GB9224@smile.fi.intel.com> (Andy Shevchenko's
+ message of "Wed, 20 Feb 2019 18:32:06 +0200")
+References: <20190220163206.GB9224@smile.fi.intel.com>
+Message-ID: <878sy9qfa0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72751071f91b66d64c9f2ca840defe1c918025d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@intel.com> writes:
 
-Add -lz to id3tag.pc, this fix is needed to be able to use pkg-config in
-madplay to find id3tag dependencies
+ > Hello,
+ > Recently I had tried to boot 2019-02.rc1 on my Intel Edison board (after few
+ > iterations I confirm that the issue somewhere in Buildroot,
+ > since 2018.11.x works with the same configuration), but it went unsuccessfully.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit aa813cd9ac029a8373070ac2c1479dd9aa32ce59)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libid3tag/id3tag.pc | 1 +
- 1 file changed, 1 insertion(+)
+ > It's a bit hard for me and time consuming to debug right now, though here are
+ > the symptoms. Since I have SSH and network enabled it looks like ssh-keygen
+ > goes to endless wait for entropy / random generator (?) and never becomes back
+ > that prevents to have a shell. Everything from kernel till daemons and modules
+ > works. (I have USB OTG enabled and I see dmesg when I switched USB roles).
+ > Is it known issue?
 
-diff --git a/package/libid3tag/id3tag.pc b/package/libid3tag/id3tag.pc
-index 845eb3276b..63d09eee8b 100644
---- a/package/libid3tag/id3tag.pc
-+++ b/package/libid3tag/id3tag.pc
-@@ -8,4 +8,5 @@ Description: ID3 tag reading library
- Version: 0.15.1b
- Requires:
- Libs: -L${libdir} -lid3tag
-+Libs.private: -lz
- Cflags: -I${includedir}
+Not that I am aware of. Are you using the same kernel version as for
+2018.11? The kernel recently(-ish) changed the way lack of entropy is
+handled, leading to hangs / very slow boot.
+
+-- 
+Bye, Peter Korsgaard
