@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:33:15 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] openssh: add upstream
+Date: Thu, 21 Feb 2019 11:32:40 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] openssh: add upstream
  security fixes
-Message-ID: <20190221103137.BDF5F8D32B@busybox.osuosl.org>
+Message-ID: <20190221103142.0B7978D32B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3d5d6919a3f4cf47820849da8277761c5e15b80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a65615d9543a3261a9ac888bbdfadd15dd8c1c70
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 CVE-2019-6109: Due to missing character encoding in the progress
 display, a malicious server (or Man-in-The-Middle attacker) can employ
