@@ -1,81 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:36:04 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] jpeg-turbo: bump to
- version 2.0.0
-Message-ID: <20190221104037.4190F8106A@busybox.osuosl.org>
+Date: Thu, 21 Feb 2019 11:36:53 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] jpeg-turbo: fix install
+ with a static only lib
+Message-ID: <20190221104037.4FC6F8106A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52c04dcf9cf5c65ff5f449cbcbf5d718246db6ef
+commit: https://git.buildroot.net/buildroot/commit/?id=493a7779e421859abd38085e6e4bee8e1b1d7d7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-- Move to cmake-infrastructure
-- Update hash of license files: minor updates and clarifications
+Define CMAKE_INSTALL_RPATH only if ENABLE_SHARED is set otherwise the
+following error is raised when installing binaries:
+
+CMake Error at cmake_install.cmake:73 (file):
+  file RPATH_CHANGE could not write new RPATH:
+
+    /usr/lib
+
+  to the file:
+
+    /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/rdjpgcom
+
+  No valid ELF RPATH or RUNPATH entry exists in the file;
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5b354383ce7dc369edf212fec6776438b24a4b66)
+(cherry picked from commit 7f905250bf66542efa3cd4dfbbb672aa1db0ce3c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 12 ++++++------
- package/jpeg-turbo/jpeg-turbo.mk   | 10 +++++-----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ ...ll-of-binaries-with-a-static-only-library.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index df1c053005..f0fc5396ef 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/
--sha1 87ebf4cab2bb27fcb8e7ccb18ec4eb680e1f2c2d  libjpeg-turbo-1.5.3.tar.gz
--md5 7c82f0f6a3130ec06b8a4d0b321cbca3  libjpeg-turbo-1.5.3.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.0/
-+sha1 fe49aea935617748c21ecbe46c986d6c1b98f39b  libjpeg-turbo-2.0.0.tar.gz
-+md5 b12a3fcf1d078db38410f27718a91b83  libjpeg-turbo-2.0.0.tar.gz
- # Locally computed
--sha256 b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523  libjpeg-turbo-1.5.3.tar.gz
--sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
--sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-+sha256 778876105d0d316203c928fd2a0374c8c01f755d0a00b12a1c8934aeccff8868  libjpeg-turbo-2.0.0.tar.gz
-+sha256 8412238c5ad95965cf3c3197791e9dea8b5fae505d133449e33ee2fa754fe61e  LICENSE.md
-+sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 2b5d876928..0fe2fcda72 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 1.5.3
-+JPEG_TURBO_VERSION = 2.0.0
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-@@ -13,14 +13,14 @@ JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
- 
--JPEG_TURBO_CONF_OPTS = --with-jpeg8
-+JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
- 
- ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
--JPEG_TURBO_CONF_OPTS += --with-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
- # x86 simd support needs nasm
- JPEG_TURBO_DEPENDENCIES += $(if $(BR2_X86_CPU_HAS_MMX),host-nasm)
- else
--JPEG_TURBO_CONF_OPTS += --without-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
- endif
- 
- define JPEG_TURBO_REMOVE_USELESS_TOOLS
-@@ -29,4 +29,4 @@ endef
- 
- JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+diff --git a/package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch b/package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch
+new file mode 100644
+index 0000000000..87f9c48382
+--- /dev/null
++++ b/package/jpeg-turbo/0001-fix-install-of-binaries-with-a-static-only-library.patch
+@@ -0,0 +1,42 @@
++From f8c7732e24502c06739944f9a721c9d84a50319d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 26 Aug 2018 19:11:55 +0200
++Subject: [PATCH] fix install of binaries with a static only library
++
++Define CMAKE_INSTALL_RPATH only if ENABLE_SHARED is set otherwise the
++following error is raised:
++
++CMake Error at cmake_install.cmake:73 (file):
++  file RPATH_CHANGE could not write new RPATH:
++
++    /usr/lib
++
++  to the file:
++
++    /home/fabrice/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/rdjpgcom
++
++  No valid ELF RPATH or RUNPATH entry exists in the file;
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/libjpeg-turbo/libjpeg-turbo/pull/273]
++---
++ CMakeLists.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 1719522..862ab11 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -109,7 +109,9 @@ endif()
++ 
++ include(cmakescripts/GNUInstallDirs.cmake)
++ 
+++if(ENABLE_SHARED)
++ set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
+++endif()
++ 
++ macro(report_directory var)
++   if(CMAKE_INSTALL_${var} STREQUAL CMAKE_INSTALL_FULL_${var})
++-- 
++2.14.1
++
