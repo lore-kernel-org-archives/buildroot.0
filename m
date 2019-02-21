@@ -1,37 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:26:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.22.6
-In-Reply-To: <20190209140740.14461-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Sat, 9 Feb 2019 16:07:40 +0200")
-References: <20190209140740.14461-1-aperez@igalia.com>
-Message-ID: <87k1http23.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Feb 2019 11:29:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libupnp18: fix static linking
+ with mpd
+In-Reply-To: <20190208204656.27400-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Feb 2019 21:46:56 +0100")
+References: <20190208204656.27400-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ftshtox3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains security fixes for CVE identifiers: CVE-2019-6212,
- > CVE-2019-6215, CVE-2019-6216, CVE-2019-6217, CVE-2019-6226,
- > CVE-2019-6227, CVE-2019-6229, CVE-2019-6233, and CVE-2019-6234.
- > Additionally, it contains a few minor fixes.
+ > - Add a call to PKG_CHECK_MODULES in configure.ac to get openssl
+ >   libraries and its dependencies if openssl support is enabled
+ > - Add OPENSSL_LIBS to libupnp.pc.in so that applications linking with
+ >   pupnp (such as mpd) will be able to retrieve openssl libraries
 
- > Release notes can be found in the announcement:
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a4148e516070b79816769f3443fc24d6d8192073
 
- >   https://webkitgtk.org/2019/02/09/webkitgtk2.22.6-released.html
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > More details on the issues covered by securit fixes can be found
- > in the corresponding security advisory:
-
- >   https://webkitgtk.org/security/WSA-2019-0001.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
+Committed to 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
