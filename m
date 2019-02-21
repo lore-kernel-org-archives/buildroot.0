@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:45:27 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libarchive: add
+Date: Thu, 21 Feb 2019 11:45:17 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libarchive: add
  upstream security fixes
-Message-ID: <20190221104325.4CBE6884A3@busybox.osuosl.org>
+Message-ID: <20190221104329.B35A28D335@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e1a3c5311c8f166b53e91fcdaeac7e770922fde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4db33a101aef78ed2f46edb90a32e1a822dbc756
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 CVE-2019-1000019: Crash when parsing some 7zip archives.
 
