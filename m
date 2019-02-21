@@ -1,31 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Feb 2019 08:57:54 +0100
-Subject: [Buildroot] [PATCH 2/2] package/rabbitmq-c: needs dynamic
- library
-In-Reply-To: <d320bfd8-9b10-6916-a8c9-bb211ae7a8f5@mind.be>
-References: <20190218114434.10741-1-fontaine.fabrice@gmail.com>
- <20190218114434.10741-2-fontaine.fabrice@gmail.com>
- <d320bfd8-9b10-6916-a8c9-bb211ae7a8f5@mind.be>
-Message-ID: <20190221085754.1f585877@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 Feb 2019 08:05:37 +0000
+Subject: [Buildroot] [Bug 11681]
+ .../buildroot/output/host/bin/x86_64-buildroot-linux-gnu-ld:
+ arch/x86/kernel/head_64.o: unable to initialize decompress status for
+ section .debug_line
+In-Reply-To: <bug-11681-163@https.bugs.busybox.net/>
+References: <bug-11681-163@https.bugs.busybox.net/>
+Message-ID: <bug-11681-163-WWZ94OmFNs@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11681
 
-On Wed, 20 Feb 2019 23:39:59 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+--- Comment #2 from Janusz Krzysztofik <janusz.krzysztofik@intel.com> ---
+Thanks for the solution, now I see my request should really go to a user
+support list not to bugzilla, sorry for spamming your bug tracking system.
 
->  Note that this patch essentially reverts Thomas' attempt to fix static build in
-> beb6524225f, almost two years ago. I expect Thomas was just fixing autobuild
-> results and doesn't actually need a statically linked rabbitmq.
+Thanks,
+Janusz
 
-I can confirm that I don't care about rabbitmq static linking support.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
