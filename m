@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 11:44:09 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/sqlcipher: force
+Date: Thu, 21 Feb 2019 11:43:50 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/sqlcipher: force
  libopenssl
-Message-ID: <20190221104208.E265681569@busybox.osuosl.org>
+Message-ID: <20190221104213.179B781569@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=805c9cb140644b7365950365d5d774a4eee6e857
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8a7ad24530b620d028a12bb3f93420c2d81ea072
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 v3.2.0 has a bug in the configure step which causes it to fail when being
 built against libressl. As libopenssl is selected as the default, the
