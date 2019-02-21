@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Feb 2019 13:54:04 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] utils/scanpypi: protect
+Date: Thu, 21 Feb 2019 13:53:59 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] utils/scanpypi: protect
  against zip-slip vulnerability in zip/tar handling
-Message-ID: <20190221125235.C6B448CA4B@busybox.osuosl.org>
+Message-ID: <20190221125242.2DA2381421@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73192f7056684ef7eb9604cdf367a2da355e50b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e9eea851620c6cb78315218184a3bba558604076
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 For details, see https://github.com/snyk/zip-slip-vulnerability
 
@@ -32,10 +32,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 18 insertions(+)
 
 diff --git a/utils/scanpypi b/utils/scanpypi
-index cb4b5e76a3..23e64e65ec 100755
+index 3d3e604435..e5ee3ec263 100755
 --- a/utils/scanpypi
 +++ b/utils/scanpypi
-@@ -212,6 +212,22 @@ class BuildrootPackage():
+@@ -225,6 +225,22 @@ class BuildrootPackage():
          self.filename = self.used_url['filename']
          self.url = self.used_url['url']
  
@@ -58,7 +58,7 @@ index cb4b5e76a3..23e64e65ec 100755
      def extract_package(self, tmp_path):
          """
          Extract the package contents into a directrory
-@@ -233,6 +249,7 @@ class BuildrootPackage():
+@@ -249,6 +265,7 @@ class BuildrootPackage():
                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
                      shutil.rmtree(tmp_pkg)
                      os.makedirs(tmp_pkg)
@@ -66,7 +66,7 @@ index cb4b5e76a3..23e64e65ec 100755
                  as_zipfile.extractall(tmp_pkg)
                  pkg_filename = self.filename.split(".zip")[0]
          else:
-@@ -248,6 +265,7 @@ class BuildrootPackage():
+@@ -264,6 +281,7 @@ class BuildrootPackage():
                      print('Removing {pkg}...'.format(pkg=tmp_pkg))
                      shutil.rmtree(tmp_pkg)
                      os.makedirs(tmp_pkg)
