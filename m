@@ -1,53 +1,52 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu, 21 Feb 2019 21:41:19 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.02.0
-Message-ID: <20190221204119.17686-1-b.bilas@grinn-global.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 21 Feb 2019 14:52:27 -0600
+Subject: [Buildroot] [PATCH v2] package/proftpd: prevent openssl pthread
+ detection
+Message-ID: <1550782347-31389-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Openssl cmdline executable can be used as a config test which
+results in either the host-openssl or host system's openssl
+being used to detect the linking with -pthread. This is an
+issue as a system maybe building with a toolchain without
+thread support. (To review the detection logic, see proftpd
+configure.in and search for pr_use_pthread_for_openssl)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 6a8d251548..4c33a77c61 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+Fixes
+http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+To recreate the failure, with a clean build.
+  make host-openssl proftpd
+
+Changes
+v1 -> v2
+[Arnout
+ - Noted the inhert dependency that was going on and suggested the
+   configure step fix to prevent the openssl flag detection leading
+   to the -pthread being added the the linker flags.
+---
+ package/proftpd/proftpd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 592c069..67d8eb8 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -22,7 +22,8 @@ PROFTPD_CONF_OPTS = \
+ 	--disable-dso \
+ 	--enable-sendfile \
+ 	--enable-shadow \
+-	--with-gnu-ld
++	--with-gnu-ld \
++	--without-openssl-cmdline
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2018.12.0"
-+	bool "2019.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2018.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index ec4e404b10..aa80908e67 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2018.12.0.tar.bz2.md5
--md5 f84d7d3562055c80c3eedce0b14d4a0d barebox-2018.12.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.02.0.tar.bz2.md5
-+md5 b3c55967878c1e332c33502f39483ceb barebox-2019.02.0.tar.bz2
- 
- # Locally calculated
--sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 barebox-2018.12.0.tar.bz2
-+sha256 f4fc67d5a2410c9d568e5fc1279ac8999e80d3d91c26631df8f3af8636c04212 barebox-2019.02.0.tar.bz2
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_MODULES += mod_rewrite
 -- 
-2.20.1
+1.9.1
