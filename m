@@ -1,9 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 22 Feb 2019 10:53:23 +0200
-Subject: [Buildroot] [PATCH 1/1] python-py: bump to version 1.8.0
+Date: Fri, 22 Feb 2019 10:53:24 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyzmq: bump to version 18.0.0
 In-Reply-To: <20190222085324.7343-1-asafka7@gmail.com>
 References: <20190222085324.7343-1-asafka7@gmail.com>
-Message-ID: <20190222085324.7343-4-asafka7@gmail.com>
+Message-ID: <20190222085324.7343-5-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-py/python-py.hash | 4 ++--
- package/python-py/python-py.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyzmq/python-pyzmq.hash | 6 +++---
+ package/python-pyzmq/python-pyzmq.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-index 67926527cd..f8e6446338 100644
---- a/package/python-py/python-py.hash
-+++ b/package/python-py/python-py.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/py/json
--md5	e53ac12db4286737837ef3ccb4158301  py-1.7.0.tar.gz
--sha256	bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694  py-1.7.0.tar.gz
-+md5	d9e30436ce7e79f30847f9b30b62e149  py-1.8.0.tar.gz
-+sha256	dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53  py-1.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-index 87e19ac21a..1592b5c6b4 100644
---- a/package/python-py/python-py.mk
-+++ b/package/python-py/python-py.mk
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index eb8cf0923b..58d5fa1f56 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pyzmq/json, sha256 locally computed
+-md5  6f5d77cb5ec1617ce9b6e5ad7c6174fb  pyzmq-17.1.2.tar.gz
+-sha256  a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf  pyzmq-17.1.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyzmq/json
++md5    81d643d1e9eb9238960a18b6b0989db2  pyzmq-18.0.0.tar.gz
++sha256 b30c339eb58355f51f4f54dd61d785f1ff58c86bca1c3a5916977631d121867b  pyzmq-18.0.0.tar.gz
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index b977cca927..5d772b9fa3 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PY_VERSION = 1.7.0
-+PYTHON_PY_VERSION = 1.8.0
- PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
--PYTHON_PY_SITE = https://files.pythonhosted.org/packages/c7/fa/eb6dd513d9eb13436e110aaeef9a1703437a8efa466ce6bb2ff1d9217ac7
-+PYTHON_PY_SITE = https://files.pythonhosted.org/packages/f1/5a/87ca5909f400a2de1561f1648883af74345fe96349f34f737cdfc94eba8c
- PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
- PYTHON_PY_SETUP_TYPE = setuptools
- PYTHON_PY_LICENSE = MIT
+-PYTHON_PYZMQ_VERSION = 17.1.2
++PYTHON_PYZMQ_VERSION = 18.0.0
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+-PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/b9/6a/bc9277b78f5c3236e36b8c16f4d2701a7fd4fa2eb697159d3e0a3a991573
++PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/64/8d/78975da77627fd863c08e8ea3c7cebce7e51bed2936be5118de6b0050638
+ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
 -- 
 2.19.1
