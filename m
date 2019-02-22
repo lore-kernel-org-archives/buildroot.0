@@ -1,39 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 14:15:09 +0100
-Subject: [Buildroot] [PATCH v2] package/proftpd: prevent openssl pthread
- detection
-In-Reply-To: <e524cd32-35c3-ce10-5bc9-68a438d71d3e@mind.be> (Arnout
- Vandecappelle's message of "Fri, 22 Feb 2019 00:20:06 +0100")
-References: <1550782347-31389-1-git-send-email-matthew.weber@rockwellcollins.com>
- <e524cd32-35c3-ce10-5bc9-68a438d71d3e@mind.be>
-Message-ID: <87pnrkj76q.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2019 13:33:43 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/proftpd: prevent
+ openssl pthread detection
+Message-ID: <20190222131306.4CB898CA3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fdea09b831205a25fa44c68c847ce382deafd095
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > On 21/02/2019 21:52, Matt Weber wrote:
- >> Openssl cmdline executable can be used as a config test which
- >> results in either the host-openssl or host system's openssl
- >> being used to detect the linking with -pthread. This is an
- >> issue as a system maybe building with a toolchain without
- >> thread support. (To review the detection logic, see proftpd
- >> configure.in and search for pr_use_pthread_for_openssl)
+The proftpd configure script doesn't use pkg-config to detect openssl
+libraries. Instead, it just adds -lcrypto. Since openssl may be linked
+with pthread, it tries to detect that by calling 'openssl version -f',
+which gives the arguments with which openssl was compiled.
 
- >  I noticed a potential issue: now pthread never gets linked in, even if openssl
- > is built with thread support and when linking statically.
+Since the openssl executable used is either host-openssl or the system
+installed openssl, the output of 'openssl version -f' is useless in
+Buildroot context. If the target toolchain doesn't have threads support,
+it will wrongly pick up -pthread from host-openssl.
 
- >  However, it turns out that that is not a problem because openssl (at least in
- > the version we use) doesn't pull in its thread support automatically.
+Fortunately there is a simple workaround: --without-openssl-cmdline says
+that there is no openssl executable and skips the test, so -pthread is
+not added. It turns out -pthread is never needed, even in static linking
+cases, because openssl/libressl puts the thread support in a separate
+object file that only gets linked in if the program actually uses
+threads (which proftpd doesn't).
 
- >  So, I completely rewrote the commit message and applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
 
-Committed to 2018.02.x and 2018.11.x, thanks.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Rewrite commit log, after additional analysis and testing]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-I did a test build on 2018.02.x to verify.
+(cherry picked from commit 51bb23652fbb5597d10cf2dc49948f9405c5619b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/proftpd/proftpd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 3e165c6ada..109e332a46 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -21,7 +21,8 @@ PROFTPD_CONF_OPTS = \
+ 	--disable-facl \
+ 	--disable-dso \
+ 	--enable-shadow \
+-	--with-gnu-ld
++	--with-gnu-ld \
++	--without-openssl-cmdline
+ 
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
