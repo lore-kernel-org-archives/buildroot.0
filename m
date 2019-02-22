@@ -1,90 +1,117 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Feb 2019 07:36:34 +0200
-Subject: [Buildroot] [PATCH] package/unzip: add security and bug fix patches
- from Debian
-Message-ID: <0a4e77a81e8dd78540acefbf12952839099383c8.1550813794.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 22 Feb 2019 07:00:33 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-02-21
+Message-ID: <20190222070038.2B02325716@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Debian bug #741384: Buffer overflow
+Hello,
 
-Debian bug #744212: Buffer overflow
+Build statistics for 2019-02-21
+===============================
 
-CVE-2014-8139: CRC32 verification heap-based overflow
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  16 |   1 |   0 |  17 |
+   2018.11.x |  18 |   0 |   0 |  18 |
+      master | 186 |  21 |   0 | 207 |
+        next |  40 |  12 |   0 |  52 |
 
-CVE-2014-8140: Out-of-bounds write issue in test_compr_eb()
+Results for branch '2018.02.x'
+==============================
 
-CVE-2014-8141: Out-of-bounds read issues in getZip64Data()
+Classification of failures by reason
+------------------------------------
 
-CVE-2014-9636: Heap overflow
+                 mesa3d-17.3.6 | 1 
 
-CVE-2015-7696: Heap overflow when extracting password-protected archive
 
-CVE-2015-7697: Infinite loop when extracting password-protected archive
+Detail of failures
+------------------
 
-Red Hat Bugzilla #1260944: Unsigned overflow on invalid input
+     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/acde1328ff453381b8536addda92d8f7172b4249 |     
 
-Debian bug #842993: Do not ignore Unix Timestamps
+Results for branch 'master'
+===========================
 
-CVE-2014-9913: Buffer overflow
+Classification of failures by reason
+------------------------------------
 
-CVE-2016-9844: Buffer overflow in zipinfo
+               runc-v1.0.0-rc6 | 5 
+                 qt5base-5.6.3 | 3 
+                qt5base-5.11.3 | 2 
+reaver-9bae55bd30b6d46b42da... | 2 
+                  brotli-1.0.7 | 1 
+                     gdb-8.1.1 | 1 
+                   glm-0.9.8.4 | 1 
+                 haproxy-1.9.1 | 1 
+           host-cryptopp-8.0.0 | 1 
+                   i2pd-2.22.0 | 1 
+                   netsurf-3.8 | 1 
+             stress-ng-0.09.47 | 1 
+                upmpdcli-1.4.0 | 1 
 
-CVE-2018-1000035: Buffer overflow in password protected ZIP archives
 
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/unzip/unzip.hash | 13 +++++++++++++
- package/unzip/unzip.mk   | 15 +++++++++++++++
- 2 files changed, 28 insertions(+)
+Detail of failures
+------------------
 
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index a138cc27c9d9..fbf2615ad6d3 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -1,2 +1,15 @@
- # Locally computed:
- sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
-+sha256 66a364d75cea29363768ca6d43dd11b9913a59e42b8da16c4f63516c3e4ce7c1 07-increase-size-of-cfactorstr.patch
-+sha256 3a8cfd2702d220c6c119eaf805b018b66460284e585e92adc8a572d190471724 08-allow-greater-hostver-values.patch
-+sha256 0a1b23118b2f4a3ed097348ab33050d4f79b3863ab30e6d64ac382589834e3de 09-cve-2014-8139-crc-overflow.patch
-+sha256 32b1eda30644c44a8bdb9a02ff08bb2eca107f8eb16dda6992a9b778a0de395e 10-cve-2014-8140-test-compr-eb.patch
-+sha256 1f60f6e28b36f3cddb7da64c528cfe29160cefa1232e13bb8a47561f574067a9 11-cve-2014-8141-getzip64data.patch
-+sha256 c05885bb48b41603f0893ada88f15c0fae3b3f9f6489f24ad630a400f6271351 12-cve-2014-9636-test-compr-eb.patch
-+sha256 788c29727ff0689c3b1828466127758426f6d2c769048aa985950373747c76f3 14-cve-2015-7696.patch
-+sha256 e85dab65c3ebf3c4ab3359a4143cfd0efccfd1cac517a4e7bd5f518f41a02b6f 15-cve-2015-7697.patch
-+sha256 95dd15d5d9cdf5cea18c357b152930d6d52660599e0fd4907d6405870fdd9fe1 16-fix-integer-underflow-csiz-decrypted.patch
-+sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-restore-unix-timestamps-accurately.patch
-+sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
-+sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
-+sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index cff5951ac005..43e90125e699 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -10,4 +10,19 @@ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
- UNZIP_LICENSE = Info-ZIP
- UNZIP_LICENSE_FILES = LICENSE
- 
-+UNZIP_PATCH = \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/07-increase-size-of-cfactorstr.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/08-allow-greater-hostver-values.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/09-cve-2014-8139-crc-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/11-cve-2014-8141-getzip64data.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/14-cve-2015-7696.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/15-cve-2015-7697.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/17-restore-unix-timestamps-accurately.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch
-+
- $(eval $(cmake-package))
+microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/9806cd1762ae63f86175f942190f5d1db2bfe04c |     
+      x86_64 |                      gdb-8.1.1 | NOK | http://autobuild.buildroot.net/results/b40bdbca6669a81301fca523e982dbc9584a4e65 | ORPH
+      x86_64 |                    glm-0.9.8.4 | NOK | http://autobuild.buildroot.net/results/13a9a935a18c1991a2bae1032e37809a320ceaec | ORPH
+       nios2 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/d85c82ad9942846f834d96c0c9b319953638c5e4 |     
+         arm |            host-cryptopp-8.0.0 | NOK | http://autobuild.buildroot.net/results/5d0dd9b3a2a30a1793354c413c110bab7ba9dcce |     
+       sparc |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/d389b5964b0f3d7698dbcf0de1c0a1a4949707f7 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/c7577b09e37234214a8bf293124ccf16424391a6 |     
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/aa85a531eba8e00c40eb838243ca7a45ce15298b |     
+     riscv32 |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/15ddf22c01a8fa606f9b34c54b4200ee29e9070d |     
+     powerpc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/3ad812f928c90209b46dee12da3d6c1ff7c95cf6 |     
+         arc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/18d0f72fa75935846698bf9ddadd639858f17132 |     
+     riscv64 |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/fff2b5a7dc8a4254c8dae1a1fe7a25f9c66ebe3e |     
+        m68k | reaver-9bae55bd30b6d46b42da... | NOK | http://autobuild.buildroot.net/results/935c038b921ffa0f185571de41223e4c201e964b |     
+        m68k | reaver-9bae55bd30b6d46b42da... | NOK | http://autobuild.buildroot.net/results/c0ce9186f59386c28ac90b0aa5618ab52f7667b0 |     
+        i686 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/d2718cd5e1e7c0aa7538531ae781398dba3d9b04 |     
+      x86_64 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/1bd718e0ca56fd5b2847d4f65bef79505944e19d |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/4a079114101d14e81221ffbb15ff643726da8212 |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/234d5983a8e12368321212a7e83538fa8c041dfe |     
+        i686 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/316e8d75b0ec00896a7d07f2eb0b8c0716b56447 |     
+     powerpc |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/e4a2fa7ed45a6c267679c58cf01c1e6c2552394b |     
+        m68k |                 upmpdcli-1.4.0 | NOK | http://autobuild.buildroot.net/results/3932a4e468f8b9e24ec7c6acb34b315101b2af38 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+      host-uboot-tools-2019.01 | 4 
+                  gqrx-v2.11.4 | 1 
+                 ibrdtnd-1.0.1 | 1 
+              lua-curl-0.3.9-1 | 1 
+                   luvi-v2.7.6 | 1 
+            mesa3d-demos-8.4.0 | 1 
+            optee-client-3.4.0 | 1 
+               runc-v1.0.0-rc6 | 1 
+              syslog-ng-3.19.1 | 1 
+
+
+Detail of failures
+------------------
+
+       sparc |                   gqrx-v2.11.4 | NOK | http://autobuild.buildroot.net/results/a003ad5324a0c0f55cb8db5d3e5d69bd21999e16 |     
+       sparc |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/96301880d4caf99e9344e4a962ac75df8753e398 |     
+     riscv64 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/eb1a92ddfb9b3401c28ec8b3589a831b0d95982e |     
+     riscv32 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/3f3a395e4b31aede06ef562af17170ea9404f0e9 |     
+      x86_64 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/0276d0d79bbbc1fff37edd6a9dc2be72035b9adb |     
+         arm |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/5b55fdb9155e8409f7fdd2a287d3e1fb0f7323c9 | ORPH
+    mips64el |               lua-curl-0.3.9-1 | NOK | http://autobuild.buildroot.net/results/02249878aac84d0e5515e2edf029c8700b7f44d7 |     
+         arm |                    luvi-v2.7.6 | NOK | http://autobuild.buildroot.net/results/63fbe124513a48bddbb6fca638ce5b91b1007cb3 |     
+         arm |             mesa3d-demos-8.4.0 | NOK | http://autobuild.buildroot.net/results/89f5481c5886d6891f20027b83e583314e0d94b9 |     
+       nios2 |             optee-client-3.4.0 | NOK | http://autobuild.buildroot.net/results/1ee21f951e02ec11ba9772e7d9aecd4513672d50 |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/57c7aa3e9f39ae3cb90c32a72d2b4e16bd46a2df |     
+         arm |               syslog-ng-3.19.1 | NOK | http://autobuild.buildroot.net/results/95f739e35da7d62229568dec2cf8816cb6725be0 |     
+
+
 -- 
-2.20.1
+http://autobuild.buildroot.net
