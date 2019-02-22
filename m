@@ -1,87 +1,90 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 22 Feb 2019 02:07:13 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/libsoxr: add avutil to
- soxr.pc"
-Message-ID: <20190222010714.22028-1-joerg.krause@embedded.rocks>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 22 Feb 2019 07:36:34 +0200
+Subject: [Buildroot] [PATCH] package/unzip: add security and bug fix patches
+ from Debian
+Message-ID: <0a4e77a81e8dd78540acefbf12952839099383c8.1550813794.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit d81870ae8129389a62df80c9c8c9165d334b6921.
+Debian bug #741384: Buffer overflow
 
-The patch attempts to fix static linking with libsoxr when it build with
-avutils. The `Libs.private` field should not contain the full absolute path to
-the static library, but only the link flags for private libraries, e.g
-`-lm`.
+Debian bug #744212: Buffer overflow
 
-Buildroots pkg-config prepends the sysroot to the value found in `Libs.private`
-resulting in a malformed linker flag if libavutil is found:
+CVE-2014-8139: CRC32 verification heap-based overflow
 
-```
--L/home/test/autobuild/run/instance-3/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lsoxr
-/home/test/autobuild/run/instance-3/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/home/test/autobuild/run/instance-3/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libavutil.a
-```
+CVE-2014-8140: Out-of-bounds write issue in test_compr_eb()
 
-.. or if libavutils is not found:
+CVE-2014-8141: Out-of-bounds read issues in getZip64Data()
 
-```
--L/home/test/autobuild/run/instance-1/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lsoxr AVUTIL_LIBRARIES-NOTFOUND
-```
+CVE-2014-9636: Heap overflow
 
-Revert this commit and replace the patch by a follow-up patch which only
-adds `-lavutil` to `Libs.private` in case it is found and used by
-libsoxr.
+CVE-2015-7696: Heap overflow when extracting password-protected archive
 
-Fixes:
-http://autobuild.buildroot.net/results/6eb4e2c9bd3884ab0152ddf873c20e62f0941181/
-http://autobuild.buildroot.net/results/07207b0a58a08bf7c2cb78345a58244b5e6aab0e/
+CVE-2015-7697: Infinite loop when extracting password-protected archive
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Red Hat Bugzilla #1260944: Unsigned overflow on invalid input
+
+Debian bug #842993: Do not ignore Unix Timestamps
+
+CVE-2014-9913: Buffer overflow
+
+CVE-2016-9844: Buffer overflow in zipinfo
+
+CVE-2018-1000035: Buffer overflow in password protected ZIP archives
+
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...0001-soxr.pc.in-add-avutil-libraries.patch | 33 -------------------
- 1 file changed, 33 deletions(-)
- delete mode 100644 package/libsoxr/0001-soxr.pc.in-add-avutil-libraries.patch
+ package/unzip/unzip.hash | 13 +++++++++++++
+ package/unzip/unzip.mk   | 15 +++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/package/libsoxr/0001-soxr.pc.in-add-avutil-libraries.patch b/package/libsoxr/0001-soxr.pc.in-add-avutil-libraries.patch
-deleted file mode 100644
-index c36988a77e..0000000000
---- a/package/libsoxr/0001-soxr.pc.in-add-avutil-libraries.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 8c1edfc22f8b714062b149e3d80ab4357a1a4e49 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 22 Nov 2018 19:10:03 +0100
--Subject: [PATCH] soxr.pc.in: add avutil libraries
--
--Add ${AVUTIL_LIBRARIES} to soxr.pc.in so applications such as
--shairport-sync will know that they must link with -lavutil when
--building statically
--
--Fixes:
-- - http://autobuild.buildroot.org/results/839c0ce6475accc1de7e8a180d4358edb6750c64
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://sourceforge.net/p/soxr/code/merge-requests/2]
--[Thomas: move to Libs.private.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/soxr.pc.in | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/soxr.pc.in b/src/soxr.pc.in
--index 69d225b..ed212a8 100644
----- a/src/soxr.pc.in
--+++ b/src/soxr.pc.in
--@@ -2,4 +2,5 @@ Name: ${PROJECT_NAME}
-- Description: ${DESCRIPTION_SUMMARY}
-- Version: ${PROJECT_VERSION}
-- Libs: -L${LIB_INSTALL_DIR} -l${PROJECT_NAME}
--+Libs.private: ${AVUTIL_LIBRARIES}
-- Cflags: -I${INCLUDE_INSTALL_DIR}
---- 
--2.19.1
--
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+index a138cc27c9d9..fbf2615ad6d3 100644
+--- a/package/unzip/unzip.hash
++++ b/package/unzip/unzip.hash
+@@ -1,2 +1,15 @@
+ # Locally computed:
+ sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
++sha256 66a364d75cea29363768ca6d43dd11b9913a59e42b8da16c4f63516c3e4ce7c1 07-increase-size-of-cfactorstr.patch
++sha256 3a8cfd2702d220c6c119eaf805b018b66460284e585e92adc8a572d190471724 08-allow-greater-hostver-values.patch
++sha256 0a1b23118b2f4a3ed097348ab33050d4f79b3863ab30e6d64ac382589834e3de 09-cve-2014-8139-crc-overflow.patch
++sha256 32b1eda30644c44a8bdb9a02ff08bb2eca107f8eb16dda6992a9b778a0de395e 10-cve-2014-8140-test-compr-eb.patch
++sha256 1f60f6e28b36f3cddb7da64c528cfe29160cefa1232e13bb8a47561f574067a9 11-cve-2014-8141-getzip64data.patch
++sha256 c05885bb48b41603f0893ada88f15c0fae3b3f9f6489f24ad630a400f6271351 12-cve-2014-9636-test-compr-eb.patch
++sha256 788c29727ff0689c3b1828466127758426f6d2c769048aa985950373747c76f3 14-cve-2015-7696.patch
++sha256 e85dab65c3ebf3c4ab3359a4143cfd0efccfd1cac517a4e7bd5f518f41a02b6f 15-cve-2015-7697.patch
++sha256 95dd15d5d9cdf5cea18c357b152930d6d52660599e0fd4907d6405870fdd9fe1 16-fix-integer-underflow-csiz-decrypted.patch
++sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-restore-unix-timestamps-accurately.patch
++sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
++sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
++sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index cff5951ac005..43e90125e699 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -10,4 +10,19 @@ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
+ 
++UNZIP_PATCH = \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/07-increase-size-of-cfactorstr.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/08-allow-greater-hostver-values.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/09-cve-2014-8139-crc-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/11-cve-2014-8141-getzip64data.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/14-cve-2015-7696.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/15-cve-2015-7697.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/17-restore-unix-timestamps-accurately.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch
++
+ $(eval $(cmake-package))
 -- 
 2.20.1
