@@ -1,54 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Feb 2019 09:04:28 +0100
-Subject: [Buildroot] [PATCH 2/2] package/snort: build with OpenAppID
- support if luajit/openssl is enabled
-In-Reply-To: <1550780846-7463-3-git-send-email-sergio.prado@e-labworks.com>
-References: <1550780846-7463-1-git-send-email-sergio.prado@e-labworks.com>
- <1550780846-7463-3-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20190222090428.0547fedb@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 22 Feb 2019 08:35:35 +0000
+Subject: [Buildroot] [Bug 11686] New: fbdev_drv.so: undefined symbol:
+ shadowUpdatePackedWeak, xinit: giving up
+Message-ID: <bug-11686-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sergio,
+https://bugs.busybox.net/show_bug.cgi?id=11686
 
-Thanks for the patch.
+            Bug ID: 11686
+           Summary: fbdev_drv.so: undefined symbol:
+                    shadowUpdatePackedWeak, xinit: giving up
+           Product: buildroot
+           Version: 2018.11.2
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pete.luuri at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Thu, 21 Feb 2019 17:27:26 -0300
-Sergio Prado <sergio.prado@e-labworks.com> wrote:
+fbdev_drv.so: undefined symbol: shadowUpdatePackedWeak, xinit: giving up
+raspberrypi3_defconfig
+Cant Startx
+Bug reported https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900613
 
-> Since version 2.9.12, OpenAppID [1] is enabled by default.
-> 
-> OpenAppID depends on luajit and openssl. If we leave it enabled by
-> default, snort would require luajit. Since luajit is not available on
-> all architectures, that would limit the usage of the snort package.
-> 
-> Since not all users will need/use OpenAppID, let's leave it disabled by
-> default. To build with OpenAppID support, the user will need to enable
-> luajit and libssl.
-> 
-> Also, it is necessary to apply a patch to fix a compile error when
-> building OpenAppID with uclibc and musl. The build fails when
-> dereferencing the rpcent structure because rpc.h is not been included.
-> 
-> [1] https://www.snort.org/downloads/openappid/9553
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
-Shouldn't this be squashed into PATCH 1/2 ? Indeed, if I applied just
-PATCH 1/2, then I suppose snort will no longer build on architectures
-that don't support Luajit.
-
-Alternatively PATCH 1/2 could have an unconditional
---disable-open-appid, and then PATCH 2/2 adds the logic to enable
-OpenAppID support when possible.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
