@@ -1,46 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:02:02 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/log4cplus: link
- with libatomic when needed
-Message-ID: <20190222120327.1917D860B6@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 13:17:45 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/postgresql: bump
+ to version 10.7
+Message-ID: <20190222121632.D03C18B8D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f549b245816e66061c8a390dd19cb7cdccee192c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2746e6e90bae35cd65aaef761a6f448a07e90388
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
+Fixes a long standing fsync issue and a number of other bugs:
+https://www.postgresql.org/docs/10/release-10-7.html
 
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+https://wiki.postgresql.org/wiki/Fsync_Errors
 
-This is often for example the case on sparcv8 32 bit.
+The hash of the license file is only changed due to a year update:
 
-Fixes:
- - http://autobuild.buildroot.org/results/16e360cb91afff7655f459a3d1fb906ca48f8464
+-Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
++Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a2fee08208b28aa53268721b675172052d26f335)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/log4cplus/log4cplus.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/postgresql/postgresql.hash | 6 +++---
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index 22efde2fd6..0bc4fc9aa6 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -11,4 +11,8 @@ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
- LOG4CPLUS_LICENSE_FILES = LICENSE
- LOG4CPLUS_INSTALL_STAGING = YES
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 05f94b4c76..ca797f1442 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.6/postgresql-10.6.tar.bz2.sha256
+-sha256	68a8276f08bda8fbefe562faaf8831cb20664a7a1d3ffdbbcc5b83e08637624b	postgresql-10.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.7/postgresql-10.7.tar.bz2.sha256
++sha256	bfed1065380c1bba927bfe51f23168471373f26e3324cbad859269cc32733ede	postgresql-10.7.tar.bz2
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LOG4CPLUS_CONF_ENV += LIBS='-latomic'
-+endif
-+
- $(eval $(autotools-package))
+ # License file, Locally calculated
+-sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
++sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 66af8fe5a9..883461fe98 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.6
++POSTGRESQL_VERSION = 10.7
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
