@@ -1,46 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Feb 2019 13:27:38 +0100
-Subject: [Buildroot] [PATCH] libcurl: fix typo in configure option w/o
- OpenSSL
-In-Reply-To: <87a7ioko5u.fsf@dell.be.48ers.dk>
-References: <20190220013958.24225-1-tpiepho@impinj.com>
- <f8da7da1-0860-547f-e172-f57d7b6f8ad2@mind.be>
- <87a7ioko5u.fsf@dell.be.48ers.dk>
-Message-ID: <3b9761a9-2e60-9c6d-e707-ee04169f3c4a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Feb 2019 13:27:40 +0100
+Subject: [Buildroot] [PATCH] systemd: Remove instance name usage in a
+ non-template unit file
+In-Reply-To: <38ec152c-e716-eadd-1fb6-f79ef46565dd@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 20 Feb 2019 23:08:20 +0100")
+References: <BL0PR0102MB341236C6A4CD78A8F7710AC5F37D0@BL0PR0102MB3412.prod.exchangelabs.com>
+ <38ec152c-e716-eadd-1fb6-f79ef46565dd@mind.be>
+Message-ID: <8736ogknyb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+ > On 20/02/2019 17:35, Gervais, Francois wrote:
+ >> Getty startup can fail due to the instance name specifier
+ >> being used in a non-template unit file.
+ >> 
+ >> Fixes:
+ >> No getty prompt on boot
+ >> 
+ >> Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
 
-On 22/02/2019 13:23, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 20/02/2019 02:40, Trent Piepho wrote:
->  >> When not using OpenSSL, the correct option to configure is --without-ssl
->  >> with two dashes.
->  >> 
->  >> Fixes: b8b78e7e6a ("libcurl: Allow selection of TLS package libcurl will use")
->  >> 
->  >> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> 
->  >  Applied to master, thanks.
-> 
->  >  Peter, this is for 2018.11.x
-> 
-> No it isn't:
-> 
-> git describe --contains b8b78e7e6a
-> 2019.02-rc1~958^2~211
+ >  Applied to master, thanks. I've extended the commit message a little to explain
+ > what exactly goes wrong.
 
- I thought I hade done exactly that... I guess I was doing too many things at
-the same time :-)
+ >  Peter, this applies to 2018.11.x as well. Not to 2018.02.x.
 
- Regards,
- Arnout
+Committed to 2018.11.x, thanks.
 
-> 
-> And it hasn't been backported to the 2018.11.x branch.
-> 
+-- 
+Bye, Peter Korsgaard
