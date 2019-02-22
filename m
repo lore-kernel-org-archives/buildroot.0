@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Feb 2019 21:29:12 +0100
-Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
-In-Reply-To: <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228182159.02a8a6c4@windsurf>
- <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
- <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
-Message-ID: <20190222212912.727ff0c2@windsurf>
+Date: Fri, 22 Feb 2019 21:37:31 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/reaver: fix static build on m68k
+In-Reply-To: <20190222201234.8340-1-fontaine.fabrice@gmail.com>
+References: <20190222201234.8340-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190222213731.6890cc9d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vadim,
+Hello,
 
-On Fri, 22 Feb 2019 20:07:37 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+On Fri, 22 Feb 2019 21:12:34 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> I 'd try it too, but the provided URL does not work :-(
+> Fixes:
+>  - http://autobuild.buildroot.org/results/935c038b921ffa0f185571de41223e4c201e964b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I updated the Wiki page with URLs on Github.com. We just shut down the
-git.bootlin.com service a few days ago, so now my personal Buildroot
-Git repo is at https://github.com/tpetazzoni/buildroot/.
-
-I'm looking forward to your feedback!
+How is this related to static linking ? It seems to be a m68k issue
+that would also occur when dynamic linking (if m68k had support for
+that).
 
 Best regards,
 
