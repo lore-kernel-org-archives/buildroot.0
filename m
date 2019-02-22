@@ -1,37 +1,112 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Fri, 22 Feb 2019 18:28:31 +0200
-Subject: [Buildroot] 2019.02-rc1 doesn't boot properly
-In-Reply-To: <878sy9qfa0.fsf@dell.be.48ers.dk>
-References: <20190220163206.GB9224@smile.fi.intel.com>
- <878sy9qfa0.fsf@dell.be.48ers.dk>
-Message-ID: <20190222162831.GJ9224@smile.fi.intel.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 22 Feb 2019 17:32:48 +0100
+Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for
+ GTK and WPE WebKit components
+In-Reply-To: <20190222164630.GB20589@momiji>
+References: <20190218171719.18721-1-aperez@igalia.com>
+ <20190218171719.18721-2-aperez@igalia.com>
+ <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
+ <20190222164630.GB20589@momiji>
+Message-ID: <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 21, 2019 at 05:26:15PM +0100, Peter Korsgaard wrote:
-> >>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@intel.com> writes:
-> 
->  > Hello,
->  > Recently I had tried to boot 2019-02.rc1 on my Intel Edison board (after few
->  > iterations I confirm that the issue somewhere in Buildroot,
->  > since 2018.11.x works with the same configuration), but it went unsuccessfully.
-> 
->  > It's a bit hard for me and time consuming to debug right now, though here are
->  > the symptoms. Since I have SSH and network enabled it looks like ssh-keygen
->  > goes to endless wait for entropy / random generator (?) and never becomes back
->  > that prevents to have a shell. Everything from kernel till daemons and modules
->  > works. (I have USB OTG enabled and I see dmesg when I switched USB roles).
->  > Is it known issue?
-> 
-> Not that I am aware of. Are you using the same kernel version as for
-> 2018.11? The kernel recently(-ish) changed the way lack of entropy is
-> handled, leading to hangs / very slow boot.
+Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com> a
+?crit :
 
-Yes, tested with the same kernel (it's external to BR, so, definitely it's the same).
+> Hello!
+>
+> On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
+> francois.perrad at gadz.org> wrote:
+> > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
+> a
+> > ?crit :
+> >
+> > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+> > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+> > > subbdirectory as the first step to unify some of their configuration.
+> > >
+> > >
+> > Moving packages into a subdirectory is discouraged,
+> > see
+> https://buildroot.org/downloads/manual/manual.html#_package_directory
+>
+> On the other hand, while adding new subdirectories is discouraged, it is
+> not forbidden. In this case I thought that it could make sense grouping the
+> the (very related) WebKit packages. Also note that I expect to be adding a
+> more in the future [1].
+>
+> That being said, I am of course open to alternative suggestions, and in
+> particular knowing where the common parts that this patch set adds into
+> ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
+> making a subdirectory to group the related packages. Any ideas?
+>
+> Cheers,
+>
+>
+> -Adri?n
+>
+>
+> > Fran?ois
+> >
+>
+> Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com>
+> a ?crit :
+> Hello!
+>
+> On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
+> francois.perrad at gadz.org> wrote:
+> > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
+> a
+> > ?crit :
+> >
+> > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+> > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+> > > subbdirectory as the first step to unify some of their configuration.
+> > >
+> > >
+> > Moving packages into a subdirectory is discouraged,
+> > see
+> https://buildroot.org/downloads/manual/manual.html#_package_directory
+>
+> On the other hand, while adding new subdirectories is discouraged, it is
+> not forbidden. In this case I thought that it could make sense grouping the
+> the (very related) WebKit packages. Also note that I expect to be adding a
+> more in the future [1].
+>
+> That being said, I am of course open to alternative suggestions, and in
+> particular knowing where the common parts that this patch set adds into
+> ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
+> making a subdirectory to group the related packages. Any ideas?
+>
+>
+You could create a virtual package webkit with 2 providers webkitgtk &
+wpewebkit.
+See details on
+https://buildroot.org/downloads/manual/manual.html#virtual-package-tutorial
 
--- 
-With Best Regards,
-Andy Shevchenko
+midori still depends on webkitgtk,
+but cog could depends on webkit, ie. using webkitgtk or wpewebkit.
+
+Fran?ois
+
+
+
+> Cheers,
+>
+>
+> -Adri?n
+>
+>
+> > Fran?ois
+> >
+> >
+> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190222/63a4c315/attachment.html>
