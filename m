@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Feb 2019 21:48:17 +0100
-Subject: [Buildroot] raspberrypi3_qt5we_defconfig on mind autobuilder
-Message-ID: <20190222214817.698f98c6@windsurf>
+Date: Fri, 22 Feb 2019 21:53:04 +0100
+Subject: [Buildroot] [PATCH] configs/rock64: Linux needs host OpenSSL
+Message-ID: <20190222205305.5097-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+The Linux configuration used in the rock64_defconfig requires
+host-openssl to be built, otherwise the build fails with:
 
-The build of raspberrypi3_qt5we_defconfig was done today on Mind's
-autobuilder, and it failed. See
-https://gitlab.com/buildroot.org/buildroot/-/jobs/165766158. The issue
-is simply:
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
 
-arm-buildroot-linux-gnueabihf-g++.br_real: internal compiler error:
-Killed (program cc1plus)
+So let's enable BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL.
 
-Could you check if you had an OOM situation perhaps ?
+Fixes:
 
-Thanks,
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/165766161
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/rock64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+index 50ffc0474f..30bf12c061 100644
+--- a/configs/rock64_defconfig
++++ b/configs/rock64_defconfig
+@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
