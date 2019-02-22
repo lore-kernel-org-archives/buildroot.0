@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:29:30 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] DEVELOPERS: update email
- address for Gary Bisson
-Message-ID: <20190222122948.16D4F8150C@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 13:29:51 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/imagemagick:
+ fixup help text layout
+Message-ID: <20190222122948.1DF168D5A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b4ff16dd1c9611ede4bb1bed79404a88993e578
+commit: https://git.buildroot.net/buildroot/commit/?id=1520bdf65ddb4cd96614b808b44b5dca518dbd9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 74693e09ae6dc5954839a431b4779dcefaf37a6d)
+(cherry picked from commit 858d2e9a27444b6321821a1fd1856564e68d31cc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/imagemagick/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e055a96c59..1cb4a9b4b6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -851,7 +851,7 @@ F:	package/qt5/qt5webengine/
- F:	package/qt5/qt5webkit/
- F:	package/qt5/qt5webkit-examples/
+diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
+index 4bd81dbd79..8b795d89e5 100644
+--- a/package/imagemagick/Config.in
++++ b/package/imagemagick/Config.in
+@@ -9,8 +9,8 @@ config BR2_PACKAGE_IMAGEMAGICK
+ 	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
+ 	  Use ImageMagick to translate, flip, mirror, rotate, scale,
+ 	  shear and transform images, adjust image colors, apply various
+-	  special effects, or draw text,
+-	  lines, polygons, ellipses and B??zier curves.
++	  special effects, or draw text, lines, polygons, ellipses and
++	  B??zier curves.
  
--N:	Gary Bisson <gary.bisson@boundarydevices.com>
-+N:	Gary Bisson <bisson.gary@gmail.com>
- F:	board/boundarydevices/
- F:	configs/nitrogen*
- F:	package/freescale-imx/
+ 	  http://www.imagemagick.org/
+ 
