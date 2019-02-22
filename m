@@ -1,68 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 22:30:29 +0100
-Subject: [Buildroot] [git commit] configs/orangepi_{lite2,
- one_plus}: use correct kernel headers version
-Message-ID: <20190222212836.6E0A38B8A7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 22 Feb 2019 22:32:30 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-pip: bump to
+ version 19.0.3
+Message-ID: <20190222213104.1BF698D9D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8b32ce8ac9031a764c61c6e25af36fded2c34aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=749e599a5b8e9856dc91ea1ec2b55d2731fad036
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In the following commits:
-
-85f4bd9425b4ee74839202ab012d193a0175c5fa configs/orangepi_lite2: fix kernel headers option
-506cdeb2d08811f309c6dc80c0098bf1ccdee21a configs/orangepi_one_plus: fix kernel headers option
-
-We fixed the orangepi_lite2 and orangepi_one_plus defconfigs to use
-the BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y option. However, we were
-mistaken by the existing comment saying that 4.18 kernel headers
-should be used. This was wrong, as the kernel source code in use is
-4.19, so this commit fixes the
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y to use the correct version.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/165766089
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/165766093
-
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepi_lite2_defconfig    | 4 ++--
- configs/orangepi_one_plus_defconfig | 4 ++--
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/orangepi_lite2_defconfig b/configs/orangepi_lite2_defconfig
-index 2d4ae70eab..c6be1c46b4 100644
---- a/configs/orangepi_lite2_defconfig
-+++ b/configs/orangepi_lite2_defconfig
-@@ -2,8 +2,8 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 96baf04a00..f2a6b25012 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	526fd9ec1e6ea956b3571ebfb42cf83c  pip-19.0.2.tar.gz
+-sha256	f851133f8b58283fa50d8c78675eb88d4ff4cde29b6c41205cd938b06338e0e5  pip-19.0.2.tar.gz
++md5	1c5edb0924a0d7d79f3a2e3df05009b4  pip-19.0.3.tar.gz
++sha256	6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2  pip-19.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 94926fce09..c7ca45d9d9 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-diff --git a/configs/orangepi_one_plus_defconfig b/configs/orangepi_one_plus_defconfig
-index 30c422efc2..1084d42233 100644
---- a/configs/orangepi_one_plus_defconfig
-+++ b/configs/orangepi_one_plus_defconfig
-@@ -2,8 +2,8 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-PYTHON_PIP_VERSION = 19.0.2
++PYTHON_PIP_VERSION = 19.0.3
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/4c/4d/88bc9413da11702cbbace3ccc51350ae099bb351febae8acc85fec34f9af
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/36/fa/51ca4d57392e2f69397cd6e5af23da2a8d37884a605f9e3f2d3bfdc48397
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
