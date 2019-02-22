@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:33:43 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/proftpd: prevent
+Date: Fri, 22 Feb 2019 13:33:38 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/proftpd: prevent
  openssl pthread detection
-Message-ID: <20190222131306.4CB898CA3F@busybox.osuosl.org>
+Message-ID: <20190222131313.1B6A98CA3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdea09b831205a25fa44c68c847ce382deafd095
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a744c5c4dad325a8eb7c9c8dc7fc3852e82a7169
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 The proftpd configure script doesn't use pkg-config to detect openssl
 libraries. Instead, it just adds -lcrypto. Since openssl may be linked
@@ -43,7 +43,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 3e165c6ada..109e332a46 100644
+index 8f3ff5088e..1f1c742f66 100644
 --- a/package/proftpd/proftpd.mk
 +++ b/package/proftpd/proftpd.mk
 @@ -21,7 +21,8 @@ PROFTPD_CONF_OPTS = \
@@ -55,4 +55,4 @@ index 3e165c6ada..109e332a46 100644
 +	--without-openssl-cmdline
  
  ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
- PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
+ PROFTPD_MODULES += mod_rewrite
