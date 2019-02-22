@@ -1,91 +1,48 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 22 Feb 2019 10:53:20 +0200
-Subject: [Buildroot] [PATCH 1/1] czmq: bump to version 4.2.0
-Message-ID: <20190222085324.7343-1-asafka7@gmail.com>
+Date: Fri, 22 Feb 2019 10:53:21 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pip: bump to version 19.0.3
+In-Reply-To: <20190222085324.7343-1-asafka7@gmail.com>
+References: <20190222085324.7343-1-asafka7@gmail.com>
+Message-ID: <20190222085324.7343-2-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Modified patch to fit the new version.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- .../0001-configure.ac-remove-Werror.patch     | 25 +++++++++++--------
- package/czmq/czmq.hash                        |  6 ++---
- package/czmq/czmq.mk                          |  2 +-
- 3 files changed, 18 insertions(+), 15 deletions(-)
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/czmq/0001-configure.ac-remove-Werror.patch b/package/czmq/0001-configure.ac-remove-Werror.patch
-index 7f2dae2c2b..58a3489e4a 100644
---- a/package/czmq/0001-configure.ac-remove-Werror.patch
-+++ b/package/czmq/0001-configure.ac-remove-Werror.patch
-@@ -7,24 +7,27 @@ Subject: [PATCH] configure.ac: remove -Werror
- newer versions of the compiler or the C library, when new warnings
- are introduced.
- 
-+Modified for version 4.2.0 by Asaf Kahlon
-+
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
- ---
-  configure.ac | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index e92970a..2fd551a 100755
-+index 6868a99b..9a941545 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -344,7 +344,7 @@ AC_C_BIGENDIAN
-- 
-- # These options are GNU compiler specific.
-- if test "x$GCC" = "xyes"; then
---    CPPFLAGS="-pedantic -Werror -Wall -Wc++-compat ${CPPFLAGS}"
--+    CPPFLAGS="-pedantic -Wall -Wc++-compat ${CPPFLAGS}"
-- fi
-- 
-- AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
-+@@ -952,7 +952,7 @@ AS_IF([test "x$enable_Werror" = "xyes" || test "x$enable_Werror" = "xauto"],
-+         ])])
-+      AS_IF([test -n "$CPP"],[AS_IF([$CPP --version 2>&1 | grep 'Free Software Foundation' > /dev/null && test "x$GCC" = "xyes"],
-+         [AC_MSG_NOTICE([Enabling pedantic errors for GNU CPP preprocessor])
-+-         CPPFLAGS="$CPPFLAGS -pedantic -Werror -Wall -Wc++-compat"
-++         CPPFLAGS="$CPPFLAGS -pedantic -Wall -Wc++-compat"
-+         ],
-+         [AC_MSG_NOTICE([Not enabling pedantic errors: preprocessor not supported by this recipe (not GNU CPP)])
-+          AS_IF([test "x$enable_Werror" = "xyes"], [AC_MSG_ERROR([--enable-Werror=yes was requested and can not be satisfied for CPP: $CPP])])
- -- 
--2.7.4
-+2.19.1
- 
-diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
-index c42525c78d..97b6e03b54 100644
---- a/package/czmq/czmq.hash
-+++ b/package/czmq/czmq.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/zeromq/czmq/releases
--md5 6d3a6fdd25c2bb29897c53670dce97bf czmq-4.1.1.tar.gz
--sha1 629d34e8b5c1f2dd88689350f71f9917a8d76f23 czmq-4.1.1.tar.gz
-+md5 7e09997db6ac3b25e8ed104053040722 czmq-4.2.0.tar.gz
-+sha1 42165b3eede517708814e5a1b6972d8bde417f7a czmq-4.2.0.tar.gz
- # Locally calculated
--sha256 f00ff419881dc2a05d0686c8467cd89b4882677fc56f31c0e2cc81c134cbb0c0 czmq-4.1.1.tar.gz
-+sha256 cfab29c2b3cc8a845749758a51e1dd5f5160c1ef57e2a41ea96e4c2dcc8feceb czmq-4.2.0.tar.gz
- sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 6eb9314200..56dc65f8bc 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 149099b118..f2a6b25012 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5    b6919f1a368138f73b367abccc06f5ae  pip-19.0.1.tar.gz
+-sha256 e81ddd35e361b630e94abeda4a1eddd36d47a90e71eb00f38f46b57f787cd1a5  pip-19.0.1.tar.gz
++md5	1c5edb0924a0d7d79f3a2e3df05009b4  pip-19.0.3.tar.gz
++sha256	6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2  pip-19.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 22562cc93f..c7ca45d9d9 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--CZMQ_VERSION = 4.1.1
-+CZMQ_VERSION = 4.2.0
- CZMQ_SITE = https://github.com/zeromq/czmq/releases/download/v$(CZMQ_VERSION)
- 
- # 0001-configure.ac-remove-Werror.patch touches configure.ac
+-PYTHON_PIP_VERSION = 19.0.1
++PYTHON_PIP_VERSION = 19.0.3
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/c8/89/ad7f27938e59db1f0f55ce214087460f65048626e2226531ba6cb6da15f0
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/36/fa/51ca4d57392e2f69397cd6e5af23da2a8d37884a605f9e3f2d3bfdc48397
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 -- 
 2.19.1
