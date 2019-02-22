@@ -1,38 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 22:29:11 +0100
-Subject: [Buildroot] [PATCH] configs/orangepi_{lite2,
- one_plus}: use correct kernel headers version
-In-Reply-To: <20190222211305.15300-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 22 Feb 2019 22:13:05 +0100")
-References: <20190222211305.15300-1-thomas.petazzoni@bootlin.com>
-Message-ID: <877edrikbc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 22 Feb 2019 22:29:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdb: disable inprocess-agent in
+ static build
+In-Reply-To: <20190222222840.52cca2a7@windsurf>
+References: <20190222095044.32559-1-fontaine.fabrice@gmail.com>
+ <20190222222840.52cca2a7@windsurf>
+Message-ID: <20190222222939.2598e35a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+On Fri, 22 Feb 2019 22:28:40 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
- > In the following commits:
- > 85f4bd9425b4ee74839202ab012d193a0175c5fa configs/orangepi_lite2: fix kernel headers option
- > 506cdeb2d08811f309c6dc80c0098bf1ccdee21a configs/orangepi_one_plus: fix kernel headers option
+> On Fri, 22 Feb 2019 10:50:44 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> 
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/b40bdbca6669a81301fca523e982dbc9584a4e65
+> > 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/gdb/gdb.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)  
+> 
+> Applied to next, thanks.
 
- > We fixed the orangepi_lite2 and orangepi_one_plus defconfigs to use
- > the BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y option. However, we were
- > mistaken by the existing comment saying that 4.18 kernel headers
- > should be used. This was wrong, as the kernel source code in use is
- > 4.19, so this commit fixes the
- > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y to use the correct version.
+Sorry: I applied to master.
 
- > Fixes:
+Best regards,
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/165766089
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/165766093
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
