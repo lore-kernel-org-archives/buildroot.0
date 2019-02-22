@@ -1,112 +1,55 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 22 Feb 2019 17:32:48 +0100
-Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for
- GTK and WPE WebKit components
-In-Reply-To: <20190222164630.GB20589@momiji>
-References: <20190218171719.18721-1-aperez@igalia.com>
- <20190218171719.18721-2-aperez@igalia.com>
- <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
- <20190222164630.GB20589@momiji>
-Message-ID: <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Feb 2019 17:58:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/reaver: fix static build on m68k
+In-Reply-To: <20190222111105.5313-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 22 Feb 2019 12:11:05 +0100")
+References: <20190222111105.5313-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736ofkbfk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com> a
-?crit :
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Hello!
->
-> On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
-> francois.perrad at gadz.org> wrote:
-> > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
-> a
-> > ?crit :
-> >
-> > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
-> > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
-> > > subbdirectory as the first step to unify some of their configuration.
-> > >
-> > >
-> > Moving packages into a subdirectory is discouraged,
-> > see
-> https://buildroot.org/downloads/manual/manual.html#_package_directory
->
-> On the other hand, while adding new subdirectories is discouraged, it is
-> not forbidden. In this case I thought that it could make sense grouping the
-> the (very related) WebKit packages. Also note that I expect to be adding a
-> more in the future [1].
->
-> That being said, I am of course open to alternative suggestions, and in
-> particular knowing where the common parts that this patch set adds into
-> ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
-> making a subdirectory to group the related packages. Any ideas?
->
-> Cheers,
->
->
-> -Adri?n
->
->
-> > Fran?ois
-> >
->
-> Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com>
-> a ?crit :
-> Hello!
->
-> On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
-> francois.perrad at gadz.org> wrote:
-> > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
-> a
-> > ?crit :
-> >
-> > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
-> > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
-> > > subbdirectory as the first step to unify some of their configuration.
-> > >
-> > >
-> > Moving packages into a subdirectory is discouraged,
-> > see
-> https://buildroot.org/downloads/manual/manual.html#_package_directory
->
-> On the other hand, while adding new subdirectories is discouraged, it is
-> not forbidden. In this case I thought that it could make sense grouping the
-> the (very related) WebKit packages. Also note that I expect to be adding a
-> more in the future [1].
->
-> That being said, I am of course open to alternative suggestions, and in
-> particular knowing where the common parts that this patch set adds into
-> ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
-> making a subdirectory to group the related packages. Any ideas?
->
->
-You could create a virtual package webkit with 2 providers webkitgtk &
-wpewebkit.
-See details on
-https://buildroot.org/downloads/manual/manual.html#virtual-package-tutorial
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/935c038b921ffa0f185571de41223e4c201e964b
 
-midori still depends on webkitgtk,
-but cog could depends on webkit, ie. using webkitgtk or wpewebkit.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  .../0001-wps_attr_parse.c-fix-build-on-m68k.patch  | 39 ++++++++++++++++++++++
+ >  1 file changed, 39 insertions(+)
+ >  create mode 100644 package/reaver/0001-wps_attr_parse.c-fix-build-on-m68k.patch
 
-Fran?ois
+ > diff --git
+ > a/package/reaver/0001-wps_attr_parse.c-fix-build-on-m68k.patch
+ > b/package/reaver/0001-wps_attr_parse.c-fix-build-on-m68k.patch
+ > new file mode 100644
+ > index 0000000000..e6e0726955
+ > --- /dev/null
+ > +++ b/package/reaver/0001-wps_attr_parse.c-fix-build-on-m68k.patch
+ > @@ -0,0 +1,39 @@
+ > +From ea649501249acdc4d0cf8a3d5cc203694e2f3f07 Mon Sep 17 00:00:00 2001
+ > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +Date: Fri, 22 Feb 2019 11:49:35 +0100
+ > +Subject: [PATCH] wps_attr_parse.c: fix build on m68k
+ > +
+ > +Static build on m68k fails on:
+ > +/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/m68k-linux-gcc
+ > -DCONF_DIR='"/var/lib/reaver"' -Wall -D_LARGEFILE_SOURCE
+ > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-dwarf2-cfi-asm
+ > -Wl,-elf2flt -static -Wno-unused-but-set-variable -Wno-unused-variable
+ > -Wno-unused-function -Wno-pointer-sign -Ilibwps -I. -Ilwe
+ > -DCONFIG_IPV6 -I. -Iutils -c -o wps/wps_dev_attr.o wps/wps_dev_attr.c
+ > +/tmp/ccC02tia.s: Assembler messages:
+ > +/tmp/ccC02tia.s:899: Error: value -216 out of range
+ > +/tmp/ccC02tia.s:899: Error: value of -216 too large for field of 1 bytes at 1977
+ > +make[1]: *** [wps/wps_attr_parse.o] Error 1
+ > +
+ > +To fix this issue, statically cast end - pos to u8
 
+How is end - pos guaranteed to fit in u8?
 
-
-> Cheers,
->
->
-> -Adri?n
->
->
-> > Fran?ois
-> >
-> >
-> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190222/63a4c315/attachment.html>
+-- 
+Bye, Peter Korsgaard
