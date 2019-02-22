@@ -1,69 +1,133 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 17:58:41 +0100
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.5-P4
-In-Reply-To: <20190222134038.28900-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 22 Feb 2019 14:40:38 +0100")
-References: <20190222134038.28900-1-peter@korsgaard.com>
-Message-ID: <87y367iwu6.fsf@dell.be.48ers.dk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 22 Feb 2019 19:06:20 +0200
+Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for
+ GTK and WPE WebKit components
+In-Reply-To: <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
+References: <20190218171719.18721-1-aperez@igalia.com>
+ <20190218171719.18721-2-aperez@igalia.com>
+ <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
+ <20190222164630.GB20589@momiji>
+ <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
+Message-ID: <20190222190620.GC11151@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello Fran?ois,
 
- > Fixes the following security issues:
- > - named could crash during recursive processing of DNAME records when
- >   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
- >   [GL #387]
+Thanks for your comments, but I have reservations about your suggestion.
 
- > - When recursion is enabled but the allow-recursion and allow-query-cache
- >   ACLs are not specified, they should be limited to local networks, but they
- >   were inadvertently set to match the default allow-query, thus allowing
- >   remote queries.  This flaw is disclosed in CVE-2018-5738.  [GL #309]
+On Fri, 22 Feb 2019 17:32:48 +0100, Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+> Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com> a
+> ?crit :
+> 
+> > Hello!
+> >
+> > On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
+> > francois.perrad at gadz.org> wrote:
+> > > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
+> > a
+> > > ?crit :
+> > >
+> > > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+> > > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+> > > > subbdirectory as the first step to unify some of their configuration.
+> > > >
+> > > >
+> > > Moving packages into a subdirectory is discouraged,
+> > > see
+> > https://buildroot.org/downloads/manual/manual.html#_package_directory
+> >
+> > On the other hand, while adding new subdirectories is discouraged, it is
+> > not forbidden. In this case I thought that it could make sense grouping the
+> > the (very related) WebKit packages. Also note that I expect to be adding a
+> > more in the future [1].
+> >
+> > That being said, I am of course open to alternative suggestions, and in
+> > particular knowing where the common parts that this patch set adds into
+> > ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
+> > making a subdirectory to group the related packages. Any ideas?
+> >
+> > Cheers,
+> >
+> >
+> > -Adri?n
+> >
+> >
+> > > Fran?ois
+> > >
+> >
+> > Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com>
+> > a ?crit :
+> > Hello!
+> >
+> > On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
+> > francois.perrad at gadz.org> wrote:
+> > > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
+> > a
+> > > ?crit :
+> > >
+> > > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+> > > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+> > > > subbdirectory as the first step to unify some of their configuration.
+> > > >
+> > > >
+> > > Moving packages into a subdirectory is discouraged,
+> > > see
+> > https://buildroot.org/downloads/manual/manual.html#_package_directory
+> >
+> > On the other hand, while adding new subdirectories is discouraged, it is
+> > not forbidden. In this case I thought that it could make sense grouping the
+> > the (very related) WebKit packages. Also note that I expect to be adding a
+> > more in the future [1].
+> >
+> > That being said, I am of course open to alternative suggestions, and in
+> > particular knowing where the common parts that this patch set adds into
+> > ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
+> > making a subdirectory to group the related packages. Any ideas?
+> >
+> >
+> You could create a virtual package webkit with 2 providers webkitgtk &
+> wpewebkit.
+> See details on
+> https://buildroot.org/downloads/manual/manual.html#virtual-package-tutorial
 
- > - Code change #4964, intended to prevent double signatures when deleting an
- >   inactive zone DNSKEY in some situations, introduced a new problem during
- >   zone processing in which some delegation glue RRsets are incorrectly
- >   identified as needing RRSIGs, which are then created for them using the
- >   current active ZSK for the zone.  In some, but not all cases, the
- >   newly-signed RRsets are added to the zone's NSEC/NSEC3 chain, but
- >   incompletely -- this can result in a broken chain, affecting validation of
- >   proof of nonexistence for records in the zone.  [GL #771]
+There cannot be a virtual package, because both ?webkitgtk? and ?wpewebkit?
+can be built and be installed in the same system.
 
- > - named could crash if it managed a DNSSEC security root with managed-keys
- >   and the authoritative zone rolled the key to an algorithm not supported by
- >   BIND 9.  This flaw is disclosed in CVE-2018-5745.  [GL #780]
+> midori still depends on webkitgtk,
+> but cog could depends on webkit, ie. using webkitgtk or wpewebkit.
 
- > - named leaked memory when processing a request with multiple Key Tag EDNS
- >   options present.  ISC would like to thank Toshifumi Sakaguchi for bringing
- >   this to our attention.  This flaw is disclosed in CVE-2018-5744.  [GL
- >   #772]
+I don't think so. Cog can be built against WebKitGTK, that's true; but that is
+intended as a development aid and it is not recommended for normal usage. The
+main goal of Cog is to be a library to help out implementing custom WPE WebKit
+launchers, and it just happens to include a reference launcher as well.
 
- > - Zone transfer controls for writable DLZ zones were not effective as the
- >   allowzonexfr method was not being called for such zones.  This flaw is
- >   disclosed in CVE-2019-6465.  [GL #790]
+The question still remains: if there is no subdirectory, where would the
+common bits from ?webkit/webkit.mk? and ?webkit/Config.in? belong?
 
- > For more details, see the release notes:
+Regards,
 
- > http://ftp.isc.org/isc/bind9/9.11.5-P4/RELEASE-NOTES-bind-9.11.5-P4.html
 
- > Change the upstream URL to HTTPS as the webserver uses HSTS:
+-Adri?n
 
- >>>> bind 9.11.5-P4 Downloading
- > URL transformed to HTTPS due to an HSTS policy
 
- > Update the hash of the license file to account for a change of copyright
- > year:
-
- > -Copyright (C) 1996-2018  Internet Systems Consortium, Inc. ("ISC")
- > +Copyright (C) 1996-2019  Internet Systems Consortium, Inc. ("ISC")
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+> > Cheers,
+> >
+> >
+> > -Adri?n
+> >
+> >
+> > > Fran?ois
+> > >
+> > >
+> > > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190222/2724c404/attachment.asc>
