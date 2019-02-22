@@ -1,34 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 20:23:24 +0100
-Subject: [Buildroot] 2019.02-rc1 doesn't boot properly
-In-Reply-To: <20190222162831.GJ9224@smile.fi.intel.com> (Andy Shevchenko's
- message of "Fri, 22 Feb 2019 18:28:31 +0200")
-References: <20190220163206.GB9224@smile.fi.intel.com>
- <878sy9qfa0.fsf@dell.be.48ers.dk>
- <20190222162831.GJ9224@smile.fi.intel.com>
-Message-ID: <87tvgviq4z.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 Feb 2019 21:12:34 +0100
+Subject: [Buildroot] [PATCH v2, 1/1] package/reaver: fix static build on m68k
+Message-ID: <20190222201234.8340-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@intel.com> writes:
+Fixes:
+ - http://autobuild.buildroot.org/results/935c038b921ffa0f185571de41223e4c201e964b
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Peter Korsgaard):
+ - Use upstream patch
 
- >> Not that I am aware of. Are you using the same kernel version as for
- >> 2018.11? The kernel recently(-ish) changed the way lack of entropy is
- >> handled, leading to hangs / very slow boot.
+ package/reaver/0001-fix-271.patch | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/reaver/0001-fix-271.patch
 
- > Yes, tested with the same kernel (it's external to BR, so, definitely it's the same).
-
-Ok, can you strace ssh-keygen to see if it indeed is hanging in
-getrandom()?
-
-Dropbear btw only creates the host keys on demand, E.G. the first time
-you try to ssh to the device, which may allow the device to collect more
-entrophy.
-
+diff --git a/package/reaver/0001-fix-271.patch b/package/reaver/0001-fix-271.patch
+new file mode 100644
+index 0000000000..9f6b395120
+--- /dev/null
++++ b/package/reaver/0001-fix-271.patch
+@@ -0,0 +1,32 @@
++From c7040da3a9ff98cd8063b9d5b5a7721374186391 Mon Sep 17 00:00:00 2001
++From: rofl0r <retnyg@gmx.net>
++Date: Fri, 22 Feb 2019 17:38:24 +0000
++Subject: [PATCH] fix #271
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/t6x/reaver-wps-fork-t6x/commit/c7040da3a9ff98cd8063b9d5b5a7721374186391]
++---
++ src/wps/wps_attr_parse.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/wps/wps_attr_parse.c b/src/wps/wps_attr_parse.c
++index 30b0e79..d681b70 100644
++--- a/src/wps/wps_attr_parse.c
+++++ b/src/wps/wps_attr_parse.c
++@@ -443,12 +443,12 @@ int wps_parse_msg(const struct wpabuf *msg, struct wps_parse_attr *attr)
++ 			 * Mac OS X 10.6 seems to be adding 0x00 padding to the
++ 			 * end of M1. Skip those to avoid interop issues.
++ 			 */
++-			int i;
++-			for (i = 0; i < end - pos; i++) {
+++			uintptr_t i, left = end - pos;
+++			for (i = 0; i < left; i++) {
++ 				if (pos[i])
++ 					break;
++ 			}
++-			if (i == end - pos) {
+++			if (i == left) {
++ 				wpa_printf(MSG_DEBUG, "WPS: Workaround - skip "
++ 					   "unexpected message padding");
++ 				break;
 -- 
-Bye, Peter Korsgaard
+2.14.1
