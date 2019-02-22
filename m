@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:19:54 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/poco: disable
- build for riscv
-Message-ID: <20190222121806.20C56836D9@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 13:23:09 +0100
+Subject: [Buildroot] [PATCH] libcurl: fix typo in configure option w/o
+ OpenSSL
+In-Reply-To: <f8da7da1-0860-547f-e172-f57d7b6f8ad2@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 20 Feb 2019 22:34:24 +0100")
+References: <20190220013958.24225-1-tpiepho@impinj.com>
+ <f8da7da1-0860-547f-e172-f57d7b6f8ad2@mind.be>
+Message-ID: <87a7ioko5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19c889f7769028bc344442ac5b1b700546d0fcee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-poco does not support the riscv target.
+ > On 20/02/2019 02:40, Trent Piepho wrote:
+ >> When not using OpenSSL, the correct option to configure is --without-ssl
+ >> with two dashes.
+ >> 
+ >> Fixes: b8b78e7e6a ("libcurl: Allow selection of TLS package libcurl will use")
+ >> 
+ >> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/9a8/9a8213c502df53222eafc3ecd2fcfa36db20950b/
-http://autobuild.buildroot.net/results/dd4/dd48cac70e8cb697b42ee51561902df81edcea40/
-http://autobuild.buildroot.net/results/030/030c6cc8e2a59b015f8f3793d76234a2ef4ab772/
+ >  Applied to master, thanks.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0737f48c5f8f502cd16123c5251d4ccaaee900ee)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/poco/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >  Peter, this is for 2018.11.x
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 75e31b7e1e..7e1257146c 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_POCO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
--		|| BR2_or1k || BR2_xtensa)
-+		|| BR2_or1k || BR2_riscv || BR2_xtensa)
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	help
+No it isn't:
+
+git describe --contains b8b78e7e6a
+2019.02-rc1~958^2~211
+
+And it hasn't been backported to the 2018.11.x branch.
+
+-- 
+Bye, Peter Korsgaard
