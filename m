@@ -1,28 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 22:23:58 +0100
-Subject: [Buildroot] [PATCH v3,1/1] package/reaver: fix build on m68k
-In-Reply-To: <20190222204602.17088-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 22 Feb 2019 21:46:02 +0100")
-References: <20190222204602.17088-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h8cvikk1.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2019 22:26:12 +0100
+Subject: [Buildroot] [PATCH] configs/rock64: Linux needs host OpenSSL
+In-Reply-To: <20190222205305.5097-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 22 Feb 2019 21:53:04 +0100")
+References: <20190222205305.5097-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87d0njikgb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+
+ > The Linux configuration used in the rock64_defconfig requires
+ > host-openssl to be built, otherwise the build fails with:
+
+ > scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ >  #include <openssl/bio.h>
+
+ > So let's enable BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/935c038b921ffa0f185571de41223e4c201e964b
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v2 -> v3 (after review of Thomas Petazzoni):
- >  - Remove static from title
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/165766161
 
- > Changes v1 -> v2 (after review of Peter Korsgaard):
- >  - Use upstream patch
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
 
