@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:30:39 +0100
-Subject: [Buildroot] [PATCH 1/3] package/imagemagick: fixup help text
- layout
-In-Reply-To: <10082_1550582141_5C6C017D_10082_180_1_2ca105eb-cb6f-44fa-94bb-4a2ffe2b6507@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
- (yann morin's message of "Tue, 19 Feb 2019 14:15:28 +0100")
-References: <10082_1550582141_5C6C017D_10082_180_1_2ca105eb-cb6f-44fa-94bb-4a2ffe2b6507@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
-Message-ID: <87y368j98w.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2019 13:31:51 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/swupdate: update license files
+In-Reply-To: <20190217175537.20091-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 17 Feb 2019 18:55:37 +0100")
+References: <20190217175537.20091-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvgwj96w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <yann.morin@orange.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: "Yann E. MORIN" <yann.morin@orange.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+ > COPYING contains only the license for GPL-2.0 so use the new license
+ > files that have been added in the Licenses directory since version
+ > 2018.03 and
+ > https://github.com/sbabic/swupdate/commit/32c1f98eaca69e362be074197f84a59d994c0876
+
+ > Also update GPL-2.0+ to "GPL-2.0+ with OpenSSL exception" and add
+ > Exceptions file, see:
+ > https://github.com/sbabic/swupdate/commit/66d0dbe80f49eb49f8999c9d738579651fc38134
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > ---
- >  package/imagemagick/Config.in | 4 ++--
- >  1 file changed, 2 insertions(+), 2 deletions(-)
-
- > diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
- > index 4bd81dbd79..8b795d89e5 100644
- > --- a/package/imagemagick/Config.in
- > +++ b/package/imagemagick/Config.in
- > @@ -9,8 +9,8 @@ config BR2_PACKAGE_IMAGEMAGICK
- >  	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
- >  	  Use ImageMagick to translate, flip, mirror, rotate, scale,
- >  	  shear and transform images, adjust image colors, apply various
- > -	  special effects, or draw text,
- > -	  lines, polygons, ellipses and B?zier curves.
- > +	  special effects, or draw text, lines, polygons, ellipses and
- > +	  B?zier curves.
+ > Changes v1 -> v2:
+ >  - Add package prefix in title
 
 Committed to 2018.02.x and 2018.11.x, thanks.
 
