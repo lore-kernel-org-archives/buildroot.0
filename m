@@ -1,48 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 16:54:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/stm32flash: bump to version 0.5
-In-Reply-To: <2748BB04F99E7E45A3203C831E8B20FE34D35B97@SERBE4I2.intra.erbe-med.de>
- (Markus Steinhilber's message of "Mon, 18 Feb 2019 14:01:53 +0000")
-References: <2748BB04F99E7E45A3203C831E8B20FE34D35B97@SERBE4I2.intra.erbe-med.de>
-Message-ID: <877edrkedy.fsf@dell.be.48ers.dk>
+From: Andreas Naumann <dev@andin.de>
+Date: Fri, 22 Feb 2019 17:18:51 +0100
+Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
+In-Reply-To: <20181228182159.02a8a6c4@windsurf>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228182159.02a8a6c4@windsurf>
+Message-ID: <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steinhilber," == Steinhilber, Markus <Markus.Steinhilber@erbe-med.com> writes:
+Hi Thomas,
 
- > Bump to latest official version.
- > Signed-off-by: Markus Steinhilber <markus.steinhilber@erbe-med.com>
- > ---
- >  package/stm32flash/stm32flash.hash | 2 ++
- >  package/stm32flash/stm32flash.mk   | 2 +-
- >  2 files changed, 3 insertions(+), 1 deletion(-)  create mode 100644 package/stm32flash/stm32flash.hash
+finally I found some time to try this v7 on top of 2019.02-rc1.
 
- > diff --git a/package/stm32flash/stm32flash.hash b/package/stm32flash/stm32flash.hash
- > new file mode 100644
- > index 0000000000..dc97c10972
- > --- /dev/null
- > +++ b/package/stm32flash/stm32flash.hash
- > @@ -0,0 +1,2 @@
- > +# Locally computed:
- > +sha256 73afcbd317ca3eb080c14b6ed1451e5a74a3bbae8f8fb5fe24ea496333f03ead
- > +stm32flash-1f934ae86babdeea47afdfae1d856d5fd5da6c53.tar.gz
- > diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
- > index c41fc76d01..9bb05ab730 100644
- > --- a/package/stm32flash/stm32flash.mk
- > +++ b/package/stm32flash/stm32flash.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+Am 28.12.18 um 18:21 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Fri, 28 Dec 2018 11:43:27 +0100, Thomas Petazzoni wrote:
+> 
+>> Here is a seventh iteration of the per-package SDK and target
+>> directory implementation, offering top-level parallel build
+>> capability.
+> 
+> Regarding top-level parallel build, I prepared this Wiki page that
+> documents the progress of the effort:
+> 
+>    https://elinux.org/Buildroot:Top_Level_Parallel_Build
+> 
 
- > -STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
- > +STM32FLASH_VERSION = 1f934ae86babdeea47afdfae1d856d5fd5da6c53
+My update to the known remaining issues is:
+1. I no longer see the ccache problem for the kconfig packages
+(uboot+linux)
 
-If this is latest official version, why isn't this a git tag?
+2. the package-file-list problem has become a blocker since commit
+3c8f0d9 core/pkg-infra: restore completeness of packages files lists
+with failures like
 
-Looking at git, this corresponds to the v0.5 tag.
+comm: /home/jenkins/.../build/.files-list-staging.new: No such file or 
+directory
 
--- 
-Bye, Peter Korsgaard
+Would it be an idea to write the statistics per package :-) inside the 
+package build folder and assemble them into one file only once all 
+packages are built?
+
+best regards,
+Andreas
+
+
+
+
+PS. Actually I just tried flock, which looks promising. If it works I'll 
+send a patch next week.
+
+> Especially, I'd like to make it clear: this patch series is only the
+> *core* support for per-package directories. There are a number of fixes
+> needed for Meson, Python and more to make it usable with some packages.
+> I wanted to keep this patch series reasonable in size by only
+> submitting the core support.
+> 
+> If you want to do some testing, please use
+> https://git.bootlin.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v7-work
+> which has all the fixes I currently have.
+> 
+> Best regards,
+> 
+> Thomas
+> 
