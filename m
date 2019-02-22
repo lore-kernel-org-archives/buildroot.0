@@ -1,47 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 12:44:30 +0100
-Subject: [Buildroot] [PATCH v1] package/qwt: needs qt5base gui support
-In-Reply-To: <20190215224022.7a1ccf4c@windsurf.home> (Thomas Petazzoni's
- message of "Fri, 15 Feb 2019 22:40:22 +0100")
-References: <20190215202504.24205-1-ps.report@gmx.net>
- <20190215214343.68c0b057@windsurf.home>
- <20190215215859.3ef24917@gmx.net>
- <20190215224022.7a1ccf4c@windsurf.home>
-Message-ID: <878sy8m4ip.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2019 12:45:17 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: handle
+ sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
+In-Reply-To: <20190205214122.25115-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 5 Feb 2019 22:41:22 +0100")
+References: <20190205214122.25115-1-ps.report@gmx.net>
+Message-ID: <874l8wm4he.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Hi,
+ > The Qt configure auto detection (and announced runtime detection
+ > feature) failes (see e.g. [1]), so override the configuration
+ > with the buildroot determined settings.
 
- > It's indeed a bug from that patch! Look carefully at the diff of
- > 3e99c8418af904b14b01455d68c84d7b5afd261f:
+ > [1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
 
- >  config BR2_PACKAGE_QWT
- >         bool "qwt"
- > -       depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- > -       select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
- > -       select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
- > -       select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5 # printsupport
- > -       select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
- > +       depends on BR2_PACKAGE_QT5
- > +       select BR2_PACKAGE_QT5BASE
- > +       select BR2_PACKAGE_QT5BASE_WIDGETS # printsupport
- > +       select BR2_PACKAGE_QT5BASE_CONCURRENT
+ > Reported-by: David Picard <dplamp@gmx.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - use 'else ifeq' (suggested by Thomas Petazzoni)
+ >   - fix typo (anounced vs. announced)
+ >   - clarify no-avx512 comment
 
- > See how the line:
+ > Notes:
+ >  - suggested by Arnout Vandecappelle [2]
 
- > -       select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+ > [2] http://lists.busybox.net/pipermail/buildroot/2019-January/242030.html
 
- > gets removed ?
-
- > So I'll apply your patch after adjusting the commit log. Thanks!
-
-Yes, sorry about that. Thanks Peter!
+Committed to 2018.02.x and 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
