@@ -1,44 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 12:45:36 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] linux: don't check hashes
- for user-supplied patches
-Message-ID: <20190222114824.2E5897FC74@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 12:49:38 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/xenomai: fix
+ build with gcc 8
+Message-ID: <20190222114824.3C0A77FC74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8373b57bbb8b96e7708daee9f0d3abb22fdc71a
+commit: https://git.buildroot.net/buildroot/commit/?id=a2975ab78eaa140d3e09497c74570f9af628f545
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-We have virtually no way to know the hashes for user-supplied patches,
-so we should just ignore them.
+Fixes:
+ - http://autobuild.buildroot.org/results/3a53f54476828ee878602da9adddf1e1e70f7a69
 
-Reported-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Tested-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ae8dab9e91055b6f674b0287bcb8b1aa90d16e0)
+(cherry picked from commit 85b3d8006be61ba9540cbd684c6d961544e35366)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...erminated-destination-buffer-with-strncpy.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index ce0b371734..b548bed1a5 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -55,6 +55,9 @@ endif
- 
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
-+# We have no way to know the hashes for user-supplied patches.
-+BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
+diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+new file mode 100644
+index 0000000000..f91a31daaf
+--- /dev/null
++++ b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+@@ -0,0 +1,91 @@
++From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
++From: Philippe Gerum <rpm@xenomai.org>
++Date: Wed, 24 Oct 2018 11:28:49 +0200
++Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
++ strncpy()
 +
- # We rely on the generic package infrastructure to download and apply
- # remote patches (downloaded from ftp, http or https). For local
- # patches, we can't rely on that infrastructure, because there might
++GCC 8.x introduced -Wstringop-truncation to help detecting likely
++unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
++character into the destination buffer whenever n < sizeof(src).
++
++Fix unsafe strncpy() calls when we do expect a null-terminated
++destination buffer.
++
++Signed-off-by: Philippe Gerum <rpm@xenomai.org>
++[Retrieved from
++https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ demo/posix/cobalt/can-rtt.c        | 4 ++--
++ demo/posix/cobalt/eth_p_all.c      | 3 ++-
++ demo/posix/cyclictest/cyclictest.c | 4 ++--
++ 3 files changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
++index 61cad05e5..dd212d804 100644
++--- a/demo/posix/cobalt/can-rtt.c
+++++ b/demo/posix/cobalt/can-rtt.c
++@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
++ 	return -1;
++     }
++ 
++-    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
+++    namecpy(ifr.ifr_name, rxdev);
++     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
++ 
++     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
++@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
++ 	    goto failure1;
++ 	}
++ 
++-	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
+++	namecpy(ifr.ifr_name, txdev);
++ 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
++ 
++ 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
++diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
++index 6ac12ab3e..91aef9fbd 100644
++--- a/demo/posix/cobalt/eth_p_all.c
+++++ b/demo/posix/cobalt/eth_p_all.c
++@@ -40,6 +40,7 @@
++ #include <net/if.h>
++ #include <arpa/inet.h>
++ #include <netinet/ether.h>
+++#include <boilerplate/ancillaries.h>
++ 
++ char buffer[10*1024];
++ int sock;
++@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
++ 	if (argc > 1) {
++ 		struct ifreq ifr;
++ 
++-		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
+++		namecpy(ifr.ifr_name, argv[1]);
++ 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
++ 			perror("cannot get interface index");
++ 			close(sock);
++diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
++index ebe5461db..76983bd02 100644
++--- a/demo/posix/cyclictest/cyclictest.c
+++++ b/demo/posix/cyclictest/cyclictest.c
++@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
++ 		case 'F':
++ 		case OPT_FIFO:
++ 			use_fifo = 1;
++-			strncpy(fifopath, optarg, strlen(optarg));
+++			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
++ 			break;
++ 
++ 		case 'H':
++@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
++ 		case 'T':
++ 		case OPT_TRACER:
++ 			tracetype = CUSTOM;
++-			strncpy(tracer, optarg, sizeof(tracer));
+++			strncpy(tracer, optarg, sizeof(tracer) - 1);
++ 			break;
++ 		case 'u':
++ 		case OPT_UNBUFFERED:
++-- 
++2.18.1
++
