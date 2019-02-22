@@ -1,60 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Feb 2019 09:53:18 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: add renaming
- functionality to barebox image copy
-In-Reply-To: <20190222094056.5f155e17@windsurf>
-References: <2748BB04F99E7E45A3203C831E8B20FE34D35E84@SERBE4I2.intra.erbe-med.de>
- <20190222094056.5f155e17@windsurf>
-Message-ID: <ef5bbef6-02e5-7c44-bec1-f65896df581f@mind.be>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 22 Feb 2019 10:53:20 +0200
+Subject: [Buildroot] [PATCH 1/1] czmq: bump to version 4.2.0
+Message-ID: <20190222085324.7343-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Modified patch to fit the new version.
 
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ .../0001-configure.ac-remove-Werror.patch     | 25 +++++++++++--------
+ package/czmq/czmq.hash                        |  6 ++---
+ package/czmq/czmq.mk                          |  2 +-
+ 3 files changed, 18 insertions(+), 15 deletions(-)
 
-On 22/02/2019 09:40, Thomas Petazzoni wrote:
-> Hello Markus,
-> 
-> On Tue, 19 Feb 2019 11:03:52 +0000
-> "Steinhilber, Markus" <Markus.Steinhilber@erbe-med.com> wrote:
-
-[snip]
->>>> Also, you need to rename the images in a post-build script if you
->>>> need certain file names.  
->>> That is a pretty normal thing in Buildroot. We just install things
->>> as they are installed by the upstream build system, and leave it up
->>> to custom post-build script to further rename/move/adjust to match
->>> the specific requirements of the project/user.  
->>
->> I understand. In this case I see it as some kind of nice-to-have
->> function you can achieve. The main reason is the one above.
-> 
-> Then perhaps the more Buildroot-ish way of doing things would be to
-> install the images build by the barebox package in a different location
-> than the one installed by the barebox-aux package, like
-> $(BINARIES_DIR)/barebox/ and $(BINARIES_DIR)/barebox-aux/. The
-> downsides of this are:
-> 
->  - We don't do this for other packages
-> 
->  - It breaks backward compatibility.
-> 
-> Arnout, Peter, what do you think ? (See Markus original patch for the
-> start of the discussion)
-
- I feel that the original patch is way too complicated for such a corner case.
-
- Indeed, this use case happens to (almost) work by chance because barebox and
-barebox-aux are two different packages rather than one like for U-Boot. But if
-you anyway have the luck of having such an option, I don't mind adding a little
-bit extra to be able to make better use of it.
-
- Perhaps a possibility is to add a config option that prefixes the output name
-with something? You'd still need to rename it in the post-build script (or, more
-likely, handle that in the genimage.cfg file). But it does solve the
-identical-name problem, it looks pretty simple, and it doesn't break anything.
-
- Regards,
- Arnout
+diff --git a/package/czmq/0001-configure.ac-remove-Werror.patch b/package/czmq/0001-configure.ac-remove-Werror.patch
+index 7f2dae2c2b..58a3489e4a 100644
+--- a/package/czmq/0001-configure.ac-remove-Werror.patch
++++ b/package/czmq/0001-configure.ac-remove-Werror.patch
+@@ -7,24 +7,27 @@ Subject: [PATCH] configure.ac: remove -Werror
+ newer versions of the compiler or the C library, when new warnings
+ are introduced.
+ 
++Modified for version 4.2.0 by Asaf Kahlon
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index e92970a..2fd551a 100755
++index 6868a99b..9a941545 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -344,7 +344,7 @@ AC_C_BIGENDIAN
+- 
+- # These options are GNU compiler specific.
+- if test "x$GCC" = "xyes"; then
+--    CPPFLAGS="-pedantic -Werror -Wall -Wc++-compat ${CPPFLAGS}"
+-+    CPPFLAGS="-pedantic -Wall -Wc++-compat ${CPPFLAGS}"
+- fi
+- 
+- AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
++@@ -952,7 +952,7 @@ AS_IF([test "x$enable_Werror" = "xyes" || test "x$enable_Werror" = "xauto"],
++         ])])
++      AS_IF([test -n "$CPP"],[AS_IF([$CPP --version 2>&1 | grep 'Free Software Foundation' > /dev/null && test "x$GCC" = "xyes"],
++         [AC_MSG_NOTICE([Enabling pedantic errors for GNU CPP preprocessor])
++-         CPPFLAGS="$CPPFLAGS -pedantic -Werror -Wall -Wc++-compat"
+++         CPPFLAGS="$CPPFLAGS -pedantic -Wall -Wc++-compat"
++         ],
++         [AC_MSG_NOTICE([Not enabling pedantic errors: preprocessor not supported by this recipe (not GNU CPP)])
++          AS_IF([test "x$enable_Werror" = "xyes"], [AC_MSG_ERROR([--enable-Werror=yes was requested and can not be satisfied for CPP: $CPP])])
+ -- 
+-2.7.4
++2.19.1
+ 
+diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
+index c42525c78d..97b6e03b54 100644
+--- a/package/czmq/czmq.hash
++++ b/package/czmq/czmq.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/zeromq/czmq/releases
+-md5 6d3a6fdd25c2bb29897c53670dce97bf czmq-4.1.1.tar.gz
+-sha1 629d34e8b5c1f2dd88689350f71f9917a8d76f23 czmq-4.1.1.tar.gz
++md5 7e09997db6ac3b25e8ed104053040722 czmq-4.2.0.tar.gz
++sha1 42165b3eede517708814e5a1b6972d8bde417f7a czmq-4.2.0.tar.gz
+ # Locally calculated
+-sha256 f00ff419881dc2a05d0686c8467cd89b4882677fc56f31c0e2cc81c134cbb0c0 czmq-4.1.1.tar.gz
++sha256 cfab29c2b3cc8a845749758a51e1dd5f5160c1ef57e2a41ea96e4c2dcc8feceb czmq-4.2.0.tar.gz
+ sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 6eb9314200..56dc65f8bc 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CZMQ_VERSION = 4.1.1
++CZMQ_VERSION = 4.2.0
+ CZMQ_SITE = https://github.com/zeromq/czmq/releases/download/v$(CZMQ_VERSION)
+ 
+ # 0001-configure.ac-remove-Werror.patch touches configure.ac
+-- 
+2.19.1
