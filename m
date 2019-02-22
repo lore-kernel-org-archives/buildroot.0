@@ -1,133 +1,66 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 22 Feb 2019 19:06:20 +0200
-Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for
- GTK and WPE WebKit components
-In-Reply-To: <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
-References: <20190218171719.18721-1-aperez@igalia.com>
- <20190218171719.18721-2-aperez@igalia.com>
- <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
- <20190222164630.GB20589@momiji>
- <CAB0FRsvF-6rbND2_N-M0TFhOOyX7J2oMEWEBhXd18m47D5HsOw@mail.gmail.com>
-Message-ID: <20190222190620.GC11151@momiji>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 22 Feb 2019 20:07:37 +0200
+Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
+In-Reply-To: <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228182159.02a8a6c4@windsurf>
+ <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
+Message-ID: <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Hi All,
 
-Thanks for your comments, but I have reservations about your suggestion.
+On Fri, Feb 22, 2019 at 6:19 PM Andreas Naumann <dev@andin.de> wrote:
+>
+> Hi Thomas,
+>
+> finally I found some time to try this v7 on top of 2019.02-rc1.
+>
+> Am 28.12.18 um 18:21 schrieb Thomas Petazzoni:
+> > Hello,
+> >
+> > On Fri, 28 Dec 2018 11:43:27 +0100, Thomas Petazzoni wrote:
+> >
+> >> Here is a seventh iteration of the per-package SDK and target
+> >> directory implementation, offering top-level parallel build
+> >> capability.
+> >
+> > Regarding top-level parallel build, I prepared this Wiki page that
+> > documents the progress of the effort:
+> >
+> >    https://elinux.org/Buildroot:Top_Level_Parallel_Build
+> >
+>
+> My update to the known remaining issues is:
+> 1. I no longer see the ccache problem for the kconfig packages
+> (uboot+linux)
+>
+> 2. the package-file-list problem has become a blocker since commit
+> 3c8f0d9 core/pkg-infra: restore completeness of packages files lists
+> with failures like
+>
+> comm: /home/jenkins/.../build/.files-list-staging.new: No such file or
+> directory
+>
+> Would it be an idea to write the statistics per package :-) inside the
+> package build folder and assemble them into one file only once all
+> packages are built?
+>
+> best regards,
+> Andreas
+>
+>
+>
+>
+> PS. Actually I just tried flock, which looks promising. If it works I'll
+> send a patch next week.
+>
 
-On Fri, 22 Feb 2019 17:32:48 +0100, Fran?ois Perrad <francois.perrad@gadz.org> wrote:
-> Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com> a
-> ?crit :
-> 
-> > Hello!
-> >
-> > On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
-> > francois.perrad at gadz.org> wrote:
-> > > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
-> > a
-> > > ?crit :
-> > >
-> > > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
-> > > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
-> > > > subbdirectory as the first step to unify some of their configuration.
-> > > >
-> > > >
-> > > Moving packages into a subdirectory is discouraged,
-> > > see
-> > https://buildroot.org/downloads/manual/manual.html#_package_directory
-> >
-> > On the other hand, while adding new subdirectories is discouraged, it is
-> > not forbidden. In this case I thought that it could make sense grouping the
-> > the (very related) WebKit packages. Also note that I expect to be adding a
-> > more in the future [1].
-> >
-> > That being said, I am of course open to alternative suggestions, and in
-> > particular knowing where the common parts that this patch set adds into
-> > ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
-> > making a subdirectory to group the related packages. Any ideas?
-> >
-> > Cheers,
-> >
-> >
-> > -Adri?n
-> >
-> >
-> > > Fran?ois
-> > >
-> >
-> > Le ven. 22 f?vr. 2019 ? 15:47, Adrian Perez de Castro <aperez@igalia.com>
-> > a ?crit :
-> > Hello!
-> >
-> > On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <
-> > francois.perrad at gadz.org> wrote:
-> > > Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com>
-> > a
-> > > ?crit :
-> > >
-> > > > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
-> > > > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
-> > > > subbdirectory as the first step to unify some of their configuration.
-> > > >
-> > > >
-> > > Moving packages into a subdirectory is discouraged,
-> > > see
-> > https://buildroot.org/downloads/manual/manual.html#_package_directory
-> >
-> > On the other hand, while adding new subdirectories is discouraged, it is
-> > not forbidden. In this case I thought that it could make sense grouping the
-> > the (very related) WebKit packages. Also note that I expect to be adding a
-> > more in the future [1].
-> >
-> > That being said, I am of course open to alternative suggestions, and in
-> > particular knowing where the common parts that this patch set adds into
-> > ?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
-> > making a subdirectory to group the related packages. Any ideas?
-> >
-> >
-> You could create a virtual package webkit with 2 providers webkitgtk &
-> wpewebkit.
-> See details on
-> https://buildroot.org/downloads/manual/manual.html#virtual-package-tutorial
-
-There cannot be a virtual package, because both ?webkitgtk? and ?wpewebkit?
-can be built and be installed in the same system.
-
-> midori still depends on webkitgtk,
-> but cog could depends on webkit, ie. using webkitgtk or wpewebkit.
-
-I don't think so. Cog can be built against WebKitGTK, that's true; but that is
-intended as a development aid and it is not recommended for normal usage. The
-main goal of Cog is to be a library to help out implementing custom WPE WebKit
-launchers, and it just happens to include a reference launcher as well.
-
-The question still remains: if there is no subdirectory, where would the
-common bits from ?webkit/webkit.mk? and ?webkit/Config.in? belong?
+I 'd try it too, but the provided URL does not work :-(
 
 Regards,
-
-
--Adri?n
-
-
-> > Cheers,
-> >
-> >
-> > -Adri?n
-> >
-> >
-> > > Fran?ois
-> > >
-> > >
-> > > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190222/2724c404/attachment.asc>
+Vadim Kochan
