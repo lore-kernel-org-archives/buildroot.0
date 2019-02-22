@@ -1,70 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 22 Feb 2019 22:30:29 +0100
-Subject: [Buildroot] [git commit] package/cryptopp: fix build with gcc < 4.9
-Message-ID: <20190222212836.7486B8B8A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_{lite2,
+ one_plus}: use correct kernel headers version
+Message-ID: <20190222212836.6E0A38B8A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40005b9a0da6ad2be8e35c1141f903dc06afd780
+commit: https://git.buildroot.net/buildroot/commit/?id=c8b32ce8ac9031a764c61c6e25af36fded2c34aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable AVX2 if gcc < 4.9
+In the following commits:
+
+85f4bd9425b4ee74839202ab012d193a0175c5fa configs/orangepi_lite2: fix kernel headers option
+506cdeb2d08811f309c6dc80c0098bf1ccdee21a configs/orangepi_one_plus: fix kernel headers option
+
+We fixed the orangepi_lite2 and orangepi_one_plus defconfigs to use
+the BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y option. However, we were
+mistaken by the existing comment saying that 4.18 kernel headers
+should be used. This was wrong, as the kernel source code in use is
+4.19, so this commit fixes the
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_X_Y to use the correct version.
 
 Fixes:
- - http://autobuild.buildroot.org/results/195e40b34344f773da51a3fbff9d8e76c517eed1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/165766089
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/165766093
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-config.h-avx2-depends-on-gcc-4.9.patch    | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ configs/orangepi_lite2_defconfig    | 4 ++--
+ configs/orangepi_one_plus_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-new file mode 100644
-index 0000000000..fd8b3c5ff2
---- /dev/null
-+++ b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-@@ -0,0 +1,40 @@
-+From c484938fb4a57430a2e47334f753b1d771aa0f1b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 21 Feb 2019 20:26:24 +0100
-+Subject: [PATCH] config.h: avx2 depends on gcc 4.9
-+
-+Build of cryptopp on x86 with gcc 4.8 fails on:
-+chacha_avx.cpp: In function 'void CryptoPP::ChaCha_OperateKeystream_AVX2(const word32*, const byte*, CryptoPP::byte*, unsigned int)':
-+chacha_avx.cpp:98:85: error: '_mm256_broadcastsi128_si256' was not declared in this scope
-+
-+This is due to the fact that _mm256_broadcastsi128_si256 has been added
-+only in gcc 4.9:
-+https://github.com/gcc-mirror/gcc/commit/78e8d5ffbf0ba5031b736d2c6fc6a44605047cbc
-+
-+So bump CRYPTOPP_GCC_VERSION from 4.7 to 4.9 for AVX2 support
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/195e40b34344f773da51a3fbff9d8e76c517eed1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/weidai11/cryptopp/pull/809]
-+---
-+ config.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config.h b/config.h
-+index eccba009..4516d2b3 100644
-+--- a/config.h
-++++ b/config.h
-+@@ -591,7 +591,7 @@ NAMESPACE_END
-+ // Requires Binutils 2.24
-+ #if !defined(CRYPTOPP_DISABLE_AVX2) && defined(CRYPTOPP_AVX_AVAILABLE) && \
-+ 	(defined(__AVX2__) || (CRYPTOPP_MSC_VERSION >= 1800) || (__SUNPRO_CC >= 0x5130) || \
-+-	(CRYPTOPP_GCC_VERSION >= 40700) || (__INTEL_COMPILER >= 1400) || \
-++	(CRYPTOPP_GCC_VERSION >= 40900) || (__INTEL_COMPILER >= 1400) || \
-+ 	(CRYPTOPP_LLVM_CLANG_VERSION >= 30100) || (CRYPTOPP_APPLE_CLANG_VERSION >= 40600))
-+ #define CRYPTOPP_AVX2_AVAILABLE 1
-+ #endif
-+-- 
-+2.14.1
-+
+diff --git a/configs/orangepi_lite2_defconfig b/configs/orangepi_lite2_defconfig
+index 2d4ae70eab..c6be1c46b4 100644
+--- a/configs/orangepi_lite2_defconfig
++++ b/configs/orangepi_lite2_defconfig
+@@ -2,8 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+diff --git a/configs/orangepi_one_plus_defconfig b/configs/orangepi_one_plus_defconfig
+index 30c422efc2..1084d42233 100644
+--- a/configs/orangepi_one_plus_defconfig
++++ b/configs/orangepi_one_plus_defconfig
+@@ -2,8 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
