@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:29:35 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] DEVELOPERS: update email
- address for Gary Bisson
-Message-ID: <20190222122952.1C24488D2D@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 14:15:09 +0100
+Subject: [Buildroot] [PATCH v2] package/proftpd: prevent openssl pthread
+ detection
+In-Reply-To: <e524cd32-35c3-ce10-5bc9-68a438d71d3e@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 22 Feb 2019 00:20:06 +0100")
+References: <1550782347-31389-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <e524cd32-35c3-ce10-5bc9-68a438d71d3e@mind.be>
+Message-ID: <87pnrkj76q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2f63d59fe8a23e495933485a2ed969d4a53817
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 74693e09ae6dc5954839a431b4779dcefaf37a6d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > On 21/02/2019 21:52, Matt Weber wrote:
+ >> Openssl cmdline executable can be used as a config test which
+ >> results in either the host-openssl or host system's openssl
+ >> being used to detect the linking with -pthread. This is an
+ >> issue as a system maybe building with a toolchain without
+ >> thread support. (To review the detection logic, see proftpd
+ >> configure.in and search for pr_use_pthread_for_openssl)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ba16b4667a..19423e6360 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -711,7 +711,7 @@ F:	package/qt5/qt5virtualkeyboard/
- F:	package/qt5/qt5webengine/
- F:	package/qt5/qt5webkit-examples/
- 
--N:	Gary Bisson <gary.bisson@boundarydevices.com>
-+N:	Gary Bisson <bisson.gary@gmail.com>
- F:	board/boundarydevices/
- F:	configs/nitrogen*
- F:	package/freescale-imx/
+ >  I noticed a potential issue: now pthread never gets linked in, even if openssl
+ > is built with thread support and when linking statically.
+
+ >  However, it turns out that that is not a problem because openssl (at least in
+ > the version we use) doesn't pull in its thread support automatically.
+
+ >  So, I completely rewrote the commit message and applied to master, thanks.
+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
+I did a test build on 2018.02.x to verify.
+
+-- 
+Bye, Peter Korsgaard
