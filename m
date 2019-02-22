@@ -1,37 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Feb 2019 10:50:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gdb: disable inprocess-agent in
- static build
-Message-ID: <20190222095044.32559-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Feb 2019 11:04:44 +0100
+Subject: [Buildroot] [PATCH v1] package/pulseaudio: fix S50pulseaudio
+ init script
+In-Reply-To: <20190213190547.6383-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 13 Feb 2019 20:05:47 +0100")
+References: <20190213190547.6383-1-ps.report@gmx.net>
+Message-ID: <8736ogqgub.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/b40bdbca6669a81301fca523e982dbc9584a4e65
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gdb/gdb.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ > - fix the following start warnings:
+ >   W: [pulseaudio] main.c: Running in system mode, but --disallow-exit not set.
+ >   W: [pulseaudio] main.c: Running in system mode, but --disallow-module-loading not set.
+ >   N: [pulseaudio] main.c: Running in system mode, forcibly disabling SHM mode.
+ >   N: [pulseaudio] main.c: Running in system mode, forcibly disabling exit idle time.
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 062f3a730c..a926961372 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -139,6 +139,11 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- GDB_CONF_OPTS += --disable-build-with-cxx
- endif
- 
-+# inprocess-agent can't be built statically
-+ifeq ($(BR2_STATIC_LIBS),y)
-+GDB_CONF_OPTS += --disable-inprocess-agent
-+endif
-+
- ifeq ($(BR2_PACKAGE_GDB_TUI),y)
- GDB_CONF_OPTS += --enable-tui
- else
+ > - fix the following stop error:
+
+ >   E: [pulseaudio] main.c: Failed to kill daemon: No such process
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2018.11.x, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
