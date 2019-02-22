@@ -1,92 +1,196 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 14:45:04 +0100
-Subject: [Buildroot] [git commit] package/unzip: add security and bug fix
- patches from Debian
-Message-ID: <20190222134409.7BA7B8D597@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 22 Feb 2019 16:46:30 +0200
+Subject: [Buildroot] [PATCH RFC/next 1/4] package/webkit: new home for
+ GTK and WPE WebKit components
+In-Reply-To: <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
+References: <20190218171719.18721-1-aperez@igalia.com>
+ <20190218171719.18721-2-aperez@igalia.com>
+ <CAB0FRsvJuxkJ03b5RpmsPPbymOvxpwxGQjgF_EJxxUPRRvvyBQ@mail.gmail.com>
+Message-ID: <20190222164630.GB20589@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=872561cd5b35d0516338cd2530a4ac1236d3efb1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello!
 
-Debian bug #741384: Buffer overflow
+On Fri, 22 Feb 2019 11:40:20 +0100, Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+> Le lun. 18 f?vr. 2019 ? 18:17, Adrian Perez de Castro <aperez@igalia.com> a
+> ?crit :
+> 
+> > Move the packages related to the GTK and WPE WebKit ports (webkitgtk,
+> > libwpe, wpewebkit, wpebackend-fdo) under a new package/webkit/
+> > subbdirectory as the first step to unify some of their configuration.
+> >
+> >
+> Moving packages into a subdirectory is discouraged,
+> see https://buildroot.org/downloads/manual/manual.html#_package_directory
 
-Debian bug #744212: Buffer overflow
+On the other hand, while adding new subdirectories is discouraged, it is
+not forbidden. In this case I thought that it could make sense grouping the
+the (very related) WebKit packages. Also note that I expect to be adding a
+more in the future [1].
 
-CVE-2014-8139: CRC32 verification heap-based overflow
+That being said, I am of course open to alternative suggestions, and in
+particular knowing where the common parts that this patch set adds into
+?webkit/webkit.mk? and ?webkit/Config.in? would go in the case of not
+making a subdirectory to group the related packages. Any ideas?
 
-CVE-2014-8140: Out-of-bounds write issue in test_compr_eb()
+Cheers,
 
-CVE-2014-8141: Out-of-bounds read issues in getZip64Data()
 
-CVE-2014-9636: Heap overflow
+-Adri?n
 
-CVE-2015-7696: Heap overflow when extracting password-protected archive
 
-CVE-2015-7697: Infinite loop when extracting password-protected archive
+> Fran?ois
+> 
+> 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > ---
+> >  package/Config.in                                       | 8 ++++----
+> >  package/{ => webkit}/libwpe/Config.in                   | 0
+> >  package/{ => webkit}/libwpe/libwpe.hash                 | 0
+> >  package/{ => webkit}/libwpe/libwpe.mk                   | 0
+> >  package/webkit/webkit.mk                                | 7 +++++++
+> >  package/{ => webkit}/webkitgtk/Config.in                | 0
+> >  package/{ => webkit}/webkitgtk/webkitgtk.hash           | 0
+> >  package/{ => webkit}/webkitgtk/webkitgtk.mk             | 0
+> >  package/{ => webkit}/wpebackend-fdo/Config.in           | 0
+> >  package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash | 0
+> >  package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk   | 0
+> >  package/{ => webkit}/wpewebkit/Config.in                | 0
+> >  package/{ => webkit}/wpewebkit/wpewebkit.hash           | 0
+> >  package/{ => webkit}/wpewebkit/wpewebkit.mk             | 0
+> >  14 files changed, 11 insertions(+), 4 deletions(-)
+> >  rename package/{ => webkit}/libwpe/Config.in (100%)
+> >  rename package/{ => webkit}/libwpe/libwpe.hash (100%)
+> >  rename package/{ => webkit}/libwpe/libwpe.mk (100%)
+> >  create mode 100644 package/webkit/webkit.mk
+> >  rename package/{ => webkit}/webkitgtk/Config.in (100%)
+> >  rename package/{ => webkit}/webkitgtk/webkitgtk.hash (100%)
+> >  rename package/{ => webkit}/webkitgtk/webkitgtk.mk (100%)
+> >  rename package/{ => webkit}/wpebackend-fdo/Config.in (100%)
+> >  rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.hash (100%)
+> >  rename package/{ => webkit}/wpebackend-fdo/wpebackend-fdo.mk (100%)
+> >  rename package/{ => webkit}/wpewebkit/Config.in (100%)
+> >  rename package/{ => webkit}/wpewebkit/wpewebkit.hash (100%)
+> >  rename package/{ => webkit}/wpewebkit/wpewebkit.mk (100%)
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 420e6e95a3..65faf1fcd6 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -1304,7 +1304,6 @@ menu "Graphics"
+> >         source "package/libva-intel-driver/Config.in"
+> >         source "package/libvdpau/Config.in"
+> >         source "package/libvips/Config.in"
+> > -       source "package/libwpe/Config.in"
+> >         source "package/menu-cache/Config.in"
+> >         source "package/opencv/Config.in"
+> >         source "package/opencv3/Config.in"
+> > @@ -1320,11 +1319,12 @@ menu "Graphics"
+> >         source "package/wayland/Config.in"
+> >         source "package/wayland-protocols/Config.in"
+> >         source "package/waylandpp/Config.in"
+> > -       source "package/webkitgtk/Config.in"
+> > +       source "package/webkit/webkitgtk/Config.in"
+> > +       source "package/webkit/libwpe/Config.in"
+> > +       source "package/webkit/wpebackend-fdo/Config.in"
+> > +       source "package/webkit/wpewebkit/Config.in"
+> >         source "package/webp/Config.in"
+> >         source "package/woff2/Config.in"
+> > -       source "package/wpebackend-fdo/Config.in"
+> > -       source "package/wpewebkit/Config.in"
+> >         source "package/zbar/Config.in"
+> >         source "package/zxing-cpp/Config.in"
+> >  endmenu
+> > diff --git a/package/libwpe/Config.in b/package/webkit/libwpe/Config.in
+> > similarity index 100%
+> > rename from package/libwpe/Config.in
+> > rename to package/webkit/libwpe/Config.in
+> > diff --git a/package/libwpe/libwpe.hash b/package/webkit/libwpe/libwpe.hash
+> > similarity index 100%
+> > rename from package/libwpe/libwpe.hash
+> > rename to package/webkit/libwpe/libwpe.hash
+> > diff --git a/package/libwpe/libwpe.mk b/package/webkit/libwpe/libwpe.mk
+> > similarity index 100%
+> > rename from package/libwpe/libwpe.mk
+> > rename to package/webkit/libwpe/libwpe.mk
+> > diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+> > new file mode 100644
+> > index 0000000000..47e94d72f6
+> > --- /dev/null
+> > +++ b/package/webkit/webkit.mk
+> > @@ -0,0 +1,7 @@
+> >
+> > +################################################################################
+> > +#
+> > +# Common definitions for the GTK and WPE WebKit ports.
+> > +#
+> >
+> > +################################################################################
+> > +
+> > +include $(sort $(wildcard package/webkit/*/*.mk))
+> > diff --git a/package/webkitgtk/Config.in
+> > b/package/webkit/webkitgtk/Config.in
+> > similarity index 100%
+> > rename from package/webkitgtk/Config.in
+> > rename to package/webkit/webkitgtk/Config.in
+> > diff --git a/package/webkitgtk/webkitgtk.hash
+> > b/package/webkit/webkitgtk/webkitgtk.hash
+> > similarity index 100%
+> > rename from package/webkitgtk/webkitgtk.hash
+> > rename to package/webkit/webkitgtk/webkitgtk.hash
+> > diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkit/webkitgtk/
+> > webkitgtk.mk
+> > similarity index 100%
+> > rename from package/webkitgtk/webkitgtk.mk
+> > rename to package/webkit/webkitgtk/webkitgtk.mk
+> > diff --git a/package/wpebackend-fdo/Config.in
+> > b/package/webkit/wpebackend-fdo/Config.in
+> > similarity index 100%
+> > rename from package/wpebackend-fdo/Config.in
+> > rename to package/webkit/wpebackend-fdo/Config.in
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash
+> > b/package/webkit/wpebackend-fdo/wpebackend-fdo.hash
+> > similarity index 100%
+> > rename from package/wpebackend-fdo/wpebackend-fdo.hash
+> > rename to package/webkit/wpebackend-fdo/wpebackend-fdo.hash
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk
+> > b/package/webkit/wpebackend-fdo/wpebackend-fdo.mk
+> > similarity index 100%
+> > rename from package/wpebackend-fdo/wpebackend-fdo.mk
+> > rename to package/webkit/wpebackend-fdo/wpebackend-fdo.mk
+> > diff --git a/package/wpewebkit/Config.in
+> > b/package/webkit/wpewebkit/Config.in
+> > similarity index 100%
+> > rename from package/wpewebkit/Config.in
+> > rename to package/webkit/wpewebkit/Config.in
+> > diff --git a/package/wpewebkit/wpewebkit.hash
+> > b/package/webkit/wpewebkit/wpewebkit.hash
+> > similarity index 100%
+> > rename from package/wpewebkit/wpewebkit.hash
+> > rename to package/webkit/wpewebkit/wpewebkit.hash
+> > diff --git a/package/wpewebkit/wpewebkit.mk b/package/webkit/wpewebkit/
+> > wpewebkit.mk
+> > similarity index 100%
+> > rename from package/wpewebkit/wpewebkit.mk
+> > rename to package/webkit/wpewebkit/wpewebkit.mk
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Red Hat Bugzilla #1260944: Unsigned overflow on invalid input
-
-Debian bug #842993: Do not ignore Unix Timestamps
-
-CVE-2014-9913: Buffer overflow
-
-CVE-2016-9844: Buffer overflow in zipinfo
-
-CVE-2018-1000035: Buffer overflow in password protected ZIP archives
-
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unzip/unzip.hash | 13 +++++++++++++
- package/unzip/unzip.mk   | 15 +++++++++++++++
- 2 files changed, 28 insertions(+)
-
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index a138cc27c9..fbf2615ad6 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -1,2 +1,15 @@
- # Locally computed:
- sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
-+sha256 66a364d75cea29363768ca6d43dd11b9913a59e42b8da16c4f63516c3e4ce7c1 07-increase-size-of-cfactorstr.patch
-+sha256 3a8cfd2702d220c6c119eaf805b018b66460284e585e92adc8a572d190471724 08-allow-greater-hostver-values.patch
-+sha256 0a1b23118b2f4a3ed097348ab33050d4f79b3863ab30e6d64ac382589834e3de 09-cve-2014-8139-crc-overflow.patch
-+sha256 32b1eda30644c44a8bdb9a02ff08bb2eca107f8eb16dda6992a9b778a0de395e 10-cve-2014-8140-test-compr-eb.patch
-+sha256 1f60f6e28b36f3cddb7da64c528cfe29160cefa1232e13bb8a47561f574067a9 11-cve-2014-8141-getzip64data.patch
-+sha256 c05885bb48b41603f0893ada88f15c0fae3b3f9f6489f24ad630a400f6271351 12-cve-2014-9636-test-compr-eb.patch
-+sha256 788c29727ff0689c3b1828466127758426f6d2c769048aa985950373747c76f3 14-cve-2015-7696.patch
-+sha256 e85dab65c3ebf3c4ab3359a4143cfd0efccfd1cac517a4e7bd5f518f41a02b6f 15-cve-2015-7697.patch
-+sha256 95dd15d5d9cdf5cea18c357b152930d6d52660599e0fd4907d6405870fdd9fe1 16-fix-integer-underflow-csiz-decrypted.patch
-+sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-restore-unix-timestamps-accurately.patch
-+sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
-+sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
-+sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index cff5951ac0..43e90125e6 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -10,4 +10,19 @@ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
- UNZIP_LICENSE = Info-ZIP
- UNZIP_LICENSE_FILES = LICENSE
- 
-+UNZIP_PATCH = \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/07-increase-size-of-cfactorstr.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/08-allow-greater-hostver-values.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/09-cve-2014-8139-crc-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/11-cve-2014-8141-getzip64data.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/14-cve-2015-7696.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/15-cve-2015-7697.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/17-restore-unix-timestamps-accurately.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch
-+
- $(eval $(cmake-package))
+[1] For example: https://github.com/WebPlatformForEmbedded/WPEBackend-rdk
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190222/8d77b316/attachment.asc>
