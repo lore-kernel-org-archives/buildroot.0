@@ -1,58 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:33:38 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/proftpd: prevent
- openssl pthread detection
-Message-ID: <20190222131313.1B6A98CA3F@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 14:17:58 +0100
+Subject: [Buildroot] [PATCH-for-master] package/dtc: additional fix of
+ include guards for older u-boot
+In-Reply-To: <20190221125652.14226-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Thu, 21 Feb 2019 13:56:51 +0100")
+References: <20190221125652.14226-1-patrickdepinguin@gmail.com>
+Message-ID: <87k1hsj721.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a744c5c4dad325a8eb7c9c8dc7fc3852e82a7169
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-The proftpd configure script doesn't use pkg-config to detect openssl
-libraries. Instead, it just adds -lcrypto. Since openssl may be linked
-with pthread, it tries to detect that by calling 'openssl version -f',
-which gives the arguments with which openssl was compiled.
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > With recent dtc but old u-boot, compilation issues occur related to libfdt.
+ > These problems really are u-boot issue since it does not properly set
+ > include paths so that its own headers are included. Nevertheless, since the
+ > u-boot version is typically decided by users and stuck at some version
+ > provided by a SoC or board vendor, it is not feasible to fix those old
+ > versions.
 
-Since the openssl executable used is either host-openssl or the system
-installed openssl, the output of 'openssl version -f' is useless in
-Buildroot context. If the target toolchain doesn't have threads support,
-it will wrongly pick up -pthread from host-openssl.
+ > Instead, already several fixes were made in the past, in Buildroot.
+ > See commits:
 
-Fortunately there is a simple workaround: --without-openssl-cmdline says
-that there is no openssl executable and skips the test, so -pthread is
-not added. It turns out -pthread is never needed, even in static linking
-cases, because openssl/libressl puts the thread support in a separate
-object file that only gets linked in if the program actually uses
-threads (which proftpd doesn't).
+ > c7ffd8a75d5 "package/dtc: fix include guards for older kernel/u-boot"
+ > f437bf547ca "uboot: fix build for older uboot source trees"
+ > bf733342324 "uboot: fix build when libfdt-devel is installed system-wide"
+ > 0bf80e4bcd5 "uboot: ensure host includes are searched before system default
+ >                 includes"
+ > b15a7a62d3f "uboot: revert "uboot: use local libfdt.h""
+ > baae5156ce3 "uboot: use local fdt headers"
+ > 3a6573ccee2 "uboot: use local libfdt.h"
 
-Fixes:
-http://autobuild.buildroot.net/results/9c25c3cb3cf93b76c0538c5376a803641bf6575b
+ > Commit c7ffd8a75d55e24d793106eabbb80964ab91081f fixes the problem caused by
+ > dtc having changed their include guards from _FOO_H to FOO_H (leading
+ > underscore removed). Old u-boot would still use _FOO_H, which (combined with
+ > host-dtc headers that use FOO_H) would cause the inclusion of two different
+ > copies of the same nominal include file, e.g. libfdt.h or libfdt_env.h,
+ > causing 'error: redefinition of xxx' compilation issues.
+ > The fix sets the 'new' include guard when the 'old' one is detected,
+ > preventing a second inclusion of the same nominal file.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Rewrite commit log, after additional analysis and testing]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > For some u-boot versions, however, this change not only needs to be made in
+ > libfdt.h and libfdt_env.h, but also in 'fdt.h'.
 
-(cherry picked from commit 51bb23652fbb5597d10cf2dc49948f9405c5619b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/proftpd/proftpd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Update the dtc patch to do just that.
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 8f3ff5088e..1f1c742f66 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -21,7 +21,8 @@ PROFTPD_CONF_OPTS = \
- 	--disable-facl \
- 	--disable-dso \
- 	--enable-shadow \
--	--with-gnu-ld
-+	--with-gnu-ld \
-+	--without-openssl-cmdline
- 
- ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
- PROFTPD_MODULES += mod_rewrite
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2018.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
