@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 13:31:51 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/swupdate: update license files
-In-Reply-To: <20190217175537.20091-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 17 Feb 2019 18:55:37 +0100")
-References: <20190217175537.20091-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tvgwj96w.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Feb 2019 13:29:30 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] DEVELOPERS: update email
+ address for Gary Bisson
+Message-ID: <20190222122948.16D4F8150C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7b4ff16dd1c9611ede4bb1bed79404a88993e578
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > COPYING contains only the license for GPL-2.0 so use the new license
- > files that have been added in the Licenses directory since version
- > 2018.03 and
- > https://github.com/sbabic/swupdate/commit/32c1f98eaca69e362be074197f84a59d994c0876
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 74693e09ae6dc5954839a431b4779dcefaf37a6d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Also update GPL-2.0+ to "GPL-2.0+ with OpenSSL exception" and add
- > Exceptions file, see:
- > https://github.com/sbabic/swupdate/commit/66d0dbe80f49eb49f8999c9d738579651fc38134
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Add package prefix in title
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e055a96c59..1cb4a9b4b6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -851,7 +851,7 @@ F:	package/qt5/qt5webengine/
+ F:	package/qt5/qt5webkit/
+ F:	package/qt5/qt5webkit-examples/
+ 
+-N:	Gary Bisson <gary.bisson@boundarydevices.com>
++N:	Gary Bisson <bisson.gary@gmail.com>
+ F:	board/boundarydevices/
+ F:	configs/nitrogen*
+ F:	package/freescale-imx/
