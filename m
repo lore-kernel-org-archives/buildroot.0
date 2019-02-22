@@ -1,59 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Feb 2019 12:13:07 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/qt5/qt5base:
- handle sse2/sse3/ssse3/sse4.1/sse4.2/avx/avx2 configuration
-Message-ID: <20190222114347.951068C60B@busybox.osuosl.org>
+Date: Fri, 22 Feb 2019 12:45:42 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: don't check hashes
+ for user-supplied patches
+Message-ID: <20190222114347.9F3C98C60B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af838045f88eb9525b0bacc78fe8b4511be5c850
+commit: https://git.buildroot.net/buildroot/commit/?id=323d3e1c2f07c8e84c4386e67fba52f248b6b266
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The Qt configure auto detection (and announced runtime detection
-feature) failes (see e.g. [1]), so override the configuration
-with the buildroot determined settings.
+We have virtually no way to know the hashes for user-supplied patches,
+so we should just ignore them.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-January/241862.html
-
-Reported-by: David Picard <dplamp@gmx.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reported-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Tested-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8f9009e5bd14fac29038bf6728c1e019d2b2ffc7)
+(cherry picked from commit 3ae8dab9e91055b6f674b0287bcb8b1aa90d16e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index b79059c2a4..b96c2eb04a 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -33,6 +33,25 @@ else
- QT5BASE_DEPENDENCIES += pcre2
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index bcd5e9cff1..1da4b36c4a 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,6 +55,9 @@ endif
  
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse2
-+else ifeq ($(BR2_X86_CPU_HAS_SSE3),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse3
-+else ifeq ($(BR2_X86_CPU_HAS_SSSE3),)
-+QT5BASE_CONFIGURE_OPTS += -no-ssse3
-+else ifeq ($(BR2_X86_CPU_HAS_SSE4),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse4.1
-+else ifeq ($(BR2_X86_CPU_HAS_SSE42),)
-+QT5BASE_CONFIGURE_OPTS += -no-sse4.2
-+else ifeq ($(BR2_X86_CPU_HAS_AVX),)
-+QT5BASE_CONFIGURE_OPTS += -no-avx
-+else ifeq ($(BR2_X86_CPU_HAS_AVX2),)
-+QT5BASE_CONFIGURE_OPTS += -no-avx2
-+else
-+# no buildroot BR2_X86_CPU_HAS_AVX512 option yet for qt configure
-+# option '-no-avx512' (available for latest only)
-+endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
++# We have no way to know the hashes for user-supplied patches.
++BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
 +
- QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
- 
- ifeq ($(BR2_PACKAGE_LIBDRM),y)
+ # We rely on the generic package infrastructure to download and apply
+ # remote patches (downloaded from ftp, http or https). For local
+ # patches, we can't rely on that infrastructure, because there might
