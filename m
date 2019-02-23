@@ -1,38 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Feb 2019 09:13:28 +0100
-Subject: [Buildroot] raspberrypi3_qt5we_defconfig on mind autobuilder
-In-Reply-To: <20190222214817.698f98c6@windsurf>
-References: <20190222214817.698f98c6@windsurf>
-Message-ID: <492a38b4-9e02-98e5-dbce-be8089096c97@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Feb 2019 09:46:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/stress-ng: Fix build issue with
+ libbsd wchar check
+In-Reply-To: <20190101154105.22148-1-vadim4j@gmail.com> (Vadim Kochan's
+ message of "Tue, 1 Jan 2019 17:41:05 +0200")
+References: <20190101154105.22148-1-vadim4j@gmail.com>
+Message-ID: <87va1ahoxt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
+ > stress-ng uses test/test-bsd-wchar.c program to check if there is
+ > support for libbsd's wchar, but the test fails because wchar.h also
+ > requires the FILE* definition from stdio.h which is not included
+ > automatically, so fix it by include stdio.h explicitly.
 
-On 22/02/2019 21:48, Thomas Petazzoni wrote:
-> Hello Arnout,
-> 
-> The build of raspberrypi3_qt5we_defconfig was done today on Mind's
-> autobuilder, and it failed. See
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/165766158. The issue
-> is simply:
-> 
-> arm-buildroot-linux-gnueabihf-g++.br_real: internal compiler error:
-> Killed (program cc1plus)
-> 
-> Could you check if you had an OOM situation perhaps ?
+ > Fixes:
+ > 	http://autobuild.buildroot.net/results/6def1bba8e7ec05682e74c4edc3a35c8c118d28b
 
- Indeed:
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-Feb 22 18:34:57 belels006 kernel: [1474258.679372] cc1plus invoked oom-killer:
-gfp_mask=0x280da, order=0, oom_score_adj=0
+Committed, thanks.
 
- That machine unfortunately only has 12GB of memory, which is a bit tight for
-qt5we... It would help if I could lower the JLEVEL (the thing has 22 CPUs), do
-you know an easy way to do that?
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
