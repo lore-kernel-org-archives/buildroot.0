@@ -1,32 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 09:54:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to 0.3.5.8
-In-Reply-To: <20190223075029.1838-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 23 Feb 2019 08:50:29 +0100")
-References: <20190223075029.1838-1-bernd.kuhls@t-online.de>
-Message-ID: <87mummhol7.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Feb 2019 09:53:50 +0100
+Subject: [Buildroot] [git commit] configs/imx23evk: Bump the U-Boot version
+Message-ID: <20190223085224.9262E8B6E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d76dce1f43ac06579d386eb77b35c461e12d981f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://blog.torproject.org/new-releases-tor-0402-alpha-0358-03411-and-03312
+Thomas Petazzoni reports:
 
- > Fixes CVE-2019-8955:
- > KIST can write above outbuf highwater mark
- > https://trac.torproject.org/projects/tor/ticket/29168
+"The imx23evk_defconfig no longer builds:
 
- > Updated license hash after upstream commit
- > https://gitweb.torproject.org/tor.git/commit/LICENSE?h=maint-0.3.5&id=efe55b88987c2539c218fdf1f46f16f9bdc3a8eb
- > which bumps copyright date to 2019.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This is due to the bump of OpenSSL to 1.1.x. This issue seems to have
+been fixed in U-Boot commit 7bae13b7579a6bc42330427496330fe2a29cbd56,
+which is part of U-Boot since 2017.01, but the defconfig is using
+2016.09."
 
-Committed, thanks.
+Bump to the U-Boot 2019.01 to fix this problem.
 
--- 
-Bye, Peter Korsgaard
+Fixes:  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/imx23evk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
+index fe0744036d..87610d1b72 100644
+--- a/configs/imx23evk_defconfig
++++ b/configs/imx23evk_defconfig
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-evk"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx23evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
