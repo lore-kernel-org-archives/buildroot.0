@@ -1,46 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 19:36:06 +0100
-Subject: [Buildroot] [PATCH] package/unzip: add security and bug fix
- patches from Debian
-In-Reply-To: <0a4e77a81e8dd78540acefbf12952839099383c8.1550813794.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 22 Feb 2019 07:36:34 +0200")
-References: <0a4e77a81e8dd78540acefbf12952839099383c8.1550813794.git.baruch@tkos.co.il>
-Message-ID: <87a7imgxnt.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Feb 2019 19:37:30 +0100
+Subject: [Buildroot] [PATCH] package/bind: security bump to version
+ 9.11.5-P4
+In-Reply-To: <20190222134038.28900-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 22 Feb 2019 14:40:38 +0100")
+References: <20190222134038.28900-1-peter@korsgaard.com>
+Message-ID: <875ztagxlh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Debian bug #741384: Buffer overflow
- > Debian bug #744212: Buffer overflow
+ > Fixes the following security issues:
+ > - named could crash during recursive processing of DNAME records when
+ >   deny-answer-aliases was in use.  This flaw is disclosed in CVE-2018-5740.
+ >   [GL #387]
 
- > CVE-2014-8139: CRC32 verification heap-based overflow
+ > - When recursion is enabled but the allow-recursion and allow-query-cache
+ >   ACLs are not specified, they should be limited to local networks, but they
+ >   were inadvertently set to match the default allow-query, thus allowing
+ >   remote queries.  This flaw is disclosed in CVE-2018-5738.  [GL #309]
 
- > CVE-2014-8140: Out-of-bounds write issue in test_compr_eb()
+ > - Code change #4964, intended to prevent double signatures when deleting an
+ >   inactive zone DNSKEY in some situations, introduced a new problem during
+ >   zone processing in which some delegation glue RRsets are incorrectly
+ >   identified as needing RRSIGs, which are then created for them using the
+ >   current active ZSK for the zone.  In some, but not all cases, the
+ >   newly-signed RRsets are added to the zone's NSEC/NSEC3 chain, but
+ >   incompletely -- this can result in a broken chain, affecting validation of
+ >   proof of nonexistence for records in the zone.  [GL #771]
 
- > CVE-2014-8141: Out-of-bounds read issues in getZip64Data()
+ > - named could crash if it managed a DNSSEC security root with managed-keys
+ >   and the authoritative zone rolled the key to an algorithm not supported by
+ >   BIND 9.  This flaw is disclosed in CVE-2018-5745.  [GL #780]
 
- > CVE-2014-9636: Heap overflow
+ > - named leaked memory when processing a request with multiple Key Tag EDNS
+ >   options present.  ISC would like to thank Toshifumi Sakaguchi for bringing
+ >   this to our attention.  This flaw is disclosed in CVE-2018-5744.  [GL
+ >   #772]
 
- > CVE-2015-7696: Heap overflow when extracting password-protected archive
+ > - Zone transfer controls for writable DLZ zones were not effective as the
+ >   allowzonexfr method was not being called for such zones.  This flaw is
+ >   disclosed in CVE-2019-6465.  [GL #790]
 
- > CVE-2015-7697: Infinite loop when extracting password-protected archive
+ > For more details, see the release notes:
 
- > Red Hat Bugzilla #1260944: Unsigned overflow on invalid input
+ > http://ftp.isc.org/isc/bind9/9.11.5-P4/RELEASE-NOTES-bind-9.11.5-P4.html
 
- > Debian bug #842993: Do not ignore Unix Timestamps
+ > Change the upstream URL to HTTPS as the webserver uses HSTS:
 
- > CVE-2014-9913: Buffer overflow
+ >>>> bind 9.11.5-P4 Downloading
+ > URL transformed to HTTPS due to an HSTS policy
 
- > CVE-2016-9844: Buffer overflow in zipinfo
+ > Update the hash of the license file to account for a change of copyright
+ > year:
 
- > CVE-2018-1000035: Buffer overflow in password protected ZIP archives
+ > -Copyright (C) 1996-2018  Internet Systems Consortium, Inc. ("ISC")
+ > +Copyright (C) 1996-2019  Internet Systems Consortium, Inc. ("ISC")
 
- > Cc: Luca Ceresoli <luca@lucaceresoli.net>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x and 2018.11.x, thanks.
 
