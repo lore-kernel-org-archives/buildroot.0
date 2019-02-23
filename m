@@ -1,57 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 15:34:10 +0100
-Subject: [Buildroot] Buildroot 2019.02-rc2 released
-Message-ID: <87ef7yh8v1.fsf@dell.be.48ers.dk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 23 Feb 2019 15:46:41 +0100
+Subject: [Buildroot] [PATCH] lua-curl: add variant definition of lcurl_url_t
+Message-ID: <20190223144641.14346-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+fix build http://autobuild.buildroot.org/results/8d7/8d76ad49837b368a7bba3c3dfd445a035471268a/
 
-Buildroot 2019.02-rc2 is released - Go download it at:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...dd-variant-definition-of-lcurl_url_t.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
 
-http://buildroot.net/downloads/buildroot-2019.02-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2019.02-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2019.02-rc1..
-
-    15  Fabrice Fontaine
-    10  Thomas Petazzoni
-     7  Peter Korsgaard
-     4  Peter Seiderer
-     3  Angelo Compagnucci
-     2  Baruch Siach
-     2  Yann E. MORIN
-     1  Bartosz Golaszewski
-     1  Bernd Kuhls
-     1  Fabio Estevam
-     1  Gary Bisson
-     1  Gervais, Francois
-     1  J?rg Krause
-     1  Matt Weber
-     1  Thomas De Schampheleire
-     1  Trent Piepho
-     1  Vadim Kochan
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02-rc2
-
-Expect the final 2019.02 release by the end of the month.
-
+diff --git a/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+new file mode 100644
+index 000000000..0fdd0760d
+--- /dev/null
++++ b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+@@ -0,0 +1,40 @@
++From 28ac0c5e642c9f7e3091a60268745f7cab4cc92b Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 23 Feb 2019 15:23:26 +0100
++Subject: [PATCH] add variant definition of lcurl_url_t
++
++like in lceasy.h
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ src/lcurlapi.h | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/Lua-cURLv3-0.3.9/src/lcurlapi.h b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++index 4dd4672..862c94f 100644
++--- a/Lua-cURLv3-0.3.9/src/lcurlapi.h
+++++ b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++@@ -19,11 +19,20 @@
++ 
++ #if LCURL_CURL_VER_GE(7,62,0)
++ 
+++#if LCURL_CC_SUPPORT_FORWARD_TYPEDEF
++ typedef struct lcurl_url_tag {
++   CURLU *url;
++ 
++   int err_mode;
++ }lcurl_url_t;
+++#else
+++struct lcurl_url_tag {
+++  CURLU *url;
+++
+++  int err_mode;
+++};
+++#define lcurl_url_t struct lcurl_url_tag
+++#endif
++ 
++ int lcurl_url_create(lua_State *L, int error_mode);
++ 
++-- 
++2.17.1
++
 -- 
-Bye, Peter Korsgaard
+2.17.1
