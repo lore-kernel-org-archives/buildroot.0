@@ -1,100 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 22:46:33 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.11
-Message-ID: <20190223214506.15AF18D700@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 22:52:35 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] board/pc: fix typo in
+ board/pc/post-build.sh
+Message-ID: <20190223215040.136528B716@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d42220921c9602b856e7baca09c3a20c69b00631
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=8ead378c7edcf2a9ab4ef64386fc2f4403848feb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
+Signed-off-by: Gr??goire Delattre <gregoire.delattre@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9f1256e1aae0a1e91e033d51b968415adec117bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ board/pc/post-build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3f304daf30..bec15f403d 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+index 552d488160..ed37b3b87e 100755
+--- a/board/pc/post-build.sh
++++ b/board/pc/post-build.sh
+@@ -11,5 +11,5 @@ else
+     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.10</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.11</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.10.tar.gz">buildroot-2018.02.10.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.10.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.11.tar.gz">buildroot-2018.02.11.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.11.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.10.tar.bz2">buildroot-2018.02.10.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.10.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.11.tar.bz2">buildroot-2018.02.11.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.11.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 45d2eb5535..42a05146b2 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>23 February 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.11 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02.10 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.11">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-February/243944.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.11.tar.bz2">2018.02.11 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+     # Copy grub 1st stage to binaries, required for genimage
+-    cp -f "$HOST_DIR/lib/grub/i387-pc/boot.img" "$BINARIES_DIR"
++    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
+ fi
