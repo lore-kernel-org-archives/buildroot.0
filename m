@@ -1,54 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 22:42:56 +0100
-Subject: [Buildroot] [git commit] Update for 2018.02.11
-Message-ID: <20190223214506.0CEAF8D700@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 22:46:33 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2018.02.11
+Message-ID: <20190223214506.15AF18D700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea5cf87d56a43dfb696f0b3c17bf376a9c65b5dc
+commit: https://git.buildroot.net/buildroot/commit/?id=d42220921c9602b856e7baca09c3a20c69b00631
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 56347fc8eabc7c563bb9794ac5a9429fb9d2a6d9)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d4ecae315a..8bae45cea8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -953,6 +953,28 @@
- 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
- 		enabled
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 3f304daf30..bec15f403d 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2018.02.11, Released February 23th, 2019
-+
-+	Important / security related fixes.
-+
-+	Ensure the PLATFORM and OS environment variables are not set,
-+	as they cause build issues for some packages.
-+
-+	The package list infrastructure now correctly handles packages
-+	installing files with old mtime.
-+
-+	Linux: Skip hash checks for user supplied downloadable
-+	patches, as no hash checksums are available for those.
-+
-+	scanpypi: protect against zip-slip vulnerability in zip/tar
-+	handling
-+
-+	Updated/fixed packages: bind, dhcpcd, dovecot, ghostscript,
-+	gnuradio, imagemagick, jpeg-turbo, libarchive, libb64,
-+	libcurl, libid3tag, madplay, mosquitto, openssh, php,
-+	postgresql, proftpd, python, python-django, python3, qt5base,
-+	sqlcipher, swupdate, systemd, unzip, webkitgtk
-+
- 2018.02.10, Released January 31th, 2019
+-      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.10</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.11</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.02.10.tar.gz">buildroot-2018.02.10.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.10.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.11.tar.gz">buildroot-2018.02.11.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.11.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.02.10.tar.bz2">buildroot-2018.02.10.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02.10.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.11.tar.bz2">buildroot-2018.02.11.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.11.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 45d2eb5535..42a05146b2 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02.11 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>23 February 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.02.11 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.02.10 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.11">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-February/243944.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02.11.tar.bz2">2018.02.11 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
