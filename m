@@ -1,46 +1,31 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 22 Feb 2019 21:28:43 -0300
-Subject: [Buildroot] [PATCH] configs/imx23evk: Bump the U-Boot version
-Message-ID: <20190223002843.16473-1-festevam@gmail.com>
+Date: Fri, 22 Feb 2019 21:30:58 -0300
+Subject: [Buildroot] U-Boot update needed in imx23evk_defconfig
+In-Reply-To: <20190222221713.4d05d16f@windsurf>
+References: <20190208124718.650e4d42@windsurf>
+ <CAOMZO5Ceka8LQQr76UVScyTXNB8DemsRZ3UQQg8aYc5N4pwNBQ@mail.gmail.com>
+ <20190222221713.4d05d16f@windsurf>
+Message-ID: <CAOMZO5DwjNDAsFXrHS4smKY3uj-HwWrc=FGx=gzEO0SiCU=+5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni reports:
+Hi Thomas,
 
-"The imx23evk_defconfig no longer builds:
+On Fri, Feb 22, 2019 at 6:17 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
+> Do you have some news about the imx23evk U-Boot version bump ? It is
+> still failing to build on current master.
 
-This is due to the bump of OpenSSL to 1.1.x. This issue seems to have
-been fixed in U-Boot commit 7bae13b7579a6bc42330427496330fe2a29cbd56,
-which is part of U-Boot since 2017.01, but the defconfig is using
-2016.09."
+Sorry for the delay. Just sent a patch that bumps U-Boot to the latest
+2019.01 version.
 
-Bump to the U-Boot 2019.01 to fix this problem.
+Tried to also bump the kernel, but I noticed a mmc/pinctrl regression
+with 4.19 and I will need to investigate it later.
 
-Fixes:  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
+Regards,
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx23evk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
-index fe0744036d..87610d1b72 100644
---- a/configs/imx23evk_defconfig
-+++ b/configs/imx23evk_defconfig
-@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-evk"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx23evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_FORMAT_SD=y
- 
- # Filesystem
--- 
-2.17.1
+Fabio Estevam
