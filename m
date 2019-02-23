@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Feb 2019 22:39:15 +0100
-Subject: [Buildroot] [git commit] package/python-psutil: bump to version
- 5.5.1
-Message-ID: <20190305095736.4292D8E504@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 14:30:30 +0100
+Subject: [Buildroot] [git commit] package/python-pyzmq: bump to version
+ 18.0.0
+Message-ID: <20190305095736.4F8B58E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=553bab0a2898fa6497cd73e4d6837dd16bb513dc
+commit: https://git.buildroot.net/buildroot/commit/?id=0e77e873abba32dadef1898e8f9968b376f526fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyzmq/python-pyzmq.hash | 6 +++---
+ package/python-pyzmq/python-pyzmq.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 12d53f95c7..a6ad618d39 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5	0502dad59fcbe047baebe07165b1376a  psutil-5.5.0.tar.gz
--sha256	1aba93430050270750d046a179c5f3d6e1f5f8b96c20399ba38c596b28fc4d37  psutil-5.5.0.tar.gz
-+md5	81d6969ba8392cd3b6f5cba6c4e77caa  psutil-5.5.1.tar.gz
-+sha256	72cebfaa422b7978a1d3632b65ff734a34c6b34f4578b68a5c204d633756b810  psutil-5.5.1.tar.gz
- # Locally computed sha256 checksums
- sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 2a70845483..09d4e95167 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index eb8cf0923b..58d5fa1f56 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pyzmq/json, sha256 locally computed
+-md5  6f5d77cb5ec1617ce9b6e5ad7c6174fb  pyzmq-17.1.2.tar.gz
+-sha256  a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf  pyzmq-17.1.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyzmq/json
++md5    81d643d1e9eb9238960a18b6b0989db2  pyzmq-18.0.0.tar.gz
++sha256 b30c339eb58355f51f4f54dd61d785f1ff58c86bca1c3a5916977631d121867b  pyzmq-18.0.0.tar.gz
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index b977cca927..5d772b9fa3 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.5.0
-+PYTHON_PSUTIL_VERSION = 5.5.1
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/6e/a0/833bcbcede5141cc5615e50c7cc5b960ce93d9c9b885fbe3b7d36e48a2d4
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c7/01/7c30b247cdc5ba29623faa5c8cf1f1bbf7e041783c340414b0ed7e067c64
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_PYZMQ_VERSION = 17.1.2
++PYTHON_PYZMQ_VERSION = 18.0.0
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+-PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/b9/6a/bc9277b78f5c3236e36b8c16f4d2701a7fd4fa2eb697159d3e0a3a991573
++PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/64/8d/78975da77627fd863c08e8ea3c7cebce7e51bed2936be5118de6b0050638
+ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
