@@ -1,55 +1,65 @@
-From: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Date: Sat, 23 Feb 2019 19:59:41 +0100
-Subject: [Buildroot] Handling of rpi-firmware blobs broken for certain cases
-Message-ID: <CAKDzfnqJfpgU3S1ZVSBcZFG87vZk=+EBykqUJUG4LMajCNSmoQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Feb 2019 20:59:56 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.11
+Message-ID: <20190223195810.95A198B875@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good evening everyone,
+commit: https://git.buildroot.net/buildroot/commit/?id=56347fc8eabc7c563bb9794ac5a9429fb9d2a6d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-I just ran into an issue where the .elf and .dat files copied into
-/boot by buildroot when building for a Raspberry Pi are incorrect.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 22 ++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-Overview of the problem using current master (or 2018.11.2 which is
-the same apart from the version):
-- Put gpu_mem=16 in config.txt (the config file for the videocore of a
-raspberry)
-- When using <32M GPU memory the videocore needs the so called cut
-down versions ("start_cd.elf" and "fixup_cd.dat") of the binary blobs
-to boot. By emperical testing it seems@least "start_cd.elf" needs
-to be present under that exact name to be able to boot the rpi
-- Buildroot has some custom handling for these files
-(https://github.com/buildroot/buildroot/blob/master/package/rpi-firmware/rpi-firmware.mk#L40)
-and copies the correctly named "source" files from the rpi-firmware
-package to the incorrect "start.elf" and "fixup.dat" names
-- When trying to boot the RPi won't book (note I've only tested this
-with a CM3, not sure if behavior is different for other RPis)
-
-Whilst I'm sure this is solvable I'm wondering why this level of
-micro-management of these blobs is necessary? The .elf files are
-12.2MB and the .dat files are 28.6KB for all of them.
-These files only get copied into the image directory from where one
-can then choose which files to include in the actual image using the
-genimage config. I don't think copying +-12MB should be a problem.
-
-Also users have the possibility of changing the config.txt file
-(assume a writeable boot filesystem of course) which means they might
-need different versions of these start and fixup files and by
-extension multiple/all different versions of these blobs need to be
-present.
-
-With all of this said my suggestion would be to simplify how this is
-handled in buildroot by just copying all *.elf and *.dat files in the
-boot directory of rpi-firmware to the image directory.
-Then the person building the image can choose which of these (specific
-ones or all of them) to include using the genimage config.
-
-An example/suggestion for a fix can be found here
-https://github.com/simonvanderveldt/buildroot/commit/16880713c2c03ad50e8cfe7bf05331718d52742e
-I've tested this and it works like a charm :)
-
-Kind regards,
-Simon
+diff --git a/CHANGES b/CHANGES
+index 2bc4258a06..819950ee5b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,25 @@
++2018.02.11, Released February 23th, 2019
++
++	Important / security related fixes.
++
++	Ensure the PLATFORM and OS environment variables are not set,
++	as they cause build issues for some packages.
++
++	The package list infrastructure now correctly handles packages
++	installing files with old mtime.
++
++	Linux: Skip hash checks for user supplied downloadable
++	patches, as no hash checksums are available for those.
++
++	scanpypi: protect against zip-slip vulnerability in zip/tar
++	handling
++
++	Updated/fixed packages: bind, dhcpcd, dovecot, ghostscript,
++	gnuradio, imagemagick, jpeg-turbo, libarchive, libb64,
++	libcurl, libid3tag, madplay, mosquitto, openssh, php,
++	postgresql, proftpd, python, python-django, python3, qt5base,
++	sqlcipher, swupdate, systemd, unzip, webkitgtk
++
+ 2018.02.10, Released January 31th, 2019
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 2ee7f92aa9..37504ae1ce 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02.10
++export BR2_VERSION := 2018.02.11
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1548952000
++BR2_VERSION_EPOCH = 1550952000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
