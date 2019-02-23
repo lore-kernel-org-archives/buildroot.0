@@ -1,97 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 14:51:48 +0100
-Subject: [Buildroot] [git commit branch/next] package/snort: build with
- OpenAppID support if luajit/openssl is enabled
-Message-ID: <20190223134942.3FAD28B8CB@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 14:52:22 +0100
+Subject: [Buildroot] [git commit branch/next] boot/barebox: bump version to
+ 2019.02.0
+Message-ID: <20190223135015.090B48B8CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d9a2defb64e10e8167888d5758a45a58dba18cd
+commit: https://git.buildroot.net/buildroot/commit/?id=59d186454b1ca7a57343da442a1708a80a499355
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since version 2.9.12, OpenAppID [1] is enabled by default.
-
-OpenAppID depends on luajit and openssl. If we leave it enabled by
-default, snort would require luajit. Since luajit is not available on
-all architectures, that would limit the usage of the snort package.
-
-Since not all users will need/use OpenAppID, let's leave it disabled by
-default. To build with OpenAppID support, the user will need to enable
-luajit and libssl.
-
-Also, it is necessary to apply a patch to fix a compile error when
-building OpenAppID with uclibc and musl. The build fails when
-dereferencing the rpcent structure because rpc.h is not been included.
-
-[1] https://www.snort.org/downloads/openappid/9553
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-error-when-building-against-uclibc-or-mu.patch | 34 ++++++++++++++++++++++
- package/snort/snort.mk                             |  9 ++++++
- 2 files changed, 43 insertions(+)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch b/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
-new file mode 100644
-index 0000000000..ce9d5526c8
---- /dev/null
-+++ b/package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch
-@@ -0,0 +1,34 @@
-+From dc2f54097da3cd493b8f4d06a14ef40be484d24f Mon Sep 17 00:00:00 2001
-+From: Sergio Prado <sergio.prado@e-labworks.com>
-+Date: Thu, 21 Feb 2019 15:02:08 -0300
-+Subject: [PATCH] Fix compile error when building against uclibc or musl
-+
-+The build fails when dereferencing the rpcent structure with uclibc or musl C libraries.
-+
-+../../../src/dynamic-preprocessors/appid/service_plugins/service_rpc.c:241:20:
-+error: dereferencing pointer to incomplete type ???struct rpcent???
-+             if (rpc->r_name)
-+
-+That's because rpc.h should be included when using these C libraries.
-+
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ src/dynamic-preprocessors/appid/service_plugins/service_rpc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c b/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
-+index 81bc8a5db8ab..2e45246083a8 100644
-+--- a/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
-++++ b/src/dynamic-preprocessors/appid/service_plugins/service_rpc.c
-+@@ -32,7 +32,7 @@
-+ #include "flow.h"
-+ #include "service_api.h"
-+ 
-+-#if defined(FREEBSD) || defined(OPENBSD)
-++#if defined(FREEBSD) || defined(OPENBSD) || (defined(LINUX) && defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__) || !defined(__GLIBC__))
-+ #include "rpc/rpc.h"
-+ #endif
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 30de02b3a8..c767d7c545 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -26,6 +26,15 @@ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
- SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
- endif
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 6a8d251548..4c33a77c61 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
-+# luajit and openssl should be enabled to build with
-+# OpenAppID support
-+ifeq ($(BR2_PACKAGE_LUAJIT)$(BR2_PACKAGE_OPENSSL),yy)
-+SNORT_DEPENDENCIES += luajit openssl
-+SNORT_CONF_OPTS += --enable-open-appid
-+else
-+SNORT_CONF_OPTS += --disable-open-appid
-+endif
-+
- SNORT_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) $(SNORT_CFLAGS)" \
- 	LIBS="$(SNORT_LIBS)" \
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2018.12.0"
++	bool "2019.02.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2018.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2019.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index ec4e404b10..aa80908e67 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# From https://www.barebox.org/download/barebox-2018.12.0.tar.bz2.md5
+-md5 f84d7d3562055c80c3eedce0b14d4a0d barebox-2018.12.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2019.02.0.tar.bz2.md5
++md5 b3c55967878c1e332c33502f39483ceb barebox-2019.02.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 barebox-2018.12.0.tar.bz2
++sha256 f4fc67d5a2410c9d568e5fc1279ac8999e80d3d91c26631df8f3af8636c04212 barebox-2019.02.0.tar.bz2
