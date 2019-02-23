@@ -1,103 +1,85 @@
 From: Thomas Huth <huth@tuxfamily.org>
-Date: Sat, 23 Feb 2019 21:56:55 +0100
-Subject: [Buildroot] [PATCH 1/3] package/xorcurses: new package
+Date: Sat, 23 Feb 2019 21:56:56 +0100
+Subject: [Buildroot] [PATCH 2/3] package/ascii-invaders: new package
 In-Reply-To: <20190223205657.18394-1-huth@tuxfamily.org>
 References: <20190223205657.18394-1-huth@tuxfamily.org>
-Message-ID: <20190223205657.18394-2-huth@tuxfamily.org>
+Message-ID: <20190223205657.18394-3-huth@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Huth <thuth@redhat.com>
-
-XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
-Your task is to roam around a series of mazes where you have to collect
-all blue masks before finding the exit. You have two 'shields' (players)
-and you can use either one at any time and switch between them. While
-the first level is simply a matter of navigation, the following levels
-introduce further objects like bombs and teleports, which have to be
-used right to solve the puzzles.
+An ASCII-art game like Space Invaders using ncurses.
 
 Signed-off-by: Thomas Huth <huth@tuxfamily.org>
 ---
- package/Config.in                |  1 +
- package/xorcurses/Config.in      | 13 +++++++++++++
- package/xorcurses/xorcurses.hash |  2 ++
- package/xorcurses/xorcurses.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/xorcurses/Config.in
- create mode 100644 package/xorcurses/xorcurses.hash
- create mode 100644 package/xorcurses/xorcurses.mk
+ package/Config.in                          |  1 +
+ package/ascii-invaders/Config.in           |  5 +++++
+ package/ascii-invaders/ascii-invaders.hash |  2 ++
+ package/ascii-invaders/ascii-invaders.mk   | 23 ++++++++++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/ascii-invaders/Config.in
+ create mode 100644 package/ascii-invaders/ascii-invaders.hash
+ create mode 100644 package/ascii-invaders/ascii-invaders.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cc232b9fba..490cbdb216 100644
+index 490cbdb216..16789fcd7c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -258,6 +258,7 @@ menu "Games"
- 	source "package/stella/Config.in"
- 	source "package/supertux/Config.in"
- 	source "package/supertuxkart/Config.in"
-+	source "package/xorcurses/Config.in"
+@@ -239,6 +239,7 @@ comment "Themes"
  endmenu
  
- menu "Graphic libraries and applications (graphic/text)"
-diff --git a/package/xorcurses/Config.in b/package/xorcurses/Config.in
+ menu "Games"
++	source "package/ascii-invaders/Config.in"
+ 	source "package/chocolate-doom/Config.in"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/flare-engine/Config.in"
+diff --git a/package/ascii-invaders/Config.in b/package/ascii-invaders/Config.in
 new file mode 100644
-index 0000000000..0af161fec9
+index 0000000000..e68d48bed0
 --- /dev/null
-+++ b/package/xorcurses/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_XORCURSES
-+    bool "xorcurses"
-+    select BR2_PACKAGE_NCURSES
-+    help
-+      XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
-+      Your task is to roam around a series of mazes where you have to collect
-+      all blue masks before finding the exit. You have two 'shields' (players)
-+      and you can use either one at any time and switch between them. While
-+      the first level is simply a matter of navigation, the following levels
-+      introduce further objects like bombs and teleports, which have to be
-+      used right to solve the puzzles.
-+      Note that the game needs a terminal with colors, i.e. make sure that
-+      the TERM environment variable is set to "linux" ("vt100" won't work).
-diff --git a/package/xorcurses/xorcurses.hash b/package/xorcurses/xorcurses.hash
++++ b/package/ascii-invaders/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_ASCII_INVADERS
++	bool "ascii_invaders"
++	select BR2_PACKAGE_NCURSES
++	help
++	  An ASCII-art game like Space Invaders using ncurses.
+diff --git a/package/ascii-invaders/ascii-invaders.hash b/package/ascii-invaders/ascii-invaders.hash
 new file mode 100644
-index 0000000000..49d3a0c3b9
+index 0000000000..6c98401c36
 --- /dev/null
-+++ b/package/xorcurses/xorcurses.hash
++++ b/package/ascii-invaders/ascii-invaders.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha512 1782ebf6ae8798b32e0a8e5e20e6d0b44eb619f6e7f015735c6e86205bd545da108c36bff1c9cfc9e9b44dee8f90bacb9df70436991f57f51c2c87e94b3a4725  XorCurses-0.2.2.tar.bz2
-diff --git a/package/xorcurses/xorcurses.mk b/package/xorcurses/xorcurses.mk
++sha512 326708ffc2c277e04575920c58f6a267e0bf46f8d2a3dbca9b5c317fb01006d4f673ab35f92f292549cc52dbee4400a84c85478eb81b9bd7703689a705547bc7  v1.0.1.tar.gz
+diff --git a/package/ascii-invaders/ascii-invaders.mk b/package/ascii-invaders/ascii-invaders.mk
 new file mode 100644
-index 0000000000..4bc132c5e8
+index 0000000000..cb5aeaff27
 --- /dev/null
-+++ b/package/xorcurses/xorcurses.mk
-@@ -0,0 +1,25 @@
-+################################################################################
++++ b/package/ascii-invaders/ascii-invaders.mk
+@@ -0,0 +1,23 @@
++##############################################################################
 +#
-+# XorCurses
++# ASCII-Invaders
 +#
-+################################################################################
++##############################################################################
 +
-+XORCURSES_VERSION = 0.2.2
-+XORCURSES_LICENSE = GPL-3.0
-+XORCURSES_SOURCE = XorCurses-$(XORCURSES_VERSION).tar.bz2
-+XORCURSES_SITE = http://www.jwm-art.net/art/archive
-+XORCURSES_INSTALL_TARGET = YES
-+XORCURSES_DEPENDENCIES = ncurses
++ASCII_INVADERS_VERSION = 1.0.1
++ASCII_INVADERS_SOURCE = v$(ASCII_INVADERS_VERSION).tar.gz
++ASCII_INVADERS_SITE = https://github.com/macdice/ascii-invaders/archive
++ASCII_INVADERS_INSTALL_TARGET = YES
++ASCII_INVADERS_DEPENDENCIES = ncurses
++ASCII_INVADERS_LICENSE = GPL-2.0+
++ASCII_INVADERS_LICENSE_FILES = LICENSE
 +
-+define XORCURSES_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="-O2 -DDATADIR='\"/usr/share/xorcurses\"' -DVERSION='\"$(XORCURSES_VERSION)\"'"
++define ASCII_INVADERS_BUILD_CMDS
++	(cd $(@D) ; $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D))
 +endef
 +
-+define XORCURSES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/xorcurses $(TARGET_DIR)/usr/bin/
-+	mkdir -p $(TARGET_DIR)/usr/share/xorcurses/maps
-+	$(INSTALL) -D -m 0755 $(@D)/maps/*.xcm $(TARGET_DIR)/usr/share/xorcurses/maps/
++define ASCII_INVADERS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ascii_invaders $(TARGET_DIR)/usr/bin
 +endef
 +
 +$(eval $(generic-package))
