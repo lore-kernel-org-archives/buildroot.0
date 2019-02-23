@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 16:32:54 +0100
-Subject: [Buildroot] [PATCH] lua-curl: add variant definition of
- lcurl_url_t
-In-Reply-To: <20190223144641.14346-1-francois.perrad@gadz.org>
-References: <20190223144641.14346-1-francois.perrad@gadz.org>
-Message-ID: <20190223163254.4e18c71c@windsurf.home>
+Date: Sat, 23 Feb 2019 16:34:24 +0100
+Subject: [Buildroot] [PATCH/next v3 1/6] package/freescale-imx: Add
+ support for i.MX8X
+In-Reply-To: <20190218204807.16815-2-nerv@dawncrow.de>
+References: <20190218204807.16815-1-nerv@dawncrow.de>
+ <20190218204807.16815-2-nerv@dawncrow.de>
+Message-ID: <20190223163424.37623476@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Feb 2019 15:46:41 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On Mon, 18 Feb 2019 21:48:02 +0100
+Andr? Hentschel <nerv@dawncrow.de> wrote:
 
-> fix build http://autobuild.buildroot.org/results/8d7/8d76ad49837b368a7bba3c3dfd445a035471268a/
+> From: Andr? Hentschel <andre.hentschel@zf.com>
+> 
+> Signed-off-by: Andr? Hentschel <andre.hentschel@zf.com>
+> ---
+>  package/freescale-imx/Config.in                    | 3 +++
+>  package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+>  2 files changed, 11 insertions(+)
 
-For you future patches, could you use the following format instead:
-
-"""
-Fixes:
-
-  http://autobuild.buildroot.org/results/8d76ad49837b368a7bba3c3dfd445a035471268a/
-
-"""
-
-i.e:
-
- - Use the "Fixes:" keyword, which gets noticed by patchwork, and
-   allows us to clearly identify the patch as a build fix
-
- - Use the slightly shorter autobuilder URL: there's no need to repeat
-   the /8d7/ directory.
-
-Also, the commit title prefix should always be "package/foo:"
+I've applied to next, but after splitting into two commits: a first one
+adding the new Config.in option, and another one adding i.MX8X support
+to firmware-imx.
 
 Thanks!
 
