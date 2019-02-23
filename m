@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Feb 2019 22:47:36 +0100
-Subject: [Buildroot] [git commit] package/python-websockets: bump to version
- 7.0
-Message-ID: <20190305095736.254E18E504@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 14:42:22 +0100
+Subject: [Buildroot] [git commit] package/glorytun: bump to version 0.1.0
+Message-ID: <20190305095736.5D65F8E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=634be864d9be9cac302d479bc1d7dd2c5df15d3d
+commit: https://git.buildroot.net/buildroot/commit/?id=910bfd57b4d67ae46785a0a2ec8ae7f61a475e35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+The hash of the license file is only changed due to a year update:
+
+-Copyright (c) 2015-2016, angt
++Copyright (c) 2015-2019, angt
+
+Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-websockets/python-websockets.hash | 4 ++--
- package/python-websockets/python-websockets.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glorytun/glorytun.hash | 4 ++--
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-index 4939c7834f..024b83d908 100644
---- a/package/python-websockets/python-websockets.hash
-+++ b/package/python-websockets/python-websockets.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websockets/json
--md5	76cf931a525a3415f5a4f59c133e89c3  websockets-6.0.tar.gz
--sha256	8f3b956d11c5b301206382726210dc1d3bee1a9ccf7aadf895aaf31f71c3716c  websockets-6.0.tar.gz
-+md5	e3b5f2e257de0371e7b4d0b6ef7bc29e  websockets-7.0.tar.gz
-+sha256	08e3c3e0535befa4f0c4443824496c03ecc25062debbcf895874f8a0b4c97c9f  websockets-7.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
-diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-index 4d547ada81..30c35d3baa 100644
---- a/package/python-websockets/python-websockets.mk
-+++ b/package/python-websockets/python-websockets.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index 59a5f09c0e..85ae338c48 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
+-sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
++sha256 65adee2945f377ec41c1384745d5676c99768bba8fd4456755ee4c7d73915ede  glorytun-0.1.0.tar.gz
++sha256 051ef5a4c3c8fe64f8641e0ed50b4cd35c64703d972130f9725c8fee7976f90b  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index f6d87c2605..9fed5d260d 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WEBSOCKETS_VERSION = 6.0
-+PYTHON_WEBSOCKETS_VERSION = 7.0
- PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
--PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/4e/2a/56e60bb4c3696bc736998cc13c3fa1a36210609d7e1a3f2519857b420245
-+PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/ba/60/59844a5cef2428cb752bd4f446b72095b1edee404a58c27e87cd12a141e2
- PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
- PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
+-GLORYTUN_VERSION = 0.0.99-mud
++GLORYTUN_VERSION = 0.1.0
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
