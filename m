@@ -1,63 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 09:44:36 +0100
-Subject: [Buildroot] [git commit] package/stress-ng: Fix build issue with
- libbsd wchar check
-Message-ID: <20190223084528.B01848B6DD@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 09:54:00 +0100
+Subject: [Buildroot] [PATCH] configs/imx23evk: Bump the U-Boot version
+In-Reply-To: <20190223002843.16473-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Fri, 22 Feb 2019 21:28:43 -0300")
+References: <20190223002843.16473-1-festevam@gmail.com>
+Message-ID: <87r2byholz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a358818e9835623835508859b4b080a704f713d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-stress-ng uses test/test-bsd-wchar.c program to check if there is
-support for libbsd's wchar, but the test fails because wchar.h also
-requires the FILE* definition from stdio.h which is not included
-automatically, so fix it by include stdio.h explicitly.
+ > Thomas Petazzoni reports:
+ > "The imx23evk_defconfig no longer builds:
 
-Fixes:
-	http://autobuild.buildroot.net/results/6def1bba8e7ec05682e74c4edc3a35c8c118d28b
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...test-bsd-wchar-Explicitly-include-stdio.h.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ > This is due to the bump of OpenSSL to 1.1.x. This issue seems to have
+ > been fixed in U-Boot commit 7bae13b7579a6bc42330427496330fe2a29cbd56,
+ > which is part of U-Boot since 2017.01, but the defconfig is using
+ > 2016.09."
 
-diff --git a/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-new file mode 100644
-index 0000000000..79d381bc65
---- /dev/null
-+++ b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-@@ -0,0 +1,29 @@
-+From 291070801245da26e4841c321910b55016ca23c0 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim.kochan@petcube.com>
-+Date: Tue, 1 Jan 2019 17:24:54 +0200
-+Subject: [PATCH] test/test-bsd-wchar: Explicitly include stdio.h
-+
-+libbsd's wchar requires FILE for some it's functions, for some
-+reason it is not included by wchar automatically and the test fails. So
-+include it explicitly.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ test/test-bsd-wchar.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/test/test-bsd-wchar.c b/test/test-bsd-wchar.c
-+index 4f7c7ca..6125968 100644
-+--- a/test/test-bsd-wchar.c
-++++ b/test/test-bsd-wchar.c
-+@@ -22,6 +22,7 @@
-+  * functionality.
-+  *
-+  */
-++#include <stdio.h>
-+ #include <bsd/wchar.h>
-+ 
-+ int main(void)
-+-- 
-+2.14.1
-+
+ > Bump to the U-Boot 2019.01 to fix this problem.
+
+ > Fixes:  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295124
+
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
