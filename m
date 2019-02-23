@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 14:42:22 +0100
-Subject: [Buildroot] [git commit] package/glorytun: bump to version 0.1.0
-Message-ID: <20190305095736.5D65F8E504@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 14:50:21 +0100
+Subject: [Buildroot] [git commit] package/snort: bump to version 2.9.12
+Message-ID: <20190305095736.668C28E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=910bfd57b4d67ae46785a0a2ec8ae7f61a475e35
+commit: https://git.buildroot.net/buildroot/commit/?id=58a2000be892bb4eb854e9800339fe2a0c43dbec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The hash of the license file is only changed due to a year update:
-
--Copyright (c) 2015-2016, angt
-+Copyright (c) 2015-2019, angt
-
-Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glorytun/glorytun.hash | 4 ++--
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/snort/snort.hash | 2 +-
+ package/snort/snort.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 59a5f09c0e..85ae338c48 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
--sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
-+sha256 65adee2945f377ec41c1384745d5676c99768bba8fd4456755ee4c7d73915ede  glorytun-0.1.0.tar.gz
-+sha256 051ef5a4c3c8fe64f8641e0ed50b4cd35c64703d972130f9725c8fee7976f90b  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index f6d87c2605..9fed5d260d 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index 211e862b7f..abe85920cf 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 9f6b3aeac5a109f55504bd370564ac431cb1773507929dc461626898f33f46cd  snort-2.9.11.1.tar.gz
++sha256 7b02e11987c6cb4f6d79d72799ca9ad2b4bd59cc1d96bb7d6c91549f990d99d0  snort-2.9.12.tar.gz
+ 
+ # Hash for license files:
+ sha256 f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 568393468b..30de02b3a8 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLORYTUN_VERSION = 0.0.99-mud
-+GLORYTUN_VERSION = 0.1.0
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+-SNORT_VERSION = 2.9.11.1
++SNORT_VERSION = 2.9.12
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
