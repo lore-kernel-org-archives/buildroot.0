@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 17:02:06 +0100
+Date: Sat, 23 Feb 2019 17:02:10 +0100
 Subject: [Buildroot] [git commit branch/next] package/qt5/qt5webengine:
- generate chromium-latest.inc automatically
-Message-ID: <20190223160044.C913B88D12@busybox.osuosl.org>
+ generate chromium-lts.inc automatically
+Message-ID: <20190223160044.D0EF588D12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8db62915a4a73cff2422a009df007e595312805
+commit: https://git.buildroot.net/buildroot/commit/?id=d5d49e556b5989e85be171ec45fd10bd3f41aa1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 As a preparation to the bump of qt5webengine, this commit changes to a
@@ -17,69 +17,61 @@ mechanism where it is generated automatically. We use a fairly
 convoluted 'find' expression to retrieve almost the same list of files
 as the exist ones.
 
-Two files are removed that are not really license files:
+The following files are added:
 
- - src/3rdparty/chromium/third_party/WebKit/Source/build/scripts/license.py
- - src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/NonCopyingSort.h
+ - src/3rdparty/chromium/third_party/libxml/src/Copyright. This is the
+   file that was pointed to by the
+   src/3rdparty/chromium/third_party/libxslt/linux/COPYING symlink.
 
-Three files are added, which are license files:
-
- - src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY
  - src/3rdparty/chromium/third_party/libxml/src/Copyright
- - src/3rdparty/chromium/third_party/libxslt/src/Copyright
+
+Two license.py scripts that are not license files are removed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5webengine/chromium-latest.inc | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/qt5/qt5webengine/chromium-lts.inc | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/chromium-latest.inc b/package/qt5/qt5webengine/chromium-latest.inc
-index 4fc1ae5ecf..9e4b7d6356 100644
---- a/package/qt5/qt5webengine/chromium-latest.inc
-+++ b/package/qt5/qt5webengine/chromium-latest.inc
-@@ -1,3 +1,8 @@
+diff --git a/package/qt5/qt5webengine/chromium-lts.inc b/package/qt5/qt5webengine/chromium-lts.inc
+index 6d27f1a827..fbc1f9b639 100644
+--- a/package/qt5/qt5webengine/chromium-lts.inc
++++ b/package/qt5/qt5webengine/chromium-lts.inc
+@@ -1,3 +1,9 @@
++# Generated with:
 +# (echo "QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \\" ; \
 +# 	find src/3rdparty/ -type f \
-+#	\( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) \
-+#	-a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' | \
-+#	sort | sed 's%^\(.*\)$%\t\1 \\%') > package/qt5/qt5webengine/chromium-latest.inc
++#	     \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \)\
++#	     -a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' | \
++#	     sort | sed 's%^\(.*\)$%\t\1 \\%') > package/qt5/qt5webengine/chromium-lts.inc
  QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
  	src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE \
  	src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE \
-@@ -268,8 +273,10 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+@@ -112,8 +118,9 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/x86inc/LICENSE \
  	src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT \
  	src/3rdparty/chromium/third_party/libwebp/LICENSE \
- 	src/3rdparty/chromium/third_party/libxml/src/COPYING \
 +	src/3rdparty/chromium/third_party/libxml/src/Copyright \
  	src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE \
- 	src/3rdparty/chromium/third_party/libxslt/linux/COPYING \
-+	src/3rdparty/chromium/third_party/libxslt/src/Copyright \
+-	src/3rdparty/chromium/third_party/libxslt/linux/COPYING \
++	src/3rdparty/chromium/third_party/libxslt/Copyright \
  	src/3rdparty/chromium/third_party/libyuv/LICENSE \
  	src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY \
- 	src/3rdparty/chromium/third_party/lzma_sdk/LICENSE \
-@@ -380,7 +387,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/webdriver/COPYING \
+ 	src/3rdparty/chromium/third_party/libyuv/third_party/gflags/LICENSE \
+@@ -124,7 +131,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
+ 	src/3rdparty/chromium/third_party/mesa/src/docs/COPYING \
+ 	src/3rdparty/chromium/third_party/mesa/src/docs/license.html \
+ 	src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT \
+-	src/3rdparty/chromium/third_party/mesa/src/src/mapi/glapi/gen/license.py \
+ 	src/3rdparty/chromium/third_party/minigbm/LICENSE \
+ 	src/3rdparty/chromium/third_party/mocha/LICENSE \
+ 	src/3rdparty/chromium/third_party/mockito/LICENSE \
+@@ -206,7 +212,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
  	src/3rdparty/chromium/third_party/webdriver/LICENSE \
+ 	src/3rdparty/chromium/third_party/WebKit/LICENSE \
  	src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS \
 -	src/3rdparty/chromium/third_party/WebKit/Source/build/scripts/license.py \
  	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE \
  	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2 \
  	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1 \
-@@ -395,7 +401,6 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING \
- 	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/COPYING \
- 	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/dtoa/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/platform/wtf/NonCopyingSort.h \
- 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING \
- 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE.md \
- 	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/html5lib/LICENSE \
-@@ -406,6 +411,7 @@ QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCMobile/third_party/SocketRocket/LICENSE \
- 	src/3rdparty/chromium/third_party/webrtc/LICENSE \
- 	src/3rdparty/chromium/third_party/webrtc/license_template.txt \
-+	src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY \
- 	src/3rdparty/chromium/third_party/woff2/LICENSE \
- 	src/3rdparty/chromium/third_party/xdg-utils/LICENSE \
- 	src/3rdparty/chromium/third_party/xstream/LICENSE \
