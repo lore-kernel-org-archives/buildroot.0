@@ -1,110 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 16:23:08 +0100
-Subject: [Buildroot] [git commit branch/next] board/freescale/common/imx:
- add support for i.MX8X
-Message-ID: <20190223152837.755048DEF5@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 15:28:56 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/firmware-imx: add support for i.MX8X
+Message-ID: <20190223152837.58F758DEF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aaf176aea7eb824e1edca10ac079567ad6bc412
+commit: https://git.buildroot.net/buildroot/commit/?id=ba3d44891f588450904b48e0a80b3f2be6f1a15a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Andr?? Hentschel <andre.hentschel@zf.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../freescale/common/imx/genimage.cfg.template_imx8  |  2 +-
- .../freescale/common/imx/imx8-bootloader-prepare.sh  | 20 +++++++++++++++-----
- board/freescale/common/imx/post-image.sh             | 13 +++++++++++++
- 3 files changed, 29 insertions(+), 6 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index 2f8842f8e0..bd5f6cdc73 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -23,7 +23,7 @@ image sdcard.img {
-   partition imx-boot {
-     in-partition-table = "no"
-     image = "imx8-boot-sd.bin"
--    offset = 33K
-+    offset = %IMXOFFSET%
-   }
- 
-   partition boot {
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index cc12666ae6..e98e93a857 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -7,12 +7,22 @@ main ()
- 		echo "ERROR: couldn't find dtb: $UBOOT_DTB"
- 		exit 1
- 	fi
--	cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
--	BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
--	${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
--	rm -f ${BINARIES_DIR}/u-boot.its
- 
--	${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
-+		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		rm -f ${BINARIES_DIR}/u-boot.its
-+
-+		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	else
-+		${HOST_DIR}/bin/mkimage_imx8 -commit > ${BINARIES_DIR}/mkimg.commit
-+		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
-+		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
-+		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
-+
-+		${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	fi
- 
- 	exit $?
- }
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 6590beda3e..12a5bea73b 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -34,6 +34,8 @@ genimage_type()
- {
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_spl"
- 	else
-@@ -41,6 +43,15 @@ genimage_type()
- 	fi
- }
- 
-+imx_offset()
-+{
-+	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
-+		echo "33K"
-+	else
-+		echo "32K"
-+	fi
-+}
-+
- uboot_image()
- {
- 	if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
-@@ -53,11 +64,13 @@ uboot_image()
- main()
- {
- 	local FILES="$(dtb_list) $(linux_image)"
-+	local IMXOFFSET="$(imx_offset)"
- 	local UBOOTBIN="$(uboot_image)"
- 	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
- 	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
- 	sed -e "s/%FILES%/${FILES}/" \
-+		-e "s/%IMXOFFSET%/${IMXOFFSET}/" \
- 		-e "s/%UBOOTBIN%/${UBOOTBIN}/" \
- 		board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
- 
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index f9db09dae8..0e2ff7bba2 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -45,6 +45,14 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+ 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+ endef
++else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
++define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
++	# SECO firmware is needed when generating imx8-boot-sd.bin which
++	# is done in post-image script.
++	cp $(@D)/firmware/seco/ahab-container.img \
++		$(BINARIES_DIR)/ahab-container.img
++endef
+ else
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx
