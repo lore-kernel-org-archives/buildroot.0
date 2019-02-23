@@ -1,51 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 23 Feb 2019 15:27:11 +0100
-Subject: [Buildroot] [PATCH 2/2] package/rpi-firmware: bump version to
- 83977fe3b6
-In-Reply-To: <20190223143753.59fcb120@windsurf.home>
-References: <20190222223704.6202-1-ps.report@gmx.net>
- <20190222223704.6202-2-ps.report@gmx.net>
- <20190223143753.59fcb120@windsurf.home>
-Message-ID: <20190223152711.6caac341@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Feb 2019 15:34:10 +0100
+Subject: [Buildroot] Buildroot 2019.02-rc2 released
+Message-ID: <87ef7yh8v1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi,
 
-On Sat, 23 Feb 2019 14:37:53 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Buildroot 2019.02-rc2 is released - Go download it at:
 
-> On Fri, 22 Feb 2019 23:37:04 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> What is the reason for bumping to 83977fe3b6 in master ? And then to
-> ebf7b40cdc in next ?
+http://buildroot.net/downloads/buildroot-2019.02-rc2.tar.gz
 
-Sorry for the confusion, preparing the bump (maybe buildroot-master) to 
+or
 
- - kernel 877656cd14 (4.14.98, up-to-date one from the 4.14 branch)
- - firmware 83977fe3b6, last commit before [1]:
- 
-	kernel bump to 4.19.23
+http://buildroot.net/downloads/buildroot-2019.02-rc2.tar.bz2
 
-	See: https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=224931
+Or get it from Git:
 
-overlapped with the release of 4.19.23 [3] and the follow up bump (major kernel
-update for buildroot-next) to
+git://git.buildroot.net/buildroot
 
-  - kernel 5eeff139ea (4.19.23)
-  - firmware ebf7b40cdc [2], one commit after [1],
+Another week, another release candidate.
 
-Regards,
-Peter
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
 
-[1] https://github.com/raspberrypi/firmware/commit/d095b96ac33de9eb4b95539cb3261f35a3c74509
-[2] https://github.com/raspberrypi/firmware/commit/ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da
-[3] https://www.phoronix.com/scan.php?page=news_item&px=Raspberry-Pi-Linux-4.19-Rolling
+git shortlog -sn 2019.02-rc1..
 
-> 
-> Thomas
+    15  Fabrice Fontaine
+    10  Thomas Petazzoni
+     7  Peter Korsgaard
+     4  Peter Seiderer
+     3  Angelo Compagnucci
+     2  Baruch Siach
+     2  Yann E. MORIN
+     1  Bartosz Golaszewski
+     1  Bernd Kuhls
+     1  Fabio Estevam
+     1  Gary Bisson
+     1  Gervais, Francois
+     1  J?rg Krause
+     1  Matt Weber
+     1  Thomas De Schampheleire
+     1  Trent Piepho
+     1  Vadim Kochan
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02-rc2
+
+Expect the final 2019.02 release by the end of the month.
+
+-- 
+Bye, Peter Korsgaard
