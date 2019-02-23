@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Feb 2019 19:34:30 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/unzip: add
+Date: Sat, 23 Feb 2019 19:35:16 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/unzip: add
  security and bug fix patches from Debian
-Message-ID: <20190223183234.737BF8A6CB@busybox.osuosl.org>
+Message-ID: <20190223183311.126878A6CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37f35c2bc970f149fa4dbfa60c85103a78a19004
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1f83d442dd11fa17cb106f6a2220c770b86c8efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Debian bug #741384: Buffer overflow
 
@@ -69,10 +69,10 @@ index a138cc27c9..fbf2615ad6 100644
 +sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
 +sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
 diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index cff5951ac0..43e90125e6 100644
+index 7d48d25309..6807257524 100644
 --- a/package/unzip/unzip.mk
 +++ b/package/unzip/unzip.mk
-@@ -10,4 +10,19 @@ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+@@ -12,4 +12,19 @@ UNZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
  UNZIP_LICENSE = Info-ZIP
  UNZIP_LICENSE_FILES = LICENSE
  
