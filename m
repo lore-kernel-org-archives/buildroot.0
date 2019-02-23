@@ -1,31 +1,44 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 22 Feb 2019 21:30:58 -0300
-Subject: [Buildroot] U-Boot update needed in imx23evk_defconfig
-In-Reply-To: <20190222221713.4d05d16f@windsurf>
-References: <20190208124718.650e4d42@windsurf>
- <CAOMZO5Ceka8LQQr76UVScyTXNB8DemsRZ3UQQg8aYc5N4pwNBQ@mail.gmail.com>
- <20190222221713.4d05d16f@windsurf>
-Message-ID: <CAOMZO5DwjNDAsFXrHS4smKY3uj-HwWrc=FGx=gzEO0SiCU=+5A@mail.gmail.com>
+From: David Lechner <david@lechnology.com>
+Date: Fri, 22 Feb 2019 19:04:54 -0600
+Subject: [Buildroot] [PATCH 2/2] configs/lego_ev3_defconfig: enable brickd
+ by default
+In-Reply-To: <20190223010454.7335-1-david@lechnology.com>
+References: <20190223010454.7335-1-david@lechnology.com>
+Message-ID: <20190223010454.7335-2-david@lechnology.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This enables the brickd package by default on LEGO MINDSTORM EV3. This
+program is important because it shuts down the system on low battery.
+Without this, rechargeable batteries could be damaged.
 
-On Fri, Feb 22, 2019 at 6:17 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: David Lechner <david@lechnology.com>
+---
+ configs/lego_ev3_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Do you have some news about the imx23evk U-Boot version bump ? It is
-> still failing to build on current master.
-
-Sorry for the delay. Just sent a patch that bumps U-Boot to the latest
-2019.01 version.
-
-Tried to also bump the kernel, but I noticed a mmc/pinctrl regression
-with 4.19 and I will need to investigate it later.
-
-Regards,
-
-Fabio Estevam
+diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+index cf2809059e..b4a1000036 100644
+--- a/configs/lego_ev3_defconfig
++++ b/configs/lego_ev3_defconfig
+@@ -8,6 +8,7 @@ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lego/ev3/post-image.sh"
+ # Linux headers same as kernel, a 4.19 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+@@ -27,6 +28,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="da850-lego-ev3"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/lego/ev3/busybox.fragment"
+ BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
++BR2_PACKAGE_BRICKD=y
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560=y
+ 
+-- 
+2.17.1
