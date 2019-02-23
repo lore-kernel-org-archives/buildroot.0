@@ -1,165 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 16:54:47 +0100
-Subject: [Buildroot] [PATCH v1 1/1] package/rcw: Optional RCW Generation
-In-Reply-To: <20190219203157.26095-1-jared.bents@rockwellcollins.com>
-References: <20190219203157.26095-1-jared.bents@rockwellcollins.com>
-Message-ID: <20190223165447.1a55b9ce@windsurf.home>
+Date: Sat, 23 Feb 2019 17:00:55 +0100
+Subject: [Buildroot] [git commit] package/luaexpat: restore
+ getcurrentbytecount, required by prosody
+Message-ID: <20190223155909.8CA7A88D9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=98cb0faa4c9f78b817df7ed0182925fdde1f17ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Feb 2019 14:31:57 -0600
-jared.bents at rockwellcollins.com wrote:
+Fixes:
 
-> +if BR2_PACKAGE_HOST_RCW
-> +
-> +config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
-> +
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/158295314
 
-Could you please drop this empty line ?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-restore-getcurrentbytecount.patch         | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-> +	string "RCW Source file paths"
-> +	help
-> +	  Path to custom RCW source files. You can provide a
-> +	  list of rcw paths to copy and build, separated by spaces.
-> +	  NOTE: If you want to build one common rcw file
-> +	  (e.g. "X.rcwi") with main rcw file (e.g. "Y.rcw") then
-> +	  include common rcw file X.rcwi in main rcw file Y.rcw
-> +	  using "#include"
-
-I am not sure this working is really relevant, people using this stuff
-are supposed to know the syntax of .rcw files and that they can use
-#include to include .rcwi files.
-
-Instead the working should perhaps be:
-
-	  Space-separated list of .rcw and .rcwi files, that will be
-	  used to generate a RCW binary. The entire list of .rcwi files
-	  used by the .rcw file must be specified. There must be a
-	  single .rcw file in the list.
-
-> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-> index f4570b9bde..d33d655e6d 100644
-> --- a/package/rcw/rcw.mk
-> +++ b/package/rcw/rcw.mk
-> @@ -9,7 +9,19 @@ RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
->  RCW_SITE_METHOD = git
->  RCW_LICENSE = BSD-3-Clause
->  RCW_LICENSE_FILES = LICENSE
-> +HOST_RCW_DEPENDENCIES = host-python
-
-Do we really need to depend on Python ? Buildroot guarantees that at
-least Python 2.7 is available on the build machine, regardless of
-whether host-python is built or not.
-
-> +# The name of the file to be deliveried in the BINARIES_DIR
-> +RCW_DELIVERY_FILE = PBL.bin
-> +
-> +# Use the host python
-> +HOST_PYTHON=$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR)
-
-All variables declared by a package are global, so by using
-"HOST_PYTHON" as a variable name, you are "polluting" the global
-namespace of variables, potentially causing a conflict. That is why we
-enforce the policy that all variables defined by a package must be
-prefixed by the package name.
-
-Also, spaces around =.
-
-> +# Get the name of the custom rcw file from the custom list
-> +RCW_PROJECT=$(filter %.rcw,$(notdir $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))))
-
-So, this means that only a single .rcw should be in the list ? If so,
-perhaps:
-
-ifeq ($(BR2_BUILDING),y)
-ifneq ($(RCW_PROJECT),)
-ifneq ($(words $(RCW_PROJECT)),1)
-$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)
-endif
-endif
-endif
-
-(totally untested)
-
-> +
-> +
-
-Only one empty line here. Please run "make check-package".
-
-> +ifeq ($(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH),"")
-
-I am not sure why the default installation becomes conditional, as you
-also have to do the same logic when a RCW file is being generated.
-
->  # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
->  # could use a post image or SDK to build/install PBL files.
->  define HOST_RCW_INSTALL_CMDS
-> @@ -17,4 +29,23 @@ define HOST_RCW_INSTALL_CMDS
->  	cp -a $(@D)/* $(HOST_DIR)/share/rcw
->  endef
->  
-> +else
-> +# Generate rcw using the specified source files from within the build directory.
-> +# Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
-> +# could use a SDK to rebuild/install PBL files.
-> +define HOST_RCW_INSTALL_CMDS
-> +	mkdir -p $(@D)/custom_board/rcw
-> +	cp -f $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)) $(@D)/custom_board/rcw
-> +	for rcwi in $(filter %.rcwi,$(notdir $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)))); do \
-> +		cd $(@D)/custom_board; ln -sf rcw/$${rcwi} $${rcwi} ; \
-> +	done
-
-I don't really understand this dance of symlinks. Why do you have this ?
-
-Please use a make $(foreach ...) loop.
-
-> +	$(HOST_PYTHON) $(@D)/rcw.py -i $(@D)/custom_board/rcw/${RCW_PROJECT} -I $(@D)/custom_board/ -o $(@D)/$(RCW_DELIVERY_FILE)
-
-Please use $(...) when referring to make variables.
-
-> +	$(INSTALL) -D -m 0644 $(@D)/$(RCW_DELIVERY_FILE) $(BINARIES_DIR)/$(RCW_DELIVERY_FILE)
-> +	mkdir -p  $(HOST_DIR)/share/rcw
-> +	cp -a $(@D)/* $(HOST_DIR)/share/rcw
-> +	find $(HOST_DIR)/share/rcw -name "*.bin" -delete
-> +endef
-> +
-> +endif
-
-I'd prefer to see it implementing like this:
-
-ifneq ($(RCW_PROJECT),)
-define HOST_RCW_ADD_CUSTOM_RCW_FILES
-	... copying of .rcw files ...
-endef
-HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
-
-define HOST_RCW_BUILD_CMDS
-	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board/ -o $(@D)/$(RCW_DELIVERY_FILE)
-endef
-
-define HOST_RCW_INSTALL_DELIVERY_FILE
-	$(INSTALL) -D -m 0644 $(@D)/$(RCW_DELIVERY_FILE) $(BINARIES_DIR)/$(RCW_DELIVERY_FILE)
-endef
-endif
-
-define HOST_RCW_INSTALL_CMDS
-        mkdir -p  $(HOST_DIR)/share/rcw
-        cp -a $(@D)/* $(HOST_DIR)/share/rcw
-	$(HOST_RCW_INSTALL_DELIVERY_FILE)
-	find $(HOST_DIR)/share/rcw -name "*.bin" -delete
-endef
-
-or something along those lines.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luaexpat/0001-restore-getcurrentbytecount.patch b/package/luaexpat/0001-restore-getcurrentbytecount.patch
+new file mode 100644
+index 0000000000..6cf2192678
+--- /dev/null
++++ b/package/luaexpat/0001-restore-getcurrentbytecount.patch
+@@ -0,0 +1,40 @@
++From 77cb691f781918908dfe34785f00a5ff75d5cc20 Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 16 Feb 2019 15:56:00 +0100
++Subject: [PATCH] restore getcurrentbytecount
++
++see https://github.com/tomasguisasola/luaexpat/issues/3
++
++Fetch from: https://github.com/tomasguisasola/luaexpat/commit/0926f2d705109b7d35b721344264b39c1169e0de
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ src/lxplib.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/luaexpat-1.3.3/src/lxplib.c b/luaexpat-1.3.3/src/lxplib.c
++index 7726913..35bec3c 100644
++--- a/luaexpat-1.3.3/src/lxplib.c
+++++ b/luaexpat-1.3.3/src/lxplib.c
++@@ -538,11 +538,18 @@ static int lxp_stop (lua_State *L) {
++   return 1;
++ }
++ 
+++static int lxp_getcurrentbytecount (lua_State* L) {
+++  lxp_userdata *xpu = checkparser(L, 1);
+++  lua_pushinteger(L, XML_GetCurrentByteCount(xpu->parser));
+++  return 1;
+++}
+++
++ static const luaL_Reg lxp_meths[] = {
++   {"parse", lxp_parse},
++   {"close", lxp_close},
++   {"__gc", parser_gc},
++   {"pos", lxp_pos},
+++  {"getcurrentbytecount", lxp_getcurrentbytecount},
++   {"setencoding", lxp_setencoding},
++   {"getcallbacks", getcallbacks},
++   {"getbase", getbase},
++-- 
++2.17.1
++
