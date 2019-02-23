@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Feb 2019 22:32:30 +0100
-Subject: [Buildroot] [git commit] package/python-pip: bump to version 19.0.3
-Message-ID: <20190305095736.3BE4E8E504@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 14:52:22 +0100
+Subject: [Buildroot] [git commit] boot/barebox: bump version to 2019.02.0
+Message-ID: <20190305095736.73AFA8E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=749e599a5b8e9856dc91ea1ec2b55d2731fad036
+commit: https://git.buildroot.net/buildroot/commit/?id=59d186454b1ca7a57343da442a1708a80a499355
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pip/python-pip.hash | 4 ++--
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index 96baf04a00..f2a6b25012 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5	526fd9ec1e6ea956b3571ebfb42cf83c  pip-19.0.2.tar.gz
--sha256	f851133f8b58283fa50d8c78675eb88d4ff4cde29b6c41205cd938b06338e0e5  pip-19.0.2.tar.gz
-+md5	1c5edb0924a0d7d79f3a2e3df05009b4  pip-19.0.3.tar.gz
-+sha256	6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2  pip-19.0.3.tar.gz
- # Locally computed sha256 checksums
- sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index 94926fce09..c7ca45d9d9 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 6a8d251548..4c33a77c61 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--PYTHON_PIP_VERSION = 19.0.2
-+PYTHON_PIP_VERSION = 19.0.3
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/4c/4d/88bc9413da11702cbbace3ccc51350ae099bb351febae8acc85fec34f9af
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/36/fa/51ca4d57392e2f69397cd6e5af23da2a8d37884a605f9e3f2d3bfdc48397
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2018.12.0"
++	bool "2019.02.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2018.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2019.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index ec4e404b10..aa80908e67 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# From https://www.barebox.org/download/barebox-2018.12.0.tar.bz2.md5
+-md5 f84d7d3562055c80c3eedce0b14d4a0d barebox-2018.12.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2019.02.0.tar.bz2.md5
++md5 b3c55967878c1e332c33502f39483ceb barebox-2019.02.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 barebox-2018.12.0.tar.bz2
++sha256 f4fc67d5a2410c9d568e5fc1279ac8999e80d3d91c26631df8f3af8636c04212 barebox-2019.02.0.tar.bz2
