@@ -1,111 +1,125 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Sat, 23 Feb 2019 02:10:59 +0000
-Subject: [Buildroot] [PATCH] grpc: update to 1.18.0
-Message-ID: <20190223021045.4383-1-tpiepho@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 23 Feb 2019 07:00:48 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-02-22
+Message-ID: <20190223070053.7843A875DA@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version.  Freshen a patch that had a conflict.
+Hello,
 
-Remove duplicate env setting.
+Build statistics for 2019-02-22
+===============================
 
-Add comment about the hack being used to get gRPC to use the buildroot
-c-ares library.  Otherwise it looks like the cmake env settings are out
-of date vs what the gRPC build documentation says to use.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  20 |   0 |   0 |  20 |
+   2018.11.x |  20 |   1 |   0 |  21 |
+      master | 187 |  23 |   2 | 212 |
+        next |  42 |  13 |   0 |  55 |
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
-I tested by running their sample app and making rpc calls to/from the target and
-the host.
+Results for branch '2018.11.x'
+==============================
 
- ...-Properly-detect-the-availability-of-pthread_setname_.patch | 10 +++++-----
- package/grpc/grpc.hash                                         |  2 +-
- package/grpc/grpc.mk                                           |  7 +++++--
- 3 files changed, 11 insertions(+), 8 deletions(-)
+Classification of failures by reason
+------------------------------------
 
-diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-index 766f758172..14807999b8 100644
---- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -1,4 +1,4 @@
--From 0aeefca28104f86f14b511feee8d5711f2e8bcb5 Mon Sep 17 00:00:00 2001
-+From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Mon, 31 Dec 2018 16:22:07 +0100
- Subject: [PATCH] Properly detect the availability of pthread_setname_np()
-@@ -17,7 +17,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-  2 files changed, 8 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index fc76cf50da..8dd457fb1a 100644
-+index 89e834b..c7bd2ad 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
- @@ -94,6 +94,12 @@ endif()
-@@ -30,11 +30,11 @@ index fc76cf50da..8dd457fb1a 100644
- +  add_definitions(-DHAVE_PTHREAD_SETNAME_NP)
- +endif ()
- +
-- add_definitions(-DPB_FIELD_16BIT)
-+ add_definitions(-DPB_FIELD_32BIT)
-  
-  if (MSVC)
- diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
--index b2028a6305..dc89e6ed57 100644
-+index 031c0c3..a29a9dc 100644
- --- a/include/grpc/impl/codegen/port_platform.h
- +++ b/include/grpc/impl/codegen/port_platform.h
- @@ -173,7 +173,9 @@
-@@ -48,5 +48,5 @@ index b2028a6305..dc89e6ed57 100644
-  #else /* musl libc */
-  #define GPR_MUSL_LIBC_COMPAT 1
- -- 
--2.20.1
-+2.14.4
- 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 9e5011125a..3ccf3bdd69 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 a5342629fe1b689eceb3be4d4f167b04c70a84b9d61cf8b555e968bc500bdb5a grpc-v1.16.1.tar.gz
-+sha256 069a52a166382dd7b99bf8e7e805f6af40d797cfcee5f80e530ca3fc75fd06e2 grpc-v1.18.0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 6c804429ff..9506e0268a 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = v1.16.1
-+GRPC_VERSION = v1.18.0
- GRPC_SITE = $(call github,grpc,grpc,$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
-@@ -15,6 +15,10 @@ GRPC_INSTALL_STAGING = YES
- GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib
- HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib
- 
-+# gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
-+# installed a cmake config file, but buildroot uses c-ares' autotools build,
-+# which doesn't do this.  These CARES settings trick the gRPC cmake code into
-+# not looking for c-ares at all and yet still linking with the library.
- GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
-@@ -32,7 +36,6 @@ endif
- HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
--	-DgRPC_CARES_PROVIDER=none \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package
+               runc-v1.0.0-rc6 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/ab0abd91a99f505175e43823f527734cd0897e19 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               runc-v1.0.0-rc6 | 5 
+             stress-ng-0.09.47 | 3 
+                 ibrdtnd-1.0.1 | 2 
+                 qt5base-5.6.3 | 2 
+                chocolate-doom | 1 
+                gerbera-v1.3.0 | 1 
+                 haproxy-1.9.1 | 1 
+                host-libsodium | 1 
+                   i2pd-2.22.0 | 1 
+        kf5-kcoreaddons-5.47.0 | 1 
+                  libssh-0.8.6 | 1 
+               mono-5.14.0.177 | 1 
+                   netsnmp-5.8 | 1 
+           python-numpy-1.15.1 | 1 
+                qt5base-5.11.3 | 1 
+               qt5webkit-5.9.1 | 1 
+               wireshark-2.6.6 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                 chocolate-doom | TIM | http://autobuild.buildroot.net/results/d7bbee884d53e48c05138dc9bc78022972c263d0 |     
+         arm |                 gerbera-v1.3.0 | NOK | http://autobuild.buildroot.net/results/cd97f9c0ff9e5927b0315670c51eb8e5d9fb287d |     
+       nios2 |                  haproxy-1.9.1 | NOK | http://autobuild.buildroot.net/results/7def97a7134d1e3e9b40f3f922ec3bc9f8fe5b23 |     
+         arm |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/b41ae0bf149169fdaf875fc89198ec5b3f5970bb |     
+       sparc |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/95b83816c79461629e4dd015f2b36ca9249016c9 |     
+         arc |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/1c3aa96eed467008e881b56164b135ae36d594f6 | ORPH
+         arm |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/4b1f467d0eaf14ff979e270b451d8b1f33df957a | ORPH
+microblazeel |         kf5-kcoreaddons-5.47.0 | NOK | http://autobuild.buildroot.net/results/512fba19ae797c092980b90e2975f72befda57c3 |     
+      x86_64 |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/7192ecf15331a01c2b18ea2342ed420d95c39b9b |     
+         arm |                mono-5.14.0.177 | NOK | http://autobuild.buildroot.net/results/11030ea4081a510e40fd9c97f1239ea0a1dfdde5 |     
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/56374e7dab6dc87295d44b324b45fc533880692f | ORPH
+     aarch64 |            python-numpy-1.15.1 | NOK | http://autobuild.buildroot.net/results/0e8121ecbdbc9d154d46cfe02dcfd513f4912a4f |     
+     riscv64 |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/4bc623516cceeb787bb83c5616188adf3d2a2fe8 |     
+       nios2 |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/e3f214cb9cf4e4b8dd6d5ac57ddf62beb03fd73f |     
+     powerpc |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/de1144f5cf7dd1754c1ff01bc07101dddbdbc6b4 |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/d8ee478f3289651a5e0860c7c5389e5f3c9e328e |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/cec7765b7b1701ef7187ab003d38f0993c1359a9 |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/fcdda4c3180c8e6e893b8d17359b18692cf8a335 |     
+      x86_64 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/2832abac5379c3d7e722dd47ce13f253bb8d8deb |     
+         arm |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/c78b680b9ec8b687cf3e3d812b6abd375bced16b |     
+      x86_64 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/a22961a48a82c0cd5d6e4f2f034fd3cfef72349c |     
+        or1k |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/3b267f7bfa32efda230024bd92488192888d83bc |     
+        or1k |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/28b7989bda5d6f5cdc3f32bb83c4e90765df6e0e |     
+     powerpc |              stress-ng-0.09.47 | NOK | http://autobuild.buildroot.net/results/1d644ce900cc87eb8988b9ae482a029d125a928d |     
+        i686 |                wireshark-2.6.6 | NOK | http://autobuild.buildroot.net/results/849773d5dc8d69c20b88c7864dd3960ba0202283 | ORPH
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+            optee-client-3.4.0 | 4 
+           uboot-tools-2019.01 | 3 
+       gst-plugins-bad-0.10.23 | 1 
+                 ibrdtnd-1.0.1 | 1 
+                  libssh-0.8.6 | 1 
+                     pcre-8.42 | 1 
+               runc-v1.0.0-rc6 | 1 
+                upmpdcli-1.4.0 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv64 |        gst-plugins-bad-0.10.23 | NOK | http://autobuild.buildroot.net/results/794149507e76d6eb28beda1ef077d4f13cc83a28 | ORPH
+         arm |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/e2276139eab7f1815b1af23642391d51caed79d0 | ORPH
+      xtensa |                   libssh-0.8.6 | NOK | http://autobuild.buildroot.net/results/03f9d9c4f1444b5dd18fabd12262b0dddb70c756 |     
+microblazeel |             optee-client-3.4.0 | NOK | http://autobuild.buildroot.net/results/5e87edf33239c6c94d037237cedaa01761881e7f |     
+     powerpc |             optee-client-3.4.0 | NOK | http://autobuild.buildroot.net/results/b401947b6eded8f03305bb1fbeb343d20d9aa156 |     
+    mips64el |             optee-client-3.4.0 | NOK | http://autobuild.buildroot.net/results/f5f04992869d4d8544a0ff493f1c87e1039318b9 |     
+microblazeel |             optee-client-3.4.0 | NOK | http://autobuild.buildroot.net/results/ba25402bf086bafd89b0b6dafe74848bd91005d5 |     
+      xtensa |                      pcre-8.42 | NOK | http://autobuild.buildroot.net/results/02089eb21ecd344ffbb815cf2d5800bca9de1087 | ORPH
+      x86_64 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/a9362f6acc432102031898b8b0346f8d5149b16c |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/fbe027fb63361ab53bac8faadb387bace6c2f20a |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/86d40ad5189ba87c0225427cc4c9f4e7f3ee4f5a |     
+     sparc64 |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/a1be5988f2e12613764c399ca182fc24544e9a08 |     
+        m68k |                 upmpdcli-1.4.0 | NOK | http://autobuild.buildroot.net/results/d3d07c3f8202d7fa6b570864c6fa1b75876eb0ca |     
+
+
 -- 
-2.14.4
+http://autobuild.buildroot.net
