@@ -1,66 +1,52 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 23 Feb 2019 15:46:41 +0100
-Subject: [Buildroot] [PATCH] lua-curl: add variant definition of lcurl_url_t
-Message-ID: <20190223144641.14346-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 23 Feb 2019 15:54:37 +0100
+Subject: [Buildroot] [PATCH 2/2] package/rpi-firmware: bump version to
+ 83977fe3b6
+In-Reply-To: <20190223152711.6caac341@gmx.net>
+References: <20190222223704.6202-1-ps.report@gmx.net>
+ <20190222223704.6202-2-ps.report@gmx.net>
+ <20190223143753.59fcb120@windsurf.home>
+ <20190223152711.6caac341@gmx.net>
+Message-ID: <20190223155437.0988855f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix build http://autobuild.buildroot.org/results/8d7/8d76ad49837b368a7bba3c3dfd445a035471268a/
+Hello Peter,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...dd-variant-definition-of-lcurl_url_t.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+Thanks for your feedback!
 
-diff --git a/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
-new file mode 100644
-index 000000000..0fdd0760d
---- /dev/null
-+++ b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
-@@ -0,0 +1,40 @@
-+From 28ac0c5e642c9f7e3091a60268745f7cab4cc92b Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sat, 23 Feb 2019 15:23:26 +0100
-+Subject: [PATCH] add variant definition of lcurl_url_t
-+
-+like in lceasy.h
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ src/lcurlapi.h | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/Lua-cURLv3-0.3.9/src/lcurlapi.h b/Lua-cURLv3-0.3.9/src/lcurlapi.h
-+index 4dd4672..862c94f 100644
-+--- a/Lua-cURLv3-0.3.9/src/lcurlapi.h
-++++ b/Lua-cURLv3-0.3.9/src/lcurlapi.h
-+@@ -19,11 +19,20 @@
-+ 
-+ #if LCURL_CURL_VER_GE(7,62,0)
-+ 
-++#if LCURL_CC_SUPPORT_FORWARD_TYPEDEF
-+ typedef struct lcurl_url_tag {
-+   CURLU *url;
-+ 
-+   int err_mode;
-+ }lcurl_url_t;
-++#else
-++struct lcurl_url_tag {
-++  CURLU *url;
-++
-++  int err_mode;
-++};
-++#define lcurl_url_t struct lcurl_url_tag
-++#endif
-+ 
-+ int lcurl_url_create(lua_State *L, int error_mode);
-+ 
-+-- 
-+2.17.1
-+
+On Sat, 23 Feb 2019 15:27:11 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> > What is the reason for bumping to 83977fe3b6 in master ? And then to
+> > ebf7b40cdc in next ?  
+> 
+> Sorry for the confusion, preparing the bump (maybe buildroot-master) to 
+> 
+>  - kernel 877656cd14 (4.14.98, up-to-date one from the 4.14 branch)
+>  - firmware 83977fe3b6, last commit before [1]:
+>  
+> 	kernel bump to 4.19.23
+> 
+> 	See: https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=224931
+
+What are the firmware changes between what's currently in master and
+83977fe3b6 ? Does it make sense to apply this to master ?
+
+> overlapped with the release of 4.19.23 [3] and the follow up bump (major kernel
+> update for buildroot-next) to
+> 
+>   - kernel 5eeff139ea (4.19.23)
+>   - firmware ebf7b40cdc [2], one commit after [1],
+
+So the firmware version ebf7b40cdc is needed to boot a 4.19 kernel ? Is
+it backward compatible with the 4.14 kernel ?
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
