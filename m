@@ -1,55 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 14:52:22 +0100
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2019.02.0
-Message-ID: <20190305095736.73AFA8E504@busybox.osuosl.org>
+Date: Sat, 23 Feb 2019 17:25:19 +0100
+Subject: [Buildroot] [git commit] package/ipmiutil: bump to version 3.1.3
+Message-ID: <20190305095736.EA7198E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59d186454b1ca7a57343da442a1708a80a499355
+commit: https://git.buildroot.net/buildroot/commit/?id=aea834155589464a118a426212d81c6c34504769
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ipmiutil/ipmiutil.hash | 6 +++---
+ package/ipmiutil/ipmiutil.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 6a8d251548..4c33a77c61 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
+index e09511f96f..3f89b9049c 100644
+--- a/package/ipmiutil/ipmiutil.hash
++++ b/package/ipmiutil/ipmiutil.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/ipmiutil/files/
+-md5 ee90387f8a14dea3f867167865c7c968  ipmiutil-3.1.2.tar.gz
+-sha1 9453db110bffab3111d6ff4047243a34084e5878  ipmiutil-3.1.2.tar.gz
++md5 0d448d14726e2fda0eb9451fb2866a5c  ipmiutil-3.1.3.tar.gz
++sha1 d20cb3194f4c5cb8c9fd64b3693d5b53dc9510d4  ipmiutil-3.1.3.tar.gz
+ # Locally computed
+-sha256 768053b3e3adfe1bf656e2848b2805ede87e429c10d282929a7c4ceeebc24703  ipmiutil-3.1.2.tar.gz
++sha256 b80303b6f05cbe48e728dd925fef201e9604a90cd3fc9c8af113367e8d6dbe57  ipmiutil-3.1.3.tar.gz
+ sha256 7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 5d8c45665d..50c90638a6 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2018.12.0"
-+	bool "2019.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2018.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index ec4e404b10..aa80908e67 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2018.12.0.tar.bz2.md5
--md5 f84d7d3562055c80c3eedce0b14d4a0d barebox-2018.12.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.02.0.tar.bz2.md5
-+md5 b3c55967878c1e332c33502f39483ceb barebox-2019.02.0.tar.bz2
- 
- # Locally calculated
--sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 barebox-2018.12.0.tar.bz2
-+sha256 f4fc67d5a2410c9d568e5fc1279ac8999e80d3d91c26631df8f3af8636c04212 barebox-2019.02.0.tar.bz2
+-IPMIUTIL_VERSION = 3.1.2
++IPMIUTIL_VERSION = 3.1.3
+ IPMIUTIL_SITE = https://sourceforge.net/projects/ipmiutil/files
+ IPMIUTIL_LICENSE = BSD-3-Clause
+ IPMIUTIL_LICENSE_FILES = COPYING
