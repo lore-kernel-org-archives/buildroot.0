@@ -1,52 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Feb 2019 15:54:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/rpi-firmware: bump version to
- 83977fe3b6
-In-Reply-To: <20190223152711.6caac341@gmx.net>
-References: <20190222223704.6202-1-ps.report@gmx.net>
- <20190222223704.6202-2-ps.report@gmx.net>
- <20190223143753.59fcb120@windsurf.home>
- <20190223152711.6caac341@gmx.net>
-Message-ID: <20190223155437.0988855f@windsurf.home>
+Date: Sat, 23 Feb 2019 15:59:37 +0100
+Subject: [Buildroot] [git commit branch/next] package/imx-mkimage: add
+ support for i.MX8 and i.MX8X
+Message-ID: <20190223152837.6F2858D700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=57c67fed0e92248b9ba8e98d76ec6ef9ff2738ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for your feedback!
+Signed-off-by: Andr?? Hentschel <andre.hentschel@zf.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imx-mkimage/imx-mkimage.mk | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-On Sat, 23 Feb 2019 15:27:11 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
-
-> > What is the reason for bumping to 83977fe3b6 in master ? And then to
-> > ebf7b40cdc in next ?  
-> 
-> Sorry for the confusion, preparing the bump (maybe buildroot-master) to 
-> 
->  - kernel 877656cd14 (4.14.98, up-to-date one from the 4.14 branch)
->  - firmware 83977fe3b6, last commit before [1]:
->  
-> 	kernel bump to 4.19.23
-> 
-> 	See: https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=224931
-
-What are the firmware changes between what's currently in master and
-83977fe3b6 ? Does it make sense to apply this to master ?
-
-> overlapped with the release of 4.19.23 [3] and the follow up bump (major kernel
-> update for buildroot-next) to
-> 
->   - kernel 5eeff139ea (4.19.23)
->   - firmware ebf7b40cdc [2], one commit after [1],
-
-So the firmware version ebf7b40cdc is needed to boot a 4.19 kernel ? Is
-it backward compatible with the 4.14 kernel ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index ac22c974ac..06d3157dc1 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -11,15 +11,23 @@ IMX_MKIMAGE_LICENSE = GPL-2.0+
+ IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
+ HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+ 
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
++# i.MX8M needs a different binary
+ define HOST_IMX_MKIMAGE_BUILD_CMDS
+-	# Currently this only supports iMX8M. When more hardware is available
+-	# this needs to be selectable based on iMX8-version (iMX8M,iMXQ etc).
+ 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
+ endef
+-
+ define HOST_IMX_MKIMAGE_INSTALL_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin/mkimage_fit_atf.sh
+ endef
++else
++# i.MX8 and i.MX8X
++define HOST_IMX_MKIMAGE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
++endef
++define HOST_IMX_MKIMAGE_INSTALL_CMDS
++	$(INSTALL) -D -m 755 $(@D)/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
++endef
++endif
+ 
+ $(eval $(host-generic-package))
