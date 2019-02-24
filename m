@@ -1,150 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Feb 2019 23:12:27 +0100
-Subject: [Buildroot] [git commit] package/ibrcommon: fix dos/unix newlines
- in patch
-Message-ID: <20190224221234.499AE8D32B@busybox.osuosl.org>
+Date: Sun, 24 Feb 2019 23:15:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ibrcommon: fix static build
+ with openssl
+In-Reply-To: <20190216112319.4769-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 16 Feb 2019 12:23:19 +0100")
+References: <20190216112319.4769-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7ikg7ey.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82c67d30503bc7dd4758f165cb87c0df822ba583
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/e88/e881667f388eea4cce2f804b373af4e3038e7b52/
+ > gf_mul is already defined in libcrypto (openssl) so rename it into
+ > ibrdtn_gf_mul to fix the following build failure in ibrdtnd package:
 
-commit fc9f9cd76f (package/ibrcommon: fix static build with openssl) added a
-patch to fix static linking.  The source code unfortunately contains a mix
-of DOS and UNIX newlines, and the DOS new lines got stripped by the mailing
-list, causing the patch to no longer apply.
+ > /home/buildroot/autobuild/instance-3/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(f_impl.o):
+ > In function `gf_mul':
+ > f_impl.c:(.text+0x0): multiple definition of `gf_mul'
+ > /home/buildroot/autobuild/instance-3/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libibrcommon.a(gf128mul.o):gf128mul.cpp:(.text+0x30):
+ > first defined here
+ > collect2: error: ld returned 1 exit status
+ > Makefile:560: recipe for target 'dtnd' failed
 
-Fix up the patch manually.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/1d3b4b6cf043a3e185ce758b617a0a18c3d36cdb
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...mon-ssl-gcm-fix-static-build-with-openssl.patch | 98 +++++++++++-----------
- 1 file changed, 49 insertions(+), 49 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-index bc3301ab61..c55b227c0c 100644
---- a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-+++ b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-@@ -28,67 +28,67 @@ index 8a5745b4..6097b43e 100644
- --- a/ibrcommon/ssl/gcm/gcm.cpp
- +++ b/ibrcommon/ssl/gcm/gcm.cpp
- @@ -89,7 +89,7 @@ ret_type gcm_init_and_key(                      /* initialise mode and set key
-- #elif defined( TABLES_256 )
-- #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
-- #else
---#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
--+#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
-- #endif
-- 
-- ret_type gcm_init_message(                      /* initialise a new message     */
-+ #elif defined( TABLES_256 )
-+ #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
-+ #else
-+-#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
-++#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
-+ #endif
-+ 
-+ ret_type gcm_init_message(                      /* initialise a new message     */
- @@ -334,9 +334,9 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
--         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
--         for( ; ; )
--         {
---            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
--+            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
--             if(!(ln >>= 1)) break;
---            gf_mul(tbuf, tbuf);
--+            ibrdtn_gf_mul(tbuf, tbuf);
--         }
--     }
-- #else   /* this one seems slower on x86 and x86_64 :-( */
-+         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
-+         for( ; ; )
-+         {
-+-            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
-++            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
-+             if(!(ln >>= 1)) break;
-+-            gf_mul(tbuf, tbuf);
-++            ibrdtn_gf_mul(tbuf, tbuf);
-+         }
-+     }
-+ #else   /* this one seems slower on x86 and x86_64 :-( */
- @@ -348,12 +348,12 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
--         tbuf[0] = 0x80;
--         while(i)
--         {
---            gf_mul(tbuf, tbuf);
--+            ibrdtn_gf_mul(tbuf, tbuf);
--             if(i & ln)
--                 gf_mul_hh(tbuf, ctx, scratch);
--             i >>= 1;
--         }
---        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
--+        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
--     }
-- #endif
--     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
-+         tbuf[0] = 0x80;
-+         while(i)
-+         {
-+-            gf_mul(tbuf, tbuf);
-++            ibrdtn_gf_mul(tbuf, tbuf);
-+             if(i & ln)
-+                 gf_mul_hh(tbuf, ctx, scratch);
-+             i >>= 1;
-+         }
-+-        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
-++        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
-+     }
-+ #endif
-+     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
- diff --git a/ibrcommon/ssl/gcm/gf128mul.cpp b/ibrcommon/ssl/gcm/gf128mul.cpp
- index a553a044..d0c460c3 100644
- --- a/ibrcommon/ssl/gcm/gf128mul.cpp
- +++ b/ibrcommon/ssl/gcm/gf128mul.cpp
- @@ -103,7 +103,7 @@
-- 
-- const unsigned short gf_tab[256] = gf_dat(xda);
-- 
---void gf_mul(void *a, const void* b)
--+void ibrdtn_gf_mul(void *a, const void* b)
-- {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
--     int i;
-- 
-+ 
-+ const unsigned short gf_tab[256] = gf_dat(xda);
-+ 
-+-void gf_mul(void *a, const void* b)
-++void ibrdtn_gf_mul(void *a, const void* b)
-+ {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
-+     int i;
-+ 
- diff --git a/ibrcommon/ssl/gcm/gf128mul.h b/ibrcommon/ssl/gcm/gf128mul.h
- index 4645c7fe..65fba54b 100644
- --- a/ibrcommon/ssl/gcm/gf128mul.h
- +++ b/ibrcommon/ssl/gcm/gf128mul.h
- @@ -619,7 +619,7 @@ gf_inline void mul_x(void *r, const void *x)
-- 
-- /*  A slow generic version of gf_mul (a = a * b) */
-- 
---void gf_mul(void *a, const void* b);
--+void ibrdtn_gf_mul(void *a, const void* b);
-- 
-- /*  This version uses 64k bytes of table space on the stack.
--     A 16 byte buffer has to be multiplied by a 16 byte key
-+ 
-+ /*  A slow generic version of gf_mul (a = a * b) */
-+ 
-+-void gf_mul(void *a, const void* b);
-++void ibrdtn_gf_mul(void *a, const void* b);
-+ 
-+ /*  This version uses 64k bytes of table space on the stack.
-+     A 16 byte buffer has to be multiplied by a 16 byte key
- -- 
- 2.14.1
- 
+The DOS newlines unfortunately got stripped by the mailing list, so the
+patch no longer applies. I have manually fixed that up now.
+
+-- 
+Bye, Peter Korsgaard
