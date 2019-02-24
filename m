@@ -1,40 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Feb 2019 22:01:45 +0100
-Subject: [Buildroot] [PATCH v2] package/lua-curl: add variant definition
- of lcurl_url_t
-In-Reply-To: <20190224195132.18844-1-francois.perrad@gadz.org>
-References: <20190224195132.18844-1-francois.perrad@gadz.org>
-Message-ID: <20190224220145.73529bb1@windsurf.home>
+Date: Sun, 24 Feb 2019 22:02:32 +0100
+Subject: [Buildroot] [git commit] package/i2pd: link with libatomic when
+ needed
+Message-ID: <20190224210032.DE68A8E1CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=f88bf61b2934c00aeff12346c2d7dc45b9ab9cda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 24 Feb 2019 20:51:32 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-> Fixes: http://autobuild.buildroot.org/results/8d76ad49837b368a7bba3c3dfd445a035471268a/
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  ...dd-variant-definition-of-lcurl_url_t.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
-Your commit messages are really too terse, they should contain more
-details about the problem. I've extended the commit log and applied to
-master.
+This is often for example the case on sparcv8 32 bit.
 
-Also, I noticed that packages built by the luarocks infrastructure have
-code being built during the "installation to target" step, and nothing
-built in the normal "build" step. Is this expected ? Can this be fixed ?
+Fixes:
+ - http://autobuild.buildroot.org/results/515160349b11f06a090f3e13992e30da9a402c17
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/i2pd/i2pd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index a92d513159..3ce5f97fb8 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -21,6 +21,10 @@ I2PD_CONF_OPTS += -DWITH_GUI=OFF
+ # build failure when cross-compiling.
+ I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++I2PD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ I2PD_CONF_OPTS += -DWITH_STATIC=ON
+ else
