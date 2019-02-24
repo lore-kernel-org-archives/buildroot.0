@@ -1,26 +1,66 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 24 Feb 2019 18:24:40 +0200
-Subject: [Buildroot] Bazel integration in buildroot
-Message-ID: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 24 Feb 2019 20:51:32 +0100
+Subject: [Buildroot] [PATCH v2] package/lua-curl: add variant definition of
+ lcurl_url_t
+Message-ID: <20190224195132.18844-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes: http://autobuild.buildroot.org/results/8d76ad49837b368a7bba3c3dfd445a035471268a/
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...dd-variant-definition-of-lcurl_url_t.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
 
-At my work we started a process in which we want to choose a construction
-tool for our packages. Of course all the traditionals are on the list like
-cmake, meson and others, but we're also looking at Bazel from Google.
-All in all, Bazel seems like a nice construction tool, but I noticed that
-there's not even one package in Buildroot that compiles with Bazel and I
-wanted to know if we missed something. Is someone here familiar with this
-build system and can elaborate more details on Bazel in the embedded world
-and specifically in Buildroot?
-
-Regards,
-Asaf.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190224/ee0e26d1/attachment.html>
+diff --git a/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+new file mode 100644
+index 000000000..0fdd0760d
+--- /dev/null
++++ b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+@@ -0,0 +1,40 @@
++From 28ac0c5e642c9f7e3091a60268745f7cab4cc92b Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 23 Feb 2019 15:23:26 +0100
++Subject: [PATCH] add variant definition of lcurl_url_t
++
++like in lceasy.h
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ src/lcurlapi.h | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/Lua-cURLv3-0.3.9/src/lcurlapi.h b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++index 4dd4672..862c94f 100644
++--- a/Lua-cURLv3-0.3.9/src/lcurlapi.h
+++++ b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++@@ -19,11 +19,20 @@
++ 
++ #if LCURL_CURL_VER_GE(7,62,0)
++ 
+++#if LCURL_CC_SUPPORT_FORWARD_TYPEDEF
++ typedef struct lcurl_url_tag {
++   CURLU *url;
++ 
++   int err_mode;
++ }lcurl_url_t;
+++#else
+++struct lcurl_url_tag {
+++  CURLU *url;
+++
+++  int err_mode;
+++};
+++#define lcurl_url_t struct lcurl_url_tag
+++#endif
++ 
++ int lcurl_url_create(lua_State *L, int error_mode);
++ 
++-- 
++2.17.1
++
+-- 
+2.17.1
