@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Feb 2019 22:22:14 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: bump to version
- 7.0.8-27
-Message-ID: <20190305095737.044DF8E504@busybox.osuosl.org>
+Date: Sun, 24 Feb 2019 22:09:48 +0100
+Subject: [Buildroot] [git commit] package/flatbuffers: bump to version 1.10.0
+Message-ID: <20190305095736.F1BDA8E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=109e5c83dc9c05412cfc6139f2846268f73d76e5
+commit: https://git.buildroot.net/buildroot/commit/?id=db710397afd052e3aebbd00ba11e777475c15d83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps imagemagick to version 7.0.8-27
-Hash for license file is changed becasue the updated the copyright year
-for 2019:
-
-https://github.com/ImageMagick/ImageMagick/commit/252dd2c52bcc591ccd673abdbb70113b42388150
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Micha??l Blanc <mika.blanc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/flatbuffers/flatbuffers.hash | 2 +-
+ package/flatbuffers/flatbuffers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 9d5a39567e..09bfb2a2e9 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
+index a8f23f4ef9..7afe849cd7 100644
+--- a/package/flatbuffers/flatbuffers.hash
++++ b/package/flatbuffers/flatbuffers.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
--sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
-+sha256 94866968a447f8f92a969bf5342d612d05a64c71fc75e63bb2d8ecf887dc7fa2  7.0.8-27.tar.gz
-+sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 7678980582..b5d0d56284 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+ # Locally computed:
+-sha256	5ca5491e4260cacae30f1a5786d109230db3f3a6e5a0eb45d0d0608293d247e3	flatbuffers-v1.9.0.tar.gz
++sha256	3714e3db8c51e43028e10ad7adffb9a36fc4aa5b1a363c2d0c4303dd1be59a7c	flatbuffers-v1.10.0.tar.gz
+ sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
+diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+index 26d9307892..69054885ea 100644
+--- a/package/flatbuffers/flatbuffers.mk
++++ b/package/flatbuffers/flatbuffers.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.7-39
-+IMAGEMAGICK_VERSION = 7.0.8-27
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+-FLATBUFFERS_VERSION = v1.9.0
++FLATBUFFERS_VERSION = v1.10.0
+ FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
+ FLATBUFFERS_LICENSE = Apache-2.0
+ FLATBUFFERS_LICENSE_FILES = LICENSE.txt
