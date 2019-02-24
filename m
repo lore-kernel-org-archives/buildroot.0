@@ -1,171 +1,161 @@
-From: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Date: Sun, 24 Feb 2019 11:22:17 +0100
-Subject: [Buildroot] Handling of rpi-firmware blobs broken for certain
- cases
-In-Reply-To: <20190223225309.7560e64f@gmx.net>
-References: <CAKDzfnqJfpgU3S1ZVSBcZFG87vZk=+EBykqUJUG4LMajCNSmoQ@mail.gmail.com>
- <20190223225309.7560e64f@gmx.net>
-Message-ID: <CAKDzfnqYse7ier5jnL-4rSrPYJ2rv+-6WYf18X0v5=ONKE4VcQ@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 24 Feb 2019 17:05:29 +0100
+Subject: [Buildroot] [PATCH] package/gcc: bump to version 8.3.0
+Message-ID: <20190224160529.6038-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Remove upsteam xtensa patches:
+https://github.com/gcc-mirror/gcc/commit/68ca69a4854af36c90531b33a4c540464dbc6a23
+https://github.com/gcc-mirror/gcc/commit/972057cb254e355805bfcd4a47d5c6f743cb76f4
 
-Thanks for your thoughts and research!
+Tested using Toolchain-builder:
+https://gitlab.com/kubu93/toolchains-builder/pipelines/48904471
 
-On Sat, Feb 23, 2019 at 10:53 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Simon,
->
-> On Sat, 23 Feb 2019 19:59:41 +0100, Simon van der Veldt <simon.vanderveldt@gmail.com> wrote:
->
-> > Good evening everyone,
-> >
-> > I just ran into an issue where the .elf and .dat files copied into
-> > /boot by buildroot when building for a Raspberry Pi are incorrect.
-> >
-> > Overview of the problem using current master (or 2018.11.2 which is
-> > the same apart from the version):
-> > - Put gpu_mem=16 in config.txt (the config file for the videocore of a
-> > raspberry)
-> > - When using <32M GPU memory the videocore needs the so called cut
-> > down versions ("start_cd.elf" and "fixup_cd.dat") of the binary blobs
-> > to boot. By emperical testing it seems at least "start_cd.elf" needs
-> > to be present under that exact name to be able to boot the rpi
->
-> From the documentation [1] I would read that you can select between multiple
-> start/fixup files using the start_file/fixup_file option (or via the shortcut
-> start_x/start_debug option) OR alternatively copy the selected files to the
-> default names start.elf/fixup.elf?
->
-> The description of the gpu_mem option (see [2]) does not mention a dependent
-> selection of special start/fixup files (only something about 'to low values
-> may automatically disable certain firmware features')...
->
-> Your theory is that gpu_mem values smaller than 64M (the default) automatically
-> select start_cd.elf/fixup_cd.elf?
->
-> Seems [3], [4] support your statement...
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+There is an existing issue between gdb 8.1.1, musl and kernel-headers
+related to aarch64 SVE support.
+See the same issue with gdb 8.2:
+http://patchwork.ozlabs.org/patch/1030704/
+http://patchwork.ozlabs.org/patch/1030703/
 
-Tbh whilst the docs are a lot better then they were in the past it's
-still a bit unstructured.
-There is mention in the official docs that gpu_mem=16 requires
-start_cd.elf and fixup.dat here
-https://www.raspberrypi.org/documentation/configuration/boot_folder.md
+The bleeding-edge toolchain I tested use kernel-headers 4.19 that
+break gdb 8.1.1 with musl toolchain.
+Using kernel-headers 4.14 build fine.
 
-Can't link to a specific section but under the "start.elf,
-start_x.elf, start_db.elf, start_cd.elf" section it says:
-> and start_cd.elf is a cut-down version with no support hardware blocks like codecs and 3D, and for use when gpu_mem=16 is specified in config.txt
+This issue is not related to the gcc version bump.
+---
+ ...ix-NAND-code-in-xtensa_expand_atomic.patch | 39 ------------------
+ ...a-don-t-force-PIC-for-uclinux-target.patch | 41 -------------------
+ package/gcc/Config.in.host                    |  2 +-
+ package/gcc/gcc.hash                          |  4 +-
+ 4 files changed, 3 insertions(+), 83 deletions(-)
+ delete mode 100644 package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
+ delete mode 100644 package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
 
-I don't think the fact that this requirement is actually < 32MB
-instead of just 16MB is documented anywhere but it's been mentioned on
-some issues and the forum by raspbian kernel devs (as you've found).
-
-> > - Buildroot has some custom handling for these files
-> > (https://github.com/buildroot/buildroot/blob/master/package/rpi-firmware/rpi-firmware.mk#L40)
-> > and copies the correctly named "source" files from the rpi-firmware
-> > package to the incorrect "start.elf" and "fixup.dat" names
-> > - When trying to boot the RPi won't book (note I've only tested this
-> > with a CM3, not sure if behavior is different for other RPis)
-> >
-> > Whilst I'm sure this is solvable I'm wondering why this level of
-> > micro-management of these blobs is necessary? The .elf files are
-> > 12.2MB and the .dat files are 28.6KB for all of them.
-> > These files only get copied into the image directory from where one
-> > can then choose which files to include in the actual image using the
-> > genimage config. I don't think copying +-12MB should be a problem.
-> >
-> > Also users have the possibility of changing the config.txt file
-> > (assume a writeable boot filesystem of course) which means they might
-> > need different versions of these start and fixup files and by
-> > extension multiple/all different versions of these blobs need to be
-> > present.
->
-> Mhhh, the buildroot defconfigs files are about a 'minimal' starting
-> example and not about a fully configurable all-in-one solution, see
-> e.g. [5], [6].
-
-I'm glad to see this, I agree 100% with the points made by Arnout in [6].
-Pretty much always you'll already have/need a custom config.txt and
-genimage config so I don't feel it's a good move to add complexity to
-try to automatically fix them up.
-
-I especially like the suggestion to add wildcard/blob support to
-genimage, I was really surprised it didn't support it.
-
-To me the way it currently works goes more into the "fully
-configurable all-in-one solution" direction with mimicking/duplicating
-knowledge about how the RPi internally works (config options in
-buildroot for different binary blobs supported by the RPi) into
-buildroot. I'd be very wary of having code this specific, in general
-I'd suggest to stay away from these implementation details for obvious
-reasons. A nice example being the list is already incomplete (with
-"start_db" missing).
-And as mentioned with the way it currently works it's not possible to
-switch to using different start and fixup files at runtime, meaning
-for example a regular user of the built image can't use the camera
-because it's impossible to switch to "start_x.elf/fixup_x.dat".
-
-> There are some good arguments to add all start/fixup files (and/or keep
-> the original names), but on the other side not all raspberry files
-> install the dtb overlay files (only the defconfigs where some overlay
-> is needed)....
-
-IMHO the overlay files have the same issues as the dtbs, they are too
-micro-managed from within buildroot.
-The simple case where one is building for a regular Raspberry Pi is
-only sometimes covered by buildroot. For some boards all overlays from
-rpi-firmware are copied to /boot and for others they aren't. So for
-some board the users of the built image can use any hat they want and
-for others they can't.
-
-When someone is building for a Compute Module they will probably have
-custom dts files in the kernel sources that need to be compiled.
-I'm currently working on such a board and I experience it as being too
-micro-managed where information on which dts/dtbs files I need is
-duplicated in the kernel and buildroot config.
-I wanted to compile all of them from our kernel sources and of course
-include all of them in the image but then I'd have to list all of them
-in the buildroot config (and I'm not even sure how to handle the
-overlays in our kernel sources this way).
-So I'm currently also using a small patch (which I know won't be
-acceptable to be upstreamed in it's current form) that just uses the
-kernel's "make dtbs" and "make dtbs_install" targets. It can be found
-here in case you're interested
-https://github.com/simonvanderveldt/buildroot/commit/891d1a14e48930565e2294e82d07d80142fc529b
-
-Kind regards,
-Simon
-
-> Regards,
-> Peter
->
-> >
-> > With all of this said my suggestion would be to simplify how this is
-> > handled in buildroot by just copying all *.elf and *.dat files in the
-> > boot directory of rpi-firmware to the image directory.
-> > Then the person building the image can choose which of these (specific
-> > ones or all of them) to include using the genimage config.
-> >
-> > An example/suggestion for a fix can be found here
-> > https://github.com/simonvanderveldt/buildroot/commit/16880713c2c03ad50e8cfe7bf05331718d52742e
-> > I've tested this and it works like a charm :)
-> >
-> > Kind regards,
-> > Simon
->
-> [1] https://www.raspberrypi.org/documentation/configuration/config-txt/boot.md
-> [2] https://www.raspberrypi.org/documentation/configuration/config-txt/memory.md
-> [3] https://ultibo.org/forum/viewtopic.php?t=205
-> [4] https://github.com/raspberrypi/linux/issues/503#issuecomment-37134612
-> [5] http://lists.busybox.net/pipermail/buildroot/2019-January/241809.html
-> [6] http://lists.busybox.net/pipermail/buildroot/2019-February/242704.html
->
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch b/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
+deleted file mode 100644
+index d62d7c1566..0000000000
+--- a/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 6765eecde2ed8d4be0fc217408b9e9b92a840aff Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 4 Sep 2018 00:39:32 -0700
+-Subject: [PATCH] gcc: xtensa: fix NAND code in xtensa_expand_atomic
+-
+-NAND is ~(a1 & a2), but xtensa_expand_atomic does ~a1 & a2.
+-That fixes libatomic tests atomic-op-{1,2}.
+-
+-gcc/
+-2018-09-04  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/xtensa/xtensa.c (xtensa_expand_atomic): Reorder AND and
+-	XOR operations in NAND case.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Backported from: r264087
+----
+- gcc/config/xtensa/xtensa.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index 7cfe64d42895..080bb4ad765d 100644
+---- a/gcc/config/xtensa/xtensa.c
+-+++ b/gcc/config/xtensa/xtensa.c
+-@@ -1614,9 +1614,9 @@ xtensa_expand_atomic (enum rtx_code code, rtx target, rtx mem, rtx val,
+-       break;
+- 
+-     case MULT: /* NAND */
+--      tmp = expand_simple_binop (SImode, XOR, old, ac.modemask,
+-+      tmp = expand_simple_binop (SImode, AND, old, val,
+- 				 NULL_RTX, 1, OPTAB_DIRECT);
+--      tmp = expand_simple_binop (SImode, AND, tmp, val,
+-+      tmp = expand_simple_binop (SImode, XOR, tmp, ac.modemask,
+- 				 new_rtx, 1, OPTAB_DIRECT);
+-       break;
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch b/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
+deleted file mode 100644
+index 360947cbb1..0000000000
+--- a/package/gcc/8.2.0/0005-gcc-xtensa-don-t-force-PIC-for-uclinux-target.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 960a2552f7b418134cdf7a31e96023a3811b98dd Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 4 Nov 2018 23:55:59 -0800
+-Subject: [PATCH] gcc: xtensa: don't force PIC for uclinux target
+-
+-xtensa-uclinux uses bFLT executable file format that cannot relocate
+-fields representing offsets from data to code. C++ objects built as PIC
+-use offsets to encode FDE structures. As a result C++ exception handling
+-doesn't work correctly on xtensa-uclinux. Don't use PIC by default on
+-xtensa-uclinux.
+-
+-gcc/
+-2018-11-05  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/xtensa/uclinux.h (XTENSA_ALWAYS_PIC): Change to 0.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: r265823
+-
+- gcc/config/xtensa/uclinux.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
+-index ba26187c8f7a..c7743df9d97c 100644
+---- a/gcc/config/xtensa/uclinux.h
+-+++ b/gcc/config/xtensa/uclinux.h
+-@@ -59,8 +59,8 @@ along with GCC; see the file COPYING3.  If not see
+- #undef LOCAL_LABEL_PREFIX
+- #define LOCAL_LABEL_PREFIX	"."
+- 
+--/* Always enable "-fpic" for Xtensa Linux.  */
+--#define XTENSA_ALWAYS_PIC 1
+-+/* Don't enable "-fpic" for Xtensa uclinux.  */
+-+#define XTENSA_ALWAYS_PIC 0
+- 
+- #undef TARGET_LIBC_HAS_FUNCTION
+- #define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
+--- 
+-2.11.0
+-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 036a5b9790..8ec406a117 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -84,7 +84,7 @@ config BR2_GCC_VERSION
+ 	default "5.5.0"     if BR2_GCC_VERSION_5_X
+ 	default "6.5.0"     if BR2_GCC_VERSION_6_X
+ 	default "7.4.0"     if BR2_GCC_VERSION_7_X
+-	default "8.2.0"     if BR2_GCC_VERSION_8_X
++	default "8.3.0"     if BR2_GCC_VERSION_8_X
+ 	default "arc-2018.09-release" if BR2_GCC_VERSION_ARC
+ 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index abdcd9ac54..4f1e7f932f 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -6,8 +6,8 @@ sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe7
+ sha512  ce046f9a50050fd54b870aab764f7db187fe7ea92eb4aaffb7c3689ca623755604e231f2af97ef795f41c406bb80c797dd69957cfdd51dfa2ba60813f72b7eac  gcc-6.5.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.4.0/sha512.sum
+ sha512  8864d8e4b97c2e1a4f17422f6e68120172ebefeab97b1757734f7185ca68a6b9a89011c6833c03fa454c17b0ac35b15e1d284881e6971035948ac6100f3aa45e  gcc-7.4.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.2.0/sha512.sum
+-sha512  64898a165f67e136d802a92e7633bf1b06c85266027e52127ea025bf5fc2291b5e858288aac0bdba246e6cdf7c6ec88bc8e0e7f3f6f1985f4297710cafde56ed  gcc-8.2.0.tar.xz
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.3.0/sha512.sum
++sha512  1811337ae3add9680cec64968a2509d085b6dc5b6783fc1e8c295e3e47416196fd1a3ad8dfe7e10be2276b4f62c357659ce2902f239f60a8648548231b4b5802  gcc-8.3.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  4d12c3ac27b9de9c533be3b8964cf23d21bf6933b5073183e1affe714b0ff33f9d6169e3b55a5c505d7dae33c9bb4f8b0d110461e3a124182d8c8d51b66b8e45  gcc-arc-2018.09-release.tar.gz
+-- 
+2.20.1
