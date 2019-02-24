@@ -1,71 +1,150 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Feb 2019 22:46:47 +0100
-Subject: [Buildroot] [PATCH-2018.02.x] package/perl: security bump to
- version 5.26.3
-Message-ID: <20190224214647.11184-1-peter@korsgaard.com>
+Date: Sun, 24 Feb 2019 23:12:27 +0100
+Subject: [Buildroot] [git commit] package/ibrcommon: fix dos/unix newlines
+ in patch
+Message-ID: <20190224221234.499AE8D32B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+commit: https://git.buildroot.net/buildroot/commit/?id=82c67d30503bc7dd4758f165cb87c0df822ba583
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- [CVE-2018-12015] Directory traversal in module Archive::Tar
-- [CVE-2018-18311] Integer overflow leading to buffer overflow and segmentation fault
-- [CVE-2018-18312] Heap-buffer-overflow write in S_regatom (regcomp.c)
-- [CVE-2018-18313] Heap-buffer-overflow read in S_grok_bslash_N (regcomp.c)
-- [CVE-2018-18314] Heap-buffer-overflow write in S_regatom (regcomp.c)
+Fixes:
+http://autobuild.buildroot.net/results/e88/e881667f388eea4cce2f804b373af4e3038e7b52/
 
-For more details, see perldelta:
-https://metacpan.org/changes/release/SHAY/perl-5.26.3
+commit fc9f9cd76f (package/ibrcommon: fix static build with openssl) added a
+patch to fix static linking.  The source code unfortunately contains a mix
+of DOS and UNIX newlines, and the DOS new lines got stripped by the mailing
+list, causing the patch to no longer apply.
 
-Bump perlcross to 1.2.2 for perl 5.26.3 support.
+Fix up the patch manually.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ ...mon-ssl-gcm-fix-static-build-with-openssl.patch | 98 +++++++++++-----------
+ 1 file changed, 49 insertions(+), 49 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 210f6d581b..502f0db9df 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.26.2.tar.xz.{md5,sha1,sha256}.txt
--md5    1fa1b53eeff76aa37b17bfc9b2771671                                 perl-5.26.2.tar.xz
--sha1   bfa5c7921ed7bf5e035dbf2f7ff81367b81e372c                         perl-5.26.2.tar.xz
--sha256 0f8c0fb1b0db4681adb75c3ba0dd77a0472b1b359b9e80efd79fc27b4352132c perl-5.26.2.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.26.3.tar.xz.{md5,sha1,sha256}.txt
-+md5    218d73f2334d2f3fdaff5a1f35358247                                 perl-5.26.3.tar.xz
-+sha1   ca73432ac07288fdce2063f5e09c642e28584226                         perl-5.26.3.tar.xz
-+sha256 e0a17cdaed5304aea1783e507e56bb0001dd72c46f211553ead3a580c3f38135 perl-5.26.3.tar.xz
+diff --git a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
+index bc3301ab61..c55b227c0c 100644
+--- a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
++++ b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
+@@ -28,67 +28,67 @@ index 8a5745b4..6097b43e 100644
+ --- a/ibrcommon/ssl/gcm/gcm.cpp
+ +++ b/ibrcommon/ssl/gcm/gcm.cpp
+ @@ -89,7 +89,7 @@ ret_type gcm_init_and_key(                      /* initialise mode and set key
+- #elif defined( TABLES_256 )
+- #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
+- #else
+--#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
+-+#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
+- #endif
+- 
+- ret_type gcm_init_message(                      /* initialise a new message     */
++ #elif defined( TABLES_256 )
++ #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
++ #else
++-#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
+++#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
++ #endif
++ 
++ ret_type gcm_init_message(                      /* initialise a new message     */
+ @@ -334,9 +334,9 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
+-         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
+-         for( ; ; )
+-         {
+--            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+-+            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+-             if(!(ln >>= 1)) break;
+--            gf_mul(tbuf, tbuf);
+-+            ibrdtn_gf_mul(tbuf, tbuf);
+-         }
+-     }
+- #else   /* this one seems slower on x86 and x86_64 :-( */
++         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
++         for( ; ; )
++         {
++-            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+++            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
++             if(!(ln >>= 1)) break;
++-            gf_mul(tbuf, tbuf);
+++            ibrdtn_gf_mul(tbuf, tbuf);
++         }
++     }
++ #else   /* this one seems slower on x86 and x86_64 :-( */
+ @@ -348,12 +348,12 @@ ret_type gcm_compute_tag(                       /* compute authentication tag
+-         tbuf[0] = 0x80;
+-         while(i)
+-         {
+--            gf_mul(tbuf, tbuf);
+-+            ibrdtn_gf_mul(tbuf, tbuf);
+-             if(i & ln)
+-                 gf_mul_hh(tbuf, ctx, scratch);
+-             i >>= 1;
+-         }
+--        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+-+        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+-     }
+- #endif
+-     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
++         tbuf[0] = 0x80;
++         while(i)
++         {
++-            gf_mul(tbuf, tbuf);
+++            ibrdtn_gf_mul(tbuf, tbuf);
++             if(i & ln)
++                 gf_mul_hh(tbuf, ctx, scratch);
++             i >>= 1;
++         }
++-        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+++        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
++     }
++ #endif
++     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
+ diff --git a/ibrcommon/ssl/gcm/gf128mul.cpp b/ibrcommon/ssl/gcm/gf128mul.cpp
+ index a553a044..d0c460c3 100644
+ --- a/ibrcommon/ssl/gcm/gf128mul.cpp
+ +++ b/ibrcommon/ssl/gcm/gf128mul.cpp
+ @@ -103,7 +103,7 @@
+- 
+- const unsigned short gf_tab[256] = gf_dat(xda);
+- 
+--void gf_mul(void *a, const void* b)
+-+void ibrdtn_gf_mul(void *a, const void* b)
+- {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
+-     int i;
+- 
++ 
++ const unsigned short gf_tab[256] = gf_dat(xda);
++ 
++-void gf_mul(void *a, const void* b)
+++void ibrdtn_gf_mul(void *a, const void* b)
++ {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
++     int i;
++ 
+ diff --git a/ibrcommon/ssl/gcm/gf128mul.h b/ibrcommon/ssl/gcm/gf128mul.h
+ index 4645c7fe..65fba54b 100644
+ --- a/ibrcommon/ssl/gcm/gf128mul.h
+ +++ b/ibrcommon/ssl/gcm/gf128mul.h
+ @@ -619,7 +619,7 @@ gf_inline void mul_x(void *r, const void *x)
+- 
+- /*  A slow generic version of gf_mul (a = a * b) */
+- 
+--void gf_mul(void *a, const void* b);
+-+void ibrdtn_gf_mul(void *a, const void* b);
+- 
+- /*  This version uses 64k bytes of table space on the stack.
+-     A 16 byte buffer has to be multiplied by a 16 byte key
++ 
++ /*  A slow generic version of gf_mul (a = a * b) */
++ 
++-void gf_mul(void *a, const void* b);
+++void ibrdtn_gf_mul(void *a, const void* b);
++ 
++ /*  This version uses 64k bytes of table space on the stack.
++     A 16 byte buffer has to be multiplied by a 16 byte key
+ -- 
+ 2.14.1
  
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.9/perl-cross-1.1.9.hash
--sha256	0bbb450e48d07e7fdf867d578b1780ac8f0e8dc284d52301dac4d763b42f6041  perl-cross-1.1.9.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.2.2/perl-cross-1.2.2.hash
-+sha256	e6987838f27d8cd3368ea68fc56a68cc52371505950927b8b7c5cb76e3a94caa  perl-cross-1.2.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 7b4a2710b1..023ef4f776 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 26
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.1.9
-+PERL_CROSS_VERSION = 1.2.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
--- 
-2.11.0
