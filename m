@@ -1,83 +1,76 @@
-From: Artem Panfilov <panfilov.artyom@gmail.com>
-Date: Sun, 24 Feb 2019 23:49:31 +0300
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: fix build with new headers
-Message-ID: <20190224204931.2759-1-panfilov.artyom@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 24 Feb 2019 21:58:16 +0100
+Subject: [Buildroot] [git commit] package/lua-curl: add variant definition
+ of lcurl_url_t
+Message-ID: <20190224205731.1C80C89131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-net_tstamp.h in recent kernel versions requires time.h for clockid_t.
+commit: https://git.buildroot.net/buildroot/commit/?id=dd6e3c8f1acae4b366803039e9f266f58ca7461e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+lua-curl has separate code paths for compilers that support forward
+typedef declarations and those who don't. For the latter case, one
+structure was not properly defined, causing a build failure with older
+compilers.
 
 Fixes:
-  http://autobuild.buildroot.net/results/93903e8abfeaa7df0b6525033fa63e29f2c9e7ae
-Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
----
- ...fix-building-with-new-kernel-headers.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
 
-diff --git a/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch b/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
+  http://autobuild.buildroot.org/results/8d76ad49837b368a7bba3c3dfd445a035471268a/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: improve commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-add-variant-definition-of-lcurl_url_t.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
 new file mode 100644
-index 0000000000..332e5491ff
+index 0000000000..0fdd0760d6
 --- /dev/null
-+++ b/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
-@@ -0,0 +1,55 @@
-+From d663a483c40939bad58301c256d86da1f3da6cc0 Mon Sep 17 00:00:00 2001
-+From: Miroslav Lichvar <mlichvar@redhat.com>
-+Date: Tue, 13 Nov 2018 13:16:08 +0100
-+Subject: [PATCH] Fix building with new kernel headers.
++++ b/package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+@@ -0,0 +1,40 @@
++From 28ac0c5e642c9f7e3091a60268745f7cab4cc92b Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sat, 23 Feb 2019 15:23:26 +0100
++Subject: [PATCH] add variant definition of lcurl_url_t
 +
-+net_tstamp.h in recent kernel versions requires time.h for clockid_t.
++like in lceasy.h
 +
-+Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +---
-+ clock.c      | 2 +-
-+ sk.c         | 1 +
-+ timemaster.c | 1 +
-+ 3 files changed, 3 insertions(+), 1 deletion(-)
++ src/lcurlapi.h | 9 +++++++++
++ 1 file changed, 9 insertions(+)
 +
-+diff --git a/clock.c b/clock.c
-+index 9c493c3..8533b39 100644
-+--- a/clock.c
-++++ b/clock.c
-+@@ -17,11 +17,11 @@
-+  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+  */
-+ #include <errno.h>
-++#include <time.h>
-+ #include <linux/net_tstamp.h>
-+ #include <poll.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-#include <time.h>
-+ #include <sys/queue.h>
++diff --git a/Lua-cURLv3-0.3.9/src/lcurlapi.h b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++index 4dd4672..862c94f 100644
++--- a/Lua-cURLv3-0.3.9/src/lcurlapi.h
+++++ b/Lua-cURLv3-0.3.9/src/lcurlapi.h
++@@ -19,11 +19,20 @@
 + 
-+ #include "address.h"
-+diff --git a/sk.c b/sk.c
-+index e2b1f28..30162eb 100644
-+--- a/sk.c
-++++ b/sk.c
-+@@ -18,6 +18,7 @@
-+  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+  */
-+ #include <errno.h>
-++#include <time.h>
-+ #include <linux/net_tstamp.h>
-+ #include <linux/sockios.h>
-+ #include <linux/ethtool.h>
-+diff --git a/timemaster.c b/timemaster.c
-+index 058678f..00db59f 100644
-+--- a/timemaster.c
-++++ b/timemaster.c
-+@@ -22,6 +22,7 @@
-+ #include <errno.h>
-+ #include <libgen.h>
-+ #include <limits.h>
-++#include <time.h>
-+ #include <linux/net_tstamp.h>
-+ #include <net/if.h>
-+ #include <signal.h>
--- 
-2.19.1
++ #if LCURL_CURL_VER_GE(7,62,0)
++ 
+++#if LCURL_CC_SUPPORT_FORWARD_TYPEDEF
++ typedef struct lcurl_url_tag {
++   CURLU *url;
++ 
++   int err_mode;
++ }lcurl_url_t;
+++#else
+++struct lcurl_url_tag {
+++  CURLU *url;
+++
+++  int err_mode;
+++};
+++#define lcurl_url_t struct lcurl_url_tag
+++#endif
++ 
++ int lcurl_url_create(lua_State *L, int error_mode);
++ 
++-- 
++2.17.1
++
