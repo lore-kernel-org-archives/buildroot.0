@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Feb 2019 22:05:43 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gcc: enable
+Date: Sun, 24 Feb 2019 22:05:34 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/gcc: enable
  __cxa_atexit
-Message-ID: <20190224211858.CFED48E20B@busybox.osuosl.org>
+Message-ID: <20190224211907.2EA7A8E20B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6be0f6d34d36bd1ae7eb3bc3af3f4e4214e5c1b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=665ae7cace6a13a030ba285d0729d3b5d95937bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 This is what GCC manual says [1]:
 -------------------------->8----------------------
@@ -72,10 +72,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 27fc1e987c..ea0d8dac28 100644
+index e47435677e..5901624ea5 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -94,7 +94,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
+@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
  HOST_GCC_COMMON_CONF_OPTS = \
  	--target=$(GNU_TARGET_NAME) \
  	--with-sysroot=$(STAGING_DIR) \
