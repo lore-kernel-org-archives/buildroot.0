@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Feb 2019 21:31:03 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: fix double-conversion compile
- for riscv
-In-Reply-To: <20190216094832.9515-1-ps.report@gmx.net>
-References: <20190216094832.9515-1-ps.report@gmx.net>
-Message-ID: <20190224213103.74ffeb90@windsurf.home>
+Date: Sun, 24 Feb 2019 21:37:28 +0100
+Subject: [Buildroot] [git commit] package/clamav: link with libatomic when
+ needed
+Message-ID: <20190224203645.72E778E217@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Feb 2019 10:48:32 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=50610dccfaa7badd4a995693107280de07bfe742
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes [1], [2]:
-> 
->   ../3rdparty/double-conversion/include/double-conversion/utils.h:83:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-> 
-> [1] http://autobuild.buildroot.net/results/8bdb6a2b56f6ea96649184e5fef6ce2c56b9ec2b
-> [2] http://autobuild.buildroot.net/results/63ba267674b424786bb10c97c565f4306147f95a
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...5-double-conversion-enable-for-riscv.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/qt5/qt5base/5.11.3/0005-double-conversion-enable-for-riscv.patch
+Configure check for OpenSSL fails:
 
-Applied to master, thanks.
+/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-3/output/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(threads_pthread.o): In function `CRYPTO_atomic_add':
+threads_pthread.c:(.text+0x1dc): undefined reference to `__atomic_is_lock_free'
+threads_pthread.c:(.text+0x1f4): undefined reference to `__atomic_fetch_add_4'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes
+http://autobuild.buildroot.net/results/cae8da81adff3ba493154e0ba8b21d90367f82eb/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/clamav/clamav.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index b5a184a67c..8900b4819a 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -22,6 +22,10 @@ CLAMAV_CONF_ENV = \
+ 	ac_cv_c_mmap_private=yes \
+ 	have_cv_ipv6=yes
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++CLAMAV_CONF_ENV += LIBS=-latomic
++endif
++
+ # UCLIBC_HAS_FTS is disabled, therefore disable fanotify (missing fts.h)
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
