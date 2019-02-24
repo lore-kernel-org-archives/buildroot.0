@@ -1,86 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Feb 2019 22:05:34 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/gcc: enable
- __cxa_atexit
-Message-ID: <20190224211907.2EA7A8E20B@busybox.osuosl.org>
+Date: Sun, 24 Feb 2019 22:46:47 +0100
+Subject: [Buildroot] [PATCH-2018.02.x] package/perl: security bump to
+ version 5.26.3
+Message-ID: <20190224214647.11184-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=665ae7cace6a13a030ba285d0729d3b5d95937bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Fixes the following security issues:
 
-This is what GCC manual says [1]:
--------------------------->8----------------------
---enable-__cxa_atexit
+- [CVE-2018-12015] Directory traversal in module Archive::Tar
+- [CVE-2018-18311] Integer overflow leading to buffer overflow and segmentation fault
+- [CVE-2018-18312] Heap-buffer-overflow write in S_regatom (regcomp.c)
+- [CVE-2018-18313] Heap-buffer-overflow read in S_grok_bslash_N (regcomp.c)
+- [CVE-2018-18314] Heap-buffer-overflow write in S_regatom (regcomp.c)
 
-    Define if you want to use __cxa_atexit, rather than atexit,
-    to register C++ destructors for local statics and global objects.
+For more details, see perldelta:
+https://metacpan.org/changes/release/SHAY/perl-5.26.3
 
-    This is essential for fully standards-compliant handling of destructors,
-    but requires __cxa_atexit in libc.
+Bump perlcross to 1.2.2 for perl 5.26.3 support.
 
-    This option is currently only available on systems with GNU libc
-    ...
--------------------------->8----------------------
-
-Important disadvantages of a simple atexit() are that [2]:
--------------------------->8----------------------
-1999 C Standard only requires that the implementation support 32
-registered functions, although most implementations support many more.
-
-More important it does not deal at all with the ability in most implementations
-to remove DSOs from a running program image by calling dlclose
-prior to program termination.
--------------------------->8----------------------
-
-Also it seems like all libc's we support in Buildroot (Glibc, uClibc and musl)
-support __cxa_at_exit() so enable it unconditionally.
-
-FWIW if we look around we'll see:
- 1. In OpenEmbedded it is enabled for everything except gcc-cross-initial: [3], [4]
- 2. In Crosstool-NG it is enabled by default: [5]
- 3. In OpenWrt it is disabled only for uClibc, otherwise enabled: [6]
-
-So I think we should be good with it as well.
-
-[1] https://gcc.gnu.org/install/configure.html
-[2] https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor-motivation
-[3] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-configure-common.inc#L59
-[4] https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-devtools/gcc/gcc-cross-initial.inc#L23
-[5] https://github.com/crosstool-ng/crosstool-ng/blob/master/config/cc/gcc.in#L270
-[6] https://github.com/openwrt/openwrt/blob/master/toolchain/gcc/common.mk#L170
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Claudiu Zissulescu <claziss@synopsys.com>
-Cc: Cupertino Miranda <cmiranda@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3e53b5198349c4d31f59c95aefece14ed6543933)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index e47435677e..5901624ea5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -87,7 +87,7 @@ HOST_GCC_COMMON_DEPENDENCIES = \
- HOST_GCC_COMMON_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--with-sysroot=$(STAGING_DIR) \
--	--disable-__cxa_atexit \
-+	--enable-__cxa_atexit \
- 	--with-gnu-ld \
- 	--disable-libssp \
- 	--disable-multilib \
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 210f6d581b..502f0db9df 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.26.2.tar.xz.{md5,sha1,sha256}.txt
+-md5    1fa1b53eeff76aa37b17bfc9b2771671                                 perl-5.26.2.tar.xz
+-sha1   bfa5c7921ed7bf5e035dbf2f7ff81367b81e372c                         perl-5.26.2.tar.xz
+-sha256 0f8c0fb1b0db4681adb75c3ba0dd77a0472b1b359b9e80efd79fc27b4352132c perl-5.26.2.tar.xz
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.26.3.tar.xz.{md5,sha1,sha256}.txt
++md5    218d73f2334d2f3fdaff5a1f35358247                                 perl-5.26.3.tar.xz
++sha1   ca73432ac07288fdce2063f5e09c642e28584226                         perl-5.26.3.tar.xz
++sha256 e0a17cdaed5304aea1783e507e56bb0001dd72c46f211553ead3a580c3f38135 perl-5.26.3.tar.xz
+ 
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.9/perl-cross-1.1.9.hash
+-sha256	0bbb450e48d07e7fdf867d578b1780ac8f0e8dc284d52301dac4d763b42f6041  perl-cross-1.1.9.tar.gz
++# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.2.2/perl-cross-1.2.2.hash
++sha256	e6987838f27d8cd3368ea68fc56a68cc52371505950927b8b7c5cb76e3a94caa  perl-cross-1.2.2.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 7b4a2710b1..023ef4f776 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,14 +6,14 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 26
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.1.9
++PERL_CROSS_VERSION = 1.2.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-- 
+2.11.0
