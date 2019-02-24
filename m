@@ -1,55 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Feb 2019 21:24:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: needs NPTL
-In-Reply-To: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
-References: <20190216104202.13511-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190224212451.433e47df@windsurf.home>
+Date: Sun, 24 Feb 2019 21:30:20 +0100
+Subject: [Buildroot] [git commit] package/qt5base: fix double-conversion
+ compile for riscv
+Message-ID: <20190224202840.18BE48E245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=a7bcd202d7e04f7a68e9167bc309dcc2716378fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 16 Feb 2019 11:42:02 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fixes [1], [2]:
 
-> The software uses pthread_mutexattr_setrobust which isn't available in
-> uClibc-ng Linuxthreads support.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/197615ad077b0a719954024c3ba182dac43a0555
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  ../3rdparty/double-conversion/include/double-conversion/utils.h:83:2: error: #error Target architecture was not detected as supported by Double-Conversion.
 
-Applied to master, thanks. However...
+[1] http://autobuild.buildroot.net/results/8bdb6a2b56f6ea96649184e5fef6ce2c56b9ec2b
+[2] http://autobuild.buildroot.net/results/63ba267674b424786bb10c97c565f4306147f95a
 
-> ---
->  package/upmpdcli/Config.in | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-> index 938024e8a2..74eb768830 100644
-> --- a/package/upmpdcli/Config.in
-> +++ b/package/upmpdcli/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_UPMPDCLI
->  	bool "upmpdcli"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0005-double-conversion-enable-for-riscv.patch  | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-... I'm not sure on which commit you based this on, but in master, this
-line looked like this:
-
-	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp, libmicrohttpd
-
-so your patch didn't apply. I fixed this up manually.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5base/5.11.3/0005-double-conversion-enable-for-riscv.patch b/package/qt5/qt5base/5.11.3/0005-double-conversion-enable-for-riscv.patch
+new file mode 100644
+index 0000000000..0bdfd4918d
+--- /dev/null
++++ b/package/qt5/qt5base/5.11.3/0005-double-conversion-enable-for-riscv.patch
+@@ -0,0 +1,31 @@
++From 982801a21c3abad7025a7110275a49e200bc460f Mon Sep 17 00:00:00 2001
++From: Stefan O'Rear <stefanor@cox.net>
++Date: Thu, 17 Nov 2016 09:54:33 -0800
++Subject: [PATCH] double-conversion: enable for riscv
++
++Original double conversion patch [1] 'Add support for RISC-V' ported
++to qtbase-5.11.3.
++
++[1] Upstream: https://github.com/google/double-conversion/commit/8316ed5bf405835558a476e528d8e1d0adf69dd9
++
++Change-Id: Id88a356940f4d61dbcec3741a74db695e47af3f0
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/3rdparty/double-conversion/include/double-conversion/utils.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
++index 485f680180..a736b14d1e 100644
++--- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
+++++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
++@@ -66,6 +66,7 @@
++     defined(__SH4__) || defined(__alpha__) || \
++     defined(_MIPS_ARCH_MIPS32R2) || \
++     defined(__AARCH64EL__) || defined(__AARCH64EB__) || \
+++    defined(__riscv) || \
++     defined(__or1k__) || \
++     defined(__microblaze__)
++ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
++-- 
++2.20.1
++
