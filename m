@@ -1,29 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Feb 2019 16:51:14 +0000
-Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
-In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
-References: <bug-9966-163@https.bugs.busybox.net/>
-Message-ID: <bug-9966-163-zenRdDIJr2@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 25 Feb 2019 20:35:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: fix meson cpu_family
+ format
+In-Reply-To: <20190225005245.1954-1-james.hilliard1@gmail.com>
+References: <20190225005245.1954-1-james.hilliard1@gmail.com>
+Message-ID: <20190225203501.3af08ef8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9966
+Hello James,
 
---- Comment #8 from Carlos Santos <casantos@datacom.com.br> ---
-(In reply to Micha? Miros?aw from comment #7)
+On Mon, 25 Feb 2019 08:52:45 +0800, james.hilliard1 at gmail.com wrote:
 
-Let me clarify my point: I'm not against adding a patch to disable rtcwake,
-even though I believe this should be submitted upstream first. My point is that
-such change would be an improvement, not a bug fix, so the right way to do it
-is by means of a patch on Buildroot that adds the required patch for util-linux
-and also turns AUTORECONF to YES.
+> From: James Hilliard <james.hilliard1@gmail.com>
+> 
+> meson requires a custom cpu_family format
+> https://mesonbuild.com/Reference-tables.html#cpu-families
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/pkg-meson.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index a637299476..886fcf7205 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -64,7 +64,7 @@ define $(2)_CONFIGURE_CMDS
+>  	rm -rf $$($$(PKG)_SRCDIR)/build
+>  	mkdir -p $$($$(PKG)_SRCDIR)/build
+>  	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+> -	    -e "s%@TARGET_ARCH@%$$(ARCH)%g" \
+> +	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+>  	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+>  	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+>  	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
 
-Also, this discussion should happen on the buildroot mailing list, not on a bug
-report, so I stop here.
+Doing the same for package/pgk-meson.mk as commit 'package/meson: fix CPU familly' ([1])
+does for package/meson/meson.mk (and by overlapping timing this change got lost for
+the 'package/pkg-meson: support per-package directories' ([2]) patch)...
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+[1] https://git.buildroot.net/buildroot/commit/?id=f3bacda0c0e0adb2ac7f515476f6bb83d1385130
+[2] https://git.buildroot.net/buildroot/commit/?id=5d882b71a8c0c87b0ccdea7ad620a8f44c33fcb1
