@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Feb 2019 22:12:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: fix meson cpu_family
- format
-In-Reply-To: <20190225005245.1954-1-james.hilliard1@gmail.com>
-References: <20190225005245.1954-1-james.hilliard1@gmail.com>
-Message-ID: <20190225221246.4bb322f7@windsurf.home>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 25 Feb 2019 22:14:33 +0100
+Subject: [Buildroot] [PATCH-for-master 2/2] package/iproute2: backport
+ patch to fix compilation under glibc < 2.18
+In-Reply-To: <20190225211147.14947-3-patrickdepinguin@gmail.com>
+References: <20190225211147.14947-1-patrickdepinguin@gmail.com>
+ <20190225211147.14947-3-patrickdepinguin@gmail.com>
+Message-ID: <20190225211431.GA28518@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Feb 2019 08:52:45 +0800
-james.hilliard1 at gmail.com wrote:
+Hi Thomas,
 
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> meson requires a custom cpu_family format
-> https://mesonbuild.com/Reference-tables.html#cpu-families
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/pkg-meson.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Applied to master, thanks.
+> When compiling iproute2 using a toolchain containing glibc 2.17 and older, it fails due to a missing definition of AF_VSOCK.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Add a submitted and accepted upstream patch to fix this issue.
+
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+Thanks for your fix!
+
+
+Kind regards,
+Petr
