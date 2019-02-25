@@ -1,48 +1,51 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Mon, 25 Feb 2019 09:40:51 +0000
-Subject: [Buildroot] RISCV64 kernel panic: cannot open root device
-In-Reply-To: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
-References: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
-Message-ID: <71c97124-5823-3c33-aff1-79af765a749e@embecosm.com>
+From: Steinhilber, Markus <Markus.Steinhilber@erbe-med.com>
+Date: Mon, 25 Feb 2019 10:00:37 +0000
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: add renaming
+ functionality to barebox image copy
+In-Reply-To: <20190222111958.68393178@windsurf>
+References: <2748BB04F99E7E45A3203C831E8B20FE34D35E84@SERBE4I2.intra.erbe-med.de>
+ <20190222094056.5f155e17@windsurf>
+ <ef5bbef6-02e5-7c44-bec1-f65896df581f@mind.be>
+ <20190222111958.68393178@windsurf>
+Message-ID: <2748BB04F99E7E45A3203C831E8B20FE34D361CD@SERBE4I2.intra.erbe-med.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jay
+Hi,
 
-On 25/02/2019 09:03, Jay Aurabind wrote:
-> Hi,
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at bootlin.com]
+> Hello,
 >
-> I built 2018.11.2 version of buildroot with config https://pastebin.com/eSPt939r
+> On Fri, 22 Feb 2019 09:53:18 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> I am getting a kernel panic due to "VFS: Cannot open root device "vda"
-> or unknown-block(0,0): error -6". Full kernel log:
-> https://pastebin.com/9zdZDDtR
+> >  Indeed, this use case happens to (almost) work by chance because
+> > barebox and barebox-aux are two different packages rather than one
+> > like for U-Boot. But if you anyway have the luck of having such an
+> > option, I don't mind adding a little bit extra to be able to make better use of it.
+> >
+> >  Perhaps a possibility is to add a config option that prefixes the
+> > output name with something? You'd still need to rename it in the
+> > post-build script (or, more likely, handle that in the genimage.cfg
+> > file). But it does solve the identical-name problem, it looks pretty simple, and it doesn't break anything.
 >
-> The command used for launching qemu is:
->
-> qemu-system-riscv64 -nographic -machine virt -kernel output/images/bbl
->   -append "console=ttyS0"     -drive
-> file=output/images/rootfs.ext2,format=raw,id=hd0     -device
-> virtio-blk-device,drive=hd0   -netdev user,id=net0    -device
-> virtio-net-device,netdev=net0
->
-> What could be wrong?
->
+> Good idea! It is simple (just one string option), and it preserves backward compatibility (the default value of the option would be
+> empty).
 
-At the moment RISC-V still requires a custom kernel. You need to choose
-'custom git repository' for your kernel version and set...
+I have to say that I don't see a benefit in the proposed behavior over my patch. My patch adds also a single string option (ok, it can be a string list to be fair) and also doesn't break backward compatibility. Additionally it can be used as a rename option. With a default value of empty it behaves exactly as without the patch.
 
-URL of custom repository -> https://github.com/riscv/riscv-linux.git
-Custom repository version -> 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+I also don't see it as too complex. It practically the original if-structure with an added if for each case to check if the value is set and use it or do the 'backward compatibility' way.
 
-Regards
+> Markus, could you look at implementing this instead ?
 
-Mark
+I think I could, but not right now as I'm busy with some other things.
 
--- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+Regards,
+Markus
+________________________________
+
+Erbe Elektromedizin GmbH Firmensitz: 72072 Tuebingen Geschaeftsfuehrer: Christian O. Erbe, Reiner Thede Registergericht: Stuttgart HRB 380137
