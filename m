@@ -1,23 +1,18 @@
-From: Jay Aurabind <jay.aurabind@gmail.com>
-Date: Mon, 25 Feb 2019 14:37:00 +0530
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Mon, 25 Feb 2019 09:40:51 +0000
 Subject: [Buildroot] RISCV64 kernel panic: cannot open root device
 In-Reply-To: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
 References: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
-Message-ID: <CAOsEZojXmBRAYdjtGkZNm2SJgTeJowVrwrsO0H7AeNpGd0Kj-A@mail.gmail.com>
+Message-ID: <71c97124-5823-3c33-aff1-79af765a749e@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, there was an omission in the qemu command line I sent in the
-previous message. I tried with both:
+Hello Jay
 
--append "root=/dev/vda ro console=ttyS0"
--append "console=ttyS0"
-
-On Mon, 25 Feb 2019 at 14:33, Jay Aurabind <jay.aurabind@gmail.com> wrote:
->
+On 25/02/2019 09:03, Jay Aurabind wrote:
 > Hi,
 >
 > I built 2018.11.2 version of buildroot with config https://pastebin.com/eSPt939r
@@ -36,14 +31,18 @@ On Mon, 25 Feb 2019 at 14:33, Jay Aurabind <jay.aurabind@gmail.com> wrote:
 >
 > What could be wrong?
 >
-> --
->
-> Thanks and Regards,
-> Aurabindo J
 
+At the moment RISC-V still requires a custom kernel. You need to choose
+'custom git repository' for your kernel version and set...
 
+URL of custom repository -> https://github.com/riscv/riscv-linux.git
+Custom repository version -> 8fe28cb58bcb235034b64cbbb7550a8a43fd88be
+
+Regards
+
+Mark
 
 -- 
-
-Thanks and Regards,
-Aurabindo J
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
