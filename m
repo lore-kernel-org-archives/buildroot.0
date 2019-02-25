@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Feb 2019 08:54:56 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/perl: security
+Date: Mon, 25 Feb 2019 08:56:20 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/perl: security
  bump to version 5.26.3
-Message-ID: <20190225075507.3EF698E37D@busybox.osuosl.org>
+Message-ID: <20190225075538.7194681DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bece12dffaf9a3300a3f8c57661750df585bd1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e67fc5c0ca1a07a288851256fd1bcef8fd374f27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes the following security issues:
 
@@ -32,7 +32,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 210f6d581b..502f0db9df 100644
+index 6936b22e03..502f0db9df 100644
 --- a/package/perl/perl.hash
 +++ b/package/perl/perl.hash
 @@ -1,7 +1,7 @@
@@ -45,12 +45,12 @@ index 210f6d581b..502f0db9df 100644
 +sha1   ca73432ac07288fdce2063f5e09c642e28584226                         perl-5.26.3.tar.xz
 +sha256 e0a17cdaed5304aea1783e507e56bb0001dd72c46f211553ead3a580c3f38135 perl-5.26.3.tar.xz
  
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.9/perl-cross-1.1.9.hash
--sha256	0bbb450e48d07e7fdf867d578b1780ac8f0e8dc284d52301dac4d763b42f6041  perl-cross-1.1.9.tar.gz
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2/perl-cross-1.2.hash
+-sha256	599077beb86af5e6097da8922a84474a5484f61475d2899eae0f8634e9619109  perl-cross-1.2.tar.gz
 +# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.2.2/perl-cross-1.2.2.hash
 +sha256	e6987838f27d8cd3368ea68fc56a68cc52371505950927b8b7c5cb76e3a94caa  perl-cross-1.2.2.tar.gz
 diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 7b4a2710b1..023ef4f776 100644
+index b0eea3eff4..62388d2016 100644
 --- a/package/perl/perl.mk
 +++ b/package/perl/perl.mk
 @@ -6,14 +6,14 @@
@@ -65,7 +65,7 @@ index 7b4a2710b1..023ef4f776 100644
  PERL_LICENSE_FILES = Artistic Copying README
  PERL_INSTALL_STAGING = YES
  
--PERL_CROSS_VERSION = 1.1.9
+-PERL_CROSS_VERSION = 1.2
 +PERL_CROSS_VERSION = 1.2.2
  # DO NOT refactor with the github helper (the result is not the same)
  PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
