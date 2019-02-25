@@ -1,33 +1,36 @@
-From: =?UTF-8?q?Micha=C3=ABl=20Blanc?= <mika.blanc@gmail.com>
-Date: Mon, 25 Feb 2019 01:16:11 +0100
-Subject: [Buildroot] [PATCH] package/flatbuffers: do not install to target
-Message-ID: <20190225001610.3786-1-mika.blanc@gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 25 Feb 2019 08:52:45 +0800
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: fix meson cpu_family
+ format
+Message-ID: <20190225005245.1954-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since flatbuffers does not have a shared library and flatc is only useful
-for compiling schemas of other projects, there is no point in installing
-flatbuffers in the target directory.
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: Micha?l Blanc <mika.blanc@gmail.com>
+meson requires a custom cpu_family format
+https://mesonbuild.com/Reference-tables.html#cpu-families
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/flatbuffers/flatbuffers.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-index 69054885ea..32186788c5 100644
---- a/package/flatbuffers/flatbuffers.mk
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -9,6 +9,7 @@ FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
- FLATBUFFERS_LICENSE = Apache-2.0
- FLATBUFFERS_LICENSE_FILES = LICENSE.txt
- FLATBUFFERS_INSTALL_STAGING = YES
-+FLATBUFFERS_INSTALL_TARGET = NO
- 
- FLATBUFFERS_CONF_OPTS += \
- 	-DCMAKE_CXX_FLAGS="-std=c++11" \
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a637299476..886fcf7205 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,7 +64,7 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
+ 	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+-	    -e "s%@TARGET_ARCH@%$$(ARCH)%g" \
++	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+ 	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
+ 	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
 -- 
-2.20.1
+2.17.1
