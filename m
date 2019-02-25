@@ -1,28 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Feb 2019 13:49:50 +0000
-Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
-In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
-References: <bug-9966-163@https.bugs.busybox.net/>
-Message-ID: <bug-9966-163-nokeAkY7lX@https.bugs.busybox.net/>
+From: Jay Aurabind <jay.aurabind@gmail.com>
+Date: Mon, 25 Feb 2019 19:20:30 +0530
+Subject: [Buildroot] Build error: kernel (local tarball) cannot find
+ linux/version.h
+Message-ID: <CAOsEZohGmBx4gfmhi7fuFJY8HGuk2ONkL8vTvyRs5bFy25R8+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9966
+Hi,
 
---- Comment #7 from Micha? Miros?aw <mirq-boogs@rere.qmqm.pl> ---
-(In reply to Carlos Santos from comment #6)
+I am building buildroot 2018.11.2 with a custom kernel. I have the
+local copy of the kernel tar'd sitting in the local filesystem, which
+I git-archived from a specific commit. I did so since I do not want
+buildroot to download the whole kernel history all over.
 
-I don't want to point fingers. Adding 'UTIL_LINUX_AUTORECONF = YES' line to 
-package/util-linux/util-linux.mk fixes the problem.
+Corresponding error log: https://pastebin.com/yHYZ26HQ
 
-I guess it has something to do with buildroot's makefile replacing 
-config/ltmain.sh in the package but not in autotools it provides. The file 
-get's replaced with unpatched version when ./configure runs autoreconf to 
-update itself.
+The custom kernel I'm using is version 4.20, and during configuration,
+I only have the option of selecting an older version string
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18
+
+Is this the probable cause of the breakage ?
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+
+Thanks and Regards,
+Jay
