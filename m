@@ -1,49 +1,34 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 25 Feb 2019 12:10:22 +0100
-Subject: [Buildroot] [PATCH v3] package/imagemagick: bump to version 7.0.8-27
-Message-ID: <1551093022-14273-1-git-send-email-angelo@amarulasolutions.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Feb 2019 11:44:03 +0000
+Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
+In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
+References: <bug-9966-163@https.bugs.busybox.net/>
+Message-ID: <bug-9966-163-psqrqTap2D@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=9966
 
-This patch bumps imagemagick to version 7.0.8-27
-Hash for license file is changed becasue the updated the copyright year
-for 2019:
+Carlos Santos <casantos@datacom.com.br> changed:
 
-https://github.com/ImageMagick/ImageMagick/commit/252dd2c52bcc591ccd673abdbb70113b42388150
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|REOPENED                    |RESOLVED
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--- Comment #6 from Carlos Santos <casantos@datacom.com.br> ---
+(In reply to Micha? Miros?aw from comment #5)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 9d5a395..09bfb2a 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
--sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
-+sha256 94866968a447f8f92a969bf5342d612d05a64c71fc75e63bb2d8ecf887dc7fa2  7.0.8-27.tar.gz
-+sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 7678980..b5d0d56 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.7-39
-+IMAGEMAGICK_VERSION = 7.0.8-27
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+Sorry, this is not a bug in Buildroot. You add a patch that knowingly breaks
+the build and then complain that the build gets broken.
+
+Also, please do not reopen an old bug just because you saw a similar behavior
+in a new situation. A bug must be reopened if it's resolution was not correct.
+New problems must be reported as new bugs.
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
