@@ -1,31 +1,35 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 25 Feb 2019 22:14:33 +0100
-Subject: [Buildroot] [PATCH-for-master 2/2] package/iproute2: backport
- patch to fix compilation under glibc < 2.18
-In-Reply-To: <20190225211147.14947-3-patrickdepinguin@gmail.com>
-References: <20190225211147.14947-1-patrickdepinguin@gmail.com>
- <20190225211147.14947-3-patrickdepinguin@gmail.com>
-Message-ID: <20190225211431.GA28518@x230>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Feb 2019 22:20:58 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/libwebsockets: bump
+ version to 3.1.0
+In-Reply-To: <20190223201736.106101-1-aduskett@gmail.com>
+References: <20190223201736.106101-1-aduskett@gmail.com>
+Message-ID: <20190225222058.1d0a106b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Adam,
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Sat, 23 Feb 2019 15:17:36 -0500
+aduskett at gmail.com wrote:
 
-> When compiling iproute2 using a toolchain containing glibc 2.17 and older, it fails due to a missing definition of AF_VSOCK.
+> +-if (LWS_WITH_LIBEV AND LWS_WITH_LIBEVENT)
+> +-	message(FATAL_ERROR "Sorry libev and libevent conflict with each others' namespace, you can only have one or the other")
+> +-endif()
 
-> Add a submitted and accepted upstream patch to fix this issue.
+I'm a bit confused by this patch. Why are removing this check ? If
+libwebsockets is anyway only using libev *or* libevent, what about
+changing libwebsockets.mk to only allow using one or the other ?
 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+This is the only point I've seen, the rest looks good to me.
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Thanks,
 
-Thanks for your fix!
-
-
-Kind regards,
-Petr
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
