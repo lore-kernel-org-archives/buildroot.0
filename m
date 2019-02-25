@@ -1,59 +1,32 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 25 Feb 2019 10:33:10 +0200
-Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
-In-Reply-To: <20190225090543.1e93d3a6@windsurf.home>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228182159.02a8a6c4@windsurf>
- <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
- <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
- <20190222212912.727ff0c2@windsurf>
- <20190225011003.g7j35hly5bpf2bys@vkochan-ThinkPad-T470p>
- <20190225090543.1e93d3a6@windsurf.home>
-Message-ID: <20190225083310.qvc3osfcpgm6xxix@vkochan-ThinkPad-T470p>
+From: Jay Aurabind <jay.aurabind@gmail.com>
+Date: Mon, 25 Feb 2019 14:33:37 +0530
+Subject: [Buildroot] RISCV64 kernel panic: cannot open root device
+Message-ID: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On Mon, Feb 25, 2019 at 09:05:43AM +0100, Thomas Petazzoni wrote:
-> Hello Vadim,
-> 
-> On Mon, 25 Feb 2019 03:10:03 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > I think that in case of per-packages parallel build the logs became
-> > messy and meaningless so I send a patch which allows to do per-package
-> > logging too:
-> > 
-> > 	https://patchwork.ozlabs.org/patch/1047549/
-> > 
-> > this is a POC so it just shows the idea.
-> 
-> Thanks for proposing this!
-> 
-> The problem of logging was discussed quite a lot back when I started to
-> work on per-package directories. I think we investigated overriding the
-> SHELL variable, but couldn't find an approach that worked properly, but
-> maybe the approach was different than yours, I need to get back to the
-> original discussion.
-> 
-> Back then, what we concluded is that people could use the "make
-> --output-sync=target" option, or "make -Otarget" in short. This option
-> buffers the output of make on a per-target basis, and displays this
-> output at once when the target has completed. The advantage is that the
-> output is no longer garbled, but the drawback is that you don't see
-> "live" what is happening: if a package takes 20 minutes to build,
-> during 20 minutes you see nothing, and at the end of the 20 minutes,
-> you get in one go the full build output of that package.
-> 
+I built 2018.11.2 version of buildroot with config https://pastebin.com/eSPt939r
 
-I changed a bit an approach to log output per-package and per-step, so it
-solves the issue of refreshing log for particular step by simply
-removing the log file at the beginning of step. Actually these steps logs
-might be merged into one at the end of make.
+I am getting a kernel panic due to "VFS: Cannot open root device "vda"
+or unknown-block(0,0): error -6". Full kernel log:
+https://pastebin.com/9zdZDDtR
 
-Regards,
-Vadim Kochan
+The command used for launching qemu is:
+
+qemu-system-riscv64 -nographic -machine virt -kernel output/images/bbl
+  -append "console=ttyS0"     -drive
+file=output/images/rootfs.ext2,format=raw,id=hd0     -device
+virtio-blk-device,drive=hd0   -netdev user,id=net0    -device
+virtio-net-device,netdev=net0
+
+What could be wrong?
+
+-- 
+
+Thanks and Regards,
+Aurabindo J
