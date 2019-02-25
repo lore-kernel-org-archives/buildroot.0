@@ -1,61 +1,71 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Mon, 25 Feb 2019 22:23:59 +0100
-Subject: [Buildroot] [PATCH 1/1] imx-mkimage: Add patch to satisfy unused
- version generation
-Message-ID: <20190225212359.19095-1-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Feb 2019 22:25:44 +0100
+Subject: [Buildroot] [git commit] package/iproute2: backport patch to fix
+ compilation under glibc < 2.18
+Message-ID: <20190225212703.ACC728E2B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a669c0f2f58e47bef4b7c2863cd1ee587befb662
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://autobuild.buildroot.net/results/1973d39b113c37e65c35f1f0a56354f192ae02d7
+When compiling iproute2 using a toolchain containing glibc 2.17 and
+older, it fails due to a missing definition of AF_VSOCK.
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+Add a submitted and accepted upstream patch to fix this issue.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Add-unused-fake-version.patch        | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/imx-mkimage/0003-Add-unused-fake-version.patch
+ .../0002-ss-fix-compilation-under-glibc-2.18.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/imx-mkimage/0003-Add-unused-fake-version.patch b/package/imx-mkimage/0003-Add-unused-fake-version.patch
+diff --git a/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch b/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch
 new file mode 100644
-index 0000000000..f437a17ac7
+index 0000000000..b6934f5d17
 --- /dev/null
-+++ b/package/imx-mkimage/0003-Add-unused-fake-version.patch
-@@ -0,0 +1,32 @@
-+From e75feef80b51c9060e3702390040495312648ad2 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-+Date: Mon, 25 Feb 2019 22:15:55 +0100
-+Subject: [PATCH] Add unused fake version
++++ b/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch
+@@ -0,0 +1,39 @@
++From 9700927a008a803ac119bdf816bdc1baa69d705c Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Wed, 20 Feb 2019 15:41:51 +0100
++Subject: [PATCH] ss: fix compilation under glibc < 2.18
 +
-+The Makefile makes the assumption that the build process runs
-+from a Git clone of the source code.
-+We can safely add a fake version here, because the code to
-+print it is broken anyway.
++Commit c759116a0b2b6da8df9687b0a40ac69050132c77 introduced support for
++AF_VSOCK. This define is only provided since glibc version 2.18, so
++compilation fails when using older toolchains.
 +
++Provide the necessary definitions if needed.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
 +---
-+ Makefile | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
++ misc/ss.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
-+diff --git a/Makefile b/Makefile
-+index ccf42e8..6041574 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -37,9 +37,7 @@ $(MKIMG): src/build_info.h $(SRCS)
-+ bin: $(MKIMG)
++diff --git a/misc/ss.c b/misc/ss.c
++index 9e821faf..766fdc5f 100644
++--- a/misc/ss.c
+++++ b/misc/ss.c
++@@ -51,6 +51,14 @@
++ #include <linux/tipc_netlink.h>
++ #include <linux/tipc_sockets_diag.h>
 + 
-+ src/build_info.h:
-+-	@echo -n '#define MKIMAGE_COMMIT 0x' > src/build_info.h
-+-	@git rev-parse --short=8 HEAD >> src/build_info.h
-+-	@echo '' >> src/build_info.h
-++	@echo '#define MKIMAGE_COMMIT 0xdeadbeef' > src/build_info.h
-+ 
-+ help:
-+ 	@echo $(CURR_DIR)
+++/* AF_VSOCK/PF_VSOCK is only provided since glibc 2.18 */
+++#ifndef PF_VSOCK
+++#define PF_VSOCK 40
+++#endif
+++#ifndef AF_VSOCK
+++#define AF_VSOCK PF_VSOCK
+++#endif
+++
++ #define MAGIC_SEQ 123456
++ #define BUF_CHUNK (1024 * 1024)
++ #define LEN_ALIGN(x) (((x) + 1) & ~1)
 +-- 
-+2.17.1
++2.19.2
 +
--- 
-2.17.1
