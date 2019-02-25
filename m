@@ -1,34 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Feb 2019 13:47:31 +0100
-Subject: [Buildroot] [git commit] package/stress-ng: Fix author email in
- 0003-test-test-bsd-wchar-...patch
-Message-ID: <20190225124536.906247FDB9@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Feb 2019 13:49:50 +0000
+Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
+In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
+References: <bug-9966-163@https.bugs.busybox.net/>
+Message-ID: <bug-9966-163-nokeAkY7lX@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7c92f7e12a682bcc335b67e601644187d9fd85f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9966
 
-Author's and sign-off's emails differs, so fix the author's one which
-is not valid anymore.
+--- Comment #7 from Micha? Miros?aw <mirq-boogs@rere.qmqm.pl> ---
+(In reply to Carlos Santos from comment #6)
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't want to point fingers. Adding 'UTIL_LINUX_AUTORECONF = YES' line to 
+package/util-linux/util-linux.mk fixes the problem.
 
-diff --git a/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-index 79d381bc65..931aaff2bd 100644
---- a/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-+++ b/package/stress-ng/0003-test-test-bsd-wchar-Explicitly-include-stdio.h.patch
-@@ -1,5 +1,5 @@
- From 291070801245da26e4841c321910b55016ca23c0 Mon Sep 17 00:00:00 2001
--From: Vadim Kochan <vadim.kochan@petcube.com>
-+From: Vadim Kochan <vadim4j@gmail.com>
- Date: Tue, 1 Jan 2019 17:24:54 +0200
- Subject: [PATCH] test/test-bsd-wchar: Explicitly include stdio.h
- 
+I guess it has something to do with buildroot's makefile replacing 
+config/ltmain.sh in the package but not in autotools it provides. The file 
+get's replaced with unpatched version when ./configure runs autoreconf to 
+update itself.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
