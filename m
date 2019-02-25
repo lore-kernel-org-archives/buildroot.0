@@ -1,102 +1,34 @@
-From: Kepplinger Martin <Martin.Kepplinger@ginzinger.com>
-Date: Mon, 25 Feb 2019 07:09:12 +0000
-Subject: [Buildroot] [PATCH] make printvars: avoid invalid calls when
- arguments are missing
-In-Reply-To: <20190223174157.28e41088@windsurf.home>
-References: <20190223161108.22819-1-martin.kepplinger@ginzinger.com>,
- <20190223174157.28e41088@windsurf.home>
-Message-ID: <468427c5e6854794aa8a97373bfdaf30@ginzinger.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Feb 2019 08:57:03 +0100
+Subject: [Buildroot] [PATCH-2018.02.x] package/perl: security bump to
+ version 5.26.3
+In-Reply-To: <20190224214647.11184-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 24 Feb 2019 22:46:47 +0100")
+References: <20190224214647.11184-1-peter@korsgaard.com>
+Message-ID: <8736ocfghc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(sorry for the horrible email format)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-my patch does not break the build. In fact, it *adds* host-tar to my build (for the first time
-ever it seems because it just downloaded).
+ > Fixes the following security issues:
+ > - [CVE-2018-12015] Directory traversal in module Archive::Tar
+ > - [CVE-2018-18311] Integer overflow leading to buffer overflow and segmentation fault
+ > - [CVE-2018-18312] Heap-buffer-overflow write in S_regatom (regcomp.c)
+ > - [CVE-2018-18313] Heap-buffer-overflow read in S_grok_bslash_N (regcomp.c)
+ > - [CVE-2018-18314] Heap-buffer-overflow write in S_regatom (regcomp.c)
 
-My impression is that what's *below* the $(1) expression in support/dependencies/dependencies.mk
-didn't get defined... (host-tar).
+ > For more details, see perldelta:
+ > https://metacpan.org/changes/release/SHAY/perl-5.26.3
 
-I've built successfully. Still, the kind of change doesn't look very beautiful.
+ > Bump perlcross to 1.2.2 for perl 5.26.3 support.
 
-Maybe there someone who sees the mistake at first sight :)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-thanks
+Committed to 2018.02.x and 2018.11.x, thanks.
 
-                                   martin
-
-
-
-Martin Kepplinger | Entwicklung Software
-
-GINZINGER ELECTRONIC SYSTEMS GMBH
-
-Tel.: +43 7723 5422 157
-Mail: martin.kepplinger at ginzinger.com
-Web: www.ginzinger.com
-
-
-
-
-________________________________________
-Von: Thomas Petazzoni [thomas.petazzoni at bootlin.com]
-Gesendet: Samstag, 23. Februar 2019 17:41
-An: Kepplinger Martin
-Cc: buildroot at buildroot.org
-Betreff: Re: [Buildroot] [PATCH] make printvars: avoid invalid calls when arguments are missing
-
-Hello Martin,
-
-On Sat, 23 Feb 2019 17:11:08 +0100
-Martin Kepplinger <martin.kepplinger@ginzinger.com> wrote:
-
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index dc818a2c18..f4f3864e8d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -232,6 +232,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
->  # Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
->  # Exit code chooses option. "$$TMP" is can be used as temporary file and
->  # is automatically cleaned up.
-> +ifneq ($(1),)
-
-$(1) only makes sense inside the macro itself. Outside the macro $(1)
-does not make sense at all, and will always be empty I believe. Are you
-sure your patch is working, and does not break the build ?
-
-Indeed, I believe the two macros you enclose in ifneq tests will in
-fact no longer be defined.
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
-
-
-________________________________________
-
-Ginzinger electronic systems GmbH
-Gewerbegebiet Pirath 16
-4952 Weng im Innkreis
-www.ginzinger.com
-
-Firmenbuchnummer: FN 364958d
-Firmenbuchgericht: Ried im Innkreis
-UID-Nr.: ATU66521089
-
-
-Diese Nachricht ist vertraulich und darf nicht an andere Personen weitergegeben oder von diesen verwendet werden. Verst?ndigen Sie uns, wenn Sie irrt?mlich eine Mitteilung empfangen haben.
-
-This message is confidential. It may not be disclosed to, or used by, anyone other than the addressee. If you receive this message by mistake, please advise the sender.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3616 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190225/762a5ca4/attachment.bin>
+-- 
+Bye, Peter Korsgaard
