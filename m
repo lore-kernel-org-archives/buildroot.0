@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 25 Feb 2019 21:54:48 +0200
-Subject: [Buildroot] [PATCH] package/libssh: bump to version 0.8.7
-Message-ID: <0904247310e27e331d4211c5d85d14490a82cf99.1551124488.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Feb 2019 22:07:40 +0100
+Subject: [Buildroot] [git commit] package/libssh: bump to version 0.8.7
+Message-ID: <20190225210547.105FE81674@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=da6bcf9e86cf73ec4e405f7f6e122e6510deb026
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Drop upstream patch.
 
@@ -19,16 +22,16 @@ http://autobuild.buildroot.net/results/e95d5957c19ff01120903a66d1167279a34da2ce/
 
 Cc: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...x-size-type-for-i-an-j-in-ssh_select.patch | 29 -------------------
- package/libssh/libssh.hash                    |  4 +--
- package/libssh/libssh.mk                      |  2 +-
+ ...ct-Fix-size-type-for-i-an-j-in-ssh_select.patch | 29 ----------------------
+ package/libssh/libssh.hash                         |  4 +--
+ package/libssh/libssh.mk                           |  2 +-
  3 files changed, 3 insertions(+), 32 deletions(-)
- delete mode 100644 package/libssh/0004-connect-Fix-size-type-for-i-an-j-in-ssh_select.patch
 
 diff --git a/package/libssh/0004-connect-Fix-size-type-for-i-an-j-in-ssh_select.patch b/package/libssh/0004-connect-Fix-size-type-for-i-an-j-in-ssh_select.patch
 deleted file mode 100644
-index 9e2bf9eea032..000000000000
+index 9e2bf9eea0..0000000000
 --- a/package/libssh/0004-connect-Fix-size-type-for-i-an-j-in-ssh_select.patch
 +++ /dev/null
 @@ -1,29 +0,0 @@
@@ -62,7 +65,7 @@ index 9e2bf9eea032..000000000000
 -2.20.1
 -
 diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 3971519a9c2c..7164c91069e8 100644
+index 3971519a9c..7164c91069 100644
 --- a/package/libssh/libssh.hash
 +++ b/package/libssh/libssh.hash
 @@ -1,5 +1,5 @@
@@ -74,7 +77,7 @@ index 3971519a9c2c..7164c91069e8 100644
 +sha256 43304ca22f0ba0b654e14b574a39816bc70212fdea5858a6637cc26cade3d592  libssh-0.8.7.tar.xz
  sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
 diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 016d67546f02..332f2a57004b 100644
+index 016d67546f..332f2a5700 100644
 --- a/package/libssh/libssh.mk
 +++ b/package/libssh/libssh.mk
 @@ -5,7 +5,7 @@
@@ -86,5 +89,3 @@ index 016d67546f02..332f2a57004b 100644
  LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
  LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
  LIBSSH_LICENSE = LGPL-2.1
--- 
-2.20.1
