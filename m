@@ -1,34 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Feb 2019 11:44:03 +0000
-Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
-In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
-References: <bug-9966-163@https.bugs.busybox.net/>
-Message-ID: <bug-9966-163-psqrqTap2D@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Feb 2019 13:47:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/stress-ng: Fix author email in
+ 0003-test-test-bsd-wchar-...patch
+In-Reply-To: <1551090971-23555-1-git-send-email-email@gmail.com> (Vadim
+ Kochan's message of "Mon, 25 Feb 2019 12:36:11 +0200")
+References: <1551090971-23555-1-git-send-email-email@gmail.com>
+Message-ID: <87wolodogj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9966
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
-Carlos Santos <casantos@datacom.com.br> changed:
+ > From: Vadim Kochan <vadim4j@gmail.com>
+ > Author's and sign-off's emails differs, so fix the author's one which
+ > is not valid anymore.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|REOPENED                    |RESOLVED
+ > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
---- Comment #6 from Carlos Santos <casantos@datacom.com.br> ---
-(In reply to Micha? Miros?aw from comment #5)
-
-Sorry, this is not a bug in Buildroot. You add a patch that knowingly breaks
-the build and then complain that the build gets broken.
-
-Also, please do not reopen an old bug just because you saw a similar behavior
-in a new situation. A bug must be reopened if it's resolution was not correct.
-New problems must be reported as new bugs.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
