@@ -1,81 +1,49 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Mon, 25 Feb 2019 10:05:22 +0100 (CET)
-Subject: [Buildroot] [PATCH v3 0/4] *** Add Intel QuickSync support to
- ffmpeg ***
-In-Reply-To: <20190205181946.14496-1-lpdev@cordier.org>
-Message-ID: <ea-mime-5c73afd2-9bb-74dec073@www-6.netcourrier.com>
+From: Jay Aurabind <jay.aurabind@gmail.com>
+Date: Mon, 25 Feb 2019 14:37:00 +0530
+Subject: [Buildroot] RISCV64 kernel panic: cannot open root device
+In-Reply-To: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
+References: <CAOsEZohYzt=r5oVXruxhxaCg6pc_5rfE5YiyedbWpQE1wE96+A@mail.gmail.com>
+Message-ID: <CAOsEZojXmBRAYdjtGkZNm2SJgTeJowVrwrsO0H7AeNpGd0Kj-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> De : Louis-Paul Cordier <lpdev@cordier.org>
-> ? : buildroot at buildroot.org
-> Sujet : [PATCH v3 0/4] *** Add Intel QuickSync support to ffmpeg ***
-> Date : 05/02/2019 19:19:42 Europe/Paris
-> Copie ? : Louis-Paul Cordier <lpdev@cordier.org>;
-> Bernd Kuhls <bernd.kuhls@t-online.de>;
-> Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
->
-> In addition of the existing VAAPI for hardware encoding, Intel provides
-> the libmfx API embeded in its Intel MediaSDK. Intel MediaSDK improves
-> encoding quality, is faster, and makes use of all encoding capabilities
-> on Intel platforms.
->
-> MFX test procedure (h264):
->
-> 1. Retrieve sample data (https://github.com/Intel-Media-SDK/samples)
-> 2. Run ./sample_multi_transcode -i::h264 test_stream.264 -o::h264 out.264.
-> 3. Test should pass.
->
-> FFMpeg QuickSync test procedure (h264):
->
-> 1. Download test video: https://peach.blender.org/trailer-page/
-> 2. Run ffmpeg -y -hwaccel qsv -qsv_device /dev/dri/renderD128 -c:v
-> h264_qsv -i /trailer_1080p.mov -c:v h264_qsv -framerate 60 -acodec
-> copy out.mp4
->
-> Louis-Paul Cordier (4):
-> package/intel-mediadriver: new package
-> package/intel-mediasdk: new package
-> package/ffmpeg: bump to version 4.1
-> package/ffmpeg: enable Intel QuickSync support.
->
-> Config.in.legacy | 6 ++
-> DEVELOPERS | 2 +
-> package/Config.in | 2 +
-> package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 ------
-> ...cenc-Fix-building-with-libfdk-aac-v2.patch | 100 ------------------
-> ...stently-use-a-proper-version-check-m.patch | 99 -----------------
-> ...dk-aac-Don-t-use-defined-in-a-define.patch | 72 -------------
-> package/ffmpeg/Config.in | 6 --
-> package/ffmpeg/ffmpeg.hash | 2 +-
-> package/ffmpeg/ffmpeg.mk | 15 +--
-> package/intel-mediadriver/Config.in | 21 ++++
-> .../intel-mediadriver/intel-mediadriver.hash | 3 +
-> .../intel-mediadriver/intel-mediadriver.mk | 30 ++++++
-> package/intel-mediasdk/Config.in | 15 +++
-> package/intel-mediasdk/intel-mediasdk.hash | 3 +
-> package/intel-mediasdk/intel-mediasdk.mk | 17 +++
-> 16 files changed, 108 insertions(+), 319 deletions(-)
-> delete mode 100644 package/ffmpeg/0001-ffmpeg-pthreads.patch
-> delete mode 100644 package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
-> delete mode 100644 package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
-> delete mode 100644 package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
-> create mode 100644 package/intel-mediadriver/Config.in
-> create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
-> create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
-> create mode 100644 package/intel-mediasdk/Config.in
-> create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
-> create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
->
-> -- 
-> 2.20.1
->
+Sorry, there was an omission in the qemu command line I sent in the
+previous message. I tried with both:
 
-Hi all, any news on the merge of these patches?
+-append "root=/dev/vda ro console=ttyS0"
+-append "console=ttyS0"
 
-Thanks
+On Mon, 25 Feb 2019 at 14:33, Jay Aurabind <jay.aurabind@gmail.com> wrote:
+>
+> Hi,
+>
+> I built 2018.11.2 version of buildroot with config https://pastebin.com/eSPt939r
+>
+> I am getting a kernel panic due to "VFS: Cannot open root device "vda"
+> or unknown-block(0,0): error -6". Full kernel log:
+> https://pastebin.com/9zdZDDtR
+>
+> The command used for launching qemu is:
+>
+> qemu-system-riscv64 -nographic -machine virt -kernel output/images/bbl
+>   -append "console=ttyS0"     -drive
+> file=output/images/rootfs.ext2,format=raw,id=hd0     -device
+> virtio-blk-device,drive=hd0   -netdev user,id=net0    -device
+> virtio-net-device,netdev=net0
+>
+> What could be wrong?
+>
+> --
+>
+> Thanks and Regards,
+> Aurabindo J
 
-Louis-Paul CORDIER
+
+
+-- 
+
+Thanks and Regards,
+Aurabindo J
