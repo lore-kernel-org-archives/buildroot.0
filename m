@@ -1,86 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Feb 2019 09:33:25 +0100
-Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11
- for O_TMPFILE
-In-Reply-To: <20190226083225.2b23e850@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 26 Feb 2019 08:32:25 +0100")
-References: <20190219223530.15956-1-christian@paral.in>
- <20190220090108.6e2d1e9a@windsurf> <87o96zeapq.fsf@dell.be.48ers.dk>
- <20190226083225.2b23e850@windsurf.home>
-Message-ID: <87d0nfdk4q.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Feb 2019 09:36:45 +0100
+Subject: [Buildroot] or1k - openrisc, gdb
+In-Reply-To: <CAKtOgoSxdRRucLoQW6eExuw0n2J26wFC0W6w2hKqOmuuGSxXqA@mail.gmail.com>
+References: <CAKtOgoSxdRRucLoQW6eExuw0n2J26wFC0W6w2hKqOmuuGSxXqA@mail.gmail.com>
+Message-ID: <20190226093645.0c6f4d75@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Shimon,
 
-Hi,
+Please Cc: the Buildroot mailing list for such questions. I've added it
+in Cc. Thanks!
 
- >> We have already dropped support for glibc <= 2.17 back in 2017.08,
- >> perhaps we should bump that to <= 2.18 now?
- >> 
- >> A number of our preconfigured toolchains do use glibc 2.18 though,
- >> E.G. the codesourcery / mentor ARM toolchain and a number of the
- >> toolchains we use on the autobuilders.
+On Mon, 25 Feb 2019 23:05:43 +0200
+Shimon Zadok <shimon.zadok@gmail.com> wrote:
 
- > While I understand the maintenance burden that it causes, I would like
- > to try to keep support for fairly old toolchains. Even if it seems
- > crazy, a number of companies are still using oldish toolchains
- > (typically provided by SoC vendors) to build stuff with relatively
- > recent Buildroot versions. It is becoming more and more difficult due
- > to the use of C++11 in many userspace components (which requires gcc >=
- > 4.8), but still. So we should be careful about bumping our glibc
- > version requirements in a global way, when only a package like "runc"
- > is affected, which serves some very specific purpose.
+> It seems that gdb is available for or1k,
+> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=tree;f=cpu;h=9adfae1a3b79dc955562b75284ba57536c6d8fd3;hb=HEAD
 
-I understand that dropping support for stuff isn't nice for the users.
+The presence of a or1k file in the cpu/ folder is not sufficient to
+indicate that there is gdb support.
 
-Just to make sure I understand the use case - These people are using old
-toolchains for some reason but uptodate Linux kernels? Why can the
-kernel be updated but not the toolchain?
+> Though the following commit says otherwise(, but may be outdated):
+> commit 61b502794eda3fdd100eea9e8f3d0b78f8fe4151
+> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Date:   Sat Jun 3 15:39:38 2017 +0200
+> 
+>     gdb: not available on ARM noMMU and OpenRISC
+> 
+>     Neither gdb nor gdbserver have support for ARM noMMU and OpenRISC, so
+>     let's disable gdb on those architectures.
+> 
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>     ---
+>     Changes since v2:
+>      - Fixed BR2_openrisc to BR2_or1k in Config.in.host
+>     Changes since v1:
+>      - Fixed BR2_openrisc to BR2_or1k
+> 
+> What would be the procedure to update that?
 
-If they are also using old kernels, then fixing up these things will
-just lead to runtime errors instead, which is even worse.
+However, or1k support was indeed recently added in gdb, in commit:
 
-Last time I was stuck with an ancient BSP, I even had to backport new
-syscalls to build and use modern user space (I believe it was accept4 or
-recvmmsg).
+  https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=42e151bf4cc66b8781f2b139c6da320095f9a045
 
-I could imagine more software starting to use O_TMPFILE in the future as
-well.
+This commit is not yet in any gdb release, so I guess waiting until 8.3
+is released is necessary. Alternatively, you could use a Git commit for
+the gdb version on or1k, like what is done for the ARC architecture.
 
-In general, mixing components of different vintage is a recipe for pain.
+Best regards,
 
-
-
- > Can we work around the lack of O_TMPFILE in the C library directly in
- > the package source code, and then rely on a >= 3.11 kernel headers
- > dependency ?
-
- > Systemd has this logic in missing_fcntl.h:
-
-I also had a look at doing that, but it is not completely trivial as the
-definitions are arch specific (as you show) and fcntl.h (on glibc at
-least) does not include asm/fcntl.h
-
-According to https://lwn.net/Articles/619146/, glibc also used to
-forward arguments wrong to the open syscall:
-
-https://sourceware.org/bugzilla/show_bug.cgi?id=17523
-
-So given how security sensitive this is, I'm wary of patching it up - I
-don't want to end up like Debian with the openssl patch :/
-
-
-As the recent iproute2 patch showed, we do still have users on glibc <=
-2.17 even though we do not officially support it, and do accept patches
-when they are simple - But people are on their own if some package
-doesn't build with such old toolchains, so the real impact of dropping
-official support for glibc 2.18 as well is not so big, E.G. it would
-just mean that we drop the preconfigured toolchains using it and stop
-testing on the autobuilders.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
