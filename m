@@ -1,42 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Feb 2019 13:10:38 +0100
-Subject: [Buildroot] [PATCH] package/gcc: bump to version 8.3.0
-In-Reply-To: <20190224160529.6038-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sun, 24 Feb 2019 17:05:29 +0100")
-References: <20190224160529.6038-1-romain.naour@smile.fr>
-Message-ID: <87wolmda2p.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Feb 2019 13:07:46 +0100
+Subject: [Buildroot] [git commit] boot/syslinux: fix build with EFI support
+Message-ID: <20190226120840.368CE8E21F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c1639a83a6c77a575d9694319eb99ea1b5a2f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Remove upsteam xtensa patches:
- > https://github.com/gcc-mirror/gcc/commit/68ca69a4854af36c90531b33a4c540464dbc6a23
- > https://github.com/gcc-mirror/gcc/commit/972057cb254e355805bfcd4a47d5c6f743cb76f4
+Commit 1a437fd22f bumped gnu-efi to version 3.0.9. This breaks the build
+of syslinux with EFI support due to multiple definitions of 'memset' and
+'memcpy'. Backport a patch already applied upstream to fix the problem.
 
- > Tested using Toolchain-builder:
- > https://gitlab.com/kubu93/toolchains-builder/pipelines/48904471
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...0013-Fix-build-with-gnu-efi-version-3.0.9.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
- > ---
- > There is an existing issue between gdb 8.1.1, musl and kernel-headers
- > related to aarch64 SVE support.
- > See the same issue with gdb 8.2:
- > http://patchwork.ozlabs.org/patch/1030704/
- > http://patchwork.ozlabs.org/patch/1030703/
-
- > The bleeding-edge toolchain I tested use kernel-headers 4.19 that
- > break gdb 8.1.1 with musl toolchain.
- > Using kernel-headers 4.14 build fine.
-
- > This issue is not related to the gcc version bump.
-
-Given that this is a bugfix release I have committed to master, thanks.
-
-Great to see that we no longer need to carry local patches.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch b/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch
+new file mode 100644
+index 0000000000..17a6d37cef
+--- /dev/null
++++ b/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch
+@@ -0,0 +1,45 @@
++From 44a1b42e561b9a257209300e2860b901b100cc17 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.com.br>
++Date: Tue, 26 Feb 2019 08:07:22 -0300
++Subject: [PATCH] Fix build with gnu-efi version 3.0.9
++
++Adapt a patch already applied upstream to prevent multiple definitions
++of 'memset' and 'memcpy'.
++
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++(adapted from commit 363d61c4f112b972649b19d67e96b9321f738f00)
++---
++ mk/lib.mk | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/mk/lib.mk b/mk/lib.mk
++index ceb95bd0..c9b6eaf3 100644
++--- a/mk/lib.mk
+++++ b/mk/lib.mk
++@@ -186,9 +186,9 @@ MINLIBOBJS = \
++ #	$(LIBVESA_OBJS)
++ 
++ CORELIBOBJS = \
++-	memcpy.o memset.o memcmp.o printf.o strncmp.o vfprintf.o 	\
+++	memcmp.o printf.o strncmp.o vfprintf.o				\
++ 	strlen.o vsnprintf.o snprintf.o stpcpy.o strcmp.o strdup.o 	\
++-	strcpy.o strncpy.o setjmp.o fopen.o fread.o fread2.o puts.o 	\
+++	strcpy.o strncpy.o fopen.o fread.o fread2.o puts.o	 	\
++ 	strtoul.o strntoumax.o strcasecmp.o 				\
++ 	sprintf.o strlcat.o strchr.o strlcpy.o strncasecmp.o ctypes.o 	\
++ 	fputs.o fwrite2.o fwrite.o fgetc.o fclose.o lmalloc.o 		\
++@@ -203,6 +203,11 @@ CORELIBOBJS = \
++ 	$(LIBENTRY_OBJS) \
++ 	$(LIBMODULE_OBJS)
++ 
+++ifndef EFI_BUILD
+++# For EFI, these are part of gnu-efi
+++CORELIBOBJS += setjmp.o memcpy.o memset.o
+++endif
+++
++ LDFLAGS	= -m elf_$(ARCH) --hash-style=gnu -T $(com32)/lib/$(ARCH)/elf.ld
++ 
++ .SUFFIXES: .c .o .a .so .lo .i .S .s .ls .ss .lss
++-- 
++2.14.5
++
