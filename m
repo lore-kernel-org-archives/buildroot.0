@@ -1,56 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Feb 2019 14:48:45 +0100
-Subject: [Buildroot] [git commit] package/cryptopp: fix dos/unix newlines in
- patch
-Message-ID: <20190226134915.0434082A01@busybox.osuosl.org>
+Date: Tue, 26 Feb 2019 14:52:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ibrcommon: fix static build
+ with openssl
+In-Reply-To: <CAPi7W8152uxi=E=rTZbGKFgKFeTGovay_O+zuYrmmux7+8w5sA@mail.gmail.com>
+ (Fabrice Fontaine's message of "Tue, 26 Feb 2019 13:32:45 +0100")
+References: <20190216112319.4769-1-fontaine.fabrice@gmail.com>
+ <87a7ikg7ey.fsf@dell.be.48ers.dk>
+ <CAPi7W8152uxi=E=rTZbGKFgKFeTGovay_O+zuYrmmux7+8w5sA@mail.gmail.com>
+Message-ID: <87o96yd5dl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b2fff01c0ec98f538632d14da82a9a295319560
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/0a26265961747600388258d32ba7dc9226c9249b/
+Hi,
+ >> The DOS newlines unfortunately got stripped by the mailing list, so the
+ >> patch no longer applies. I have manually fixed that up now.
 
-Commit 40005b9a0da6 (package/cryptopp: fix build with gcc < 4.9) added a
-patch to fix building with old toolchains.  The source code unfortunately
-contains a mix of DOS and UNIX newlines, and the DOS new lines got stripped
-by the mailing list, causing the patch to no longer apply.
+ > Thanks for fixing the issue, there is also the same problem with
+ > host-cryptopp's patch:
+ > http://autobuild.buildroot.net/results/e8f/e8fad6fe97391276df0bbb3deb9d4ab90ce043d1/build-end.log.
+ > Could you also fix the issue?
+ > Next time, I'll try to add a warning in the commit message.
 
-Fix up the patch manually.
+Sure, fixed. It would indeed be good if you could give a small heads up
+in case we have such issue again in the future.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-index fd8b3c5ff2..7f93bceacf 100644
---- a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-+++ b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-@@ -27,14 +27,14 @@ index eccba009..4516d2b3 100644
- --- a/config.h
- +++ b/config.h
- @@ -591,7 +591,7 @@ NAMESPACE_END
-- // Requires Binutils 2.24
-- #if !defined(CRYPTOPP_DISABLE_AVX2) && defined(CRYPTOPP_AVX_AVAILABLE) && \
-- 	(defined(__AVX2__) || (CRYPTOPP_MSC_VERSION >= 1800) || (__SUNPRO_CC >= 0x5130) || \
---	(CRYPTOPP_GCC_VERSION >= 40700) || (__INTEL_COMPILER >= 1400) || \
--+	(CRYPTOPP_GCC_VERSION >= 40900) || (__INTEL_COMPILER >= 1400) || \
-- 	(CRYPTOPP_LLVM_CLANG_VERSION >= 30100) || (CRYPTOPP_APPLE_CLANG_VERSION >= 40600))
-- #define CRYPTOPP_AVX2_AVAILABLE 1
-- #endif
-+ // Requires Binutils 2.24
-+ #if !defined(CRYPTOPP_DISABLE_AVX2) && defined(CRYPTOPP_AVX_AVAILABLE) && \
-+ 	(defined(__AVX2__) || (CRYPTOPP_MSC_VERSION >= 1800) || (__SUNPRO_CC >= 0x5130) || \
-+-	(CRYPTOPP_GCC_VERSION >= 40700) || (__INTEL_COMPILER >= 1400) || \
-++	(CRYPTOPP_GCC_VERSION >= 40900) || (__INTEL_COMPILER >= 1400) || \
-+ 	(CRYPTOPP_LLVM_CLANG_VERSION >= 30100) || (CRYPTOPP_APPLE_CLANG_VERSION >= 40600))
-+ #define CRYPTOPP_AVX2_AVAILABLE 1
-+ #endif
- -- 
- 2.14.1
- 
+-- 
+Bye, Peter Korsgaard
