@@ -1,26 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Feb 2019 19:42:07 +0100
-Subject: [Buildroot] [PATCH] package/systemd: add upstream security fixes
-In-Reply-To: <d4ac88943e000f048f1ef9ee8605fc76f9c195b6.1551204934.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 26 Feb 2019 20:15:34 +0200")
-References: <d4ac88943e000f048f1ef9ee8605fc76f9c195b6.1551204934.git.baruch@tkos.co.il>
-Message-ID: <87bm2ycry8.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Feb 2019 19:52:48 +0100
+Subject: [Buildroot] [PATCH-for-master 1/2] package/meson: don't install
+ cross-compilation.conf during target-finalize
+In-Reply-To: <20190225211147.14947-2-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Mon, 25 Feb 2019 22:11:46 +0100")
+References: <20190225211147.14947-1-patrickdepinguin@gmail.com>
+ <20190225211147.14947-2-patrickdepinguin@gmail.com>
+Message-ID: <877edmcrgf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > CVE-2019-6454: systemd (PID1) crash with specially crafted D-Bus message
- > from unprivileged user
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > package/meson installs a cross-compilation.conf file in
+ > $(HOST_DIR)/etc/meson, via TARGET_FINALIZE_HOOKS.
 
- > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > package/pkg-cmake.mk installs a toolchainfile.cmake in
+ > $(HOST_DIR)/share/buildroot, via TOOLCHAIN_POST_INSTALL_STAGING_HOOKS.
 
-Committed, thanks.
+ > Both files have a similar concept, they describe some flags/paths needed for
+ > compilation using respective build systems. One difference is that the meson
+ > file is added for external compilation, from the SDK, while the cmake file
+ > is used internally in Buildroot.
+
+ > The 'problem' of using TARGET_FINALIZE_HOOKS for the meson file, is that it
+ > installs a 'host' file from target-finalize, which is conceptually incorrect
+ > and breaks the invariant that only TARGET_DIR is changed on a subsequent
+ > 'make' when everything was already built (i.e. only target-finalize is run).
+
+ > This can easily be fixed, by using the same hook as cmake uses, i.e.
+ > TOOLCHAIN_POST_INSTALL_STAGING_HOOKS.
+
+ > Note that actually even for cmake, TOOLCHAIN_POST_INSTALL_STAGING_HOOKS is
+ > not the best hook to install a host file. A better hook would have been
+ > TOOLCHAIN_POST_INSTALL_HOOKS, but this triggers only for 'host' packages,
+ > and 'toolchain' is treated as a 'target' package.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > ---
+ >  package/meson/meson.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+ > index d76541cc93..aba7382cc9 100644
+ > --- a/package/meson/meson.mk
+ > +++ b/package/meson/meson.mk
+ > @@ -65,6 +65,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
+ >> $(HOST_DIR)/etc/meson/cross-compilation.conf
+ >  endef
+ 
+ > -TARGET_FINALIZE_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+ > +TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+
+Is this then going to use the correct (final) paths for per-package
+build directories?
 
 -- 
 Bye, Peter Korsgaard
