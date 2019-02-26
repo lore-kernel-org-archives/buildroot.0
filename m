@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Feb 2019 19:41:03 +0100
-Subject: [Buildroot] [PATCH] package/stress-ng: add libbsd optional
- dependency
-In-Reply-To: <f0a91ae28ddcc6f9aa7f8fa3c15d8c9943d17bb2.1551203208.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 26 Feb 2019 19:46:48 +0200")
-References: <f0a91ae28ddcc6f9aa7f8fa3c15d8c9943d17bb2.1551203208.git.baruch@tkos.co.il>
-Message-ID: <87ftsacs00.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Feb 2019 19:42:07 +0100
+Subject: [Buildroot] [PATCH] package/systemd: add upstream security fixes
+In-Reply-To: <d4ac88943e000f048f1ef9ee8605fc76f9c195b6.1551204934.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 26 Feb 2019 20:15:34 +0200")
+References: <d4ac88943e000f048f1ef9ee8605fc76f9c195b6.1551204934.git.baruch@tkos.co.il>
+Message-ID: <87bm2ycry8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > stress-ng optionally detects and uses BSD wcsl* wchar string functions.
- > Cc: Romain Naour <romain.naour@gmail.com>
+ > CVE-2019-6454: systemd (PID1) crash with specially crafted D-Bus message
+ > from unprivileged user
+
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
