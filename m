@@ -1,91 +1,72 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 25 Feb 2019 23:55:14 +0000
-Subject: [Buildroot] [PATCH] package/pkg-generic: speed up
- RECURSIVE_FINAL_DEPENDENCIES
-Message-ID: <20190225235504.486-1-tpiepho@impinj.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 26 Feb 2019 00:01:38 -0300
+Subject: [Buildroot] [PATCH v5 09/10] testing/tests/download: test git
+ special ref
+References: <33cac50f-5203-03fa-4231-183863741c18@mind.be>
+Message-ID: <5c74ac12d78c6_3bfe2affcaddba9025438@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Evaluating all the <PKG>_RECURSIVE_FINAL_DEPENDENCIES variables
-(abbreviated RFD hereafter) ends up being quite slow.  Enough, on a
-reasonable modern workstation, to increase the time it takes to run
-"make printvars" from 13 seconds in 2018.02 to 371 seconds in 2019.02.
+Hello,
 
-This patch improves this by using dynamic programming to speed the
-evaluation of RFD, reducing the before mentioned printvars time to about
-14.6 seconds.
+On Tue, Feb 19, 2019 at 06:01 AM, Arnout Vandecappelle wrote:
 
-The evaluation of PKG1_RFD requires recursively evaluating each of
-PKG1's dependencies' RFDs, then their dependencies' RFDs, and so on.
-The same is done for PKG2_RFD.  But it's likely that many of the
-dependencies of PKG2 are the same as PKG1.  And when we consider all
-packages, the dependencies are re-computed many thousands of times.
+> On 18/02/2019 03:46, Ricardo Martincoski wrote:
+>> 
+>> On Wed, Feb 06, 2019 at 08:05 AM, Arnout Vandecappelle wrote:
+>> 
+>>> On 12/05/2018 04:58, Ricardo Martincoski wrote:
+>>>> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+>>>>
+>>>> Add a special ref to the static repo and check on the git refs test case
+>>>> the download of a git package:
+>>>>  - with the name of a special ref as version;
+>>>
+>>>  We might remove support for getting special refs by name, but keep on
+>>> supporting getting special refs by sha1. So I've changed the test into getting
+>>> it by sha1 instead.
+>> 
+>> OK... but it depends on a recent git version to work.
+> 
+>  Ah, darn, I forgot that...
+> 
+>> The same does not occur when getting special refs by name.
+>> 
+>> When using recent versions of git the download of the sha1 of a special ref
+>> works because of this line in support/download/git:
+>>   _git fetch origin "'${cset}:${cset}'"
+> 
+>  So, IIRC, Yann had an idea for how to rewrite this in a way that we would (1)
+> no longer support branch names and (2) we would support hashes that refer to
+> special refs or ancestors of special refs. But I don't remember what it was.
+> Maybe it was
+> 
+> _git fetch origin '+refs/*:refs/remotes/origin/*' '+refs/tags/*:refs/tags/*'
+> 
+> That way (I think) a branch name would no longer be usable (because when doing
+> the checkout the origin/ bit would be missing), but a tag name still would be
+> usable.
 
-To avoid this re-computation we memoize, or save, the computed value of
-each RFD variable when it found the first time.  Subsequent evaluations
-re-use the memoized value.
+I didn't tested it but I like the idea.
 
-Surprisingly, this ends up being not all the hard to implement in make.
-The basic construct is this:
+> 
+>> I tested using:
+>> git version 2.17.1
+>> 
+>> The git version installed in our docker image does not support it.
+>> 
+>> I am not sure what is the best fix for the TestGitRefs failure in GitLab CI.
+>> I would change the test to use special ref by name, and *when* we change the
+>> behavior, we change the test in the same commit to expect it to fail.
+> 
+>  Or maybe just remove the test for now.
 
-VAR = $(if !defined(VAR__X),$(eval VAR__X := value))$(VAR__X)
-
-The first time VAR is evaluated VAR__X will not be defined, and code to
-set VAR__X to the computed value is eval'd.  Then the now defined value
-of VAR__X is returned.  Subsequent evaluations can just return VAR__X.
-
-It is important to note that VAR is defined with '=', as not enough
-information (namely, all packages' dependencies) is know when it is
-parsed to find the correct value.  VAR will be evaluated each time it is
-used.  But VAR__X is defined with ":=", so that it is evaluated once
-when defined, and not each time it is used.
-
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
-
-I did 20 runs of printvars VARS="%_RFD" of this version vs the one that
-used strip + sort.  Mean was 3.19730 vs 3.13765 seconds, in favor of
-this one being faster.  More importantly, the p-value for a one sided
-t-test was 0.007353, so the difference is statistically significant.  I
-also compared the time to run "make help", to measure the parse time,
-and there was not a statistically significant difference.
+OK. When new code is added to support hashes that refer to special refs the test
+can be added again.
 
 
- package/pkg-generic.mk | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f4c9148d8b..8cd156afdb 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -678,14 +678,17 @@ $(2)_FINAL_ALL_DEPENDENCIES = \
- 		$$($(2)_FINAL_DOWNLOAD_DEPENDENCIES) \
- 		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
- 		$$($(2)_FINAL_PATCH_DEPENDENCIES))
--$(2)_FINAL_RECURSIVE_DEPENDENCIES = \
--	$$(sort \
--		$$(foreach p,\
--			$$($(2)_FINAL_ALL_DEPENDENCIES),\
--			$$(p)\
--			$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_DEPENDENCIES)\
--		)\
--	)
-+$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
-+	$$(if $$(filter undefined,$$(origin $(2)_FINAL_RECURSIVE_DEPENDENCIES__X)), \
-+		$$(eval $(2)_FINAL_RECURSIVE_DEPENDENCIES__X := \
-+			$$(foreach p, \
-+				$$($(2)_FINAL_ALL_DEPENDENCIES), \
-+				$$(p) \
-+				$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_DEPENDENCIES) \
-+			) \
-+		) \
-+	) \
-+	$$($(2)_FINAL_RECURSIVE_DEPENDENCIES__X))
- 
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
--- 
-2.14.4
+Regards,
+Ricardo
