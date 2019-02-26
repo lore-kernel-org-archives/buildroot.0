@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Feb 2019 08:24:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.12
-In-Reply-To: <20190226034554.24429-1-christian@paral.in>
-References: <20190226034554.24429-1-christian@paral.in>
-Message-ID: <20190226082449.040c7a2a@windsurf.home>
+Date: Tue, 26 Feb 2019 08:25:22 +0100
+Subject: [Buildroot] [git commit] package/iproute2: backport patch to
+ fix compilation under glibc < 2.18
+In-Reply-To: <87h8creaa7.fsf@dell.be.48ers.dk>
+References: <20190225212703.ACC728E2B8@busybox.osuosl.org>
+ <87h8creaa7.fsf@dell.be.48ers.dk>
+Message-ID: <20190226082522.58423472@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Hello Peter,
 
-Thanks for your patch.
+On Tue, 26 Feb 2019 00:08:32 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Mon, 25 Feb 2019 19:45:54 -0800
-Christian Stewart <christian@paral.in> wrote:
-
-> Go 1.12 was released on 2/25/2019: https://blog.golang.org/go1.12
+> We don't really support such old glibc versions since 2017.08. From
+> CHANGES:
 > 
-> Additional notes on how Go modules will evolve in 2019 are here:
-> https://blog.golang.org/modules2019
+> 2017.08-rc1, Released August 2nd, 2017
 > 
-> In Go 1.12, module support remains the same as in Go 1.11. GOPATH is scheduled
-> for deprecation in 1.13, however. The Buildroot Go package infrastructure should
-> therefore aim to migrate to a new, currently undefined, Go module friendly
-> compilation approach before Go 1.13 is released.
+>         Toolchain:
+> 
+>         - CodeSourcery toolchains for x86 and SuperH have been
+>           removed, they were using a too old glibc version
+>           (2.17). External toolchains with glibc 2.17 or earlier are
+>           no longer supported.
+> 
+> 
+> But OK, the patch is small and already accepted upstream.
 
-I am puzzled by your statement "currently undefined". Is it undefined
-in the sense "it is not defined yet how Buildroot will handle this" or
-"it is not defined in Go yet how the module compilation will work in
-1.13" ?
-
-Best regards,
+Yes, the patch was already upstream, which is what convinced me to
+apply this.
 
 Thomas
 -- 
