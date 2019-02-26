@@ -1,43 +1,28 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 26 Feb 2019 11:48:35 -0500
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself to several packages.
-Message-ID: <20190226164835.83694-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Feb 2019 18:04:02 +0100
+Subject: [Buildroot] [PATCH-for-master] boot/syslinux: fix build with
+ EFI support
+In-Reply-To: <871s3ueopv.fsf@dell.be.48ers.dk>
+References: <20190226111332.7615-1-casantos@datacom.com.br>
+ <871s3ueopv.fsf@dell.be.48ers.dk>
+Message-ID: <20190226180402.3e4b279a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+On Tue, 26 Feb 2019 13:09:00 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+> I guess we don't have any tests or autobuilder runs for this, we
+> probably should add one.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4e59287a4c..f9b6a0e7d7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -49,8 +49,11 @@ F:	package/libressl/
- F:	package/libselinux/
- F:	package/libsemanage/
- F:	package/libsepol/
-+F:	package/libwebsockets/
- F:	package/nginx-naxsi/
-+F:	package/php/
- F:	package/policycoreutils/
-+F:	package/python3/
- F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
- F:	package/python-pip/
-@@ -63,6 +66,7 @@ F:	package/selinux-python/
- F:	package/semodule-utils/
- F:	package/setools/
- F:	package/sngrep/
-+F:	package/systemd/
- 
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
+Oh, yes, more runtime tests (even if they are just build testing) for
+bootloader/firmware stuff would be *very* useful.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
