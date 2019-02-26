@@ -1,36 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 Feb 2019 10:45:47 +0000
-Subject: [Buildroot] [Bug 11701] New: recuuring of usr and in bin shortcuts
- are created
-Message-ID: <bug-11701-163@https.bugs.busybox.net/>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 26 Feb 2019 08:13:32 -0300
+Subject: [Buildroot] [PATCH-for-master] boot/syslinux: fix build with EFI
+ support
+Message-ID: <20190226111332.7615-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11701
+Commit 1a437fd22f bumped gnu-efi to version 3.0.9. This breaks the build
+of syslinux with EFI support due to multiple definitions of 'memset' and
+'memcpy'. Backport a patch already applied upstream to fix the problem.
 
-            Bug ID: 11701
-           Summary: recuuring of usr and in bin shortcuts are created
-           Product: buildroot
-           Version: 2018.11.3
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: babylikhi831 at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ ...0013-Fix-build-with-gnu-efi-version-3.0.9.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch
 
-when we are try to build buildroot 2018.11.3 it is compiling but when we see
-host
-there is recuriing in that recurring of usr usr inside usr 
-shortcuts are created
-
+diff --git a/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch b/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch
+new file mode 100644
+index 0000000000..17a6d37cef
+--- /dev/null
++++ b/boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch
+@@ -0,0 +1,45 @@
++From 44a1b42e561b9a257209300e2860b901b100cc17 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.com.br>
++Date: Tue, 26 Feb 2019 08:07:22 -0300
++Subject: [PATCH] Fix build with gnu-efi version 3.0.9
++
++Adapt a patch already applied upstream to prevent multiple definitions
++of 'memset' and 'memcpy'.
++
++Signed-off-by: Carlos Santos <casantos@datacom.com.br>
++(adapted from commit 363d61c4f112b972649b19d67e96b9321f738f00)
++---
++ mk/lib.mk | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/mk/lib.mk b/mk/lib.mk
++index ceb95bd0..c9b6eaf3 100644
++--- a/mk/lib.mk
+++++ b/mk/lib.mk
++@@ -186,9 +186,9 @@ MINLIBOBJS = \
++ #	$(LIBVESA_OBJS)
++ 
++ CORELIBOBJS = \
++-	memcpy.o memset.o memcmp.o printf.o strncmp.o vfprintf.o 	\
+++	memcmp.o printf.o strncmp.o vfprintf.o				\
++ 	strlen.o vsnprintf.o snprintf.o stpcpy.o strcmp.o strdup.o 	\
++-	strcpy.o strncpy.o setjmp.o fopen.o fread.o fread2.o puts.o 	\
+++	strcpy.o strncpy.o fopen.o fread.o fread2.o puts.o	 	\
++ 	strtoul.o strntoumax.o strcasecmp.o 				\
++ 	sprintf.o strlcat.o strchr.o strlcpy.o strncasecmp.o ctypes.o 	\
++ 	fputs.o fwrite2.o fwrite.o fgetc.o fclose.o lmalloc.o 		\
++@@ -203,6 +203,11 @@ CORELIBOBJS = \
++ 	$(LIBENTRY_OBJS) \
++ 	$(LIBMODULE_OBJS)
++ 
+++ifndef EFI_BUILD
+++# For EFI, these are part of gnu-efi
+++CORELIBOBJS += setjmp.o memcpy.o memset.o
+++endif
+++
++ LDFLAGS	= -m elf_$(ARCH) --hash-style=gnu -T $(com32)/lib/$(ARCH)/elf.ld
++ 
++ .SUFFIXES: .c .o .a .so .lo .i .S .s .ls .ss .lss
++-- 
++2.14.5
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.5
