@@ -1,72 +1,128 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 26 Feb 2019 00:01:38 -0300
-Subject: [Buildroot] [PATCH v5 09/10] testing/tests/download: test git
- special ref
-References: <33cac50f-5203-03fa-4231-183863741c18@mind.be>
-Message-ID: <5c74ac12d78c6_3bfe2affcaddba9025438@ultri5.mail>
+Date: Tue, 26 Feb 2019 00:02:09 -0300
+Subject: [Buildroot] [PATCH-for-master] Revert "testing/tests/download: test
+ git special ref"
+Message-ID: <20190226030209.19322-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This reverts commit 81771cfcdc40e5909a4ec663e7c88b3a32068c05.
 
-On Tue, Feb 19, 2019 at 06:01 AM, Arnout Vandecappelle wrote:
+The download of sha1 of a special ref currently works or not depending
+on the git client version in use.
+With git version 2.11.0 (present in the docker image) it does not work.
+With git version 2.17.1 it works.
 
-> On 18/02/2019 03:46, Ricardo Martincoski wrote:
->> 
->> On Wed, Feb 06, 2019 at 08:05 AM, Arnout Vandecappelle wrote:
->> 
->>> On 12/05/2018 04:58, Ricardo Martincoski wrote:
->>>> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
->>>>
->>>> Add a special ref to the static repo and check on the git refs test case
->>>> the download of a git package:
->>>>  - with the name of a special ref as version;
->>>
->>>  We might remove support for getting special refs by name, but keep on
->>> supporting getting special refs by sha1. So I've changed the test into getting
->>> it by sha1 instead.
->> 
->> OK... but it depends on a recent git version to work.
-> 
->  Ah, darn, I forgot that...
-> 
->> The same does not occur when getting special refs by name.
->> 
->> When using recent versions of git the download of the sha1 of a special ref
->> works because of this line in support/download/git:
->>   _git fetch origin "'${cset}:${cset}'"
-> 
->  So, IIRC, Yann had an idea for how to rewrite this in a way that we would (1)
-> no longer support branch names and (2) we would support hashes that refer to
-> special refs or ancestors of special refs. But I don't remember what it was.
-> Maybe it was
-> 
-> _git fetch origin '+refs/*:refs/remotes/origin/*' '+refs/tags/*:refs/tags/*'
-> 
-> That way (I think) a branch name would no longer be usable (because when doing
-> the checkout the origin/ bit would be missing), but a tag name still would be
-> usable.
+For the sake of reproducibility, remove this part of the TestGitRefs
+test case until some code gets added to the download infra to handle
+sha1 of a special ref for any git client version.
 
-I didn't tested it but I like the idea.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/158295269
 
-> 
->> I tested using:
->> git version 2.17.1
->> 
->> The git version installed in our docker image does not support it.
->> 
->> I am not sure what is the best fix for the TestGitRefs failure in GitLab CI.
->> I would change the test to use special ref by name, and *when* we change the
->> behavior, we change the test in the same commit to expect it to fail.
-> 
->  Or maybe just remove the test for now.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+TestGitRefs after this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/167428144
+---
+ .../package/git-special-ref/git-special-ref.hash  |   2 --
+ .../package/git-special-ref/git-special-ref.mk    |  11 -----------
+ .../17/c409592968d17600ff9912e96fdd461bb72e74     | Bin 48 -> 0 bytes
+ .../53/122a7b0454b33c6d9e159c10657173db77899e     | Bin 27 -> 0 bytes
+ .../b7/2ff6078f62522a87f5cae5e9f34dedf5ec3885     | Bin 186 -> 0 bytes
+ .../git-remote/repo.git/refs/changes/01/1/2       |   1 -
+ support/testing/tests/download/test_git.py        |   1 -
+ 7 files changed, 15 deletions(-)
+ delete mode 100644 support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.hash
+ delete mode 100644 support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.mk
+ delete mode 100644 support/testing/tests/download/git-remote/repo.git/objects/17/c409592968d17600ff9912e96fdd461bb72e74
+ delete mode 100644 support/testing/tests/download/git-remote/repo.git/objects/53/122a7b0454b33c6d9e159c10657173db77899e
+ delete mode 100644 support/testing/tests/download/git-remote/repo.git/objects/b7/2ff6078f62522a87f5cae5e9f34dedf5ec3885
+ delete mode 100644 support/testing/tests/download/git-remote/repo.git/refs/changes/01/1/2
 
-OK. When new code is added to support hashes that refer to special refs the test
-can be added again.
+diff --git a/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.hash b/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.hash
+deleted file mode 100644
+index 00e45b6da3..0000000000
+--- a/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-sha256  e78abd24049c6acac81a02fb8fa6dfa60db74a19772d41e28ad9d6b9b77c8054  git-special-ref-b72ff6078f62522a87f5cae5e9f34dedf5ec3885.tar.gz
+-sha256  b252b594be4679764e2e06cfea77a3e50638dd445af9b472b0f298c43b134518  file
+diff --git a/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.mk b/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.mk
+deleted file mode 100644
+index d3d0913067..0000000000
+--- a/support/testing/tests/download/br2-external/git-refs/package/git-special-ref/git-special-ref.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# git-special-ref
+-#
+-################################################################################
+-
+-GIT_SPECIAL_REF_VERSION = b72ff6078f62522a87f5cae5e9f34dedf5ec3885
+-GIT_SPECIAL_REF_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
+-GIT_SPECIAL_REF_LICENSE_FILES = file
+-
+-$(eval $(generic-package))
+diff --git a/support/testing/tests/download/git-remote/repo.git/objects/17/c409592968d17600ff9912e96fdd461bb72e74 b/support/testing/tests/download/git-remote/repo.git/objects/17/c409592968d17600ff9912e96fdd461bb72e74
+deleted file mode 100644
+index 8c19de6455168ac65c81d70219e01eb2431c069e..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
 
+literal 48
+zcmb<m)YkO!4K*-JGB7bPFg6VIIDN)5l|$^(sx;1<Ig_pZOZptL5<kBEbgq)&X$db2
+E0EbQzfdBvi
 
-Regards,
-Ricardo
+diff --git a/support/testing/tests/download/git-remote/repo.git/objects/53/122a7b0454b33c6d9e159c10657173db77899e b/support/testing/tests/download/git-remote/repo.git/objects/53/122a7b0454b33c6d9e159c10657173db77899e
+deleted file mode 100644
+index d72d49eed56298f84aaf85967dbf051da94f3871..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 27
+icmb<m^geacKghr&MMKZS_ngleO)uZaObmAQY+e9~zX?PD
+
+diff --git a/support/testing/tests/download/git-remote/repo.git/objects/b7/2ff6078f62522a87f5cae5e9f34dedf5ec3885 b/support/testing/tests/download/git-remote/repo.git/objects/b7/2ff6078f62522a87f5cae5e9f34dedf5ec3885
+deleted file mode 100644
+index 6727b2e8083f2a31c48e849caa4cd772a6778e07..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 186
+zcmV;r07d_J0j<tKP6QzkKvCD6f(!Jd3TU8=F<!upo`9x`k<8Fc7+iRJJ8|LOxP6PC
+zpL=U{YHR3W4iSwZJD`;e`N$YNKq*9MgnVIk9=9zR2~OS8kbUZ8Y}}Ab=4e)SfunV)
+z*t{BJ-4TlpkqKC(&-u}ZeyceR?)o*2S@+!Um#Uw}51!gDzMNaC*HiB8S>p<UJc0{)
+o0SllGJ*KDpQ%>D)l54sSDN4Q9^DeyfQkL!O at h`vX8x-PgzB#pAi~s-t
+
+diff --git a/support/testing/tests/download/git-remote/repo.git/refs/changes/01/1/2 b/support/testing/tests/download/git-remote/repo.git/refs/changes/01/1/2
+deleted file mode 100644
+index 7066394dd0..0000000000
+--- a/support/testing/tests/download/git-remote/repo.git/refs/changes/01/1/2
++++ /dev/null
+@@ -1 +0,0 @@
+-b72ff6078f62522a87f5cae5e9f34dedf5ec3885
+diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
+index 40cf1afe05..2455557298 100644
+--- a/support/testing/tests/download/test_git.py
++++ b/support/testing/tests/download/test_git.py
+@@ -76,7 +76,6 @@ class TestGitRefs(GitTestBase):
+         self.check_download("git-sha1-reachable-by-tag")
+         self.check_download("git-sha1-tag-itself")
+         self.check_download("git-sha1-tag-points-to")
+-        self.check_download("git-special-ref")
+         self.check_download("git-submodule-disabled")
+         self.check_download("git-submodule-enabled")
+         self.check_download("git-tag")
+-- 
+2.17.1
