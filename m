@@ -1,149 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Feb 2019 20:25:58 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] support/dependencies: require at least CMake 3.8
-Message-ID: <20190227192558.19183-1-fontaine.fabrice@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 27 Feb 2019 20:57:20 +0100
+Subject: [Buildroot] [PATCH-for-master 1/2] package/meson: don't install
+ cross-compilation.conf during target-finalize
+In-Reply-To: <20190227181841.30b543f9@windsurf>
+References: <20190225211147.14947-1-patrickdepinguin@gmail.com>
+ <20190225211147.14947-2-patrickdepinguin@gmail.com>
+ <877edmcrgf.fsf@dell.be.48ers.dk>
+ <CAAXf6LVFtKBiv0RL0MJB+uMOKbcdr5nX3fV300Drcf_dVvMu+A@mail.gmail.com>
+ <20190227181841.30b543f9@windsurf>
+Message-ID: <CAAXf6LU6Aj=CfKGgOAnkrwJzBf7G8p+wknqb5wx4qGW63t9QTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gerbera package in version 1.3 unfortunately now requires CMake >= 3.8
-for C++17 macros:
-https://github.com/gerbera/gerbera/commit/b5fd39f30fb10385ec228b71377685206a609c3a
+El mi?., 27 feb. 2019 a las 18:18, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello,
+>
+> On Tue, 26 Feb 2019 20:48:49 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > I haven't played with / investigated the per-package feature yet, so I
+> > may miss some specifics.
+> > Below is the content of the hook:
+> >
+> > define HOST_MESON_INSTALL_CROSS_CONF
+> >     mkdir -p $(HOST_DIR)/etc/meson
+> >     sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+> >         -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+> >         -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+> >         -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> >         -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+> >         -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+> >         -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> >         -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>
+> With per-package enabled, this $(HOST_DIR) here will point to the
+> per-package host directory of host-meson instead of pointing to the
+> global host directory.
+>
+> >         $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+> >         > $(HOST_DIR)/etc/meson/cross-compilation.conf
+>
+> Here as well, but this one is not an issue: the per-package host
+> directory of host-meson will be rsync'ed into the global host directory
+> at the end of the build.
+>
+> > Are there any variables in there that would change value?
+>
+> With per-package enabled, HOST_DIR, STAGING_DIR and TARGET_DIR have a
+> different value when building each package (they point to the current
+> package per-package directories) or when building stuff outside of a
+> package (they point to the global directories).
+>
+> > In sequential build, the file before and after this change is identical.
+>
+> It's not so much sequential vs. parallel, but per-package directories
+> or not. Per-package directory can be used while doing a sequential
+> build.
+>
 
-So we need to bump our requirement from 3.1 to 3.8. If the host doesn't
-have a CMake >= 3.8, Buildroot will build its own host-cmake package.
+Thanks for explaining everything.
 
-Also drop patch that relax cmake requirement on json-for-modern-cpp
+If I understand it correctly, since the patch is hooking into
+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS, HOST_DIR will be the per-package
+directory of 'toolchain', not of 'host-meson', right?
 
-Fixes:
- - http://autobuild.buildroot.org/results/6405647b47b132ff5d0d211b92d407322d52d507
+To solve it, we could change:
+-        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
++        -e "s%@HOST_DIR@%$(call qstrip,$(BR2_HOST_DIR))%g" \
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Put back a slightly updated comment
- - Drop patch on json-for-modern-cpp
+Is that correct?
+And do you consider this acceptable?
 
- ...system-relax-requirement-on-cmake-version.patch | 85 ----------------------
- support/dependencies/check-host-cmake.mk           | 11 +--
- 2 files changed, 3 insertions(+), 93 deletions(-)
- delete mode 100644 package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
-
-diff --git a/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch b/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
-deleted file mode 100644
-index a5921527a0..0000000000
---- a/package/json-for-modern-cpp/0001-buildsystem-relax-requirement-on-cmake-version.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--From e8b6b7adc138a66f8d47396a2e707366d3771028 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Mon, 31 Dec 2018 18:42:09 +0100
--Subject: [PATCH] buildsystem: relax requirement on cmake version
--
--Commit 73cc5089 (Using target_compile_features to specify C++ 11
--standard) bumped the required cmake version, from 3.0 to 3.8, so
--as to get the definition of target_compile_features().
--
--However, target_compile_features() was introduced in cmake-3.1:
--    https://cmake.org/cmake/help/v3.1/command/target_compile_features.html
--
--And using cmake-3.1 is indeed sufficient to properly build.
--
--As such, relax the minimum required version down to cmake-3.1,
--so we can build on oldish, entreprise-grade distributions that
--only have cmake-3.1 (or at least, don't have up to cmake-3.8).
--
--Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Upstream status: MR pending
--https://github.com/nlohmann/json/pull/1409
-----
-- CMakeLists.txt                                     | 2 +-
-- benchmarks/CMakeLists.txt                          | 2 +-
-- test/cmake_add_subdirectory/project/CMakeLists.txt | 2 +-
-- test/cmake_import/project/CMakeLists.txt           | 2 +-
-- test/cmake_import_minver/project/CMakeLists.txt    | 2 +-
-- 5 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 409f5bff..da6f08e7 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.8)
--+cmake_minimum_required(VERSION 3.1)
-- 
-- ##
-- ## PROJECT
--diff --git a/benchmarks/CMakeLists.txt b/benchmarks/CMakeLists.txt
--index a53812c1..dd3f3027 100644
----- a/benchmarks/CMakeLists.txt
--+++ b/benchmarks/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.8)
--+cmake_minimum_required(VERSION 3.1)
-- project(JSON_Benchmarks LANGUAGES CXX)
-- 
-- # set compiler flags
--diff --git a/test/cmake_add_subdirectory/project/CMakeLists.txt b/test/cmake_add_subdirectory/project/CMakeLists.txt
--index 2c5be183..21357b68 100644
----- a/test/cmake_add_subdirectory/project/CMakeLists.txt
--+++ b/test/cmake_add_subdirectory/project/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.8)
--+cmake_minimum_required(VERSION 3.1)
-- 
-- project(DummyImport CXX)
-- 
--diff --git a/test/cmake_import/project/CMakeLists.txt b/test/cmake_import/project/CMakeLists.txt
--index d268d72c..fe892fc1 100644
----- a/test/cmake_import/project/CMakeLists.txt
--+++ b/test/cmake_import/project/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.8)
--+cmake_minimum_required(VERSION 3.1)
-- 
-- project(DummyImport CXX)
-- 
--diff --git a/test/cmake_import_minver/project/CMakeLists.txt b/test/cmake_import_minver/project/CMakeLists.txt
--index eeef3296..29056bdc 100644
----- a/test/cmake_import_minver/project/CMakeLists.txt
--+++ b/test/cmake_import_minver/project/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.8)
--+cmake_minimum_required(VERSION 3.1)
-- 
-- project(DummyImportMinVer CXX)
-- 
---- 
--2.14.1
--
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 4300e6f600..5604713de6 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -1,14 +1,9 @@
--# Versions before 3.0 are affected by the bug described in
--# https://git.busybox.net/buildroot/commit/?id=ef2c1970e4bff3be3992014070392b0e6bc28bd2
--# and fixed in upstream CMake in version 3.0:
--# https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
--#
--# Set this to either 3.0 or higher, depending on the highest minimum
-+# Set this to either 3.8 or higher, depending on the highest minimum
- # version required by any of the packages bundled in Buildroot. If a
- # package is bumped or a new one added, and it requires a higher
--# version, our cmake infra will catch it and whine.
-+# version, our cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.1
-+BR2_CMAKE_VERSION_MIN = 3.8
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
--- 
-2.14.1
+Thanks,
+Thomas
