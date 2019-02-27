@@ -1,42 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Feb 2019 22:09:48 +0100
-Subject: [Buildroot] [git commit] package/flatbuffers: bump to version 1.10.0
-Message-ID: <20190305095736.F1BDA8E504@busybox.osuosl.org>
+Date: Wed, 27 Feb 2019 18:14:16 +0100
+Subject: [Buildroot] [git commit] package/imx-mkimage: add patch to satisfy
+ unused version generation
+Message-ID: <20190305095737.0AF518E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db710397afd052e3aebbd00ba11e777475c15d83
+commit: https://git.buildroot.net/buildroot/commit/?id=3095ba1a2b9660ec629634797d27a330468bbc6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Micha??l Blanc <mika.blanc@gmail.com>
+Fixes:
+
+http://autobuild.buildroot.net/results/1973d39b113c37e65c35f1f0a56354f192ae02d7
+
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flatbuffers/flatbuffers.hash | 2 +-
- package/flatbuffers/flatbuffers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../imx-mkimage/0003-Add-unused-fake-version.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
-index a8f23f4ef9..7afe849cd7 100644
---- a/package/flatbuffers/flatbuffers.hash
-+++ b/package/flatbuffers/flatbuffers.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	5ca5491e4260cacae30f1a5786d109230db3f3a6e5a0eb45d0d0608293d247e3	flatbuffers-v1.9.0.tar.gz
-+sha256	3714e3db8c51e43028e10ad7adffb9a36fc4aa5b1a363c2d0c4303dd1be59a7c	flatbuffers-v1.10.0.tar.gz
- sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-index 26d9307892..69054885ea 100644
---- a/package/flatbuffers/flatbuffers.mk
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLATBUFFERS_VERSION = v1.9.0
-+FLATBUFFERS_VERSION = v1.10.0
- FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
- FLATBUFFERS_LICENSE = Apache-2.0
- FLATBUFFERS_LICENSE_FILES = LICENSE.txt
+diff --git a/package/imx-mkimage/0003-Add-unused-fake-version.patch b/package/imx-mkimage/0003-Add-unused-fake-version.patch
+new file mode 100644
+index 0000000000..9652a817ba
+--- /dev/null
++++ b/package/imx-mkimage/0003-Add-unused-fake-version.patch
+@@ -0,0 +1,33 @@
++From e75feef80b51c9060e3702390040495312648ad2 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
++Date: Mon, 25 Feb 2019 22:15:55 +0100
++Subject: [PATCH] Add unused fake version
++
++The Makefile makes the assumption that the build process runs
++from a Git clone of the source code.
++We can safely add a fake version here, because the code to
++print it is broken anyway.
++
++Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
++---
++ Makefile | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index ccf42e8..6041574 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -37,9 +37,7 @@ $(MKIMG): src/build_info.h $(SRCS)
++ bin: $(MKIMG)
++ 
++ src/build_info.h:
++-	@echo -n '#define MKIMAGE_COMMIT 0x' > src/build_info.h
++-	@git rev-parse --short=8 HEAD >> src/build_info.h
++-	@echo '' >> src/build_info.h
+++	@echo '#define MKIMAGE_COMMIT 0xdeadbeef' > src/build_info.h
++ 
++ help:
++ 	@echo $(CURR_DIR)
++-- 
++2.17.1
++
