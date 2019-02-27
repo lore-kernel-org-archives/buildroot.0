@@ -1,39 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Feb 2019 18:21:23 +0100
-Subject: [Buildroot] [PATCH 1/1] imx-mkimage: Add patch to satisfy
- unused version generation
-In-Reply-To: <20190225212359.19095-1-nerv@dawncrow.de>
-References: <20190225212359.19095-1-nerv@dawncrow.de>
-Message-ID: <20190227182123.706da2b1@windsurf>
+From: Julien Olivain <juju@cotds.org>
+Date: Wed, 27 Feb 2019 18:43:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qemu: add riscv emulation on host
+ variant
+Message-ID: <20190227174309.8209-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andr?,
+RISC-V support was added in qemu 2.12. This target emulation
+in host qemu can now be enabled.
 
-On Mon, 25 Feb 2019 22:23:59 +0100
-Andr? Hentschel <nerv@dawncrow.de> wrote:
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ package/qemu/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/1973d39b113c37e65c35f1f0a56354f192ae02d7
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  .../0003-Add-unused-fake-version.patch        | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/imx-mkimage/0003-Add-unused-fake-version.patch
-
-Applied to next, thanks. I assumed this patch was for next, as the
-build failure is on next, and I suppose is related to the recent bump
-of imx-mkimage.
-
-Thanks,
-
-Thomas
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index f99f3e05cf..8a0df38fb8 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_powerpc
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
++	default y if BR2_riscv
+ 	default y if BR2_sh
+ 	default y if BR2_sparc
+ 	default y if BR2_x86_64
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
