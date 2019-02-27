@@ -1,99 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Feb 2019 10:05:49 +0100
-Subject: [Buildroot] [git commit] runc: depend on linux headers >= 3.11 for
- O_TMPFILE
-Message-ID: <20190227090354.1923082A9D@busybox.osuosl.org>
+Date: Wed, 27 Feb 2019 10:07:45 +0100
+Subject: [Buildroot] [PATCH 1/3] runc: depend on linux headers >= 3.11
+ for O_TMPFILE
+In-Reply-To: <20190219223530.15956-1-christian@paral.in> (Christian Stewart's
+ message of "Tue, 19 Feb 2019 14:35:28 -0800")
+References: <20190219223530.15956-1-christian@paral.in>
+Message-ID: <87ef7tfvku.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=905e976a6af224b3ed015c46fcea2d717c155f55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
+ > Add dependency on headers >= 3.11. O_TMPFILE, required by runc, was not
+ > available until this version.
 
-Add dependency on headers >= 3.11 for O_TMPFILE, used by runc after the
-fix for CVE-2019-5736 and propagate to the reverse dependencies of runc.
+ > Fixes:
 
-Notice that C library support for O_TMPFILE is also needed, which was added
-in glibc 2.19 and musl 0.9.15.
+ > http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Peter: squash series, extend commit message, mention C library dependency,
-	fix indentation]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-containerd/Config.in | 4 +++-
- package/docker-engine/Config.in     | 6 ++++--
- package/runc/Config.in              | 6 ++++--
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+ > ---
+ >  package/runc/Config.in | 6 ++++--
+ >  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 5e0cc1e877..3de3dc6da2 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
-@@ -32,4 +33,5 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 3c97310484..cd878880ae 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-@@ -50,8 +51,9 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+ > diff --git a/package/runc/Config.in b/package/runc/Config.in
+ > index 47c850ef30..44713222e4 100644
+ > --- a/package/runc/Config.in
+ > +++ b/package/runc/Config.in
+ > @@ -3,6 +3,7 @@ config BR2_PACKAGE_RUNC
+ >  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ >  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
+ >  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ >  	help
+ >  	  runC is a CLI tool for spawning and running containers
+ > @@ -10,7 +11,8 @@ config BR2_PACKAGE_RUNC
  
- endif
+ >  	  https://github.com/opencontainers/runc
  
--comment "docker-engine needs a glibc or musl toolchain w/ threads"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index 47c850ef30..5b08b91032 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  runC is a CLI tool for spawning and running containers
-@@ -10,7 +11,8 @@ config BR2_PACKAGE_RUNC
- 
- 	  https://github.com/opencontainers/runc
- 
--comment "runc needs a glibc or musl toolchain toolchain w/ threads"
-+comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
- 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
+ > -comment "runc needs a glibc or musl toolchain toolchain w/ threads"
+ > +comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
+ >  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
+ >  		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ > -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ > +  	!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
+
+This line should be indented by a tab as pointed out by check-package.
+
+Committed series after squashing into a single commit and extending the
+commit message to explain when this issue was introduced and the C
+library dependencies, thanks.
+
+-- 
+Bye, Peter Korsgaard
