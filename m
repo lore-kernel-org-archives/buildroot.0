@@ -1,35 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Feb 2019 23:45:40 +0100
-Subject: [Buildroot] [git commit branch/next] package/qemu: add riscv
- emulation on host variant
-Message-ID: <20190228224841.6B6B68E6F9@busybox.osuosl.org>
+Date: Wed, 27 Feb 2019 18:14:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/imx-mkimage: add patch
+ to satisfy unused version generation
+Message-ID: <20190228224841.6441F8E4FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48b38a2cda7b33e746a5d1c8d6c7b5a5b795ff85
+commit: https://git.buildroot.net/buildroot/commit/?id=3095ba1a2b9660ec629634797d27a330468bbc6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-RISC-V support was added in qemu 2.12. This target emulation
-in host qemu can now be enabled.
+Fixes:
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
+http://autobuild.buildroot.net/results/1973d39b113c37e65c35f1f0a56354f192ae02d7
+
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ .../imx-mkimage/0003-Add-unused-fake-version.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index f99f3e05cf..8a0df38fb8 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	default y if BR2_powerpc
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
-+	default y if BR2_riscv
- 	default y if BR2_sh
- 	default y if BR2_sparc
- 	default y if BR2_x86_64
+diff --git a/package/imx-mkimage/0003-Add-unused-fake-version.patch b/package/imx-mkimage/0003-Add-unused-fake-version.patch
+new file mode 100644
+index 0000000000..9652a817ba
+--- /dev/null
++++ b/package/imx-mkimage/0003-Add-unused-fake-version.patch
+@@ -0,0 +1,33 @@
++From e75feef80b51c9060e3702390040495312648ad2 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
++Date: Mon, 25 Feb 2019 22:15:55 +0100
++Subject: [PATCH] Add unused fake version
++
++The Makefile makes the assumption that the build process runs
++from a Git clone of the source code.
++We can safely add a fake version here, because the code to
++print it is broken anyway.
++
++Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
++---
++ Makefile | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index ccf42e8..6041574 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -37,9 +37,7 @@ $(MKIMG): src/build_info.h $(SRCS)
++ bin: $(MKIMG)
++ 
++ src/build_info.h:
++-	@echo -n '#define MKIMAGE_COMMIT 0x' > src/build_info.h
++-	@git rev-parse --short=8 HEAD >> src/build_info.h
++-	@echo '' >> src/build_info.h
+++	@echo '#define MKIMAGE_COMMIT 0xdeadbeef' > src/build_info.h
++ 
++ help:
++ 	@echo $(CURR_DIR)
++-- 
++2.17.1
++
