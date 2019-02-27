@@ -1,79 +1,32 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 27 Feb 2019 23:13:10 +0100
-Subject: [Buildroot] [PATCH/next v1] zbar: bump version to 0.22
-Message-ID: <20190227221310.19394-1-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Feb 2019 22:44:02 +0000
+Subject: [Buildroot] [Bug 11701] recuuring of usr and in bin shortcuts are
+ created
+In-Reply-To: <bug-11701-163@https.bugs.busybox.net/>
+References: <bug-11701-163@https.bugs.busybox.net/>
+Message-ID: <bug-11701-163-rTh7ZjA1hT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- change from git download to official release and
-  download site (drop need for autoreconf)
+https://bugs.busybox.net/show_bug.cgi?id=11701
 
-- drop dependency on kernel headers >= 3.17 (should
-  be fixed with commit 'v4l2: make ZBar build and run on
-  Kernels < 3.16' (see [1])
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Not much/enough information to reproduce your problem, see e.g. [1] what maybe
+needed.
 
-[1] https://git.linuxtv.org/zbar.git/commit/?id=fa5c48127ec1e3670e28540c2e6a03431ebac5b8
+Please provide your .config (or defconfig) file of your build.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/zbar/Config.in | 6 ++----
- package/zbar/zbar.hash | 2 +-
- package/zbar/zbar.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 8 deletions(-)
+Try to make a clean re-build (see [2]): make clean; make
 
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-index e850c1f02b..e0b28365fc 100644
---- a/package/zbar/Config.in
-+++ b/package/zbar/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_ZBAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
- 	depends on BR2_USE_MMU # libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBV4L
- 	help
-@@ -11,7 +10,6 @@ config BR2_PACKAGE_ZBAR
- 
- 	  https://git.linuxtv.org/zbar.git/about/
- 
--comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
-+comment "zbar needs a toolchain w/ threads, C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-index 6735bc67d6..0f44d0f5c0 100644
---- a/package/zbar/zbar.hash
-+++ b/package/zbar/zbar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 94c71c6110c705f07ba5ba2803583d09b3853e8773169c86bdcf831443156aaa zbar-57d601e82089f2f31de9e1683c3834f237421f5d.tar.gz
-+sha256 1ba9e94c7217a8bd3800f9f3abddf3ed393a62cdf141a709765aad2788744eb7 zbar-0.22.tar.bz2
- sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index c3f0797c55..d2423df696 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--ZBAR_VERSION = 57d601e82089f2f31de9e1683c3834f237421f5d
--ZBAR_SITE = git://linuxtv.org/zbar.git
-+ZBAR_VERSION = 0.22
-+ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
-+ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
- ZBAR_LICENSE_FILES = LICENSE
- ZBAR_INSTALL_STAGING = YES
--ZBAR_AUTORECONF = YES
- ZBAR_DEPENDENCIES = libv4l jpeg
- # add host-gettext for AM_ICONV macro
- ZBAR_DEPENDENCIES += host-gettext
+Try to show an example of what you see in the host directory, e.g.
+the output of ls or find commands...
+
+[1] http://nightly.buildroot.org/manual.html#reporting-bugs
+[2] http://nightly.buildroot.org/manual.html#full-rebuild
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
