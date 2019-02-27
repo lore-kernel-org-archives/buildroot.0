@@ -1,33 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Feb 2019 14:34:31 +0100
-Subject: [Buildroot] Buildroot selected for Google Summer of Code 2019!
-Message-ID: <20190227143431.55b80917@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Feb 2019 14:39:00 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14, 19,
+ 20}.x series
+In-Reply-To: <20190227085125.22457-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 27 Feb 2019 09:51:25 +0100")
+References: <20190227085125.22457-1-peter@korsgaard.com>
+Message-ID: <87o96xxsej.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-The Buildroot project is part of the organizations accepted for the
-Google Summer of Code 2019 program.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  linux/Config.in                      |  2 +-
+ >  linux/linux.hash                     | 10 +++++-----
+ >  package/linux-headers/Config.in.host | 10 +++++-----
+ >  3 files changed, 11 insertions(+), 11 deletions(-)
 
-This means that if you are a student and want to get paid this summer
-to work on Buildroot, you have a great opportunity! You can get paid
-between 3000 USD and 6000 USD depending on where you live.
+Committed, thanks.
 
-See our project ideas at https://elinux.org/Buildroot:GSoC2019Ideas. Of
-course, we are open to other project ideas, so if you want to work on
-other topics, feel free to propose it.
-
-For more details, see also
-https://summerofcode.withgoogle.com/organizations/4790790335758336/.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
