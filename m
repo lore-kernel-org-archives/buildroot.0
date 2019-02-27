@@ -1,50 +1,33 @@
-From: Evgeniy Didin <evgeniy.didin@synopsys.com>
-Date: Wed, 27 Feb 2019 13:04:06 +0000
-Subject: [Buildroot] package/opencv3: missing ffmpeg and gstreamer on
- configure step.
-Message-ID: <33d3498225ef647bfc2830bc4df5e67d0353b2d0.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Feb 2019 14:34:31 +0100
+Subject: [Buildroot] Buildroot selected for Google Summer of Code 2019!
+Message-ID: <20190227143431.55b80917@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+Hello,
 
-Trying to build opencv3 with enabled ffmpeg and gstreamer support I have faced with the issue, that
-during configure process opencv3 is not able to find ffmpeg and gstreamer, which are already built.
-Here is part of the config log:
---------------------8<---------------------------------
-...
--- Looking for sys/videoio.h
--- Looking for sys/videoio.h - not found
--- Can't find ffmpeg - 'pkg-config' utility is missing
--- Performing Test HAVE_CXX_WNO_DEPRECATED
-...
--------------------->8---------------------------------
+The Buildroot project is part of the organizations accepted for the
+Google Summer of Code 2019 program.
 
-And finally in the end of log I see next message:
---------------------8<---------------------------------
-...
---   Video I/O:
---     FFMPEG:                      NO
---       avcodec:                   NO
---       avformat:                  NO
---       avutil:                    NO
---       swscale:                   NO
---       avresample:                NO
---     GStreamer:                   NO
---     libv4l/libv4l2:              NO
---     v4l/v4l2:                    linux/videodev2.h
-...
--------------------->8---------------------------------
+This means that if you are a student and want to get paid this summer
+to work on Buildroot, you have a great opportunity! You can get paid
+between 3000 USD and 6000 USD depending on where you live.
 
-At the same time modifying output/build/opencv3-3.4.3/CMakeLists.txt file
-by adding lines like "set(HAVE_FFMPEG YES)" leads to successfull opencv3 building
-with ffmpeg and gstreamer support.
+See our project ideas at https://elinux.org/Buildroot:GSoC2019Ideas. Of
+course, we are open to other project ideas, so if you want to work on
+other topics, feel free to propose it.
 
-Is it a know issue?
-Maybe I have missed something during configurating of the build?
+For more details, see also
+https://summerofcode.withgoogle.com/organizations/4790790335758336/.
 
 Best regards,
-Evgeniy Didin
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
