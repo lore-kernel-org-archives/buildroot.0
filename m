@@ -1,80 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 27 Feb 2019 20:57:20 +0100
-Subject: [Buildroot] [PATCH-for-master 1/2] package/meson: don't install
- cross-compilation.conf during target-finalize
-In-Reply-To: <20190227181841.30b543f9@windsurf>
-References: <20190225211147.14947-1-patrickdepinguin@gmail.com>
- <20190225211147.14947-2-patrickdepinguin@gmail.com>
- <877edmcrgf.fsf@dell.be.48ers.dk>
- <CAAXf6LVFtKBiv0RL0MJB+uMOKbcdr5nX3fV300Drcf_dVvMu+A@mail.gmail.com>
- <20190227181841.30b543f9@windsurf>
-Message-ID: <CAAXf6LU6Aj=CfKGgOAnkrwJzBf7G8p+wknqb5wx4qGW63t9QTg@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 27 Feb 2019 23:01:00 +0100
+Subject: [Buildroot] [PATCH v1] zbar: needs c99 mode
+Message-ID: <20190227220100.13536-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mi?., 27 feb. 2019 a las 18:18, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> Hello,
->
-> On Tue, 26 Feb 2019 20:48:49 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > I haven't played with / investigated the per-package feature yet, so I
-> > may miss some specifics.
-> > Below is the content of the hook:
-> >
-> > define HOST_MESON_INSTALL_CROSS_CONF
-> >     mkdir -p $(HOST_DIR)/etc/meson
-> >     sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-> >         -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
-> >         -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
-> >         -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
-> >         -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
-> >         -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
-> >         -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-> >         -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
->
-> With per-package enabled, this $(HOST_DIR) here will point to the
-> per-package host directory of host-meson instead of pointing to the
-> global host directory.
->
-> >         $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-> >         > $(HOST_DIR)/etc/meson/cross-compilation.conf
->
-> Here as well, but this one is not an issue: the per-package host
-> directory of host-meson will be rsync'ed into the global host directory
-> at the end of the build.
->
-> > Are there any variables in there that would change value?
->
-> With per-package enabled, HOST_DIR, STAGING_DIR and TARGET_DIR have a
-> different value when building each package (they point to the current
-> package per-package directories) or when building stuff outside of a
-> package (they point to the global directories).
->
-> > In sequential build, the file before and after this change is identical.
->
-> It's not so much sequential vs. parallel, but per-package directories
-> or not. Per-package directory can be used while doing a sequential
-> build.
->
+Fixes [1]:
 
-Thanks for explaining everything.
+  bar/sqcode.c: In function 'sq_scan_shape':
+  zbar/sqcode.c:171:5: error: 'for' loop initial declarations are only allowed in C99 or C11 mode
+       for (int x = x0 - 1; x < x0 + width + 1; x++) {
+       ^
+  zbar/sqcode.c:171:5: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
 
-If I understand it correctly, since the patch is hooking into
-TOOLCHAIN_POST_INSTALL_STAGING_HOOKS, HOST_DIR will be the per-package
-directory of 'toolchain', not of 'host-meson', right?
+[1] http://autobuild.buildroot.net/results/7d544275756f655f9d42c05562aca653923155b1
 
-To solve it, we could change:
--        -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+        -e "s%@HOST_DIR@%$(call qstrip,$(BR2_HOST_DIR))%g" \
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/zbar/zbar.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Is that correct?
-And do you consider this acceptable?
-
-Thanks,
-Thomas
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index 6df069e001..c3f0797c55 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -13,6 +13,8 @@ ZBAR_AUTORECONF = YES
+ ZBAR_DEPENDENCIES = libv4l jpeg
+ # add host-gettext for AM_ICONV macro
+ ZBAR_DEPENDENCIES += host-gettext
++# uses C99 features
++ZBAR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ ZBAR_CONF_OPTS = \
+ 	--disable-doc \
+ 	--without-imagemagick \
+-- 
+2.20.1
