@@ -1,103 +1,54 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Thu, 28 Feb 2019 12:34:27 -0300 (BRT)
-Subject: [Buildroot] GCC in my pc has been used during my customize
- package building
-In-Reply-To: <201902281532433257768@hoperun.com>
-References: <201902281532433257768@hoperun.com>
-Message-ID: <872494767.3516883.1551368067037.JavaMail.zimbra@datacom.com.br>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Thu, 28 Feb 2019 21:19:21 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-02-27
+In-Reply-To: <20190228070048.49BF086B2B@whitealder.osuosl.org>
+References: <20190228070048.49BF086B2B@whitealder.osuosl.org>
+Message-ID: <20190228191921.GA28686@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was looking at the original repository.
+Hi Thomas, All
 
-If i were you...
+On Thu, Feb 28, 2019 at 07:00:43AM -0000, Thomas Petazzoni wrote:
 
-I would use CMake, get rid of those handcrafted Makefiles, and integrate with buildroot using the standard Cmake integration.
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
 
-Honestly, those Makefiles are not good. I know they are meant to be simple, but they are not. Notice, for instance, your usage of pkg-config to define some LDFLAGS variable. This is not going to work correctly without some manual instalation of dependencies.
+...
 
-This is an example, just to show you that you should use something better, but that will give less headache in the near future (for instance, now...).
+>                     efl-1.21.1 | 1 
 
-I don't think the problem is in buildroot here...
+...
 
------ Mensagem original -----
-> De: "zhou c" <zhou_c@hoperun.com>
-> Para: "buildroot" <buildroot@busybox.net>
-> Enviadas: Quinta-feira, 28 de fevereiro de 2019 4:32:43
-> Assunto: [Buildroot] GCC in my pc has been used during my customize package building
+> 
+> 
+> Detail of failures
+> ------------------
+> 
 
-> Sorry, Fix the mail.
-> 
-> ====================================================
-> 
-> Hi all,
-> 
-> I am new guy in buildroot developing, and maybe have some stupid
-> questions.
-> 
-> I tried to integrate some package in github into buildroot for my
-> requirements. Just like the following:
-> 
->??? ################################################################################
->??? #
->??? # ioc-cbc-tools
->??? #
->??? ################################################################################
->??? IOC_CBC_TOOLS_VERSION = master
->??? IOC_CBC_TOOLS_SITE =$(call github,intel,ioc-cbc-tools,$(IOC_CBC_TOOLS_VERSION))
->??? IOC_CBC_TOOLS_LICENSE = BSD-3
->??? IOC_CBC_TOOLS_LICENSE_FILES = COPYING
->???
->??? define IOC_CBC_TOOLS_BUILD_CMDS
->??? $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
->??? endef
->???
->??? define IOC_CBC_TOOLS_INSTALL_CMDS
->??? $(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(MAKE) -C $(@D) install
->??? endef
->???
->??? $(eval $(generic-package))
-> 
-> but the makefile in this project just like this:
-> 
->??? $(OUT_DIR)/cbc_lifecycle: cbc_lifecycle.c
->??? gcc -o $@ $(CFLAGS) $(LDFLAGS) cbc_lifecycle.c -pthread -lacrn-mngr
->???
->??? clean:
->??? rm $(OUT_DIR)/cbc_lifecycle
-> 
-> It take "gcc" directly. But there isn't gcc in my "buildroot/output/host/bin".
-> 
->??? buildroot $ find? output/host/ -name "*gcc"
->??? output/host/libexec/gcc
->??? output/host/lib/gcc
->??? output/host/bin/x86_64-linux-gcc
->??? output/host/bin/x86_64-xxx-linux-gnu-gcc
-> 
-> Could anybody give me some hints?
-> 
-> Thanks for any comments.
-> 
-> Thanks,
-> Jerry
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+...
 
--- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+>         i586 |                     efl-1.21.1 | NOK | http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007 |     
+
+I tried build this defconfig and it fails for me too. The failure is
+caused because mesa3d installs some GL related typedef's which efl
+declares them too because GL_ES_VERSION_2_0 is not defined by mesa3d. I
+can fix the build only if manually select ES and EGL support for mes3d,
+and manually select BR2_PACKAGE_EFL_OPENGLES=y. I really dont know which
+part behaves wrongly (mesa3d or efl), so just put here my observation.
+
+
+P.S.
+Perhaps, maybe, it is needed to add checking (during configure) for these
+re-defined GL types in efl instead of checking for GLES version definition.
+
+Regards,
+Vadim Kochan
