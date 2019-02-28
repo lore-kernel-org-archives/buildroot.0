@@ -1,62 +1,103 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 28 Feb 2019 09:30:00 -0500
-Subject: [Buildroot] [PATCH] package/ninja: enforce Python3 on the host
-In-Reply-To: <20190222203756.8795-1-joerg.krause@embedded.rocks>
-References: <20190222203756.8795-1-joerg.krause@embedded.rocks>
-Message-ID: <CAFSsvmo=E_YVNY_Yp3Ru+TUZqQUaq9+NBr4RqAbEVnaVRg6arQ@mail.gmail.com>
+From: Henrique Marks <henrique.marks@datacom.ind.br>
+Date: Thu, 28 Feb 2019 12:34:27 -0300 (BRT)
+Subject: [Buildroot] GCC in my pc has been used during my customize
+ package building
+In-Reply-To: <201902281532433257768@hoperun.com>
+References: <201902281532433257768@hoperun.com>
+Message-ID: <872494767.3516883.1551368067037.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All:
+I was looking at the original repository.
 
+If i were you...
 
-Tested by: Adam Duskett <Aduskett@gmail.com>
+I would use CMake, get rid of those handcrafted Makefiles, and integrate with buildroot using the standard Cmake integration.
 
-On Fri, Feb 22, 2019 at 3:38 PM J?rg Krause <joerg.krause@embedded.rocks> wrote:
->
-> The current logic selects Python3 for the host only if Python3 is
-> selected for the target, otherwise it selects Python2.
->
-> As Meson, the only package infrastructure using ninja, needs Python3, it is
-> desirable to also depend on Python3 on the host for the ninja host
-> package.
->
-> Otherwise, if no Python interpreter is selected for the target, both
-> Python2 and Python3 are build for the host, which is time consuming
-> without any benefit.
->
-> For example when building libmpdclient (and all its target and host
-> dependencies) the actual elapsed time for is reduced from around 286s to 207s
-> as reported by `time -p make clean all`.
->
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/ninja/ninja.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-> index 9d6f30e9fe..42dc3cb567 100644
-> --- a/package/ninja/ninja.mk
-> +++ b/package/ninja/ninja.mk
-> @@ -9,7 +9,10 @@ NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
->  NINJA_LICENSE = Apache-2.0
->  NINJA_LICENSE_FILES = COPYING
->
-> -HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-> +# Enforce Python3 on the host, to prevent building Python2 and Python3 when
-> +# using packages using the Meson infrastructure and not having any Python
-> +# interperter selected for the target.
-> +HOST_NINJA_NEEDS_HOST_PYTHON = python3
->
->  define HOST_NINJA_BUILD_CMDS
->         (cd $(@D); ./configure.py --bootstrap)
-> --
-> 2.20.1
->
+Honestly, those Makefiles are not good. I know they are meant to be simple, but they are not. Notice, for instance, your usage of pkg-config to define some LDFLAGS variable. This is not going to work correctly without some manual instalation of dependencies.
+
+This is an example, just to show you that you should use something better, but that will give less headache in the near future (for instance, now...).
+
+I don't think the problem is in buildroot here...
+
+----- Mensagem original -----
+> De: "zhou c" <zhou_c@hoperun.com>
+> Para: "buildroot" <buildroot@busybox.net>
+> Enviadas: Quinta-feira, 28 de fevereiro de 2019 4:32:43
+> Assunto: [Buildroot] GCC in my pc has been used during my customize package building
+
+> Sorry, Fix the mail.
+> 
+> ====================================================
+> 
+> Hi all,
+> 
+> I am new guy in buildroot developing, and maybe have some stupid
+> questions.
+> 
+> I tried to integrate some package in github into buildroot for my
+> requirements. Just like the following:
+> 
+>??? ################################################################################
+>??? #
+>??? # ioc-cbc-tools
+>??? #
+>??? ################################################################################
+>??? IOC_CBC_TOOLS_VERSION = master
+>??? IOC_CBC_TOOLS_SITE =$(call github,intel,ioc-cbc-tools,$(IOC_CBC_TOOLS_VERSION))
+>??? IOC_CBC_TOOLS_LICENSE = BSD-3
+>??? IOC_CBC_TOOLS_LICENSE_FILES = COPYING
+>???
+>??? define IOC_CBC_TOOLS_BUILD_CMDS
+>??? $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
+>??? endef
+>???
+>??? define IOC_CBC_TOOLS_INSTALL_CMDS
+>??? $(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(MAKE) -C $(@D) install
+>??? endef
+>???
+>??? $(eval $(generic-package))
+> 
+> but the makefile in this project just like this:
+> 
+>??? $(OUT_DIR)/cbc_lifecycle: cbc_lifecycle.c
+>??? gcc -o $@ $(CFLAGS) $(LDFLAGS) cbc_lifecycle.c -pthread -lacrn-mngr
+>???
+>??? clean:
+>??? rm $(OUT_DIR)/cbc_lifecycle
+> 
+> It take "gcc" directly. But there isn't gcc in my "buildroot/output/host/bin".
+> 
+>??? buildroot $ find? output/host/ -name "*gcc"
+>??? output/host/libexec/gcc
+>??? output/host/lib/gcc
+>??? output/host/bin/x86_64-linux-gcc
+>??? output/host/bin/x86_64-xxx-linux-gnu-gcc
+> 
+> Could anybody give me some hints?
+> 
+> Thanks for any comments.
+> 
+> Thanks,
+> Jerry
+> 
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Dr. Henrique Marks
+henrique.marks at datacom.ind.br
+R. Am?rica, 1000 - Eldorado do Sul - RS
+CEP: 92990-000 - Brasil
+Fone: +55 51 3933 3000 - Ramal 3466
