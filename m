@@ -1,81 +1,62 @@
-From: jonsmirl at gmail.com <jonsmirl@gmail.com>
-Date: Sun, 31 Mar 2019 22:57:54 -0400
-Subject: [Buildroot] Help making package file for libp11
-Message-ID: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri,  1 Mar 2019 02:23:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/efl: Fix build without OpenGL ES
+Message-ID: <20190301002311.17071-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I made up a package file for libp11 based off from other posts to the list...
+efl does not compile without OpenGL ES because it checks for
+GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr
+types if such version is not defined, so fix it by add check also for
+OpenGL 1.5 where these types are defined.
 
-LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
-LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
-LIBP11_DEPENDENCIES = openssl
-LIBP11_INSTALL_STAGING = YES
-LIBP11_LICENSE = LGPLv2.1
-LIBP11_LICENSE_FILES = COPYING
-LIBP11_AUTORECONF = YES
+Fixes:
+	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
 
-LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
-ifeq ($(BR2_PACKAGE_P11_KIT),y)
-LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-endif
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ ...x-check-definition-of-GLsizeiptr-and-GLin.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
 
-$(eval $(autotools-package))
-
------------------------------
-
-I'm getting an error with the path at the install stage...
-Can anyone give me a clue as to what is wrong?
-
-make[2]: Entering directory
-`/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-make[3]: Entering directory
-`/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-make[3]: Nothing to be done for `install-exec-am'.
- /bin/mkdir -p '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
- /usr/bin/install -c -m 644 NEWS
-'/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
-make[3]: Leaving directory
-`/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-make[2]: Leaving directory
-`/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-make[1]: Leaving directory
-`/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
->>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
-for la in $(find
-/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
--name "*.la"); do \
-cp -a "${la}" "${la}.fixed" && \
-/bin/sed -i -e "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR@:g"
-\
--e "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR@:g"
-\
--e "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g"
-\
--e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
--e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
-\
--e "s:@STAGING_DIR@:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
-\
--e "s:@BASE_DIR@:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
-\
-"${la}.fixed" && \
-if cmp -s "${la}" "${la}.fixed"; then \
-rm -f "${la}.fixed"; \
-else \
-mv "${la}.fixed" "${la}"; \
-fi || exit 1; \
-done
-libp11: installs files in
-/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
-make: *** [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
-Error 1
-make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
-
-
+diff --git a/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+new file mode 100644
+index 0000000000..07672981d3
+--- /dev/null
++++ b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+@@ -0,0 +1,30 @@
++From 161af4faa3b30f0b2db1f9642fca559eeed05da2 Mon Sep 17 00:00:00 2001
++From: Vadim Kochan <vadim4j@gmail.com>
++Date: Fri, 1 Mar 2019 01:05:31 +0200
++Subject: [PATCH 1/1] lib: evas: Fix check definition of GLsizeiptr and
++ GLintprt
++
++GLsizeiptr and GLintptr also defined in GL 1.5 version,
++so add check for both GL and GLES versions.
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ src/lib/evas/Evas_GL.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/lib/evas/Evas_GL.h b/src/lib/evas/Evas_GL.h
++index fa3e6f4..1928f16 100644
++--- a/src/lib/evas/Evas_GL.h
+++++ b/src/lib/evas/Evas_GL.h
++@@ -4270,7 +4270,7 @@ typedef signed int       GLfixed;      // Changed khronos_int32_t
++ # endif
++ #endif
++ 
++-#ifndef GL_ES_VERSION_2_0
+++#if !defined(GL_VERSION_1_5) && !defined(GL_ES_VERSION_2_0)
++ /* GL types for handling large vertex buffer objects */
++ #include <stddef.h>
++ typedef ptrdiff_t GLintptr;     // Changed khronos_intptr_t
++-- 
++2.14.1
++
 -- 
-Jon Smirl
-jonsmirl at gmail.com
+2.14.1
