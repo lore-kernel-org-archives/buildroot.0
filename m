@@ -1,53 +1,49 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 1 Mar 2019 17:33:18 +0200
-Subject: [Buildroot] Bazel integration in buildroot
-In-Reply-To: <20190301121938.GA21608@lwo1-lhp-f71841>
-References: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
- <20190301121938.GA21608@lwo1-lhp-f71841>
-Message-ID: <CALFsTFWqzGmcVBEjh7OMq7K2hfQCNOp_RtUbeuT2vVPSnYq9+Q@mail.gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri,  1 Mar 2019 17:47:05 +0100
+Subject: [Buildroot] [PATCH/next 1/9] boot/optee-os: package sets TA SDK
+ location
+Message-ID: <e709b9364807ed93b5e1dc0edfe8a1dd50006b1b.1551458062.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+Makefile script for boot package optee-os produces make variable
+OPTEE_OS_STAGING_SDK to locate the Trusted Application SDK expected
+by other packages when building OP-TEE trusted applications.
 
-On Fri, Mar 1, 2019 at 2:19 PM Vadym Kochan <vadim4j@gmail.com> wrote:
->
-> Hi Asaf,
->
-> On Sun, Feb 24, 2019 at 06:24:40PM +0200, Asaf Kahlon wrote:
-> > Hello,
-> >
-> > At my work we started a process in which we want to choose a construction
-> > tool for our packages. Of course all the traditionals are on the list like
-> > cmake, meson and others, but we're also looking at Bazel from Google.
-> > All in all, Bazel seems like a nice construction tool, but I noticed that
-> > there's not even one package in Buildroot that compiles with Bazel and I
-> > wanted to know if we missed something. Is someone here familiar with this
-> > build system and can elaborate more details on Bazel in the embedded world
-> > and specifically in Buildroot?
-> >
-> > Regards,
-> > Asaf.
->
-> First of all I am not an expert, but I have some thoughts about this:)
->
-> It looks like bazel is a Java application ? if so, then there will one
-> more (I think big) dependency like Java on the host to build the bazel's
-> packages, or it may be built by openjdk buildroot's package (which is
-> not merged yet). Actually, bazel packages support might be added for local
-> usages only.
->
-> Anyway it is better if some of the buildroot experts can answer this question.
->
-> Regards,
-> Vadim Kochan
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+---
+ boot/optee-os/optee-os.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thanks for the response!
-I think too it would require a non-trivial change.
-I'll be happy to hear from other Buildroot experts too.
-
-Thanks,
-Asaf.
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index aeac067..df481c9 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -55,9 +55,11 @@ OPTEE_OS_MAKE_OPTS += $(call qstrip,$(BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES))
+ OPTEE_OS_BUILDDIR_OUT = out
+ ifeq ($(BR2_aarch64),y)
+ OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm64
++OPTEE_OS_STAGING_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
+ endif
+ ifeq ($(BR2_arm),y)
+ OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm32
++OPTEE_OS_STAGING_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
+ endif
+ 
+ ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
+@@ -86,8 +88,8 @@ define OPTEE_OS_BUILD_SDK
+ 		 $(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) ta_dev_kit
+ endef
+ define OPTEE_OS_INSTALL_STAGING_CMDS
+-	mkdir -p $(STAGING_DIR)/lib/optee
+-	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK) $(STAGING_DIR)/lib/optee
++	mkdir -p $(OPTEE_OS_STAGING_SDK)
++	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK)/* $(OPTEE_OS_STAGING_SDK)
+ endef
+ endif # BR2_TARGET_OPTEE_OS_SDK
+ 
+-- 
+1.9.1
