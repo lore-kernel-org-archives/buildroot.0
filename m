@@ -1,62 +1,42 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 Mar 2019 21:18:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/beecrypt: fix build without C++
-Message-ID: <20190301201818.24561-1-fontaine.fabrice@gmail.com>
+Date: Fri,  1 Mar 2019 21:42:24 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/dmidecode: bump to version 3.2
+Message-ID: <20190301204224.29565-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not check for C++ compiler as C++ support has been disabled since
-commit dd4d3c18d6753e1224fbe59d91a4b44f39bc38c0 otherwise
-build will fail on toolchains without a working C++ compiler:
-
-checking how to run the C++ preprocessor... /lib/cpp
-configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/beecrypt-4.2.1':
-configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-
-Fixes:
- - http://autobuild.buildroot.org/results/3c79cc68f1b088ad24daf7f9bd70718d702be577
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0003-don-t-check-for-cplusplus-compiler.patch  | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
+ package/dmidecode/dmidecode.hash | 3 ++-
+ package/dmidecode/dmidecode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch b/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
-new file mode 100644
-index 0000000000..32f167996f
---- /dev/null
-+++ b/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
-@@ -0,0 +1,27 @@
-+configure.ac: don't check for C++ compiler
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -durN beecrypt-4.2.1-orig/configure.ac beecrypt-4.2.1/configure.ac
-+--- beecrypt-4.2.1-orig/configure.ac	2019-03-01 19:58:16.516117640 +0100
-++++ beecrypt-4.2.1/configure.ac	2019-03-01 21:10:17.707391803 +0100
-+@@ -119,9 +119,6 @@
-+ 
-+ # Checks for C compiler and preprocessor
-+ AC_PROG_CC
-+-AC_PROG_CPP
-+-AC_PROG_CXX
-+-AC_PROG_CXXCPP
-+ AM_PROG_AS
-+ AC_PROG_LD
-+ AC_PROG_LN_S
-+@@ -133,9 +130,6 @@
-+ AC_LANG_PUSH(C)
-+ AC_OPENMP
-+ AC_LANG_POP(C)
-+-AC_LANG_PUSH(C++)
-+-AC_OPENMP
-+-AC_LANG_POP(C++)
-+ 
-+ # Checks for compiler characteristics and flags
-+ if test "$ac_enable_expert_mode" = no; then
+diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
+index 1e8154b37d..c6edf4bcac 100644
+--- a/package/dmidecode/dmidecode.hash
++++ b/package/dmidecode/dmidecode.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 d766ce9b25548c59b1e7e930505b4cad9a7bb0b904a1a391fbb604d529781ac0  dmidecode-3.1.tar.xz
++sha256 077006fa2da0d06d6383728112f2edef9684e9c8da56752e97cd45a11f838edd  dmidecode-3.2.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
+index b6f96b6df8..811565d8e4 100644
+--- a/package/dmidecode/dmidecode.mk
++++ b/package/dmidecode/dmidecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DMIDECODE_VERSION = 3.1
++DMIDECODE_VERSION = 3.2
+ DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
+ DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
+ DMIDECODE_LICENSE = GPL-2.0+
 -- 
 2.14.1
