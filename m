@@ -1,44 +1,32 @@
-From: James Grant <jamesg@zaltys.org>
-Date: Fri, 1 Mar 2019 20:36:32 +1300
-Subject: [Buildroot] [PATCH 1/2] package/qt5/qt5base: add custom
- configure options last
-In-Reply-To: <20190301082815.21ede3d8@windsurf.home>
-References: <20190301021712.47698-1-james.grant@jci.com>
- <20190301082815.21ede3d8@windsurf.home>
-Message-ID: <1dc294ad-2a19-a464-0918-2179dd40cc10@zaltys.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Mar 2019 10:07:33 +0100
+Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
+In-Reply-To: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
+ (James Grant's message of "Fri, 1 Mar 2019 02:21:29 +0000")
+References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
+Message-ID: <87imx3ufmy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1/03/2019 20:28, Thomas Petazzoni wrote:
-> Hello James,
->
-> On Fri, 1 Mar 2019 15:17:11 +1300
-> James Grant <james.grant@jci.com> wrote:
->
->> This allows all options set by Buildroot to be overridden.
->>
->> Signed-off-by: James Grant <james.grant@jci.com>
->> ---
->>   package/qt5/qt5base/qt5base.mk | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
->> index 11c6684812..8c0f5f0c9f 100644
->> --- a/package/qt5/qt5base/qt5base.mk
->> +++ b/package/qt5/qt5base/qt5base.mk
->> @@ -296,6 +296,9 @@ define QT5BASE_CONFIGURE_HOSTCC
->>   	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
->>   endef
->>   
->> +# Must be last so can override all options set by Buildroot
->> +QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
-> Shouldn't this line also be removed from where it originally was ?
+>>>>> "James" == James Grant <james.grant@jci.com> writes:
 
-Yes - sorry, I didn't split the two patches I sent for qt5base properly. 
-Do people want/need them resent?
+ > Hi,
+ > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
 
-Regards,
-James Grant.
+ > https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
+
+ > I'm suggesting that for upcoming 2019.02 release that no attempt is made to build with SSL support for 5.6.
+
+ > About to send patch to that effect.
+
+Yes. I was hoping that users of Qt 5.6 would step up and send patches,
+but given that hasn't happened and 2019.02 is overdue, that is probably
+the least bad solution.
+
+Looking forward to your patch.
+
+-- 
+Bye, Peter Korsgaard
