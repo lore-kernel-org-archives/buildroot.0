@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Mar 2019 10:11:24 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] support/dependencies: require at least CMake 3.8
-In-Reply-To: <20190227192558.19183-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 27 Feb 2019 20:25:58 +0100")
-References: <20190227192558.19183-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ef7rufgj.fsf@dell.be.48ers.dk>
+Date: Fri, 01 Mar 2019 10:13:55 +0100
+Subject: [Buildroot] [PATCH 1/2] package/qt5/qt5base: add custom
+ configure options last
+In-Reply-To: <20190301021712.47698-1-james.grant@jci.com> (James Grant's
+ message of "Fri, 1 Mar 2019 15:17:11 +1300")
+References: <20190301021712.47698-1-james.grant@jci.com>
+Message-ID: <877edjufcc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "James" == James Grant <james.grant@jci.com> writes:
 
- > gerbera package in version 1.3 unfortunately now requires CMake >= 3.8
- > for C++17 macros:
- > https://github.com/gerbera/gerbera/commit/b5fd39f30fb10385ec228b71377685206a609c3a
-
- > So we need to bump our requirement from 3.1 to 3.8. If the host doesn't
- > have a CMake >= 3.8, Buildroot will build its own host-cmake package.
-
- > Also drop patch that relax cmake requirement on json-for-modern-cpp
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/6405647b47b132ff5d0d211b92d407322d52d507
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > This allows all options set by Buildroot to be overridden.
+ > Signed-off-by: James Grant <james.grant@jci.com>
  > ---
- > Changes v1 -> v2 (after review of Yann E. Morin):
- >  - Put back a slightly updated comment
- >  - Drop patch on json-for-modern-cpp
+ >  package/qt5/qt5base/qt5base.mk | 3 +++
+ >  1 file changed, 3 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+ > index 11c6684812..8c0f5f0c9f 100644
+ > --- a/package/qt5/qt5base/qt5base.mk
+ > +++ b/package/qt5/qt5base/qt5base.mk
+ > @@ -296,6 +296,9 @@ define QT5BASE_CONFIGURE_HOSTCC
+ >  	$(SED) 's,^QMAKE_CXX\s*=.*,QMAKE_CXX = $(HOSTCXX),' $(@D)/mkspecs/common/g++-base.conf
+ >  endef
+ 
+ > +# Must be last so can override all options set by Buildroot
+ > +QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+ > +
+
+Committed after removing the original line as pointed out by Thomas, thanks.
 
 -- 
 Bye, Peter Korsgaard
