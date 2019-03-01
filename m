@@ -1,41 +1,70 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Fri, 1 Mar 2019 14:19:38 +0200
-Subject: [Buildroot] Bazel integration in buildroot
-In-Reply-To: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
-References: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
-Message-ID: <20190301121938.GA21608@lwo1-lhp-f71841>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri,  1 Mar 2019 14:33:42 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: Generate package config if
+ it is not specified
+Message-ID: <1551443622-29498-1-git-send-email-email@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Asaf,
+From: Vadim Kochan <vadim4j@gmail.com>
 
-On Sun, Feb 24, 2019 at 06:24:40PM +0200, Asaf Kahlon wrote:
-> Hello,
-> 
-> At my work we started a process in which we want to choose a construction
-> tool for our packages. Of course all the traditionals are on the list like
-> cmake, meson and others, but we're also looking at Bazel from Google.
-> All in all, Bazel seems like a nice construction tool, but I noticed that
-> there's not even one package in Buildroot that compiles with Bazel and I
-> wanted to know if we missed something. Is someone here familiar with this
-> build system and can elaborate more details on Bazel in the embedded world
-> and specifically in Buildroot?
-> 
-> Regards,
-> Asaf.
+It is possible to generate one-line config for the package just by
+normalize it to the form:
 
-First of all I am not an expert, but I have some thoughts about this:)
+    BR2_PACKAGE_${pkg_replaced-to_and_uppercase}
 
-It looks like bazel is a Java application ? if so, then there will one
-more (I think big) dependency like Java on the host to build the bazel's
-packages, or it may be built by openjdk buildroot's package (which is
-not merged yet). Actually, bazel packages support might be added for local
-usages only.
+it simplifes a bit of testing package where no additional config options
+are needed.
 
-Anyway it is better if some of the buildroot experts can answer this question.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ utils/test-pkg | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-Regards,
-Vadim Kochan
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1995fa8..cce4679 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -2,12 +2,20 @@
+ set -e
+ 
+ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
++TEMP_CONF=""
++
++do_clean() {
++    if [ ! -z "${TEMP_CONF}" ]; then
++        rm -f "${TEMP_CONF}"
++    fi
++}
+ 
+ main() {
+     local o O opts
+     local cfg dir pkg random toolchains_dir toolchain all number mode
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
++    local pkg_br_name
+ 
+     o='hac:d:n:p:r:t:'
+     O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+@@ -50,8 +58,15 @@ main() {
+             ;;
+         esac
+     done
++
++    trap do_clean INT TERM HUP EXIT
++
+     if [ -z "${cfg}" ]; then
+-        printf "error: no config snippet specified\n" >&2; exit 1
++        pkg_br_name="${pkg//-/_}"
++        pkg_br_name="BR2_PACKAGE_${pkg_br_name^^}"
++        TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
++        echo "${pkg_br_name}=y" > ${TEMP_CONF}
++        cfg="${TEMP_CONF}"
+     fi
+     if [ ! -e "${cfg}" ]; then
+         printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
+-- 
+2.7.4
