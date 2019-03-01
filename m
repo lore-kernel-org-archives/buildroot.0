@@ -1,32 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Mar 2019 10:07:33 +0100
-Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
-In-Reply-To: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
- (James Grant's message of "Fri, 1 Mar 2019 02:21:29 +0000")
-References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
-Message-ID: <87imx3ufmy.fsf@dell.be.48ers.dk>
+Date: Fri, 01 Mar 2019 10:11:24 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] support/dependencies: require at least CMake 3.8
+In-Reply-To: <20190227192558.19183-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Feb 2019 20:25:58 +0100")
+References: <20190227192558.19183-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ef7rufgj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Grant <james.grant@jci.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Hi,
- > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
+ > gerbera package in version 1.3 unfortunately now requires CMake >= 3.8
+ > for C++17 macros:
+ > https://github.com/gerbera/gerbera/commit/b5fd39f30fb10385ec228b71377685206a609c3a
 
- > https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
+ > So we need to bump our requirement from 3.1 to 3.8. If the host doesn't
+ > have a CMake >= 3.8, Buildroot will build its own host-cmake package.
 
- > I'm suggesting that for upcoming 2019.02 release that no attempt is made to build with SSL support for 5.6.
+ > Also drop patch that relax cmake requirement on json-for-modern-cpp
 
- > About to send patch to that effect.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6405647b47b132ff5d0d211b92d407322d52d507
 
-Yes. I was hoping that users of Qt 5.6 would step up and send patches,
-but given that hasn't happened and 2019.02 is overdue, that is probably
-the least bad solution.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Yann E. Morin):
+ >  - Put back a slightly updated comment
+ >  - Drop patch on json-for-modern-cpp
 
-Looking forward to your patch.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
