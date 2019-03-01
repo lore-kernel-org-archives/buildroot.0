@@ -1,62 +1,51 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri,  1 Mar 2019 02:23:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: Fix build without OpenGL ES
-Message-ID: <20190301002311.17071-1-vadim4j@gmail.com>
+From: James Grant <james.grant@jci.com>
+Date: Fri, 1 Mar 2019 15:17:12 +1300
+Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5base: exclude OpenSSL
+ functionality for Qt 5.6.x
+In-Reply-To: <20190301021712.47698-1-james.grant@jci.com>
+References: <20190301021712.47698-1-james.grant@jci.com>
+Message-ID: <20190301021712.47698-2-james.grant@jci.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-efl does not compile without OpenGL ES because it checks for
-GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr
-types if such version is not defined, so fix it by add check also for
-OpenGL 1.5 where these types are defined.
+No patch back-porting OpenSSL 1.1.x support to Qt 5.6.x is available.
 
-Fixes:
-	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
+https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: James Grant <james.grant@jci.com>
 ---
- ...x-check-definition-of-GLsizeiptr-and-GLin.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+ package/qt5/qt5base/qt5base.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
-new file mode 100644
-index 0000000000..07672981d3
---- /dev/null
-+++ b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
-@@ -0,0 +1,30 @@
-+From 161af4faa3b30f0b2db1f9642fca559eeed05da2 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Fri, 1 Mar 2019 01:05:31 +0200
-+Subject: [PATCH 1/1] lib: evas: Fix check definition of GLsizeiptr and
-+ GLintprt
-+
-+GLsizeiptr and GLintptr also defined in GL 1.5 version,
-+so add check for both GL and GLES versions.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ src/lib/evas/Evas_GL.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/lib/evas/Evas_GL.h b/src/lib/evas/Evas_GL.h
-+index fa3e6f4..1928f16 100644
-+--- a/src/lib/evas/Evas_GL.h
-++++ b/src/lib/evas/Evas_GL.h
-+@@ -4270,7 +4270,7 @@ typedef signed int       GLfixed;      // Changed khronos_int32_t
-+ # endif
-+ #endif
-+ 
-+-#ifndef GL_ES_VERSION_2_0
-++#if !defined(GL_VERSION_1_5) && !defined(GL_ES_VERSION_2_0)
-+ /* GL types for handling large vertex buffer objects */
-+ #include <stddef.h>
-+ typedef ptrdiff_t GLintptr;     // Changed khronos_intptr_t
-+-- 
-+2.14.1
-+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 8c0f5f0c9f..a5ce583327 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -52,8 +52,6 @@ else
+ # option '-no-avx512' (available for latest only)
+ endif
+ 
+-QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+-
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+ QT5BASE_CONFIGURE_OPTS += -kms
+ QT5BASE_DEPENDENCIES += libdrm
+@@ -190,8 +188,13 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++# No OpenSSL 1.1.x support in Qt 5.6.x
++QT5BASE_CONFIGURE_OPTS += -no-openssl
++else
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
++endif
+ 
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
 -- 
-2.14.1
+2.21.0
