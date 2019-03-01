@@ -1,95 +1,122 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri,  1 Mar 2019 17:47:08 +0100
-Subject: [Buildroot] [PATCH/next 4/9] package/optee-client: fix build
- warnings 3.4.0
+Date: Fri,  1 Mar 2019 17:47:09 +0100
+Subject: [Buildroot] [PATCH/next 5/9] package/optee-client: support
+ BUILD_STATIC_LIBS
 In-Reply-To: <e709b9364807ed93b5e1dc0edfe8a1dd50006b1b.1551458062.git.etienne.carriere@linaro.org>
 References: <e709b9364807ed93b5e1dc0edfe8a1dd50006b1b.1551458062.git.etienne.carriere@linaro.org>
-Message-ID: <bb232c034ea826652d904417479d7d946ba7593b.1551458062.git.etienne.carriere@linaro.org>
+Message-ID: <eccff8f3e8576166038d8ad2e858e8578edef5e1.1551458062.git.etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And a patch for optee-client package currently synced with tag 3.4.0
-which contains source issues to be fixed.
+Patch optee-client from release 3.4.0 to support building resources
+with static linkage of executable binaries with the user libraries.
+
+The optee-client patch is under review in the OP-TEE project [1] and
+should be merged in the next OP-TEE release 3.5.0.
+
+This change drops !BR2_STATIC_LIBS constraint on package optee-client.
+
+[1] https://github.com/OP-TEE/optee_client/pull/147
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- .../0001-libteec-fix-build-warnings.patch          | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/optee-client/0001-libteec-fix-build-warnings.patch
+ .../0001-libteec-fix-build-warnings.patch          |  4 +-
+ ...pport-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch | 51 ++++++++++++++++++++++
+ package/optee-client/Config.in                     |  4 --
+ 3 files changed, 53 insertions(+), 6 deletions(-)
+ create mode 100644 package/optee-client/0002-cmake-support-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch
 
 diff --git a/package/optee-client/0001-libteec-fix-build-warnings.patch b/package/optee-client/0001-libteec-fix-build-warnings.patch
-new file mode 100644
-index 0000000..21f47ec
---- /dev/null
+index 21f47ec..aec07b4 100644
+--- a/package/optee-client/0001-libteec-fix-build-warnings.patch
 +++ b/package/optee-client/0001-libteec-fix-build-warnings.patch
-@@ -0,0 +1,65 @@
-+From 657414ccd20b4fb2985efd83b0679964fec923c2 Mon Sep 17 00:00:00 2001
+@@ -1,7 +1,7 @@
+-From 657414ccd20b4fb2985efd83b0679964fec923c2 Mon Sep 17 00:00:00 2001
++From 2f5ab18b4886b31a33850ee51f33fb753e9c7b7f Mon Sep 17 00:00:00 2001
+ From: Etienne Carriere <etienne.carriere@linaro.org>
+ Date: Fri, 1 Mar 2019 09:36:46 +0100
+-Subject: [PATCH] libteec: fix build warnings
++Subject: [PATCH 1/2] libteec: fix build warnings
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+diff --git a/package/optee-client/0002-cmake-support-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch b/package/optee-client/0002-cmake-support-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch
+new file mode 100644
+index 0000000..f63f1a3
+--- /dev/null
++++ b/package/optee-client/0002-cmake-support-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch
+@@ -0,0 +1,51 @@
++From 857ed6a900e2f16035a88e73e47d79e9251f6544 Mon Sep 17 00:00:00 2001
 +From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Fri, 1 Mar 2019 09:36:46 +0100
-+Subject: [PATCH] libteec: fix build warnings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++Date: Fri, 1 Mar 2019 12:31:48 +0100
++Subject: [PATCH 2/2] cmake: support BUILD_STATIC_LIBS/BUILD_SHARED_LIBS
 +
-+Fix build warnings reported by the Buildroot team [1]:
++CMake variables BUILD_STATIC_LIBS and BUILD_SHARED_LIBS
++set constraints on libraries and executable linkage.
 +
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-+                            ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_open_session_arg *)buf;
-+        ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_invoke_arg *)buf;
-+        ^
-+
-+[1] http://lists.busybox.net/pipermail/buildroot/2019-February/243437.html
++With this change OP-TEE client CMake script builds and installs the
++embedded files with the expected linkage configuration.
 +
 +Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 +---
-+ libteec/src/tee_client_api.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ libteec/CMakeLists.txt        | 5 +++--
++ tee-supplicant/CMakeLists.txt | 2 +-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/libteec/src/tee_client_api.c b/libteec/src/tee_client_api.c
-+index 698092b..a8683fd 100644
-+--- a/libteec/src/tee_client_api.c
-++++ b/libteec/src/tee_client_api.c
-+@@ -140,7 +140,7 @@ TEEC_Result TEEC_InitializeContext(const char *name, TEEC_Context *ctx)
-+ 		return TEEC_ERROR_BAD_PARAMETERS;
++diff --git a/libteec/CMakeLists.txt b/libteec/CMakeLists.txt
++index 3ec8f66..e3495fb 100644
++--- a/libteec/CMakeLists.txt
+++++ b/libteec/CMakeLists.txt
++@@ -33,7 +33,7 @@ endif()
++ ################################################################################
++ # Built library
++ ################################################################################
++-add_library (teec SHARED ${SRC})
+++add_library (teec ${SRC})
 + 
-+ 	for (n = 0; n < TEEC_MAX_DEV_SEQ; n++) {
-+-		uint32_t gen_caps;
-++		uint32_t gen_caps = 0;
-+ 
-+ 		snprintf(devname, sizeof(devname), "/dev/tee%zu", n);
-+ 		fd = teec_open_dev(devname, name, &gen_caps);
-+@@ -504,7 +504,7 @@ TEEC_Result TEEC_OpenSession(TEEC_Context *ctx, TEEC_Session *session,
-+ 	buf_data.buf_ptr = (uintptr_t)buf;
-+ 	buf_data.buf_len = sizeof(buf);
-+ 
-+-	arg = (struct tee_ioctl_open_session_arg *)buf;
-++	arg = (struct tee_ioctl_open_session_arg *)(void *)buf;
-+ 	arg->num_params = TEEC_CONFIG_PAYLOAD_REF_COUNT;
-+ 	params = (struct tee_ioctl_param *)(arg + 1);
-+ 
-+@@ -578,7 +578,7 @@ TEEC_Result TEEC_InvokeCommand(TEEC_Session *session, uint32_t cmd_id,
-+ 	buf_data.buf_ptr = (uintptr_t)buf;
-+ 	buf_data.buf_len = sizeof(buf);
-+ 
-+-	arg = (struct tee_ioctl_invoke_arg *)buf;
-++	arg = (struct tee_ioctl_invoke_arg *)(void *)buf;
-+ 	arg->num_params = TEEC_CONFIG_PAYLOAD_REF_COUNT;
-+ 	params = (struct tee_ioctl_param *)(arg + 1);
-+ 
++ set_target_properties (teec PROPERTIES
++ 	VERSION ${PROJECT_VERSION}
++@@ -71,4 +71,5 @@ target_link_libraries (teec
++ ################################################################################
++ # FIXME: This should in someway harmonize with CFG_TEE_CLIENT_LOAD_PATH
++ # FIXME: Should we change this to /usr/local/lib?
++-install (TARGETS teec DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++install (TARGETS teec LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++                      ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++diff --git a/tee-supplicant/CMakeLists.txt b/tee-supplicant/CMakeLists.txt
++index d2d3afd..e663be9 100644
++--- a/tee-supplicant/CMakeLists.txt
+++++ b/tee-supplicant/CMakeLists.txt
++@@ -85,4 +85,4 @@ target_link_libraries (${PROJECT_NAME}
++ ################################################################################
++ # Install targets
++ ################################################################################
++-install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_SBINDIR})
+++install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
 +-- 
 +1.9.1
 +
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index db0b7b7..0de136c 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_OPTEE_CLIENT
+ 	bool "optee-client"
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Enable the OP-TEE client package that brings non-secure
+ 	  client application resources for OP-TEE support. OP-TEE
+@@ -12,6 +11,3 @@ config BR2_PACKAGE_OPTEE_CLIENT
+ 	  and invoked by the secure world.
+ 
+ 	  https://github.com/OP-TEE/optee_client
+-
+-comment "optee-client needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
 -- 
 1.9.1
