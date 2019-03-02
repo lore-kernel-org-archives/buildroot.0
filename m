@@ -1,56 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 Mar 2019 22:27:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to version
- 0.19.2
-Message-ID: <20190301212703.10913-1-fontaine.fabrice@gmail.com>
+From: James Grant <jamesg@zaltys.org>
+Date: Sat, 2 Mar 2019 17:07:18 +1300
+Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
+In-Reply-To: <87imx3ufmy.fsf@dell.be.48ers.dk>
+References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
+ <87imx3ufmy.fsf@dell.be.48ers.dk>
+Message-ID: <50637756-4e19-d116-b335-0a2149d25033@zaltys.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fixes CVE-2018-5815 and CVE-2018-5816
-- README has been renamed into README.md
+On 1/03/2019 22:07, Peter Korsgaard wrote:
+>>>>>> "James" == James Grant<james.grant@jci.com>  writes:
+>   > Hi,
+>   > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
+>
+>   >https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
+>
+>   > I'm suggesting that for upcoming 2019.02 release that no attempt is made to build with SSL support for 5.6.
+>
+>   > About to send patch to that effect.
+>
+> Yes. I was hoping that users of Qt 5.6 would step up and send patches,
+> but given that hasn't happened and 2019.02 is overdue, that is probably
+> the least bad solution.
+>
+> Looking forward to your patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libraw/libraw.hash | 4 ++--
- package/libraw/libraw.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Earliest version of a OpenSSL 1.1 patch for Qt 5.x I can find is against 
+Qt 5.7 (LGPLv3). If you adapted / backported that for Qt 5.6 there is an 
+argument you're contaminating LGPLv2 Qt5.6 with LGPLv3 code - defeating 
+the whole point of keeping Qt 5.6 for many.
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index c546b1bee5..643a2109b5 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256	7cf724a40a0d8915869498f51062a952167e4f5bae2b6920542c9e0e079a471d	LibRaw-0.18.11.tar.gz
-+sha256	400d47969292291d297873a06fb0535ccce70728117463927ddd9452aa849644	LibRaw-0.19.2.tar.gz
- sha256	eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449	LICENSE.LGPL
- sha256	0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f	LICENSE.CDDL
--sha256	7fe7564c5d48c5d353d7c1966dcddada3791586a4c2eedbc68ad56e96955e75d	README
-+sha256	eee0055723d3483ef3ee7920e2178177b14a334c2a622be4101bcfb05d21407e	README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 4ff7462647..0d95207b73 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRAW_VERSION = 0.18.11
-+LIBRAW_VERSION = 0.19.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
-@@ -14,7 +14,7 @@ LIBRAW_CONF_OPTS += \
- 	--disable-demosaic-pack-gpl2 \
- 	--disable-demosaic-pack-gpl3
- LIBRAW_LICENSE = LGPL-2.1 or CDDL-1.0
--LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README
-+LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README.md
- LIBRAW_DEPENDENCIES = host-pkgconf
- LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
--- 
-2.14.1
+I got Qt 5.6 compiling with LibreSSL (which is keeping a level of 
+OpenSSL 1.0 compatibility).? Currently Qt is set to dlopen() OpenSSL at 
+runtime (-openssl), changing this to shared linkage (-openssl-linked), 
+then compiling only the SSL module with -fpermissive yields a working 
+build. No actual code changes needed.
+
+Is there really any benefit to dlopen() OpenSSL on an embedded system in 
+any case?
+
+The -fpermissive flag is needed to workaround? 'const BIO_METHOD *' vs. 
+'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function signatures.
+
+'download' example successfully downloaded a file from a https site for me.
+
+Should I put together a patch doing this? ... or is someone likely to 
+come forward with a more comprehensive LGPLv2 licensed fix?
+
+Regards,
+James Grant.
