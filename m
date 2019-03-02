@@ -1,46 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 Mar 2019 21:24:35 +0100
-Subject: [Buildroot] [git commit] package/devmem2: Fix DEVMEM2_SITE variable
-Message-ID: <20190302202734.ACD878E245@busybox.osuosl.org>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sat, 2 Mar 2019 23:13:42 +0200
+Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
+In-Reply-To: <875zt1kona.fsf@dell.be.48ers.dk>
+References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
+ <87imx3ufmy.fsf@dell.be.48ers.dk>
+ <50637756-4e19-d116-b335-0a2149d25033@zaltys.org>
+ <875zt1kona.fsf@dell.be.48ers.dk>
+Message-ID: <20190302211342.ww5xlkllobrccxxc@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=408b48b5c58e478a615e50f94989576c133ea8d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-The old free-electrons.com URL does not seem to work anymore,
-resulting in the package failing to build. Use bootlin.com instead.
+On Sat, Mar 02, 2019 at 09:27:37PM +0100, Peter Korsgaard wrote:
+> >>>>> "James" == James Grant <jamesg@zaltys.org> writes:
+> 
+>  > On 1/03/2019 22:07, Peter Korsgaard wrote:
+>  >>>>>>> "James" == James Grant<james.grant@jci.com>  writes:
+>  >> > Hi,
+>  >> > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
+>  >> 
+>  >> >https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
+>  >> 
+>  >> > I'm suggesting that for upcoming 2019.02 release that no attempt
+>  >> > is made to build with SSL support for 5.6.
+>  >> 
+>  >> > About to send patch to that effect.
+>  >> 
+>  >> Yes. I was hoping that users of Qt 5.6 would step up and send patches,
+>  >> but given that hasn't happened and 2019.02 is overdue, that is probably
+>  >> the least bad solution.
+>  >> 
+>  >> Looking forward to your patch.
+> 
+>  > Earliest version of a OpenSSL 1.1 patch for Qt 5.x I can find is
+>  > against Qt 5.7 (LGPLv3). If you adapted / backported that for Qt 5.6
+>  > there is an argument you're contaminating LGPLv2 Qt5.6 with LGPLv3
+>  > code - defeating the whole point of keeping Qt 5.6 for many.
+> 
+> Yes, agreed.
+> 
+>  > I got Qt 5.6 compiling with LibreSSL (which is keeping a level of
+>  > OpenSSL 1.0 compatibility).? Currently Qt is set to dlopen() OpenSSL
+>  > at runtime (-openssl), changing this to shared linkage
+>  > (-openssl-linked), then compiling only the SSL module with
+>  > -fpermissive yields a working build. No actual code changes needed.
+> 
+>  > Is there really any benefit to dlopen() OpenSSL on an embedded system
+>  > in any case?
+> 
+> Not that I am aware of.
+> 
+> 
+>  > The -fpermissive flag is needed to workaround? 'const BIO_METHOD *'
+>  > vs. 'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function
+>  > signatures.
+> 
+>  > 'download' example successfully downloaded a file from a https site for me.
+> 
+>  > Should I put together a patch doing this? ... or is someone likely to
+>  > come forward with a more comprehensive LGPLv2 licensed fix?
+> 
+> If it is a simple patch, then please post it. It may be interesting for
+> users on 5.6.
+> 
 
-Signed-off-by: Xavier Ruppen <xruppen@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/devmem2/Config.in  | 2 +-
- package/devmem2/devmem2.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Just FYI, I found only this patch:
 
-diff --git a/package/devmem2/Config.in b/package/devmem2/Config.in
-index 64d6400bd8..1ccb0553b4 100644
---- a/package/devmem2/Config.in
-+++ b/package/devmem2/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_DEVMEM2
- 	help
- 	  Simple program to read/write from/to any location in memory.
- 
--	  http://free-electrons.com/pub/mirror/devmem2.c
-+	  http://bootlin.com/pub/mirror/devmem2.c
-diff --git a/package/devmem2/devmem2.mk b/package/devmem2/devmem2.mk
-index 044e6fa596..e1bbee3b78 100644
---- a/package/devmem2/devmem2.mk
-+++ b/package/devmem2/devmem2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DEVMEM2_SITE = http://free-electrons.com/pub/mirror
-+DEVMEM2_SITE = http://bootlin.com/pub/mirror
- DEVMEM2_SOURCE = devmem2.c
- DEVMEM2_VERSION = 1
- DEVMEM2_LICENSE = GPL-2.0+
+    https://github.com/patch-exchange/openssl-1.1-transition/blob/master/qt5-qtbase/qtbase-5.7.0-openssl-1.1.patch
+
+Regards,
+Vadim Kochan
