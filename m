@@ -1,22 +1,22 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Mar 2019 11:16:32 +0100
-Subject: [Buildroot] [PATCH 4/8 v2] support/graph-depends: also cut on
- host-tar
+Date: Sun,  3 Mar 2019 11:16:33 +0100
+Subject: [Buildroot] [PATCH 5/8 v2] support/graph-depends: also cut on
+ host-gzip
 In-Reply-To: <cover.1551608168.git.yann.morin.1998@free.fr>
 References: <cover.1551608168.git.yann.morin.1998@free.fr>
-Message-ID: <dd0aba483012006a58f3e1be87a28dc2a9f35af6.1551608168.git.yann.morin.1998@free.fr>
+Message-ID: <54a5230dcc7d087c93c86805a89a3652b4fca09c.1551608168.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When host-tar is needed, it is a mandatory dependency of all packages.
-As such, drawing the dependency lines toward host-tar would uselessly
+When host-gzip is needed, it is a mandatory dependency of all packages.
+As such, drawing the dependency lines toward host-gzip would uselessly
 clutter the graph.
 
-So, like for the skeleton and host-skeleton, we cut the dependency chains
-toward host-tar.
+So, like for the skeleton, host-skeleton, and host-tar, we cut the
+dependency chains toward host-gzip.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -25,15 +25,15 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index c3e5d83ee8..3143c61cc4 100755
+index 3143c61cc4..29134c8237 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
 @@ -172,7 +172,7 @@ def remove_transitive_deps(pkg, deps):
  
  # List of dependencies that all/many packages have, and that we want
  # to trim when generating the dependency graph.
--MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton']
-+MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar']
+-MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar']
++MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar', 'host-gzip']
  
  
  # This function removes the dependency on some 'mandatory' package, like the
