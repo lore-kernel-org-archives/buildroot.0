@@ -1,96 +1,92 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon,  4 Mar 2019 01:23:40 +0200
-Subject: [Buildroot] [PATCH] package/sunxi-tools: Fix build meminfo with musl
-Message-ID: <20190303232340.23904-1-vadim4j@gmail.com>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon,  4 Mar 2019 07:44:18 +0800
+Subject: [Buildroot] [PATCH 1/3] package/python-terminaltables: new package
+Message-ID: <20190303234420.1727-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl does not provide inx/outx API for ARM arch, so use
-io memory access via pointers which is actually done this
-way in glibc/ulibc.
+From: James Hilliard <james.hilliard1@gmail.com>
 
-Fixes:
-    http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
+Generate simple tables in terminals from a nested list of strings.
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
+ DEVELOPERS                                          |  1 +
+ package/Config.in                                   |  1 +
+ package/python-terminaltables/Config.in             |  6 ++++++
+ .../python-terminaltables.hash                      |  3 +++
+ .../python-terminaltables/python-terminaltables.mk  | 13 +++++++++++++
+ 5 files changed, 24 insertions(+)
+ create mode 100644 package/python-terminaltables/Config.in
+ create mode 100644 package/python-terminaltables/python-terminaltables.hash
+ create mode 100644 package/python-terminaltables/python-terminaltables.mk
 
-PATCH v1:
-       1) Tested on board with A13 SoC
-
-RFT v2:
-       1) Fixed mistaken copy-paste-n-replace of outl by sunxi_io_write in sunxi_io_mask(...)
- ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-
-diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f192927225..5e86c2cbc7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1039,6 +1039,7 @@ F:	package/python-async-timeout/
+ F:	package/python-cchardet/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
++F:	package/python-terminaltables/
+ F:	package/python-yarl/
+ 
+ N:	James Knight <james.knight@rockwellcollins.com>
+diff --git a/package/Config.in b/package/Config.in
+index 420e6e95a3..adb3cc9151 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1050,6 +1050,7 @@ menu "External python modules"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
++	source "package/python-terminaltables/Config.in"
+ 	source "package/python-texttable/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+diff --git a/package/python-terminaltables/Config.in b/package/python-terminaltables/Config.in
 new file mode 100644
-index 0000000000..997c413f23
+index 0000000000..bb3c51c48f
 --- /dev/null
-+++ b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-@@ -0,0 +1,59 @@
-+From 5c0a443ba336f10a8db6a99c769aa84ad37ed4d2 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Wed, 20 Feb 2019 02:48:43 +0200
-+Subject: [PATCH] meminfo: Access to io memory via pointers
++++ b/package/python-terminaltables/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TERMINALTABLES
++	bool "python-terminaltables"
++	help
++	  Generate simple tables in terminals from a nested list of strings.
 +
-+The main reason for this is to be able compile with musl library,
-+because there is no support of inx/outx functions for ARM platform.
++	  https://github.com/Robpol86/terminaltables
+diff --git a/package/python-terminaltables/python-terminaltables.hash b/package/python-terminaltables/python-terminaltables.hash
+new file mode 100644
+index 0000000000..3184f5f716
+--- /dev/null
++++ b/package/python-terminaltables/python-terminaltables.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/terminaltables/json
++md5	863797674d8f75d22e16e6c1fdcbeb41  terminaltables-3.1.0.tar.gz
++sha256	f3eb0eb92e3833972ac36796293ca0906e998dc3be91fbe1f8615b331b853b81  terminaltables-3.1.0.tar.gz
+diff --git a/package/python-terminaltables/python-terminaltables.mk b/package/python-terminaltables/python-terminaltables.mk
+new file mode 100644
+index 0000000000..763f82e9a2
+--- /dev/null
++++ b/package/python-terminaltables/python-terminaltables.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-terminaltables
++#
++################################################################################
 +
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ meminfo.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
++PYTHON_TERMINALTABLES_VERSION = 3.1.0
++PYTHON_TERMINALTABLES_SOURCE = terminaltables-$(PYTHON_TERMINALTABLES_VERSION).tar.gz
++PYTHON_TERMINALTABLES_SITE = https://files.pythonhosted.org/packages/9b/c4/4a21174f32f8a7e1104798c445dacdc1d4df86f2f26722767034e4de4bff
++PYTHON_TERMINALTABLES_SETUP_TYPE = setuptools
++PYTHON_TERMINALTABLES_LICENSE = MIT
 +
-+diff --git a/meminfo.c b/meminfo.c
-+index 0b0ff23..7d9f10f 100644
-+--- a/meminfo.c
-++++ b/meminfo.c
-+@@ -22,7 +22,6 @@
-+ #include <sys/mman.h>
-+ #include <stdint.h>
-+ #include <errno.h>
-+-#include <sys/io.h>
-+ #include <stdbool.h>
-+ 
-+ #include "common.h"
-+@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
-+ unsigned int
-+ sunxi_io_read(void *base, int offset)
-+ {
-+-	return inl((unsigned long) (base + offset));
-++	unsigned long port = (unsigned long) (base + offset);
-++	return *((volatile unsigned long *) port);
-+ }
-+ 
-+ void
-+ sunxi_io_write(void *base, int offset, unsigned int value)
-+ {
-+-	outl(value, (unsigned long) (base + offset));
-++	unsigned long port = (unsigned long) (base + offset);
-++	*((volatile unsigned long *) port) = value;
-+ }
-+ 
-+ void
-+ sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
-+ {
-+-	unsigned int tmp = inl((unsigned long) (base + offset));
-++	unsigned int tmp = sunxi_io_read(base, offset);
-+ 
-+ 	tmp &= ~mask;
-+ 	tmp |= value & mask;
-+ 
-+-	outl(tmp, (unsigned long) (base + offset));
-++	sunxi_io_write(base, offset, tmp);
-+ }
-+ 
-+ 
-+-- 
-+2.14.1
-+
++$(eval $(python-package))
 -- 
-2.14.1
+2.17.1
