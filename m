@@ -1,144 +1,138 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Mar 2019 11:16:34 +0100
-Subject: [Buildroot] [PATCH 6/8 v2] infra/pkg-generic: use pure
- Makefile-based recursive dependencies
+Date: Sun,  3 Mar 2019 11:16:35 +0100
+Subject: [Buildroot] [PATCH 7/8 v2] core: add make-based full-dependency list
 In-Reply-To: <cover.1551608168.git.yann.morin.1998@free.fr>
 References: <cover.1551608168.git.yann.morin.1998@free.fr>
-Message-ID: <7db07f60e79a87fbfd832aa5c6287641aeb78cf3.1551608168.git.yann.morin.1998@free.fr>
+Message-ID: <441a286ab4c051146d250a65115a40431727faac.1551608168.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Calling to the graph-depends script is very costly, as it calls back to
-'make' a lot of time.
+Currently, when we need to build the full dependency graph, we call make
+to show the list of packages (make show-targets), and then call it again
+and again iteratively while it returns new packages.
 
-It turns out that we already have the list of recursive dependencies, so
-we can just print that.
+Since calling make will parse the whole set of our Makefiles, this takes
+quite a bit of time (~4s each here), and the total can get pretty long.
 
-As for the recursive reverse dependencies, we use the same memoisation
-technique to cut-down on the expansion cost, which would otherwise be on
-the order of ?(??) (with ? enabled packages).
+However, make being make, already builds the whole dependency tree
+information, so we can just ask for it.
 
-From a defconfig, modified to use glibc, C++, wchar, locales, ssp, and
-allyespackageconfig (tweaked to avoid multi providers, etc...), the
-timings for X-show-recursive-rdepends are:
+Add a new top-level rule 'show-dependency-tree' that displays the whole
+set of dependencies for all packages. For each package, its name, type
+and version is displayed, then all the direct, first-level dependencies
+are dumped. We choose a format that is not unlike the dot-graph format,
+because it is both easy to read as a human, and easy to parse as a
+machine:
 
-                    before      after       speedup     #rdeps
-    libnss          0m22.932s   0m5.775s     3.97x      3
-    qt5base         0m41.176s   0m5.781s     7.12x      67
-    libjpeg         0m56.185s   0m5.749s     9.71x      228
-    libxml2         0m54.964s   0m5.795s     9.48x      271
-    freetype        0m46.754s   0m5.819s     8.07x      287
-    libpng          0m53.577s   0m5.760s     9.30x      303
-    sqlite          1m15.222s   0m5.807s    12.95x      801
-    libopenssl      1m25.471s   0m5.844s    14.63x      931
-    readline        1m13.805s   0m5.775s    12.78x      958
-    libzlib         1m11.807s   0m5.820s    12.34x      1039
-    toolchain       1m23.712s   0m6.080s    13.77x      2107
-    skeleton        1m27.839s   0m6.293s    13.96x      2111 (+1)
-    host-skeleton   1m27.405s   0m6.350s    13.76x      2172 (+2)
+    foo: target 1.2.3
+    foo -> bar host-meh
+    bar: target virtual
+    bar -> buz
+    buz: target 2.3.4
+    buz ->
+    host-meh: host virtual
+    host-meh -> host-bleark
+    host-bleark: host 3.4.5
+    host-bleark ->
+    rootfs-meh: host
+    rootfs-meh -> host-bleark
 
-  - speedup: ratio before/after
-  - #rdeps: number of recursive reverse dependencies, with the extra
-            dependencies returned with this patch, see below for the
-            reason.
+To be noted: rootfs are currently reported as if they were 'host'
+packages, to stay aligned with how graph-depends currently treats them.
+Ideally, graph-depends could be enhanced to recognise them separately,
+but that is another story.
 
-So, for a low-level package with a lot of reverse dependencies, like
-libzlibz, libopenssl or readline are, the timings are already very much
-in favour of the change. This is less impressive with packages that
-have few dependencies (libnss), but still much faster.
+For just plain defconfig, which is about the smallest config we can have
+with an internal toolchain, we already have a seven-fold improvement
+(with the graph-depends rule modified to not run the pdf generation, to
+be able to just compare the tree generation):
 
-Also, remember that the config tested has as much packages enabled as
-possible, so is in itself a degenerate case. With simpler and more
-realistic configurations, the gains would probably be a bit lower than
-reported above, but various tests still report good improvements
-overall (note: coming up with a 'realistic' configuration is pretty
-hard, as everyone and their dog have their notion of what is realistic
-in their context, so nothing displayed here; timings are left as an
-exercise for the interested parties to report aggravation in their
-cases should they notice some regression).
+    $ time make graph-depends
+    real    0m27.344s
+    $ time make show-dependency-tree
+    real    0m3.848s
 
-Note that, more recursive reverse dependencies may be displayed now,
-since we do not apply the exceptions applied in graph-depends. For
-example, host-skeleton gains two new recursive reverse dependencies:
-skeleton and toolchain, which are both exceptions in graph-depends.
+From defconfig, C++, wchar, locales, ssp, and allyespackageconfig,
+tweaked for even more packages (qt5 not qt4, luajit to avoid multi
+providers, etc...), the timings are (graph-depends still modified to
+not generate the pdf):
 
-As for direct (not reverse) dependencies: the gain is not as fantastic
-as for reverse ones, but it is still noticeable, especially thanks to
-a21212fb7cf (package/pkg-generic: speed up RECURSIVE_FINAL_DEPENDENCIES);
-just a few examples for %-show-recursive-depends:
+    $ time make graph-depends
+    real    1m56.459s
+    $ time make show-dependency-tree
+    real    0m5.748s
 
-                    before      after       speedup     #deps
-    libzlib         0m46.864s   0m5.902s     7.94x      17
-    qt5base         0m57.590s   0m5.848s     9.85x      190
-    sqlite          0m46.601s   0m5.816s     8.01x      24
-
-Basically, displaying recursive dependencies, direct or reverse, is
-almost a constant now: it only slightly varies by about 10% depending
-on the complexity of the dependency chain, with the parsing of the
-Makefiles still accounting for the large majority of the time.
-
-(PS. Thanks to Joseph for suggesting a list of interesting packages
-to test, and thanks to Trent for his example of memoisation!)
+There. I don't think those numbers need any explanation whatsoever;
+they do speak on their own. OK, for maths sake, the ratio is about
+twenty-fold. So, "yeah", I guess... ;-)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: Trent Piepho <tpiepho@impinj.com>
-
 ---
-Changes v1 -> v2:
-  - use memoisation  (Thanks Trent!)
-  - redo the timings
-  - drop the comments about skeleton and host-skeleton, that are no
-    longer degenerate cases
----
- package/pkg-generic.mk | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ Makefile               | 4 ++++
+ fs/common.mk           | 8 ++++++++
+ package/pkg-generic.mk | 4 ++++
+ 3 files changed, 16 insertions(+)
 
+diff --git a/Makefile b/Makefile
+index 3d95d066fb..7d127e3799 100644
+--- a/Makefile
++++ b/Makefile
+@@ -876,6 +876,10 @@ graph-depends-requirements:
+ 	@dot -? >/dev/null 2>&1 || \
+ 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
+ 
++.PHONY: show-dependency-tree
++show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
++	@:
++
+ .PHONY: graph-depends
+ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+diff --git a/fs/common.mk b/fs/common.mk
+index a560417c6c..daa43efd75 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -47,6 +47,10 @@ ROOTFS_COMMON_DEPENDENCIES = \
+ 	$(BR2_TAR_HOST_DEPENDENCY) \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
++rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
++	$(info rootfs-common: host)
++	$(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
++
+ .PHONY: rootfs-common
+ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	@$(call MESSAGE,"Generating root filesystems common tables")
+@@ -80,6 +84,10 @@ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+ 
+ ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+ 
++rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
++	$$(info rootfs-$(1): host)
++	$$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
++
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+ ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 4353bd3868..0d17e62a70 100644
+index 0d17e62a70..62c2e221f7 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -649,6 +649,18 @@ $(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
- 	) \
- 	$$($(2)_FINAL_RECURSIVE_DEPENDENCIES__X))
- 
-+$(2)_FINAL_RECURSIVE_RDEPENDENCIES = $$(sort \
-+	$$(if $$(filter undefined,$$(origin $(2)_FINAL_RECURSIVE_RDEPENDENCIES__X)), \
-+		$$(eval $(2)_FINAL_RECURSIVE_RDEPENDENCIES__X := \
-+			$$(foreach p, \
-+				$$($(2)_RDEPENDENCIES), \
-+				$$(p) \
-+				$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_RDEPENDENCIES) \
-+			) \
-+		) \
-+	) \
-+	$$($(2)_FINAL_RECURSIVE_RDEPENDENCIES__X))
-+
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
-@@ -826,15 +838,13 @@ $(1)-show-depends:
- 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
- 
- $(1)-show-recursive-depends:
--			@cd "$$(CONFIG_DIR)" && \
--			$$(TOPDIR)/support/scripts/graph-depends -p $(1) -f -q
-+			@echo $$($(2)_FINAL_RECURSIVE_DEPENDENCIES)
- 
- $(1)-show-rdepends:
- 			@echo $$($(2)_RDEPENDENCIES)
- 
- $(1)-show-recursive-rdepends:
--			@cd "$$(CONFIG_DIR)" && \
--			$$(TOPDIR)/support/scripts/graph-depends -p $(1) --reverse -f -q
-+			@echo $$($(2)_FINAL_RECURSIVE_RDEPENDENCIES)
- 
- $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
+@@ -850,6 +850,10 @@ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPEND
  	@:
+ 	$$(info $(1))
+ 
++$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_ALL_DEPENDENCIES))
++	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
++	$$(info $(1) -> $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(d)))
++
+ $(1)-graph-depends: graph-depends-requirements
+ 	$(call pkg-graph-depends,$(1),--direct)
+ 
 -- 
 2.14.1
