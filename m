@@ -1,60 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Mar 2019 20:37:14 +0100
-Subject: [Buildroot] [git commit] package/tor: fix static build with openssl
-Message-ID: <20190303193548.B47128E24D@busybox.osuosl.org>
+From: Xavier Ruppen <xruppen@gmail.com>
+Date: Sun,  3 Mar 2019 21:04:41 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: fix "Timed out waiting
+ for device /dev/console."
+In-Reply-To: <20190303113052.9120-1-xruppen@gmail.com>
+References: <20190303113052.9120-1-xruppen@gmail.com>
+Message-ID: <20190303200441.15925-1-xruppen@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0b169363be148944365b09b1676ba685dc9878f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Buildroot built with systemd fails to open a login prompt on the
+serial port when /dev/console is specified as BR2_TARGET_GENERIC_GETTY_PORT
+(which is its default value):
 
-Fixes:
- - http://autobuild.buildroot.org/results/102796d74e63d0d203e6ac9e2094052588188e6d
+systemd[1]: dev-console.device: Job dev-console.device/start timed out.
+systemd[1]: Timed out waiting for device /dev/console.
+systemd[1]: Dependency failed for Serial Getty on console.
+systemd[1]: serial-getty at console.service: Job serial-getty at console.service/start failed with result 'dependency'.
+systemd[1]: dev-console.device: Job dev-console.device/start failed with result 'timeout'.
+systemd[1]: Reached target Login Prompts.
+systemd[1]: Reached target Multi-User System.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+According to this issue on Github [1], serial-getty at .service should
+not be instantiated on /dev/console, console-getty at .service should
+be used instead. This stems from the fact that there should be no
+dependency on /dev/console.
+
+[1] https://github.com/systemd/systemd/issues/10914
+
+Signed-off-by: Xavier Ruppen <xruppen@gmail.com>
 ---
- package/tor/0001-Fix-static-linking-with-OpenSSL.patch | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ Changes v1 -> v2:
+  - swap tty and console if statements
+  - use equality operator instead of grep for "console"
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-index 516dc16da3..50ea00af7a 100644
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-@@ -10,13 +10,15 @@ and remove host paths when looking for openssl.
-  - Adapt the patch to make it apply on the new version.]
- [Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10 &
-         0.3.4.8, 0.3.5.7]
-+[Fabrice: fix detection of openssl functions in 0.3.5.8]
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-- configure.ac         | 2 +-
-+ configure.ac         | 4 ++--
-  src/test/include.am  | 8 ++++----
-  src/tools/include.am | 4 ++--
-- 3 files changed, 7 insertions(+), 7 deletions(-)
-+ 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/systemd/systemd.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 7a46a50ed3..3c75931527 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -397,9 +397,13 @@ endef
  
- diff --git a/configure.ac b/configure.ac
- index 05e1392cf..580befa6b 100644
-@@ -31,6 +33,15 @@ index 05e1392cf..580befa6b 100644
-      [#include <openssl/ssl.h>
-       char *getenv(const char *);],
-      [struct ssl_cipher_st;
-+@@ -919,7 +919,7 @@ dnl Now check for particular openssl functions.
-+ save_LIBS="$LIBS"
-+ save_LDFLAGS="$LDFLAGS"
-+ save_CPPFLAGS="$CPPFLAGS"
-+-LIBS="$TOR_OPENSSL_LIBS $LIBS"
-++LIBS="$TOR_OPENSSL_LIBS -lz $LIBS"
-+ LDFLAGS="$TOR_LDFLAGS_openssl $LDFLAGS"
-+ CPPFLAGS="$TOR_CPPFLAGS_openssl $CPPFLAGS"
-+ 
- diff --git a/src/test/include.am b/src/test/include.am
- index ecb768957..39a622e88 100644
- --- a/src/test/include.am
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd needs getty.service for VTs and serial-getty.service for serial ttys
++# note that console-getty.service should be used on /dev/console as it should not have dependencies
+ # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
+ define SYSTEMD_INSTALL_SERVICE_TTY
+-	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
++	if [ $(BR2_TARGET_GENERIC_GETTY_PORT) = "console" ]; \
++	then \
++		SERVICE="console-getty"; \
++	elif echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+ 	then \
+ 		SERVICE="getty"; \
+ 	else \
+-- 
+2.21.0
