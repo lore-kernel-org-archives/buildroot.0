@@ -1,67 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Mar 2019 23:10:29 +0100
-Subject: [Buildroot] [git commit] package/gqrx: link with libatomic when
- needed
-Message-ID: <20190303220826.061F48165D@busybox.osuosl.org>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Mon,  4 Mar 2019 01:23:40 +0200
+Subject: [Buildroot] [PATCH] package/sunxi-tools: Fix build meminfo with musl
+Message-ID: <20190303232340.23904-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0928b7c0e9cb67db0e746c6373bf20ca8aa62f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-On some architectures, atomic builtins are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+musl does not provide inx/outx API for ARM arch, so use
+io memory access via pointers which is actually done this
+way in glibc/ulibc.
 
 Fixes:
- - http://autobuild.buildroot.net/results/a003ad5324a0c0f55cb8db5d3e5d69bd21999e16/
- - http://autobuild.buildroot.net/results/464602175d026d135125e5baa00e0729aec7a931/
+    http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-[Peter: add dependency on sync or atomic builtins in Config, addd comment]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/gqrx/Config.in | 2 ++
- package/gqrx/gqrx.mk   | 6 ++++++
- 2 files changed, 8 insertions(+)
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index a46409e333..b0d7e7b9f3 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -1,6 +1,7 @@
- comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU # gnuradio
- 	depends on !BR2_PACKAGE_PYTHON3 # gnuradio
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || !BR2_STATIC_LIBS
- 
-@@ -14,6 +15,7 @@ config BR2_PACKAGE_GQRX
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR # boost
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_BOOST
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index b51bb23eaf..d93c07d10c 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -12,4 +12,10 @@ GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
- 
- GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
- 
-+# gqrx can use __atomic builtins, so we need to link with
-+# libatomic when available
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GQRX_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
+PATCH v1:
+       1) Tested on board with A13 SoC
+
+RFT v2:
+       1) Fixed mistaken copy-paste-n-replace of outl by sunxi_io_write in sunxi_io_mask(...)
+ ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+
+diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+new file mode 100644
+index 0000000000..997c413f23
+--- /dev/null
++++ b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
+@@ -0,0 +1,59 @@
++From 5c0a443ba336f10a8db6a99c769aa84ad37ed4d2 Mon Sep 17 00:00:00 2001
++From: Vadim Kochan <vadim4j@gmail.com>
++Date: Wed, 20 Feb 2019 02:48:43 +0200
++Subject: [PATCH] meminfo: Access to io memory via pointers
 +
- $(eval $(cmake-package))
++The main reason for this is to be able compile with musl library,
++because there is no support of inx/outx functions for ARM platform.
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ meminfo.c | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/meminfo.c b/meminfo.c
++index 0b0ff23..7d9f10f 100644
++--- a/meminfo.c
+++++ b/meminfo.c
++@@ -22,7 +22,6 @@
++ #include <sys/mman.h>
++ #include <stdint.h>
++ #include <errno.h>
++-#include <sys/io.h>
++ #include <stdbool.h>
++ 
++ #include "common.h"
++@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
++ unsigned int
++ sunxi_io_read(void *base, int offset)
++ {
++-	return inl((unsigned long) (base + offset));
+++	unsigned long port = (unsigned long) (base + offset);
+++	return *((volatile unsigned long *) port);
++ }
++ 
++ void
++ sunxi_io_write(void *base, int offset, unsigned int value)
++ {
++-	outl(value, (unsigned long) (base + offset));
+++	unsigned long port = (unsigned long) (base + offset);
+++	*((volatile unsigned long *) port) = value;
++ }
++ 
++ void
++ sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
++ {
++-	unsigned int tmp = inl((unsigned long) (base + offset));
+++	unsigned int tmp = sunxi_io_read(base, offset);
++ 
++ 	tmp &= ~mask;
++ 	tmp |= value & mask;
++ 
++-	outl(tmp, (unsigned long) (base + offset));
+++	sunxi_io_write(base, offset, tmp);
++ }
++ 
++ 
++-- 
++2.14.1
++
+-- 
+2.14.1
