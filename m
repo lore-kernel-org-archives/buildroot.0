@@ -1,39 +1,74 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 02 Mar 2019 17:52:32 -0800
-Subject: [Buildroot] [PATCH 1/1] go: explicitly disable modules to avoid
- unintended network lookup
-In-Reply-To: <20190213091601.wnoefujowo6j5t7q@bifrost>
-References: <20190126102355.24766-1-christian@paral.in>
- <87va1pgyhe.fsf@paral.in> <20190212165759.euozased2t6zrmka@bifrost>
- <87sgwsh6k7.fsf@paral.in> <20190213091601.wnoefujowo6j5t7q@bifrost>
-Message-ID: <87lg1wg1wf.fsf@paral.in>
+From: James Grant <jamesg@zaltys.org>
+Date: Sun,  3 Mar 2019 18:51:03 +1300
+Subject: [Buildroot] [PATCH] package/qt5/qt5base: build Qt 5.6 with LibreSSL
+ if present.
+Message-ID: <20190303055103.39033-1-jamesg@zaltys.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+LibreSSL build is successful with shared linkage, but not default dlopen().
 
-Anisse Astier <anisse@astier.eu> writes:
->> If you do this reproduction with ANY > go1.11 version of Buildroot
->> today:
->> 
->> export GO111MODULE=on
->> make docker-engine
->> 
->> Then Buildroot will leak the GO111MODULE variable into the build
->> process, and Go will start downloading dependencies from the internet
->> and ignore GOPATH. 
->> 
->> Here is a reproduction, where Go makes network calls:
->> 
->> https://asciinema.org/a/pKktUhsN2NDoWkiCEgW9iUPbA
+Also adds patch for successful compilation by using -fpermissive.
 
-This is still the case today. What are the statuses of these patches?
+Signed-off-by: James Grant <jamesg@zaltys.org>
+---
+ ...rmissive-gcc-flag-to-allow-compilati.patch | 29 +++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk                |  4 ++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
+ create mode 100644 package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
 
- - https://patchwork.ozlabs.org/patch/1031429/
- - https://patchwork.ozlabs.org/patch/1048076/
-
-Best regards,
-Christian
+diff --git a/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch b/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
+new file mode 100644
+index 0000000000..c8fc426f79
+--- /dev/null
++++ b/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
+@@ -0,0 +1,29 @@
++From 62588f2d8267c67c2337004e83e80695280db9eb Mon Sep 17 00:00:00 2001
++From: James Grant <jamesg@zaltys.org>
++Date: Sun, 3 Mar 2019 17:29:29 +1300
++Subject: [PATCH 1/1] libressl - add -fpermissive gcc flag to allow
++ compilation.
++
++Workaround for 'const BIO_METHOD *' vs. 'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function signatures.
++
++Signed-off-by: James Grant <jamesg@zaltys.org>
++---
++ src/network/ssl/ssl.pri | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
++index 29c47cd7..f0aad448 100644
++--- a/src/network/ssl/ssl.pri
+++++ b/src/network/ssl/ssl.pri
++@@ -77,7 +77,7 @@ android:!android-no-sdk: SOURCES += ssl/qsslsocket_openssl_android.cpp
++         LIBS_PRIVATE += $$OPENSSL_LIBS_RELEASE
++     }
++ 
++-    QMAKE_CXXFLAGS += $$OPENSSL_CFLAGS
+++    QMAKE_CXXFLAGS += $$OPENSSL_CFLAGS -fpermissive
++     LIBS_PRIVATE += $$OPENSSL_LIBS
++     win32: LIBS_PRIVATE += -lcrypt32
++ }
++-- 
++2.18.1
++
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a5ce583327..e7f6e658f1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -190,7 +190,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ # No OpenSSL 1.1.x support in Qt 5.6.x
+-QT5BASE_CONFIGURE_OPTS += -no-openssl
++# LibreSSL works with shared linkage only and -fpermissive patch
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBRESSL),-openssl-linked,-no-openssl)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBRESSL),openssl)
+ else
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
+-- 
+2.18.1
