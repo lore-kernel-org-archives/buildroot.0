@@ -1,9 +1,9 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon,  4 Mar 2019 07:44:19 +0800
-Subject: [Buildroot] [PATCH 2/3] package/python-aioconsole: new package
+Date: Mon,  4 Mar 2019 07:44:20 +0800
+Subject: [Buildroot] [PATCH 3/3] package/python-aiomonitor: new package
 In-Reply-To: <20190303234420.1727-1-james.hilliard1@gmail.com>
 References: <20190303234420.1727-1-james.hilliard1@gmail.com>
-Message-ID: <20190303234420.1727-2-james.hilliard1@gmail.com>
+Message-ID: <20190303234420.1727-3-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,83 +12,90 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-Asynchronous console and interfaces for asyncio.
+aiomonitor adds monitor and python REPL capabilities for
+asyncio application.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
  DEVELOPERS                                       |  1 +
  package/Config.in                                |  1 +
- package/python-aioconsole/Config.in              |  7 +++++++
- package/python-aioconsole/python-aioconsole.hash |  3 +++
- package/python-aioconsole/python-aioconsole.mk   | 13 +++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/python-aioconsole/Config.in
- create mode 100644 package/python-aioconsole/python-aioconsole.hash
- create mode 100644 package/python-aioconsole/python-aioconsole.mk
+ package/python-aiomonitor/Config.in              | 10 ++++++++++
+ package/python-aiomonitor/python-aiomonitor.hash |  5 +++++
+ package/python-aiomonitor/python-aiomonitor.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/python-aiomonitor/Config.in
+ create mode 100644 package/python-aiomonitor/python-aiomonitor.hash
+ create mode 100644 package/python-aiomonitor/python-aiomonitor.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5e86c2cbc7..f38d62a148 100644
+index f38d62a148..56e2914c8e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1026,6 +1026,7 @@ F:	configs/pine64_sopine_defconfig
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/lua-std-debug/
- F:	package/lua-std-normalize/
-+F:	package/python-aioconsole/
- F:	package/python-aiodns/
- F:	package/python-aiohttp/
- F:	package/python-aiohttp-jinja2/
+@@ -1034,6 +1034,7 @@ F:	package/python-aiohttp-remotes/
+ F:	package/python-aiohttp-security/
+ F:	package/python-aiohttp-session/
+ F:	package/python-aiohttp-sse/
++F:	package/python-aiomonitor/
+ F:	package/python-aiojobs/
+ F:	package/python-aiorwlock/
+ F:	package/python-async-timeout/
 diff --git a/package/Config.in b/package/Config.in
-index adb3cc9151..b27f8dd70b 100644
+index b27f8dd70b..26e90e3fad 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -800,6 +800,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-aiocoap/Config.in"
-+	source "package/python-aioconsole/Config.in"
- 	source "package/python-aiodns/Config.in"
- 	source "package/python-aiohttp/Config.in"
- 	source "package/python-aiohttp-jinja2/Config.in"
-diff --git a/package/python-aioconsole/Config.in b/package/python-aioconsole/Config.in
+@@ -808,6 +808,7 @@ menu "External python modules"
+ 	source "package/python-aiohttp-security/Config.in"
+ 	source "package/python-aiohttp-session/Config.in"
+ 	source "package/python-aiohttp-sse/Config.in"
++	source "package/python-aiomonitor/Config.in"
+ 	source "package/python-aiorwlock/Config.in"
+ 	source "package/python-aiojobs/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+diff --git a/package/python-aiomonitor/Config.in b/package/python-aiomonitor/Config.in
 new file mode 100644
-index 0000000000..cd52eecf32
+index 0000000000..c76c952c82
 --- /dev/null
-+++ b/package/python-aioconsole/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_AIOCONSOLE
-+	bool "python-aioconsole"
++++ b/package/python-aiomonitor/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_AIOMONITOR
++	bool "python-aiomonitor"
 +	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_TERMINALTABLES # runtime
++	select BR2_PACKAGE_PYTHON_AIOCONSOLE # runtime
 +	help
-+	  Asynchronous console and interfaces for asyncio.
++	  aiomonitor adds monitor and python REPL capabilities for
++	  asyncio application.
 +
-+	  https://github.com/vxgmichel/aioconsole
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
++	  https://github.com/aio-libs/aiomonitor
+diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
 new file mode 100644
-index 0000000000..0e09cfb4ec
+index 0000000000..ddcfd071e2
 --- /dev/null
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/aioconsole/json
-+md5	212dc49e2f2a995c87ce659ba63e7422  aioconsole-0.1.13.tar.gz
-+sha256	8b9898f0f6539bdce3bc3720d75189e21813f1a7f8350228fc7fd54bf7327d0f  aioconsole-0.1.13.tar.gz
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aiomonitor/python-aiomonitor.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiomonitor/json
++md5	0f58ac68497a59d104ecb6ba369df784  aiomonitor-0.4.3.tar.gz
++sha256	37cd279c26e2c80b4e6ed9d23476c84c0b75fc3794617fceb6f341437b9af5fe  aiomonitor-0.4.3.tar.gz
++# Locally computed sha256 checksums
++sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
+diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
 new file mode 100644
-index 0000000000..135e45f6e5
+index 0000000000..88f28a52dd
 --- /dev/null
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-aiomonitor/python-aiomonitor.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-aioconsole
++# python-aiomonitor
 +#
 +################################################################################
 +
-+PYTHON_AIOCONSOLE_VERSION = 0.1.13
-+PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/ea/ee/80154d7242c2107d02768c5a848e4cded39ce8cd89b48982c217474c8ddd
-+PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
-+PYTHON_AIOCONSOLE_LICENSE = GPLv3
++PYTHON_AIOMONITOR_VERSION = 0.4.3
++PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
++PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/11/27/2d25a3318e57181e04d2694768f0e1e621b64606d8424076790caa29e401
++PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
++PYTHON_AIOMONITOR_LICENSE = Apache-2.0
++PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
