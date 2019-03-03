@@ -1,57 +1,86 @@
-From: Xavier Ruppen <xruppen@gmail.com>
-Date: Sun,  3 Mar 2019 12:30:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix "Timed out waiting for
- device /dev/console."
-Message-ID: <20190303113052.9120-1-xruppen@gmail.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Sun,  3 Mar 2019 12:49:16 +0100
+Subject: [Buildroot] [PATCH v2] make printvars: avoid invalid calls when
+ arguments are missing
+Message-ID: <20190303114916.28824-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot built with systemd fails to open a login prompt on the
-serial port when /dev/console is specified as BR2_TARGET_GENERIC_GETTY_PORT
-(which is its default value):
+during "make printvars > compare" the following error occurs -
+reproducible after any "make *_defconfig":
 
-systemd[1]: dev-console.device: Job dev-console.device/start timed out.
-systemd[1]: Timed out waiting for device /dev/console.
-systemd[1]: Dependency failed for Serial Getty on console.
-systemd[1]: serial-getty at console.service: Job serial-getty at console.service/start failed with result 'dependency'.
-systemd[1]: dev-console.device: Job dev-console.device/start failed with result 'timeout'.
-systemd[1]: Reached target Login Prompts.
-systemd[1]: Reached target Multi-User System.
+/bin/bash: support/dependencies/check-host-.sh: no such file or directory
+/bin/bash: -c: line 0: syntax error: ')' unexpected
+/bin/bash: -c: line 0: `set -e; TMP="$(mktemp)"; if () >/dev/null 2>&1; then echo ""; else echo ""; fi;
 
-According to this issue on Github [1], serial-getty at .service should
-not be instantiated on /dev/console, console-getty at .service should
-be used instead. This stems from the fact that there should be no
-dependency on /dev/console.
+which is 2 errors, resulting from $(1) arguments being empty, but
+called anyway. So this simply skips parts when otherwise we would exit
+when wrong scripts are tried be executed.
 
-[1] https://github.com/systemd/systemd/issues/10914
+When comparing the outputs, this removes "host-lzip" from all packages'
+*EXTRACT_DEPENDENCIES.
 
-Signed-off-by: Xavier Ruppen <xruppen@gmail.com>
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 ---
- package/systemd/systemd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7a46a50ed3..f378203e8d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -397,11 +397,15 @@ endef
+hi,                                                                             
+                                                                                
+ok so this neither breaks my build and "make printvars" succeeds too. When      
+comparing "make printvars" output now, "host-lzip" is _removed_ from all        
+packages' dependiencies (in contrast to the previous patch). 
+
+thanks
+
+                            martin
+
+
+
+ package/Makefile.in                  | 8 ++++----
+ support/dependencies/dependencies.mk | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dc818a2c18..ae1e2e16f6 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -232,18 +232,18 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+ # Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
+ # Exit code chooses option. "$$TMP" is can be used as temporary file and
+ # is automatically cleaned up.
+-try-run = $(shell set -e;               \
++try-run = $(if $(1), $(shell set -e;	\
+ 	TMP="$$(mktemp)";               \
+ 	if ($(1)) >/dev/null 2>&1;      \
+ 	then echo "$(2)";               \
+ 	else echo "$(3)";               \
+ 	fi;                             \
+-	rm -f "$$TMP")
++	rm -f "$$TMP"))
  
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd needs getty.service for VTs and serial-getty.service for serial ttys
-+# note that console-getty.service should be used on /dev/console as it should not have dependencies
- # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
- define SYSTEMD_INSTALL_SERVICE_TTY
- 	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
- 	then \
- 		SERVICE="getty"; \
-+	elif echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'console'; \
-+	then \
-+		SERVICE="console-getty"; \
- 	else \
- 		SERVICE="serial-getty"; \
- 	fi; \
+ # host-cc-option
+ # Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
+-host-cc-option = $(call try-run,\
+-        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
++host-cc-option = $(if $(1), $(call try-run,\
++        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2)))
+ 
+ 
+ # host-intltool should be executed with the system perl, so we save
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 4fac5c731b..c53bbe01ce 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -15,7 +15,7 @@ else
+ # script should use 'which' to find a candidate. The script should return
+ # the path to the suitable host tool, or nothing if no suitable tool was found.
+ define suitable-host-package
+-$(shell support/dependencies/check-host-$(1).sh $(2))
++$(if $(1), $(shell support/dependencies/check-host-$(1).sh $(2)))
+ endef
+ endif
+ # host utilities needs host-tar to extract the source code tarballs, so
 -- 
-2.21.0
+2.20.1
