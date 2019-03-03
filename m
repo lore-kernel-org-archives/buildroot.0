@@ -1,12 +1,12 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sat, 2 Mar 2019 23:13:42 +0200
-Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
-In-Reply-To: <875zt1kona.fsf@dell.be.48ers.dk>
-References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
- <87imx3ufmy.fsf@dell.be.48ers.dk>
- <50637756-4e19-d116-b335-0a2149d25033@zaltys.org>
- <875zt1kona.fsf@dell.be.48ers.dk>
-Message-ID: <20190302211342.ww5xlkllobrccxxc@vkochan-ThinkPad-T470p>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 02 Mar 2019 17:52:32 -0800
+Subject: [Buildroot] [PATCH 1/1] go: explicitly disable modules to avoid
+ unintended network lookup
+In-Reply-To: <20190213091601.wnoefujowo6j5t7q@bifrost>
+References: <20190126102355.24766-1-christian@paral.in>
+ <87va1pgyhe.fsf@paral.in> <20190212165759.euozased2t6zrmka@bifrost>
+ <87sgwsh6k7.fsf@paral.in> <20190213091601.wnoefujowo6j5t7q@bifrost>
+Message-ID: <87lg1wg1wf.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,62 +15,25 @@ To: buildroot@busybox.net
 
 Hi All,
 
-On Sat, Mar 02, 2019 at 09:27:37PM +0100, Peter Korsgaard wrote:
-> >>>>> "James" == James Grant <jamesg@zaltys.org> writes:
-> 
->  > On 1/03/2019 22:07, Peter Korsgaard wrote:
->  >>>>>>> "James" == James Grant<james.grant@jci.com>  writes:
->  >> > Hi,
->  >> > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
->  >> 
->  >> >https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
->  >> 
->  >> > I'm suggesting that for upcoming 2019.02 release that no attempt
->  >> > is made to build with SSL support for 5.6.
->  >> 
->  >> > About to send patch to that effect.
->  >> 
->  >> Yes. I was hoping that users of Qt 5.6 would step up and send patches,
->  >> but given that hasn't happened and 2019.02 is overdue, that is probably
->  >> the least bad solution.
->  >> 
->  >> Looking forward to your patch.
-> 
->  > Earliest version of a OpenSSL 1.1 patch for Qt 5.x I can find is
->  > against Qt 5.7 (LGPLv3). If you adapted / backported that for Qt 5.6
->  > there is an argument you're contaminating LGPLv2 Qt5.6 with LGPLv3
->  > code - defeating the whole point of keeping Qt 5.6 for many.
-> 
-> Yes, agreed.
-> 
->  > I got Qt 5.6 compiling with LibreSSL (which is keeping a level of
->  > OpenSSL 1.0 compatibility).? Currently Qt is set to dlopen() OpenSSL
->  > at runtime (-openssl), changing this to shared linkage
->  > (-openssl-linked), then compiling only the SSL module with
->  > -fpermissive yields a working build. No actual code changes needed.
-> 
->  > Is there really any benefit to dlopen() OpenSSL on an embedded system
->  > in any case?
-> 
-> Not that I am aware of.
-> 
-> 
->  > The -fpermissive flag is needed to workaround? 'const BIO_METHOD *'
->  > vs. 'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function
->  > signatures.
-> 
->  > 'download' example successfully downloaded a file from a https site for me.
-> 
->  > Should I put together a patch doing this? ... or is someone likely to
->  > come forward with a more comprehensive LGPLv2 licensed fix?
-> 
-> If it is a simple patch, then please post it. It may be interesting for
-> users on 5.6.
-> 
+Anisse Astier <anisse@astier.eu> writes:
+>> If you do this reproduction with ANY > go1.11 version of Buildroot
+>> today:
+>> 
+>> export GO111MODULE=on
+>> make docker-engine
+>> 
+>> Then Buildroot will leak the GO111MODULE variable into the build
+>> process, and Go will start downloading dependencies from the internet
+>> and ignore GOPATH. 
+>> 
+>> Here is a reproduction, where Go makes network calls:
+>> 
+>> https://asciinema.org/a/pKktUhsN2NDoWkiCEgW9iUPbA
 
-Just FYI, I found only this patch:
+This is still the case today. What are the statuses of these patches?
 
-    https://github.com/patch-exchange/openssl-1.1-transition/blob/master/qt5-qtbase/qtbase-5.7.0-openssl-1.1.patch
+ - https://patchwork.ozlabs.org/patch/1031429/
+ - https://patchwork.ozlabs.org/patch/1048076/
 
-Regards,
-Vadim Kochan
+Best regards,
+Christian
