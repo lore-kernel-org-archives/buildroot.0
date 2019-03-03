@@ -1,96 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Mar 2019 11:16:31 +0100
-Subject: [Buildroot] [PATCH 0/8 v2] support/graphs: fixup and speedup graph
- dependencies (branch yem/graphs-from-make-2)
-Message-ID: <cover.1551608168.git.yann.morin.1998@free.fr>
+Date: Sun,  3 Mar 2019 11:16:29 +0100
+Subject: [Buildroot] [PATCH 1/8 v2] support/graph-depends: make sure
+ mandatory deps are displayed
+In-Reply-To: <cover.1551608168.git.yann.morin.1998@free.fr>
+References: <cover.1551608168.git.yann.morin.1998@free.fr>
+Message-ID: <c76a56e43bf476c1d11b9c52dcd588e9639df456.1551608168.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This series is a joint effort with Thomas, to get a graph-depends that
-is more reliable (does not forget some dependencies), and faster.
+The current graph-depends implementation filters out a number of
+"mandatory" dependencies that all packages have: dependency on
+"toolchain" and dependency on "skeleton".
 
-TL;DR: we fixed it, and it is faster. ;-)
+Despite this filtering, in full graph dependencies, "toolchain" and
+"skeleton" are still shown, because they are target packages, and
+therefore appear in the result of "make show-targets". Thanks to this,
+they will be visible as dependencies of the "ALL" node, which is the
+root of the dependency tree.
 
-Long story:
+However, as we are going to introduce host-skeleton as a "mandatory
+dependency" to be filtered out, this is no longer going to work.
 
-Currently, graph-depends is used in three ways: to graph the dependency
-tree (which is its prime objective, hence the name), to check for
-circular dependencies, and to compute the list of recursive direct or
-reverse dependencies.
+This commit adjusts the remove_extra_deps() function to ensure that
+when a mandatory dependency is removed, this dependency exists between
+the root of the dependency tree and the mandatory dependency.
 
-In so doing, graph-depends needs to build up the dependency tree, so it
-calls to make to get an initial list of packages, and then iteratively
-calls it again and again to get the dependencies, until none are
-returned anymore. Running make is rather costly, because it scans the
-entire collection of .mk; running it iteratively is thus in O(n), with n
-the dependency depth.
+This issue was noticed by Yann E. Morin, and this commit provides a
+different implementation than what Yann proposed in
+https://patchwork.ozlabs.org/patch/910453/.
 
-This series was started with the realisation that 'make' already knows
-about the dependency tree (that's its job, damned!).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - list mandatory deps before removing them
+  - fix flake8 warnings
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/scripts/graph-depends | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-So, this series starts with some commits which actually fix graph-depends
-to not forget any dependency, then cut down on madatory dependencies.
-
-Building upon that, we introduce the necesary infrastructure in our
-Makefiles, to return the dependency tree, and use that from
-graph-depends.
-
-Incidentally, we also notice that recursive, direct and reverse,
-dependencies can also be had from make in a much less costly manner than
-with graph-depends.
-
-Changes v1 -> v2:
-  - use memoisation to further speed-up recursive reverse dependencies
-  - update timings accordingly
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit bdfea8428f1d89ec79e0253b61fe86eb5437532d
-
-  Update for 2019.02-rc3 (2019-03-01 12:57:30 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to ae655a96d9f6c640f9cf16c273c732fe2009ce57
-
-  support/graph-depends: use the new make-based dependency tree (2019-03-03 11:06:38 +0100)
-
-
-----------------------------------------------------------------
-Thomas Petazzoni (1):
-      support/graph-depends: make sure mandatory deps are displayed
-
-Yann E. MORIN (7):
-      support/graph-depends: add option to exclude mandatory deps
-      support/graph-depends: also cut on host-skeleton
-      support/graph-depends: also cut on host-tar
-      support/graph-depends: also cut on host-gzip
-      infra/pkg-generic: use pure Makefile-based recursive dependencies
-      core: add make-based full-dependency list
-      support/graph-depends: use the new make-based dependency tree
-
- Makefile                      |   4 ++
- fs/common.mk                  |   8 +++
- package/pkg-generic.mk        |  22 +++++--
- support/scripts/brpkgutil.py  | 107 ++++++++++++++++-----------------
- support/scripts/graph-depends | 133 +++++++++---------------------------------
- 5 files changed, 109 insertions(+), 165 deletions(-)
-
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index d2b100f385..5a6f6930e9 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -181,6 +181,12 @@ def remove_mandatory_deps(pkg, deps):
+     return [p for p in deps[pkg] if p not in MANDATORY_DEPS]
+ 
+ 
++# This function returns all dependencies of pkg that are part of the
++# mandatory dependencies:
++def get_mandatory_deps(pkg, deps):
++    return [p for p in deps[pkg] if p in MANDATORY_DEPS]
++
++
+ # This function will check that there is no loop in the dependency chain
+ # As a side effect, it builds up the dependency cache.
+ def check_circular_deps(deps):
+@@ -213,6 +219,9 @@ def check_circular_deps(deps):
+ def remove_extra_deps(deps, rootpkg, transitive):
+     for pkg in list(deps.keys()):
+         if not pkg == rootpkg:
++            for d in get_mandatory_deps(pkg, deps):
++                if d not in deps[rootpkg]:
++                    deps[rootpkg].append(d)
+             deps[pkg] = remove_mandatory_deps(pkg, deps)
+     for pkg in list(deps.keys()):
+         if not transitive or pkg == rootpkg:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
