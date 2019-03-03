@@ -1,48 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Mar 2019 22:17:39 +0100
-Subject: [Buildroot] [PATCH 1/1] go: explicitly disable modules to avoid
- unintended network lookup
-In-Reply-To: <87lg1wg1wf.fsf@paral.in> (Christian Stewart's message of "Sat,
- 02 Mar 2019 17:52:32 -0800")
-References: <20190126102355.24766-1-christian@paral.in>
- <87va1pgyhe.fsf@paral.in> <20190212165759.euozased2t6zrmka@bifrost>
- <87sgwsh6k7.fsf@paral.in> <20190213091601.wnoefujowo6j5t7q@bifrost>
- <87lg1wg1wf.fsf@paral.in>
-Message-ID: <87ef7nk68c.fsf@dell.be.48ers.dk>
+Date: Sun, 03 Mar 2019 22:21:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix "Timed out waiting
+ for device /dev/console."
+In-Reply-To: <20190303204826.GL2721@scaer> (Yann E. MORIN's message of "Sun, 3
+ Mar 2019 21:48:26 +0100")
+References: <20190303113052.9120-1-xruppen@gmail.com>
+ <20190303115413.GG2721@scaer> <87o96rk8m0.fsf@dell.be.48ers.dk>
+ <20190303204826.GL2721@scaer>
+Message-ID: <87a7ibk62d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hi All,
- > Anisse Astier <anisse@astier.eu> writes:
- >>> If you do this reproduction with ANY > go1.11 version of Buildroot
- >>> today:
- >>> 
- >>> export GO111MODULE=on
- >>> make docker-engine
- >>> 
- >>> Then Buildroot will leak the GO111MODULE variable into the build
- >>> process, and Go will start downloading dependencies from the internet
- >>> and ignore GOPATH. 
- >>> 
- >>> Here is a reproduction, where Go makes network calls:
- >>> 
- >>> https://asciinema.org/a/pKktUhsN2NDoWkiCEgW9iUPbA
+Hi,
 
- > This is still the case today. What are the statuses of these patches?
+ >> I was going to commit this, but then I noticed that there isn't a
+ >> console-getty at .service file, so this doesn't seem right:
+ >> 
+ >> ls -lah ../../../../lib/systemd/system/|grep getty
+ >> lrwxrwxrwx 1 peko peko 49 Mar 3 21:13 autovt at .service ->
+ >> ../../../../usr/lib/systemd/system/getty at .service
+ >> -rw-r--r--  1 peko peko 1.1K Mar  3 21:13 console-getty.service
 
- >  - https://patchwork.ozlabs.org/patch/1031429/
+ >> -rw-r--r--  1 peko peko 1.2K Mar  3 21:13 container-getty at .service
+ >> -rw-r--r--  1 peko peko  506 Dec 21 19:53 getty-pre.target
+ >> -rw-r--r--  1 peko peko 1.8K Mar  3 21:13 getty at .service
+ >> -rw-r--r--  1 peko peko  500 Dec 21 19:53 getty.target
+ >> -rw-r--r--  1 peko peko 1.5K Mar  3 21:13 serial-getty at .service
+ >> 
+ >> I guess we need to introduce a TARGET variable that is
+ >> $${SERVICE}.service for console-getty, and $${SERVICE}@.service for
+ >> everything else, but I know next to nothing about systemd, so I will let
+ >> someone who can actually test this send a patch.
 
-I have just applied it now.
+ > Well, wecould make it simple, and use (pseudoc-ode):
 
->  - https://patchwork.ozlabs.org/patch/1048076/
+ >     if console:
+ >         SERVICE='console-getty'
+ >     elif vt:
+ >         SERVICE='getty@'
+ >     else:
+ >         SERVICE='serial-getty@'
 
-This is for next / post 2019.02. I haven't looked closely at it yet, but
-will do so soon.
+ > No?
+
+I don't think so, as we need both <name>@<target> and <target>:
+
+	ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
+		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+
+So we either end up with no @ in the symlink name, or a double @@.
+
+I don't know if that is problem or not for systemd.
 
 -- 
 Bye, Peter Korsgaard
