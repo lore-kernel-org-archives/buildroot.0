@@ -1,138 +1,411 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Mar 2019 11:16:35 +0100
-Subject: [Buildroot] [PATCH 7/8 v2] core: add make-based full-dependency list
+Date: Sun,  3 Mar 2019 11:16:36 +0100
+Subject: [Buildroot] [PATCH 8/8 v2] support/graph-depends: use the new
+ make-based dependency tree
 In-Reply-To: <cover.1551608168.git.yann.morin.1998@free.fr>
 References: <cover.1551608168.git.yann.morin.1998@free.fr>
-Message-ID: <441a286ab4c051146d250a65115a40431727faac.1551608168.git.yann.morin.1998@free.fr>
+Message-ID: <ae655a96d9f6c640f9cf16c273c732fe2009ce57.1551608168.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when we need to build the full dependency graph, we call make
-to show the list of packages (make show-targets), and then call it again
-and again iteratively while it returns new packages.
+Now that we can get the whole dependency tree from make, use it to
+speed up things considerably.
 
-Since calling make will parse the whole set of our Makefiles, this takes
-quite a bit of time (~4s each here), and the total can get pretty long.
+So far, we had three functions to get the dependencies information:
+get_depends(), get_rdepends(), and, somehow unrelated, get_version().
 
-However, make being make, already builds the whole dependency tree
-information, so we can just ask for it.
+Because of the way %-show-{,r}depends works, getting the dependency tree
+was expensive, the three functions all took a set of packages for which
+to get the dependencies, in an attempt to limit the time it took to get
+that tree.
 
-Add a new top-level rule 'show-dependency-tree' that displays the whole
-set of dependencies for all packages. For each package, its name, type
-and version is displayed, then all the direct, first-level dependencies
-are dumped. We choose a format that is not unlike the dot-graph format,
-because it is both easy to read as a human, and easy to parse as a
-machine:
+Now, getting the tree is much, much less costly, and we can get the
+whole tree as cheaply as we previously got only the first-level
+dependencies.
 
-    foo: target 1.2.3
-    foo -> bar host-meh
-    bar: target virtual
-    bar -> buz
-    buz: target 2.3.4
-    buz ->
-    host-meh: host virtual
-    host-meh -> host-bleark
-    host-bleark: host 3.4.5
-    host-bleark ->
-    rootfs-meh: host
-    rootfs-meh -> host-bleark
+Furthemore, we can now also get the version information at the same
+time, and that also brings in whether the package is virtual or not,
+target or host.
 
-To be noted: rootfs are currently reported as if they were 'host'
-packages, to stay aligned with how graph-depends currently treats them.
-Ideally, graph-depends could be enhanced to recognise them separately,
-but that is another story.
+So, we drop all three helper functions, and replace them with a single
+one that returns all that information in one go: full dependency tree,
+per-package type, and per-package version.
 
-For just plain defconfig, which is about the smallest config we can have
-with an internal toolchain, we already have a seven-fold improvement
-(with the graph-depends rule modified to not run the pdf generation, to
-be able to just compare the tree generation):
-
-    $ time make graph-depends
-    real    0m27.344s
-    $ time make show-dependency-tree
-    real    0m3.848s
-
-From defconfig, C++, wchar, locales, ssp, and allyespackageconfig,
-tweaked for even more packages (qt5 not qt4, luajit to avoid multi
-providers, etc...), the timings are (graph-depends still modified to
-not generate the pdf):
-
-    $ time make graph-depends
-    real    1m56.459s
-    $ time make show-dependency-tree
-    real    0m5.748s
-
-There. I don't think those numbers need any explanation whatsoever;
-they do speak on their own. OK, for maths sake, the ratio is about
-twenty-fold. So, "yeah", I guess... ;-)
+Note: since commit 2d29fd96a (pkg-virtual: remove VERSION/SOURCE),
+virtual packages are no longer reported as having a 'virtual' version,
+so have since been displayed as regular packages in the graphs. Although
+noone complained, this patch incidentally restores the initial
+behaviour, and virtual packages are now correctly displayed as such
+again.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- Makefile               | 4 ++++
- fs/common.mk           | 8 ++++++++
- package/pkg-generic.mk | 4 ++++
- 3 files changed, 16 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 3d95d066fb..7d127e3799 100644
---- a/Makefile
-+++ b/Makefile
-@@ -876,6 +876,10 @@ graph-depends-requirements:
- 	@dot -? >/dev/null 2>&1 || \
- 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
+---
+Note: as I rewrote brpkgutil.py almost entirely now, and as I also
+substantially modified graph-depends, I added my (C) to them. We don't
+usually have copyright information in our files (no .mk or no Config.in
+and such have that), so I think it would be OK to just drop the (C) in
+there as well, especially since the Berne convention does not require it
+for a work to be protected and recognised anyway:
+    https://en.wikipedia.org/wiki/Copyright_symbol
+
+Beside, the authorship information is already present in the git log,
+and it is much more accurate in there than it is in the files
+themselves.
+---
+ support/scripts/brpkgutil.py  | 107 ++++++++++++++++++--------------------
+ support/scripts/graph-depends | 117 +++++-------------------------------------
+ 2 files changed, 64 insertions(+), 160 deletions(-)
+
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index e70d525353..b5ea467bf9 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -1,67 +1,60 @@
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# Copyright (C) 2018 Yann E. MORIN <yann.morin.1998@free.fr>
  
-+.PHONY: show-dependency-tree
-+show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
-+	@:
+ import logging
+-import sys
++import os
+ import subprocess
+ 
+ 
+-# Execute the "make <pkg>-show-version" command to get the version of a given
+-# list of packages, and return the version formatted as a Python dictionary.
+-def get_version(pkgs):
+-    logging.info("Getting version for %s" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory"]
+-    for pkg in pkgs:
+-        cmd.append("%s-show-version" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0]
+-    if p.returncode != 0:
+-        logging.error("Error getting version %s" % pkgs)
+-        sys.exit(1)
+-    output = output.split("\n")
+-    if len(output) != len(pkgs) + 1:
+-        logging.error("Error getting version")
+-        sys.exit(1)
+-    version = {}
+-    for i in range(0, len(pkgs)):
+-        pkg = pkgs[i]
+-        version[pkg] = output[i]
+-    return version
++# This function returns a tuple of three dictionaries, all using package
++# names as keys:
++# - a dictionary which values are the lists of packages that are the
++#   dependencies of the package used as key;
++# - a dictionary which values are the type of the package used as key;
++# - a dictionary which values are the version of the package used as key,
++#   'virtual' for a virtual package, or the empty string for a rootfs.
++#
++# 'direction' can be either 'direct' or 'forward' to get the direct (aka
++# forward) dependencies, or 'back' or 'reverse' to get the reverse (aka
++# backward) dependencies.
++def get_dependency_tree(direction="direct"):
++    logging.info("Getting dependency tree...")
+ 
+-
+-def _get_depends(pkgs, rule):
+-    logging.info("Getting dependencies for %s" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory"]
+-    for pkg in pkgs:
+-        cmd.append("%s-%s" % (pkg, rule))
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0]
+-    if p.returncode != 0:
+-        logging.error("Error getting dependencies %s\n" % pkgs)
+-        sys.exit(1)
+-    output = output.split("\n")
+-    if len(output) != len(pkgs) + 1:
+-        logging.error("Error getting dependencies")
+-        sys.exit(1)
+     deps = {}
+-    for i in range(0, len(pkgs)):
+-        pkg = pkgs[i]
+-        pkg_deps = output[i].split(" ")
+-        if pkg_deps == ['']:
+-            deps[pkg] = []
++    types = {}
++    versions = {}
 +
- .PHONY: graph-depends
- graph-depends: graph-depends-requirements
- 	@$(INSTALL) -d $(GRAPHS_DIR)
-diff --git a/fs/common.mk b/fs/common.mk
-index a560417c6c..daa43efd75 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -47,6 +47,10 @@ ROOTFS_COMMON_DEPENDENCIES = \
- 	$(BR2_TAR_HOST_DEPENDENCY) \
- 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
- 
-+rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
-+	$(info rootfs-common: host)
-+	$(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
++    # Special case for the 'all' top-level fake package
++    deps['all'] = []
++    types['all'] = 'target'
++    versions['all'] = ''
 +
- .PHONY: rootfs-common
- rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- 	@$(call MESSAGE,"Generating root filesystems common tables")
-@@ -80,6 +84,10 @@ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
- 
- ROOTFS_$(2)_DEPENDENCIES += rootfs-common
- 
-+rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
-+	$$(info rootfs-$(1): host)
-+	$$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
++    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
++    with open(os.devnull, 'wb') as devnull:
++        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull, universal_newlines=True)
++        output = p.communicate()[0]
 +
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
- ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 0d17e62a70..62c2e221f7 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -850,6 +850,10 @@ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPEND
- 	@:
- 	$$(info $(1))
++    for l in output.splitlines():
++        if " -> " in l:
++            pkg = l.split(" -> ")[0]
++            if direction == "forward" or direction == "direct":
++                try:
++                    deps[pkg] += l.split(" -> ")[1].split()
++                except KeyError:
++                    deps[pkg] = l.split(" -> ")[1].split()
++            elif direction == "back" or direction == "reverse":
++                for p in l.split(" -> ")[1].split():
++                    try:
++                        deps[p].append(pkg)
++                    except KeyError:
++                        deps[p] = [pkg]
++            else:
++                raise ValueError('direction must be one of: direct, forward, reverse, back')
+         else:
+-            deps[pkg] = pkg_deps
+-    return deps
++            pkg, type_version = l.split(": ", 1)
++            t, v = "{} -".format(type_version).split(None, 2)[:2]
++            deps['all'].append(pkg)
++            types[pkg] = t
++            versions[pkg] = v
  
-+$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_ALL_DEPENDENCIES))
-+	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
-+	$$(info $(1) -> $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(d)))
-+
- $(1)-graph-depends: graph-depends-requirements
- 	$(call pkg-graph-depends,$(1),--direct)
+-
+-# Execute the "make <pkg>-show-depends" command to get the list of
+-# dependencies of a given list of packages, and return the list of
+-# dependencies formatted as a Python dictionary.
+-def get_depends(pkgs):
+-    return _get_depends(pkgs, 'show-depends')
+-
+-
+-# Execute the "make <pkg>-show-rdepends" command to get the list of
+-# reverse dependencies of a given list of packages, and return the
+-# list of dependencies formatted as a Python dictionary.
+-def get_rdepends(pkgs):
+-    return _get_depends(pkgs, 'show-rdepends')
++    return (deps, types, versions)
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 29134c8237..139a5dee80 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -20,10 +20,10 @@
+ #    configuration.
+ #
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# Copyright (C) 2018 Yann E. MORIN <yann.morin.1998@free.fr>
  
+ import logging
+ import sys
+-import subprocess
+ import argparse
+ from fnmatch import fnmatch
+ 
+@@ -36,63 +36,6 @@ MODE_PKG = 2    # draw dependency graph for a given package
+ allpkgs = []
+ 
+ 
+-# Execute the "make show-targets" command to get the list of the main
+-# Buildroot PACKAGES and return it formatted as a Python list. This
+-# list is used as the starting point for full dependency graphs
+-def get_targets():
+-    logging.info("Getting targets")
+-    cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+-    output = p.communicate()[0].strip()
+-    if p.returncode != 0:
+-        return None
+-    if output == '':
+-        return []
+-    return output.split(' ')
+-
+-
+-# Recursive function that builds the tree of dependencies for a given
+-# list of packages. The dependencies are built in a list called
+-# 'dependencies', which contains tuples of the form (pkg1 ->
+-# pkg2_on_which_pkg1_depends, pkg3 -> pkg4_on_which_pkg3_depends) and
+-# the function finally returns this list.
+-def get_all_depends(pkgs, get_depends_func):
+-    dependencies = []
+-
+-    # Filter the packages for which we already have the dependencies
+-    filtered_pkgs = []
+-    for pkg in pkgs:
+-        if pkg in allpkgs:
+-            continue
+-        filtered_pkgs.append(pkg)
+-        allpkgs.append(pkg)
+-
+-    if len(filtered_pkgs) == 0:
+-        return []
+-
+-    depends = get_depends_func(filtered_pkgs)
+-
+-    deps = set()
+-    for pkg in filtered_pkgs:
+-        pkg_deps = depends[pkg]
+-
+-        # This package has no dependency.
+-        if pkg_deps == []:
+-            continue
+-
+-        # Add dependencies to the list of dependencies
+-        for dep in pkg_deps:
+-            dependencies.append((pkg, dep))
+-            deps.add(dep)
+-
+-    if len(deps) != 0:
+-        newdeps = get_all_depends(deps, get_depends_func)
+-        if newdeps is not None:
+-            dependencies += newdeps
+-
+-    return dependencies
+-
+-
+ # The Graphviz "dot" utility doesn't like dashes in node names. So for
+ # node names, we strip all dashes. Also, nodes can't start with a number,
+ # so we prepend an underscore.
+@@ -230,7 +173,7 @@ def remove_extra_deps(deps, rootpkg, transitive):
+ 
+ 
+ # Print the attributes of a node: label and fill-color
+-def print_attrs(outfile, pkg, version, depth, colors):
++def print_attrs(outfile, pkg, pkg_type, pkg_version, depth, colors):
+     name = pkg_node_name(pkg)
+     if pkg == 'all':
+         label = 'ALL'
+@@ -239,13 +182,11 @@ def print_attrs(outfile, pkg, version, depth, colors):
+     if depth == 0:
+         color = colors[0]
+     else:
+-        if pkg.startswith('host') \
+-                or pkg.startswith('toolchain') \
+-                or pkg.startswith('rootfs'):
++        if pkg_type == "host":
+             color = colors[2]
+         else:
+             color = colors[1]
+-    if version == "virtual":
++    if pkg_version == "virtual":
+         outfile.write("%s [label = <<I>%s</I>>]\n" % (name, label))
+     else:
+         outfile.write("%s [label = \"%s\"]\n" % (name, label))
+@@ -256,13 +197,13 @@ done_deps = []
+ 
+ 
+ # Print the dependency graph of a package
+-def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                    arrow_dir, draw_graph, depth, max_depth, pkg, colors):
+     if pkg in done_deps:
+         return
+     done_deps.append(pkg)
+     if draw_graph:
+-        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++        print_attrs(outfile, pkg, dict_types[pkg], dict_versions[pkg], depth, colors)
+     elif depth != 0:
+         outfile.write("%s " % pkg)
+     if pkg not in dict_deps:
+@@ -270,17 +211,15 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+     for p in stop_list:
+         if fnmatch(pkg, p):
+             return
+-    if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
++    if dict_versions[pkg] == "virtual" and "virtual" in stop_list:
+         return
+-    if pkg.startswith("host-") and "host" in stop_list:
++    if dict_types[pkg] == "host" and "host" in stop_list:
+         return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+-            if dict_version.get(d) == "virtual" \
+-               and "virtual" in exclude_list:
++            if dict_versions[d] == "virtual" and "virtual" in exclude_list:
+                 continue
+-            if d.startswith("host-") \
+-               and "host" in exclude_list:
++            if dict_types[d] == "host" and "host" in exclude_list:
+                 continue
+             add = True
+             for p in exclude_list:
+@@ -290,7 +229,7 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+             if add:
+                 if draw_graph:
+                     outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+-                print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++                print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                                arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
+ 
+ 
+@@ -352,6 +291,7 @@ def main():
+ 
+     if args.package is None:
+         mode = MODE_FULL
++        rootpkg = 'all'
+     else:
+         mode = MODE_PKG
+         rootpkg = args.package
+@@ -370,13 +310,11 @@ def main():
+         exclude_list += MANDATORY_DEPS
+ 
+     if args.direct:
+-        get_depends_func = brpkgutil.get_depends
+         arrow_dir = "forward"
+     else:
+         if mode == MODE_FULL:
+             logging.error("--reverse needs a package")
+             sys.exit(1)
+-        get_depends_func = brpkgutil.get_rdepends
+         arrow_dir = "back"
+ 
+     draw_graph = not args.flat_list
+@@ -389,46 +327,19 @@ def main():
+         logging.error("Error: incorrect color list '%s'" % args.colors)
+         sys.exit(1)
+ 
+-    # In full mode, start with the result of get_targets() to get the main
+-    # targets and then use get_all_depends() for all targets
+-    if mode == MODE_FULL:
+-        targets = get_targets()
+-        dependencies = []
+-        allpkgs.append('all')
+-        filtered_targets = []
+-        for tg in targets:
+-            dependencies.append(('all', tg))
+-            filtered_targets.append(tg)
+-        deps = get_all_depends(filtered_targets, get_depends_func)
+-        if deps is not None:
+-            dependencies += deps
+-        rootpkg = 'all'
+-
+-    # In pkg mode, start directly with get_all_depends() on the requested
+-    # package
+-    elif mode == MODE_PKG:
+-        dependencies = get_all_depends([rootpkg], get_depends_func)
+-
+-    # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+-    dict_deps = {}
+-    for dep in dependencies:
+-        if dep[0] not in dict_deps:
+-            dict_deps[dep[0]] = []
+-        dict_deps[dep[0]].append(dep[1])
++    dict_deps, dict_types, dict_versions = brpkgutil.get_dependency_tree(arrow_dir)
+ 
+     check_circular_deps(dict_deps)
+     if check_only:
+         sys.exit(0)
+ 
+     dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive)
+-    dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
+-                                          if pkg != "all" and not pkg.startswith("root")])
+ 
+     # Start printing the graph data
+     if draw_graph:
+         outfile.write("digraph G {\n")
+ 
+-    print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
++    print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+                    arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
+ 
+     if draw_graph:
 -- 
 2.14.1
