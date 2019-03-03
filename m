@@ -1,74 +1,84 @@
 From: James Grant <jamesg@zaltys.org>
-Date: Sun,  3 Mar 2019 18:51:03 +1300
-Subject: [Buildroot] [PATCH] package/qt5/qt5base: build Qt 5.6 with LibreSSL
- if present.
-Message-ID: <20190303055103.39033-1-jamesg@zaltys.org>
+Date: Sun, 3 Mar 2019 19:00:22 +1300
+Subject: [Buildroot] No OpenSSL 1.1.x support in Qt 5.6.x.
+In-Reply-To: <20190302211342.ww5xlkllobrccxxc@vkochan-ThinkPad-T470p>
+References: <BL2P132MB00203E45B23E62E378ED9B02E5760@BL2P132MB0020.NAMP132.PROD.OUTLOOK.COM>
+ <87imx3ufmy.fsf@dell.be.48ers.dk>
+ <50637756-4e19-d116-b335-0a2149d25033@zaltys.org>
+ <875zt1kona.fsf@dell.be.48ers.dk>
+ <20190302211342.ww5xlkllobrccxxc@vkochan-ThinkPad-T470p>
+Message-ID: <9c45638b-b2d6-ca0c-045c-1f93d2b16f8f@zaltys.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LibreSSL build is successful with shared linkage, but not default dlopen().
+On 3/03/2019 10:13, Vadim Kochan wrote:
+> Hi All,
+>
+> On Sat, Mar 02, 2019 at 09:27:37PM +0100, Peter Korsgaard wrote:
+>>>>>>> "James" == James Grant<jamesg@zaltys.org>  writes:
+>>   > On 1/03/2019 22:07, Peter Korsgaard wrote:
+>>   >>>>>>> "James" == James Grant<james.grant@jci.com>   writes:
+>>   >> > Hi,
+>>   >> > There is no OpenSSL 1.1.x support in Qt 5.6.x and no-one appears to have back-ported support.
+>>   >>
+>>   >> >https://development.qt-project.narkive.com/RW4wxYXY/openssl-1-1-x-support-on-qt-5-6-5-9
+>>   >>
+>>   >> > I'm suggesting that for upcoming 2019.02 release that no attempt
+>>   >> > is made to build with SSL support for 5.6.
+>>   >>
+>>   >> > About to send patch to that effect.
+>>   >>
+>>   >> Yes. I was hoping that users of Qt 5.6 would step up and send patches,
+>>   >> but given that hasn't happened and 2019.02 is overdue, that is probably
+>>   >> the least bad solution.
+>>   >>
+>>   >> Looking forward to your patch.
+>>
+>>   > Earliest version of a OpenSSL 1.1 patch for Qt 5.x I can find is
+>>   > against Qt 5.7 (LGPLv3). If you adapted / backported that for Qt 5.6
+>>   > there is an argument you're contaminating LGPLv2 Qt5.6 with LGPLv3
+>>   > code - defeating the whole point of keeping Qt 5.6 for many.
+>>
+>> Yes, agreed.
+>>
+>>   > I got Qt 5.6 compiling with LibreSSL (which is keeping a level of
+>>   > OpenSSL 1.0 compatibility).? Currently Qt is set to dlopen() OpenSSL
+>>   > at runtime (-openssl), changing this to shared linkage
+>>   > (-openssl-linked), then compiling only the SSL module with
+>>   > -fpermissive yields a working build. No actual code changes needed.
+>>
+>>   > Is there really any benefit to dlopen() OpenSSL on an embedded system
+>>   > in any case?
+>>
+>> Not that I am aware of.
+>>
+>>
+>>   > The -fpermissive flag is needed to workaround? 'const BIO_METHOD *'
+>>   > vs. 'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function
+>>   > signatures.
+>>
+>>   > 'download' example successfully downloaded a file from a https site for me.
+>>
+>>   > Should I put together a patch doing this? ... or is someone likely to
+>>   > come forward with a more comprehensive LGPLv2 licensed fix?
+>>
+>> If it is a simple patch, then please post it. It may be interesting for
+>> users on 5.6.
+>>
+> Just FYI, I found only this patch:
+>
+>      https://github.com/patch-exchange/openssl-1.1-transition/blob/master/qt5-qtbase/qtbase-5.7.0-openssl-1.1.patch
 
-Also adds patch for successful compilation by using -fpermissive.
+Also these, which look more complete:
 
-Signed-off-by: James Grant <jamesg@zaltys.org>
----
- ...rmissive-gcc-flag-to-allow-compilati.patch | 29 +++++++++++++++++++
- package/qt5/qt5base/qt5base.mk                |  4 ++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
- create mode 100644 package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
+https://src.fedoraproject.org/cgit/rpms/qt5-qtbase.git/plain/qt5-qtbase-5.9.1-openssl11.patch?h=f27
+https://github.com/richmoore/qtbase/commits/openssl11
+http://openssl.6102.n7.nabble.com/Porting-to-OpenSSL-1-1-td68712.html
 
-diff --git a/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch b/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
-new file mode 100644
-index 0000000000..c8fc426f79
---- /dev/null
-+++ b/package/qt5/qt5base/5.6.3/0003-libressl-add-fpermissive-gcc-flag-to-allow-compilati.patch
-@@ -0,0 +1,29 @@
-+From 62588f2d8267c67c2337004e83e80695280db9eb Mon Sep 17 00:00:00 2001
-+From: James Grant <jamesg@zaltys.org>
-+Date: Sun, 3 Mar 2019 17:29:29 +1300
-+Subject: [PATCH 1/1] libressl - add -fpermissive gcc flag to allow
-+ compilation.
-+
-+Workaround for 'const BIO_METHOD *' vs. 'BIO_METHOD *' changes to BIO_new() and BIO_s_mem() function signatures.
-+
-+Signed-off-by: James Grant <jamesg@zaltys.org>
-+---
-+ src/network/ssl/ssl.pri | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
-+index 29c47cd7..f0aad448 100644
-+--- a/src/network/ssl/ssl.pri
-++++ b/src/network/ssl/ssl.pri
-+@@ -77,7 +77,7 @@ android:!android-no-sdk: SOURCES += ssl/qsslsocket_openssl_android.cpp
-+         LIBS_PRIVATE += $$OPENSSL_LIBS_RELEASE
-+     }
-+ 
-+-    QMAKE_CXXFLAGS += $$OPENSSL_CFLAGS
-++    QMAKE_CXXFLAGS += $$OPENSSL_CFLAGS -fpermissive
-+     LIBS_PRIVATE += $$OPENSSL_LIBS
-+     win32: LIBS_PRIVATE += -lcrypt32
-+ }
-+-- 
-+2.18.1
-+
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index a5ce583327..e7f6e658f1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -190,7 +190,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
- # No OpenSSL 1.1.x support in Qt 5.6.x
--QT5BASE_CONFIGURE_OPTS += -no-openssl
-+# LibreSSL works with shared linkage only and -fpermissive patch
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBRESSL),-openssl-linked,-no-openssl)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBRESSL),openssl)
- else
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
--- 
-2.18.1
+But LGPLv3 vs. LGPLv2 licensing is a potential issue with all these.
+
+Regards,
+James Grant.
