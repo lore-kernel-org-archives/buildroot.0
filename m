@@ -1,139 +1,108 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Mar 2019 20:06:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: Allow to build
- with uclibc but w/o mausezahn
-In-Reply-To: <20190304085741.13782-1-vadim4j@gmail.com>
-References: <20190304085741.13782-1-vadim4j@gmail.com>
-Message-ID: <899f39cb-501b-ef06-7884-5d4f4ef7909a@mind.be>
+Date: Mon, 4 Mar 2019 20:13:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5base: add
+ BR2_PACKAGE_QT5BASE_OPENSSL
+In-Reply-To: <20190304172808.4672-1-fontaine.fabrice@gmail.com>
+References: <20190304172808.4672-1-fontaine.fabrice@gmail.com>
+Message-ID: <65868048-c722-551d-9f8a-2c8bb213f221@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Vadim,
 
-On 04/03/2019 09:57, Vadim Kochan wrote:
-> mausezahn can't be build with uclibc because uclibc
-> does not provide ceill() function, so it does not allow
-> to build all netsniff-ng's tools with uclibc.
+
+On 04/03/2019 18:28, Fabrice Fontaine wrote:
+> Commit c110e48cecde6f543da18388322907b05b25e7d2 disabled openssl support
+> on QT 5.6, this has the side-effect of breaking the build of
+> python-pyqt5 because support of openssl is enabled on python-pyqt5 if
+> BR2_PACKAGE_OPENSSL is selected
 > 
-> Fix it by moving mausezahn under separate config option,
-> which has own dependencies and packages selection (libnet & libcli).
+> To fix this issue, add a new BR2_PACKAGE_QT5BASE_OPENSSL option in
+> qt5base and use it in python-pyqt5
+
+ I like it!
+
 > 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/e92991308d47649cecc4084e41ab5711ec96831f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/netsniff-ng/Config.in      | 27 +++++++++++++++++++--------
->  package/netsniff-ng/netsniff-ng.mk | 16 +++++++++++-----
->  2 files changed, 30 insertions(+), 13 deletions(-)
+>  package/python-pyqt5/python-pyqt5.mk | 2 +-
+>  package/qt5/qt5base/Config.in        | 8 ++++++++
+>  package/qt5/qt5base/qt5base.mk       | 9 ++-------
+>  3 files changed, 11 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-> index c4803b2fa2..15862ff433 100644
-> --- a/package/netsniff-ng/Config.in
-> +++ b/package/netsniff-ng/Config.in
-> @@ -1,16 +1,12 @@
-> -config BR2_PACKAGE_NETSNIFF_NG
-> +menuconfig BR2_PACKAGE_NETSNIFF_NG
->  	bool "netsniff-ng"
-> -	# Build with uClibc fails due to missing ceill()
-> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
->  	select BR2_PACKAGE_LIBNL
->  	select BR2_PACKAGE_LIBPCAP
-> -	select BR2_PACKAGE_LIBCLI
->  	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
->  	select BR2_PACKAGE_LIBURCU
-> -	select BR2_PACKAGE_LIBNET
->  	help
->  	  netsniff-ng is a free, performant Linux network analyzer and
->  	  networking toolkit. If you will, the Swiss army knife for
-> @@ -18,7 +14,22 @@ config BR2_PACKAGE_NETSNIFF_NG
+> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+> index cde026ef63..4955936ae3 100644
+> --- a/package/python-pyqt5/python-pyqt5.mk
+> +++ b/package/python-pyqt5/python-pyqt5.mk
+> @@ -25,9 +25,9 @@ PYTHON_PYQT5_QTDETAIL_LICENSE = Open Source
+>  PYTHON_PYQT5_QTDETAIL_TYPE = shared
 >  
->  	  http://netsniff-ng.org
+>  # Turn off features that aren't available in current qt configuration
+> -PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
+>  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
+>  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
+> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
 >  
-> -comment "netsniff-ng needs a glibc or musl toolchain w/ threads, headers >= 3.0"
-> +if BR2_PACKAGE_NETSNIFF_NG
-> +
-> +config BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN
-> +	bool "mausezahn"
-
- Is it worth to add a separate config for this? I.e., does it give significant
-saving in either binary size (including libcli and libnet dependencies) or
-runtime performance?
-
- If not, we prefer to handle it "automatically" in the .mk file only. In other
-words, keep the libcli and libnet selects above but make them conditional on
-!uclibc, and change the .mk file as indicated below...
-
-> +	default y
-> +	# Build with uClibc fails due to missing ceill()
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> +	select BR2_PACKAGE_LIBCLI
-> +	select BR2_PACKAGE_LIBNET
-> +
-> +comment "mausezahn needs glibc or musl toolchain"
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC
-> +
-> +endif
-> +
-> +comment "netsniff-ng needs a toolchain w/ threads, headers >= 3.0"
->  	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC \
-> -		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS  || \
-> +			!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-> index 77d8921425..9fe50f10d3 100644
-> --- a/package/netsniff-ng/netsniff-ng.mk
-> +++ b/package/netsniff-ng/netsniff-ng.mk
-> @@ -13,9 +13,14 @@ NETSNIFF_NG_LICENSE_FILES = README COPYING
->  NETSNIFF_NG_CONF_ENV = \
->  	NACL_INC_DIR=/dev/null \
->  	NACL_LIB_DIR=/dev/null
-> -NETSNIFF_NG_DEPENDENCIES = \
-> -	libnl libpcap libcli libnetfilter_conntrack \
-> -	liburcu libnet
-> +NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack liburcu
-> +
-> +NETSNIFF_NG_TOOLS = netsniff-ng trafgen astraceroute flowtop ifpps bpfc curvetun
-> +
-> +ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
-
- ... make this condition
-
-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
-
-(and move the comment from Config.in to here).
-
-> +NETSNIFF_NG_DEPENDENCIES += libcli libnet
-> +NETSNIFF_NG_TOOLS += mausezahn
-> +endif
+>  define PYTHON_PYQT5_QTDETAIL
+>  	echo $(1) >> $(2)/qtdetail.out
+> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> index 1340ea48f0..709fec8d3b 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -286,6 +286,14 @@ comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+>  	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8
 >  
->  ifeq ($(BR2_PACKAGE_GEOIP),y)
->  NETSNIFF_NG_DEPENDENCIES += geoip
-> @@ -41,12 +46,13 @@ define NETSNIFF_NG_CONFIGURE_CMDS
->  endef
->  
->  define NETSNIFF_NG_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(NETSNIFF_NG_TOOLS)
->  endef
->  
->  define NETSNIFF_NG_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> -		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install -C $(@D)
-> +		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install \
-> +			-C $(@D) $(NETSNIFF_NG_TOOLS)
+> +config BR2_PACKAGE_QT5BASE_OPENSSL
+> +	bool "OpenSSL support"
 
- I don't like very much that we have to enumerate the tools in the .mk file, but
-I don't see any other possibility.
+ Since this was implicitly enabled before, you should add
+
+	default y
+
+here.
+
+> +	# No OpenSSL 1.1.x support in Qt 5.6.x
+> +	depends on !BR2_PACKAGE_QT5_VERSION_5_6
+
+ James added a follow-up patch that re-enabled it for libressl. That one would
+have to be rewritten as well, obviously. It will be difficult, though, since you
+get circular dependencies... So, if that can't be solved, I'm not sure we should
+accept this patch either (although I really like the approach).
 
  Regards,
  Arnout
 
->  endef
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  This option enables OpenSSL support.
+> +
+>  config BR2_PACKAGE_QT5BASE_TSLIB
+>  	bool "Enable Tslib support"
+>  	select BR2_PACKAGE_TSLIB
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index a5ce583327..20f8a21d91 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -188,13 +188,8 @@ else
+>  QT5BASE_CONFIGURE_OPTS += -no-eglfs
+>  endif
 >  
->  $(eval $(generic-package))
+> -ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+> -# No OpenSSL 1.1.x support in Qt 5.6.x
+> -QT5BASE_CONFIGURE_OPTS += -no-openssl
+> -else
+> -QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
+> -QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
+> -endif
+> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),-openssl,-no-openssl)
+> +QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),openssl)
+>  
+>  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
+>  QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
 > 
