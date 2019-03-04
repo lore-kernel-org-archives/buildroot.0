@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Mar 2019 08:28:22 +0100
-Subject: [Buildroot] Bazel integration in buildroot
-In-Reply-To: <CALFsTFWqzGmcVBEjh7OMq7K2hfQCNOp_RtUbeuT2vVPSnYq9+Q@mail.gmail.com>
-References: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
- <20190301121938.GA21608@lwo1-lhp-f71841>
- <CALFsTFWqzGmcVBEjh7OMq7K2hfQCNOp_RtUbeuT2vVPSnYq9+Q@mail.gmail.com>
-Message-ID: <6c95a20b-8b5e-c007-db8b-ac35aa2e7751@mind.be>
+Date: Mon, 4 Mar 2019 08:34:32 +0100
+Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: Generate package config
+ if it is not specified
+In-Reply-To: <1551443622-29498-1-git-send-email-email@gmail.com>
+References: <1551443622-29498-1-git-send-email-email@gmail.com>
+Message-ID: <dd2a36a6-e77b-6601-6d71-93e60401cbaf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +13,77 @@ To: buildroot@busybox.net
 
 
 
-On 01/03/2019 16:33, Asaf Kahlon wrote:
-> Hello Vadim,
+On 01/03/2019 13:33, Vadim Kochan wrote:
+> From: Vadim Kochan <vadim4j@gmail.com>
 > 
-> On Fri, Mar 1, 2019 at 2:19 PM Vadym Kochan <vadim4j@gmail.com> wrote:
->>
->> Hi Asaf,
->>
->> On Sun, Feb 24, 2019 at 06:24:40PM +0200, Asaf Kahlon wrote:
->>> Hello,
->>>
->>> At my work we started a process in which we want to choose a construction
->>> tool for our packages. Of course all the traditionals are on the list like
->>> cmake, meson and others, but we're also looking at Bazel from Google.
->>> All in all, Bazel seems like a nice construction tool, but I noticed that
->>> there's not even one package in Buildroot that compiles with Bazel and I
->>> wanted to know if we missed something. Is someone here familiar with this
->>> build system and can elaborate more details on Bazel in the embedded world
->>> and specifically in Buildroot?
-
- The big question is: does Bazal support cross-compilation? If it does, using
-Bazel for building in Buildroot should be easy enough.
-
->>>
->>> Regards,
->>> Asaf.
->>
->> First of all I am not an expert, but I have some thoughts about this:)
->>
->> It looks like bazel is a Java application ? if so, then there will one
->> more (I think big) dependency like Java on the host to build the bazel's
->> packages, or it may be built by openjdk buildroot's package (which is
-
- We can have conditionals in dependencies.sh. E.g. the "locale" program is a
-dependency if BR2_NEEDS_HOST_UTF8_LOCALE=y.
-
->> not merged yet). Actually, bazel packages support might be added for local
->> usages only.
->>
->> Anyway it is better if some of the buildroot experts can answer this question.
->>
->> Regards,
->> Vadim Kochan
+> It is possible to generate one-line config for the package just by
+> normalize it to the form:
 > 
-> Thanks for the response!
-> I think too it would require a non-trivial change.
+>     BR2_PACKAGE_${pkg_replaced-to_and_uppercase}
+> 
+> it simplifes a bit of testing package where no additional config options
+> are needed.
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
- We typically start with creating a few packages that use the build system
-before creating infra for it. And in some cases we simply don't create infra,
-e.g. for qmake.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  utils/test-pkg | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index 1995fa8..cce4679 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -2,12 +2,20 @@
+>  set -e
+>  
+>  TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+> +TEMP_CONF=""
+> +
+> +do_clean() {
+> +    if [ ! -z "${TEMP_CONF}" ]; then
+> +        rm -f "${TEMP_CONF}"
+
+ A race-free way of cleaning up! Excellent!
+
+> +    fi
+> +}
+>  
+>  main() {
+>      local o O opts
+>      local cfg dir pkg random toolchains_dir toolchain all number mode
+>      local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+>      local -a toolchains
+> +    local pkg_br_name
+>  
+>      o='hac:d:n:p:r:t:'
+>      O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+> @@ -50,8 +58,15 @@ main() {
+>              ;;
+>          esac
+>      done
+> +
+> +    trap do_clean INT TERM HUP EXIT
+> +
+>      if [ -z "${cfg}" ]; then
+> -        printf "error: no config snippet specified\n" >&2; exit 1
+> +        pkg_br_name="${pkg//-/_}"
+
+ The script is already using bash, so this is OK.
+
+ However, the UPPERCASE macro also converts . to _. Still, since we don't have
+any package with . in it, it should be fine.
 
  Regards,
  Arnout
 
-
-> I'll be happy to hear from other Buildroot experts too.
-> 
-> Thanks,
-> Asaf.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +        pkg_br_name="BR2_PACKAGE_${pkg_br_name^^}"
+> +        TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
+> +        echo "${pkg_br_name}=y" > ${TEMP_CONF}
+> +        cfg="${TEMP_CONF}"
+>      fi
+>      if [ ! -e "${cfg}" ]; then
+>          printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
 > 
