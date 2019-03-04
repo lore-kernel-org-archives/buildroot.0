@@ -1,102 +1,64 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon,  4 Mar 2019 07:44:20 +0800
-Subject: [Buildroot] [PATCH 3/3] package/python-aiomonitor: new package
-In-Reply-To: <20190303234420.1727-1-james.hilliard1@gmail.com>
-References: <20190303234420.1727-1-james.hilliard1@gmail.com>
-Message-ID: <20190303234420.1727-3-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  4 Mar 2019 07:46:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cutelyst: bump to version 2.7.0
+Message-ID: <20190304064635.6819-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Commit c110e48cecde6f543da18388322907b05b25e7d2 disabled openssl support
+on QT 5.6, this has the side-effect of breaking the build of cutelyst
+because cutelyst does not manage build with QT_NO_SSL, see:
+https://github.com/cutelyst/cutelyst/issues/159
 
-aiomonitor adds monitor and python REPL capabilities for
-asyncio application.
+This bump fixes the issue by bumping cutelyst to version 2.7.0 and by
+removing the uneeded select on BR2_PACKAGE_OPENSSL
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/4299221429713ace25fc234abeb81697bc410647
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-aiomonitor/Config.in              | 10 ++++++++++
- package/python-aiomonitor/python-aiomonitor.hash |  5 +++++
- package/python-aiomonitor/python-aiomonitor.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-aiomonitor/Config.in
- create mode 100644 package/python-aiomonitor/python-aiomonitor.hash
- create mode 100644 package/python-aiomonitor/python-aiomonitor.mk
+ package/cutelyst/Config.in     | 1 -
+ package/cutelyst/cutelyst.hash | 2 +-
+ package/cutelyst/cutelyst.mk   | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f38d62a148..56e2914c8e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1034,6 +1034,7 @@ F:	package/python-aiohttp-remotes/
- F:	package/python-aiohttp-security/
- F:	package/python-aiohttp-session/
- F:	package/python-aiohttp-sse/
-+F:	package/python-aiomonitor/
- F:	package/python-aiojobs/
- F:	package/python-aiorwlock/
- F:	package/python-async-timeout/
-diff --git a/package/Config.in b/package/Config.in
-index b27f8dd70b..26e90e3fad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -808,6 +808,7 @@ menu "External python modules"
- 	source "package/python-aiohttp-security/Config.in"
- 	source "package/python-aiohttp-session/Config.in"
- 	source "package/python-aiohttp-sse/Config.in"
-+	source "package/python-aiomonitor/Config.in"
- 	source "package/python-aiorwlock/Config.in"
- 	source "package/python-aiojobs/Config.in"
- 	source "package/python-alsaaudio/Config.in"
-diff --git a/package/python-aiomonitor/Config.in b/package/python-aiomonitor/Config.in
-new file mode 100644
-index 0000000000..c76c952c82
---- /dev/null
-+++ b/package/python-aiomonitor/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_AIOMONITOR
-+	bool "python-aiomonitor"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_TERMINALTABLES # runtime
-+	select BR2_PACKAGE_PYTHON_AIOCONSOLE # runtime
-+	help
-+	  aiomonitor adds monitor and python REPL capabilities for
-+	  asyncio application.
-+
-+	  https://github.com/aio-libs/aiomonitor
-diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
-new file mode 100644
-index 0000000000..ddcfd071e2
---- /dev/null
-+++ b/package/python-aiomonitor/python-aiomonitor.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiomonitor/json
-+md5	0f58ac68497a59d104ecb6ba369df784  aiomonitor-0.4.3.tar.gz
-+sha256	37cd279c26e2c80b4e6ed9d23476c84c0b75fc3794617fceb6f341437b9af5fe  aiomonitor-0.4.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
-diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
-new file mode 100644
-index 0000000000..88f28a52dd
---- /dev/null
-+++ b/package/python-aiomonitor/python-aiomonitor.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiomonitor
-+#
-+################################################################################
-+
-+PYTHON_AIOMONITOR_VERSION = 0.4.3
-+PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
-+PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/11/27/2d25a3318e57181e04d2694768f0e1e621b64606d8424076790caa29e401
-+PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
-+PYTHON_AIOMONITOR_LICENSE = Apache-2.0
-+PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+index 3e28cff95d..8eff938d51 100644
+--- a/package/cutelyst/Config.in
++++ b/package/cutelyst/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_CUTELYST
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+ 	  A C++ Web Framework built on top of Qt, using
+diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
+index edc83f3886..87506ab90c 100644
+--- a/package/cutelyst/cutelyst.hash
++++ b/package/cutelyst/cutelyst.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  d088e6dbbb9a1ef03b4481d44746a2b086724842f5ee85abe8095e2eb6fe0da4    cutelyst-2.5.2.tar.gz
++sha256  f87c2f04b148a50f5df13aa5d75b45bf20e56be2e2cd6e17c2aef5231db4b467    cutelyst-2.7.0.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
+diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
+index 8e117e3286..42a317e765 100644
+--- a/package/cutelyst/cutelyst.mk
++++ b/package/cutelyst/cutelyst.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUTELYST_VERSION = 2.5.2
++CUTELYST_VERSION = 2.7.0
+ CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
+ CUTELYST_INSTALL_STAGING = YES
+ CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
 -- 
-2.17.1
+2.14.1
