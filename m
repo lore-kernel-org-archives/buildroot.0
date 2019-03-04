@@ -1,78 +1,191 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Mar 2019 16:25:44 +0100
-Subject: [Buildroot] [git commit] package/runc: blacklist Codesourcery ARM
- toolchain
-Message-ID: <20190304152628.2021E8E73E@busybox.osuosl.org>
+Date: Mon, 4 Mar 2019 16:26:20 +0100
+Subject: [Buildroot] [git commit] config-fragments: drop old crosstool-ng
+ toolchains
+Message-ID: <20190304152628.27DFF8E897@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce76a989022baa6395b874ed44b9246bba053f8a
+commit: https://git.buildroot.net/buildroot/commit/?id=d9874121479e9c7f7dae6e755760615de85bd181
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/018e309caa0fc662aa2993e47b2037fb6c569011/
+These toolchains are very old and cause a number of autobuilder failures
+that doesn't happen with more recent toolchains:
 
-This toolchain uses glibc 2.18, which does not provide O_TMPFILE support.
+Fixes (glibc 2.18 does not provide O_TMPFILE):
+http://autobuild.buildroot.net/results/c49e8361a1d4406eefd8fc1b35c8e5b061aa403b
+
+Fixes (x86 toolchain built without libquadmath):
+http://autobuild.buildroot.net/results/2d9724f169ccd60c7feb1cb549f1e2e1e9219ac3/
+
+Use Codesourcery ARM toolchain (GCC 4.8.3) to provide a test with a old GCC
+version.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in | 2 ++
- package/docker-engine/Config.in     | 2 ++
- package/runc/Config.in              | 2 ++
- 3 files changed, 6 insertions(+)
+ .../autobuild/armv5-ctng-linux-gnueabi.config               | 10 ----------
+ .../autobuild/armv7-ctng-linux-gnueabihf.config             | 13 -------------
+ .../config-fragments/autobuild/i686-ctng-linux-gnu.config   | 10 ----------
+ .../autobuild/mips64el-ctng_n32-linux-gnu.config            |  9 ---------
+ .../autobuild/mips64el-ctng_n64-linux-gnu.config            | 11 -----------
+ .../autobuild/powerpc-ctng_e500v2-linux-gnuspe.config       | 11 -----------
+ support/config-fragments/autobuild/toolchain-configs.csv    |  9 +--------
+ .../autobuild/x86_64-ctng_locales-linux-gnu.config          | 11 -----------
+ 8 files changed, 1 insertion(+), 83 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 3de3dc6da2..4a4db1cde1 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-@@ -35,3 +36,4 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index cd878880ae..08f30e434a 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
-@@ -56,4 +57,5 @@ comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index 5b08b91032..cfd26e9813 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.19
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCP specification.
-@@ -16,3 +17,4 @@ comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+diff --git a/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config b/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config
+deleted file mode 100644
+index c2f4cb62ca..0000000000
+--- a/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config
++++ /dev/null
+@@ -1,10 +0,0 @@
+-BR2_arm=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config b/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config
+deleted file mode 100644
+index 60ec952940..0000000000
+--- a/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config
++++ /dev/null
+@@ -1,13 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv7-ctng-linux-gnueabihf"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/i686-ctng-linux-gnu.config b/support/config-fragments/autobuild/i686-ctng-linux-gnu.config
+deleted file mode 100644
+index 9a961123c3..0000000000
+--- a/support/config-fragments/autobuild/i686-ctng-linux-gnu.config
++++ /dev/null
+@@ -1,10 +0,0 @@
+-BR2_x86_i686=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i686-ctng-linux-gnu.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-ctng-linux-gnu"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config b/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config
+deleted file mode 100644
+index cf33ea26f3..0000000000
+--- a/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config
++++ /dev/null
+@@ -1,9 +0,0 @@
+-BR2_mips64el=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n32-linux-gnu.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="mips64el-ctng_n32-linux-gnu"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config b/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config
+deleted file mode 100644
+index 942a1b13b5..0000000000
+--- a/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config
++++ /dev/null
+@@ -1,11 +0,0 @@
+-BR2_mips64el=y
+-BR2_MIPS_NABI64=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="mips64el-ctng_n64-linux-gnu"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config b/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config
+deleted file mode 100644
+index e82d3fbda7..0000000000
+--- a/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config
++++ /dev/null
+@@ -1,11 +0,0 @@
+-BR2_powerpc=y
+-BR2_powerpc_8548=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index c51335ac63..60ce1a9786 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -19,11 +19,10 @@ support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
+ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ 
+ # Test a toolchain with an old gcc version (gcc 4.8)
+-support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
++support/config-fragments/autobuild/sourcery-arm.config,x86
+ 
+ # Toolchains used by test-pkg only when the '-a' option is passed:
+ support/config-fragments/autobuild/arm-aarch64.config,x86_64
+-support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
+ support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
+ support/config-fragments/autobuild/br-arc-full-internal.config,any
+ support/config-fragments/autobuild/br-arc-internal-glibc.config,any
+@@ -59,18 +58,12 @@ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+ support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
+ support/config-fragments/autobuild/br-xtensa-full.config,x86_64
+ support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+-support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
+ support/config-fragments/autobuild/linaro-aarch64.config,x86
+ support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+ support/config-fragments/autobuild/linaro-arm.config,x86
+-support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
+-support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
+-support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config,x86
+ support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86
+-support/config-fragments/autobuild/sourcery-arm.config,x86
+ support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
+ support/config-fragments/autobuild/sourcery-mips64.config,x86
+ support/config-fragments/autobuild/sourcery-mips.config,x86
+ support/config-fragments/autobuild/sourcery-nios2.config,x86
+ support/config-fragments/autobuild/sourcery-x86-64.config,x86
+-support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config,x86
+diff --git a/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config b/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config
+deleted file mode 100644
+index 435034be27..0000000000
+--- a/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config
++++ /dev/null
+@@ -1,11 +0,0 @@
+-BR2_x86_64=y
+-BR2_x86_corei7=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/x86_64-ctng_locales-linux-gnu.tar.xz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="x86_64-ctng_locales-linux-gnu"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
