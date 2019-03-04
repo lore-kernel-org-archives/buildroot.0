@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Mar 2019 11:22:25 +0100
-Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
-In-Reply-To: <3f0c64cc-c73e-e9d3-ff79-e1ba91041f00@mind.be>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228182159.02a8a6c4@windsurf>
- <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
- <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
- <20190222212912.727ff0c2@windsurf>
- <20190225011003.g7j35hly5bpf2bys@vkochan-ThinkPad-T470p>
- <20190225090543.1e93d3a6@windsurf.home>
- <20190301145043.GA20576@lwo1-lhp-f71841>
- <20190301171803.GD2721@scaer>
- <3f0c64cc-c73e-e9d3-ff79-e1ba91041f00@mind.be>
-Message-ID: <20190304112225.3ea9d6a8@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Mar 2019 14:05:46 +0100
+Subject: [Buildroot] Python 2.7 end of life on January 1, 2020
+In-Reply-To: <506b3ab3-1450-d7c6-56aa-a5bea1a88353@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 4 Mar 2019 08:20:11 +0100")
+References: <20190301195404.1c00356b@windsurf>
+ <506b3ab3-1450-d7c6-56aa-a5bea1a88353@mind.be>
+Message-ID: <87zhqaiyc5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 4 Mar 2019 08:24:33 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-> On 01/03/2019 18:18, Yann E. MORIN wrote:
-> > However, we eventually concluded that this was not going to work
-> > reliably, so we decided against at that time. I could not find that
-> > conclusion in the devdays meeting reports, so I guess it's burried
-> > somewhere in the mailing list. I'll try to unearth those later in the
-> > evening or the week-end...  
-> 
->  If I remember correct, didn't GNU make bypass the SHELL variable for simple
-> commands?
+ >> This means that our 2020.02 LTS release probably should not have Python
+ >> 2.x anymore ?
 
-Aah, yes, you have good memory, this definitely rings a bell.
+ >  I don't know. We don't usually terminate a package just because it's EOL.
+ > Remember, we have plenty of packages with dead upstreams. Or take Qt 5.6 for
+ > example: it's been EOL for how long now?
 
-Thomas
+Qt 5.6 _IS_ still supported, but will go EOL this month:
+
+https://blog.qt.io/blog/2018/11/29/support-qt-5-6-lts-ends-march-2019/
+
+Regarding Python 2.x longer term, I guess it depends on if the python
+module authors will continue to support it.
+
+ >  In addition, as opposed to Qt5.6 for example, distros (Debian and Redhat) will
+ > keep on maintaining it for a few years still.
+
+ >  So I'd say: as long as it doesn't cause breakage, keep it. Definitely as long
+ > as there are other packages depending on it (Kodi...).
+
+Agreed.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
