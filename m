@@ -1,9 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Mar 2019 08:20:11 +0100
-Subject: [Buildroot] Python 2.7 end of life on January 1, 2020
-In-Reply-To: <20190301195404.1c00356b@windsurf>
-References: <20190301195404.1c00356b@windsurf>
-Message-ID: <506b3ab3-1450-d7c6-56aa-a5bea1a88353@mind.be>
+Date: Mon, 4 Mar 2019 08:24:33 +0100
+Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
+In-Reply-To: <20190301171803.GD2721@scaer>
+References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
+ <20181228182159.02a8a6c4@windsurf>
+ <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
+ <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
+ <20190222212912.727ff0c2@windsurf>
+ <20190225011003.g7j35hly5bpf2bys@vkochan-ThinkPad-T470p>
+ <20190225090543.1e93d3a6@windsurf.home>
+ <20190301145043.GA20576@lwo1-lhp-f71841> <20190301171803.GD2721@scaer>
+Message-ID: <3f0c64cc-c73e-e9d3-ff79-e1ba91041f00@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +19,15 @@ To: buildroot@busybox.net
 
 
 
-On 01/03/2019 19:54, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Through a LWN.net article, I recently realized that Python 2.7 will see
-> its end of life on January 1, 2020, according to:
-> 
->   https://www.python.org/dev/peps/pep-0373/
-> 
-> You also have a fancy countdown at:
-> 
->   https://pythonclock.org/
-> 
-> This means that our 2020.02 LTS release probably should not have Python
-> 2.x anymore ?
+On 01/03/2019 18:18, Yann E. MORIN wrote:
+> However, we eventually concluded that this was not going to work
+> reliably, so we decided against at that time. I could not find that
+> conclusion in the devdays meeting reports, so I guess it's burried
+> somewhere in the mailing list. I'll try to unearth those later in the
+> evening or the week-end...
 
- I don't know. We don't usually terminate a package just because it's EOL.
-Remember, we have plenty of packages with dead upstreams. Or take Qt 5.6 for
-example: it's been EOL for how long now?
-
- In addition, as opposed to Qt5.6 for example, distros (Debian and Redhat) will
-keep on maintaining it for a few years still.
-
- So I'd say: as long as it doesn't cause breakage, keep it. Definitely as long
-as there are other packages depending on it (Kodi...).
-
- I expect we'll remove it some time during 2020 to make sure it's no longer in
-the 2021.02 LTS.
+ If I remember correct, didn't GNU make bypass the SHELL variable for simple
+commands?
 
  Regards,
  Arnout
-
-> 
-> If that's our decision, then we should probably discuss the deprecation
-> path we want to follow to strongly warn users that they should migrate
-> away from Python 2.x.
-> 
-> What do people think about this ?
-> 
-> Best regards,
-> 
-> Thomas
-> 
