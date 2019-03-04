@@ -1,191 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Mar 2019 16:26:20 +0100
-Subject: [Buildroot] [git commit] config-fragments: drop old crosstool-ng
- toolchains
-Message-ID: <20190304152628.27DFF8E897@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 4 Mar 2019 18:06:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/efl: Fix build without OpenGL ES
+In-Reply-To: <20190301002311.17071-1-vadim4j@gmail.com>
+References: <20190301002311.17071-1-vadim4j@gmail.com>
+Message-ID: <ef9aef3f-4a9e-bf62-ce70-4b119b5319ad@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9874121479e9c7f7dae6e755760615de85bd181
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Vadim,
 
-These toolchains are very old and cause a number of autobuilder failures
-that doesn't happen with more recent toolchains:
+Le 01/03/2019 ? 01:23, Vadim Kochan a ?crit?:
+> efl does not compile without OpenGL ES because it checks for
+> GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr
+> types if such version is not defined, so fix it by add check also for
+> OpenGL 1.5 where these types are defined.
+> 
+> Fixes:
+> 	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
 
-Fixes (glibc 2.18 does not provide O_TMPFILE):
-http://autobuild.buildroot.net/results/c49e8361a1d4406eefd8fc1b35c8e5b061aa403b
 
-Fixes (x86 toolchain built without libquadmath):
-http://autobuild.buildroot.net/results/2d9724f169ccd60c7feb1cb549f1e2e1e9219ac3/
+Thanks for the patch!
 
-Use Codesourcery ARM toolchain (GCC 4.8.3) to provide a test with a old GCC
-version.
+Upstream used a slightly different fix for this issue, can you try to backport
+this patch instead?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../autobuild/armv5-ctng-linux-gnueabi.config               | 10 ----------
- .../autobuild/armv7-ctng-linux-gnueabihf.config             | 13 -------------
- .../config-fragments/autobuild/i686-ctng-linux-gnu.config   | 10 ----------
- .../autobuild/mips64el-ctng_n32-linux-gnu.config            |  9 ---------
- .../autobuild/mips64el-ctng_n64-linux-gnu.config            | 11 -----------
- .../autobuild/powerpc-ctng_e500v2-linux-gnuspe.config       | 11 -----------
- support/config-fragments/autobuild/toolchain-configs.csv    |  9 +--------
- .../autobuild/x86_64-ctng_locales-linux-gnu.config          | 11 -----------
- 8 files changed, 1 insertion(+), 83 deletions(-)
+https://git.enlightenment.org/core/efl.git/commit/?id=0d2b624f1e24240a1c4e651aa1cfe9a8dd10a573
 
-diff --git a/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config b/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config
-deleted file mode 100644
-index c2f4cb62ca..0000000000
---- a/support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_arm=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config b/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config
-deleted file mode 100644
-index 60ec952940..0000000000
---- a/support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config
-+++ /dev/null
-@@ -1,13 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv7-ctng-linux-gnueabihf"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/i686-ctng-linux-gnu.config b/support/config-fragments/autobuild/i686-ctng-linux-gnu.config
-deleted file mode 100644
-index 9a961123c3..0000000000
---- a/support/config-fragments/autobuild/i686-ctng-linux-gnu.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_x86_i686=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i686-ctng-linux-gnu.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-ctng-linux-gnu"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config b/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config
-deleted file mode 100644
-index cf33ea26f3..0000000000
---- a/support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config
-+++ /dev/null
-@@ -1,9 +0,0 @@
--BR2_mips64el=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n32-linux-gnu.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="mips64el-ctng_n32-linux-gnu"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config b/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config
-deleted file mode 100644
-index 942a1b13b5..0000000000
---- a/support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config
-+++ /dev/null
-@@ -1,11 +0,0 @@
--BR2_mips64el=y
--BR2_MIPS_NABI64=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="mips64el-ctng_n64-linux-gnu"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config b/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config
-deleted file mode 100644
-index e82d3fbda7..0000000000
---- a/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config
-+++ /dev/null
-@@ -1,11 +0,0 @@
--BR2_powerpc=y
--BR2_powerpc_8548=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index c51335ac63..60ce1a9786 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -19,11 +19,10 @@ support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
- support/config-fragments/autobuild/br-arm-full-static.config,x86_64
- 
- # Test a toolchain with an old gcc version (gcc 4.8)
--support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
-+support/config-fragments/autobuild/sourcery-arm.config,x86
- 
- # Toolchains used by test-pkg only when the '-a' option is passed:
- support/config-fragments/autobuild/arm-aarch64.config,x86_64
--support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
- support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
- support/config-fragments/autobuild/br-arc-full-internal.config,any
- support/config-fragments/autobuild/br-arc-internal-glibc.config,any
-@@ -59,18 +58,12 @@ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
- support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
--support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
- support/config-fragments/autobuild/linaro-aarch64.config,x86
- support/config-fragments/autobuild/linaro-aarch64-be.config,x86
- support/config-fragments/autobuild/linaro-arm.config,x86
--support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
--support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
--support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config,x86
- support/config-fragments/autobuild/sourcery-arm-armv4t.config,x86
--support/config-fragments/autobuild/sourcery-arm.config,x86
- support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
- support/config-fragments/autobuild/sourcery-mips64.config,x86
- support/config-fragments/autobuild/sourcery-mips.config,x86
- support/config-fragments/autobuild/sourcery-nios2.config,x86
- support/config-fragments/autobuild/sourcery-x86-64.config,x86
--support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config,x86
-diff --git a/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config b/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config
-deleted file mode 100644
-index 435034be27..0000000000
---- a/support/config-fragments/autobuild/x86_64-ctng_locales-linux-gnu.config
-+++ /dev/null
-@@ -1,11 +0,0 @@
--BR2_x86_64=y
--BR2_x86_corei7=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/x86_64-ctng_locales-linux-gnu.tar.xz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="x86_64-ctng_locales-linux-gnu"
--BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+>  ...x-check-definition-of-GLsizeiptr-and-GLin.patch | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+> 
+> diff --git a/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+> new file mode 100644
+> index 0000000000..07672981d3
+> --- /dev/null
+> +++ b/package/efl/0001-lib-evas-Fix-check-definition-of-GLsizeiptr-and-GLin.patch
+> @@ -0,0 +1,30 @@
+> +From 161af4faa3b30f0b2db1f9642fca559eeed05da2 Mon Sep 17 00:00:00 2001
+> +From: Vadim Kochan <vadim4j@gmail.com>
+> +Date: Fri, 1 Mar 2019 01:05:31 +0200
+> +Subject: [PATCH 1/1] lib: evas: Fix check definition of GLsizeiptr and
+> + GLintprt
+> +
+> +GLsizeiptr and GLintptr also defined in GL 1.5 version,
+> +so add check for both GL and GLES versions.
+> +
+> +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> +---
+> + src/lib/evas/Evas_GL.h | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/lib/evas/Evas_GL.h b/src/lib/evas/Evas_GL.h
+> +index fa3e6f4..1928f16 100644
+> +--- a/src/lib/evas/Evas_GL.h
+> ++++ b/src/lib/evas/Evas_GL.h
+> +@@ -4270,7 +4270,7 @@ typedef signed int       GLfixed;      // Changed khronos_int32_t
+> + # endif
+> + #endif
+> + 
+> +-#ifndef GL_ES_VERSION_2_0
+> ++#if !defined(GL_VERSION_1_5) && !defined(GL_ES_VERSION_2_0)
+> + /* GL types for handling large vertex buffer objects */
+> + #include <stddef.h>
+> + typedef ptrdiff_t GLintptr;     // Changed khronos_intptr_t
+> +-- 
+> +2.14.1
+> +
+> 
