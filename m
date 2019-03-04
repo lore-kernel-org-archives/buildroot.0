@@ -1,16 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Mar 2019 08:24:33 +0100
-Subject: [Buildroot] [PATCH v7 0/8] Top-level parallel build support
-In-Reply-To: <20190301171803.GD2721@scaer>
-References: <20181228104335.22379-1-thomas.petazzoni@bootlin.com>
- <20181228182159.02a8a6c4@windsurf>
- <1e8db4c8-8bd4-d47a-ae39-a2d461a49672@andin.de>
- <CAMw6YJL9ciuU=tScsbV3rqH1KFd+OaPn6jN+DrUDqTdLizqQCA@mail.gmail.com>
- <20190222212912.727ff0c2@windsurf>
- <20190225011003.g7j35hly5bpf2bys@vkochan-ThinkPad-T470p>
- <20190225090543.1e93d3a6@windsurf.home>
- <20190301145043.GA20576@lwo1-lhp-f71841> <20190301171803.GD2721@scaer>
-Message-ID: <3f0c64cc-c73e-e9d3-ff79-e1ba91041f00@mind.be>
+Date: Mon, 4 Mar 2019 08:28:22 +0100
+Subject: [Buildroot] Bazel integration in buildroot
+In-Reply-To: <CALFsTFWqzGmcVBEjh7OMq7K2hfQCNOp_RtUbeuT2vVPSnYq9+Q@mail.gmail.com>
+References: <CALFsTFU49uLC3aW+O62_oqa2v-tGeT8ZEqMpRjybSBcy4eGSWQ@mail.gmail.com>
+ <20190301121938.GA21608@lwo1-lhp-f71841>
+ <CALFsTFWqzGmcVBEjh7OMq7K2hfQCNOp_RtUbeuT2vVPSnYq9+Q@mail.gmail.com>
+Message-ID: <6c95a20b-8b5e-c007-db8b-ac35aa2e7751@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,15 +14,66 @@ To: buildroot@busybox.net
 
 
 
-On 01/03/2019 18:18, Yann E. MORIN wrote:
-> However, we eventually concluded that this was not going to work
-> reliably, so we decided against at that time. I could not find that
-> conclusion in the devdays meeting reports, so I guess it's burried
-> somewhere in the mailing list. I'll try to unearth those later in the
-> evening or the week-end...
+On 01/03/2019 16:33, Asaf Kahlon wrote:
+> Hello Vadim,
+> 
+> On Fri, Mar 1, 2019 at 2:19 PM Vadym Kochan <vadim4j@gmail.com> wrote:
+>>
+>> Hi Asaf,
+>>
+>> On Sun, Feb 24, 2019 at 06:24:40PM +0200, Asaf Kahlon wrote:
+>>> Hello,
+>>>
+>>> At my work we started a process in which we want to choose a construction
+>>> tool for our packages. Of course all the traditionals are on the list like
+>>> cmake, meson and others, but we're also looking at Bazel from Google.
+>>> All in all, Bazel seems like a nice construction tool, but I noticed that
+>>> there's not even one package in Buildroot that compiles with Bazel and I
+>>> wanted to know if we missed something. Is someone here familiar with this
+>>> build system and can elaborate more details on Bazel in the embedded world
+>>> and specifically in Buildroot?
 
- If I remember correct, didn't GNU make bypass the SHELL variable for simple
-commands?
+ The big question is: does Bazal support cross-compilation? If it does, using
+Bazel for building in Buildroot should be easy enough.
+
+>>>
+>>> Regards,
+>>> Asaf.
+>>
+>> First of all I am not an expert, but I have some thoughts about this:)
+>>
+>> It looks like bazel is a Java application ? if so, then there will one
+>> more (I think big) dependency like Java on the host to build the bazel's
+>> packages, or it may be built by openjdk buildroot's package (which is
+
+ We can have conditionals in dependencies.sh. E.g. the "locale" program is a
+dependency if BR2_NEEDS_HOST_UTF8_LOCALE=y.
+
+>> not merged yet). Actually, bazel packages support might be added for local
+>> usages only.
+>>
+>> Anyway it is better if some of the buildroot experts can answer this question.
+>>
+>> Regards,
+>> Vadim Kochan
+> 
+> Thanks for the response!
+> I think too it would require a non-trivial change.
+
+ We typically start with creating a few packages that use the build system
+before creating infra for it. And in some cases we simply don't create infra,
+e.g. for qmake.
 
  Regards,
  Arnout
+
+
+> I'll be happy to hear from other Buildroot experts too.
+> 
+> Thanks,
+> Asaf.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
