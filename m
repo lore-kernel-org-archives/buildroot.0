@@ -1,100 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 05 Mar 2019 10:00:14 -0000
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.12.6
-Message-ID: <20190305095735.8597A80035@busybox.osuosl.org>
+Date: Tue, 05 Mar 2019 10:00:15 -0000
+Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
+ 1.0.1
+Message-ID: <20190305095735.D9AF88E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c49c1579575c5653ecd608129a8cc0d8ceb86887
+commit: https://git.buildroot.net/buildroot/commit/?id=33f0fd27fadb568740f100978f859d4967cc6dc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Two quirks for specific devices, two little cleanups (for
-details see [1])
+This release fixes contains a small fix which allows calling the
+backend initialization routine more than once. Release notes:
 
-- rebased 0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
+  https://wpewebkit.org/release/wpebackend-fdo-1.0.1.html
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-January/039864.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...son.build-enable-CPP-include-check-only-in-case-CP.patch | 13 +++++++++----
- package/libinput/libinput.hash                              | 10 +++++-----
- package/libinput/libinput.mk                                |  2 +-
- 3 files changed, 15 insertions(+), 10 deletions(-)
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
-index c9a0652e40..341f6eb11d 100644
---- a/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
-+++ b/package/libinput/0001-meson.build-enable-CPP-include-check-only-in-case-CP.patch
-@@ -1,4 +1,4 @@
--From 57383dc900e76e65ce5e5dc95f776e086100344d Mon Sep 17 00:00:00 2001
-+From 3656db7fd23d166238cb8816c0d097095911b3fc Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Sat, 12 Jan 2019 10:22:38 +0100
- Subject: [PATCH] meson.build: enable CPP include check only in case CPP
-@@ -8,22 +8,27 @@ Drop hard meson C++/CPP dependency, only needed for the build-time
- header inclusion test, build the test only in case C++/CPP compiler
- is available.
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 20c89d324c..6e6f9f0e3f 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.0.tar.xz.sums
+-md5 5318728afb3bf7417293af67ce427963 wpebackend-fdo-1.0.0.tar.xz
+-sha1 7ee22bc1d585616f4ad2047d8be54ec396486211 wpebackend-fdo-1.0.0.tar.xz
+-sha256 7a747f87a1ae46d30144369050e3ce348b58986d04e1a139ba75c198fa636729 wpebackend-fdo-1.0.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
++md5 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
++sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
++sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8 wpebackend-fdo-1.0.1.tar.xz
  
-+Upstream: https://gitlab.freedesktop.org/libinput/libinput/commit/4516ba977c1e22d01da4cc50a8ebffa5d11d73f1
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased on 1.12.6, add upstream link]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
- ---
-  meson.build | 16 +++++++++-------
-  1 file changed, 9 insertions(+), 7 deletions(-)
- 
- diff --git a/meson.build b/meson.build
--index a9c7c185..8183822e 100644
-+index 8127c674..86960d84 100644
- --- a/meson.build
- +++ b/meson.build
- @@ -1,4 +1,4 @@
- -project('libinput', 'c', 'cpp',
- +project('libinput', 'c',
-- 	version : '1.12.5',
-+ 	version : '1.12.6',
-  	license : 'MIT/Expat',
-  	default_options : [ 'c_std=gnu99', 'warning_level=2' ],
--@@ -641,12 +641,14 @@ executable('test-build-linker',
-+@@ -642,12 +642,14 @@ executable('test-build-linker',
-  	   include_directories : [includes_src, includes_include],
-  	   dependencies : [ dep_libinput, dep_libinput_util ],
-  	   install : false)
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 3ca3fd6771..15be6d71e2 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-January/039804.html
--md5  40dcc044443c9314537f605b6f30bf17 libinput-1.12.5.tar.xz
--sha1 7c0b75e8cf2f1747fb8ae69300acabd46f7a7f0d libinput-1.12.5.tar.xz
--sha256 7d4b6831010ef3bf69df4b41170047fa4325edef8ff5d2d28e78281af0687123 libinput-1.12.5.tar.xz
--sha512 9365b91b3ac2c4ff0f9927913242afac7677979682dd7b541001b13d09d7982acd854f6d348101cfa4b0854c6a92b4c683f62593a97870e32ae3d607eaeae3ff libinput-1.12.5.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-January/039864.html
-+md5 8cf10cc0fdfab865b105dd28283fa0fd libinput-1.12.6.tar.xz
-+sha1 e3044cd2073312c24a315df1be4aa38da6bb2bbd libinput-1.12.6.tar.xz
-+sha256 12b4023a3fc683d3d8127db573bdf925a2ef366615042f69c87e57c32a50f45d libinput-1.12.6.tar.xz
-+sha512 02ad90c77a0c8c27fd96ec34e1546c5f0947ced49bad386372c1ef7c41b3b2157c39020f0766f20aaf2ab3c97128567e169279bea21115ced39499dda325d2ef libinput-1.12.6.tar.xz
- 
- # License files
- sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index bc4cc89825..450fd26a24 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+ # Hashes for license files:
+ sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 06c87cb9bf..5842861bac 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.12.5
-+LIBINPUT_VERSION = 1.12.6
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-WPEBACKEND_FDO_VERSION = 1.0.0
++WPEBACKEND_FDO_VERSION = 1.0.1
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
