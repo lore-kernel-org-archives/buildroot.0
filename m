@@ -1,39 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 5 Mar 2019 22:06:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: remove
- apexsink support
-In-Reply-To: <20190305212203.2f7d4b33@windsurf>
-References: <20190305192032.14244-1-fontaine.fabrice@gmail.com>
- <20190305212203.2f7d4b33@windsurf>
-Message-ID: <CAPi7W80pG6O-jJqSL6KTC-eNhPdCZW2ZPAfKEcOSLEwGC5gwuw@mail.gmail.com>
+Date: Tue,  5 Mar 2019 22:19:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imx-mkimage: fix license file
+Message-ID: <20190305211922.11179-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-Le mar. 5 mars 2019 ? 21:22, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Tue,  5 Mar 2019 20:20:32 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > apexsink does not build with OpenSSL 1.1.x so remove this option
->
-> Just curious: was this build issue fixed in newer version of GStreamer ?
-There is no more apexsink option in gstreamer1 (since version 1.12).
-However, the hls option which also depends on openssl has been updated
-to support openssl 1.1.x
-(https://github.com/GStreamer/gst-plugins-bad/commit/e796a7cb974a361bd4463a71aed4e1256cfe2df6)
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+COPYING file is now at the top level, see:
+https://source.codeaurora.org/external/imx/imx-mkimage/commit/?id=4a7e6873dc9de70f61dcbdb9c15a945a2e31d272
 
-Fabrice
+Fixes:
+ - http://autobuild.buildroot.org/results/03cffcf6959d5a6efa05b6e3c71d95d096cc942a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/imx-mkimage/imx-mkimage.hash | 2 +-
+ package/imx-mkimage/imx-mkimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+index c9dcd0fa1d..1c00a78904 100644
+--- a/package/imx-mkimage/imx-mkimage.hash
++++ b/package/imx-mkimage/imx-mkimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256 d5d7afca6abef4fc6653a2f8b99545d62921a5ab8c44ff3481120232e2162dde  imx-mkimage-rel_imx_4.14.78_1.0.0_ga.tar.gz
+-sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
++sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index 06d3157dc1..9f8e7d2d01 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -8,7 +8,7 @@ IMX_MKIMAGE_VERSION = rel_imx_4.14.78_1.0.0_ga
+ IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+ IMX_MKIMAGE_SITE_METHOD = git
+ IMX_MKIMAGE_LICENSE = GPL-2.0+
+-IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
++IMX_MKIMAGE_LICENSE_FILES = COPYING
+ HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+ 
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+-- 
+2.14.1
