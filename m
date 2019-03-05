@@ -1,85 +1,81 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  5 Mar 2019 20:20:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: remove apexsink
- support
-Message-ID: <20190305192032.14244-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Mar 2019 20:31:54 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5base: add
+ BR2_PACKAGE_QT5BASE_OPENSSL
+In-Reply-To: <20190304201145.E02D08E89D@busybox.osuosl.org>
+References: <20190304201145.E02D08E89D@busybox.osuosl.org>
+Message-ID: <0f583eb7-72ed-1d26-26d1-9194309cb1a5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apexsink does not build with OpenSSL 1.1.x so remove this option
 
-Fixes:
- - http://autobuild.buildroot.org/results/a29e8a8509190fc4b3c419dae2301cf72a601f62
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy                                     | 8 ++++++++
- package/gstreamer/gst-plugins-bad/Config.in          | 4 ----
- package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk | 8 +-------
- 3 files changed, 9 insertions(+), 11 deletions(-)
+On 04/03/2019 21:13, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=a946657b6e40924a746d1bd86eb023158abd1ab8
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Commit c110e48cecde6f543da18388322907b05b25e7d2 disabled openssl support
+> on QT 5.6, this has the side-effect of breaking the build of
+> python-pyqt5 because support of openssl is enabled on python-pyqt5 if
+> BR2_PACKAGE_OPENSSL is selected
+> 
+> To fix this issue, add a new BR2_PACKAGE_QT5BASE_OPENSSL option in
+> qt5base and use it in python-pyqt5
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/e92991308d47649cecc4084e41ab5711ec96831f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [Peter: make _OPENSSL a blind option, add libressl logic for 5.6.x]
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/python-pyqt5/python-pyqt5.mk | 2 +-
+>  package/qt5/qt5base/Config.in        | 6 ++++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+> index cde026ef63..4955936ae3 100644
+> --- a/package/python-pyqt5/python-pyqt5.mk
+> +++ b/package/python-pyqt5/python-pyqt5.mk
+> @@ -25,9 +25,9 @@ PYTHON_PYQT5_QTDETAIL_LICENSE = Open Source
+>  PYTHON_PYQT5_QTDETAIL_TYPE = shared
+>  
+>  # Turn off features that aren't available in current qt configuration
+> -PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
+>  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
+>  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
+> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
+>  
+>  define PYTHON_PYQT5_QTDETAIL
+>  	echo $(1) >> $(2)/qtdetail.out
+> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> index 1340ea48f0..696e689758 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -286,6 +286,12 @@ comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+>  	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+>  		!BR2_HOST_GCC_AT_LEAST_4_8
+>  
+> +config BR2_PACKAGE_QT5BASE_OPENSSL
+> +	bool
+> +	# No OpenSSL 1.1.x support in Qt 5.6.x
+> +	default y if BR2_PACKAGE_QT5_VERSION_5_6 && BR2_PACKAGE_LIBRESSL
+> +	default y if BR2_PACKAGE_QT5_VERSION_LATEST && BR2_PACKAGE_OPENSSL
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 25b48fba82..93e50f3f60 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,14 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2019.05"
-+
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
-+	bool "gst-plugins-bad apexsink option removed"
-+	select BR2_LEGACY
-+	help
-+	  The gst-plugins-bad apexsink option was removed.
-+
- comment "Legacy options removed in 2019.02"
- 
- config BR2_PACKAGE_QT
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index f45981f6c8..971668b710 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -242,10 +242,6 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_Y4M
- 
- comment "plugins with external dependencies (there may be more available)"
- 
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
--	bool "apexsink"
--	select BR2_PACKAGE_OPENSSL
--
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BZ2
- 	bool "bz2"
- 	select BR2_PACKAGE_BZIP2
-diff --git a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-index 856ff9665d..a98eac4235 100644
---- a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
-@@ -12,6 +12,7 @@ GST_PLUGINS_BAD_LICENSE = LGPL-2.1+, GPL-2.0+
- GST_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB COPYING
- 
- GST_PLUGINS_BAD_CONF_OPTS = \
-+	--disable-apexsink \
- 	--disable-examples \
- 	--disable-spandsp
- 
-@@ -472,13 +473,6 @@ GST_PLUGINS_BAD_CONF_OPTS += --disable-y4m
- endif
- 
- # plugins with deps
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK),y)
--GST_PLUGINS_BAD_CONF_OPTS += --enable-apexsink
--GST_PLUGINS_BAD_DEPENDENCIES += openssl
--else
--GST_PLUGINS_BAD_CONF_OPTS += --disable-apexsink
--endif
--
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BZ2),y)
- GST_PLUGINS_BAD_CONF_OPTS += --enable-bz2
- GST_PLUGINS_BAD_DEPENDENCIES += bzip2
--- 
-2.14.1
+ Now it's not enabled for libressl... The && OPENSSL should be removed I think.
+
+ Regards,
+ Arnout
+
+> +
+>  config BR2_PACKAGE_QT5BASE_TSLIB
+>  	bool "Enable Tslib support"
+>  	select BR2_PACKAGE_TSLIB
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
