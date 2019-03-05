@@ -1,65 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:15 -0000
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.22.4
-Message-ID: <20190305095735.E02128E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-benchmark: new package
+Message-ID: <20190305095736.1D42F8E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5546dfd095df4f874ff3bc46e3a2cffda3693340
+commit: https://git.buildroot.net/buildroot/commit/?id=2fc4790e672f7455c24767791db48584fde88eed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a maintenance release of the current stable WPE WebKit version,
-which contains security fixes for CVE identifiers: CVE-2019-6212,
-CVE-2019-6215, CVE-2019-6216, CVE-2019-6217, CVE-2019-6226,
-CVE-2019-6227, CVE-2019-6229, CVE-2019-6233, and CVE-2019-6234.
-Additionally, it contains a few minor fixes.
+OP-TEE performance benchmark tools for the OP-TEE project.
 
-Release notes can be found in the announcement:
+This packages generates embedded Linux based OS materials used
+to retrieve execution timing information on invocation of the
+OP-TEE secure services.
 
-  https://wpewebkit.org/release/wpe-2.22.4.html
+It is added next to the OP-TEE client package in BR configuration.
 
-More details on the issues covered by securit fixes can be found
-in the corresponding security advisory:
+This change references in Buildroot the today's latest OP-TEE
+revision release tagged 3.4.0.
 
-  https://wpewebkit.org/security/WSA-2019-0001.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[Thomas:
+ - drop version selection
+ - propagate the dependency of optee-client]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/optee-benchmark/Config.in            | 15 +++++++++++++++
+ package/optee-benchmark/optee-benchmark.hash |  2 ++
+ package/optee-benchmark/optee-benchmark.mk   | 13 +++++++++++++
+ 5 files changed, 32 insertions(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 39937a3465..27c6cdf33e 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.22.3.tar.xz.sums
--md5 6d0c693ea49a93fc9e701cf784245ea5 wpewebkit-2.22.3.tar.xz
--sha1 d8a22bec787f38939c7922dc43bf27c9144cef74 wpewebkit-2.22.3.tar.xz
--sha256 241f177cded1a4ba3088716650eaaac25588878882170789b3c630ac45dbb2fa wpewebkit-2.22.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.22.4.tar.xz.sums
-+md5 6e5c668473c57906bdec1c641bac4579 wpewebkit-2.22.4.tar.xz
-+sha1 002b8b25f4fc26bfef68767b3ff1eba1aac53fa5 wpewebkit-2.22.4.tar.xz
-+sha256 871e86b7e989de0c1224ac7ab8ed6d8b52756cf793a8c253b56ab8ba8d288c96 wpewebkit-2.22.4.tar.xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ea307ddcbb..44de17aba1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -689,6 +689,7 @@ F:	package/szip/
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6b3d56ab0c..89df9b725c 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
++F:	package/optee-benchmark/
+ F:	package/optee-client/
+ F:	package/optee-examples/
+ F:	package/optee-test/
+diff --git a/package/Config.in b/package/Config.in
+index cb81180faa..420e6e95a3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2079,6 +2079,7 @@ endmenu
  
--WPEWEBKIT_VERSION = 2.22.3
-+WPEWEBKIT_VERSION = 2.22.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
++	source "package/optee-benchmark/Config.in"
+ 	source "package/optee-client/Config.in"
+ 	source "package/optee-examples/Config.in"
+ 	source "package/optee-test/Config.in"
+diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
+new file mode 100644
+index 0000000000..0e36549c94
+--- /dev/null
++++ b/package/optee-benchmark/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_OPTEE_BENCHMARK
++	bool "optee-benchmark"
++	depends on !BR2_STATIC_LIBS # optee-client
++	select BR2_PACKAGE_OPTEE_CLIENT
++	select BR2_PACKAGE_LIBYAML
++	help
++	  Enable the OP-TEE benchmark package that brings facilities
++	  for profiling traversal and execution timings when
++	  invoking OP-TEE. OP-TEE benchmark is a component delivered
++	  by the OP-TEE project.
++
++	  http://github.com/linaro-swg/optee_benchmark
++
++comment "optee-benchmark needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
+new file mode 100644
+index 0000000000..c3c41b69da
+--- /dev/null
++++ b/package/optee-benchmark/optee-benchmark.hash
+@@ -0,0 +1,2 @@
++# From https://github.com/linaro-swg/optee_benchmark/archive/3.4.0.tar.gz
++sha256 e5e868a06a9dcc8cc444b3e72c65f57670b0811091be62edbe0d03d13c75e716 optee-benchmark-3.4.0.tar.gz
+diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
+new file mode 100644
+index 0000000000..4ebab4498e
+--- /dev/null
++++ b/package/optee-benchmark/optee-benchmark.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# optee-benchmark
++#
++################################################################################
++
++OPTEE_BENCHMARK_VERSION = 3.4.0
++OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
++OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
++
++OPTEE_BENCHMARK_DEPENDENCIES = optee-client libyaml
++
++$(eval $(cmake-package))
