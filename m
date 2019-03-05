@@ -1,107 +1,85 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 5 Mar 2019 19:51:52 +0100
-Subject: [Buildroot] [PATCH 1/1] core/pkg-infra: Fix package files
- statistics for parallel build
-In-Reply-To: <13651_1551800345_5C7E9819_13651_366_1_20190305153902.GH2808@r-lnx-nyma7486-2>
-References: <20190305144216.13738-1-anaumann@ultratronik.de>
- <13651_1551800345_5C7E9819_13651_366_1_20190305153902.GH2808@r-lnx-nyma7486-2>
-Message-ID: <67a3d40b-3c6c-5760-fb88-fb3c2974af44@andin.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  5 Mar 2019 20:20:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: remove apexsink
+ support
+Message-ID: <20190305192032.14244-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+apexsink does not build with OpenSSL 1.1.x so remove this option
 
-...
+Fixes:
+ - http://autobuild.buildroot.org/results/a29e8a8509190fc4b3c419dae2301cf72a601f62
 
->>
->> Of course this solution adds a dependency on flock. However flock is
->> part of util-linux which probably is a dependency of other buildroot
->> prerequisites anyway.
-> 
-> We already use flock in the download infra, so that's OK.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ Config.in.legacy                                     | 8 ++++++++
+ package/gstreamer/gst-plugins-bad/Config.in          | 4 ----
+ package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk | 8 +-------
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-Ah, nice.
-
->> Also, even though this solution has a somewhat hacky feel to me, it does
->> work for both per-package and standard sequential builds. When converting
->> to per-package for good, the statistics gathering code could probably
->> be simplified because, well, all the files are installed isolated folders
->> which contents should be easier to compare before/after.
-> 
-> Well, I was going to suggest just that: create the lists in the
-> per-package directory, so you won't have the race to begin with.
-> 
-> Then, at the end of the build, when all the target/ directories (ditto
-> host) are gathere into one, then do so for all the individual package
-> file lists too.
-
-Yes I was going to do that but realized it would lead to different code 
-for the same thing. And as far as I understood, the per-package stuff is 
-planned as an option. Maintaining two implementations felt less ideal, 
-even if one of them turns out more straightforward (which has yet to be 
-proven).
-
-> 
-> If, as you seem to suggest, this also simplifies the code, then bonus
-> point for you! ;-)
-
-Well this was theory, I havn't really thought it out yet. As I wrote 
-above, I'd leave that until per-package is merged and proves stable.
-
-
-best regards,
-Andreas
-
-
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>   package/pkg-generic.mk | 14 ++++++++------
->>   1 file changed, 8 insertions(+), 6 deletions(-)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 6d4442b824..0f875736d6 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -64,20 +64,22 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->>   # $(3): suffix of file  (optional)
->>   define step_pkg_size_inner
->>   	@touch $(BUILD_DIR)/.files-list$(3).stat
->> -	@touch $(BUILD_DIR)/packages-file-list$(3).txt
->> -	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
->> +	exec 3>$(BUILD_DIR)/packages-file-list$(3).txt; \
->> +	flock -x 3; \
->> +	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt; \
->>   	cd $(2); \
->>   	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
->> -		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
->> +		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new; \
->>   	LC_ALL=C comm -13 \
->>   		$(BUILD_DIR)/.files-list$(3).stat \
->>   		$(BUILD_DIR)/.files-list$(3).new \
->> -		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
->> +		> $($(PKG)_BUILDDIR)/.files-list$(3).txt; \
->>   	sed -r -e 's/^[^,]+/$(1)/' \
->>   		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
->> -		>> $(BUILD_DIR)/packages-file-list$(3).txt
->> +		>> $(BUILD_DIR)/packages-file-list$(3).txt; \
->>   	mv $(BUILD_DIR)/.files-list$(3).new \
->> -		$(BUILD_DIR)/.files-list$(3).stat
->> +		$(BUILD_DIR)/.files-list$(3).stat; \
->> +	exec 3>&-
->>   endef
->>   
->>   define step_pkg_size
->> -- 
->> 2.21.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 25b48fba82..93e50f3f60 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,14 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2019.05"
++
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
++	bool "gst-plugins-bad apexsink option removed"
++	select BR2_LEGACY
++	help
++	  The gst-plugins-bad apexsink option was removed.
++
+ comment "Legacy options removed in 2019.02"
+ 
+ config BR2_PACKAGE_QT
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index f45981f6c8..971668b710 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -242,10 +242,6 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_Y4M
+ 
+ comment "plugins with external dependencies (there may be more available)"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
+-	bool "apexsink"
+-	select BR2_PACKAGE_OPENSSL
+-
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BZ2
+ 	bool "bz2"
+ 	select BR2_PACKAGE_BZIP2
+diff --git a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+index 856ff9665d..a98eac4235 100644
+--- a/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk
+@@ -12,6 +12,7 @@ GST_PLUGINS_BAD_LICENSE = LGPL-2.1+, GPL-2.0+
+ GST_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB COPYING
+ 
+ GST_PLUGINS_BAD_CONF_OPTS = \
++	--disable-apexsink \
+ 	--disable-examples \
+ 	--disable-spandsp
+ 
+@@ -472,13 +473,6 @@ GST_PLUGINS_BAD_CONF_OPTS += --disable-y4m
+ endif
+ 
+ # plugins with deps
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK),y)
+-GST_PLUGINS_BAD_CONF_OPTS += --enable-apexsink
+-GST_PLUGINS_BAD_DEPENDENCIES += openssl
+-else
+-GST_PLUGINS_BAD_CONF_OPTS += --disable-apexsink
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BZ2),y)
+ GST_PLUGINS_BAD_CONF_OPTS += --enable-bz2
+ GST_PLUGINS_BAD_DEPENDENCIES += bzip2
+-- 
+2.14.1
