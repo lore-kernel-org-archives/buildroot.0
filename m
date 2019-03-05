@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:14 -0000
-Subject: [Buildroot] [git commit] boot/uboot: bump to version 2019.01
-Message-ID: <20190305095735.999EF8E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: bump version to 0.49.2
+Message-ID: <20190305095735.EDFBD8E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cd5b4fa0c4dfeda38c7f76f2d45ae8e52116889
+commit: https://git.buildroot.net/buildroot/commit/?id=05bbdb876d621285783b1d71a4fd492c84cc11d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index bd1b248e94..d4a93615ee 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -39,7 +39,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 3a5c7dd438..fadef6df8a 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.49.0/meson-0.49.0.tar.gz.asc
+-sha256 fb0395c4ac208eab381cd1a20571584bdbba176eb562a7efa9cb17cace0e1551 meson-0.49.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.49.2/meson-0.49.2.tar.gz.asc
++sha256 ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd meson-0.49.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d76541cc93..49e27f5527 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2018.09"
-+	bool "2019.01"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2018.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2019.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index ea07fb584d..df2b8caf89 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  839bf23cfe8ce613a77e583a60375179d0ad324e92c82fbdd07bebf0fd142268  u-boot-2018.09.tar.bz2
-+sha256  50bd7e5a466ab828914d080d5f6a432345b500e8fba1ad3b7b61e95e60d51c22  u-boot-2019.01.tar.bz2
+-MESON_VERSION = 0.49.0
++MESON_VERSION = 0.49.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
