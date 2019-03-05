@@ -1,60 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:15 -0000
-Subject: [Buildroot] [git commit] package/edid-decode: bump version to
- 6def7bc
-Message-ID: <20190305095735.C408A8E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
+ version 2.22.4
+Message-ID: <20190305095735.E02128E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e09f3899cba0853afef2f3312c61676f2cbdaf
+commit: https://git.buildroot.net/buildroot/commit/?id=5546dfd095df4f874ff3bc46e3a2cffda3693340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes since f56f329:
+This is a maintenance release of the current stable WPE WebKit version,
+which contains security fixes for CVE identifiers: CVE-2019-6212,
+CVE-2019-6215, CVE-2019-6216, CVE-2019-6217, CVE-2019-6226,
+CVE-2019-6227, CVE-2019-6229, CVE-2019-6233, and CVE-2019-6234.
+Additionally, it contains a few minor fixes.
 
-  0a454bc makefile: also honor LDFLAGS
-  9e59ba9 edid-decode: update links, add README
-  7684918 edid-decode: README: updates
-  bc1e846 edid-decode: reformat to linux kernel coding style
-  9cb3744 edid-decode: fix spurious warning about string termination
-  3b26b8a edid-decode: fix wrong sample rate unit
-  4437dd9 edid-decode: use const for unsigned char pointers to the EDID
-  eee377b edid-decode: add support for QuantumData 980 EDID file format
-  7d8f41f edid-decode: simplify data block parsing
-  8c81ccf Add Samsung UE49KS8005 EDID
-  ab18bef edid-decode: add HDMI Forum VSDB fields for HDMI 2.1b
-  e9ffafc edid-decode: add options and new output formats
-  b2da151 edid-decode: add --extract and --check options
-  5eeb151 edid-decode: replace AdobeYCC/RGB by opYCC/RGB
-  6def7bc edid-decode: make it easier to find the out-of-range monitor values
+Release notes can be found in the announcement:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+  https://wpewebkit.org/release/wpe-2.22.4.html
+
+More details on the issues covered by securit fixes can be found
+in the corresponding security advisory:
+
+  https://wpewebkit.org/security/WSA-2019-0001.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/edid-decode/edid-decode.hash | 2 +-
- package/edid-decode/edid-decode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-index 437dcf4a66..12cd30e818 100644
---- a/package/edid-decode/edid-decode.hash
-+++ b/package/edid-decode/edid-decode.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 94f43f93285eb5cf8133061295bcdf72b6897bf5372879c2e4032a08d359af12  edid-decode-f56f329ed23a25d002352dedba1e8f092a47286f.tar.gz
-+sha256 27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36 edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index b412a77a13..c43f1ae7da 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 39937a3465..27c6cdf33e 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.22.3.tar.xz.sums
+-md5 6d0c693ea49a93fc9e701cf784245ea5 wpewebkit-2.22.3.tar.xz
+-sha1 d8a22bec787f38939c7922dc43bf27c9144cef74 wpewebkit-2.22.3.tar.xz
+-sha256 241f177cded1a4ba3088716650eaaac25588878882170789b3c630ac45dbb2fa wpewebkit-2.22.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.22.4.tar.xz.sums
++md5 6e5c668473c57906bdec1c641bac4579 wpewebkit-2.22.4.tar.xz
++sha1 002b8b25f4fc26bfef68767b3ff1eba1aac53fa5 wpewebkit-2.22.4.tar.xz
++sha256 871e86b7e989de0c1224ac7ab8ed6d8b52756cf793a8c253b56ab8ba8d288c96 wpewebkit-2.22.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 6b3d56ab0c..89df9b725c 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
-+EDID_DECODE_VERSION = 6def7bc83dfb0338632e06a8b14c93faa6af8879
- EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
+-WPEWEBKIT_VERSION = 2.22.3
++WPEWEBKIT_VERSION = 2.22.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
