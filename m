@@ -1,109 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:15 -0000
-Subject: [Buildroot] [git commit] package/optee-benchmark: new package
-Message-ID: <20190305095736.1D42F8E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cog: new package
+Message-ID: <20190305095735.7848080035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fc4790e672f7455c24767791db48584fde88eed
+commit: https://git.buildroot.net/buildroot/commit/?id=3d34daf3926f6735703b4548b618cd28273481ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OP-TEE performance benchmark tools for the OP-TEE project.
-
-This packages generates embedded Linux based OS materials used
-to retrieve execution timing information on invocation of the
-OP-TEE secure services.
-
-It is added next to the OP-TEE client package in BR configuration.
-
-This change references in Buildroot the today's latest OP-TEE
-revision release tagged 3.4.0.
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[Thomas:
- - drop version selection
- - propagate the dependency of optee-client]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/optee-benchmark/Config.in            | 15 +++++++++++++++
- package/optee-benchmark/optee-benchmark.hash |  2 ++
- package/optee-benchmark/optee-benchmark.mk   | 13 +++++++++++++
- 5 files changed, 32 insertions(+)
+ DEVELOPERS            |  2 ++
+ package/Config.in     |  1 +
+ package/cog/Config.in | 27 +++++++++++++++++++++++++++
+ package/cog/cog.hash  |  5 +++++
+ package/cog/cog.mk    | 17 +++++++++++++++++
+ 5 files changed, 52 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ea307ddcbb..44de17aba1 100644
+index 9746ba6792..45b59de276 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -689,6 +689,7 @@ F:	package/szip/
+@@ -67,6 +67,7 @@ F:	package/sngrep/
  
- N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
-+F:	package/optee-benchmark/
- F:	package/optee-client/
- F:	package/optee-examples/
- F:	package/optee-test/
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
++F:	package/cog/
+ F:	package/libepoxy/
+ F:	package/libwpe/
+ F:	package/webkitgtk/
+@@ -824,6 +825,7 @@ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+ F:	package/botan/
+ F:	package/chipmunk/
++F:	package/cog/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/gdbm/
 diff --git a/package/Config.in b/package/Config.in
-index cb81180faa..420e6e95a3 100644
+index 0a5180a238..1b5d5c9d7f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2079,6 +2079,7 @@ endmenu
+@@ -263,6 +263,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
  
- menu "Security"
- 	source "package/checkpolicy/Config.in"
-+	source "package/optee-benchmark/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
- 	source "package/optee-test/Config.in"
-diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
+ comment "Graphic applications"
++	source "package/cog/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+diff --git a/package/cog/Config.in b/package/cog/Config.in
 new file mode 100644
-index 0000000000..0e36549c94
+index 0000000000..768fcefaac
 --- /dev/null
-+++ b/package/optee-benchmark/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_OPTEE_BENCHMARK
-+	bool "optee-benchmark"
-+	depends on !BR2_STATIC_LIBS # optee-client
-+	select BR2_PACKAGE_OPTEE_CLIENT
-+	select BR2_PACKAGE_LIBYAML
++++ b/package/cog/Config.in
+@@ -0,0 +1,27 @@
++comment "cog needs wpewebkit and a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_WPEWEBKIT || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_COG
++	bool "cog"
++	depends on BR2_PACKAGE_WPEWEBKIT
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS
 +	help
-+	  Enable the OP-TEE benchmark package that brings facilities
-+	  for profiling traversal and execution timings when
-+	  invoking OP-TEE. OP-TEE benchmark is a component delivered
-+	  by the OP-TEE project.
++	  Single "window" launcher for the WebKit WPE port, and
++	  helper library for implementing WPE launcher. It does
++	  not provide any chrome, and is suitable to be used
++	  as a Web application container.
 +
-+	  http://github.com/linaro-swg/optee_benchmark
++if BR2_PACKAGE_COG
 +
-+comment "optee-benchmark needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
++config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
++	string "home uri"
++	default "https://wpewebkit.org"
++	help
++	  Default URI to open when "cog" is launched. If an empty
++	  string is used, there is no default and the URI to open
++	  must be always specified in the command line.
++
++endif
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
 new file mode 100644
-index 0000000000..c3c41b69da
+index 0000000000..97daf72744
 --- /dev/null
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -0,0 +1,2 @@
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.4.0.tar.gz
-+sha256 e5e868a06a9dcc8cc444b3e72c65f57670b0811091be62edbe0d03d13c75e716 optee-benchmark-3.4.0.tar.gz
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
++++ b/package/cog/cog.hash
+@@ -0,0 +1,5 @@
++# Locally generated
++sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
++
++# Hashes for license files:
++sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
 new file mode 100644
-index 0000000000..4ebab4498e
+index 0000000000..43f13152c8
 --- /dev/null
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -0,0 +1,13 @@
++++ b/package/cog/cog.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# optee-benchmark
++# cog
 +#
 +################################################################################
 +
-+OPTEE_BENCHMARK_VERSION = 3.4.0
-+OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
-+OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
-+
-+OPTEE_BENCHMARK_DEPENDENCIES = optee-client libyaml
++COG_VERSION = v0.2.0
++COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
++COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
++COG_LICENSE = MIT
++COG_LICENSE_FILES = COPYING
++COG_CONF_OPTS = \
++	-DCOG_BUILD_PROGRAMS=ON \
++	-DCOG_PLATFORM_FDO=ON \
++	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
 +
 +$(eval $(cmake-package))
