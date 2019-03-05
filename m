@@ -1,51 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:14 -0000
-Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 0.8.3
-Message-ID: <20190305095735.8C6B380035@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libwpe: new package
+Message-ID: <20190305095735.5CCF88E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f1550b0494d09067f1701b2306e55a7f2b39c37
+commit: https://git.buildroot.net/buildroot/commit/?id=7d0203387e4a7afa93773170e04e8850cde5c631
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1]:
-- Fix build of static libraries with meson.
-- New API: XKB_KEY_XF86MonBrightnessCycle/XKB_KEY_XF86RotationLockToggle
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-February/039970.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libxkbcommon/libxkbcommon.hash | 4 ++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                 |  2 ++
+ package/Config.in          |  1 +
+ package/libwpe/Config.in   | 13 +++++++++++++
+ package/libwpe/libwpe.hash |  7 +++++++
+ package/libwpe/libwpe.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index 67ae4b5921..e4a56873ea 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039243.html
--sha256 7ab8c4b3403d89d01898066b72cb6069bddeb5af94905a65368f671a026ed58c libxkbcommon-0.8.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/039970.html
-+sha256 b855c629849a97ab9835a4ad99d6b749a636f70d38a03f070c6ef72024825540 libxkbcommon-0.8.3.tar.xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 89a8e2d2a2..50e4ffe6a9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -68,6 +68,7 @@ F:	package/sngrep/
+ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
++F:	package/libwpe/
+ F:	package/webkitgtk/
+ F:	package/woff2/
  
- # License file:
- sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 2045d96380..801782b38c 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXKBCOMMON_VERSION = 0.8.2
-+LIBXKBCOMMON_VERSION = 0.8.3
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+@@ -827,6 +828,7 @@ F:	package/gdbm/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libump/
++F:	package/libwpe/
+ F:	package/linenoise/
+ F:	package/ljlinenoise/
+ F:	package/lpeg/
+diff --git a/package/Config.in b/package/Config.in
+index 29862c478c..84ccb0358f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1302,6 +1302,7 @@ menu "Graphics"
+ 	source "package/libva-intel-driver/Config.in"
+ 	source "package/libvdpau/Config.in"
+ 	source "package/libvips/Config.in"
++	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opencv3/Config.in"
+diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
+new file mode 100644
+index 0000000000..c11c853985
+--- /dev/null
++++ b/package/libwpe/Config.in
+@@ -0,0 +1,13 @@
++comment "libwpe needs a toolchain w/ C++, dynamic library and an OpenEGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++
++config BR2_PACKAGE_LIBWPE
++	bool "libwpe"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Base library for the WPE WebKit port.
++
++	  https://wpewebkit.org/
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+new file mode 100644
+index 0000000000..58dba92e6f
+--- /dev/null
++++ b/package/libwpe/libwpe.hash
+@@ -0,0 +1,7 @@
++# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
++md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
++sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
++sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719 libwpe-1.0.0.tar.xz
++
++# Hashes for license files:
++sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+new file mode 100644
+index 0000000000..aad1214e1d
+--- /dev/null
++++ b/package/libwpe/libwpe.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libwpe
++#
++################################################################################
++
++LIBWPE_VERSION = 1.0.0
++LIBWPE_SITE = https://wpewebkit.org/releases
++LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
++LIBWPE_INSTALL_STAGING = YES
++LIBWPE_LICENSE = BSD-2-Clause
++LIBWPE_LICENSE_FILES = COPYING
++LIBWPE_DEPENDENCIES = libegl libxkbcommon
++
++# Workaround for https://github.com/raspberrypi/userland/issues/316
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBWPE_CONF_OPTS += \
++	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE' \
++	-DCMAKE_CXX_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE'
++endif
++
++$(eval $(cmake-package))
