@@ -1,116 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:14 -0000
-Subject: [Buildroot] [git commit] package/libwpe: new package
-Message-ID: <20190305095735.5CCF88E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wine: bump to version 4.0
+Message-ID: <20190305095735.54EE38E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d0203387e4a7afa93773170e04e8850cde5c631
+commit: https://git.buildroot.net/buildroot/commit/?id=9accc7f095901e62c06f2c366592b2dc0c5bac14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                 |  2 ++
- package/Config.in          |  1 +
- package/libwpe/Config.in   | 13 +++++++++++++
- package/libwpe/libwpe.hash |  7 +++++++
- package/libwpe/libwpe.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 45 insertions(+)
+ package/wine/wine.hash |  2 +-
+ package/wine/wine.mk   | 19 ++++++++++++++++---
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 89a8e2d2a2..50e4ffe6a9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -68,6 +68,7 @@ F:	package/sngrep/
- N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
- F:	package/libepoxy/
-+F:	package/libwpe/
- F:	package/webkitgtk/
- F:	package/woff2/
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index ba007142e8..6993d6ecbc 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d45a88edbe7db363e297cacedc94e66df3464504a01c2eccf04f518066a6fb0c wine-3.0.4.tar.xz
++sha256 6736cdee95b2b8bb021ec0c19497ed8cad5ae2c8bfdb7ab5dc687ff92a480d4d wine-4.0.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 7e44e3c81d..78fa860ecf 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-@@ -827,6 +828,7 @@ F:	package/gdbm/
- F:	package/libtomcrypt/
- F:	package/libtommath/
- F:	package/libump/
-+F:	package/libwpe/
- F:	package/linenoise/
- F:	package/ljlinenoise/
- F:	package/lpeg/
-diff --git a/package/Config.in b/package/Config.in
-index 29862c478c..84ccb0358f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1302,6 +1302,7 @@ menu "Graphics"
- 	source "package/libva-intel-driver/Config.in"
- 	source "package/libvdpau/Config.in"
- 	source "package/libvips/Config.in"
-+	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opencv3/Config.in"
-diff --git a/package/libwpe/Config.in b/package/libwpe/Config.in
-new file mode 100644
-index 0000000000..c11c853985
---- /dev/null
-+++ b/package/libwpe/Config.in
-@@ -0,0 +1,13 @@
-+comment "libwpe needs a toolchain w/ C++, dynamic library and an OpenEGL-capable backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_LIBWPE
-+	bool "libwpe"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  Base library for the WPE WebKit port.
-+
-+	  https://wpewebkit.org/
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-new file mode 100644
-index 0000000000..58dba92e6f
---- /dev/null
-+++ b/package/libwpe/libwpe.hash
-@@ -0,0 +1,7 @@
-+# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
-+md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
-+sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
-+sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719 libwpe-1.0.0.tar.xz
-+
-+# Hashes for license files:
-+sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-new file mode 100644
-index 0000000000..aad1214e1d
---- /dev/null
-+++ b/package/libwpe/libwpe.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# libwpe
-+#
-+################################################################################
-+
-+LIBWPE_VERSION = 1.0.0
-+LIBWPE_SITE = https://wpewebkit.org/releases
-+LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
-+LIBWPE_INSTALL_STAGING = YES
-+LIBWPE_LICENSE = BSD-2-Clause
-+LIBWPE_LICENSE_FILES = COPYING
-+LIBWPE_DEPENDENCIES = libegl libxkbcommon
-+
-+# Workaround for https://github.com/raspberrypi/userland/issues/316
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBWPE_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE' \
-+	-DCMAKE_CXX_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE'
+-WINE_VERSION = 3.0.4
++WINE_VERSION = 4.0
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+-WINE_SITE = https://dl.winehq.org/wine/source/3.0
++WINE_SITE = https://dl.winehq.org/wine/source/4.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+@@ -25,7 +25,9 @@ WINE_CONF_OPTS = \
+ 	--without-gsm \
+ 	--without-hal \
+ 	--without-opencl \
+-	--without-oss
++	--without-oss \
++	--without-vkd3d \
++	--without-vulkan
+ 
+ # Wine uses a wrapper around gcc, and uses the value of --host to
+ # construct the filename of the gcc to call.  But for external
+@@ -222,6 +224,13 @@ else
+ WINE_CONF_OPTS += --without-sane
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2),y)
++WINE_CONF_OPTS += --with-sdl
++WINE_DEPENDENCIES += sdl2
++else
++WINE_CONF_OPTS += --without-sdl
 +endif
 +
-+$(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ WINE_CONF_OPTS += --with-tiff
+ WINE_DEPENDENCIES += tiff
+@@ -356,6 +365,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-glu \
+ 	--without-gnutls \
+ 	--without-gsm \
++	--without-gssapi \
+ 	--without-gstreamer \
+ 	--without-hal \
+ 	--without-jpeg \
+@@ -372,8 +382,11 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-pulse \
+ 	--without-png \
+ 	--without-sane \
++	--without-sdl \
+ 	--without-tiff \
+ 	--without-v4l \
++	--without-vkd3d \
++	--without-vulkan \
+ 	--without-x \
+ 	--without-xcomposite \
+ 	--without-xcursor \
