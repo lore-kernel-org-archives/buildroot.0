@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 05 Mar 2019 10:00:13 -0000
-Subject: [Buildroot] [git commit] package/kexec: enable powerpc64le platforms
-Message-ID: <20190305095735.BC7D88E504@busybox.osuosl.org>
+Date: Tue, 05 Mar 2019 10:00:14 -0000
+Subject: [Buildroot] [git commit] package/libcpprestsdk: add optional
+ websocketpp dependency
+Message-ID: <20190305095735.CB3088E504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a4af5214ccafa6cca39e2d9136f4822f40f3a6
+commit: https://git.buildroot.net/buildroot/commit/?id=a36842af3bc9449803c73ffc7cee5e67890f2a8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-kexec has fully support of ppc64 platform:
-https://www.kernel.org/doc/Documentation/kdump/kdump.txt
-
-Signed-off-by: Artem Senichev <artemsen@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kexec/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index c8cdea5663..c4a09be109 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_KEXEC
- 	bool "kexec"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
- 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
--		BR2_powerpc || BR2_sh4 || BR2_sh4a || BR2_aarch64
-+		BR2_powerpc || BR2_powerpc64le || BR2_sh4 || BR2_sh4a || BR2_aarch64
- 	help
- 	  Kexec is a user space utility for loading another kernel
- 	  and asking the currently running kernel to do something with
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index be9ca292c5..6f5fb41999 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -10,6 +10,13 @@ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+ LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
+-LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
++LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
++
++ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
++LIBCPPRESTSDK_DEPENDENCIES += websocketpp
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
++else
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
++endif
+ 
+ $(eval $(cmake-package))
