@@ -1,240 +1,291 @@
-From: Michel Stempin <michel.stempin@wanadoo.fr>
-Date: Tue,  5 Mar 2019 23:37:06 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Add LicheePi Zero support
-In-Reply-To: <866e1f31-97ad-0df3-42e7-521a4a2ad60e@wanadoo.fr>
-References: <866e1f31-97ad-0df3-42e7-521a4a2ad60e@wanadoo.fr>
-Message-ID: <1551825426-8743-1-git-send-email-michel.stempin@wanadoo.fr>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Wed, 06 Mar 2019 00:20:45 +0100
+Subject: [Buildroot] [PATCH] package/openrc: new init package OpenRC
+ (0.38.3)
+In-Reply-To: <20190305213858.GQ2721@scaer>
+References: <20190228194415.7943-1-michal.lyszczek@bofc.pl>
+ <befe78f5-d0b9-9f10-187d-26a918a6250c@mind.be>
+ <20190305213858.GQ2721@scaer>
+Message-ID: <20190305232045.mylcl6l2ic26akxk@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michel Stempin <michel.stempin@wanadoo.fr>
----
-Changes v1 -> v2: (suggested by Thomas)
- - use git send-email
- - use BR2_TARGET_UBOOT_BOOT_SCRIPT
- - remove fstab tweaking
- - use support/scripts/genimage.sh
- - use the internal toolchain in the defconfig
- - use a commit for building the kernel and u-boot
- - remove package resize2fs in defconfig
- - remove DTC host package use BR2_TARGET_UBOOT_NEEDS_DTC
- - remove BR2_PACKAGE_HOST_UBOOT_TOOLS
+Yann, Arnout
 
- board/licheepi/boot.cmd         |  4 +++
- board/licheepi/genimage.cfg     | 35 +++++++++++++++++++
- board/licheepi/readme.txt       | 66 ++++++++++++++++++++++++++++++++++++
- configs/licheepi_zero_defconfig | 74 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 179 insertions(+)
- create mode 100644 board/licheepi/boot.cmd
- create mode 100644 board/licheepi/genimage.cfg
- create mode 100644 board/licheepi/readme.txt
- create mode 100644 configs/licheepi_zero_defconfig
+First, thank you for your extensive review. Now to the point.
 
-diff --git a/board/licheepi/boot.cmd b/board/licheepi/boot.cmd
-new file mode 100644
-index 0000000..383b347
---- /dev/null
-+++ b/board/licheepi/boot.cmd
-@@ -0,0 +1,4 @@
-+setenv bootargs console=ttyS0,115200 panic=5 console=tty0 rootwait root=/dev/mmcblk0p2 earlyprintk rw
-+load mmc 0:1 0x41000000 zImage
-+load mmc 0:1 0x41800000 sun8i-v3s-licheepi-zero-dock.dtb
-+bootz 0x41000000 - 0x41800000
-diff --git a/board/licheepi/genimage.cfg b/board/licheepi/genimage.cfg
-new file mode 100644
-index 0000000..0d8540f
---- /dev/null
-+++ b/board/licheepi/genimage.cfg
-@@ -0,0 +1,35 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"sun8i-v3s-licheepi-zero-dock.dtb",
-+			"sun8i-v3s-licheepi-zero.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 8M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+		size = 516096 # 512KB - 8192
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 0
-+	}
-+}
-diff --git a/board/licheepi/readme.txt b/board/licheepi/readme.txt
-new file mode 100644
-index 0000000..3f39bd0
---- /dev/null
-+++ b/board/licheepi/readme.txt
-@@ -0,0 +1,66 @@
-+# LicheePi Zero
-+
-+Intro
-+=====
-+
-+This directory contains a buildroot configuration for building a
-+LicheePi Zero.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+There is only one LicheePi Zero defconfig files in Buildroot:
-+
-+  $ make licheepi_zero_defconfig
-+
-+Build the rootfs
-+----------------
-+
-+Note: you will need to have access to the network, since Buildroot
-+will download the packages' sources.
-+
-+You may now build your rootfs with:
-+
-+  $ make
-+
-+(This may take a while, consider getting yourself a coffee ;-) )
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- boot.scr
-+    +-- boot.vfat
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4 -> rootfs.ext2
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- sun8i-v3s-licheepi-zero-dock.dtb
-+    +-- sun8i-v3s-licheepi-zero.dtb
-+    +-- u-boot.bin
-+    +-- u-boot-sunxi-with-spl.bin
-+    `-- zImage
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called
-+"sdcard.img" in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Alternatively, you can use the Etcher graphical tool to burn the image
-+to the SD card safely and on any platform:
-+
-+https://etcher.io/
-+
-+Once the SD card is burned, insert it into your LicheePi Zero board,
-+and power it up. Your new system should come up now and start a
-+console on the UART0 serial port.
-diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
-new file mode 100644
-index 0000000..6b1dc5a
---- /dev/null
-+++ b/configs/licheepi_zero_defconfig
-@@ -0,0 +1,74 @@
-+# Target options
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV4=y
-+
-+# Toolchain
-+# Use 4.14.x headers and C++ support
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
-+BR2_TARGET_GENERIC_ROOT_PASSWD="licheepi"
-+# Run a getty (login prompt) after boot on ttyS0 @ 115200 bps
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+# Run Custom genimage script after creating filesystem images
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/licheepi/genimage.cfg"
-+
-+# Kernel
-+# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cda44c146b9b87290bc7c636ffa7d88cbfb03ace"
-+# In-tree kernel configuration
-+BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
-+# AllWinner V3s-based DTS
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
-+
-+# Target packages
-+
-+#?Hardware handling
-+# Firmare
-+# Linux-firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+# Wifi firmware
-+# Realtek 87xx for rtl8723bs support
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
-+
-+# Dhcpcd package DHCP client for Wi-Fi
-+BR2_PACKAGE_DHCPCD=y
-+
-+# WPA_supplicant package for Wi-Fi Authentication
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
-+
-+# Filesystem images
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloaders
-+# Custom U-Boot from Lichee-Pi Github repository
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="32ab1804cd7c5858be8009e35ca07502dc8765c7"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+# Generate a U-Boot boot script
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/licheepi/boot.cmd"
-+
-+# Host utilities
-+# Required host utilities for building an SDCard image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.7.4
+On 2019-03-05 22:38:58, Yann E. MORIN wrote:
+> Micha?, Arnout,
+>
+> On 2019-03-04 19:59 +0100, Arnout Vandecappelle spake thusly:
+> >  I can tell you, we don't add something like a new init system easily, so this
+> > may take some time to get merged...
+
+Totally understandable. I myself don't want to commit crap under my name ;-)
+
+> >  First of all, the patch that adds the openrc package as an ordinary package
+> > (not an init system) should be separate. That one has to be standalone, obviously.
+>
+> Agreed.
+
+Will do
+
+> > On 28/02/2019 20:44, Micha? ?yszczek wrote:
+> > > OpenRC is a dependency based init system that works with the system
+> > > provided init program, normally located at /sbin/init. It is not a
+> > > replacement for /sbin/init.
+> > >
+> > > Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+> > > ---
+> > > OpenRC uses own set of scripts for sysinit thus
+> > > BR2_PACKAGE_INITSCRIPTS is disabled. I decided to add new init
+> > > choice and choice which program to use as PID1 since OpenRC uses
+> > > its own scripts for services so S** scripts cannot be used. It is
+> > > possible to add simple script to local.d that would start all S**
+> > > scripts, but that would diminish OpenRC's features and usefullness,
+> > > so additional startup scripts should be written and added to
+> > > buildroot.
+> >
+> >  While this is true, I think you should still add that script so that packages
+> > which don't have an OpenRC service description will still work. (We should also
+> > have done that for systemd IMO.)
+>
+> Not needed, as it is my understanding that systemd autoimatically
+> creates units for scripts in /etc/init.d/ when there is no corresponding
+> native unit. From http://man7.org/linux/man-pages/man1/systemd.1.html :
+>
+>     systemd is compatible with the SysV init system to a large degree:
+>     SysV init scripts are supported and simply read as an alternative
+>     (though limited) configuration file format. The SysV /dev/initctl
+>     interface is provided, and compatibility implementations of the
+>     various SysV client tools are available. In addition to that, various
+>     established Unix functionality such as /etc/fstab or the utmp
+>     database are supported.
+>
+> > Then you can have something like thisin
+> > pkg-generic.mk:
+> >
+> > $(2)_INSTALL_INIT_OPENRC ?= $$($(2)_INSTALL_INIT_SYSV)
+> >
+> > so if a package defines its OpenRC file, that one will be used instead of the
+> > sysvinit script.
+>
+> Is that works so easily, then this is indeed a good idea.
+>
+> >  With that in mind, I think an OpenRC skeelton would make sense at well. It
+> > would be pretty empty :-).
+>
+> Except maybe for that one script that does the sysv-init fallback.
+
+Ok, how about this: by default OpenRC installs and enables many services that
+are not necessarily needed, like setting hwclock, configuring network
+interfaces, activating swap, setting keymaps. Some of these services fails or
+may fail due to missing network interfaces, or due to missing additional
+programs like loadkeys for setting keymaps. Also I notices that sysctl fails
+with BusyBox version since it is missing "--system" option. These are not
+critical and OpenRC still boots up and spawns tty with login - but it prints
+error and thus is ugly and may confuse users.
+
+So my proposition would be to not perform default 'make install' but install
+only bare minimum set of init scrips, that are sure not to fail. And scripts
+that are not compatible with default buildroot installation could land in
+skeleton.
+
+One notable example is "agetty". It's not like it's some hardcore dependency for
+OpenRC, but it uses it by default to spawn shell, and agetty is not compatible
+with busybox due to one change in order:
+
+agetty [options] port [baud_rate...] [term]
+getty [OPTIONS] BAUD_RATE TTY [TERMTYPE]
+
+See, baud rate is swaped with port. So I could write custom getty service for
+OpenRC and put it into skeleton. That would lift agetty dependency.
+
+
+What might be best way to install only chosed files?
+
+- Do 'make install' to temp directory, remove what is not needed than copy to
+target?
+- Invoke "install" for each file? There are quite of them.
+- Do normal 'make install' then call 'rm' on each uneeded files in target_dir?
+- or maybe there is some easy way of doing it I didn't think about?
+
+> > > If OpenRC init is accepted into Buildroot, I will commit
+> > > some time to port existing sysvinit startup scripts to OpenRC.
+> > >
+> > > OpenRC works with default config - a single change is needed (which
+> > > init system to use, with optional PID1 change - default BusyBox). I
+> > > tested it with both BusyBox and sysvinit as PID1. Also tested with
+> > > BusyBox programs enabled and disabled (standalone apps used, none
+> > > of which was from BusyBox package). I tested it using
+> > > qemu-x86_64_defconfig and beaglebone_defconfig.
+> >
+> >  If this gets added as a full BR2_INIT_ option, you should also add the runtime
+> > tests for it (in separate patches, obviously). Look at the system tests for
+> > inspiration.
+>
+> ... located in support/testing/tests/init/.
+>
+> [--SNIP--]
+> > > +++ b/package/openrc/Config.in
+> > > @@ -0,0 +1,19 @@
+> > > +config BR2_PACKAGE_OPENRC
+> > > +	bool "OpenRC"
+> > > +	select BR2_PACKAGE_UTIL_LINUX
+> > > +	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+> >
+> >  Does it really depend on agetty? Seems strange...
+
+It does not, answer is above. I wanted to preserve as much upstream stuff as
+possible - but maybe that is not the way?
+
+> >  That said, if additional tweaks are needed to support busybox getty, that can
+> > be done in a follow-up patch.
+>
+> We have a similar workaround for systemd, but I just sent a patch to
+> actually remove it:
+>     https://patchwork.ozlabs.org/patch/1051821/
+
+As stated above, I could create simple service that would use getty instead of
+agetty and put it in skeleon.
+
+> If OpenRC does not require util-linux, it would be acceptable to have a
+> workaround to be able to use busybox' getty instead. But if OpenRC
+> otherwise requires util-linux (e.g. for lib"stuff"), then there is no
+> point for such a workaround.
+
+OpenRC does not need util-linux.
+
+> > > +	OPENRC_MAKE_OPTS += MKZSHCOMP=yes
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_SHARED_LIBS),y)
+> > > +	OPENRC_MAKE_OPTS += MKSTATICLIBS=no
+> > > +else
+> > > +	OPENRC_MAKE_OPTS += MKSTATICLIBS=yes
+> > > +endif
+> > > +
+> > > +OPENRC_MAKE_OPTS += TARGETDIR=$(TARGET_DIR)
+>
+> Arnout, TARGETDIR comes from here. Although I admit it is confusing...
+
+This patch was introduced because OpenRC determines location for its libs,
+wheter to put them in /lib or /lib64 directory, by reading link of /lib.
+Unfortunately it has "/lib" path hardcoded and buildroot is reading that
+link from host os, so libs generated for cross x86 could land in lib64 on amd64
+hosts. I will rise this issue to OpenRC's author - maybe there is already
+solution for this and I've just invented wheel again.
+
+> > > +OPENRC_MAKE_OPTS += MKNET=yes
+> > > +OPENRC_MAKE_OPTS += MKPKGCONFIG=no
+> > > +OPENRC_MAKE_OPTS += MKSELINUX=no
+> > > +OPENRC_MAKE_OPTS += MKSYSVINIT=yes
+>
+> When doing a sequence, I's nicer to write:
+>
+>     OPENRC_MAKE_OPTS += \
+>         TARGETDIR=$(TARGET_DIR) \
+>         MKNET=yes \
+>         MKPKGCONFIG=no \
+>         [...]
+>
+> > > +OPENRC_MAKE_OPTS += BRANDING=$(BR2_OPENRC_BRANDING)
+> >  We typically use an explicit qstrip and adding quotes here. That way, it works
+> > correctly even if you override it from the command line or in local.mk.
+>
+> To be homest, I don;t thionk overriding frm the command-line should be
+> suported that nicely, because it is not reproducible. It may work for a
+> quicky, but how much more complex is it to go to menuconfig, or edit
+> .config ?
+> > > +	ln -sf /etc/init.d/agetty.$(SYSTEM_GETTY_PORT) $(TARGET_DIR)/etc/runlevels/default
+> > > +	$(SED) '/#term_type=/c\term_type="$(SYSTEM_GETTY_TERM)"' $(TARGET_DIR)/etc/conf.d/agetty
+> > > +	$(SED) '/#agetty_options=/c\agetty_options="$(SYSTEM_GETTY_OPTIONS)"' $(TARGET_DIR)/etc/conf.d/agetty
+> >
+> >  We usually do this kind of thing in a single SED invocation, with -e to specify
+> > each command.
+>
+> ... except for the first, as $(SED) already ends with -e.
+>
+> (and I find it ugly indeed, because it makes the first pattern different
+> from the others... Bleark...)
+>
+> > > +config BR2_OPENRC_BRANDING
+> > > +	string "OpenRC branding"
+> > > +	default "Buildroot"
+> > > +	depends on BR2_INIT_OPENRC
+> > > +	help
+> > > +	  Custom string that will show up when OpenRC starts like:
+> > > +
+> > > +	  OpenRC 0.38.3.8ee04a5 is starting up <branding-name> (armv7l)
+> >
+> >  I really don't think it's worth to add a config option for this. Would it be
+> > possible to reuse one of the existing options, e.g. BR2_TARGET_GENERIC_HOSTNAME
+> > or BR2_TARGET_GENERIC_ISSUE? Or alternatively, just leave branding empty?
+>
+> Agreed.
+>
+
+That field was not designed to place hostname there but os branding. For
+example, "GNU/Linux Debian" would be good example of branding, since multiple
+hardware with different hostnames can use single OS. Of course it's just for
+eye-candy but I would prefer to hardcode it to "Buildroot" (or empty) than put
+hostname or issue here.
+
+> >  If it is a config option, I think it is more appropriate as a suboption of the
+> > openrc package. We do that for the systemd suboptions as well.
+>
+> I don't think it has to be a new option, BR2_TARGET_GENERIC_ISSUE is
+> exactly there for this kind of usage.
+>
+> > > +choice
+> > > +	prompt "PID1 to use with OpenRC"
+> > > +	default BR2_OPENRC_PID1_BUSYBOX
+> > > +	help
+> > > +	  Since OpenRC is not replacement for /sbin/init but works with
+> > > +	  it, you can select which PID1 service you want to run
+> > > +
+> > > +config BR2_OPENRC_PID1_BUSYBOX
+> >
+> >  Since this is a suboption of BR2_INIT_OPENRC, it should be called
+> > BR2_INIT_OPENRC_PID1_BUSYBOX. But I think the PID1 bit is a bit redundant.
+>
+> I think this should be a sub-option of the openrc package, not the 'init'
+> part.
+>
+> > > +endif # BR2_INIT_OPENRC
+> > > +
+> > >  choice
+> > >  	prompt "/dev management" if !BR2_INIT_SYSTEMD
+> > >  	default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+> > > @@ -337,16 +376,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+> > >  config BR2_TARGET_GENERIC_GETTY_TERM
+> > >  	string "TERM environment variable"
+> > >  	default "vt100"
+> > > -	# currently observed only by busybox and sysvinit
+> > > -	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+> > > +	# currently observed only by busybox, sysvinit and openrc
+> > > +	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV || BR2_INIT_OPENRC
+> >
+> >  Perhaps this should be changed into !BR2_INIT_SYSTEMD - that's actually what it
+> > is at the moment.
+> >
+> >  Come to think of it, BR2_TARGET_GENERIC_GETTY should depend on !BR2_INIT_NONE
+> > as well.
+>
+> Probably, indeed... I missed that one when doing my big overhaul of that
+> section.
+
+I agree with statements where I didn't leave comment and will apply proposed
+fixes.
+
+Thanks again for review.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190306/1563c814/attachment.asc>
