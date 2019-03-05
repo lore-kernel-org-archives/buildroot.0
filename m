@@ -1,46 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  5 Mar 2019 22:49:18 +0100
-Subject: [Buildroot] [PATCH 1/1] imx-mkimage: add -std=c99 to CFLAGS
-Message-ID: <20190305214918.15640-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Mar 2019 22:54:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: remove
+ apexsink support
+In-Reply-To: <CAPi7W80pG6O-jJqSL6KTC-eNhPdCZW2ZPAfKEcOSLEwGC5gwuw@mail.gmail.com>
+References: <20190305192032.14244-1-fontaine.fabrice@gmail.com>
+ <20190305212203.2f7d4b33@windsurf>
+ <CAPi7W80pG6O-jJqSL6KTC-eNhPdCZW2ZPAfKEcOSLEwGC5gwuw@mail.gmail.com>
+Message-ID: <20190305225458.55d987be@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4c31d97a9aaf9ef887e68d64efe468c81f8cf7bc
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/imx-mkimage/imx-mkimage.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+On Tue, 5 Mar 2019 22:06:24 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 9f8e7d2d01..d8d8b10b32 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -14,7 +14,9 @@ HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
- # i.MX8M needs a different binary
- define HOST_IMX_MKIMAGE_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS) -std=c99" \
-+		-C $(@D)/iMX8M -f soc.mak mkimage_imx8
- endef
- define HOST_IMX_MKIMAGE_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
-@@ -23,7 +25,9 @@ endef
- else
- # i.MX8 and i.MX8X
- define HOST_IMX_MKIMAGE_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS) -std=c99" \
-+		-C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
- endef
- define HOST_IMX_MKIMAGE_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
+> > > apexsink does not build with OpenSSL 1.1.x so remove this option  
+> >
+> > Just curious: was this build issue fixed in newer version of GStreamer ?  
+> There is no more apexsink option in gstreamer1 (since version 1.12).
+
+OK, so this is another reason to drop apexsink support. I guess it
+should be mentioned in the commit log.
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
