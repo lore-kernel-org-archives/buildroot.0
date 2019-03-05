@@ -1,36 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Mar 2019 10:28:24 +0100
-Subject: [Buildroot] modules
-In-Reply-To: <24581291551766817@myt5-262fb1897c00.qloud-c.yandex.net>
- (=?utf-8?B?ItCR0YvRgdGC0YDQvtCyINCS0LjRgtCw0LvQuNC5Iidz?= message of "Tue,
- 05 Mar 2019 09:20:17 +0300")
-References: <24581291551766817@myt5-262fb1897c00.qloud-c.yandex.net>
-Message-ID: <87k1hdhdqf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Mar 2019 10:55:29 +0100
+Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <CAN5uoS_1zj1=ywE3-Gu55UksPAsHdGGEgAgm+YAAV=Wuo2pBfA@mail.gmail.com>
+References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
+ <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
+ <20190217231234.321ec6e4@windsurf.home>
+ <8d23dabb-4270-9c5f-4432-84cebee42c5a@mind.be>
+ <CAN5uoS_1zj1=ywE3-Gu55UksPAsHdGGEgAgm+YAAV=Wuo2pBfA@mail.gmail.com>
+Message-ID: <20190305105529.1fcccbc3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "???????" == ??????? ??????? <error25@yandex.ru> writes:
+Hello ?tienne,
 
- > Hi
- > I compile
- > https://github.com/philkingston/pios
- > no file
- > stblinux-3.3-3.0a.tar.bz2
+On Tue, 5 Mar 2019 10:14:07 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
- > I want to try compile BCM7231B0
- > kernel with modules for Debian
+> I've prepared something to test the optee on qemu/arm through the
+> runtime tests but few questions puzzle me.
+> 
+> 1/ To use the board defconfig for the test, I created the file
+> support/test/conf/qemu_xxx_defconfig as a symlink to
+> configs/qemu_xxx_defconfig.
+> I'm not sure it is that nice. But it allowed to set the test config in
+> the test_opee.py using:
+> 
+>     class TestOpteeXtest(infra.basetest.BRTest):
+>         with open(infra.filepath('conf/qemu_armv7a_tz_virt_defconfig'),
+> 'r') as config_file:
+>             config = "".join(line for line in config_file if line[:1]!='#')
 
- > I have little knowledge for compile
+infra.filepath() is as simple as:
 
-Ehh, why do you then contact the Buildroot developers and not the
-maintainer of that pios repo, E.G. 'Phil Kingston'?
+def filepath(relpath):
+    return os.path.join(os.getcwd(), "support/testing", relpath)
 
-There is no reference to stblinux-3.3-3.0a.tar.bz2 anywhere in the
-official Buildroot repository, so it must be a local change made in this
-'pios' fork.
+so you can just do:
 
+	with open(os.path.join(os.getcwd(), "configs/qemu_armv7a_tz_virt_defconfig"))
+
+however, I see one down-side with this: defconfigs are usually using an
+internal toolchain, so they take a long time to build. We typically try
+to use external toolchains for most runtime tests, to make them faster
+and therefore more usable. But perhaps you can take the defconfig +
+inject a few lines of configuration to use an external toolchain.
+
+> 2/ To share this test I need few preliminary changes in arm-trusted-firmware.
+> This will brings a series of dependent patches: tf-a updates + qemu
+> board defconfig + optee runtime test script.
+> The series depends on branch next, as dependent on OP-TEE packages.
+> That will make several versatile changes in a single patches series
+> over the next branch.
+> 
+> I plan to submit the series to the ML, for the next.
+> Tell me if you rather have this work be reviewed in 2 steps: first
+> tf-a changes, then once merged, qemu board and the optee runtime test.
+
+Note: next is going to be merged back in master very soon now, since
+2019.02 has been released.
+
+If you already have all the changes, then please send them in one
+single series, it makes it clearer why the preparation patches are
+needed.
+
+Also, I have seen your series improving various things in optee related
+packages, I intend to have a look very soon.
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
