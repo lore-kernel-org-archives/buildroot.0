@@ -1,97 +1,98 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Mar 2019 20:13:29 +0100
-Subject: [Buildroot] [git commit] package/shadowsocks-libev: bump to version
- 3.2.4
-Message-ID: <20190305095737.20C448E950@busybox.osuosl.org>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 5 Mar 2019 11:58:17 +0100
+Subject: [Buildroot] [PATCH v4 6/7] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <20190305105529.1fcccbc3@windsurf>
+References: <1548845249-28201-1-git-send-email-etienne.carriere@linaro.org>
+ <1548845249-28201-6-git-send-email-etienne.carriere@linaro.org>
+ <20190217231234.321ec6e4@windsurf.home>
+ <8d23dabb-4270-9c5f-4432-84cebee42c5a@mind.be>
+ <CAN5uoS_1zj1=ywE3-Gu55UksPAsHdGGEgAgm+YAAV=Wuo2pBfA@mail.gmail.com>
+ <20190305105529.1fcccbc3@windsurf>
+Message-ID: <CAN5uoS-PdCLnh3BFkPF9a_-JQN79Rn6+Z3N0Spd6O931EEeAXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e675e9a0473f39b60ab66d94a61ac9c077ed438f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 5 Mar 2019 at 10:55, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello ?tienne,
+>
+> On Tue, 5 Mar 2019 10:14:07 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> > I've prepared something to test the optee on qemu/arm through the
+> > runtime tests but few questions puzzle me.
+> >
+> > 1/ To use the board defconfig for the test, I created the file
+> > support/test/conf/qemu_xxx_defconfig as a symlink to
+> > configs/qemu_xxx_defconfig.
+> > I'm not sure it is that nice. But it allowed to set the test config in
+> > the test_opee.py using:
+> >
+> >     class TestOpteeXtest(infra.basetest.BRTest):
+> >         with open(infra.filepath('conf/qemu_armv7a_tz_virt_defconfig'),
+> > 'r') as config_file:
+> >             config = "".join(line for line in config_file if line[:1]!='#')
+>
+> infra.filepath() is as simple as:
+>
+> def filepath(relpath):
+>     return os.path.join(os.getcwd(), "support/testing", relpath)
+>
+> so you can just do:
+>
+>         with open(os.path.join(os.getcwd(), "configs/qemu_armv7a_tz_virt_defconfig"))
+>
 
-The patch can be removed, as it has been applied upstream:
+Ok, i should have looked into :)
+Thanks. I prefer to get rid of such symlink.
 
-  https://github.com/shadowsocks/shadowsocks-libev/commit/9b4aebc840f444e5aa83633838e3890cec523017
+> however, I see one down-side with this: defconfigs are usually using an
+> internal toolchain, so they take a long time to build. We typically try
+> to use external toolchains for most runtime tests, to make them faster
+> and therefore more usable. But perhaps you can take the defconfig +
+> inject a few lines of configuration to use an external toolchain.
+>
 
-And because the patch is removed, we can drop AUTORECONF = YES.
+Great, I'll go this way: defconfig + extra toolchain directives.
 
-Signed-off-by: DUPONCHEEL S??bastien <sebastien.duponcheel@corp.ovh.com>
-[Thomas: extend commit log]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...c-fix-static-build-with-netfilter_conntra.patch | 31 ----------------------
- package/shadowsocks-libev/shadowsocks-libev.hash   |  2 +-
- package/shadowsocks-libev/shadowsocks-libev.mk     |  4 +--
- 3 files changed, 2 insertions(+), 35 deletions(-)
+> > 2/ To share this test I need few preliminary changes in arm-trusted-firmware.
+> > This will brings a series of dependent patches: tf-a updates + qemu
+> > board defconfig + optee runtime test script.
+> > The series depends on branch next, as dependent on OP-TEE packages.
+> > That will make several versatile changes in a single patches series
+> > over the next branch.
+> >
+> > I plan to submit the series to the ML, for the next.
+> > Tell me if you rather have this work be reviewed in 2 steps: first
+> > tf-a changes, then once merged, qemu board and the optee runtime test.
+>
+> Note: next is going to be merged back in master very soon now, since
+> 2019.02 has been released.
+>
+> If you already have all the changes, then please send them in one
+> single series, it makes it clearer why the preparation patches are
+> needed.
+>
 
-diff --git a/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch b/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-deleted file mode 100644
-index 7ddb140e8d..0000000000
---- a/package/shadowsocks-libev/0001-configure.ac-fix-static-build-with-netfilter_conntra.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 9b4aebc840f444e5aa83633838e3890cec523017 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 18 Jan 2019 21:05:34 +0100
--Subject: [PATCH] configure.ac: fix static build with netfilter_conntrack
--
--Fixes:
-- - http://autobuild.buildroot.org/results/22a28e8fd8182e1c908541dbc5b0ee087c3803e6
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://github.com/shadowsocks/shadowsocks-libev/pull/2270]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index a706591..c6dab8b 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -256,7 +256,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
-- 	        if test x"$enable_connmarktos" = "xyes"; then
-- 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
-- 	        fi
---	        with_netfilter_conntrack=no])
--+	        with_netfilter_conntrack=no], [-lnfnetlink])
-- 	    AC_CHECK_HEADERS([libnetfilter_conntrack/libnetfilter_conntrack.h \
-- 	        libnetfilter_conntrack/libnetfilter_conntrack_tcp.h],,[
-- 	        if test x"$enable_connmarktos" = "xyes"; then
---- 
--2.14.1
--
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index a7c0dc0710..b8bc4379a9 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.hash
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 2befc27b1cc62af0450702343d17e347936f0d4e3d4b04ba9246c4f9b409b742 shadowsocks-libev-3.2.3.tar.gz
-+sha256 65a67c355df1794dc0ef94d80d2d596fd590b13fdcd0a21bda28859c88924ce5 shadowsocks-libev-3.2.4.tar.gz
- 
- # License files, locally calculated
- sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index c2c33b7aa5..fcebe34a4b 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--SHADOWSOCKS_LIBEV_VERSION = 3.2.3
-+SHADOWSOCKS_LIBEV_VERSION = 3.2.4
- SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
- SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
- SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
--# We're patching configure.ac
--SHADOWSOCKS_LIBEV_AUTORECONF = YES
- SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
+Fine, thank.
+I'll send soon.
+
+Regards,
+etienne
+
+>
+> Also, I have seen your series improving various things in optee related
+> packages, I intend to have a look very soon.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
