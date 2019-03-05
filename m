@@ -1,54 +1,84 @@
-From: =?utf-8?B?0JHRi9GB0YLRgNC+0LIg0JLQuNGC0LDQu9C40Lk=?= <error25@yandex.ru>
-Date: Tue, 05 Mar 2019 17:26:42 +0300
-Subject: [Buildroot] modules
-In-Reply-To: <87fts1h54b.fsf@dell.be.48ers.dk>
-References: <24581291551766817@myt5-262fb1897c00.qloud-c.yandex.net>
- <87k1hdhdqf.fsf@dell.be.48ers.dk>
- <925021551779772@sas2-ce04c18c415c.qloud-c.yandex.net>
- <87fts1h54b.fsf@dell.be.48ers.dk>
-Message-ID: <899921551796002@iva1-5148b5385b62.qloud-c.yandex.net>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Tue,  5 Mar 2019 15:42:16 +0100
+Subject: [Buildroot] [PATCH 1/1] core/pkg-infra: Fix package files
+ statistics for parallel build
+Message-ID: <20190305144216.13738-1-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have little knowledge for compile bcm-refsw
+When activating top level parallel build, multiple processes may
+try to modify the various *files-list* files in the common build/
+directory at the same time. This can cause racy build failures.
 
-Possible make proprietary modules for BCM7231 ?
-Without simbols (as in satellite receivers)
+The fix here is to use flock to ensure exclusive execution of the
+statistics gathering code. For this to work it is assumed that the
+target/staging/host directories are isolated, which is true for
+per-package builds.
+For standard sequential builds, the locking is of course unnecessary
+but no conditional handling is implemented  since the runtime cost is
+expected to be next to nothing.
 
-I have files and will sent bcm-refsw
-refsw_release_unified_20140919.tgz
-refswBCM.tar.gz
+For flock to work, the statistics gathering code must be run in a
+single subshell. Otherwise the lockfile descriptor would be closed
+after the subshell (= the Makefile line where it was opened) ends
+and thus the lock would be released before even entering the critical
+code section.
 
-I run Debian via UART , only no TV out HDMI and no Sound
-If possible help
-Thank you
-Regards , Vitaly
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
 
->>>>>> "???????" == ??????? ??????? <error25@yandex.ru> writes:
-> 
->> Hi
->> I when compile , link http://sources.buildroot.net/stblinux-3.3-3.0a.tar.bz2
->> and no file ((
-> 
-> sources.buildroot.net is the default source code mirror for buildroot,
-> but we do not have any packages using that stblinux file, so we
-> (naturally) don't have the file.
-> )
->> https://github.com/philkingston/pios
->> note
->> Please feed suggestions, bug reports, insults, and bribes back to the
->> buildroot mailing list: buildroot at buildroot.org
-> 
-> That is correct for Buildroot itself, but this Phil Kingston has made
-> modifications to Buildroot including that stblinux file, so he is most
-> likely to be able to help you.
-> 
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Notes:
+This patch has been developed on top of Thomas ppsh-v7 branch, rebased
+on master.
+
+Of course this solution adds a dependency on flock. However flock is
+part of util-linux which probably is a dependency of other buildroot
+prerequisites anyway.
+
+Also, even though this solution has a somewhat hacky feel to me, it does
+work for both per-package and standard sequential builds. When converting
+to per-package for good, the statistics gathering code could probably
+be simplified because, well, all the files are installed isolated folders
+which contents should be easier to compare before/after.
+
+ package/pkg-generic.mk | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6d4442b824..0f875736d6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -64,20 +64,22 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(3): suffix of file  (optional)
+ define step_pkg_size_inner
+ 	@touch $(BUILD_DIR)/.files-list$(3).stat
+-	@touch $(BUILD_DIR)/packages-file-list$(3).txt
+-	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
++	exec 3>$(BUILD_DIR)/packages-file-list$(3).txt; \
++	flock -x 3; \
++	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt; \
+ 	cd $(2); \
+ 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+-		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
++		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new; \
+ 	LC_ALL=C comm -13 \
+ 		$(BUILD_DIR)/.files-list$(3).stat \
+ 		$(BUILD_DIR)/.files-list$(3).new \
+-		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
++		> $($(PKG)_BUILDDIR)/.files-list$(3).txt; \
+ 	sed -r -e 's/^[^,]+/$(1)/' \
+ 		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
+-		>> $(BUILD_DIR)/packages-file-list$(3).txt
++		>> $(BUILD_DIR)/packages-file-list$(3).txt; \
+ 	mv $(BUILD_DIR)/.files-list$(3).new \
+-		$(BUILD_DIR)/.files-list$(3).stat
++		$(BUILD_DIR)/.files-list$(3).stat; \
++	exec 3>&-
+ endef
+ 
+ define step_pkg_size
+-- 
+2.21.0
