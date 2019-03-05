@@ -1,81 +1,121 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Mar 2019 20:31:54 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5base: add
- BR2_PACKAGE_QT5BASE_OPENSSL
-In-Reply-To: <20190304201145.E02D08E89D@busybox.osuosl.org>
-References: <20190304201145.E02D08E89D@busybox.osuosl.org>
-Message-ID: <0f583eb7-72ed-1d26-26d1-9194309cb1a5@mind.be>
+From: Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com>
+Date: Tue,  5 Mar 2019 14:54:40 -0500
+Subject: [Buildroot] [PATCH 1/1] package/vsftpd: add patch to fix hang
+Message-ID: <20190305195440.25074-1-abdelmalek.benelouezzane@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This fixes a hang due to SIGCHLD not being handled correctly by
+vsftpd. The patch comes from fedora and didn't make its way to
+upstream yet.
 
+More information about the bug can be found in:
+ - https://bugzilla.redhat.com/show_bug.cgi?id=1198259
 
-On 04/03/2019 21:13, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=a946657b6e40924a746d1bd86eb023158abd1ab8
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Commit c110e48cecde6f543da18388322907b05b25e7d2 disabled openssl support
-> on QT 5.6, this has the side-effect of breaking the build of
-> python-pyqt5 because support of openssl is enabled on python-pyqt5 if
-> BR2_PACKAGE_OPENSSL is selected
-> 
-> To fix this issue, add a new BR2_PACKAGE_QT5BASE_OPENSSL option in
-> qt5base and use it in python-pyqt5
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e92991308d47649cecc4084e41ab5711ec96831f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [Peter: make _OPENSSL a blind option, add libressl logic for 5.6.x]
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/python-pyqt5/python-pyqt5.mk | 2 +-
->  package/qt5/qt5base/Config.in        | 6 ++++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-> index cde026ef63..4955936ae3 100644
-> --- a/package/python-pyqt5/python-pyqt5.mk
-> +++ b/package/python-pyqt5/python-pyqt5.mk
-> @@ -25,9 +25,9 @@ PYTHON_PYQT5_QTDETAIL_LICENSE = Open Source
->  PYTHON_PYQT5_QTDETAIL_TYPE = shared
->  
->  # Turn off features that aren't available in current qt configuration
-> -PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
->  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
->  PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
-> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
->  
->  define PYTHON_PYQT5_QTDETAIL
->  	echo $(1) >> $(2)/qtdetail.out
-> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-> index 1340ea48f0..696e689758 100644
-> --- a/package/qt5/qt5base/Config.in
-> +++ b/package/qt5/qt5base/Config.in
-> @@ -286,6 +286,12 @@ comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
->  	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
->  		!BR2_HOST_GCC_AT_LEAST_4_8
->  
-> +config BR2_PACKAGE_QT5BASE_OPENSSL
-> +	bool
-> +	# No OpenSSL 1.1.x support in Qt 5.6.x
-> +	default y if BR2_PACKAGE_QT5_VERSION_5_6 && BR2_PACKAGE_LIBRESSL
-> +	default y if BR2_PACKAGE_QT5_VERSION_LATEST && BR2_PACKAGE_OPENSSL
+Signed-off-by: Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com>
+---
+ ...0004-Prevent-hang-in-SIGCHLD-handler.patch | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+ create mode 100644 package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
 
- Now it's not enabled for libressl... The && OPENSSL should be removed I think.
-
- Regards,
- Arnout
-
-> +
->  config BR2_PACKAGE_QT5BASE_TSLIB
->  	bool "Enable Tslib support"
->  	select BR2_PACKAGE_TSLIB
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
+new file mode 100644
+index 0000000000..221720b6e3
+--- /dev/null
++++ b/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
+@@ -0,0 +1,90 @@
++Prevent hang in SIGCHLD handler
++
++Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=1198259
++
++Fetch from:
++https://src.fedoraproject.org/cgit/rpms/vsftpd.git/plain/0026-Prevent-hanging-in-SIGCHLD-handler.patch
++
++Signed-off-by: Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com>
++
++From 1e65a0a15f819b8bf1b551bd84f71d0da1f5a00c Mon Sep 17 00:00:00 2001
++From: Martin Sehnoutka <msehnout@redhat.com>
++Date: Thu, 17 Nov 2016 13:02:27 +0100
++Subject: [PATCH 26/59] Prevent hanging in SIGCHLD handler.
++
++vsftpd can now handle pam_exec.so in pam.d config without hanging
++in SIGCHLD handler.
++---
++ sysutil.c    |  4 ++--
++ sysutil.h    |  2 +-
++ twoprocess.c | 13 +++++++++++--
++ 3 files changed, 14 insertions(+), 5 deletions(-)
++
++diff --git a/sysutil.c b/sysutil.c
++index 6d7cb3f..099748f 100644
++--- a/sysutil.c
+++++ b/sysutil.c
++@@ -608,13 +608,13 @@ vsf_sysutil_exit(int exit_code)
++ }
++ 
++ struct vsf_sysutil_wait_retval
++-vsf_sysutil_wait(void)
+++vsf_sysutil_wait(int hang)
++ {
++   struct vsf_sysutil_wait_retval retval;
++   vsf_sysutil_memclr(&retval, sizeof(retval));
++   while (1)
++   {
++-    int sys_ret = wait(&retval.exit_status);
+++    int sys_ret = waitpid(-1, &retval.exit_status, hang ? 0 : WNOHANG);
++     if (sys_ret < 0 && errno == EINTR)
++     {
++       vsf_sysutil_check_pending_actions(kVSFSysUtilUnknown, 0, 0);
++diff --git a/sysutil.h b/sysutil.h
++index c145bdf..13153cd 100644
++--- a/sysutil.h
+++++ b/sysutil.h
++@@ -177,7 +177,7 @@ struct vsf_sysutil_wait_retval
++   int PRIVATE_HANDS_OFF_syscall_retval;
++   int PRIVATE_HANDS_OFF_exit_status;
++ };
++-struct vsf_sysutil_wait_retval vsf_sysutil_wait(void);
+++struct vsf_sysutil_wait_retval vsf_sysutil_wait(int hang);
++ int vsf_sysutil_wait_reap_one(void);
++ int vsf_sysutil_wait_get_retval(
++   const struct vsf_sysutil_wait_retval* p_waitret);
++diff --git a/twoprocess.c b/twoprocess.c
++index 33d84dc..b1891e7 100644
++--- a/twoprocess.c
+++++ b/twoprocess.c
++@@ -47,8 +47,17 @@ static void
++ handle_sigchld(void* duff)
++ {
++ 
++-  struct vsf_sysutil_wait_retval wait_retval = vsf_sysutil_wait();
+++  struct vsf_sysutil_wait_retval wait_retval = vsf_sysutil_wait(0);
++   (void) duff;
+++  if (!vsf_sysutil_wait_get_exitcode(&wait_retval) &&
+++      !vsf_sysutil_wait_get_retval(&wait_retval))
+++    /* There was nobody to wait for, possibly caused by underlying library
+++     * which created a new process through fork()/vfork() and already picked
+++     * it up, e.g. by pam_exec.so or integrity check routines for libraries
+++     * when FIPS mode is on (nss freebl), which can lead to calling prelink
+++     * if the prelink package is installed.
+++     */
+++    return;
++   /* Child died, so we'll do the same! Report it as an error unless the child
++    * exited normally with zero exit code
++    */
++@@ -390,7 +399,7 @@ common_do_login(struct vsf_session* p_sess, const struct mystr* p_user_str,
++   priv_sock_send_result(p_sess->parent_fd, PRIV_SOCK_RESULT_OK);
++   if (!p_sess->control_use_ssl)
++   {
++-    (void) vsf_sysutil_wait();
+++    (void) vsf_sysutil_wait(1);
++   }
++   else
++   {
++-- 
++2.14.4
++
+-- 
+2.17.1
