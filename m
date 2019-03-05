@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:13 -0000
-Subject: [Buildroot] [git commit] package/python-pip: bump to version 19.0.2
-Message-ID: <20190305095735.23FC98E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-lxml: bump to version 4.3.1
+Message-ID: <20190305095735.1CBE58E950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ffe9e78127fea40a76b75b1431b443e9888cd21
+commit: https://git.buildroot.net/buildroot/commit/?id=44b771b06b178a35dd44192a45600374def0e1f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+iso-schematron.rng change: update RNG schema to 2016 specification.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pip/python-pip.hash | 4 ++--
- package/python-pip/python-pip.mk   | 4 ++--
+ package/python-lxml/python-lxml.hash | 4 ++--
+ package/python-lxml/python-lxml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index 149099b118..96baf04a00 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5    b6919f1a368138f73b367abccc06f5ae  pip-19.0.1.tar.gz
--sha256 e81ddd35e361b630e94abeda4a1eddd36d47a90e71eb00f38f46b57f787cd1a5  pip-19.0.1.tar.gz
-+md5	526fd9ec1e6ea956b3571ebfb42cf83c  pip-19.0.2.tar.gz
-+sha256	f851133f8b58283fa50d8c78675eb88d4ff4cde29b6c41205cd938b06338e0e5  pip-19.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256 5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index 22562cc93f..94926fce09 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 6558f107e3..19c30f3ac6 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,6 +1,6 @@
+ # Locally computed
+-sha256  7035d9361f3ceec9ccc1dd3482094d1174580e7e1bf6870b77ea758f7cad15d2  lxml-4.2.6.tar.gz
++sha256  da5e7e941d6e71c9c9a717c93725cda0708c2474f532e3680ac5e39ec57d224d  lxml-4.3.1.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+-sha256  705bdfece6dbb87879d9ec40a8c9530651aefb98ae387da9134584464742d539  src/lxml/isoschematron/resources/rng/iso-schematron.rng
++sha256  56c5b13f28b78958890c36e3249c34c169041e42ebcfdce8080f3324ba2bf4de  src/lxml/isoschematron/resources/rng/iso-schematron.rng
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 1b46670ffd..29c77dd351 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PIP_VERSION = 19.0.1
-+PYTHON_PIP_VERSION = 19.0.2
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/c8/89/ad7f27938e59db1f0f55ce214087460f65048626e2226531ba6cb6da15f0
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/4c/4d/88bc9413da11702cbbace3ccc51350ae099bb351febae8acc85fec34f9af
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+-PYTHON_LXML_VERSION = 4.2.6
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/b0/06/37437e348cd296c56a8bac0396007960abb2bcdaf77e8a3bde52bb68e550
++PYTHON_LXML_VERSION = 4.3.1
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/0f/bd/bb1464d1f363dbd805862c8a1ea258b9a4f4d2049c376d1c4790b6545691
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
