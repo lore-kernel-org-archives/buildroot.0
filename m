@@ -1,52 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Mar 2019 21:51:23 +0100
-Subject: [Buildroot] [git commit] boot/optee-os: define a new variable
- OPTEE_OS_SDK
-Message-ID: <20190305210106.3E070814D8@busybox.osuosl.org>
+Date: Tue, 5 Mar 2019 21:54:32 +0100
+Subject: [Buildroot] [git commit] package/optee-examples: use the
+ OPTEE_OS_SDK variable
+Message-ID: <20190305210106.4AFE6814D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca34a3ed25a3e215de1cc268d08cfecfa1dee096
+commit: https://git.buildroot.net/buildroot/commit/?id=24ac0fef4a7379475025616bc98dea6063a93dc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new variable OPTEE_OS_SDK, define by the optee-os
-package, which points to the OPTEE SDK installed in STAGING_DIR. This
-will allow other pakage to find this SDK more easily.
+The optee-os package was recently changed to provide the OPTEE_OS_SDK
+to allow other packages to locate the OP-TEE Trusted Application SDK,
+so let's use this new variable in the optee-examples package.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[Thomas: improve commit log, rename variable to just OPTEE_OS_SDK]
+[Thomas: use the new variable name, rework commit log]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/optee-os/optee-os.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/optee-examples/optee-examples.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index aeac067309..6da20a9f3e 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -55,9 +55,11 @@ OPTEE_OS_MAKE_OPTS += $(call qstrip,$(BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES))
- OPTEE_OS_BUILDDIR_OUT = out
- ifeq ($(BR2_aarch64),y)
- OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm64
-+OPTEE_OS_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
- endif
- ifeq ($(BR2_arm),y)
- OPTEE_OS_LOCAL_SDK = $(OPTEE_OS_BUILDDIR_OUT)/export-ta_arm32
-+OPTEE_OS_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
- endif
+diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
+index 10fe62b72a..f2163b8643 100644
+--- a/package/optee-examples/optee-examples.mk
++++ b/package/optee-examples/optee-examples.mk
+@@ -11,19 +11,13 @@ OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
-@@ -86,8 +88,8 @@ define OPTEE_OS_BUILD_SDK
- 		 $(TARGET_CONFIGURE_OPTS) $(OPTEE_OS_MAKE_OPTS) ta_dev_kit
- endef
- define OPTEE_OS_INSTALL_STAGING_CMDS
--	mkdir -p $(STAGING_DIR)/lib/optee
--	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK) $(STAGING_DIR)/lib/optee
-+	mkdir -p $(OPTEE_OS_SDK)
-+	cp -ardpf $(@D)/$(OPTEE_OS_LOCAL_SDK)/* $(OPTEE_OS_SDK)
- endef
- endif # BR2_TARGET_OPTEE_OS_SDK
+ OPTEE_EXAMPLES_DEPENDENCIES = optee-client optee-os
  
+-ifeq ($(BR2_aarch64),y)
+-OPTEE_EXAMPLES_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm64
+-else ifeq ($(BR2_arm),y)
+-OPTEE_EXAMPLES_SDK = $(STAGING_DIR)/lib/optee/export-ta_arm32
+-endif
+-
+ # Trusted Application are not built from CMake due to ta_dev_kit dependencies.
+ # We must build and install them on target.
+ define OPTEE_EXAMPLES_BUILD_TAS
+ 	$(foreach f,$(wildcard $(@D)/*/ta/Makefile), \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+-			TA_DEV_KIT_DIR=$(OPTEE_EXAMPLES_SDK) \
++			TA_DEV_KIT_DIR=$(OPTEE_OS_SDK) \
+ 			O=out -C $(dir $f) all
+ 	)
+ endef
