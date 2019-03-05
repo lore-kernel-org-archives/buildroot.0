@@ -1,139 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Mar 2019 17:06:08 +0100
-Subject: [Buildroot] [PATCH] package/systemd: use util-linux' agetty,
- drop patch
-Message-ID: <20190305160608.4046-1-yann.morin.1998@free.fr>
+From: Andreas Naumann <dev@andin.de>
+Date: Tue, 5 Mar 2019 19:51:52 +0100
+Subject: [Buildroot] [PATCH 1/1] core/pkg-infra: Fix package files
+ statistics for parallel build
+In-Reply-To: <13651_1551800345_5C7E9819_13651_366_1_20190305153902.GH2808@r-lnx-nyma7486-2>
+References: <20190305144216.13738-1-anaumann@ultratronik.de>
+ <13651_1551800345_5C7E9819_13651_366_1_20190305153902.GH2808@r-lnx-nyma7486-2>
+Message-ID: <67a3d40b-3c6c-5760-fb88-fb3c2974af44@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently have a patch that replaces the use of (hard-coded) agetty
-in systemd, to use just plain getty. That patch dates back to commit
-f4a5eed474c (Add the systemd package), when util-linux was not a
-dependency, and we relied on busybox to actually provide getty.
+Hi Yann,
 
-But nowadays, util-linux is a mandatory dependency of systemd anyway.
-agetty is about 42, while busybox' getty is around 5KiB (give or
-take). That's an extra 50KiB, but it has to be balanced against the rest
-of the system: systemd only runs on a glibc system, needs dbus and thus
-expat, and kmod, that a ~40KiB overhead is barely noticeable (a miminal
-systemd setup with nothing enabled, on ARM, is already ~20MiB)
+...
 
-So, drop our agetty-dropping patch, and forcibly enable agetty in
-util-linux.
+>>
+>> Of course this solution adds a dependency on flock. However flock is
+>> part of util-linux which probably is a dependency of other buildroot
+>> prerequisites anyway.
+> 
+> We already use flock in the download infra, so that's OK.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Ah, nice.
 
----
-Note: all 6 run-time tests still pass.
----
- package/systemd/0001-fix-getty-unit.patch | 81 -------------------------------
- package/systemd/Config.in                 |  1 +
- 2 files changed, 1 insertion(+), 81 deletions(-)
- delete mode 100644 package/systemd/0001-fix-getty-unit.patch
+>> Also, even though this solution has a somewhat hacky feel to me, it does
+>> work for both per-package and standard sequential builds. When converting
+>> to per-package for good, the statistics gathering code could probably
+>> be simplified because, well, all the files are installed isolated folders
+>> which contents should be easier to compare before/after.
+> 
+> Well, I was going to suggest just that: create the lists in the
+> per-package directory, so you won't have the race to begin with.
+> 
+> Then, at the end of the build, when all the target/ directories (ditto
+> host) are gathere into one, then do so for all the individual package
+> file lists too.
 
-diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0001-fix-getty-unit.patch
-deleted file mode 100644
-index a12569f493..0000000000
---- a/package/systemd/0001-fix-getty-unit.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--From 69e440f9b7a0e9a43ef582d4bb521722b448a7c2 Mon Sep 17 00:00:00 2001
--From: Maxime Ripard <maxime.ripard@free-electrons.com>
--Date: Mon, 31 Jul 2017 10:08:46 -0400
--Subject: [PATCH] fix-getty-unit
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Prefer getty to agetty in console setup systemd units
--
--Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--[aduskett at gmail.com: Update for systemd v237]
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[J?r?my: replace additional usage of agetty by getty.]
--Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-----
-- units/console-getty.service.m4    | 2 +-
-- units/container-getty at .service.m4 | 2 +-
-- units/getty at .service.m4           | 5 +----
-- units/serial-getty at .service.m4    | 2 +-
-- 4 files changed, 4 insertions(+), 7 deletions(-)
--
--diff --git a/units/console-getty.service.m4 b/units/console-getty.service.m4
--index 3c553240a..fd5ad9456 100644
----- a/units/console-getty.service.m4
--+++ b/units/console-getty.service.m4
--@@ -23,7 +23,7 @@ ConditionPathExists=/dev/console
-- # The '-o' option value tells agetty to replace 'login' arguments with an
-- # option to preserve environment (-p), followed by '--' for safety, and then
-- # the entered username.
---ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear --keep-baud console 115200,38400,9600 $TERM
--+ExecStart=-/sbin/getty -L console 115200 vt100
-- Type=idle
-- Restart=always
-- UtmpIdentifier=cons
--diff --git a/units/container-getty at .service.m4 b/units/container-getty at .service.m4
--index 087ab7f9b..30f7b66fe 100644
----- a/units/container-getty at .service.m4
--+++ b/units/container-getty at .service.m4
--@@ -28,7 +28,7 @@ Before=rescue.service
-- # The '-o' option value tells agetty to replace 'login' arguments with an
-- # option to preserve environment (-p), followed by '--' for safety, and then
-- # the entered username.
---ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear --keep-baud pts/%I 115200,38400,9600 $TERM
--+ExecStart=-/sbin/getty -L %I 115200 vt100
-- Type=idle
-- Restart=always
-- RestartSec=0
--diff --git a/units/getty at .service.m4 b/units/getty at .service.m4
--index 80e793bb7..385758c61 100644
----- a/units/getty at .service.m4
--+++ b/units/getty at .service.m4
--@@ -35,10 +35,7 @@ ConditionPathExists=/dev/tty0
-- 
-- [Service]
-- # the VT is cleared by TTYVTDisallocate
---# The '-o' option value tells agetty to replace 'login' arguments with an
---# option to preserve environment (-p), followed by '--' for safety, and then
---# the entered username.
---ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
--+ExecStart=-/sbin/getty -L %I 115200 vt100
-- Type=idle
-- Restart=always
-- RestartSec=0
--diff --git a/units/serial-getty at .service.m4 b/units/serial-getty at .service.m4
--index 757b86ab2..3d60efdb6 100644
----- a/units/serial-getty at .service.m4
--+++ b/units/serial-getty at .service.m4
--@@ -33,7 +33,7 @@ Before=rescue.service
-- # The '-o' option value tells agetty to replace 'login' arguments with an
-- # option to preserve environment (-p), followed by '--' for safety, and then
-- # the entered username.
---ExecStart=-/sbin/agetty -o '-p -- \\u' --keep-baud 115200,38400,9600 %I $TERM
--+ExecStart=-/sbin/getty -L %I 115200 vt100
-- Type=idle
-- Restart=always
-- UtmpIdentifier=%I
---- 
--2.14.4
--
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 920b65db44..490222f376 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -20,6 +20,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
- 	select BR2_PACKAGE_UTIL_LINUX_FSCK
--- 
-2.14.1
+Yes I was going to do that but realized it would lead to different code 
+for the same thing. And as far as I understood, the per-package stuff is 
+planned as an option. Maintaining two implementations felt less ideal, 
+even if one of them turns out more straightforward (which has yet to be 
+proven).
+
+> 
+> If, as you seem to suggest, this also simplifies the code, then bonus
+> point for you! ;-)
+
+Well this was theory, I havn't really thought it out yet. As I wrote 
+above, I'd leave that until per-package is merged and proves stable.
+
+
+best regards,
+Andreas
+
+
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>   package/pkg-generic.mk | 14 ++++++++------
+>>   1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 6d4442b824..0f875736d6 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -64,20 +64,22 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>>   # $(3): suffix of file  (optional)
+>>   define step_pkg_size_inner
+>>   	@touch $(BUILD_DIR)/.files-list$(3).stat
+>> -	@touch $(BUILD_DIR)/packages-file-list$(3).txt
+>> -	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+>> +	exec 3>$(BUILD_DIR)/packages-file-list$(3).txt; \
+>> +	flock -x 3; \
+>> +	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt; \
+>>   	cd $(2); \
+>>   	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+>> -		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
+>> +		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new; \
+>>   	LC_ALL=C comm -13 \
+>>   		$(BUILD_DIR)/.files-list$(3).stat \
+>>   		$(BUILD_DIR)/.files-list$(3).new \
+>> -		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
+>> +		> $($(PKG)_BUILDDIR)/.files-list$(3).txt; \
+>>   	sed -r -e 's/^[^,]+/$(1)/' \
+>>   		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
+>> -		>> $(BUILD_DIR)/packages-file-list$(3).txt
+>> +		>> $(BUILD_DIR)/packages-file-list$(3).txt; \
+>>   	mv $(BUILD_DIR)/.files-list$(3).new \
+>> -		$(BUILD_DIR)/.files-list$(3).stat
+>> +		$(BUILD_DIR)/.files-list$(3).stat; \
+>> +	exec 3>&-
+>>   endef
+>>   
+>>   define step_pkg_size
+>> -- 
+>> 2.21.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
