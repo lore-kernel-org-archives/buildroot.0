@@ -1,39 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 05 Mar 2019 10:00:14 -0000
-Subject: [Buildroot] [git commit] package/libcpprestsdk: add optional
- websocketpp dependency
-Message-ID: <20190305095735.CB3088E504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 0.8.3
+Message-ID: <20190305095735.8C6B380035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a36842af3bc9449803c73ffc7cee5e67890f2a8c
+commit: https://git.buildroot.net/buildroot/commit/?id=4f1550b0494d09067f1701b2306e55a7f2b39c37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For details see [1]:
+- Fix build of static libraries with meson.
+- New API: XKB_KEY_XF86MonBrightnessCycle/XKB_KEY_XF86RotationLockToggle
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2019-February/039970.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/libxkbcommon/libxkbcommon.hash | 4 ++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index be9ca292c5..6f5fb41999 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -10,6 +10,13 @@ LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
--LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-+LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
-+
-+ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
-+LIBCPPRESTSDK_DEPENDENCIES += websocketpp
-+LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
-+else
-+LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-+endif
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 67ae4b5921..e4a56873ea 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039243.html
+-sha256 7ab8c4b3403d89d01898066b72cb6069bddeb5af94905a65368f671a026ed58c libxkbcommon-0.8.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/039970.html
++sha256 b855c629849a97ab9835a4ad99d6b749a636f70d38a03f070c6ef72024825540 libxkbcommon-0.8.3.tar.xz
  
- $(eval $(cmake-package))
+ # License file:
+ sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 2045d96380..801782b38c 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 0.8.2
++LIBXKBCOMMON_VERSION = 0.8.3
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
