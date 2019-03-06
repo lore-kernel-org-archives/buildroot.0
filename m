@@ -1,72 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  6 Mar 2019 22:28:15 +0100
-Subject: [Buildroot] [PATCH 2/2] linux{, -headers}: support downloads of v5+
-In-Reply-To: <20190306212815.19759-1-arnout@mind.be>
-References: <20190306212815.19759-1-arnout@mind.be>
-Message-ID: <20190306212815.19759-2-arnout@mind.be>
+From: Julien Olivain <juju@cotds.org>
+Date: Wed,  6 Mar 2019 22:47:21 +0100
+Subject: [Buildroot] [PATCH 1/1] board/freescale/common/imx: fix
+ imx8-bootloader-prepare for i.MX8M
+Message-ID: <20190306214721.8996-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the arrival of linux v5.0, we need yet another condition to set
-_SITE correctly. Instead of continuing this madness, solve the problem
-generically: use v2.6 for 2.6.*, and use the number before the first dot
-in the other cases.
+The update of imx-mkimage in commit
+c14d92d439062caa6c94c4a93b20ab18aa20554c
 
-While we're at it, remove the comment which has been incorrect since
-80d7b68167a5c8893e906ace6b5f0b0166336406 (7 years ago).
+broke the imx8-bootloader-prepare.sh script for i.MX8M, used in
+freescale_imx8mqevk_defconfig
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The updated mkimage_fit_atf.sh script in imx-mkimage now needs
+a ATF_LOAD_ADDR variable, which was set to 0x00910000 for i.MX8M.
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
 ---
- linux/linux.mk                         | 9 ++-------
- package/linux-headers/linux-headers.mk | 9 ++-------
- 2 files changed, 4 insertions(+), 14 deletions(-)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 2b5d096e14..c7081db88f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -37,15 +37,10 @@ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
- LINUX_SITE = https://git.kernel.org/torvalds/t
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
--# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
--# to use the $(word) function. We support versions such as 4.0, 3.1,
--# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
- ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
- LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
--else ifeq ($(findstring x3.,x$(LINUX_VERSION)),x3.)
--LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
--else ifeq ($(findstring x4.,x$(LINUX_VERSION)),x4.)
--LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
-+else
-+LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_VERSION))).x
- endif
- endif
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index e98e93a857..3b319693ea 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -10,7 +10,7 @@ main ()
  
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 4b5ebf8d97..95432ade83 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -50,15 +50,10 @@ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
- LINUX_HEADERS_SITE = https://git.kernel.org/torvalds/t
- else
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
--# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
--# to use the $(word) function. We support versions such as 4.0, 3.1,
--# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
--else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
--LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
--else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
--LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
-+else
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_HEADERS_VERSION))).x
- endif # x2.6
- endif # LINUX_HEADERS_CUSTOM_TARBALL
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
  
 -- 
 2.20.1
