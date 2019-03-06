@@ -1,88 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Mar 2019 23:25:43 +0100
-Subject: [Buildroot] [git commit] core/pkg-infra: restore completeness
- of packages files lists
-In-Reply-To: <6b2a27b3-5bd0-442f-80fb-608c858b9828@cesnet.cz>
-References: <20190208083943.3BB41884AC@busybox.osuosl.org>
- <6b2a27b3-5bd0-442f-80fb-608c858b9828@cesnet.cz>
-Message-ID: <20190306222543.GU2721@scaer>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Thu,  7 Mar 2019 01:07:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/efl: Fix build with mesa
+Message-ID: <20190306230733.22325-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan, All,
+efl does not compile with mesa without OpenGL ES because it checks for
+GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr types if such
+version is not defined, but mesa declares them too for OpenGL version
+1.5, so fix it by add check also for OpenGL 1.5 where these types are
+defined.
 
-On 2019-03-06 12:57 +0100, Jan Kundr?t spake thusly:
-> > package/pkg-generic.mk | 14 +++++++++++---
-> > 1 file changed, 11 insertions(+), 3 deletions(-)
-> >
-> >diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> >index f5cab2b9c2..6168b40e89 100644
-> >--- a/package/pkg-generic.mk
-> >+++ b/package/pkg-generic.mk
-> >@@ -63,13 +63,21 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
-> > # $(2): base directory to search in
-> > # $(3): suffix of file  (optional)
-> > define step_pkg_size_inner
-> >+	@touch $(BUILD_DIR)/.files-list$(3).stat
-> > 	@touch $(BUILD_DIR)/packages-file-list$(3).txt
-> > 	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
-> > 	cd $(2); \
-> >-	find . \( -type f -o -type l \) \
-> >-		-newer $($(PKG)_DIR)/.stamp_built \
-> >-		-exec printf '$(1),%s\n' {} + \
-> >+	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-> >+		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
-> >+	LC_ALL=C comm -13 \
-> >+		$(BUILD_DIR)/.files-list$(3).stat \
-> >+		$(BUILD_DIR)/.files-list$(3).new \
-> >+		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
-> >+	sed -r -e 's/^[^,]+/$(1)/' \
-> >+		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
-> > 		>> $(BUILD_DIR)/packages-file-list$(3).txt
-> >+	mv $(BUILD_DIR)/.files-list$(3).new \
-> >+		$(BUILD_DIR)/.files-list$(3).stat
-> 
-> This breaks top-level parallel build.
+Use patch from:
+	https://git.enlightenment.org/core/efl.git/commit/?id=0d2b624f1e24240a1c4e651aa1cfe9a8dd10a573
 
-Yes, that's not unexpected, and I'm not entirely surprised.
+Fixes:
+	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
 
-So, TLPB is not yet supported, so fixing the files lists was deemed more
-important than allowing an as-yet unsupported (and known to anyway
-already break in other surprising and silent ways) "feature".
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ ...e-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
 
-We also discussed this at the devloers days in Brussels, where I pointed
-out that this would also break for PPSH (aka per-package staging+host,
-aka PPD, perp-package directory). Again, fixing it for the upcoming LTS
-was more important.
-
-> Here's an example how it looks when it
-> breaks:
-[--SNIP--]
-> I can't offer much insight into how to best fix this, unfortunately, whether
-> to add some locking or whether to make this per-package.
-> 
-> This is just with a patched top-level Makefile to remove the .NOTPARALLEL
-> stanza, with no per-package build dire patches atec.
-
-And it is known that just removing .NOTPRALLEL would otherwise open a
-can of worms, with much more subtle breakage anyway, like concurrent
-acces to direcotries or files in target/  (install(1) is racy in how
-it tests if a file exists and then creates it).
-
-We've just made this breakage more verbose, now. ;-]
-
-But really, the real way to TLPB is with PPD anyway.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch b/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
+new file mode 100644
+index 0000000000..b64a200ffb
+--- /dev/null
++++ b/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
+@@ -0,0 +1,34 @@
++From d045dd99acdd47be238642d4f9384dccacde2b42 Mon Sep 17 00:00:00 2001
++From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
++Date: Sat, 15 Dec 2018 16:19:01 +0000
++Subject: [PATCH] evas gl - make GLintptr etc. also ndefed for GL_VERSION_1_5
++ fix typedef
++
++It seems that GL_VERSION_1_5 define == these provided by gl already. At
++least reading the mesa headers I do, so this should fix T7502
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ src/lib/evas/Evas_GL.h | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/lib/evas/Evas_GL.h b/src/lib/evas/Evas_GL.h
++index fa3e6f4..5524d82 100644
++--- a/src/lib/evas/Evas_GL.h
+++++ b/src/lib/evas/Evas_GL.h
++@@ -4272,9 +4272,11 @@ typedef signed int       GLfixed;      // Changed khronos_int32_t
++ 
++ #ifndef GL_ES_VERSION_2_0
++ /* GL types for handling large vertex buffer objects */
++-#include <stddef.h>
+++# ifndef GL_VERSION_1_5
+++#  include <stddef.h>
++ typedef ptrdiff_t GLintptr;     // Changed khronos_intptr_t
++ typedef ptrdiff_t GLsizeiptr;   // Changed khronos_ssize_t
+++# endif
++ #endif
++ 
++ /* Some definitions from GLES 3.0.
++-- 
++2.14.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
