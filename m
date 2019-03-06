@@ -1,37 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Mar 2019 17:48:41 +0100
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 6 Mar 2019 18:09:19 +0100
 Subject: [Buildroot] [PATCH] package/musl: remove rcrt1.o from target
  installation
-In-Reply-To: <20190306163316.6117-1-norbert.lange@andritz.com>
+In-Reply-To: <20190306174841.4f8b67a1@windsurf>
 References: <20190306163316.6117-1-norbert.lange@andritz.com>
-Message-ID: <20190306174841.4f8b67a1@windsurf>
+ <20190306174841.4f8b67a1@windsurf>
+Message-ID: <CADYdroMAZ12BZH6q5472gAOuuDfT5RQVXA3SP1ts=7cW2yhGrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+>
+> Could you give some more details ?
 
-Thanks for your patch!
 
-On Wed,  6 Mar 2019 17:33:16 +0100
-Norbert Lange <nolange79@gmail.com> wrote:
+ rcrt1.o is a new startup for "static-pie" apps, and only needed for building,
+should not end up in the target filesystem
 
-> From: Norbert Lange <nolange79@gmail.com>
-> 
-> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+>
+> In fact, your patch does not remove rcrt1.o from target installation:
+> it ensures that the target installation does *NOT* remove it from
+> TARGET_DIR.
 
-Could you give some more details ?
+One of us is eligible for a legasthenic fund, either its you or I am
+a really badly affected cause I still cant find a fault in the patch.
 
-In fact, your patch does not remove rcrt1.o from target installation:
-it ensures that the target installation does *NOT* remove it from
-TARGET_DIR.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Norbert
