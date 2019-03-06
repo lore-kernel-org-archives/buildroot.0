@@ -1,33 +1,37 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed,  6 Mar 2019 17:33:16 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Mar 2019 17:48:41 +0100
 Subject: [Buildroot] [PATCH] package/musl: remove rcrt1.o from target
  installation
-Message-ID: <20190306163316.6117-1-norbert.lange@andritz.com>
+In-Reply-To: <20190306163316.6117-1-norbert.lange@andritz.com>
+References: <20190306163316.6117-1-norbert.lange@andritz.com>
+Message-ID: <20190306174841.4f8b67a1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <nolange79@gmail.com>
+Hello Norbert,
 
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
----
- package/musl/musl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your patch!
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 90c753926e..ff807c0cba 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -58,7 +58,7 @@ endef
- define MUSL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) install-libs
--	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o Scrt1.o)
-+	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o rcrt1.o Scrt1.o)
- endef
- 
- $(eval $(generic-package))
+On Wed,  6 Mar 2019 17:33:16 +0100
+Norbert Lange <nolange79@gmail.com> wrote:
+
+> From: Norbert Lange <nolange79@gmail.com>
+> 
+> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+
+Could you give some more details ?
+
+In fact, your patch does not remove rcrt1.o from target installation:
+it ensures that the target installation does *NOT* remove it from
+TARGET_DIR.
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
