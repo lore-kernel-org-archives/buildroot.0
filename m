@@ -1,80 +1,171 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 06 Mar 2019 12:57:50 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5Bgit_commit=5D_core/pkg-infra=3A_re?=
- =?iso-8859-1?q?store_completeness_of_packages_files_lists?=
-In-Reply-To: <20190208083943.3BB41884AC@busybox.osuosl.org>
-References: <20190208083943.3BB41884AC@busybox.osuosl.org>
-Message-ID: <6b2a27b3-5bd0-442f-80fb-608c858b9828@cesnet.cz>
+From: jared.bents at rockwellcollins.com <jared.bents@rockwellcollins.com>
+Date: Wed,  6 Mar 2019 08:22:30 -0600
+Subject: [Buildroot] [PATCH v1 1/2] package/busybox: udhcp CVE-2018-20679
+ patch
+Message-ID: <20190306142231.23490-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  package/pkg-generic.mk | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f5cab2b9c2..6168b40e89 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -63,13 +63,21 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  # $(2): base directory to search in
->  # $(3): suffix of file  (optional)
->  define step_pkg_size_inner
-> +	@touch $(BUILD_DIR)/.files-list$(3).stat
->  	@touch $(BUILD_DIR)/packages-file-list$(3).txt
->  	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
->  	cd $(2); \
-> -	find . \( -type f -o -type l \) \
-> -		-newer $($(PKG)_DIR)/.stamp_built \
-> -		-exec printf '$(1),%s\n' {} + \
-> +	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-> +		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
-> +	LC_ALL=C comm -13 \
-> +		$(BUILD_DIR)/.files-list$(3).stat \
-> +		$(BUILD_DIR)/.files-list$(3).new \
-> +		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
-> +	sed -r -e 's/^[^,]+/$(1)/' \
-> +		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
->  		>> $(BUILD_DIR)/packages-file-list$(3).txt
-> +	mv $(BUILD_DIR)/.files-list$(3).new \
-> +		$(BUILD_DIR)/.files-list$(3).stat
+From: Jared Bents <jared.bents@rockwellcollins.com>
 
-This breaks top-level parallel build. Here's an example how it looks when 
-it breaks:
+Patch to resolve CVE-2018-20679 which affects versions prior
+to 1.30.0
 
-2019-03-06T12:50:02 >>> expat 2.2.6 Fixing libtool files
-2019-03-06T12:50:02 Making install in gnulib-lib
-2019-03-06T12:50:02 /usr/bin/make  install-am
-2019-03-06T12:50:02 >>> ethtool 4.19 Installing to target
-2019-03-06T12:50:02 
-PATH="/home/jkt/work/prog/_build/br-cfb/host/bin:/home/jkt/work/prog/_build/br-cfb/host/sbin:/home/jkt/.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/home/jkt/
-.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/8.1.0:/usr/lib/llvm/6/bin:/usr/lib/llvm/4/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/games/bin" 
- /usr/bin/make  DESTDIR=/home/jkt/work/prog/_build/br-cfb/target install -C 
-/home/jkt/work/prog/_build/br-cfb/build/ethtool-4.19/
-2019-03-06T12:50:02 /bin/mkdir -p 
-'/home/jkt/work/prog/_build/br-cfb/target/usr/sbin'
-2019-03-06T12:50:02 /bin/mkdir -p 
-'/home/jkt/work/prog/_build/br-cfb/host/lib'
-2019-03-06T12:50:02 /bin/sh ../libtool   --mode=install /usr/bin/install -c 
-  libgettextlib.la '/home/jkt/work/prog/_build/br-cfb/host/lib'
-2019-03-06T12:50:02 /usr/bin/install -c ethtool 
-'/home/jkt/work/prog/_build/br-cfb/target/usr/sbin'
-2019-03-06T12:50:02 comm: 
-/home/jkt/work/prog/_build/br-cfb/build/.files-list-staging.new: No such 
-file or directory
-2019-03-06T12:50:02 make[1]: *** [package/pkg-generic.mk:287: 
-/home/jkt/work/prog/_build/br-cfb/build/expat-2.2.6/.stamp_staging_installed] 
-Error 1
-2019-03-06T12:50:02 make[1]: *** Waiting for unfinished jobs....
+More information can be found at:
+https://nvd.nist.gov/vuln/detail/CVE-2018-20679
 
-I can't offer much insight into how to best fix this, unfortunately, 
-whether to add some locking or whether to make this per-package.
+This applies to both master and 2019.02
 
-This is just with a patched top-level Makefile to remove the .NOTPARALLEL 
-stanza, with no per-package build dire patches atec.
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ ...tions-are-indeed-4-byte-closes-11506.patch | 136 ++++++++++++++++++
+ 1 file changed, 136 insertions(+)
+ create mode 100644 package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
 
-With kind regards,
-Jan
+diff --git a/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch b/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+new file mode 100644
+index 0000000000..bc1a48bf4b
+--- /dev/null
++++ b/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+@@ -0,0 +1,136 @@
++From 6d3b4bb24da9a07c263f3c1acf8df85382ff562c Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Mon, 17 Dec 2018 18:07:18 +0100
++Subject: udhcpc: check that 4-byte options are indeed 4-byte, closes 11506
++
++function                                             old     new   delta
++udhcp_get_option32                                     -      27     +27
++udhcp_get_option                                     231     248     +17
++------------------------------------------------------------------------------
++(add/remove: 1/0 grow/shrink: 1/0 up/down: 44/0)               Total: 44 bytes
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++ networking/udhcp/common.c | 19 +++++++++++++++++++
++ networking/udhcp/common.h |  4 ++++
++ networking/udhcp/dhcpc.c  |  6 +++---
++ networking/udhcp/dhcpd.c  |  6 +++---
++ 4 files changed, 29 insertions(+), 6 deletions(-)
++
++diff --git a/networking/udhcp/common.c b/networking/udhcp/common.c
++index e5fd74f91..41b05b855 100644
++--- a/networking/udhcp/common.c
+++++ b/networking/udhcp/common.c
++@@ -272,6 +272,15 @@ uint8_t* FAST_FUNC udhcp_get_option(struct dhcp_packet *packet, int code)
++ 			goto complain; /* complain and return NULL */
++ 
++ 		if (optionptr[OPT_CODE] == code) {
+++			if (optionptr[OPT_LEN] == 0) {
+++				/* So far no valid option with length 0 known.
+++				 * Having this check means that searching
+++				 * for DHCP_MESSAGE_TYPE need not worry
+++				 * that returned pointer might be unsafe
+++				 * to dereference.
+++				 */
+++				goto complain; /* complain and return NULL */
+++			}
++ 			log_option("option found", optionptr);
++ 			return optionptr + OPT_DATA;
++ 		}
++@@ -289,6 +298,16 @@ uint8_t* FAST_FUNC udhcp_get_option(struct dhcp_packet *packet, int code)
++ 	return NULL;
++ }
++ 
+++uint8_t* FAST_FUNC udhcp_get_option32(struct dhcp_packet *packet, int code)
+++{
+++	uint8_t *r = udhcp_get_option(packet, code);
+++	if (r) {
+++		if (r[-1] != 4)
+++			r = NULL;
+++	}
+++	return r;
+++}
+++
++ /* Return the position of the 'end' option (no bounds checking) */
++ int FAST_FUNC udhcp_end_option(uint8_t *optionptr)
++ {
++diff --git a/networking/udhcp/common.h b/networking/udhcp/common.h
++index 7ad603d33..9511152ff 100644
++--- a/networking/udhcp/common.h
+++++ b/networking/udhcp/common.h
++@@ -205,6 +205,10 @@ extern const uint8_t dhcp_option_lengths[] ALIGN1;
++ unsigned FAST_FUNC udhcp_option_idx(const char *name, const char *option_strings);
++ 
++ uint8_t *udhcp_get_option(struct dhcp_packet *packet, int code) FAST_FUNC;
+++/* Same as above + ensures that option length is 4 bytes
+++ * (returns NULL if size is different)
+++ */
+++uint8_t *udhcp_get_option32(struct dhcp_packet *packet, int code) FAST_FUNC;
++ int udhcp_end_option(uint8_t *optionptr) FAST_FUNC;
++ void udhcp_add_binary_option(struct dhcp_packet *packet, uint8_t *addopt) FAST_FUNC;
++ #if ENABLE_UDHCPC || ENABLE_UDHCPD
++diff --git a/networking/udhcp/dhcpc.c b/networking/udhcp/dhcpc.c
++index 4b23e4d39..5b3fd531c 100644
++--- a/networking/udhcp/dhcpc.c
+++++ b/networking/udhcp/dhcpc.c
++@@ -1691,7 +1691,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
++  * They say ISC DHCP client supports this case.
++  */
++ 				server_addr = 0;
++-				temp = udhcp_get_option(&packet, DHCP_SERVER_ID);
+++				temp = udhcp_get_option32(&packet, DHCP_SERVER_ID);
++ 				if (!temp) {
++ 					bb_error_msg("no server ID, using 0.0.0.0");
++ 				} else {
++@@ -1718,7 +1718,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
++ 				struct in_addr temp_addr;
++ 				uint8_t *temp;
++ 
++-				temp = udhcp_get_option(&packet, DHCP_LEASE_TIME);
+++				temp = udhcp_get_option32(&packet, DHCP_LEASE_TIME);
++ 				if (!temp) {
++ 					bb_error_msg("no lease time with ACK, using 1 hour lease");
++ 					lease_seconds = 60 * 60;
++@@ -1813,7 +1813,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
++ 					uint32_t svid;
++ 					uint8_t *temp;
++ 
++-					temp = udhcp_get_option(&packet, DHCP_SERVER_ID);
+++					temp = udhcp_get_option32(&packet, DHCP_SERVER_ID);
++ 					if (!temp) {
++  non_matching_svid:
++ 						log1("received DHCP NAK with wrong"
++diff --git a/networking/udhcp/dhcpd.c b/networking/udhcp/dhcpd.c
++index a8cd3f03b..477856d11 100644
++--- a/networking/udhcp/dhcpd.c
+++++ b/networking/udhcp/dhcpd.c
++@@ -640,7 +640,7 @@ static void add_server_options(struct dhcp_packet *packet)
++ static uint32_t select_lease_time(struct dhcp_packet *packet)
++ {
++ 	uint32_t lease_time_sec = server_config.max_lease_sec;
++-	uint8_t *lease_time_opt = udhcp_get_option(packet, DHCP_LEASE_TIME);
+++	uint8_t *lease_time_opt = udhcp_get_option32(packet, DHCP_LEASE_TIME);
++ 	if (lease_time_opt) {
++ 		move_from_unaligned32(lease_time_sec, lease_time_opt);
++ 		lease_time_sec = ntohl(lease_time_sec);
++@@ -987,7 +987,7 @@ int udhcpd_main(int argc UNUSED_PARAM, char **argv)
++ 		}
++ 
++ 		/* Get SERVER_ID if present */
++-		server_id_opt = udhcp_get_option(&packet, DHCP_SERVER_ID);
+++		server_id_opt = udhcp_get_option32(&packet, DHCP_SERVER_ID);
++ 		if (server_id_opt) {
++ 			uint32_t server_id_network_order;
++ 			move_from_unaligned32(server_id_network_order, server_id_opt);
++@@ -1011,7 +1011,7 @@ int udhcpd_main(int argc UNUSED_PARAM, char **argv)
++ 		}
++ 
++ 		/* Get REQUESTED_IP if present */
++-		requested_ip_opt = udhcp_get_option(&packet, DHCP_REQUESTED_IP);
+++		requested_ip_opt = udhcp_get_option32(&packet, DHCP_REQUESTED_IP);
++ 		if (requested_ip_opt) {
++ 			move_from_unaligned32(requested_nip, requested_ip_opt);
++ 		}
++-- 
++cgit v1.2.1
++
+-- 
+2.18.0
