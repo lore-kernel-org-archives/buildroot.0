@@ -1,84 +1,80 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 6 Mar 2019 11:26:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/efl: Fix build with mesa
-In-Reply-To: <20190306101924.GA14041@lwo1-lhp-f71841>
-References: <20190305001943.18631-1-vadim4j@gmail.com>
- <d5faea0f-3445-4039-4dcb-5815d66d15bb@smile.fr>
- <20190306101924.GA14041@lwo1-lhp-f71841>
-Message-ID: <30c10f89-0070-7009-719a-922958708673@smile.fr>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 06 Mar 2019 12:57:50 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5Bgit_commit=5D_core/pkg-infra=3A_re?=
+ =?iso-8859-1?q?store_completeness_of_packages_files_lists?=
+In-Reply-To: <20190208083943.3BB41884AC@busybox.osuosl.org>
+References: <20190208083943.3BB41884AC@busybox.osuosl.org>
+Message-ID: <6b2a27b3-5bd0-442f-80fb-608c858b9828@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vadym,
+>  package/pkg-generic.mk | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f5cab2b9c2..6168b40e89 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -63,13 +63,21 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>  # $(2): base directory to search in
+>  # $(3): suffix of file  (optional)
+>  define step_pkg_size_inner
+> +	@touch $(BUILD_DIR)/.files-list$(3).stat
+>  	@touch $(BUILD_DIR)/packages-file-list$(3).txt
+>  	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+>  	cd $(2); \
+> -	find . \( -type f -o -type l \) \
+> -		-newer $($(PKG)_DIR)/.stamp_built \
+> -		-exec printf '$(1),%s\n' {} + \
+> +	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+> +		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(3).new
+> +	LC_ALL=C comm -13 \
+> +		$(BUILD_DIR)/.files-list$(3).stat \
+> +		$(BUILD_DIR)/.files-list$(3).new \
+> +		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
+> +	sed -r -e 's/^[^,]+/$(1)/' \
+> +		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
+>  		>> $(BUILD_DIR)/packages-file-list$(3).txt
+> +	mv $(BUILD_DIR)/.files-list$(3).new \
+> +		$(BUILD_DIR)/.files-list$(3).stat
 
-Le 06/03/2019 ? 11:19, Vadym Kochan a ?crit?:
-> Hi Romain,
-> 
-> On Wed, Mar 06, 2019 at 11:12:40AM +0100, Romain Naour wrote:
->> Hi Vadim,
->>
->> Le 05/03/2019 ? 01:19, Vadim Kochan a ?crit?:
->>> efl does not compile with mesa without OpenGL ES because it checks for
->>> GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr types if such
->>> version is not defined, but mesa declares them too for OpenGL version
->>> 1.5, so fix it by add check also for OpenGL 1.5 where these types are
->>> defined.
->>>
->>> Use patch from:
->>> 	https://git.enlightenment.org/core/efl.git/commit/?id=0d2b624f1e24240a1c4e651aa1cfe9a8dd10a573
->>>
->>> Fixes:
->>> 	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
->>>
->>> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
->>> ---
->>>  ...e-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch | 34 ++++++++++++++++++++++
->>>  1 file changed, 34 insertions(+)
->>>  create mode 100644 package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
->>>
->>> diff --git a/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch b/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
->>> new file mode 100644
->>> index 0000000000..453b9f47b2
->>> --- /dev/null
->>> +++ b/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
->>> @@ -0,0 +1,34 @@
->>> +From d045dd99acdd47be238642d4f9384dccacde2b42 Mon Sep 17 00:00:00 2001
->>> +From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
->>> +Date: Sat, 15 Dec 2018 16:19:01 +0000
->>> +Subject: [PATCH] evas gl - make GLintptr etc. also ndefed for GL_VERSION_1_5
->>> + fix typedef
->>> +
->>> +It seems that GL_VERSION_1_5 define == these provided by gl already. At
->>> +least reading the mesa headers I do, so this should fix T7502
->>> +
->>> + at fix
->>
->> Your SoB line is missing here.
->> Also it would be great to add the upstream status of this patch.
->>
->> Otherwise, the patch is ok.
->>
->> Best regards,
->> Romain
->>
-> 
-> I directly applied the original commit (as patch) from URI which you provided, and
-> there was no SoB, so should I put there myself (I was not sure with this
-> because I did not touched the original patch) ?
+This breaks top-level parallel build. Here's an example how it looks when 
+it breaks:
 
-Even if the patch is not modified by you, contributors must add their SoB line
-(even if upstream doesn't use them).
+2019-03-06T12:50:02 >>> expat 2.2.6 Fixing libtool files
+2019-03-06T12:50:02 Making install in gnulib-lib
+2019-03-06T12:50:02 /usr/bin/make  install-am
+2019-03-06T12:50:02 >>> ethtool 4.19 Installing to target
+2019-03-06T12:50:02 
+PATH="/home/jkt/work/prog/_build/br-cfb/host/bin:/home/jkt/work/prog/_build/br-cfb/host/sbin:/home/jkt/.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/home/jkt/
+.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/8.1.0:/usr/lib/llvm/6/bin:/usr/lib/llvm/4/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/games/bin" 
+ /usr/bin/make  DESTDIR=/home/jkt/work/prog/_build/br-cfb/target install -C 
+/home/jkt/work/prog/_build/br-cfb/build/ethtool-4.19/
+2019-03-06T12:50:02 /bin/mkdir -p 
+'/home/jkt/work/prog/_build/br-cfb/target/usr/sbin'
+2019-03-06T12:50:02 /bin/mkdir -p 
+'/home/jkt/work/prog/_build/br-cfb/host/lib'
+2019-03-06T12:50:02 /bin/sh ../libtool   --mode=install /usr/bin/install -c 
+  libgettextlib.la '/home/jkt/work/prog/_build/br-cfb/host/lib'
+2019-03-06T12:50:02 /usr/bin/install -c ethtool 
+'/home/jkt/work/prog/_build/br-cfb/target/usr/sbin'
+2019-03-06T12:50:02 comm: 
+/home/jkt/work/prog/_build/br-cfb/build/.files-list-staging.new: No such 
+file or directory
+2019-03-06T12:50:02 make[1]: *** [package/pkg-generic.mk:287: 
+/home/jkt/work/prog/_build/br-cfb/build/expat-2.2.6/.stamp_staging_installed] 
+Error 1
+2019-03-06T12:50:02 make[1]: *** Waiting for unfinished jobs....
 
-See:
-https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+I can't offer much insight into how to best fix this, unfortunately, 
+whether to add some locking or whether to make this per-package.
 
-Best regards,
-Romain
+This is just with a patched top-level Makefile to remove the .NOTPARALLEL 
+stanza, with no per-package build dire patches atec.
 
-> 
-> Regards,
-> Vadim Kochan
-> 
+With kind regards,
+Jan
