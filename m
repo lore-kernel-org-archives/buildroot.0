@@ -1,62 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Mar 2019 20:47:25 +0100
-Subject: [Buildroot] [PATCH] package/openrc: new init package OpenRC
- (0.38.3)
-In-Reply-To: <20190306181221.GS2721@scaer>
-References: <20190228194415.7943-1-michal.lyszczek@bofc.pl>
- <befe78f5-d0b9-9f10-187d-26a918a6250c@mind.be>
- <20190305213858.GQ2721@scaer>
- <20190305232045.mylcl6l2ic26akxk@c-ml-p3510.redembedded.pl>
- <28627e2a-5cd9-dfb9-5825-bc6b294cba3b@mind.be>
- <20190306173639.GR2721@scaer> <20190306181221.GS2721@scaer>
-Message-ID: <20190306194725.GT2721@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed,  6 Mar 2019 21:35:51 +0100
+Subject: [Buildroot] [PATCH v2] zbar: bump version to 0.22
+Message-ID: <20190306203551.27811-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micha?, Arnout, All,
+- change from git download to official release and
+  download site (drop need for autoreconf)
 
-On 2019-03-06 19:12 +0100, Yann E. MORIN spake thusly:
-> On 2019-03-06 18:36 +0100, Yann E. MORIN spake thusly:
-> > Maybe we're taking the problem in the wrong way, then?
-> And actually, I think we are. As per [0]:
+- drop dependency on kernel headers >= 3.17 (should
+  be fixed with commit 'v4l2: make ZBar build and run on
+  Kernels < 3.16' (see [1])
 
-[0] https://en.wikipedia.org/wiki/OpenRC
+[1] https://git.linuxtv.org/zbar.git/commit/?id=fa5c48127ec1e3670e28540c2e6a03431ebac5b8
 
->     Since 0.25 OpenRC includes openrc-init, which can replace /sbin/init
-> 
-> Also, the 0.25 release notes contain:
-> 
->     This version contains an OpenRC-specific implementation of init for
->     Linux which can be used in place of sysvinit or any other init process.
-> 
-> I checked, and it looks like this is still the case in OpenRC's master
-> branch.
-> 
-> So, I believe we should aim for this solution, because it drastically
-> simplifies things.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - rebased on current master
+---
+ package/zbar/Config.in | 6 ++----
+ package/zbar/zbar.hash | 2 +-
+ package/zbar/zbar.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 8 deletions(-)
 
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+index e850c1f02b..e0b28365fc 100644
+--- a/package/zbar/Config.in
++++ b/package/zbar/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_ZBAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+ 	depends on BR2_USE_MMU # libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBV4L
+ 	help
+@@ -11,7 +10,6 @@ config BR2_PACKAGE_ZBAR
+ 
+ 	  https://git.linuxtv.org/zbar.git/about/
+ 
+-comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
++comment "zbar needs a toolchain w/ threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
+index 47a080af12..0f44d0f5c0 100644
+--- a/package/zbar/zbar.hash
++++ b/package/zbar/zbar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 7eb73c180c787184ede0f98806c52b23eb9c24609673e1ed51210504ea2937f5 zbar-681b0f305fb5c5bb0df8437f7d740b29a93a7889.tar.gz
++sha256 1ba9e94c7217a8bd3800f9f3abddf3ed393a62cdf141a709765aad2788744eb7 zbar-0.22.tar.bz2
+ sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index 2146aee85b..63220774b9 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-ZBAR_VERSION = 681b0f305fb5c5bb0df8437f7d740b29a93a7889
+-ZBAR_SITE = git://linuxtv.org/zbar.git
++ZBAR_VERSION = 0.22
++ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
++ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
+ ZBAR_LICENSE = LGPL-2.1+
+ ZBAR_LICENSE_FILES = LICENSE
+ ZBAR_INSTALL_STAGING = YES
+-ZBAR_AUTORECONF = YES
+ ZBAR_DEPENDENCIES = libv4l jpeg
+ # add host-gettext for AM_ICONV macro
+ ZBAR_DEPENDENCIES += host-gettext
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.21.0
