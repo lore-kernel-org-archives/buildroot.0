@@ -1,36 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Mar 2019 10:25:55 +0100
-Subject: [Buildroot] [git commit] docs/website: download.html: correct
- version number in title
-Message-ID: <20190307092421.8DE028E92E@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 07 Mar 2019 09:27:20 +0000
+Subject: [Buildroot] [Bug 11716] Typo on website,
+ saying latest release is 2018.2.11
+In-Reply-To: <bug-11716-163@https.bugs.busybox.net/>
+References: <bug-11716-163@https.bugs.busybox.net/>
+Message-ID: <bug-11716-163-vrCcB0G9ok@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=964d525970e8d6dfd7807dc965d07e0d2bcc49f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11716
 
-Fixes #11716
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Latest release is 2019.02.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+Ups, fixed - Thanks!
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3fc6c2897f..a3d69cdcd8 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,7 +8,7 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2018.02.11</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2019.02</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
