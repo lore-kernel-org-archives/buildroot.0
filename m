@@ -1,92 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 7 Mar 2019 22:59:34 +0100
-Subject: [Buildroot] [git commit] package/sunxi-tools: fix build meminfo
- with musl
-Message-ID: <20190307215655.0CD9888933@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unixodbc: bump to version 2.3.7
+Message-ID: <20190307215655.1C18988933@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d12d3969d1d7501a1ebd8e642aa0f0a1098715de
+commit: https://git.buildroot.net/buildroot/commit/?id=7407ec0382059e49e762ca0ff17cad3b7e71f3e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-musl does not provide inx/outx API for ARM arch, so use
-io memory access via pointers which is actually done this
-way in glibc/ulibc.
-
-Fixes:
-    http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-meminfo-Access-to-io-memory-via-pointers.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ package/unixodbc/unixodbc.hash | 6 +++---
+ package/unixodbc/unixodbc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-new file mode 100644
-index 0000000000..997c413f23
---- /dev/null
-+++ b/package/sunxi-tools/0001-meminfo-Access-to-io-memory-via-pointers.patch
-@@ -0,0 +1,59 @@
-+From 5c0a443ba336f10a8db6a99c769aa84ad37ed4d2 Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Wed, 20 Feb 2019 02:48:43 +0200
-+Subject: [PATCH] meminfo: Access to io memory via pointers
-+
-+The main reason for this is to be able compile with musl library,
-+because there is no support of inx/outx functions for ARM platform.
-+
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ meminfo.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/meminfo.c b/meminfo.c
-+index 0b0ff23..7d9f10f 100644
-+--- a/meminfo.c
-++++ b/meminfo.c
-+@@ -22,7 +22,6 @@
-+ #include <sys/mman.h>
-+ #include <stdint.h>
-+ #include <errno.h>
-+-#include <sys/io.h>
-+ #include <stdbool.h>
-+ 
-+ #include "common.h"
-+@@ -74,24 +73,26 @@ static enum sunxi_soc_version soc_version;
-+ unsigned int
-+ sunxi_io_read(void *base, int offset)
-+ {
-+-	return inl((unsigned long) (base + offset));
-++	unsigned long port = (unsigned long) (base + offset);
-++	return *((volatile unsigned long *) port);
-+ }
-+ 
-+ void
-+ sunxi_io_write(void *base, int offset, unsigned int value)
-+ {
-+-	outl(value, (unsigned long) (base + offset));
-++	unsigned long port = (unsigned long) (base + offset);
-++	*((volatile unsigned long *) port) = value;
-+ }
-+ 
-+ void
-+ sunxi_io_mask(void *base, int offset, unsigned int value, unsigned int mask)
-+ {
-+-	unsigned int tmp = inl((unsigned long) (base + offset));
-++	unsigned int tmp = sunxi_io_read(base, offset);
-+ 
-+ 	tmp &= ~mask;
-+ 	tmp |= value & mask;
-+ 
-+-	outl(tmp, (unsigned long) (base + offset));
-++	sunxi_io_write(base, offset, tmp);
-+ }
-+ 
-+ 
-+-- 
-+2.14.1
-+
+diff --git a/package/unixodbc/unixodbc.hash b/package/unixodbc/unixodbc.hash
+index 9d21a66e8d..4d0ad191d1 100644
+--- a/package/unixodbc/unixodbc.hash
++++ b/package/unixodbc/unixodbc.hash
+@@ -1,6 +1,6 @@
+-# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.6.tar.gz.md5
+-md5 a8629fd2953b04b4639d0a9d8a5cf9d1  unixODBC-2.3.6.tar.gz
++# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.7.tar.gz.md5
++md5 274a711b0c77394e052db6493840c6f9  unixODBC-2.3.7.tar.gz
+ # Locally computed
+-sha256 88b637f647c052ecc3861a3baa275c3b503b193b6a49ff8c28b2568656d14d69  unixODBC-2.3.6.tar.gz
++sha256 45f169ba1f454a72b8fcbb82abd832630a3bf93baa84731cf2949f449e1e3e77  unixODBC-2.3.7.tar.gz
+ sha256 a6b9aa1e9bfade121164c06fd975e9b913a8e38bf33d25ff967dfa3ed07d12f8  COPYING
+ sha256 1e594f4c7fd6d099eca4bd1340b39d871ce0298331d8ebd4b68935548ee45cf4  exe/COPYING
+diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
+index 423f395212..2c936fe9d5 100644
+--- a/package/unixodbc/unixodbc.mk
++++ b/package/unixodbc/unixodbc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNIXODBC_VERSION = 2.3.6
++UNIXODBC_VERSION = 2.3.7
+ UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
+ UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
+ UNIXODBC_INSTALL_STAGING = YES
