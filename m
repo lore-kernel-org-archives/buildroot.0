@@ -1,68 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 22:43:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: fix static build
- without lua
-In-Reply-To: <20190304214720.13703-1-fontaine.fabrice@gmail.com>
-References: <20190304214720.13703-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190307224345.4336952c@windsurf>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 7 Mar 2019 22:45:48 +0100
+Subject: [Buildroot] [git commit] leveldb: install memenv static library and
+ header
+Message-ID: <20190307214326.9B7388EA4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=16f847340d07dce620e4c3fc0a099aa79898d86a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Mar 2019 22:47:20 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+The project builds a tiny static library that consists of a single
+symbol which creates an in-memory LevelDB database.
 
-> diff --git a/package/swupdate/0001-Makefile-fix-static-build.patch b/package/swupdate/0001-Makefile-fix-static-build.patch
-> new file mode 100644
-> index 0000000000..56901f9871
-> --- /dev/null
-> +++ b/package/swupdate/0001-Makefile-fix-static-build.patch
-> @@ -0,0 +1,62 @@
-> +From 15a324f8c67548f219256a5a75ba8123cc5bdac6 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 4 Mar 2019 21:51:36 +0100
-> +Subject: [PATCH] Makefile: fix static build
-> +
-> +Don't build and install lua_swupdate.so if HAVE_LUA isn't set to y
-> +otherwise build will fail if the toolchain only suports building static
-> +libraries
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/c11c4d26983e0347d96f3dda62e6d72b031967bb
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/sbabic/swupdate/pull/49]
-> +---
-> + Makefile | 12 +++++++++---
-> + 1 file changed, 9 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index cfeb9a6..cac99b5 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -369,11 +369,15 @@ tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
-> + tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
-> + tools-all	:= $(tools-objs)
-> + 
-> ++ifeq ($(HAVE_LUA),y)
-> ++lua_swupdate	:= lua_swupdate.so
-> ++endif
+That library is not installed by default and may be used by other
+projects.
 
-I am a bit confused. How could lua_swupdate.so build at all (even in
-shared library configurations) when HAVE_LUA is not enabled ?
+This commit installs in the staging directory the libmemenv.a static
+library and the memenv.h header file.
 
-I see the patch has been applied upstream, so I guess it is correct,
-but still that confuses me a bit. Or maybe lua_swupdate.so doesn't link
-with Lua ? 
+Signed-off-by: Ga??l PORTAY <gael.portay@collabora.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/leveldb/leveldb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+index af9e879828..6078cd496c 100644
+--- a/package/leveldb/leveldb.mk
++++ b/package/leveldb/leveldb.mk
+@@ -25,6 +25,8 @@ define LEVELDB_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) \
+ 		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
+ 		$(LEVELDB_MAKE_ARGS) -C $(@D) install
++	$(INSTALL) -D -m 0644 $(@D)/out-static/libmemenv.a $(STAGING_DIR)/usr/lib/libmemenv.a
++	$(INSTALL) -D -m 0644 $(@D)/helpers/memenv/memenv.h $(STAGING_DIR)/usr/include/helpers/memenv/memenv.h
+ endef
+ 
+ define LEVELDB_INSTALL_TARGET_CMDS
