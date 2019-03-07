@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 22:10:29 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/busybox: udhcp
- CVE-2018-20679 patch
-In-Reply-To: <20190306142231.23490-1-jared.bents@rockwellcollins.com>
-References: <20190306142231.23490-1-jared.bents@rockwellcollins.com>
-Message-ID: <20190307221029.79cb8f09@windsurf>
+Date: Thu, 7 Mar 2019 22:10:39 +0100
+Subject: [Buildroot] [git commit] package/gst-plugins-bad: allow static
+ build of zbar plugin
+Message-ID: <20190307210805.E5B998E9A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Mar 2019 08:22:30 -0600
-jared.bents at rockwellcollins.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec9b3aec53f55fd1aca99c42f737afafdf912a7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Jared Bents <jared.bents@rockwellcollins.com>
-> 
-> Patch to resolve CVE-2018-20679 which affects versions prior
-> to 1.30.0
-> 
-> More information can be found at:
-> https://nvd.nist.gov/vuln/detail/CVE-2018-20679
-> 
-> This applies to both master and 2019.02
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  ...tions-are-indeed-4-byte-closes-11506.patch | 136 ++++++++++++++++++
->  1 file changed, 136 insertions(+)
->  create mode 100644 package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+zbar can be built statically since commit
+fc4a6abfa6bbffeabefb9967dbf378c410fb6318 so remove the dynamic library
+dependency from BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
 
-I've applied both to master, because it makes them to have them to
-backport to 2019.02. However, for master, a followup patch doing an
-update to 1.30.1 would be good.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer/gst-plugins-bad/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index f45981f6c8..fe8457f6d2 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -324,14 +324,13 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ 	bool "zbar"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
+ 	depends on BR2_USE_MMU # zbar-> libv4l
+-	depends on !BR2_STATIC_LIBS # zbar-> libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
+ 	select BR2_PACKAGE_ZBAR
+ 
+-comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
++comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.17"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
+ endif
