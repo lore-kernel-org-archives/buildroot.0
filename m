@@ -1,10 +1,10 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu,  7 Mar 2019 15:48:52 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/optee-test: thread dependency
- from optee-client
+Date: Thu,  7 Mar 2019 15:48:51 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/optee-examples: thread
+ dependency from optee-client
 In-Reply-To: <1551970132-9377-1-git-send-email-etienne.carriere@linaro.org>
 References: <1551970132-9377-1-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <1551970132-9377-4-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1551970132-9377-3-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,15 +21,15 @@ Changes v1 -> v2:
     to packages dependent on optee-client.
 
 ---
- package/optee-test/Config.in | 1 +
+ package/optee-examples/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
-index 575790b..46c4a1d 100644
---- a/package/optee-test/Config.in
-+++ b/package/optee-test/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_TEST
- 	bool "optee-test"
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 479f920..904c36c 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
+ 	bool "optee-examples"
  	depends on BR2_TARGET_OPTEE_OS
  	depends on !BR2_STATIC_LIBS # optee-client
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
