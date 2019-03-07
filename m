@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 21:44:29 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/imx-mkimage: add -std=c99 to CFLAGS
-In-Reply-To: <20190306174918.19512-1-fontaine.fabrice@gmail.com>
-References: <20190306174918.19512-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190307214429.620b961b@windsurf>
+Date: Thu, 7 Mar 2019 21:47:03 +0100
+Subject: [Buildroot] [PATCH v2] zbar: bump version to 0.22
+In-Reply-To: <20190306203551.27811-1-ps.report@gmx.net>
+References: <20190306203551.27811-1-ps.report@gmx.net>
+Message-ID: <20190307214703.27fcbcab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Mar 2019 18:49:18 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Peter,
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4c31d97a9aaf9ef887e68d64efe468c81f8cf7bc
+On Wed,  6 Mar 2019 21:35:51 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> - change from git download to official release and
+>   download site (drop need for autoreconf)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Add package in title
+> - drop dependency on kernel headers >= 3.17 (should
+>   be fixed with commit 'v4l2: make ZBar build and run on
+>   Kernels < 3.16' (see [1])
 
-Applied to master, thanks.
+Should this removal of the headers >= 3.17 dependency also be
+propagated to BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR ?
+
+Commit dd08ca7aa98209222a077d1db97323bbc3b563b2, which added the
+headers >= 3.17 dependency to zbar, propagated this dependency to
+gst-plugins-bad.
+
+Thanks,
 
 Thomas
 -- 
