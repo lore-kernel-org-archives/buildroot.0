@@ -1,37 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 23:20:10 +0100
-Subject: [Buildroot] [PATCH 1/1] board/freescale/common/imx: fix
- imx8-bootloader-prepare for i.MX8M
-In-Reply-To: <20190306214721.8996-1-juju@cotds.org>
-References: <20190306214721.8996-1-juju@cotds.org>
-Message-ID: <20190307232010.13118304@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 7 Mar 2019 23:27:24 +0100
+Subject: [Buildroot] [PATCH v3 0/3] qt5webkit: fix build issue using
+ system leveldb
+In-Reply-To: <20190102205630.18725-1-gael.portay@collabora.com>
+References: <20190102205630.18725-1-gael.portay@collabora.com>
+Message-ID: <c4c22d85-4525-8c32-b4c0-dce3cadb51de@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Mar 2019 22:47:21 +0100
-Julien Olivain <juju@cotds.org> wrote:
+ Hi Gael,
 
-> The update of imx-mkimage in commit
-> c14d92d439062caa6c94c4a93b20ab18aa20554c
+On 02/01/2019 21:56, Ga?l PORTAY wrote:
+> This patchset fixes the build issue reported by autobuilder [0].
 > 
-> broke the imx8-bootloader-prepare.sh script for i.MX8M, used in
-> freescale_imx8mqevk_defconfig
+>         /home/naourr/work/instance-2/output/build/qt5webkit-5.9.1/Source/WebCore//.obj/platform/leveldb/LevelDBDatabase.o: In function `WebCore::LevelDBDatabase::openInMemory(WebCore::LevelDBComparator const*)':
+> LevelDBDatabase.cpp.text._ZN7WebCore15LevelDBDatabase12openInMemoryEPKNS_17LevelDBComparatorE+0x34): undefined reference to `leveldb::NewMemEnv(leveldb::Env*)'
+>         collect2: error: ld returned 1 exit status
+>         make[3]: *** [Makefile.api:97: ../lib/libQt5WebKit.so.5.9.1] Error 1
 > 
-> The updated mkimage_fit_atf.sh script in imx-mkimage now needs
-> a ATF_LOAD_ADDR variable, which was set to 0x00910000 for i.MX8M.
-> 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-> ---
->  board/freescale/common/imx/imx8-bootloader-prepare.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> The issue happens when the package leveldb is enabled.
 
-Applied to master, thanks.
+ Series applied to master, thanks. I renamed the patch because two other patches
+to leveldb have been added in the meantime.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
