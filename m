@@ -1,69 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 21:36:25 +0100
-Subject: [Buildroot] [git commit] package/flashrom: fix build on riscv
-Message-ID: <20190307203345.90B9D8EA1B@busybox.osuosl.org>
+Date: Thu, 7 Mar 2019 21:36:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: disable on microblaze
+ and xtensa
+In-Reply-To: <20190306180216.20337-1-fontaine.fabrice@gmail.com>
+References: <20190306180216.20337-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190307213657.72d25e51@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc366832f2b4268d77e2f367d4d059c318ba4e3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  6 Mar 2019 19:02:16 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/fb95c22cbe1d19e73f0089103ed6da2f4b3081c8
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cdf0fb462eec143ea881d43cdd0c69c86122f66b
+>  - http://autobuild.buildroot.org/results/df4d9702959b610762e87cf21fac9de62365dae6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/flashrom/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...001-platform-Add-riscv-to-known-platforms.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
-new file mode 100644
-index 0000000000..06eb9256e4
---- /dev/null
-+++ b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
-@@ -0,0 +1,41 @@
-+From a9a03cc6ba71825bfae0d64e1888f33c77345bc3 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 17 Mar 2018 23:08:29 -0700
-+Subject: [PATCH] platform: Add riscv to known platforms
-+
-+Change-Id: I724a99e2493fcbf71c2fc2d9f6a1ad607c737087
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Reviewed-on: https://review.coreboot.org/25260
-+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
-+Reviewed-by: Paul Menzel <paulepanter@users.sourceforge.net>
-+Reviewed-by: David Hendricks <david.hendricks@gmail.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/flashrom/flashrom/commit/a9a03cc6ba71825bfae0d64e1888f33c77345bc3]
-+---
-+ platform.h | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/platform.h b/platform.h
-+index e3b7674ae..65fe85881 100644
-+--- a/platform.h
-++++ b/platform.h
-+@@ -69,6 +69,9 @@
-+ #elif defined (__m68k__)
-+ 	#define __FLASHROM_ARCH__ "m68k"
-+ 	#define IS_M68K 1
-++#elif defined (__riscv)
-++	#define __FLASHROM_ARCH__ "riscv"
-++	#define IS_RISCV 1
-+ #elif defined (__sh__)
-+ 	#define __FLASHROM_ARCH__ "sh"
-+ 	#define IS_SH 1
-+@@ -77,7 +80,7 @@
-+ 	#define IS_S390 1
-+ #endif
-+ 
-+-#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_SH || IS_S390)
-++#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_RISCV || IS_SH || IS_S390)
-+ #error Unknown architecture
-+ #endif
-+ 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
