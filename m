@@ -1,49 +1,91 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 7 Mar 2019 17:23:36 +0100
-Subject: [Buildroot] [PATCH] package/python3: require util-linux' <uuid.h>
-Message-ID: <e5b1510a81bda096dacc133276f1ff2643131dcc.1551975775.git.jan.kundrat@cesnet.cz>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 07 Mar 2019 19:13:46 +0200
+Subject: [Buildroot] [PATCH v3] package/optee-*: packages depend on
+ thread support
+In-Reply-To: <1551973528-5130-1-git-send-email-etienne.carriere@linaro.org>
+References: <17603738bfac0de04a1de57a562dbde2a572d926.1551944208.git.etienne.carriere@linaro.org>
+ <1551973528-5130-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <878sxq38vp.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this dependency, a top level parallel build fails for me (-j24):
+Hi Etienne,
 
-  /home/ci/build/build/host-python3-3.7.2/Modules/_uuidmodule.c: In function 'py_uuid_generate_time_safe':
-  /home/ci/build/build/host-python3-3.7.2/Modules/_uuidmodule.c:15:5: error: unknown type name 'uuid_t'; did you mean 'uid_t'?
-       uuid_t uuid;
-       ^~~~~~
-       uid_t
-  /home/ci/build/build/host-python3-3.7.2/Modules/_uuidmodule.c:32:5: error: implicit declaration of function 'uuid_generate_time'; did you mean 'py_uuid_generate_time_safe'? [-Werror=implicit-function-declaration]
-       uuid_generate_time(uuid);
-       ^~~~~~~~~~~~~~~~~~
-       py_uuid_generate_time_safe
+Almost there.
 
-I *suspect* that this is due to host-uboot-tools which provide
-/usr/include/uuid.h and which gets accidentally picked by python3.
+On Thu, Mar 07 2019, Etienne Carriere wrote:
 
-There's a bugreport [1] upstream which at leeast appears to be relevant.
+> BR2_PACKAGE_OPTEE_CLIENT depends on BR2_TOOLCHAIN_HAS_THREADS.
+> Library teec uses pthread support to protect clients state
+> management.
+>
+> This change declares this dependency in package optee-client and
+> updates dependent packages accordingly: optee-benchmark,
+> optee-client, optee-examples and optee-test.
+>
+> Fixes [1] and [2] where config selected an toolchain without thread
+> support and build failed with trace like:
+>
+>   CMake Error at /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>     Could NOT find Threads (missing: Threads_FOUND)
+>   Call Stack (most recent call first):
+>     /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:377 (_FPHSA_FAILURE_MESSAGE)
+>     /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindThreads.cmake:212 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>     libteec/CMakeLists.txt:8 (find_package)
+>
+> [1] http://autobuild.buildroot.net/results/ed6ffe2197da4f3a970bd3c5522291236396cc8e
+> [2] http://autobuild.buildroot.net/results/406f90048db097580b626ef889823132f8676ba1
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+> Changes v2 -> v3:
+>   - Squash v2 series into a single patch.
+>   - Update config comment for unmet dependencies.
+>
+> Changes v1 -> v2:
+>   - No change. v2 appends changes to this change to propagate the optee-client
+>     dependency on threads to packages dependent on optee-client.
+>
+> ---
+>  package/optee-benchmark/Config.in | 4 +++-
+>  package/optee-client/Config.in    | 4 +++-
+>  package/optee-examples/Config.in  | 4 +++-
+>  package/optee-test/Config.in      | 4 +++-
+>  4 files changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
+> index 0e36549..0023ac6 100644
+> --- a/package/optee-benchmark/Config.in
+> +++ b/package/optee-benchmark/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_OPTEE_BENCHMARK
+>  	bool "optee-benchmark"
+>  	depends on !BR2_STATIC_LIBS # optee-client
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+>  	select BR2_PACKAGE_OPTEE_CLIENT
+>  	select BR2_PACKAGE_LIBYAML
+>  	help
+> @@ -11,5 +12,6 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
+>
+>  	  http://github.com/linaro-swg/optee_benchmark
+>
+> -comment "optee-benchmark needs a toolchain w/ dynamic library"
+> +comment "optee-benchmark needs a toolchain w/ dynamic library and threads"
+>  	depends on BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-[1] https://bugs.python.org/issue32627
+Multiple depends are ANDed. This is not what you want. We want to
+display the comment when either condition is true. So you need to OR the
+conditions like this:
 
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
----
- package/python3/python3.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ef2c4857d8..dcec210674 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -40,7 +40,7 @@ HOST_PYTHON3_CONF_ENV += \
- 
- PYTHON3_DEPENDENCIES = host-python3 libffi
- 
--HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi
-+HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi host-util-linux
- 
- PYTHON3_INSTALL_STAGING = YES
- 
--- 
-2.19.1
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
