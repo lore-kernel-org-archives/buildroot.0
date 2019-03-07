@@ -1,69 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 22:29:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vsftpd: add patch to fix hang
-In-Reply-To: <20190305195440.25074-1-abdelmalek.benelouezzane@savoirfairelinux.com>
-References: <20190305195440.25074-1-abdelmalek.benelouezzane@savoirfairelinux.com>
-Message-ID: <20190307222900.07e5c3be@windsurf>
+Date: Thu, 7 Mar 2019 22:30:59 +0100
+Subject: [Buildroot] [git commit] package/optee-*: packages depend on thread
+ support
+Message-ID: <20190307212831.895A68E944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aa02c6553ce6528ad0513f3e92264a28bcfa844d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Mar 2019 14:54:40 -0500
-Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com> wrote:
+BR2_PACKAGE_OPTEE_CLIENT depends on BR2_TOOLCHAIN_HAS_THREADS.
+Library teec uses pthread support to protect clients state management.
 
-> This fixes a hang due to SIGCHLD not being handled correctly by
-> vsftpd. The patch comes from fedora and didn't make its way to
-> upstream yet.
-> 
-> More information about the bug can be found in:
->  - https://bugzilla.redhat.com/show_bug.cgi?id=1198259
-> 
-> Signed-off-by: Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com>
+This change declares this dependency in package optee-client and
+updates dependent packages accordingly: optee-benchmark, optee-client,
+optee-examples and optee-test.
 
-Thanks, I've applied, but had to reformat your patch a bit, see below.
+Fixes [1] and [2] where config selected an toolchain without thread
+support and build failed with trace like:
 
-> ---
->  ...0004-Prevent-hang-in-SIGCHLD-handler.patch | 90 +++++++++++++++++++
->  1 file changed, 90 insertions(+)
->  create mode 100644 package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
-> 
-> diff --git a/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
-> new file mode 100644
-> index 0000000000..221720b6e3
-> --- /dev/null
-> +++ b/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
-> @@ -0,0 +1,90 @@
-> +Prevent hang in SIGCHLD handler
-> +
-> +Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=1198259
-> +
-> +Fetch from:
-> +https://src.fedoraproject.org/cgit/rpms/vsftpd.git/plain/0026-Prevent-hanging-in-SIGCHLD-handler.patch
-> +
-> +Signed-off-by: Abdelmalek Benelouezzane <abdelmalek.benelouezzane@savoirfairelinux.com>
+  CMake Error at /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+    Could NOT find Threads (missing: Threads_FOUND)
+  Call Stack (most recent call first):
+    /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:377 (_FPHSA_FAILURE_MESSAGE)
+    /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindThreads.cmake:212 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+    libteec/CMakeLists.txt:8 (find_package)
 
-Those details....
+[1] http://autobuild.buildroot.net/results/ed6ffe2197da4f3a970bd3c5522291236396cc8e
+[2] http://autobuild.buildroot.net/results/406f90048db097580b626ef889823132f8676ba1
 
-> +
-> +From 1e65a0a15f819b8bf1b551bd84f71d0da1f5a00c Mon Sep 17 00:00:00 2001
-> +From: Martin Sehnoutka <msehnout@redhat.com>
-> +Date: Thu, 17 Nov 2016 13:02:27 +0100
-> +Subject: [PATCH 26/59] Prevent hanging in SIGCHLD handler.
-> +
-> +vsftpd can now handle pam_exec.so in pam.d config without hanging
-> +in SIGCHLD handler.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[Thomas: fix dependencies of Config.in comment, as noticed by Baruch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/optee-benchmark/Config.in | 5 +++--
+ package/optee-client/Config.in    | 5 +++--
+ package/optee-examples/Config.in  | 5 +++--
+ package/optee-test/Config.in      | 5 +++--
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-Should go here. Otherwise the patch is no longer properly formatted to
-be applied with "git am".
-
-I've fixed that and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
+index 0e36549c94..b9326e0432 100644
+--- a/package/optee-benchmark/Config.in
++++ b/package/optee-benchmark/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPTEE_BENCHMARK
+ 	bool "optee-benchmark"
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_PACKAGE_LIBYAML
+ 	help
+@@ -11,5 +12,5 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
+ 
+ 	  http://github.com/linaro-swg/optee_benchmark
+ 
+-comment "optee-benchmark needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "optee-benchmark needs a toolchain w/ dynamic library and threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index db0b7b7f9f..833a6226a6 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPTEE_CLIENT
+ 	bool "optee-client"
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Enable the OP-TEE client package that brings non-secure
+ 	  client application resources for OP-TEE support. OP-TEE
+@@ -13,5 +14,5 @@ config BR2_PACKAGE_OPTEE_CLIENT
+ 
+ 	  https://github.com/OP-TEE/optee_client
+ 
+-comment "optee-client needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "optee-client needs a toolchain w/ dynamic library and threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 479f9204bb..62d0bf4b2a 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
+ 	bool "optee-examples"
+ 	depends on BR2_TARGET_OPTEE_OS
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_TARGET_OPTEE_OS_SDK
+ 	help
+@@ -18,6 +19,6 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
+ 
+ 	  https://github.com/linaro-swg/optee_examples
+ 
+-comment "optee-examples needs a toolchain w/ dynamic library"
++comment "optee-examples needs a toolchain w/ dynamic library and threads"
+ 	depends on BR2_TARGET_OPTEE_OS
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
+index 575790b119..77c38c47fd 100644
+--- a/package/optee-test/Config.in
++++ b/package/optee-test/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_TEST
+ 	bool "optee-test"
+ 	depends on BR2_TARGET_OPTEE_OS
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_TARGET_OPTEE_OS_SDK
+ 	help
+@@ -22,6 +23,6 @@ config BR2_PACKAGE_OPTEE_TEST
+ 
+ 	  http://github.com/OP-TEE/optee_test
+ 
+-comment "optee-test needs a toolchain w/ dynamic library"
++comment "optee-test needs a toolchain w/ dynamic library and threads"
+ 	depends on BR2_TARGET_OPTEE_OS
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
