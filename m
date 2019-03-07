@@ -1,47 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 22:59:34 +0100
-Subject: [Buildroot] [git commit] package/unixodbc: bump to version 2.3.7
-Message-ID: <20190307215655.1C18988933@busybox.osuosl.org>
+Date: Thu, 7 Mar 2019 22:59:42 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/ccid: bump to version
+ 1.4.30
+In-Reply-To: <20190303101854.16285-1-fontaine.fabrice@gmail.com>
+References: <20190303101854.16285-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190307225942.018ffb39@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7407ec0382059e49e762ca0ff17cad3b7e71f3e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  3 Mar 2019 11:18:54 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/unixodbc/unixodbc.hash | 6 +++---
- package/unixodbc/unixodbc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/ccid/ccid.hash | 2 +-
+>  package/ccid/ccid.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unixodbc/unixodbc.hash b/package/unixodbc/unixodbc.hash
-index 9d21a66e8d..4d0ad191d1 100644
---- a/package/unixodbc/unixodbc.hash
-+++ b/package/unixodbc/unixodbc.hash
-@@ -1,6 +1,6 @@
--# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.6.tar.gz.md5
--md5 a8629fd2953b04b4639d0a9d8a5cf9d1  unixODBC-2.3.6.tar.gz
-+# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.7.tar.gz.md5
-+md5 274a711b0c77394e052db6493840c6f9  unixODBC-2.3.7.tar.gz
- # Locally computed
--sha256 88b637f647c052ecc3861a3baa275c3b503b193b6a49ff8c28b2568656d14d69  unixODBC-2.3.6.tar.gz
-+sha256 45f169ba1f454a72b8fcbb82abd832630a3bf93baa84731cf2949f449e1e3e77  unixODBC-2.3.7.tar.gz
- sha256 a6b9aa1e9bfade121164c06fd975e9b913a8e38bf33d25ff967dfa3ed07d12f8  COPYING
- sha256 1e594f4c7fd6d099eca4bd1340b39d871ce0298331d8ebd4b68935548ee45cf4  exe/COPYING
-diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
-index 423f395212..2c936fe9d5 100644
---- a/package/unixodbc/unixodbc.mk
-+++ b/package/unixodbc/unixodbc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNIXODBC_VERSION = 2.3.6
-+UNIXODBC_VERSION = 2.3.7
- UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
- UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
- UNIXODBC_INSTALL_STAGING = YES
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
