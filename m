@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 23:13:18 +0100
-Subject: [Buildroot] [git commit] package/dmidecode: bump to version 3.2
-Message-ID: <20190307221118.14BA88EA1D@busybox.osuosl.org>
+Date: Thu, 7 Mar 2019 23:14:09 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/dmidecode: bump to version
+ 3.2
+In-Reply-To: <20190301204224.29565-1-fontaine.fabrice@gmail.com>
+References: <20190301204224.29565-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190307231409.5eea50f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57a7ed973a20bc021c66aff84a511dc6c460800a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  1 Mar 2019 21:42:24 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Add hash for license file
+> Add hash for license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/dmidecode/dmidecode.hash | 3 ++-
+>  package/dmidecode/dmidecode.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dmidecode/dmidecode.hash | 3 ++-
- package/dmidecode/dmidecode.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index 1e8154b37d..c6edf4bcac 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 d766ce9b25548c59b1e7e930505b4cad9a7bb0b904a1a391fbb604d529781ac0  dmidecode-3.1.tar.xz
-+sha256 077006fa2da0d06d6383728112f2edef9684e9c8da56752e97cd45a11f838edd  dmidecode-3.2.tar.xz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index b6f96b6df8..811565d8e4 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DMIDECODE_VERSION = 3.1
-+DMIDECODE_VERSION = 3.2
- DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
