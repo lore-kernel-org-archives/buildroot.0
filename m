@@ -1,86 +1,36 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 07 Mar 2019 12:23:45 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_2/2=5D_linux=7B=2C_-headers?=
- =?iso-8859-1?q?=7D=3A_support_downloads_of_v5+?=
-In-Reply-To: <20190306212815.19759-2-arnout@mind.be>
-References: <20190306212815.19759-1-arnout@mind.be>
- <20190306212815.19759-2-arnout@mind.be>
-Message-ID: <e952d8b7-a4a8-4a5d-9a95-0e441b742bc5@cesnet.cz>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 7 Mar 2019 12:45:53 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-sc-firmware:
+ properly wrap help text
+Message-ID: <20190307114427.39F1984444@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On st?eda 6. b?ezna 2019 22:28:15 CET, Arnout Vandecappelle 
-(Essensium/Mind) wrote:
-> With the arrival of linux v5.0, we need yet another condition to set
-> _SITE correctly. Instead of continuing this madness, solve the problem
-> generically: use v2.6 for 2.6.*, and use the number before the first dot
-> in the other cases.
->
-> While we're at it, remove the comment which has been incorrect since
-> 80d7b68167a5c8893e906ace6b5f0b0166336406 (7 years ago).
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  linux/linux.mk                         | 9 ++-------
->  package/linux-headers/linux-headers.mk | 9 ++-------
->  2 files changed, 4 insertions(+), 14 deletions(-)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 2b5d096e14..c7081db88f 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -37,15 +37,10 @@ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
->  LINUX_SITE = https://git.kernel.org/torvalds/t
->  else
->  LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
-> -# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-> -# to use the $(word) function. We support versions such as 4.0, 3.1,
-> -# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
->  ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
->  LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-> -else ifeq ($(findstring x3.,x$(LINUX_VERSION)),x3.)
-> -LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
-> -else ifeq ($(findstring x4.,x$(LINUX_VERSION)),x4.)
-> -LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
-> +else
-> +LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword 
-> $(subst ., ,$(LINUX_VERSION))).x
->  endif
->  endif
->  
-> diff --git a/package/linux-headers/linux-headers.mk 
-> b/package/linux-headers/linux-headers.mk
-> index 4b5ebf8d97..95432ade83 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -50,15 +50,10 @@ LINUX_HEADERS_SOURCE = 
-> linux-$(LINUX_HEADERS_VERSION).tar.gz
->  LINUX_HEADERS_SITE = https://git.kernel.org/torvalds/t
->  else
->  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-> -# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-> -# to use the $(word) function. We support versions such as 4.0, 3.1,
-> -# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
->  ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
->  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-> -else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
-> -LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
-> -else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
-> -LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
-> +else
-> +LINUX_HEADERS_SITE = 
-> $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., 
-> ,$(LINUX_HEADERS_VERSION))).x
->  endif # x2.6
->  endif # LINUX_HEADERS_CUSTOM_TARBALL
->  
+commit: https://git.buildroot.net/buildroot/commit/?id=fec83ccc11629d68a4cfc1562e611d89476db553
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Fixes:
+package/freescale-imx/imx-sc-firmware/Config.in:5: help text: <tab><2 spaces><62 chars>
 
-Thanks!
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/freescale-imx/imx-sc-firmware/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Jan
+diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
+index 5c71618ce0..4a22f72b1f 100644
+--- a/package/freescale-imx/imx-sc-firmware/Config.in
++++ b/package/freescale-imx/imx-sc-firmware/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_IMX_SC_FIRMWARE
+ 	bool "imx-sc-firmware"
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 	help
+-	  System Control Unit Firmware blobs for the Freescale i.MX8 SoCs.
++	  System Control Unit Firmware blobs for the Freescale i.MX8
++	  SoCs.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
