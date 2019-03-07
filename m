@@ -1,60 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Mar 2019 23:51:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: needs host-python2
-In-Reply-To: <20190214201358.28023-1-fontaine.fabrice@gmail.com>
-References: <20190214201358.28023-1-fontaine.fabrice@gmail.com>
-Message-ID: <fd3ddf44-2606-c3b3-7a42-cf3a2c5032e9@mind.be>
+From: Juan A. Rubio <jarubio2001@gmail.com>
+Date: Thu, 7 Mar 2019 23:00:19 +0000
+Subject: [Buildroot] QT 5.6 app with eglfs and etnaviv (imx6 solo,
+ buildroot 2018.02.5)
+Message-ID: <CAE58QoMfF2Kwi0Hc_yOeOinoLA-82OfzzeymOBXsjMK=nYoK5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabrice,
+Hello,
 
-On 14/02/2019 21:13, Fabrice Fontaine wrote:
-> mongodb (like gnuradio) needs host-python2 however there is no way to
-> enforce this so add a dependency on !BR2_PACKAGE_PYTHON3.
-> Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
-> build and install host-python-typing for host-python3.
+I'm trying to get my Qt 5.6 app to run with the etnaviv driver instead
+of vivante. My app has so far been running without any problems with
+the vivante driver (I'm using NXP's 4.9.11 kernel). So now I would
+like to try and see if I can switch to the community driver and mesa.
 
- We really should find a better solution, because this certainly sucks...
+These are the variables that I've been exporting with the vivante driver:
+FB_MULTI_BUFFER=3
+QT_QPA_EGLFS_INTEGRATION=eglfs_viv
 
- However, IIUC, the problem is really that scons needs host-python2, not mongodb
-itself. So I guess a better fix is to bump scons to 3.0.4 which supports python3.
+For etnaviv, I'm doing:
+QT_QPA_EGLFS_INTEGRATION=eglfs_kms
 
-> This issue was not raised in the previous version of mongodb as
-> host-scons was the only dependency however we now have
-> host-python-typing and host-python-pyyaml dependencies and it
-> does not seem right to enforce python2 on those packages
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/693bdba2c01a1b69f56d6ee75094a6a0fc3f40b4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mongodb/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
-> index 969b8e062f..4ea62d9119 100644
-> --- a/package/mongodb/Config.in
-> +++ b/package/mongodb/Config.in
-> @@ -1,6 +1,7 @@
->  # from https://docs.mongodb.com/manual/installation/#supported-platforms
->  config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
->  	bool
-> +	depends on !BR2_PACKAGE_PYTHON3
+But I'm getting this error::
+gbm: failed to open any driver (search paths /usr/lib/dri)
+gbm: Last dlopen error: /usr/lib/dri/vivante_dri.so: cannot open
+shared object file: No such file or directory
+failed to load driver: vivante
 
- check-package complains here - the depends should be after the defaults.
+These are the contents of /usr/lib/dri/
+# ls /usr/lib/dri/
+etnaviv_dri.so     imx-drm_dri.so     kms_swrast_dri.so  swrast_dri.so
 
- However, ARCH_SUPPORTS is supposed to be for architecture dependencies only.
-So, this should be in the package itself and in the comment.
+And I'm enabling these packages:
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
 
- Regards,
- Arnout
+BR2_PACKAGE_LIBDRM=y
+BR2_PACKAGE_LIBDRM_HAS_ATOMIC=y
+BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC=y
+BR2_PACKAGE_LIBDRM_ETNAVIV=y
+BR2_PACKAGE_KMSXX=y
 
->  	# ARM needs LDREX/STREX, so ARMv6+
->  	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
->  	default y if BR2_aarch64 || BR2_powerpc64 || BR2_x86_64
-> 
+I'm obviously missing something here. Any help would be very much appreciated.
+
+Thanks,
+Juan
