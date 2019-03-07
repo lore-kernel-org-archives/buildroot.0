@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 21:47:03 +0100
-Subject: [Buildroot] [PATCH v2] zbar: bump version to 0.22
-In-Reply-To: <20190306203551.27811-1-ps.report@gmx.net>
-References: <20190306203551.27811-1-ps.report@gmx.net>
-Message-ID: <20190307214703.27fcbcab@windsurf>
+Date: Thu, 7 Mar 2019 21:47:25 +0100
+Subject: [Buildroot] [git commit] package/mender: add missing double quote
+ in service file
+Message-ID: <20190307204455.F30FA8E943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=93321e5f166d08426e38a14bce318e9807d7d45d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 Mar 2019 21:35:51 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+There was a missing double quotes that would prevent the service from
+starting.
 
-> - change from git download to official release and
->   download site (drop need for autoreconf)
-> 
-> - drop dependency on kernel headers >= 3.17 (should
->   be fixed with commit 'v4l2: make ZBar build and run on
->   Kernels < 3.16' (see [1])
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mender/mender.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Should this removal of the headers >= 3.17 dependency also be
-propagated to BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR ?
-
-Commit dd08ca7aa98209222a077d1db97323bbc3b563b2, which added the
-headers >= 3.17 dependency to zbar, propagated this dependency to
-gst-plugins-bad.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mender/mender.service b/package/mender/mender.service
+index 8b60a4f1aa..2a5f476ee5 100644
+--- a/package/mender/mender.service
++++ b/package/mender/mender.service
+@@ -12,7 +12,7 @@ if [ -L /var/lib/mender \
+     if rm -f /var/lib/mender >/dev/null 2>&1; then \
+         mkdir -p /var/lib/mender; \
+     else \
+-        echo "No persistent location to store mender data. Data will be lost\
++        echo "No persistent location to store mender data. Data will be lost" \
+         echo "at reboot. Are you sure this is what you want to do?"; \
+         mkdir -p "$(readlink /var/lib/mender)"; \
+     fi; \
