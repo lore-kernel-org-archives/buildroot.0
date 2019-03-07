@@ -1,45 +1,40 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu,  7 Mar 2019 10:29:14 +0100
-Subject: [Buildroot] [PATCH] package/optee-client: depends on thread support
-Message-ID: <17603738bfac0de04a1de57a562dbde2a572d926.1551944208.git.etienne.carriere@linaro.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 Mar 2019 10:31:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5base: add
+ BR2_PACKAGE_QT5BASE_OPENSSL
+In-Reply-To: <CAPi7W834BsA0B8LksxUSh8Nfz5tVgLiEP_R_1fpGivzgXXZ3yA@mail.gmail.com>
+ (Fabrice Fontaine's message of "Wed, 6 Mar 2019 20:34:35 +0100")
+References: <20190304172808.4672-1-fontaine.fabrice@gmail.com>
+ <87a7iaieoe.fsf@dell.be.48ers.dk>
+ <CAPi7W834BsA0B8LksxUSh8Nfz5tVgLiEP_R_1fpGivzgXXZ3yA@mail.gmail.com>
+Message-ID: <875zsvghdj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_OPTEE_CLIENT depends on BR2_TOOLCHAIN_HAS_THREADS.
-Library teec uses pthread support to protect clients state
-management. This change declares this dependency in the package.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes [1] that set an toolchain without thread support and failed
-to build with trace:
+Hi,
 
-  CMake Error at /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
-    Could NOT find Threads (missing: Threads_FOUND)
-  Call Stack (most recent call first):
-    /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:377 (_FPHSA_FAILURE_MESSAGE)
-    /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindThreads.cmake:212 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-    libteec/CMakeLists.txt:8 (find_package)
+ > Dear Peter,
+ >> I kept this as a blind option to not change behaviour and added the
+ >> logic for the recently added libressl support for 5.6.x and committed,
+ >> thanks.
+ > Thanks for taking care of this however qt5enginio also fails to build
+ > without SSL on QT5.6:
+ > http://autobuild.buildroot.org/results/579dfa53451ad78563faaad514f47d80851c3234
 
-[1] https://autobuild.buildroot.net/results/ed6ffe2197da4f3a970bd3c5522291236396cc8e
+ > We can't add a dependency or a select on the blind
+ > BR2_PACKAGE_QT5BASE_OPENSSL option so what should we do?
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
- package/optee-client/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I guess we should just change the select BR2_PACKAGE_OPENSSL part to:
 
-diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-index db0b7b7..1379201 100644
---- a/package/optee-client/Config.in
-+++ b/package/optee-client/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPTEE_CLIENT
- 	bool "optee-client"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Enable the OP-TEE client package that brings non-secure
- 	  client application resources for OP-TEE support. OP-TEE
+select BR2_PACKAGE_LIBRESSL if BR2_PACKAGE_QT5_VERSION_5_6
+select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT5_VERSION_LATEST
+
+(and the corresponding change in the .mk)
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
