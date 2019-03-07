@@ -1,42 +1,86 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 7 Mar 2019 12:16:20 +0100
-Subject: [Buildroot] [PATCH 0/3] Some more games: XorCurses,
- ASCII-Invaders and Frotz
-In-Reply-To: <20190223205657.18394-1-huth@tuxfamily.org>
-References: <20190223205657.18394-1-huth@tuxfamily.org>
-Message-ID: <1d8dac6e-1cca-9f19-bd81-445ba43d792b@tuxfamily.org>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Thu, 07 Mar 2019 12:23:45 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_2/2=5D_linux=7B=2C_-headers?=
+ =?iso-8859-1?q?=7D=3A_support_downloads_of_v5+?=
+In-Reply-To: <20190306212815.19759-2-arnout@mind.be>
+References: <20190306212815.19759-1-arnout@mind.be>
+ <20190306212815.19759-2-arnout@mind.be>
+Message-ID: <e952d8b7-a4a8-4a5d-9a95-0e441b742bc5@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/02/2019 21.56, Thomas Huth wrote:
-> Hi everybody!
-> This is my first patch contribution to the buildroot project ...
-> I used buildroot for building most of the images for he QEMU advent
-> calendar 2018 (see https://www.qemu-advent-calendar.org/2018/ ).
-> That would not have been possible without buildroot, so thanks a lot
-> for this great build environment!
-> 
-> Anyway, I've now gone through the package files that I've written
-> for that project, and I think some of them might maybe be interesting
-> for integrating them into the official buildroot tree, too. Please
-> have a look at the following patches, and let me know what you think.
-> (I also got some more package files on my hard disk, but they need some
-> more polishing, so I would like to get some feedback on these three
-> patches first)
-> 
-> Thomas Huth (3):
->   package/xorcurses: new package
->   package/ascii-invaders: new package
->   package/frotz: new package
+On st?eda 6. b?ezna 2019 22:28:15 CET, Arnout Vandecappelle 
+(Essensium/Mind) wrote:
+> With the arrival of linux v5.0, we need yet another condition to set
+> _SITE correctly. Instead of continuing this madness, solve the problem
+> generically: use v2.6 for 2.6.*, and use the number before the first dot
+> in the other cases.
+>
+> While we're at it, remove the comment which has been incorrect since
+> 80d7b68167a5c8893e906ace6b5f0b0166336406 (7 years ago).
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  linux/linux.mk                         | 9 ++-------
+>  package/linux-headers/linux-headers.mk | 9 ++-------
+>  2 files changed, 4 insertions(+), 14 deletions(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 2b5d096e14..c7081db88f 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -37,15 +37,10 @@ else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+>  LINUX_SITE = https://git.kernel.org/torvalds/t
+>  else
+>  LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+> -# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+> -# to use the $(word) function. We support versions such as 4.0, 3.1,
+> -# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+>  ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
+>  LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+> -else ifeq ($(findstring x3.,x$(LINUX_VERSION)),x3.)
+> -LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+> -else ifeq ($(findstring x4.,x$(LINUX_VERSION)),x4.)
+> -LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+> +else
+> +LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword 
+> $(subst ., ,$(LINUX_VERSION))).x
+>  endif
+>  endif
+>  
+> diff --git a/package/linux-headers/linux-headers.mk 
+> b/package/linux-headers/linux-headers.mk
+> index 4b5ebf8d97..95432ade83 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -50,15 +50,10 @@ LINUX_HEADERS_SOURCE = 
+> linux-$(LINUX_HEADERS_VERSION).tar.gz
+>  LINUX_HEADERS_SITE = https://git.kernel.org/torvalds/t
+>  else
+>  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+> -# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+> -# to use the $(word) function. We support versions such as 4.0, 3.1,
+> -# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+>  ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+>  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+> -else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
+> -LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+> -else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
+> -LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+> +else
+> +LINUX_HEADERS_SITE = 
+> $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., 
+> ,$(LINUX_HEADERS_VERSION))).x
+>  endif # x2.6
+>  endif # LINUX_HEADERS_CUSTOM_TARBALL
+>  
 
-*ping*
+Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 
-Any comments? Are the patches not suitable for buildroot? No problem,
-just let me know and I'll shut up ;-) ... or is it that just nobody has
-enough spare time for a review?
+Thanks!
 
- Cheers,
-  Thomas
+Jan
