@@ -1,50 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 7 Mar 2019 22:41:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/flashrom: disable on arc,
- nios and or1k
-In-Reply-To: <20190307223605.0b916083@windsurf>
-References: <20190307213431.17211-1-fontaine.fabrice@gmail.com>
- <20190307223605.0b916083@windsurf>
-Message-ID: <CAPi7W8269ViDpmXyq-x+h6oJGx=Q1VRVbOfdz6fm=O4NNBuvSQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Mar 2019 22:43:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: fix static build
+ without lua
+In-Reply-To: <20190304214720.13703-1-fontaine.fabrice@gmail.com>
+References: <20190304214720.13703-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190307224345.4336952c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-Le jeu. 7 mars 2019 ? 22:36, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Thu,  7 Mar 2019 22:34:31 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/22c72369cd5b7a8200bb03564bdc342ed026ccac
-> >  - http://autobuild.buildroot.org/results/ef6869bc40382145fad1079b79107275c4973494
-> >  - http://autobuild.buildroot.org/results/09d857102c469ede1db0bff8aa0dcd82a4001eaf
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Should we turn this around, and use:
->
-> config BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
->         bool
->         default y if ...
->         default y if ...
->
-> etc. ?
-OK, I'll send a v2.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Hello Fabrice,
 
-Fabrice
+On Mon,  4 Mar 2019 22:47:20 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> diff --git a/package/swupdate/0001-Makefile-fix-static-build.patch b/package/swupdate/0001-Makefile-fix-static-build.patch
+> new file mode 100644
+> index 0000000000..56901f9871
+> --- /dev/null
+> +++ b/package/swupdate/0001-Makefile-fix-static-build.patch
+> @@ -0,0 +1,62 @@
+> +From 15a324f8c67548f219256a5a75ba8123cc5bdac6 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 4 Mar 2019 21:51:36 +0100
+> +Subject: [PATCH] Makefile: fix static build
+> +
+> +Don't build and install lua_swupdate.so if HAVE_LUA isn't set to y
+> +otherwise build will fail if the toolchain only suports building static
+> +libraries
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/c11c4d26983e0347d96f3dda62e6d72b031967bb
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/sbabic/swupdate/pull/49]
+> +---
+> + Makefile | 12 +++++++++---
+> + 1 file changed, 9 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index cfeb9a6..cac99b5 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -369,11 +369,15 @@ tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
+> + tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
+> + tools-all	:= $(tools-objs)
+> + 
+> ++ifeq ($(HAVE_LUA),y)
+> ++lua_swupdate	:= lua_swupdate.so
+> ++endif
+
+I am a bit confused. How could lua_swupdate.so build at all (even in
+shared library configurations) when HAVE_LUA is not enabled ?
+
+I see the patch has been applied upstream, so I guess it is correct,
+but still that confuses me a bit. Or maybe lua_swupdate.so doesn't link
+with Lua ? 
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
