@@ -1,45 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 22:10:39 +0100
-Subject: [Buildroot] [git commit] package/gst-plugins-bad: allow static
+Date: Thu, 7 Mar 2019 22:10:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: allow static
  build of zbar plugin
-Message-ID: <20190307210805.E5B998E9A2@busybox.osuosl.org>
+In-Reply-To: <20190305222807.18393-1-fontaine.fabrice@gmail.com>
+References: <20190305222807.18393-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190307221055.6f5636ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec9b3aec53f55fd1aca99c42f737afafdf912a7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  5 Mar 2019 23:28:07 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-zbar can be built statically since commit
-fc4a6abfa6bbffeabefb9967dbf378c410fb6318 so remove the dynamic library
-dependency from BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+> zbar can be built statically since commit
+> fc4a6abfa6bbffeabefb9967dbf378c410fb6318 so remove the dynamic library
+> dependency from BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gstreamer/gst-plugins-bad/Config.in | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer/gst-plugins-bad/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index f45981f6c8..fe8457f6d2 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -324,14 +324,13 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
- 	bool "zbar"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
- 	depends on BR2_USE_MMU # zbar-> libv4l
--	depends on !BR2_STATIC_LIBS # zbar-> libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
- 	select BR2_PACKAGE_ZBAR
- 
--comment "zbar plugin needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.17"
-+comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.17"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
