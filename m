@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Mar 2019 21:43:01 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/efl: Fix build with mesa
-In-Reply-To: <20190306231429.22849-1-vadim4j@gmail.com>
-References: <20190306231429.22849-1-vadim4j@gmail.com>
-Message-ID: <20190307214301.05f8ae74@windsurf>
+Date: Thu, 7 Mar 2019 21:44:12 +0100
+Subject: [Buildroot] [git commit] package/imx-mkimage: add -std=c99 to CFLAGS
+Message-ID: <20190307204137.13C2D88F28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  7 Mar 2019 01:14:29 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7ad4cb3a5e712a8caa8b102aca2c200b80601dc1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> efl does not compile with mesa without OpenGL ES because it checks for
-> GL_ES_VERSION_2_0 and declares own GLintptr and GLsizeiptr types if such
-> version is not defined, but mesa declares them too for OpenGL version
-> 1.5, so fix it by add check also for OpenGL 1.5 where these types are
-> defined.
-> 
-> Use patch from:
-> 	https://git.enlightenment.org/core/efl.git/commit/?id=0d2b624f1e24240a1c4e651aa1cfe9a8dd10a573
-> 
-> Fixes:
-> 	http://autobuild.buildroot.net/results/62ca120f1e54e8c3ae445f98b2624b526569f007
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
+Fixes:
+ - http://autobuild.buildroot.org/results/4c31d97a9aaf9ef887e68d64efe468c81f8cf7bc
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imx-mkimage/imx-mkimage.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index 9f8e7d2d01..d8d8b10b32 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -14,7 +14,9 @@ HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+ # i.MX8M needs a different binary
+ define HOST_IMX_MKIMAGE_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS) -std=c99" \
++		-C $(@D)/iMX8M -f soc.mak mkimage_imx8
+ endef
+ define HOST_IMX_MKIMAGE_INSTALL_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
+@@ -23,7 +25,9 @@ endef
+ else
+ # i.MX8 and i.MX8X
+ define HOST_IMX_MKIMAGE_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS) -std=c99" \
++		-C $(@D) MKIMG=mkimage_imx8 mkimage_imx8
+ endef
+ define HOST_IMX_MKIMAGE_INSTALL_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
