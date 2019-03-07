@@ -1,32 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Mar 2019 23:00:56 +0100
-Subject: [Buildroot] [PATCH 2/3] board/qemu/xtensa-lx60: backport
- upsteam patch fixing kernel runtime issue with Binutils 2.32.
-In-Reply-To: <20190204223010.19733-2-romain.naour@gmail.com>
-References: <20190204223010.19733-1-romain.naour@gmail.com>
- <20190204223010.19733-2-romain.naour@gmail.com>
-Message-ID: <d02af7b1-6515-bdbd-12a5-e2bc6138961b@mind.be>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 8 Mar 2019 00:11:56 +0200
+Subject: [Buildroot] [PATCH] package/sunxi-tools: Fix build meminfo with
+ musl
+In-Reply-To: <20190307225857.68cc5b07@windsurf>
+References: <20190303232340.23904-1-vadim4j@gmail.com>
+ <20190307225857.68cc5b07@windsurf>
+Message-ID: <20190307221156.gaxzlfbqh2c5p2do@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-
-On 04/02/2019 23:30, Romain Naour wrote:
-> With Binutils 2.32, xtensa kernel <= 4.18 need an upstream patch from kernel 4.19 [1]
-
- Since Gerome bumped this and the other defconfigs to 4.19.16, I guess this one
-is no longer valid. So I've marked it as Superseded.
-
- Regards,
- Arnout
-
+On Thu, Mar 07, 2019 at 10:58:57PM +0100, Thomas Petazzoni wrote:
+> On Mon,  4 Mar 2019 01:23:40 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
 > 
-> [1] https://www.sourceware.org/ml/binutils/2019-02/msg00015.html
+> > musl does not provide inx/outx API for ARM arch, so use
+> > io memory access via pointers which is actually done this
+> > way in glibc/ulibc.
+> > 
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
+> > 
+> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> > ---
 > 
-> Fixes:
-> https://gitlab.com/kubu93/toolchains-builder/-/jobs/155355484
+> Applied to master, thanks. Could you please submit this patch
+> upstream ? The project is on Github, so submitting a pull request is
+> fairly trivial.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Thanks!
+
+Already there:
+
+    https://github.com/linux-sunxi/sunxi-tools/pull/122
+
+Regards,
+Vadim Kochan
