@@ -1,42 +1,44 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 8 Mar 2019 00:11:56 +0200
-Subject: [Buildroot] [PATCH] package/sunxi-tools: Fix build meminfo with
- musl
-In-Reply-To: <20190307225857.68cc5b07@windsurf>
-References: <20190303232340.23904-1-vadim4j@gmail.com>
- <20190307225857.68cc5b07@windsurf>
-Message-ID: <20190307221156.gaxzlfbqh2c5p2do@vkochan-ThinkPad-T470p>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  7 Mar 2019 23:08:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: add
+ BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
+Message-ID: <20190307220824.1476-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
+ - http://autobuild.buildroot.org/results/22c72369cd5b7a8200bb03564bdc342ed026ccac
+ - http://autobuild.buildroot.org/results/ef6869bc40382145fad1079b79107275c4973494
+ - http://autobuild.buildroot.org/results/09d857102c469ede1db0bff8aa0dcd82a4001eaf
 
-On Thu, Mar 07, 2019 at 10:58:57PM +0100, Thomas Petazzoni wrote:
-> On Mon,  4 Mar 2019 01:23:40 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > musl does not provide inx/outx API for ARM arch, so use
-> > io memory access via pointers which is actually done this
-> > way in glibc/ulibc.
-> > 
-> > Fixes:
-> >     http://autobuild.buildroot.net/results/bf10cbe40c0f672c34db72e4eea4c168d5932bd4/
-> > 
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> 
-> Applied to master, thanks. Could you please submit this patch
-> upstream ? The project is on Github, so submitting a pull request is
-> fairly trivial.
-> 
-> Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/flashrom/Config.in | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Already there:
-
-    https://github.com/linux-sunxi/sunxi-tools/pull/122
-
-Regards,
-Vadim Kochan
+diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+index cf1f53c1a3..9c20f2ed2c 100644
+--- a/package/flashrom/Config.in
++++ b/package/flashrom/Config.in
+@@ -1,6 +1,15 @@
++config BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be || BR2_arm || \
++		BR2_armeb || BR2_i386 || BR2_m68k || BR2_mips || \
++		BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
++		BR2_riscv || BR2_sh || BR2_sparc || BR2_sparc64 || \
++		BR2_x86_64
++
+ config BR2_PACKAGE_FLASHROM
+ 	bool "flashrom"
+-	depends on !BR2_microblaze && !BR2_xtensa # platform.h
++	depends on BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
+ 	help
+ 	  flashrom is a utility for identifying, reading, writing,
+ 	  verifying and erasing flash chips. It is designed to flash
+-- 
+2.14.1
