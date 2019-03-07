@@ -1,44 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  7 Mar 2019 23:08:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/flashrom: add
- BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
-Message-ID: <20190307220824.1476-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Mar 2019 23:10:56 +0100
+Subject: [Buildroot] [git commit] package/log4cplus: add optional qt5
+ dependency
+Message-ID: <20190307220847.CF1258EA35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/22c72369cd5b7a8200bb03564bdc342ed026ccac
- - http://autobuild.buildroot.org/results/ef6869bc40382145fad1079b79107275c4973494
- - http://autobuild.buildroot.org/results/09d857102c469ede1db0bff8aa0dcd82a4001eaf
+commit: https://git.buildroot.net/buildroot/commit/?id=d04b12d19e834c0e7aba52e78c46ff820b93ad69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: test BR2_PACKAGE_QT5BASE instead of BR2_PACKAGE_QT5, just for
+consistency with the package we add to the DEPENDENCIES variable.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flashrom/Config.in | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/log4cplus/log4cplus.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index cf1f53c1a3..9c20f2ed2c 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -1,6 +1,15 @@
-+config BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64 || BR2_aarch64_be || BR2_arm || \
-+		BR2_armeb || BR2_i386 || BR2_m68k || BR2_mips || \
-+		BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
-+		BR2_riscv || BR2_sh || BR2_sparc || BR2_sparc64 || \
-+		BR2_x86_64
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index 0bc4fc9aa6..82fc7135f4 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
+@@ -11,6 +11,13 @@ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+ LOG4CPLUS_LICENSE_FILES = LICENSE
+ LOG4CPLUS_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE),y)
++LOG4CPLUS_DEPENDENCIES += host-pkgconf qt5base
++LOG4CPLUS_CONF_OPTS += --with-qt5
++else
++LOG4CPLUS_CONF_OPTS += --without-qt5
++endif
 +
- config BR2_PACKAGE_FLASHROM
- 	bool "flashrom"
--	depends on !BR2_microblaze && !BR2_xtensa # platform.h
-+	depends on BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
- 	help
- 	  flashrom is a utility for identifying, reading, writing,
- 	  verifying and erasing flash chips. It is designed to flash
--- 
-2.14.1
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LOG4CPLUS_CONF_ENV += LIBS='-latomic'
+ endif
