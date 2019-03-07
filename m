@@ -1,68 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  7 Mar 2019 19:10:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix build on riscv
-Message-ID: <20190307181026.13713-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Mar 2019 21:24:37 +0100
+Subject: [Buildroot] [PATCH] package/python3: require util-linux'
+ <uuid.h>
+In-Reply-To: <e5b1510a81bda096dacc133276f1ff2643131dcc.1551975775.git.jan.kundrat@cesnet.cz>
+References: <e5b1510a81bda096dacc133276f1ff2643131dcc.1551975775.git.jan.kundrat@cesnet.cz>
+Message-ID: <20190307212437.22ce6f91@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/fb95c22cbe1d19e73f0089103ed6da2f4b3081c8
+Hello Jan,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...001-platform-Add-riscv-to-known-platforms.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
+On Thu, 7 Mar 2019 17:23:36 +0100
+Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
 
-diff --git a/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
-new file mode 100644
-index 0000000000..06eb9256e4
---- /dev/null
-+++ b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
-@@ -0,0 +1,41 @@
-+From a9a03cc6ba71825bfae0d64e1888f33c77345bc3 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 17 Mar 2018 23:08:29 -0700
-+Subject: [PATCH] platform: Add riscv to known platforms
-+
-+Change-Id: I724a99e2493fcbf71c2fc2d9f6a1ad607c737087
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Reviewed-on: https://review.coreboot.org/25260
-+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
-+Reviewed-by: Paul Menzel <paulepanter@users.sourceforge.net>
-+Reviewed-by: David Hendricks <david.hendricks@gmail.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/flashrom/flashrom/commit/a9a03cc6ba71825bfae0d64e1888f33c77345bc3]
-+---
-+ platform.h | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/platform.h b/platform.h
-+index e3b7674ae..65fe85881 100644
-+--- a/platform.h
-++++ b/platform.h
-+@@ -69,6 +69,9 @@
-+ #elif defined (__m68k__)
-+ 	#define __FLASHROM_ARCH__ "m68k"
-+ 	#define IS_M68K 1
-++#elif defined (__riscv)
-++	#define __FLASHROM_ARCH__ "riscv"
-++	#define IS_RISCV 1
-+ #elif defined (__sh__)
-+ 	#define __FLASHROM_ARCH__ "sh"
-+ 	#define IS_SH 1
-+@@ -77,7 +80,7 @@
-+ 	#define IS_S390 1
-+ #endif
-+ 
-+-#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_SH || IS_S390)
-++#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_RISCV || IS_SH || IS_S390)
-+ #error Unknown architecture
-+ #endif
-+ 
+> Without this dependency, a top level parallel build fails for me (-j24):
+
+Is this with the per-package directory patch set applied, or top-level
+parallel build with the Buildroot master (which is a totally
+unsupported configuration) ?
+
+> I *suspect* that this is due to host-uboot-tools which provide
+> /usr/include/uuid.h and which gets accidentally picked by python3.
+
+I think we need a better understanding of why this would be needed.
+host-python3 builds just fine in minimal chroot that does not have
+libuuid-dev installed, otherwise the autobuilders would be full of
+host-python3 build failures.
+
+So we need more research and a more convincing explanation.
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
