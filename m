@@ -1,100 +1,68 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu, 7 Mar 2019 18:22:55 +0100
-Subject: [Buildroot] [PATCH v3] package/optee-*: packages depend on
- thread support
-In-Reply-To: <878sxq38vp.fsf@tarshish>
-References: <17603738bfac0de04a1de57a562dbde2a572d926.1551944208.git.etienne.carriere@linaro.org>
- <1551973528-5130-1-git-send-email-etienne.carriere@linaro.org>
- <878sxq38vp.fsf@tarshish>
-Message-ID: <CAN5uoS_fr7xN4Yj5oSfiMDn_vMdJKWiQPcG8Y6=Uh2QzmhLztQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  7 Mar 2019 19:10:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix build on riscv
+Message-ID: <20190307181026.13713-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 7 Mar 2019 at 18:13, Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Etienne,
->
-> Almost there.
->
-> On Thu, Mar 07 2019, Etienne Carriere wrote:
->
-> > BR2_PACKAGE_OPTEE_CLIENT depends on BR2_TOOLCHAIN_HAS_THREADS.
-> > Library teec uses pthread support to protect clients state
-> > management.
-> >
-> > This change declares this dependency in package optee-client and
-> > updates dependent packages accordingly: optee-benchmark,
-> > optee-client, optee-examples and optee-test.
-> >
-> > Fixes [1] and [2] where config selected an toolchain without thread
-> > support and build failed with trace like:
-> >
-> >   CMake Error at /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
-> >     Could NOT find Threads (missing: Threads_FOUND)
-> >   Call Stack (most recent call first):
-> >     /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake:377 (_FPHSA_FAILURE_MESSAGE)
-> >     /home/buildroot/autobuild/run/instance-1/output/host/share/cmake-3.8/Modules/FindThreads.cmake:212 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-> >     libteec/CMakeLists.txt:8 (find_package)
-> >
-> > [1] http://autobuild.buildroot.net/results/ed6ffe2197da4f3a970bd3c5522291236396cc8e
-> > [2] http://autobuild.buildroot.net/results/406f90048db097580b626ef889823132f8676ba1
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
-> > Changes v2 -> v3:
-> >   - Squash v2 series into a single patch.
-> >   - Update config comment for unmet dependencies.
-> >
-> > Changes v1 -> v2:
-> >   - No change. v2 appends changes to this change to propagate the optee-client
-> >     dependency on threads to packages dependent on optee-client.
-> >
-> > ---
-> >  package/optee-benchmark/Config.in | 4 +++-
-> >  package/optee-client/Config.in    | 4 +++-
-> >  package/optee-examples/Config.in  | 4 +++-
-> >  package/optee-test/Config.in      | 4 +++-
-> >  4 files changed, 12 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
-> > index 0e36549..0023ac6 100644
-> > --- a/package/optee-benchmark/Config.in
-> > +++ b/package/optee-benchmark/Config.in
-> > @@ -1,6 +1,7 @@
-> >  config BR2_PACKAGE_OPTEE_BENCHMARK
-> >       bool "optee-benchmark"
-> >       depends on !BR2_STATIC_LIBS # optee-client
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
-> >       select BR2_PACKAGE_OPTEE_CLIENT
-> >       select BR2_PACKAGE_LIBYAML
-> >       help
-> > @@ -11,5 +12,6 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
-> >
-> >         http://github.com/linaro-swg/optee_benchmark
-> >
-> > -comment "optee-benchmark needs a toolchain w/ dynamic library"
-> > +comment "optee-benchmark needs a toolchain w/ dynamic library and threads"
-> >       depends on BR2_STATIC_LIBS
-> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
->
-> Multiple depends are ANDed. This is not what you want. We want to
-> display the comment when either condition is true. So you need to OR the
-> conditions like this:
->
->   depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
->
+Fixes:
+ - http://autobuild.buildroot.org/results/fb95c22cbe1d19e73f0089103ed6da2f4b3081c8
 
-Damn', looks like i should have better test this PATCH v3.
-Thanks. I'll send a v4.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-platform-Add-riscv-to-known-platforms.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
 
-etienne
-
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
+new file mode 100644
+index 0000000000..06eb9256e4
+--- /dev/null
++++ b/package/flashrom/0001-platform-Add-riscv-to-known-platforms.patch
+@@ -0,0 +1,41 @@
++From a9a03cc6ba71825bfae0d64e1888f33c77345bc3 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sat, 17 Mar 2018 23:08:29 -0700
++Subject: [PATCH] platform: Add riscv to known platforms
++
++Change-Id: I724a99e2493fcbf71c2fc2d9f6a1ad607c737087
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Reviewed-on: https://review.coreboot.org/25260
++Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
++Reviewed-by: Paul Menzel <paulepanter@users.sourceforge.net>
++Reviewed-by: David Hendricks <david.hendricks@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/flashrom/flashrom/commit/a9a03cc6ba71825bfae0d64e1888f33c77345bc3]
++---
++ platform.h | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/platform.h b/platform.h
++index e3b7674ae..65fe85881 100644
++--- a/platform.h
+++++ b/platform.h
++@@ -69,6 +69,9 @@
++ #elif defined (__m68k__)
++ 	#define __FLASHROM_ARCH__ "m68k"
++ 	#define IS_M68K 1
+++#elif defined (__riscv)
+++	#define __FLASHROM_ARCH__ "riscv"
+++	#define IS_RISCV 1
++ #elif defined (__sh__)
++ 	#define __FLASHROM_ARCH__ "sh"
++ 	#define IS_SH 1
++@@ -77,7 +80,7 @@
++ 	#define IS_S390 1
++ #endif
++ 
++-#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_SH || IS_S390)
+++#if !(IS_X86 || IS_MIPS || IS_PPC || IS_ARM || IS_SPARC || IS_ALPHA || IS_HPPA || IS_M68K || IS_RISCV || IS_SH || IS_S390)
++ #error Unknown architecture
++ #endif
++ 
+-- 
+2.14.1
