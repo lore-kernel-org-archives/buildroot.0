@@ -1,60 +1,69 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Mar 2019 22:39:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gnuradio: add optional log4cpp
- dependency
-Message-ID: <20190308213956.22219-1-fontaine.fabrice@gmail.com>
+Date: Fri,  8 Mar 2019 22:52:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with curl
+ and libidn2
+Message-ID: <20190308215200.11949-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, logger component is enabled if log4cpp is found
-
-Moreover, it should be noted that log4cpp is now mandatory in latest
-upstream:
-https://github.com/gnuradio/gnuradio/commit/d2428961205bf62e6b39966f040f98435e5cc2ed
+Fixes:
+ - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gnuradio/Config.in   | 6 ++++++
- package/gnuradio/gnuradio.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+ ...ix-static-build-with-curl-and-libidn.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 3fdaea850e..6d0669779f 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -56,6 +56,12 @@ config BR2_PACKAGE_GNURADIO_FEC
- 	help
- 	  FEC signal processing blocks
- 
-+config BR2_PACKAGE_GNURADIO_LOG
-+	bool "gr-log support"
-+	select BR2_PACKAGE_LOG4CPP
-+	help
-+	  Enable logger component
+diff --git a/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
+new file mode 100644
+index 0000000000..94f742c3f8
+--- /dev/null
++++ b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
+@@ -0,0 +1,41 @@
++From de0e7fe3b56cff79c11aedc89448814fab8d1877 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 8 Mar 2019 19:11:11 +0100
++Subject: [PATCH] MakeLists.txt: fix static build with curl and libidn2
 +
- config BR2_PACKAGE_GNURADIO_PYTHON
- 	bool "python support"
- 	depends on BR2_PACKAGE_PYTHON
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 202c2213a7..ef9723cb01 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -115,6 +115,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNURADIO_LOG),y)
-+GNURADIO_DEPENDENCIES += log4cpp
-+GNURADIO_CONF_OPTS += -DENABLE_GR_LOG=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_LOG=OFF
-+endif
++curl can be statically linked with libidn2, in this case, build fails:
++/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/libcurl.a(libcurl_la-url.o): In function `free_idnconverted_hostname.isra.1':
++url.c:(.text+0xf4): undefined reference to `idn2_free'
 +
- ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
- GNURADIO_DEPENDENCIES += python
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
++To fix this issue, add a call to pkg_check_modules to retrieve any
++needed dependencies
++
++Fixes:
++ - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/gerbera/gerbera/pull/429]
++---
++ CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d0eed230..e6b62c96 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -443,7 +443,11 @@ if(WITH_MYSQL)
++ endif()
++ 
++ if(WITH_CURL)
++-    find_package (CURL REQUIRED)
+++    find_package(PkgConfig QUIET)
+++    pkg_check_modules (CURL QUIET libcurl)
+++    if (NOT CURL_FOUND)
+++        find_package (CURL REQUIRED)
+++    endif()
++     if (CURL_FOUND)
++         include_directories(${CURL_INCLUDE_DIRS})
++         target_link_libraries (gerbera ${CURL_LIBRARIES})
++-- 
++2.20.1
++
 -- 
-2.14.1
+2.20.1
