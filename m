@@ -1,82 +1,45 @@
-From: Mark Thompson <mark.thompson@starleaf.com>
-Date: Fri, 8 Mar 2019 18:33:39 +0000
-Subject: [Buildroot] [PATCH v2] qt5virtualkeyboard: Install new library
-In-Reply-To: <20190308180750.GW2721@scaer>
-References: <0bc4e8bf-5b7a-69e2-4443-6936700a132f@starleaf.com>
- <20190308180750.GW2721@scaer>
-Message-ID: <4c8cb1db-58a9-5df0-25cd-538e76e8a7a7@starleaf.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 Mar 2019 20:44:11 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/mongodb: needs host-python2
+Message-ID: <20190308194411.8573-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Between Qt 5.11 and 5.12 the virtual keyboard package gained a new top-level
-library, libQt5VirtualKeyboard.so, which is then used by all of the plugins
-it installs.  This change makes Buildroot aware of the new library so that
-we install it to the target filesystem.
+mongodb (like gnuradio) needs host-python2 however there is no way to
+enforce this so add a dependency on !BR2_PACKAGE_PYTHON3.
+Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
+build and install host-python-typing for host-python3.
 
-Signed-off-by: Mark Thompson <mark.thompson@starleaf.com>
+This issue was not raised in the previous version of mongodb as
+host-scons was the only dependency however we now have
+host-python-typing and host-python-pyyaml dependencies and it
+does not seem right to enforce python2 on those packages
+
+Fixes:
+ - http://autobuild.buildroot.org/results/693bdba2c01a1b69f56d6ee75094a6a0fc3f40b4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-On 08/03/2019 18:07, Yann E. MORIN wrote:
->> +ifeq ($(BR2_STATIC_LIBS),)
->> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS
->> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5VirtualKeyboard*.so.* $(TARGET_DIR)/usr/lib
->> +endef
->> +endif
-> 
-> You said that this new library was introduced with qt-5.12, but here you
-> define it unconditionally...
-> 
->>  ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>  define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
->>  	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick/Enterprise
->> @@ -97,6 +103,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
->>  	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
->>  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
->>  		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
->> +	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS)
-> 
-> ... and here you use it unconditionally, which means that, when qt-5.6
-> is enabled, this code will still be used, and thus the copy will be
-> attempted, but will fail as the library does not exist in before
-> qt-5.12.
+Changes v1 -> v2 (after review of Arnout Vandecappelle):
+ - Move python3 dependency under BR2_PACKAGE_MONGODB
 
-Good point, I was only considering the recent 5.11 -> 5.12 change and ignoring that it can still be built with 5.6.
+ package/mongodb/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-New version enclosing.
-
-Thanks,
-
-- Mark
-
-
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index 8ce3169774..ebe0f1e009 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -81,6 +81,11 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Enterprise/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/Enterprise/
- endef
- else
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5VirtualKeyboard*.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
- define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
- 	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/
-@@ -97,6 +102,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
- 		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
-+	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+index 969b8e062f..c4449a7be4 100644
+--- a/package/mongodb/Config.in
++++ b/package/mongodb/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+ config BR2_PACKAGE_MONGODB
+ 	bool "mongodb"
+ 	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.17.1
+2.14.1
