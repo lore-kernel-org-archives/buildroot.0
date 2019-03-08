@@ -1,45 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Mar 2019 20:44:11 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/mongodb: needs host-python2
-Message-ID: <20190308194411.8573-1-fontaine.fabrice@gmail.com>
+Date: Fri,  8 Mar 2019 20:59:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/reaver: bump to version 1.6.5
+Message-ID: <20190308195952.11031-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mongodb (like gnuradio) needs host-python2 however there is no way to
-enforce this so add a dependency on !BR2_PACKAGE_PYTHON3.
-Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
-build and install host-python-typing for host-python3.
-
-This issue was not raised in the previous version of mongodb as
-host-scons was the only dependency however we now have
-host-python-typing and host-python-pyyaml dependencies and it
-does not seem right to enforce python2 on those packages
-
-Fixes:
- - http://autobuild.buildroot.org/results/693bdba2c01a1b69f56d6ee75094a6a0fc3f40b4
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Move python3 dependency under BR2_PACKAGE_MONGODB
+ package/reaver/reaver.hash | 2 +-
+ package/reaver/reaver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/mongodb/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
-index 969b8e062f..c4449a7be4 100644
---- a/package/mongodb/Config.in
-+++ b/package/mongodb/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
- config BR2_PACKAGE_MONGODB
- 	bool "mongodb"
- 	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_PYTHON3
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
+index 6d2baccdce..9a75215282 100644
+--- a/package/reaver/reaver.hash
++++ b/package/reaver/reaver.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 350a89b068f8b461e6459b739d4f5f301db01f115d75f4d698a1f2830149c412 reaver-9bae55bd30b6d46b42da3a09dc23c8b0f9341996.tar.gz
++sha256 e6761d2d4ef9cb2b45fe0a60d6b94048ce4442e4ac209904fe89506ff1e94c44 reaver-v1.6.5.tar.gz
+ sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
+diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+index d9a621a847..328a5c76a3 100644
+--- a/package/reaver/reaver.mk
++++ b/package/reaver/reaver.mk
+@@ -6,7 +6,7 @@
+ 
+ # Older repos for this project will not cross-compile easily
+ #?while this one works right away
+-REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
++REAVER_VERSION = v1.6.5
+ REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
+ REAVER_LICENSE = GPL-2.0+
+ REAVER_LICENSE_FILES = docs/LICENSE
 -- 
 2.14.1
