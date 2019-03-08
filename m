@@ -1,62 +1,153 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  8 Mar 2019 16:04:18 -0600
-Subject: [Buildroot] [PATCH v8 0/9] Package CPE Reporting
-Message-ID: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Fri,  8 Mar 2019 16:04:26 -0600
+Subject: [Buildroot] [PATCH v8 8/9] support/scripts/cpe-report: new script
+In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1552082667-46877-9-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds new infrastructure to report a target's set of package
-CPE identifiers in a similar way to that of the legal info reporting.
+The script supports looking up all the CPEs provided in a
+make cpe-info csv file export from a target Buildroot build.
+It checks the current version and suggests a CPE needs update
+or possibly an initial submission is required to NIST.
 
-The addition of CPE IDs to packages can be a manual process but there is
-a default value which hopefully will match the string.  A cpe-report tool
-is provided to help manage the accuracy of the CPE strings.  Some existing
-fix-ups forthe CPE strings can be found in the following commit that
-eventually needs to be split up and applied.
+Adds option to allow alternate locations for the dictionary
+URL and caching of a processed dictionary to speed up execution.
 
-https://github.com/rc-matthew-l-weber/buildroot/commit/8ce8d4740b95672d8390799b611a35ea18a543e0
+Outputs a cpe/ folder with propsed xml generated from the
+dictionary contents to propose updated versions to NIST.
 
-Changes from v7
-- The pkg-stats CPE status update has been dropped as it seemed like a
-  better feature to be integrated at the release-monitoring.org level.
-  Or could be reopened with a new direction as part of GSoC.
-  (http://patchwork.ozlabs.org/patch/985550/)
-- cpe-report script has been overhauled to provide preformatted xml
-  for version updates to help accelerate sending those to NIST
-- A new security management section was added to the manual with details
-  on CPE upkeep and manual CVE analysis tools.
+For missing CPE matches, a cpe-report-missing.txt is created
+by the script that can be used later to manually create proposed
+new NIST dictionary entries.
 
+Ref: NIST has a group email (cpe_dictionary at nist.gov) used to
+recieve these version update and new entry xml files.  They do
+process the XML and provide feedback. In some cases they will
+propose back something different where the vendor or version is
+slightly different.
 
-Matt Weber (8):
-  cpe-info: new make target
-  cpe-info: id prefix/suffix
-  cpe-info: only report target pkgs
-  cpe-info: cpe minor version support
-  cpe-info: update manual for new pkg vars
-  support/scripts/cpedb.py: new CPE XML helper
-  support/scripts/cpe-report: new script
-  docs/manual: new security management section
+Limitations
+ - Currently any use of non-number version identifiers isn't
+   supported by NIST as they use ranges to determine impact
+   of a CVE
+ - Any Linux version from a non-upstream is also not supported
+   without manually adjusting the information as the custom
+   kernel will more then likely not match the upstream version
+   used in the dictionary
 
-Shruthi Singh (1):
-  toolchain/toolchain-ext: glibc cpe-info support
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
 
- Makefile                                           |  17 +-
- docs/manual/adding-packages-generic.txt            | 111 ++++++++-----
- docs/manual/cpe-reporting.txt                      | 103 ++++++++++++
- docs/manual/manual.txt                             |   2 +
- package/Makefile.in                                |   4 +
- package/pkg-generic.mk                             |  36 ++++
- package/pkg-utils.mk                               |   8 +
- support/scripts/cpe-report                         |  70 ++++++++
- support/scripts/cpedb.py                           | 185 +++++++++++++++++++++
- .../toolchain-external/pkg-toolchain-external.mk   |   7 +
- 10 files changed, 499 insertions(+), 44 deletions(-)
- create mode 100644 docs/manual/cpe-reporting.txt
+v8
+ - Updated to just output missing and needs version update
+ - Optional processed dictionary caching support
+ - Optional dictionary URL
+ - Creation of a missing status file (cpe-report-missing.txt)
+ - Adjusted index used in CSV for removal of CVE patched item
+
+v5 -> v7
+ - No change
+
+v5
+[Ricardo
+ - Updated v4 comments about general flake formatting cleanup
+ - Incorporated parts of patch 1/2 suggestions for optimizations
+
+[Ricardo/Arnout
+ - Collectly, decided to move cpe report analysis to this
+   script and use a seperate module cpedb class
+
+[Arnout
+ - Rename cpe_dict to instead be cpedb
+
+v1 -> v4
+ - Patch did not exist and was part of pkg-stats file
+---
+ support/scripts/cpe-report | 70 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
  create mode 100755 support/scripts/cpe-report
- create mode 100644 support/scripts/cpedb.py
 
+diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
+new file mode 100755
+index 0000000..7242a37
+--- /dev/null
++++ b/support/scripts/cpe-report
+@@ -0,0 +1,70 @@
++#!/usr/bin/env python
++
++import argparse
++import sys
++import csv
++from cpedb import CPEDB
++
++CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
++
++
++def get_target_cpe_report(cpe_report_file, cpedb):
++    report_cpe_exact_match = ""
++    report_cpe_needing_update = ""
++    report_cpe_needing_update_list = ""
++    report_cpe_missing = ""
++
++    print("CPE: Checking for matches...")
++    try:
++        with open(cpe_report_file) as cpe_file:
++            cpe_list = csv.reader(cpe_file)
++            next(cpe_list)  # make cpe-info has a one line header
++            for cpe in cpe_list:
++                result = cpedb.find(cpe[0])
++                if not result:
++                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
++                    if not result:
++                        report_cpe_missing += cpe[0] + "," + cpe[1] + "," + cpe[3] + "\n"
++                    else:
++                        latest_version = cpedb.find_partial_latest_version(cpedb.get_cpe_no_version(cpe[0]))
++                        report_cpe_needing_update += cpe[0] + ", Latest Version Guess from Dict[" + latest_version + "]\n"
++                        report_cpe_needing_update_list += cpe[0] + "\n"
++                else:
++                    report_cpe_exact_match += cpe[0] + "\n"
++    except (OSError, IOError) as e:
++        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
++        sys.exit(1)
++
++    print("CPE: Found but may REQUIRE an UPDATE:\n" + report_cpe_needing_update)
++    print("CPE: Not found:\n" + report_cpe_missing)
++
++    fp = open('cpe-report-missing.txt', 'w+')
++    fp.write(report_cpe_missing)
++    fp.close()
++
++    for cpe in report_cpe_needing_update_list.splitlines():
++        cpedb.update(cpe)
++    print("XML Generation Complete of NIST update files, see ./cpe/*")
++
++
++def parse_args():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
++                        help='CPE Report generated by make cpe-info (csv format)')
++    parser.add_argument('-u', dest='url', action='store', required=False,
++                        help='(optional)URL to the NIST dict (official-cpe-dictionary_v2.3.xml.gz)')
++    return parser.parse_args()
++
++
++def __main__():
++    args = parse_args()
++    cpedb = CPEDB()
++    url = CPE_XML_URL
++    if args.url:
++        url = args.url
++    cpedb.get_xml_dict(url)
++    print("Performing Target CPE Report Analysis...")
++    get_target_cpe_report(args.cpe_report, cpedb)
++
++
++__main__()
 -- 
 1.9.1
