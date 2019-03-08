@@ -1,56 +1,86 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  8 Mar 2019 16:04:22 -0600
-Subject: [Buildroot] [PATCH v8 4/9] cpe-info: cpe minor version support
+Date: Fri,  8 Mar 2019 16:04:20 -0600
+Subject: [Buildroot] [PATCH v8 2/9] cpe-info: id prefix/suffix
 In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1552082667-46877-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1552082667-46877-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Minor version are used to allow -rc, - and other variants of
-representing a sub release in the CPE dictionary.
+There are two types of software CPE prefixes applicable for software,
+one for applications and one for operating systems.
+Note: The third type is for hardware.
+
+This patchset determines which should be used and stores that
+information with the package for later use when assembling the CPE
+report.
+
+Refs:
+   https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
+   https://cpe.mitre.org/specification/
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
 
 v8
-- New support to allow rc, -,  and p# minor versions as the CPE dict
-  currently uses these on a number of packages.
+ - Rebase
+
+v4 -> v7
+ - None
+
+v3
+[Arnout
+ - Moved CPE prefix and suffix defines to package/Makefile.in
+
+v1 -> v2
+[Thomas P
+ - Change to using a filter on pkg name value vs ifelse
 ---
- package/Makefile.in    | 2 +-
- package/pkg-generic.mk | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/Makefile.in    | 4 ++++
+ package/pkg-generic.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/package/Makefile.in b/package/Makefile.in
-index 644282f..3e93145 100644
+index dc818a2..644282f 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -391,7 +391,7 @@ TARGET_CONFIGURE_ARGS = \
+@@ -389,6 +389,10 @@ TARGET_CONFIGURE_ARGS = \
  
- CPE_PREFIX_OS = cpe:2.3:o
- CPE_PREFIX_APP = cpe:2.3:a
--CPE_SUFFIX = *:*:*:*:*:*:*
-+CPE_SUFFIX = *:*:*:*:*:*
+ ################################################################################
  
++CPE_PREFIX_OS = cpe:2.3:o
++CPE_PREFIX_APP = cpe:2.3:a
++CPE_SUFFIX = *:*:*:*:*:*:*
++
  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
  NLS_OPTS = --enable-nls
+ TARGET_NLS_DEPENDENCIES = host-gettext
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8ff389e..1b895d0 100644
+index 644128d..a547c65 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -914,7 +914,8 @@ endif
- $(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
- $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+@@ -916,11 +916,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
  $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
--$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
-+$(2)_CPE_ID_VERSION_MINOR ?= *
-+$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR)
+ $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
  
- ifneq ($(filter linux linux-headers,$(1)),)
- $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
++ifneq ($(filter linux linux-headers,$(1)),)
++$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
++else
++$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
++endif
++
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	@$$(call MESSAGE,"Collecting cpe info")
+-	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
++	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 
+ # legal-info: declare dependencies and set values used later for the manifest
 -- 
 1.9.1
