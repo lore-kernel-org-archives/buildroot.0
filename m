@@ -1,101 +1,112 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Mar 2019 23:15:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: bump to version 8.1.0
-Message-ID: <20190308221534.16430-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  8 Mar 2019 23:19:47 +0100
+Subject: [Buildroot] [PATCH v3] zbar: bump version to 0.22
+Message-ID: <20190308221947.18548-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- Add BSD-3-Clause (CRYPTOGAMS) and Public domain (ChaCha SSE2 and  AVX)
-  to LICENSE, see:
-  https://github.com/weidai11/cryptopp/commit/64a89bf352c7eb8ec905b4bf6d1177a56fed0121
+- change from git download to official release and
+  download site (drop need for autoreconf)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- drop dependency on kernel headers >= 3.17 (should be fixed with
+  commit 'v4l2: make ZBar build and run on Kernels < 3.16' (see [1]),
+  propagate removal to gst-plugins-bad
+
+[1] https://git.linuxtv.org/zbar.git/commit/?id=fa5c48127ec1e3670e28540c2e6a03431ebac5b8
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...001-config.h-avx2-depends-on-gcc-4.9.patch | 40 -------------------
- package/cryptopp/cryptopp.hash                |  6 +--
- package/cryptopp/cryptopp.mk                  |  4 +-
- 3 files changed, 5 insertions(+), 45 deletions(-)
- delete mode 100644 package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
+Changes v1 -> v2:
+  - rebased on current master
 
-diff --git a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-deleted file mode 100644
-index 7f93bceacf..0000000000
---- a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From c484938fb4a57430a2e47334f753b1d771aa0f1b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 21 Feb 2019 20:26:24 +0100
--Subject: [PATCH] config.h: avx2 depends on gcc 4.9
--
--Build of cryptopp on x86 with gcc 4.8 fails on:
--chacha_avx.cpp: In function 'void CryptoPP::ChaCha_OperateKeystream_AVX2(const word32*, const byte*, CryptoPP::byte*, unsigned int)':
--chacha_avx.cpp:98:85: error: '_mm256_broadcastsi128_si256' was not declared in this scope
--
--This is due to the fact that _mm256_broadcastsi128_si256 has been added
--only in gcc 4.9:
--https://github.com/gcc-mirror/gcc/commit/78e8d5ffbf0ba5031b736d2c6fc6a44605047cbc
--
--So bump CRYPTOPP_GCC_VERSION from 4.7 to 4.9 for AVX2 support
--
--Fixes:
-- - http://autobuild.buildroot.org/results/195e40b34344f773da51a3fbff9d8e76c517eed1
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/weidai11/cryptopp/pull/809]
-----
-- config.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/config.h b/config.h
--index eccba009..4516d2b3 100644
----- a/config.h
--+++ b/config.h
--@@ -591,7 +591,7 @@ NAMESPACE_END
-- // Requires Binutils 2.24
-- #if !defined(CRYPTOPP_DISABLE_AVX2) && defined(CRYPTOPP_AVX_AVAILABLE) && \
-- 	(defined(__AVX2__) || (CRYPTOPP_MSC_VERSION >= 1800) || (__SUNPRO_CC >= 0x5130) || \
---	(CRYPTOPP_GCC_VERSION >= 40700) || (__INTEL_COMPILER >= 1400) || \
--+	(CRYPTOPP_GCC_VERSION >= 40900) || (__INTEL_COMPILER >= 1400) || \
-- 	(CRYPTOPP_LLVM_CLANG_VERSION >= 30100) || (CRYPTOPP_APPLE_CLANG_VERSION >= 40600))
-- #define CRYPTOPP_AVX2_AVAILABLE 1
-- #endif
---- 
--2.14.1
--
-diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
-index 8d12a98dab..5d6d8520c2 100644
---- a/package/cryptopp/cryptopp.hash
-+++ b/package/cryptopp/cryptopp.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://www.cryptopp.com/release800.html:
--sha256  bbfd89b348846b920d97a1d32b88c85caf0d7bb423d4fcfab7c44349aaceb82c  cryptopp800.zip
-+# Hash from: https://www.cryptopp.com/release810.html:
-+sha256  f609b453e42abbab7163191dfe060964121f04da212e2e4f2f0ebe94b7e806ae  cryptopp810.zip
+Changes v2 -> v3:
+  - propagate removal of header dependency to gst-plugins-bad
+    (suggested by Thomas Petazzoni)
+
+Note:
+  Previous commit dd08ca7aa98209222a077d1db97323bbc3b563b2 lifted the
+  kernel headers dependency from >= 3.0 to >= 3.17, a complete
+  test-pkg run without headers dependency showed no error, so
+  remove the kernel headers dependency...
+---
+ package/gstreamer/gst-plugins-bad/Config.in | 6 ++----
+ package/zbar/Config.in                      | 6 ++----
+ package/zbar/zbar.hash                      | 2 +-
+ package/zbar/zbar.mk                        | 6 +++---
+ 4 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 411e4b6174..39139c0458 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -321,12 +321,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
+ 	depends on BR2_USE_MMU # zbar-> libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
+ 	select BR2_PACKAGE_ZBAR
  
- # Hash for license file:
--sha256  fe5f5f187e6e38ac2f833956fc5c4cab2df08797cff07f540e4ee74f12f7ee5b  License.txt
-+sha256  f29d65ae3f0c8e327284f193524643ffb4d682fcca3e1740a5c6cbab0e720583  License.txt
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index 8e3277a941..dd41b0ec47 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -4,10 +4,10 @@
+-comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.17"
++comment "zbar plugin needs a toolchain w/ threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 
+ endif
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+index e850c1f02b..e0b28365fc 100644
+--- a/package/zbar/Config.in
++++ b/package/zbar/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_ZBAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+ 	depends on BR2_USE_MMU # libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBV4L
+ 	help
+@@ -11,7 +10,6 @@ config BR2_PACKAGE_ZBAR
+ 
+ 	  https://git.linuxtv.org/zbar.git/about/
+ 
+-comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
++comment "zbar needs a toolchain w/ threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
+index 47a080af12..0f44d0f5c0 100644
+--- a/package/zbar/zbar.hash
++++ b/package/zbar/zbar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 7eb73c180c787184ede0f98806c52b23eb9c24609673e1ed51210504ea2937f5 zbar-681b0f305fb5c5bb0df8437f7d740b29a93a7889.tar.gz
++sha256 1ba9e94c7217a8bd3800f9f3abddf3ed393a62cdf141a709765aad2788744eb7 zbar-0.22.tar.bz2
+ sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index 2146aee85b..63220774b9 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--CRYPTOPP_VERSION = 8.0.0
-+CRYPTOPP_VERSION = 8.1.0
- CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
- CRYPTOPP_SITE = https://cryptopp.com
--CRYPTOPP_LICENSE = BSL-1.0
-+CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
- CRYPTOPP_LICENSE_FILES = License.txt
- CRYPTOPP_INSTALL_STAGING = YES
- 
+-ZBAR_VERSION = 681b0f305fb5c5bb0df8437f7d740b29a93a7889
+-ZBAR_SITE = git://linuxtv.org/zbar.git
++ZBAR_VERSION = 0.22
++ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
++ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
+ ZBAR_LICENSE = LGPL-2.1+
+ ZBAR_LICENSE_FILES = LICENSE
+ ZBAR_INSTALL_STAGING = YES
+-ZBAR_AUTORECONF = YES
+ ZBAR_DEPENDENCIES = libv4l jpeg
+ # add host-gettext for AM_ICONV macro
+ ZBAR_DEPENDENCIES += host-gettext
 -- 
-2.20.1
+2.21.0
