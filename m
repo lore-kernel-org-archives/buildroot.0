@@ -1,161 +1,250 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  8 Mar 2019 16:04:27 -0600
-Subject: [Buildroot] [PATCH v8 9/9] docs/manual: new security management
- section
+Date: Fri,  8 Mar 2019 16:04:25 -0600
+Subject: [Buildroot] [PATCH v8 7/9] support/scripts/cpedb.py: new CPE XML
+ helper
 In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1552082667-46877-10-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1552082667-46877-8-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This changeset captures an initial discussion on the use of CPE
-reporting within a target build.  It notes the reporting limitations
-and provides actions a user could take to improve upon the current
-report information.
+Python class which consumes a NIST CPE XML and provides helper
+functions to access and search the db's data.
 
-There is also an example of how one might do CVE analysis using the
-CPE report information.
+ - Defines the CPE as a object with operations / formats
+ - Processing of CPE dictionary
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes
 
 v8
- - Updated for cpe-report changes
- - Added notes on doing CVE searches and submissions
+ - Added support for generation of update xml to maintain the
+   NIST dictionary for any Buildroot package version bumps
+ - Dropped searching of the Config.in files for URLs, instead
+   assuming the first time a package is added to NIST, the xml is
+   manually filled out with reference urls.  Any updates to versions
+   after that will use the proposed autogen xml that mines the URLS
+   from the NIST dict file.
+ - Caching support for a processed dictionary to speed up subsequent
+   runs when testing, as a db doesn't update more then once a day
 
-v7
- - New
+v5 -> v7
+ - No change
+
+v5
+[Ricardo
+ - Fixed typo in join/split of cpe str without version
+ - Removed extra prints as they aren't needed when we have the
+   output reports/stdout
+ - Updated v4 comments about general flake formatting cleanup
+ - Incorporated parts of patch 1/2 suggestions for optimizations
+
+[Arnout
+ - added pre-processing of cpe values into two sets, one with
+   and one without version
+ - Collectly with Ricardo, decided to move cpe class to this
+   seperate script
+
+v1 -> v4
+ - No version
 ---
- docs/manual/cpe-reporting.txt | 103 ++++++++++++++++++++++++++++++++++++++++++
- docs/manual/manual.txt        |   2 +
- 2 files changed, 105 insertions(+)
- create mode 100644 docs/manual/cpe-reporting.txt
+ support/scripts/cpedb.py | 185 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 185 insertions(+)
+ create mode 100644 support/scripts/cpedb.py
 
-diff --git a/docs/manual/cpe-reporting.txt b/docs/manual/cpe-reporting.txt
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
 new file mode 100644
-index 0000000..a6f32d5
+index 0000000..0369536
 --- /dev/null
-+++ b/docs/manual/cpe-reporting.txt
-@@ -0,0 +1,103 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/support/scripts/cpedb.py
+@@ -0,0 +1,185 @@
++import sys
++import urllib2
++from collections import OrderedDict
++import xmltodict
++import gzip
++from StringIO import StringIO
++import os
++import pickle
 +
-+[[cpe-info]]
++VALID_REFS = ['VENDOR', 'VERSION', 'CHANGE_LOG', 'PRODUCT', 'PROJECT', 'ADVISORY']
 +
-+== Security Vulnerability Management
 +
-+There are many different vulnerability databases (open/paid). This
-+section documents the use of the National Vulnerability Database(NVD)
-+provided by the National Institute of Standards and Technology (NIST).
++class CPE:
++    cpe_str = None
++    cpe_str_short = None
++    cpe_desc = None
++    cpe_cur_ver = None
++    titles = {}
++    references = {}
 +
-+Within Buildroot, the intent is to provide good reporting of the build
-+configuration's inventory of software. The vulnerability analysis is
-+assumed to occur outside of the Buildroot environment (at this time).
++    def __init__(self, cpe_str, titles=None, refs=None):
++        self.cpe_str = cpe_str
++        self.cpe_str_short = ":".join(self.cpe_str.split(":")[:6])
++        self.titles = titles
++        self.references = refs
++        self.cpe_cur_ver = "".join(self.cpe_str.split(":")[5:6])
 +
-+=== Common Platform Enumeration (CPE) Reporting
++    def to_dict(self, cpe_str):
++        cpe_short_name = ":".join(cpe_str.split(":")[2:6])
++        cpe_new_ver = "".join(cpe_str.split(":")[5:6])
++        self.titles[0]['#text'] = self.titles[0]['#text'].replace(self.cpe_cur_ver, cpe_new_ver)
++        cpe_dict = OrderedDict([
++            ('cpe-item', OrderedDict([
++                ('@name', 'cpe:/' + cpe_short_name),
++                ('title', self.titles),
++                ('references', OrderedDict([('reference', self.references)])),
++                ('cpe-23:cpe23-item', OrderedDict([
++                        ('@name', cpe_str)
++                ]))
++            ]))
++        ])
++        return cpe_dict
 +
-+Buildroot consists of a series of upstream packages.  Each of those
-+packages may have a CPE definition used to map vulnerabilities to Common
-+Vulnerabilities and Exposures (CVE). A single package CPE has many versions
-+and each version may have a suite of CVEs associated.
 +
-+To make the gathering of the software inventory of CPE easier, Buildroot can
-+collect for you all the CPE related to the configured defconfig. To produce
-+this material, after you have configured Buildroot with +make menuconfig+,
-++make xconfig+ or +make gconfig+, run:
++class CPEDB:
++    all_cpes = dict()
++    all_cpes_no_version = dict()
 +
-+--------------------
-+make cpe-info
-+--------------------
++    def get_xml_dict(self, url):
++        print("CPE: Setting up NIST dictionary")
++        # Setup location to save dict and xmls, if it exists, assume we're
++        # reusing the previous dict
++        if not os.path.exists("cpe"):
++            os.makedirs("cpe")
++            self.get_new_xml_dict(url)
++        else:
++            print("CPE: Loading CACHED dictionary")
++            cpe_file = open('cpe/.all_cpes.pkl', 'rb')
++            self.all_cpes = pickle.load(cpe_file)
++            cpe_file.close()
++            cpe_file = open('cpe/.all_cpes_no_version.pkl', 'rb')
++            self.all_cpes_no_version = pickle.load(cpe_file)
++            cpe_file.close()
 +
-+Buildroot then collects and writes the +$(TOPDIR)/cpe-manifest.csv+. This file
-+can be used for manual inspection against a CVE database or provided to
-+external tools which perform CVE inventory/analysis.
++    def get_new_xml_dict(self, url):
++        print("CPE: Fetching xml manifest from [" + url + "]")
++        try:
++            compressed_cpe_file = urllib2.urlopen(url)
++            print("CPE: Unzipping xml manifest...")
++            nist_cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
++            print("CPE: Converting xml manifest to dict...")
++            all_cpedb = xmltodict.parse(nist_cpe_file)
 +
-+*CPE Maintenance*
++            # Cycle through the dict and build two dict to be used for custom
++            # lookups of partial and complete CPE objects
++            # The objects are then used to create new proposed XML updates if
++            # if is determined one is required
++            for cpe in all_cpedb['cpe-list']['cpe-item']:
++                cpe_titles = cpe['title']
++                # There maybe multiple titles or one.  Make sure this is
++                # always a list
++                if not isinstance(cpe_titles, (list,)):
++                    cpe_titles = [cpe_titles]
++                # Out of the different language titles, select English
++                for title in cpe_titles:
++                    if title['@xml:lang'] is 'en-US':
++                        cpe_titles = [title]
++                # Some older CPE don't include references, if they do, make
++                # sure we handle the case of one ref needing to be packed
++                # in a list
++                if 'references' in cpe:
++                    cpe_ref = cpe['references']['reference']
++                    if not isinstance(cpe_ref, (list,)):
++                        cpe_ref = [cpe_ref]
++                    # The reference text has not been consistantly upper case
++                    # in the NIST dict but they now require it.  So force upper
++                    # and then check for compliance to a specific tagging
++                    for ref_href in cpe_ref:
++                        ref_href['#text'] = ref_href['#text'].upper()
++                        if ref_href['#text'] not in VALID_REFS:
++                            ref_href['#text'] = ref_href['#text'] + "-- UPDATE this entry, here are some exmaples and just one word should be used -- " + ' '.join(VALID_REFS)
++                cpe_str = cpe['cpe-23:cpe23-item']['@name']
++                item = CPE(cpe_str, cpe_titles, cpe_ref)
++                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++                # This dict must have a unique key for every CPE version
++                # which allows matching to the specific obj data of that
++                # NIST dict entry
++                self.all_cpes.update({cpe_str: item})
++                # This dict has one entry for every CPE (w/o version) to allow
++                # partial match (no valid version) check (the obj is saved and
++                # used as seed for suggested xml updates. By updating the same
++                # non-version'd entry, it assumes the last update here is the
++                # latest version in the NIST dict)
++                self.all_cpes_no_version.update({cpe_str_no_version: item})
 +
-+To maintain these CPE strings for version changes against the NIST dictionary,
-+the manifest can be further processed. First, navigate to your Buildroot
-+directory and execute the script below. The script has some optional arguments
-+for providing a alternate dictionary URL or caching a processed dictionary.
++        except urllib2.HTTPError:
++            print("CPE: HTTP Error: %s" % url)
++            sys.exit(1)
++        except urllib2.URLError:
++            print("CPE: URL Error: %s" % url)
++            sys.exit(1)
 +
-+--------------------
-+support/scripts/cpe-report -c $(TOPDIR)/cpe-manifest.csv
-+--------------------
++        print("CPE: Caching dictionary")
++        cpes_file = open('cpe/.all_cpes.pkl', 'wb')
++        pickle.dump(self.all_cpes, cpes_file)
++        cpes_file.close()
++        cpes_file = open('cpe/.all_cpes_no_version.pkl', 'wb')
++        pickle.dump(self.all_cpes_no_version, cpes_file)
++        cpes_file.close()
 +
-+This script retrieves the NIST dictionary and classifies each CPE as either
-+matched, requires version update or missing. Based on this analysis, the script
-+automatically uses the NIST dictionary entries to produce a draft of XML which
-+can be submitted to NIST to update a version of an entry in the dictionary. It
-+is important to review the generated xml files in the cpe folder as they may
-+need refined reference tags and adjustments to how the version is represented
-+in the title.
++    def find_partial(self, cpe_str):
++        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++        if cpe_str_no_version in self.all_cpes_no_version:
++            return cpe_str_no_version
 +
-+In the case of missing items, a +cpe-report-missing.txt+ report is output by
-+the script and can be used as a starting point to manually create a xml file
-+to submit. Note, some manual analysis using the NIST search engine (https://nvd.nist.gov/products/cpe/search)
-+is suggested for these missing item as the Buildroot +CPE_ID_+ variables maybe
-+slightly incorrect and cause the cpe-report script to catagorize the package
-+as missing. If that is the case, a change can be made by adjusting the default
-+CPE variables in the specific package's +.mk+. See xref:_infrastructure_for_packages_with_specific_build_systems[]
-+discussion on the use of +LIBFOO_CPE_*+.
-+If the package is truely missing, the package's Kconfig help material and .mk
-+should provide most of the information to construct a new NIST submission.
++    def find_partial_obj(self, cpe_str):
++        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++        if cpe_str_no_version in self.all_cpes_no_version:
++            return self.all_cpes_no_version[cpe_str_no_version]
 +
-+To submit a new entry or updated entry to NIST, create an request email to the
-+cpe_dictionary at nist.gov recipient and attach a individual xml file per package
-+being added/updated.  It is OK to have multiple version updates in a single
-+file as long as they are all for the same package. For reference the guidance
-+can be found on the NIST CPE site (https://nvd.nist.gov/products/cpe).
++    def find_partial_latest_version(self, cpe_str_partial):
++        cpe_obj = self.find_partial_obj(cpe_str_partial)
++        return cpe_obj.cpe_cur_ver
 +
-+*Limitations*
++    def find(self, cpe_str):
++        if self.find_partial(cpe_str):
++            if cpe_str in self.all_cpes:
++                return cpe_str
 +
-+Buildroot does not produce or accurately present some of the CPE material. Items
-+such as any versions which are non-number/hash are not compliant with the CPE
-+string specification and would require a manual analysis to update the CPE list
-+before any external CVE analysis should occur. This is a similar situation for
-+packages like the Linux kernel or U-Boot which may not have a version which
-+directly maps to a CPE.
++    def update(self, cpe_str):
++        to_update = self.find_partial_obj(cpe_str)
++        xml = self.__gen_xml__(to_update.to_dict(cpe_str))
++        fp = open(os.path.join('cpe', self.get_cpe_name(cpe_str) + '-' + self.get_cpe_version(cpe_str) + '.xml'), 'w+')
++        fp.write(xmltodict.unparse(xml, pretty=True))
++        fp.close()
 +
-+There is an assumed default CPE string for each package which is auto-generated
-+using existing package information. The output of +make cpe-info+ is based on
-+this default information and the packages which have been individually tailored
-+to match existing CPE strings. The Buildroot developers try to do their best to
-+keep those declarative statements as accurate as possible, to the best of their
-+knowledge. However, it is very well possible that those declarative statements
-+are not all fully accurate nor exhaustive. Similar to legal-info, it is your
-+responsibility to verify this information.
++    def get_nvd_url(self, cpe_str):
++        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
++                urllib2.quote(cpe_str) + \
++                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
 +
-+=== Common Vulnerability and Exposures (CVE) Anaylsis
-+The Common Vulnerabilities and Exposures (CVE) system provides a
-+reference-method for publicly known information-security vulnerabilities and
-+exposures. (https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures)
++    def get_cpe_no_version(self, cpe):
++        return ":".join(cpe.split(":")[:5])
 +
-+Like previously stated, there are many tools and methods to perform this
-+analysis. The most basic example is to do a manual CVE analysis by navigating
-+to the NVD search engine (https://nvd.nist.gov/vuln/search) and using the CPE
-+string identified in the first field of the +$(TOPDIR)/cpe-manifest.csv+.
-+Here's an example for tcpdump (https://nvd.nist.gov/vuln/search/results?form_type=Basic&results_type=overview&query=cpe%3A2.3%3Aa%3Atcpdump%3Atcpdump%3A4.9.1%3A*%3A*%3A*%3A*%3A*%3A*%3A*&search_type=all).
++    def get_cpe_name(self, cpe_str):
++        return "".join(cpe_str.split(":")[4])
 +
-+Beyond the manual search approach, the next step would be a more centralized
-+shared database with multi-feed support (NVD+).  The cve-search project aims
-+to offer that type of solution (https://github.com/cve-search/cve-search).
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 4eb4ba9..fad8bf2 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -46,6 +46,8 @@ include::legal-notice.txt[]
- 
- include::beyond-buildroot.txt[]
- 
-+include::cpe-reporting.txt[]
++    def get_cpe_version(self, cpe_str):
++        return "".join(cpe_str.split(":")[5])
 +
- = Developer guide
- 
- include::how-buildroot-works.txt[]
++    def __gen_xml__(self, cpe_list):
++        list_header = {
++            "cpe-list": {
++                "@xmlns:config": "http://scap.nist.gov/schema/configuration/0.1",
++                "@xmlns": "http://cpe.mitre.org/dictionary/2.0",
++                "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
++                "@xmlnsscap-core": "http://scap.nist.gov/schema/scap-core/0.3",
++                "@xmlns:cpe-23": "http://scap.nist.gov/schema/cpe-extension/2.3",
++                "@xmlns:ns6": "http://scap.nist.gov/schema/scap-core/0.1",
++                "@xmlns:meta": "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
++                "@xsi:schemaLocation": "http://scap.nist.gov/schema/cpe-extension/2.3 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd http://cpe.mitre.org/dictionary/2.0 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd http://scap.nist.gov/schema/scap-core/0.3 https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd http://scap.nist.gov/schema/configuration/0.1 https://scap.nist.gov/schema/nvd/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.1 https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"
++             }
++        }
++        list_header['cpe-list'].update(cpe_list)
++        return list_header
 -- 
 1.9.1
