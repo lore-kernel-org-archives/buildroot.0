@@ -1,76 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Mar 2019 19:07:50 +0100
-Subject: [Buildroot] [PATCH] qt5virtualkeyboard: Install new library
-In-Reply-To: <0bc4e8bf-5b7a-69e2-4443-6936700a132f@starleaf.com>
-References: <0bc4e8bf-5b7a-69e2-4443-6936700a132f@starleaf.com>
-Message-ID: <20190308180750.GW2721@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 8 Mar 2019 19:19:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: fix static build
+ without lua
+In-Reply-To: <20190307224345.4336952c@windsurf>
+References: <20190304214720.13703-1-fontaine.fabrice@gmail.com>
+ <20190307224345.4336952c@windsurf>
+Message-ID: <CAPi7W81MtxfKomR77Gar4eKw4ianFAPGUBn3c9XfSpjNZ7Bj8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+Hello Thomas,
+Le jeu. 7 mars 2019 ? 22:43, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Mon,  4 Mar 2019 22:47:20 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > diff --git a/package/swupdate/0001-Makefile-fix-static-build.patch b/package/swupdate/0001-Makefile-fix-static-build.patch
+> > new file mode 100644
+> > index 0000000000..56901f9871
+> > --- /dev/null
+> > +++ b/package/swupdate/0001-Makefile-fix-static-build.patch
+> > @@ -0,0 +1,62 @@
+> > +From 15a324f8c67548f219256a5a75ba8123cc5bdac6 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Mon, 4 Mar 2019 21:51:36 +0100
+> > +Subject: [PATCH] Makefile: fix static build
+> > +
+> > +Don't build and install lua_swupdate.so if HAVE_LUA isn't set to y
+> > +otherwise build will fail if the toolchain only suports building static
+> > +libraries
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/c11c4d26983e0347d96f3dda62e6d72b031967bb
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +[Upstream status: https://github.com/sbabic/swupdate/pull/49]
+> > +---
+> > + Makefile | 12 +++++++++---
+> > + 1 file changed, 9 insertions(+), 3 deletions(-)
+> > +
+> > +diff --git a/Makefile b/Makefile
+> > +index cfeb9a6..cac99b5 100644
+> > +--- a/Makefile
+> > ++++ b/Makefile
+> > +@@ -369,11 +369,15 @@ tools-bins     := $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
+> > + tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
+> > + tools-all   := $(tools-objs)
+> > +
+> > ++ifeq ($(HAVE_LUA),y)
+> > ++lua_swupdate        := lua_swupdate.so
+> > ++endif
+>
+> I am a bit confused. How could lua_swupdate.so build at all (even in
+> shared library configurations) when HAVE_LUA is not enabled ?
+>
+> I see the patch has been applied upstream, so I guess it is correct,
+> but still that confuses me a bit. Or maybe lua_swupdate.so doesn't link
+> with Lua ?
+The issue (fixed by the patch) is that swudpate always tries to build
+lua_swupdate.so even if there is no object files in this shared
+library when CONFIG_LUA is not set.
 
-On 2019-03-08 17:09 +0000, Mark Thompson spake thusly:
-> Between Qt 5.11 and 5.12 the virtual keyboard package gained a new top-level
-> library, libQt5VirtualKeyboard.so, which is then used by all of the plugins
-> it installs.  This change makes Buildroot aware of the new library so that
-> we install it to the target filesystem.
-> 
-> Signed-off-by: Mark Thompson <mark.thompson@starleaf.com>
-> ---
->  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> index 8ce3169774..6c255c98da 100644
-> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> @@ -75,6 +75,12 @@ define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->  endef
->  
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5VirtualKeyboard*.so.* $(TARGET_DIR)/usr/lib
-> +endef
-> +endif
+Here is an extract of bindings/Makefile (see
+https://github.com/sbabic/swupdate/commit/624904cc18003fae413011563dac83a333f10509):
+obj-$(CONFIG_LUA) += auxiliar.o lua_swupdate.o
 
-You said that this new library was introduced with qt-5.12, but here you
-define it unconditionally...
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->  define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
->  	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick/Enterprise
-> @@ -97,6 +103,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
->  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
->  		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
-> +	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS)
+Best Regards,
 
-... and here you use it unconditionally, which means that, when qt-5.6
-is enabled, this code will still be used, and thus the copy will be
-attempted, but will fail as the library does not exist in before
-qt-5.12.
-
-Regards,
-Yann E. MORIN.
-
->  	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML)
->  	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
->  	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
-> -- 
-> 2.17.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabrice
