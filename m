@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Mar 2019 20:59:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/reaver: bump to version 1.6.5
-Message-ID: <20190308195952.11031-1-fontaine.fabrice@gmail.com>
+Date: Fri,  8 Mar 2019 21:19:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openldap: bump to version 2.4.47
+Message-ID: <20190308201902.17716-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/reaver/reaver.hash | 2 +-
- package/reaver/reaver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
-index 6d2baccdce..9a75215282 100644
---- a/package/reaver/reaver.hash
-+++ b/package/reaver/reaver.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256 350a89b068f8b461e6459b739d4f5f301db01f115d75f4d698a1f2830149c412 reaver-9bae55bd30b6d46b42da3a09dc23c8b0f9341996.tar.gz
-+sha256 e6761d2d4ef9cb2b45fe0a60d6b94048ce4442e4ac209904fe89506ff1e94c44 reaver-v1.6.5.tar.gz
- sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
-diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
-index d9a621a847..328a5c76a3 100644
---- a/package/reaver/reaver.mk
-+++ b/package/reaver/reaver.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 37e2673c4b..0b33b8d724 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.md5
+-md5 829016c5a9f45c51adc50073ac6f9fd7  openldap-2.4.46.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.sha1
+-sha1 a9ae2273eb9bdd70090dafe0d018a3132606bef6  openldap-2.4.46.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.md5
++md5 e508f97bfd778fec7799f286e5c07176  openldap-2.4.47.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.sha1
++sha1 c59d52dd75f7d1c7b02f83725da36c322d439674  openldap-2.4.47.tgz
+ # Locally computed
+-sha256 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d  openldap-2.4.46.tgz
++sha256 f54c5877865233d9ada77c60c0f69b3e0bfd8b1b55889504c650047cc305520b  openldap-2.4.47.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 3f00f2b7df..9dbab731c3 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Older repos for this project will not cross-compile easily
- #?while this one works right away
--REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
-+REAVER_VERSION = v1.6.5
- REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
- REAVER_LICENSE = GPL-2.0+
- REAVER_LICENSE_FILES = docs/LICENSE
+-OPENLDAP_VERSION = 2.4.46
++OPENLDAP_VERSION = 2.4.47
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
 -- 
 2.14.1
