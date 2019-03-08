@@ -1,80 +1,101 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  8 Mar 2019 16:04:23 -0600
-Subject: [Buildroot] [PATCH v8 5/9] toolchain/toolchain-ext: glibc cpe-info
- support
-In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1552082667-46877-6-git-send-email-matthew.weber@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 Mar 2019 23:15:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: bump to version 8.1.0
+Message-ID: <20190308221534.16430-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Shruthi Singh <shruthi.singh@rockwellcollins.com>
+- Remove patch (already in version)
+- Add BSD-3-Clause (CRYPTOGAMS) and Public domain (ChaCha SSE2 and  AVX)
+  to LICENSE, see:
+  https://github.com/weidai11/cryptopp/commit/64a89bf352c7eb8ec905b4bf6d1177a56fed0121
 
-This commit adds the correct CPE string for glibc, describing CPE ID,
-VERSION, PACKAGE NAME and URL.
-
-Signed-off-by: Shruthi Singh shruthi.singh at rockwellcollins.com
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes
+ ...001-config.h-avx2-depends-on-gcc-4.9.patch | 40 -------------------
+ package/cryptopp/cryptopp.hash                |  6 +--
+ package/cryptopp/cryptopp.mk                  |  4 +-
+ 3 files changed, 5 insertions(+), 45 deletions(-)
+ delete mode 100644 package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
 
-v8
- - No change
-
-v7
- - New
----
- package/pkg-generic.mk                                 | 14 ++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  7 +++++++
- 2 files changed, 21 insertions(+)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1b895d0..f9cedd2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -924,8 +924,22 @@ $(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
- endif
+diff --git a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch b/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
+deleted file mode 100644
+index 7f93bceacf..0000000000
+--- a/package/cryptopp/0001-config.h-avx2-depends-on-gcc-4.9.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From c484938fb4a57430a2e47334f753b1d771aa0f1b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 21 Feb 2019 20:26:24 +0100
+-Subject: [PATCH] config.h: avx2 depends on gcc 4.9
+-
+-Build of cryptopp on x86 with gcc 4.8 fails on:
+-chacha_avx.cpp: In function 'void CryptoPP::ChaCha_OperateKeystream_AVX2(const word32*, const byte*, CryptoPP::byte*, unsigned int)':
+-chacha_avx.cpp:98:85: error: '_mm256_broadcastsi128_si256' was not declared in this scope
+-
+-This is due to the fact that _mm256_broadcastsi128_si256 has been added
+-only in gcc 4.9:
+-https://github.com/gcc-mirror/gcc/commit/78e8d5ffbf0ba5031b736d2c6fc6a44605047cbc
+-
+-So bump CRYPTOPP_GCC_VERSION from 4.7 to 4.9 for AVX2 support
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/195e40b34344f773da51a3fbff9d8e76c517eed1
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/weidai11/cryptopp/pull/809]
+----
+- config.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/config.h b/config.h
+-index eccba009..4516d2b3 100644
+---- a/config.h
+-+++ b/config.h
+-@@ -591,7 +591,7 @@ NAMESPACE_END
+- // Requires Binutils 2.24
+- #if !defined(CRYPTOPP_DISABLE_AVX2) && defined(CRYPTOPP_AVX_AVAILABLE) && \
+- 	(defined(__AVX2__) || (CRYPTOPP_MSC_VERSION >= 1800) || (__SUNPRO_CC >= 0x5130) || \
+--	(CRYPTOPP_GCC_VERSION >= 40700) || (__INTEL_COMPILER >= 1400) || \
+-+	(CRYPTOPP_GCC_VERSION >= 40900) || (__INTEL_COMPILER >= 1400) || \
+- 	(CRYPTOPP_LLVM_CLANG_VERSION >= 30100) || (CRYPTOPP_APPLE_CLANG_VERSION >= 40600))
+- #define CRYPTOPP_AVX2_AVAILABLE 1
+- #endif
+--- 
+-2.14.1
+-
+diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
+index 8d12a98dab..5d6d8520c2 100644
+--- a/package/cryptopp/cryptopp.hash
++++ b/package/cryptopp/cryptopp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://www.cryptopp.com/release800.html:
+-sha256  bbfd89b348846b920d97a1d32b88c85caf0d7bb423d4fcfab7c44349aaceb82c  cryptopp800.zip
++# Hash from: https://www.cryptopp.com/release810.html:
++sha256  f609b453e42abbab7163191dfe060964121f04da212e2e4f2f0ebe94b7e806ae  cryptopp810.zip
  
- $(1)-cpe-info: PKG=$(2)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+$(1)-cpe-info: toolchain
-+endif
- $(1)-cpe-info:
- ifeq ($$($(2)_TYPE),target)
-+ifneq ($$($(2)_NAME),toolchain-external)
-+ifneq ($(findstring TOOLCHAIN_EXTERNAL, $(2)),)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
-+	$$(eval $(2)_VERSION = $$(shell $$(call TOOLCHAIN_CPE_INFO)))
-+	$$(eval $(2)_CPE_ID_VENDOR = gnu)
-+	$$(eval $(2)_CPE_ID_NAME = glibc)
-+	$$(eval $(2)_ACTUAL_SOURCE_SITE = https://github.com/bminor/glibc/releases)
-+	$$(eval $(2)_RAWNAME = glibc)
-+endif # ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC),y)
-+endif # ifneq ($(findstring TOOLCHAIN_EXTERNAL, $(2)),)
-+endif # ifneq ($$($(2)_NAME),toolchain-external)
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 	@$$(call MESSAGE,"Collecting cpe info")
- 	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d..aed06c5 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -440,6 +440,13 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
- endef
+ # Hash for license file:
+-sha256  fe5f5f187e6e38ac2f833956fc5c4cab2df08797cff07f540e4ee74f12f7ee5b  License.txt
++sha256  f29d65ae3f0c8e327284f193524643ffb4d682fcca3e1740a5c6cbab0e720583  License.txt
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 8e3277a941..dd41b0ec47 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+define TOOLCHAIN_CPE_INFO
-+	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	MAJ=`awk '{ if ($$1 = /#define/ && ($$2= /__GLIBC__/)){printf $$3};}' $${ARCH_SYSROOT_DIR}/usr/include/features.h` ; \
-+	MIN=`awk '{ if ($$1 = /#define/ && ($$2 = /_GLIBC_MINOR/)){printf $$3};}' $${ARCH_SYSROOT_DIR}/usr/include/features.h` ; \
-+	echo $${MAJ}.$${MIN}
-+endef
-+
- # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
- # Note: the skeleton package additionally creates lib32->lib or lib64->lib
- # (as appropriate)
+-CRYPTOPP_VERSION = 8.0.0
++CRYPTOPP_VERSION = 8.1.0
+ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = https://cryptopp.com
+-CRYPTOPP_LICENSE = BSL-1.0
++CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+ CRYPTOPP_LICENSE_FILES = License.txt
+ CRYPTOPP_INSTALL_STAGING = YES
+ 
 -- 
-1.9.1
+2.20.1
