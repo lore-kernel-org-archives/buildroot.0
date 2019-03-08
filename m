@@ -1,30 +1,65 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 8 Mar 2019 23:49:47 +0100
-Subject: [Buildroot] issue to build elfutils due to libintl
-In-Reply-To: <20190308125638.GA30079@arthur-bzh>
-References: <20190308125638.GA30079@arthur-bzh>
-Message-ID: <20190308234947.274e5d36@gmx.net>
+Date: Fri, 8 Mar 2019 23:52:23 +0100
+Subject: [Buildroot] QT 5.6 app with eglfs and etnaviv (imx6 solo,
+ buildroot 2018.02.5)
+In-Reply-To: <CAE58QoMfF2Kwi0Hc_yOeOinoLA-82OfzzeymOBXsjMK=nYoK5g@mail.gmail.com>
+References: <CAE58QoMfF2Kwi0Hc_yOeOinoLA-82OfzzeymOBXsjMK=nYoK5g@mail.gmail.com>
+Message-ID: <20190308235223.62e76a71@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arthur,
+Hello Juan,
 
-On Fri, 8 Mar 2019 13:56:38 +0100, Arthur LAMBERT <lambertarthur22@gmail.com> wrote:
+On Thu, 7 Mar 2019 23:00:19 +0000, "Juan A. Rubio" <jarubio2001@gmail.com> wrote:
 
-> Hi,
+> Hello,
 > 
-> I have one issue to build the package elfutils. Everything was working fine
-> and after updating my ubuntu from 16.04 to 18.04 I am not able to build
-> anymore the package with success.
+> I'm trying to get my Qt 5.6 app to run with the etnaviv driver instead
+> of vivante. My app has so far been running without any problems with
+> the vivante driver (I'm using NXP's 4.9.11 kernel). So now I would
+> like to try and see if I can switch to the community driver and mesa.
 > 
-> My defconfig is for arm architecture with uclibc.
+> These are the variables that I've been exporting with the vivante driver:
+> FB_MULTI_BUFFER=3
+> QT_QPA_EGLFS_INTEGRATION=eglfs_viv
+> 
+> For etnaviv, I'm doing:
+> QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+> 
+> But I'm getting this error::
+> gbm: failed to open any driver (search paths /usr/lib/dri)
+> gbm: Last dlopen error: /usr/lib/dri/vivante_dri.so: cannot open
+> shared object file: No such file or directory
+> failed to load driver: vivante
+> 
+> These are the contents of /usr/lib/dri/
+> # ls /usr/lib/dri/
+> etnaviv_dri.so     imx-drm_dri.so     kms_swrast_dri.so  swrast_dri.so
+> 
+> And I'm enabling these packages:
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
+> 
+> BR2_PACKAGE_LIBDRM=y
+> BR2_PACKAGE_LIBDRM_HAS_ATOMIC=y
+> BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC=y
+> BR2_PACKAGE_LIBDRM_ETNAVIV=y
+> BR2_PACKAGE_KMSXX=y
+> 
+> I'm obviously missing something here. Any help would be very much appreciated.
 
-Mind to share your complete .config/defconfig file?
+Mind to share your complete .config/defconfig?
 
-Did your run an complete build (make clean; make), see [1]?
+Did your run an complete re-build (make clean; make), see [1]?
 
 Regards,
 Peter
@@ -32,63 +67,8 @@ Peter
 [1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
 
 > 
-> The error :
-> 
-> >>> elfutils 0.174 Building  
-> PATH="/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/bin:/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/sbin:/home/arthur/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/gnat/bin:/home/g179168/middleware/tools/bin/:/usr/local/go/bin"  /usr/bin/make -j9  -C /home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/
-> make[1]: Entering directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
-> /usr/bin/make --no-print-directory all-recursive
-> Making all in config
-> make[3]: Nothing to be done for 'all'.
-> Making all in m4
-> make[3]: Nothing to be done for 'all'.
-> Making all in lib
->   CC       xstrdup.o
->   CC       xstrndup.o
->   CC       xmalloc.o
->   CC       next_prime.o
->   CC       crc32.o
->   CC       crc32_file.o
->   CC       color.o
->   CC       printversion.o
-> xmalloc.c:33:10: fatal error: libintl.h: No such file or directory
->  #include <libintl.h>
->           ^~~~~~~~~~~
-> compilation terminated.
-> Makefile:418: recipe for target 'xmalloc.o' failed
-> make[3]: *** [xmalloc.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> printversion.c:33:10: fatal error: libintl.h: No such file or directory
->  #include <libintl.h>
->           ^~~~~~~~~~~
-> compilation terminated.
-> Makefile:418: recipe for target 'printversion.o' failed
-> make[3]: *** [printversion.o] Error 1
-> color.c:35:10: fatal error: libintl.h: No such file or directory
->  #include <libintl.h>
->           ^~~~~~~~~~~
-> compilation terminated.
-> Makefile:418: recipe for target 'color.o' failed
-> make[3]: *** [color.o] Error 1
-> Makefile:487: recipe for target 'all-recursive' failed
-> make[2]: *** [all-recursive] Error 1
-> Makefile:403: recipe for target 'all' failed
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
-> package/pkg-generic.mk:238: recipe for target '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built' failed
-> make: *** [/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built] Error 2
-> 
-> The issue was present with 2017.02.2 version of buildroot and I am always able to reproduce the issue with 2019.02 release.
-> Is it an error in my defconfig ? is it a real issue ?
-> 
-> In my opinion the issue is due to the update of my gcc version during the ubuntu upgrade. I am able to
-> compile elfutils on my archlinux with gcc 5.4.0. I have the issue with gcc 7.3.0 on my ubuntu.
-> 
-> This patch was not supposed to fixed this kind of issues ?
-> http://lists.busybox.net/pipermail/buildroot/2017-July/196484.html
-> 
 > Thanks,
-> Arthur.
+> Juan
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
