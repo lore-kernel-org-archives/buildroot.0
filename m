@@ -1,112 +1,94 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  8 Mar 2019 23:19:47 +0100
-Subject: [Buildroot] [PATCH v3] zbar: bump version to 0.22
-Message-ID: <20190308221947.18548-1-ps.report@gmx.net>
+Date: Fri, 8 Mar 2019 23:41:12 +0100
+Subject: [Buildroot] [PATCH 1/1] Changed download links for libxml2 and
+ libxslt
+In-Reply-To: <CAJSYY8e8_uGy5ELd7JpLpVitw-rG3WogxhxhUQxRzVNndfnECw@mail.gmail.com>
+References: <CAJSYY8e8_uGy5ELd7JpLpVitw-rG3WogxhxhUQxRzVNndfnECw@mail.gmail.com>
+Message-ID: <20190308234112.2128603a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- change from git download to official release and
-  download site (drop need for autoreconf)
+Hello Nityananda,
 
-- drop dependency on kernel headers >= 3.17 (should be fixed with
-  commit 'v4l2: make ZBar build and run on Kernels < 3.16' (see [1]),
-  propagate removal to gst-plugins-bad
+On Fri, 8 Mar 2019 15:46:44 +0530, Nityananda Padhan <ntneitin@gmail.com> wrote:
 
-[1] https://git.linuxtv.org/zbar.git/commit/?id=fa5c48127ec1e3670e28540c2e6a03431ebac5b8
+> Those ftp links were unreachable. After those changes it worked.
+> 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - rebased on current master
+Thanks for the patch, but the ftp download here works fine (as does the http one)...,
+maybe a problem at your company network/proxy?
 
-Changes v2 -> v3:
-  - propagate removal of header dependency to gst-plugins-bad
-    (suggested by Thomas Petazzoni)
+Yes, http works under more circumstances...
 
-Note:
-  Previous commit dd08ca7aa98209222a077d1db97323bbc3b563b2 lifted the
-  kernel headers dependency from >= 3.0 to >= 3.17, a complete
-  test-pkg run without headers dependency showed no error, so
-  remove the kernel headers dependency...
----
- package/gstreamer/gst-plugins-bad/Config.in | 6 ++----
- package/zbar/Config.in                      | 6 ++----
- package/zbar/zbar.hash                      | 2 +-
- package/zbar/zbar.mk                        | 6 +++---
- 4 files changed, 8 insertions(+), 12 deletions(-)
+> 
+> Thanks
+> Neitin Nt
 
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index 411e4b6174..39139c0458 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -321,12 +321,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_ZBAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zbar-> libv4l
- 	depends on BR2_USE_MMU # zbar-> libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # zbar-> libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # zbar
- 	select BR2_PACKAGE_ZBAR
- 
--comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.17"
-+comment "zbar plugin needs a toolchain w/ threads, C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 
- endif
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-index e850c1f02b..e0b28365fc 100644
---- a/package/zbar/Config.in
-+++ b/package/zbar/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_ZBAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
- 	depends on BR2_USE_MMU # libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # v4l2_query_ext_ctrl
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBV4L
- 	help
-@@ -11,7 +10,6 @@ config BR2_PACKAGE_ZBAR
- 
- 	  https://git.linuxtv.org/zbar.git/about/
- 
--comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.17"
-+comment "zbar needs a toolchain w/ threads, C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-index 47a080af12..0f44d0f5c0 100644
---- a/package/zbar/zbar.hash
-+++ b/package/zbar/zbar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 7eb73c180c787184ede0f98806c52b23eb9c24609673e1ed51210504ea2937f5 zbar-681b0f305fb5c5bb0df8437f7d740b29a93a7889.tar.gz
-+sha256 1ba9e94c7217a8bd3800f9f3abddf3ed393a62cdf141a709765aad2788744eb7 zbar-0.22.tar.bz2
- sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89 LICENSE
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index 2146aee85b..63220774b9 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--ZBAR_VERSION = 681b0f305fb5c5bb0df8437f7d740b29a93a7889
--ZBAR_SITE = git://linuxtv.org/zbar.git
-+ZBAR_VERSION = 0.22
-+ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
-+ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
- ZBAR_LICENSE_FILES = LICENSE
- ZBAR_INSTALL_STAGING = YES
--ZBAR_AUTORECONF = YES
- ZBAR_DEPENDENCIES = libv4l jpeg
- # add host-gettext for AM_ICONV macro
- ZBAR_DEPENDENCIES += host-gettext
--- 
-2.21.0
+Please send the patch inline (and not as attachment), see [1] for details...
+
+> From 80548bd6111d9f8f8c60c12a643cbf7088342e11 Mon Sep 17 00:00:00 2001
+> From: Nt Neitin <ntneitin@gmail.com>
+> Date: Fri, 8 Mar 2019 15:22:29 +0530
+> Subject: [PATCH 1/1] Changed download links for libxml2 and libxslt
+
+Should be:
+
+  package/libxml2: change download site to http
+
+and
+
+  package/libxslt: change download site to http
+
+and only one change per patch....
+
+> 
+>  Changes to be committed:
+> 	modified:   package/libxml2/libxml2.mk
+> 	modified:   package/libxslt/libxslt.mk
+> 
+> Signed-off-by: Nt Neitin <ntneitin@gmail.com>
+
+Signed of should be 'Signed-off-by: Your Real Name <your@email.address>',
+in your case 'Nityananda Padhan <ntneitin@gmail.com>'?
+
+Regards,
+Peter
+
+[1] https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+> ---
+>  package/libxml2/libxml2.mk | 2 +-
+>  package/libxslt/libxslt.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+> index 3b3714fff1..f4b4de090e 100644
+> --- a/package/libxml2/libxml2.mk
+> +++ b/package/libxml2/libxml2.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+> >  
+>  LIBXML2_VERSION = 2.9.9
+> -LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+> +LIBXML2_SITE = http://xmlsoft.org/sources
+>  LIBXML2_INSTALL_STAGING = YES
+>  LIBXML2_LICENSE = MIT
+>  LIBXML2_LICENSE_FILES = COPYING
+> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+> index 5b1c0ae268..4632301b16 100644
+> --- a/package/libxslt/libxslt.mk
+> +++ b/package/libxslt/libxslt.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  LIBXSLT_VERSION = 1.1.32
+> -LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
+> +LIBXSLT_SITE = http://xmlsoft.org/sources
+>  LIBXSLT_INSTALL_STAGING = YES
+>  LIBXSLT_LICENSE = MIT
+>  LIBXSLT_LICENSE_FILES = COPYING
+> -- 
+> 2.17.1
