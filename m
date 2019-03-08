@@ -1,75 +1,56 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Fri, 8 Mar 2019 13:56:38 +0100
-Subject: [Buildroot] issue to build elfutils due to libintl
-Message-ID: <20190308125638.GA30079@arthur-bzh>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri,  8 Mar 2019 14:27:09 +0100
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: rename tpm2-tss libraries
+ in the help text
+Message-ID: <20190308132710.11116-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Since tpm2-tss version 2.0.0, tpm2 libraries have been renamed.
 
-I have one issue to build the package elfutils. Everything was working fine
-and after updating my ubuntu from 16.04 to 18.04 I am not able to build
-anymore the package with success.
+libsapi renamed to libtss2-sys
+https://github.com/tpm2-software/tpm2-tss/commit/5f0ab55d4e46077cb8f0c53a76c5ebd15a088d26
 
-My defconfig is for arm architecture with uclibc.
+libtcti-device renamed to libtss2-tcti-device
+libtcti-socket renamed to libtss2-tcti-mssim
+https://github.com/tpm2-software/tpm2-tss/commit/b8584accbd96e38eaea250e31ed3ea580d2bca27
 
-The error :
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Carlos Santos <casantos@datacom.com.br>
+---
+ package/tpm2-tss/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
->>> elfutils 0.174 Building
-PATH="/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/bin:/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/sbin:/home/arthur/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/gnat/bin:/home/g179168/middleware/tools/bin/:/usr/local/go/bin"  /usr/bin/make -j9  -C /home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/
-make[1]: Entering directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
-/usr/bin/make --no-print-directory all-recursive
-Making all in config
-make[3]: Nothing to be done for 'all'.
-Making all in m4
-make[3]: Nothing to be done for 'all'.
-Making all in lib
-  CC       xstrdup.o
-  CC       xstrndup.o
-  CC       xmalloc.o
-  CC       next_prime.o
-  CC       crc32.o
-  CC       crc32_file.o
-  CC       color.o
-  CC       printversion.o
-xmalloc.c:33:10: fatal error: libintl.h: No such file or directory
- #include <libintl.h>
-          ^~~~~~~~~~~
-compilation terminated.
-Makefile:418: recipe for target 'xmalloc.o' failed
-make[3]: *** [xmalloc.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-printversion.c:33:10: fatal error: libintl.h: No such file or directory
- #include <libintl.h>
-          ^~~~~~~~~~~
-compilation terminated.
-Makefile:418: recipe for target 'printversion.o' failed
-make[3]: *** [printversion.o] Error 1
-color.c:35:10: fatal error: libintl.h: No such file or directory
- #include <libintl.h>
-          ^~~~~~~~~~~
-compilation terminated.
-Makefile:418: recipe for target 'color.o' failed
-make[3]: *** [color.o] Error 1
-Makefile:487: recipe for target 'all-recursive' failed
-make[2]: *** [all-recursive] Error 1
-Makefile:403: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-make[1]: Leaving directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
-package/pkg-generic.mk:238: recipe for target '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built' failed
-make: *** [/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built] Error 2
-
-The issue was present with 2017.02.2 version of buildroot and I am always able to reproduce the issue with 2019.02 release.
-Is it an error in my defconfig ? is it a real issue ?
-
-In my opinion the issue is due to the update of my gcc version during the ubuntu upgrade. I am able to
-compile elfutils on my archlinux with gcc 5.4.0. I have the issue with gcc 7.3.0 on my ubuntu.
-
-This patch was not supposed to fixed this kind of issues ?
-http://lists.busybox.net/pipermail/buildroot/2017-July/196484.html
-
-Thanks,
-Arthur.
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 2fb5b0f213..2d619750f8 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_TPM2_TSS
+ 	    variants may be useful for integration into event-driven
+ 	    programming environments. Both the synchronous and
+ 	    asynchronous API are exposed through a single library:
+-	    libsapi.
++	    libtss2-sys.
+ 
+ 	  * TPM Command Transmission Interface (TCTI) that is described
+ 	    in the same specification. This API provides a standard
+@@ -26,10 +26,10 @@ config BR2_PACKAGE_TPM2_TSS
+ 	    implementing the TCTI API will be implemented as a way to
+ 	    abstract various platform specific IPC mechanisms. Currently
+ 	    this repository provides two TCTI implementations:
+-	    libtcti-device and libtcti-socket.  The prior should be used
+-	    for direct access to the TPM through the Linux kernel
+-	    driver. The later implements the protocol exposed by the
+-	    Microsoft software TPM2 simulator.
++	    libtss2-tcti-device and libtss2-tcti-mssim. The prior should
++	    be used for direct access to the TPM through the Linux
++	    kernel driver. The later implements the protocol exposed by
++	    the Microsoft software TPM2 simulator.
+ 
+ 	  https://github.com/tpm2-software/tpm2-tss
+ 
+-- 
+2.20.1
