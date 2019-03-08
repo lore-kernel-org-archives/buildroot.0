@@ -1,69 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Mar 2019 22:52:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with curl
- and libidn2
-Message-ID: <20190308215200.11949-1-fontaine.fabrice@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri,  8 Mar 2019 16:04:22 -0600
+Subject: [Buildroot] [PATCH v8 4/9] cpe-info: cpe minor version support
+In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1552082667-46877-5-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
+Minor version are used to allow -rc, - and other variants of
+representing a sub release in the CPE dictionary.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...ix-static-build-with-curl-and-libidn.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
+Changes
 
-diff --git a/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
-new file mode 100644
-index 0000000000..94f742c3f8
---- /dev/null
-+++ b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
-@@ -0,0 +1,41 @@
-+From de0e7fe3b56cff79c11aedc89448814fab8d1877 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 8 Mar 2019 19:11:11 +0100
-+Subject: [PATCH] MakeLists.txt: fix static build with curl and libidn2
-+
-+curl can be statically linked with libidn2, in this case, build fails:
-+/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/libcurl.a(libcurl_la-url.o): In function `free_idnconverted_hostname.isra.1':
-+url.c:(.text+0xf4): undefined reference to `idn2_free'
-+
-+To fix this issue, add a call to pkg_check_modules to retrieve any
-+needed dependencies
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gerbera/gerbera/pull/429]
-+---
-+ CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d0eed230..e6b62c96 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -443,7 +443,11 @@ if(WITH_MYSQL)
-+ endif()
-+ 
-+ if(WITH_CURL)
-+-    find_package (CURL REQUIRED)
-++    find_package(PkgConfig QUIET)
-++    pkg_check_modules (CURL QUIET libcurl)
-++    if (NOT CURL_FOUND)
-++        find_package (CURL REQUIRED)
-++    endif()
-+     if (CURL_FOUND)
-+         include_directories(${CURL_INCLUDE_DIRS})
-+         target_link_libraries (gerbera ${CURL_LIBRARIES})
-+-- 
-+2.20.1
-+
+v8
+- New support to allow rc, -,  and p# minor versions as the CPE dict
+  currently uses these on a number of packages.
+---
+ package/Makefile.in    | 2 +-
+ package/pkg-generic.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 644282f..3e93145 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -391,7 +391,7 @@ TARGET_CONFIGURE_ARGS = \
+ 
+ CPE_PREFIX_OS = cpe:2.3:o
+ CPE_PREFIX_APP = cpe:2.3:a
+-CPE_SUFFIX = *:*:*:*:*:*:*
++CPE_SUFFIX = *:*:*:*:*:*
+ 
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ NLS_OPTS = --enable-nls
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8ff389e..1b895d0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -914,7 +914,8 @@ endif
+ $(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
+ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+ $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
+-$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
++$(2)_CPE_ID_VERSION_MINOR ?= *
++$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR)
+ 
+ ifneq ($(filter linux linux-headers,$(1)),)
+ $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
 -- 
-2.20.1
+1.9.1
