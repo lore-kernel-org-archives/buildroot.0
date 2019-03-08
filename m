@@ -1,88 +1,75 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Fri,  8 Mar 2019 11:37:13 +0100 (CET)
-Subject: [Buildroot] [PATCH v3 0/4] *** Add Intel QuickSync support to
- ffmpeg ***
-Message-ID: <ea-mime-5c8245d9-2d55-45d16710@www-6.netcourrier.com>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Fri, 8 Mar 2019 13:56:38 +0100
+Subject: [Buildroot] issue to build elfutils due to libintl
+Message-ID: <20190308125638.GA30079@arthur-bzh>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> De : Louis-Paul Cordier <lpdev@cordier.org>
-> ? : buildroot at buildroot.org
-> Sujet : [PATCH v3 0/4] *** Add Intel QuickSync support to ffmpeg ***
-> Date : 05/02/2019 19:19:42 Europe/Paris
-> Copie ? : Louis-Paul Cordier <lpdev@cordier.org>;
-> Bernd Kuhls <bernd.kuhls@t-online.de>;
-> Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
->
-> In addition of the existing VAAPI for hardware encoding, Intel provides
-> the libmfx API embeded in its Intel MediaSDK. Intel MediaSDK improves
-> encoding quality, is faster, and makes use of all encoding capabilities
-> on Intel platforms.
->
-> MFX test procedure (h264):
->
-> 1. Retrieve sample data (https://github.com/Intel-Media-SDK/samples)
-> 2. Run ./sample_multi_transcode -i::h264 test_stream.264 -o::h264 out.264.
-> 3. Test should pass.
->
-> FFMpeg QuickSync test procedure (h264):
->
-> 1. Download test video: https://peach.blender.org/trailer-page/
-> 2. Run ffmpeg -y -hwaccel qsv -qsv_device /dev/dri/renderD128 -c:v
-> h264_qsv -i /trailer_1080p.mov -c:v h264_qsv -framerate 60 -acodec
-> copy out.mp4
->
-> Louis-Paul Cordier (4):
-> package/intel-mediadriver: new package
-> package/intel-mediasdk: new package
-> package/ffmpeg: bump to version 4.1
-> package/ffmpeg: enable Intel QuickSync support.
->
-> Config.in.legacy | 6 ++
-> DEVELOPERS | 2 +
-> package/Config.in | 2 +
-> package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 ------
-> ...cenc-Fix-building-with-libfdk-aac-v2.patch | 100 ------------------
-> ...stently-use-a-proper-version-check-m.patch | 99 -----------------
-> ...dk-aac-Don-t-use-defined-in-a-define.patch | 72 -------------
-> package/ffmpeg/Config.in | 6 --
-> package/ffmpeg/ffmpeg.hash | 2 +-
-> package/ffmpeg/ffmpeg.mk | 15 +--
-> package/intel-mediadriver/Config.in | 21 ++++
-> .../intel-mediadriver/intel-mediadriver.hash | 3 +
-> .../intel-mediadriver/intel-mediadriver.mk | 30 ++++++
-> package/intel-mediasdk/Config.in | 15 +++
-> package/intel-mediasdk/intel-mediasdk.hash | 3 +
-> package/intel-mediasdk/intel-mediasdk.mk | 17 +++
-> 16 files changed, 108 insertions(+), 319 deletions(-)
-> delete mode 100644 package/ffmpeg/0001-ffmpeg-pthreads.patch
-> delete mode 100644 package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
-> delete mode 100644 package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
-> delete mode 100644 package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
-> create mode 100644 package/intel-mediadriver/Config.in
-> create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
-> create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
-> create mode 100644 package/intel-mediasdk/Config.in
-> create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
-> create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
->
-> -- 
-> 2.20.1
->
+Hi,
 
-Hi all,
+I have one issue to build the package elfutils. Everything was working fine
+and after updating my ubuntu from 16.04 to 18.04 I am not able to build
+anymore the package with success.
 
+My defconfig is for arm architecture with uclibc.
 
+The error :
 
-I rebump conerning my last patches, that take into consideration all the suggestions of the community.
+>>> elfutils 0.174 Building
+PATH="/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/bin:/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/host/sbin:/home/arthur/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/gnat/bin:/home/g179168/middleware/tools/bin/:/usr/local/go/bin"  /usr/bin/make -j9  -C /home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/
+make[1]: Entering directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
+/usr/bin/make --no-print-directory all-recursive
+Making all in config
+make[3]: Nothing to be done for 'all'.
+Making all in m4
+make[3]: Nothing to be done for 'all'.
+Making all in lib
+  CC       xstrdup.o
+  CC       xstrndup.o
+  CC       xmalloc.o
+  CC       next_prime.o
+  CC       crc32.o
+  CC       crc32_file.o
+  CC       color.o
+  CC       printversion.o
+xmalloc.c:33:10: fatal error: libintl.h: No such file or directory
+ #include <libintl.h>
+          ^~~~~~~~~~~
+compilation terminated.
+Makefile:418: recipe for target 'xmalloc.o' failed
+make[3]: *** [xmalloc.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+printversion.c:33:10: fatal error: libintl.h: No such file or directory
+ #include <libintl.h>
+          ^~~~~~~~~~~
+compilation terminated.
+Makefile:418: recipe for target 'printversion.o' failed
+make[3]: *** [printversion.o] Error 1
+color.c:35:10: fatal error: libintl.h: No such file or directory
+ #include <libintl.h>
+          ^~~~~~~~~~~
+compilation terminated.
+Makefile:418: recipe for target 'color.o' failed
+make[3]: *** [color.o] Error 1
+Makefile:487: recipe for target 'all-recursive' failed
+make[2]: *** [all-recursive] Error 1
+Makefile:403: recipe for target 'all' failed
+make[1]: *** [all] Error 2
+make[1]: Leaving directory '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174'
+package/pkg-generic.mk:238: recipe for target '/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built' failed
+make: *** [/home/arthur/work/buildroot/master_buildroot_integration_dreem/output/build/elfutils-0.174/.stamp_built] Error 2
 
+The issue was present with 2017.02.2 version of buildroot and I am always able to reproduce the issue with 2019.02 release.
+Is it an error in my defconfig ? is it a real issue ?
 
-Thanks for your time!
+In my opinion the issue is due to the update of my gcc version during the ubuntu upgrade. I am able to
+compile elfutils on my archlinux with gcc 5.4.0. I have the issue with gcc 7.3.0 on my ubuntu.
 
-Louis-Paul CORDIER
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190308/8059cda7/attachment.html>
+This patch was not supposed to fixed this kind of issues ?
+http://lists.busybox.net/pipermail/buildroot/2017-July/196484.html
+
+Thanks,
+Arthur.
