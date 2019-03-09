@@ -1,72 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  9 Mar 2019 12:31:27 +0100
-Subject: [Buildroot] [PATCH 2/2] package/ncmpc: fix build with gcc 5
-In-Reply-To: <20190309113127.24045-1-fontaine.fabrice@gmail.com>
-References: <20190309113127.24045-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190309113127.24045-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 Mar 2019 14:24:12 +0100
+Subject: [Buildroot] [PATCH v3] zbar: bump version to 0.22
+In-Reply-To: <20190308221947.18548-1-ps.report@gmx.net>
+References: <20190308221947.18548-1-ps.report@gmx.net>
+Message-ID: <20190309142412.19af2ef5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/655eb4905c6e308d34293658acee4fc4e1fe0bbc
+Hello Peter,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...TagListPage.cxx-fix-build-with-gcc-5.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
+On Fri,  8 Mar 2019 23:19:47 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-diff --git a/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch b/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
-new file mode 100644
-index 0000000000..003937f1d9
---- /dev/null
-+++ b/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
-@@ -0,0 +1,42 @@
-+From fc6120f20e3482525ffa70230b8c3d72d979178f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 9 Mar 2019 12:26:12 +0100
-+Subject: [PATCH] src/TagListPage.cxx: fix build with gcc 5
-+
-+Build with gcc 5 fails on:
-+
-+FAILED: ncmpc at exe/src_TagListPage.cxx.o
-+/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/mips-linux-gnu-g++ -Incmpc at exe -I. -I.. -I../src -I../ -I/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/usr/bin/../mips64el-buildroot-linux-gnu/sysroot/usr/include -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -O3 -DBOOST_NO_IOSTREAM -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED -Wall -Wextra -Wno-deprecated-declarations -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wmissing-declarations -Wmissing-noreturn -Wmissing-format-attribute -Wredundant-decls -Wundef -Wno-non-virtual-dtor -fvisibility=hidden -ffunction-sections -fdata-sections -D_GNU_SOURCE -D_DEFAULT_SOURCE -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -MD -MQ 'ncmpc at exe/src_TagListPage.cxx.o' -MF 'ncmpc at exe/src_TagListPage.cxx.o.d' -o 'ncmpc at exe/src_TagListPage.cxx.o' -c ../src/TagListPage
- .cxx
-+../src/TagListPage.cxx: In member function 'TagFilter TagListPage::MakeCursorFilter() const':
-+../src/TagListPage.cxx:41:12: error: converting to 'TagFilter {aka std::forward_list<std::pair<mpd_tag_type, std::__cxx11::basic_string<char> > >}' from initializer list would use explicit constructor 'std::forward_list<_Tp, _Alloc>::forward_list(const _Alloc&) [with _Tp = std::pair<mpd_tag_type, std::__cxx11::basic_string<char> >; _Alloc = std::allocator<std::pair<mpd_tag_type, std::__cxx11::basic_string<char> > >]'
-+    return {};
-+
-+Fix this error by returning {{}} (a list with one empty element) instead
-+of {}, see:
-+https://stackoverflow.com/questions/26947704/implicit-conversion-failure-from-initializer-list
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/655eb4905c6e308d34293658acee4fc4e1fe0bbc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/47]
-+---
-+ src/TagListPage.cxx | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/TagListPage.cxx b/src/TagListPage.cxx
-+index e197bae..c7379b4 100644
-+--- a/src/TagListPage.cxx
-++++ b/src/TagListPage.cxx
-+@@ -38,7 +38,7 @@ TagListPage::MakeCursorFilter() const noexcept
-+ 	unsigned i = lw.selected;
-+ 	if (parent != nullptr) {
-+ 		if (i == 0)
-+-			return {};
-++			return {{}};
-+ 
-+ 		--i;
-+ 	}
-+-- 
-+2.20.1
-+
+> - change from git download to official release and
+>   download site (drop need for autoreconf)
+> 
+> - drop dependency on kernel headers >= 3.17 (should be fixed with
+>   commit 'v4l2: make ZBar build and run on Kernels < 3.16' (see [1]),
+>   propagate removal to gst-plugins-bad
+> 
+> [1] https://git.linuxtv.org/zbar.git/commit/?id=fa5c48127ec1e3670e28540c2e6a03431ebac5b8
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+I didn't pay attention, but in fact this is still not correct.
+
+zbar selects libv4l, and libv4l has a dependency on headers >= 3.0. So
+zbar should keep a dependency on >= 3.0, and so should the
+gst-plugins-bad zbar option. Otherwise, you can enable zbar on < 3.0
+headers, but libv4l is not selectable, violating the kconfig
+correctness of the configuration.
+
+Conclusion: we need a headers >= 3.0 dependency on zbar and the
+gst-plugins-bad zbar option.
+
+Could you fix this and resend ?
+
+Thanks a lot!
+
+Thomas Petazzoni
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
