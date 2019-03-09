@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Mar 2019 21:44:13 +0100
-Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: rename tpm2-tss
- libraries in the help text
-In-Reply-To: <20190308132710.11116-1-romain.naour@smile.fr>
-References: <20190308132710.11116-1-romain.naour@smile.fr>
-Message-ID: <20190309214413.25881978@windsurf>
+Date: Sat, 9 Mar 2019 21:45:36 +0100
+Subject: [Buildroot] [git commit] package/cryptopp: don't build cryptest.exe
+Message-ID: <20190309204346.96E698E218@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Mar 2019 14:27:09 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd1ba229bea3cbb55025a69b7a1348a1a5af6ad6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since tpm2-tss version 2.0.0, tpm2 libraries have been renamed.
-> 
-> libsapi renamed to libtss2-sys
-> https://github.com/tpm2-software/tpm2-tss/commit/5f0ab55d4e46077cb8f0c53a76c5ebd15a088d26
-> 
-> libtcti-device renamed to libtss2-tcti-device
-> libtcti-socket renamed to libtss2-tcti-mssim
-> https://github.com/tpm2-software/tpm2-tss/commit/b8584accbd96e38eaea250e31ed3ea580d2bca27
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/tpm2-tss/Config.in | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Replace install target by install-lib target to avoid building and
+installing cryptest.exe
 
-Both applied to master. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cryptopp/cryptopp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index dd41b0ec47..59ced7654c 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -24,7 +24,7 @@ define HOST_CRYPTOPP_BUILD_CMDS
+ endef
+ 
+ define HOST_CRYPTOPP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
+ endef
+ 
+ $(eval $(host-generic-package))
