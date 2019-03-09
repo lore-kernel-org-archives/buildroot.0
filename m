@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Mar 2019 21:47:07 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/ncmpc: fix build with
- gcc 5"
-In-Reply-To: <20190309144242.32654-1-fontaine.fabrice@gmail.com>
-References: <20190309144242.32654-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190309214707.1ee7101e@windsurf>
+Date: Sat, 9 Mar 2019 21:47:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: fix static build
+In-Reply-To: <20190309162815.24868-1-fontaine.fabrice@gmail.com>
+References: <20190309162815.24868-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190309214714.6d46a717@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  9 Mar 2019 15:42:41 +0100
+On Sat,  9 Mar 2019 17:28:15 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This reverts commit 56c476db99b764c6a1f64a64e0295e96f8a4612f.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ebd8678a56a7dd8679fd4ec3ca1385c04866cc88
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...TagListPage.cxx-fix-build-with-gcc-5.patch | 39 -------------------
->  1 file changed, 39 deletions(-)
->  delete mode 100644 package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
+>  package/sqlcipher/sqlcipher.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Both applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
