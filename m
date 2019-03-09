@@ -1,106 +1,88 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  9 Mar 2019 09:18:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with gcc 8.1
-Message-ID: <20190309081832.10177-1-fontaine.fabrice@gmail.com>
+Date: Sat,  9 Mar 2019 12:31:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ncmpc: remove first patch
+Message-ID: <20190309113127.24045-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/df5abe6ca8b4c8935f3d5c257aef816190771200
+This patch has been rejected by upstream however the issue has been
+fixed by a different approach since version 0.31 and
+https://github.com/MusicPlayerDaemon/ncmpc/commit/029523c8a2472e45213e50c1e3eb414245dd9d57
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-32-bit-gcc-8-1-non-debug-build-work.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch
+ ...e_ptr-error-with-some-old-toolchains.patch | 54 -------------------
+ ...ild-add-atomic-dependency-for-sparc.patch} |  0
+ 2 files changed, 54 deletions(-)
+ delete mode 100644 package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
+ rename package/ncmpc/{0002-meson.build-add-atomic-dependency-for-sparc.patch => 0001-meson.build-add-atomic-dependency-for-sparc.patch} (100%)
 
-diff --git a/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch b/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch
-new file mode 100644
-index 0000000000..9c51c554cd
---- /dev/null
-+++ b/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch
-@@ -0,0 +1,79 @@
-+From e75c9dc85fdeeeda0b98d8cd8d784e0508c3ffb8 Mon Sep 17 00:00:00 2001
-+From: Wei Liu <wei.liu2@citrix.com>
-+Date: Thu, 26 Jul 2018 15:58:54 +0100
-+Subject: [PATCH] xenpmd: make 32 bit gcc 8.1 non-debug build work
-+
-+32 bit gcc 8.1 non-debug build yields:
-+
-+xenpmd.c:354:23: error: '%02x' directive output may be truncated writing between 2 and 8 bytes into a region of size 3 [-Werror=format-truncation=]
-+     snprintf(val, 3, "%02x",
-+                       ^~~~
-+xenpmd.c:354:22: note: directive argument in the range [40, 2147483778]
-+     snprintf(val, 3, "%02x",
-+                      ^~~~~~
-+xenpmd.c:354:5: note: 'snprintf' output between 3 and 9 bytes into a destination of size 3
-+     snprintf(val, 3, "%02x",
-+     ^~~~~~~~~~~~~~~~~~~~~~~~
-+              (unsigned int)(9*4 +
-+              ~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->model_number) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->serial_number) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->battery_type) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->oem_info) + 4));
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+All info->* used in calculation are 32 bytes long, and the parsing
-+code makes sure they are null-terminated, so the end result of the
-+expression won't exceed 255, which should be able to be fit into 3
-+bytes in hexadecimal format.
-+
-+Add an assertion to make gcc happy.
-+
-+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
-+Acked-by: Ian Jackson <ian.jackson@eu.citrix.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/xen-project/xen/commit/e75c9dc85fdeeeda0b98d8cd8d784e0508c3ffb8]
-+---
-+ tools/xenpmd/xenpmd.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/tools/xenpmd/xenpmd.c b/tools/xenpmd/xenpmd.c
-+index 56412a9a81c..1c801caa712 100644
-+--- a/tools/xenpmd/xenpmd.c
-++++ b/tools/xenpmd/xenpmd.c
-+@@ -40,6 +40,7 @@
-+ #include <unistd.h>
-+ #include <sys/stat.h>
-+ #include <xenstore.h>
-++#include <assert.h>
-+ 
-+ /* #define RUN_STANDALONE */
-+ #define RUN_IN_SIMULATE_MODE
-+@@ -345,18 +346,17 @@ void write_ulong_lsb_first(char *temp_val, unsigned long val)
-+ void write_battery_info_to_xenstore(struct battery_info *info)
-+ {
-+     char val[1024], string_info[256];
-++    unsigned int len;
-+ 
-+     xs_mkdir(xs, XBT_NULL, "/pm");
-+    
-+     memset(val, 0, 1024);
-+     memset(string_info, 0, 256);
-+     /* write 9 dwords (so 9*4) + length of 4 strings + 4 null terminators */
-+-    snprintf(val, 3, "%02x", 
-+-             (unsigned int)(9*4 +
-+-                            strlen(info->model_number) +
-+-                            strlen(info->serial_number) +
-+-                            strlen(info->battery_type) +
-+-                            strlen(info->oem_info) + 4));
-++    len = 9 * 4 + strlen(info->model_number) + strlen(info->serial_number) +
-++          strlen(info->battery_type) + strlen(info->oem_info) + 4;
-++    assert(len < 255);
-++    snprintf(val, 3, "%02x", len);
-+     write_ulong_lsb_first(val+2, info->present);
-+     write_ulong_lsb_first(val+10, info->design_capacity);
-+     write_ulong_lsb_first(val+18, info->last_full_capacity);
+diff --git a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
+deleted file mode 100644
+index 47905d71d7..0000000000
+--- a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 63c0c47106007f7b2a791e3e4b062a5424d3dfe8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 12 Aug 2018 09:02:50 +0200
+-Subject: [PATCH] Fix unique_ptr error with some old toolchains
+-
+-With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
+-5.5 ...), the following error is raised by the compiler:
+-
+-../src/screen.cxx:60:29:   required from here
+-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
+-error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
+-
+-[...]
+-
+-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
+-note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
+-       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
+-                          ^
+-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
+-note:   no known conversion for argument 2 from 'Page*' to 'const
+-std::unique_ptr<Page>&'
+-
+-This is due to the fact that init function of screen_functions
+-structure returns Page* but PageMap wants a std::unique_ptr<Page>
+-
+-To fix this, cast raw pointer into a unique_ptr with an explicit cast
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/screen.cxx | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/screen.cxx b/src/screen.cxx
+-index dd42b25..56afd11 100644
+---- a/src/screen.cxx
+-+++ b/src/screen.cxx
+-@@ -56,8 +56,9 @@ ScreenManager::MakePage(const struct screen_functions &sf)
+- 		return i;
+- 
+- 	auto j = pages.emplace(&sf,
+--			       sf.init(*this, main_window.w,
+--				       main_window.size));
+-+			       std::unique_ptr<Page>(sf.init(*this,
+-+							     main_window.w,
+-+							     main_window.size)));
+- 	assert(j.second);
+- 	return j.first;
+- }
+--- 
+-2.14.1
+-
+diff --git a/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
+similarity index 100%
+rename from package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
+rename to package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
 -- 
 2.20.1
