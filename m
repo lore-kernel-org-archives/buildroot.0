@@ -1,31 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Mar 2019 14:52:07 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ncmpc: remove first patch
-In-Reply-To: <20190309113127.24045-1-fontaine.fabrice@gmail.com>
+Date: Sat, 9 Mar 2019 14:53:32 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ncmpc: fix build with gcc 5
+In-Reply-To: <20190309113127.24045-2-fontaine.fabrice@gmail.com>
 References: <20190309113127.24045-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190309145207.16f806d3@windsurf>
+ <20190309113127.24045-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190309145332.50877f3b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  9 Mar 2019 12:31:26 +0100
+Hello Fabrice,
+
+On Sat,  9 Mar 2019 12:31:27 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This patch has been rejected by upstream however the issue has been
-> fixed by a different approach since version 0.31 and
-> https://github.com/MusicPlayerDaemon/ncmpc/commit/029523c8a2472e45213e50c1e3eb414245dd9d57
+> Fixes:
+>  - http://autobuild.buildroot.org/results/655eb4905c6e308d34293658acee4fc4e1fe0bbc
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...e_ptr-error-with-some-old-toolchains.patch | 54 -------------------
->  ...ild-add-atomic-dependency-for-sparc.patch} |  0
->  2 files changed, 54 deletions(-)
->  delete mode 100644 package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
->  rename package/ncmpc/{0002-meson.build-add-atomic-dependency-for-sparc.patch => 0001-meson.build-add-atomic-dependency-for-sparc.patch} (100%)
+>  ...TagListPage.cxx-fix-build-with-gcc-5.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
 
-Applied to master, thanks.
+This patch didn't apply cleanly:
+
+$ git pwam 1053833
+Applying patch #1053833 using "git am -s"
+Description: [2/2] package/ncmpc: fix build with gcc 5
+Applying: package/ncmpc: fix build with gcc 5
+.git/rebase-apply/patch:46: space before tab in indent.
+ 	unsigned i = lw.selected;
+.git/rebase-apply/patch:47: space before tab in indent.
+ 	if (parent != nullptr) {
+.git/rebase-apply/patch:48: space before tab in indent.
+ 		if (i == 0)
+.git/rebase-apply/patch:51: trailing whitespace.
+ 
+.git/rebase-apply/patch:52: space before tab in indent.
+ 		--i;
+error: corrupt patch at line 56
+Patch failed at 0001 package/ncmpc: fix build with gcc 5
+hint: Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+'git am' failed with exit status 128
+
+I fixed it up manually and applied. I'm not entirely sure that the fix
+is the best/correct one as I'm not proficient enough in C++, but we'll
+see what upstream says about the pull request later on.
+
+Thanks,
 
 Thomas
 -- 
