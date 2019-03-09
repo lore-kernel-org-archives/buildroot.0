@@ -1,118 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 9 Mar 2019 22:08:18 +0100
-Subject: [Buildroot] issue to build elfutils due to libintl
-In-Reply-To: <20190309163432.GA25854@arthur-bzh>
-References: <20190308125638.GA30079@arthur-bzh>
- <20190308234947.274e5d36@gmx.net>
- <20190309163432.GA25854@arthur-bzh>
-Message-ID: <20190309220818.7d373b55@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  9 Mar 2019 22:12:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mongodb: disable on powerpc64
+Message-ID: <20190309211236.15682-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arthur,
+As stated in SConstruct, the altivec runtime test breaks
+cross-compilation: "This checks for an altivec optimization we use in
+full text search. Different versions of gcc appear to put output bytes
+in different parts of the output vector produced by vec_vbpermq.  This
+configure check looks to see which format the compiler produces. NOTE:
+This breaks cross compiles, as it relies on checking runtime
+functionality for the environment we're in."
 
-On Sat, 9 Mar 2019 17:34:32 +0100, Arthur LAMBERT <lambertarthur22@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/162198617979a83b66f70ed6013251942ed04d67
 
-> > 
-> > Did your run an complete build (make clean; make), see [1]?
-> >   
-> 
-> Good suggestion. I did not try. I rerun the test with full clean and I have always the issue.
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mongodb/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Mhhh, your defconfig builds fine here (on openSUSE Tumbleweed), maybe
-try to build with 'make V=1' to gain more info (which compiler is used, which flags etc.)...
-
-Here:
-
-	$ find . -name libintl.h
-./build/uclibc-1.0.31/include/libintl.h
-./build/uclibc-1.0.31/include/config/uclibc/has/libintl.h
-./build/gettext-0.19.8.1/gettext-runtime/intl/libintl.h
-./host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libintl.h
-
-So the missing libintl.h from your error message is available here...
-
-Regards,
-Peter
-
-> 
-> My defconfig :
-> 
-> BR2_arm=y
-> BR2_cortex_a7=y
-> BR2_ARM_FPU_NEON_VFPV4=y
-> BR2_KERNEL_HEADERS_4_9=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_PTHREAD_DEBUG=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_TARGET_GENERIC_HOSTNAME="femto"
-> BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> BR2_ENABLE_LOCALE_WHITELIST="en_US"
-> BR2_TARGET_TZ_INFO=y
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="XXX"
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="XXX"
-> BR2_LINUX_KERNEL_DEFCONFIG="XXX"
-> BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="XXX"
-> BR2_PACKAGE_LINUX_TOOLS_PERF=y
-> BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-> BR2_PACKAGE_ALSA_UTILS=y
-> BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-> BR2_PACKAGE_ALSA_UTILS_APLAY=y
-> BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-> BR2_PACKAGE_BZIP2=y
-> BR2_PACKAGE_GETTEXT=y
-> BR2_PACKAGE_DOSFSTOOLS=y
-> BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-> BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-> BR2_PACKAGE_E2FSPROGS=y
-> BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-> BR2_PACKAGE_MEMTOOL=y
-> BR2_PACKAGE_PYTHON3=y
-> BR2_PACKAGE_LIBSNDFILE=y
-> BR2_PACKAGE_LIBVORBIS=y
-> BR2_PACKAGE_LIBARCHIVE=y
-> BR2_PACKAGE_OPENSSL=y
-> BR2_PACKAGE_LIBCONFIG=y
-> BR2_PACKAGE_DTC=y
-> BR2_PACKAGE_DTC_PROGRAMS=y
-> BR2_PACKAGE_LIBCURL=y
-> BR2_PACKAGE_PAHO_MQTT_C=y
-> BR2_PACKAGE_ELFUTILS=y
-> BR2_PACKAGE_LIBUNWIND=y
-> BR2_PACKAGE_OPENBLAS=y
-> BR2_PACKAGE_PROTOBUF=y
-> BR2_PACKAGE_PROTOBUF_C=y
-> BR2_PACKAGE_BLUEZ5_UTILS=y
-> BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-> BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED=y
-> BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
-> BR2_PACKAGE_DROPBEAR=y
-> BR2_PACKAGE_GESFTPSERVER=y
-> BR2_PACKAGE_IPTABLES=y
-> BR2_PACKAGE_IPUTILS=y
-> BR2_PACKAGE_IW=y
-> BR2_PACKAGE_TCPDUMP=y
-> BR2_PACKAGE_WIRELESS_TOOLS=y
-> BR2_PACKAGE_WPA_SUPPLICANT=y
-> BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-> BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
-> BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
-> BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
-> BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
-> BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-> BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-> BR2_PACKAGE_HTOP=y
-> BR2_TARGET_ROOTFS_TAR_GZIP=y
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BOARDNAME="xxxxx"
-> BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="xxxxx"
-> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xxxxx"
-> BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+index 4696eb7660..7df502add6 100644
+--- a/package/mongodb/Config.in
++++ b/package/mongodb/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+ 	bool
+ 	# ARM needs LDREX/STREX, so ARMv6+
+ 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+-	default y if BR2_aarch64 || BR2_powerpc64 || BR2_x86_64
++	default y if BR2_aarch64 || BR2_x86_64
+ 
+ config BR2_PACKAGE_MONGODB
+ 	bool "mongodb"
+-- 
+2.20.1
