@@ -1,36 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  9 Mar 2019 23:29:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5enginio: needs ssl
-Message-ID: <20190309222953.7785-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 Mar 2019 23:37:42 +0100
+Subject: [Buildroot] [PATCH v3 0/2] Add gettext-tiny package
+In-Reply-To: <20190212215520.7422-1-vadim4j@gmail.com>
+References: <20190212215520.7422-1-vadim4j@gmail.com>
+Message-ID: <20190309233742.3095c546@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove select on BR2_PACKAGE_QT5BASE and BR2_PACKAGE_OPENSSL to avoid a
-circular dependency
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
+On Tue, 12 Feb 2019 23:55:18 +0200
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/qt5/qt5enginio/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Add lightweight alternative for the GNU gettext package - gettext-tiny.
+> The sources are used from sabotage-linux project. Some files are used
+> from the original gettext gnu like po/*, gettextize and some m4 files.
+> 
+> The original gettext package is renamed to gettext-gnu because now gettext is
+> a virtual package and gettext-gnu and gettext-tiny became as gettext providers.
+> 
+> The main purpose of gettext-tiny is to be used only for the host if NLS
+> is not enabled.
 
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index 102058e7c5..cce0f2a1cb 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_QT5ENGINIO
- 	bool "qt5enginio"
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_QT5BASE
-+	depends on BR2_PACKAGE_QT5BASE_OPENSSL
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
- 	help
+I finally took some time to play around with this. The first thing is
+that I didn't like a lot the download of lots of gettext-gnu files from
+gettext-tiny. I've played a bit with this, and ended up trying to use
+the gettext-gnu tarball instead. See:
+
+  https://github.com/tpetazzoni/buildroot/tree/gettext-tiny
+  https://github.com/tpetazzoni/buildroot/commit/22936b22944f49646c8732fb2742a526d0a556e2#diff-e5eacf305a325109262748204673e7b5R19
+
+for the details. It also avoids the need to patch to get config.rpath,
+because config.rpath is available in the gettext-gnu tarball.
+
+I also reworked how the virtual package was handled, but I then
+understood that I had mistaken that only the host package was really a
+virtual package with two implementation: the target gettext package has
+only one implementation: gettext-gnu.
+
+However, the ecryptfs-utils case has shown that it is possible for a
+package to need a gettext implementation even if BR2_SYSTEM_ENABLE_NLS
+is disabled. So from there, we have two solutions:
+
+ - Patch ecryptfs-utils itself so that it doesn't use gettext when
+   --disable-nls is used. Perhaps this is the right thing to do. In
+   this case, we could indeed mandate that the target gettext package
+   is only available when BR2_SYSTEM_ENABLE_NLS=y, and therefore indeed
+   have the gettext virtual package always point to gettext-gnu.
+
+ - Alternatively, support gettext-tiny as a target package, which would
+   provide both libintl and the gettext program (the latter to please
+   ecryptfs-utils).
+
+I was initially worried that some packages that don't understand
+--disable-nls might try to link with libintl, and that we would
+therefore need a target gettext package even if BR2_SYSTEM_ENABLE_NLS.
+However, libintl is only a replacement library for the gettext
+functions that don't exist in uclibc/musl, but do exist in glibc.
+Because in glibc they are part of the C library itself, I don't think
+any package is ever going to link explicitly with libintl. It's only
+Buildroot that ensures -lintl is passed to the LIBS/LDFLAGS when
+needed. So I believe we're good.
+
+So, perhaps the good solution is option (1) above ?
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
