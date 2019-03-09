@@ -1,53 +1,118 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 9 Mar 2019 21:55:03 +0100
-Subject: [Buildroot] [PATCH 1/1] Changed download links for libxml2 and
- libxslt
-In-Reply-To: <CAJSYY8cDvs-X_pJBvU7o1hDojbXsTerbNqyV3aCLtEg9-xNtJQ@mail.gmail.com>
-References: <CAJSYY8e8_uGy5ELd7JpLpVitw-rG3WogxhxhUQxRzVNndfnECw@mail.gmail.com>
- <20190308234112.2128603a@gmx.net>
- <CAJSYY8fUi_chaMOAYPe3whv8c7enG0UxuDFxnaFaR4WFeU31xw@mail.gmail.com>
- <CAJSYY8cDvs-X_pJBvU7o1hDojbXsTerbNqyV3aCLtEg9-xNtJQ@mail.gmail.com>
-Message-ID: <20190309215503.5ae94ccf@gmx.net>
+Date: Sat, 9 Mar 2019 22:08:18 +0100
+Subject: [Buildroot] issue to build elfutils due to libintl
+In-Reply-To: <20190309163432.GA25854@arthur-bzh>
+References: <20190308125638.GA30079@arthur-bzh>
+ <20190308234947.274e5d36@gmx.net>
+ <20190309163432.GA25854@arthur-bzh>
+Message-ID: <20190309220818.7d373b55@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nityananda,
+Hello Arthur,
 
-thanks for the rework, patch looks good, but please keep buildroot at buildroot.org in CC...
+On Sat, 9 Mar 2019 17:34:32 +0100, Arthur LAMBERT <lambertarthur22@gmail.com> wrote:
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> > 
+> > Did your run an complete build (make clean; make), see [1]?
+> >   
+> 
+> Good suggestion. I did not try. I rerun the test with full clean and I have always the issue.
+> 
+
+Mhhh, your defconfig builds fine here (on openSUSE Tumbleweed), maybe
+try to build with 'make V=1' to gain more info (which compiler is used, which flags etc.)...
+
+Here:
+
+	$ find . -name libintl.h
+./build/uclibc-1.0.31/include/libintl.h
+./build/uclibc-1.0.31/include/config/uclibc/has/libintl.h
+./build/gettext-0.19.8.1/gettext-runtime/intl/libintl.h
+./host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libintl.h
+
+So the missing libintl.h from your error message is available here...
 
 Regards,
 Peter
 
-On Sat, 9 Mar 2019 18:59:16 +0530, Nityananda Padhan <ntneitin@gmail.com> wrote:
-
-> From dc92f5d7088a9c1c5be0151f2736df900db35e70 Mon Sep 17 00:00:00 2001
-> From: Nityananda Padhan <ntneitin@gmail.com>
-> Date: Sat, 9 Mar 2019 18:50:05 +0530
-> Subject: [PATCH 2/2] package/libxslt: change download site to http
 > 
-> Changes to be committed:
-> modified:   package/libxslt/libxslt.mk
+> My defconfig :
 > 
-> Signed-off-by: Nityananda Padhan <ntneitin@gmail.com>
-> ---
->  package/libxslt/libxslt.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-> index 5b1c0ae268..4632301b16 100644
-> --- a/package/libxslt/libxslt.mk
-> +++ b/package/libxslt/libxslt.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
-> 
->  LIBXSLT_VERSION = 1.1.32
-> -LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
-> +LIBXSLT_SITE = http://xmlsoft.org/sources
->  LIBXSLT_INSTALL_STAGING = YES
->  LIBXSLT_LICENSE = MIT
->  LIBXSLT_LICENSE_FILES = COPYING
+> BR2_arm=y
+> BR2_cortex_a7=y
+> BR2_ARM_FPU_NEON_VFPV4=y
+> BR2_KERNEL_HEADERS_4_9=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_PTHREAD_DEBUG=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_TARGET_GENERIC_HOSTNAME="femto"
+> BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> BR2_ENABLE_LOCALE_WHITELIST="en_US"
+> BR2_TARGET_TZ_INFO=y
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="XXX"
+> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="XXX"
+> BR2_LINUX_KERNEL_DEFCONFIG="XXX"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="XXX"
+> BR2_PACKAGE_LINUX_TOOLS_PERF=y
+> BR2_PACKAGE_BUSYBOX_WATCHDOG=y
+> BR2_PACKAGE_ALSA_UTILS=y
+> BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+> BR2_PACKAGE_ALSA_UTILS_APLAY=y
+> BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+> BR2_PACKAGE_BZIP2=y
+> BR2_PACKAGE_GETTEXT=y
+> BR2_PACKAGE_DOSFSTOOLS=y
+> BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
+> BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
+> BR2_PACKAGE_E2FSPROGS=y
+> BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+> BR2_PACKAGE_MEMTOOL=y
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_LIBSNDFILE=y
+> BR2_PACKAGE_LIBVORBIS=y
+> BR2_PACKAGE_LIBARCHIVE=y
+> BR2_PACKAGE_OPENSSL=y
+> BR2_PACKAGE_LIBCONFIG=y
+> BR2_PACKAGE_DTC=y
+> BR2_PACKAGE_DTC_PROGRAMS=y
+> BR2_PACKAGE_LIBCURL=y
+> BR2_PACKAGE_PAHO_MQTT_C=y
+> BR2_PACKAGE_ELFUTILS=y
+> BR2_PACKAGE_LIBUNWIND=y
+> BR2_PACKAGE_OPENBLAS=y
+> BR2_PACKAGE_PROTOBUF=y
+> BR2_PACKAGE_PROTOBUF_C=y
+> BR2_PACKAGE_BLUEZ5_UTILS=y
+> BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
+> BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED=y
+> BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
+> BR2_PACKAGE_DROPBEAR=y
+> BR2_PACKAGE_GESFTPSERVER=y
+> BR2_PACKAGE_IPTABLES=y
+> BR2_PACKAGE_IPUTILS=y
+> BR2_PACKAGE_IW=y
+> BR2_PACKAGE_TCPDUMP=y
+> BR2_PACKAGE_WIRELESS_TOOLS=y
+> BR2_PACKAGE_WPA_SUPPLICANT=y
+> BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+> BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+> BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
+> BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
+> BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+> BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+> BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+> BR2_PACKAGE_HTOP=y
+> BR2_TARGET_ROOTFS_TAR_GZIP=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BOARDNAME="xxxxx"
+> BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="xxxxx"
+> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xxxxx"
+> BR2_TARGET_UBOOT_FORMAT_IMX=y
