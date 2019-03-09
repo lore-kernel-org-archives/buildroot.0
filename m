@@ -1,60 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Mar 2019 21:35:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable locale
- with uclibc
-In-Reply-To: <20190309145125.19822-1-fontaine.fabrice@gmail.com>
-References: <20190309145125.19822-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190309213554.0bdbab0e@windsurf>
+Date: Sat, 9 Mar 2019 15:36:22 +0100
+Subject: [Buildroot] [git commit] package/tpm2-abrmd: rename libsapi to
+ libtss2-sys in the help text
+Message-ID: <20190309203433.487228B917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Waldemar,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f297cc033c4a9a9d9f4b9b7b4872a73ab2b684e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-What do you think about the below issue ? As Fabrice said, it
-apparently exists since 2014, perhaps this is something to fix in
-uClibc ?
+libsapi was renamed to libtss2-sys in tpm2-tss library:
+https://github.com/tpm2-software/tpm2-tss/commit/5f0ab55d4e46077cb8f0c53a76c5ebd15a088d26
 
-Thanks,
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tpm2-abrmd/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
-
-On Sat,  9 Mar 2019 15:51:25 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/f7be30ffa28b7f367fb5343a7d69dc8bc7c3a170
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/imagemagick/imagemagick.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index b5d0d56284..81e49eb62c 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
-> @@ -40,6 +40,14 @@ IMAGEMAGICK_CONF_OPTS = \
->  
->  IMAGEMAGICK_DEPENDENCIES = host-pkgconf
->  
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +# Like postgreSQL, imagemagick does not build against uClibc with
-> +# locales enabled, due to an uClibc bug, see
-> +# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
-> +# so overwrite automatic detection and disable locale support
-> +IMAGEMAGICK_CONF_ENV += ac_cv_func_newlocale=no
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
->  IMAGEMAGICK_CONF_OPTS += --with-fontconfig
->  IMAGEMAGICK_DEPENDENCIES += fontconfig
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
+index d18f736182..db0ea66112 100644
+--- a/package/tpm2-abrmd/Config.in
++++ b/package/tpm2-abrmd/Config.in
+@@ -16,8 +16,8 @@ config BR2_PACKAGE_TPM2_ABRMD
+ 
+ 	  The package also provides a client library for interacting
+ 	  with the daemon via TPM Command Transmission Interface (TCTI).
+-	  It is intended for use with the SAPI library (libsapi) like
+-	  any other TCTI.
++	  It is intended for use with the SAPI library (libtss2-sys)
++	  like any other TCTI.
+ 
+ 	  https://github.com/tpm2-software/tpm2-abrmd
+ 
