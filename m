@@ -1,88 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Mar 2019 14:49:20 +0100
-Subject: [Buildroot] [git commit] package/ncmpc: remove first patch
-Message-ID: <20190309134906.A59A3860B6@busybox.osuosl.org>
+Date: Sat, 9 Mar 2019 14:51:46 +0100
+Subject: [Buildroot] [git commit] package/ncmpc: fix build with gcc 5
+Message-ID: <20190309134906.AB95E8133E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dbfe50f4f0943fef53abc9581152f95d3318f95
+commit: https://git.buildroot.net/buildroot/commit/?id=56c476db99b764c6a1f64a64e0295e96f8a4612f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch has been rejected by upstream however the issue has been
-fixed by a different approach since version 0.31 and
-https://github.com/MusicPlayerDaemon/ncmpc/commit/029523c8a2472e45213e50c1e3eb414245dd9d57
+Fixes:
+ - http://autobuild.buildroot.org/results/655eb4905c6e308d34293658acee4fc4e1fe0bbc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...unique_ptr-error-with-some-old-toolchains.patch | 54 ----------------------
- ...on.build-add-atomic-dependency-for-sparc.patch} |  0
- 2 files changed, 54 deletions(-)
+ ...-src-TagListPage.cxx-fix-build-with-gcc-5.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
-deleted file mode 100644
-index 47905d71d7..0000000000
---- a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 63c0c47106007f7b2a791e3e4b062a5424d3dfe8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 Aug 2018 09:02:50 +0200
--Subject: [PATCH] Fix unique_ptr error with some old toolchains
--
--With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
--5.5 ...), the following error is raised by the compiler:
--
--../src/screen.cxx:60:29:   required from here
--/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
--error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
--
--[...]
--
--/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
--note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
--       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
--                          ^
--/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
--note:   no known conversion for argument 2 from 'Page*' to 'const
--std::unique_ptr<Page>&'
--
--This is due to the fact that init function of screen_functions
--structure returns Page* but PageMap wants a std::unique_ptr<Page>
--
--To fix this, cast raw pointer into a unique_ptr with an explicit cast
--
--Fixes:
-- - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/screen.cxx | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/screen.cxx b/src/screen.cxx
--index dd42b25..56afd11 100644
----- a/src/screen.cxx
--+++ b/src/screen.cxx
--@@ -56,8 +56,9 @@ ScreenManager::MakePage(const struct screen_functions &sf)
-- 		return i;
-- 
-- 	auto j = pages.emplace(&sf,
---			       sf.init(*this, main_window.w,
---				       main_window.size));
--+			       std::unique_ptr<Page>(sf.init(*this,
--+							     main_window.w,
--+							     main_window.size)));
-- 	assert(j.second);
-- 	return j.first;
-- }
---- 
--2.14.1
--
-diff --git a/package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
-similarity index 100%
-rename from package/ncmpc/0002-meson.build-add-atomic-dependency-for-sparc.patch
-rename to package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
+diff --git a/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch b/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
+new file mode 100644
+index 0000000000..fc166a67f4
+--- /dev/null
++++ b/package/ncmpc/0002-src-TagListPage.cxx-fix-build-with-gcc-5.patch
+@@ -0,0 +1,39 @@
++From fc6120f20e3482525ffa70230b8c3d72d979178f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 9 Mar 2019 12:26:12 +0100
++Subject: [PATCH] src/TagListPage.cxx: fix build with gcc 5
++
++Build with gcc 5 fails on:
++
++FAILED: ncmpc at exe/src_TagListPage.cxx.o
++/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/mips-linux-gnu-g++ -Incmpc at exe -I. -I.. -I../src -I../ -I/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/usr/bin/../mips64el-buildroot-linux-gnu/sysroot/usr/include -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -O3 -DBOOST_NO_IOSTREAM -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED -Wall -Wextra -Wno-deprecated-declarations -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wmissing-declarations -Wmissing-noreturn -Wmissing-format-attribute -Wredundant-decls -Wundef -Wno-non-virtual-dtor -fvisibility=hidden -ffunction-sections -fdata-sections -D_GNU_SOURCE -D_DEFAULT_SOURCE -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -MD -MQ 'ncmpc at exe/src_TagListPage.cxx.o' -MF 'ncmpc at exe/src_TagListPage.cxx.o.d' -o 'ncmpc at exe/src_TagListPage.cxx.o' -c ../src/TagListPage
+ .cxx
++../src/TagListPage.cxx: In member function 'TagFilter TagListPage::MakeCursorFilter() const':
++../src/TagListPage.cxx:41:12: error: converting to 'TagFilter {aka std::forward_list<std::pair<mpd_tag_type, std::__cxx11::basic_string<char> > >}' from initializer list would use explicit constructor 'std::forward_list<_Tp, _Alloc>::forward_list(const _Alloc&) [with _Tp = std::pair<mpd_tag_type, std::__cxx11::basic_string<char> >; _Alloc = std::allocator<std::pair<mpd_tag_type, std::__cxx11::basic_string<char> > >]'
++    return {};
++
++Fix this error by returning {{}} (a list with one empty element) instead
++of {}, see:
++https://stackoverflow.com/questions/26947704/implicit-conversion-failure-from-initializer-list
++
++Fixes:
++ - http://autobuild.buildroot.org/results/655eb4905c6e308d34293658acee4fc4e1fe0bbc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/47]
++---
++ src/TagListPage.cxx | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/TagListPage.cxx b/src/TagListPage.cxx
++index e197bae..c7379b4 100644
++--- a/src/TagListPage.cxx
+++++ b/src/TagListPage.cxx
++@@ -38,7 +38,7 @@ TagListPage::MakeCursorFilter() const noexcept
++ 	unsigned i = lw.selected;
++ 	if (parent != nullptr) {
++ 		if (i == 0)
++-			return {};
+++			return {{}};
++ 
++ 		--i;
++ 	}
