@@ -1,96 +1,63 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Sat, 9 Mar 2019 17:34:32 +0100
-Subject: [Buildroot] issue to build elfutils due to libintl
-In-Reply-To: <20190308234947.274e5d36@gmx.net>
-References: <20190308125638.GA30079@arthur-bzh>
- <20190308234947.274e5d36@gmx.net>
-Message-ID: <20190309163432.GA25854@arthur-bzh>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat,  9 Mar 2019 20:28:14 +0200
+Subject: [Buildroot] [PATCH] package/libpcap: disable dbus to break circular
+ dependency
+Message-ID: <87d1255df9dbfe03c8503a1fdb74bb2385675351.1552156094.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Did your run an complete build (make clean; make), see [1]?
-> 
+The optional dbus dependency of libpcap creates a circular dependency
+chain:
 
-Good suggestion. I did not try. I rerun the test with full clean and I have always the issue.
+$ make libpcap-show-recursive-depends
 
+Recursion detected for  : systemd
+which is a dependency of: dbus
+which is a dependency of: libpcap
+which is a dependency of: iptables
+which is a dependency of: systemd
+make: *** [package/libpcap/libpcap.mk:55: libpcap-show-recursive-depends] Error 1
 
-My defconfig :
+Of all these dependencies the one of libpcap on dbus seems to be less
+useful. Drop it.
 
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_KERNEL_HEADERS_4_9=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_HOSTNAME="femto"
-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-BR2_ENABLE_LOCALE_WHITELIST="en_US"
-BR2_TARGET_TZ_INFO=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="XXX"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="XXX"
-BR2_LINUX_KERNEL_DEFCONFIG="XXX"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="XXX"
-BR2_PACKAGE_LINUX_TOOLS_PERF=y
-BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-BR2_PACKAGE_ALSA_UTILS=y
-BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-BR2_PACKAGE_ALSA_UTILS_APLAY=y
-BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-BR2_PACKAGE_BZIP2=y
-BR2_PACKAGE_GETTEXT=y
-BR2_PACKAGE_DOSFSTOOLS=y
-BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-BR2_PACKAGE_E2FSPROGS=y
-BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-BR2_PACKAGE_MEMTOOL=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_LIBSNDFILE=y
-BR2_PACKAGE_LIBVORBIS=y
-BR2_PACKAGE_LIBARCHIVE=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_LIBCONFIG=y
-BR2_PACKAGE_DTC=y
-BR2_PACKAGE_DTC_PROGRAMS=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_PAHO_MQTT_C=y
-BR2_PACKAGE_ELFUTILS=y
-BR2_PACKAGE_LIBUNWIND=y
-BR2_PACKAGE_OPENBLAS=y
-BR2_PACKAGE_PROTOBUF=y
-BR2_PACKAGE_PROTOBUF_C=y
-BR2_PACKAGE_BLUEZ5_UTILS=y
-BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED=y
-BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
-BR2_PACKAGE_DROPBEAR=y
-BR2_PACKAGE_GESFTPSERVER=y
-BR2_PACKAGE_IPTABLES=y
-BR2_PACKAGE_IPUTILS=y
-BR2_PACKAGE_IW=y
-BR2_PACKAGE_TCPDUMP=y
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
-BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
-BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
-BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
-BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-BR2_PACKAGE_HTOP=y
-BR2_TARGET_ROOTFS_TAR_GZIP=y
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BOARDNAME="xxxxx"
-BR2_TARGET_UBOOT_CUSTOM_GIT=y
-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="xxxxx"
-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xxxxx"
-BR2_TARGET_UBOOT_FORMAT_IMX=y
+Fixes:
+http://autobuild.buildroot.net/results/0b5d18bff816cbcee11e8645449701722d956de5/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libpcap/libpcap.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 126087220b02..83188c8c4847 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -16,6 +16,8 @@ LIBPCAP_CONF_ENV = \
+ 	CFLAGS="$(LIBPCAP_CFLAGS)"
+ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag
++# Disable dbus to break recursive dependencies
++LIBPCAP_CONF_OPTS += --disable-dbus
+ LIBPCAP_CONFIG_SCRIPTS = pcap-config
+ 
+ # Omit -rpath from pcap-config output
+@@ -32,13 +34,6 @@ else
+ LIBPCAP_CONF_OPTS += --disable-bluetooth
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-LIBPCAP_CONF_OPTS += --enable-dbus
+-LIBPCAP_DEPENDENCIES += dbus
+-else
+-LIBPCAP_CONF_OPTS += --disable-dbus
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ LIBPCAP_DEPENDENCIES += libnl
+ LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
+-- 
+2.20.1
