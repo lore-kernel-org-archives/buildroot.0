@@ -1,49 +1,91 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 10 Mar 2019 01:23:36 -0800
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.12
-In-Reply-To: <CA+_SqVbzRuEgvansndPeSVqOeratEK5aGc+OGTc0e6j0FeJEkw@mail.gmail.com>
-References: <20190226034554.24429-1-christian@paral.in>
- <20190226082449.040c7a2a@windsurf.home>
- <CA+h8R2qERZ1EjoyCiSCD32K8KM9m5OS_RdQ3iS59m9UmBUEwYw@mail.gmail.com>
- <CA+_SqVbzRuEgvansndPeSVqOeratEK5aGc+OGTc0e6j0FeJEkw@mail.gmail.com>
-Message-ID: <87sgvvccbr.fsf@paral.in>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Mar 2019 10:46:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix build without fork
+Message-ID: <20190310094627.20440-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes:
+ - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
 
-Angelo Compagnucci <angelo@amarulasolutions.com> writes:
->> On Mon, Feb 25, 2019 at 11:24 PM Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com> wrote:
->> > I am puzzled by your statement "currently undefined". Is it undefined
->> > in the sense "it is not defined yet how Buildroot will handle this" or
->> > "it is not defined in Go yet how the module compilation will work in
->> > 1.13" ?
->
-> It's less of a problem with module support for go now, because the
-> dependencies are proxyed and verified before being delivered to the go
-> download mechanism, so the reproducibility is somewhat guaranteed.
-> The problem remains for breaking the buildroot internal download
-> mechanism and for not a so probably clear licensing of downloaded
-> modules (I have to investigate this).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-amdgpu-basic_tests.c-check-for-fork.patch | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
 
-I'm beginning to work on this now, would it be acceptable if Buildroot
-adopted the following approach:
-
- - Remove GOPATH
- - Configure Go to download module files to buildroot/dl/go-modules
- - Set GOPROXY to allow network during download step only.
- - Require go.mod and go.sum hashes for all Go packages.
- - During extract step, run "go mod vendor" to extract code to build/
- - Use vendored building mode "-mod=vendor"
-
-This should allow Go to download and verify modules correctly during the
-download step, to the Buildroot dl/ tree, as well as disallowing network
-fetching during the build phase, and extracting versioned module code to
-the build directory.
-
-Best,
-Christian
+diff --git a/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch b/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
+new file mode 100644
+index 0000000000..806c0c0fb7
+--- /dev/null
++++ b/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
+@@ -0,0 +1,64 @@
++From a5ba5f3c194aa68b1e944d6691ad5cbbb2766ba7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 10 Mar 2019 09:44:11 +0100
++Subject: [PATCH libdrm] amdgpu/basic_tests.c: check for fork
++
++amdgpu test program use fork since
++https://cgit.freedesktop.org/mesa/drm/commit/tests/amdgpu/basic_tests.c?id=736ef0b61cab55378202c5f49d91799cc2b99091
++
++However, this function is not always available so add a check for it in
++configure.ac and use it in tests/amdgpu/basic_tests.c
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to dri-devel at lists.freedesktop.org]
++---
++ configure.ac               | 2 ++
++ tests/amdgpu/basic_tests.c | 4 ++++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index d72e84ad..6effb9a2 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -193,6 +193,8 @@ AC_CHECK_FUNCS([open_memstream],
++                [AC_DEFINE([HAVE_OPEN_MEMSTREAM], 1, [Have open_memstream()])],
++                [AC_DEFINE([HAVE_OPEN_MEMSTREAM], 0)])
++ 
+++AC_CHECK_FUNCS([fork])
+++
++ dnl Use lots of warning flags with with gcc and compatible compilers
++ 
++ dnl Note: if you change the following variable, the cache is automatically
++diff --git a/tests/amdgpu/basic_tests.c b/tests/amdgpu/basic_tests.c
++index dbae4d53..c32a1351 100644
++--- a/tests/amdgpu/basic_tests.c
+++++ b/tests/amdgpu/basic_tests.c
++@@ -1646,10 +1646,12 @@ static void amdgpu_userptr_test(void)
++ 	while (j++ < sdma_write_length)
++ 		pm4[i++] = 0xdeadbeaf;
++ 
+++#ifdef HAVE_FORK
++ 	if (!fork()) {
++ 		pm4[0] = 0x0;
++ 		exit(0);
++ 	}
+++#endif
++ 
++ 	amdgpu_test_exec_cs_helper(context_handle,
++ 				   AMDGPU_HW_IP_DMA, 0,
++@@ -1675,7 +1677,9 @@ static void amdgpu_userptr_test(void)
++ 	r = amdgpu_cs_ctx_free(context_handle);
++ 	CU_ASSERT_EQUAL(r, 0);
++ 
+++#ifdef HAVE_FORK
++ 	wait(NULL);
+++#endif
++ }
++ 
++ static void amdgpu_sync_dependency_test(void)
++-- 
++2.20.1
++
+-- 
+2.20.1
