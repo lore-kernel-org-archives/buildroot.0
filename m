@@ -1,43 +1,66 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Mar 2019 18:33:51 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: fix webrtc option
-In-Reply-To: <1552200637682-0.post@n4.nabble.com>
-References: <20170704113141.2D5C67FCBD@busybox.osuosl.org>
- <87lgo419uv.fsf@dell.be.48ers.dk>
- <1552200637682-0.post@n4.nabble.com>
-Message-ID: <20190310183351.289eacb4@gmx.net>
+Date: Sun, 10 Mar 2019 18:51:09 +0100
+Subject: [Buildroot] [RFC v1] package/gst1-plugins-bad: add webrtcbin option
+Message-ID: <20190310175109.13444-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello fancychao,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+  - just compile tested yet
+  - named webrtcbin option (instead of webrtc), because of the
+    BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC entry in Config.in.legacy
+    (see [1] for history)
 
-On Sun, 10 Mar 2019 00:50:37 -0600 (CST), fancychao <fanchao@fastmail.com> wrote:
+[1] https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
+ .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   |  7 +++++++
+ 2 files changed, 18 insertions(+)
 
-> Hi,
-> 
-> Sorry if I read this wrong: it seems like webrtcdsp and webrtc are different
-> plugin. I was looking for the webrtcbin element in the latest rootfs but it
-> didn't exist. Do you know if this change has removed the webrtc plugin?
-
-No, this bulildroot commit (for gstreamer-1.10.x) predates the introduction
-of the new webrtc/webrtcbin plugin (since gstreamer-1.14.x, see [1]).
-
-A new buildroot gst1-plugins-bad option for it is missing...
-
-Regards,
-Peter
-
-[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=1894293d6378c69548d974d2965e9decc1527654
-
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 869f0a9d45..5d0480cfb0 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -558,6 +558,17 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
+ 	help
+ 	  Webp image format plugin
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCBIN
++	bool "webrtcbin"
++	depends on !BR2_STATIC_LIBS # libnice -> gnutls
++	select BR2_PACKAGE_GST1_PLUGINS_BASE # libgstsdp
++	select BR2_PACKAGE_LIBNICE
++	help
++	  WebRTC plugins (webrtcbin - a bin for webrtc connections)
++
++comment "webrtcbin needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
+ 	bool "webrtcdsp"
+ 	# All depends from webrtc-audio-processing
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index f5b081f972..2220554a2d 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -703,6 +703,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCBIN),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
++GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtcdsp
+ GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
+-- 
+2.21.0
