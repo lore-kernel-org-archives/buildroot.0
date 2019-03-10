@@ -1,89 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Mar 2019 11:28:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.12
-In-Reply-To: <87sgvvccbr.fsf@paral.in>
-References: <20190226034554.24429-1-christian@paral.in>
- <20190226082449.040c7a2a@windsurf.home>
- <CA+h8R2qERZ1EjoyCiSCD32K8KM9m5OS_RdQ3iS59m9UmBUEwYw@mail.gmail.com>
- <CA+_SqVbzRuEgvansndPeSVqOeratEK5aGc+OGTc0e6j0FeJEkw@mail.gmail.com>
- <87sgvvccbr.fsf@paral.in>
-Message-ID: <20190310102831.GC25009@scaer>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 10 Mar 2019 11:44:27 +0100
+Subject: [Buildroot] [PATCHv2 1/2] package/elf2flt: bump version to fix
+ build with Binutils >= 2.32
+Message-ID: <20190310104428.11398-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+From: Romain Naour <romain.naour@gmail.com>
 
-On 2019-03-10 01:23 -0800, Christian Stewart spake thusly:
-> Angelo Compagnucci <angelo@amarulasolutions.com> writes:
-> >> On Mon, Feb 25, 2019 at 11:24 PM Thomas Petazzoni
-> >> <thomas.petazzoni@bootlin.com> wrote:
-> >> > I am puzzled by your statement "currently undefined". Is it undefined
-> >> > in the sense "it is not defined yet how Buildroot will handle this" or
-> >> > "it is not defined in Go yet how the module compilation will work in
-> >> > 1.13" ?
-> >
-> > It's less of a problem with module support for go now, because the
-> > dependencies are proxyed and verified before being delivered to the go
-> > download mechanism, so the reproducibility is somewhat guaranteed.
-> > The problem remains for breaking the buildroot internal download
-> > mechanism and for not a so probably clear licensing of downloaded
-> > modules (I have to investigate this).
-> 
-> I'm beginning to work on this now, would it be acceptable if Buildroot
-> adopted the following approach:
-> 
->  - Remove GOPATH
->  - Configure Go to download module files to buildroot/dl/go-modules
+Binutils added bfd_stdint.h to bfd.h [1], so elf2flt must create a
+symlink for this header.
 
-How would you get the modules list and their URIs, when we are just
-downloading? The package sources are not yet extracted.
+Bump the elf2flt version that include the upstream fix [2].
 
->  - Set GOPROXY to allow network during download step only.
->  - Require go.mod and go.sum hashes for all Go packages.
+Keep our local patch 0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
+that was not integrated with the recent project activity [3].
 
-Not sure what go.mod and go.sum are, but if you're suggesting that we
-have hashes in foo.hash for all modules in package foo, that would be
-nice, yes!
+Fixes:
+[armv7m-uclibc]
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356410
 
->  - During extract step, run "go mod vendor" to extract code to build/
+[m68k-coldfire-uclibc]
+https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356412
 
-... getting the modules from $(BR2_DL_DIR) instead of downloading them
-that is?
+[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2d5d5a8f0a8b5a03454bf168b7fa7024bb1ebbd8
+[2] https://github.com/uclinux-dev/elf2flt/commit/429521f695c6f4212d809a141bfa4417b733f395
+[3] https://github.com/uclinux-dev/elf2flt/pull/8
 
->  - Use vendored building mode "-mod=vendor"
-> 
-> This should allow Go to download and verify modules correctly during the
-> download step, to the Buildroot dl/ tree, as well as disallowing network
-> fetching during the build phase, and extracting versioned module code to
-> the build directory.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v2: bump the version instead of adding a new local patch (Arnout).
+---
+ ...002-Makefile-fix-build-with-Binutils-2.31.patch | 34 ----------------------
+ package/elf2flt/elf2flt.hash                       |  2 +-
+ package/elf2flt/elf2flt.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 package/elf2flt/0002-Makefile-fix-build-with-Binutils-2.31.patch
 
-If that were possible, I would like that, yes. That'd be good!
-
-However, I'd suggest that this extra module vendoring dance only occur
-if the package has set a specific variable, like we do for git
-submodules:
-
-    FOO_GO_MODULES = YES
-
-(I almost wrote GOO_MODULES ;-) )
-
-That way, if a package does not explicitly request them, it would fail
-at build time since they would not be available and would not be already
-downloaded.
-
-Of course, if we expect the majority of go packages to have modules,
-that variable would be moot...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/elf2flt/0002-Makefile-fix-build-with-Binutils-2.31.patch b/package/elf2flt/0002-Makefile-fix-build-with-Binutils-2.31.patch
+deleted file mode 100644
+index 825582550b..0000000000
+--- a/package/elf2flt/0002-Makefile-fix-build-with-Binutils-2.31.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From faf1a1646093fbc5ed279bae1c7250c7dfea56f8 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@smile.fr>
+-Date: Tue, 17 Jul 2018 16:36:16 +0200
+-Subject: [PATCH] Makefile: fix build with Binutils 2.31
+-
+-Binutils added diagnostics.h to bfd.h [1], so elf2flt must create a symlink
+-for this header.
+-
+-Fixes:
+-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284139
+-
+-[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=95da9854466ada2572b42f5528711a06a2d42db1
+-
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index cfad06c..164e306 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -127,7 +127,7 @@ bfd-headers/.stamp:
+- 	rm -rf bfd-headers
+- 	mkdir bfd-headers
+- 	ln -sf $(BFD_INCLUDE_DIR)/bfd.h bfd-headers/bfd.h
+--	for f in ansidecl filenames hashtab libiberty symcat; do \
+-+	for f in ansidecl diagnostics filenames hashtab libiberty symcat; do \
+- 		ln -sf $(BINUTILS_INCLUDE_DIR)/$$f.h bfd-headers/$$f.h || exit 1; \
+- 	done
+- 	ln -sf $(BINUTILS_INCLUDE_DIR)/elf bfd-headers/elf
+--- 
+-2.7.4
+-
+diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
+index 40df62c8c0..773cf35b77 100644
+--- a/package/elf2flt/elf2flt.hash
++++ b/package/elf2flt/elf2flt.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 7713bd1debd24a94b795b7fc698dc97e306e7cbcc1d0580856c79fe70aac9c45  elf2flt-6d80ab6c93409e796f85da404bde84b841231531.tar.gz
++sha256 d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index 557f94d338..e7edd8b9de 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELF2FLT_VERSION = 6d80ab6c93409e796f85da404bde84b841231531
++ELF2FLT_VERSION = 7e33f28df198c46764021ed14408bd262751e148
+ ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
+ ELF2FLT_LICENSE = GPL-2.0+
+ ELF2FLT_LICENSE_FILES = LICENSE.TXT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.5
