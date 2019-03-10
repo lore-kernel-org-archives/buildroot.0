@@ -1,91 +1,106 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Mar 2019 10:46:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix build without fork
-Message-ID: <20190310094627.20440-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 10 Mar 2019 11:13:23 +0100
+Subject: [Buildroot] [PATCH 1/3] package/elf2flt: fix build with
+ Binutils >= 2.32
+In-Reply-To: <3852b652-46a0-267e-03be-d2a791d7526d@mind.be>
+References: <20190204223010.19733-1-romain.naour@gmail.com>
+ <3852b652-46a0-267e-03be-d2a791d7526d@mind.be>
+Message-ID: <0d0ad5db-ee8c-ea32-c1ba-583d4bda8f80@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
+Hi Arnout,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-amdgpu-basic_tests.c-check-for-fork.patch | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
+Le 07/03/2019 ? 22:58, Arnout Vandecappelle a ?crit?:
+>  Hi Romain,
+> 
+> On 04/02/2019 23:30, Romain Naour wrote:
+>> Binutils added bfd_stdint.h to bfd.h [1], so elf2flt must create a
+>> symlink for this header.
+>>
+>> Fixes:
+>> [armv7m-uclibc]
+>> https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356410
+>>
+>> [m68k-coldfire-uclibc]
+>> https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356412
+>>
+>> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2d5d5a8f0a8b5a03454bf168b7fa7024bb1ebbd8
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  ...003-Makefile-fix-build-with-Binutils-2.32.patch | 40 ++++++++++++++++++++++
+> 
+>  Could you instead take the upstream patch [1] or perhaps even just bump elf2flt?
 
-diff --git a/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch b/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
-new file mode 100644
-index 0000000000..806c0c0fb7
---- /dev/null
-+++ b/package/libdrm/0004-amdgpu-basic_tests.c-check-for-fork.patch
-@@ -0,0 +1,64 @@
-+From a5ba5f3c194aa68b1e944d6691ad5cbbb2766ba7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 10 Mar 2019 09:44:11 +0100
-+Subject: [PATCH libdrm] amdgpu/basic_tests.c: check for fork
-+
-+amdgpu test program use fork since
-+https://cgit.freedesktop.org/mesa/drm/commit/tests/amdgpu/basic_tests.c?id=736ef0b61cab55378202c5f49d91799cc2b99091
-+
-+However, this function is not always available so add a check for it in
-+configure.ac and use it in tests/amdgpu/basic_tests.c
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to dri-devel at lists.freedesktop.org]
-+---
-+ configure.ac               | 2 ++
-+ tests/amdgpu/basic_tests.c | 4 ++++
-+ 2 files changed, 6 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d72e84ad..6effb9a2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -193,6 +193,8 @@ AC_CHECK_FUNCS([open_memstream],
-+                [AC_DEFINE([HAVE_OPEN_MEMSTREAM], 1, [Have open_memstream()])],
-+                [AC_DEFINE([HAVE_OPEN_MEMSTREAM], 0)])
-+ 
-++AC_CHECK_FUNCS([fork])
-++
-+ dnl Use lots of warning flags with with gcc and compatible compilers
-+ 
-+ dnl Note: if you change the following variable, the cache is automatically
-+diff --git a/tests/amdgpu/basic_tests.c b/tests/amdgpu/basic_tests.c
-+index dbae4d53..c32a1351 100644
-+--- a/tests/amdgpu/basic_tests.c
-++++ b/tests/amdgpu/basic_tests.c
-+@@ -1646,10 +1646,12 @@ static void amdgpu_userptr_test(void)
-+ 	while (j++ < sdma_write_length)
-+ 		pm4[i++] = 0xdeadbeaf;
-+ 
-++#ifdef HAVE_FORK
-+ 	if (!fork()) {
-+ 		pm4[0] = 0x0;
-+ 		exit(0);
-+ 	}
-++#endif
-+ 
-+ 	amdgpu_test_exec_cs_helper(context_handle,
-+ 				   AMDGPU_HW_IP_DMA, 0,
-+@@ -1675,7 +1677,9 @@ static void amdgpu_userptr_test(void)
-+ 	r = amdgpu_cs_ctx_free(context_handle);
-+ 	CU_ASSERT_EQUAL(r, 0);
-+ 
-++#ifdef HAVE_FORK
-+ 	wait(NULL);
-++#endif
-+ }
-+ 
-+ static void amdgpu_sync_dependency_test(void)
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Sure, I'll bump the version.
+
+I thought the project was no longer maintained since the last activity dates
+from 20/03/2017. The upstream patch [1] was not merged yet at the time I worked
+on Binutils 2.32 update ;-)
+
+Thanks for noticing it!
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
+> [1]
+> https://github.com/uclinux-dev/elf2flt/commit/429521f695c6f4212d809a141bfa4417b733f395
+> 
+>>  1 file changed, 40 insertions(+)
+>>  create mode 100644 package/elf2flt/0003-Makefile-fix-build-with-Binutils-2.32.patch
+>>
+>> diff --git a/package/elf2flt/0003-Makefile-fix-build-with-Binutils-2.32.patch b/package/elf2flt/0003-Makefile-fix-build-with-Binutils-2.32.patch
+>> new file mode 100644
+>> index 0000000000..6bbe3af80b
+>> --- /dev/null
+>> +++ b/package/elf2flt/0003-Makefile-fix-build-with-Binutils-2.32.patch
+>> @@ -0,0 +1,40 @@
+>> +From 58a9bd43e6b068f9b29982a2fe688d0ed34a8663 Mon Sep 17 00:00:00 2001
+>> +From: Romain Naour <romain.naour@gmail.com>
+>> +Date: Tue, 22 Jan 2019 22:18:02 +0100
+>> +Subject: [PATCH] Makefile: fix build with Binutils 2.32
+>> +
+>> +Binutils added bfd_stdint.h to bfd.h [1], so elf2flt must create a
+>> +symlink for this header.
+>> +
+>> +Fixes:
+>> +[armv7m-uclibc]
+>> +https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356410
+>> +
+>> +[m68k-coldfire-uclibc]
+>> +https://gitlab.com/kubu93/toolchains-builder/-/jobs/148356412
+>> +
+>> +[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2d5d5a8f0a8b5a03454bf168b7fa7024bb1ebbd8
+>> +
+>> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> +---
+>> + Makefile.in | 4 +++-
+>> + 1 file changed, 3 insertions(+), 1 deletion(-)
+>> +
+>> +diff --git a/Makefile.in b/Makefile.in
+>> +index 164e306..57fff5c 100644
+>> +--- a/Makefile.in
+>> ++++ b/Makefile.in
+>> +@@ -126,7 +126,9 @@ sinclude .deps
+>> + bfd-headers/.stamp:
+>> + 	rm -rf bfd-headers
+>> + 	mkdir bfd-headers
+>> +-	ln -sf $(BFD_INCLUDE_DIR)/bfd.h bfd-headers/bfd.h
+>> ++	for f in bfd bfd_stdint; do \
+>> ++		ln -sf $(BFD_INCLUDE_DIR)/$$f.h bfd-headers/$$f.h || exit 1; \
+>> ++	done
+>> + 	for f in ansidecl diagnostics filenames hashtab libiberty symcat; do \
+>> + 		ln -sf $(BINUTILS_INCLUDE_DIR)/$$f.h bfd-headers/$$f.h || exit 1; \
+>> + 	done
+>> +-- 
+>> +2.14.5
+>> +
+>>
