@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Mar 2019 22:54:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix build without fork
-In-Reply-To: <CAPi7W82UfzUoZ_SuNoA4BQc8RfosQW_RCu9F+105p-6yD=3rQw@mail.gmail.com>
-References: <20190310094627.20440-1-fontaine.fabrice@gmail.com>
- <20190310191758.7d1707e3@gmx.net>
- <CAPi7W82UfzUoZ_SuNoA4BQc8RfosQW_RCu9F+105p-6yD=3rQw@mail.gmail.com>
-Message-ID: <20190311225421.31ebff20@windsurf>
+Date: Mon, 11 Mar 2019 22:58:43 +0100
+Subject: [Buildroot] [git commit] package/mongodb: disable on powerpc64
+Message-ID: <20190311220331.3934C8EC6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9fd1931410ec7f68e0f310efb9c5f616bb73ea8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Mar 2019 18:52:37 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+As stated in SConstruct, the altivec runtime test breaks
+cross-compilation: "This checks for an altivec optimization we use in
+full text search. Different versions of gcc appear to put output bytes
+in different parts of the output vector produced by vec_vbpermq.  This
+configure check looks to see which format the compiler produces. NOTE:
+This breaks cross compiles, as it relies on checking runtime
+functionality for the environment we're in."
 
-> > Will the test succeed without fork? Maybe better disable the whole test in case
-> > fork is not available? Or simple wait for Upstream suggestions/opinion.... ;-)  
-> Indeed, you were right, the test won't succeed but upstream does not
-> want to disable the test either:
-> https://patchwork.freedesktop.org/patch/291508.
-> Should we add a dependency on BR2_USE_MMU to libdrm and all its
-> reverse dependencies?
+Fixes:
+ - http://autobuild.buildroot.org/results/162198617979a83b66f70ed6013251942ed04d67
 
-Why on libdrm ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mongodb/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As upstream said: amdgpu is never going to be used on noMMU platforms,
-and the amdgpu tests are only compiled in when the amdgpu driver is
-enabled. From tests/Makefile.am:
-
-if HAVE_AMDGPU
-if HAVE_CUNIT
-SUBDIRS += amdgpu
-endif
-endif
-
-So, just make BR2_PACKAGE_LIBDRM_AMDGPU depends on BR2_USE_MMU. Isn't
-that sufficient ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+index 4696eb7660..7df502add6 100644
+--- a/package/mongodb/Config.in
++++ b/package/mongodb/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+ 	bool
+ 	# ARM needs LDREX/STREX, so ARMv6+
+ 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+-	default y if BR2_aarch64 || BR2_powerpc64 || BR2_x86_64
++	default y if BR2_aarch64 || BR2_x86_64
+ 
+ config BR2_PACKAGE_MONGODB
+ 	bool "mongodb"
