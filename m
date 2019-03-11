@@ -1,25 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Mar 2019 22:22:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: add optional spandsp
- dependency
-In-Reply-To: <20190310113153.782-1-fontaine.fabrice@gmail.com>
-References: <20190310113153.782-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190311222230.56e7a366@windsurf>
+Date: Mon, 11 Mar 2019 22:54:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix build without fork
+In-Reply-To: <CAPi7W82UfzUoZ_SuNoA4BQc8RfosQW_RCu9F+105p-6yD=3rQw@mail.gmail.com>
+References: <20190310094627.20440-1-fontaine.fabrice@gmail.com>
+ <20190310191758.7d1707e3@gmx.net>
+ <CAPi7W82UfzUoZ_SuNoA4BQc8RfosQW_RCu9F+105p-6yD=3rQw@mail.gmail.com>
+Message-ID: <20190311225421.31ebff20@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Mar 2019 12:31:53 +0100
+Hello,
+
+On Mon, 11 Mar 2019 18:52:37 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wireshark/wireshark.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > Will the test succeed without fork? Maybe better disable the whole test in case
+> > fork is not available? Or simple wait for Upstream suggestions/opinion.... ;-)  
+> Indeed, you were right, the test won't succeed but upstream does not
+> want to disable the test either:
+> https://patchwork.freedesktop.org/patch/291508.
+> Should we add a dependency on BR2_USE_MMU to libdrm and all its
+> reverse dependencies?
 
-Applied to master, thanks.
+Why on libdrm ?
+
+As upstream said: amdgpu is never going to be used on noMMU platforms,
+and the amdgpu tests are only compiled in when the amdgpu driver is
+enabled. From tests/Makefile.am:
+
+if HAVE_AMDGPU
+if HAVE_CUNIT
+SUBDIRS += amdgpu
+endif
+endif
+
+So, just make BR2_PACKAGE_LIBDRM_AMDGPU depends on BR2_USE_MMU. Isn't
+that sufficient ?
+
+Thanks,
 
 Thomas
 -- 
