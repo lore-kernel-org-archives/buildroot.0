@@ -1,9 +1,9 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Mon, 11 Mar 2019 07:48:18 +0100
-Subject: [Buildroot] [PATCH 1/4] toolchain: set the ssp gcc option in kconfig
+Date: Mon, 11 Mar 2019 07:48:21 +0100
+Subject: [Buildroot] [PATCH 4/4] toolchain: allow PIC/PIE without RELRO
 In-Reply-To: <cover.1552286891.git.yann.morin@orange.com>
 References: <cover.1552286891.git.yann.morin@orange.com>
-Message-ID: <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Message-ID: <11977_1552286921_5C8604BE_11977_87_1_9c1d9253-d6be-4870-a4dd-b45f5c87742f@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,87 +12,81 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Currently, we repeat all the SSP level selection deep down to the
-toolchain wrapper itself, where we eventually translate it to the
-actual SSP option to use. This is a bit redundant.
+In commit 7484c1c3b806 (toolchain/toolchain-wrapper: add BR2_RELRO_),
+we added the PIC/PIE flags, but based on the RELRO_FULL condition.
 
-Additionally, we will want to check that the toolchain actually
-supports that option (for those toolchain where it was backported).
+It is however totally possible to do a PIC/PIE executable without
+RELRO_FULL, as it is also valid to do a PIC/PIE build with RELRO_PARTIAL.
 
-So, move the translation into kconfig.
+Add a new option that now governs the PIC/PIE flags.
 
-Since that new option does have neither a prompt, nor a default
-value for SSP_NONE, it will not be set unless it actually contains
-a non-empty string, so it will never be "" and we can skip the usual
-qstrip-then-quote-anyway dance.
+Note: it is unknown if RELRO_FULL really needs PIC/PIE or not, so we
+keep the current situation, where RELRO-FULL forces PIC/PIE compilation.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in                      |  6 ++++++
- toolchain/toolchain-wrapper.c  | 10 ++--------
- toolchain/toolchain-wrapper.mk |  8 ++------
- 3 files changed, 10 insertions(+), 14 deletions(-)
+ Config.in                      | 8 ++++++++
+ toolchain/toolchain-wrapper.c  | 2 +-
+ toolchain/toolchain-wrapper.mk | 4 ++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/Config.in b/Config.in
-index d58d8dc04a..757ad1ca40 100644
+index d5a0460f98..31fea3ab34 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -764,6 +764,12 @@ config BR2_SSP_ALL
+@@ -712,6 +712,13 @@ endmenu
  
- endchoice
+ comment "Security Hardening Options"
  
-+config BR2_SSP_OPTION
-+	string
-+	default "-fstack-protector"        if BR2_SSP_REGULAR
-+	default "-fstack-protector-strong" if BR2_SSP_STRONG
-+	default "-fstack-protector-all"    if BR2_SSP_ALL
++config BR2_PIC_PIE
++	bool "Build code with PIC/PIE"
++	depends on BR2_SHARED_LIBS
++	help
++	  Generate Position-Independent Code (PIC) and link
++	  Position-Independent Executables (PIE).
 +
- comment "Stack Smashing Protection needs a toolchain w/ SSP"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ choice
+ 	bool "Stack Smashing Protection"
+ 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+@@ -794,6 +801,7 @@ config BR2_RELRO_PARTIAL
  
+ config BR2_RELRO_FULL
+ 	bool "Full"
++	select BR2_PIC_PIE
+ 	help
+ 	  This option includes the partial configuration, but also marks
+ 	  the GOT as read-only at the cost of initialization time during
 diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index e9c5cd9d32..d605a7d648 100644
+index d605a7d648..a38f827786 100644
 --- a/toolchain/toolchain-wrapper.c
 +++ b/toolchain/toolchain-wrapper.c
-@@ -98,14 +98,8 @@ static char *predef_args[] = {
- #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
- 	"-EB",
- #endif
--#ifdef BR_SSP_REGULAR
--	"-fstack-protector",
--#endif
--#ifdef BR_SSP_STRONG
--	"-fstack-protector-strong",
--#endif
--#ifdef BR_SSP_ALL
--	"-fstack-protector-all",
-+#ifdef BR_SSP_OPTION
-+	BR_SSP_OPTION,
- #endif
- #ifdef BR_ADDITIONAL_CFLAGS
- 	BR_ADDITIONAL_CFLAGS
+@@ -370,7 +370,7 @@ int main(int argc, char **argv)
+ 		*cur++ = "-Wno-builtin-macro-redefined";
+ 	}
+ 
+-#ifdef BR2_RELRO_FULL
++#ifdef BR2_PIC_PIE
+ 	/* Patterned after Fedora/Gentoo hardening approaches.
+ 	 * https://fedoraproject.org/wiki/Changes/Harden_All_Packages
+ 	 * https://wiki.gentoo.org/wiki/Hardened/Toolchain#Position_Independent_Executables_.28PIEs.29
 diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 613f5f6c56..e48e765a8e 100644
+index e48e765a8e..67cec5c1cf 100644
 --- a/toolchain/toolchain-wrapper.mk
 +++ b/toolchain/toolchain-wrapper.mk
-@@ -51,12 +51,8 @@ else ifeq ($(BR2_RELRO_FULL),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
+@@ -45,6 +45,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
  endif
  
--ifeq ($(BR2_SSP_REGULAR),y)
--TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_REGULAR
--else ifeq ($(BR2_SSP_STRONG),y)
--TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_STRONG
--else ifeq ($(BR2_SSP_ALL),y)
--TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
-+ifneq ($(BR2_SSP_OPTION),)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_OPTION='$(BR2_SSP_OPTION)'
- endif
- 
- define TOOLCHAIN_WRAPPER_BUILD
++ifeq ($(BR2_PIC_PIE),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR2_PIC_PIE
++endif
++
+ ifeq ($(BR2_RELRO_PARTIAL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
+ else ifeq ($(BR2_RELRO_FULL),y)
 -- 
 2.17.1
 
