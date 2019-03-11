@@ -1,74 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Mar 2019 23:26:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: amdgpu needs MMU
-Message-ID: <20190311222630.17241-1-fontaine.fabrice@gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Mon, 11 Mar 2019 21:59:03 +0000
+Subject: [Buildroot] 2019.02 performance
+Message-ID: <1552341542.7410.20.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-amdgpu test uses fork() so disable amdgpu without MMU
+With 2018.02, I had to disable the package size and related hooks as
+they were too slow: over half the build time.  As I'm sure some
+remember, there was a thread about it and performance was
+improved.  Here's the results with 2019.02.  I'm using a real config
+for a product we have and testing on a reasonably modern native Linux
+workstation with a decent NVMe SSD and a four core processor.  Using
+ccache, which had already built the software.
 
-Fixes:
- - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
+Total build time: real 22:53, CPU 39:04.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libdrm/Config.in                          | 1 +
- package/mesa3d/Config.in                          | 2 ++
- package/x11r7/xdriver_xf86-video-amdgpu/Config.in | 2 ++
- 3 files changed, 5 insertions(+)
+Breakdown by build step (host/stage/target/images mean install same),
+across all packages:
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 581f921968..3cb0e02a41 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_LIBDRM_RADEON
- 
- config BR2_PACKAGE_LIBDRM_AMDGPU
- 	bool "amdgpu"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
- 	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 5019f2683b..fdd64b0337 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -125,6 +125,7 @@ comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	bool "Gallium Radeon SI driver"
-+	depends on BR2_USE_MMU # libdrm
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_PACKAGE_MESA3D_LLVM
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-@@ -141,6 +142,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- # Radeon SI needs libelf
- # musl is not currently compatible with elfutils
- comment "Radeon SI driver needs a uClibc or glibc toolchain"
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_MESA3D_LLVM
- 	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
- 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-index 43090c7559..c42255f55c 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
- 	bool "xf86-video-amdgpu"
-+	depends on BR2_USE_MMU # libdrm
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
- 	select BR2_PACKAGE_LIBDRM
-@@ -11,5 +12,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
- 	  AMD GPU video driver
- 
- comment "xf86-video-amdgpu needs egl/opengl support from mesa3d"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
- 		!BR2_PACKAGE_MESA3D_DRI_DRIVER
--- 
-2.14.1
+configure                666.223
+build                    381.480
+host                     122.191
+extract                   57.489
+target                    57.039
+stage                     28.356
+patch                      9.711
+postimage                  9.008
+finalize                   6.396
+images                     0.063
+download                   0.022
+
+
+The single threaded configure and cmake scripts remain the killer,
+through total of all install steps is about 2/3 of the build step time.
+
+Breakdown for the global instrumentation hooks, across all packages and
+build steps:
+
+check_host_rpath          64.345
+step_pkg_size             32.992
+check_bin_arch            26.286
+step_check_build_dir       8.365
+step_time                  7.895
+
+pkg_size is much more reasonable now.  In total, these are about 10.2%
+of the total build time.
+
+Next are benchmarks from a cloud VM, which is considerably slower.
+
+Total build time: Real 53:58, CPU 55:22
+
+configure               1021.933
+build                    936.449
+host                     206.171
+extract                  106.642
+target                    98.028
+stage                     53.747
+finalize                  40.840
+download                  25.091
+postimage                 22.876
+patch                     19.153
+images                     0.119
+
+The GIH breakdown:
+
+check_host_rpath         117.981
+step_pkg_size             49.881
+check_bin_arch            46.035
+step_time                 12.573
+step_check_build_dir       9.307
+
+About 7.2% of total build time.
