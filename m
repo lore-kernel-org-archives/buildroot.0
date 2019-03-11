@@ -1,34 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Mar 2019 09:01:09 +0100
-Subject: [Buildroot] [PATCH v3 0/2] Add gettext-tiny package
-In-Reply-To: <20190310101852.GB25009@scaer>
-References: <20190212215520.7422-1-vadim4j@gmail.com>
- <20190309233742.3095c546@windsurf>
- <20190310002005.jglt6ptlgctyz6eb@vkochan-ThinkPad-T470p>
- <20190310101126.3d738624@windsurf> <20190310101852.GB25009@scaer>
-Message-ID: <20190311090109.1c2392be@windsurf>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 11 Mar 2019 01:01:07 -0700
+Subject: [Buildroot] ? using compilers other than gcc!
+In-Reply-To: <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
+References: <43556bee-b905-8e11-c71d-d87aa92d13f5@lamiaworks.com.au>
+ <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
+Message-ID: <CAMWSM7jpZFfSLZ8pUNNODRbc_2Gm_gQtkoZNDdR+4NeoK9sXRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Mar 2019 11:18:52 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Mon, Mar 11, 2019 at 12:03 AM <yann.morin@orange.com> wrote:
+>
+> The best candidate nowadays for an alternative to gcc, is clang.
+>
 
-> Alternatively, I believe it would be relatively trivial to provide a
-> fake gettext rwapper:
-
-Well, that was the whole point of the discussion in my initial reply to
-Vadim's v3. Do we want to create a gettext-tiny target variant, which
-would install a fake gettext wrapper, or do we say "if NLS is disabled,
-there is no gettext support on the target". See my reply to Vadim v3
-cover letter.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+In that regard, has there been any progress in supporting Clang as a
+compiler in Buildroot?
