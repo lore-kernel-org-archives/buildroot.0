@@ -1,8 +1,9 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Mon, 11 Mar 2019 07:48:19 +0100
-Subject: [Buildroot] [PATCH 0/4] toolchain: PIC/PIE and
- -fstack-protector-strong for all
-Message-ID: <17889_1552286905_5C8604B9_17889_106_1_421580f0-fa59-4179-a32b-e62d7cab7acf@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Date: Mon, 11 Mar 2019 07:48:18 +0100
+Subject: [Buildroot] [PATCH 1/4] toolchain: set the ssp gcc option in kconfig
+In-Reply-To: <cover.1552286891.git.yann.morin@orange.com>
+References: <cover.1552286891.git.yann.morin@orange.com>
+Message-ID: <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,99 +12,89 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+Currently, we repeat all the SSP level selection deep down to the
+toolchain wrapper itself, where we eventually translate it to the
+actual SSP option to use. This is a bit redundant.
 
-Currently, our hardening options make a few assumptions, which although
-reasonable, limit their usefulness.
+Additionally, we will want to check that the toolchain actually
+supports that option (for those toolchain where it was backported).
 
-For starters, -fstack-protector-strong has been seen to be backported
-to gcc versions older than 4.9. Then, PIC/PIE is currently restricted
-and enforced by RELRO_FULL, although it is completely orthogonal.
+So, move the translation into kconfig.
 
-This series first ensures that -fstackprotector-strong can be enabled
-for toolchains with gcc older than 4.9, by dropping the restriction in
-Kconfig, but adding a check, at 'configure time', that the toolchain
-actually supports it.
+Since that new option does have neither a prompt, nor a default
+value for SSP_NONE, it will not be set unless it actually contains
+a non-empty string, so it will never be "" and we can skip the usual
+qstrip-then-quote-anyway dance.
 
-It is easy to test the check actually works for toolchains that lack
--fstack-protector-strong with this defconfig:
-    BR2_arm=y
-    BR2_SSP_STRONG=y
-    BR2_TOOLCHAIN_EXTERNAL=y
+Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ Config.in                      |  6 ++++++
+ toolchain/toolchain-wrapper.c  | 10 ++--------
+ toolchain/toolchain-wrapper.mk |  8 ++------
+ 3 files changed, 10 insertions(+), 14 deletions(-)
 
-Which yields a result like we have for the other checks:
-    >>> toolchain-external-codesourcery-arm 2014.05-29 Configuring
-    SSP option -fstack-protector-strong not available in this toolchain, please select another SSP level
-    package/pkg-generic.mk:228: recipe for target [...] failed
-    [...]
-    make: *** [_all] Error 2
-
-Finally, the last patch in the series allows for PIC/PIE to be enabled
-without any RELRO option. It is easy to test that PIC/PIE works without
-RELRO, with this defconfig:
-    BR2_arm=y
-    BR2_PIC_PIE=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-
-And then build (e.g.) busybox, which would yield results not unlike:
-    $ make busybox-depends
-    $ BR2_DEBUG_WRAPPER=2 make busybox-build
-    [...]
-    Toolchain wrapper executing:
-    [...]
-    '-fPIE'
-    '-pie'
-    [...]
-    $ file output/build/busybox-1.29.3/busybox
-    output/build/busybox-1.29.3/busybox: ELF 32-bit LSB shared object,
-    ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter
-    /lib/ld-linux.so.3, for GNU/Linux 2.6.16, not stripped
-
-Compared to a build without PIC/PIE:
-    output/build/busybox-1.29.3/busybox: ELF 32-bit LSB executable, [...]
-
-Note that the restrictions around PIC/PIE are not lifted: we're still
-avoiding it for specific cases (static, kernel, uboot...)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 7144c8169755b58ffbad27e0e5ff0963df2fda2d
-
-  package/sqlcipher: fix static build (2019-03-09 21:46:55 +0100)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to ff11160a5d2c236a33140b74035f3e43837bc381
-
-  toolchain: allow PIC/PIE without RELRO (2019-03-11 07:40:17 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      toolchain: set the ssp gcc option in kconfig
-      toolchain: check the SSP option is known
-      toolchain: -fstack-protector-strong can be back-ported
-      toolchain: allow PIC/PIE without RELRO
-
- Config.in                                            | 20 +++++++++++++++++---
- toolchain/helpers.mk                                 |  8 ++++++++
- .../toolchain-external/pkg-toolchain-external.mk     |  2 +-
- toolchain/toolchain-wrapper.c                        | 12 +++---------
- toolchain/toolchain-wrapper.mk                       | 12 ++++++------
- 5 files changed, 35 insertions(+), 19 deletions(-)
-
+diff --git a/Config.in b/Config.in
+index d58d8dc04a..757ad1ca40 100644
+--- a/Config.in
++++ b/Config.in
+@@ -764,6 +764,12 @@ config BR2_SSP_ALL
+ 
+ endchoice
+ 
++config BR2_SSP_OPTION
++	string
++	default "-fstack-protector"        if BR2_SSP_REGULAR
++	default "-fstack-protector-strong" if BR2_SSP_STRONG
++	default "-fstack-protector-all"    if BR2_SSP_ALL
++
+ comment "Stack Smashing Protection needs a toolchain w/ SSP"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index e9c5cd9d32..d605a7d648 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -98,14 +98,8 @@ static char *predef_args[] = {
+ #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
+ 	"-EB",
+ #endif
+-#ifdef BR_SSP_REGULAR
+-	"-fstack-protector",
+-#endif
+-#ifdef BR_SSP_STRONG
+-	"-fstack-protector-strong",
+-#endif
+-#ifdef BR_SSP_ALL
+-	"-fstack-protector-all",
++#ifdef BR_SSP_OPTION
++	BR_SSP_OPTION,
+ #endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 613f5f6c56..e48e765a8e 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -51,12 +51,8 @@ else ifeq ($(BR2_RELRO_FULL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
+ endif
+ 
+-ifeq ($(BR2_SSP_REGULAR),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_REGULAR
+-else ifeq ($(BR2_SSP_STRONG),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_STRONG
+-else ifeq ($(BR2_SSP_ALL),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
++ifneq ($(BR2_SSP_OPTION),)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_OPTION='$(BR2_SSP_OPTION)'
+ endif
+ 
+ define TOOLCHAIN_WRAPPER_BUILD
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.17.1
 
 
 _________________________________________________________________________________________________________________________
