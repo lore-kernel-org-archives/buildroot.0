@@ -1,74 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Mar 2019 09:54:51 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libfuse: common files from
- libfuse3 are prefered
-In-Reply-To: <CADYdroPtCdrKHQ=BoO7uJYAYJM0V9yg3RZC_jQMNA8KPHy0-Vg@mail.gmail.com>
-References: <20190306163054.5918-1-norbert.lange@andritz.com>
- <20190306163054.5918-2-norbert.lange@andritz.com>
- <d136d1c9-caf5-4db5-aeb5-6273c4a6438a@mind.be>
- <CADYdroPtCdrKHQ=BoO7uJYAYJM0V9yg3RZC_jQMNA8KPHy0-Vg@mail.gmail.com>
-Message-ID: <b1ca4bae-caea-d6b7-701d-28394c9ae1c3@mind.be>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Mon, 11 Mar 2019 12:46:09 +0200
+Subject: [Buildroot] [PATCH v3 0/2] Add gettext-tiny package
+In-Reply-To: <20190311090235.4e64625b@windsurf>
+References: <20190212215520.7422-1-vadim4j@gmail.com>
+ <20190309233742.3095c546@windsurf>
+ <20190310002005.jglt6ptlgctyz6eb@vkochan-ThinkPad-T470p>
+ <20190310101126.3d738624@windsurf> <20190310101852.GB25009@scaer>
+ <20190310230532.4dhczaa4sygw75ie@vkochan-ThinkPad-T470p>
+ <20190311090235.4e64625b@windsurf>
+Message-ID: <20190311104609.GA8459@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas, Yann, All
 
-
-On 10/03/2019 20:43, Norbert Lange wrote:
-> Am So., 10. M?rz 2019 um 16:20 Uhr schrieb Arnout Vandecappelle
-> <arnout@mind.be>:
->>
->>  Hi Norbert,
->>
->> On 06/03/2019 17:30, Norbert Lange wrote:
->>> if both libfuse and libfuse3 are installed,
->>> make sure libfuse3 will be build first and
->>> use the auxiliary files from the newer package.
->>
->>  Which files are those?
+On Mon, Mar 11, 2019 at 09:02:35AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Everything except the libfuse DSO itself, see
-> https://github.com/libfuse/libfuse/blob/master/ChangeLog.rst#libfuse-300-2016-12-08
-
- Quoting that page:
-
-e.g. /etc/fuse.conf, the udev and init scripts, and the mount.fuse(8) manpage
-
- Please mention these explicitly in the commit message. Indeed, our current
-libfuse package doesn't install any of those.
-
->>  You could also verify if the packages that currently use libfuse can also use
->> libfuse3: curlftpfs e2fsprogs exfat gvfs libostree lua-flu ntfs-3g openvmtools
->> owfs sshfs unionfs xenomai. If many of them can also work with libfuse3, it
->> might be worth making a virtual package out of it.
+> On Mon, 11 Mar 2019 01:05:32 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
 > 
-> They most certainly wont, V2 and V3 are not forward compatible.
-
- Absolutely not - it's like the qt4 to qt5 transition, or python2 to python3.
-Many packages will take steps to support both options for some time.
-
-[snip]
->>> +     ln -sf fusermount3 $(TARGET_DIR)/usr/bin/fusermount
->>
->>  Ah, here it is :-)
->>
->>  Why do you need to make this symlink?
+> > But, it looks like that there should be no problem if NLS is disabled
+> > (host-gettext is provided by gettext-tiny) and gettext (target)
+> > (provided by gettext-gnu) are enabled in the same time (of course 1
+> > small fix is required in latest gettext-tiny series v3):
+> > 
+> > in file package/gettext/Config.in
+> > 
+> > > config BR2_PACKAGE_GETTEXT
+> > >          bool "gettext"
+> > >          select BR2_PACKAGE_HAS_GETTEXT  
+> > *remove -> depends on BR2_SYSTEM_ENABLE_NLS
+> > 		    
+> > remove dependens on NLS to select gettext-gnu for the target.
+> > 
+> > So, both host-gettext-tiny and gettext-gnu should coexist as they
+> > provides different instances, right ?
+> > 
+> > If this is ok, then of course ecryptfs-utils needs support the gettext-less
+> > version, but it might be done later out of this scope ?
 > 
-> I dont need to make this link, but this helper tool *is backwards compatible*,
-> so it makes no sense to provide version.
-
- OK, understood. Could you add this explanation to the commit message?
-
-
- Regards,
- Arnout
-
-> And fusermount is the "interface" for end users/scripts, those
-> typically dont care
-> for which DSO the filesystem depends on.
-> (debian has the same solution)
+> I don't really like to do this. It's a lot better if we can avoid
+> gettext-gnu entirely if NLS is disabled. So I'd prefer if we could
+> stick to one of the two options I proposed in my reply to your v3:
 > 
-> Norbert
+> Option 1: we fix ecryptfs-utils to not unconditionally use gettext.
 > 
+> Option 2: we improve gettext-tiny so that it provides a fake gettext
+> implementation, and we allow gettext-tiny as a gettext implementation
+> for the target.
+> 
+
+Regarding ecryptfs-utils, looks like it is easy just to use
+function with "gettext" name and if gettext exists (by "which") then use
+the full path which is returned by "which", otherwise I think it is OK to
+use just "echo" or Yann's wrapper. Here is a sample script:
+
+----------8<----------------
+#! /bin/sh
+
+GETTEXT_PROG=""
+gettext() {
+    if [ -z "${GETTEXT_PROG}" ]; then
+        GETTEXT_PROG=$(which gettext)
+        if [ $? != 0 ]; then
+            GETTEXT_PROG=echo
+	fi
+    fi
+    ${GETTEXT_PROG} "$@"
+}
+
+gettext "XXXXXXXXXXXX"
+gettext "ZZZZZZZZZZZZ"
+gettext "CCCCCCCCCCCC"
+-------->8------------------
+
+Of course copy-n-pasting it to even few ecryptfs-utils's scripts looks
+not good, the better way if each script will source some 'common' one
+which has this gettext function. Otherwise, the better if gettext-tiny
+installs one for target because it may work w/o changing ecryptfs-utils,
+and it will work for other packages which may use gettext tool.
+
+So I will start with ecryptfs-utils.
+
+Regards,
+Vadim Kochan
