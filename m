@@ -1,58 +1,74 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Mar 2019 23:11:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix build without fork
-In-Reply-To: <20190311225421.31ebff20@windsurf>
-References: <20190310094627.20440-1-fontaine.fabrice@gmail.com>
- <20190310191758.7d1707e3@gmx.net>
- <CAPi7W82UfzUoZ_SuNoA4BQc8RfosQW_RCu9F+105p-6yD=3rQw@mail.gmail.com>
- <20190311225421.31ebff20@windsurf>
-Message-ID: <CAPi7W83_uaTgvWyUEE4ev96wySz1hyHJrCFzhpgDOogK7B7hOA@mail.gmail.com>
+Date: Mon, 11 Mar 2019 23:26:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: amdgpu needs MMU
+Message-ID: <20190311222630.17241-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-Le lun. 11 mars 2019 ? 22:54, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Mon, 11 Mar 2019 18:52:37 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > Will the test succeed without fork? Maybe better disable the whole test in case
-> > > fork is not available? Or simple wait for Upstream suggestions/opinion.... ;-)
-> > Indeed, you were right, the test won't succeed but upstream does not
-> > want to disable the test either:
-> > https://patchwork.freedesktop.org/patch/291508.
-> > Should we add a dependency on BR2_USE_MMU to libdrm and all its
-> > reverse dependencies?
->
-> Why on libdrm ?
->
-> As upstream said: amdgpu is never going to be used on noMMU platforms,
-> and the amdgpu tests are only compiled in when the amdgpu driver is
-> enabled. From tests/Makefile.am:
->
-> if HAVE_AMDGPU
-> if HAVE_CUNIT
-> SUBDIRS += amdgpu
-> endif
-> endif
->
-> So, just make BR2_PACKAGE_LIBDRM_AMDGPU depends on BR2_USE_MMU. Isn't
-> that sufficient ?
-Indeed, I missed this one, I'll send a new patch.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+amdgpu test uses fork() so disable amdgpu without MMU
 
-Fabrice
+Fixes:
+ - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libdrm/Config.in                          | 1 +
+ package/mesa3d/Config.in                          | 2 ++
+ package/x11r7/xdriver_xf86-video-amdgpu/Config.in | 2 ++
+ 3 files changed, 5 insertions(+)
+
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 581f921968..3cb0e02a41 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -36,6 +36,7 @@ config BR2_PACKAGE_LIBDRM_RADEON
+ 
+ config BR2_PACKAGE_LIBDRM_AMDGPU
+ 	bool "amdgpu"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
+ 	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
+ 	help
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 5019f2683b..fdd64b0337 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -125,6 +125,7 @@ comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 	bool "Gallium Radeon SI driver"
++	depends on BR2_USE_MMU # libdrm
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+@@ -141,6 +142,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ # Radeon SI needs libelf
+ # musl is not currently compatible with elfutils
+ comment "Radeon SI driver needs a uClibc or glibc toolchain"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+ 
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
+index 43090c7559..c42255f55c 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
+ 	bool "xf86-video-amdgpu"
++	depends on BR2_USE_MMU # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
+ 	select BR2_PACKAGE_LIBDRM
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
+ 	  AMD GPU video driver
+ 
+ comment "xf86-video-amdgpu needs egl/opengl support from mesa3d"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+ 		!BR2_PACKAGE_MESA3D_DRI_DRIVER
+-- 
+2.14.1
