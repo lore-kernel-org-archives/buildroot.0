@@ -1,13 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2019 09:49:03 +0100
-Subject: [Buildroot] [PATCH 2/4] toolchain: check the SSP option is known
-In-Reply-To: <29010_1552372901_5C8754A5_29010_303_1_20190312064139.GD4924@r-lnx-nyma7486-2>
+Date: Tue, 12 Mar 2019 09:52:59 +0100
+Subject: [Buildroot] [PATCH 1/4] toolchain: set the ssp gcc option in
+ kconfig
+In-Reply-To: <27512_1552370795_5C874C6B_27512_48_1_20190312060632.GA4924@r-lnx-nyma7486-2>
 References: <cover.1552286891.git.yann.morin@orange.com>
- <8928_1552286905_5C8604B9_8928_93_1_836f3203-3172-44de-a772-1825aafd915d@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- <f8725159-1dae-da34-de01-dbf681de2169@mind.be>
- <20190312061810.GB4924@r-lnx-nyma7486-2>
- <29010_1552372901_5C8754A5_29010_303_1_20190312064139.GD4924@r-lnx-nyma7486-2>
-Message-ID: <7df764e1-1b90-2026-238f-d493c027c389@mind.be>
+ <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+ <309c4824-97d8-e946-79b2-7e4c722ed601@mind.be>
+ <27512_1552370795_5C874C6B_27512_48_1_20190312060632.GA4924@r-lnx-nyma7486-2>
+Message-ID: <d24bdf97-bea5-f64a-6664-b4c5a356aeb3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,24 +16,43 @@ To: buildroot@busybox.net
 
 
 
-On 12/03/2019 07:41, yann.morin at orange.com wrote:
+On 12/03/2019 07:06, yann.morin at orange.com wrote:
 > Arnout, All,
 > 
-> On 2019-03-12 07:18 +0100, MORIN Yann TGI/OLS spake thusly:
->> On 2019-03-12 01:25 +0100, Arnout Vandecappelle spake thusly:
+> On 2019-03-12 01:02 +0100, Arnout Vandecappelle spake thusly:
+>> On 11/03/2019 07:48, yann.morin at orange.com wrote:
+>> [snip]
 > [--SNIP--]
->>>  I notice that in vlc.mk, we have
->>> ax_cv_check_cflags___fstack_protector_strong=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
->> I'll check what vlc really wants it for (e.g. strong, all, regular?),
->> fix and send a patch.
+>>> +ifneq ($(BR2_SSP_OPTION),)
+>>> +TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_OPTION='$(BR2_SSP_OPTION)'
+>>>  endif
+>>  I'd really like to use the BR_ADDITIONAL_CFLAGS instead, by changing the
+>> definition in the .mk file to something like:
+>>
+>> TOOLCHAIN_WRAPPER_OPTS = \
+>>         $(call qstrip,$(BR2_TARGET_OPTIMIZATION)) \
+>> 	$(call qstrip,$(BR2_SSP_OPTION))
+>>
+>> TOOLCHAIN_WRAPPER_ARGS += \
+>>  	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TOOLCHAIN_WRAPPER_OPTS),"$(f)"$(comma))'
 > 
-> So, vlc already depends on gcc >= 4.9 anyway, so there will always have
-> support for fstack-protctor-strong, and this legacy wart can be removed
-> now, I guess.
+> OK, will do.
 
- Not at all! gcc >= 4.9 doesn't guarantee SSP availability, only that if SSP is
-available, then -fstack-protector=strong will work. So the check is correct
-because vlc depends on gcc >= 4.9.
+ Note that we don't have a runtime test for BR2_TRGET_OPTIMIZATION so some
+manual testing will be needed.
+
+
+>> (note that I preferred the qstrip instead of the ifdef here, and adding quotes
+>> explicitly in the foreach, but you may want to implement it differently).
+> 
+> Yeah, I tried to avoid the qstriop-then-strip-anyway dance, but it is
+> indeed nicer the way you wrote it.
+
+ I like the qstrip-then-quote dance, because it makes things consistent.
+
+ Note that this is a very special case because we want to quote each
+space-separated option here; in general we actually want to make sure the spaces
+are quoted when we do a qstrip-then-quote dance.
 
  Regards,
  Arnout
