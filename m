@@ -1,115 +1,145 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Mar 2019 21:20:00 +0100
-Subject: [Buildroot] [PATCH] package/openjpeg: security bump to latest git
- version
-Message-ID: <20190312202000.28239-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Mar 2019 21:33:18 +0100
+Subject: [Buildroot] [git commit] package/php: security bump to version 7.3.3
+Message-ID: <20190312203343.3F3FE8ECC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current git contains fixes for a number of post-2.3.0 security issues:
+commit: https://git.buildroot.net/buildroot/commit/?id=b821ae3d63440258808e413b1ace53639066046a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-git shortlog --no-merges -i --grep cve --grep overflow --grep zero v2.3.0..
-Even Rouault (2):
-      Avoid out-of-bounds write overflow due to uint32 overflow computation on images with huge dimensions.
-      color_apply_icc_profile: avoid potential heap buffer overflow
+php-7.3.3 fixes a number of security issues (no CVE known, bugtracker issues
+not yet public): https://secure.php.net/ChangeLog-7.php#7.3.3
 
-Hugo Lefeuvre (4):
-      convertbmp: fix issues with zero bitmasks
-      jp3d/jpwl convert: fix write stack buffer overflow
-      jp2: convert: fix null pointer dereference
-      convertbmp: detect invalid file dimensions early
-
-Karol Babioch (2):
-      jp3d: Replace sprintf() by snprintf() in volumetobin()
-      opj_mj2_extract: Check provided output prefix for length
-
-Stefan Weil (1):
-      Fix some potential overflow issues (#1161)
-
-Young_X (5):
-      [MJ2] To avoid divisions by zero / undefined behaviour on shift
-      [JPWL] fix CVE-2018-16375
-      [JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
-      [JPWL] opj_compress: reorder checks related to code block dimensions to avoid potential int overflow
-      [JP3D] To avoid divisions by zero / undefined behaviour on shift (CVE-2018-14423
-
-ichlubna (1):
-      openjp3d: Int overflow fixed (#1159)
-
-setharnold (1):
-      fix unchecked integer multiplication overflow
-
-Drop now upstreamed 0004-install-static-lib.patch.
-
-Add a hash for the LICENSE file.
+Drop 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch as the
+flock detection has been removed since commit 9222702633 (Avoid dependency
+on "struct flock" fields order.)
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openjpeg/0004-install-static-lib.patch | 27 --------------------------
- package/openjpeg/openjpeg.hash                 |  3 ++-
- package/openjpeg/openjpeg.mk                   |  4 ++--
- 3 files changed, 4 insertions(+), 30 deletions(-)
- delete mode 100644 package/openjpeg/0004-install-static-lib.patch
+ ...ch => 0004-Call-apxs-with-correct-prefix.patch} |  0
+ ...ck-mechanism-is-obviously-linux-so-force-.patch | 82 ----------------------
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 84 deletions(-)
 
-diff --git a/package/openjpeg/0004-install-static-lib.patch b/package/openjpeg/0004-install-static-lib.patch
+diff --git a/package/php/0005-Call-apxs-with-correct-prefix.patch b/package/php/0004-Call-apxs-with-correct-prefix.patch
+similarity index 100%
+rename from package/php/0005-Call-apxs-with-correct-prefix.patch
+rename to package/php/0004-Call-apxs-with-correct-prefix.patch
+diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
 deleted file mode 100644
-index 4a3bbfa28a..0000000000
---- a/package/openjpeg/0004-install-static-lib.patch
+index 5c3814f619..0000000000
+--- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--From 66297f07a43d2770a97c8456d20202f3d051d980 Mon Sep 17 00:00:00 2001
--From: Even Rouault <even.rouault@spatialys.com>
--Date: Mon, 9 Oct 2017 11:40:43 +0200
--Subject: [PATCH] Unix build: fix regression of 2.3.0 where a shared-only or
-- static-only build lacks the installation target for the library (#1019, fixes
-- regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
+@@ -1,82 +0,0 @@
+-From bedbd41ef0a5ce80b83a6f6eaebd7c90f0bc5615 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 9 Aug 2016 11:52:19 +0200
+-Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
 -
--Downloaded from upstream commit
--https://github.com/uclouvain/openjpeg/commit/66297f07a43d2770a97c8456d20202f3d051d980
--
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: update for 7.2.12 & 7.3.2]
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-[aduskett at gmail.com: Update for 7.3.0]
 ----
-- src/lib/openjp2/CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
+- ext/opcache/config.m4 | 34 ++--------------------------------
+- 1 file changed, 2 insertions(+), 32 deletions(-)
 -
--diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.txt
--index 0b4520384..f8990ccf0 100644
----- a/src/lib/openjp2/CMakeLists.txt
--+++ b/src/lib/openjp2/CMakeLists.txt
--@@ -99,6 +99,7 @@ else()
--     set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME} openjp2_static)
--   else()
--     add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
--+    set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME})
--   endif()
-- endif()
+-diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
+-index fbb9b21..ffddc8e 100644
+---- a/ext/opcache/config.m4
+-+++ b/ext/opcache/config.m4
+-@@ -334,58 +334,8 @@ int main() {
+-     msg=yes],[msg=no],[msg=no])
+-   AC_MSG_RESULT([$msg])
 - 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index dd3cf26cf0..8a6fda48c4 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 3dc787c1bb6023ba846c2a0d9b1f6e179f1cd255172bde9eb75b01f1e6c7d71a  openjpeg-2.3.0.tar.gz
-+sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
-+sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 9a8fdab7a4..6036ab95a3 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
+--flock_type=unknown
+--AC_MSG_CHECKING(for struct flock layout)
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5, 6, 7 };
+--  int main() {
+--    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 6 && lock.l_len== 7) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--    flock_type=aix64
+--    AC_DEFINE([HAVE_FLOCK_AIX64], [], [Struct flock is 64-bit AIX-type])
+--], [])
+--fi
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() {
+--    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 3 && lock.l_len == 4) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--	flock_type=linux
+--    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+--], [])
+--fi
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() {
+--    if(lock.l_start == 1 && lock.l_len == 2 && lock.l_type == 4 && lock.l_whence == 5) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--	flock_type=bsd
+--    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
+--], [])
+--fi
+--
+--AC_MSG_RESULT([$flock_type])
+-+flock_type=linux
+-+AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+- 
+- if test "$flock_type" = "unknown"; then
+- 	AC_MSG_ERROR([Don't know how to define struct flock on this system[,] set --enable-opcache=no])
+--- 
+-2.7.4
+-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 5d74a28bc7..8a9814d10e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 010b868b4456644ae227d05ad236c8b0a1f57dc6320e7e5ad75e86c5baf0a9a8  php-7.3.2.tar.xz
++sha256 6bb03e79a183d0cb059a6d117bbb2e0679cab667fb713a13c6a16f56bebab9b3  php-7.3.3.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 061b2f2609..ea6deca7c1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENJPEG_VERSION = 2.3.0
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
--- 
-2.11.0
+-PHP_VERSION = 7.3.2
++PHP_VERSION = 7.3.3
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
