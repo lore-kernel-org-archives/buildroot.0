@@ -1,37 +1,43 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 13 Mar 2019 00:08:36 +0100
-Subject: [Buildroot] [PATCH 2/5] linux: update the comment about thumb issue
- with Binutils 2.29 and 2.30
+Date: Wed, 13 Mar 2019 00:08:37 +0100
+Subject: [Buildroot] [PATCH 3/5] package/binutils: use the default binutils
+ version (2.31) for ARM with thumb mode enabled.
 In-Reply-To: <20190312230839.23307-1-romain.naour@gmail.com>
 References: <20190312230839.23307-1-romain.naour@gmail.com>
-Message-ID: <20190312230839.23307-2-romain.naour@gmail.com>
+Message-ID: <20190312230839.23307-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Binutils 2.29 and 2.30 are affected by a bug in ADR and ADRL
+pseudo-instruction [1] that was fixed in Binutils 2.31 [2].
+
+  * The ADR and ADRL pseudo-instructions supported by the ARM assembler
+    now only set the bottom bit of the address of thumb function symbols
+    if the -mthumb-interwork command line option is active.
+
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=21458
+[2] https://sourceware.org/ml/binutils/2018-07/msg00213.html
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- linux/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f17334ae7c..856b53eec0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,9 +8,10 @@ config BR2_LINUX_KERNEL
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 8485568170..ec1e0d8dd7 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,8 +8,6 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
  
- if BR2_LINUX_KERNEL
- 
--comment "Linux kernel in thumb mode may be broken with binutils >= 2.29"
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=21458
-+comment "Linux kernel in thumb mode may be broken with binutils 2.29 and 2.30"
- 	depends on BR2_arm || BR2_armeb
--	depends on !BR2_BINUTILS_VERSION_2_28_X
-+	depends on BR2_BINUTILS_VERSION_2_29_X || BR2_BINUTILS_VERSION_2_30_X
- 
- # Packages that need to have a kernel with support for loadable modules,
- # but do not use the kernel-modules infrastructure, should select that
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB
+-	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
+ 	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
 -- 
 2.14.5
