@@ -1,35 +1,39 @@
-From: Devashish Bhageerutty <db@windarphotonics.com>
-Date: Tue, 12 Mar 2019 15:09:04 +0000
-Subject: [Buildroot] Adding custom linux config
-Message-ID: <HE1PR0702MB361270F873CC0E92047A60CCCF490@HE1PR0702MB3612.eurprd07.prod.outlook.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 12 Mar 2019 18:18:25 +0100
+Subject: [Buildroot] [PATCH] package/lpeg: bump to version 1.0.2
+Message-ID: <20190312171825.6050-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lpeg/lpeg.hash | 2 +-
+ package/lpeg/lpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I am building an image with an out of tree configuration. I have specified the path to my custom config file in the defconfig and my linux.config is in the folder structure as shown on the Buildroot template. But when I am building or if I do ?make linux-update-(def)config?, my config file is getting overwritten by a generic one. I have checked the /proc/configz on a running system to verify this. This configuration was working before on Buildroot 2015 with linux kernel 3.10 but now I am using Buildroot 2018.02 and kernel 4.14.73. I would be grateful if I could be pointed to what could be causing this or any tests I can make to figure out why this is happening.
-
-Best Regards,
-
-Deva
-
-[windar_logo_email_sig]
-Devashish Bhageerutty
-Embedded Software Engineer
-Windar Photonics A/S
-E-mail: db at windarphotonics.com<mailto:db@windarphotonics.com>
-Web: www.windarphotonics.com
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190312/801207f6/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.png
-Type: image/png
-Size: 9595 bytes
-Desc: image001.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190312/801207f6/attachment.png>
+diff --git a/package/lpeg/lpeg.hash b/package/lpeg/lpeg.hash
+index da38cc875..7a20f063f 100644
+--- a/package/lpeg/lpeg.hash
++++ b/package/lpeg/lpeg.hash
+@@ -1,2 +1,2 @@
+ # computed by luarocks/buildroot
+-sha256 149be31e0155c4694f77ea7264d9b398dd134eca0d00ff03358d91a6cfb2ea9d  lpeg-1.0.1-1.src.rock
++sha256 e0d0d687897f06588558168eeb1902ac41a11edd1b58f1aa61b99d0ea0abbfbc  lpeg-1.0.2-1.src.rock
+diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
+index 1541f33cc..cdb2e81a5 100644
+--- a/package/lpeg/lpeg.mk
++++ b/package/lpeg/lpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LPEG_VERSION = 1.0.1-1
++LPEG_VERSION = 1.0.2-1
+ LPEG_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
+-- 
+2.17.1
