@@ -1,67 +1,56 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 13:09:32 +0100
-Subject: [Buildroot] [PATCH 1/5 v2] toolchain: prepare to pass more
- additional CFLAGS via the wrapper
-In-Reply-To: <cover.1552392456.git.yann.morin@orange.com>
-References: <cover.1552392456.git.yann.morin@orange.com>
-Message-ID: <17089_1552392582_5C87A186_17089_129_1_a5ce0b38-3ef0-45ac-a336-7985a6490f2b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Mar 2019 14:12:30 +0200
+Subject: [Buildroot] [PATCH] package/file: security bump to version 5.36
+Message-ID: <cd8c9e5890d36e5b0c3d8a895ff19f2d361f4a27.1552392750.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+CVE-2019-8906: do_core_note in readelf.c in libmagic.a in file 5.35 has
+an out-of-bounds read because memcpy is misused.
 
-Currently, we pass the user-supplied so-called target optimisation flags
-to the wrapper.
+CVE-2019-8904: do_bid_note in readelf.c in libmagic.a in file 5.35 has a
+stack-based buffer over-read, related to file_printf and file_vprintf.
 
-We're going to have additional such CFLAGS to pass, so push-back the
-formatting loop to quote the options at the last moment.
+Update license files hashes; removal of trailing white spaces.
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- toolchain/toolchain-wrapper.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/file/file.hash | 12 +++++++-----
+ package/file/file.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 613f5f6c56..c9e6fd3f3d 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -16,11 +16,13 @@ endif
- TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+diff --git a/package/file/file.hash b/package/file/file.hash
+index c279dff6e160..7948e856ee9c 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated
+-sha256 f15a50dbbfa83fec0bd1161e8e191b092ec832720e30cd14536e044ac623b20a  file-5.34.tar.gz
+-sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
+-sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
+-sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
++# Locally calculated after verifying signature
++# ftp://ftp.astron.com/pub/file/file-5.36.tar.gz.asc
++# using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
++sha256 fb608290c0fd2405a8f63e5717abf6d03e22e183fb21884413d1edd918184379  file-5.36.tar.gz
++sha256 0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
++sha256 4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
++sha256 7ac061e1a1c840c4dfa0573aec6f3497676c9295b5ec4190d3576646eb1646bf  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index b5b12978bc49..1a835015a779 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+TOOLCHAIN_WRAPPER_OPTS = \
-+	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-+
- # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
- # separate argument when used in execv() by the toolchain wrapper.
--TOOLCHAIN_WRAPPER_OPTS = \
--	$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)"$(comma))
--TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_OPTS)'
-+TOOLCHAIN_WRAPPER_ARGS += \
-+	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TOOLCHAIN_WRAPPER_OPTS),"$(f)"$(comma))'
- 
- ifeq ($(BR2_CCACHE),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
+-FILE_VERSION = 5.34
++FILE_VERSION = 5.36
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
 -- 
-2.17.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.20.1
