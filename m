@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2019 01:02:18 +0100
-Subject: [Buildroot] [PATCH 1/4] toolchain: set the ssp gcc option in
- kconfig
-In-Reply-To: <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-References: <cover.1552286891.git.yann.morin@orange.com>
- <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-Message-ID: <309c4824-97d8-e946-79b2-7e4c722ed601@mind.be>
+Date: Tue, 12 Mar 2019 01:08:33 +0100
+Subject: [Buildroot] ? using compilers other than gcc!
+In-Reply-To: <CAMWSM7jpZFfSLZ8pUNNODRbc_2Gm_gQtkoZNDdR+4NeoK9sXRA@mail.gmail.com>
+References: <43556bee-b905-8e11-c71d-d87aa92d13f5@lamiaworks.com.au>
+ <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
+ <CAMWSM7jpZFfSLZ8pUNNODRbc_2Gm_gQtkoZNDdR+4NeoK9sXRA@mail.gmail.com>
+Message-ID: <f084d35f-ddc3-0f05-4456-ee15c1d68dfe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +14,22 @@ To: buildroot@busybox.net
 
 
 
-On 11/03/2019 07:48, yann.morin at orange.com wrote:
-[snip]
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index 613f5f6c56..e48e765a8e 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -51,12 +51,8 @@ else ifeq ($(BR2_RELRO_FULL),y)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
->  endif
->  
-> -ifeq ($(BR2_SSP_REGULAR),y)
-> -TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_REGULAR
-> -else ifeq ($(BR2_SSP_STRONG),y)
-> -TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_STRONG
-> -else ifeq ($(BR2_SSP_ALL),y)
-> -TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
-> +ifneq ($(BR2_SSP_OPTION),)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_OPTION='$(BR2_SSP_OPTION)'
->  endif
+On 11/03/2019 09:01, Joseph Kogut wrote:
+> On Mon, Mar 11, 2019 at 12:03 AM <yann.morin@orange.com> wrote:
+>>
+>> The best candidate nowadays for an alternative to gcc, is clang.
+>>
+> 
+> In that regard, has there been any progress in supporting Clang as a
+> compiler in Buildroot?
 
- I try to mention this every time someone touches the toolchain wrapper:
+ I don't think anyone has ever proposed any patches that go into that direction.
+Though I suppose that compiler-rt [1] is a necessary step.
 
- I'd really like to use the BR_ADDITIONAL_CFLAGS instead, by changing the
-definition in the .mk file to something like:
-
-TOOLCHAIN_WRAPPER_OPTS = \
-        $(call qstrip,$(BR2_TARGET_OPTIMIZATION)) \
-	$(call qstrip,$(BR2_SSP_OPTION))
-
-TOOLCHAIN_WRAPPER_ARGS += \
- 	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TOOLCHAIN_WRAPPER_OPTS),"$(f)"$(comma))'
-
-(note that I preferred the qstrip instead of the ifdef here, and adding quotes
-explicitly in the foreach, but you may want to implement it differently).
+ It's a big endeavor. There will e.g. need to be a new symbol to distinguish
+between clang and gcc, and e.g. disable the kernel when clang is used.
 
  Regards,
  Arnout
+
+[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=84352
