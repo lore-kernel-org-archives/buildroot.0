@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 21:37:54 +0100
-Subject: [Buildroot] [PATCH] package/php: security bump to version 7.3.3
-In-Reply-To: <20190312151029.24382-1-peter@korsgaard.com>
-References: <20190312151029.24382-1-peter@korsgaard.com>
-Message-ID: <20190312213754.20f35d52@windsurf>
+Date: Tue, 12 Mar 2019 21:37:58 +0100
+Subject: [Buildroot] [PATCH] package/iproute2: bump to version 4.20.0
+In-Reply-To: <5ae4f299bdd123734b834aa0da5f4baf4286e93e.1552406122.git.baruch@tkos.co.il>
+References: <5ae4f299bdd123734b834aa0da5f4baf4286e93e.1552406122.git.baruch@tkos.co.il>
+Message-ID: <20190312213758.52fe38f4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Mar 2019 16:10:29 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Tue, 12 Mar 2019 17:55:22 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> php-7.3.3 fixes a number of security issues (no CVE known, bugtracker issues
-> not yet public): https://secure.php.net/ChangeLog-7.php#7.3.3
+> Drop upstream patch. Renumber the remaining patch.
 > 
-> Drop 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch as the
-> flock detection has been removed since commit 9222702633 (Avoid dependency
-> on "struct flock" fields order.)
+> Add upstream patch fixing build with musl libc.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  ...ch => 0004-Call-apxs-with-correct-prefix.patch} |  0
->  ...ck-mechanism-is-obviously-linux-so-force-.patch | 82 ----------------------
->  package/php/php.hash                               |  2 +-
->  package/php/php.mk                                 |  2 +-
->  4 files changed, 2 insertions(+), 84 deletions(-)
->  rename package/php/{0005-Call-apxs-with-correct-prefix.patch => 0004-Call-apxs-with-correct-prefix.patch} (100%)
->  delete mode 100644 package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+>  ...ss-fix-compilation-under-glibc-2.18.patch} |  0
+>  ...rovide-fallback-CLOCK_TAI-definition.patch | 32 -------------------
+>  ...02-f_flower-fix-build-with-musl-libc.patch | 31 ++++++++++++++++++
+>  package/iproute2/iproute2.hash                |  2 +-
+>  package/iproute2/iproute2.mk                  |  2 +-
+>  5 files changed, 33 insertions(+), 34 deletions(-)
+>  rename package/iproute2/{0002-ss-fix-compilation-under-glibc-2.18.patch => 0001-ss-fix-compilation-under-glibc-2.18.patch} (100%)
+>  delete mode 100644 package/iproute2/0001-utils.h-provide-fallback-CLOCK_TAI-definition.patch
+>  create mode 100644 package/iproute2/0002-f_flower-fix-build-with-musl-libc.patch
 
 Applied to master, thanks.
 
