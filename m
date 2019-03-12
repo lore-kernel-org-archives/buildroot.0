@@ -1,87 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2019 23:47:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avahi: add upstream security fix
-In-Reply-To: <20190312222157.19390-1-panfilov.artyom@gmail.com>
-References: <20190312222157.19390-1-panfilov.artyom@gmail.com>
-Message-ID: <06c7a373-b071-d898-86a9-9a4ed972ef0b@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 13 Mar 2019 00:06:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5enginio: needs ssl
+In-Reply-To: <20190312232910.5c88999a@windsurf>
+References: <20190309222953.7785-1-fontaine.fabrice@gmail.com>
+ <20190312232910.5c88999a@windsurf>
+Message-ID: <CAPi7W80-SshJCY0yMoxFu71ZBXYUsi4s_6y+LU7RdvwJcRvg7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Artem,
+Hello Thomas,
+Le mar. 12 mars 2019 ? 23:29, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Sat,  9 Mar 2019 23:29:53 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Remove select on BR2_PACKAGE_QT5BASE and BR2_PACKAGE_OPENSSL to avoid a
+> > circular dependency
+>
+> I don't really understand where the "circular dependency" is.
+>
+> To me it seems like the problem is rather:
+>
+> """
+> Qt 5.6 SSL support is no longer available with OpenSSL since the bump
+> of OpenSSL to 1.1.x. Therefore selecting Qt5 and OpenSSL does not
+> guarantee that qt5base will be built with SSL support. Due to this, the
+> build of qt5enginio currently fails on Qt 5.6.
+> """
+>
+> > diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+> > index 102058e7c5..cce0f2a1cb 100644
+> > --- a/package/qt5/qt5enginio/Config.in
+> > +++ b/package/qt5/qt5enginio/Config.in
+> > @@ -1,7 +1,6 @@
+> >  config BR2_PACKAGE_QT5ENGINIO
+> >       bool "qt5enginio"
+> > -     select BR2_PACKAGE_OPENSSL
+> > -     select BR2_PACKAGE_QT5BASE
+> > +     depends on BR2_PACKAGE_QT5BASE_OPENSSL
+>
+> Either we do this, or:
+>
+>         select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT5_VERSION_LATEST
+>         select BR2_PACKAGE_LIBRESSL if BR2_PACKAGE_QT5_VERSION_5_6
+I tried this, but I assume that I must add the dependencies of
+libressl if QT 5.6 is true, for example like this:
 
-On 12/03/2019 23:21, Artem Panfilov wrote:
-> Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
-> inadvertently responds to IPv6 unicast queries with source addresses
-> that are not on-link, which allows remote attackers to cause a denial
-> of service (traffic amplification) and may cause information leakage
-> by obtaining potentially sensitive information from the responding
-> device via port-5353 UDP packets.
-> 
-> Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
-> ---
->  ...eries-from-address-not-on-local-link.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
-> 
-> diff --git a/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch b/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
-> new file mode 100644
-> index 0000000000..e5b13e0bee
-> --- /dev/null
-> +++ b/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
-> @@ -0,0 +1,42 @@
-> +From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
-> +From: Trent Lloyd <trent@lloyd.id.au>
-> +Date: Sat, 22 Dec 2018 09:06:07 +0800
-> +Subject: [PATCH] Drop legacy unicast queries from address not on local link
-> +
-> +When handling legacy unicast queries, ensure that the source IP is
-> +inside a subnet on the local link, otherwise drop the packet.
-> +
-> +Fixes #145
-> +Fixes #203
-> +CVE-2017-6519
-> +CVE-2018-100084
+depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
+                (BR2_PACKAGE_QT5_VERSION_5_6 && \
+                (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
+                !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
 
- You need to add a Signed-off-by line for yourself.  This is a short way for you
-to assert that you are entitled to contribute the patch under the license(s) of
-the avahi package. See  http://elinux.org/Developer_Certificate_Of_Origin and
-https://buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
-for more details.
+But then, this creates the following circular dependency:
 
- Regards,
- Arnout
+package/sqlcipher/Config.in:1:error: recursive dependency detected!
+package/sqlcipher/Config.in:1: symbol BR2_PACKAGE_SQLCIPHER depends on
+BR2_PACKAGE_SQLITE
+package/sqlite/Config.in:1: symbol BR2_PACKAGE_SQLITE is selected by
+BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
+package/qt5/qt5base/Config.in:104: symbol
+BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM is part of choice <choice>
+package/qt5/qt5base/Config.in:88: choice <choice> contains symbol <choice>
+package/qt5/qt5base/Config.in:88: choice <choice> contains symbol
+BR2_PACKAGE_QT5BASE
+package/qt5/qt5base/Config.in:1: symbol BR2_PACKAGE_QT5BASE is
+selected by BR2_PACKAGE_QT5ENGINIO
+package/qt5/qt5enginio/Config.in:1: symbol BR2_PACKAGE_QT5ENGINIO
+depends on BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+package/openssl/Config.in:1: symbol
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected by
+BR2_PACKAGE_SQLCIPHER
 
-> +---
-> + avahi-core/server.c | 8 ++++++++
-> + 1 file changed, 8 insertions(+)
-> +
-> +diff --git a/avahi-core/server.c b/avahi-core/server.c
-> +index a2cb19a8..a2580e38 100644
-> +--- a/avahi-core/server.c
-> ++++ b/avahi-core/server.c
-> +@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
-> + 
-> +     if (avahi_dns_packet_is_query(p)) {
-> +         int legacy_unicast = 0;
-> ++        char t[AVAHI_ADDRESS_STR_MAX];
-> + 
-> +         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
-> +          * AR section completely here, so far. Until the day we add
-> +@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
-> +             legacy_unicast = 1;
-> +         }
-> + 
-> ++        if (!is_mdns_mcast_address(dst_address) &&
-> ++            !avahi_interface_address_on_link(i, src_address)) {
-> ++
-> ++            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
-> ++            return;
-> ++        }
-> ++
-> +         if (legacy_unicast)
-> +             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
-> + 
-> 
+Did I made a mistake? Shouldn't we add the libressl dependencies?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
+
+Fabrice
