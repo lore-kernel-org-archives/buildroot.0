@@ -1,91 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 13 Mar 2019 00:06:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5enginio: needs ssl
-In-Reply-To: <20190312232910.5c88999a@windsurf>
-References: <20190309222953.7785-1-fontaine.fabrice@gmail.com>
- <20190312232910.5c88999a@windsurf>
-Message-ID: <CAPi7W80-SshJCY0yMoxFu71ZBXYUsi4s_6y+LU7RdvwJcRvg7Q@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 13 Mar 2019 00:08:35 +0100
+Subject: [Buildroot] [PATCH 1/5] package/binutils: switch to use 2.31.x as
+ the default version
+Message-ID: <20190312230839.23307-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-Le mar. 12 mars 2019 ? 23:29, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Sat,  9 Mar 2019 23:29:53 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Remove select on BR2_PACKAGE_QT5BASE and BR2_PACKAGE_OPENSSL to avoid a
-> > circular dependency
->
-> I don't really understand where the "circular dependency" is.
->
-> To me it seems like the problem is rather:
->
-> """
-> Qt 5.6 SSL support is no longer available with OpenSSL since the bump
-> of OpenSSL to 1.1.x. Therefore selecting Qt5 and OpenSSL does not
-> guarantee that qt5base will be built with SSL support. Due to this, the
-> build of qt5enginio currently fails on Qt 5.6.
-> """
->
-> > diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-> > index 102058e7c5..cce0f2a1cb 100644
-> > --- a/package/qt5/qt5enginio/Config.in
-> > +++ b/package/qt5/qt5enginio/Config.in
-> > @@ -1,7 +1,6 @@
-> >  config BR2_PACKAGE_QT5ENGINIO
-> >       bool "qt5enginio"
-> > -     select BR2_PACKAGE_OPENSSL
-> > -     select BR2_PACKAGE_QT5BASE
-> > +     depends on BR2_PACKAGE_QT5BASE_OPENSSL
->
-> Either we do this, or:
->
->         select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT5_VERSION_LATEST
->         select BR2_PACKAGE_LIBRESSL if BR2_PACKAGE_QT5_VERSION_5_6
-I tried this, but I assume that I must add the dependencies of
-libressl if QT 5.6 is true, for example like this:
+Now that binutils 2.32 has been released, it is time to move to
+binutils 2.31.x as the default binutils version, instead of 2.29.1.
 
-depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
-                (BR2_PACKAGE_QT5_VERSION_5_6 && \
-                (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
-                !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/Config.in.host | 2 +-
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But then, this creates the following circular dependency:
-
-package/sqlcipher/Config.in:1:error: recursive dependency detected!
-package/sqlcipher/Config.in:1: symbol BR2_PACKAGE_SQLCIPHER depends on
-BR2_PACKAGE_SQLITE
-package/sqlite/Config.in:1: symbol BR2_PACKAGE_SQLITE is selected by
-BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
-package/qt5/qt5base/Config.in:104: symbol
-BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM is part of choice <choice>
-package/qt5/qt5base/Config.in:88: choice <choice> contains symbol <choice>
-package/qt5/qt5base/Config.in:88: choice <choice> contains symbol
-BR2_PACKAGE_QT5BASE
-package/qt5/qt5base/Config.in:1: symbol BR2_PACKAGE_QT5BASE is
-selected by BR2_PACKAGE_QT5ENGINIO
-package/qt5/qt5enginio/Config.in:1: symbol BR2_PACKAGE_QT5ENGINIO
-depends on BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-package/openssl/Config.in:1: symbol
-BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected by
-BR2_PACKAGE_SQLCIPHER
-
-Did I made a mistake? Shouldn't we add the libressl dependencies?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 9a2b27c55e..8485568170 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -10,7 +10,7 @@ choice
+ 	prompt "Binutils Version"
+ 	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB
+ 	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
+-	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
++	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4531b8d9c8..6798356ff2 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2018.09-release
+ else
+-BINUTILS_VERSION = 2.29.1
++BINUTILS_VERSION = 2.31.1
+ endif
+ endif # BINUTILS_VERSION
+ 
+-- 
+2.14.5
