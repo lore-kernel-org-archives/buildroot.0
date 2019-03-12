@@ -1,45 +1,47 @@
 From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 12 Mar 2019 11:21:07 +0100
-Subject: [Buildroot] why qt5webengine dependencies?
-Message-ID: <0464fb6c-4e64-4608-611d-91d115a87fb0@ginzinger.com>
+Date: Tue, 12 Mar 2019 11:57:13 +0100
+Subject: [Buildroot] [PATCH] docs/manual: add note about spurious errors
+ duing make printvars
+Message-ID: <20190312105713.23968-1-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi Gael,
+Add a note about errors we currently have, as discussed in
+http://lists.busybox.net/pipermail/buildroot/2019-March/244212.html
 
-why does qt5webengine in buildroot have a dependency on
-* udev:
-I apply the following patch and create /dev/shm at runtime, which works
-out just fine. At least a build-depencency is questionable, isn't it?
---- a/src/core/config/linux.pri
-+++ b/src/core/config/linux.pri
-@@ -8,7 +8,7 @@ gn_args += \
-     use_gnome_keyring=false \
-     use_kerberos=false \
-     linux_use_bundled_binutils=false \
--    use_udev=true \
-+    use_udev=false \
-     use_bundled_fontconfig=false
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+---
+ docs/manual/make-tips.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index ea1d825bef..475de4ffa7 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -131,3 +131,13 @@ The output of quoted variables can be reused in shell scripts, for example:
+  $ echo $BUSYBOX_DEPENDENCIES
+  skeleton toolchain
+ ----
++
++Note that when using +make printvars+ you might see spurious errors like
++the following. Please help reviewing our Makefile macros and variables
++in order to fix this:
++
++----
++/bin/bash: support/dependencies/check-host-.sh: no such file or directory
++/bin/bash: -c: line 0: syntax error: ')' unexpected
++/bin/bash: -c: line 0: `set -e; TMP="$(mktemp)"; if () >/dev/null 2>&1; then echo ""; else echo ""; fi;
++----
+-- 
+2.20.1
 
-* OpenGL backend:
-I'm yet to test this, but Qt webengine semms to support building with
-"no-opengl" since 5.8! And there's QT_WEBENGINE_DISABLE_GPU at runtime,
-so...
-
-
-My question is: why the dependencies?
-
-thanks,
-
-                                martin
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: smime.p7s
 Type: application/x-pkcs7-signature
 Size: 3616 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190312/40348415/attachment.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190312/e2e0dfb4/attachment.bin>
