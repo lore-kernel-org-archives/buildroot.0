@@ -1,67 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Mar 2019 09:03:45 +0100
+Date: Tue, 12 Mar 2019 09:04:00 +0100
 Subject: [Buildroot] [git commit branch/2018.02.x] libunistring: bump to
- version 0.9.9
-Message-ID: <20190312082243.BC55B838A8@busybox.osuosl.org>
+ version 0.9.10
+Message-ID: <20190312082243.C24488ECAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3008c4d4154eeb028d530833cbe82a476032d5a
+commit: https://git.buildroot.net/buildroot/commit/?id=9760192fc3e9281f007f83123e7d6cb1bd09b6f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Drop --{enable,disable}-threads; threading support is detected
-automatically.
+Fixes:
+http://autobuild.buildroot.net/results/1c6c0270dd6b11548d569045e000a322ed465727/
 
-Add GPLv3 license file.
-
-Add license files hash.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5af41088a49e1a5c438d9d6d2e39e2a15d4b3c8a)
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7d480277b6425005e0b0357fe1665aa3e7cff1c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libunistring/libunistring.hash |  6 +++++-
- package/libunistring/libunistring.mk   | 10 ++--------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ package/libunistring/libunistring.hash | 4 ++--
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index 15e35cb81c..8a5da7782d 100644
+index 8a5da7782d..2e4595b17d 100644
 --- a/package/libunistring/libunistring.hash
 +++ b/package/libunistring/libunistring.hash
-@@ -1,2 +1,6 @@
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--sha256	2e3764512aaf2ce598af5a38818c0ea23dedf1ff5460070d1b6cee5c3336e797	libunistring-0.9.7.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
-+sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
-+# Locally calculated
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
+-# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
+-sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
++# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
++sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+ sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
 diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 9340e79937..929b52ebd5 100644
+index 929b52ebd5..fa51447170 100644
 --- a/package/libunistring/libunistring.mk
 +++ b/package/libunistring/libunistring.mk
-@@ -4,18 +4,12 @@
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNISTRING_VERSION = 0.9.7
-+LIBUNISTRING_VERSION = 0.9.9
+-LIBUNISTRING_VERSION = 0.9.9
++LIBUNISTRING_VERSION = 0.9.10
  LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
  LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
  LIBUNISTRING_INSTALL_STAGING = YES
- LIBUNISTRING_LICENSE = LGPL-3.0+ or GPL-2.0
--LIBUNISTRING_LICENSE_FILES = COPYING.LIB
--
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBUNISTRING_CONF_OPTS += --enable-threads=posix
--else
--LIBUNISTRING_CONF_OPTS += --disable-threads
--endif
-+LIBUNISTRING_LICENSE_FILES = COPYING COPYING.LIB
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
