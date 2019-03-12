@@ -1,91 +1,87 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 12 Mar 2019 23:35:25 +0100
-Subject: [Buildroot] [PATCHv2 2/2] package/glibc: bump to version 2.29
-In-Reply-To: <20190312223525.17360-1-romain.naour@gmail.com>
-References: <20190312223525.17360-1-romain.naour@gmail.com>
-Message-ID: <20190312223525.17360-2-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2019 23:47:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avahi: add upstream security fix
+In-Reply-To: <20190312222157.19390-1-panfilov.artyom@gmail.com>
+References: <20190312222157.19390-1-panfilov.artyom@gmail.com>
+Message-ID: <06c7a373-b071-d898-86a9-9a4ed972ef0b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes to build and runtime requirements:
+ Hi Artem,
 
-* Python 3.4 or later is required to build the GNU C Library.
+On 12/03/2019 23:21, Artem Panfilov wrote:
+> Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
+> inadvertently responds to IPv6 unicast queries with source addresses
+> that are not on-link, which allows remote attackers to cause a denial
+> of service (traffic amplification) and may cause information leakage
+> by obtaining potentially sensitive information from the responding
+> device via port-5353 UDP packets.
+> 
+> Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+> ---
+>  ...eries-from-address-not-on-local-link.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
+> 
+> diff --git a/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch b/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
+> new file mode 100644
+> index 0000000000..e5b13e0bee
+> --- /dev/null
+> +++ b/package/avahi/0001-drop-legacy-unicast-queries-from-address-not-on-local-link.patch
+> @@ -0,0 +1,42 @@
+> +From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
+> +From: Trent Lloyd <trent@lloyd.id.au>
+> +Date: Sat, 22 Dec 2018 09:06:07 +0800
+> +Subject: [PATCH] Drop legacy unicast queries from address not on local link
+> +
+> +When handling legacy unicast queries, ensure that the source IP is
+> +inside a subnet on the local link, otherwise drop the packet.
+> +
+> +Fixes #145
+> +Fixes #203
+> +CVE-2017-6519
+> +CVE-2018-100084
 
-* On most architectures, GCC 5 or later is required to build the GNU C
-  Library.  (On powerpc64le, GCC 6.2 or later is still required, as
-  before.)
+ You need to add a Signed-off-by line for yourself.  This is a short way for you
+to assert that you are entitled to contribute the patch under the license(s) of
+the avahi package. See  http://elinux.org/Developer_Certificate_Of_Origin and
+https://buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
+for more details.
 
-While at it, remove the double "glibc-" prefix in the version.
+ Regards,
+ Arnout
 
-https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: remove "glibc-" prefix in the version (Yann).
----
- package/gcc/Config.in.host                                          | 6 ++----
- .../glibc.hash                                                      | 2 +-
- package/glibc/glibc.mk                                              | 6 +++---
- 3 files changed, 6 insertions(+), 8 deletions(-)
- rename package/glibc/{glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 => 2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61}/glibc.hash (69%)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 8ec406a117..222251f43c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -30,10 +30,8 @@ config BR2_GCC_VERSION_4_9_X
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
--	# glibc >= 2.26 needs gcc >= 6.2
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
--	# glibc >= 2.27 needs gcc >= 5
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC && (BR2_aarch64 || BR2_aarch64_be))
-+	# glibc >= 2.29 needs gcc >= 5 on all architectures.
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_GCC_VERSION_5_X
-diff --git a/package/glibc/glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1/glibc.hash b/package/glibc/2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61/glibc.hash
-similarity index 69%
-rename from package/glibc/glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1/glibc.hash
-rename to package/glibc/2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61/glibc.hash
-index e83b1caf4c..56e4bf1c18 100644
---- a/package/glibc/glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1/glibc.hash
-+++ b/package/glibc/2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  ebf04c7b00153d6df8beceec0666d4b13e1ac613b40d5774d1b8c6f61c1686e6  glibc-glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1.tar.gz
-+sha256  fdc2f7966eac7071ac4d66bc38d9236476d670f042645f9566746a1fd42a6a9d  glibc-2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index ec5b3cedc9..cb867d4d5b 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -12,8 +12,8 @@ GLIBC_VERSION = 4e2943456e690d89f48e6e710757dd09404b0c9a
- GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
- else
- # Generate version string using:
--#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1
-+#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
-+GLIBC_VERSION = 2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-@@ -32,7 +32,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- # Before glibc is configured, we must have the first stage
- # cross-compiler and the kernel headers
- GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
--	$(BR2_MAKE_HOST_DEPENDENCY)
-+	$(BR2_MAKE_HOST_DEPENDENCY) $(BR2_PYTHON3_HOST_DEPENDENCY)
- 
- GLIBC_SUBDIR = build
- 
--- 
-2.14.5
+> +---
+> + avahi-core/server.c | 8 ++++++++
+> + 1 file changed, 8 insertions(+)
+> +
+> +diff --git a/avahi-core/server.c b/avahi-core/server.c
+> +index a2cb19a8..a2580e38 100644
+> +--- a/avahi-core/server.c
+> ++++ b/avahi-core/server.c
+> +@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
+> + 
+> +     if (avahi_dns_packet_is_query(p)) {
+> +         int legacy_unicast = 0;
+> ++        char t[AVAHI_ADDRESS_STR_MAX];
+> + 
+> +         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
+> +          * AR section completely here, so far. Until the day we add
+> +@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
+> +             legacy_unicast = 1;
+> +         }
+> + 
+> ++        if (!is_mdns_mcast_address(dst_address) &&
+> ++            !avahi_interface_address_on_link(i, src_address)) {
+> ++
+> ++            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
+> ++            return;
+> ++        }
+> ++
+> +         if (legacy_unicast)
+> +             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
+> + 
+> 
