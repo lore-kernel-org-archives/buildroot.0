@@ -1,43 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 22:01:04 +0100
-Subject: [Buildroot] [PATCH 1/2] printvars: don't print anything when
- VARS is not set
-In-Reply-To: <20190312175535.18152-1-arnout@mind.be>
-References: <20190312173602.GE25009@scaer>
- <20190312175535.18152-1-arnout@mind.be>
-Message-ID: <20190312220104.7acc0f67@windsurf>
+Date: Tue, 12 Mar 2019 22:05:57 +0100
+Subject: [Buildroot] [git commit] package/go: set GOCACHE to a host path
+Message-ID: <20190312210340.2BD6F8B67E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Mar 2019 18:55:34 +0100
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3909423f1ccf186bd064e225ecb064ca1ece0310
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Using 'make printvars' for printing all variables is not very useful.
-> E.g. all macros will output some bogus value. In addition, the same can
-> be achieved with 'make -p'.
-> 
-> We can simply remove the condition on $(VARS). If VARS is not set, the
-> filter expression will be empty which matches nothing, so nothing is
-> printed.
-> 
-> Note that the old behaviour can still be achieved with:
-> make printvars VARS=%
-> 
-> Update the 'make help' text to match the new behaviour.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Set the GOCACHE environment variable properly.
 
-Both applied, thanks!
+It was previously unset, and defaults to $HOME/.cache/go-build.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/go/go.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 1558b55e21..4daa2fe093 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -37,13 +37,16 @@ GO_GOARCH = mips64le
+ endif
+ 
+ HOST_GO_DEPENDENCIES = host-go-bootstrap
++HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
+ HOST_GO_ROOT = $(HOST_DIR)/lib/go
++HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
+ 
+ # For the convienience of target packages.
+ HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
+ HOST_GO_TARGET_ENV = \
+ 	GO111MODULE=off \
+ 	GOARCH=$(GO_GOARCH) \
++	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
+ 	GOROOT="$(HOST_GO_ROOT)" \
+ 	CC="$(TARGET_CC)" \
+ 	CXX="$(TARGET_CXX)" \
+@@ -63,6 +66,7 @@ endif
+ # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
+ HOST_GO_MAKE_ENV = \
+ 	GO111MODULE=off \
++	GOCACHE=$(HOST_GO_HOST_CACHE) \
+ 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
+ 	GOROOT_FINAL=$(HOST_GO_ROOT) \
+ 	GOROOT="$(@D)" \
