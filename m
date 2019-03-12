@@ -1,123 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Mar 2019 16:20:51 +0100
-Subject: [Buildroot] [git commit] ntp: security bump to version 4.2.8p13
-Message-ID: <20190312151826.277998EC7E@busybox.osuosl.org>
+Date: Tue, 12 Mar 2019 16:16:34 +0100
+Subject: [Buildroot] [git commit] package/file: security bump to version 5.36
+Message-ID: <20190312151826.1FBF68EC7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ffdc08f04a87b0dd6f2bba250627389ce79a776
+commit: https://git.buildroot.net/buildroot/commit/?id=14d6e6df7bcfd7d46811a812610ec87b0b249088
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2019-8936: Crafted null dereference attack in authenticated
-mode 6 packet.
+CVE-2019-8906: do_core_note in readelf.c in libmagic.a in file 5.35 has
+an out-of-bounds read because memcpy is misused.
 
-Drop upstream patches.
+CVE-2019-8904: do_bid_note in readelf.c in libmagic.a in file 5.35 has a
+stack-based buffer over-read, related to file_printf and file_vprintf.
 
-Update COPYRIGHT file hash; text formatting (line width) changes.
+Update license files hashes; removal of trailing white spaces.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/0003-fix-nommu.patch                   | 29 ----------------------
- .../ntp/0004-fix-work-fork-without-droproot.patch  | 26 -------------------
- package/ntp/ntp.hash                               |  8 +++---
- package/ntp/ntp.mk                                 |  2 +-
- 4 files changed, 5 insertions(+), 60 deletions(-)
+ package/file/file.hash | 12 +++++++-----
+ package/file/file.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/ntp/0003-fix-nommu.patch b/package/ntp/0003-fix-nommu.patch
-deleted file mode 100644
-index 0959fa0ba5..0000000000
---- a/package/ntp/0003-fix-nommu.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Fix no-MMU build
--
--The detach_from_terminal() is unused for no-MMU, but it depends on symbols
--that are not defined for no-MMU. Don't define detach_from_terminal() when
--HAVE_WORKING_FORK is not defined.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3538
--
--diff -Nuar ntp-4.2.8p12.orig/ntpd/ntpd.c ntp-4.2.8p12/ntpd/ntpd.c
----- ntp-4.2.8p12.orig/ntpd/ntpd.c	2018-08-14 14:51:30.000000000 +0300
--+++ ntp-4.2.8p12/ntpd/ntpd.c	2018-10-13 21:25:25.858261249 +0300
--@@ -534,6 +534,7 @@
--  * Detach from terminal (much like daemon())
--  * Nothe that this function calls exit()
--  */
--+# ifdef HAVE_WORKING_FORK
-- static void
-- detach_from_terminal(
-- 	int pipe_fds[2],
--@@ -617,6 +618,7 @@
-- 
-- 	return;
-- }
--+# endif /* HAVE_WORKING_FORK */
-- 
-- #ifdef HAVE_DROPROOT
-- /*
-diff --git a/package/ntp/0004-fix-work-fork-without-droproot.patch b/package/ntp/0004-fix-work-fork-without-droproot.patch
-deleted file mode 100644
-index cb6fec0125..0000000000
---- a/package/ntp/0004-fix-work-fork-without-droproot.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Fix work_fork build when droproot is disabled
--
--The set_user_group_ids() depends on HAVE_DROPROOT. When HAVE_DROPROOT is not
--enabled, work_fork.c code causes a link failure:
--
--../libntp/libntp.a(work_fork.o): In function `send_blocking_req_internal':
--work_fork.c:(.text+0x498): undefined reference to `set_user_group_ids'
--
--Make the set_user_group_ids() call depend on HAVE_DROPROOT.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://bugs.ntp.org/show_bug.cgi?id=3539
--
----- ntp-4.2.8p12.orig/libntp/work_fork.c	2018-08-14 14:51:06.000000000 +0300
--+++ ntp-4.2.8p12/libntp/work_fork.c	2018-10-15 21:10:54.580917962 +0300
--@@ -594,7 +594,9 @@
-- 	init_logging("ntp_intres", 0, FALSE);
-- 	setup_logfile(NULL);
-- 
--+#if defined(HAVE_DROPROOT)
-- 	(void) set_user_group_ids();
--+#endif
-- 
-- 	/*
-- 	 * And now back to the portable code
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 2fd8a8322b..4014936e61 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,5 +1,5 @@
--# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p12.tar.gz.md5
--md5 1522d66574bae14abb2622746dad2bdc  ntp-4.2.8p12.tar.gz
-+# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p13.tar.gz.md5
-+md5 ea040ab9b4ca656b5229b89d6b822f13  ntp-4.2.8p13.tar.gz
- # Calculated based on the hash above
--sha256 709b222b5013d77d26bfff532b5ea470a8039497ef29d09363931c036cb30454  ntp-4.2.8p12.tar.gz
--sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
-+sha256 288772cecfcd9a53694ffab108d1825a31ba77f3a8466b0401baeca3bc232a38  ntp-4.2.8p13.tar.gz
-+sha256 3828da5fc8126889d6a64432288ace08526c490bf5427d799931689069968d91  COPYRIGHT
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index c62d59e81a..d53fcc5d0b 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/file/file.hash b/package/file/file.hash
+index c279dff6e1..7948e856ee 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated
+-sha256 f15a50dbbfa83fec0bd1161e8e191b092ec832720e30cd14536e044ac623b20a  file-5.34.tar.gz
+-sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
+-sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
+-sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
++# Locally calculated after verifying signature
++# ftp://ftp.astron.com/pub/file/file-5.36.tar.gz.asc
++# using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
++sha256 fb608290c0fd2405a8f63e5717abf6d03e22e183fb21884413d1edd918184379  file-5.36.tar.gz
++sha256 0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
++sha256 4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
++sha256 7ac061e1a1c840c4dfa0573aec6f3497676c9295b5ec4190d3576646eb1646bf  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index b5b12978bc..1a835015a7 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p12
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p13
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
- NTP_LICENSE = NTP
+-FILE_VERSION = 5.34
++FILE_VERSION = 5.36
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
