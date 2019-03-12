@@ -1,38 +1,78 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 15:04:27 +0100
-Subject: [Buildroot] [PATCH] docs/manual: add note about spurious errors
- duing make printvars
-In-Reply-To: <b2ce6da8-e324-7ac5-d386-60c0ec8925f1@mind.be>
-References: <20190312105713.23968-1-martin.kepplinger@ginzinger.com>
- <99874541-4ce3-4cb8-b7ce-a0d3d7496357@mind.be>
- <20718_1552396490_5C87B0CA_20718_131_1_20190312131447.GA25212@r-lnx-nyma7486-2>
- <b2ce6da8-e324-7ac5-d386-60c0ec8925f1@mind.be>
-Message-ID: <11344_1552399469_5C87BC6D_11344_307_1_20190312140427.GB25212@r-lnx-nyma7486-2>
+Date: Tue, 12 Mar 2019 15:25:55 +0100
+Subject: [Buildroot] [PATCH 5/5 v2] toolchain: allow PIC/PIE without
+ RELRO
+In-Reply-To: <CANQCQpaWDAmxxZqzR0wushhhuva9QG7dPO45HU81h1LKa8h5TQ@mail.gmail.com>
+References: <cover.1552392456.git.yann.morin@orange.com>
+ <16391_1552392582_5C87A186_16391_281_1_704ea354-404e-4e6b-af91-9e63897e78c9@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+ <CANQCQpaWDAmxxZqzR0wushhhuva9QG7dPO45HU81h1LKa8h5TQ@mail.gmail.com>
+Message-ID: <27752_1552400757_5C87C175_27752_116_1_20190312142555.GC25212@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Matt, All,
 
-On 2019-03-12 14:53 +0100, Arnout Vandecappelle spake thusly:
-> On 12/03/2019 14:14, yann.morin at orange.com wrote:
-> > I'd like the ability to extract many unrelated variables, but not all of
-> > them either, so maybe we can accept that VARS is a sapce-separated list
-> > of patterns to extract, ?-la:
-> >     make -s printvars VARS="VAR_1 VAR_2 PAT_1_% PAT_2_%"
->  This has worked ever since we introduced VARS...
+On 2019-03-12 08:50 -0500, Matthew Weber spake thusly:
+> On Tue, Mar 12, 2019 at 7:09 AM <yann.morin@orange.com> wrote:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+> > In commit 7484c1c3b806 (toolchain/toolchain-wrapper: add BR2_RELRO_),
+> > we added the PIC/PIE flags, but based on the RELRO_FULL condition.
+[--SNIP--]
+> >  config BR2_RELRO_FULL
+> >         bool "Full"
+> > +       select BR2_PIC_PIE
+> 
+> In the previous email chain it was being discussed if PIC/PIE was
+> required for full RELRO.  Like you guys mentioned, I believe it was
+> always just lumped into the configuration the other distros called
+> "full".  However, I'm pretty sure they are independent and you could
+> have full RELRO without PIC/PIE  (I did not test this theory, just
+> checked some docs and the theory holds).
 
-Wooo... I did not even try it, I just assumed from the manual that this
-was not supported, because we say "the make pattern" (i.e. singular)...
+Arnout did test it, and it indeed works.
 
-OK, so I know someone that will soon be sending an update to the
-manual... ;-)
-Thanks!
+>  I'd be on the fence if we
+> should remove this select and keep the BR2_PIC_PIE as something you'd
+> need to independently set if you want it with BR2_RELRO_FULL.  I
+> guess, better to make that sort of change now then after more time has
+> gone by.
+
+I did not do that in this patch, to introduce the minimal disruption
+possible. I.e. a configuration which had relro-full will still get
+PIC/PIE. This patch just adds the possiblity to do PIC/PIE without
+relro-full.
+
+If we really want to decouple the two, then I think we should do that in
+a separate patch, which just drops this new select, to allow relro-full
+without PIC/PIE.
+
+I'll do that in a followup patch.
 
 Regards,
 Yann E. MORIN.
+
+> >         help
+> >           This option includes the partial configuration, but also marks
+> >           the GOT as read-only at the cost of initialization time during
+> > diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> > index c73a0cc079..7a4b9c4007 100644
+> > --- a/toolchain/toolchain-wrapper.c
+> > +++ b/toolchain/toolchain-wrapper.c
+> > @@ -367,7 +367,7 @@ int main(int argc, char **argv)
+> >                 *cur++ = "-Wno-builtin-macro-redefined";
+> >         }
+> >
+> > -#ifdef BR2_RELRO_FULL
+> > +#ifdef BR2_PIC_PIE
+> 
+> Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
                                         ____________
