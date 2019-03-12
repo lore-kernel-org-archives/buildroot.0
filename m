@@ -1,70 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Mar 2019 18:36:02 +0100
-Subject: [Buildroot] [PATCH] docs/manual: add note about spurious errors
- duing make printvars
-In-Reply-To: <99874541-4ce3-4cb8-b7ce-a0d3d7496357@mind.be>
-References: <20190312105713.23968-1-martin.kepplinger@ginzinger.com>
- <99874541-4ce3-4cb8-b7ce-a0d3d7496357@mind.be>
-Message-ID: <20190312173602.GE25009@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 12 Mar 2019 18:55:34 +0100
+Subject: [Buildroot] [PATCH 1/2] printvars: don't print anything when VARS
+ is not set
+In-Reply-To: <20190312173602.GE25009@scaer>
+References: <20190312173602.GE25009@scaer>
+Message-ID: <20190312175535.18152-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Using 'make printvars' for printing all variables is not very useful.
+E.g. all macros will output some bogus value. In addition, the same can
+be achieved with 'make -p'.
 
-On 2019-03-12 13:33 +0100, Arnout Vandecappelle spake thusly:
-> On 12/03/2019 11:57, Martin Kepplinger wrote:
-> > Add a note about errors we currently have, as discussed in
-> > http://lists.busybox.net/pipermail/buildroot/2019-March/244212.html
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-> > ---
-> >  docs/manual/make-tips.txt | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-> > index ea1d825bef..475de4ffa7 100644
-> > --- a/docs/manual/make-tips.txt
-> > +++ b/docs/manual/make-tips.txt
-> > @@ -131,3 +131,13 @@ The output of quoted variables can be reused in shell scripts, for example:
-> >   $ echo $BUSYBOX_DEPENDENCIES
-> >   skeleton toolchain
-> >  ----
-> > +
-> > +Note that when using +make printvars+ you might see spurious errors like
-> > +the following. Please help reviewing our Makefile macros and variables
-> > +in order to fix this:
-> 
->  I thought the conclusion of that thread is that there is no way to fix it?
+We can simply remove the condition on $(VARS). If VARS is not set, the
+filter expression will be empty which matches nothing, so nothing is
+printed.
 
-Yes, that was my impresion as well. We can document that here may be
-spurious error messages, but fixing them is not wanted (because it makes
-the code more complex).
+Note that the old behaviour can still be achieved with:
+make printvars VARS=%
 
-> The
-> only reasonable way is to filter out macros from the .VARS. E.g. defining
-> PRINTVARS_FILTER and for each macro definition, append to that list.
-> 
->  However, I'm not even convinced that we really want to do that. It is adding
-> significant complexity for little gain.
+Update the 'make help' text to match the new behaviour.
 
-Agreed.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->  Instead, I'm more inclined to remove the possibility of running printvars
-> without explicit VARS=. If you really want, you can still get all variables with
-> VARS=%.
-
-Yes, that sounds like a good idea, indeed. +1
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Makefile b/Makefile
+index a64196f9c3..6af8923892 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1031,7 +1031,7 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ printvars:
+ 	@:
+ 	$(foreach V, \
+-		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
++		$(sort $(filter $(VARS),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+ 		$(if $(QUOTED_VARS),\
+@@ -1124,7 +1124,7 @@ help:
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+-	@echo '  printvars              - dump all the internal variables'
++	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
