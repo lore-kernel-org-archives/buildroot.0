@@ -1,21 +1,351 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 Mar 2019 09:24:14 +0000
-Subject: [Buildroot] [Bug 11366] [2018.08] SysV IPC not available for
- fakeroot on WSL
-In-Reply-To: <bug-11366-163@https.bugs.busybox.net/>
-References: <bug-11366-163@https.bugs.busybox.net/>
-Message-ID: <bug-11366-163-66Z5hogHuL@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2019 10:28:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.12
+In-Reply-To: <87imwovk68.fsf@paral.in>
+References: <20190226034554.24429-1-christian@paral.in>
+ <20190226082449.040c7a2a@windsurf.home>
+ <CA+h8R2qERZ1EjoyCiSCD32K8KM9m5OS_RdQ3iS59m9UmBUEwYw@mail.gmail.com>
+ <CA+_SqVbzRuEgvansndPeSVqOeratEK5aGc+OGTc0e6j0FeJEkw@mail.gmail.com>
+ <87sgvvccbr.fsf@paral.in> <20190310102831.GC25009@scaer>
+ <CA+h8R2ocNHQgo9=yYZ-AevRwCV9jo9tVE-eFTSi4YAO=2ODD2Q@mail.gmail.com>
+ <24269451-e4c6-1ac4-1084-c23996361eb4@mind.be> <87imwovk68.fsf@paral.in>
+Message-ID: <9eb6e8f9-166f-7425-49a9-8408a059da4f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11366
 
---- Comment #11 from Peter Korsgaard <jacmet@uclibc.org> ---
-Or even better, send the patch to upstream fakeroot and get it included there
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On 12/03/2019 04:35, Christian Stewart wrote:
+> Hi Arnout,
+> 
+> Arnout Vandecappelle <arnout@mind.be> writes:
+>>  So, since the version is explicit, it's actually completely equivalent to the
+>> vendoring: it's still impossible to treat the modules as packages in the
+>> Buildroot sense, since Buildroot doesn't allow the same package to have
+>> different versions. It's essentially just making our life more difficult :-(.
+> 
+> I don't think it makes sense to treat them as packages in this sense anyway.
+
+ Actually, below, you do seem to suggest something that goes in that direction...
+
+[snip]
+> Removing GOPATH is not as extreme as it sounds. This is just a
+> re-organization of the build code to simplify it quite a bit.
+> 
+> Today, the build code tries to synthesize a gopath (pkg-golang.mk):
+> 
+> $(2)_WORKSPACE ?= _gopath
+> 
+> $(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
+> $(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+> $(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+> $(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+> $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+> 
+> mkdir -p $$(dir $$($(2)_SRC_PATH))
+> ln -sf $$(@D) $$($(2)_SRC_PATH)
+> 
+> GOPATH="$$(@D)/$$($(2)_WORKSPACE)"
+> 
+> This creates the following directory structure:
+> 
+> $(@D)/pkg_gopath/src/github.com/myorg/mypackage/CODE_SYMLINKED_HERE
+> 
+> Then the Go tool is configured to use pkg_gopath as the GOPATH.
+> 
+> With the Go modules system, even if a Go project is not configured to
+> use Go modules at all, it no longer is necessary to build a GOPATH.
+> 
+> With the absence of a go.mod and go.sum file, and the presence of a
+> vendor/ dir, the Go tool will now correctly recognize the vendor/ and
+> build outside GOPATH. This defaults GO111MODULE=on when Go is invoked
+> outside GOPATH. In Go 1.13, GOPATH will be removed completely (or at
+> least, deprecated).
+> 
+> In buildroot, we can simplify the code significantly with this new
+> construction. We can simply extract code to $(@D), enable GO111MODULE,
+> and the build will function correctly.
+
+ Hell yeah! As a first step, that sounds like a great move. So we'd have:
+
+1. Bump package/go
+2. Set GO111MODULE=on and remove GOPATH from pkg-golang
+3. Remove now-unused PKG_SRC_{DOMAIN,VENDOR,...} from packages
+4. Remove this stuff from documentation
+
+ Step 2 should probably also set GOPROXY=off in all steps to avoid accidental
+downloads. Maybe we should even export GOPROXY=off and enable it only in the
+specific cases where it needs to be enabled? That would be a fifth patch.
+
+
+>>> This would allow us to pin versioning
+>>> and tightly control download checksumming through the package.hash ->
+>>> go.sum merkle tree.
+>>
+>>  I may miss something, but if it's in vendor/ in the upstream git repo (either
+>> as a submodule or as a copy), it's also tightly controlled and checksummed,
+>> right? 
+> 
+> The build would be executed with go build -mod=vendor, which tells the
+> Go tool to ignore go.mod and use vendor/ only. Then, if vendor/ is
+> already present in the upstream Git repo, we can skip the "go mod
+> download" and "go mod vendor" steps.
+
+ So that would be the current sitatuation then.
+
+
+> The result is that the Go tool uses the following directory layout
+> regardless of if Go modules download/extract was used during the
+> download phase:
+> 
+>  - $(@D)/vendor: contains all deps extracted
+>  - $(@D)/go.mod: contains at minimum "module github.com/myorg/mymodule"
+
+ Is this go.mod then autogenerated by 'go build -mod=vendor' or do we need to
+generate it in a post-patch hook?
+
+
+>> So I don't think this is really bringing any value. For us, I mean - I
+>> imagine it *does* bring value for people developing Go packages.
+> 
+> If we ignore vendor/ in the upstream Git repository and introduce our
+> own go.mod, it would allow us to tightly control changes to dependencies
+> (including security updates) within the Buildroot project, even if
+> upstream maintainers do not update their vendor trees. This is
+> especially important when we are using older revisions of projects that
+> do not maintain release branches with vendored code.
+>
+> In short, this would allow us to centralize the responsibility of Go
+> dependency management in the Go module system, store all dependencies in
+> the GOPROXY mechanism / Buildroot download directory, and force upgrades
+> of dependencies for older revisions of projects without introducing
+> large code vendoring patches into the Buildroot tree.
+
+ It sounds to me like a bit too big of an endeavor for the small Buildroot
+project to take on... Upstream Go just doesn't have a decent security story for
+not-well-maintained packages, and I don't think that there's much we can do
+about it.
+
+
+>>> If a package does not have a go.mod or go.sum file, a patch would be
+>>> added to Buildroot to include the files with the correct pinned
+>>> dependencies.
+> 
+> This seems like a viable solution -
+> 
+>  1. Copy the Buildroot package directory go.mod, go.sum in if exists.
+>  2. If no go.mod exists in the project, write one with the minimum
+>  "module github.com/myorg/mymodule" line.
+>  3. Execute "go mod download" and "go mod vendor" as discussed.
+> 
+> In point #1, if vendor/ already exists, and we indicate we want to
+> override vendor/, then we can delete the upstream Git vendor/ tree in
+> this step.
+
+ Yes, sounds good to me. Though I would first like to see if there actually is
+any project that has both a go.mod and an existing vendor/ tree.
+
+ What does "go mod vendor" do if a vendor/ tree already exists? Maybe we just
+have to keep that behaviour, i.e. not delete the existing vendor tree and let
+the go tool take care of things. It should in principle do the right thing.
+
+
+>>>>>  - Configure Go to download module files to buildroot/dl/go-modules
+>>
+>>  If all modules go together in a single location, there is a risk that there
+>> will be two modules with the same name and version that are in reality different
+>> modules. Or are the full paths repeated there? I.e., does the zip file end up
+>> under a github.com/foo/bar directory?
+> 
+> No. The Go tool uses an intricate path scheme to avoid collisions, and
+> does not assume integrity of the on-disk cache (as far as I know).
+> 
+>>> We can set the paths such that the $GOPATH/pkg/mod/cache/download
+>>> directory resolves to buildroot/dl/go-modules. According to the above
+>>> documentation, a Buildroot user could then serve the dl/go-modules
+>>> directory directly with a HTTP server and set GOPROXY such that all
+>>> module downloads come from that server. This could be configurable
+>>> eventually via the Buildroot KConfig architecture.
+>>
+>>  No need for it to be configurable, it could be the BR2_PRIMARY_SITE.
+> 
+> This seems like the best approach.
+> 
+> Here is some reference from go help goproxy:
+> 
+>   A Go module proxy is any web server that can respond to GET requests for
+>   URLs of a specified form. The requests have no query parameters, so even
+>   a site serving from a fixed file system (including a file:/// URL)
+>   can be a module proxy.
+> 
+>   The GET requests sent to a Go module proxy are:
+> 
+>   GET $GOPROXY/<module>/@v/list returns a list of all known versions of the
+>   given module, one per line.
+> 
+>   GET $GOPROXY/<module>/@v/<version>.info returns JSON-formatted metadata
+>   about that version of the given module.
+> 
+>   GET $GOPROXY/<module>/@v/<version>.mod returns the go.mod file
+>   for that version of the given module.
+> 
+>   GET $GOPROXY/<module>/@v/<version>.zip returns the zip archive
+>   for that version of the given module.
+> 
+>   To avoid problems when serving from case-sensitive file systems,
+>   the <module> and <version> elements are case-encoded, replacing every
+>   uppercase letter with an exclamation mark followed by the corresponding
+>   lower-case letter: github.com/Azure encodes as github.com/!azure.
+> 
+> So perhaps we would want to add some suffix to PRIMARY_SITE.
+
+ That's what you proposed: go-modules.
+
+ But I'm not sure now: does the go mod download generate these auxiliary files
+automatically in pkg/mod/cache/download? I.e. can we just serve $(BR2_DL_DIR) as
+PRIMARY, set GOPROXY to $(BR2_PRIMARY_SITE)/go-modules, and Bob's your uncle?
+
+> Something further down the pipe, but worth looking at for those
+> interested, is the upcoming Go code notary project: 
+> 
+> https://go.googlesource.com/proposal/+/master/design/25530-notary.md
+> 
+>>  However, IIUC, the GOPROXY mechanism doesn't have any fallback. So I guess the
+>> full solution would be to add something like go download infra that first sets
+>> GOPROXY to file://$(BR2_DL_DIR)/go-modules, then to
+>> $(BR2_PRIMARY_SITE)/go-modules, then direct, and finally
+>> $(BR2_SECONDARY_SITE)/go-modules.
+> 
+> https://github.com/golang/go/issues/26334
+> 
+> Looks like indeed, it doesn't have a fallback yet. However, this is a
+> bit awkward: what if our GOPROXY doesn't have just a single dependency?
+> 
+> The download tree looks like:
+> 
+> ??? github.com
+> ??? ??? davecgh
+> ??? ??? ??? go-spew
+> ??? ???     ??? @v
+> ??? ???         ??? list
+> ??? ???         ??? list.lock
+> ??? ???         ??? v1.1.1.info
+> ??? ???         ??? v1.1.1.mod
+> ??? golang.org
+>     ??? x
+>         ??? crypto
+>         ??? ??? @v
+>         ???     ??? list
+>         ???     ??? list.lock
+>         ???     ??? v0.0.0-20180904163835-0709b304e793.info
+>         ???     ??? v0.0.0-20180904163835-0709b304e793.lock
+>         ???     ??? v0.0.0-20180904163835-0709b304e793.mod
+>         ???     ??? v0.0.0-20180904163835-0709b304e793.zip
+>         ???     ??? v0.0.0-20180904163835-0709b304e793.ziphash
+> 
+> I tried downloading just one dependency, then copying the
+> $GOPATH/pkg/mod/cache/download/* files to GOPROXY=file://path/to/copy.
+> 
+> Then, invoking Go build:
+> 
+> go: finding golang.org/x/crypto v0.0.0-20180904163835-0709b304e793
+> Fetching file://goproxy/golang.org/x/crypto/@v/v0.0.0-20180904163835-0709b304e793.info
+> Fetching file://goproxy/golang.org/x/crypto/@v/v0.0.0-20180904163835-0709b304e793.mod
+> 
+> Okay, this worked as expected. Now, adding a new dependency:
+> 
+> Fetching file://goproxy/github.com/urfave/cli/@v/list
+> Fetching file://goproxy/github.com/urfave/@v/list
+> Fetching file://goproxy/github.com/@v/list
+> build tmod: cannot load github.com/urfave/cli: cannot find module providing package github.com/urfave/cli
+> 
+> Hmm. Looks like it doesn't have a fallback yet.
+
+ Heh, I didn't think of that: the tool tries to download *all* modules...
+
+ What would help is if there was some kind of keep-going option. Then we can do
+all the fallback on the Buildroot side, like I mentioned: first try with PRIMARY
+(and download some dependencies and put it in the cache), then try with direct,
+then try with SECONDARY. The last one should succeed fully, reusing things from
+the cache if they were already downloaded before, and fetching them from direct
+or secondary if not.
+
+> 
+> Athens is another project addressing this area: https://github.com/gomods/athens
+
+[snip]
+>>  If we anyway end up with everything extracted in the vendor tree, we can just
+>> as well do that during the *download* step. Similar like we do for VCS
+>> downloads: we get the *entire* source tree, including go modules, and tar that up.
+>>
+>>  We'd still have a go SITE_METHOD and corresponding download helper. This one
+>> would first use another download method to get the base tarball, then extract
+>> it, run 'go mod vendor' with GOPROXY=direct, and create a new tarball.
+>>
+>>  This way, the PRIMARY_SITE, SECONDARY_SITE, 'make source', PRIMARY_ONLY, 'make
+>> source-check' would all still work. So it would be (I think) the least invasive
+>> way to introduce this.
+> 
+> This seems like the right approach. This all feels similar to how
+> Buildroot uses the Git tool to clone a repository, check out a revision,
+> and bundle up a tarball today.
+
+ And I realize now: it would also handle legal-info, which would not be handled
+correctly with everything that was proposed up to now (because the go modules
+are not part of $(PKG)_ALL_DOWNLOADS, they don't get copied to legal-info output).
+
+> 
+>>  With my proposal, this would be FOO_SITE_METHOD = go
+>>
+>>  Oh BTW we'd probably also need to support something like FOO_SITE_METHOD =
+>> go+git. dl-wrapper will (should) strip off the first +, the go download helper
+>> would have to handle the second +. But that can be done in a follow-up patch :-)
+> 
+> This is way too fancy for me to implement :)
+
+ This would in fact not be needed if we would have the go.mod in the Buildroot
+tree and use go mod to get the source itself too.
+
+> 
+>>  I think it's worth prototyping something that is not complete yet, and send it
+>> to the list with a lot of comments in the commit message about what is still
+>> missing. That's probably a better basis for discussion that English text.
+> 
+> Something to note: you can set GOMOD variable to the path to a go.mod file.
+> 
+> Okay, I'll have a look at:
+> 
+>  - use vendor/ with GO111MODULE=on, remove gopath
+
+ That one is not controversial for sure.
+
+>  - use -mod=vendor during build phase
+
+ Ditto. It should essentially change nothing for our current packages, right?
+
+>  - set GOCACHE properly (what is it set to today??)
+
+ You already sent a patch for that :-)
+
+>  - set GOPATH such that the Go tool downloads to dl/go-modules/pkg/mod
+
+ That one seems useless - with the steps above, there should never be any
+download done by go mod.
+
+
+> And (pick one):
+> 
+>  - post-extract hook with optional go.mod in repository, "go mod vendor"
+>  - additional site method which "go mod vendor" and re-compress to tarball
+
+ So these are the more controversial ones. I think you should pick the one you
+like most, make a quick prototype that works for one specific package, note what
+is missing in the commit log, and send it to the list for discussion.
+
+ Thanks for this work!
+
+ Regards,
+ Arnout
