@@ -1,90 +1,145 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 12 Mar 2019 09:37:20 -0500
-Subject: [Buildroot] [PATCH 4/4] toolchain: allow PIC/PIE without RELRO
-In-Reply-To: <2d087cfc-e1a4-da43-5b4f-46920b60452c@mind.be>
-References: <cover.1552286891.git.yann.morin@orange.com>
- <11977_1552286921_5C8604BE_11977_87_1_9c1d9253-d6be-4870-a4dd-b45f5c87742f@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- <3c26a901-4f69-163b-266a-5627f818b75c@mind.be>
- <32338_1552371732_5C875014_32338_448_1_20190312062209.GC4924@r-lnx-nyma7486-2>
- <2d087cfc-e1a4-da43-5b4f-46920b60452c@mind.be>
-Message-ID: <CANQCQpbBvoSEMsdt+3U9+n7wiQe=OeF7Z3Jn=PFMYNSRbXg+9g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Mar 2019 16:10:29 +0100
+Subject: [Buildroot] [PATCH] package/php: security bump to version 7.3.3
+Message-ID: <20190312151029.24382-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-On Tue, Mar 12, 2019 at 3:57 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 12/03/2019 07:22, yann.morin at orange.com wrote:
-> > Arnout, All,
-> >
-> > On 2019-03-12 01:36 +0100, Arnout Vandecappelle spake thusly:
-> >> On 11/03/2019 07:48, yann.morin at orange.com wrote:
-> >>> From: "Yann E. MORIN" <yann.morin@orange.com>
-> >>>
-> >>> Note: it is unknown if RELRO_FULL really needs PIC/PIE or not, so we
-> >>> keep the current situation, where RELRO-FULL forces PIC/PIE compilation.
-> >>
-> >>  I just checked on my host, and a simple test program compiled with -no-pie
-> >> -Wl,-z,relro -Wl,-z,now does work, so indeed the two seem to be independent.
-> >
-> > Still, I'd prefer tokeep the select to keep the current behaviour. We
-> > can drop it later on if someone has a need for it.
-> >
-> >>  I guess it's historical accident that the global full relro and PIE are
-> >> typically introduced together. From what I understand, they are pretty much
-> >> independent.
-> >
-> > I talked with Matt on IRC about this the other day, and his reasoning
-> > for doing so as it is was to mimick the way done on distros (Debian,
-> > FC?), so it is not a complete accident either. ;-)
->
->  That's what I meant: it's historical accident that Fedora [1] and Debian [2]
-> started enabling -z,now and -pie at the same time. On their respective wiki
-> pages that discuss enabling these things, they are in fact treated separately.
->
+php-7.3.3 fixes a number of security issues (no CVE known, bugtracker issues
+not yet public): https://secure.php.net/ChangeLog-7.php#7.3.3
 
-Yep, sent a note on the v2 patch. I think we should drop the PIC/PIE
-select from RELRO FULL....
+Drop 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch as the
+flock detection has been removed since commit 9222702633 (Avoid dependency
+on "struct flock" fields order.)
 
->  Regards,
->  Arnout
->
-> [1] https://fedoraproject.org/wiki/Security_Features_Matrix#Userspace_Hardening
-> [2] https://wiki.debian.org/Hardening#User_Space
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ch => 0004-Call-apxs-with-correct-prefix.patch} |  0
+ ...ck-mechanism-is-obviously-linux-so-force-.patch | 82 ----------------------
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 84 deletions(-)
+ rename package/php/{0005-Call-apxs-with-correct-prefix.patch => 0004-Call-apxs-with-correct-prefix.patch} (100%)
+ delete mode 100644 package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
 
-
-
+diff --git a/package/php/0005-Call-apxs-with-correct-prefix.patch b/package/php/0004-Call-apxs-with-correct-prefix.patch
+similarity index 100%
+rename from package/php/0005-Call-apxs-with-correct-prefix.patch
+rename to package/php/0004-Call-apxs-with-correct-prefix.patch
+diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+deleted file mode 100644
+index 5c3814f619..0000000000
+--- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
++++ /dev/null
+@@ -1,82 +0,0 @@
+-From bedbd41ef0a5ce80b83a6f6eaebd7c90f0bc5615 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 9 Aug 2016 11:52:19 +0200
+-Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: update for 7.2.12 & 7.3.2]
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-[aduskett at gmail.com: Update for 7.3.0]
+----
+- ext/opcache/config.m4 | 34 ++--------------------------------
+- 1 file changed, 2 insertions(+), 32 deletions(-)
+-
+-diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
+-index fbb9b21..ffddc8e 100644
+---- a/ext/opcache/config.m4
+-+++ b/ext/opcache/config.m4
+-@@ -334,58 +334,8 @@ int main() {
+-     msg=yes],[msg=no],[msg=no])
+-   AC_MSG_RESULT([$msg])
+- 
+--flock_type=unknown
+--AC_MSG_CHECKING(for struct flock layout)
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5, 6, 7 };
+--  int main() {
+--    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 6 && lock.l_len== 7) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--    flock_type=aix64
+--    AC_DEFINE([HAVE_FLOCK_AIX64], [], [Struct flock is 64-bit AIX-type])
+--], [])
+--fi
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() {
+--    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 3 && lock.l_len == 4) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--	flock_type=linux
+--    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+--], [])
+--fi
+--
+--if test "$flock_type" = "unknown"; then
+--AC_RUN_IFELSE([AC_LANG_SOURCE([[
+--  #include <fcntl.h>
+--  struct flock lock = { 1, 2, 3, 4, 5 };
+--  int main() {
+--    if(lock.l_start == 1 && lock.l_len == 2 && lock.l_type == 4 && lock.l_whence == 5) {
+--		return 0;
+--    }
+--    return 1;
+--  }
+--]])], [
+--	flock_type=bsd
+--    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
+--], [])
+--fi
+--
+--AC_MSG_RESULT([$flock_type])
+-+flock_type=linux
+-+AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
+- 
+- if test "$flock_type" = "unknown"; then
+- 	AC_MSG_ERROR([Don't know how to define struct flock on this system[,] set --enable-opcache=no])
+--- 
+-2.7.4
+-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 5d74a28bc7..8a9814d10e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 010b868b4456644ae227d05ad236c8b0a1f57dc6320e7e5ad75e86c5baf0a9a8  php-7.3.2.tar.xz
++sha256 6bb03e79a183d0cb059a6d117bbb2e0679cab667fb713a13c6a16f56bebab9b3  php-7.3.3.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 061b2f2609..ea6deca7c1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.3.2
++PHP_VERSION = 7.3.3
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.11.0
