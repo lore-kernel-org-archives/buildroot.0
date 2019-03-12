@@ -1,54 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 12 Mar 2019 18:55:35 +0100
-Subject: [Buildroot] [PATCH 2/2] docs/manual: document new behaviour of
- 'make printvars'
-In-Reply-To: <20190312175535.18152-1-arnout@mind.be>
-References: <20190312173602.GE25009@scaer>
- <20190312175535.18152-1-arnout@mind.be>
-Message-ID: <20190312175535.18152-2-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2019 19:00:43 +0100
+Subject: [Buildroot] host-gcc-final not reinstalling target libraries
+ (or: howto clean target directory)
+In-Reply-To: <CADYdroNev_V7QTEYx53Aq_4tmS4PQXQj5EG0QHJE=6CarEROrw@mail.gmail.com>
+References: <CADYdroNev_V7QTEYx53Aq_4tmS4PQXQj5EG0QHJE=6CarEROrw@mail.gmail.com>
+Message-ID: <799dcf7a-87f4-41c8-c958-a077c2518eda@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a 'VARS=...' setting to the example. To make it clear that several
-variables can be specified, use two variables in the first example.
-Only 2 variables are printed, so the ... is removed.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
- docs/manual/make-tips.txt | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index ea1d825bef..869b6807dd 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -80,18 +80,18 @@ to xref:ccache[].
- 
- .Dumping the internal make variables:
- 
--One can dump all the variables known to make, along with their values:
-+One can dump the variables known to make, along with their values:
- 
- ----
-- $ make -s printvars
-- VARIABLE=value_of_variable
-- ...
-+ $ make -s printvars VARS='VARIABLE1 VARIABLE2'
-+ VARIABLE1=value_of_variable
-+ VARIABLE2=value_of_variable
- ----
- 
- It is possible to tweak the output using some variables:
- 
- - +VARS+ will limit the listing to variables which names match the
--  specified make-pattern
-+  specified make-patterns - this must be set else nothing is printed
- - +QUOTED_VARS+, if set to +YES+, will single-quote the value
- - +RAW_VARS+, if set to +YES+, will print the unexpanded value
- 
--- 
-2.20.1
+On 12/03/2019 12:42, Norbert Lange wrote:
+> Hello,
+> 
+> I had some aged buildroot installation with several library versions
+> in the resulting target images. So now I cam up with the idea just to
+> recreate the target system with those 2 commands:
+> 
+> rm build/*/.stamp_target*installed target
+> make
+> 
+> Well, it *almost* worked, the only package that does not reinstall the
+> target files that way is host-gcc-final, the filesystem is then
+> lacking critical DSOs like libatomic, libstdc++.
+> 
+> So is there any way to fix this, or any recommendation on how a
+> "target-clean" would look like (ideally get make to provide a
+> target-clean).
+
+ The reason that no target-clean exists is that it doesn't work.
+
+ In the specific case of gcc, it's because the target stuff is installed by
+host-gcc-final, so you have to remove host-gcc-final-*/.stamp_host_installed.
+But other things are likely going to break in various other ways.
+
+ Regards,
+ Arnout
