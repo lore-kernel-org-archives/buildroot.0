@@ -1,46 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Mar 2019 09:25:08 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-03-10
-In-Reply-To: <20190311125037.GA20362@lwo1-lhp-f71841> (Vadym Kochan's message
- of "Mon, 11 Mar 2019 14:50:37 +0200")
-References: <20190311070050.A164586F58@hemlock.osuosl.org>
- <20190311125037.GA20362@lwo1-lhp-f71841>
-Message-ID: <87sgvsfqjf.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Mar 2019 09:03:45 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] libunistring: bump to
+ version 0.9.9
+Message-ID: <20190312082243.BC55B838A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadym" == Vadym Kochan <vadim4j@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e3008c4d4154eeb028d530833cbe82a476032d5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Hi All,
- > On Mon, Mar 11, 2019 at 07:00:44AM -0000, Thomas Petazzoni wrote:
- >> Hello,
- >> 
- >> Build statistics for 2019-03-10
- >> ===============================
- >> 
- >> branch |  OK | NOK | TIM | TOT |
- >> 2018.02.x |  23 |   1 |   0 |  24 |
- >> 2018.11.x |  26 |   1 |   0 |  27 |
- >> master | 236 |  73 |   3 | 312 |
- >> 
- >> Results for branch '2018.02.x'
- >> ==============================
- >> 
- >> Classification of failures by reason
- >> ------------------------------------
- >> 
- >> host-libunistring-0.9.7 | 1 
- > Regarding this, I found that the issue should be fixed in 0.9.10 version:
+Drop --{enable,disable}-threads; threading support is detected
+automatically.
 
- > 	https://www.mail-archive.com/bug-libunistring at gnu.org/msg00310.html
+Add GPLv3 license file.
 
- > which is already latest in 2018.11.x and master branches, but not in 2018.02.x
+Add license files hash.
 
-Thanks, I have cherry picked the bump to 0.9.10 on the 2018.02.x branch.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5af41088a49e1a5c438d9d6d2e39e2a15d4b3c8a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libunistring/libunistring.hash |  6 +++++-
+ package/libunistring/libunistring.mk   | 10 ++--------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 15e35cb81c..8a5da7782d 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+-sha256	2e3764512aaf2ce598af5a38818c0ea23dedf1ff5460070d1b6cee5c3336e797	libunistring-0.9.7.tar.xz
++# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
++sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
++# Locally calculated
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 9340e79937..929b52ebd5 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,18 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBUNISTRING_VERSION = 0.9.7
++LIBUNISTRING_VERSION = 0.9.9
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
+ LIBUNISTRING_LICENSE = LGPL-3.0+ or GPL-2.0
+-LIBUNISTRING_LICENSE_FILES = COPYING.LIB
+-
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIBUNISTRING_CONF_OPTS += --enable-threads=posix
+-else
+-LIBUNISTRING_CONF_OPTS += --disable-threads
+-endif
++LIBUNISTRING_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
