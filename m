@@ -1,8 +1,9 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 13:09:33 +0100
-Subject: [Buildroot] [PATCH 0/5 v2] toolchain: PIC/PIE and
- -fstack-protector-strong for all
-Message-ID: <9664_1552392577_5C87A181_9664_451_1_ec0b3ed0-5065-465a-9cac-40470a502ad7@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Date: Tue, 12 Mar 2019 13:09:36 +0100
+Subject: [Buildroot] [PATCH 5/5 v2] toolchain: allow PIC/PIE without RELRO
+In-Reply-To: <cover.1552392456.git.yann.morin@orange.com>
+References: <cover.1552392456.git.yann.morin@orange.com>
+Message-ID: <16391_1552392582_5C87A186_16391_281_1_704ea354-404e-4e6b-af91-9e63897e78c9@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,106 +12,84 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+In commit 7484c1c3b806 (toolchain/toolchain-wrapper: add BR2_RELRO_),
+we added the PIC/PIE flags, but based on the RELRO_FULL condition.
 
-Currently, our hardening options make a few assumptions, which although
-reasonable, limit their usefulness.
+It is however totally possible to do a PIC/PIE executable without
+RELRO_FULL, as it is also valid to do a PIC/PIE build with RELRO_PARTIAL.
 
-For starters, -fstack-protector-strong has been seen to be backported
-to gcc versions older than 4.9. Then, PIC/PIE is currently restricted
-and enforced by RELRO_FULL, although it is completely orthogonal.
+Add a new option that now governs the PIC/PIE flags.
 
-This series first ensures that -fstack-protector-strong can be enabled
-for toolchains with gcc older than 4.9, by dropping the restriction in
-Kconfig, but adding a check, at 'configure time', that the toolchain
-actually supports it.
+Note: it is unknown if RELRO_FULL really needs PIC/PIE or not, so we
+keep the current situation, where RELRO-FULL forces PIC/PIE compilation.
+Decoupling can come later from an interested party.
 
-It is easy to test the check actually works for toolchains that lack
--fstack-protector-strong with this defconfig:
-    BR2_arm=y
-    BR2_SSP_STRONG=y
-    BR2_TOOLCHAIN_EXTERNAL=y
+Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ Config.in                      | 8 ++++++++
+ toolchain/toolchain-wrapper.c  | 2 +-
+ toolchain/toolchain-wrapper.mk | 4 ++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-Which yields a result like we have for the other checks:
-    >>> toolchain-external-codesourcery-arm 2014.05-29 Configuring
-    SSP option -fstack-protector-strong not available in this toolchain,
-    please select another SSP level
-    package/pkg-generic.mk:228: recipe for target [...] failed
-    [...]
-    make: *** [_all] Error 2
-
-Finally, the last patch in the series allows for PIC/PIE to be enabled
-without any RELRO option. It is easy to test that PIC/PIE works without
-RELRO, with this defconfig:
-    BR2_arm=y
-    BR2_PIC_PIE=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-
-And then build (e.g.) busybox, which would yield results not unlike:
-    $ make busybox-depends
-    $ BR2_DEBUG_WRAPPER=2 make busybox-build
-    [...]
-    Toolchain wrapper executing:
-    [...]
-    '-fPIE'
-    '-pie'
-    [...]
-    $ file output/build/busybox-1.29.3/busybox
-    output/build/busybox-1.29.3/busybox: ELF 32-bit LSB shared object,
-    ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter
-    /lib/ld-linux.so.3, for GNU/Linux 2.6.16, not stripped
-
-Compared to a build without PIC/PIE:
-    output/build/busybox-1.29.3/busybox: ELF 32-bit LSB executable, [...]
-
-Note that the restrictions around PIC/PIE are not lifted: we're still
-avoiding it for specific cases (static, kernel, uboot...)
-
-Changes v1 -> v2:
-  - use wrapper's TOOLCHAIN_WRAPPER_OPTS  (Arnout)
-  - explain why we're not introducing BR2_TOOLCHAIN_HAS_SSP_STRONG
-    (Arnout)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit f9fd1931410ec7f68e0f310efb9c5f616bb73ea8
-
-  package/mongodb: disable on powerpc64 (2019-03-11 22:58:43 +0100)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to 93df05fa20d12a20ffab551abed681f4d0a9146d
-
-  toolchain: allow PIC/PIE without RELRO (2019-03-12 13:01:39 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      toolchain: prepare to pass more additional CFLAGS via the wrapper
-      toolchain: set the ssp gcc option in kconfig
-      toolchain: check the SSP option is known
-      toolchain: -fstack-protector-strong can be back-ported
-      toolchain: allow PIC/PIE without RELRO
-
- Config.in                                           | 20 +++++++++++++++++---
- toolchain/helpers.mk                                |  8 ++++++++
- .../toolchain-external/pkg-toolchain-external.mk    |  2 +-
- toolchain/toolchain-wrapper.c                       | 11 +----------
- toolchain/toolchain-wrapper.mk                      | 21 ++++++++++-----------
- 5 files changed, 37 insertions(+), 25 deletions(-)
-
+diff --git a/Config.in b/Config.in
+index d5a0460f98..31fea3ab34 100644
+--- a/Config.in
++++ b/Config.in
+@@ -712,6 +712,13 @@ endmenu
+ 
+ comment "Security Hardening Options"
+ 
++config BR2_PIC_PIE
++	bool "Build code with PIC/PIE"
++	depends on BR2_SHARED_LIBS
++	help
++	  Generate Position-Independent Code (PIC) and link
++	  Position-Independent Executables (PIE).
++
+ choice
+ 	bool "Stack Smashing Protection"
+ 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+@@ -794,6 +801,7 @@ config BR2_RELRO_PARTIAL
+ 
+ config BR2_RELRO_FULL
+ 	bool "Full"
++	select BR2_PIC_PIE
+ 	help
+ 	  This option includes the partial configuration, but also marks
+ 	  the GOT as read-only at the cost of initialization time during
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index c73a0cc079..7a4b9c4007 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -367,7 +367,7 @@ int main(int argc, char **argv)
+ 		*cur++ = "-Wno-builtin-macro-redefined";
+ 	}
+ 
+-#ifdef BR2_RELRO_FULL
++#ifdef BR2_PIC_PIE
+ 	/* Patterned after Fedora/Gentoo hardening approaches.
+ 	 * https://fedoraproject.org/wiki/Changes/Harden_All_Packages
+ 	 * https://wiki.gentoo.org/wiki/Hardened/Toolchain#Position_Independent_Executables_.28PIEs.29
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index ca66fa7ba4..3c42146cea 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -48,6 +48,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+ endif
+ 
++ifeq ($(BR2_PIC_PIE),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR2_PIC_PIE
++endif
++
+ ifeq ($(BR2_RELRO_PARTIAL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
+ else ifeq ($(BR2_RELRO_FULL),y)
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.17.1
 
 
 _________________________________________________________________________________________________________________________
