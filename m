@@ -1,9 +1,10 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 13:09:34 +0100
-Subject: [Buildroot] [PATCH 3/5 v2] toolchain: check the SSP option is known
+Date: Tue, 12 Mar 2019 13:09:33 +0100
+Subject: [Buildroot] [PATCH 2/5 v2] toolchain: set the ssp gcc option in
+ kconfig
 In-Reply-To: <cover.1552392456.git.yann.morin@orange.com>
 References: <cover.1552392456.git.yann.morin@orange.com>
-Message-ID: <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Message-ID: <6137_1552392582_5C87A186_6137_469_1_14193bcc-af2f-41d0-987f-c3154c37b38c@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,86 +13,96 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Some toolchain vendors may have backported those options to older gcc
-versions, and we have no way to know, so we have to check that the
-user's selection is acceptable.
+Currently, we repeat all the SSP level selection deep down to the
+toolchain wrapper itself, where we eventually translate it to the
+actual SSP option to use. This is a bit redundant.
 
-Extend the macro that currently checks for SSP in the toolchain, with
-a new test that the actual SSP option is recognised and accepted.
+Additionally, we will want to check that the toolchain actually
+supports that option (for those toolchain where it was backported).
 
-Note that the SSP option is either totaly empty, or an already-quoted
-string, so we can safely and easily assign it to a shell variable to
-test and use it.
-
-Note that we do not introduce BR2_TOOLCHAIN_HAS_SSP_STRONG, because:
-
-  - our internal toolchain infra only supports gcc >= 4.9, so it has
-    SSP strong;
-
-  - of the external pre-built toolchains, only the codesourcery-arm
-    one has a gcc-4.8 which lacks SSP strong, all the others have a
-    gcc >= 4.9;
-
-  - we'd still have to do the actual check for custom external
-    toolchains anyway.
-
-So, we're not adding BR2_TOOLCHAIN_HAS_SSP_STRONG just for a single
-case.
+So, move the translation into kconfig, and add the qstrip'ed value
+to the additional flags passed to the wrapper. Add it before
+user-supplied opitons, to keep the previous behaviour (and allow
+anyone crazy-enough to override it with BR2_TARGET_OPTIMIZATION).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - expand the commit log to explain why we're not adding
-    BR2_TOOLCHAIN_HAS_SSP_STRONG  (Arnout)
+  - use TOOLCHAIN_WRAPPER_OPTS  (Arnout)
 ---
- toolchain/helpers.mk                                   | 8 ++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ Config.in                      | 6 ++++++
+ toolchain/toolchain-wrapper.c  | 9 ---------
+ toolchain/toolchain-wrapper.mk | 9 +--------
+ 3 files changed, 7 insertions(+), 17 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e5520c00c3..ba097e83cf 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -415,6 +415,7 @@ check_unusable_toolchain = \
- # Check if the toolchain has SSP (stack smashing protector) support
- #
- # $1: cross-gcc path
-+# $2: gcc ssp option
- #
- check_toolchain_ssp = \
- 	__CROSS_CC=$(strip $1) ; \
-@@ -427,6 +428,13 @@ check_toolchain_ssp = \
- 		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
- 		exit 1 ; \
- 	fi ; \
-+	__SSP_OPTION=$(2); \
-+	if [ -n "$${__SSP_OPTION}" ] ; then \
-+		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
-+			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
-+			exit 1 ; \
-+		fi; \
-+	fi; \
- 	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+diff --git a/Config.in b/Config.in
+index d58d8dc04a..757ad1ca40 100644
+--- a/Config.in
++++ b/Config.in
+@@ -764,6 +764,12 @@ config BR2_SSP_ALL
  
- #
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d96f..00cbd7b17a 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -549,7 +549,7 @@ define $(2)_CONFIGURE_CMDS
- 	else \
- 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
- 	fi
--	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
-+	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
- endef
+ endchoice
  
- $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
++config BR2_SSP_OPTION
++	string
++	default "-fstack-protector"        if BR2_SSP_REGULAR
++	default "-fstack-protector-strong" if BR2_SSP_STRONG
++	default "-fstack-protector-all"    if BR2_SSP_ALL
++
+ comment "Stack Smashing Protection needs a toolchain w/ SSP"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index e9c5cd9d32..c73a0cc079 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -98,15 +98,6 @@ static char *predef_args[] = {
+ #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
+ 	"-EB",
+ #endif
+-#ifdef BR_SSP_REGULAR
+-	"-fstack-protector",
+-#endif
+-#ifdef BR_SSP_STRONG
+-	"-fstack-protector-strong",
+-#endif
+-#ifdef BR_SSP_ALL
+-	"-fstack-protector-all",
+-#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index c9e6fd3f3d..ca66fa7ba4 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+ 
+ TOOLCHAIN_WRAPPER_OPTS = \
++	$(call qstrip,$(BR2_SSP_OPTION)) \
+ 	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+ 
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+@@ -53,14 +54,6 @@ else ifeq ($(BR2_RELRO_FULL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
+ endif
+ 
+-ifeq ($(BR2_SSP_REGULAR),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_REGULAR
+-else ifeq ($(BR2_SSP_STRONG),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_STRONG
+-else ifeq ($(BR2_SSP_ALL),y)
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
+-endif
+-
+ define TOOLCHAIN_WRAPPER_BUILD
+ 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
+ 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
 -- 
 2.17.1
 
