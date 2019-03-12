@@ -1,9 +1,9 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 13:09:36 +0100
-Subject: [Buildroot] [PATCH 5/5 v2] toolchain: allow PIC/PIE without RELRO
+Date: Tue, 12 Mar 2019 13:09:34 +0100
+Subject: [Buildroot] [PATCH 3/5 v2] toolchain: check the SSP option is known
 In-Reply-To: <cover.1552392456.git.yann.morin@orange.com>
 References: <cover.1552392456.git.yann.morin@orange.com>
-Message-ID: <16391_1552392582_5C87A186_16391_281_1_704ea354-404e-4e6b-af91-9e63897e78c9@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Message-ID: <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +12,86 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-In commit 7484c1c3b806 (toolchain/toolchain-wrapper: add BR2_RELRO_),
-we added the PIC/PIE flags, but based on the RELRO_FULL condition.
+Some toolchain vendors may have backported those options to older gcc
+versions, and we have no way to know, so we have to check that the
+user's selection is acceptable.
 
-It is however totally possible to do a PIC/PIE executable without
-RELRO_FULL, as it is also valid to do a PIC/PIE build with RELRO_PARTIAL.
+Extend the macro that currently checks for SSP in the toolchain, with
+a new test that the actual SSP option is recognised and accepted.
 
-Add a new option that now governs the PIC/PIE flags.
+Note that the SSP option is either totaly empty, or an already-quoted
+string, so we can safely and easily assign it to a shell variable to
+test and use it.
 
-Note: it is unknown if RELRO_FULL really needs PIC/PIE or not, so we
-keep the current situation, where RELRO-FULL forces PIC/PIE compilation.
-Decoupling can come later from an interested party.
+Note that we do not introduce BR2_TOOLCHAIN_HAS_SSP_STRONG, because:
+
+  - our internal toolchain infra only supports gcc >= 4.9, so it has
+    SSP strong;
+
+  - of the external pre-built toolchains, only the codesourcery-arm
+    one has a gcc-4.8 which lacks SSP strong, all the others have a
+    gcc >= 4.9;
+
+  - we'd still have to do the actual check for custom external
+    toolchains anyway.
+
+So, we're not adding BR2_TOOLCHAIN_HAS_SSP_STRONG just for a single
+case.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- Config.in                      | 8 ++++++++
- toolchain/toolchain-wrapper.c  | 2 +-
- toolchain/toolchain-wrapper.mk | 4 ++++
- 3 files changed, 13 insertions(+), 1 deletion(-)
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/Config.in b/Config.in
-index d5a0460f98..31fea3ab34 100644
---- a/Config.in
-+++ b/Config.in
-@@ -712,6 +712,13 @@ endmenu
+---
+Changes v1 -> v2:
+  - expand the commit log to explain why we're not adding
+    BR2_TOOLCHAIN_HAS_SSP_STRONG  (Arnout)
+---
+ toolchain/helpers.mk                                   | 8 ++++++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index e5520c00c3..ba097e83cf 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -415,6 +415,7 @@ check_unusable_toolchain = \
+ # Check if the toolchain has SSP (stack smashing protector) support
+ #
+ # $1: cross-gcc path
++# $2: gcc ssp option
+ #
+ check_toolchain_ssp = \
+ 	__CROSS_CC=$(strip $1) ; \
+@@ -427,6 +428,13 @@ check_toolchain_ssp = \
+ 		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
+ 		exit 1 ; \
+ 	fi ; \
++	__SSP_OPTION=$(2); \
++	if [ -n "$${__SSP_OPTION}" ] ; then \
++		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
++			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
++			exit 1 ; \
++		fi; \
++	fi; \
+ 	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
  
- comment "Security Hardening Options"
+ #
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index db3570d96f..00cbd7b17a 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -549,7 +549,7 @@ define $(2)_CONFIGURE_CMDS
+ 	else \
+ 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+ 	fi
+-	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
++	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
+ endef
  
-+config BR2_PIC_PIE
-+	bool "Build code with PIC/PIE"
-+	depends on BR2_SHARED_LIBS
-+	help
-+	  Generate Position-Independent Code (PIC) and link
-+	  Position-Independent Executables (PIE).
-+
- choice
- 	bool "Stack Smashing Protection"
- 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-@@ -794,6 +801,7 @@ config BR2_RELRO_PARTIAL
- 
- config BR2_RELRO_FULL
- 	bool "Full"
-+	select BR2_PIC_PIE
- 	help
- 	  This option includes the partial configuration, but also marks
- 	  the GOT as read-only at the cost of initialization time during
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index c73a0cc079..7a4b9c4007 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -367,7 +367,7 @@ int main(int argc, char **argv)
- 		*cur++ = "-Wno-builtin-macro-redefined";
- 	}
- 
--#ifdef BR2_RELRO_FULL
-+#ifdef BR2_PIC_PIE
- 	/* Patterned after Fedora/Gentoo hardening approaches.
- 	 * https://fedoraproject.org/wiki/Changes/Harden_All_Packages
- 	 * https://wiki.gentoo.org/wiki/Hardened/Toolchain#Position_Independent_Executables_.28PIEs.29
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index ca66fa7ba4..3c42146cea 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -48,6 +48,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_PIC_PIE),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_PIC_PIE
-+endif
-+
- ifeq ($(BR2_RELRO_PARTIAL),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_PARTIAL
- else ifeq ($(BR2_RELRO_FULL),y)
+ $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
 -- 
 2.17.1
 
