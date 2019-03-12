@@ -1,44 +1,48 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 12 Mar 2019 20:30:50 +0000
-Subject: [Buildroot] 2019.02 performance
-In-Reply-To: <20190312090518.692f21a9@windsurf>
-References: <1552341542.7410.20.camel@impinj.com>
- <20190312090518.692f21a9@windsurf>
-Message-ID: <1552422649.7410.30.camel@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Mar 2019 21:38:16 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: bump version to 1.5.8
+Message-ID: <20190312204744.E36998EC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2019-03-12 at 09:05 +0100, Thomas Petazzoni wrote:
-> 
-> A hot ccache will drastically decrease the time of the "build" step of
-> each package, and make the "configure" and "install" steps look
-> comparatively very long. A build without ccache support or with a cold
-> cache will show a much larger "build" time I believe.
+commit: https://git.buildroot.net/buildroot/commit/?id=24cc2eaa335a34633b71a7db7c972ab64b5e7739
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, it will be larger.  I don't have a benchmark handy with that info.
- Perhaps I'll do one overnight.  But what I see here, is that nearly
-every build we do, both manually and as part of CI, has a very high
-ccache hit rate.  I was keeping track of the stats from CI for a while
-on that.  
+Bugfix release, fixing a number of issues discovered post-1.5.7
 
-> > 
-> > pkg_size is much more reasonable now.  In total, these are about 10.2%
-> > of the total build time.
-> 
-> 10% just for the instrumentation is still a lot. Our of 22 minutes of
-> your build time, it's still ~2 minutes. The clear dominating factor
+https://mosquitto.org/blog/2019/02/version-1-5-8-released/
 
-This is just the build image time (from scratch + ccache).  There is
-also a documentation build, and steps like legal info, package build
-time graphs, and dependency graphs are quite long.  The dependency
-graphs are clearly the biggest low hanging fruit once this step is
-considered.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Though check host rpath could be sped up!  One thing that might skew
-these results is our host packages to target packages ratio might be
-higher than typical.  If I took out the host based python software and
-host based image crypto signing stuff there'd be a lot fewer host ELF
-files.
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 17a467a721..25b9910138 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 d4024c3388502d50be4192991e90d66dfb344376104df3f63846c9f201779955  mosquitto-1.5.7.tar.gz
++sha256 78d7e70c3794dc3a1d484b4f2f8d3addebe9c2da3f5a1cebe557f7d13beb0da4  mosquitto-1.5.8.tar.gz
+ 
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index d17fae5df6..51c0abd0ba 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.5.7
++MOSQUITTO_VERSION = 1.5.8
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
