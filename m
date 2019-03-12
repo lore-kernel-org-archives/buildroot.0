@@ -1,116 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 21:57:12 +0100
-Subject: [Buildroot] [git commit] package/openjpeg: security bump to latest
- git version
-Message-ID: <20190312205433.8FA2680418@busybox.osuosl.org>
+Date: Tue, 12 Mar 2019 21:54:51 +0100
+Subject: [Buildroot] [git commit] package/btrfs-progs: bump to version 4.20.2
+Message-ID: <20190312205433.88B4D80418@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5e8c81875a26551e780e409a0647916e626c969
+commit: https://git.buildroot.net/buildroot/commit/?id=514de70539de3614a59850bb1ff31b32a22c825f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Current git contains fixes for a number of post-2.3.0 security issues:
-
-git shortlog --no-merges -i --grep cve --grep overflow --grep zero v2.3.0..
-Even Rouault (2):
-      Avoid out-of-bounds write overflow due to uint32 overflow computation on images with huge dimensions.
-      color_apply_icc_profile: avoid potential heap buffer overflow
-
-Hugo Lefeuvre (4):
-      convertbmp: fix issues with zero bitmasks
-      jp3d/jpwl convert: fix write stack buffer overflow
-      jp2: convert: fix null pointer dereference
-      convertbmp: detect invalid file dimensions early
-
-Karol Babioch (2):
-      jp3d: Replace sprintf() by snprintf() in volumetobin()
-      opj_mj2_extract: Check provided output prefix for length
-
-Stefan Weil (1):
-      Fix some potential overflow issues (#1161)
-
-Young_X (5):
-      [MJ2] To avoid divisions by zero / undefined behaviour on shift
-      [JPWL] fix CVE-2018-16375
-      [JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
-      [JPWL] opj_compress: reorder checks related to code block dimensions to avoid potential int overflow
-      [JP3D] To avoid divisions by zero / undefined behaviour on shift (CVE-2018-14423
-
-ichlubna (1):
-      openjp3d: Int overflow fixed (#1159)
-
-setharnold (1):
-      fix unchecked integer multiplication overflow
-
-Drop now upstreamed 0004-install-static-lib.patch.
-
-Add a hash for the LICENSE file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openjpeg/0004-install-static-lib.patch | 27 --------------------------
- package/openjpeg/openjpeg.hash                 |  3 ++-
- package/openjpeg/openjpeg.mk                   |  4 ++--
- 3 files changed, 4 insertions(+), 30 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openjpeg/0004-install-static-lib.patch b/package/openjpeg/0004-install-static-lib.patch
-deleted file mode 100644
-index 4a3bbfa28a..0000000000
---- a/package/openjpeg/0004-install-static-lib.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 66297f07a43d2770a97c8456d20202f3d051d980 Mon Sep 17 00:00:00 2001
--From: Even Rouault <even.rouault@spatialys.com>
--Date: Mon, 9 Oct 2017 11:40:43 +0200
--Subject: [PATCH] Unix build: fix regression of 2.3.0 where a shared-only or
-- static-only build lacks the installation target for the library (#1019, fixes
-- regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
--
--Downloaded from upstream commit
--https://github.com/uclouvain/openjpeg/commit/66297f07a43d2770a97c8456d20202f3d051d980
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/lib/openjp2/CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.txt
--index 0b4520384..f8990ccf0 100644
----- a/src/lib/openjp2/CMakeLists.txt
--+++ b/src/lib/openjp2/CMakeLists.txt
--@@ -99,6 +99,7 @@ else()
--     set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME} openjp2_static)
--   else()
--     add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
--+    set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME})
--   endif()
-- endif()
-- 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index dd3cf26cf0..8a6fda48c4 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 3dc787c1bb6023ba846c2a0d9b1f6e179f1cd255172bde9eb75b01f1e6c7d71a  openjpeg-2.3.0.tar.gz
-+sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
-+sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 9a8fdab7a4..6036ab95a3 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 07d55ec332..e7277ddea1 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 bf0b34f1538c0b6e88f959937b0419678cadbf2ba7044336dcbfb2bcdc28cd74  btrfs-progs-v4.17.1.tar.xz
++sha256 890f8b7e162f2bbfaa5c7b23e8b6f791fd3f325239a0510871fa4b45e4a80e7c  btrfs-progs-v4.20.2.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 585dcf364c..f3b671914b 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENJPEG_VERSION = 2.3.0
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
+-BTRFS_PROGS_VERSION = 4.17.1
++BTRFS_PROGS_VERSION = 4.20.2
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
