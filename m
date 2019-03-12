@@ -1,56 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Mar 2019 14:12:30 +0200
-Subject: [Buildroot] [PATCH] package/file: security bump to version 5.36
-Message-ID: <cd8c9e5890d36e5b0c3d8a895ff19f2d361f4a27.1552392750.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Mar 2019 13:33:10 +0100
+Subject: [Buildroot] [PATCH] docs/manual: add note about spurious errors
+ duing make printvars
+In-Reply-To: <20190312105713.23968-1-martin.kepplinger@ginzinger.com>
+References: <20190312105713.23968-1-martin.kepplinger@ginzinger.com>
+Message-ID: <99874541-4ce3-4cb8-b7ce-a0d3d7496357@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2019-8906: do_core_note in readelf.c in libmagic.a in file 5.35 has
-an out-of-bounds read because memcpy is misused.
 
-CVE-2019-8904: do_bid_note in readelf.c in libmagic.a in file 5.35 has a
-stack-based buffer over-read, related to file_printf and file_vprintf.
 
-Update license files hashes; removal of trailing white spaces.
+On 12/03/2019 11:57, Martin Kepplinger wrote:
+> Add a note about errors we currently have, as discussed in
+> http://lists.busybox.net/pipermail/buildroot/2019-March/244212.html
+> 
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+> ---
+>  docs/manual/make-tips.txt | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+> index ea1d825bef..475de4ffa7 100644
+> --- a/docs/manual/make-tips.txt
+> +++ b/docs/manual/make-tips.txt
+> @@ -131,3 +131,13 @@ The output of quoted variables can be reused in shell scripts, for example:
+>   $ echo $BUSYBOX_DEPENDENCIES
+>   skeleton toolchain
+>  ----
+> +
+> +Note that when using +make printvars+ you might see spurious errors like
+> +the following. Please help reviewing our Makefile macros and variables
+> +in order to fix this:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/file/file.hash | 12 +++++++-----
- package/file/file.mk   |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ I thought the conclusion of that thread is that there is no way to fix it? The
+only reasonable way is to filter out macros from the .VARS. E.g. defining
+PRINTVARS_FILTER and for each macro definition, append to that list.
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index c279dff6e160..7948e856ee9c 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,5 +1,7 @@
--# Locally calculated
--sha256 f15a50dbbfa83fec0bd1161e8e191b092ec832720e30cd14536e044ac623b20a  file-5.34.tar.gz
--sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
--sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
--sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
-+# Locally calculated after verifying signature
-+# ftp://ftp.astron.com/pub/file/file-5.36.tar.gz.asc
-+# using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
-+sha256 fb608290c0fd2405a8f63e5717abf6d03e22e183fb21884413d1edd918184379  file-5.36.tar.gz
-+sha256 0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
-+sha256 4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
-+sha256 7ac061e1a1c840c4dfa0573aec6f3497676c9295b5ec4190d3576646eb1646bf  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index b5b12978bc49..1a835015a779 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.34
-+FILE_VERSION = 5.36
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
--- 
-2.20.1
+ However, I'm not even convinced that we really want to do that. It is adding
+significant complexity for little gain.
+
+ Instead, I'm more inclined to remove the possibility of running printvars
+without explicit VARS=. If you really want, you can still get all variables with
+VARS=%.
+
+ Regards,
+ Arnout
+
+> +
+> +----
+> +/bin/bash: support/dependencies/check-host-.sh: no such file or directory
+> +/bin/bash: -c: line 0: syntax error: ')' unexpected
+> +/bin/bash: -c: line 0: `set -e; TMP="$(mktemp)"; if () >/dev/null 2>&1; then echo ""; else echo ""; fi;
+> +----
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
