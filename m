@@ -1,76 +1,83 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 13 Mar 2019 00:33:48 +0100
-Subject: [Buildroot] why qt5webengine dependencies?
-In-Reply-To: <0464fb6c-4e64-4608-611d-91d115a87fb0@ginzinger.com>
-References: <0464fb6c-4e64-4608-611d-91d115a87fb0@ginzinger.com>
-Message-ID: <20190313003348.04cdc397@gmx.net>
+From: Artem Panfilov <panfilov.artyom@gmail.com>
+Date: Wed, 13 Mar 2019 02:46:51 +0300
+Subject: [Buildroot] [PATCH v2] package/avahi: add upstream security fix
+Message-ID: <20190312234651.13693-1-panfilov.artyom@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Martin,
+Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
+inadvertently responds to IPv6 unicast queries with source addresses
+that are not on-link, which allows remote attackers to cause a denial
+of service (traffic amplification) and may cause information leakage
+by obtaining potentially sensitive information from the responding
+device via port-5353 UDP packets.
 
-On Tue, 12 Mar 2019 11:21:07 +0100, Martin Kepplinger <martin.kepplinger@ginzinger.com> wrote:
+Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
 
-> hi Gael,
-> 
-> why does qt5webengine in buildroot have a dependency on
-> * udev:
-> I apply the following patch and create /dev/shm at runtime, which works
-> out just fine. At least a build-depencency is questionable, isn't it?
-> --- a/src/core/config/linux.pri
-> +++ b/src/core/config/linux.pri
-> @@ -8,7 +8,7 @@ gn_args += \
->      use_gnome_keyring=false \
->      use_kerberos=false \
->      linux_use_bundled_binutils=false \
-> -    use_udev=true \
-> +    use_udev=false \
->      use_bundled_fontconfig=false
-> 
+---
+Changes v1 -> v2:
+  - add "Signed-off-by" and "Backported from" tags in patch
+---
+ ...ast-queries-from-address-not-on-loca.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
 
-- Because it is the default?
-- Why do you want to do this/change the default? Saving one small udev package
-for an huge package as qt5webengine (loosing hot-plugging support for keyboad/mouse)?
-
-> 
-> * OpenGL backend:
-> I'm yet to test this, but Qt webengine semms to support building with
-> "no-opengl" since 5.8! And there's QT_WEBENGINE_DISABLE_GPU at runtime,
-> so...
-
-The QT_WEBENGINE_DISABLE_GPU option seems to be run time (and not compile time)
-option...
-
-And yes [1] mentions Rendering without GPU:
-
-  In a number of scenarios, we disable using the GPU (e.g. when using ANGLE on
-  Windows or if the OpenGL driver is known to have problems). In this case,
-  the GPU thread will not be initialized at all and the renderer processes will
-  use Skia's software rasterizer to generate bitmaps that are copied to the browser
-  process using shared memory. In this case, Qt WebEngine will create copies of these
-  bitmaps and use them to generate QImages, which are then used to create QSGTextures.
-  This happens during the creation of scene graph nodes in DelegatedFrameNode::commit.
-  The code that does the actual copying can be found in ResourceHolder::initTexture.
-
-And there are some '#ifndef QT_NO_OPENGL' in the source code, e.g.
-qt5webengine-5.12.1/src/webenginewidgets/render_widget_host_view_qt_delegate_widget.cpp
-
-Maybe try without OpenGL and submit a patch lifting the requirements (since [1] qt quick
-for qt latest does not depend on opengl in buildroot)?
- 
-Regards,
-Peter
-
-[1] https://wiki.qt.io/QtWebEngine/Rendering
-[2] https://git.buildroot.net/buildroot/commit/?id=5eb43c83c10aa9cd5cdf2302af0682b3d9978ecc
-
-> 
-> 
-> My question is: why the dependencies?
-> 
-> thanks,
-> 
->                                 martin
+diff --git a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
+new file mode 100644
+index 0000000000..0e8408c830
+--- /dev/null
++++ b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
+@@ -0,0 +1,48 @@
++From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
++From: Trent Lloyd <trent@lloyd.id.au>
++Date: Sat, 22 Dec 2018 09:06:07 +0800
++Subject: [PATCH] Drop legacy unicast queries from address not on local link
++
++When handling legacy unicast queries, ensure that the source IP is
++inside a subnet on the local link, otherwise drop the packet.
++
++Fixes #145
++Fixes #203
++CVE-2017-6519
++CVE-2018-100084
++
++Backported from: e111def44a7df4624a4aa3f85fe98054bffb6b4f
++Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
++---
++ avahi-core/server.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/avahi-core/server.c b/avahi-core/server.c
++index a2cb19a8..a2580e38 100644
++--- a/avahi-core/server.c
+++++ b/avahi-core/server.c
++@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
++ 
++     if (avahi_dns_packet_is_query(p)) {
++         int legacy_unicast = 0;
+++        char t[AVAHI_ADDRESS_STR_MAX];
++ 
++         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
++          * AR section completely here, so far. Until the day we add
++@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
++             legacy_unicast = 1;
++         }
++ 
+++        if (!is_mdns_mcast_address(dst_address) &&
+++            !avahi_interface_address_on_link(i, src_address)) {
+++
+++            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
+++            return;
+++        }
+++
++         if (legacy_unicast)
++             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
++ 
++-- 
++2.19.1
++
+-- 
+2.19.1
