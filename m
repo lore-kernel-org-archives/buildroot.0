@@ -1,76 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 21:51:46 +0100
-Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.35
-Message-ID: <20190312204938.D135F8ECA9@busybox.osuosl.org>
+Date: Tue, 12 Mar 2019 21:51:53 +0100
+Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.2.13
+Message-ID: <20190312204938.D7E9F8ECC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55c388d9d4e910f505219dd9868c29370973391a
+commit: https://git.buildroot.net/buildroot/commit/?id=32ef40a9d9e359223056aa214386d516010f3991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release 1.34 added riscv32 support.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpg-error/Config.in         | 8 +++++---
- package/libgpg-error/libgpg-error.hash | 4 ++--
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index dbb554989e..415cd015cf 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -7,9 +7,9 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 		BR2_mipsel	|| BR2_mips64		|| BR2_mips64el	|| \
- 		BR2_m68k	|| BR2_nios2		|| BR2_powerpc	|| \
- 		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_RISCV_64	|| \
--		BR2_sh4		|| BR2_sh4eb		|| BR2_sh4a	|| \
--		BR2_sh4aeb	|| BR2_sparc		|| BR2_sparc64	|| \
--		BR2_x86_64
-+		BR2_RISCV_32	|| BR2_sh4		|| BR2_sh4eb	|| \
-+		BR2_sh4a	|| BR2_sh4aeb		|| BR2_sparc	|| \
-+		BR2_sparc64	|| BR2_x86_64
- 
- config BR2_PACKAGE_LIBGPG_ERROR
- 	bool "libgpg-error"
-@@ -40,6 +40,8 @@ config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
- 		if BR2_powerpc
- 	default "powerpc64-unknown-linux-gnu" \
- 		if BR2_powerpc64 || BR2_powerpc64le
-+	default "riscv32-unknown-linux-gnu" \
-+		if BR2_RISCV_32
- 	default "riscv64-unknown-linux-gnu" \
- 		if BR2_RISCV_64
- 	default "sh4-unknown-linux-gnu" \
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index b18ab7e6b6..1b1ea4e7ef 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index f985e11ad3..a9b7d10f67 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
 @@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.33.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.35.tar.bz2.sig
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q4/000433.html
+-sha1 2aeccc35ea8034306ff7a1072b84abbaa79619c3  gnupg-2.2.12.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q1/000434.html
++sha1 66ebc053e2d22f743673d3fbe54453774e4fac58  gnupg-2.2.13.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.12.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.13.tar.bz2.sig
  # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 5d38826656e746c936e7742d9cde072b50baa3c4c49daa168a56813612bf03ff  libgpg-error-1.33.tar.bz2
-+sha256 cbd5ee62a8a8c88d48c158fff4fc9ead4132aacd1b4a56eb791f9f997d07e067  libgpg-error-1.35.tar.bz2
- # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index d26d92fb05..f081ee4813 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+-sha256 db030f8b4c98640e91300d36d516f1f4f8fe09514a94ea9fc7411ee1a34082cb  gnupg-2.2.12.tar.bz2
++sha256 76c787a955f9e6e0ead47c9be700bfb9d454f955a7b7c7e697aa719bac7b11d8  gnupg-2.2.13.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 9365e960f2..ca6b6293e7 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.33
-+LIBGPG_ERROR_VERSION = 1.35
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-GNUPG2_VERSION = 2.2.12
++GNUPG2_VERSION = 2.2.13
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
