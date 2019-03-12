@@ -1,10 +1,10 @@
 From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 12 Mar 2019 13:09:35 +0100
-Subject: [Buildroot] [PATCH 4/5 v2] toolchain: -fstack-protector-strong can
- be back-ported
+Date: Tue, 12 Mar 2019 13:09:32 +0100
+Subject: [Buildroot] [PATCH 1/5 v2] toolchain: prepare to pass more
+ additional CFLAGS via the wrapper
 In-Reply-To: <cover.1552392456.git.yann.morin@orange.com>
 References: <cover.1552392456.git.yann.morin@orange.com>
-Message-ID: <17089_1552392582_5C87A186_17089_130_1_f6f2aff0-c673-4b8c-9779-7e671921c77f@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Message-ID: <17089_1552392582_5C87A186_17089_129_1_a5ce0b38-3ef0-45ac-a336-7985a6490f2b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,42 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Currently, use of -fstack-protector-strong is only available for gcc
-starting with 4.9, on the assumption that it appeared with that version.
+Currently, we pass the user-supplied so-called target optimisation flags
+to the wrapper.
 
-Although this is true, it happens that quite a few vendors will have
-back-ported -fstack-protector-strong to older gcc versions (at least 4.8
-seen in the wild).
+We're going to have additional such CFLAGS to pass, so push-back the
+formatting loop to quote the options at the last moment.
 
-Remove the guard against gcc>=4.9, and expand the help text.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
 ---
-Notes:
+ toolchain/toolchain-wrapper.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-We could have changed the guard to something like:
-    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_TOOLCHAIN_EXTERNAL
-
-However, the latest gcc we support in the internal toolchain *is*
-gcc-4.9, so the condition would have always been true. Hence, we just
-drop the condition.
----
- Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Config.in b/Config.in
-index 757ad1ca40..d5a0460f98 100644
---- a/Config.in
-+++ b/Config.in
-@@ -746,14 +746,14 @@ config BR2_SSP_REGULAR
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 613f5f6c56..c9e6fd3f3d 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -16,11 +16,13 @@ endif
+ TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
  
- config BR2_SSP_STRONG
- 	bool "-fstack-protector-strong"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  Like -fstack-protector but includes additional functions to be
- 	  protected - those that have local array definitions, or have
- 	  references to local frame addresses.
++TOOLCHAIN_WRAPPER_OPTS = \
++	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
++
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+ # separate argument when used in execv() by the toolchain wrapper.
+-TOOLCHAIN_WRAPPER_OPTS = \
+-	$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)"$(comma))
+-TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_OPTS)'
++TOOLCHAIN_WRAPPER_ARGS += \
++	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TOOLCHAIN_WRAPPER_OPTS),"$(f)"$(comma))'
  
--comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	  -fstack-protector-strong officially appeared in gcc 4.9, but
-+	  some vendors have backported -fstack-protector-strong to older
-+	  versions of gcc.
- 
- config BR2_SSP_ALL
- 	bool "-fstack-protector-all"
+ ifeq ($(BR2_CCACHE),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
 -- 
 2.17.1
 
