@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2019 09:52:59 +0100
-Subject: [Buildroot] [PATCH 1/4] toolchain: set the ssp gcc option in
- kconfig
-In-Reply-To: <27512_1552370795_5C874C6B_27512_48_1_20190312060632.GA4924@r-lnx-nyma7486-2>
+Date: Tue, 12 Mar 2019 09:53:41 +0100
+Subject: [Buildroot] [PATCH 2/4] toolchain: check the SSP option is known
+In-Reply-To: <19507_1552371492_5C874F24_19507_2_1_20190312061810.GB4924@r-lnx-nyma7486-2>
 References: <cover.1552286891.git.yann.morin@orange.com>
- <8928_1552286905_5C8604B9_8928_92_1_1b5ea6bb-0d36-4857-888c-c65dd93bff8b@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
- <309c4824-97d8-e946-79b2-7e4c722ed601@mind.be>
- <27512_1552370795_5C874C6B_27512_48_1_20190312060632.GA4924@r-lnx-nyma7486-2>
-Message-ID: <d24bdf97-bea5-f64a-6664-b4c5a356aeb3@mind.be>
+ <8928_1552286905_5C8604B9_8928_93_1_836f3203-3172-44de-a772-1825aafd915d@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+ <f8725159-1dae-da34-de01-dbf681de2169@mind.be>
+ <19507_1552371492_5C874F24_19507_2_1_20190312061810.GB4924@r-lnx-nyma7486-2>
+Message-ID: <ac2d0cfd-efb7-7a6b-3e59-54502e8d40ea@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,43 +15,98 @@ To: buildroot@busybox.net
 
 
 
-On 12/03/2019 07:06, yann.morin at orange.com wrote:
+On 12/03/2019 07:18, yann.morin at orange.com wrote:
 > Arnout, All,
 > 
-> On 2019-03-12 01:02 +0100, Arnout Vandecappelle spake thusly:
+> On 2019-03-12 01:25 +0100, Arnout Vandecappelle spake thusly:
 >> On 11/03/2019 07:48, yann.morin at orange.com wrote:
->> [snip]
+>>> From: "Yann E. MORIN" <yann.morin@orange.com>
+>>> Extend the macro that currently checks for SSP in the toolchain, with
+>>> a new test that the actual SSP option is recognised and accepted.
 > [--SNIP--]
->>> +ifneq ($(BR2_SSP_OPTION),)
->>> +TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_OPTION='$(BR2_SSP_OPTION)'
->>>  endif
->>  I'd really like to use the BR_ADDITIONAL_CFLAGS instead, by changing the
->> definition in the .mk file to something like:
+>>  I notice that in vlc.mk, we have
 >>
->> TOOLCHAIN_WRAPPER_OPTS = \
->>         $(call qstrip,$(BR2_TARGET_OPTIMIZATION)) \
->> 	$(call qstrip,$(BR2_SSP_OPTION))
->>
->> TOOLCHAIN_WRAPPER_ARGS += \
->>  	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TOOLCHAIN_WRAPPER_OPTS),"$(f)"$(comma))'
+>> ax_cv_check_cflags___fstack_protector_strong=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
 > 
-> OK, will do.
-
- Note that we don't have a runtime test for BR2_TRGET_OPTIMIZATION so some
-manual testing will be needed.
-
-
->> (note that I preferred the qstrip instead of the ifdef here, and adding quotes
->> explicitly in the foreach, but you may want to implement it differently).
+> It should probably be changed to:   $(if $(BR2_SSP_STRONG),yes,no)
 > 
-> Yeah, I tried to avoid the qstriop-then-strip-anyway dance, but it is
-> indeed nicer the way you wrote it.
+> I'll check what vlc really wants it for (e.g. strong, all, regular?),
+> fix and send a patch.
+> 
+>> without an actual check that stack-protector=strong really is available... Maybe
+>> we need BR2_TOOLCHAIN_HAS_SSP_STRONG after all?
+> 
+> I really pondered doing it that way, but I decided against, because:
+> 
+>   - our internal toolchain infra only supports gcc >= 4.9, so it has SSP
+>     strong
+> 
+>   - of the external pre-built toolchains, only the codesourcery-arm one
+>     has a gcc-4.8 which lacks SSP strong (and I use that in the cover
+>     letter to explain how to test my changes), all the others have a
+>     gcc >= 4.9
+> 
+> So, we'd have to add this _HAS_SSP_STRONG for a single case.
 
- I like the qstrip-then-quote dance, because it makes things consistent.
-
- Note that this is a very special case because we want to quote each
-space-separated option here; in general we actually want to make sure the spaces
-are quoted when we do a qstrip-then-quote dance.
+ Hm, somehow I missed that in your commit message :-P
 
  Regards,
  Arnout
+
+> 
+> Now, the vlc case, fixed as I suggest above, would be covered by this
+> configure-test.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+>>> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>> ---
+>>>  toolchain/helpers.mk                                   | 8 ++++++++
+>>>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>>>  2 files changed, 9 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+>>> index e5520c00c3..ba097e83cf 100644
+>>> --- a/toolchain/helpers.mk
+>>> +++ b/toolchain/helpers.mk
+>>> @@ -415,6 +415,7 @@ check_unusable_toolchain = \
+>>>  # Check if the toolchain has SSP (stack smashing protector) support
+>>>  #
+>>>  # $1: cross-gcc path
+>>> +# $2: gcc ssp option
+>>>  #
+>>>  check_toolchain_ssp = \
+>>>  	__CROSS_CC=$(strip $1) ; \
+>>> @@ -427,6 +428,13 @@ check_toolchain_ssp = \
+>>>  		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
+>>>  		exit 1 ; \
+>>>  	fi ; \
+>>> +	__SSP_OPTION=$(2); \
+>>> +	if [ -n "$${__SSP_OPTION}" ] ; then \
+>>> +		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
+>>> +			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
+>>> +			exit 1 ; \
+>>> +		fi; \
+>>> +	fi; \
+>>>  	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+>>>  
+>>>  #
+>>> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> index db3570d96f..00cbd7b17a 100644
+>>> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+>>> @@ -549,7 +549,7 @@ define $(2)_CONFIGURE_CMDS
+>>>  	else \
+>>>  		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+>>>  	fi
+>>> -	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
+>>> +	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
+>>>  endef
+>>>  
+>>>  $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
+>>>
+> 
