@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Mar 2019 01:08:33 +0100
-Subject: [Buildroot] ? using compilers other than gcc!
-In-Reply-To: <CAMWSM7jpZFfSLZ8pUNNODRbc_2Gm_gQtkoZNDdR+4NeoK9sXRA@mail.gmail.com>
-References: <43556bee-b905-8e11-c71d-d87aa92d13f5@lamiaworks.com.au>
- <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
- <CAMWSM7jpZFfSLZ8pUNNODRbc_2Gm_gQtkoZNDdR+4NeoK9sXRA@mail.gmail.com>
-Message-ID: <f084d35f-ddc3-0f05-4456-ee15c1d68dfe@mind.be>
+Date: Tue, 12 Mar 2019 01:25:05 +0100
+Subject: [Buildroot] [PATCH 2/4] toolchain: check the SSP option is known
+In-Reply-To: <8928_1552286905_5C8604B9_8928_93_1_836f3203-3172-44de-a772-1825aafd915d@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+References: <cover.1552286891.git.yann.morin@orange.com>
+ <8928_1552286905_5C8604B9_8928_93_1_836f3203-3172-44de-a772-1825aafd915d@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
+Message-ID: <f8725159-1dae-da34-de01-dbf681de2169@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,77 @@ To: buildroot@busybox.net
 
 
 
-On 11/03/2019 09:01, Joseph Kogut wrote:
-> On Mon, Mar 11, 2019 at 12:03 AM <yann.morin@orange.com> wrote:
->>
->> The best candidate nowadays for an alternative to gcc, is clang.
->>
+On 11/03/2019 07:48, yann.morin at orange.com wrote:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
 > 
-> In that regard, has there been any progress in supporting Clang as a
-> compiler in Buildroot?
+> Some toolchain vendors may have backported those options to older gcc
+> versions, and we have no way to know, so we have to check that the
+> user's selection is acceptable.
+> 
+> Extend the macro that currently checks for SSP in the toolchain, with
+> a new test that the actual SSP option is recognised and accepted.
+> 
+> Note that the SSP option is either totaly empty, or an already-quoted
+> string, so we can safely and easily assign it to a shell variable to
+> test and use it.
 
- I don't think anyone has ever proposed any patches that go into that direction.
-Though I suppose that compiler-rt [1] is a necessary step.
+ I notice that in vlc.mk, we have
 
- It's a big endeavor. There will e.g. need to be a new symbol to distinguish
-between clang and gcc, and e.g. disable the kernel when clang is used.
+ax_cv_check_cflags___fstack_protector_strong=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+
+without an actual check that stack-protector=strong really is available... Maybe
+we need BR2_TOOLCHAIN_HAS_SSP_STRONG after all?
 
  Regards,
  Arnout
 
-[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=84352
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  toolchain/helpers.mk                                   | 8 ++++++++
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index e5520c00c3..ba097e83cf 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -415,6 +415,7 @@ check_unusable_toolchain = \
+>  # Check if the toolchain has SSP (stack smashing protector) support
+>  #
+>  # $1: cross-gcc path
+> +# $2: gcc ssp option
+>  #
+>  check_toolchain_ssp = \
+>  	__CROSS_CC=$(strip $1) ; \
+> @@ -427,6 +428,13 @@ check_toolchain_ssp = \
+>  		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
+>  		exit 1 ; \
+>  	fi ; \
+> +	__SSP_OPTION=$(2); \
+> +	if [ -n "$${__SSP_OPTION}" ] ; then \
+> +		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
+> +			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
+> +			exit 1 ; \
+> +		fi; \
+> +	fi; \
+>  	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+>  
+>  #
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index db3570d96f..00cbd7b17a 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -549,7 +549,7 @@ define $(2)_CONFIGURE_CMDS
+>  	else \
+>  		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+>  	fi
+> -	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
+> +	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
+>  endef
+>  
+>  $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
+> 
