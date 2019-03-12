@@ -1,74 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Mar 2019 22:34:57 +0100
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version 2.29
-In-Reply-To: <20190310165917.24325-2-romain.naour@gmail.com>
-References: <20190310165917.24325-1-romain.naour@gmail.com>
- <20190310165917.24325-2-romain.naour@gmail.com>
-Message-ID: <20190312213457.GI25009@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Mar 2019 22:36:47 +0100
+Subject: [Buildroot] [git commit] package/libcdio-paranoia: bump to version
+ 10.2+2.0.0
+Message-ID: <20190312213410.C020E8E5B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ced8fdd2d133e579cd99dda2f4e44badd65009b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-03-10 17:59 +0100, Romain Naour spake thusly:
-[--SNIP--]
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index ec5b3cedc9..1437f87368 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -13,7 +13,7 @@ GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1
-> +GLIBC_VERSION = glibc-2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61
+Add LIBCDIO_PARANOIA_SOURCE to download a tar.bz2 (tar.gz is not
+available for this version)
 
-I think at some point, someone suggested we drop the 'glibc-' prefix,
-and jsut use e.g. 2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcdio-paranoia/libcdio-paranoia.hash | 2 +-
+ package/libcdio-paranoia/libcdio-paranoia.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-I just checked, and it seems to work:
-
-    $ git show 2.29-6-g067fc32968b601493f4b247a3ac00caeea3f3d61
-    commit 067fc32968b601493f4b247a3ac00caeea3f3d61 (origin/release/2.29/master)
-    Author: Florian Weimer <fweimer@redhat.com>
-    Date:   Fri Feb 15 21:27:01 2019 +0100
-
-        nptl: Fix invalid Systemtap probe in pthread_join [BZ #24211]
-
-        [...]
-
-I think it is nicer...
-
-Regards,
-Yann E. MORIN.
-
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-> @@ -32,7 +32,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
->  # Before glibc is configured, we must have the first stage
->  # cross-compiler and the kernel headers
->  GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
-> -	$(BR2_MAKE_HOST_DEPENDENCY)
-> +	$(BR2_MAKE_HOST_DEPENDENCY) $(BR2_PYTHON3_HOST_DEPENDENCY)
->  
->  GLIBC_SUBDIR = build
->  
-> -- 
-> 2.14.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libcdio-paranoia/libcdio-paranoia.hash b/package/libcdio-paranoia/libcdio-paranoia.hash
+index 33e59ba704..a62620dfd6 100644
+--- a/package/libcdio-paranoia/libcdio-paranoia.hash
++++ b/package/libcdio-paranoia/libcdio-paranoia.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 d60f82ece97eeb92407a9ee03f3499c8983206672c28ae5e4e22179063c81941  libcdio-paranoia-10.2+0.94+2.tar.gz
++sha256 4565c18caf401083c53733e6d2847b6671ba824cff1c7792b9039693d34713c1  libcdio-paranoia-10.2+2.0.0.tar.bz2
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libcdio-paranoia/libcdio-paranoia.mk b/package/libcdio-paranoia/libcdio-paranoia.mk
+index 3281aa0145..32b1f169b4 100644
+--- a/package/libcdio-paranoia/libcdio-paranoia.mk
++++ b/package/libcdio-paranoia/libcdio-paranoia.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBCDIO_PARANOIA_VERSION = 10.2+0.94+2
++LIBCDIO_PARANOIA_VERSION = 10.2+2.0.0
++LIBCDIO_PARANOIA_SOURCE = libcdio-paranoia-$(LIBCDIO_PARANOIA_VERSION).tar.bz2
+ LIBCDIO_PARANOIA_SITE = $(BR2_GNU_MIRROR)/libcdio
+ LIBCDIO_PARANOIA_LICENSE = GPL-3.0+
+ LIBCDIO_PARANOIA_LICENSE_FILES = COPYING
