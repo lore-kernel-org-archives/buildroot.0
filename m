@@ -1,68 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 21:57:33 +0100
-Subject: [Buildroot] [PATCH] package/openjpeg: security bump to latest
- git version
-In-Reply-To: <20190312202000.28239-1-peter@korsgaard.com>
-References: <20190312202000.28239-1-peter@korsgaard.com>
-Message-ID: <20190312215733.28b98716@windsurf>
+Date: Tue, 12 Mar 2019 21:58:32 +0100
+Subject: [Buildroot] [git commit] Makefile: printvars: don't print anything
+ when VARS is not set
+Message-ID: <20190312205609.1F00A8E21E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Mar 2019 21:20:00 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd5bd12379dcacc9ca359a40624148e8c3fea3c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Current git contains fixes for a number of post-2.3.0 security issues:
-> 
-> git shortlog --no-merges -i --grep cve --grep overflow --grep zero v2.3.0..
-> Even Rouault (2):
->       Avoid out-of-bounds write overflow due to uint32 overflow computation on images with huge dimensions.
->       color_apply_icc_profile: avoid potential heap buffer overflow
-> 
-> Hugo Lefeuvre (4):
->       convertbmp: fix issues with zero bitmasks
->       jp3d/jpwl convert: fix write stack buffer overflow
->       jp2: convert: fix null pointer dereference
->       convertbmp: detect invalid file dimensions early
-> 
-> Karol Babioch (2):
->       jp3d: Replace sprintf() by snprintf() in volumetobin()
->       opj_mj2_extract: Check provided output prefix for length
-> 
-> Stefan Weil (1):
->       Fix some potential overflow issues (#1161)
-> 
-> Young_X (5):
->       [MJ2] To avoid divisions by zero / undefined behaviour on shift
->       [JPWL] fix CVE-2018-16375
->       [JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
->       [JPWL] opj_compress: reorder checks related to code block dimensions to avoid potential int overflow
->       [JP3D] To avoid divisions by zero / undefined behaviour on shift (CVE-2018-14423
-> 
-> ichlubna (1):
->       openjp3d: Int overflow fixed (#1159)
-> 
-> setharnold (1):
->       fix unchecked integer multiplication overflow
-> 
-> Drop now upstreamed 0004-install-static-lib.patch.
-> 
-> Add a hash for the LICENSE file.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/openjpeg/0004-install-static-lib.patch | 27 --------------------------
->  package/openjpeg/openjpeg.hash                 |  3 ++-
->  package/openjpeg/openjpeg.mk                   |  4 ++--
->  3 files changed, 4 insertions(+), 30 deletions(-)
->  delete mode 100644 package/openjpeg/0004-install-static-lib.patch
+Using 'make printvars' for printing all variables is not very useful.
+E.g. all macros will output some bogus value. In addition, the same can
+be achieved with 'make -p'.
 
-Applied to master, thanks.
+We can simply remove the condition on $(VARS). If VARS is not set, the
+filter expression will be empty which matches nothing, so nothing is
+printed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Note that the old behaviour can still be achieved with:
+make printvars VARS=%
+
+Update the 'make help' text to match the new behaviour.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index a64196f9c3..6af8923892 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1031,7 +1031,7 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+ printvars:
+ 	@:
+ 	$(foreach V, \
+-		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
++		$(sort $(filter $(VARS),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+ 		$(if $(QUOTED_VARS),\
+@@ -1124,7 +1124,7 @@ help:
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+-	@echo '  printvars              - dump all the internal variables'
++	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
