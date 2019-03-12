@@ -1,109 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Mar 2019 00:25:12 +0100
-Subject: [Buildroot] [PATCH 3/5 v2] toolchain: check the SSP option is
- known
-In-Reply-To: <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-References: <cover.1552392456.git.yann.morin@orange.com>
- <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-Message-ID: <7ac2b57b-4f33-b661-e80f-6d4d30ebe469@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 13 Mar 2019 00:33:48 +0100
+Subject: [Buildroot] why qt5webengine dependencies?
+In-Reply-To: <0464fb6c-4e64-4608-611d-91d115a87fb0@ginzinger.com>
+References: <0464fb6c-4e64-4608-611d-91d115a87fb0@ginzinger.com>
+Message-ID: <20190313003348.04cdc397@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Martin,
 
+On Tue, 12 Mar 2019 11:21:07 +0100, Martin Kepplinger <martin.kepplinger@ginzinger.com> wrote:
 
-On 12/03/2019 13:09, yann.morin at orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
+> hi Gael,
 > 
-> Some toolchain vendors may have backported those options to older gcc
-> versions, and we have no way to know, so we have to check that the
-> user's selection is acceptable.
+> why does qt5webengine in buildroot have a dependency on
+> * udev:
+> I apply the following patch and create /dev/shm at runtime, which works
+> out just fine. At least a build-depencency is questionable, isn't it?
+> --- a/src/core/config/linux.pri
+> +++ b/src/core/config/linux.pri
+> @@ -8,7 +8,7 @@ gn_args += \
+>      use_gnome_keyring=false \
+>      use_kerberos=false \
+>      linux_use_bundled_binutils=false \
+> -    use_udev=true \
+> +    use_udev=false \
+>      use_bundled_fontconfig=false
 > 
-> Extend the macro that currently checks for SSP in the toolchain, with
-> a new test that the actual SSP option is recognised and accepted.
-> 
-> Note that the SSP option is either totaly empty, or an already-quoted
-> string, so we can safely and easily assign it to a shell variable to
-> test and use it.
-> 
-> Note that we do not introduce BR2_TOOLCHAIN_HAS_SSP_STRONG, because:
-> 
->   - our internal toolchain infra only supports gcc >= 4.9, so it has
->     SSP strong;
-> 
->   - of the external pre-built toolchains, only the codesourcery-arm
->     one has a gcc-4.8 which lacks SSP strong, all the others have a
->     gcc >= 4.9;
-> 
->   - we'd still have to do the actual check for custom external
->     toolchains anyway.
-> 
-> So, we're not adding BR2_TOOLCHAIN_HAS_SSP_STRONG just for a single
-> case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v1 -> v2:
->   - expand the commit log to explain why we're not adding
->     BR2_TOOLCHAIN_HAS_SSP_STRONG  (Arnout)
-> ---
->  toolchain/helpers.mk                                   | 8 ++++++++
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index e5520c00c3..ba097e83cf 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -415,6 +415,7 @@ check_unusable_toolchain = \
->  # Check if the toolchain has SSP (stack smashing protector) support
->  #
->  # $1: cross-gcc path
-> +# $2: gcc ssp option
->  #
->  check_toolchain_ssp = \
->  	__CROSS_CC=$(strip $1) ; \
-> @@ -427,6 +428,13 @@ check_toolchain_ssp = \
->  		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
->  		exit 1 ; \
->  	fi ; \
-> +	__SSP_OPTION=$(2); \
 
- Is there any reason to pass this as an argument rather than using
-$(BR2_SSP_OPTION) directly?
+- Because it is the default?
+- Why do you want to do this/change the default? Saving one small udev package
+for an huge package as qt5webengine (loosing hot-plugging support for keyboad/mouse)?
 
- The same goes for $(TOOLCHAIN_EXTERNAL_CC), but that ship has sailed.
-
- Regards,
- Arnout
-
-> +	if [ -n "$${__SSP_OPTION}" ] ; then \
-> +		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
-> +			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
-> +			exit 1 ; \
-> +		fi; \
-> +	fi; \
->  	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
->  
->  #
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index db3570d96f..00cbd7b17a 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -549,7 +549,7 @@ define $(2)_CONFIGURE_CMDS
->  	else \
->  		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
->  	fi
-> -	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
-> +	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
->  endef
->  
->  $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
 > 
+> * OpenGL backend:
+> I'm yet to test this, but Qt webengine semms to support building with
+> "no-opengl" since 5.8! And there's QT_WEBENGINE_DISABLE_GPU at runtime,
+> so...
+
+The QT_WEBENGINE_DISABLE_GPU option seems to be run time (and not compile time)
+option...
+
+And yes [1] mentions Rendering without GPU:
+
+  In a number of scenarios, we disable using the GPU (e.g. when using ANGLE on
+  Windows or if the OpenGL driver is known to have problems). In this case,
+  the GPU thread will not be initialized at all and the renderer processes will
+  use Skia's software rasterizer to generate bitmaps that are copied to the browser
+  process using shared memory. In this case, Qt WebEngine will create copies of these
+  bitmaps and use them to generate QImages, which are then used to create QSGTextures.
+  This happens during the creation of scene graph nodes in DelegatedFrameNode::commit.
+  The code that does the actual copying can be found in ResourceHolder::initTexture.
+
+And there are some '#ifndef QT_NO_OPENGL' in the source code, e.g.
+qt5webengine-5.12.1/src/webenginewidgets/render_widget_host_view_qt_delegate_widget.cpp
+
+Maybe try without OpenGL and submit a patch lifting the requirements (since [1] qt quick
+for qt latest does not depend on opengl in buildroot)?
+ 
+Regards,
+Peter
+
+[1] https://wiki.qt.io/QtWebEngine/Rendering
+[2] https://git.buildroot.net/buildroot/commit/?id=5eb43c83c10aa9cd5cdf2302af0682b3d9978ecc
+
+> 
+> 
+> My question is: why the dependencies?
+> 
+> thanks,
+> 
+>                                 martin
