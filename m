@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 22:21:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: amdgpu needs MMU
-In-Reply-To: <20190311222630.17241-1-fontaine.fabrice@gmail.com>
-References: <20190311222630.17241-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190312222141.26fd518d@windsurf>
+Date: Tue, 12 Mar 2019 22:27:45 +0100
+Subject: [Buildroot] [RFC v1] package/gst1-plugins-bad: add webrtcbin
+ option
+In-Reply-To: <20190310175109.13444-1-ps.report@gmx.net>
+References: <20190310175109.13444-1-ps.report@gmx.net>
+Message-ID: <20190312222745.06cf1b34@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Mar 2019 23:26:30 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> amdgpu test uses fork() so disable amdgpu without MMU
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8d6194982c1080e173fcef8212fb06e6dc275d58
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Arnout in Cc, our Config.in.legacy/backward-compatibility guru.
+
+On Sun, 10 Mar 2019 18:51:09 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libdrm/Config.in                          | 1 +
->  package/mesa3d/Config.in                          | 2 ++
->  package/x11r7/xdriver_xf86-video-amdgpu/Config.in | 2 ++
->  3 files changed, 5 insertions(+)
+> Notes:
+>   - just compile tested yet
+>   - named webrtcbin option (instead of webrtc), because of the
+>     BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC entry in Config.in.legacy
+>     (see [1] for history)
 
-Applied to master, thanks.
+Would it be a big problem to reuse the
+BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC option ?
+
+Best regards,
 
 Thomas
 -- 
