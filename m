@@ -1,86 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 09:05:18 +0100
-Subject: [Buildroot] 2019.02 performance
-In-Reply-To: <1552341542.7410.20.camel@impinj.com>
-References: <1552341542.7410.20.camel@impinj.com>
-Message-ID: <20190312090518.692f21a9@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Mar 2019 09:25:08 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-03-10
+In-Reply-To: <20190311125037.GA20362@lwo1-lhp-f71841> (Vadym Kochan's message
+ of "Mon, 11 Mar 2019 14:50:37 +0200")
+References: <20190311070050.A164586F58@hemlock.osuosl.org>
+ <20190311125037.GA20362@lwo1-lhp-f71841>
+Message-ID: <87sgvsfqjf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vadym" == Vadym Kochan <vadim4j@gmail.com> writes:
 
-First of all, thanks a *lot* for sharing this kind of analysis. This is
-very useful.
+ > Hi All,
+ > On Mon, Mar 11, 2019 at 07:00:44AM -0000, Thomas Petazzoni wrote:
+ >> Hello,
+ >> 
+ >> Build statistics for 2019-03-10
+ >> ===============================
+ >> 
+ >> branch |  OK | NOK | TIM | TOT |
+ >> 2018.02.x |  23 |   1 |   0 |  24 |
+ >> 2018.11.x |  26 |   1 |   0 |  27 |
+ >> master | 236 |  73 |   3 | 312 |
+ >> 
+ >> Results for branch '2018.02.x'
+ >> ==============================
+ >> 
+ >> Classification of failures by reason
+ >> ------------------------------------
+ >> 
+ >> host-libunistring-0.9.7 | 1 
+ > Regarding this, I found that the issue should be fixed in 0.9.10 version:
 
-On Mon, 11 Mar 2019 21:59:03 +0000
-Trent Piepho <tpiepho@impinj.com> wrote:
+ > 	https://www.mail-archive.com/bug-libunistring at gnu.org/msg00310.html
 
-> With 2018.02, I had to disable the package size and related hooks as
-> they were too slow: over half the build time.  As I'm sure some
-> remember, there was a thread about it and performance was
-> improved.  Here's the results with 2019.02.  I'm using a real config
-> for a product we have and testing on a reasonably modern native Linux
-> workstation with a decent NVMe SSD and a four core processor.  Using
-> ccache, which had already built the software.
+ > which is already latest in 2018.11.x and master branches, but not in 2018.02.x
 
-A hot ccache will drastically decrease the time of the "build" step of
-each package, and make the "configure" and "install" steps look
-comparatively very long. A build without ccache support or with a cold
-cache will show a much larger "build" time I believe.
+Thanks, I have cherry picked the bump to 0.9.10 on the 2018.02.x branch.
 
-> Breakdown by build step (host/stage/target/images mean install same),
-> across all packages:
-> 
-> configure                666.223
-> build                    381.480
-> host                     122.191
-> extract                   57.489
-> target                    57.039
-> stage                     28.356
-> patch                      9.711
-> postimage                  9.008
-> finalize                   6.396
-> images                     0.063
-> download                   0.022
-> 
-> 
-> The single threaded configure and cmake scripts remain the killer,
-> through total of all install steps is about 2/3 of the build step time.
-> 
-> Breakdown for the global instrumentation hooks, across all packages and
-> build steps:
-> 
-> check_host_rpath          64.345
-> step_pkg_size             32.992
-> check_bin_arch            26.286
-> step_check_build_dir       8.365
-> step_time                  7.895
-> 
-> pkg_size is much more reasonable now.  In total, these are about 10.2%
-> of the total build time.
-
-10% just for the instrumentation is still a lot. Our of 22 minutes of
-your build time, it's still ~2 minutes. The clear dominating factor
-here is check_host_rpath. If I'm reading the check-host-rpath
-correctly, we are checking all files in $(HOST_DIR) at the end of the
-build of every package. Couldn't this be optimized by using the list of
-files installed by a package, like we do for check-bin-arch ?
-
-I think that back when check-host-rpath we introduced, we did not had
-the list of files installed by host packages. But now that we do,
-perhaps we should use it ?
-
-For the other ones, I don't immediately see any easy optimization
-route, except perhaps writing some dedicated C programs instead of
-using the slower shell scripts forking like crazy.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
