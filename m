@@ -1,136 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Mar 2019 22:28:23 +0100
-Subject: [Buildroot] [PATCH 1/2] support/dependencies: add a check for
- python3
-In-Reply-To: <20190310165917.24325-1-romain.naour@gmail.com>
-References: <20190310165917.24325-1-romain.naour@gmail.com>
-Message-ID: <20190312212823.GH25009@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Mar 2019 22:28:29 +0100
+Subject: [Buildroot] [git commit] package/wpewebkit: fix host gcc >= 4.8
+ check
+Message-ID: <20190312212537.DE7F28EC4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f7aafaadc4247144af21f2e035ef72e3d8b001ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-03-10 17:59 +0100, Romain Naour spake thusly:
-> Since version 2.29, glibc requires python 3.4 or later to build the GNU C Library [1].
-> 
-> We add a new check to verify the version of python3 interpreter installed on the host.
-> If no suitable python3 interpreter is found, define BR2_PYTHON3_HOST_DEPENDENCY to add
-> host-python3 in package dependencies when needed.
-> 
-> [1] https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  support/dependencies/check-host-python3.mk | 13 ++++++++++
->  support/dependencies/check-host-python3.sh | 41 ++++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
->  create mode 100644 support/dependencies/check-host-python3.mk
->  create mode 100755 support/dependencies/check-host-python3.sh
-> 
-> diff --git a/support/dependencies/check-host-python3.mk b/support/dependencies/check-host-python3.mk
-> new file mode 100644
-> index 0000000000..ceb48c969e
-> --- /dev/null
-> +++ b/support/dependencies/check-host-python3.mk
-> @@ -0,0 +1,13 @@
-> +# Since version 2.29, glibc requires python 3.4 or later to build the GNU C Library.
-> +# https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
-> +
-> +# Set this to either 3.4 or higher, depending on the highest minimum
-> +# version required by any of the packages bundled in Buildroot. If a
-> +# package is bumped or a new one added, and it requires a higher
-> +# version, our package infra will catch it and whine.
-> +#
-> +BR2_PYTHON3_VERSION_MIN = 3.4
-> +
-> +ifeq (,$(call suitable-host-package,python3,$(BR2_PYTHON3_VERSION_MIN) python3 python))
+We need host gcc >= 4.8 not host gcc < 4.8.
 
-This call is turned into:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard &lt;<a href="mailto:james.hilliard1@gmail.com" target="_blank">james.hilliard1 at gmail.com</a>&gt;<br></blockquote><div><br></div><div><span class="gmail-m_4107183884095209747gmail-il"><span class="gmail-il">Acked</span></span>-by: Francois Perrad &lt;<a href="mailto:francois.perrad@gadz.org" target="_blank">francois.perrad at gadz.org</a>&gt;</div><div> <br></div><blockquote class="gmail_quote" style="margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wpewebkit/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    $(shell support/dependencies/check-host-python3.sh 3.4 python3 python)
-
-which means that support/dependencies/check-host-python3.sh is called
-with three arguments, not two, which means that...
-
-> +BR2_PYTHON3_HOST_DEPENDENCY = host-python3
-> +endif
-> diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
-> new file mode 100755
-> index 0000000000..e5745fa7c4
-> --- /dev/null
-> +++ b/support/dependencies/check-host-python3.sh
-> @@ -0,0 +1,41 @@
-> +#!/bin/sh
-> +
-> +# prevent shift error
-> +[ $# -lt 2 ] && exit 1
-> +
-> +major_min="${1%.*}"
-> +minor_min="${1#*.}"
-> +
-> +shift
-
-... here we're left with two remaining arguments, and thus...
-
-> +# The host python interpreter is already checked by dependencies.sh but
-> +# it only check if the version is at least 2.7.
-> +# We want to check the version number of the python3 interpreter even
-> +# if Buildroot is able to use any version but some packages may require
-> +# a more recent version.
-> +python3_candidates="$1"
-
-... here ${1} is only ever going to contain "python3", not
-"python3 python" as you think it does. Does it?
-
-> +for candidate in $python3_candidates ; do
-
-The simplest is to drop the python3_candidates variable, and simply use:
-
-    for candidate in "${@}"; do
-        [...]
-    done
-
-Regards,
-Yann E. MORIN.
-
-> +	python3=`which $candidate 2>/dev/null`
-> +	if [ ! -x "$python3" ]; then
-> +		continue
-> +	fi
-> +	version=`$python3 -V 2>&1 | sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-].*//g' -e '1q'`
-> +
-> +	major=`echo "$version" | cut -d. -f1`
-> +	minor=`echo "$version" | cut -d. -f2`
-> +
-> +	if [ $major -lt $major_min ]; then
-> +		# no suitable python3 found
-> +		continue
-> +	fi
-> +
-> +	if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
-> +		# no suitable python3 found
-> +		continue
-> +	fi
-> +
-> +	# suitable python3 found
-> +	echo $python3
-> +	break
-> +done
-> -- 
-> 2.14.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 64e81a95f9..04ebe5452b 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -33,7 +33,7 @@ comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gc
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_HOST_GCC_AT_LEAST_4_8
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
+ 
+ comment "wpewebkit needs an OpenGL ES w/ EGL backend"
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
