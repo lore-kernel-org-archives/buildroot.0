@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Mar 2019 22:37:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcdio-paranoia: bump to
- version 10.2+2.0.0
-In-Reply-To: <20190309230318.29924-1-fontaine.fabrice@gmail.com>
-References: <20190309230318.29924-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190312223743.304bd14f@windsurf>
+Date: Tue, 12 Mar 2019 22:37:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: bump to version
+ 2.0.2
+In-Reply-To: <20190309223833.12252-1-fontaine.fabrice@gmail.com>
+References: <20190309223833.12252-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190312223746.02f0bc0a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 Mar 2019 00:03:18 +0100
+On Sat,  9 Mar 2019 23:38:33 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Add LIBCDIO_PARANOIA_SOURCE to download a tar.bz2 (tar.gz is not
-> available for this version)
+> - Remove two patches (already in version)
+> - Update hash of LICENSE.md, clarifications on BSD and zlib were added:
+>   https://github.com/libjpeg-turbo/libjpeg-turbo/commit/90e2d7f3fdbfbc00afc2d21c4a5b61eebcd3c849
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libcdio-paranoia/libcdio-paranoia.hash | 2 +-
->  package/libcdio-paranoia/libcdio-paranoia.mk   | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  ...-Fix-int-overflow-segfault-w-big-BMP.patch | 51 -------------------
+>  ...on-t-allow-quantization-w-non-RGB-CS.patch | 39 --------------
+>  package/jpeg-turbo/jpeg-turbo.hash            | 10 ++--
+>  package/jpeg-turbo/jpeg-turbo.mk              |  2 +-
+>  4 files changed, 6 insertions(+), 96 deletions(-)
+>  delete mode 100644 package/jpeg-turbo/0001-tjLoadImage-Fix-int-overflow-segfault-w-big-BMP.patch
+>  delete mode 100644 package/jpeg-turbo/0002-wrbmp.c-Don-t-allow-quantization-w-non-RGB-CS.patch
 
 Applied to master, thanks.
 
