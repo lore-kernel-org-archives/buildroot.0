@@ -1,116 +1,60 @@
-From: Devashish Bhageerutty <db@windarphotonics.com>
-Date: Wed, 13 Mar 2019 14:32:52 +0000
-Subject: [Buildroot] Adding custom linux config
-In-Reply-To: <ae958dbb-99f6-ff67-aad9-cd24c45d925e@mind.be>
-References: <HE1PR0702MB361270F873CC0E92047A60CCCF490@HE1PR0702MB3612.eurprd07.prod.outlook.com>
- <ae958dbb-99f6-ff67-aad9-cd24c45d925e@mind.be>
-Message-ID: <HE1PR0702MB36124C2AB07A33712AA60D07CF4A0@HE1PR0702MB3612.eurprd07.prod.outlook.com>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Wed, 13 Mar 2019 16:09:27 +0100
+Subject: [Buildroot] add two user
+In-Reply-To: <CAOqJNTcsbw9bHCgEO7YAZJFBe_=5JDR1j1KVoZUnKCU8V_BBWQ@mail.gmail.com>
+References: <CAOqJNTcsbw9bHCgEO7YAZJFBe_=5JDR1j1KVoZUnKCU8V_BBWQ@mail.gmail.com>
+Message-ID: <24542_1552489771_5C891D2B_24542_13_3_20190313150927.GD3315@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+??????, All,
 
-Sorry for not being clear enough. What I wanted to say is that I am trying to build an image with a custom linux.config file but I am not able to. 
+On 2019-03-13 15:31 +0200, ?????? ????? spake thusly:
+> Hello, people. I want to add two user in my system. One user added successful. I added second user to user table. First user
+> created, but second user doesn't created.
+> my user table
+> user 8000 ntc 2000 =useruser /home/user /usr/bin/sh dialout,input user
+> dev 8001 dev 2001 =userdev /home/dev /usr/bin/sh sudo dev user
 
-I have specified the path in the defconfig file as stated in the manual (Please see attached Heimdal_defconfig for the Buildroot configuration).
+Can you check that your device table is correctly terminated with a
+proper \n ?
 
-The config file that I want to use for my linux is the linux.config.old (attached in the email) which has specific items for my hardware for example Flash and FPGA). 
+Some editors will incorrectly omit the last \n when saving text files.
 
-When I build the image and check the .config file (in the /proc/configz), items are missing eg; CONFIG_MTD_M25P80=y or CONFIG_SPI_CADENCE_QSPI=y etc... This is preventing me from reading the flash memory.
+Regards,
+Yann E. MORIN.
 
-If I do a "make linux-update-defconfig" in the Buildroot folder, my linux.config will get overwritten by a generic one instead of doing a merge and will still be missing the specific items I had before. I have attached this as linux.config in the email. 
+> Regards,
+> Sakhno Serhii
 
-Finally here is a link for a difference check between my linux.config (on the right) and the linux.config that is generated my Buildroot when I do a linux-update-defconfig.(on the left) https://www.diffchecker.com/421xxn9X
-
-Thank you for your help. 
-
-Best Regards,
-
-Deva
-
-
------Original Message-----
-From: Arnout Vandecappelle <arnout@mind.be> 
-Sent: 12 March 2019 23:22
-To: Devashish Bhageerutty <db@windarphotonics.com>; buildroot at busybox.net
-Subject: Re: [Buildroot] Adding custom linux config
-
-
-
-On 12/03/2019 16:09, Devashish Bhageerutty wrote:
-> Hi,
-> 
-> ?
-> 
-> I am building an image with an out of tree configuration. I have 
-> specified the path to my custom config file in the defconfig and my 
-> linux.config is in the folder structure as shown on the Buildroot 
-> template. But when I am building or if I do ?make 
-> linux-update-(def)config?, my config file is getting overwritten by a 
-> generic one. I have checked the /proc/configz on a running system to 
-> verify this. This configuration was working before on Buildroot 2015 
-> with linux kernel
-> 3.10 but now I am using Buildroot 2018.02 and kernel 4.14.73. I would 
-> be grateful if I could be pointed to what could be causing this or any 
-> tests I can make to figure out why this is happening.
-
- Can you do 'make savedefconfig' and share the resulting defconfig file? Your explanation is not very clear I'm afraid...
-
- Regards,
- Arnout
-
-> 
-> ?
-> 
-> Best Regards,
-> 
-> ?
-> 
-> Deva
-> 
-> ?
-> 
-> windar_logo_email_sig
-> 
-> Devashish Bhageerutty
-> 
-> Embedded Software Engineer
-> 
-> Windar Photonics A/S
-> 
-> E-mail: db at windarphotonics.com <mailto:db@windarphotonics.com>
-> 
-> Web: www.windarphotonics.com
-> 
-> ?
-> 
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux.config
-Type: application/octet-stream
-Size: 3512 bytes
-Desc: linux.config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190313/8d5b880b/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux.config.old
-Type: application/octet-stream
-Size: 3969 bytes
-Desc: linux.config.old
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190313/8d5b880b/attachment-0001.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: heimdal_defconfig
-Type: application/octet-stream
-Size: 2243 bytes
-Desc: heimdal_defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190313/8d5b880b/attachment-0002.obj>
+
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
