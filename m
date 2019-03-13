@@ -1,102 +1,97 @@
-From: scsijon <scsijon@lamiaworks.com.au>
-Date: Thu, 14 Mar 2019 09:32:10 +1100
-Subject: [Buildroot] ? using compilers other than gcc!
-In-Reply-To: <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
-References: <43556bee-b905-8e11-c71d-d87aa92d13f5@lamiaworks.com.au>
- <4380_1552287778_5C860822_4380_384_1_20190311070256.GA2834@r-lnx-nyma7486-2>
-Message-ID: <e72359ef-5378-3799-2b57-399c3a042c61@lamiaworks.com.au>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Wed, 13 Mar 2019 23:02:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/aioblescan: new package
+Message-ID: <20190313220253.26245-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Python library to scan and decode advertised BLE info.
+Uses asyncio.
 
-On 11/03/19 18:02, yann.morin at orange.com wrote:
-> sccijon, All,
-> 
-> On 2019-03-11 13:04 +1100, scsijon spake thusly:
->> Downloaded the latest 2019-02 buildroot, I found where to set musl, but
->> can't see how to change the compiler from gcc to another and I want to try
->> the latest pcc?
-> 
-> Buildroot only supports gcc.
-> 
->> However it has now seriously surfaced again into the general linux world,
->> with a few decent step-ups, and worth at least looking at as far as i'm
->> concerned, like it's still fast and tight and it's MUSL aware, needs only
->> one library package for us to work with, builds it's own GCC, and can
->> rebuild itself. And NO it doesn't do everything GCC does, but do we really
->> need all that.....
->>
->> Links worth looking at are
->> https://www.phoronix.com/scan.php?page=news_item&px=PCC-Still-Going-2016;
-> 
-> That dates back from more than 3 years ago now...
-> 
->> http://pcc.ludd.ltu.se/supported-platforms/;
-> 
-> Nothing new in the "News" section since July 2015 (almost 4 years ago
-> now).
-> 
->> https://lwn.net/Articles/255558/.
-> 
-> Article dated from 2007. Hardly recenti either...
-> 
-> So much so for something that "has now seriously surfaced again", I'm
-> afraid... :-/
-> 
->> Yeah, I know none of them are new, but the people behind the latest stuff
->> put it in the work, not the doc's.
-> 
-I did say the articles were dated, I just included them for those that 
-had not heard if it and wanted some background. I also said they were 
-putting time on the system, not publicity documentation.
+https://github.com/frawau/aioblescan
 
-> Their cvs (irk!) server is down:
->      http://pcc.ludd.ltu.se/fisheye/
->      503 Service Temporarily Unavailable
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-aioblescan/Config.in              |  7 +++++++
+ package/python-aioblescan/python-aioblescan.hash |  5 +++++
+ package/python-aioblescan/python-aioblescan.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-aioblescan/Config.in
+ create mode 100644 package/python-aioblescan/python-aioblescan.hash
+ create mode 100644 package/python-aioblescan/python-aioblescan.mk
 
-"cvs -d :pserver:anonymous at pcc.ludd.ltu.se:/cvsroot co pcc" works, 
-that's the listed way to download it as stated on their download page, I 
-don't know about the /fisheye/, I suspect it's part of the old (unused) 
-reporting system that was abandoned when it had crashed and moved.
-
-> 
->> You can get it and it's library at http://pcc.ludd.ltu.se/ftp/pub/pcc/ if it
->> interests you.
->>
->> So, back to the question, how can I use it?
-> 
-> Short answer: you can't.
-
-ok, I just asked, it's just buildroot's configuration wording seemed to 
-allow alternatives, but I couldn't work out how to, thus this question.
-
-> 
-> Long answer: you can prepare a set of patches against Buildroot, to
-> enable using an alternate compiler, but this is probably a daunting
-> task, as everything everywhere in the infra expects gcc. Packages
-> also expect gcc, and when they do allow for something else, it's
-> probably clang, not pcc. Also, pcc is C only. So, such an endeavour
-> would probably last years before you could eventually select pcc in
-> Buildroot.
-> 
-> So, if I were you, I wouldn't hold my breath...
-> 
-> The best candidate nowadays for an alternative to gcc, is clang.
-
-no, I want something that is totally portable/relocatable, which is why 
-i'm looking at pcc in the first place.
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-Thanks anyway, I shall just go to one of the alternatives, it's actually 
-supprising how many have appeared out there for musl, they are just not 
-as far advanced as buildroot, and having used buildroot in the past I 
-thought I would start with it.
-
-scsijon
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bff5a58a5b..10ba19b647 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -933,6 +933,7 @@ F:	fs/f2fs/
+ F:	package/bluez5_utils-headers/
+ F:	package/f2fs-tools/
+ F:	package/pigpio/
++F:	package/python-aioblescan/
+ F:	package/python-falcon/
+ F:	package/python-mimeparse/
+ F:	package/python-pigpio/
+diff --git a/package/Config.in b/package/Config.in
+index 420e6e95a3..f0ddfb76e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -799,6 +799,7 @@ endif
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
++	source "package/python-aioblescan/Config.in"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aiodns/Config.in"
+ 	source "package/python-aiohttp/Config.in"
+diff --git a/package/python-aioblescan/Config.in b/package/python-aioblescan/Config.in
+new file mode 100644
+index 0000000000..dd1acfa095
+--- /dev/null
++++ b/package/python-aioblescan/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_AIOBLESCAN
++	bool "python-aioblescan"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Scanning Bluetooth for advertised info with asyncio.
++
++	  https://github.com/frawau/aioblescan
+diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
+new file mode 100644
+index 0000000000..d33162850a
+--- /dev/null
++++ b/package/python-aioblescan/python-aioblescan.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aioblescan/json
++md5	b662f44828a99430d4ed42c843ddb89c  aioblescan-0.2.4.tar.gz
++sha256	d613f24ffdb3dae48d6157443f76708f0c791034036330d00272af6b408b2c6c  aioblescan-0.2.4.tar.gz
++# Locally computed sha256 checksums
++sha256	c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
+diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
+new file mode 100644
+index 0000000000..8a6bda3a65
+--- /dev/null
++++ b/package/python-aioblescan/python-aioblescan.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aioblescan
++#
++################################################################################
++
++PYTHON_AIOBLESCAN_VERSION = 0.2.4
++PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
++PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/a9/ad/1e2f41b2036bd76079f88cd94ce35b5a996d937dccaf432ea6b8092d3e11
++PYTHON_AIOBLESCAN_SETUP_TYPE = distutils
++PYTHON_AIOBLESCAN_LICENSE = MIT
++PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+-- 
+2.20.1
