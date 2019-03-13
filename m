@@ -1,60 +1,105 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Wed, 13 Mar 2019 16:09:27 +0100
-Subject: [Buildroot] add two user
-In-Reply-To: <CAOqJNTcsbw9bHCgEO7YAZJFBe_=5JDR1j1KVoZUnKCU8V_BBWQ@mail.gmail.com>
-References: <CAOqJNTcsbw9bHCgEO7YAZJFBe_=5JDR1j1KVoZUnKCU8V_BBWQ@mail.gmail.com>
-Message-ID: <24542_1552489771_5C891D2B_24542_13_3_20190313150927.GD3315@r-lnx-nyma7486-2>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 13 Mar 2019 11:43:47 -0400
+Subject: [Buildroot] [PATCHv2 1/2] support/dependencies: add a check for
+ python3
+In-Reply-To: <20190312223525.17360-1-romain.naour@gmail.com>
+References: <20190312223525.17360-1-romain.naour@gmail.com>
+Message-ID: <CAFSsvmpDxn2VuG+6nwkYraWC4BAw7NR4r7XCBjBPmNpgGJVXiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-??????, All,
+All;
 
-On 2019-03-13 15:31 +0200, ?????? ????? spake thusly:
-> Hello, people. I want to add two user in my system. One user added successful. I added second user to user table. First user
-> created, but second user doesn't created.
-> my user table
-> user 8000 ntc 2000 =useruser /home/user /usr/bin/sh dialout,input user
-> dev 8001 dev 2001 =userdev /home/dev /usr/bin/sh sudo dev user
+Tested-by: Adam Duskett <aduskett@gmail.com>
 
-Can you check that your device table is correctly terminated with a
-proper \n ?
+Reviewed-by: Adam Duskett <aduskett@gmail.com>
 
-Some editors will incorrectly omit the last \n when saving text files.
 
-Regards,
-Yann E. MORIN.
 
-> Regards,
-> Sakhno Serhii
-
+On Tue, Mar 12, 2019 at 6:35 PM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Since version 2.29, glibc requires python 3.4 or later to build the GNU C Library [1].
+>
+> We add a new check to verify the version of python3 interpreter installed on the host.
+> If no suitable python3 interpreter is found, define BR2_PYTHON3_HOST_DEPENDENCY to add
+> host-python3 in package dependencies when needed.
+>
+> [1] https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: fix the third argument handling in the check-host-python3.sh (Yann)
+>     rework the python version handling to simplify the check (Adam)
+> ---
+>  support/dependencies/check-host-python3.mk | 13 +++++++++++++
+>  support/dependencies/check-host-python3.sh | 31 ++++++++++++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 support/dependencies/check-host-python3.mk
+>  create mode 100755 support/dependencies/check-host-python3.sh
+>
+> diff --git a/support/dependencies/check-host-python3.mk b/support/dependencies/check-host-python3.mk
+> new file mode 100644
+> index 0000000000..ceb48c969e
+> --- /dev/null
+> +++ b/support/dependencies/check-host-python3.mk
+> @@ -0,0 +1,13 @@
+> +# Since version 2.29, glibc requires python 3.4 or later to build the GNU C Library.
+> +# https://www.sourceware.org/ml/libc-alpha/2019-01/msg00723.html
+> +
+> +# Set this to either 3.4 or higher, depending on the highest minimum
+> +# version required by any of the packages bundled in Buildroot. If a
+> +# package is bumped or a new one added, and it requires a higher
+> +# version, our package infra will catch it and whine.
+> +#
+> +BR2_PYTHON3_VERSION_MIN = 3.4
+> +
+> +ifeq (,$(call suitable-host-package,python3,$(BR2_PYTHON3_VERSION_MIN) python3 python))
+> +BR2_PYTHON3_HOST_DEPENDENCY = host-python3
+> +endif
+> diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
+> new file mode 100755
+> index 0000000000..17cafd2883
+> --- /dev/null
+> +++ b/support/dependencies/check-host-python3.sh
+> @@ -0,0 +1,31 @@
+> +#!/bin/sh
+> +
+> +# prevent shift error
+> +[ $# -lt 2 ] && exit 1
+> +
+> +version_min="$(echo ${1} | awk '{ split($1, v, "."); print v[1] v[2] }')"
+> +
+> +shift
+> +
+> +# The host python interpreter is already checked by dependencies.sh but
+> +# it only check if the version is at least 2.7.
+> +# We want to check the version number of the python3 interpreter even
+> +# if Buildroot is able to use any version but some packages may require
+> +# a more recent version.
+> +
+> +for candidate in "${@}" ; do
+> +       python3=`which $candidate 2>/dev/null`
+> +       if [ ! -x "$python3" ]; then
+> +               continue
+> +       fi
+> +       version=`$python3 -V 2>&1 | awk '{ split($2, v, "."); print v[1] v[2] }'`
+> +
+> +       if [ $version -lt $version_min ]; then
+> +               # no suitable python3 found
+> +               continue
+> +       fi
+> +
+> +       # suitable python3 found
+> +       echo $python3
+> +       break
+> +done
+> --
+> 2.14.5
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
