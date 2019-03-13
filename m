@@ -1,69 +1,46 @@
-From: Alexandru Ardelean <ardeleanalex@gmail.com>
-Date: Wed, 13 Mar 2019 10:29:32 +0200
-Subject: [Buildroot] [PATCH] libiio: bump to version 0.15
-Message-ID: <20190313082932.13596-1-ardeleanalex@gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Wed, 13 Mar 2019 08:35:58 +0000
+Subject: [Buildroot] [PATCH 1/1] package/kexec: update to 2.0.18
+Message-ID: <20190313083557.13418-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change bumps libiio, to version 0.15.
-This version is currently the most stable version in the series. It
-contains several fixes over 0.14.
+This release fixes the following issue with new kernels:
 
-0.16 & 0.17 have been released but they have some issues with backwards
-compatibility, so they are not yet recommended.
+kexec --load bzImage --reuse-cmdline
+Unhandled rela relocation: R_X86_64_PLT32
 
-Changelog for version 0.15 (over 0.14).
-Link:
-  https://github.com/analogdevicesinc/libiio/releases/tag/v0.15
-
-Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
-
-0.15 contains a fix that should also be added into the latest LTS.
-buildroot LTS contains version 0.14
-
-Question:
- - is it ok to port this change to the LTS (2019.02) ?
- - do we cherry-pick the patches from 0.15 to put on top of 0.14 ?
-
-The important patches would be ~12.
-The really important patches would be fewer (needs more digging into).
-
-How do patches for LTS versions get marked/sent ?
-(Or how is the protocol for sending patches to LTS; I haven't found
-anything yet to suggest how to do it).
-
-Thanks
-Alex
-
- package/libiio/libiio.hash | 2 +-
- package/libiio/libiio.mk   | 2 +-
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-index fbb4bccb90..800b2ee8f4 100644
---- a/package/libiio/libiio.hash
-+++ b/package/libiio/libiio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 12063db7a9366aa00bfd789db30afaddb29686bc29b3ce1e5d4adfe1c3b42527  libiio-0.14.tar.gz
-+sha256 a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19  libiio-0.15.tar.gz
- sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index d2376bca34..2371a71063 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 24294909ee..f87692b689 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256 504c816b769da573167b63f3b6d4fce3740f231c98d8db0c4fda47a4b90482a9 kexec-tools-2.0.17.tar.xz
++sha256 f020f07341977eb512663e301c2de60c6589e141467c16a8efd58243c0b2b238 kexec-tools-2.0.18.tar.xz
+ # locally calculated
+ sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index b0f4367ddd..b011c0b4e5 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIIO_VERSION = 0.14
-+LIBIIO_VERSION = 0.15
- LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
- LIBIIO_INSTALL_STAGING = YES
- LIBIIO_LICENSE = LGPL-2.1+
+-KEXEC_VERSION = 2.0.17
++KEXEC_VERSION = 2.0.18
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
 -- 
-2.17.1
+2.19.1
