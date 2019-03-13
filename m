@@ -1,25 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Mar 2019 17:51:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gdb: disable inprocess-agent in
- static build
-In-Reply-To: <20190222095044.32559-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 22 Feb 2019 10:50:44 +0100")
-References: <20190222095044.32559-1-fontaine.fabrice@gmail.com>
-Message-ID: <871s3ag1jl.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 13 Mar 2019 18:59:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/glm: bump to version 0.9.9.3
+In-Reply-To: <CAPi7W800pNzvTCN+tih-C_ae3EhuaiEchW+pZ=iC5m7gTUtD8Q@mail.gmail.com>
+References: <20190217093529.5634-1-fontaine.fabrice@gmail.com>
+ <20190217155457.25581467@windsurf.home>
+ <CAPi7W800pNzvTCN+tih-C_ae3EhuaiEchW+pZ=iC5m7gTUtD8Q@mail.gmail.com>
+Message-ID: <CAPi7W83Dwqto5nUhyk6i-GbXy38PnuP-f-17dadyLvOpU2S=HA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Dear all,
+Le dim. 17 f?vr. 2019 ? 17:53, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Dear Thomas,
+> Le dim. 17 f?vr. 2019 ? 15:54, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> >
+> > Hello Fabrice,
+> >
+> > On Sun, 17 Feb 2019 10:35:29 +0100
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > - Disable tests as they are enabled by default since version 0.9.9.1:
+> > >   https://github.com/g-truc/glm/commit/d307d390193f4027faec48ac79d7f74b2bec6e56
+> > > - Static and shared libraries are always built since version 0.9.9.1:
+> > >   https://github.com/g-truc/glm/commit/a23dd2f800185a5e233534fed82fc5c2840fbe5c
+> > >   So, add a patch to fix this behavior and disable them as GLM is
+> > >   header-ony
+> >
+> > I don't understand this. Why does the glm CMakeLists.txt has provision
+> > to build static and shared libraries if it's a header-only library ?
+> Current version of glm already provides the possibility to build these
+> libraries through GLM_STATIC_LIBRARY_ENABLE and
+> GLM_SHARED_LIBRARY_ENABLE but these options are disabled by default.
+> In the current version, if these two options are disabled, glm tries
+> to build a glm_dummy executable with the only cpp file in the glm
+> directory (i.e. glm/detail/glm.cpp which defines a glm namespace with
+> all the glm structures). This glm_dummy executable raises some build
+> failures.
+> I don't really understand how these libraries could be useful,.
+> However, to keep current behavior, I decided to disable them.
+> If I get a feedback on my PR, I'll ask upstream about it.
+For your information, I asked upstream about it
+(https://github.com/g-truc/glm/pull/871) but I got no answer. Then I
+sent a PR to remove those libraries which was merged
+(https://github.com/g-truc/glm/pull/878) but reverted a few hours
+later (https://github.com/g-truc/glm/pull/879) so I think that's
+upstream really wants to keep those libraries.
+> >
+> > > ++if(BUILD_STATIC_LIBS)
+> > > + add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
+> > > +     ${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
+> > > +     ${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
+> > > +@@ -51,7 +52,9 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
+> > > +     ${GTC_SOURCE}     ${GTC_INLINE}     ${GTC_HEADER}
+> > > +     ${GTX_SOURCE}     ${GTX_INLINE}     ${GTX_HEADER}
+> > > +     ${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
+> >
+> > I.e, what is this code doing ?
+> >
+> > Thanks,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> Best Regards,
+>
+> Fabrice
+Best Regards,
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/b40bdbca6669a81301fca523e982dbc9584a4e65
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2018.02.x and 2018.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Fabrice
