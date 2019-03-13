@@ -1,36 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Mar 2019 17:50:39 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine: fix comment on
- GL dependencies
-Message-ID: <20190313164746.ECDF38B66D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Mar 2019 17:18:20 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/gdb: disable
+ inprocess-agent in static build
+Message-ID: <20190313164839.506FD8ECA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fb4c14ecb1e8f001449830b65ec2a4606b87682
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=d8944d527dba2a897da276807f549a1eb222669b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-qt5declarative can be built/used without opengl support so fix the
-dependency comment in qt5webengine.
+Fixes:
+ - http://autobuild.buildroot.org/results/b40bdbca6669a81301fca523e982dbc9584a4e65
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2a01a328195090c45d2b2407680cbf567f547643)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webengine/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gdb/gdb.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 744d659567..bfc0a02c12 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -34,7 +34,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	# v8 (a chromium 3rd-party) compiles its internal host-tools with the
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 062f3a730c..a926961372 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -139,6 +139,11 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ GDB_CONF_OPTS += --disable-build-with-cxx
+ endif
+ 
++# inprocess-agent can't be built statically
++ifeq ($(BR2_STATIC_LIBS),y)
++GDB_CONF_OPTS += --disable-inprocess-agent
++endif
++
+ ifeq ($(BR2_PACKAGE_GDB_TUI),y)
+ GDB_CONF_OPTS += --enable-tui
+ else
