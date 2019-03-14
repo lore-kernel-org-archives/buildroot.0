@@ -1,37 +1,58 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 14 Mar 2019 10:40:24 +0100
-Subject: [Buildroot] [PATCH v2 13/13] qt5: Fix pkgconfig search path for
- per-package infrastructure
+Date: Thu, 14 Mar 2019 10:40:18 +0100
+Subject: [Buildroot] [PATCH v2 07/13] Makefile: allow top-level parallel
+ build with BR2_PER_PACKAGE_DIRECTORIES=y
 In-Reply-To: <20190314094024.1961-1-anaumann@ultratronik.de>
 References: <20190314094024.1961-1-anaumann@ultratronik.de>
-Message-ID: <20190314094024.1961-14-anaumann@ultratronik.de>
+Message-ID: <20190314094024.1961-8-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Per default qmake uses the pkg-config binary and search path detected by qt5base
-and set in mkspecs/qconfig.pri. For per-package infra, this leads to packages
-not contained in qt5base not being detected.
-To overcome this, set the correct pathes in the global QMAKE variable.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+With per-package folder support, top-level parallel build becomes
+safe, so we can enclose the .NOTPARALLEL statement in a
+!BR2_PER_PACKAGE_DIRECTORIES condition.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/qt5/qt5.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Makefile | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 15ca188c8c..15a98ce4ab 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -33,4 +33,6 @@ define QT5_QTCONF_FIXUP
- endef
+diff --git a/Makefile b/Makefile
+index 58282dc098..4bbc3e5be9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -228,21 +228,12 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
+ endif
  
- # Variable for other Qt applications to use
--QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++ -qtconf $(@D)/qt.conf
-+QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++ -qtconf $(@D)/qt.conf \
-+	PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR) \
-+	PKG_CONFIG_LIBDIR=$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig
+-# Parallel execution of this Makefile is disabled because it changes
+-# the packages building order, that can be a problem for two reasons:
+-# - If a package has an unspecified optional dependency and that
+-#   dependency is present when the package is built, it is used,
+-#   otherwise it isn't (but compilation happily proceeds) so the end
+-#   result will differ if the order is swapped due to parallel
+-#   building.
+-# - Also changing the building order can be a problem if two packages
+-#   manipulate the same file in the target directory.
+-#
+-# Taking into account the above considerations, if you still want to execute
+-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+-# use the -j<jobs> option when building, e.g:
+-#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
++# Disable top-level parallel build if per-package directories is not
++# used. Indeed, per-package directories is necessary to guarantee
++# determinism and reproducibility with top-level parallel build.
+ .NOTPARALLEL:
++endif
+ 
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
 -- 
 2.21.0
