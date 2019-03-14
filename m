@@ -1,75 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 22:18:42 +0100
-Subject: [Buildroot] [git commit] package/binutils: remove version 2.29
-Message-ID: <20190314211546.218048EEE6@busybox.osuosl.org>
+Date: Thu, 14 Mar 2019 22:18:21 +0100
+Subject: [Buildroot] [git commit] package/binutils: remove version 2.28
+Message-ID: <20190314211546.1688D8EEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a05759bf8060e58cdfcae9074208a702d1b0de7
+commit: https://git.buildroot.net/buildroot/commit/?id=dc5d95154e030becb8a5ada0f0876aa4ec4f0295
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We are back with 3 binutils version in Buildroot.
-Now CFI support is always present for NIOSII.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  Config.in.legacy                                   |   8 +
- linux/Config.in                                    |   4 +-
- package/binutils/2.29.1/0001-sh-conf.patch         |  48 ----
- package/binutils/2.29.1/0002-ld-makefile.patch     |  41 ---
- .../2.29.1/0003-check-ldrunpath-length.patch       |  36 ---
- .../0004-add-sysroot-fix-from-bug-3049.patch       |  51 ----
- .../2.29.1/0005-poison-system-directories.patch    | 306 ---------------------
+ package/binutils/2.28.1/0120-sh-conf.patch         |  46 ----
+ ...a-fix-memory-corruption-by-broken-sysregs.patch |  42 ---
+ package/binutils/2.28.1/0300-ld-makefile.patch     |  41 ---
+ .../2.28.1/0301-check-ldrunpath-length.patch       |  36 ---
+ .../0500-add-sysroot-fix-from-bug-3049.patch       |  48 ----
+ .../2.28.1/0600-poison-system-directories.patch    | 306 ---------------------
+ .../binutils/2.28.1/0906-microblaze-pr21180.patch  |  33 ---
  package/binutils/Config.in.host                    |   6 -
  package/binutils/binutils.hash                     |   1 -
- 9 files changed, 10 insertions(+), 491 deletions(-)
+ 10 files changed, 8 insertions(+), 559 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 089fc9539a..2f99dc8ad2 100644
+index 93e50f3f60..089fc9539a 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,14 @@ endif
  
  comment "Legacy options removed in 2019.05"
  
-+config BR2_BINUTILS_VERSION_2_29_X
-+	bool "binutils version 2.29 support removed"
++config BR2_BINUTILS_VERSION_2_28_X
++	bool "binutils version 2.28 support removed"
 +	select BR2_LEGACY
 +	help
-+	  Support for binutils version 2.29 has been removed. The
++	  Support for binutils version 2.28 has been removed. The
 +	  current default version (2.31 or later) has been selected
 +	  instead.
 +
- config BR2_BINUTILS_VERSION_2_28_X
- 	bool "binutils version 2.28 support removed"
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
+ 	bool "gst-plugins-bad apexsink option removed"
  	select BR2_LEGACY
-diff --git a/linux/Config.in b/linux/Config.in
-index 856b53eec0..818b94e1c0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -9,9 +9,9 @@ config BR2_LINUX_KERNEL
- if BR2_LINUX_KERNEL
- 
- # https://sourceware.org/bugzilla/show_bug.cgi?id=21458
--comment "Linux kernel in thumb mode may be broken with binutils 2.29 and 2.30"
-+comment "Linux kernel in thumb mode may be broken with binutils 2.30"
- 	depends on BR2_arm || BR2_armeb
--	depends on BR2_BINUTILS_VERSION_2_29_X || BR2_BINUTILS_VERSION_2_30_X
-+	depends on BR2_BINUTILS_VERSION_2_30_X
- 
- # Packages that need to have a kernel with support for loadable modules,
- # but do not use the kernel-modules infrastructure, should select that
-diff --git a/package/binutils/2.29.1/0001-sh-conf.patch b/package/binutils/2.29.1/0001-sh-conf.patch
+diff --git a/package/binutils/2.28.1/0120-sh-conf.patch b/package/binutils/2.28.1/0120-sh-conf.patch
 deleted file mode 100644
-index 3c9ef62e2f..0000000000
---- a/package/binutils/2.29.1/0001-sh-conf.patch
+index f77599835f..0000000000
+--- a/package/binutils/2.28.1/0120-sh-conf.patch
 +++ /dev/null
-@@ -1,48 +0,0 @@
--From fdb0d1d63d8dc30b319db174f2a90e681d8cd2ed Mon Sep 17 00:00:00 2001
+@@ -1,46 +0,0 @@
+-From 1ceee199e9a32034c6def7700fdbb26335ca76a3 Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
 -Date: Fri, 25 Dec 2015 11:38:13 +0100
 -Subject: [PATCH] sh-conf
@@ -81,49 +63,95 @@ index 3c9ef62e2f..0000000000
 -
 -[Romain: rebase on top of 2.26]
 -Signed-off-by: Romain Naour <romain.naour@gmail.com>
--[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
 - configure    | 2 +-
 - configure.ac | 2 +-
 - 2 files changed, 2 insertions(+), 2 deletions(-)
 -
 -diff --git a/configure b/configure
--index be9dd89..3c0f4c6 100755
+-index 34b66f7..905bc7b 100755
 ---- a/configure
 -+++ b/configure
--@@ -3844,7 +3844,7 @@ case "${target}" in
+-@@ -3943,7 +3943,7 @@ case "${target}" in
 -   or1k*-*-*)
 -     noconfigdirs="$noconfigdirs gdb"
 -     ;;
---  sh-*-*)
--+  sh*-*-*)
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
 -     case "${target}" in
 -       sh*-*-elf)
 -          ;;
 -diff --git a/configure.ac b/configure.ac
--index 532c5c2..4f40318 100644
+-index 4977d97..1e69ee2 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -1178,7 +1178,7 @@ case "${target}" in
+-@@ -1279,7 +1279,7 @@ case "${target}" in
 -   or1k*-*-*)
 -     noconfigdirs="$noconfigdirs gdb"
 -     ;;
---  sh-*-*)
--+  sh*-*-*)
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
 -     case "${target}" in
 -       sh*-*-elf)
 -          ;;
 --- 
--2.9.4
+-2.4.3
 -
-diff --git a/package/binutils/2.29.1/0002-ld-makefile.patch b/package/binutils/2.29.1/0002-ld-makefile.patch
+diff --git a/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch b/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
 deleted file mode 100644
-index a7cd71e63c..0000000000
---- a/package/binutils/2.29.1/0002-ld-makefile.patch
+index 30103ee05e..0000000000
+--- a/package/binutils/2.28.1/0131-xtensa-fix-memory-corruption-by-broken-sysregs.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 3c8788dbb70b40e737d4b8e30cab81406e5c5091 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Wed, 2 Aug 2017 00:36:05 -0700
+-Subject: [PATCH] xtensa: fix memory corruption by broken sysregs
+-
+-In some xtensa configurations there may be system/user registers in
+-xtensa-modules with negative index. ISA initialization for such config
+-may clobber heap and result in program termination.
+-Don't update lookup table entries for register with negative indices.
+-They are not directly accessible via RSR/WSR/XSR or RUR/WUR, so this
+-change should not affect processing of valid assembly/binary code.
+-
+-bfd/
+-2017-08-02  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* xtensa-isa.c (xtensa_isa_init): Don't update lookup table
+-	entries for sysregs with negative indices.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: d84ed528d4817b0ff854006b65a9f6ec75f0407a
+-
+- bfd/xtensa-isa.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/bfd/xtensa-isa.c b/bfd/xtensa-isa.c
+-index 8da75bea8109..8c6ee88fdeae 100644
+---- a/bfd/xtensa-isa.c
+-+++ b/bfd/xtensa-isa.c
+-@@ -292,7 +292,8 @@ xtensa_isa_init (xtensa_isa_status *errno_p, char **error_msg_p)
+-       xtensa_sysreg_internal *sreg = &isa->sysregs[n];
+-       is_user = sreg->is_user;
+- 
+--      isa->sysreg_table[is_user][sreg->number] = n;
+-+      if (sreg->number >= 0)
+-+	isa->sysreg_table[is_user][sreg->number] = n;
+-     }
+- 
+-   /* Set up the interface lookup table.  */
+--- 
+-2.1.4
+-
+diff --git a/package/binutils/2.28.1/0300-ld-makefile.patch b/package/binutils/2.28.1/0300-ld-makefile.patch
+deleted file mode 100644
+index 6710195798..0000000000
+--- a/package/binutils/2.28.1/0300-ld-makefile.patch
 +++ /dev/null
 @@ -1,41 +0,0 @@
--From d4e18ebc6ad810167a2de84b185a5f0d65b9ec2d Mon Sep 17 00:00:00 2001
+-From d76a7549b43974fe8564971a3f40459bc495a8a7 Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
 -Date: Fri, 25 Dec 2015 11:40:53 +0100
 -Subject: [PATCH] ld-makefile
@@ -136,7 +164,7 @@ index a7cd71e63c..0000000000
 - 2 files changed, 2 insertions(+), 2 deletions(-)
 -
 -diff --git a/ld/Makefile.am b/ld/Makefile.am
--index 625347f..d5334d2 100644
+-index 0b3b049..3871c74 100644
 ---- a/ld/Makefile.am
 -+++ b/ld/Makefile.am
 -@@ -57,7 +57,7 @@ endif
@@ -149,10 +177,10 @@ index a7cd71e63c..0000000000
 - EMUL = @EMUL@
 - EMULATION_OFILES = @EMULATION_OFILES@
 -diff --git a/ld/Makefile.in b/ld/Makefile.in
--index ba25177..a2cf228 100644
+-index ed98f87..530e4c9 100644
 ---- a/ld/Makefile.in
 -+++ b/ld/Makefile.in
--@@ -446,7 +446,7 @@ AM_CFLAGS = $(WARN_CFLAGS) $(ELF_CLFAGS)
+-@@ -452,7 +452,7 @@ AM_CFLAGS = $(WARN_CFLAGS) $(ELF_CLFAGS)
 - # We put the scripts in the directory $(scriptdir)/ldscripts.
 - # We can't put the scripts in $(datadir) because the SEARCH_DIR
 - # directives need to be different for native and cross linkers.
@@ -162,15 +190,15 @@ index a7cd71e63c..0000000000
 - BFDDIR = $(BASEDIR)/bfd
 - INCDIR = $(BASEDIR)/include
 --- 
--2.9.4
+-2.4.3
 -
-diff --git a/package/binutils/2.29.1/0003-check-ldrunpath-length.patch b/package/binutils/2.29.1/0003-check-ldrunpath-length.patch
+diff --git a/package/binutils/2.28.1/0301-check-ldrunpath-length.patch b/package/binutils/2.28.1/0301-check-ldrunpath-length.patch
 deleted file mode 100644
-index 3fbc5031d1..0000000000
---- a/package/binutils/2.29.1/0003-check-ldrunpath-length.patch
+index 8d673dcfc5..0000000000
+--- a/package/binutils/2.28.1/0301-check-ldrunpath-length.patch
 +++ /dev/null
 @@ -1,36 +0,0 @@
--From 3bd211025c890ef2971958915d500a9bb2913a2a Mon Sep 17 00:00:00 2001
+-From ebe1cba46df52d7bf86def3d681271fd05fb453b Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
 -Date: Fri, 25 Dec 2015 11:41:47 +0100
 -Subject: [PATCH] check-ldrunpath-length
@@ -182,37 +210,37 @@ index 3fbc5031d1..0000000000
 - 1 file changed, 4 insertions(+)
 -
 -diff --git a/ld/emultempl/elf32.em b/ld/emultempl/elf32.em
--index d2551b6..70fcb56 100644
+-index 0405d4f..efd3300 100644
 ---- a/ld/emultempl/elf32.em
 -+++ b/ld/emultempl/elf32.em
--@@ -1463,6 +1463,8 @@ fragment <<EOF
+-@@ -1411,6 +1411,8 @@ fragment <<EOF
 - 	      && command_line.rpath == NULL)
 - 	    {
-- 	      path = (const char *) getenv ("LD_RUN_PATH");
--+	      if ((path) && (strlen (path) == 0))
--+	        path = NULL;
-- 	      if (path
-- 		  && gld${EMULATION_NAME}_search_needed (path, &n, force))
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+	      	lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
 - 		break;
--@@ -1740,6 +1742,8 @@ gld${EMULATION_NAME}_before_allocation (void)
+-@@ -1692,6 +1694,8 @@ gld${EMULATION_NAME}_before_allocation (void)
 -   rpath = command_line.rpath;
 -   if (rpath == NULL)
 -     rpath = (const char *) getenv ("LD_RUN_PATH");
 -+  if ((rpath) && (strlen (rpath) == 0))
--+    rpath = NULL;
+-+  	rpath = NULL;
 - 
 -   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link.next)
 -     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
 --- 
--2.9.4
+-2.4.3
 -
-diff --git a/package/binutils/2.29.1/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.29.1/0004-add-sysroot-fix-from-bug-3049.patch
+diff --git a/package/binutils/2.28.1/0500-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.28.1/0500-add-sysroot-fix-from-bug-3049.patch
 deleted file mode 100644
-index 9e11840cee..0000000000
---- a/package/binutils/2.29.1/0004-add-sysroot-fix-from-bug-3049.patch
+index 0331088666..0000000000
+--- a/package/binutils/2.28.1/0500-add-sysroot-fix-from-bug-3049.patch
 +++ /dev/null
-@@ -1,51 +0,0 @@
--From 378bda0e19d279535b3f4a0e448a658a534a5d67 Mon Sep 17 00:00:00 2001
+@@ -1,48 +0,0 @@
+-From 30628870e583375f8927c04398c7219c6e9f703c Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
 -Date: Fri, 25 Dec 2015 11:42:48 +0100
 -Subject: [PATCH] add sysroot fix from bug #3049
@@ -226,14 +254,13 @@ index 9e11840cee..0000000000
 -[Romain: rebase on top of 2.26]
 -Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- ld/ldfile.c | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
+- ld/ldfile.c | 11 +++++++++--
+- 1 file changed, 9 insertions(+), 2 deletions(-)
 -
--diff --git a/ld/ldfile.c b/ld/ldfile.c
--index 3b37a0a..f7e5473 100644
----- a/ld/ldfile.c
--+++ b/ld/ldfile.c
--@@ -338,18 +338,24 @@ ldfile_open_file_search (const char *arch,
+-diff --git a/ld/ldfile.c diff --git b/ld/ldfile.c
+---- a/ld/ldfile.c	2017-03-02 03:23:54.000000000 -0500
+-+++ b/ld/ldfile.c	2017-03-20 09:52:27.687415942 -0400
+-@@ -336,18 +336,24 @@
 -      directory first.  */
 -   if (!entry->flags.maybe_archive)
 -     {
@@ -260,16 +287,14 @@ index 9e11840cee..0000000000
 - 	return TRUE;
 - 
 -       if (IS_ABSOLUTE_PATH (entry->filename))
---- 
--2.9.4
 -
-diff --git a/package/binutils/2.29.1/0005-poison-system-directories.patch b/package/binutils/2.29.1/0005-poison-system-directories.patch
+diff --git a/package/binutils/2.28.1/0600-poison-system-directories.patch b/package/binutils/2.28.1/0600-poison-system-directories.patch
 deleted file mode 100644
-index a7c2761a9d..0000000000
---- a/package/binutils/2.29.1/0005-poison-system-directories.patch
+index bb1a7b438c..0000000000
+--- a/package/binutils/2.28.1/0600-poison-system-directories.patch
 +++ /dev/null
 @@ -1,306 +0,0 @@
--From b100e9d16bfe6725b2624902af457ecfa490b150 Mon Sep 17 00:00:00 2001
+-From be366461dd49e760440fb28eaee5164eb281adcc Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
 -Date: Fri, 25 Dec 2015 11:45:38 +0100
 -Subject: [PATCH] poison-system-directories
@@ -349,10 +374,10 @@ index a7c2761a9d..0000000000
 - 9 files changed, 89 insertions(+)
 -
 -diff --git a/ld/config.in b/ld/config.in
--index 5d91380..ffe84a7 100644
+-index 276fb77..35c58eb 100644
 ---- a/ld/config.in
 -+++ b/ld/config.in
--@@ -21,6 +21,9 @@
+-@@ -17,6 +17,9 @@
 -    language is requested. */
 - #undef ENABLE_NLS
 - 
@@ -363,10 +388,10 @@ index a7c2761a9d..0000000000
 - #undef EXTRA_SHLIB_EXTENSION
 - 
 -diff --git a/ld/configure b/ld/configure
--index da20ab5..63e3da7 100755
+-index a446283..d1f9504 100755
 ---- a/ld/configure
 -+++ b/ld/configure
--@@ -785,6 +785,7 @@ with_lib_path
+-@@ -789,6 +789,7 @@ with_lib_path
 - enable_targets
 - enable_64_bit_bfd
 - with_sysroot
@@ -374,7 +399,7 @@ index a7c2761a9d..0000000000
 - enable_gold
 - enable_got
 - enable_compressed_debug_sections
--@@ -1443,6 +1444,8 @@ Optional Features:
+-@@ -1446,6 +1447,8 @@ Optional Features:
 -   --disable-largefile     omit support for large files
 -   --enable-targets        alternative target configurations
 -   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
@@ -383,7 +408,7 @@ index a7c2761a9d..0000000000
 -   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
 -   --enable-got=<type>     GOT handling scheme (target, single, negative,
 -                           multigot)
--@@ -15497,7 +15500,18 @@ else
+-@@ -15499,7 +15502,18 @@ else
 - fi
 - 
 - 
@@ -403,7 +428,7 @@ index a7c2761a9d..0000000000
 - # Check whether --enable-got was given.
 - if test "${enable_got+set}" = set; then :
 -diff --git a/ld/configure.ac b/ld/configure.ac
--index 34315e6..5ade9a0 100644
+-index 188172d..2cd8443 100644
 ---- a/ld/configure.ac
 -+++ b/ld/configure.ac
 -@@ -95,6 +95,16 @@ AC_SUBST(use_sysroot)
@@ -424,12 +449,12 @@ index a7c2761a9d..0000000000
 - dnl "install_as_default" is set to false if gold is the default linker.
 - dnl "installed_linker" is the installed BFD linker name.
 -diff --git a/ld/ld.h b/ld/ld.h
--index 162e156..7d6d7ef 100644
+-index d84ec4e..3476b26 100644
 ---- a/ld/ld.h
 -+++ b/ld/ld.h
--@@ -177,6 +177,14 @@ typedef struct
--      in the linker script.  */
--   bfd_boolean force_group_allocation;
+-@@ -172,6 +172,14 @@ typedef struct {
+-   /* If set, display the target memory usage (per memory region).  */
+-   bfd_boolean print_memory_usage;
 - 
 -+  /* If TRUE (the default) warn for uses of system directories when
 -+     cross linking.  */
@@ -443,10 +468,10 @@ index a7c2761a9d..0000000000
 -   enum endian_enum endian;
 - 
 -diff --git a/ld/ld.texinfo b/ld/ld.texinfo
--index bb5f719..78501e4 100644
+-index 1dd7492..fb1438e 100644
 ---- a/ld/ld.texinfo
 -+++ b/ld/ld.texinfo
--@@ -2480,6 +2480,18 @@ string identifying the original linked file does not change.
+-@@ -2403,6 +2403,18 @@ string identifying the original linked file does not change.
 - 
 - Passing @code{none} for @var{style} disables the setting from any
 - @code{--build-id} options earlier on the command line.
@@ -466,11 +491,11 @@ index a7c2761a9d..0000000000
 - 
 - @c man end
 -diff --git a/ld/ldfile.c b/ld/ldfile.c
--index f7e5473..2cd84d3 100644
+-index 1439309..086b354 100644
 ---- a/ld/ldfile.c
 -+++ b/ld/ldfile.c
--@@ -116,6 +116,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
--     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
+-@@ -114,6 +114,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
+-     new_dirs->name = concat (ld_sysroot, name + 1, (const char *) NULL);
 -   else
 -     new_dirs->name = xstrdup (name);
 -+
@@ -494,20 +519,20 @@ index a7c2761a9d..0000000000
 - 
 - /* Try to open a BFD for a lang_input_statement.  */
 -diff --git a/ld/ldlex.h b/ld/ldlex.h
--index 5aa7f6b..cb655e0 100644
+-index 6f11e7b..0ca3110 100644
 ---- a/ld/ldlex.h
 -+++ b/ld/ldlex.h
--@@ -147,6 +147,8 @@ enum option_values
+-@@ -146,6 +146,8 @@ enum option_values
+-   OPTION_PRINT_MEMORY_USAGE,
 -   OPTION_REQUIRE_DEFINED_SYMBOL,
 -   OPTION_ORPHAN_HANDLING,
--   OPTION_FORCE_GROUP_ALLOCATION,
 -+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
 -+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
 - };
 - 
 - /* The initial parser states.  */
 -diff --git a/ld/ldmain.c b/ld/ldmain.c
--index ee5ab11..5f6effd 100644
+-index bb0b9cc..a23c56c 100644
 ---- a/ld/ldmain.c
 -+++ b/ld/ldmain.c
 -@@ -270,6 +270,8 @@ main (int argc, char **argv)
@@ -520,10 +545,10 @@ index a7c2761a9d..0000000000
 -   /* We initialize DEMANGLING based on the environment variable
 -      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
 -diff --git a/ld/lexsup.c b/ld/lexsup.c
--index 08106bc..d619d50 100644
+-index 4cad209..be7d584 100644
 ---- a/ld/lexsup.c
 -+++ b/ld/lexsup.c
--@@ -538,6 +538,14 @@ static const struct ld_option ld_options[] =
+-@@ -535,6 +535,14 @@ static const struct ld_option ld_options[] =
 -   { {"orphan-handling", required_argument, NULL, OPTION_ORPHAN_HANDLING},
 -     '\0', N_("=MODE"), N_("Control how orphan sections are handled."),
 -     TWO_DASHES },
@@ -538,7 +563,7 @@ index a7c2761a9d..0000000000
 - };
 - 
 - #define OPTION_COUNT ARRAY_SIZE (ld_options)
--@@ -550,6 +558,7 @@ parse_args (unsigned argc, char **argv)
+-@@ -547,6 +555,7 @@ parse_args (unsigned argc, char **argv)
 -   int ingroup = 0;
 -   char *default_dirlist = NULL;
 -   char *shortopts;
@@ -546,7 +571,7 @@ index a7c2761a9d..0000000000
 -   struct option *longopts;
 -   struct option *really_longopts;
 -   int last_optind;
--@@ -1534,6 +1543,14 @@ parse_args (unsigned argc, char **argv)
+-@@ -1528,6 +1537,14 @@ parse_args (unsigned argc, char **argv)
 -           }
 -           break;
 - 
@@ -561,7 +586,7 @@ index a7c2761a9d..0000000000
 - 	case OPTION_PUSH_STATE:
 - 	  input_flags.pushed = xmemdup (&input_flags,
 - 					sizeof (input_flags),
--@@ -1577,6 +1594,10 @@ parse_args (unsigned argc, char **argv)
+-@@ -1571,6 +1588,10 @@ parse_args (unsigned argc, char **argv)
 -       command_line.soname = NULL;
 -     }
 - 
@@ -573,46 +598,78 @@ index a7c2761a9d..0000000000
 -     {
 -       lang_leave_group ();
 --- 
--2.9.4
+-2.4.3
 -
+diff --git a/package/binutils/2.28.1/0906-microblaze-pr21180.patch b/package/binutils/2.28.1/0906-microblaze-pr21180.patch
+deleted file mode 100644
+index 52ac4fdd13..0000000000
+--- a/package/binutils/2.28.1/0906-microblaze-pr21180.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-Fix ld segfault for microblaze when --gc-sections is used
+-Upstream: pending
+-https://sourceware.org/bugzilla/show_bug.cgi?id=21180
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur a/bfd/elf32-microblaze.c b/bfd/elf32-microblaze.c
+---- a/bfd/elf32-microblaze.c	2016-08-03 09:36:50.000000000 +0200
+-+++ b/bfd/elf32-microblaze.c	2017-02-23 19:43:12.612313590 +0100
+-@@ -3233,13 +3233,20 @@
+- 	      || h->dynindx == -1))
+-         {
+-           asection *sec = h->root.u.def.section;
+-+	  bfd_vma value;
+-+
+-+	  value = h->root.u.def.value;
+-+	  if (sec->output_section != NULL)
+-+	    /* PR 21180: If the output section is NULL, then the symbol is no
+-+	       longer needed, and in theory the GOT entry is redundant.  But
+-+	       it is too late to change our minds now...  */
+-+	    value += sec->output_section->vma + sec->output_offset;
+-+
+-           microblaze_elf_output_dynamic_relocation (output_bfd,
+-                                                     srela, srela->reloc_count++,
+-                                                     /* symindex= */ 0,
+-                                                     R_MICROBLAZE_REL, offset,
+--                                                    h->root.u.def.value
+--                                                    + sec->output_section->vma
+--                                                    + sec->output_offset);
+-+                                                    value);
+-         }
+-       else
+-         {
 diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 9fb8857c3c..c3c3beb420 100644
+index ec1e0d8dd7..9fb8857c3c 100644
 --- a/package/binutils/Config.in.host
 +++ b/package/binutils/Config.in.host
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
- 	bool
- 	default y
- 	depends on !BR2_microblaze
--	depends on !(BR2_nios2 && (BR2_BINUTILS_VERSION_2_28_X || BR2_BINUTILS_VERSION_2_29_X))
- 
- choice
- 	prompt "Binutils Version"
-@@ -13,10 +12,6 @@ choice
+@@ -13,11 +13,6 @@ choice
  	help
  	  Select the version of binutils you wish to use.
  
--config BR2_BINUTILS_VERSION_2_29_X
--	bool "binutils 2.29.1"
+-config BR2_BINUTILS_VERSION_2_28_X
+-	bool "binutils 2.28.1"
+-	depends on !BR2_arc
 -	depends on !BR2_riscv
 -
- config BR2_BINUTILS_VERSION_2_30_X
- 	bool "binutils 2.30"
- 
-@@ -34,7 +29,6 @@ endchoice
+ config BR2_BINUTILS_VERSION_2_29_X
+ 	bool "binutils 2.29.1"
+ 	depends on !BR2_riscv
+@@ -39,7 +34,6 @@ endchoice
  config BR2_BINUTILS_VERSION
  	string
  	default "arc-2018.09-release"	if BR2_BINUTILS_VERSION_ARC
--	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
+-	default "2.28.1"	if BR2_BINUTILS_VERSION_2_28_X
+ 	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
  	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
  	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
 diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 756fa9bd89..039e3682f6 100644
+index 873e0dada4..756fa9bd89 100644
 --- a/package/binutils/binutils.hash
 +++ b/package/binutils/binutils.hash
 @@ -1,5 +1,4 @@
  # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
--sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e82624ae37fb0bbd03af3b17088a94f60dfe1a86a7ff82e18ece3c24f0fd0  binutils-2.29.1.tar.xz
+-sha512	dc5b6872ae01c07c12d38f3bb7ead06effc6da3265ac872e2d9c6104304f89f85f2645b029a43f308a7938a7299b1928d385205d0a2245674a621649032a138d  binutils-2.28.1.tar.xz
+ sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e82624ae37fb0bbd03af3b17088a94f60dfe1a86a7ff82e18ece3c24f0fd0  binutils-2.29.1.tar.xz
  sha512  e747ea20d8d79fcd21b9d9f6695059caa7189d60f19256da398e34b789fea9a133c32b192e9693b5828d27683739b0198431bf8b3e39fb3b04884cf89d9aa839  binutils-2.30.tar.xz
  sha512  0fca326feb1d5f5fe505a827b20237fe3ec9c13eaf7ec7e35847fd71184f605ba1cefe1314b1b8f8a29c0aa9d88162849ee1c1a3e70c2f7407d88339b17edb30  binutils-2.31.1.tar.xz
- sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
