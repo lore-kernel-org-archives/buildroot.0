@@ -1,83 +1,42 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Thu, 14 Mar 2019 13:38:11 +0000
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: bump version to 10.15.3
+Date: Thu, 14 Mar 2019 13:38:12 +0000
+Subject: [Buildroot] [PATCH 2/3] package/nghttp2: bump version to 1.37.0
 In-Reply-To: <20190314133813.727-1-martin@barkynet.com>
 References: <20190314133813.727-1-martin@barkynet.com>
-Message-ID: <20190314133813.727-2-martin@barkynet.com>
+Message-ID: <20190314133813.727-3-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v10.15.3/
-
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/nodejs/nodejs.hash |  4 ++--
- package/nodejs/nodejs.mk   | 12 ++++++++++--
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ package/nghttp2/nghttp2.hash | 2 +-
+ package/nghttp2/nghttp2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 5a06e5328c..e9c174e662 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v8.15.0/SHASUMS256.txt
--sha256 968523333947cc3f769d73dedc6c9c60580826d8714bc0e62ca4589de6a7c633  node-v8.15.0.tar.xz
-+# From https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
-+sha256 4e22d926f054150002055474e452ed6cbb85860aa7dc5422213a2002ed9791d5  node-v10.15.3.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 446cb77dbf..833b1989e6 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
+index d000fd56c5..a56f56f222 100644
+--- a/package/nghttp2/nghttp2.hash
++++ b/package/nghttp2/nghttp2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f75e8f228217f23aa5eabfbab140e061cda00b7c21e34c891ecfb248d663303f  nghttp2-1.32.0.tar.gz
++sha256 760981ab5703d3ed185eccb322321d379453974357a3263971a928c2879a43bf  nghttp2-1.37.0.tar.gz
+ sha256 6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
+diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
+index 20bfee75a3..7ce28b41fc 100644
+--- a/package/nghttp2/nghttp2.mk
++++ b/package/nghttp2/nghttp2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 8.15.0
-+NODEJS_VERSION = 10.15.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
- 	libhttpparser libuv zlib \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
-+HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib host-patchelf
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
- 
-@@ -73,6 +73,8 @@ define HOST_NODEJS_BUILD_CMDS
- 		$(HOST_CONFIGURE_OPTS) \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
-+
-+	$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib $(@D)/out/Release/torque
- endef
- 
- define HOST_NODEJS_INSTALL_CMDS
-@@ -81,6 +83,8 @@ define HOST_NODEJS_INSTALL_CMDS
- 		$(HOST_CONFIGURE_OPTS) \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
-+
-+	$(INSTALL) -m755 -D $(@D)/out/Release/torque $(HOST_DIR)/usr/bin/torque
- endef
- 
- ifeq ($(BR2_i386),y)
-@@ -128,6 +132,10 @@ define NODEJS_CONFIGURE_CMDS
- 		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
- 		$(NODEJS_CONF_OPTS) \
- 	)
-+
-+	# use host version of torque
-+	sed "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/usr/bin/torque#" \
-+		-i $(@D)/deps/v8/gypfiles/v8.gyp
- endef
- 
- define NODEJS_BUILD_CMDS
+-NGHTTP2_VERSION = 1.32.0
++NGHTTP2_VERSION = 1.37.0
+ NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
+ NGHTTP2_LICENSE = MIT
+ NGHTTP2_LICENSE_FILES = COPYING
 -- 
 2.21.0
