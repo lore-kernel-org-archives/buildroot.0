@@ -1,53 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Mar 2019 21:26:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xdm: security bump to
- version 1.1.12
-Message-ID: <20190314202616.19906-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 21:26:47 +0100
+Subject: [Buildroot] [git commit] package/libiio: bump to version 0.15
+Message-ID: <20190314202448.BA9F48EE3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-2179.
+commit: https://git.buildroot.net/buildroot/commit/?id=8478bd526f2369addf98579804bbbee01334a024
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2019-March/002959.html
+This change bumps libiio, to version 0.15.
+This version is currently the most stable version in the series. It
+contains several fixes over 0.14.
 
-Added all license hashes provided by upstream and license hash.
+0.16 & 0.17 have been released but they have some issues with backwards
+compatibility, so they are not yet recommended.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Changelog for version 0.15 (over 0.14).
+Link:
+  https://github.com/analogdevicesinc/libiio/releases/tag/v0.15
+
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xdm/xapp_xdm.hash | 9 +++++++--
- package/x11r7/xapp_xdm/xapp_xdm.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/libiio/libiio.hash | 2 +-
+ package/libiio/libiio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_xdm/xapp_xdm.hash b/package/x11r7/xapp_xdm/xapp_xdm.hash
-index 207d769fbf..605be9debc 100644
---- a/package/x11r7/xapp_xdm/xapp_xdm.hash
-+++ b/package/x11r7/xapp_xdm/xapp_xdm.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2011-September/001737.html
--sha256	d4da426ddea0124279a3f2e00a26db61944690628ee818a64df9d27352081c47	xdm-1.1.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002959.html
-+md5 47c4c3bf8d59b64b64d134df8b5e5ec5  xdm-1.1.12.tar.bz2
-+sha1 5cc5590e40837949b1a63cb030878f8ceebd4d85  xdm-1.1.12.tar.bz2
-+sha256 0dd283f72dda098d09e2925b9278c95e21551e693a5802ab442d1b577d8327f4  xdm-1.1.12.tar.bz2
-+sha512 1a4be0a070ced5db8fda6fc74794c9f9ed0cb37fa440fda6a3a7652aff62dfc3d7ba68b9facf054671ebf0f4db2a0eec29d0aa3716e3407ccd5529bac3553bdb  xdm-1.1.12.tar.bz2
-+# Locally computed
-+sha256 b33b4bebbd6511b3e15315e8e29d67f25334ee45da8b7da6e6e97c53a70c6923  COPYING
-diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
-index 422ee53b10..3c91e21579 100644
---- a/package/x11r7/xapp_xdm/xapp_xdm.mk
-+++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index fbb4bccb90..800b2ee8f4 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 12063db7a9366aa00bfd789db30afaddb29686bc29b3ce1e5d4adfe1c3b42527  libiio-0.14.tar.gz
++sha256 a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19  libiio-0.15.tar.gz
+ sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index d2376bca34..2371a71063 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XDM_VERSION = 1.1.11
-+XAPP_XDM_VERSION = 1.1.12
- XAPP_XDM_SOURCE = xdm-$(XAPP_XDM_VERSION).tar.bz2
- XAPP_XDM_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XDM_LICENSE = MIT
--- 
-2.20.1
+-LIBIIO_VERSION = 0.14
++LIBIIO_VERSION = 0.15
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPL-2.1+
