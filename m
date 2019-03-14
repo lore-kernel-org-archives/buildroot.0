@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 22:17:05 +0100
-Subject: [Buildroot] [git commit] package/binutils: remove special case
- version selection for ARM Thumb
-Message-ID: <20190314211546.0BFC48EEE6@busybox.osuosl.org>
+Date: Thu, 14 Mar 2019 22:16:27 +0100
+Subject: [Buildroot] [git commit] package/binutils: switch to use 2.31.x as
+ the default version
+Message-ID: <20190314211545.F2A908EE6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b11a7fbea79accb1853dd6c15b63e76675e31794
+commit: https://git.buildroot.net/buildroot/commit/?id=f786c8a6ec2772c073b9c548acaa5c8bd874fb4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Binutils 2.29 and 2.30 are affected by a bug in ADR and ADRL
-pseudo-instruction [1] that was fixed in Binutils 2.31 [2].
-
-  * The ADR and ADRL pseudo-instructions supported by the ARM assembler
-    now only set the bottom bit of the address of thumb function symbols
-    if the -mthumb-interwork command line option is active.
-
-Due to this issue, we were default to binutils 2.28 for ARM Thumb. But
-now that the issue has been fixed in binutils 2.31 and that this
-version is the default, the special casing to use 2.28 is no longer
-needed.
-
-[1] https://sourceware.org/bugzilla/show_bug.cgi?id=21458
-[2] https://sourceware.org/ml/binutils/2018-07/msg00213.html
+Now that binutils 2.32 has been released, it is time to move to
+binutils 2.31.x as the default binutils version, instead of 2.29.1.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/binutils/Config.in.host | 2 --
- 1 file changed, 2 deletions(-)
+ package/binutils/Config.in.host | 2 +-
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 8485568170..ec1e0d8dd7 100644
+index 9a2b27c55e..8485568170 100644
 --- a/package/binutils/Config.in.host
 +++ b/package/binutils/Config.in.host
-@@ -8,8 +8,6 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
- 
- choice
+@@ -10,7 +10,7 @@ choice
  	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB
--	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
- 	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB
+ 	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
+-	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
++	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
  	default BR2_BINUTILS_VERSION_ARC if BR2_arc
  	help
+ 	  Select the version of binutils you wish to use.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4531b8d9c8..6798356ff2 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2018.09-release
+ else
+-BINUTILS_VERSION = 2.29.1
++BINUTILS_VERSION = 2.31.1
+ endif
+ endif # BINUTILS_VERSION
+ 
