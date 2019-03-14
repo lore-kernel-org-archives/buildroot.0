@@ -1,99 +1,127 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 14 Mar 2019 21:18:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aioblescan: new package
-In-Reply-To: <20190314201850.1021-1-grzegorz@blach.pl>
-References: <20190314201850.1021-1-grzegorz@blach.pl>
-Message-ID: <20190314201850.1021-2-grzegorz@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 21:53:44 +0100
+Subject: [Buildroot] [git commit] package/liblo: bump to version 0.30
+Message-ID: <20190314205055.B95638EC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python library to scan and decode advertised BLE info.
-Uses asyncio.
+commit: https://git.buildroot.net/buildroot/commit/?id=1e61048ee149f423d768581cf3c90171d1fb9f99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/frawau/aioblescan
+- Remove both patches (already in version)
+- Add sha256 hash
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-aioblescan/Config.in              |  7 +++++++
- package/python-aioblescan/python-aioblescan.hash |  5 +++++
- package/python-aioblescan/python-aioblescan.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-aioblescan/Config.in
- create mode 100644 package/python-aioblescan/python-aioblescan.hash
- create mode 100644 package/python-aioblescan/python-aioblescan.mk
+ .../0001-server-use-correct-poll.h-header.patch    | 32 ----------------------
+ ...rc-server.c-fix-stringop-truncation-error.patch | 30 --------------------
+ package/liblo/liblo.hash                           |  7 +++--
+ package/liblo/liblo.mk                             |  2 +-
+ 4 files changed, 5 insertions(+), 66 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bff5a58a5b..10ba19b647 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -933,6 +933,7 @@ F:	fs/f2fs/
- F:	package/bluez5_utils-headers/
- F:	package/f2fs-tools/
- F:	package/pigpio/
-+F:	package/python-aioblescan/
- F:	package/python-falcon/
- F:	package/python-mimeparse/
- F:	package/python-pigpio/
-diff --git a/package/Config.in b/package/Config.in
-index 420e6e95a3..f0ddfb76e9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -799,6 +799,7 @@ endif
- 	source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
-+	source "package/python-aioblescan/Config.in"
- 	source "package/python-aiocoap/Config.in"
- 	source "package/python-aiodns/Config.in"
- 	source "package/python-aiohttp/Config.in"
-diff --git a/package/python-aioblescan/Config.in b/package/python-aioblescan/Config.in
-new file mode 100644
-index 0000000000..dd1acfa095
---- /dev/null
-+++ b/package/python-aioblescan/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_AIOBLESCAN
-+	bool "python-aioblescan"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Scanning Bluetooth for advertised info with asyncio.
-+
-+	  https://github.com/frawau/aioblescan
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-new file mode 100644
-index 0000000000..d33162850a
---- /dev/null
-+++ b/package/python-aioblescan/python-aioblescan.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aioblescan/json
-+md5	b662f44828a99430d4ed42c843ddb89c  aioblescan-0.2.4.tar.gz
-+sha256	d613f24ffdb3dae48d6157443f76708f0c791034036330d00272af6b408b2c6c  aioblescan-0.2.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256	c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-new file mode 100644
-index 0000000000..8a6bda3a65
---- /dev/null
-+++ b/package/python-aioblescan/python-aioblescan.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aioblescan
-+#
-+################################################################################
-+
-+PYTHON_AIOBLESCAN_VERSION = 0.2.4
-+PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/a9/ad/1e2f41b2036bd76079f88cd94ce35b5a996d937dccaf432ea6b8092d3e11
-+PYTHON_AIOBLESCAN_SETUP_TYPE = distutils
-+PYTHON_AIOBLESCAN_LICENSE = MIT
-+PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.20.1
+diff --git a/package/liblo/0001-server-use-correct-poll.h-header.patch b/package/liblo/0001-server-use-correct-poll.h-header.patch
+deleted file mode 100644
+index 04c0445534..0000000000
+--- a/package/liblo/0001-server-use-correct-poll.h-header.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From d59f2e6f42a9e4f8a9184d7ed75546f47dc50123 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 8 Apr 2018 11:09:02 +0200
+-Subject: [PATCH] server: use correct poll.h header
+-
+-Fixes build with the musl C library:
+-    http://autobuild.buildroot.net/results/000a46954d0c6d3dbc4b4634a0d3a3c955fac679
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+-Upstream status:
+-  PR sent: https://github.com/radarsat1/liblo/pull/66
+----
+- src/server.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/server.c b/src/server.c
+-index 01fa08f..11c62d2 100644
+---- a/src/server.c
+-+++ b/src/server.c
+-@@ -51,7 +51,7 @@
+- #include <netdb.h>
+- #include <sys/socket.h>
+- #ifdef HAVE_POLL
+--#include <sys/poll.h>
+-+#include <poll.h>
+- #endif
+- #include <sys/un.h>
+- #include <arpa/inet.h>
+--- 
+-2.14.1
+-
+diff --git a/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch b/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
+deleted file mode 100644
+index 3f3bf86cc3..0000000000
+--- a/package/liblo/0002-src-server.c-fix-stringop-truncation-error.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From c1b2fbd8d96d9b668a0b5e3c49c75c13cfe7d4ba Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 15 Dec 2018 21:55:08 +0100
+-Subject: [PATCH] src/server.c: fix stringop-truncation error
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/62896bd6a1a30facaffd07a7a763831996dc8ea0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/radarsat1/liblo/pull/70]
+----
+- src/server.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/server.c b/src/server.c
+-index 6d1a9de..72aecc9 100644
+---- a/src/server.c
+-+++ b/src/server.c
+-@@ -377,7 +377,7 @@ void lo_server_resolve_hostname(lo_server s)
+-         gethostname(hostname, sizeof(hostname));
+-         he = gethostbyname(hostname);
+-         if (he) {
+--            strncpy(hostname, he->h_name, sizeof(hostname));
+-+            strncpy(hostname, he->h_name, sizeof(hostname) - 1);
+-         }
+-     }
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
+index fe61f82e67..049ab80747 100644
+--- a/package/liblo/liblo.hash
++++ b/package/liblo/liblo.hash
+@@ -1,6 +1,7 @@
+-# From http://sourceforge.net/projects/liblo/files/liblo/0.29/
+-sha1	6aa69456787d3d6ef915281b4a0f8f2c79548ce3	liblo-0.29.tar.gz
+-md5	b0e70bc0fb2254addf94adddf85cffd3		liblo-0.29.tar.gz
++# From http://sourceforge.net/projects/liblo/files/liblo/0.30/
++sha1	152a3260d186f111a71508dc0ed709984960f130	liblo-0.30.tar.gz
++md5	fa1a9d45f86fc18fb54019f670ff2262		liblo-0.30.tar.gz
+ 
+ # Locally computed
++sha256	  30a7c9de49a25ed7f2425a7a7415f5b14739def62431423d3419ea26fb978d1b	liblo-0.30.tar.gz
+ sha256	  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index e28e52803a..69918186db 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLO_VERSION = 0.29
++LIBLO_VERSION = 0.30
+ LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
+ 
+ LIBLO_LICENSE = LGPL-2.1+
