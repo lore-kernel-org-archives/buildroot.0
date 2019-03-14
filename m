@@ -1,37 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 21:13:11 +0100
-Subject: [Buildroot] [git commit] Revert "package/qt5/qt5webengine: fix
- comment on GL dependencies"
-Message-ID: <20190314201112.170798ECA8@busybox.osuosl.org>
+Date: Thu, 14 Mar 2019 21:14:32 +0100
+Subject: [Buildroot] [git commit] package/ulogd: add postgresql optional
+ dependency
+Message-ID: <20190314201207.E8C248ECA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a25c9ef4b122aac2a42458fc5648dcb293c2d59
+commit: https://git.buildroot.net/buildroot/commit/?id=167e5cdce2b38e2a2fec186520c528b6891bca04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 6fb4c14ecb1e8f001449830b65ec2a4606b87682. Indeed,
-as Peter Seiderer pointed out, the comment is in fact partially
-correct: with Qt 5.6, QT5DECLARATIVE_QUICK does require OpenGL
-support.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5webengine/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ulogd/ulogd.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index bfc0a02c12..744d659567 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -34,7 +34,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5base-eglfs
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	# v8 (a chromium 3rd-party) compiles its internal host-tools with the
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 5b0e558930..5ea127f630 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -7,7 +7,7 @@
+ ULOGD_VERSION = 2.0.5
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+-ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
++ULOGD_CONF_OPTS = --with-dbi=no
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+ 	libnfnetlink
+@@ -22,11 +22,17 @@ ULOGD_DEPENDENCIES += mysql
+ else
+ ULOGD_CONF_OPTS += --with-mysql=no
+ endif
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++ULOGD_CONF_OPTS += --with-pgsql
++ULOGD_DEPENDENCIES += postgresql
++else
++ULOGD_CONF_OPTS += --without-pgsql
++endif
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ ULOGD_DEPENDENCIES += sqlite
+ endif
+ else
+-ULOGD_CONF_OPTS += --with-mysql=no --without-sqlite
++ULOGD_CONF_OPTS += --with-mysql=no --without-pgsql --without-sqlite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
