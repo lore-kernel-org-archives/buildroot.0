@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 22:38:01 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ulogd: use --without-mysql
-In-Reply-To: <20190314212059.20817-1-fontaine.fabrice@gmail.com>
-References: <20190314212059.20817-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190314223801.47ce54c5@windsurf>
+Date: Thu, 14 Mar 2019 22:38:12 +0100
+Subject: [Buildroot] [git commit] package/systemd: fix patch series order
+Message-ID: <20190314213514.BA1938ED40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Mar 2019 22:20:58 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8085b9eaa4ad172f1a8de0696b917bd8b2c1b9be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Replace --with-mysql=no by --without-mysql
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ulogd/ulogd.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+With the removal of old patches, 0018 should be 0002 and 0019 should be 0003.
 
-Both applied, thanks! They could have been a single patch.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ch => 0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch} | 0
+ ...ch => 0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/0018-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch b/package/systemd/0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
+similarity index 100%
+rename from package/systemd/0018-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
+rename to package/systemd/0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
+diff --git a/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch b/package/systemd/0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
+similarity index 100%
+rename from package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
+rename to package/systemd/0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
