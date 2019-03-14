@@ -1,39 +1,56 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 14 Mar 2019 13:38:10 +0000
-Subject: [Buildroot] [PATCH 0/3] Update nodejs to 10.x LTS branch
-Message-ID: <20190314133813.727-1-martin@barkynet.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 14:49:07 +0100
+Subject: [Buildroot] [PATCH v2 02/13] qt5: Convert to generic target
+ install command
+In-Reply-To: <269608ba-7e70-ca69-b0c8-52fb70dfae26@andin.de>
+References: <20190314094024.1961-1-anaumann@ultratronik.de>
+ <20190314094024.1961-3-anaumann@ultratronik.de>
+ <20190314111311.48cda006@windsurf>
+ <580bc2fc-615a-f200-0428-1096d2dcdf63@mind.be>
+ <20190314120610.4ee82dd9@windsurf>
+ <b04bf76c-a3c4-1601-10c0-78ad61dffdc7@mind.be>
+ <269608ba-7e70-ca69-b0c8-52fb70dfae26@andin.de>
+Message-ID: <20190314144907.22c81f6f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Now that buildroot supports openssl 1.1 we can update nodejs to the 10.x LTS branch.  The 10.x branch is the current active LTS branch and will be supported until April 2021.  The 8.x branch buildroot currently uses is now in maintenance only and this will stop at the end of 2019.
+On Thu, 14 Mar 2019 14:35:39 +0100
+Andreas Naumann <dev@andin.de> wrote:
 
-Nodejs 10.x needs to compile a host tool called torque when building V8.  Currently the nodejs build system fails to compile this correctly for the host so i have included a work around in the patch.  Hopefully in the future this will get fixed. See [1] for some info.
+> Ok, I oversaw this because I was focused on ppsh, where it is much less
+> of a problem.
 
-I have also update nodejs to use nghttp2 to remove one more static dependency.
+Indeed.
 
-Thanks
+> After my original post, I tried very hard to tweak qt.conf to help us
+> here without the need for patching the generated Makefiles. First it
+> looked promising but unfortunately it seem that it's not possible to
+> install into a temporary sysroot because it automoatically is used to
+> pull -I includes from.
 
-Martin
+Yeah, I also tried quite hard to make the installation with
+INSTALL_ROOT work properly, but couldn't find a good solution.
 
-[1] https://github.com/nodejs/node/issues/23420
+> > So my point is: using this pattern for a few packages is a good step
+> >  in that direction, because it teaches us something about the 
+> > implications.  
+> 
+> My personal impression is, that it might be less "huge" after having 
+> converted to per-package staging.
 
+The thing is that per-package directories is going to remain optional
+for a bit of time. It is a fairly radical change, probably going to
+break a bunch of things. So we'll have to live with the two
+possibilities (per-package disabled, per-package enabled) for at least
+a few release I believe.
 
-Martin Bark (3):
-  package/nodejs: bump version to 10.15.3
-  package/nghttp2: bump version to 1.37.0
-  package/nodejs: use shared nghttp2 library
-
- package/nghttp2/nghttp2.hash |  2 +-
- package/nghttp2/nghttp2.mk   |  2 +-
- package/nodejs/Config.in     |  1 +
- package/nodejs/nodejs.hash   |  4 ++--
- package/nodejs/nodejs.mk     | 15 ++++++++++++---
- 5 files changed, 17 insertions(+), 7 deletions(-)
-
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
