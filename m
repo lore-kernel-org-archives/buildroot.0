@@ -1,33 +1,37 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 14 Mar 2019 22:11:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aioblescan: new package
-In-Reply-To: <20190314220308.11414673@windsurf>
-References: <20190314201850.1021-1-grzegorz@blach.pl>
- <20190314201850.1021-2-grzegorz@blach.pl> <20190314220308.11414673@windsurf>
-Message-ID: <884A98E0-AA83-431C-ABED-AEF7AEB0B88F@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 22:16:41 +0100
+Subject: [Buildroot] [git commit] linux: update the comment about thumb
+ issue with Binutils 2.29 and 2.30
+Message-ID: <20190314211546.050478EEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14 Mar 2019, at 22:03, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> Hello Grzegorz,
-> 
-> On Thu, 14 Mar 2019 21:18:50 +0100
-> Grzegorz Blach <grzegorz@blach.pl> wrote:
-> 
->> Python library to scan and decode advertised BLE info.
->> Uses asyncio.
->> 
->> https://github.com/frawau/aioblescan
->> 
->> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> 
-> I have already applied your previous iteration. BTW, this new iteration
-> was not labelled as "v2" and didn't contain a changelog, which makes it
-> difficult to identify what has changed.
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=b4ba1be944674272872089cbad2d8d755db1b914
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've sent info about fixed package name in cover letter, but it looks like this cover letter isn?t indexed yet by pipermail.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index f17334ae7c..856b53eec0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,9 +8,10 @@ config BR2_LINUX_KERNEL
+ 
+ if BR2_LINUX_KERNEL
+ 
+-comment "Linux kernel in thumb mode may be broken with binutils >= 2.29"
++# https://sourceware.org/bugzilla/show_bug.cgi?id=21458
++comment "Linux kernel in thumb mode may be broken with binutils 2.29 and 2.30"
+ 	depends on BR2_arm || BR2_armeb
+-	depends on !BR2_BINUTILS_VERSION_2_28_X
++	depends on BR2_BINUTILS_VERSION_2_29_X || BR2_BINUTILS_VERSION_2_30_X
+ 
+ # Packages that need to have a kernel with support for loadable modules,
+ # but do not use the kernel-modules infrastructure, should select that
