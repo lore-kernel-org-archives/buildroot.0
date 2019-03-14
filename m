@@ -1,147 +1,438 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 14 Mar 2019 10:40:11 +0100
-Subject: [Buildroot] [PATCH v2 00/13] ppsh compatible Qt5 / generic qmake
- target install
-Message-ID: <20190314094024.1961-1-anaumann@ultratronik.de>
+Date: Thu, 14 Mar 2019 10:40:17 +0100
+Subject: [Buildroot] [PATCH v2 06/13] core: implement per-package SDK and
+ target
+In-Reply-To: <20190314094024.1961-1-anaumann@ultratronik.de>
+References: <20190314094024.1961-1-anaumann@ultratronik.de>
+Message-ID: <20190314094024.1961-7-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-(please disregard v1 of this, which just went out by accident to some of you
-directly, but not the mailing list).
+This commit implements the core of the move to per-package SDK and
+target directories. The main idea is that instead of having a global
+output/host and output/target in which all packages install files, we
+switch to per-package host and target directories, that only contain
+their explicit dependencies.
 
-here's v2 with your suggestions, especially a generic target install step, taken
-in. I ran out of time converting to a qmake infra, but let's first see if the
-direction of this is acceptable.
+There are two main benefits:
 
-I have separated the general qmake patches from the ppsh-specifics. However, I
-included the rebased ppsh-v7 patches and my patches on top of that because it
-was my original intend to improve on that. Please let me know if that's ok or
-how to go on with it.
+ - Packages will no longer discover dependencies that they do not
+   explicitly indicate in their <pkg>_DEPENDENCIES variable.
 
-Details about the generic install are in the commit message (patch 1+2).
+ - We can support top-level parallel build properly, because a package
+   only "sees" its own host directory and target directory, isolated
+   from the build of other packages that can happen in parallel.
 
-I have spent quite some time testing this:
-- I have tested with Qt5.12.1 only. Qt5.6 should but might not always do the right
-  thing. However I think it was decided to remove support for 5.6 anyway.?
-- I have checked for a few modules that the correct files were installed with/without
-  exmaples being selected as well as static vs. dynamic library setting.
-- For some modules with options I ran a few different configurations and checked for
-  the respective file being installed/absent. However, qt5base has so many options, I
-  could not test them all. But overall it went surprisingly well, e.g. I didnt
-  notice files being installed that should not be there.
+It works as follows:
 
-Finally I compared the target folders before/after the patch set, with everything
-Qt5 being turned on. That showed some additional files and folders being installed
-through the generic method:
-- /usr/bin/xmlpatterns
-- /usr/bin/xmlpatternsvalidator
-- all plain libQt5*.so links
-- /usr/lib/libQt5VirtualKeyboard.so.5.12.1 and links
-- /usr/lib/qt/plugins/lipi_toolkit/*
-- /usr/lib/qt/plugins/virtualkeyboard/*
-- /usr/lib/libQt5WaylandCompositor.so.5.12.1 and links
-- /usr/libexec/QtWebPluginProcess
-- /usr/libexec/QtWebProcess
-- /usr/qml/Qt/labs/location/*
-- /usr/qml/QtWayland/*
+ - A new output/per-package/ directory is created, which will contain
+   one sub-directory per package, and inside it, a "host" directory
+   and a "target" directory:
 
-After all, I think those files should probably be there, rather than not.
-I still have not yet done any runtime tests.
+   output/per-package/busybox/target
+   output/per-package/busybox/host
+   output/per-package/host-fakeroot/target
+   output/per-package/host-fakeroot/host
 
-Another word about the removal of the *.la *.prl fixup. When developing the
-generic install, I found that the fixup command touches ALL (not only the qt-
-relevant) files. This apparently does no harm, but we have a separate libtool fixup
-step anyway. So I checked what it does and found.. no diff. Thats for both,
-HOST_DIR being default and custom out of the buildroot dir. Are there other
-situations where the qt specific fixup is needed? If so, would it be sensible
-to limit it to prl files because la files are already taken care of in the generic
-infra?
+   This output/per-package/ directory is PER_PACKAGE_DIR.
 
+ - The global TARGET_DIR and HOST_DIR variable now automatically point
+   to the per-package directory when PKG is defined. So whenever a
+   package references $(HOST_DIR) or $(TARGET_DIR) in its build
+   process, it effectively references the per-package host/target
+   directories. Note that STAGING_DIR is a sub-dir of HOST_DIR, so it
+   is handled as well.
 
-v1 -> v2:
-  - added generic qmake target install
-  - added removal of la/prl fixup (optional)
-  - rebased and reordered (together with ppsh-v7) on master
-  - split patches to separate qmake rework from ppsh specifics
-  - added handling of pkg-config search pathes for ppsh
+ - Of course, packages have dependencies, so those dependencies must
+   be installed in the per-package host and target directories. To do
+   so, we simply rsync (using hard links to save space and time) the
+   host and target directories of the direct dependencies of the
+   package to the current package host and target directories.
 
+   We only need to take care of direct dependencies (and not
+   recursively all dependencies), because we accumulate into those
+   per-package host and target directories the files installed by the
+   dependencies. Note that this only works because we make the
+   assumption that one package does *not* overwrite files installed by
+   another package.
 
-best regards,
-Andreas
+   This is done for "extract dependencies" at the beginning of the
+   extract step, and for "normal dependencies" at the beginning of the
+   configure step.
 
+This is basically enough to make per-package SDK and target work. The
+only gotcha is that at the end of the build, output/target and
+output/host are empty, which means that:
 
-Andreas Naumann (7):
-  qt5base: Do not build shared libs if BR2_STATIC_LIBS is chosen
-  qt5: Convert to generic target install command
-  qt5base: Fix inconsistencies when overriding qmake properties
-  qt5: Remove *.la/*.prl fixup script
-  qt5: Use qmake via QT5_QMAKE variable
-  qt5: Prepare qmake for per-package infrastructure
-  qt5: Fix pkgconfig search path for per-package infrastructure
+ - The filesystem image creation code cannot work.
 
-Thomas Petazzoni (6):
-  core: implement per-package SDK and target
-  Makefile: allow top-level parallel build with
-    BR2_PER_PACKAGE_DIRECTORIES=y
-  package/pkg-generic: make libtool .la files compatible with
-    per-package directories
-  package/pkg-kconfig: handle KCONFIG_DEPENDENCIES with per-package
-    directories
-  docs/manual: add details about top-level parallel build support
-  docs/manual: document the effect of per-package directory on variables
+ - We don't have a SDK to build code outside of Buildroot.
 
- Config.in                                     | 18 +++++
- Makefile                                      | 48 +++++++------
- docs/manual/adding-packages-generic.txt       |  9 ++-
- docs/manual/common-usage.txt                  | 44 ++++++++++++
- docs/manual/faq-troubleshooting.txt           |  3 +
- docs/manual/quickstart.txt                    |  8 +--
- package/pkg-generic.mk                        | 24 ++++++-
- package/pkg-kconfig.mk                        |  1 +
- package/pkg-utils.mk                          | 26 +++++++
- package/python-sip/python-sip.mk              |  3 +-
- package/qextserialport/qextserialport.mk      |  6 +-
- package/qt5/qt5.mk                            | 30 +++++----
- package/qt5/qt53d/qt53d.mk                    | 24 +------
- package/qt5/qt5base/qt.conf.in                | 17 +----
- package/qt5/qt5base/qt5base.mk                | 67 +++----------------
- package/qt5/qt5canvas3d/qt5canvas3d.mk        | 13 +---
- package/qt5/qt5charts/qt5charts.mk            | 27 +-------
- .../qt5/qt5connectivity/qt5connectivity.mk    | 47 +------------
- package/qt5/qt5declarative/qt5declarative.mk  | 35 +---------
- package/qt5/qt5enginio/qt5enginio.mk          | 26 +------
- .../qt5graphicaleffects.mk                    |  5 +-
- .../qt5/qt5imageformats/qt5imageformats.mk    |  7 +-
- package/qt5/qt5location/qt5location.mk        | 37 +---------
- package/qt5/qt5multimedia/qt5multimedia.mk    | 34 +---------
- .../qt5/qt5quickcontrols/qt5quickcontrols.mk  | 28 +-------
- .../qt5quickcontrols2/qt5quickcontrols2.mk    | 27 +-------
- package/qt5/qt5script/qt5script.mk            | 19 +-----
- package/qt5/qt5scxml/qt5scxml.mk              | 24 +------
- package/qt5/qt5sensors/qt5sensors.mk          | 27 +-------
- package/qt5/qt5serialbus/qt5serialbus.mk      | 25 +------
- package/qt5/qt5serialport/qt5serialport.mk    | 19 +-----
- package/qt5/qt5svg/qt5svg.mk                  | 27 +-------
- package/qt5/qt5tools/qt5tools.mk              |  3 +-
- .../qt5virtualkeyboard/qt5virtualkeyboard.mk  | 37 +---------
- package/qt5/qt5wayland/qt5wayland.mk          | 28 +-------
- package/qt5/qt5webchannel/qt5webchannel.mk    | 26 +------
- package/qt5/qt5webengine/qt5webengine.mk      | 28 +-------
- .../qt5webkit-examples/qt5webkit-examples.mk  | 10 +--
- package/qt5/qt5webkit/qt5webkit.mk            | 13 +---
- package/qt5/qt5websockets/qt5websockets.mk    | 27 +-------
- package/qt5/qt5x11extras/qt5x11extras.mk      |  8 +--
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk  | 19 +-----
- package/qt5cinex/qt5cinex.mk                  |  3 +-
- package/qwt/qwt.mk                            |  1 +
- support/scripts/check-host-rpath              | 27 ++++++--
- support/scripts/fix-rpath                     | 29 ++++++--
- 46 files changed, 312 insertions(+), 702 deletions(-)
+In order to fix this, this commit extends the target-finalize step so
+that it starts by populating output/target and output/host by
+rsync-ing into them the target and host directories of all packages
+listed in the $(PACKAGES) variable. It is necessary to do this
+sequentially in the target-finalize step and not in each
+package. Doing it in package installation means that it can be done in
+parallel. In that case, there is a chance that two rsyncs are creating
+the same hardlink or directory at the same time, which makes one of
+them fail.
 
+This change to per-package directories has an impact on the RPATH
+built into the host binaries, as those RPATH now point to various
+per-package host directories, and no longer to the global host
+directory. We do not try to rewrite such RPATHs during the build as
+having such RPATHs is perfectly fine, but we still need to handle two
+fallouts from this change:
+
+ - The check-host-rpath script, which verifies at the end of each
+   package installation that it has the appropriate RPATH, is modified
+   to understand that a RPATH to $(PER_PACKAGE_DIR)/<pkg>/host/lib is
+   a correct RPAT.
+
+ - The fix-rpath script, which mungles the RPATH mainly for the SDK
+   preparation, is modified to rewrite the RPATH to not point to
+   per-package directories. Indeed the patchelf --make-rpath-relative
+   call only works if the RPATH points to the ROOTDIR passed as
+   argument, and this ROOTDIR is the global host directory. Rewriting
+   the RPATH to not point to per-package host directories prior to
+   this is an easy solution to this issue.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+ Config.in                        | 18 ++++++++++++++++++
+ Makefile                         | 29 ++++++++++++++++++-----------
+ package/pkg-generic.mk           |  7 ++++++-
+ package/pkg-utils.mk             | 26 ++++++++++++++++++++++++++
+ support/scripts/check-host-rpath | 27 ++++++++++++++++++++++-----
+ support/scripts/fix-rpath        | 29 ++++++++++++++++++++++-------
+ 6 files changed, 112 insertions(+), 24 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 757ad1ca40..bdfe6e362c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -708,6 +708,24 @@ config BR2_REPRODUCIBLE
+ 	  This is labeled as an experimental feature, as not all
+ 	  packages behave properly to ensure reproducibility.
+ 
++config BR2_PER_PACKAGE_DIRECTORIES
++	bool "Use per-package directories (experimental)"
++	help
++	  This option will change the build process of Buildroot
++	  package to use per-package target and host directories.
++
++	  This is useful for two related purposes:
++
++	    - Cleanly isolate the build of each package, so that a
++	      given package only "sees" the dependencies it has
++	      explicitly expressed, and not other packages that may
++	      have by chance been built before.
++
++	    - Enable top-level parallel build.
++
++	  This is labeled as an experimental feature, as not all
++	  packages behave properly with per-package directories.
++
+ endmenu
+ 
+ comment "Security Hardening Options"
+diff --git a/Makefile b/Makefile
+index 6af8923892..58282dc098 100644
+--- a/Makefile
++++ b/Makefile
+@@ -205,6 +205,7 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+ BUILD_DIR := $(BASE_DIR)/build
+ BINARIES_DIR := $(BASE_DIR)/images
+ BASE_TARGET_DIR := $(BASE_DIR)/target
++PER_PACKAGE_DIR := $(BASE_DIR)/per-package
+ # initial definition so that 'make clean' works for most users, even without
+ # .config. HOST_DIR will be overwritten later when .config is included.
+ HOST_DIR := $(BASE_DIR)/host
+@@ -453,12 +454,13 @@ XZCAT := $(call qstrip,$(BR2_XZCAT))
+ LZCAT := $(call qstrip,$(BR2_LZCAT))
+ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+-# packages compiled for the host go here
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++HOST_DIR = $(if $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/host,$(call qstrip,$(BR2_HOST_DIR)))
++TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(if $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/target,$(BASE_TARGET_DIR)))
++else
+ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+-
+-# The target directory is common to all packages,
+-# but there is one that is specific to each filesystem.
+ TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
++endif
+ 
+ ifneq ($(HOST_DIR),$(BASE_DIR)/host)
+ HOST_DIR_SYMLINK = $(BASE_DIR)/host
+@@ -594,8 +596,8 @@ world: target-post-image
+ .PHONY: prepare-sdk
+ prepare-sdk: world
+ 	@$(call MESSAGE,"Rendering the SDK relocatable")
+-	$(TOPDIR)/support/scripts/fix-rpath host
+-	$(TOPDIR)/support/scripts/fix-rpath staging
++	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath host
++	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath staging
+ 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+ 	mkdir -p $(HOST_DIR)/share/buildroot
+ 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+@@ -728,15 +730,19 @@ $(TARGETS_ROOTFS): target-finalize
+ # Avoid the rootfs name leaking down the dependency chain
+ target-finalize: ROOTFS=
+ 
+-host-finalize: $(HOST_DIR_SYMLINK)
++.PHONY: host-finalize
++host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
++	@$(call MESSAGE,"Finalizing host directory")
++	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
+ 
+ .PHONY: staging-finalize
+ staging-finalize:
+ 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+ 
+ .PHONY: target-finalize
+-target-finalize: $(PACKAGES) host-finalize
++target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
+ 	@$(call MESSAGE,"Finalizing target directory")
++	$(call per-package-rsync,$(sort $(PACKAGES)),target,$(TARGET_DIR))
+ 	# Check files that are touched by more than one package
+ 	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
+ 	./support/scripts/check-uniq-files -t staging $(BUILD_DIR)/packages-file-list-staging.txt
+@@ -780,7 +786,7 @@ endif
+ 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
+ 
+ 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+-	$(TOPDIR)/support/scripts/fix-rpath target
++	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath target
+ 
+ # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ # counterparts are appropriately setup as symlinks ones to the others.
+@@ -1004,7 +1010,8 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 
+ # staging and target directories do NOT list these as
+ # dependencies anywhere else
+-$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) \
++	$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
+ 	@mkdir -p $@
+ 
+ # outputmakefile generates a Makefile in the output directory, if using a
+@@ -1043,7 +1050,7 @@ printvars:
+ clean:
+ 	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
++		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR)
+ 
+ .PHONY: distclean
+ distclean: clean
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 4353bd3868..e406abadd6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -106,7 +106,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += check_bin_arch
+ # have a proper DT_RPATH or DT_RUNPATH tag
+ define check_host_rpath
+ 	$(if $(filter install-host,$(2)),\
+-		$(if $(filter end,$(1)),support/scripts/check-host-rpath $(3) $(HOST_DIR)))
++		$(if $(filter end,$(1)),support/scripts/check-host-rpath $(3) $(HOST_DIR) $(PER_PACKAGE_DIR)))
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += check_host_rpath
+ 
+@@ -141,6 +141,7 @@ endif
+ # Retrieve the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	@$(call step_start,download)
++	$(call prepare-per-package-directory,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+@@ -167,6 +168,7 @@ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call step_start,extract)
+ 	@$(call MESSAGE,"Extracting")
++	$(call prepare-per-package-directory,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES))
+ 	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
+ 	$($(PKG)_EXTRACT_CMDS)
+@@ -227,6 +229,7 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call step_start,configure)
+ 	@$(call MESSAGE,"Configuring")
++	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+@@ -338,6 +341,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 
+ # Remove package sources
+ $(BUILD_DIR)/%/.stamp_dircleaned:
++	$(if $(BR2_PER_PACKAGE_DIRECTORIES),rm -Rf $(PER_PACKAGE_DIR)/$(NAME))
+ 	rm -Rf $(@D)
+ 
+ ################################################################################
+@@ -897,6 +901,7 @@ $$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_ACTUAL_SOURCE):		PKG=$(2)
+ $$($(2)_TARGET_ACTUAL_SOURCE):		PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
++$$($(2)_TARGET_DIRCLEAN):		NAME=$(1)
+ 
+ # Compute the name of the Kconfig option that correspond to the
+ # package being enabled. We handle three cases: the special Linux
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index bffd79dfb0..34345a0d65 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -62,6 +62,32 @@ $$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
+ endif
+ endef
+ 
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++# rsync the contents of per-package directories
++# $1: space-separated list of packages to rsync from
++# $2: 'host' or 'target'
++# $3: destination directory
++define per-package-rsync
++	mkdir -p $(3)
++	$(foreach pkg,$(1),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
++		$(3)$(sep))
++endef
++
++# prepares the per-package HOST_DIR and TARGET_DIR of the current
++# package, by rsync the host and target directories of the
++# dependencies of this package. The list of dependencies is passed as
++# argument, so that this function can be used to prepare with
++# different set of dependencies (download, extract, configure, etc.)
++#
++# $1: space-separated list of packages to rsync from
++define prepare-per-package-directory
++	$(call per-package-rsync,$(1),host,$(HOST_DIR))
++	$(call per-package-rsync,$(1),target,$(TARGET_DIR))
++endef
++endif
++
+ #
+ # legal-info helper functions
+ #
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index c8939569e2..d903a82958 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -11,6 +11,7 @@ export LC_ALL=C
+ main() {
+     local pkg="${1}"
+     local hostdir="${2}"
++    local perpackagedir="${3}"
+     local file ret
+ 
+     # Remove duplicate and trailing '/' for proper match
+@@ -20,7 +21,7 @@ main() {
+     while read file; do
+         is_elf "${file}" || continue
+         elf_needs_rpath "${file}" "${hostdir}" || continue
+-        check_elf_has_rpath "${file}" "${hostdir}" && continue
++        check_elf_has_rpath "${file}" "${hostdir}" "${perpackagedir}" && continue
+         if [ ${ret} -eq 0 ]; then
+             ret=1
+             printf "***\n"
+@@ -44,6 +45,15 @@ is_elf() {
+ # needs such an RPATH if at least of the libraries used by the ELF
+ # executable is available in the host library directory. This function
+ # returns 0 when a RPATH is needed, 1 otherwise.
++#
++# With per-package directory support, ${hostdir} will point to the
++# current package per-package host directory, and this is where this
++# function will check if the libraries needed by the executable are
++# located (or not). In practice, the ELF executable RPATH may point to
++# another package per-package host directory, but that is fine because
++# if such an executable is within the current package per-package host
++# directory, its libraries will also have been copied into the current
++# package per-package host directory.
+ elf_needs_rpath() {
+     local file="${1}"
+     local hostdir="${2}"
+@@ -62,13 +72,19 @@ elf_needs_rpath() {
+ # This function checks whether at least one of the RPATH of the given
+ # ELF executable (first argument) properly points to the host library
+ # directory (second argument), either through an absolute RPATH or a
+-# relative RPATH. Having such a RPATH will make sure the ELF
+-# executable will find at runtime the shared libraries it depends
+-# on. This function returns 0 when a proper RPATH was found, or 1
+-# otherwise.
++# relative RPATH. In the context of per-package directory support,
++# ${hostdir} (second argument) points to the current package host
++# directory. However, it is perfectly valid for an ELF binary to have
++# a RPATH pointing to another package per-package host directory,
++# which is why such RPATH is also accepted (the per-package directory
++# gets passed as third argument). Having a RPATH pointing to the host
++# directory will make sure the ELF executable will find at runtime the
++# shared libraries it depends on. This function returns 0 when a
++# proper RPATH was found, or 1 otherwise.
+ check_elf_has_rpath() {
+     local file="${1}"
+     local hostdir="${2}"
++    local perpackagedir="${3}"
+     local rpath dir
+ 
+     while read rpath; do
+@@ -77,6 +93,7 @@ check_elf_has_rpath() {
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+             [ "${dir}" = "${hostdir}/lib" ] && return 0
+             [ "${dir}" = "\$ORIGIN/../lib" ] && return 0
++            [[ ${dir} =~ ${perpackagedir}/[^/]*/host/lib ]] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index fa138ca15a..926767a54f 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -127,14 +127,29 @@ main() {
+ 
+     while read file ; do
+         # check if it's an ELF file
+-        if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
+-            # make files writable if necessary
+-            changed=$(chmod -c u+w "${file}")
+-            # call patchelf to sanitize the rpath
+-            ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
+-            # restore the original permission
+-            test "${changed}" != "" && chmod u-w "${file}"
++        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
++        if test $? -ne 0 ; then
++            continue
+         fi
++
++        # make files writable if necessary
++        changed=$(chmod -c u+w "${file}")
++
++        # With per-package directory support, most RPATH of host
++        # binaries will point to per-package directories. This won't
++        # work with the --make-rpath-relative ${rootdir} invocation as
++        # the per-package host directory is not within ${rootdir}. So,
++        # we rewrite all RPATHs pointing to per-package directories so
++        # that they point to the global host directry.
++        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]*/host@${HOST_DIR}@")
++        if test "${rpath}" != "${changed_rpath}" ; then
++            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
++        fi
++
++        # call patchelf to sanitize the rpath
++        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
++        # restore the original permission
++        test "${changed}" != "" && chmod u-w "${file}"
+     done < <(find "${rootdir}" ${find_args[@]})
+ 
+     # Restore patched patchelf utility
 -- 
 2.21.0
