@@ -1,34 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Mar 2019 22:20:59 +0100
-Subject: [Buildroot] [PATCH 2/2] package/ulogd: use --without-dbi
-In-Reply-To: <20190314212059.20817-1-fontaine.fabrice@gmail.com>
-References: <20190314212059.20817-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190314212059.20817-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 22:23:06 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5virtualkeyboard: install
+ shared library
+Message-ID: <20190314212112.7C59A885A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use --without-dbi instead of --with-dbi=off
+commit: https://git.buildroot.net/buildroot/commit/?id=9ecadf14d65b84b9a5b4a37bd17c2c65e4906cbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Between Qt 5.11 and 5.12 the virtual keyboard package gained a new
+top-level library, libQt5VirtualKeyboard.so, which is then used by all
+of the plugins it installs. This change makes Buildroot aware of the
+new library so that we install it to the target filesystem.
+
+Signed-off-by: Mark Thompson <mark.thompson@starleaf.com>
+[Thomas: move the definition of QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS
+into a separate condition]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ulogd/ulogd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 8fecc0ed38..a2cad40677 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -7,7 +7,7 @@
- ULOGD_VERSION = 2.0.7
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
--ULOGD_CONF_OPTS = --with-dbi=no
-+ULOGD_CONF_OPTS = --without-dbi
- ULOGD_DEPENDENCIES = host-pkgconf \
- 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
- 	libnfnetlink
--- 
-2.14.1
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 8ce3169774..3f1ebdbaa4 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -93,10 +93,17 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST):$(BR2_STATIC_LIBS),y:)
++define QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5VirtualKeyboard*.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
+ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
+ 		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
++	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_LIBS)
+ 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML)
+ 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
+ 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
