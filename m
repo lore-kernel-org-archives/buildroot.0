@@ -1,32 +1,98 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 14 Mar 2019 17:31:31 -0400
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix patch series order
-Message-ID: <20190314213131.85663-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 22:31:54 +0100
+Subject: [Buildroot] [git commit] package/systemd: fix patch 0019
+Message-ID: <20190314212915.938788CA65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=6da59bc29ec5f233151b88f138f6937b95f6e0c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the removal of old patches, 0018 should be 0002 and 0019 should be 0003.
+This patch was backported to work with systemd v240. Now that systemd
+is at v241, we must update the patch.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...02-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch} | 0
- ...03-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch} | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename package/systemd/{0018-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch => 0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch} (100%)
- rename package/systemd/{0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch => 0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch} (100%)
+ ...e-temporary-strings-to-hold-dbus-paths-on-the.patch | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/systemd/0018-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch b/package/systemd/0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
-similarity index 100%
-rename from package/systemd/0018-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
-rename to package/systemd/0002-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
-diff --git a/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch b/package/systemd/0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
-similarity index 100%
-rename from package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
-rename to package/systemd/0003-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
--- 
-2.20.1
+diff --git a/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch b/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
+index bd09e60207..007b806c09 100644
+--- a/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
++++ b/package/systemd/0019-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
+@@ -10,14 +10,14 @@ clear way to understand if the allocation fails.
+ (cherry picked from commit f519a19bcd5afe674a9b8fc462cd77d8bad403c1)
+ [baruch: backport to v240]
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++[Adam: Update for v241]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+-Upstream status: commit f519a19bcd5
+-
+  src/libsystemd/sd-bus/bus-objects.c | 68 +++++++++++++++++++++++------
+  1 file changed, 54 insertions(+), 14 deletions(-)
+ 
+ diff --git a/src/libsystemd/sd-bus/bus-objects.c b/src/libsystemd/sd-bus/bus-objects.c
+-index d0538104ae25..54b977418e03 100644
++index 58329f3fe78..54b977418e0 100644
+ --- a/src/libsystemd/sd-bus/bus-objects.c
+ +++ b/src/libsystemd/sd-bus/bus-objects.c
+ @@ -1133,7 +1133,8 @@ static int object_manager_serialize_path_and_fallbacks(
+@@ -34,7 +34,7 @@ index d0538104ae25..54b977418e03 100644
+                  return 0;
+  
+          /* Second, add fallback vtables registered for any of the prefixes */
+--        prefix = alloca(strlen(path) + 1);
++-        prefix = newa(char, strlen(path) + 1);
+ +        pl = strlen(path);
+ +        assert(pl <= BUS_PATH_SIZE_MAX);
+ +        prefix = new(char, pl + 1);
+@@ -81,7 +81,7 @@ index d0538104ae25..54b977418e03 100644
+ +                if (!prefix)
+ +                        return -ENOMEM;
+  
+--                prefix = alloca(strlen(path) + 1);
++-                prefix = newa(char, strlen(path) + 1);
+                  OBJECT_PATH_FOREACH_PREFIX(prefix, path) {
+                          n = hashmap_get(bus->nodes, prefix);
+                          if (n)
+@@ -113,7 +113,7 @@ index d0538104ae25..54b977418e03 100644
+                  if (bus->nodes_modified)
+                          continue;
+  
+--                prefix = alloca(strlen(path) + 1);
++-                prefix = newa(char, strlen(path) + 1);
+                  OBJECT_PATH_FOREACH_PREFIX(prefix, path) {
+                          r = emit_properties_changed_on_interface(bus, prefix, path, interface, true, &found_interface, names);
+                          if (r != 0)
+@@ -131,7 +131,7 @@ index d0538104ae25..54b977418e03 100644
+          if (bus->nodes_modified)
+                  return 0;
+  
+--        prefix = alloca(strlen(path) + 1);
++-        prefix = newa(char, strlen(path) + 1);
+ +        pl = strlen(path);
+ +        assert(pl <= BUS_PATH_SIZE_MAX);
+ +        prefix = new(char, pl + 1);
+@@ -155,7 +155,7 @@ index d0538104ae25..54b977418e03 100644
+          if (bus->nodes_modified)
+                  return 0;
+  
+--        prefix = alloca(strlen(path) + 1);
++-        prefix = newa(char, strlen(path) + 1);
+ +        pl = strlen(path);
+ +        assert(pl <= BUS_PATH_SIZE_MAX);
+ +        prefix = new(char, pl + 1);
+@@ -179,7 +179,7 @@ index d0538104ae25..54b977418e03 100644
+          if (bus->nodes_modified)
+                  return 0;
+  
+--        prefix = alloca(strlen(path) + 1);
++-        prefix = newa(char, strlen(path) + 1);
+ +        pl = strlen(path);
+ +        assert(pl <= BUS_PATH_SIZE_MAX);
+ +        prefix = new(char, pl + 1);
