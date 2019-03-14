@@ -1,34 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 22:19:23 +0100
-Subject: [Buildroot] [PATCH 1/5] package/binutils: switch to use 2.31.x
- as the default version
-In-Reply-To: <20190312230839.23307-1-romain.naour@gmail.com>
-References: <20190312230839.23307-1-romain.naour@gmail.com>
-Message-ID: <20190314221923.6d361b69@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Mar 2019 22:20:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ulogd: use --without-mysql
+Message-ID: <20190314212059.20817-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Mar 2019 00:08:35 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+Replace --with-mysql=no by --without-mysql
 
-> Now that binutils 2.32 has been released, it is time to move to
-> binutils 2.31.x as the default binutils version, instead of 2.29.1.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/binutils/Config.in.host | 2 +-
->  package/binutils/binutils.mk    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ulogd/ulogd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Series applied. Once again, many thanks for all this work to keep our
-toolchain components up-to-date.
-
-Thomas
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 55bbec489d..8fecc0ed38 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -20,7 +20,7 @@ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ ULOGD_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
+ ULOGD_DEPENDENCIES += mysql
+ else
+-ULOGD_CONF_OPTS += --with-mysql=no
++ULOGD_CONF_OPTS += --without-mysql
+ endif
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ ULOGD_CONF_OPTS += --with-pgsql
+@@ -32,7 +32,7 @@ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ ULOGD_DEPENDENCIES += sqlite
+ endif
+ else
+-ULOGD_CONF_OPTS += --with-mysql=no --without-pgsql --without-sqlite
++ULOGD_CONF_OPTS += --without-mysql --without-pgsql --without-sqlite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
