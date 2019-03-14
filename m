@@ -1,35 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Mar 2019 12:03:35 +0100
-Subject: [Buildroot] [PATCH v2 00/13] ppsh compatible Qt5 / generic
- qmake target install
-In-Reply-To: <20190314094024.1961-1-anaumann@ultratronik.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Mar 2019 12:06:10 +0100
+Subject: [Buildroot] [PATCH v2 02/13] qt5: Convert to generic target
+ install command
+In-Reply-To: <580bc2fc-615a-f200-0428-1096d2dcdf63@mind.be>
 References: <20190314094024.1961-1-anaumann@ultratronik.de>
-Message-ID: <46b2d555-ef74-b20d-1d51-8ef54c23604a@mind.be>
+ <20190314094024.1961-3-anaumann@ultratronik.de>
+ <20190314111311.48cda006@windsurf>
+ <580bc2fc-615a-f200-0428-1096d2dcdf63@mind.be>
+Message-ID: <20190314120610.4ee82dd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 14 Mar 2019 12:01:16 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
+> > One issue with this approach is that if you do a complete build, and
+> > then do "make qt5base-reinstall", then the date of the .stamp_built
+> > file of qt5base has not changed, and will be older than the one of all
+> > other packages that have been built after qt5base. Therefore, the rsync
+> > that you do will copy again not only the files from qt5base, but also
+> > the ones from all other packages that have been built after qt5base.  
+> 
+>  I agree that this is a problem.
+> 
+>  But I think it can be easily solved by using the pkg-file-list instead of find.
+> Since we already have a dependency of target on staging, we know that the
+> pkg-file-list is up-to-date.
 
-On 14/03/2019 10:40, Andreas Naumann wrote:
-> - I have tested with Qt5.12.1 only. Qt5.6 should but might not always do the right
->   thing. However I think it was decided to remove support for 5.6 anyway.?
+True.
 
- The plan was to remove 5.6 after it has gone EOL, which is supposed to be in
-March 2019 (3 years after the initial release in March 2016). So, the plan was
-to still update to 5.6.4, include that in Buildroot 2019.05 and 2019.02.x, and
-remove it after 2019.05.
+> > I continue to believe we want to find a solution where "make
+> > INSTALL_ROOT=$(TARGET_DIR) install" and "make
+> > INSTALL_ROOT=$(STAGING_DIR) install" works properly.  
+> 
+>  I disagree. I think the pattern of installing to staging and then copying to
+> target is a good pattern.
 
- However, on the release wiki [1] I now see
+We basically don't use this pattern anywhere. I would agree with the
+general direction of killing the staging vs. target difference, and
+simply produce "target" out of "staging" at the very end of the build,
+but that's a huge undertaking.
 
-Phase 	Original plan 	Updated plan 	Realized
-5.6.4 	Not yet defined 		Won't be done at all
+Best regards,
 
-so maybe we can expedite the removal.
-
- Regards,
- Arnout
-
-[1] https://wiki.qt.io/Qt_5.6_Release
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
