@@ -1,10 +1,10 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 14 Mar 2019 10:40:22 +0100
-Subject: [Buildroot] [PATCH v2 11/13] docs/manual: document the effect of
- per-package directory on variables
+Date: Thu, 14 Mar 2019 10:40:19 +0100
+Subject: [Buildroot] [PATCH v2 08/13] package/pkg-generic: make libtool .la
+ files compatible with per-package directories
 In-Reply-To: <20190314094024.1961-1-anaumann@ultratronik.de>
 References: <20190314094024.1961-1-anaumann@ultratronik.de>
-Message-ID: <20190314094024.1961-12-anaumann@ultratronik.de>
+Message-ID: <20190314094024.1961-9-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,65 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-As suggested by Arnout Vandecappelle, this commit adjusts the
-generic-package documentation to document the effect of per-package
-directory support on HOST_DIR, STAGING_DIR and TARGET_DIR.
+Libtool .la files unfortunately contain a number of absolute paths,
+which now refer to per-package directories. Due to this, when building
+package A, .la files may contain absolute paths referring to
+directories in package B per-package sysroot. This causes some -L
+flags referring to other sysroot from being added, which doesn't work
+as the linker no longer realizes that such paths are within its
+sysroot.
 
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To fix this, we introduce a replacement step of .la files in the
+configure step, to make sure all paths refer to this package
+per-package directory.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- docs/manual/adding-packages-generic.txt | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7be1754f54..4a991140a8 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -578,6 +578,13 @@ In the action definitions, you can use the following variables:
- * +$(TARGET_CROSS)+ to get the cross-compilation toolchain prefix
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e406abadd6..6d4442b824 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -134,6 +134,21 @@ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_user
+ endif
  
- * Of course the +$(HOST_DIR)+, +$(STAGING_DIR)+ and +$(TARGET_DIR)+
--  variables to install the packages properly.
-+  variables to install the packages properly. Those variables point to
-+  the global _host_, _staging_ and _target_ directories, unless
-+  _per-package directory_ support is used, in which case they point to
-+  the current package _host_, _staging_ and _target_ directories. In
-+  both cases, it doesn't make any difference from the package point of
-+  view: it should simply use +HOST_DIR+, +STAGING_DIR+ and
-+  +TARGET_DIR+. See xref:top-level-parallel-build[] for more details
-+  about _per-package directory_ support.
- 
- Finally, you can also use hooks. See xref:hooks[] for more information.
++#######################################
++# Helper functions
++
++# Make sure .la files only reference the current per-package
++# directory.
++
++# $1: package name (lower case)
++# $2: staging directory of the package
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++define fixup-libtool-files
++	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
++		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]*/:$(PER_PACKAGE_DIR)/$(1)/:g"
++endef
++endif
++
+ ################################################################################
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
+@@ -230,6 +245,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call step_start,configure)
+ 	@$(call MESSAGE,"Configuring")
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
++	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+@@ -890,6 +906,7 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):		PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
++$$($(2)_TARGET_CONFIGURE):		NAME=$(1)
+ $$($(2)_TARGET_RSYNC):			SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+ $$($(2)_TARGET_RSYNC):			PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
 -- 
 2.21.0
