@@ -1,40 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 21:57:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/aioblescan: new package
-In-Reply-To: <20190313220253.26245-1-grzegorz@blach.pl>
-References: <20190313220253.26245-1-grzegorz@blach.pl>
-Message-ID: <20190314215739.20f2c72f@windsurf>
+Date: Thu, 14 Mar 2019 21:58:19 +0100
+Subject: [Buildroot] [git commit] package/avahi: add upstream security fix
+Message-ID: <20190314205716.2B30E8EC51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Mar 2019 23:02:52 +0100
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e17adf1c5ee1cecd747f84fff8f6261c1e8a476
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Python library to scan and decode advertised BLE info.
-> Uses asyncio.
-> 
-> https://github.com/frawau/aioblescan
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  DEVELOPERS                                       |  1 +
->  package/Config.in                                |  1 +
->  package/python-aioblescan/Config.in              |  7 +++++++
->  package/python-aioblescan/python-aioblescan.hash |  5 +++++
->  package/python-aioblescan/python-aioblescan.mk   | 14 ++++++++++++++
->  5 files changed, 28 insertions(+)
->  create mode 100644 package/python-aioblescan/Config.in
->  create mode 100644 package/python-aioblescan/python-aioblescan.hash
->  create mode 100644 package/python-aioblescan/python-aioblescan.mk
+Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
+inadvertently responds to IPv6 unicast queries with source addresses
+that are not on-link, which allows remote attackers to cause a denial
+of service (traffic amplification) and may cause information leakage
+by obtaining potentially sensitive information from the responding
+device via port-5353 UDP packets.
 
-The commit title didn't match exactly the package name, so I fixed that
-up. The rest looked good to me, so I've applied to master. Thanks!
+Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-unicast-queries-from-address-not-on-loca.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
+new file mode 100644
+index 0000000000..0e8408c830
+--- /dev/null
++++ b/package/avahi/0001-Drop-legacy-unicast-queries-from-address-not-on-loca.patch
+@@ -0,0 +1,48 @@
++From e111def44a7df4624a4aa3f85fe98054bffb6b4f Mon Sep 17 00:00:00 2001
++From: Trent Lloyd <trent@lloyd.id.au>
++Date: Sat, 22 Dec 2018 09:06:07 +0800
++Subject: [PATCH] Drop legacy unicast queries from address not on local link
++
++When handling legacy unicast queries, ensure that the source IP is
++inside a subnet on the local link, otherwise drop the packet.
++
++Fixes #145
++Fixes #203
++CVE-2017-6519
++CVE-2018-100084
++
++Backported from: e111def44a7df4624a4aa3f85fe98054bffb6b4f
++Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
++---
++ avahi-core/server.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/avahi-core/server.c b/avahi-core/server.c
++index a2cb19a8..a2580e38 100644
++--- a/avahi-core/server.c
+++++ b/avahi-core/server.c
++@@ -930,6 +930,7 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
++ 
++     if (avahi_dns_packet_is_query(p)) {
++         int legacy_unicast = 0;
+++        char t[AVAHI_ADDRESS_STR_MAX];
++ 
++         /* For queries EDNS0 might allow ARCOUNT != 0. We ignore the
++          * AR section completely here, so far. Until the day we add
++@@ -947,6 +948,13 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
++             legacy_unicast = 1;
++         }
++ 
+++        if (!is_mdns_mcast_address(dst_address) &&
+++            !avahi_interface_address_on_link(i, src_address)) {
+++
+++            avahi_log_debug("Received non-local unicast query from host %s on interface '%s.%i'.", avahi_address_snprint(t, sizeof(t), src_address), i->hardware->name, i->protocol);
+++            return;
+++        }
+++
++         if (legacy_unicast)
++             reflect_legacy_unicast_query_packet(s, p, i, src_address, port);
++ 
++-- 
++2.19.1
++
