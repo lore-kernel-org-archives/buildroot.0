@@ -1,10 +1,10 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 14 Mar 2019 10:40:19 +0100
-Subject: [Buildroot] [PATCH v2 08/13] package/pkg-generic: make libtool .la
- files compatible with per-package directories
+Date: Thu, 14 Mar 2019 10:40:20 +0100
+Subject: [Buildroot] [PATCH v2 09/13] package/pkg-kconfig: handle
+ KCONFIG_DEPENDENCIES with per-package directories
 In-Reply-To: <20190314094024.1961-1-anaumann@ultratronik.de>
 References: <20190314094024.1961-1-anaumann@ultratronik.de>
-Message-ID: <20190314094024.1961-9-anaumann@ultratronik.de>
+Message-ID: <20190314094024.1961-10-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,36 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Libtool .la files unfortunately contain a number of absolute paths,
-which now refer to per-package directories. Due to this, when building
-package A, .la files may contain absolute paths referring to
-directories in package B per-package sysroot. This causes some -L
-flags referring to other sysroot from being added, which doesn't work
-as the linker no longer realizes that such paths are within its
-sysroot.
+The pkg-kconfig infrastructure hijacks the regular chain of build
+steps to insert its own step to prepare the configuration of kconfig
+packages. This additional step may have dependencies of its own, such
+as host-flex, host-bison or toolchain.
 
-To fix this, we introduce a replacement step of .la files in the
-configure step, to make sure all paths refer to this package
-per-package directory.
+In the context of per-package directory support, those dependencies
+must be copied to the per-package directory of the current package
+prior to doing the config preparation. This commit implements this
+logic by adding a call to prepare-per-package-directory at the right
+spot.
 
+Reported-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/pkg-generic.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/pkg-kconfig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e406abadd6..6d4442b824 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -134,6 +134,21 @@ endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_user
- endif
- 
-+#######################################
-+# Helper functions
-+
-+# Make sure .la files only reference the current per-package
-+# directory.
-+
-+# $1: package name (lower case)
-+# $2: staging directory of the package
-+ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-+define fixup-libtool-files
-+	$(Q)find $(2)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-+		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]*/:$(PER_PACKAGE_DIR)/$(1)/:g"
-+endef
-+endif
-+
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
-@@ -230,6 +245,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- 	@$(call step_start,configure)
- 	@$(call MESSAGE,"Configuring")
- 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
-+	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
- 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_CONFIGURE_CMDS)
- 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
-@@ -890,6 +906,7 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_HOST):		PKG=$(2)
- $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-+$$($(2)_TARGET_CONFIGURE):		NAME=$(1)
- $$($(2)_TARGET_RSYNC):			SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
- $$($(2)_TARGET_RSYNC):			PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index ce11e14824..5a29490473 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -117,6 +117,7 @@ endef
+ # Since the file could be a defconfig file it needs to be expanded to a
+ # full .config first.
+ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
++	$$(call prepare-per-package-directory,$$($(2)_KCONFIG_DEPENDENCIES))
+ 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
 -- 
 2.21.0
