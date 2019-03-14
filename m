@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 08:52:13 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine: fix comment
- on GL dependencies
-In-Reply-To: <20190313200725.33bae840@gmx.net>
-References: <20190313164746.ECDF38B66D@busybox.osuosl.org>
- <20190313200725.33bae840@gmx.net>
-Message-ID: <20190314085213.4d9a904e@windsurf>
+Date: Thu, 14 Mar 2019 08:54:45 +0100
+Subject: [Buildroot] [RFC v1] package/gst1-plugins-bad: add webrtcbin
+ option
+In-Reply-To: <25dda2d4-51f8-b20f-9dcd-32584bb0f194@mind.be>
+References: <20190310175109.13444-1-ps.report@gmx.net>
+ <20190312222745.06cf1b34@windsurf>
+ <71e0a8c0-0809-e02c-cb29-25b2771202bd@mind.be>
+ <20190313201733.5ac6fb18@gmx.net>
+ <25dda2d4-51f8-b20f-9dcd-32584bb0f194@mind.be>
+Message-ID: <20190314085445.7be54f55@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Mar 2019 20:07:25 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu, 14 Mar 2019 08:27:56 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> This comment change is only valid for BR2_PACKAGE_QT5_VERSION_LATEST/Qt5.12.x as
-> qt5webengine selects BR2_PACKAGE_QT5DECLARATIVE_QUICK and qt5declarative/Config.in
-> states:
+>  The Config.in option was introduced in 2017.02, and renamed for 2017.08.
 > 
->   config BR2_PACKAGE_QT5DECLARATIVE_QUICK
->           bool "quick module"
->           depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
+>  However, the rename was also backported to 2017.02.4.
+> 
+>  In other words, the only people who could be hit by this issue are people that
+> used 2017.02 and never upgraded even to 2017.02.4.
+> 
+>  I think it's OK if we risk breaking something for those people. Especially
+> because the problem is very obvious and very easy to fix.
 
-Aah, yes, indeed. I had missed that qt5webengine not only selects
-QT5DECLARATIVE, but also QT5DECLARATIVE_QUICK. So I think we should
-simply revert the change.
+Yes, I agree: I believe it's better to have the right name for the
+option moving forward, and the problem with re-using the name of the
+previous option is not too bad.
 
-Best regards,
+So, I'm happy to see that both of us agree on the direction to take
+with this.
+
+Thanks
 
 Thomas
 -- 
