@@ -1,52 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 23:24:21 +0100
-Subject: [Buildroot] [PATCH 1/6] boot/arm-trusted-firmware: support
- 32bit Arm targets
-In-Reply-To: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
-References: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
-Message-ID: <20190314232421.46ad28f2@windsurf>
+Date: Thu, 14 Mar 2019 23:26:32 +0100
+Subject: [Buildroot] [git commit] package/beecrypt: fix build without C++
+Message-ID: <20190314222335.AE2628EE76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6255c816232468b2e92cffcfa835aa79d8fcae04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 Mar 2019 11:11:35 +0100
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
+Do not check for C++ compiler as C++ support has been disabled since
+commit dd4d3c18d6753e1224fbe59d91a4b44f39bc38c0 otherwise
+build will fail on toolchains without a working C++ compiler:
 
-> This change allows one to build the TF-A (Trusted Firmware A) for
-> 32bit Armv7 and Armv8 platforms which arm-trusted-firmware supports
-> since release v1.5.
-> 
-> BR2_aarch64 is changed to BR2_ARM_CPU_ARMV8A as the later complemented
-> by BR2_ARM_CPU_ARMV7A better represents to architectures that can
-> support Arm Trusted Firmware A.
-> 
-> When BR2_arm is enabled, TF-A is built in Aarch32 mode.
-> Selection between Armv8-A (default) and Armv7-A (ARM_ARCH_MAJOR=7) is
-> expected from BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
+checking how to run the C++ preprocessor... /lib/cpp
+configure: error: in `/data/buildroot/buildroot-test/instance-1/output/build/beecrypt-4.2.1':
+configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-It seems a bit annoying to require passing ARM_ARCH_MAJOR=7 in those
-additional variable. Why don't we do it automatically in
-arm-trusted-firmware.mk. We have all the knowledge required, no?
+Fixes:
+ - http://autobuild.buildroot.org/results/3c79cc68f1b088ad24daf7f9bd70718d702be577
 
-> +ifeq ($(BR2_arm),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0003-don-t-check-for-cplusplus-compiler.patch  | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Can we do:
-
-ifeq ($(BR2_arm),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32 ARM_ARCH_MAJOR=7
-else
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64 ARM_ARCH_MAJOR=8
-endif
-
-for example ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch b/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
+new file mode 100644
+index 0000000000..32f167996f
+--- /dev/null
++++ b/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
+@@ -0,0 +1,27 @@
++configure.ac: don't check for C++ compiler
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -durN beecrypt-4.2.1-orig/configure.ac beecrypt-4.2.1/configure.ac
++--- beecrypt-4.2.1-orig/configure.ac	2019-03-01 19:58:16.516117640 +0100
+++++ beecrypt-4.2.1/configure.ac	2019-03-01 21:10:17.707391803 +0100
++@@ -119,9 +119,6 @@
++ 
++ # Checks for C compiler and preprocessor
++ AC_PROG_CC
++-AC_PROG_CPP
++-AC_PROG_CXX
++-AC_PROG_CXXCPP
++ AM_PROG_AS
++ AC_PROG_LD
++ AC_PROG_LN_S
++@@ -133,9 +130,6 @@
++ AC_LANG_PUSH(C)
++ AC_OPENMP
++ AC_LANG_POP(C)
++-AC_LANG_PUSH(C++)
++-AC_OPENMP
++-AC_LANG_POP(C++)
++ 
++ # Checks for compiler characteristics and flags
++ if test "$ac_enable_expert_mode" = no; then
