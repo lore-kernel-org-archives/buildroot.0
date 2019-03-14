@@ -1,34 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Mar 2019 22:03:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-aioblescan: new package
-In-Reply-To: <20190314201850.1021-2-grzegorz@blach.pl>
-References: <20190314201850.1021-1-grzegorz@blach.pl>
- <20190314201850.1021-2-grzegorz@blach.pl>
-Message-ID: <20190314220308.11414673@windsurf>
+Date: Thu, 14 Mar 2019 22:03:47 +0100
+Subject: [Buildroot] [git commit] package/libpcap: disable dbus to break
+ circular dependency
+Message-ID: <20190314210048.F2CA383B8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Grzegorz,
+commit: https://git.buildroot.net/buildroot/commit/?id=b01d463c14060318743ce5d0a2da01a5b3a5e0e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Mar 2019 21:18:50 +0100
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+The optional dbus dependency of libpcap creates a circular dependency
+chain:
 
-> Python library to scan and decode advertised BLE info.
-> Uses asyncio.
-> 
-> https://github.com/frawau/aioblescan
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+$ make libpcap-show-recursive-depends
 
-I have already applied your previous iteration. BTW, this new iteration
-was not labelled as "v2" and didn't contain a changelog, which makes it
-difficult to identify what has changed.
+Recursion detected for  : systemd
+which is a dependency of: dbus
+which is a dependency of: libpcap
+which is a dependency of: iptables
+which is a dependency of: systemd
+make: *** [package/libpcap/libpcap.mk:55: libpcap-show-recursive-depends] Error 1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Of all these dependencies the one of libpcap on dbus seems to be less
+useful. Drop it.
+
+Fixes:
+http://autobuild.buildroot.net/results/0b5d18bff816cbcee11e8645449701722d956de5/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libpcap/libpcap.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 126087220b..83188c8c48 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -16,6 +16,8 @@ LIBPCAP_CONF_ENV = \
+ 	CFLAGS="$(LIBPCAP_CFLAGS)"
+ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag
++# Disable dbus to break recursive dependencies
++LIBPCAP_CONF_OPTS += --disable-dbus
+ LIBPCAP_CONFIG_SCRIPTS = pcap-config
+ 
+ # Omit -rpath from pcap-config output
+@@ -32,13 +34,6 @@ else
+ LIBPCAP_CONF_OPTS += --disable-bluetooth
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-LIBPCAP_CONF_OPTS += --enable-dbus
+-LIBPCAP_DEPENDENCIES += dbus
+-else
+-LIBPCAP_CONF_OPTS += --disable-dbus
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ LIBPCAP_DEPENDENCIES += libnl
+ LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
