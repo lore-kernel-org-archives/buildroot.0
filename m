@@ -1,37 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 15 Mar 2019 08:54:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-benchmark: needs fork
-Message-ID: <20190315075454.22670-1-fontaine.fabrice@gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 15 Mar 2019 10:00:03 +0100
+Subject: [Buildroot] [PATCH 1/6] boot/arm-trusted-firmware: support
+ 32bit Arm targets
+In-Reply-To: <20190314232421.46ad28f2@windsurf>
+References: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
+ <20190314232421.46ad28f2@windsurf>
+Message-ID: <CAN5uoS9QwY7g9swo_ngLxGX8XYi62Vy=S=czO1WvvCtBw7ADvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ea61442275d1790a29e02e2fa27f072e4c12daa7
+On Thu, 14 Mar 2019 at 23:24, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed,  6 Mar 2019 11:11:35 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> > This change allows one to build the TF-A (Trusted Firmware A) for
+> > 32bit Armv7 and Armv8 platforms which arm-trusted-firmware supports
+> > since release v1.5.
+> >
+> > BR2_aarch64 is changed to BR2_ARM_CPU_ARMV8A as the later complemented
+> > by BR2_ARM_CPU_ARMV7A better represents to architectures that can
+> > support Arm Trusted Firmware A.
+> >
+> > When BR2_arm is enabled, TF-A is built in Aarch32 mode.
+> > Selection between Armv8-A (default) and Armv7-A (ARM_ARCH_MAJOR=7) is
+> > expected from BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
+>
+> It seems a bit annoying to require passing ARM_ARCH_MAJOR=7 in those
+> additional variable. Why don't we do it automatically in
+> arm-trusted-firmware.mk. We have all the knowledge required, no?
+>
+> > +ifeq ($(BR2_arm),y)
+> > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
+>
+> Can we do:
+>
+> ifeq ($(BR2_arm),y)
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32 ARM_ARCH_MAJOR=7
+> else
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64 ARM_ARCH_MAJOR=8
+> endif
+>
+> for example ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/optee-benchmark/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Well... I guess yes. Until there comes Aarch32 Armv8-A platforms.
+So, yes, you're right. Your change will relax ARM_ARCH_MAJOR from
+..._ADDITIONAL_VARIABLES.
 
-diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
-index b9326e0432..07de2a3f80 100644
---- a/package/optee-benchmark/Config.in
-+++ b/package/optee-benchmark/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_OPTEE_BENCHMARK
- 	bool "optee-benchmark"
-+	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # optee-client
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
-@@ -13,4 +14,5 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
- 	  http://github.com/linaro-swg/optee_benchmark
- 
- comment "optee-benchmark needs a toolchain w/ dynamic library and threads"
-+	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.14.1
+regards,
+etienne
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
