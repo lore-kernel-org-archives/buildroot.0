@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXdamage: bump
- version to 1.1.5
-Message-ID: <20190315203120.A5D5383480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xstdcmap: bump version
+ to 1.0.4
+Message-ID: <20190315203120.5004583480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ecf804cffb4475dab4eae8e9534ad874eb7a1c4
+commit: https://git.buildroot.net/buildroot/commit/?id=be2593f761fe17b0aabad5fb449c41ec9b8c4bc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libXdamage/xlib_libXdamage.hash | 9 +++++++--
- package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   | 2 +-
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash | 9 +++++++--
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
-index 343cbf4a68..120d3e026a 100644
---- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
-+++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
+index 6d8b35fae1..fc067850b0 100644
+--- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
++++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
 @@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-January/055220.html
--sha256	7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad	libXdamage-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002973.html
-+md5 e3f554267a7a04b042dc1f6352bd6d99  libXdamage-1.1.5.tar.bz2
-+sha1 719ae6ab8c1b972c6386b654976c479255af5572  libXdamage-1.1.5.tar.bz2
-+sha256 b734068643cac3b5f3d2c8279dd366b5bf28c7219d9e9d8717e1383995e0ea45  libXdamage-1.1.5.tar.bz2
-+sha512 a3ca6cc33b1727f717a3e2aa5593f660508a81a47918a0aa949e9e8fba105e303fe5071983b48caac92feea0fe6e8e01620805e4d19b41f21f20d837b191c124  libXdamage-1.1.5.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-February/002164.html
+-sha256	f648e2b0cf16aa29856de998e2c7204be39dc1f8daeda9464d32288e0b580fc1	xstdcmap-1.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002954.html
++md5  da67142c128d18386ff145882e0afc66  xstdcmap-1.0.4.tar.bz2
++sha1 a5eff72ba31625e5b11506add800140019a39636  xstdcmap-1.0.4.tar.bz2
++sha256 06898b3f1eaad0b205ff3c75bdefa3207868b889d4cb37b32b8267b2bbfe6f8b  xstdcmap-1.0.4.tar.bz2
++sha512 2adbb0aec1766341e04090efa962241ff6c9e32c612851b7221cec0ee16852107d406a08ec5251070f39df882c13e3c8c9edcd88f278187a9f373e1727643a8f  xstdcmap-1.0.4.tar.bz2
 +# Locally computed
-+sha256 33effe928634be12e668465c3935c5570ff2787b970b15d9243d69df42302c57  COPYING
-diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
-index d52b4e0e24..cc5493ff6c 100644
---- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
-+++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
++sha256 f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
+diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
+index a4d6dc34f6..dd5b0ee349 100644
+--- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
++++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXDAMAGE_VERSION = 1.1.4
-+XLIB_LIBXDAMAGE_VERSION = 1.1.5
- XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.bz2
- XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDAMAGE_LICENSE = MIT
+-XAPP_XSTDCMAP_VERSION = 1.0.3
++XAPP_XSTDCMAP_VERSION = 1.0.4
+ XAPP_XSTDCMAP_SOURCE = xstdcmap-$(XAPP_XSTDCMAP_VERSION).tar.bz2
+ XAPP_XSTDCMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XSTDCMAP_LICENSE = MIT
