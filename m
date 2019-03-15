@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xlogo: bump version to
- 1.0.5
-Message-ID: <20190315203120.27FFB83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xlsatoms: bump version
+ to 1.1.3
+Message-ID: <20190315203120.2E7CA83480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811e2b0fc312a1c0b88b480d93112b2e4182f6df
+commit: https://git.buildroot.net/buildroot/commit/?id=237eec6ad4b4038af910d5c5a396aa60b1aa2340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xlogo/xapp_xlogo.hash | 9 +++++++--
- package/x11r7/xapp_xlogo/xapp_xlogo.mk   | 2 +-
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 9 +++++++--
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.hash b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
-index 861cd596a4..a4aada48c8 100644
---- a/package/x11r7/xapp_xlogo/xapp_xlogo.hash
-+++ b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
+diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+index 58d0737b9d..de7eabe3be 100644
+--- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
++++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2012-March/001905.html
--sha256	17af6f4fb73e7310e087fbfe5d773bab2b0d6f37a894ae5ee32de4693af6ba92	xlogo-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002963.html
-+md5 e9d21de1dc8c8b9f854509a26a985cd7  xlogo-1.0.5.tar.bz2
-+sha1 f025a0ad30c45cbec1c2f3b1610bff94fb4e9f33  xlogo-1.0.5.tar.bz2
-+sha256 633d7a3aa5df61e4e643b740e5799664741ab1a0ba40593e54fcd15dc30f378e  xlogo-1.0.5.tar.bz2
-+sha512 0d78e269b0be3c5de71de7f362b896bfd9934ecd9d0361b3302399b1269e029c4a9f35418d792121a1edc34405d753f9d69c996cc3a69ac717f2b0d1f736406b  xlogo-1.0.5.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002579.html
+-sha256	47e5dc7c3dbda6db2cf8c00cedac1722835c1550aa21cfdbc9ba83906694dea4	xlsatoms-1.1.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
++md5 61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
++sha1 9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
++sha256 57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
++sha512 c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
 +# Locally computed
-+sha256 972b454b6c0da17cec61225ab9dfd4afc69fd8e7e4c629497197c6f79adc6fb0  COPYING
-diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.mk b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-index 380acfc404..455469e160 100644
---- a/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-+++ b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
++sha256 f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
+diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+index d6d9338013..a3230fc2dc 100644
+--- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
++++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XLOGO_VERSION = 1.0.4
-+XAPP_XLOGO_VERSION = 1.0.5
- XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.bz2
- XAPP_XLOGO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLOGO_LICENSE = MIT
+-XAPP_XLSATOMS_VERSION = 1.1.2
++XAPP_XLSATOMS_VERSION = 1.1.3
+ XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
+ XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XLSATOMS_LICENSE = MIT
