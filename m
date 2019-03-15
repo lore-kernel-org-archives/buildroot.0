@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
- 1.0.8
-Message-ID: <20190315203119.E9F3583480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xlogo: bump version to
+ 1.0.5
+Message-ID: <20190315203120.27FFB83480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c133c7bd300b0c1d1e8dc170db9c66686000b80f
+commit: https://git.buildroot.net/buildroot/commit/?id=811e2b0fc312a1c0b88b480d93112b2e4182f6df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xclock/xapp_xclock.hash | 9 +++++++--
- package/x11r7/xapp_xclock/xapp_xclock.mk   | 2 +-
+ package/x11r7/xapp_xlogo/xapp_xlogo.hash | 9 +++++++--
+ package/x11r7/xapp_xlogo/xapp_xlogo.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
-index 1469077c1b..a0712e9a1a 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.hash
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
+diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.hash b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
+index 861cd596a4..a4aada48c8 100644
+--- a/package/x11r7/xapp_xlogo/xapp_xlogo.hash
++++ b/package/x11r7/xapp_xlogo/xapp_xlogo.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-September/002310.html
--sha256	23ceeca94e3e20a6c26a703ac7f789066d4517f8d2cb717ae7cb28a617d97dd0	xclock-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002947.html
-+md5 8bd39eb3678ed58a2350794fe13401cc  xclock-1.0.8.tar.bz2
-+sha1 980df6958286450cfc1fe6daa7ff912885d728ba  xclock-1.0.8.tar.bz2
-+sha256 930820483a36f1f1ce1bf52b648865629a16082641e12c5cf2b5045815fc2255  xclock-1.0.8.tar.bz2
-+sha512 1272221ace3657505bae1b22f181e9ecbf1710900c89a860c8ceae47ae31ca5e75b6557c37dc0a881a0a24c9597b9a07f46200926feb1013f1e2e995111a7646  xclock-1.0.8.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2012-March/001905.html
+-sha256	17af6f4fb73e7310e087fbfe5d773bab2b0d6f37a894ae5ee32de4693af6ba92	xlogo-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002963.html
++md5 e9d21de1dc8c8b9f854509a26a985cd7  xlogo-1.0.5.tar.bz2
++sha1 f025a0ad30c45cbec1c2f3b1610bff94fb4e9f33  xlogo-1.0.5.tar.bz2
++sha256 633d7a3aa5df61e4e643b740e5799664741ab1a0ba40593e54fcd15dc30f378e  xlogo-1.0.5.tar.bz2
++sha512 0d78e269b0be3c5de71de7f362b896bfd9934ecd9d0361b3302399b1269e029c4a9f35418d792121a1edc34405d753f9d69c996cc3a69ac717f2b0d1f736406b  xlogo-1.0.5.tar.bz2
 +# Locally computed
-+sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
-index 6f8044ef61..b0f74682e0 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.mk
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
++sha256 972b454b6c0da17cec61225ab9dfd4afc69fd8e7e4c629497197c6f79adc6fb0  COPYING
+diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.mk b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
+index 380acfc404..455469e160 100644
+--- a/package/x11r7/xapp_xlogo/xapp_xlogo.mk
++++ b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XCLOCK_VERSION = 1.0.7
-+XAPP_XCLOCK_VERSION = 1.0.8
- XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
- XAPP_XCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XCLOCK_LICENSE = MIT
+-XAPP_XLOGO_VERSION = 1.0.4
++XAPP_XLOGO_VERSION = 1.0.5
+ XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.bz2
+ XAPP_XLOGO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XLOGO_LICENSE = MIT
