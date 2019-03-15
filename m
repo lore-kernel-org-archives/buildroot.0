@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:50 +0100
-Subject: [Buildroot] [PATCH 24/31] package/x11r7/xdriver_xf86-video-tdfx:
- bump version to 1.5.0
+Date: Fri, 15 Mar 2019 19:02:40 +0100
+Subject: [Buildroot] [PATCH 14/31] package/x11r7/xapp_xmore: bump version to
+ 1.0.3
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-24-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-14-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash | 9 +++++++--
- .../xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk   | 2 +-
+ package/x11r7/xapp_xmore/xapp_xmore.hash | 9 +++++++--
+ package/x11r7/xapp_xmore/xapp_xmore.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
-index 84885596f6..5e9a88fbde 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
+diff --git a/package/x11r7/xapp_xmore/xapp_xmore.hash b/package/x11r7/xapp_xmore/xapp_xmore.hash
+index f2b7d1a694..cd777831fa 100644
+--- a/package/x11r7/xapp_xmore/xapp_xmore.hash
++++ b/package/x11r7/xapp_xmore/xapp_xmore.hash
 @@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002755.html
--sha256 4cf48ee14ead52b23493c3dce5032496fd68bf1d000170bb138730497e212a42  xf86-video-tdfx-1.4.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002944.html
-+md5 4697f0cc69ff1ff90bc770863c158d29  xf86-video-tdfx-1.5.0.tar.bz2
-+sha1 8042dd0c2bc5a396b2cfeb5418b03059a089be25  xf86-video-tdfx-1.5.0.tar.bz2
-+sha256 2f4580e1f66901dd578d6e1f73df8150fd4b8480eb0c9653d4c5d8e0f8e78561  xf86-video-tdfx-1.5.0.tar.bz2
-+sha512 eca3359c7db56183a1cfcce7295e41ccc349005ee1cbcf75209f1e4e8e04e887ba511712ef35efc11c940713c8327b0b8ab8b6c86facf02062b3e84c0b1af5ff  xf86-video-tdfx-1.5.0.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2010-July/001360.html
+-sha1	7db4e5feb82d5d05038722d3af00d28e103bed18	xmore-1.0.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002964.html
++md5 8e1279352192e4142740c21db58f9be9  xmore-1.0.3.tar.bz2
++sha1 b57b92afd783d28c4c505e0c95556939f24c3ec9  xmore-1.0.3.tar.bz2
++sha256 644a1e0d5182d7708d413722d0579a587dc56b9a8cb60640df076d302e09251b  xmore-1.0.3.tar.bz2
++sha512 e3e44831cd87a54bb585f80ef0d87f69dc35f6c834a73241aad9f6e2b0999b53c51a0a3f915a94ae4d6dc9bdfb9f60b6576f0bdcec441443abd98efa6c51b1d3  xmore-1.0.3.tar.bz2
 +# Locally computed
-+sha256 5bb3d3baff0b7bbef885215ca9c12a5be1a42c848c96601b699637557fbb41ec  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-index 6511eec7ad..8975334f90 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
++sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
+diff --git a/package/x11r7/xapp_xmore/xapp_xmore.mk b/package/x11r7/xapp_xmore/xapp_xmore.mk
+index b0b0edf23b..f8a3ba8c1f 100644
+--- a/package/x11r7/xapp_xmore/xapp_xmore.mk
++++ b/package/x11r7/xapp_xmore/xapp_xmore.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.7
-+XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.5.0
- XDRIVER_XF86_VIDEO_TDFX_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
+-XAPP_XMORE_VERSION = 1.0.2
++XAPP_XMORE_VERSION = 1.0.3
+ XAPP_XMORE_SOURCE = xmore-$(XAPP_XMORE_VERSION).tar.bz2
+ XAPP_XMORE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMORE_LICENSE = MIT
 -- 
 2.20.1
