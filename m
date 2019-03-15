@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:44 +0100
-Subject: [Buildroot] [PATCH 18/31] package/x11r7/xapp_xvinfo: bump version
- to 1.1.4
+Date: Fri, 15 Mar 2019 19:02:51 +0100
+Subject: [Buildroot] [PATCH 25/31] package/x11r7/xlib_libFS: bump version to
+ 1.0.8
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-18-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-25-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xvinfo/xapp_xvinfo.hash | 9 +++++++--
- package/x11r7/xapp_xvinfo/xapp_xvinfo.mk   | 2 +-
+ package/x11r7/xlib_libFS/xlib_libFS.hash | 9 +++++++--
+ package/x11r7/xlib_libFS/xlib_libFS.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
-index 2077730fc9..405fc36ea6 100644
---- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
-+++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
+index 786d147b37..c6f168576a 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.hash
++++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002596.html
--sha256	9fba8b68daf53863e66d5004fa9c703fcecf69db4d151ea2d3d885d621e6e5eb	xvinfo-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002955.html
-+md5 b13afec137b9b331814a9824ab03ec80  xvinfo-1.1.4.tar.bz2
-+sha1 136a70a72b23c81f4fe8f4c8cb7073316be16b44  xvinfo-1.1.4.tar.bz2
-+sha256 0353220d6606077ba42363db65f50410759f9815352f77adc799e2adfa76e73f  xvinfo-1.1.4.tar.bz2
-+sha512 85e1f936c5c826f0fdde3670bd77d5cde8641c6e8e7849e42142e91b5aa01d7e0e60d2b064eb6fef4f5666321813ca2dc9f9656756ccbe6dcda37b119ee8a63e  xvinfo-1.1.4.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002588.html
+-sha256	2e9d4c07026a7401d4fa4ffae86e6ac7fec83f50f3268fa85f52718e479dc4f3	libFS-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
++md5 4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
++sha1 70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
++sha256 c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
++sha512 466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
 +# Locally computed
-+sha256 7725b0484faa1832534814ecb577f5a86acc74f1bcce25f92c55dfc1b693717d  COPYING
-diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
-index 5b05a63233..7b3b97f073 100644
---- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
-+++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
++sha256 5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index 56f2dc3cba..9cc93e0fe1 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XVINFO_VERSION = 1.1.3
-+XAPP_XVINFO_VERSION = 1.1.4
- XAPP_XVINFO_SOURCE = xvinfo-$(XAPP_XVINFO_VERSION).tar.bz2
- XAPP_XVINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XVINFO_LICENSE = MIT
+-XLIB_LIBFS_VERSION = 1.0.7
++XLIB_LIBFS_VERSION = 1.0.8
+ XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
+ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
 -- 
 2.20.1
