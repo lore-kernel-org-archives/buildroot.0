@@ -1,64 +1,52 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 15 Mar 2019 10:00:03 +0100
-Subject: [Buildroot] [PATCH 1/6] boot/arm-trusted-firmware: support
- 32bit Arm targets
-In-Reply-To: <20190314232421.46ad28f2@windsurf>
-References: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
- <20190314232421.46ad28f2@windsurf>
-Message-ID: <CAN5uoS9QwY7g9swo_ngLxGX8XYi62Vy=S=czO1WvvCtBw7ADvA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 15 Mar 2019 11:22:04 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: requires gcc 4.9
+Message-ID: <73ae9f7e151366504087d518dbef2e357eb0606b.1552641724.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Mar 2019 at 23:24, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed,  6 Mar 2019 11:11:35 +0100
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
->
-> > This change allows one to build the TF-A (Trusted Firmware A) for
-> > 32bit Armv7 and Armv8 platforms which arm-trusted-firmware supports
-> > since release v1.5.
-> >
-> > BR2_aarch64 is changed to BR2_ARM_CPU_ARMV8A as the later complemented
-> > by BR2_ARM_CPU_ARMV7A better represents to architectures that can
-> > support Arm Trusted Firmware A.
-> >
-> > When BR2_arm is enabled, TF-A is built in Aarch32 mode.
-> > Selection between Armv8-A (default) and Armv7-A (ARM_ARCH_MAJOR=7) is
-> > expected from BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
->
-> It seems a bit annoying to require passing ARM_ARCH_MAJOR=7 in those
-> additional variable. Why don't we do it automatically in
-> arm-trusted-firmware.mk. We have all the knowledge required, no?
->
-> > +ifeq ($(BR2_arm),y)
-> > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
->
-> Can we do:
->
-> ifeq ($(BR2_arm),y)
-> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32 ARM_ARCH_MAJOR=7
-> else
-> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64 ARM_ARCH_MAJOR=8
-> endif
->
-> for example ?
+BUILDING.md lists gcc 4.9.4 or newer as build prerequisite. This is
+needed for full C++11 support.
 
-Well... I guess yes. Until there comes Aarch32 Armv8-A platforms.
-So, yes, you're right. Your change will relax ARM_ARCH_MAJOR from
-..._ADDITIONAL_VARIABLES.
+  https://github.com/nodejs/node/commit/d13a65ad68c429884434cdcd94c52b79a6d69717
 
-regards,
-etienne
+Cc: Daniel Price <daniel.price@gmail.com>
+Reported-by: Boris-Ben Shapiro <erectcrested@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/nodejs/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index d2846f8d579d..ed6225b08efb 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -7,19 +7,19 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	# libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+-comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.8, wchar"
++comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.9, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
++		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_NODEJS
+ 	bool "nodejs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_4_8
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+-- 
+2.20.1
