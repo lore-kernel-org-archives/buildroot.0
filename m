@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:51 +0100
-Subject: [Buildroot] [PATCH 25/31] package/x11r7/xlib_libFS: bump version to
- 1.0.8
+Date: Fri, 15 Mar 2019 19:02:41 +0100
+Subject: [Buildroot] [PATCH 15/31] package/x11r7/xapp_xprop: bump version to
+ 1.2.4
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-25-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libFS/xlib_libFS.hash | 9 +++++++--
- package/x11r7/xlib_libFS/xlib_libFS.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_xprop/xapp_xprop.hash | 10 +++++-----
+ package/x11r7/xapp_xprop/xapp_xprop.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
-index 786d147b37..c6f168576a 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.hash
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002588.html
--sha256	2e9d4c07026a7401d4fa4ffae86e6ac7fec83f50f3268fa85f52718e479dc4f3	libFS-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
-+md5 4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
-+sha1 70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
-+sha256 c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
-+sha512 466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
-+# Locally computed
-+sha256 5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 56f2dc3cba..9cc93e0fe1 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
+index a57d375b84..f513e12c24 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.hash
++++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002870.html
+-md5 4becb3ddc4674d741487189e4ce3d0b6  xprop-1.2.3.tar.bz2
+-sha1 77062c08a23cfca76824b7e8f9860678255d6b1a  xprop-1.2.3.tar.bz2
+-sha256 d22afb28c86d85fff10a50156a7d0fa930c80ae865d70b26d805fd28a17a521b  xprop-1.2.3.tar.bz2
+-sha512 ad7987fec11ae19b7adc3b0f683fc393e95155f3b6c753d1d8744aedcfb360452eee5735a4c380152b286905931515f3e1a28676b5531001eb8dd93b7249916a  xprop-1.2.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002969.html
++md5 cc369c28383a5d7144e7197ee7d30bfa  xprop-1.2.4.tar.bz2
++sha1 0549a927d01930218f1d0089d0157eb9538b34a5  xprop-1.2.4.tar.bz2
++sha256 8c77fb096e46c60032b7e2bde9492c3ffcc18734f50b395085a5f10bfd3cf753  xprop-1.2.4.tar.bz2
++sha512 6e770cb89ba87ae057858cc9f0f5498979e78c3ef66ce86361b7c646cc0b70c41a18d76e55ed7225fe715b22b62bc07c56272519a2631b92832e9403ce260da7  xprop-1.2.4.tar.bz2
+ # Locally computed
+ sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
+index d8063d94c8..a0ad4302cb 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.mk
++++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFS_VERSION = 1.0.7
-+XLIB_LIBFS_VERSION = 1.0.8
- XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
- XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFS_LICENSE = MIT
+-XAPP_XPROP_VERSION = 1.2.3
++XAPP_XPROP_VERSION = 1.2.4
+ XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
+ XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XPROP_LICENSE = MIT
 -- 
 2.20.1
