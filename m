@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Mar 2019 11:14:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
- curl and libidn2
-In-Reply-To: <CAPi7W82sCBSHs9tv9RvoaAvkNDN6qy=P9DNtbr-yPQ=km1GHbQ@mail.gmail.com>
-References: <20190308215200.11949-1-fontaine.fabrice@gmail.com>
- <20190309150920.343482ce@windsurf>
- <CAPi7W82sCBSHs9tv9RvoaAvkNDN6qy=P9DNtbr-yPQ=km1GHbQ@mail.gmail.com>
-Message-ID: <20190315111445.7681a2d0@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 15 Mar 2019 12:40:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 5.6.1
+Message-ID: <20190315104046.16119-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Sat, 9 Mar 2019 16:04:50 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> > As upstream replied in the pull request, the CMake FindCURL module
-> > already uses pkg-config if available. Could you investigate what this
-> > doesn't work as expected ?  
-> Cmake does not use pkgconfig in FindCurl in any "official" versions
-> (including 3.13.4), they have added a call to pkgconfig only in
-> December 2018 with
-> https://github.com/Kitware/CMake/commit/fc5afbe97094d741b853b045d51351f3a370e87e#diff-62c4a3bc6680cd4945de9749af697a2a
-> I'll be a part of the upcoming 3.14.0.
-
-Thanks for the additional explication!
-
-I've applied the patch to master. Thanks!
-
-Thomas
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index a6ad618d39..dea94d43fc 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5	81d6969ba8392cd3b6f5cba6c4e77caa  psutil-5.5.1.tar.gz
+-sha256	72cebfaa422b7978a1d3632b65ff734a34c6b34f4578b68a5c204d633756b810  psutil-5.5.1.tar.gz
++md5	765a4179f02c149794a6e99d890dfa4b  psutil-5.6.1.tar.gz
++sha256	fa0a570e0a30b9dd618bffbece590ae15726b47f9f1eaf7518dfb35f4d7dcd21  psutil-5.6.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 09d4e95167..3a6e7961bc 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PSUTIL_VERSION = 5.5.1
++PYTHON_PSUTIL_VERSION = 5.6.1
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c7/01/7c30b247cdc5ba29623faa5c8cf1f1bbf7e041783c340414b0ed7e067c64
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/2f/b8/11ec5006d2ec2998cb68349b8d1317c24c284cf918ecd6729739388e4c56
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
