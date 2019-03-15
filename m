@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-amdgpu:
- bump version to 19.0.0
-Message-ID: <20190315203120.6D54E83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXcomposite: bump
+ version to 0.4.5
+Message-ID: <20190315203120.985AD83480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ef13fd5326955ac83a36deb82787d8d0e6d1712
+commit: https://git.buildroot.net/buildroot/commit/?id=dbad37fe386048da8158bb924c25cff0811d64d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash   | 10 +++++-----
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk     |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXcomposite/xlib_libXcomposite.hash | 9 +++++++--
+ package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index 999f971811..7f1ad29110 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-September/002918.html
--md5  5d75f5993cda5e013cd851c5947ec450  xf86-video-amdgpu-18.1.0.tar.bz2
--sha1 d3097af7da3b56396721e214f348e7ceb5f3a358  xf86-video-amdgpu-18.1.0.tar.bz2
--sha256 e11f25bb51d718b8ea938ad2b8095323c0ab16f4ddffd92091d80f9a445a9672  xf86-video-amdgpu-18.1.0.tar.bz2
--sha512 371f1a9f6cd2ce3b7117361222d196950c5efa01d957783c79a37c19a2273ce33d133fa51bb68432b8535aad61cb14fbb61d173a167d318b2533eb2507b7a903  xf86-video-amdgpu-18.1.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002966.html
-+md5 a9a1bee983e570614a78ae9070223149  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha1 7a9c6f08ec7c0a8cc665079c8f49716febc73729  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha256 8836147d4755908ec9e192b7cc485fbc2ce7706de33f7bea515294d3ba4c4f51  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha512 6a30fc03185816307f16693cd6b07f13694ca1b6b1327c58a951bccc8082f112bb768ab610229dc1040617eef860fc1ab17a7e6bf635c5a4e454e252f3addca8  xf86-video-amdgpu-19.0.0.tar.bz2
- # Locally computed
- sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 6a8266d0b0..a2cecae7b4 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.hash b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.hash
+index b0c3211f12..37e9c72117 100644
+--- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.hash
++++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/archives/xorg/2013-January/055221.html
+-sha256	ede250cd207d8bee4a338265c3007d7a68d5aca791b6ac41af18e9a2aeb34178	libXcomposite-0.4.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002971.html
++md5 3fa0841ea89024719b20cd702a9b54e0  libXcomposite-0.4.5.tar.bz2
++sha1 902631efb55a798c81086e5ff90b60349839db40  libXcomposite-0.4.5.tar.bz2
++sha256 b3218a2c15bab8035d16810df5b8251ffc7132ff3aa70651a1fba0bfe9634e8f  libXcomposite-0.4.5.tar.bz2
++sha512 502fd51fd9097bb3ca72174ac5b25b9d3b1ff240d32c4765199df03d89337d94b4ddea49e90b177b370862430089d966ce9c38988337156352cfeae911c2d3d5  libXcomposite-0.4.5.tar.bz2
++# Locally computed
++sha256 efa0219ed8485ac555c1a3fb82daf34539b2e0dcf4dadc99c01f1e39c69a4a68  COPYING
+diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+index e84b52e3fd..80e94fe37c 100644
+--- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
++++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.1.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 19.0.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+-XLIB_LIBXCOMPOSITE_VERSION = 0.4.4
++XLIB_LIBXCOMPOSITE_VERSION = 0.4.5
+ XLIB_LIBXCOMPOSITE_SOURCE = libXcomposite-$(XLIB_LIBXCOMPOSITE_VERSION).tar.bz2
+ XLIB_LIBXCOMPOSITE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCOMPOSITE_LICENSE = MIT
