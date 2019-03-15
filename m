@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdata_xcursor-themes: bump
- version to 1.0.6
-Message-ID: <20190315203120.5DCC983480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libfontenc: bump
+ version to 1.1.4
+Message-ID: <20190315203120.AC94C83480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ea923bdd73f4529d004c2612488844eb5a24928
+commit: https://git.buildroot.net/buildroot/commit/?id=47401cfb8e82df8df697a7ca5f0469c4672594c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash | 10 +++++-----
- package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.hash | 9 +++++++--
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-index 6a8c99599f..dd8d2ad26d 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002882.html
--md5 34a93df23e4aa9ee2832a4af33da3ceb  xcursor-themes-1.0.5.tar.bz2
--sha1 6caae6cdb441003a42305f964c32bac21c34626f  xcursor-themes-1.0.5.tar.bz2
--sha256 ae8381d39096598f7fe93fbd3ab079d93347a989f29e017f399ffcd20c8e1272  xcursor-themes-1.0.5.tar.bz2
--sha512 f41e1de0d5deafba33106dcad81576d1888fca052a962c202f2221104aa2d8236b066d8d8fc3dcfbdc166db63f84e60980dfc54059b20a26c7415de71ed07a5b  xcursor-themes-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002945.html
-+md5 aea14eabf40528ec4db18f1cfcf5c458  xcursor-themes-1.0.6.tar.bz2
-+sha1 b56fd5bf5b1ada0532a85c27db0d296e392168c5  xcursor-themes-1.0.6.tar.bz2
-+sha256 ee1ec574741293abcf66ac14ce7e74add7ac6be7deb8b38179ef010d22354999  xcursor-themes-1.0.6.tar.bz2
-+sha512 2ad3586a5571a5ddc0001187362b54b839644916164834213af98e58698044aec4392dd6e1e42f1794fda85c8fedf259b09214a9636bd0e71a1629c710f198d3  xcursor-themes-1.0.6.tar.bz2
- # Locally computed
- sha256 e437aed89c3440a9fe7e19968a3f2eeb97041ef6c9616837a3fd42d0874fc0e6 COPYING
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index 048291008b..c3c5f388e9 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
+index 251a1d686f..de05fd27dd 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002589.html
+-sha256	70588930e6fc9542ff38e0884778fbc6e6febf21adbab92fd8f524fe60aefd21	libfontenc-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002956.html
++md5 6447db6a689fb530c218f0f8328c3abc  libfontenc-1.1.4.tar.bz2
++sha1 d4f232b0b07487b984e13422ce4130b61a8b9edb  libfontenc-1.1.4.tar.bz2
++sha256 2cfcce810ddd48f2e5dc658d28c1808e86dcf303eaff16728b9aa3dbc0092079  libfontenc-1.1.4.tar.bz2
++sha512 76fa851d00113241f15fdd5b5bb7e927b8d8b9a82ce3fcb0678b8c7e32cb5e8d898c4bda1d60dafb7748145049d3240627ac34a2360c64e98a7a912ea7c30582  libfontenc-1.1.4.tar.bz2
++# Locally computed
++sha256 a4dda7a643b517794bfa23dc9605da030055df38ac8a5b9e1905e690975a59c4  COPYING
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index cb84ae4ee1..a55b90d680 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDATA_XCURSOR_THEMES_VERSION = 1.0.5
-+XDATA_XCURSOR_THEMES_VERSION = 1.0.6
- XDATA_XCURSOR_THEMES_SOURCE = xcursor-themes-$(XDATA_XCURSOR_THEMES_VERSION).tar.bz2
- XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
- XDATA_XCURSOR_THEMES_LICENSE = MIT
+-XLIB_LIBFONTENC_VERSION = 1.1.3
++XLIB_LIBFONTENC_VERSION = 1.1.4
+ XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
+ XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFONTENC_LICENSE = MIT
