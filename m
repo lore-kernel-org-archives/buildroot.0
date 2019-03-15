@@ -1,8 +1,10 @@
 From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sat, 16 Mar 2019 06:26:36 +0800
-Subject: [Buildroot] [PATCH v4 1/2] package/gnu-efi: fix gnu-efi in projects
- using -nostdinc
-Message-ID: <20190315222637.2937-1-james.hilliard1@gmail.com>
+Date: Sat, 16 Mar 2019 06:26:37 +0800
+Subject: [Buildroot] [PATCH v4 2/2] package/systemd: enable building of
+ systemd-boot
+In-Reply-To: <20190315222637.2937-1-james.hilliard1@gmail.com>
+References: <20190315222637.2937-1-james.hilliard1@gmail.com>
+Message-ID: <20190315222637.2937-2-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,177 +13,146 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-This fixes the problem with undeclared intptr_t type for builds not including
-stdint.h, without breaking builds using -nostdinc.
+systemd-boot is the integration of gummiboot into systemd, when
+gummiboot is no longer maintained [0].
+
+Add an option to build systemd-boot as part of the systemd build.
+
+Install the boot files, that can serve as a template for the user
+to tweak for their system.
+
+[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add missing depends on i386 || x86_64
+  - add missing dependency to gnu-efi
+  - add missing boot files (they will be shared with standalone
+    systemd-boot later)
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...roblem-with-undeclared-intptr_t-type.patch | 114 ++++++++++++++++++
- .../0001-efilink-fix-build-with-gcc-4.8.patch |  35 ------
- 2 files changed, 114 insertions(+), 35 deletions(-)
- create mode 100644 package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
- delete mode 100644 package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+ package/systemd/Config.in                 | 28 +++++++++++++++++++
+ package/systemd/boot-files/buildroot.conf |  3 +++
+ package/systemd/boot-files/loader.conf    |  2 ++
+ package/systemd/systemd.mk                | 33 +++++++++++++++++++++++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 package/systemd/boot-files/buildroot.conf
+ create mode 100644 package/systemd/boot-files/loader.conf
 
-diff --git a/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch b/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 490222f376..63d9ea52e3 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -78,6 +78,34 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
++config BR2_PACKAGE_SYSTEMD_BOOT
++	bool "systemd-boot"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_GNU_EFI
++	help
++	  systemd-boot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
++
++	  systemd-boot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
++
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using systemd-boot: the instructions are
++	  exactly the same, except that the systemd-boot configuration
++	  files will be located in /loader/ inside the EFI partition.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++
++config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
++	string
++	default "ia32"  if BR2_i386
++	default "x64"   if BR2_x86_64
++	depends on BR2_PACKAGE_SYSTEMD_BOOT
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
 new file mode 100644
-index 0000000000..1d1b1f94b4
+index 0000000000..16d4d85f4a
 --- /dev/null
-+++ b/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
-@@ -0,0 +1,114 @@
-+From 1a53d8f88a452847b25f9689f9a08dbcf82c86e4 Mon Sep 17 00:00:00 2001
-+From: Esben Haabendal <esben@esben1.localdomain>
-+Date: Fri, 15 Mar 2019 11:57:51 +0100
-+Subject: [PATCH] Fix for problem with undeclared intptr_t type
++++ b/package/systemd/boot-files/buildroot.conf
+@@ -0,0 +1,3 @@
++title	Buildroot
++linux	/bzImage
++options	root=/dev/sda2 rootwait console=tty1
+diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
+new file mode 100644
+index 0000000000..93b77b8f93
+--- /dev/null
++++ b/package/systemd/boot-files/loader.conf
+@@ -0,0 +1,2 @@
++timeout 3
++default buildroot
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 928e2dc1b6..5389b7ae3a 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -26,6 +26,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dima=false \
+ 	-Defi=false \
+ 	-Dgnu-efi=false \
++	-Dlibcryptsetup=false \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
+@@ -352,6 +353,34 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
++SYSTEMD_INSTALL_IMAGES = YES
++SYSTEMD_DEPENDENCIES += gnu-efi
++SYSTEMD_CONF_OPTS += \
++	-Defi=true \
++	-Dgnu-efi=true \
++	-Defi-cc=$(TARGET_CC) \
++	-Defi-ld=$(TARGET_LD) \
++	-Defi-libdir=$(STAGING_DIR)/usr/lib \
++	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
++	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
 +
-+When building gnu-efi with old compilers with pre C90 compilers:
++SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
++define SYSTEMD_INSTALL_BOOT_FILES
++	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
++		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
++	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
++		$(BINARIES_DIR)/efi-part/startup.nsh
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
++		$(BINARIES_DIR)/efi-part/loader/loader.conf
++	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
++		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
++endef
 +
-+In file included from gnu-efi-3.0.9/lib/../inc/efilib.h:25:0,
-+                 from gnu-efi-3.0.9/lib/lib.h:24,
-+                 from gnu-efi-3.0.9/lib/dpath.c:25:
-+gnu-efi-3.0.9/lib/dpath.c: In function 'FileDevicePath':
-+gnu-efi-3.0.9/lib/../inc/efilink.h:145:47: error: 'intptr_t' undeclared (first use in this function)
-+ #define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(intptr_t)(&(((TYPE *) 0)->Field)))
++else
++SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++endif # BR2_PACKAGE_SYSTEMD_BOOT == y
 +
-+Problem introduced with commit a46a62b12b58139c31d4288384808365c4053bf2
-+(Fix some types gcc doesn't like).
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+@@ -376,6 +405,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
++define SYSTEMD_INSTALL_IMAGES_CMDS
++	$(SYSTEMD_INSTALL_BOOT_FILES)
++endef
 +
-+Avoid this by adding intptr_t (and uintptr_t) typedefs for builds that does
-+not include stdint.h.
-+
-+Signed-off-by: Esben Haabendal <esben@esben1.localdomain>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/gnu-efi/code/merge-requests/5]
-+---
-+ inc/aarch64/efibind.h  | 2 ++
-+ inc/arm/efibind.h      | 2 ++
-+ inc/ia32/efibind.h     | 2 ++
-+ inc/ia64/efibind.h     | 2 ++
-+ inc/mips64el/efibind.h | 2 ++
-+ inc/x86_64/efibind.h   | 2 ++
-+ 6 files changed, 12 insertions(+)
-+
-+diff --git a/inc/aarch64/efibind.h b/inc/aarch64/efibind.h
-+index bdaa523..3c8cf96 100644
-+--- a/inc/aarch64/efibind.h
-++++ b/inc/aarch64/efibind.h
-+@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
-+ typedef short               int16_t;
-+ typedef unsigned char       uint8_t;
-+ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
-++typedef uint64_t            uintptr_t;
-++typedef int64_t             intptr_t;
-+ 
-+ #else
-+ #include <stdint.h>
-+diff --git a/inc/arm/efibind.h b/inc/arm/efibind.h
-+index 40a5a9c..7a22b9c 100644
-+--- a/inc/arm/efibind.h
-++++ b/inc/arm/efibind.h
-+@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
-+ typedef short               int16_t;
-+ typedef unsigned char       uint8_t;
-+ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
-++typedef uint32_t            uintptr_t;
-++typedef int32_t             intptr_t;
-+ 
-+ #else
-+ #include <stdint.h>
-+diff --git a/inc/ia32/efibind.h b/inc/ia32/efibind.h
-+index 1b11f10..dd01385 100644
-+--- a/inc/ia32/efibind.h
-++++ b/inc/ia32/efibind.h
-+@@ -75,6 +75,8 @@ Revision History
-+        typedef unsigned char       uint8_t;
-+        typedef char                int8_t;
-+     #endif
-++    typedef uint32_t            uintptr_t;
-++    typedef int32_t             intptr_t;
-+ #elif defined(__GNUC__)
-+     #include <stdint.h>
-+ #endif
-+diff --git a/inc/ia64/efibind.h b/inc/ia64/efibind.h
-+index b415461..b9b2e62 100644
-+--- a/inc/ia64/efibind.h
-++++ b/inc/ia64/efibind.h
-+@@ -62,6 +62,8 @@ Revision History
-+         typedef unsigned char       uint8_t;
-+         typedef char                int8_t;
-+     #endif
-++    typedef uint64_t            uintptr_t;
-++    typedef int64_t             intptr_t;
-+ #elif defined(__GNUC__)
-+     #include <stdint.h>
-+ #endif
-+diff --git a/inc/mips64el/efibind.h b/inc/mips64el/efibind.h
-+index 4adbca3..32241e5 100644
-+--- a/inc/mips64el/efibind.h
-++++ b/inc/mips64el/efibind.h
-+@@ -29,6 +29,8 @@ typedef unsigned short      uint16_t;
-+ typedef short               int16_t;
-+ typedef unsigned char       uint8_t;
-+ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
-++typedef uint64_t            uintptr_t;
-++typedef int64_t             intptr_t;
-+ 
-+ #else
-+ #include <stdint.h>
-+diff --git a/inc/x86_64/efibind.h b/inc/x86_64/efibind.h
-+index 4309f9f..ae40595 100644
-+--- a/inc/x86_64/efibind.h
-++++ b/inc/x86_64/efibind.h
-+@@ -84,6 +84,8 @@ Revision History
-+        typedef unsigned char       uint8_t;
-+        typedef char                int8_t;
-+     #endif
-++    typedef uint64_t            uintptr_t;
-++    typedef int64_t             intptr_t;
-+ #elif defined(__GNUC__)
-+     #include <stdint.h>
-+ #endif
-+-- 
-+2.17.1
-+
-diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 57c78c9bd4..0000000000
---- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 18 Jan 2019 22:05:37 +0100
--Subject: [PATCH] efilink: fix build with gcc 4.8
--
--intptr_t is undefined without an include on stdint.h
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
-----
-- inc/efilink.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/inc/efilink.h b/inc/efilink.h
--index cc5aa2d..b69a6fd 100644
----- a/inc/efilink.h
--+++ b/inc/efilink.h
--@@ -1,6 +1,10 @@
-- #ifndef _EFI_LINK_H
-- #define _EFI_LINK_H
-- 
--+#if defined(__GNUC__)
--+#include <stdint.h>
--+#endif
--+
-- /*++
-- 
-- Copyright (c) 1998  Intel Corporation
---- 
--2.14.1
--
+ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
 -- 
 2.17.1
