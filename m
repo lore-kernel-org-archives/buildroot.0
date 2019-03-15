@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libfontenc: bump
- version to 1.1.4
-Message-ID: <20190315203120.AC94C83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+Message-ID: <20190315203120.7AC5883480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47401cfb8e82df8df697a7ca5f0469c4672594c4
+commit: https://git.buildroot.net/buildroot/commit/?id=8c656c65a9d60f05479148df91e487a1904e581f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libfontenc/xlib_libfontenc.hash | 9 +++++++--
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 2 +-
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-index 251a1d686f..de05fd27dd 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002589.html
--sha256	70588930e6fc9542ff38e0884778fbc6e6febf21adbab92fd8f524fe60aefd21	libfontenc-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002956.html
-+md5 6447db6a689fb530c218f0f8328c3abc  libfontenc-1.1.4.tar.bz2
-+sha1 d4f232b0b07487b984e13422ce4130b61a8b9edb  libfontenc-1.1.4.tar.bz2
-+sha256 2cfcce810ddd48f2e5dc658d28c1808e86dcf303eaff16728b9aa3dbc0092079  libfontenc-1.1.4.tar.bz2
-+sha512 76fa851d00113241f15fdd5b5bb7e927b8d8b9a82ce3fcb0678b8c7e32cb5e8d898c4bda1d60dafb7748145049d3240627ac34a2360c64e98a7a912ea7c30582  libfontenc-1.1.4.tar.bz2
-+# Locally computed
-+sha256 a4dda7a643b517794bfa23dc9605da030055df38ac8a5b9e1905e690975a59c4  COPYING
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-index cb84ae4ee1..a55b90d680 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+index 2443dc2880..fead7a35ff 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 685a1b3e1b486f4fb02dd14adc33b8ce215bb96ed8e26787ee8b7bda4c0d6cce  xdriver_xf86-video-intel-33ee0c3b21ea279e08d0863fcb2e874f0974b00e.tar.gz
++sha256 ed98b13673e7f75918e6c338885e60e305ecb9a3559ef98459c888baedcb2465  xdriver_xf86-video-intel-6afed33b2d673d88674f0c76efe500ae414e8e1b.tar.gz
+ sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index bd315c8d9a..3ae4554d57 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFONTENC_VERSION = 1.1.3
-+XLIB_LIBFONTENC_VERSION = 1.1.4
- XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
- XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFONTENC_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 33ee0c3b21ea279e08d0863fcb2e874f0974b00e
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 6afed33b2d673d88674f0c76efe500ae414e8e1b
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
