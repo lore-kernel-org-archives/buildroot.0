@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:49 +0100
-Subject: [Buildroot] [PATCH 23/31] package/x11r7/xdriver_xf86-video-intel:
- bump version
+Date: Fri, 15 Mar 2019 19:02:46 +0100
+Subject: [Buildroot] [PATCH 20/31]
+ package/x11r7/xdriver_xf86-input-libinput: bump version to 0.28.2
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-23-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash      | 2 +-
- .../x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-input-libinput.hash                   | 10 +++++-----
+ .../xdriver_xf86-input-libinput.mk                     |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-index 2443dc2880..fead7a35ff 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index c6f2577bd6..dac68422fd 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-October/002923.html
+-md5  9d2fb3d6b452d568a275908b856de0e2  xf86-input-libinput-0.28.1.tar.bz2
+-sha1 f72f298c23fa993857ff1a9a06754f2f5962b376  xf86-input-libinput-0.28.1.tar.bz2
+-sha256 9ada448e076c0078a84b48e5298fa8ce317565f9b342b74c20429214a707d98b  xf86-input-libinput-0.28.1.tar.bz2
+-sha512 2b8cabfbc3490edbe928771ed9d62a0d4a423bc1373fc6cf9d3a6b5937e17ddc48ebb1b70f1191e507024e4b8220c137495cbba825292b51e50709daa7d31623  xf86-input-libinput-0.28.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002938.html
++md5 b7548bc1d7e82d189205794ff86307af  xf86-input-libinput-0.28.2.tar.bz2
++sha1 e216e81f570a2261a1bc5a79c4782f019b5a3c36  xf86-input-libinput-0.28.2.tar.bz2
++sha256 b8b346962c6b62b8069928c29c0db83b6f544863bf2fc6830f324de841de2820  xf86-input-libinput-0.28.2.tar.bz2
++sha512 da6eb632180649853b3aa2fb88debd6aafe5ede24a5f4a04a21cf18fa97fd414d300b86cdf8a42027c98ac89f1b9f88034fc9e364ac3a02fa38872e57b542a84  xf86-input-libinput-0.28.2.tar.bz2
  # Locally computed
--sha256 685a1b3e1b486f4fb02dd14adc33b8ce215bb96ed8e26787ee8b7bda4c0d6cce  xdriver_xf86-video-intel-33ee0c3b21ea279e08d0863fcb2e874f0974b00e.tar.gz
-+sha256 ed98b13673e7f75918e6c338885e60e305ecb9a3559ef98459c888baedcb2465  xdriver_xf86-video-intel-6afed33b2d673d88674f0c76efe500ae414e8e1b.tar.gz
- sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index bd315c8d9a..3ae4554d57 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+ sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 83de5c9610..7643659e31 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 33ee0c3b21ea279e08d0863fcb2e874f0974b00e
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 6afed33b2d673d88674f0c76efe500ae414e8e1b
- XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.1
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.2
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 2.20.1
