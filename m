@@ -1,33 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Mar 2019 15:58:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to 0.3.5.8
-In-Reply-To: <20190223075029.1838-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 23 Feb 2019 08:50:29 +0100")
-References: <20190223075029.1838-1-bernd.kuhls@t-online.de>
-Message-ID: <87ef78b2vm.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Mar 2019 16:22:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/botan: link with libatomic when
+ needed
+In-Reply-To: <20190215220110.13519-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 15 Feb 2019 23:01:10 +0100")
+References: <20190215220110.13519-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7hwb1ru.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Release notes:
- > https://blog.torproject.org/new-releases-tor-0402-alpha-0358-03411-and-03312
+ > On some architectures, atomic binutils are provided by the libatomic
+ > library from gcc. Linking with libatomic is therefore necessary,
+ > otherwise the build fails with:
 
- > Fixes CVE-2019-8955:
- > KIST can write above outbuf highwater mark
- > https://trac.torproject.org/projects/tor/ticket/29168
+ > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
- > Updated license hash after upstream commit
- > https://gitweb.torproject.org/tor.git/commit/LICENSE?h=maint-0.3.5&id=efe55b88987c2539c218fdf1f46f16f9bdc3a8eb
- > which bumps copyright date to 2019.
+ > This is often for example the case on sparcv8 32 bit.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a442734c570e4a02854014d831ba3aab9f592430
 
-Instead of cherry picking this, I have instead bumped the version to
-0.3.4.11 for 2018.11.x.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
