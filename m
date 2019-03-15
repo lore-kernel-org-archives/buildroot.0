@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Mar 2019 21:38:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to
- version 4.9.5
-In-Reply-To: <20190315175958.2407-1-bernd.kuhls@t-online.de>
-References: <20190315175958.2407-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315213802.15e68fca@windsurf>
+Date: Fri, 15 Mar 2019 21:38:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 19.0.0
+In-Reply-To: <20190315180659.21182-1-bernd.kuhls@t-online.de>
+References: <20190315180659.21182-1-bernd.kuhls@t-online.de>
+Message-ID: <20190315213808.39ada044@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Mar 2019 18:59:58 +0100
+On Fri, 15 Mar 2019 19:06:59 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes: https://www.samba.org/samba/history/samba-4.9.5.html
+> We keep using autotools and switch to meson in a later patch after
+> upstream deprecated autotools:
+> https://lists.freedesktop.org/archives/mesa-announce/2019-March/000501.html
 > 
-> Fixes CVE-2019-3824:
-> ldb: Out of bound read in ldb_wildcard_compare
+> Imx winsys was removed:
+> https://cgit.freedesktop.org/mesa/mesa/commit/?h=19.0&id=41a0acd6a149ec9f47ea527ad08a2b29bf1ee6b2
+> 
+> Patch 0004 removed, applied upstream.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/samba4/samba4.hash | 4 ++--
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
+>  ...sing-include-stddef.h-in-egldevice.h.patch | 47 -------------------
+>  package/mesa3d/mesa3d.hash                    | 10 ++--
+>  package/mesa3d/mesa3d.mk                      |  7 ++-
+>  4 files changed, 11 insertions(+), 55 deletions(-)
+>  delete mode 100644 package/mesa3d/0004-egl-add-missing-include-stddef.h-in-egldevice.h.patch
 
 Applied to master, thanks.
 
