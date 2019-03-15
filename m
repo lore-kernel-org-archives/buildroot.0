@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xfsinfo: bump version
- to 1.0.6
-Message-ID: <20190315203120.12A9B83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
+ 1.0.8
+Message-ID: <20190315203119.E9F3583480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db6c223f7fdbeb756dd15ed94a2cb50f25e1a6d5
+commit: https://git.buildroot.net/buildroot/commit/?id=c133c7bd300b0c1d1e8dc170db9c66686000b80f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash | 9 +++++++--
- package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk   | 2 +-
+ package/x11r7/xapp_xclock/xapp_xclock.hash | 9 +++++++--
+ package/x11r7/xapp_xclock/xapp_xclock.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
-index b1bcc0bc8a..67480a51aa 100644
---- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
-+++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
+index 1469077c1b..a0712e9a1a 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.hash
++++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2014-December/002512.html
--sha256	d38f4b6db4038f52ba1a09123ef497993194288454c0c13d16debe246f120d8f	xfsinfo-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002949.html
-+md5 0060d6151427d9e570e54fc52a88e7d7  xfsinfo-1.0.6.tar.bz2
-+sha1 cbfe7470179f1ab5eecf992226dc1b28902c6b4c  xfsinfo-1.0.6.tar.bz2
-+sha256 8a3e8b9b9ae6ed571989d04e1846d39b9043e28f7623b500ebe1d47762c9b1d6  xfsinfo-1.0.6.tar.bz2
-+sha512 901fc3817d7c95f2ba75ed0c51de91abd8efa67bbb93ad6b7d66e56a2f721af9db364e92f9ef2e719835fd48e934a5ea7402e5565c0ccd9b6b82633e869dc57b  xfsinfo-1.0.6.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002310.html
+-sha256	23ceeca94e3e20a6c26a703ac7f789066d4517f8d2cb717ae7cb28a617d97dd0	xclock-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002947.html
++md5 8bd39eb3678ed58a2350794fe13401cc  xclock-1.0.8.tar.bz2
++sha1 980df6958286450cfc1fe6daa7ff912885d728ba  xclock-1.0.8.tar.bz2
++sha256 930820483a36f1f1ce1bf52b648865629a16082641e12c5cf2b5045815fc2255  xclock-1.0.8.tar.bz2
++sha512 1272221ace3657505bae1b22f181e9ecbf1710900c89a860c8ceae47ae31ca5e75b6557c37dc0a881a0a24c9597b9a07f46200926feb1013f1e2e995111a7646  xclock-1.0.8.tar.bz2
 +# Locally computed
-+sha256 bae01fa08f30f21f9cfb75e8339d081b34e5e03d12677177f85a55b0ca41d0db  COPYING
-diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
-index 38d01e4949..bef9787ffe 100644
---- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
-+++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
++sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
+index 6f8044ef61..b0f74682e0 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.mk
++++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XFSINFO_VERSION = 1.0.5
-+XAPP_XFSINFO_VERSION = 1.0.6
- XAPP_XFSINFO_SOURCE = xfsinfo-$(XAPP_XFSINFO_VERSION).tar.bz2
- XAPP_XFSINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XFSINFO_LICENSE = MIT
+-XAPP_XCLOCK_VERSION = 1.0.7
++XAPP_XCLOCK_VERSION = 1.0.8
+ XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
+ XAPP_XCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XCLOCK_LICENSE = MIT
