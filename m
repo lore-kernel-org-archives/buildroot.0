@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:47 +0100
-Subject: [Buildroot] [PATCH 21/31] package/x11r7/xdriver_xf86-video-amdgpu:
- bump version to 19.0.0
+Date: Fri, 15 Mar 2019 19:02:39 +0100
+Subject: [Buildroot] [PATCH 13/31] package/x11r7/xapp_xmodmap: bump version
+ to 1.0.10
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-21-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added all hashes provided by upstream and license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-amdgpu.hash                     | 10 +++++-----
- .../xdriver_xf86-video-amdgpu.mk                       |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.hash | 9 +++++++--
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index 999f971811..7f1ad29110 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-September/002918.html
--md5  5d75f5993cda5e013cd851c5947ec450  xf86-video-amdgpu-18.1.0.tar.bz2
--sha1 d3097af7da3b56396721e214f348e7ceb5f3a358  xf86-video-amdgpu-18.1.0.tar.bz2
--sha256 e11f25bb51d718b8ea938ad2b8095323c0ab16f4ddffd92091d80f9a445a9672  xf86-video-amdgpu-18.1.0.tar.bz2
--sha512 371f1a9f6cd2ce3b7117361222d196950c5efa01d957783c79a37c19a2273ce33d133fa51bb68432b8535aad61cb14fbb61d173a167d318b2533eb2507b7a903  xf86-video-amdgpu-18.1.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002966.html
-+md5 a9a1bee983e570614a78ae9070223149  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha1 7a9c6f08ec7c0a8cc665079c8f49716febc73729  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha256 8836147d4755908ec9e192b7cc485fbc2ce7706de33f7bea515294d3ba4c4f51  xf86-video-amdgpu-19.0.0.tar.bz2
-+sha512 6a30fc03185816307f16693cd6b07f13694ca1b6b1327c58a951bccc8082f112bb768ab610229dc1040617eef860fc1ab17a7e6bf635c5a4e454e252f3addca8  xf86-video-amdgpu-19.0.0.tar.bz2
- # Locally computed
- sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 6a8266d0b0..a2cecae7b4 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+index aad981522d..4925ec00a3 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002583.html
+-sha256	b7b0e5cc5f10d0fb6d2d6ea4f00c77e8ac0e847cc5a73be94cd86139ac4ac478	xmodmap-1.0.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002952.html
++md5 51f1d30a525e9903280ffeea2744b1f6  xmodmap-1.0.10.tar.bz2
++sha1 69e041f8a8c501bd1feb68805a0880633a685bc8  xmodmap-1.0.10.tar.bz2
++sha256 473f0941d7439d501bb895ff358832b936ec34c749b9704c37a15e11c318487c  xmodmap-1.0.10.tar.bz2
++sha512 324c7dcef843186088f16b3bc47485eb3c9b4331e56ce43b692deb4bb3d4f4f27512480e91a379cceac8383df920dc5e37cd825246b50b6343291cec48134c04  xmodmap-1.0.10.tar.bz2
++# Locally computed
++sha256 c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
+diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+index 670bf9f41f..f3a458b7b5 100644
+--- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
++++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.1.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 19.0.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+-XAPP_XMODMAP_VERSION = 1.0.9
++XAPP_XMODMAP_VERSION = 1.0.10
+ XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.bz2
+ XAPP_XMODMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMODMAP_LICENSE = MIT
 -- 
 2.20.1
