@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:33 +0100
-Subject: [Buildroot] [PATCH 07/31] package/x11r7/xapp_xfd: bump version to
- 1.1.3
+Date: Fri, 15 Mar 2019 19:02:31 +0100
+Subject: [Buildroot] [PATCH 05/31] package/x11r7/xapp_xditview: bump version
+ to 1.0.5
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-7-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,35 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xfd/xapp_xfd.hash | 9 +++++++--
- package/x11r7/xapp_xfd/xapp_xfd.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_xditview/xapp_xditview.hash | 7 ++++++-
+ package/x11r7/xapp_xditview/xapp_xditview.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.hash b/package/x11r7/xapp_xfd/xapp_xfd.hash
-index 7b6824bec3..d1f5c45432 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.hash
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.hash
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.hash b/package/x11r7/xapp_xditview/xapp_xditview.hash
+index c8c1a0cb56..0eb3a13ff7 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.hash
++++ b/package/x11r7/xapp_xditview/xapp_xditview.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-July/002268.html
--sha256	c1a32222fbb891e46f9a82ebab005bc5e54ce006a2586195ec9ea7ab308e2759	xfd-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002968.html
-+md5 f9c9f2b101a96d4b50c2a4ab9b5ab5b1  xfd-1.1.3.tar.bz2
-+sha1 ca6dbe2027b205992a52c6bb717a43508f12a8c4  xfd-1.1.3.tar.bz2
-+sha256 192f938ba5830e84cc807d8ead2ad9655b43eaed6500c830f3e083aad10ed958  xfd-1.1.3.tar.bz2
-+sha512 68e2d4ce5e24215353b6f3231191d69639c4dd90a703e03ccf152bbfe4012da071c387ba289f918fb0336a3be9ee49dc05cbec7273fa85f5e476ead7e10795f0  xfd-1.1.3.tar.bz2
+ # From http://lists.x.org/archives/xorg-announce/2015-April/002570.html
+-sha256	307f8df1bc3e90a7fba74dfe16840891c365abc027fbd556027eb057e5d1ff73	xditview-1.0.4.tar.bz2
++md5 3a909116a3b2abe3845215cf49e09fa5  xditview-1.0.5.tar.bz2
++sha1 f06f65bca31168c86bcebd7f92dbbda08817a5cc  xditview-1.0.5.tar.bz2
++sha256 eecb1ed51ab4edc7f454476d1248cfb7799a17c5679b3dd834e8b4658331c04b  xditview-1.0.5.tar.bz2
++sha512 e20c903f38394b496111267e142d84d11e69a3b89f91869652d1f2ee5c997a13f90bfa2966651b42cd3979a330b348a6e397cc6a74c45b1f3f91643e7c06765d  xditview-1.0.5.tar.bz2
 +# Locally computed
-+sha256 57ae10f24fc110dafb3b8d7735cf26b1905ff74e716745b2520e4ccd7751095c  COPYING
-diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
-index 06c9c83e4a..84b4a77770 100644
---- a/package/x11r7/xapp_xfd/xapp_xfd.mk
-+++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
++sha256 023d879308a49249181f78bbb567e93c45138ad847fe969d191e4802e7a1a005  COPYING
+diff --git a/package/x11r7/xapp_xditview/xapp_xditview.mk b/package/x11r7/xapp_xditview/xapp_xditview.mk
+index e8d72770ea..388710034c 100644
+--- a/package/x11r7/xapp_xditview/xapp_xditview.mk
++++ b/package/x11r7/xapp_xditview/xapp_xditview.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XFD_VERSION = 1.1.2
-+XAPP_XFD_VERSION = 1.1.3
- XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.bz2
- XAPP_XFD_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XFD_LICENSE = MIT
+-XAPP_XDITVIEW_VERSION = 1.0.4
++XAPP_XDITVIEW_VERSION = 1.0.5
+ XAPP_XDITVIEW_SOURCE = xditview-$(XAPP_XDITVIEW_VERSION).tar.bz2
+ XAPP_XDITVIEW_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDITVIEW_LICENSE = MIT
 -- 
 2.20.1
