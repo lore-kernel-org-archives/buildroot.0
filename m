@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:27 +0100
-Subject: [Buildroot] [PATCH 01/31] package/x11r7/xserver_xorg-server: bump
- version to 1.20.4
-Message-ID: <20190315180256.20256-1-bernd.kuhls@t-online.de>
+Date: Fri, 15 Mar 2019 19:02:36 +0100
+Subject: [Buildroot] [PATCH 10/31] package/x11r7/xapp_xinit: bump version to
+ 1.4.1
+In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
+References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,73 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-modesettings-needs-dri2.patch                 |  0
- ...02-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
- .../0003-Remove-check-for-useSIGIO-option.patch        |  0
- .../0004-include-misc.h-fix-uClibc-build.patch         |  0
- package/x11r7/xserver_xorg-server/Config.in            |  4 ++--
- .../x11r7/xserver_xorg-server/xserver_xorg-server.hash | 10 +++++-----
- 6 files changed, 7 insertions(+), 7 deletions(-)
- rename package/x11r7/xserver_xorg-server/{1.20.3 => 1.20.4}/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.3 => 1.20.4}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.3 => 1.20.4}/0003-Remove-check-for-useSIGIO-option.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.3 => 1.20.4}/0004-include-misc.h-fix-uClibc-build.patch (100%)
+ package/x11r7/xapp_xinit/xapp_xinit.hash | 10 +++++-----
+ package/x11r7/xapp_xinit/xapp_xinit.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.3/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.4/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.3/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.20.4/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.3/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.20.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.3/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.4/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.3/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.20.4/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.3/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.4/0004-include-misc.h-fix-uClibc-build.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.3/0004-include-misc.h-fix-uClibc-build.patch
-rename to package/x11r7/xserver_xorg-server/1.20.4/0004-include-misc.h-fix-uClibc-build.patch
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 7ccb2bd9cf..ed238d570b 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -61,7 +61,7 @@ choice
- 	bool "X Window System server version"
+diff --git a/package/x11r7/xapp_xinit/xapp_xinit.hash b/package/x11r7/xapp_xinit/xapp_xinit.hash
+index 58ee1ecb1d..076bd64758 100644
+--- a/package/x11r7/xapp_xinit/xapp_xinit.hash
++++ b/package/x11r7/xapp_xinit/xapp_xinit.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002863.html
+-md5 2da154b2f80ca9637b1a17b13af0880c  xinit-1.4.0.tar.bz2
+-sha1 fcdca692b09a45f546016fff78718d1cf7e7852f  xinit-1.4.0.tar.bz2
+-sha256 230835eef2f5978a1e1344928168119373f6df1d0a32c09515e545721ee582ef  xinit-1.4.0.tar.bz2
+-sha512 53a29081130c1e195eb441ee77ccaa044b18b4cca3d2d5da3a6d67aa421dfd9718fa18b6be6232a41e40cf260c8190064c4d8d9ab771177bd5cd12e77a8fa79e  xinit-1.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002962.html
++md5 6d506ab2efc17a08e87778654e099d37  xinit-1.4.1.tar.bz2
++sha1 d874a2eecf2c30291e327851b151fdab8183260c  xinit-1.4.1.tar.bz2
++sha256 de9b8f617b68a70f6caf87da01fcf0ebd2b75690cdcba9c921d0ef54fa54abb9  xinit-1.4.1.tar.bz2
++sha512 6cbc5d025a891c419f3f4493381b2fca57a67d78df866d2f16a83426f86bad6eca7f240fac12b25cbcc63df0fec41f625407184e044898602d66483715315340  xinit-1.4.1.tar.bz2
+ # Locally computed
+ sha256 c47001aa217d4ae7787121d80634db4bdba564e49a0ecab8d48b1bdc4edee1c7 COPYING
+diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
+index d911a45953..86a4d92674 100644
+--- a/package/x11r7/xapp_xinit/xapp_xinit.mk
++++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	bool "1.20.3"
-+	bool "1.20.4"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 
-@@ -79,7 +79,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.20.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
-+	default "1.20.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 4cde15e5d4..5c1beb1379 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2018-October/002928.html
--md5 8ee29e8b24cef6b3cfa747ec01b9155a  xorg-server-1.20.3.tar.bz2
--sha1 a522cd543606b4d0509d821b8061904951171c50  xorg-server-1.20.3.tar.bz2
--sha256 1b3ce466c12cacbe2252b3ad5b0ed561972eef9d09e75900d65fb1e21f9201de  xorg-server-1.20.3.tar.bz2
--sha512 ee44554f86df4297f54c5871fe7a18954eeef4338775a25f36d6577b279c4775f61128da71b86cfaeadcc080838d6749dede138d4db178866579da2056543fba  xorg-server-1.20.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002957.html
-+md5 c4841cc24b79420205d082fe82e0a650  xorg-server-1.20.4.tar.bz2
-+sha1 1a79da92122124cb782a4eebfd83fd33d5c0d7d4  xorg-server-1.20.4.tar.bz2
-+sha256 fe0fd493ebe93bfc56bede382fa204458ff5f636ea54d413a5d1bd58e19166ee  xorg-server-1.20.4.tar.bz2
-+sha512 f1c92ef6d7613e0636973d3395b48dfdad42230847ab1c8b1cea84647a968f649f9aba97bdb01c10ee8351cbe954d4e6ca4a0fc84bb8fa662d49c8ba2aee00a8  xorg-server-1.20.4.tar.bz2
+-XAPP_XINIT_VERSION = 1.4.0
++XAPP_XINIT_VERSION = 1.4.1
+ XAPP_XINIT_SOURCE = xinit-$(XAPP_XINIT_VERSION).tar.bz2
+ XAPP_XINIT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
 -- 
 2.20.1
