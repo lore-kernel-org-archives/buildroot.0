@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:39 +0100
-Subject: [Buildroot] [PATCH 13/31] package/x11r7/xapp_xmodmap: bump version
- to 1.0.10
+Date: Fri, 15 Mar 2019 19:02:42 +0100
+Subject: [Buildroot] [PATCH 16/31] package/x11r7/xapp_xrdb: bump version to
+ 1.2.0
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-13-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-16-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xmodmap/xapp_xmodmap.hash | 9 +++++++--
- package/x11r7/xapp_xmodmap/xapp_xmodmap.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_xrdb/xapp_xrdb.hash | 10 +++++-----
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-index aad981522d..4925ec00a3 100644
---- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-+++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002583.html
--sha256	b7b0e5cc5f10d0fb6d2d6ea4f00c77e8ac0e847cc5a73be94cd86139ac4ac478	xmodmap-1.0.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002952.html
-+md5 51f1d30a525e9903280ffeea2744b1f6  xmodmap-1.0.10.tar.bz2
-+sha1 69e041f8a8c501bd1feb68805a0880633a685bc8  xmodmap-1.0.10.tar.bz2
-+sha256 473f0941d7439d501bb895ff358832b936ec34c749b9704c37a15e11c318487c  xmodmap-1.0.10.tar.bz2
-+sha512 324c7dcef843186088f16b3bc47485eb3c9b4331e56ce43b692deb4bb3d4f4f27512480e91a379cceac8383df920dc5e37cd825246b50b6343291cec48134c04  xmodmap-1.0.10.tar.bz2
-+# Locally computed
-+sha256 c149563cf2cb0ecfb1148b6eb8f604c62bed43452a0d0fbafb97286a97840f5c  COPYING
-diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-index 670bf9f41f..f3a458b7b5 100644
---- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-+++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+index c729861724..b8a6896ca7 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.hash
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002871.html
+-md5 96f9423eab4d0641c70848d665737d2e  xrdb-1.1.1.tar.bz2
+-sha1 0d6b1cae357574d565d6e6bc10f6ccf073e1b9dd  xrdb-1.1.1.tar.bz2
+-sha256 2d23ade7cdbb487996bf77cbb32cbe9bdb34d004748a53de7a4a97660d2217b7  xrdb-1.1.1.tar.bz2
+-sha512 20c342004ef911fc4d3ef4ac3ac15d1c30bb946b8156f3a6916c242e470be0cb63261563462fd1e2e07b1a7cc527b8cacf5f913e31b02196629a95043cf8d13f  xrdb-1.1.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002953.html
++md5 34ae801ef994d192c70fcce2bdb2a1b2  xrdb-1.2.0.tar.bz2
++sha1 79596928246288a217abdec0e4a2315ec9b07963  xrdb-1.2.0.tar.bz2
++sha256 f23a65cfa1f7126040d68b6cf1e4567523edac10f8dc06f23d840d330c7c6946  xrdb-1.2.0.tar.bz2
++sha512 14e1cdfb2152fb28f1f4641b177ab236648d7e967a95b952bf4cfce8d3e1ef085e85385354e3381aaf644462e8888a1847f755ab4016ecb4cb4a715b001dd2ef  xrdb-1.2.0.tar.bz2
+ # Locally computed
+ sha256 ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc COPYING
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+index 4b84c64a92..b445805d17 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XMODMAP_VERSION = 1.0.9
-+XAPP_XMODMAP_VERSION = 1.0.10
- XAPP_XMODMAP_SOURCE = xmodmap-$(XAPP_XMODMAP_VERSION).tar.bz2
- XAPP_XMODMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XMODMAP_LICENSE = MIT
+-XAPP_XRDB_VERSION = 1.1.1
++XAPP_XRDB_VERSION = 1.2.0
+ XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
+ XAPP_XRDB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XRDB_LICENSE = MIT
 -- 
 2.20.1
