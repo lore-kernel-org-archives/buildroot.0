@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:55 +0100
-Subject: [Buildroot] [PATCH 29/31] package/x11r7/xlib_libXdamage: bump
- version to 1.1.5
+Date: Fri, 15 Mar 2019 19:02:48 +0100
+Subject: [Buildroot] [PATCH 22/31] package/x11r7/xdriver_xf86-video-ati:
+ bump version to 19.0.0
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-29-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXdamage/xlib_libXdamage.hash | 9 +++++++--
- package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 10 +++++-----
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
-index 343cbf4a68..120d3e026a 100644
---- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
-+++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
-@@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-January/055220.html
--sha256	7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad	libXdamage-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002973.html
-+md5 e3f554267a7a04b042dc1f6352bd6d99  libXdamage-1.1.5.tar.bz2
-+sha1 719ae6ab8c1b972c6386b654976c479255af5572  libXdamage-1.1.5.tar.bz2
-+sha256 b734068643cac3b5f3d2c8279dd366b5bf28c7219d9e9d8717e1383995e0ea45  libXdamage-1.1.5.tar.bz2
-+sha512 a3ca6cc33b1727f717a3e2aa5593f660508a81a47918a0aa949e9e8fba105e303fe5071983b48caac92feea0fe6e8e01620805e4d19b41f21f20d837b191c124  libXdamage-1.1.5.tar.bz2
-+# Locally computed
-+sha256 33effe928634be12e668465c3935c5570ff2787b970b15d9243d69df42302c57  COPYING
-diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
-index d52b4e0e24..cc5493ff6c 100644
---- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
-+++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index e9581cb084..4b6cce7af8 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-September/002919.html
+-md5  7910883fff7f4a462efac0fe059ed7e3  xf86-video-ati-18.1.0.tar.bz2
+-sha1 87beb7d09f5b722570adda9a5a1822cbd19e7059  xf86-video-ati-18.1.0.tar.bz2
+-sha256 6c335f423c1dc3d904550d41cb871ca4130ba7037dda67d82e3f1555e1bfb9ac  xf86-video-ati-18.1.0.tar.bz2
+-sha512 7a58c9a6cb4876bd2ff37d837372b4e360e81fec7de6a6c7a48d70a5338d62745f734f5d4207f30aa368ff2d9ef44f5f1ef36afd73802a618998c16fe395ed53  xf86-video-ati-18.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002967.html
++md5 0a95c1c8158d658bd0b3ac38a1b31382  xf86-video-ati-19.0.0.tar.bz2
++sha1 c7bb5d25ca725b8fa625a5f1a6948433e51b98a5  xf86-video-ati-19.0.0.tar.bz2
++sha256 dd907d318884bb6e81e7e62da7bb34af26aeeed3a81c21e0b46a4f3cae3ff457  xf86-video-ati-19.0.0.tar.bz2
++sha512 0674c8befa926fd3b431ce80d90f2cd0de17314efe7fd3a5ed0d78018d6cd32625b514bf68436a47eb15e5ad4b50317f3c09fd687b77e69a067d1210ee459827  xf86-video-ati-19.0.0.tar.bz2
+ # Locally computed
+ sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index e89929d291..45401b7841 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXDAMAGE_VERSION = 1.1.4
-+XLIB_LIBXDAMAGE_VERSION = 1.1.5
- XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.bz2
- XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDAMAGE_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 18.1.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 19.0.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
 -- 
 2.20.1
