@@ -1,43 +1,42 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 15 Mar 2019 22:47:40 +0100
-Subject: [Buildroot] [PATCH 2/2] pkg-generic: Cleanup some redundant checks
-In-Reply-To: <20190315214740.4212-1-nolange79@gmail.com>
-References: <20190315214740.4212-1-nolange79@gmail.com>
-Message-ID: <20190315214740.4212-2-nolange79@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Mar 2019 23:01:51 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: disable locale with
+ uclibc
+Message-ID: <20190315215857.2E5B083826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/pkg-generic.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=e1b691884b79ee753249b42426a89ebce474192f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 89da43d5e5..11f16cab18 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -604,18 +604,15 @@ endif
+Fixes:
+ - http://autobuild.buildroot.org/results/f7be30ffa28b7f367fb5343a7d69dc8bc7c3a170
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imagemagick/imagemagick.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b5d0d56284..81e49eb62c 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -40,6 +40,14 @@ IMAGEMAGICK_CONF_OPTS = \
  
- ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
- $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
--endif
+ IMAGEMAGICK_DEPENDENCIES = host-pkgconf
  
--ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
- ifneq ($$(filter .xz .lzma,$$(suffix $$($(2)_SOURCE))),)
- $(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
- endif
--endif
- 
--ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
- ifeq ($$(suffix $$($(2)_SOURCE)),.lz)
- $(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
- endif
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++# Like postgreSQL, imagemagick does not build against uClibc with
++# locales enabled, due to an uClibc bug, see
++# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
++# so overwrite automatic detection and disable locale support
++IMAGEMAGICK_CONF_ENV += ac_cv_func_newlocale=no
++endif
 +
- endif
- 
- ifeq ($$(BR2_CCACHE),y)
--- 
-2.20.1
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ IMAGEMAGICK_CONF_OPTS += --with-fontconfig
+ IMAGEMAGICK_DEPENDENCIES += fontconfig
