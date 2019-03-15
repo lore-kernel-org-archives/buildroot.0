@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:40 +0100
-Subject: [Buildroot] [PATCH 14/31] package/x11r7/xapp_xmore: bump version to
- 1.0.3
+Date: Fri, 15 Mar 2019 19:02:47 +0100
+Subject: [Buildroot] [PATCH 21/31] package/x11r7/xdriver_xf86-video-amdgpu:
+ bump version to 19.0.0
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-14-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-21-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xmore/xapp_xmore.hash | 9 +++++++--
- package/x11r7/xapp_xmore/xapp_xmore.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-amdgpu.hash                     | 10 +++++-----
+ .../xdriver_xf86-video-amdgpu.mk                       |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_xmore/xapp_xmore.hash b/package/x11r7/xapp_xmore/xapp_xmore.hash
-index f2b7d1a694..cd777831fa 100644
---- a/package/x11r7/xapp_xmore/xapp_xmore.hash
-+++ b/package/x11r7/xapp_xmore/xapp_xmore.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2010-July/001360.html
--sha1	7db4e5feb82d5d05038722d3af00d28e103bed18	xmore-1.0.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002964.html
-+md5 8e1279352192e4142740c21db58f9be9  xmore-1.0.3.tar.bz2
-+sha1 b57b92afd783d28c4c505e0c95556939f24c3ec9  xmore-1.0.3.tar.bz2
-+sha256 644a1e0d5182d7708d413722d0579a587dc56b9a8cb60640df076d302e09251b  xmore-1.0.3.tar.bz2
-+sha512 e3e44831cd87a54bb585f80ef0d87f69dc35f6c834a73241aad9f6e2b0999b53c51a0a3f915a94ae4d6dc9bdfb9f60b6576f0bdcec441443abd98efa6c51b1d3  xmore-1.0.3.tar.bz2
-+# Locally computed
-+sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-diff --git a/package/x11r7/xapp_xmore/xapp_xmore.mk b/package/x11r7/xapp_xmore/xapp_xmore.mk
-index b0b0edf23b..f8a3ba8c1f 100644
---- a/package/x11r7/xapp_xmore/xapp_xmore.mk
-+++ b/package/x11r7/xapp_xmore/xapp_xmore.mk
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index 999f971811..7f1ad29110 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-September/002918.html
+-md5  5d75f5993cda5e013cd851c5947ec450  xf86-video-amdgpu-18.1.0.tar.bz2
+-sha1 d3097af7da3b56396721e214f348e7ceb5f3a358  xf86-video-amdgpu-18.1.0.tar.bz2
+-sha256 e11f25bb51d718b8ea938ad2b8095323c0ab16f4ddffd92091d80f9a445a9672  xf86-video-amdgpu-18.1.0.tar.bz2
+-sha512 371f1a9f6cd2ce3b7117361222d196950c5efa01d957783c79a37c19a2273ce33d133fa51bb68432b8535aad61cb14fbb61d173a167d318b2533eb2507b7a903  xf86-video-amdgpu-18.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002966.html
++md5 a9a1bee983e570614a78ae9070223149  xf86-video-amdgpu-19.0.0.tar.bz2
++sha1 7a9c6f08ec7c0a8cc665079c8f49716febc73729  xf86-video-amdgpu-19.0.0.tar.bz2
++sha256 8836147d4755908ec9e192b7cc485fbc2ce7706de33f7bea515294d3ba4c4f51  xf86-video-amdgpu-19.0.0.tar.bz2
++sha512 6a30fc03185816307f16693cd6b07f13694ca1b6b1327c58a951bccc8082f112bb768ab610229dc1040617eef860fc1ab17a7e6bf635c5a4e454e252f3addca8  xf86-video-amdgpu-19.0.0.tar.bz2
+ # Locally computed
+ sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index 6a8266d0b0..a2cecae7b4 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XMORE_VERSION = 1.0.2
-+XAPP_XMORE_VERSION = 1.0.3
- XAPP_XMORE_SOURCE = xmore-$(XAPP_XMORE_VERSION).tar.bz2
- XAPP_XMORE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XMORE_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.1.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 19.0.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
 -- 
 2.20.1
