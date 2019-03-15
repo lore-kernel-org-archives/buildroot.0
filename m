@@ -1,93 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 15 Mar 2019 17:53:07 +0100
-Subject: [Buildroot] Nodejs failure for arm cortex-A8
-In-Reply-To: <CAH2Z6Cm1z2-C7dPhX+qQZ8o-DQk5FCNR55+YOjipmKO2J9tNDA@mail.gmail.com>
-References: <CAH2Z6C=P+MmQNXUaEKBoKZ+FvmyCgoUy39FSvEDAvecsYb=PVQ@mail.gmail.com>
- <871s381xre.fsf@tarshish>
- <CAH2Z6CkdrwJ=wcAOwyU_juiEdakB1sOr+_g8aBjtm+_L7azxWg@mail.gmail.com>
- <CAH2Z6Cnq4t7vRMK7=1gqCy4FMhtrErax4_FR_biCyS3Ryh0XMg@mail.gmail.com>
- <CAH2Z6Cm1z2-C7dPhX+qQZ8o-DQk5FCNR55+YOjipmKO2J9tNDA@mail.gmail.com>
-Message-ID: <20190315175307.66adc7dd@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 15 Mar 2019 18:49:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.4.7
+Message-ID: <20190315174912.4945-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Boris-Ben,
+Quoting https://openvpn.net/community-downloads/
+"This is primarily a maintenance release with bugfixes and improvements.
+ One of the big things is enhanced TLS 1.3 support."
 
-On Fri, 15 Mar 2019 18:01:27 +0200, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:
+Release notes:
+https://github.com/OpenVPN/openvpn/commit/2b8aec62d5db2c17d5d4052991bc18272748bf29
 
-> Just saw : https://github.com/nodejs/node/commit/d13a65ad68c429884434cdcd94c52b79a6d69717
-> 
-> Thanks!
-> I will try this after the weekend
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-With this patch your will see the following comment in make menuconfig
-
-    "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.9, wchar"
-
-This will change nothing for your host and selected crosss-compile toolchain...
-
-> 
-> On Fri, 15 Mar 2019 at 17:59, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:
-> >
-> > Hi Baruch.
-> > I am a bit tied to Ubuntu 14.04. Can you guide me on how to update the
-> > nodejs toolchain dependency? I use the CodeSourcery 2014 toolchain.
-> > There is no other option for CS toolchain, only buildroot toolchain
-> > which I don't want to use, as my project already tested with CS
-> > toolchain.
-> > Is it a difficult task to update nodejs toolchain version dependecy?
-
-It is not about the cross-compile toolchain, your failure while compiling host-nodejs
-(using your host GCC /usr/bin/gcc to compile exectuables for your host/ubuntu),
-to fix this you need to update your host gcc...
-
-Regards,
-Peter
-
-> >
-> > On Fri, 15 Mar 2019 at 17:57, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:  
-> > >
-> > > Hi Baruch.
-> > > I am a bit tied to Ubuntu 14.04. Can you guide me on how to update the
-> > > nodejs toolchain dependency? I use the CodeSourcery 2014 toolchain.
-> > > There is no other option for CS toolchain, only buildroot toolchain
-> > > which I don't want to use, as my project already tested with CS
-> > > toolchain.
-> > > Is it a difficult task to update nodejs toolchain version dependecy?
-> > >
-> > > On Fri, 15 Mar 2019 at 08:01, Baruch Siach <baruch@tkos.co.il> wrote:  
-> > > >
-> > > > Hi Ben,
-> > > >
-> > > > On Thu, Mar 14 2019, Boris-Ben Shapiro wrote:  
-> > > > > I am trying to compile buildroot master branch on ubuntu 14.04 32-bit.
-> > > > > The target compilation is for TI DM8148 processor (DaVinci series).
-> > > > > This is the defconfig I used: http://code.bulix.org/wbenum-621398
-> > > > > And this is full configuration: http://code.bulix.org/lqktww-621399
-> > > > >
-> > > > > I get a multiple failures while compiling nodejs package:
-> > > > > http://code.bulix.org/8gdwec-621396
-> > > > >
-> > > > > Can anyone please help with this?  
-> > > >
-> > > > Ubuntu 14.04 carries gcc 4.8, I guess. Current nodejs requires gcc 4.9.
-> > > >
-> > > >   https://github.com/nodejs/node/commit/d13a65ad68c429884434cdcd94c52b79a6d69717
-> > > >
-> > > > Try a newer host toolchain.
-> > > >
-> > > > I guess we need to update the nodejs toolchain version dependency.
-> > > >
-> > > > baruch
-> > > >
-> > > > --
-> > > >      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> > > > =}------------------------------------------------ooO--U--Ooo------------{=
-> > > >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index b740ea9a86..a4819f8ad2 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256 4f6434fa541cc9e363434ea71a16a62cf2615fb2f16af5b38f43ab5939998c26  openvpn-2.4.6.tar.xz
++sha256 a42f53570f669eaf10af68e98d65b531015ff9e12be7a62d9269ea684652f648  openvpn-2.4.7.tar.xz
+ sha256 1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 858398a321..4c6956fe12 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.4.6
++OPENVPN_VERSION = 2.4.7
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
+-- 
+2.20.1
