@@ -1,50 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libFS: bump version to
- 1.0.8
-Message-ID: <20190315203120.8900083480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdata_xcursor-themes: bump
+ version to 1.0.6
+Message-ID: <20190315203120.5DCC983480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03e2392a1fc881e58ace34150bad831f623091ca
+commit: https://git.buildroot.net/buildroot/commit/?id=4ea923bdd73f4529d004c2612488844eb5a24928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libFS/xlib_libFS.hash | 9 +++++++--
- package/x11r7/xlib_libFS/xlib_libFS.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash | 10 +++++-----
+ package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
-index 786d147b37..c6f168576a 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.hash
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002588.html
--sha256	2e9d4c07026a7401d4fa4ffae86e6ac7fec83f50f3268fa85f52718e479dc4f3	libFS-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
-+md5 4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
-+sha1 70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
-+sha256 c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
-+sha512 466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
-+# Locally computed
-+sha256 5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 56f2dc3cba..9cc93e0fe1 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
+index 6a8c99599f..dd8d2ad26d 100644
+--- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
++++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002882.html
+-md5 34a93df23e4aa9ee2832a4af33da3ceb  xcursor-themes-1.0.5.tar.bz2
+-sha1 6caae6cdb441003a42305f964c32bac21c34626f  xcursor-themes-1.0.5.tar.bz2
+-sha256 ae8381d39096598f7fe93fbd3ab079d93347a989f29e017f399ffcd20c8e1272  xcursor-themes-1.0.5.tar.bz2
+-sha512 f41e1de0d5deafba33106dcad81576d1888fca052a962c202f2221104aa2d8236b066d8d8fc3dcfbdc166db63f84e60980dfc54059b20a26c7415de71ed07a5b  xcursor-themes-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002945.html
++md5 aea14eabf40528ec4db18f1cfcf5c458  xcursor-themes-1.0.6.tar.bz2
++sha1 b56fd5bf5b1ada0532a85c27db0d296e392168c5  xcursor-themes-1.0.6.tar.bz2
++sha256 ee1ec574741293abcf66ac14ce7e74add7ac6be7deb8b38179ef010d22354999  xcursor-themes-1.0.6.tar.bz2
++sha512 2ad3586a5571a5ddc0001187362b54b839644916164834213af98e58698044aec4392dd6e1e42f1794fda85c8fedf259b09214a9636bd0e71a1629c710f198d3  xcursor-themes-1.0.6.tar.bz2
+ # Locally computed
+ sha256 e437aed89c3440a9fe7e19968a3f2eeb97041ef6c9616837a3fd42d0874fc0e6 COPYING
+diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+index 048291008b..c3c5f388e9 100644
+--- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
++++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFS_VERSION = 1.0.7
-+XLIB_LIBFS_VERSION = 1.0.8
- XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
- XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFS_LICENSE = MIT
+-XDATA_XCURSOR_THEMES_VERSION = 1.0.5
++XDATA_XCURSOR_THEMES_VERSION = 1.0.6
+ XDATA_XCURSOR_THEMES_SOURCE = xcursor-themes-$(XDATA_XCURSOR_THEMES_VERSION).tar.bz2
+ XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
+ XDATA_XCURSOR_THEMES_LICENSE = MIT
