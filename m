@@ -1,49 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Mar 2019 21:36:14 +0100
-Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.4.7
-Message-ID: <20190315203428.CAAD08E66E@busybox.osuosl.org>
+Date: Fri, 15 Mar 2019 21:36:21 +0100
+Subject: [Buildroot] [git commit] package/samba4: security bump to version
+ 4.9.5
+Message-ID: <20190315203428.D1C318E66E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee7d5e54a600a956667ac0ecccb41bd20aa07cdd
+commit: https://git.buildroot.net/buildroot/commit/?id=e7d67faac5be820b1c8019eb249adf8765d4cf42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting https://openvpn.net/community-downloads/
-"This is primarily a maintenance release with bugfixes and improvements.
- One of the big things is enhanced TLS 1.3 support."
+Release notes: https://www.samba.org/samba/history/samba-4.9.5.html
 
-Release notes:
-https://github.com/OpenVPN/openvpn/commit/2b8aec62d5db2c17d5d4052991bc18272748bf29
+Fixes CVE-2019-3824:
+ldb: Out of bound read in ldb_wildcard_compare
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index b740ea9a86..a4819f8ad2 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256 4f6434fa541cc9e363434ea71a16a62cf2615fb2f16af5b38f43ab5939998c26  openvpn-2.4.6.tar.xz
-+sha256 a42f53570f669eaf10af68e98d65b531015ff9e12be7a62d9269ea684652f648  openvpn-2.4.7.tar.xz
- sha256 1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 858398a321..4c6956fe12 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index de349c3049..70cea4809b 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.4.tar.asc
+-sha256 6d98a8d8bcccbe788e4bbb406362e6676311aca711a3f3cc9b3a404bb9ff0b4f  samba-4.9.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.5.tar.asc
++sha256 078956d2d98e22011265afd4b7221efe4861067dcba4a031583b01f34d423700  samba-4.9.5.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9f771cf82f..9b226a0e05 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.4.6
-+OPENVPN_VERSION = 2.4.7
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+-SAMBA4_VERSION = 4.9.4
++SAMBA4_VERSION = 4.9.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
