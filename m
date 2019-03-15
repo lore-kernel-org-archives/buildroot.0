@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:54 +0100
-Subject: [Buildroot] [PATCH 28/31] package/x11r7/xlib_libXcursor: bump
- version to 1.2.0
+Date: Fri, 15 Mar 2019 19:02:55 +0100
+Subject: [Buildroot] [PATCH 29/31] package/x11r7/xlib_libXdamage: bump
+ version to 1.1.5
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-28-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-29-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +15,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 12 +++++++-----
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.hash | 9 +++++++--
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-index 7da9eb8c4f..3a12253d40 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-@@ -1,5 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-November/002823.html
--md5  58fe3514e1e7135cf364101e714d1a14  libXcursor-1.1.15.tar.bz2
--sha1 3e19f991f244b7fa31566adce7ead078424296cf  libXcursor-1.1.15.tar.bz2
--sha256 294e670dd37cd23995e69aae626629d4a2dfe5708851bbc13d032401b7a3df6b  libXcursor-1.1.15.tar.bz2
--sha512 53ad0fa2afd7b4cf1108b560e44ea71abdf5c55a18df243d7123942513589c927f5c105395f790d8769959e0129db54264e6aac7efd51a5f1aec270379b1f2f5  libXcursor-1.1.15.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002972.html
-+md5 9b9be0e289130fb820aedf67705fc549  libXcursor-1.2.0.tar.bz2
-+sha1 cca0b34955d3c2f657f05a2a2c40f75353ddd912  libXcursor-1.2.0.tar.bz2
-+sha256 3ad3e9f8251094af6fe8cb4afcf63e28df504d46bfa5a5529db74a505d628782  libXcursor-1.2.0.tar.bz2
-+sha512 2b12d0fd17e311ce269dbba58588698885815eb07aa44d48525ed5cd9e5f379bb90138a792a191e2f74888ab10b3ca9a4f507f21de0984ed79748973ab927a03  libXcursor-1.2.0.tar.bz2
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+index 343cbf4a68..120d3e026a 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/archives/xorg/2013-January/055220.html
+-sha256	7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad	libXdamage-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002973.html
++md5 e3f554267a7a04b042dc1f6352bd6d99  libXdamage-1.1.5.tar.bz2
++sha1 719ae6ab8c1b972c6386b654976c479255af5572  libXdamage-1.1.5.tar.bz2
++sha256 b734068643cac3b5f3d2c8279dd366b5bf28c7219d9e9d8717e1383995e0ea45  libXdamage-1.1.5.tar.bz2
++sha512 a3ca6cc33b1727f717a3e2aa5593f660508a81a47918a0aa949e9e8fba105e303fe5071983b48caac92feea0fe6e8e01620805e4d19b41f21f20d837b191c124  libXdamage-1.1.5.tar.bz2
 +# Locally computed
-+sha256 1f1588aff23eec0cb6bb9cfe02f8a75abbe43faf3d9b1eff54b7fbc42774b3ad  COPYING
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index 6ee76039e0..9bbd460c9d 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++sha256 33effe928634be12e668465c3935c5570ff2787b970b15d9243d69df42302c57  COPYING
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+index d52b4e0e24..cc5493ff6c 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXCURSOR_VERSION = 1.1.15
-+XLIB_LIBXCURSOR_VERSION = 1.2.0
- XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
- XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCURSOR_LICENSE = MIT
+-XLIB_LIBXDAMAGE_VERSION = 1.1.4
++XLIB_LIBXDAMAGE_VERSION = 1.1.5
+ XLIB_LIBXDAMAGE_SOURCE = libXdamage-$(XLIB_LIBXDAMAGE_VERSION).tar.bz2
+ XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDAMAGE_LICENSE = MIT
 -- 
 2.20.1
