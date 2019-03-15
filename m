@@ -1,158 +1,51 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Sat, 16 Mar 2019 06:26:37 +0800
-Subject: [Buildroot] [PATCH v4 2/2] package/systemd: enable building of
- systemd-boot
-In-Reply-To: <20190315222637.2937-1-james.hilliard1@gmail.com>
-References: <20190315222637.2937-1-james.hilliard1@gmail.com>
-Message-ID: <20190315222637.2937-2-james.hilliard1@gmail.com>
+From: Alistair Francis <Alistair.Francis@wdc.com>
+Date: Fri, 15 Mar 2019 23:06:38 +0000
+Subject: [Buildroot] [PATCH 1/3] arch: riscv: Add a RISC-V Platform option
+Message-ID: <20190315230540.4311-1-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Add a RISC-V Platform option. At the moment only QEMU platforms are
+supported, but in the future this can be extended to include real
+hardware platforms (such as the Unleashed board).
 
-systemd-boot is the integration of gummiboot into systemd, when
-gummiboot is no longer maintained [0].
+My goal is that this platform will set default config options (such as
+the default defconfig for the kernel) based on the platform value.
 
-Add an option to build systemd-boot as part of the systemd build.
-
-Install the boot files, that can serve as a template for the user
-to tweak for their system.
-
-[0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - add missing depends on i386 || x86_64
-  - add missing dependency to gnu-efi
-  - add missing boot files (they will be shared with standalone
-    systemd-boot later)
-]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- package/systemd/Config.in                 | 28 +++++++++++++++++++
- package/systemd/boot-files/buildroot.conf |  3 +++
- package/systemd/boot-files/loader.conf    |  2 ++
- package/systemd/systemd.mk                | 33 +++++++++++++++++++++++
- 4 files changed, 66 insertions(+)
- create mode 100644 package/systemd/boot-files/buildroot.conf
- create mode 100644 package/systemd/boot-files/loader.conf
+ arch/Config.in.riscv | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 490222f376..63d9ea52e3 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -78,6 +78,34 @@ if BR2_PACKAGE_SYSTEMD
- config BR2_PACKAGE_PROVIDES_UDEV
- 	default "systemd"
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index 097719e846..c97fa5b703 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -108,6 +108,22 @@ config BR2_RISCV_ABI_LP64D
+ 	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
+ endchoice
  
-+config BR2_PACKAGE_SYSTEMD_BOOT
-+	bool "systemd-boot"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_GNU_EFI
++choice
++	prompt "Target Platform"
++	default BR2_RISCV_QEMU_VIRT
 +	help
-+	  systemd-boot is a simple UEFI boot manager which executes
-+	  configured EFI images. The default entry is selected by a
-+	  configured pattern (glob) or an on-screen menu.
++	  The RISC-V Platform to target.
 +
-+	  systemd-boot operates on the EFI System Partition (ESP)
-+	  only. Configuration file fragments, kernels, initrds, other
-+	  EFI images need to reside on the ESP. Linux kernels need to
-+	  be built with CONFIG_EFI_STUB to be able to be directly
-+	  executed as an EFI image.
++config BR2_RISCV_QEMU_VIRT
++	bool "qemu/virt"
 +
-+	  See the Grub2 help text for details on preparing an EFI
-+	  capable disk image using systemd-boot: the instructions are
-+	  exactly the same, except that the systemd-boot configuration
-+	  files will be located in /loader/ inside the EFI partition.
++config BR2_RISCV_QEMU_SIFIVE_U
++	bool "qemu/sifive_u"
 +
-+	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
++config BR2_RISCV_UNKNOWN
++	bool "unknown"
++endchoice
 +
-+config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
-+	string
-+	default "ia32"  if BR2_i386
-+	default "x64"   if BR2_x86_64
-+	depends on BR2_PACKAGE_SYSTEMD_BOOT
-+
- config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
- 	bool "HTTP server for journal events"
- 	select BR2_PACKAGE_LIBMICROHTTPD
-diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
-new file mode 100644
-index 0000000000..16d4d85f4a
---- /dev/null
-+++ b/package/systemd/boot-files/buildroot.conf
-@@ -0,0 +1,3 @@
-+title	Buildroot
-+linux	/bzImage
-+options	root=/dev/sda2 rootwait console=tty1
-diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
-new file mode 100644
-index 0000000000..93b77b8f93
---- /dev/null
-+++ b/package/systemd/boot-files/loader.conf
-@@ -0,0 +1,2 @@
-+timeout 3
-+default buildroot
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 928e2dc1b6..5389b7ae3a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -26,6 +26,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dima=false \
- 	-Defi=false \
- 	-Dgnu-efi=false \
-+	-Dlibcryptsetup=false \
- 	-Dldconfig=false \
- 	-Ddefault-dnssec=no \
- 	-Dtests=false \
-@@ -352,6 +353,34 @@ else
- SYSTEMD_CONF_OPTS += -Dhibernate=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
-+SYSTEMD_INSTALL_IMAGES = YES
-+SYSTEMD_DEPENDENCIES += gnu-efi
-+SYSTEMD_CONF_OPTS += \
-+	-Defi=true \
-+	-Dgnu-efi=true \
-+	-Defi-cc=$(TARGET_CC) \
-+	-Defi-ld=$(TARGET_LD) \
-+	-Defi-libdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
-+
-+SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
-+define SYSTEMD_INSTALL_BOOT_FILES
-+	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
-+		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
-+	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
-+		$(BINARIES_DIR)/efi-part/startup.nsh
-+	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
-+		$(BINARIES_DIR)/efi-part/loader/loader.conf
-+	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
-+		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
-+endef
-+
-+else
-+SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
-+endif # BR2_PACKAGE_SYSTEMD_BOOT == y
-+
- SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
- SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
-@@ -376,6 +405,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
- 
-+define SYSTEMD_INSTALL_IMAGES_CMDS
-+	$(SYSTEMD_INSTALL_BOOT_FILES)
-+endef
-+
- define SYSTEMD_USERS
- 	- - input -1 * - - - Input device group
- 	- - systemd-journal -1 * - - - Journal
+ config BR2_ARCH
+ 	default "riscv32" if !BR2_ARCH_IS_64
+ 	default "riscv64" if BR2_ARCH_IS_64
 -- 
-2.17.1
+2.21.0
