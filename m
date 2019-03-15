@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:36 +0100
-Subject: [Buildroot] [PATCH 10/31] package/x11r7/xapp_xinit: bump version to
- 1.4.1
+Date: Fri, 15 Mar 2019 19:02:34 +0100
+Subject: [Buildroot] [PATCH 08/31] package/x11r7/xapp_xfsinfo: bump version
+ to 1.0.6
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-10-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added all hashes provided by upstream and license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xinit/xapp_xinit.hash | 10 +++++-----
- package/x11r7/xapp_xinit/xapp_xinit.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash | 9 +++++++--
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.hash b/package/x11r7/xapp_xinit/xapp_xinit.hash
-index 58ee1ecb1d..076bd64758 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.hash
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002863.html
--md5 2da154b2f80ca9637b1a17b13af0880c  xinit-1.4.0.tar.bz2
--sha1 fcdca692b09a45f546016fff78718d1cf7e7852f  xinit-1.4.0.tar.bz2
--sha256 230835eef2f5978a1e1344928168119373f6df1d0a32c09515e545721ee582ef  xinit-1.4.0.tar.bz2
--sha512 53a29081130c1e195eb441ee77ccaa044b18b4cca3d2d5da3a6d67aa421dfd9718fa18b6be6232a41e40cf260c8190064c4d8d9ab771177bd5cd12e77a8fa79e  xinit-1.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002962.html
-+md5 6d506ab2efc17a08e87778654e099d37  xinit-1.4.1.tar.bz2
-+sha1 d874a2eecf2c30291e327851b151fdab8183260c  xinit-1.4.1.tar.bz2
-+sha256 de9b8f617b68a70f6caf87da01fcf0ebd2b75690cdcba9c921d0ef54fa54abb9  xinit-1.4.1.tar.bz2
-+sha512 6cbc5d025a891c419f3f4493381b2fca57a67d78df866d2f16a83426f86bad6eca7f240fac12b25cbcc63df0fec41f625407184e044898602d66483715315340  xinit-1.4.1.tar.bz2
- # Locally computed
- sha256 c47001aa217d4ae7787121d80634db4bdba564e49a0ecab8d48b1bdc4edee1c7 COPYING
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
-index d911a45953..86a4d92674 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.mk
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
+diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
+index b1bcc0bc8a..67480a51aa 100644
+--- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
++++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-December/002512.html
+-sha256	d38f4b6db4038f52ba1a09123ef497993194288454c0c13d16debe246f120d8f	xfsinfo-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002949.html
++md5 0060d6151427d9e570e54fc52a88e7d7  xfsinfo-1.0.6.tar.bz2
++sha1 cbfe7470179f1ab5eecf992226dc1b28902c6b4c  xfsinfo-1.0.6.tar.bz2
++sha256 8a3e8b9b9ae6ed571989d04e1846d39b9043e28f7623b500ebe1d47762c9b1d6  xfsinfo-1.0.6.tar.bz2
++sha512 901fc3817d7c95f2ba75ed0c51de91abd8efa67bbb93ad6b7d66e56a2f721af9db364e92f9ef2e719835fd48e934a5ea7402e5565c0ccd9b6b82633e869dc57b  xfsinfo-1.0.6.tar.bz2
++# Locally computed
++sha256 bae01fa08f30f21f9cfb75e8339d081b34e5e03d12677177f85a55b0ca41d0db  COPYING
+diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
+index 38d01e4949..bef9787ffe 100644
+--- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
++++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XINIT_VERSION = 1.4.0
-+XAPP_XINIT_VERSION = 1.4.1
- XAPP_XINIT_SOURCE = xinit-$(XAPP_XINIT_VERSION).tar.bz2
- XAPP_XINIT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
+-XAPP_XFSINFO_VERSION = 1.0.5
++XAPP_XFSINFO_VERSION = 1.0.6
+ XAPP_XFSINFO_SOURCE = xfsinfo-$(XAPP_XFSINFO_VERSION).tar.bz2
+ XAPP_XFSINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFSINFO_LICENSE = MIT
 -- 
 2.20.1
