@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:41 +0100
-Subject: [Buildroot] [PATCH 15/31] package/x11r7/xapp_xprop: bump version to
- 1.2.4
+Date: Fri, 15 Mar 2019 19:02:50 +0100
+Subject: [Buildroot] [PATCH 24/31] package/x11r7/xdriver_xf86-video-tdfx:
+ bump version to 1.5.0
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-15-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-24-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added all hashes provided by upstream and license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xprop/xapp_xprop.hash | 10 +++++-----
- package/x11r7/xapp_xprop/xapp_xprop.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash | 9 +++++++--
+ .../xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
-index a57d375b84..f513e12c24 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.hash
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002870.html
--md5 4becb3ddc4674d741487189e4ce3d0b6  xprop-1.2.3.tar.bz2
--sha1 77062c08a23cfca76824b7e8f9860678255d6b1a  xprop-1.2.3.tar.bz2
--sha256 d22afb28c86d85fff10a50156a7d0fa930c80ae865d70b26d805fd28a17a521b  xprop-1.2.3.tar.bz2
--sha512 ad7987fec11ae19b7adc3b0f683fc393e95155f3b6c753d1d8744aedcfb360452eee5735a4c380152b286905931515f3e1a28676b5531001eb8dd93b7249916a  xprop-1.2.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002969.html
-+md5 cc369c28383a5d7144e7197ee7d30bfa  xprop-1.2.4.tar.bz2
-+sha1 0549a927d01930218f1d0089d0157eb9538b34a5  xprop-1.2.4.tar.bz2
-+sha256 8c77fb096e46c60032b7e2bde9492c3ffcc18734f50b395085a5f10bfd3cf753  xprop-1.2.4.tar.bz2
-+sha512 6e770cb89ba87ae057858cc9f0f5498979e78c3ef66ce86361b7c646cc0b70c41a18d76e55ed7225fe715b22b62bc07c56272519a2631b92832e9403ce260da7  xprop-1.2.4.tar.bz2
- # Locally computed
- sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
-index d8063d94c8..a0ad4302cb 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.mk
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
+index 84885596f6..5e9a88fbde 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002755.html
+-sha256 4cf48ee14ead52b23493c3dce5032496fd68bf1d000170bb138730497e212a42  xf86-video-tdfx-1.4.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002944.html
++md5 4697f0cc69ff1ff90bc770863c158d29  xf86-video-tdfx-1.5.0.tar.bz2
++sha1 8042dd0c2bc5a396b2cfeb5418b03059a089be25  xf86-video-tdfx-1.5.0.tar.bz2
++sha256 2f4580e1f66901dd578d6e1f73df8150fd4b8480eb0c9653d4c5d8e0f8e78561  xf86-video-tdfx-1.5.0.tar.bz2
++sha512 eca3359c7db56183a1cfcce7295e41ccc349005ee1cbcf75209f1e4e8e04e887ba511712ef35efc11c940713c8327b0b8ab8b6c86facf02062b3e84c0b1af5ff  xf86-video-tdfx-1.5.0.tar.bz2
++# Locally computed
++sha256 5bb3d3baff0b7bbef885215ca9c12a5be1a42c848c96601b699637557fbb41ec  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+index 6511eec7ad..8975334f90 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XPROP_VERSION = 1.2.3
-+XAPP_XPROP_VERSION = 1.2.4
- XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
- XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XPROP_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.7
++XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.5.0
+ XDRIVER_XF86_VIDEO_TDFX_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
 -- 
 2.20.1
