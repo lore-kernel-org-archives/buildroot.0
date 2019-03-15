@@ -1,51 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xinit: bump version to
- 1.4.1
-Message-ID: <20190315203120.20C3883480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xrdb: bump version to
+ 1.2.0
+Message-ID: <20190315203120.4985683480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbbadf0e164ef8439cc9b9069c5daa70a42dee6b
+commit: https://git.buildroot.net/buildroot/commit/?id=7f64039a6cc9e7d9ff09194dd5d93fb2b93d866d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xinit/xapp_xinit.hash | 10 +++++-----
- package/x11r7/xapp_xinit/xapp_xinit.mk   |  2 +-
+ package/x11r7/xapp_xrdb/xapp_xrdb.hash | 10 +++++-----
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk   |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.hash b/package/x11r7/xapp_xinit/xapp_xinit.hash
-index 58ee1ecb1d..076bd64758 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.hash
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.hash
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+index c729861724..b8a6896ca7 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.hash
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
 @@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002863.html
--md5 2da154b2f80ca9637b1a17b13af0880c  xinit-1.4.0.tar.bz2
--sha1 fcdca692b09a45f546016fff78718d1cf7e7852f  xinit-1.4.0.tar.bz2
--sha256 230835eef2f5978a1e1344928168119373f6df1d0a32c09515e545721ee582ef  xinit-1.4.0.tar.bz2
--sha512 53a29081130c1e195eb441ee77ccaa044b18b4cca3d2d5da3a6d67aa421dfd9718fa18b6be6232a41e40cf260c8190064c4d8d9ab771177bd5cd12e77a8fa79e  xinit-1.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002962.html
-+md5 6d506ab2efc17a08e87778654e099d37  xinit-1.4.1.tar.bz2
-+sha1 d874a2eecf2c30291e327851b151fdab8183260c  xinit-1.4.1.tar.bz2
-+sha256 de9b8f617b68a70f6caf87da01fcf0ebd2b75690cdcba9c921d0ef54fa54abb9  xinit-1.4.1.tar.bz2
-+sha512 6cbc5d025a891c419f3f4493381b2fca57a67d78df866d2f16a83426f86bad6eca7f240fac12b25cbcc63df0fec41f625407184e044898602d66483715315340  xinit-1.4.1.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002871.html
+-md5 96f9423eab4d0641c70848d665737d2e  xrdb-1.1.1.tar.bz2
+-sha1 0d6b1cae357574d565d6e6bc10f6ccf073e1b9dd  xrdb-1.1.1.tar.bz2
+-sha256 2d23ade7cdbb487996bf77cbb32cbe9bdb34d004748a53de7a4a97660d2217b7  xrdb-1.1.1.tar.bz2
+-sha512 20c342004ef911fc4d3ef4ac3ac15d1c30bb946b8156f3a6916c242e470be0cb63261563462fd1e2e07b1a7cc527b8cacf5f913e31b02196629a95043cf8d13f  xrdb-1.1.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002953.html
++md5 34ae801ef994d192c70fcce2bdb2a1b2  xrdb-1.2.0.tar.bz2
++sha1 79596928246288a217abdec0e4a2315ec9b07963  xrdb-1.2.0.tar.bz2
++sha256 f23a65cfa1f7126040d68b6cf1e4567523edac10f8dc06f23d840d330c7c6946  xrdb-1.2.0.tar.bz2
++sha512 14e1cdfb2152fb28f1f4641b177ab236648d7e967a95b952bf4cfce8d3e1ef085e85385354e3381aaf644462e8888a1847f755ab4016ecb4cb4a715b001dd2ef  xrdb-1.2.0.tar.bz2
  # Locally computed
- sha256 c47001aa217d4ae7787121d80634db4bdba564e49a0ecab8d48b1bdc4edee1c7 COPYING
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
-index d911a45953..86a4d92674 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.mk
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
+ sha256 ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc COPYING
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+index 4b84c64a92..b445805d17 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XINIT_VERSION = 1.4.0
-+XAPP_XINIT_VERSION = 1.4.1
- XAPP_XINIT_SOURCE = xinit-$(XAPP_XINIT_VERSION).tar.bz2
- XAPP_XINIT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
+-XAPP_XRDB_VERSION = 1.1.1
++XAPP_XRDB_VERSION = 1.2.0
+ XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
+ XAPP_XRDB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XRDB_LICENSE = MIT
