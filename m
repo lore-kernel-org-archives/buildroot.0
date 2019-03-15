@@ -1,51 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:46 +0100
-Subject: [Buildroot] [PATCH 20/31]
- package/x11r7/xdriver_xf86-input-libinput: bump version to 0.28.2
+Date: Fri, 15 Mar 2019 19:02:54 +0100
+Subject: [Buildroot] [PATCH 28/31] package/x11r7/xlib_libXcursor: bump
+ version to 1.2.0
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-20-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-28-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added all hashes provided by upstream and license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-libinput.hash                   | 10 +++++-----
- .../xdriver_xf86-input-libinput.mk                     |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 12 +++++++-----
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index c6f2577bd6..dac68422fd 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-October/002923.html
--md5  9d2fb3d6b452d568a275908b856de0e2  xf86-input-libinput-0.28.1.tar.bz2
--sha1 f72f298c23fa993857ff1a9a06754f2f5962b376  xf86-input-libinput-0.28.1.tar.bz2
--sha256 9ada448e076c0078a84b48e5298fa8ce317565f9b342b74c20429214a707d98b  xf86-input-libinput-0.28.1.tar.bz2
--sha512 2b8cabfbc3490edbe928771ed9d62a0d4a423bc1373fc6cf9d3a6b5937e17ddc48ebb1b70f1191e507024e4b8220c137495cbba825292b51e50709daa7d31623  xf86-input-libinput-0.28.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002938.html
-+md5 b7548bc1d7e82d189205794ff86307af  xf86-input-libinput-0.28.2.tar.bz2
-+sha1 e216e81f570a2261a1bc5a79c4782f019b5a3c36  xf86-input-libinput-0.28.2.tar.bz2
-+sha256 b8b346962c6b62b8069928c29c0db83b6f544863bf2fc6830f324de841de2820  xf86-input-libinput-0.28.2.tar.bz2
-+sha512 da6eb632180649853b3aa2fb88debd6aafe5ede24a5f4a04a21cf18fa97fd414d300b86cdf8a42027c98ac89f1b9f88034fc9e364ac3a02fa38872e57b542a84  xf86-input-libinput-0.28.2.tar.bz2
- # Locally computed
- sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 83de5c9610..7643659e31 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+index 7da9eb8c4f..3a12253d40 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+@@ -1,5 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-November/002823.html
+-md5  58fe3514e1e7135cf364101e714d1a14  libXcursor-1.1.15.tar.bz2
+-sha1 3e19f991f244b7fa31566adce7ead078424296cf  libXcursor-1.1.15.tar.bz2
+-sha256 294e670dd37cd23995e69aae626629d4a2dfe5708851bbc13d032401b7a3df6b  libXcursor-1.1.15.tar.bz2
+-sha512 53ad0fa2afd7b4cf1108b560e44ea71abdf5c55a18df243d7123942513589c927f5c105395f790d8769959e0129db54264e6aac7efd51a5f1aec270379b1f2f5  libXcursor-1.1.15.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002972.html
++md5 9b9be0e289130fb820aedf67705fc549  libXcursor-1.2.0.tar.bz2
++sha1 cca0b34955d3c2f657f05a2a2c40f75353ddd912  libXcursor-1.2.0.tar.bz2
++sha256 3ad3e9f8251094af6fe8cb4afcf63e28df504d46bfa5a5529db74a505d628782  libXcursor-1.2.0.tar.bz2
++sha512 2b12d0fd17e311ce269dbba58588698885815eb07aa44d48525ed5cd9e5f379bb90138a792a191e2f74888ab10b3ca9a4f507f21de0984ed79748973ab927a03  libXcursor-1.2.0.tar.bz2
++# Locally computed
++sha256 1f1588aff23eec0cb6bb9cfe02f8a75abbe43faf3d9b1eff54b7fbc42774b3ad  COPYING
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index 6ee76039e0..9bbd460c9d 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.1
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.28.2
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-XLIB_LIBXCURSOR_VERSION = 1.1.15
++XLIB_LIBXCURSOR_VERSION = 1.2.0
+ XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
+ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
 -- 
 2.20.1
