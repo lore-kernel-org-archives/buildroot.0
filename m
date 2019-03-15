@@ -1,46 +1,141 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 15 Mar 2019 12:40:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 5.6.1
-Message-ID: <20190315104046.16119-1-asafka7@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 15 Mar 2019 13:32:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xenomai: bump to version 3.0.8
+Message-ID: <20190315123213.23652-1-norbert.lange@andritz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+remove upstream patch.
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index a6ad618d39..dea94d43fc 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5	81d6969ba8392cd3b6f5cba6c4e77caa  psutil-5.5.1.tar.gz
--sha256	72cebfaa422b7978a1d3632b65ff734a34c6b34f4578b68a5c204d633756b810  psutil-5.5.1.tar.gz
-+md5	765a4179f02c149794a6e99d890dfa4b  psutil-5.6.1.tar.gz
-+sha256	fa0a570e0a30b9dd618bffbece590ae15726b47f9f1eaf7518dfb35f4d7dcd21  psutil-5.6.1.tar.gz
- # Locally computed sha256 checksums
- sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 09d4e95167..3a6e7961bc 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+---
+ ...ated-destination-buffer-with-strncpy.patch | 91 -------------------
+ package/xenomai/xenomai.hash                  |  3 +-
+ package/xenomai/xenomai.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 93 deletions(-)
+ delete mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+
+diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+deleted file mode 100644
+index f91a31daaf..0000000000
+--- a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
++++ /dev/null
+@@ -1,91 +0,0 @@
+-From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
+-From: Philippe Gerum <rpm@xenomai.org>
+-Date: Wed, 24 Oct 2018 11:28:49 +0200
+-Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
+- strncpy()
+-
+-GCC 8.x introduced -Wstringop-truncation to help detecting likely
+-unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
+-character into the destination buffer whenever n < sizeof(src).
+-
+-Fix unsafe strncpy() calls when we do expect a null-terminated
+-destination buffer.
+-
+-Signed-off-by: Philippe Gerum <rpm@xenomai.org>
+-[Retrieved from
+-https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- demo/posix/cobalt/can-rtt.c        | 4 ++--
+- demo/posix/cobalt/eth_p_all.c      | 3 ++-
+- demo/posix/cyclictest/cyclictest.c | 4 ++--
+- 3 files changed, 6 insertions(+), 5 deletions(-)
+-
+-diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
+-index 61cad05e5..dd212d804 100644
+---- a/demo/posix/cobalt/can-rtt.c
+-+++ b/demo/posix/cobalt/can-rtt.c
+-@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
+- 	return -1;
+-     }
+- 
+--    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
+-+    namecpy(ifr.ifr_name, rxdev);
+-     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
+- 
+-     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
+-@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
+- 	    goto failure1;
+- 	}
+- 
+--	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
+-+	namecpy(ifr.ifr_name, txdev);
+- 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
+- 
+- 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
+-diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
+-index 6ac12ab3e..91aef9fbd 100644
+---- a/demo/posix/cobalt/eth_p_all.c
+-+++ b/demo/posix/cobalt/eth_p_all.c
+-@@ -40,6 +40,7 @@
+- #include <net/if.h>
+- #include <arpa/inet.h>
+- #include <netinet/ether.h>
+-+#include <boilerplate/ancillaries.h>
+- 
+- char buffer[10*1024];
+- int sock;
+-@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
+- 	if (argc > 1) {
+- 		struct ifreq ifr;
+- 
+--		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
+-+		namecpy(ifr.ifr_name, argv[1]);
+- 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
+- 			perror("cannot get interface index");
+- 			close(sock);
+-diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
+-index ebe5461db..76983bd02 100644
+---- a/demo/posix/cyclictest/cyclictest.c
+-+++ b/demo/posix/cyclictest/cyclictest.c
+-@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
+- 		case 'F':
+- 		case OPT_FIFO:
+- 			use_fifo = 1;
+--			strncpy(fifopath, optarg, strlen(optarg));
+-+			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
+- 			break;
+- 
+- 		case 'H':
+-@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
+- 		case 'T':
+- 		case OPT_TRACER:
+- 			tracetype = CUSTOM;
+--			strncpy(tracer, optarg, sizeof(tracer));
+-+			strncpy(tracer, optarg, sizeof(tracer) - 1);
+- 			break;
+- 		case 'u':
+- 		case OPT_UNBUFFERED:
+--- 
+-2.18.1
+-
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index c36badb6bf..e275b7424a 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,3 @@
+ # Locally computed;
+-sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
++sha256 c373261ddb8280d9d7078cdd9cd9646dfb7d70d8cd3aa9693d9148f03990d711  xenomai-3.0.8.tar.bz2
++
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 98f550af60..3cb7dada4b 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -6,7 +6,7 @@
  
--PYTHON_PSUTIL_VERSION = 5.5.1
-+PYTHON_PSUTIL_VERSION = 5.6.1
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c7/01/7c30b247cdc5ba29623faa5c8cf1f1bbf7e041783c340414b0ed7e067c64
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/2f/b8/11ec5006d2ec2998cb68349b8d1317c24c284cf918ecd6729739388e4c56
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.6
++XENOMAI_VERSION = 3.0.8
+ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
 -- 
-2.19.1
+2.20.1
