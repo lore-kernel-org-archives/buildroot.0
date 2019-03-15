@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXau: bump version to
- 1.0.9
-Message-ID: <20190315203120.9059D83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xvinfo: bump version to
+ 1.1.4
+Message-ID: <20190315203120.56C3683480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa1a1d21562d6d5d967287f2193ad7fe04b1cbd5
+commit: https://git.buildroot.net/buildroot/commit/?id=88665095ee4d081273ea78389dcd32db46258e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libXau/xlib_libXau.hash | 9 +++++++--
- package/x11r7/xlib_libXau/xlib_libXau.mk   | 2 +-
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.hash | 9 +++++++--
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.hash b/package/x11r7/xlib_libXau/xlib_libXau.hash
-index b6c8de73c1..a78d7f0fea 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.hash
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.hash
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
+index 2077730fc9..405fc36ea6 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
 @@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-May/055728.html
--sha256	fdd477320aeb5cdd67272838722d6b7d544887dfe7de46e1e7cc0c27c2bea4f2	libXau-1.0.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002942.html
-+md5 c5f16288f2da9f071b29111d68797480  libXau-1.0.9.tar.bz2
-+sha1 ef9b1ad00f958c8b6e30a1bbc11fdfac311c9733  libXau-1.0.9.tar.bz2
-+sha256 ccf8cbf0dbf676faa2ea0a6d64bcc3b6746064722b606c8c52917ed00dcb73ec  libXau-1.0.9.tar.bz2
-+sha512 3ca454ba466a807ea28b0f715066d73dc76ad312697b121d43e4d5766215052e9b7ffb8fe3ed3e496fa3f2a13f164ac692ff85cc428e26731b679f0f06a1d562  libXau-1.0.9.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002596.html
+-sha256	9fba8b68daf53863e66d5004fa9c703fcecf69db4d151ea2d3d885d621e6e5eb	xvinfo-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002955.html
++md5 b13afec137b9b331814a9824ab03ec80  xvinfo-1.1.4.tar.bz2
++sha1 136a70a72b23c81f4fe8f4c8cb7073316be16b44  xvinfo-1.1.4.tar.bz2
++sha256 0353220d6606077ba42363db65f50410759f9815352f77adc799e2adfa76e73f  xvinfo-1.1.4.tar.bz2
++sha512 85e1f936c5c826f0fdde3670bd77d5cde8641c6e8e7849e42142e91b5aa01d7e0e60d2b064eb6fef4f5666321813ca2dc9f9656756ccbe6dcda37b119ee8a63e  xvinfo-1.1.4.tar.bz2
 +# Locally computed
-+sha256 56abe29bb1d9806a9e04fa9f80fed2c0f18027594df3f098148d814aef6bddfa  COPYING
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index 0fc78e7068..bac10818f1 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
++sha256 7725b0484faa1832534814ecb577f5a86acc74f1bcce25f92c55dfc1b693717d  COPYING
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+index 5b05a63233..7b3b97f073 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXAU_VERSION = 1.0.8
-+XLIB_LIBXAU_VERSION = 1.0.9
- XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.bz2
- XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAU_LICENSE = MIT
+-XAPP_XVINFO_VERSION = 1.1.3
++XAPP_XVINFO_VERSION = 1.1.4
+ XAPP_XVINFO_SOURCE = xvinfo-$(XAPP_XVINFO_VERSION).tar.bz2
+ XAPP_XVINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XVINFO_LICENSE = MIT
