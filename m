@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xlsatoms: bump version
- to 1.1.3
-Message-ID: <20190315203120.2E7CA83480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_bitmap: bump version to
+ 1.0.9
+Message-ID: <20190315203119.DC27D8EFC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=237eec6ad4b4038af910d5c5a396aa60b1aa2340
+commit: https://git.buildroot.net/buildroot/commit/?id=bd476bb179bc4cb2277b654cc599dda45c3e9c76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 9 +++++++--
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 2 +-
+ package/x11r7/xapp_bitmap/xapp_bitmap.hash | 9 +++++++--
+ package/x11r7/xapp_bitmap/xapp_bitmap.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-index 58d0737b9d..de7eabe3be 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+diff --git a/package/x11r7/xapp_bitmap/xapp_bitmap.hash b/package/x11r7/xapp_bitmap/xapp_bitmap.hash
+index cd64362084..f632bce3c5 100644
+--- a/package/x11r7/xapp_bitmap/xapp_bitmap.hash
++++ b/package/x11r7/xapp_bitmap/xapp_bitmap.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002579.html
--sha256	47e5dc7c3dbda6db2cf8c00cedac1722835c1550aa21cfdbc9ba83906694dea4	xlsatoms-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
-+md5 61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
-+sha1 9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
-+sha256 57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
-+sha512 c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-January/002518.html
+-sha256	806cdeb80f5466ba9121e8cc6c6af82d3e4b32ef1a57bc5a76c15887640ec35d	bitmap-1.0.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002941.html
++md5 b94172053ffa282bd88274f1e6a677f1  bitmap-1.0.9.tar.bz2
++sha1 26ba3130b14a2db81b427f2353ac21301c5d2527  bitmap-1.0.9.tar.bz2
++sha256 e0f3afad5272d796f54c33fa1b5bd1fb3f62843a54b28c87196d06a35123e5f5  bitmap-1.0.9.tar.bz2
++sha512 873c626c72a0f4025fe8c8aeedbf3fe4ee5657fb487ad7410406a20da518c0358041dc45c2549926cc10e1d031977073b9d1ddb32830fdce95b716a52fe44456  bitmap-1.0.9.tar.bz2
 +# Locally computed
-+sha256 f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-index d6d9338013..a3230fc2dc 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
++sha256 03be44611edac06827bd13c0815a67ecd37ffe8fb1b9e210d6545d79bec89a3a  COPYING
+diff --git a/package/x11r7/xapp_bitmap/xapp_bitmap.mk b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
+index 1ee2880adc..6bc0dbde0d 100644
+--- a/package/x11r7/xapp_bitmap/xapp_bitmap.mk
++++ b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XLSATOMS_VERSION = 1.1.2
-+XAPP_XLSATOMS_VERSION = 1.1.3
- XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
- XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLSATOMS_LICENSE = MIT
+-XAPP_BITMAP_VERSION = 1.0.8
++XAPP_BITMAP_VERSION = 1.0.9
+ XAPP_BITMAP_SOURCE = bitmap-$(XAPP_BITMAP_VERSION).tar.bz2
+ XAPP_BITMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_BITMAP_LICENSE = MIT
