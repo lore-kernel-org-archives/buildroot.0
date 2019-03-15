@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Mar 2019 19:02:38 +0100
-Subject: [Buildroot] [PATCH 12/31] package/x11r7/xapp_xlsatoms: bump version
- to 1.1.3
+Date: Fri, 15 Mar 2019 19:02:35 +0100
+Subject: [Buildroot] [PATCH 09/31] package/x11r7/xapp_xhost: bump version to
+ 1.0.8
 In-Reply-To: <20190315180256.20256-1-bernd.kuhls@t-online.de>
 References: <20190315180256.20256-1-bernd.kuhls@t-online.de>
-Message-ID: <20190315180256.20256-12-bernd.kuhls@t-online.de>
+Message-ID: <20190315180256.20256-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash | 9 +++++++--
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk   | 2 +-
+ package/x11r7/xapp_xhost/xapp_xhost.hash | 9 +++++++--
+ package/x11r7/xapp_xhost/xapp_xhost.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-index 58d0737b9d..de7eabe3be 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash
+diff --git a/package/x11r7/xapp_xhost/xapp_xhost.hash b/package/x11r7/xapp_xhost/xapp_xhost.hash
+index b714eb65c3..0c3879441b 100644
+--- a/package/x11r7/xapp_xhost/xapp_xhost.hash
++++ b/package/x11r7/xapp_xhost/xapp_xhost.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002579.html
--sha256	47e5dc7c3dbda6db2cf8c00cedac1722835c1550aa21cfdbc9ba83906694dea4	xlsatoms-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002951.html
-+md5 61671fee12535347db24ec3a715032a7  xlsatoms-1.1.3.tar.bz2
-+sha1 9fdb1e8df6bb08529a812ac90f63d500bf5174cc  xlsatoms-1.1.3.tar.bz2
-+sha256 57868f958c263976727881f3078e55b86b4a109dc578d2b92f5c6d690850a382  xlsatoms-1.1.3.tar.bz2
-+sha512 c267ccfdc5a83e834bfb5c3b144e22642badcadef4eb146eeec2df6fe6f85e9379500ae4219912c70fa2e535036a1a96cf496381f5d814e79af075e03c975f30  xlsatoms-1.1.3.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002576.html
+-sha256	93e619ee15471f576cfb30c663e18f5bc70aca577a63d2c2c03f006a7837c29a	xhost-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-February/002950.html
++md5 a48c72954ae6665e0616f6653636da8c  xhost-1.0.8.tar.bz2
++sha1 971670858a464d4f8eeb6f4e182f9fcd94149790  xhost-1.0.8.tar.bz2
++sha256 a2dc3c579e13674947395ef8ccc1b3763f89012a216c2cc6277096489aadc396  xhost-1.0.8.tar.bz2
++sha512 55581f9bc45a70a73b13fe718ca83c4cb0a6116d26addc0f07659ebeb5bf7d2379e84cab5a1702ae77a298a66f42ae03f41ddc7d5acd61c6f18448e58ad7cb6b  xhost-1.0.8.tar.bz2
 +# Locally computed
-+sha256 f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
-diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-index d6d9338013..a3230fc2dc 100644
---- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
-+++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
++sha256 7e69bed6fcfff05ecf454d7e4b29cd265172385833f1978f04b638f92f2cfecf  COPYING
+diff --git a/package/x11r7/xapp_xhost/xapp_xhost.mk b/package/x11r7/xapp_xhost/xapp_xhost.mk
+index a4bb16bae3..e9fb155216 100644
+--- a/package/x11r7/xapp_xhost/xapp_xhost.mk
++++ b/package/x11r7/xapp_xhost/xapp_xhost.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XLSATOMS_VERSION = 1.1.2
-+XAPP_XLSATOMS_VERSION = 1.1.3
- XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
- XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLSATOMS_LICENSE = MIT
+-XAPP_XHOST_VERSION = 1.0.7
++XAPP_XHOST_VERSION = 1.0.8
+ XAPP_XHOST_SOURCE = xhost-$(XAPP_XHOST_VERSION).tar.bz2
+ XAPP_XHOST_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XHOST_LICENSE = MIT
 -- 
 2.20.1
