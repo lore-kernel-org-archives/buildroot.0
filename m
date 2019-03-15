@@ -1,29 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Mar 2019 21:46:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ulogd: add --with-sqlite option
-In-Reply-To: <20190315074142.21960-1-fontaine.fabrice@gmail.com>
-References: <20190315074142.21960-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190315214655.56e5bafe@windsurf>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 15 Mar 2019 16:52:32 -0400
+Subject: [Buildroot] [PATCH v8 2/3] package/openjdk: package/openjdk: Add
+ AArch64 support
+In-Reply-To: <20190315205233.128763-1-aduskett@gmail.com>
+References: <20190315205233.128763-1-aduskett@gmail.com>
+Message-ID: <20190315205233.128763-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Mar 2019 08:41:42 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+From: Adam Duskett <Aduskett@gmail.com>
 
-> Use --with-sqlite and --without-sqlite options
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ulogd/ulogd.mk | 3 +++
->  1 file changed, 3 insertions(+)
+OpenJDK has CPU ports for the AArch64 and ARM architectures.
+Add support for AArch64 as the first.
 
-Applied to master, thanks.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v8:
+  - None
 
-Thomas
+ package/openjdk/openjdk.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 23fbbf5ea2..4934d66c3f 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -86,6 +86,11 @@ OPENJDK_CONF_OPTS = \
+ 	--with-version-string="$(OPENJDK_VERSION_MAJOR)" \
+ 	--with-zlib=bundled
+ 
++# If building for AArch64, use the provided CPU port.
++ifeq ($(BR2_aarch64),y)
++OPENJDK_CONF_OPTS += --with-cpu-port=aarch64 --with-abi-profile=aarch64
++endif
++
+ ifeq ($(BR2_CCACHE),y)
+ OPENJDK_CONF_OPTS += \
+ 	--enable-ccache \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
