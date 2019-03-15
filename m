@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 15 Mar 2019 21:33:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xstdcmap: bump version
- to 1.0.4
-Message-ID: <20190315203120.5004583480@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libFS: bump version to
+ 1.0.8
+Message-ID: <20190315203120.8900083480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be2593f761fe17b0aabad5fb449c41ec9b8c4bc6
+commit: https://git.buildroot.net/buildroot/commit/?id=03e2392a1fc881e58ace34150bad831f623091ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash | 9 +++++++--
- package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk   | 2 +-
+ package/x11r7/xlib_libFS/xlib_libFS.hash | 9 +++++++--
+ package/x11r7/xlib_libFS/xlib_libFS.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
-index 6d8b35fae1..fc067850b0 100644
---- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
-+++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
+index 786d147b37..c6f168576a 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.hash
++++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-February/002164.html
--sha256	f648e2b0cf16aa29856de998e2c7204be39dc1f8daeda9464d32288e0b580fc1	xstdcmap-1.0.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-February/002954.html
-+md5  da67142c128d18386ff145882e0afc66  xstdcmap-1.0.4.tar.bz2
-+sha1 a5eff72ba31625e5b11506add800140019a39636  xstdcmap-1.0.4.tar.bz2
-+sha256 06898b3f1eaad0b205ff3c75bdefa3207868b889d4cb37b32b8267b2bbfe6f8b  xstdcmap-1.0.4.tar.bz2
-+sha512 2adbb0aec1766341e04090efa962241ff6c9e32c612851b7221cec0ee16852107d406a08ec5251070f39df882c13e3c8c9edcd88f278187a9f373e1727643a8f  xstdcmap-1.0.4.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002588.html
+-sha256	2e9d4c07026a7401d4fa4ffae86e6ac7fec83f50f3268fa85f52718e479dc4f3	libFS-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002970.html
++md5 4e1196275aa743d6ebd3d3d5ec1dff9c  libFS-1.0.8.tar.bz2
++sha1 70173cc15a7a55defb7b22b00a9387901acad634  libFS-1.0.8.tar.bz2
++sha256 c8e13727149b2ddfe40912027459b2522042e3844c5cd228c3300fe5eef6bd0f  libFS-1.0.8.tar.bz2
++sha512 466198ae5c0b83e3579713d86ddfd0b039f5c5b511cf6d5dc0e9664ee2d40aec9e8929445c8e97394d85faf76a7cf2f81bddb13d23de7ce19919e3b1e36ba56f  libFS-1.0.8.tar.bz2
 +# Locally computed
-+sha256 f0a362fc1b8e788845b1c0ad7ba9ade58fdfb73da750c3b9780db5d70b947657  COPYING
-diff --git a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
-index a4d6dc34f6..dd5b0ee349 100644
---- a/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
-+++ b/package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk
++sha256 5386724e7475b89394dd836b954a6688f875efab99e43e8eb7e8775f5b99a341  COPYING
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index 56f2dc3cba..9cc93e0fe1 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XSTDCMAP_VERSION = 1.0.3
-+XAPP_XSTDCMAP_VERSION = 1.0.4
- XAPP_XSTDCMAP_SOURCE = xstdcmap-$(XAPP_XSTDCMAP_VERSION).tar.bz2
- XAPP_XSTDCMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XSTDCMAP_LICENSE = MIT
+-XLIB_LIBFS_VERSION = 1.0.7
++XLIB_LIBFS_VERSION = 1.0.8
+ XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
+ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
