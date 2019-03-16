@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Mar 2019 08:43:19 +0100
-Subject: [Buildroot] [PATCH 3/3] boot: riscv: Remove riscv-pk
-In-Reply-To: <20190315230540.4311-3-alistair.francis@wdc.com>
-References: <20190315230540.4311-1-alistair.francis@wdc.com>
- <20190315230540.4311-3-alistair.francis@wdc.com>
-Message-ID: <20190316084319.15b569e0@windsurf>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sat, 16 Mar 2019 16:16:11 +0530
+Subject: [Buildroot] GSoC 2019 Motivation Letter - Atharva Lele
+Message-ID: <CABM+sgqbB94ZirzpL5=13miMhrJGuysuKR0h7dZQ6vrv=yWdjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello all,
+I am Atharva from Pune, India. I am an Electronics Engineering Student,
+currently in my 3rd Year of studies. I am a passionate student wanting to
+work in open-source and believe in the philosophy of open-source software.
 
-On Fri, 15 Mar 2019 23:06:39 +0000
-Alistair Francis <Alistair.Francis@wdc.com> wrote:
+Out of the proposed projects, I am interested in the Reproducible Builds
+topic. I was trying to make a few packages and my own RFS for the Raspberry
+Pi (I am learning embedded linux) and I found that while the source was the
+same, even a slight change in build environments used to make a lot of
+impact. The final builds on my laptop and my cloud VPS used to differ at
+times. Since them I am curious about having reproducibility in builds.
+After looking at the reproducible builds website linked in the project
+idea, I'm very interested in it and I'm currently going through their
+documentation.
 
-> Now that OpenSBI is supported remove BBL (riscv-pk).
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+I have not contributed to any major open source organization before. I have
+put out a custom kernel for a phone on XDA-Developers but thats about it.
+Over the past year, I realized that open-source is the future and that I
+would like to work in that industry. I've always been helpful to people and
+this is what I see a lot in the opensource community. I also noticed how
+helpful and kind the buildroot IRC channel is towards its members. I really
+appreciate that and would love to work with buildroot as I can see that the
+idea and the work environment is very good.
 
-This commit is not enough: you do not update the
-qemu_riscv64_virt_defconfig and qemu_riscv32_virt_defconfig, which use
-riscv-pk. They should be converted to use opensbi instead, and of
-course be runtime tested under Qemu.
+Over this week, I will work on some of the suggestions for students and try
+to implement a patch/bugfix. Hoping that I get selected and if I do,
+looking forward to work with you all.
 
-And of course, it'd be nice if Mark Corbin, who added riscv-pk, could
-give his opinion about the replacement of riscv-pk by opensbi.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Atharva Lele
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190316/d1ee525f/attachment.html>
