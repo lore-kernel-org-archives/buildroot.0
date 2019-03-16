@@ -1,181 +1,153 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Mar 2019 17:48:14 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/systemd: enable building of
- systemd-boot
-In-Reply-To: <20190315222637.2937-2-james.hilliard1@gmail.com>
-References: <20190315222637.2937-1-james.hilliard1@gmail.com>
- <20190315222637.2937-2-james.hilliard1@gmail.com>
-Message-ID: <20190316164814.GA7890@scaer>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sat, 16 Mar 2019 17:57:28 +0100
+Subject: [Buildroot] [PATCH 1/3] package/xorcurses: new package
+In-Reply-To: <20190223205657.18394-2-huth@tuxfamily.org>
+References: <20190223205657.18394-1-huth@tuxfamily.org>
+ <20190223205657.18394-2-huth@tuxfamily.org>
+Message-ID: <CAKcgs2wiC6CcCwqb04G-VqwxdRULhSeQbEXUW+aMwdfwNFz8pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hello Thomas,
 
-On 2019-03-16 06:26 +0800, james.hilliard1 at gmail.com spake thusly:
-> From: James Hilliard <james.hilliard1@gmail.com>
-> 
-> systemd-boot is the integration of gummiboot into systemd, when
-> gummiboot is no longer maintained [0].
-> 
-> Add an option to build systemd-boot as part of the systemd build.
-> 
-> Install the boot files, that can serve as a template for the user
-> to tweak for their system.
-> 
-> [0] https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> [yann.morin.1998 at free.fr:
->   - add missing depends on i386 || x86_64
->   - add missing dependency to gnu-efi
->   - add missing boot files (they will be shared with standalone
->     systemd-boot later)
+Thanks for your contribution. Please find some comments below.
 
-Since we do not really have a well-defined plan toward actually having a
-standalone systemd-boot anytime soon, this part (that I wrote) should
-now be dropped.
-
-No need to resend; this can be fixed by whoever applies that patch.
-
-Regards,
-Yann E. MORIN.
-
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Le sam. 23 f?vr. 2019 ? 21:57, Thomas Huth <huth@tuxfamily.org> a ?crit :
+>
+> From: Thomas Huth <thuth@redhat.com>
+>
+> XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
+> Your task is to roam around a series of mazes where you have to collect
+> all blue masks before finding the exit. You have two 'shields' (players)
+> and you can use either one at any time and switch between them. While
+> the first level is simply a matter of navigation, the following levels
+> introduce further objects like bombs and teleports, which have to be
+> used right to solve the puzzles.
+>
+> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
 > ---
->  package/systemd/Config.in                 | 28 +++++++++++++++++++
->  package/systemd/boot-files/buildroot.conf |  3 +++
->  package/systemd/boot-files/loader.conf    |  2 ++
->  package/systemd/systemd.mk                | 33 +++++++++++++++++++++++
->  4 files changed, 66 insertions(+)
->  create mode 100644 package/systemd/boot-files/buildroot.conf
->  create mode 100644 package/systemd/boot-files/loader.conf
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 490222f376..63d9ea52e3 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -78,6 +78,34 @@ if BR2_PACKAGE_SYSTEMD
->  config BR2_PACKAGE_PROVIDES_UDEV
->  	default "systemd"
->  
-> +config BR2_PACKAGE_SYSTEMD_BOOT
-> +	bool "systemd-boot"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	select BR2_PACKAGE_GNU_EFI
-> +	help
-> +	  systemd-boot is a simple UEFI boot manager which executes
-> +	  configured EFI images. The default entry is selected by a
-> +	  configured pattern (glob) or an on-screen menu.
-> +
-> +	  systemd-boot operates on the EFI System Partition (ESP)
-> +	  only. Configuration file fragments, kernels, initrds, other
-> +	  EFI images need to reside on the ESP. Linux kernels need to
-> +	  be built with CONFIG_EFI_STUB to be able to be directly
-> +	  executed as an EFI image.
-> +
-> +	  See the Grub2 help text for details on preparing an EFI
-> +	  capable disk image using systemd-boot: the instructions are
-> +	  exactly the same, except that the systemd-boot configuration
-> +	  files will be located in /loader/ inside the EFI partition.
-> +
-> +	  https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
-> +
-> +config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
-> +	string
-> +	default "ia32"  if BR2_i386
-> +	default "x64"   if BR2_x86_64
-> +	depends on BR2_PACKAGE_SYSTEMD_BOOT
-> +
->  config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
->  	bool "HTTP server for journal events"
->  	select BR2_PACKAGE_LIBMICROHTTPD
-> diff --git a/package/systemd/boot-files/buildroot.conf b/package/systemd/boot-files/buildroot.conf
-> new file mode 100644
-> index 0000000000..16d4d85f4a
-> --- /dev/null
-> +++ b/package/systemd/boot-files/buildroot.conf
-> @@ -0,0 +1,3 @@
-> +title	Buildroot
-> +linux	/bzImage
-> +options	root=/dev/sda2 rootwait console=tty1
-> diff --git a/package/systemd/boot-files/loader.conf b/package/systemd/boot-files/loader.conf
-> new file mode 100644
-> index 0000000000..93b77b8f93
-> --- /dev/null
-> +++ b/package/systemd/boot-files/loader.conf
-> @@ -0,0 +1,2 @@
-> +timeout 3
-> +default buildroot
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 928e2dc1b6..5389b7ae3a 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -26,6 +26,7 @@ SYSTEMD_CONF_OPTS += \
->  	-Dima=false \
->  	-Defi=false \
->  	-Dgnu-efi=false \
-> +	-Dlibcryptsetup=false \
->  	-Dldconfig=false \
->  	-Ddefault-dnssec=no \
->  	-Dtests=false \
-> @@ -352,6 +353,34 @@ else
->  SYSTEMD_CONF_OPTS += -Dhibernate=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
-> +SYSTEMD_INSTALL_IMAGES = YES
-> +SYSTEMD_DEPENDENCIES += gnu-efi
-> +SYSTEMD_CONF_OPTS += \
-> +	-Defi=true \
-> +	-Dgnu-efi=true \
-> +	-Defi-cc=$(TARGET_CC) \
-> +	-Defi-ld=$(TARGET_LD) \
-> +	-Defi-libdir=$(STAGING_DIR)/usr/lib \
-> +	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
-> +	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
-> +
-> +SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
-> +define SYSTEMD_INSTALL_BOOT_FILES
-> +	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
-> +		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
-> +	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
-> +		$(BINARIES_DIR)/efi-part/startup.nsh
-> +	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
-> +		$(BINARIES_DIR)/efi-part/loader/loader.conf
-> +	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
-> +		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
-> +endef
-> +
-> +else
-> +SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
-> +endif # BR2_PACKAGE_SYSTEMD_BOOT == y
-> +
->  SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
->  ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
->  SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
-> @@ -376,6 +405,10 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  	SYSTEMD_INSTALL_MACHINEID_HOOK \
->  	SYSTEMD_INSTALL_RESOLVCONF_HOOK
->  
-> +define SYSTEMD_INSTALL_IMAGES_CMDS
-> +	$(SYSTEMD_INSTALL_BOOT_FILES)
-> +endef
-> +
->  define SYSTEMD_USERS
->  	- - input -1 * - - - Input device group
->  	- - systemd-journal -1 * - - - Journal
-> -- 
-> 2.17.1
-> 
+>  package/Config.in                |  1 +
+>  package/xorcurses/Config.in      | 13 +++++++++++++
+>  package/xorcurses/xorcurses.hash |  2 ++
+>  package/xorcurses/xorcurses.mk   | 25 +++++++++++++++++++++++++
+You also need to create an entry in the DEVELOPERS file for your name
+and this package.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  4 files changed, 41 insertions(+)
+>  create mode 100644 package/xorcurses/Config.in
+>  create mode 100644 package/xorcurses/xorcurses.hash
+>  create mode 100644 package/xorcurses/xorcurses.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index cc232b9fba..490cbdb216 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -258,6 +258,7 @@ menu "Games"
+>         source "package/stella/Config.in"
+>         source "package/supertux/Config.in"
+>         source "package/supertuxkart/Config.in"
+> +       source "package/xorcurses/Config.in"
+>  endmenu
+>
+>  menu "Graphic libraries and applications (graphic/text)"
+> diff --git a/package/xorcurses/Config.in b/package/xorcurses/Config.in
+> new file mode 100644
+> index 0000000000..0af161fec9
+> --- /dev/null
+> +++ b/package/xorcurses/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_XORCURSES
+> +    bool "xorcurses"
+> +    select BR2_PACKAGE_NCURSES
+> +    help
+> +      XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
+> +      Your task is to roam around a series of mazes where you have to collect
+> +      all blue masks before finding the exit. You have two 'shields' (players)
+> +      and you can use either one at any time and switch between them. While
+> +      the first level is simply a matter of navigation, the following levels
+> +      introduce further objects like bombs and teleports, which have to be
+> +      used right to solve the puzzles.
+> +      Note that the game needs a terminal with colors, i.e. make sure that
+> +      the TERM environment variable is set to "linux" ("vt100" won't work).
+There are some coding style issues in this file. Please run the
+following command:
+./utils/check-package package/xorcurses/*
+to fix the warnings.
+
+You also need to mention the upstream URL of this package as part of
+the help text.
+You might not need to have a help text that long. Just the first line
+should be enough.
+
+> diff --git a/package/xorcurses/xorcurses.hash b/package/xorcurses/xorcurses.hash
+> new file mode 100644
+> index 0000000000..49d3a0c3b9
+> --- /dev/null
+> +++ b/package/xorcurses/xorcurses.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha512 1782ebf6ae8798b32e0a8e5e20e6d0b44eb619f6e7f015735c6e86205bd545da108c36bff1c9cfc9e9b44dee8f90bacb9df70436991f57f51c2c87e94b3a4725  XorCurses-0.2.2.tar.bz2
+You also need to provide the hash for the license file.
+
+
+> diff --git a/package/xorcurses/xorcurses.mk b/package/xorcurses/xorcurses.mk
+> new file mode 100644
+> index 0000000000..4bc132c5e8
+> --- /dev/null
+> +++ b/package/xorcurses/xorcurses.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# XorCurses
+> +#
+> +################################################################################
+> +
+> +XORCURSES_VERSION = 0.2.2
+> +XORCURSES_LICENSE = GPL-3.0
+> +XORCURSES_SOURCE = XorCurses-$(XORCURSES_VERSION).tar.bz2
+> +XORCURSES_SITE = http://www.jwm-art.net/art/archive
+> +XORCURSES_INSTALL_TARGET = YES
+this is the default value, so not needed.
+
+> +XORCURSES_DEPENDENCIES = ncurses
+> +
+> +define XORCURSES_BUILD_CMDS
+> +       $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+> +               CFLAGS="-O2 -DDATADIR='\"/usr/share/xorcurses\"' -DVERSION='\"$(XORCURSES_VERSION)\"'"
+You mght want to keep the default CFLAGS by doing this
+CFLAGS="$(TARGET_CFLAGS) -O2 ...."
+
+> +endef
+> +
+> +define XORCURSES_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 0755 $(@D)/xorcurses $(TARGET_DIR)/usr/bin/
+It should be $(INSTALL) -D -m 0755 $(@D)/xorcurses
+$(TARGET_DIR)/usr/bin/xorcurses
+
+> +       mkdir -p $(TARGET_DIR)/usr/share/xorcurses/maps
+> +       $(INSTALL) -D -m 0755 $(@D)/maps/*.xcm $(TARGET_DIR)/usr/share/xorcurses/maps/
+If these are not executable files, it would be better to change their
+access permission mode.
+
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.17.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+As a rule of thumb, it is recommended to test your package with the
+test-pkg tool. This will allow you to spot some issues when building
+in different configurations.
+Please look into the buildroot user manual, under the "How to test
+your package" for more details.
+
+Thanks!
+Gilles.
