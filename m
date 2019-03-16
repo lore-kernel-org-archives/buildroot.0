@@ -1,242 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 16 Mar 2019 14:36:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cups: security bump to version
- 2.2.10
-Message-ID: <20190316133648.12222-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat, 16 Mar 2019 16:42:38 +0100
+Subject: [Buildroot] [RFC PATCH v3 1/1] libglib2: Bump to version 2.56.4
+Message-ID: <20190316154238.864-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fixes CVE-2018-4700: Linux session cookies used a predictable random
-  number seed: https://github.com/apple/cups/releases/tag/v2.2.10.
-- Remove fifth patch (already in version)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- .../0005-Fix-builds-without-PAM-Issue-5283.patch   | 189 ---------------------
- package/cups/cups.hash                             |   2 +-
- package/cups/cups.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 191 deletions(-)
- delete mode 100644 package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+Hi,
 
-diff --git a/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch b/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
-deleted file mode 100644
-index ff242f8276..0000000000
---- a/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
-+++ /dev/null
-@@ -1,189 +0,0 @@
--From 570933a6a3597371bae1beeb754ee8711d6305ab Mon Sep 17 00:00:00 2001
--From: Michael R Sweet <michael.r.sweet@gmail.com>
--Date: Mon, 2 Apr 2018 20:05:13 -0400
--Subject: [PATCH] Fix builds without PAM (Issue #5283)
--
--[baruch: drop CHANGES.md hunk]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 570933a6a3
--
-- CHANGES.md       |   8 ++-
-- scheduler/auth.c | 134 ++---------------------------------------------
-- 2 files changed, 11 insertions(+), 131 deletions(-)
--
--diff --git a/scheduler/auth.c b/scheduler/auth.c
--index 8b134b5d7257..fa4e2715de34 100644
----- a/scheduler/auth.c
--+++ b/scheduler/auth.c
--@@ -1,8 +1,8 @@
-- /*
--  * Authorization routines for the CUPS scheduler.
--  *
--- * Copyright 2007-2016 by Apple Inc.
--- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
--+ * Copyright ? 2007-2018 by Apple Inc.
--+ * Copyright ??1997-2007 by Easy Software Products, all rights reserved.
--  *
--  * This file contains Kerberos support code, copyright 2006 by
--  * Jelmer Vernooij.
--@@ -71,9 +71,6 @@ static int		check_authref(cupsd_client_t *con, const char *right);
-- static int		compare_locations(cupsd_location_t *a,
-- 			                  cupsd_location_t *b);
-- static cupsd_authmask_t	*copy_authmask(cupsd_authmask_t *am, void *data);
---#if !HAVE_LIBPAM
---static char		*cups_crypt(const char *pw, const char *salt);
---#endif /* !HAVE_LIBPAM */
-- static void		free_authmask(cupsd_authmask_t *am, void *data);
-- #if HAVE_LIBPAM
-- static int		pam_func(int, const struct pam_message **,
--@@ -694,14 +691,14 @@ cupsdAuthorize(cupsd_client_t *con)	/* I - Client connection */
-- 	    * client...
-- 	    */
-- 
---	    pass = cups_crypt(password, pw->pw_passwd);
--+	    pass = crypt(password, pw->pw_passwd);
-- 
-- 	    if (!pass || strcmp(pw->pw_passwd, pass))
-- 	    {
-- #  ifdef HAVE_SHADOW_H
-- 	      if (spw)
-- 	      {
---		pass = cups_crypt(password, spw->sp_pwdp);
--+		pass = crypt(password, spw->sp_pwdp);
-- 
-- 		if (pass == NULL || strcmp(spw->sp_pwdp, pass))
-- 		{
--@@ -1995,129 +1992,6 @@ copy_authmask(cupsd_authmask_t *mask,	/* I - Existing auth mask */
-- }
-- 
-- 
---#if !HAVE_LIBPAM
---/*
--- * 'cups_crypt()' - Encrypt the password using the DES or MD5 algorithms,
--- *                  as needed.
--- */
---
---static char *				/* O - Encrypted password */
---cups_crypt(const char *pw,		/* I - Password string */
---           const char *salt)		/* I - Salt (key) string */
---{
---  if (!strncmp(salt, "$1$", 3))
---  {
---   /*
---    * Use MD5 passwords without the benefit of PAM; this is for
---    * Slackware Linux, and the algorithm was taken from the
---    * old shadow-19990827/lib/md5crypt.c source code... :(
---    */
---
---    int			i;		/* Looping var */
---    unsigned long	n;		/* Output number */
---    int			pwlen;		/* Length of password string */
---    const char		*salt_end;	/* End of "salt" data for MD5 */
---    char		*ptr;		/* Pointer into result string */
---    _cups_md5_state_t	state;		/* Primary MD5 state info */
---    _cups_md5_state_t	state2;		/* Secondary MD5 state info */
---    unsigned char	digest[16];	/* MD5 digest result */
---    static char		result[120];	/* Final password string */
---
---
---   /*
---    * Get the salt data between dollar signs, e.g. $1$saltdata$md5.
---    * Get a maximum of 8 characters of salt data after $1$...
---    */
---
---    for (salt_end = salt + 3; *salt_end && (salt_end - salt) < 11; salt_end ++)
---      if (*salt_end == '$')
---        break;
---
---   /*
---    * Compute the MD5 sum we need...
---    */
---
---    pwlen = strlen(pw);
---
---    _cupsMD5Init(&state);
---    _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---    _cupsMD5Append(&state, (unsigned char *)salt, salt_end - salt);
---
---    _cupsMD5Init(&state2);
---    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
---    _cupsMD5Append(&state2, (unsigned char *)salt + 3, salt_end - salt - 3);
---    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
---    _cupsMD5Finish(&state2, digest);
---
---    for (i = pwlen; i > 0; i -= 16)
---      _cupsMD5Append(&state, digest, i > 16 ? 16 : i);
---
---    for (i = pwlen; i > 0; i >>= 1)
---      _cupsMD5Append(&state, (unsigned char *)((i & 1) ? "" : pw), 1);
---
---    _cupsMD5Finish(&state, digest);
---
---    for (i = 0; i < 1000; i ++)
---    {
---      _cupsMD5Init(&state);
---
---      if (i & 1)
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---      else
---        _cupsMD5Append(&state, digest, 16);
---
---      if (i % 3)
---        _cupsMD5Append(&state, (unsigned char *)salt + 3, salt_end - salt - 3);
---
---      if (i % 7)
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---
---      if (i & 1)
---        _cupsMD5Append(&state, digest, 16);
---      else
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---
---      _cupsMD5Finish(&state, digest);
---    }
---
---   /*
---    * Copy the final sum to the result string and return...
---    */
---
---    memcpy(result, salt, (size_t)(salt_end - salt));
---    ptr = result + (salt_end - salt);
---    *ptr++ = '$';
---
---    for (i = 0; i < 5; i ++, ptr += 4)
---    {
---      n = ((((unsigned)digest[i] << 8) | (unsigned)digest[i + 6]) << 8);
---
---      if (i < 4)
---        n |= (unsigned)digest[i + 12];
---      else
---        n |= (unsigned)digest[5];
---
---      to64(ptr, n, 4);
---    }
---
---    to64(ptr, (unsigned)digest[11], 2);
---    ptr += 2;
---    *ptr = '\0';
---
---    return (result);
---  }
---  else
---  {
---   /*
---    * Use the standard crypt() function...
---    */
---
---    return (crypt(pw, salt));
---  }
---}
---#endif /* !HAVE_LIBPAM */
---
---
-- /*
--  * 'free_authmask()' - Free function for auth masks.
--  */
---- 
--2.17.0
--
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index a19b3b09a6..3d238d61e6 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256 3c4b637b737077565ccdfbd5f61785d03f49461ae736fcc2c0ffaf41d2c6ea6a  cups-2.2.7-source.tar.gz
-+sha256 77c8b2b3bb7fe8b5fbfffc307f2c817b2d7ec67b657f261a1dd1c61ab81205bb  cups-2.2.10-source.tar.gz
- sha256 6e0e0ffbde118aae709f7ef65590de9071e8b2cd322f84fd645c6b64f3cc452c  LICENSE.txt
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 8f33824879..b91fe7ac4c 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
+using still 2.56.x, but I'll have a look into 2.60.x, whether it suffers the
+same problem as 2.58.x [1] [2]
+
+
+Kind regards,
+Petr
+
+[1] https://git.buildroot.org/buildroot/commit/package/libglib2?id=2694222c3d3663d9fcc55e6cf44a45b74b43793f
+[2] http://lists.busybox.net/pipermail/buildroot/2018-December/237663.html
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 57403a2154..faa01ef563 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
+-sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
++# https://download.gnome.org/sources/glib/2.56/glib-2.56.4.sha256sum
++sha256  27f703d125efb07f8a743666b580df0b4095c59fc8750e8890132c91d437504c  glib-2.56.4.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f602c371f5..d34bfabd52 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CUPS_VERSION = 2.2.7
-+CUPS_VERSION = 2.2.10
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPL-2.0, LGPL-2.0
+ LIBGLIB2_VERSION_MAJOR = 2.56
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 -- 
-2.14.1
+2.21.0
