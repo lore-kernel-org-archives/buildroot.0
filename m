@@ -1,118 +1,79 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 16 Mar 2019 20:32:31 +0100
-Subject: [Buildroot] [PATCH 1/1] modem-manager: Bump to version 1.10.0
-Message-ID: <20190316193231.17097-1-petr.vorel@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 16 Mar 2019 20:57:52 +0100
+Subject: [Buildroot] [PATCH] package/bluez-alsa: bump to version 1.4.0
+Message-ID: <20190316195752.25035-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch (included in this release).
+Also:
+* License file has been renamed: LICENSE.txt -> LICENSE
+* Update license file hash -> List of contributors are in a seperate
+file now
+* Configure option `--with-alsadatadir` has been renamed to `--with-alsaconfdir`
+* Configure option `--enable-pcm-test` has been removed
+* New optional configure option `ofono` (no build dependency, will
+disable internal HFP in favor of oFonos HFP profile)
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...erneldevice-fix-build-with-musl-libc.patch | 67 -------------------
- package/modem-manager/modem-manager.hash      |  2 +-
- package/modem-manager/modem-manager.mk        |  2 +-
- 3 files changed, 2 insertions(+), 69 deletions(-)
- delete mode 100644 package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch
+ package/bluez-alsa/bluez-alsa.hash |  4 ++--
+ package/bluez-alsa/bluez-alsa.mk   | 14 ++++++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch b/package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 68181cb5ed..0000000000
---- a/package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From ed40ac76b125b1c3b2e2f8522d283b073c23bd3b Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 15 Jun 2018 06:25:46 +0300
--Subject: [PATCH] kerneldevice: fix build with musl libc
--
--musl libc does not implement the canonicalize_file_name() GNU extension.
--Use the POSIX standard realpath() instead.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: sent to modemmanager-devel at lists.freedesktop.org
--
-- src/kerneldevice/mm-kernel-device-generic.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/src/kerneldevice/mm-kernel-device-generic.c b/src/kerneldevice/mm-kernel-device-generic.c
--index 6b0f072402ff..885bef171f5d 100644
----- a/src/kerneldevice/mm-kernel-device-generic.c
--+++ b/src/kerneldevice/mm-kernel-device-generic.c
--@@ -120,7 +120,7 @@ preload_sysfs_path (MMKernelDeviceGeneric *self)
--                            mm_kernel_event_properties_get_subsystem (self->priv->properties),
--                            mm_kernel_event_properties_get_name      (self->priv->properties));
-- 
---    self->priv->sysfs_path = canonicalize_file_name (tmp);
--+    self->priv->sysfs_path = realpath (tmp, NULL);
--     if (!self->priv->sysfs_path || !g_file_test (self->priv->sysfs_path, G_FILE_TEST_EXISTS)) {
--         mm_warn ("Invalid sysfs path read for %s/%s",
--                  mm_kernel_event_properties_get_subsystem (self->priv->properties),
--@@ -163,7 +163,7 @@ preload_interface_sysfs_path (MMKernelDeviceGeneric *self)
--      * The correct parent dir we want to have is the first one with "usb" subsystem.
--      */
--     aux = g_strdup_printf ("%s/device", self->priv->sysfs_path);
---    dirpath = canonicalize_file_name (aux);
--+    dirpath = realpath (aux, NULL);
--     g_free (aux);
-- 
--     while (dirpath) {
--@@ -179,7 +179,7 @@ preload_interface_sysfs_path (MMKernelDeviceGeneric *self)
--             gchar *canonicalized_subsystem;
--             gchar *subsystem_name;
-- 
---            canonicalized_subsystem = canonicalize_file_name (subsystem_filepath);
--+            canonicalized_subsystem = realpath (subsystem_filepath, NULL);
--             g_free (subsystem_filepath);
-- 
--             subsystem_name = g_path_get_basename (canonicalized_subsystem);
--@@ -239,7 +239,7 @@ preload_driver (MMKernelDeviceGeneric *self)
--         gchar *tmp2;
-- 
--         tmp = g_strdup_printf ("%s/driver", self->priv->interface_sysfs_path);
---        tmp2 = canonicalize_file_name (tmp);
--+        tmp2 = realpath (tmp, NULL);
--         if (tmp2 && g_file_test (tmp2, G_FILE_TEST_EXISTS))
--             self->priv->driver = g_path_get_basename (tmp2);
--         g_free (tmp2);
--@@ -308,7 +308,7 @@ preload_physdev_subsystem (MMKernelDeviceGeneric *self)
--         gchar *subsyspath;
-- 
--         aux = g_strdup_printf ("%s/subsystem", self->priv->physdev_sysfs_path);
---        subsyspath = canonicalize_file_name (aux);
--+        subsyspath = realpath (aux, NULL);
--         self->priv->physdev_subsystem = g_path_get_dirname (subsyspath);
--         g_free (subsyspath);
--         g_free (aux);
---- 
--2.17.1
--
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 77a8c2dc43..404ae7929f 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  18abe34421aa3b52ff47d4ba93aa282f8f8944717dd644a5c0c81eeeac9c7eb1  ModemManager-1.8.0.tar.xz
-+sha256  fd0f39996025dac96995daea8a58ec7dd571582f7563a8ae0d5f65b571b76ee2  ModemManager-1.10.0.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index e2f89d9de1..aa27dc9ce5 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+index ba81eadf34..384428f880 100644
+--- a/package/bluez-alsa/bluez-alsa.hash
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  29dad23877d0cf46a16e2f8d3746219e89068c33d052059caf1caaacd8b40cac  bluez-alsa-v1.3.1.tar.gz
+-sha256  9a18d8b11802d0cec100839a0676a6fc48a4179f8f70b8e12a7f3d6b7a8fd70a  LICENSE.txt
++sha256  6287ae6135795a78470068ef9d9ea660d556cefc409905bd9211fda04d1e1f8e  bluez-alsa-v1.4.0.tar.gz
++sha256  45fe8648faa0e735d4aaf60c32ddd37fc7f027d34ccedcf0f69d8aa961b63b25  LICENSE
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+index 5c0bb4f12b..c1806aef8b 100644
+--- a/package/bluez-alsa/bluez-alsa.mk
++++ b/package/bluez-alsa/bluez-alsa.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.8.0
-+MODEM_MANAGER_VERSION = 1.10.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-BLUEZ_ALSA_VERSION = v1.3.1
++BLUEZ_ALSA_VERSION = v1.4.0
+ BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,$(BLUEZ_ALSA_VERSION))
+ BLUEZ_ALSA_LICENSE = MIT
+-BLUEZ_ALSA_LICENSE_FILES = LICENSE.txt
++BLUEZ_ALSA_LICENSE_FILES = LICENSE
+ BLUEZ_ALSA_DEPENDENCIES = alsa-lib bluez5_utils libglib2 sbc host-pkgconf
+ 
+ # git repo, no configure
+@@ -22,9 +22,8 @@ BLUEZ_ALSA_POST_PATCH_HOOKS += BLUEZ_ALSA_MKDIR_M4
+ BLUEZ_ALSA_CONF_OPTS = \
+ 	--enable-aplay \
+ 	--disable-debug-time \
+-	--disable-pcm-test \
+ 	--with-alsaplugindir=/usr/lib/alsa-lib \
+-	--with-alsadatadir=/usr/share/alsa
++	--with-alsaconfdir=/usr/share/alsa
+ 
+ ifeq ($(BR2_PACKAGE_FDK_AAC),y)
+ BLUEZ_ALSA_DEPENDENCIES += fdk-aac
+@@ -33,6 +32,13 @@ else
+ BLUEZ_ALSA_CONF_OPTS += --disable-aac
+ endif
+ 
++# no build dependency, disables internal HFP in favor of oFonos HFP profile
++ifeq ($(BR2_PACKAGE_OFONO),y)
++BLUEZ_ALSA_CONF_OPTS += --enable-ofono
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-ofono
++endif
++
+ ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_HCITOP),y)
+ BLUEZ_ALSA_DEPENDENCIES += libbsd ncurses
+ BLUEZ_ALSA_CONF_OPTS += --enable-hcitop
 -- 
 2.21.0
