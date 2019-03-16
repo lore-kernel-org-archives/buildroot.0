@@ -1,90 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 16 Mar 2019 23:14:40 +0100
-Subject: [Buildroot] [PATCH v2] package/gst1-plugins-bad: add webrtc option
-Message-ID: <20190316221440.24465-1-ps.report@gmx.net>
+From: Michel Stempin <michel.stempin@wanadoo.fr>
+Date: Sat, 16 Mar 2019 23:27:11 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xdriver_xf86-video-fbdev: bump to
+ version 0.5.0
+Message-ID: <1552775231-12318-1-git-send-email-michel.stempin@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove old webrtc Config.in.legacy entry introduced by [1] (misnamed
-  webrtc option was introduced with 2017.02, renamed to webrtcdsp for
-  2017.08 and although backported to 2017.02.4)
+Starting X manually resulted in a symbol error:
+| Xorg: symbol lookup error: /usr/lib/xorg/modules/drivers/fbdev_drv.so: undefined symbol: shadowUpdatePackedWeak
 
-[1] https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
+This bug was reported against the fbdev driver, which is fixed
+upstream in 0.5.0:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900317
+
+Signed-off-by: Michel Stempin <michel.stempin@wanadoo.fr>
 ---
-Changes v1 -> v2:
-  - renamed option form webrtcbin to webrtc
-  - remove legacy webrtc Config.in.legacy entry
----
- Config.in.legacy                                      | 10 ----------
- package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
- .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   |  7 +++++++
- 3 files changed, 18 insertions(+), 10 deletions(-)
+ package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash | 2 +-
+ package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2030b51e1d..0a0bce41f9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1685,16 +1685,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
- 	bool "mad (*.mp3 audio) removed"
- 	select BR2_LEGACY
+diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
+index 0f34e51..d0cbc09 100644
+--- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
++++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.hash
+@@ -1,2 +1,2 @@
+ # From http://lists.x.org/archives/xorg-announce/2013-September/002324.html
+-sha256	9dd4b326498223abbfdf786089a46ea3db4fa6bbd341308eb48a9e00bc3fd51b	xf86-video-fbdev-0.4.4.tar.bz2
++sha256	dcc3d85f378022180e437a9ec00a59b6cb7680ff79c40394d695060af2374699	xf86-video-fbdev-0.5.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+index f39311e..ab0acfb 100644
+--- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
++++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+@@ -1,10 +1,10 @@
+-################################################################################
++###############################################################################
+ #
+ # xdriver_xf86-video-fbdev
+ #
+ ################################################################################
  
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
--	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
--	select BR2_LEGACY
--	help
--	  The WebRTC plugin in GStreamer 1.x has always been named
--	  webrtcdsp, but was wrongly introduced in Buildroot under the
--	  name webrtc. Therefore, we have renamed the option to match
--	  the actual name of the GStreamer plugin.
--
- config BR2_STRIP_none
- 	bool "Strip command 'none' has been removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 869f0a9d45..6830902f3a 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -558,6 +558,17 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
- 	help
- 	  Webp image format plugin
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
-+	bool "webrtc"
-+	depends on !BR2_STATIC_LIBS # libnice -> gnutls
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE # libgstsdp
-+	select BR2_PACKAGE_LIBNICE
-+	help
-+	  WebRTC plugins (webrtcbin - a bin for webrtc connections)
-+
-+comment "webrtc needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
- 	bool "webrtcdsp"
- 	# All depends from webrtc-audio-processing
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index f5b081f972..e4e7661ac4 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -703,6 +703,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-+GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtcdsp
- GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
+-XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.4
++XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.5.0
+ XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_FBDEV_LICENSE = MIT
 -- 
-2.21.0
+2.7.4
