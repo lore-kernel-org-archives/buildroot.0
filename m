@@ -1,73 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Mar 2019 22:34:38 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/iproute2:
- backport patch to fix compilation under glibc < 2.18
-Message-ID: <20190316213302.943C48EC17@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 16 Mar 2019 22:55:31 +0100
+Subject: [Buildroot] [RFC v1] package/gst1-plugins-bad: add webrtcbin
+ option
+In-Reply-To: <20190314085445.7be54f55@windsurf>
+References: <20190310175109.13444-1-ps.report@gmx.net>
+ <20190312222745.06cf1b34@windsurf>
+ <71e0a8c0-0809-e02c-cb29-25b2771202bd@mind.be>
+ <20190313201733.5ac6fb18@gmx.net>
+ <25dda2d4-51f8-b20f-9dcd-32584bb0f194@mind.be>
+ <20190314085445.7be54f55@windsurf>
+Message-ID: <20190316225531.1eee0726@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d5579dd343cd95fefa31f8172b38b72f98c6b16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Hello Arnout, Thomas,
 
-When compiling iproute2 using a toolchain containing glibc 2.17 and
-older, it fails due to a missing definition of AF_VSOCK.
+On Thu, 14 Mar 2019 08:54:45 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Add a submitted and accepted upstream patch to fix this issue.
+> On Thu, 14 Mar 2019 08:27:56 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+> >  The Config.in option was introduced in 2017.02, and renamed for 2017.08.
+> > 
+> >  However, the rename was also backported to 2017.02.4.
+> > 
+> >  In other words, the only people who could be hit by this issue are people that
+> > used 2017.02 and never upgraded even to 2017.02.4.
+> > 
+> >  I think it's OK if we risk breaking something for those people. Especially
+> > because the problem is very obvious and very easy to fix.  
+> 
+> Yes, I agree: I believe it's better to have the right name for the
+> option moving forward, and the problem with re-using the name of the
+> previous option is not too bad.
+> 
+> So, I'm happy to see that both of us agree on the direction to take
+> with this.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a669c0f2f58e47bef4b7c2863cd1ee587befb662)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-ss-fix-compilation-under-glibc-2.18.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+To both: thanks for review and advice, updated patch follows...
 
-diff --git a/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch b/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch
-new file mode 100644
-index 0000000000..b6934f5d17
---- /dev/null
-+++ b/package/iproute2/0002-ss-fix-compilation-under-glibc-2.18.patch
-@@ -0,0 +1,39 @@
-+From 9700927a008a803ac119bdf816bdc1baa69d705c Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Wed, 20 Feb 2019 15:41:51 +0100
-+Subject: [PATCH] ss: fix compilation under glibc < 2.18
-+
-+Commit c759116a0b2b6da8df9687b0a40ac69050132c77 introduced support for
-+AF_VSOCK. This define is only provided since glibc version 2.18, so
-+compilation fails when using older toolchains.
-+
-+Provide the necessary definitions if needed.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-+---
-+ misc/ss.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/misc/ss.c b/misc/ss.c
-+index 9e821faf..766fdc5f 100644
-+--- a/misc/ss.c
-++++ b/misc/ss.c
-+@@ -51,6 +51,14 @@
-+ #include <linux/tipc_netlink.h>
-+ #include <linux/tipc_sockets_diag.h>
-+ 
-++/* AF_VSOCK/PF_VSOCK is only provided since glibc 2.18 */
-++#ifndef PF_VSOCK
-++#define PF_VSOCK 40
-++#endif
-++#ifndef AF_VSOCK
-++#define AF_VSOCK PF_VSOCK
-++#endif
-++
-+ #define MAGIC_SEQ 123456
-+ #define BUF_CHUNK (1024 * 1024)
-+ #define LEN_ALIGN(x) (((x) + 1) & ~1)
-+-- 
-+2.19.2
-+
+Regards,
+Peter
+
+> 
+> Thanks
+> 
+> Thomas
