@@ -1,49 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 16 Mar 2019 19:31:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xvkbd: bump to version 3.9
-Message-ID: <20190316183115.27032-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat, 16 Mar 2019 20:25:39 +0100
+Subject: [Buildroot] [PATCH 1/1] feh: Bump to version 3.1.3
+Message-ID: <20190316192539.12600-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add COPYING to license files as README does not contain the full GPL
-  text
-- Add hash for license files
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/xvkbd/xvkbd.hash | 4 +++-
- package/xvkbd/xvkbd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
-index 18148e5e09..402d3179ab 100644
---- a/package/xvkbd/xvkbd.hash
-+++ b/package/xvkbd/xvkbd.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256	895f768269820e7c0379b0daac3687bda0c670d192ebb7e61e5613a5939ec90b	xvkbd-3.7.tar.gz
-+sha256	b81c37ddfb7b78993dad15d304f8fd78e540d57c0a72f7e3316fd45fba919a9d	xvkbd-3.9.tar.gz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256	7f72a6f6e9a183efe65fb22c77f41bf076582f8a375881129461f50652af61e4	README
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 132d7e1f0c..4c2befe962 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index cb554858bf..02a88fbda9 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 6ec338f80c3f4c30d715f44780f1a09ebfbb99e92a1bb43316428744a839f383  feh-2.27.1.tar.bz2
++sha256 9fe840fbc6ce66dcf1e99296c90eb6fc44a4c2fad9a1069dfc7e0fad88eb56ef  feh-3.1.3.tar.bz2
+ sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 3bfd427e79..ac79a7da64 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XVKBD_VERSION = 3.7
-+XVKBD_VERSION = 3.9
- XVKBD_SITE = http://t-sato.in.coocan.jp/xvkbd
- XVKBD_LICENSE = GPL-2.0+
--XVKBD_LICENSE_FILES = README
-+XVKBD_LICENSE_FILES = COPYING README
- 
- # Passing USRLIBDIR ensures that the stupid Makefile doesn't add
- # /usr/lib to the library search path.
+-FEH_VERSION = 2.27.1
++FEH_VERSION = 3.1.3
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
 -- 
-2.14.1
+2.21.0
