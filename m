@@ -1,32 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Mar 2019 23:11:30 +0100
-Subject: [Buildroot] [PATCH] config-fragments: drop old crosstool-ng
- toolchains
-In-Reply-To: <20190303215712.7862-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 3 Mar 2019 22:57:11 +0100")
-References: <20190303215712.7862-1-peter@korsgaard.com>
-Message-ID: <87lg1d8831.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Mar 2019 23:12:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gst-plugins-bad: disable spandsp
+In-Reply-To: <20190304173008.21826-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Mar 2019 18:30:08 +0100")
+References: <20190304173008.21826-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h8c1881o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > These toolchains are very old and cause a number of autobuilder failures
- > that doesn't happen with more recent toolchains:
+ > gst-plugins-bad does not build with spandsp so disable it (it's already
+ > disabled in gst1-plugins-bad)
 
- > Fixes (glibc 2.18 does not provide O_TMPFILE):
- > http://autobuild.buildroot.net/results/c49e8361a1d4406eefd8fc1b35c8e5b061aa403b
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/842ca572b7810bca70846274262a6fcdb38df49
 
- > Fixes (x86 toolchain built without libquadmath):
- > http://autobuild.buildroot.net/results/2d9724f169ccd60c7feb1cb549f1e2e1e9219ac3/
-
- > Use Codesourcery ARM toolchain (GCC 4.8.3) to provide a test with a old GCC
- > version.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.11.x, thanks.
 
