@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 12:14:56 +0100
-Subject: [Buildroot] [PATCH] package/bluez-alsa: bump to version 1.4.0
-In-Reply-To: <20190316195752.25035-1-joerg.krause@embedded.rocks>
-References: <20190316195752.25035-1-joerg.krause@embedded.rocks>
-Message-ID: <20190317121456.3c5be4eb@windsurf>
+Date: Sun, 17 Mar 2019 12:15:34 +0100
+Subject: [Buildroot] [git commit] package/xapp_xfd: add optional
+ xlib_libxkbfile dependency
+Message-ID: <20190317111240.A312783C82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Mar 2019 20:57:52 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=38b0aabea070e9e0d48ae28f25f38b472e5f617d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Also:
-> * License file has been renamed: LICENSE.txt -> LICENSE
-> * Update license file hash -> List of contributors are in a seperate
-> file now
-> * Configure option `--with-alsadatadir` has been renamed to `--with-alsaconfdir`
-> * Configure option `--enable-pcm-test` has been removed
-> * New optional configure option `ofono` (no build dependency, will
-> disable internal HFP in favor of oFonos HFP profile)
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/bluez-alsa/bluez-alsa.hash |  4 ++--
->  package/bluez-alsa/bluez-alsa.mk   | 14 ++++++++++----
->  2 files changed, 12 insertions(+), 6 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/6a487750c0f08f1a87ae4e30e139e5a1a6004b81
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xapp_xfd/xapp_xfd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
+index 84b4a77770..8bea7a2fa7 100644
+--- a/package/x11r7/xapp_xfd/xapp_xfd.mk
++++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
+@@ -12,4 +12,11 @@ XAPP_XFD_LICENSE_FILES = COPYING
+ XAPP_XFD_DEPENDENCIES = freetype fontconfig xlib_libXaw xlib_libXft
+ XAPP_XFD_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXKBFILE),y)
++XAPP_XFD_CONF_OPTS += --with-xkb
++XAPP_XFD_DEPENDENCIES += xlib_libxkbfile
++else
++XAPP_XFD_CONF_OPTS += --without-xkb
++endif
++
+ $(eval $(autotools-package))
