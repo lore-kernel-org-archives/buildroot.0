@@ -1,108 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Mar 2019 10:23:13 +0100
-Subject: [Buildroot] [PATCH v10 5/6] package/pkg-autotools.mk: Add
- PKG_GIR_EXTRA_LIBS_PATH variable
-In-Reply-To: <20190317085732.GA4361@scaer>
-References: <20190206091531.104591-1-aduskett@gmail.com>
- <20190206091531.104591-5-aduskett@gmail.com>
- <20190317085732.GA4361@scaer>
-Message-ID: <20190317092313.GA14237@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Mar 2019 10:03:34 +0100
+Subject: [Buildroot] [git commit] utils/test-pkg: generate package config if
+ it is not specified
+Message-ID: <20190317092021.9AF388E74C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a946813dd581ac2e1aea6745edad2bc7ce44e6aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-03-17 09:57 +0100, Yann E. MORIN spake thusly:
-> On 2019-02-06 04:15 -0500, aduskett at gmail.com spake thusly:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> > 
-> > Some packages require passing an extra libs path to gobject-introspection
-> > in order to compile their respective typelib files. This allows users to
-> > specify a PKG_GIR_EXTRA_LIBS_PATH variable in the respective packages mk file
-> > that will then be passed on to the g-ir-scanner, allowing those directory paths
-> > to be indexed.
-> > 
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > ---
-> > Changes v1 -> v10:
-> >   - Add this patch to the series.
-> > 
-> >  package/pkg-autotools.mk | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> > index 45de99356f..06021f95c1 100644
-> > --- a/package/pkg-autotools.mk
-> > +++ b/package/pkg-autotools.mk
-> > @@ -162,6 +162,7 @@ endif
-> >  
-> >  $(2)_CONF_ENV			?=
-> >  $(2)_CONF_OPTS			?=
-> > +$(2)_GIR_EXTRA_LIBS_PATH	?=
-> >  $(2)_MAKE_ENV			?=
-> >  $(2)_MAKE_OPTS			?=
-> >  $(2)_INSTALL_OPTS                ?= install
-> > @@ -239,6 +240,8 @@ endef
-> >  endif
-> >  endif
-> >  
-> > +export GIR_EXTRA_LIBS_PATH=$$($$(PKG)_GIR_EXTRA_LIBS_PATH)
-> 
-> How can this even work?
+It is possible to generate one-line config for the package just by
+normalize it to the form:
 
-OK, so as Thomas pointed out, it may indeed work, because of the '$$'
-expansion that seen to be expanded at the time of build, not at the time
-the macro is called.
+    BR2_PACKAGE_${pkg_replaced-to_and_uppercase}
 
-Still, the below explanation still stands.
+it simplifes a bit of testing package where no additional config options
+are needed.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/test-pkg | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-> The value of GIR_EXTRA_LIBS_PATH will be that of the last package
-> parsed, and this is robably not what you really intended.
-> 
-> If a package needs to pass extra environment variables, there is already
-> this (at least for most of our package infras, I believe):
-> 
->     FOO_CONF_ENV
->     FOO_MAKE_ENV
-> 
-> ... which packages can set to add environment variables.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-> >  
-> >  ifeq ($$($(2)_AUTORECONF),YES)
-> > -- 
-> > 2.20.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1995fa8578..cce4679b04 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -2,12 +2,20 @@
+ set -e
+ 
+ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
++TEMP_CONF=""
++
++do_clean() {
++    if [ ! -z "${TEMP_CONF}" ]; then
++        rm -f "${TEMP_CONF}"
++    fi
++}
+ 
+ main() {
+     local o O opts
+     local cfg dir pkg random toolchains_dir toolchain all number mode
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
++    local pkg_br_name
+ 
+     o='hac:d:n:p:r:t:'
+     O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+@@ -50,8 +58,15 @@ main() {
+             ;;
+         esac
+     done
++
++    trap do_clean INT TERM HUP EXIT
++
+     if [ -z "${cfg}" ]; then
+-        printf "error: no config snippet specified\n" >&2; exit 1
++        pkg_br_name="${pkg//-/_}"
++        pkg_br_name="BR2_PACKAGE_${pkg_br_name^^}"
++        TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
++        echo "${pkg_br_name}=y" > ${TEMP_CONF}
++        cfg="${TEMP_CONF}"
+     fi
+     if [ ! -e "${cfg}" ]; then
+         printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
