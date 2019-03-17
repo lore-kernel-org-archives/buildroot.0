@@ -1,73 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 14:34:02 +0100
-Subject: [Buildroot] [git commit] support/graph-depends: make sure mandatory
- deps are displayed
-Message-ID: <20190317144806.7CD098F173@busybox.osuosl.org>
+Date: Sun, 17 Mar 2019 14:35:21 +0100
+Subject: [Buildroot] [git commit] support/graph-depends: also cut on host-tar
+Message-ID: <20190317144806.902368F1D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e414fbe9b9193da566d2af71537a14e9fcae869
+commit: https://git.buildroot.net/buildroot/commit/?id=3311aa8cf4ee5935a50990e02c609606e160219d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current graph-depends implementation filters out a number of
-"mandatory" dependencies that all packages have: dependency on
-"toolchain" and dependency on "skeleton".
+When host-tar is needed, it is a mandatory dependency of all packages.
+As such, drawing the dependency lines toward host-tar would uselessly
+clutter the graph.
 
-Despite this filtering, in full graph dependencies, "toolchain" and
-"skeleton" are still shown, because they are target packages, and
-therefore appear in the result of "make show-targets". Thanks to this,
-they will be visible as dependencies of the "ALL" node, which is the
-root of the dependency tree.
+So, like for the skeleton and host-skeleton, we cut the dependency chains
+toward host-tar.
 
-However, as we are going to introduce host-skeleton as a "mandatory
-dependency" to be filtered out, this is no longer going to work.
-
-This commit adjusts the remove_extra_deps() function to ensure that
-when a mandatory dependency is removed, this dependency exists between
-the root of the dependency tree and the mandatory dependency.
-
-This issue was noticed by Yann E. Morin, and this commit provides a
-different implementation than what Yann proposed in
-https://patchwork.ozlabs.org/patch/910453/.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr:
-  - list mandatory deps before removing them
-  - fix flake8 warnings
-]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/graph-depends | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ support/scripts/graph-depends | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index d2b100f385..5a6f6930e9 100755
+index c3e5d83ee8..3143c61cc4 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -181,6 +181,12 @@ def remove_mandatory_deps(pkg, deps):
-     return [p for p in deps[pkg] if p not in MANDATORY_DEPS]
+@@ -172,7 +172,7 @@ def remove_transitive_deps(pkg, deps):
+ 
+ # List of dependencies that all/many packages have, and that we want
+ # to trim when generating the dependency graph.
+-MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton']
++MANDATORY_DEPS = ['toolchain', 'skeleton', 'host-skeleton', 'host-tar']
  
  
-+# This function returns all dependencies of pkg that are part of the
-+# mandatory dependencies:
-+def get_mandatory_deps(pkg, deps):
-+    return [p for p in deps[pkg] if p in MANDATORY_DEPS]
-+
-+
- # This function will check that there is no loop in the dependency chain
- # As a side effect, it builds up the dependency cache.
- def check_circular_deps(deps):
-@@ -213,6 +219,9 @@ def check_circular_deps(deps):
- def remove_extra_deps(deps, rootpkg, transitive):
-     for pkg in list(deps.keys()):
-         if not pkg == rootpkg:
-+            for d in get_mandatory_deps(pkg, deps):
-+                if d not in deps[rootpkg]:
-+                    deps[rootpkg].append(d)
-             deps[pkg] = remove_mandatory_deps(pkg, deps)
-     for pkg in list(deps.keys()):
-         if not transitive or pkg == rootpkg:
+ # This function removes the dependency on some 'mandatory' package, like the
