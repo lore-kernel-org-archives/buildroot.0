@@ -1,33 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 11:07:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/stella: needs gcc >= 5
-In-Reply-To: <20190317075807.11337-1-fontaine.fabrice@gmail.com>
-References: <20190317075807.11337-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190317110715.5b672db6@windsurf>
+Date: Sun, 17 Mar 2019 11:07:41 +0100
+Subject: [Buildroot] [git commit] package/go: bump to version 1.12.1
+Message-ID: <20190317100610.E7D1B80282@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 08:58:07 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1af9d9dd25b96af77f25c3051f394b8495e07e66
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> std::put_time needs gcc 5.x:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54354
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/cf5bd2f262b108e4b90b6e31e46c5f82b9aef0a0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/stella/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Go 1.12 was released on 2/25/2019: https://blog.golang.org/go1.12
 
-Applied to master, thanks.
+Go 1.12.1 was released on 3/14/2019:
+https://golang.org/doc/devel/release.html#go1.12.minor
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Additional notes on how Go modules will evolve in 2019 are here:
+https://blog.golang.org/modules2019
+
+In Go 1.12, module support remains the same as in Go 1.11. GOPATH is scheduled
+for deprecation in 1.13, however. The Buildroot Go package infrastructure should
+therefore aim to migrate to a new, currently undefined, Go module friendly
+compilation approach before Go 1.13 is released.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 29891399c3..60aa1e1f57 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	bc1ef02bb1668835db1390a2e478dcbccb5dd16911691af9d75184bbe5aa943e  go1.11.5.src.tar.gz
++sha256	0be127684df4b842a64e58093154f9d15422f1405f1fcff4b2c36ffc6a15818a  go1.12.1.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 4daa2fe093..c27f161f48 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.11.5
++GO_VERSION = 1.12.1
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
