@@ -1,57 +1,54 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 16 Mar 2019 19:01:42 -0700
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.12.1
-Message-ID: <20190317020142.743-1-christian@paral.in>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 17 Mar 2019 05:54:26 +0200
+Subject: [Buildroot] [PATCH] package/iw: bump to version 5.0.1
+Message-ID: <a7e0b39d66f6b5426ef69d0ccbf63d027d1e26b2.1552794866.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Go 1.12 was released on 2/25/2019: https://blog.golang.org/go1.12
+Drop unused GIT_DIR environment.
 
-Go 1.12.1 was released on 3/14/2019:
-https://golang.org/doc/devel/release.html#go1.12.minor
-
-Additional notes on how Go modules will evolve in 2019 are here:
-https://blog.golang.org/modules2019
-
-In Go 1.12, module support remains the same as in Go 1.11. GOPATH is scheduled
-for deprecation in 1.13, however. The Buildroot Go package infrastructure should
-therefore aim to migrate to a new, currently undefined, Go module friendly
-compilation approach before Go 1.13 is released.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-
-package/go: bump to 1.12.1
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iw/iw.hash | 2 +-
+ package/iw/iw.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 29891399c3..60aa1e1f57 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	bc1ef02bb1668835db1390a2e478dcbccb5dd16911691af9d75184bbe5aa943e  go1.11.5.src.tar.gz
-+sha256	0be127684df4b842a64e58093154f9d15422f1405f1fcff4b2c36ffc6a15818a  go1.12.1.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 4daa2fe093..c27f161f48 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index 6423df77325c..a85989ece80c 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	f01671c0074bfdec082a884057edba1b9efd35c89eda554638496f03b769ad89	iw-4.14.tar.xz
++sha256	1e38ea794a223525b2ea7fe78fd14f2a56121e62e21ba5f9dbe8c494b35b5c0d	iw-5.0.1.tar.xz
+ # Locally calculated
+ sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 8264e8b5dcc6..858874211171 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.11.5
-+GO_VERSION = 1.12.1
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+-IW_VERSION = 4.14
++IW_VERSION = 5.0.1
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = ISC
+@@ -12,8 +12,7 @@ IW_LICENSE_FILES = COPYING
+ IW_DEPENDENCIES = host-pkgconf libnl
+ IW_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+-	PKG_CONFIG="$(HOST_DIR)/bin/pkg-config" \
+-	GIT_DIR=$(IW_DIR)
++	PKG_CONFIG="$(HOST_DIR)/bin/pkg-config"
  
+ define IW_BUILD_CMDS
+ 	$(IW_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
 -- 
-2.19.2
+2.20.1
