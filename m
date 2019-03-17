@@ -1,31 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 11:11:50 +0100
-Subject: [Buildroot] [PATCH] package/iw: bump to version 5.0.1
-In-Reply-To: <a7e0b39d66f6b5426ef69d0ccbf63d027d1e26b2.1552794866.git.baruch@tkos.co.il>
-References: <a7e0b39d66f6b5426ef69d0ccbf63d027d1e26b2.1552794866.git.baruch@tkos.co.il>
-Message-ID: <20190317111150.6c9011c9@windsurf>
+Date: Sun, 17 Mar 2019 11:13:38 +0100
+Subject: [Buildroot] [git commit] package/arp-scan: bump to version 1.9.5
+Message-ID: <20190317101108.BFFCA8132B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 05:54:26 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=75e67c3decef1076e794b727d16a73c03cd83358
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop unused GIT_DIR environment.
-> 
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/iw/iw.hash | 2 +-
->  package/iw/iw.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 4 deletions(-)
+Add hash for license file
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/arp-scan/arp-scan.hash | 3 ++-
+ package/arp-scan/arp-scan.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/arp-scan/arp-scan.hash b/package/arp-scan/arp-scan.hash
+index 4b2ddf1816..62f12d3d20 100644
+--- a/package/arp-scan/arp-scan.hash
++++ b/package/arp-scan/arp-scan.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	ce908ac71c48e85dddf6dd4fe5151d13c7528b1f49717a98b2a2535bd797d892	arp-scan-1.9.tar.gz
++sha256	aa9498af84158a315b7e0ea6c2cddfa746660ca3987cbe7e32c0c90f5382d9d2	arp-scan-1.9.5.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
+index b46e941d10..a87fa35151 100644
+--- a/package/arp-scan/arp-scan.mk
++++ b/package/arp-scan/arp-scan.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ARP_SCAN_VERSION = 1.9
+-ARP_SCAN_SITE = https://github.com/royhills/arp-scan/releases/download/$(ARP_SCAN_VERSION)
++ARP_SCAN_VERSION = 1.9.5
++ARP_SCAN_SITE = $(call github,royhills,arp-scan,$(ARP_SCAN_VERSION))
+ ARP_SCAN_LICENSE = GPL-3.0+
+ ARP_SCAN_LICENSE_FILES = COPYING
+ ARP_SCAN_DEPENDENCIES = libpcap
