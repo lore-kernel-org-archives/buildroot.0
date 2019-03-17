@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 10:27:36 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: Generate package config
- if it is not specified
-In-Reply-To: <1551443622-29498-1-git-send-email-email@gmail.com>
-References: <1551443622-29498-1-git-send-email-email@gmail.com>
-Message-ID: <20190317102736.51bd10fb@windsurf>
+Date: Sun, 17 Mar 2019 10:31:04 +0100
+Subject: [Buildroot] [git commit] package/binutils: install libiberty for
+ host build
+Message-ID: <20190317093858.D9DC28EC53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec7ba54055919d89afc93606794d161505fa2d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Mar 2019 14:33:42 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+Add --enable-install-libiberty to HOST_BINUTILS_CONF_OPTS to allow
+prelink-cross to build properly.
 
-> From: Vadim Kochan <vadim4j@gmail.com>
-> 
-> It is possible to generate one-line config for the package just by
-> normalize it to the form:
-> 
->     BR2_PACKAGE_${pkg_replaced-to_and_uppercase}
-> 
-> it simplifes a bit of testing package where no additional config options
-> are needed.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  utils/test-pkg | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks. I was initially a bit skeptical because if
-the package has a dependency, your solution does not work very well,
-and users could believe that the package is going to be tested while it
-won't. But in fact in that case all tests are going to be "SKIPPED"
-because the BR2_PACKAGE_FOO=y line is not in the final .config. This
-will clearly tell the user that much not testing has happened. So I'm
-fine with this, and therefore I applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 6798356ff2..cfaf0bdeb7 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -84,6 +84,7 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--disable-shared \
+ 	--enable-static \
++	--enable-install-libiberty \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--enable-poison-system-directories \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
