@@ -1,36 +1,43 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun, 17 Mar 2019 20:47:59 +0000
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: correct license file hash
-Message-ID: <20190317204800.17703-1-martin@barkynet.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Mar 2019 22:10:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kf5-modemmanager-qt: link with
+ libatomic when needed
+Message-ID: <20190317211016.2052-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LICENSE file in nodejs 10.15.3 updated to include additional
-3rd party licenses.
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
+
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+
+This is often for example the case on sparcv8 32 bit.
 
 Fixes:
- - http://autobuild.buildroot.net/results/4bf66b9f05e9d04171156e44c7dd87619e429747
- - http://autobuild.buildroot.net/results/a65776ba1045f12263a686933eb6a4b5d6ff7333
- - http://autobuild.buildroot.net/results/aab619106a7d763f45e95a7ae3d85816fb4a6512
- - http://autobuild.buildroot.net/results/bb6cb93f323be22e4c0efc05011042526c01f62c
+ - http://autobuild.buildroot.org/results/b941a3deaa57cac79f1686d47ca6ababf2f0d5e4
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nodejs/nodejs.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index e9c174e662..6cb2cdd5b7 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -2,4 +2,4 @@
- sha256 4e22d926f054150002055474e452ed6cbb85860aa7dc5422213a2002ed9791d5  node-v10.15.3.tar.xz
+diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
+index 9bbeeaa760..20fbc102c6 100644
+--- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
++++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
+@@ -13,4 +13,9 @@ KF5_MODEMMANAGER_QT_LICENSE_FILE = COPYING.LIB
+ KF5_MODEMMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules modem-manager qt5base
+ KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
  
- # Hash for license file
--sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-+sha256 7ab373b3671d57d91078f5345ea9486443c9ca498eb9f8cf87dee2641a6fa09d  LICENSE
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.21.0
+2.14.1
