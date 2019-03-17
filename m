@@ -1,9 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 16 Mar 2019 18:21:38 -0700
-Subject: [Buildroot] [RFC PATCH v1 2/6] package/runc: upgrade to go modules
+Date: Sat, 16 Mar 2019 18:21:39 -0700
+Subject: [Buildroot] [RFC PATCH v1 3/6] package/docker-containerd: upgrade
+ to go modules
 In-Reply-To: <20190317012142.10545-1-christian@paral.in>
 References: <20190317012142.10545-1-christian@paral.in>
-Message-ID: <20190317012142.10545-2-christian@paral.in>
+Message-ID: <20190317012142.10545-3-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,114 +12,343 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 This commit introduces go.mod and go.sum files derived from the vendor.conf in
-the upstream runc repository.
+the upstream containerd repository.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/runc/go.mod  | 26 ++++++++++++++++++++++++
- package/runc/go.sum  | 47 ++++++++++++++++++++++++++++++++++++++++++++
- package/runc/runc.mk |  2 --
- 3 files changed, 73 insertions(+), 2 deletions(-)
- create mode 100644 package/runc/go.mod
- create mode 100644 package/runc/go.sum
+ .../docker-containerd/docker-containerd.mk    |   9 +-
+ package/docker-containerd/go.mod              |  93 ++++++++
+ package/docker-containerd/go.sum              | 200 ++++++++++++++++++
+ 3 files changed, 298 insertions(+), 4 deletions(-)
+ create mode 100644 package/docker-containerd/go.mod
+ create mode 100644 package/docker-containerd/go.sum
 
-diff --git a/package/runc/go.mod b/package/runc/go.mod
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 9088c17660..18bda643b9 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -9,12 +9,13 @@ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+ 
+-DOCKER_CONTAINERD_WORKSPACE = vendor
+-
+ DOCKER_CONTAINERD_LDFLAGS = \
+-	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
++	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
+-DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
++DOCKER_CONTAINERD_BUILD_TARGETS = \
++	github.com/containerd/containerd/cmd/ctr \
++	github.com/containerd/containerd/cmd/containerd \
++	github.com/containerd/containerd/cmd/containerd-shim
+ 
+ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+ 
+diff --git a/package/docker-containerd/go.mod b/package/docker-containerd/go.mod
 new file mode 100644
-index 0000000000..26eed99edb
+index 0000000000..03eab35383
 --- /dev/null
-+++ b/package/runc/go.mod
-@@ -0,0 +1,26 @@
-+module github.com/opencontainers/runc
++++ b/package/docker-containerd/go.mod
+@@ -0,0 +1,93 @@
++module github.com/containerd/containerd
 +
-+// Derived from runc @ v1.0.0-rc6.
++// Derived from docker-containerd/vendor.conf @ v1.2.3
 +require (
-+	github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48
-+	github.com/containerd/console v0.0.0-20180220200639-2748ece16665
-+	github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b
-+	github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf // indirect
-+	github.com/cyphar/filepath-securejoin v0.2.1
-+	github.com/docker/go-units v0.2.0
-+	github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55
-+	github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172
-+	github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674
-+	github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559
-+	github.com/opencontainers/selinux v1.0.0-rc1
++	github.com/BurntSushi/toml v0.0.0-20170626110600-a368813c5e64
++	github.com/Microsoft/go-winio v0.4.11
++	github.com/Microsoft/hcsshim v0.8.1
++	github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a // indirect
++	github.com/blang/semver v3.1.0+incompatible // indirect
++	github.com/containerd/aufs v0.0.0-20180724161921-ffa39970e26a
++	github.com/containerd/btrfs v0.0.0-20180306195803-2e1aa0ddf94f
++	github.com/containerd/cgroups v0.0.0-20180515175038-5e610833b720
++	github.com/containerd/console v0.0.0-20180822173158-c12b1e7919c1
++	github.com/containerd/containerd v1.2.5
++	github.com/containerd/continuity v0.0.0-20181001140422-bd77b46c8352
++	github.com/containerd/cri v0.0.0-20190206004706-c3cf754321fc
++	github.com/containerd/fifo v0.0.0-20180307165137-3d5202aec260
++	github.com/containerd/go-cni v0.0.0-20181011142537-40bcf8ec8acd // indirect
++	github.com/containerd/go-runc v0.0.0-20180907222934-5a6d9f37cfa3
++	github.com/containerd/ttrpc v0.0.0-20180920185216-2a805f718635
++	github.com/containerd/typeurl v0.0.0-20180627222232-a93fcdb778cd
++	github.com/containerd/zfs v0.0.0-20180329214549-9a0b8b8b5982
++	github.com/containernetworking/cni v0.6.0 // indirect
++	github.com/containernetworking/plugins v0.7.0 // indirect
++	github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b // indirect
++	github.com/docker/distribution v0.0.0-20170213194809-b38e5838b7b2 // indirect
++	github.com/docker/docker v0.0.0-20171019062838-86f080cff091 // indirect
++	github.com/docker/go-events v0.0.0-20170721190031-9461782956ad
++	github.com/docker/go-metrics v0.0.0-20180131145841-4ea375f7759c
++	github.com/docker/go-units v0.3.1
++	github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96 // indirect
++	github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a // indirect
++	github.com/emicklei/go-restful v2.2.1+incompatible // indirect
++	github.com/ghodss/yaml v1.0.0 // indirect
++	github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55 // indirect
++	github.com/gogo/googleapis v1.0.0
++	github.com/gogo/protobuf v1.0.0
++	github.com/golang/glog v0.0.0-20141105023935-44145f04b68c // indirect
++	github.com/google/go-cmp v0.1.0
++	github.com/google/gofuzz v0.0.0-20161122191042-44d81051d367 // indirect
++	github.com/grpc-ecosystem/go-grpc-prometheus v0.0.0-20160910222444-6b7015e65d36
++	github.com/hashicorp/errwrap v0.0.0-20141028054710-7554cd9344ce // indirect
++	github.com/hashicorp/go-multierror v0.0.0-20161216184304-ed905158d874 // indirect
++	github.com/json-iterator/go v1.1.5 // indirect
++	github.com/linuxkit/virtsock v0.0.0-20180830132707-8e79449dea07 // indirect
++	github.com/matttproud/golang_protobuf_extensions v1.0.0 // indirect
++	github.com/mistifyio/go-zfs v0.0.0-20171122051224-166add352731 // indirect
++	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
++	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
++	github.com/onsi/ginkgo v1.8.0 // indirect
++	github.com/onsi/gomega v1.5.0 // indirect
++	github.com/opencontainers/go-digest v0.0.0-20180430190053-c9281466c8b2
++	github.com/opencontainers/image-spec v1.0.1
++	github.com/opencontainers/runc v0.0.0-20190115041553-12f6a991201f
++	github.com/opencontainers/runtime-spec v0.0.0-20180909173843-eba862dc2470
++	github.com/opencontainers/runtime-tools v0.6.0 // indirect
++	github.com/opencontainers/selinux v0.0.0-20180628160156-b6fa367ed7f5 // indirect
++	github.com/pborman/uuid v0.0.0-20180122190007-c65b2f87fee3 // indirect
 +	github.com/pkg/errors v0.8.0
-+	github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea
-+	github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235
++	github.com/prometheus/client_golang v0.0.0-20180131142826-f4fb1b73fb09
++	github.com/prometheus/client_model v0.0.0-20171117100541-99fa1f4be8e5 // indirect
++	github.com/prometheus/common v0.0.0-20180110214958-89604d197083 // indirect
++	github.com/prometheus/procfs v0.0.0-20180125133057-cb4147076ac7 // indirect
++	github.com/satori/go.uuid v1.2.0 // indirect
++	github.com/seccomp/libseccomp-golang v0.0.0-20160531183505-32f571b70023 // indirect
++	github.com/sirupsen/logrus v1.0.0
++	github.com/spf13/pflag v1.0.3 // indirect
 +	github.com/stretchr/testify v1.3.0 // indirect
 +	github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8
-+	github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b
-+	github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc
-+	github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc // indirect
-+	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 // indirect
-+	golang.org/x/sys v0.0.0-20190204203706-41f3e6584952
++	github.com/tchap/go-patricia v2.2.6+incompatible // indirect
++	github.com/urfave/cli v0.0.0-20171014202726-7bc6a0acffa5
++	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
++	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
++	github.com/xeipuuv/gojsonschema v0.0.0-20180618132009-1d523034197f // indirect
++	go.etcd.io/bbolt v1.3.1-etcd.8
++	golang.org/x/crypto v0.0.0-20180222182404-49796115aa4b // indirect
++	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
++	golang.org/x/oauth2 v0.0.0-20170412232759-a6bd8cefa181 // indirect
++	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
++	golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e
++	golang.org/x/time v0.0.0-20161028155119-f51c12702a4d // indirect
++	google.golang.org/appengine v1.4.0 // indirect
++	google.golang.org/genproto v0.0.0-20170523043604-d80a6e20e776 // indirect
++	google.golang.org/grpc v1.12.0
++	gopkg.in/inf.v0 v0.9.0 // indirect
++	gotest.tools v2.1.0+incompatible
++	k8s.io/api v0.0.0-20181004124137-fd83cbc87e76 // indirect
++	k8s.io/apimachinery v0.0.0-20180913025736-6dd46049f395 // indirect
++	k8s.io/apiserver v0.0.0-20181004124341-e85ad7b666fe // indirect
++	k8s.io/client-go v9.0.0+incompatible // indirect
++	k8s.io/kubernetes v1.12.0 // indirect
++	k8s.io/utils v0.0.0-20180918230422-cd34563cd63c // indirect
 +)
-diff --git a/package/runc/go.sum b/package/runc/go.sum
+diff --git a/package/docker-containerd/go.sum b/package/docker-containerd/go.sum
 new file mode 100644
-index 0000000000..b93484b06d
+index 0000000000..41cda7653a
 --- /dev/null
-+++ b/package/runc/go.sum
-@@ -0,0 +1,47 @@
-+github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48 h1:AQMF0Xixllgf29MKlx/TGEhRk7bEDX5kxz8Ui8lOvEs=
-+github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48/go.mod h1:TrMrLQfeENAPYPRsJuq3jsqdlRh3lvi6trTZJG8+tho=
-+github.com/containerd/console v0.0.0-20180220200639-2748ece16665 h1:8p4sC/YOZbLdxenlXANCdsPv2vt4JiBtYPO9mWql/Wc=
-+github.com/containerd/console v0.0.0-20180220200639-2748ece16665/go.mod h1:Tj/on1eG8kiEhd0+fhSDzsPAFESxzBBvdyEgyryXffw=
++++ b/package/docker-containerd/go.sum
+@@ -0,0 +1,200 @@
++github.com/BurntSushi/toml v0.0.0-20170626110600-a368813c5e64 h1:BuYewlQyh/jroxY8qx41SrzD8Go17GkyCyAeVmprvQI=
++github.com/BurntSushi/toml v0.0.0-20170626110600-a368813c5e64/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
++github.com/Microsoft/go-winio v0.4.11 h1:zoIOcVf0xPN1tnMVbTtEdI+P8OofVk3NObnwOQ6nK2Q=
++github.com/Microsoft/go-winio v0.4.11/go.mod h1:VhR8bwka0BXejwEJY73c50VrPtXAaKcyvVC4A4RozmA=
++github.com/Microsoft/hcsshim v0.8.1 h1:0RKPd1pQB/4YRjdw0jFwq3A5nWFN4n1ojNzcm4B+8ZI=
++github.com/Microsoft/hcsshim v0.8.1/go.mod h1:Op3hHsoHPAvb6lceZHDtd9OkTew38wNoXnJs8iY7rUg=
++github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a h1:BtpsbiV638WQZwhA98cEZw2BsbnQJrbd0BI7tsy0W1c=
++github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
++github.com/blang/semver v3.1.0+incompatible h1:7hqmJYuaEK3qwVjWubYiht3j93YI0WQBuysxHIfUriU=
++github.com/blang/semver v3.1.0+incompatible/go.mod h1:kRBLl5iJ+tD4TcOOxsy/0fnwebNt5EWlYSAyrTnjyyk=
++github.com/containerd/aufs v0.0.0-20180724161921-ffa39970e26a h1:ixq65h0RN5+oc8h4FrLB6ftleIloflgpphPoqvn3W/4=
++github.com/containerd/aufs v0.0.0-20180724161921-ffa39970e26a/go.mod h1:KWTFEKnST/R6wiSG+n7rid/ZQJxi73594So04IsWRpc=
++github.com/containerd/btrfs v0.0.0-20180306195803-2e1aa0ddf94f h1:ZJ8RlZBVDL4P2MbwK7gizs4a6N06ZsARIjSUaH70Rxk=
++github.com/containerd/btrfs v0.0.0-20180306195803-2e1aa0ddf94f/go.mod h1:obwvRpZTBx8yJQ/6w+6mrVoLAiS0CedRD8CCD+U7vZQ=
++github.com/containerd/cgroups v0.0.0-20180515175038-5e610833b720 h1:BWEq1Q9P+v4Yb97IRvoSMNuHbd2ilBqV9h5Zew3ELco=
++github.com/containerd/cgroups v0.0.0-20180515175038-5e610833b720/go.mod h1:X9rLEHIqSf/wfK8NsPqxJmeZgW4pcfzdXITDrUSJ6uI=
++github.com/containerd/console v0.0.0-20180822173158-c12b1e7919c1 h1:uict5mhHFTzKLUCufdSLym7z/J0CbBJT59lYbP9wtbg=
++github.com/containerd/console v0.0.0-20180822173158-c12b1e7919c1/go.mod h1:Tj/on1eG8kiEhd0+fhSDzsPAFESxzBBvdyEgyryXffw=
++github.com/containerd/containerd v1.2.5 h1:D+s0XmoswfcRJXgmMMlI1vAblp+LTCftRnEjKsgbFPU=
++github.com/containerd/containerd v1.2.5/go.mod h1:bC6axHOhabU15QhwfG7w5PipXdVtMXFTttgp+kVtyUA=
++github.com/containerd/continuity v0.0.0-20181001140422-bd77b46c8352 h1:CdBoaTKPl60tksFVWYc5QnLWwXBcU+XcLiXx8+NcZ9o=
++github.com/containerd/continuity v0.0.0-20181001140422-bd77b46c8352/go.mod h1:GL3xCUCBDV3CZiTSEKksMWbLE66hEyuu9qyDOOqM47Y=
++github.com/containerd/cri v0.0.0-20190206004706-c3cf754321fc h1:oaMe0U/5ksRcI1iXLF2Jr1Wy3OukJqUeei2wZl34OPQ=
++github.com/containerd/cri v0.0.0-20190206004706-c3cf754321fc/go.mod h1:DavH5Qa8+6jOmeOMO3dhWoqksucZDe06LfuhBz/xPZs=
++github.com/containerd/fifo v0.0.0-20180307165137-3d5202aec260 h1:XGyg7oTtD0DoRFhbpV6x1WfV0flKC4UxXU7ab1zC08U=
++github.com/containerd/fifo v0.0.0-20180307165137-3d5202aec260/go.mod h1:ODA38xgv3Kuk8dQz2ZQXpnv/UZZUHUCL7pnLehbXgQI=
++github.com/containerd/go-cni v0.0.0-20181011142537-40bcf8ec8acd h1:joFNf8tTYsguuv6/HMvyPSnMsGloCVSUVDI9TaE4rpM=
++github.com/containerd/go-cni v0.0.0-20181011142537-40bcf8ec8acd/go.mod h1:2wlRxCQdiBY+OcjNg5x8kI+5mEL1fGt25L4IzQHYJsM=
++github.com/containerd/go-runc v0.0.0-20180907222934-5a6d9f37cfa3 h1:esQOJREg8nw8aXj6uCN5dfW5cKUBiEJ/+nni1Q/D/sw=
++github.com/containerd/go-runc v0.0.0-20180907222934-5a6d9f37cfa3/go.mod h1:IV7qH3hrUgRmyYrtgEeGWJfWbgcHL9CSRruz2Vqcph0=
++github.com/containerd/ttrpc v0.0.0-20180920185216-2a805f718635 h1:Hh9KYLzbpTyhtCnW4p0Iy+bJNO4fGKFZp1ylELZw6TI=
++github.com/containerd/ttrpc v0.0.0-20180920185216-2a805f718635/go.mod h1:PvCDdDGpgqzQIzDW1TphrGLssLDZp2GuS+X5DkEJB8o=
++github.com/containerd/typeurl v0.0.0-20180627222232-a93fcdb778cd h1:JNn81o/xG+8NEo3bC/vx9pbi/g2WI8mtP2/nXzu297Y=
++github.com/containerd/typeurl v0.0.0-20180627222232-a93fcdb778cd/go.mod h1:Cm3kwCdlkCfMSHURc+r6fwoGH6/F1hH3S4sg0rLFWPc=
++github.com/containerd/zfs v0.0.0-20180329214549-9a0b8b8b5982 h1:+sKKe2jkRCcj+2smvlAh9S5mTv9+ALHPKTGeoEA/e9Q=
++github.com/containerd/zfs v0.0.0-20180329214549-9a0b8b8b5982/go.mod h1:mp4bnlceN4Zxp2fwNMzdKcPMopBajlb+VrHYSpKipcE=
++github.com/containernetworking/cni v0.6.0 h1:FXICGBZNMtdHlW65trpoHviHctQD3seWhRRcqp2hMOU=
++github.com/containernetworking/cni v0.6.0/go.mod h1:LGwApLUm2FpoOfxTDEeq8T9ipbpZ61X79hmU3w8FmsY=
++github.com/containernetworking/plugins v0.7.0 h1:CRJEnGMQ20KIsgNU6QZBL1OI9IAGnxyGczHWmDj00Ug=
++github.com/containernetworking/plugins v0.7.0/go.mod h1:dagHaAhNjXjT9QYOklkKJDGaQPTg4pf//FrUcJeb7FU=
 +github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b h1:+mtZ0WjVZwTX0RVrXMXDwuYVaNeHGvWBW1UwJeMR+2M=
 +github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
-+github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf h1:CAKfRE2YtTUIjjh1bkBtyYFaUT/WmOqsJjgtihT0vMI=
-+github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf/go.mod h1:E3G3o1h8I7cfcXa63jLwjI0eiQQMgzzUDFVpN/nH/eA=
-+github.com/cyphar/filepath-securejoin v0.2.1 h1:5DPkzz/0MwUpvR4fxASKzgApeq2OMFY5FfYtrX28Coo=
-+github.com/cyphar/filepath-securejoin v0.2.1/go.mod h1:FpkQEhXnPnOthhzymB7CGsFk2G9VLXONKD9G7QGMM+4=
 +github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 +github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-+github.com/docker/go-units v0.2.0 h1:TtZVwKVMsN8COBXUhH/x17NFxEFfIIK2i9DL/nz4zfE=
-+github.com/docker/go-units v0.2.0/go.mod h1:fgPhTUdO+D/Jk86RDLlptpiXQzgHJF7gydDDbaIK4Dk=
++github.com/docker/distribution v0.0.0-20170213194809-b38e5838b7b2 h1:Ia9z/Prt7e3+tE42GL2CzWkjaJkV2w3TAp/F4rxoAcI=
++github.com/docker/distribution v0.0.0-20170213194809-b38e5838b7b2/go.mod h1:J2gT2udsDAN96Uj4KfcMRqY0/ypR+oyYUYmja8H+y+w=
++github.com/docker/docker v0.0.0-20171019062838-86f080cff091 h1:QpxpTw4MJeOzbC7X00IFxnZhZx8oDOqXMrMAHiwNn54=
++github.com/docker/docker v0.0.0-20171019062838-86f080cff091/go.mod h1:eEKB0N0r5NX/I1kEveEz05bcu8tLC/8azJZsviup8Sk=
++github.com/docker/go-events v0.0.0-20170721190031-9461782956ad h1:VXIse57M5C6ezDuCPyq6QmMvEJ2xclYKZ35SfkXdm3E=
++github.com/docker/go-events v0.0.0-20170721190031-9461782956ad/go.mod h1:Uw6UezgYA44ePAFQYUehOuCzmy5zmg/+nl2ZfMWGkpA=
++github.com/docker/go-metrics v0.0.0-20180131145841-4ea375f7759c h1:oKvAcvys1isfMMXIOxB2C4f1VXSFy7PFjsecI//7BMo=
++github.com/docker/go-metrics v0.0.0-20180131145841-4ea375f7759c/go.mod h1:/u0gXw0Gay3ceNrsHubL3BtdOL2fHf93USgMTe0W5dI=
++github.com/docker/go-units v0.3.1 h1:QAFdsA6jLCnglbqE6mUsHuPcJlntY94DkxHf4deHKIU=
++github.com/docker/go-units v0.3.1/go.mod h1:fgPhTUdO+D/Jk86RDLlptpiXQzgHJF7gydDDbaIK4Dk=
++github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96 h1:cenwrSVm+Z7QLSV/BsnenAOcDXdX4cMv4wP0B/5QbPg=
++github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96/go.mod h1:Qh8CwZgvJUkLughtfhJv5dyTYa91l1fOUCrgjqmcifM=
++github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a h1:A4wNiqeKqU56ZhtnzJCTyPZ1+cyu8jKtIchQ3TtxHgw=
++github.com/elazarl/goproxy v0.0.0-20181111060418-2ce16c963a8a/go.mod h1:/Zj4wYkgs4iZTTu3o/KG3Itv/qCCa8VVMlb3i9OVuzc=
++github.com/emicklei/go-restful v2.2.1+incompatible h1:yreWt49MQDL5ac0Dau9EKE22or+LrHikXVhAqUAXnfk=
++github.com/emicklei/go-restful v2.2.1+incompatible/go.mod h1:otzb+WCGbkyDHkqmQmT5YD2WR4BBwUdeQoFo8l/7tVs=
++github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV9I=
++github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
++github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
++github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 +github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55 h1:oIgNYSrSUbNH5DJh6DMhU1PiOKOYIHNxrV3djLsLpEI=
 +github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55/go.mod h1:/YcGZj5zSblfDWMMoOzV4fas9FZnQYTkDnsGvmh2Grw=
-+github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172 h1:ib1Vbb6/KliPKsRcZdmCUnFGP7/BcCWgW9+gR+sUQk0=
-+github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
-+github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674 h1:6adeeLyL1ODW0umMHTYaU+NkdFgYkHKSYC2cw3MDx2g=
-+github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674/go.mod h1:x8F1gnqOkIEiO4rqoeEEEqQbo7HjGMTvyoq3gej4iT0=
-+github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559 h1:pVIiB5BBYCSqbku9gTus5uZ+dmmZiWtmHAaI8Y1hpb4=
-+github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559/go.mod h1:jwyrGlmzljRJv/Fgzds9SsS/C5hL+LL3ko9hs6T5lQ0=
-+github.com/opencontainers/selinux v1.0.0-rc1 h1:Q70KvmpJSrYzryl/d0tC3vWUiTn23cSdStKodlokEPs=
-+github.com/opencontainers/selinux v1.0.0-rc1/go.mod h1:+BLncwf63G4dgOzykXAxcmnFlUaOlkDdmw/CqsW6pjs=
++github.com/gogo/googleapis v1.0.0 h1:7wwW6yQ5xmZE42/QWNC87xHgnHxIh7pWvtc1BhI/0DU=
++github.com/gogo/googleapis v1.0.0/go.mod h1:gf4bu3Q80BeJ6H1S1vYPm8/ELATdvryBaNFGgqEef3s=
++github.com/gogo/protobuf v1.0.0 h1:2jyBKDKU/8v3v2xVR2PtiWQviFUyiaGk2rpfyFT8rTM=
++github.com/gogo/protobuf v1.0.0/go.mod h1:r8qH/GZQm5c6nD/R0oafs1akxWv10x8SbQlK7atdtwQ=
++github.com/golang/glog v0.0.0-20141105023935-44145f04b68c h1:CbdkBQ1/PiAo0FYJhQGwASD8wrgNvTdf01g6+O9tNuA=
++github.com/golang/glog v0.0.0-20141105023935-44145f04b68c/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
++github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM=
++github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
++github.com/google/go-cmp v0.1.0 h1:9tmYDKxX2N1am4Ooz6a2HC7DfK0CWNuhT8T/Fi/bvtA=
++github.com/google/go-cmp v0.1.0/go.mod h1:oXzfMopK8JAjlY9xF4vHSVASa0yLyX7SntLO5aqRK0M=
++github.com/google/gofuzz v0.0.0-20161122191042-44d81051d367 h1:ScAXWS+TR6MZKex+7Z8rneuSJH+FSDqd6ocQyl+ZHo4=
++github.com/google/gofuzz v0.0.0-20161122191042-44d81051d367/go.mod h1:HP5RmnzzSNb993RKQDq4+1A4ia9nllfqcQFTQJedwGI=
++github.com/grpc-ecosystem/go-grpc-prometheus v0.0.0-20160910222444-6b7015e65d36 h1:cwTrrTEhz13khQS3/UZMLFWwiqlcsdp/2sxFmSjAWeQ=
++github.com/grpc-ecosystem/go-grpc-prometheus v0.0.0-20160910222444-6b7015e65d36/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
++github.com/hashicorp/errwrap v0.0.0-20141028054710-7554cd9344ce h1:prjrVgOk2Yg6w+PflHoszQNLTUh4kaByUcEWM/9uin4=
++github.com/hashicorp/errwrap v0.0.0-20141028054710-7554cd9344ce/go.mod h1:YH+1FKiLXxHSkmPseP+kNlulaMuP3n2brvKWEqk/Jc4=
++github.com/hashicorp/go-multierror v0.0.0-20161216184304-ed905158d874 h1:cAv7ZbSmyb1wjn6T4TIiyFCkpcfgpbcNNC3bM2srLaI=
++github.com/hashicorp/go-multierror v0.0.0-20161216184304-ed905158d874/go.mod h1:JMRHfdO9jKNzS/+BTlxCjKNQHg/jZAft8U7LloJvN7I=
++github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=
++github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
++github.com/json-iterator/go v1.1.5 h1:gL2yXlmiIo4+t+y32d4WGwOjKGYcGOuyrg46vadswDE=
++github.com/json-iterator/go v1.1.5/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
++github.com/linuxkit/virtsock v0.0.0-20180830132707-8e79449dea07 h1:Txrn3UR5uEutnv3naHnt9nhDHWDUrK/NjtKs17hMTMw=
++github.com/linuxkit/virtsock v0.0.0-20180830132707-8e79449dea07/go.mod h1:3r6x7q95whyfWQpmGZTu3gk3v2YkMi05HEzl7Tf7YEo=
++github.com/matttproud/golang_protobuf_extensions v1.0.0 h1:YNOwxxSJzSUARoD9KRZLzM9Y858MNGCOACTvCW9TSAc=
++github.com/matttproud/golang_protobuf_extensions v1.0.0/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
++github.com/mistifyio/go-zfs v0.0.0-20171122051224-166add352731 h1:2kI6piV7D1QfQwaJsvDK5+zwDtz5Z5pODaPZbAbIers=
++github.com/mistifyio/go-zfs v0.0.0-20171122051224-166add352731/go.mod h1:8AuVvqP/mXw1px98n46wfvcGfQ4ci2FwoAjKYxuo3Z4=
++github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=
++github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
++github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 h1:Esafd1046DLDQ0W1YjYsBW+p8U2u7vzgW2SQVmlNazg=
++github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
++github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
++github.com/onsi/ginkgo v1.8.0 h1:VkHVNpR4iVnU8XQR6DBm8BqYjN7CRzw+xKUbVVbbW9w=
++github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
++github.com/onsi/gomega v1.5.0 h1:izbySO9zDPmjJ8rDjLvkA2zJHIo+HkYXHnf7eN7SSyo=
++github.com/onsi/gomega v1.5.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
++github.com/opencontainers/go-digest v0.0.0-20180430190053-c9281466c8b2 h1:QhPf3A2AZW3tTGvHPg0TA+CR3oHbVLlXUhlghqISp1I=
++github.com/opencontainers/go-digest v0.0.0-20180430190053-c9281466c8b2/go.mod h1:cMLVZDEM3+U2I4VmLI6N8jQYUd2OVphdqWwCJHrFt2s=
++github.com/opencontainers/image-spec v1.0.1 h1:JMemWkRwHx4Zj+fVxWoMCFm/8sYGGrUVojFA6h/TRcI=
++github.com/opencontainers/image-spec v1.0.1/go.mod h1:BtxoFyWECRxE4U/7sNtV5W15zMzWCbyJoFRP3s7yZA0=
++github.com/opencontainers/runc v0.0.0-20190115041553-12f6a991201f h1:a969LJ4IQFwRHYqonHtUDMSh9i54WcKggeEkQ3fZMl4=
++github.com/opencontainers/runc v0.0.0-20190115041553-12f6a991201f/go.mod h1:qT5XzbpPznkRYVz/mWwUaVBUv2rmF59PVA73FjuZG0U=
++github.com/opencontainers/runtime-spec v0.0.0-20180909173843-eba862dc2470 h1:dQgS6CgSB2mBQur4Cz7kaEtXNSw56ZlRb7ZsBT70hTA=
++github.com/opencontainers/runtime-spec v0.0.0-20180909173843-eba862dc2470/go.mod h1:jwyrGlmzljRJv/Fgzds9SsS/C5hL+LL3ko9hs6T5lQ0=
++github.com/opencontainers/runtime-tools v0.6.0 h1:NYIDT9KoSAIfmXpMrulp/j+64c8OBb2l19u3vmOl4so=
++github.com/opencontainers/runtime-tools v0.6.0/go.mod h1:r3f7wjNzSs2extwzU3Y+6pKfobzPh+kKFJ3ofN+3nfs=
++github.com/opencontainers/selinux v0.0.0-20180628160156-b6fa367ed7f5 h1:gB9Q5rgyqOydWjwo1/qd0AEWa0C8MIl+MR8tklNaQ+w=
++github.com/opencontainers/selinux v0.0.0-20180628160156-b6fa367ed7f5/go.mod h1:+BLncwf63G4dgOzykXAxcmnFlUaOlkDdmw/CqsW6pjs=
++github.com/pborman/uuid v0.0.0-20180122190007-c65b2f87fee3 h1:9J0mOv1rXIBlRjQCiAGyx9C3dZZh5uIa3HU0oTV8v1E=
++github.com/pborman/uuid v0.0.0-20180122190007-c65b2f87fee3/go.mod h1:VyrYX9gd7irzKovcSS6BIIEwPRkP2Wm2m9ufcdFSJ34=
 +github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=
 +github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 +github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 +github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-+github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea h1:G1PmHXBlo7d4vTCVEoifjyLZPPe5N7/onNLXgtwsiW0=
-+github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea/go.mod h1:GbW5+tmTXfcxTToHLXlScSlAvWlF4P2Ca7zGrPiEpWo=
-+github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235 h1:a2XWU6egUZQhD52o2GEKr79zE+OuZmwLybyOQpoqhHQ=
-+github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235/go.mod h1:pMByvHTf9Beacp5x1UXfOR9xyW/9antXMhjMPG0dEzc=
++github.com/prometheus/client_golang v0.0.0-20180131142826-f4fb1b73fb09 h1:v1e+C2rmzKYWLU13Xu9q2C3IlruVdQGL9hRj9jo97/k=
++github.com/prometheus/client_golang v0.0.0-20180131142826-f4fb1b73fb09/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
++github.com/prometheus/client_model v0.0.0-20171117100541-99fa1f4be8e5 h1:cLL6NowurKLMfCeQy4tIeph12XNQWgANCNvdyrOYKV4=
++github.com/prometheus/client_model v0.0.0-20171117100541-99fa1f4be8e5/go.mod h1:MbSGuTsp3dbXC40dX6PRTWyKYBIrTGTE9sqQNg2J8bo=
++github.com/prometheus/common v0.0.0-20180110214958-89604d197083 h1:BVsJT8+ZbyuL3hypz/HmEiM8h2P6hBQGig4el9/MdjA=
++github.com/prometheus/common v0.0.0-20180110214958-89604d197083/go.mod h1:daVV7qP5qjZbuso7PdcryaAu0sAZbrN9i7WWcTMWvro=
++github.com/prometheus/procfs v0.0.0-20180125133057-cb4147076ac7 h1:hhvfGDVThBnd4kYisSFmYuHYeUhglxcwag7FhVPH9zM=
++github.com/prometheus/procfs v0.0.0-20180125133057-cb4147076ac7/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
++github.com/satori/go.uuid v1.2.0 h1:0uYX9dsZ2yD7q2RtLRtPSdGDWzjeM3TbMJP9utgA0ww=
++github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
++github.com/seccomp/libseccomp-golang v0.0.0-20160531183505-32f571b70023 h1:ZtrLs4RfZhyCYqamkjrwNSSAYhnRYqBSi8g17h2kars=
++github.com/seccomp/libseccomp-golang v0.0.0-20160531183505-32f571b70023/go.mod h1:GbW5+tmTXfcxTToHLXlScSlAvWlF4P2Ca7zGrPiEpWo=
++github.com/sirupsen/logrus v1.0.0 h1:XM8X4m/9ACaclZMs946FQNEZBZafvToJLTR4007drwo=
++github.com/sirupsen/logrus v1.0.0/go.mod h1:pMByvHTf9Beacp5x1UXfOR9xyW/9antXMhjMPG0dEzc=
++github.com/spf13/pflag v1.0.3 h1:zPAT6CGy6wXeQ7NtTnaTerfKOsV6V6F8agHXFiazDkg=
++github.com/spf13/pflag v1.0.3/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
++github.com/stretchr/objx v0.1.0 h1:4G4v2dO3VZwixGIRoQ5Lfboy6nUhCyYzaqnIAPPhYs4=
 +github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 +github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 +github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 +github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8 h1:zLV6q4e8Jv9EHjNg/iHfzwDkCve6Ua5jCygptrtXHvI=
 +github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8/go.mod h1:hkRG7XYTFWNJGYcbNJQlaLq0fg1yr4J4t/NcTQtrfww=
-+github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b h1:NCe8LNa+eGKU8K2/UEbMBM303YWoS0/PrJlbSglCUh0=
-+github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
-+github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc h1:0HAHLwEY4k1VqaO1SzBi4XxT0KA06Cv+QW2LXknBk9g=
-+github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc/go.mod h1:+SR5DhBJrl6ZM7CoCKvpw5BKroDKQ+PJqOg65H/2ktk=
-+github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc h1:R83G5ikgLMxrBvLh22JhdfI8K6YXEPHx5P03Uu3DRs4=
-+github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc/go.mod h1:ZjcWmFBXmLKZu9Nxj3WKYEafiSqer2rnvPr0en9UNpI=
-+golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 h1:bjcUS9ztw9kFmmIxJInhon/0Is3p+EHBKNgquIzo1OI=
-+golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
-+golang.org/x/sys v0.0.0-20190204203706-41f3e6584952 h1:FDfvYgoVsA7TTZSbgiqjAbfPbK47CNHdWl3h/PJtii0=
-+golang.org/x/sys v0.0.0-20190204203706-41f3e6584952/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 0539661266..4b2675d6e2 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -9,8 +9,6 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
- 
--RUNC_WORKSPACE = Godeps/_workspace
--
- RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
- RUNC_TAGS = cgo static_build
++github.com/tchap/go-patricia v2.2.6+incompatible h1:JvoDL7JSoIP2HDE8AbDH3zC8QBPxmzYe32HHy5yQ+Ck=
++github.com/tchap/go-patricia v2.2.6+incompatible/go.mod h1:bmLyhP68RS6kStMGxByiQ23RP/odRBOTVjwp2cDyi6I=
++github.com/urfave/cli v0.0.0-20171014202726-7bc6a0acffa5 h1:MCfT24H3f//U5+UCrZp1/riVO3B50BovxtDiNn0XKkk=
++github.com/urfave/cli v0.0.0-20171014202726-7bc6a0acffa5/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
++github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f h1:J9EGpcZtP0E/raorCMxlFGSTBrsSlaDGf3jU/qvAE2c=
++github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f/go.mod h1:N2zxlSyiKSe5eX1tZViRH5QA0qijqEDrYZiPEAiq3wU=
++github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 h1:EzJWgHovont7NscjpAxXsDA8S8BMYve8Y5+7cuRE7R0=
++github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415/go.mod h1:GwrjFmJcFw6At/Gs6z4yjiIwzuJ1/+UwLxMQDVQXShQ=
++github.com/xeipuuv/gojsonschema v0.0.0-20180618132009-1d523034197f h1:mvXjJIHRZyhNuGassLTcXTwjiWq7NmjdavZsUnmFybQ=
++github.com/xeipuuv/gojsonschema v0.0.0-20180618132009-1d523034197f/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4myDekKRoLuqhs=
++go.etcd.io/bbolt v1.3.1-etcd.8 h1:6J7QAKqfFBGnU80KRnuQxfjjeE5xAGE/qB810I3FQHQ=
++go.etcd.io/bbolt v1.3.1-etcd.8/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
++golang.org/x/crypto v0.0.0-20180222182404-49796115aa4b h1:/GxqO8gbyb+sNnviFY2IIMrtm8vGg6NEJDft68wJY/g=
++golang.org/x/crypto v0.0.0-20180222182404-49796115aa4b/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
++golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
++golang.org/x/net v0.0.0-20180906233101-161cd47e91fd h1:nTDtHvHSdCn1m6ITfMRqtOd/9+7a3s8RBNOZ3eYZzJA=
++golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
++golang.org/x/oauth2 v0.0.0-20170412232759-a6bd8cefa181 h1:/4OaQ4bC66Oq9JDhUnxTjBGt8XBhDuwgMRXHgvfcCUY=
++golang.org/x/oauth2 v0.0.0-20170412232759-a6bd8cefa181/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
++golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f h1:wMNYb4v58l5UBM7MYRLPG6ZhfOqbKu7X5eyFl8ZhKvA=
++golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
++golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e h1:o3PsSEY8E4eXWkXrIP9YJALUkVZqzHJT5DOasTyn8Vs=
++golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
++golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
++golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
++golang.org/x/time v0.0.0-20161028155119-f51c12702a4d h1:TnM+PKb3ylGmZvyPXmo9m/wktg7Jn/a/fNmr33HSj8g=
++golang.org/x/time v0.0.0-20161028155119-f51c12702a4d/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
++google.golang.org/appengine v1.4.0 h1:/wp5JvzpHIxhs/dumFmF7BXTf3Z+dd4uXta4kVyO508=
++google.golang.org/appengine v1.4.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
++google.golang.org/genproto v0.0.0-20170523043604-d80a6e20e776 h1:wVJP1pATLVPNxCz4R2mTO6HUJgfGE0PmIu2E10RuhCw=
++google.golang.org/genproto v0.0.0-20170523043604-d80a6e20e776/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=
++google.golang.org/grpc v1.12.0 h1:Mm8atZtkT+P6R43n/dqNDWkPPu5BwRVu/1rJnJCeZH8=
++google.golang.org/grpc v1.12.0/go.mod h1:yo6s7OP7yaDglbqo1J04qKzAhqBH6lvTonzMVmEdcZw=
++gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
++gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
++gopkg.in/fsnotify.v1 v1.4.7 h1:xOHLXZwVvI9hhs+cLKq5+I5onOuwQLhQwiu63xxlHs4=
++gopkg.in/fsnotify.v1 v1.4.7/go.mod h1:Tz8NjZHkW78fSQdbUxIjBTcgA1z1m8ZHf0WmKUhAMys=
++gopkg.in/inf.v0 v0.9.0 h1:3zYtXIO92bvsdS3ggAdA8Gb4Azj0YU+TVY1uGYNFA8o=
++gopkg.in/inf.v0 v0.9.0/go.mod h1:cWUDdTG/fYaXco+Dcufb5Vnc6Gp2YChqWtbxRZE0mXw=
++gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 h1:uRGJdciOHaEIrze2W8Q3AKkepLTh2hOroT7a+7czfdQ=
++gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7/go.mod h1:dt/ZhP58zS4L8KSrWDmTeBkI65Dw0HsyUHuEVlX15mw=
++gopkg.in/yaml.v2 v2.2.1 h1:mUhvW9EsL+naU5Q3cakzfE91YhliOondGd6ZrsDBHQE=
++gopkg.in/yaml.v2 v2.2.1/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
++gotest.tools v2.1.0+incompatible h1:5USw7CrJBYKqjg9R7QlA6jzqZKEAtvW82aNmsxxGPxw=
++gotest.tools v2.1.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
++k8s.io/api v0.0.0-20181004124137-fd83cbc87e76 h1:cGc6jt7tNK7a2WfgNKjxjoU/UXXr9Q7JTqvCupZ+6+Y=
++k8s.io/api v0.0.0-20181004124137-fd83cbc87e76/go.mod h1:iuAfoD4hCxJ8Onx9kaTIt30j7jUFS00AXQi6QMi99vA=
++k8s.io/apimachinery v0.0.0-20180913025736-6dd46049f395 h1:X+c9tYTDc9Pmt+Z1YSMqmUTCYf13VYe1u+ZwzjgpK0M=
++k8s.io/apimachinery v0.0.0-20180913025736-6dd46049f395/go.mod h1:ccL7Eh7zubPUSh9A3USN90/OzHNSVN6zxzde07TDCL0=
++k8s.io/apiserver v0.0.0-20181004124341-e85ad7b666fe h1:QNs3vf1GO871H/R8rUYJpiXjp7mplm7d5mI9b30XUGQ=
++k8s.io/apiserver v0.0.0-20181004124341-e85ad7b666fe/go.mod h1:6bqaTSOSJavUIXUtfaR9Os9JtTCm8ZqH2SUl2S60C4w=
++k8s.io/client-go v9.0.0+incompatible h1:2kqW3X2xQ9SbFvWZjGEHBLlWc1LG9JIJNXWkuqwdZ3A=
++k8s.io/client-go v9.0.0+incompatible/go.mod h1:7vJpHMYJwNQCWgzmNV+VYUl1zCObLyodBc8nIyt8L5s=
++k8s.io/kubernetes v1.12.0 h1:2PjG+1oSb9SSwFkJIH6HZH85CDfJ7hOaMMMQYi1Q+0c=
++k8s.io/kubernetes v1.12.0/go.mod h1:ocZa8+6APFNC2tX1DZASIbocyYT5jHzqFVsY5aoB7Jk=
++k8s.io/utils v0.0.0-20180918230422-cd34563cd63c h1:1fJozimgUsIqPVvgjlpeh53pMbPFXXFiCoe4CErMFJ0=
++k8s.io/utils v0.0.0-20180918230422-cd34563cd63c/go.mod h1:8k8uAuAQ0rXslZKaEWd0c3oVhZz7sSzSiPnVZayjIX0=
 -- 
 2.19.2
