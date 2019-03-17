@@ -1,59 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 14:35:03 +0100
-Subject: [Buildroot] [git commit] support/graph-depends: add option to
- exclude mandatory deps
-Message-ID: <20190317144806.830BE7FF2B@busybox.osuosl.org>
+Date: Sun, 17 Mar 2019 15:57:19 +0100
+Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
+ 'source-check' target
+In-Reply-To: <20190317143215.GD14237@scaer>
+References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+ <20190317143215.GD14237@scaer>
+Message-ID: <20190317155719.14839925@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66cf4201f92082162a7be6e58f5e11368e226ae3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some times, multiple dependency graphs for a set of packages (mostly
-the application-level packages for the project) are included in reports
-(e.g. delivery notes). Repeating the mandatory dependencies on all
-those graphs is useless and clutters the important dependencies.
+On Sun, 17 Mar 2019 15:32:15 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-When we had only two such mandatory dependencies (toolchain, skeleton),
-it was manageable to list them as manual exclusions:
-    -x toolchain -x skeleton
+> As discussed with Thomas P., it all depends on the semantics we want to
+> give to source-check. But the one implemented by your series does not
+> seem that interesting in the end. Yes, it makes your remote-worker-with-
+> a-slow-connection maybe a bit more bearable.
+> 
+> It also means that all it says is that, right at the time of source-check,
+> here is actually "something" named as you expect, but there is no
+> guarantee that a 'make source' later will be able to get that "something"
+> anyway.
+> 
+> So, I am still not entirely convinced by the usefulness of source-check.
 
-But we now have quite a few such dependencies, and it becomes a bit more
-cumbersome to manage, not counting the ones we may add in the future.
+Just to add to Yann's explanations, here are the two aspects that makes
+the proposed semantic of "source-check" a bit weak:
 
-Add an option to exclude all those mandatory dependencies, to generate
-neat graphs.
+ - It only says "something" was available at the specified download
+   location, but not that this something matches the hash we have in
+   the package hash file. Hence a successful "make source-check" does
+   not guarantee a successful "make source".
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/graph-depends | 5 +++++
- 1 file changed, 5 insertions(+)
+ - It only says at the time of "make source-check" that "something" was
+   available at the specified download location, but 2 minutes later
+   the file could be removed upstream, the tag be dropped, etc. Hence a
+   successful "make source-check" does not guarantee a successful "make
+   source".
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 5a6f6930e9..5c5de7dd0b 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -311,6 +311,8 @@ def parse_args():
-                         "'host' to stop on host packages.")
-     parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
-                         help="Like --stop-on, but do not add PACKAGE to the graph.")
-+    parser.add_argument("--exclude-mandatory", "-X", action="store_true",
-+                        help="Like if -x was passed for all mandatory dependencies.")
-     parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
-                         default="lightblue,grey,gainsboro",
-                         help="Comma-separated list of the three colors to use" +
-@@ -364,6 +366,9 @@ def main():
-     else:
-         exclude_list = args.exclude_list
- 
-+    if args.exclude_mandatory:
-+        exclude_list += MANDATORY_DEPS
-+
-     if args.direct:
-         get_depends_func = brpkgutil.get_depends
-         arrow_dir = "forward"
+So, a "make source-check" does not provide you much guarantees. It only
+tells you that at the time of the source-check, "something" was
+available at the specified download location, but you don't know if
+that "something" is correct and that it will still be around when
+you'll do your build.
+
+If we are willing to accept this very weak semantic of source-check,
+then fair enough, but we (and our users) have to be aware of the very
+limited guarantees that source-check provides.
+
+What do you think?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
