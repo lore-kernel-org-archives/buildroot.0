@@ -1,42 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 17:30:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jack2: bump to version 1.9.12
-In-Reply-To: <20190317153211.27782-1-fontaine.fabrice@gmail.com>
-References: <20190317153211.27782-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190317173024.2ccf5321@windsurf>
+Date: Sun, 17 Mar 2019 17:30:52 +0100
+Subject: [Buildroot] [git commit] package/python-ipython: bump to version
+ 7.3.0
+Message-ID: <20190317162759.326E38E37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 16:32:11 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bc516052593947a067c98956931df9df31ee3195
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove patches (already in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-initialization-in-test-iodelay.patch  | 65 -----------------
->  .../jack2/0002-Improve-check-for-ucontext.patch    | 84 ----------------------
->  ...ace-support-depends-on-execinfo.h-existen.patch | 67 -----------------
->  .../0004-tests-define-__STDC_LIMIT_MACROS.patch    | 41 -----------
->  package/jack2/0005-gcc7.patch                      | 31 --------
->  package/jack2/0006-fix-ftbfs-with-clang.patch      | 28 --------
->  package/jack2/jack2.hash                           |  2 +-
->  package/jack2/jack2.mk                             |  2 +-
->  8 files changed, 2 insertions(+), 318 deletions(-)
->  delete mode 100644 package/jack2/0001-Fix-initialization-in-test-iodelay.patch
->  delete mode 100644 package/jack2/0002-Improve-check-for-ucontext.patch
->  delete mode 100644 package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
->  delete mode 100644 package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
->  delete mode 100644 package/jack2/0005-gcc7.patch
->  delete mode 100644 package/jack2/0006-fix-ftbfs-with-clang.patch
+- Update hash for COPYING.rst, it has been updated to remove
+  BSD-3-Clause text:
+  https://github.com/ipython/ipython/commit/5a6ef3e35db9ac04bf47a17d96484e03370f03dd
+- Add LICENSE to license files as this is now the file that contain
+  BSD-3-Clause text
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-ipython/python-ipython.hash | 7 ++++---
+ package/python-ipython/python-ipython.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 41bdd70feb..e49ff6b10e 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,5 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5 7014b8824981eef2cb893ea5398d6b8d ipython-5.8.0.tar.gz
+-sha256 4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906 ipython-5.8.0.tar.gz
++md5 2aec01154a78c6075c5b7f1bfea4abd3 ipython-7.3.0.tar.gz
++sha256 06de667a9e406924f97781bda22d5d76bfb39762b678762d86a466e63f65dc39 ipython-7.3.0.tar.gz
+ # Locally computed sha256
+-sha256 a5d87689342ec47cebdf623af06cec734c607666c696fe48271f2ff91752443d COPYING.rst
++sha256 341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17 COPYING.rst
++sha256 e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 79a48bf43d..048428e83a 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IPYTHON_VERSION = 5.8.0
++PYTHON_IPYTHON_VERSION = 7.3.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/41/a6/2d25314b1f9375639d8f8e0f8052e8cec5df511d3449f22c4f1c2d8cb3c6
++PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/82/0a/146b0f0f1ddf13ab8682aed5c5a42250cddf1082e193ec95b50b03b9f791
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+-PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
++PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
