@@ -1,34 +1,25 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon, 18 Mar 2019 06:05:57 +0800
-Subject: [Buildroot] [PATCH 1/1] package/python-aiojobs: drop aiohttp
- dependency
-Message-ID: <20190317220557.1359-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Mar 2019 23:07:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to
+ version 0.19.2
+In-Reply-To: <20190301212703.10913-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Mar 2019 22:27:03 +0100")
+References: <20190301212703.10913-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvg188ab.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-aiohttp isn't a required dependency for aiojobs
+ > - Fixes CVE-2018-5815 and CVE-2018-5816
+ > - README has been renamed into README.md
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiojobs/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/python-aiojobs/Config.in b/package/python-aiojobs/Config.in
-index 54d6c02a8e..ab61985164 100644
---- a/package/python-aiojobs/Config.in
-+++ b/package/python-aiojobs/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_AIOJOBS
- 	bool "python-aiojobs"
- 	depends on BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
- 	help
- 	  Jobs scheduler for managing background task (asyncio).
- 
+Committed to 2018.02.x and 2018.11.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
