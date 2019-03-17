@@ -1,243 +1,229 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 11:14:02 +0100
-Subject: [Buildroot] [git commit] package/cups: security bump to version
- 2.2.10
-Message-ID: <20190317101108.D054F8E8A6@busybox.osuosl.org>
+Date: Sun, 17 Mar 2019 11:13:29 +0100
+Subject: [Buildroot] [git commit] package/python-numpy: bump to version
+ 1.16.2
+Message-ID: <20190317101108.B9E6C8E8A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=260d9e534268083e7aa89e1bdb47bb8f3668a052
+commit: https://git.buildroot.net/buildroot/commit/?id=c82da04c7ef2eb44b320f2b4863fa3622896d038
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fixes CVE-2018-4700: Linux session cookies used a predictable random
-  number seed: https://github.com/apple/cups/releases/tag/v2.2.10.
-- Remove fifth patch (already in version)
+- Update patches and send them upstream
+- Update license hash (typos fixed and year updated)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0005-Fix-builds-without-PAM-Issue-5283.patch   | 189 ---------------------
- package/cups/cups.hash                             |   2 +-
- package/cups/cups.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 191 deletions(-)
+ .../0001-Don-t-use-fenv.h-on-uClibc.patch          | 30 +++++++++++++
+ package/python-numpy/0001-no-fenv-on-uclibc.patch  | 49 ----------------------
+ ...2-FIX-no-FPU-exceptions-bits-on-ARC-glibc.patch | 31 ++++++++++++++
+ .../0003-no-FPU-exceptions-bits-on-ARC-glibc.patch | 42 -------------------
+ package/python-numpy/python-numpy.hash             |  6 +--
+ package/python-numpy/python-numpy.mk               |  2 +-
+ 6 files changed, 65 insertions(+), 95 deletions(-)
 
-diff --git a/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch b/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+diff --git a/package/python-numpy/0001-Don-t-use-fenv.h-on-uClibc.patch b/package/python-numpy/0001-Don-t-use-fenv.h-on-uClibc.patch
+new file mode 100644
+index 0000000000..8b3937a1ba
+--- /dev/null
++++ b/package/python-numpy/0001-Don-t-use-fenv.h-on-uClibc.patch
+@@ -0,0 +1,30 @@
++From 52b47439d17463304e5bd7974dec17ced0b0f24a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 Mar 2019 10:38:27 +0100
++Subject: [PATCH] Don't use <fenv.h> on uClibc
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/numpy/numpy/pull/13137]
++---
++ numpy/core/src/npymath/ieee754.c.src | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
++index d960838c8..f3f15f841 100644
++--- a/numpy/core/src/npymath/ieee754.c.src
+++++ b/numpy/core/src/npymath/ieee754.c.src
++@@ -681,7 +681,8 @@ void npy_set_floatstatus_invalid(void)
++     fp_raise_xcp(FP_INVALID);
++ }
++ 
++-#elif defined(_MSC_VER) || (defined(__osf__) && defined(__alpha))
+++#elif defined(_MSC_VER) || (defined(__osf__) && defined(__alpha)) || \
+++      defined (__UCLIBC__)
++ 
++ /*
++  * By using a volatile floating point value,
++-- 
++2.14.1
++
+diff --git a/package/python-numpy/0001-no-fenv-on-uclibc.patch b/package/python-numpy/0001-no-fenv-on-uclibc.patch
 deleted file mode 100644
-index ff242f8276..0000000000
---- a/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+index 5aa377bb21..0000000000
+--- a/package/python-numpy/0001-no-fenv-on-uclibc.patch
 +++ /dev/null
-@@ -1,189 +0,0 @@
--From 570933a6a3597371bae1beeb754ee8711d6305ab Mon Sep 17 00:00:00 2001
--From: Michael R Sweet <michael.r.sweet@gmail.com>
--Date: Mon, 2 Apr 2018 20:05:13 -0400
--Subject: [PATCH] Fix builds without PAM (Issue #5283)
+@@ -1,49 +0,0 @@
+-From 1d309b81a6fdac33dfb5148f618bafe6ebdff958 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 15 Sep 2017 12:51:36 +0300
+-Subject: [PATCH] Don't use <fenv.h> on uClibc
 -
--[baruch: drop CHANGES.md hunk]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-The python-numpy code already has provisions to not use <fenv.h> when
+-not available. However, it uses __GLIBC__ to know whether fenv.h is
+-available or not, but uClibc defines __GLIBC__, so python-numpy thinks
+-fenv.h is available.
+-
+-This patch fixes that by changing all defined(__GLIBC__) occurences by
+-(defined(__GLIBC__) && !defined(__UCLIBC__)).
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ----
--Upstream status: commit 570933a6a3
+- numpy/core/include/numpy/ufuncobject.h | 2 +-
+- numpy/core/src/npymath/ieee754.c.src   | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
 -
-- CHANGES.md       |   8 ++-
-- scheduler/auth.c | 134 ++---------------------------------------------
-- 2 files changed, 11 insertions(+), 131 deletions(-)
--
--diff --git a/scheduler/auth.c b/scheduler/auth.c
--index 8b134b5d7257..fa4e2715de34 100644
----- a/scheduler/auth.c
--+++ b/scheduler/auth.c
--@@ -1,8 +1,8 @@
-- /*
--  * Authorization routines for the CUPS scheduler.
--  *
--- * Copyright 2007-2016 by Apple Inc.
--- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
--+ * Copyright ?? 2007-2018 by Apple Inc.
--+ * Copyright ????1997-2007 by Easy Software Products, all rights reserved.
--  *
--  * This file contains Kerberos support code, copyright 2006 by
--  * Jelmer Vernooij.
--@@ -71,9 +71,6 @@ static int		check_authref(cupsd_client_t *con, const char *right);
-- static int		compare_locations(cupsd_location_t *a,
-- 			                  cupsd_location_t *b);
-- static cupsd_authmask_t	*copy_authmask(cupsd_authmask_t *am, void *data);
---#if !HAVE_LIBPAM
---static char		*cups_crypt(const char *pw, const char *salt);
---#endif /* !HAVE_LIBPAM */
-- static void		free_authmask(cupsd_authmask_t *am, void *data);
-- #if HAVE_LIBPAM
-- static int		pam_func(int, const struct pam_message **,
--@@ -694,14 +691,14 @@ cupsdAuthorize(cupsd_client_t *con)	/* I - Client connection */
-- 	    * client...
-- 	    */
-- 
---	    pass = cups_crypt(password, pw->pw_passwd);
--+	    pass = crypt(password, pw->pw_passwd);
-- 
-- 	    if (!pass || strcmp(pw->pw_passwd, pass))
-- 	    {
-- #  ifdef HAVE_SHADOW_H
-- 	      if (spw)
-- 	      {
---		pass = cups_crypt(password, spw->sp_pwdp);
--+		pass = crypt(password, spw->sp_pwdp);
-- 
-- 		if (pass == NULL || strcmp(spw->sp_pwdp, pass))
-- 		{
--@@ -1995,129 +1992,6 @@ copy_authmask(cupsd_authmask_t *mask,	/* I - Existing auth mask */
+-diff --git a/numpy/core/include/numpy/ufuncobject.h b/numpy/core/include/numpy/ufuncobject.h
+-index d0ac1fd7d732..65e49fcd5b7a 100644
+---- a/numpy/core/include/numpy/ufuncobject.h
+-+++ b/numpy/core/include/numpy/ufuncobject.h
+-@@ -319,7 +319,7 @@ typedef struct _loop1d_info {
+- #if defined(sun) || defined(__BSD__) || defined(__OpenBSD__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version < 502114)) || \
+-       defined(__NetBSD__) || \
+--      defined(__GLIBC__) || defined(__APPLE__) || \
+-+      (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+-       defined(__CYGWIN__) || defined(__MINGW32__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114)) || \
+-       defined(_AIX) || \
+-diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
+-index 0370ea6c77aa..e63e409b6604 100644
+---- a/numpy/core/src/npymath/ieee754.c.src
+-+++ b/numpy/core/src/npymath/ieee754.c.src
+-@@ -612,7 +612,7 @@ void npy_set_floatstatus_invalid(void)
 - }
 - 
 - 
---#if !HAVE_LIBPAM
---/*
--- * 'cups_crypt()' - Encrypt the password using the DES or MD5 algorithms,
--- *                  as needed.
--- */
---
---static char *				/* O - Encrypted password */
---cups_crypt(const char *pw,		/* I - Password string */
---           const char *salt)		/* I - Salt (key) string */
---{
---  if (!strncmp(salt, "$1$", 3))
---  {
---   /*
---    * Use MD5 passwords without the benefit of PAM; this is for
---    * Slackware Linux, and the algorithm was taken from the
---    * old shadow-19990827/lib/md5crypt.c source code... :(
---    */
---
---    int			i;		/* Looping var */
---    unsigned long	n;		/* Output number */
---    int			pwlen;		/* Length of password string */
---    const char		*salt_end;	/* End of "salt" data for MD5 */
---    char		*ptr;		/* Pointer into result string */
---    _cups_md5_state_t	state;		/* Primary MD5 state info */
---    _cups_md5_state_t	state2;		/* Secondary MD5 state info */
---    unsigned char	digest[16];	/* MD5 digest result */
---    static char		result[120];	/* Final password string */
---
---
---   /*
---    * Get the salt data between dollar signs, e.g. $1$saltdata$md5.
---    * Get a maximum of 8 characters of salt data after $1$...
---    */
---
---    for (salt_end = salt + 3; *salt_end && (salt_end - salt) < 11; salt_end ++)
---      if (*salt_end == '$')
---        break;
---
---   /*
---    * Compute the MD5 sum we need...
---    */
---
---    pwlen = strlen(pw);
---
---    _cupsMD5Init(&state);
---    _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---    _cupsMD5Append(&state, (unsigned char *)salt, salt_end - salt);
---
---    _cupsMD5Init(&state2);
---    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
---    _cupsMD5Append(&state2, (unsigned char *)salt + 3, salt_end - salt - 3);
---    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
---    _cupsMD5Finish(&state2, digest);
---
---    for (i = pwlen; i > 0; i -= 16)
---      _cupsMD5Append(&state, digest, i > 16 ? 16 : i);
---
---    for (i = pwlen; i > 0; i >>= 1)
---      _cupsMD5Append(&state, (unsigned char *)((i & 1) ? "" : pw), 1);
---
---    _cupsMD5Finish(&state, digest);
---
---    for (i = 0; i < 1000; i ++)
---    {
---      _cupsMD5Init(&state);
---
---      if (i & 1)
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---      else
---        _cupsMD5Append(&state, digest, 16);
---
---      if (i % 3)
---        _cupsMD5Append(&state, (unsigned char *)salt + 3, salt_end - salt - 3);
---
---      if (i % 7)
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---
---      if (i & 1)
---        _cupsMD5Append(&state, digest, 16);
---      else
---        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
---
---      _cupsMD5Finish(&state, digest);
---    }
---
---   /*
---    * Copy the final sum to the result string and return...
---    */
---
---    memcpy(result, salt, (size_t)(salt_end - salt));
---    ptr = result + (salt_end - salt);
---    *ptr++ = '$';
---
---    for (i = 0; i < 5; i ++, ptr += 4)
---    {
---      n = ((((unsigned)digest[i] << 8) | (unsigned)digest[i + 6]) << 8);
---
---      if (i < 4)
---        n |= (unsigned)digest[i + 12];
---      else
---        n |= (unsigned)digest[5];
---
---      to64(ptr, n, 4);
---    }
---
---    to64(ptr, (unsigned)digest[11], 2);
---    ptr += 2;
---    *ptr = '\0';
---
---    return (result);
---  }
---  else
---  {
---   /*
---    * Use the standard crypt() function...
---    */
---
---    return (crypt(pw, salt));
---  }
---}
---#endif /* !HAVE_LIBPAM */
---
---
-- /*
--  * 'free_authmask()' - Free function for auth masks.
--  */
+--#elif defined(__GLIBC__) || defined(__APPLE__) || \
+-+#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+-       defined(__CYGWIN__) || defined(__MINGW32__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
+- #  include <fenv.h>
 --- 
--2.17.0
+-2.7.5
 -
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index a19b3b09a6..3d238d61e6 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256 3c4b637b737077565ccdfbd5f61785d03f49461ae736fcc2c0ffaf41d2c6ea6a  cups-2.2.7-source.tar.gz
-+sha256 77c8b2b3bb7fe8b5fbfffc307f2c817b2d7ec67b657f261a1dd1c61ab81205bb  cups-2.2.10-source.tar.gz
- sha256 6e0e0ffbde118aae709f7ef65590de9071e8b2cd322f84fd645c6b64f3cc452c  LICENSE.txt
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 8f33824879..b91fe7ac4c 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
+diff --git a/package/python-numpy/0002-FIX-no-FPU-exceptions-bits-on-ARC-glibc.patch b/package/python-numpy/0002-FIX-no-FPU-exceptions-bits-on-ARC-glibc.patch
+new file mode 100644
+index 0000000000..ece52118d7
+--- /dev/null
++++ b/package/python-numpy/0002-FIX-no-FPU-exceptions-bits-on-ARC-glibc.patch
+@@ -0,0 +1,31 @@
++From 1125f1ee33324bc91b4e8dd9da49163af572d04a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 Mar 2019 10:48:25 +0100
++Subject: [PATCH] FIX: no FPU exceptions bits on ARC glibc
++
++The FPU exceptions bits are missing in fenv.h in glibc for ARC
++architecture.
++
++Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/numpy/numpy/pull/13137]
++---
++ numpy/core/src/npymath/ieee754.c.src | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
++index f3f15f841..3f66b24a4 100644
++--- a/numpy/core/src/npymath/ieee754.c.src
+++++ b/numpy/core/src/npymath/ieee754.c.src
++@@ -682,7 +682,7 @@ void npy_set_floatstatus_invalid(void)
++ }
++ 
++ #elif defined(_MSC_VER) || (defined(__osf__) && defined(__alpha)) || \
++-      defined (__UCLIBC__)
+++      defined (__UCLIBC__) || (defined(__arc__) && defined(__GLIBC__))
++ 
++ /*
++  * By using a volatile floating point value,
++-- 
++2.14.1
++
+diff --git a/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+deleted file mode 100644
+index f2ed4f6f98..0000000000
+--- a/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From ae217b0e77a52f08f46ef66fa88820946984507a Mon Sep 17 00:00:00 2001
+-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+-Date: Tue, 6 Feb 2018 15:59:22 +0300
+-Subject: [PATCH] FIX: no FPU exceptions bits on ARC glibc
+-
+-The FPU exceptions bits are missing in fenv.h in glibc for ARC architecture.
+-
+-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+----
+- numpy/core/include/numpy/ufuncobject.h | 2 +-
+- numpy/core/src/npymath/ieee754.c.src   | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/numpy/core/include/numpy/ufuncobject.h b/numpy/core/include/numpy/ufuncobject.h
+-index 89f72fcea..29e05b179 100644
+---- a/numpy/core/include/numpy/ufuncobject.h
+-+++ b/numpy/core/include/numpy/ufuncobject.h
+-@@ -319,7 +319,7 @@ typedef struct _loop1d_info {
+- #if defined(sun) || defined(__BSD__) || defined(__OpenBSD__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version < 502114)) || \
+-       defined(__NetBSD__) || \
+--      (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+-+      (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
+-       defined(__CYGWIN__) || defined(__MINGW32__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114)) || \
+-       defined(_AIX) || \
+-diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
+-index 8dc4d77ef..78e646470 100644
+---- a/numpy/core/src/npymath/ieee754.c.src
+-+++ b/numpy/core/src/npymath/ieee754.c.src
+-@@ -627,7 +627,7 @@ void npy_set_floatstatus_invalid(void)
+- }
+- 
+- 
+--#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
+-+#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
+-       defined(__CYGWIN__) || defined(__MINGW32__) || \
+-       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
+- #  include <fenv.h>
+--- 
+-2.16.2
+-
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 7c7f446118..ef2aa7f16d 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,4 +1,4 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.15.1
+-sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.16.2
++sha256	8088221e6e27da8d5907729f0bfe798f526836f22cc59ae83a0f867e67416a3e	numpy-1.16.2.tar.gz
+ # License files, locally calculated
+-sha256	9e85ee1c3f11444243c9b7667721592a01f1cd90cb28ad937ac99f6241d6b685	LICENSE.txt
++sha256	6b5086f61fe0c71564a79304ecbaa60f11fa3f3debf82f73d16a611cab102adc	LICENSE.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 26a10c377b..20f42eab69 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_VERSION = 2.2.7
-+CUPS_VERSION = 2.2.10
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPL-2.0, LGPL-2.0
+-PYTHON_NUMPY_VERSION = 1.15.1
++PYTHON_NUMPY_VERSION = 1.16.2
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause
