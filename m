@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Mar 2019 23:14:14 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/systemd: fix
+Date: Sun, 17 Mar 2019 23:13:16 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/systemd: fix
  "Timed out waiting for device /dev/console."
-Message-ID: <20190317221128.3AC048EC5D@busybox.osuosl.org>
+Message-ID: <20190317221134.3FBDA8EC5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66681350b412aefae5a08dc82f72bd41daa8b9cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ff5e05f55e05ef0f8324ebfbbf2bdf95e070dc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Buildroot built with systemd fails to open a login prompt on the
 serial port when /dev/console is specified as BR2_TARGET_GENERIC_GETTY_PORT
@@ -43,10 +43,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 4dea7d340d..d636fb5536 100644
+index 15db1969e5..15257e2b3b 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -366,19 +366,26 @@ endef
+@@ -376,19 +376,26 @@ endef
  
  ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
