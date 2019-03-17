@@ -1,25 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Mar 2019 22:49:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/devmem2: Fix DEVMEM2_SITE
- variable
-In-Reply-To: <20190302111035.15085-1-xruppen@gmail.com> (Xavier Ruppen's
- message of "Sat, 2 Mar 2019 12:10:35 +0100")
-References: <20190302111035.15085-1-xruppen@gmail.com>
-Message-ID: <87y35d892w.fsf@dell.be.48ers.dk>
+From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
+Date: Mon, 18 Mar 2019 06:05:57 +0800
+Subject: [Buildroot] [PATCH 1/1] package/python-aiojobs: drop aiohttp
+ dependency
+Message-ID: <20190317220557.1359-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Xavier" == Xavier Ruppen <xruppen@gmail.com> writes:
+From: James Hilliard <james.hilliard1@gmail.com>
 
- > The old free-electrons.com URL does not seem to work anymore,
- > resulting in the package failing to build. Use bootlin.com instead.
+aiohttp isn't a required dependency for aiojobs
 
- > Signed-off-by: Xavier Ruppen <xruppen@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-aiojobs/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Committed to 2018.02.x and 2018.11.x, thanks.
-
+diff --git a/package/python-aiojobs/Config.in b/package/python-aiojobs/Config.in
+index 54d6c02a8e..ab61985164 100644
+--- a/package/python-aiojobs/Config.in
++++ b/package/python-aiojobs/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_AIOJOBS
+ 	bool "python-aiojobs"
+ 	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
+ 	help
+ 	  Jobs scheduler for managing background task (asyncio).
+ 
 -- 
-Bye, Peter Korsgaard
+2.17.1
