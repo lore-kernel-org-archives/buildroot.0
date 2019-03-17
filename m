@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 11:14:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cups: security bump to version
- 2.2.10
-In-Reply-To: <20190316133648.12222-1-fontaine.fabrice@gmail.com>
-References: <20190316133648.12222-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190317111438.662eee07@windsurf>
+Date: Sun, 17 Mar 2019 11:22:45 +0100
+Subject: [Buildroot] [git commit] package/libglib2: bump to version 2.56.4
+Message-ID: <20190317101959.B38968EC50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Mar 2019 14:36:48 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b08d4a9bfb5e597c3a601496517801999fec3dff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Fixes CVE-2018-4700: Linux session cookies used a predictable random
->   number seed: https://github.com/apple/cups/releases/tag/v2.2.10.
-> - Remove fifth patch (already in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0005-Fix-builds-without-PAM-Issue-5283.patch   | 189 ---------------------
->  package/cups/cups.hash                             |   2 +-
->  package/cups/cups.mk                               |   2 +-
->  3 files changed, 2 insertions(+), 191 deletions(-)
->  delete mode 100644 package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 57403a2154..faa01ef563 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.56/glib-2.56.3.sha256sum
+-sha256  a9a4c5b4c81b6c75bc140bdf5e32120ef3ce841b7413214ecf5f987acec74cb2  glib-2.56.3.tar.xz
++# https://download.gnome.org/sources/glib/2.56/glib-2.56.4.sha256sum
++sha256  27f703d125efb07f8a743666b580df0b4095c59fc8750e8890132c91d437504c  glib-2.56.4.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f602c371f5..d34bfabd52 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.56
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
