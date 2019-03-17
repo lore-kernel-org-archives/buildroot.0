@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Mar 2019 11:14:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/biosdevname: bump to version
- 0.7.3
-In-Reply-To: <20190316120230.12174-1-fontaine.fabrice@gmail.com>
-References: <20190316120230.12174-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190317111434.5cf20b59@windsurf>
+Date: Sun, 17 Mar 2019 11:14:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cups: security bump to version
+ 2.2.10
+In-Reply-To: <20190316133648.12222-1-fontaine.fabrice@gmail.com>
+References: <20190316133648.12222-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190317111438.662eee07@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Mar 2019 13:02:30 +0100
+On Sat, 16 Mar 2019 14:36:48 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Switch site to github to get latest release
-> - Add hash for license file
+> - Fixes CVE-2018-4700: Linux session cookies used a predictable random
+>   number seed: https://github.com/apple/cups/releases/tag/v2.2.10.
+> - Remove fifth patch (already in version)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/biosdevname/Config.in        | 2 +-
->  package/biosdevname/biosdevname.hash | 3 ++-
->  package/biosdevname/biosdevname.mk   | 4 ++--
->  3 files changed, 5 insertions(+), 4 deletions(-)
+>  .../0005-Fix-builds-without-PAM-Issue-5283.patch   | 189 ---------------------
+>  package/cups/cups.hash                             |   2 +-
+>  package/cups/cups.mk                               |   2 +-
+>  3 files changed, 2 insertions(+), 191 deletions(-)
+>  delete mode 100644 package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
 
 Applied to master, thanks.
 
