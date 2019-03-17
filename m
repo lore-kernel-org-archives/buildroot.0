@@ -1,131 +1,185 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 17 Mar 2019 14:13:17 +0200
-Subject: [Buildroot] Nodejs failure for arm cortex-A8
-In-Reply-To: <CAH2Z6CmpUa7AO5Bi_azqbdX9xiqXCWYcbA5xzu=MraD3-a-=ng@mail.gmail.com>
-References: <CAH2Z6C=P+MmQNXUaEKBoKZ+FvmyCgoUy39FSvEDAvecsYb=PVQ@mail.gmail.com>
- <871s381xre.fsf@tarshish>
- <CAH2Z6CkdrwJ=wcAOwyU_juiEdakB1sOr+_g8aBjtm+_L7azxWg@mail.gmail.com>
- <CAH2Z6Cnq4t7vRMK7=1gqCy4FMhtrErax4_FR_biCyS3Ryh0XMg@mail.gmail.com>
- <CAH2Z6Cm1z2-C7dPhX+qQZ8o-DQk5FCNR55+YOjipmKO2J9tNDA@mail.gmail.com>
- <20190315175307.66adc7dd@gmx.net>
- <CAH2Z6CmpUa7AO5Bi_azqbdX9xiqXCWYcbA5xzu=MraD3-a-=ng@mail.gmail.com>
-Message-ID: <87ftrlzoki.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Mar 2019 12:38:52 +0100
+Subject: [Buildroot] [git commit] package/gnu-efi: fix gnu-efi in projects
+ using -nostdinc
+Message-ID: <20190317124559.D97AF8EC54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ben,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a04886a6423b78e8adf72bb6c22a50c8ed45459
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Mar 17 2019, Boris-Ben Shapiro wrote:
-> So now If I want to use the only NON-buildroot toolchain for this CPU:
-> Sourcery CodeBench ARM 2014.05, I cannot...
-> Is there a solution where I can use external toolchain Sourcery
-> CodeBench ARM 2014.05 and still compile NodeJS
+This fixes the problem with undeclared intptr_t type for builds not including
+stdint.h, without breaking builds using -nostdinc.
 
-You need to deal with two separate issues here. (1) target toolchain,
-and (2) host toolchain. That is because you must first build host-nodejs
-to build nodejs for target. Buildroot takes care of that for you.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...for-problem-with-undeclared-intptr_t-type.patch | 114 +++++++++++++++++++++
+ .../0001-efilink-fix-build-with-gcc-4.8.patch      |  35 -------
+ 2 files changed, 114 insertions(+), 35 deletions(-)
 
-Both toolchains must be gcc 4.9 or newer. That is upstream nodejs
-decision as of version 8. Buildroot can't do much about that. You might
-have some luck with older nodejs versions.
-
-The Sourcery ARM 2014.05 toolchain is based on gcc 4.8 to it can't build
-nodejs 8. You can use other toolchain like the Linaro or Arm (Inc)
-provided toolchains. You must set target ABI to EABIhf to select these
-toolchains.
-
-Same goes for host toolchain. Ubuntu 14.04 default toolchain is gcc
-4.8. This toolchain can't build host-nodejs. So you must install a newer
-host gcc version.
-
-baruch
-
-> On Fri, 15 Mar 2019 at 18:53, Peter Seiderer <ps.report@gmx.net> wrote:
->>
->> Hello Boris-Ben,
->>
->> On Fri, 15 Mar 2019 18:01:27 +0200, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:
->>
->> > Just saw : https://github.com/nodejs/node/commit/d13a65ad68c429884434cdcd94c52b79a6d69717
->> >
->> > Thanks!
->> > I will try this after the weekend
->>
->> With this patch your will see the following comment in make menuconfig
->>
->>     "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.9, wchar"
->>
->> This will change nothing for your host and selected crosss-compile toolchain...
->>
->> >
->> > On Fri, 15 Mar 2019 at 17:59, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:
->> > >
->> > > Hi Baruch.
->> > > I am a bit tied to Ubuntu 14.04. Can you guide me on how to update the
->> > > nodejs toolchain dependency? I use the CodeSourcery 2014 toolchain.
->> > > There is no other option for CS toolchain, only buildroot toolchain
->> > > which I don't want to use, as my project already tested with CS
->> > > toolchain.
->> > > Is it a difficult task to update nodejs toolchain version dependecy?
->>
->> It is not about the cross-compile toolchain, your failure while compiling host-nodejs
->> (using your host GCC /usr/bin/gcc to compile exectuables for your host/ubuntu),
->> to fix this you need to update your host gcc...
->>
->> Regards,
->> Peter
->>
->> > >
->> > > On Fri, 15 Mar 2019 at 17:57, Boris-Ben Shapiro <erectcrested@gmail.com> wrote:
->> > > >
->> > > > Hi Baruch.
->> > > > I am a bit tied to Ubuntu 14.04. Can you guide me on how to update the
->> > > > nodejs toolchain dependency? I use the CodeSourcery 2014 toolchain.
->> > > > There is no other option for CS toolchain, only buildroot toolchain
->> > > > which I don't want to use, as my project already tested with CS
->> > > > toolchain.
->> > > > Is it a difficult task to update nodejs toolchain version dependecy?
->> > > >
->> > > > On Fri, 15 Mar 2019 at 08:01, Baruch Siach <baruch@tkos.co.il> wrote:
->> > > > >
->> > > > > Hi Ben,
->> > > > >
->> > > > > On Thu, Mar 14 2019, Boris-Ben Shapiro wrote:
->> > > > > > I am trying to compile buildroot master branch on ubuntu 14.04 32-bit.
->> > > > > > The target compilation is for TI DM8148 processor (DaVinci series).
->> > > > > > This is the defconfig I used: http://code.bulix.org/wbenum-621398
->> > > > > > And this is full configuration: http://code.bulix.org/lqktww-621399
->> > > > > >
->> > > > > > I get a multiple failures while compiling nodejs package:
->> > > > > > http://code.bulix.org/8gdwec-621396
->> > > > > >
->> > > > > > Can anyone please help with this?
->> > > > >
->> > > > > Ubuntu 14.04 carries gcc 4.8, I guess. Current nodejs requires gcc 4.9.
->> > > > >
->> > > > >   https://github.com/nodejs/node/commit/d13a65ad68c429884434cdcd94c52b79a6d69717
->> > > > >
->> > > > > Try a newer host toolchain.
->> > > > >
->> > > > > I guess we need to update the nodejs toolchain version dependency.
->> > > > >
->> > > > > baruch
->> > > > >
->> > > > > --
->> > > > >      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
->> > > > > =}------------------------------------------------ooO--U--Ooo------------{=
->> > > > >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->>
-
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch b/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
+new file mode 100644
+index 0000000000..1d1b1f94b4
+--- /dev/null
++++ b/package/gnu-efi/0001-Fix-for-problem-with-undeclared-intptr_t-type.patch
+@@ -0,0 +1,114 @@
++From 1a53d8f88a452847b25f9689f9a08dbcf82c86e4 Mon Sep 17 00:00:00 2001
++From: Esben Haabendal <esben@esben1.localdomain>
++Date: Fri, 15 Mar 2019 11:57:51 +0100
++Subject: [PATCH] Fix for problem with undeclared intptr_t type
++
++When building gnu-efi with old compilers with pre C90 compilers:
++
++In file included from gnu-efi-3.0.9/lib/../inc/efilib.h:25:0,
++                 from gnu-efi-3.0.9/lib/lib.h:24,
++                 from gnu-efi-3.0.9/lib/dpath.c:25:
++gnu-efi-3.0.9/lib/dpath.c: In function 'FileDevicePath':
++gnu-efi-3.0.9/lib/../inc/efilink.h:145:47: error: 'intptr_t' undeclared (first use in this function)
++ #define EFI_FIELD_OFFSET(TYPE,Field) ((UINTN)(intptr_t)(&(((TYPE *) 0)->Field)))
++
++Problem introduced with commit a46a62b12b58139c31d4288384808365c4053bf2
++(Fix some types gcc doesn't like).
++
++Avoid this by adding intptr_t (and uintptr_t) typedefs for builds that does
++not include stdint.h.
++
++Signed-off-by: Esben Haabendal <esben@esben1.localdomain>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://sourceforge.net/p/gnu-efi/code/merge-requests/5]
++---
++ inc/aarch64/efibind.h  | 2 ++
++ inc/arm/efibind.h      | 2 ++
++ inc/ia32/efibind.h     | 2 ++
++ inc/ia64/efibind.h     | 2 ++
++ inc/mips64el/efibind.h | 2 ++
++ inc/x86_64/efibind.h   | 2 ++
++ 6 files changed, 12 insertions(+)
++
++diff --git a/inc/aarch64/efibind.h b/inc/aarch64/efibind.h
++index bdaa523..3c8cf96 100644
++--- a/inc/aarch64/efibind.h
+++++ b/inc/aarch64/efibind.h
++@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
++ typedef short               int16_t;
++ typedef unsigned char       uint8_t;
++ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
+++typedef uint64_t            uintptr_t;
+++typedef int64_t             intptr_t;
++ 
++ #else
++ #include <stdint.h>
++diff --git a/inc/arm/efibind.h b/inc/arm/efibind.h
++index 40a5a9c..7a22b9c 100644
++--- a/inc/arm/efibind.h
+++++ b/inc/arm/efibind.h
++@@ -27,6 +27,8 @@ typedef unsigned short      uint16_t;
++ typedef short               int16_t;
++ typedef unsigned char       uint8_t;
++ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
+++typedef uint32_t            uintptr_t;
+++typedef int32_t             intptr_t;
++ 
++ #else
++ #include <stdint.h>
++diff --git a/inc/ia32/efibind.h b/inc/ia32/efibind.h
++index 1b11f10..dd01385 100644
++--- a/inc/ia32/efibind.h
+++++ b/inc/ia32/efibind.h
++@@ -75,6 +75,8 @@ Revision History
++        typedef unsigned char       uint8_t;
++        typedef char                int8_t;
++     #endif
+++    typedef uint32_t            uintptr_t;
+++    typedef int32_t             intptr_t;
++ #elif defined(__GNUC__)
++     #include <stdint.h>
++ #endif
++diff --git a/inc/ia64/efibind.h b/inc/ia64/efibind.h
++index b415461..b9b2e62 100644
++--- a/inc/ia64/efibind.h
+++++ b/inc/ia64/efibind.h
++@@ -62,6 +62,8 @@ Revision History
++         typedef unsigned char       uint8_t;
++         typedef char                int8_t;
++     #endif
+++    typedef uint64_t            uintptr_t;
+++    typedef int64_t             intptr_t;
++ #elif defined(__GNUC__)
++     #include <stdint.h>
++ #endif
++diff --git a/inc/mips64el/efibind.h b/inc/mips64el/efibind.h
++index 4adbca3..32241e5 100644
++--- a/inc/mips64el/efibind.h
+++++ b/inc/mips64el/efibind.h
++@@ -29,6 +29,8 @@ typedef unsigned short      uint16_t;
++ typedef short               int16_t;
++ typedef unsigned char       uint8_t;
++ typedef signed char         int8_t;   // unqualified 'char' is unsigned on ARM
+++typedef uint64_t            uintptr_t;
+++typedef int64_t             intptr_t;
++ 
++ #else
++ #include <stdint.h>
++diff --git a/inc/x86_64/efibind.h b/inc/x86_64/efibind.h
++index 4309f9f..ae40595 100644
++--- a/inc/x86_64/efibind.h
+++++ b/inc/x86_64/efibind.h
++@@ -84,6 +84,8 @@ Revision History
++        typedef unsigned char       uint8_t;
++        typedef char                int8_t;
++     #endif
+++    typedef uint64_t            uintptr_t;
+++    typedef int64_t             intptr_t;
++ #elif defined(__GNUC__)
++     #include <stdint.h>
++ #endif
++-- 
++2.17.1
++
+diff --git a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch b/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 57c78c9bd4..0000000000
+--- a/package/gnu-efi/0001-efilink-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 6335e5c697c57d8b5854b8202de3733bcb151ca6 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 18 Jan 2019 22:05:37 +0100
+-Subject: [PATCH] efilink: fix build with gcc 4.8
+-
+-intptr_t is undefined without an include on stdint.h
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a0ca37b5ed27af445344e3ac49dc87bb17512c50
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://sourceforge.net/p/gnu-efi/code/merge-requests/3]
+----
+- inc/efilink.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/inc/efilink.h b/inc/efilink.h
+-index cc5aa2d..b69a6fd 100644
+---- a/inc/efilink.h
+-+++ b/inc/efilink.h
+-@@ -1,6 +1,10 @@
+- #ifndef _EFI_LINK_H
+- #define _EFI_LINK_H
+- 
+-+#if defined(__GNUC__)
+-+#include <stdint.h>
+-+#endif
+-+
+- /*++
+- 
+- Copyright (c) 1998  Intel Corporation
+--- 
+-2.14.1
+-
