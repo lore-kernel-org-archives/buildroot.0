@@ -1,262 +1,124 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 16 Mar 2019 18:21:37 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/6] package/go: implement go modules
- integration
-Message-ID: <20190317012142.10545-1-christian@paral.in>
+Date: Sat, 16 Mar 2019 18:21:38 -0700
+Subject: [Buildroot] [RFC PATCH v1 2/6] package/runc: upgrade to go modules
+In-Reply-To: <20190317012142.10545-1-christian@paral.in>
+References: <20190317012142.10545-1-christian@paral.in>
+Message-ID: <20190317012142.10545-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit moves from the GOPATH mechanism to the new GO111MODULE approach for
-Go based packages. Old Go packages (with the exception of docker-cli) will
-compile without changes (for example, mender, flanneld).
-
-Cavets with the current implementation:
-
- - "make source" may not produce a valid output
- - module downloading occurs ignoring the Buildroot download server
- - module downloading occurs in a post-patch hook
-
-Go code uses a package-based imports system. Imports are
-relative to a root directory, previously called GOPATH.
-
-import "github.com/docker/docker/pkg/myutils"
-
-This would resolve to $GOPATH/src/github.com/docker/docker/pkg/myutils.
-
-Buildroot packages previously used an additional feature in the Go tool which
-allows packages to avoid using GOPATH by "vendoring" dependencies - copying the
-code directly into the Git repository.
-
-vendor/github.com/docker/docker/pkg/myutils
-
-Old packages that used the vendor/ approach remain compatible via inferring the
-root import path from the download URL if no go.mod is present.
-
-All current Buildroot Go modules use "vendor" to avoid downloading dependencies.
-This requires that the Go projects added to Buildroot include all of their
-dependencies in their repositories. It also does not allow us the opportunity to
-validate or adjust dependency versions when upgrading packages in Buildroot.
-
-The Go module system aims to completely replace the GOPATH mechanism by
-allowing the Go tool to reason about package versioning, code fetching,
-proxying, and checksumming.
-
-A project can contain any number of go.mod files. A go.mod file is akin to
-Node's package.json file. It specifies all direct and indirect dependencies of
-all Go packages in the subtree below the file. The Go tool can manage this file
-automatically if desired, and specifies a required format. Go.mod additionally
-requires dependency versions to be explicitly specified. There is no semantic
-versioning or asterisk-based version specifiers.
-
-module mymodule
-
-require (
-github.com/aws/aws-sdk-go v1.17.12 // indirect
-github.com/blang/semver v3.5.2-0.20180723201105-3c1074078d32+incompatible
-)
-
-The Go tool creates a go.sum file next to the go.mod file. The go.sum
-file is akin to Node's package-shrinkwrap.json.
-
-github.com/aws/aws-sdk-go v1.15.31/go.mod
-h1:mFuSZ37Z9YOHbQEwBWztmVzqXrEkub65tZoCYDt7FT0=
-github.com/aws/aws-sdk-go v1.17.12
-h1:jMFwRUaM0LcfdenfvbDLePNoWSoCdOHqF4RCvSB4xNQ=
-github.com/aws/aws-sdk-go v1.17.12/go.mod
-h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
-github.com/blang/semver
-v3.5.2-0.20180723201105-3c1074078d32+incompatible
-h1:8fBbhRkI5/0ocLFbrhPgnGUm0ogc+Gko1cRodPWDKX4=
-github.com/blang/semver
-v3.5.2-0.20180723201105-3c1074078d32+incompatible/go.mod
-h1:kRBLl5iJ+tD4TcOOxsy/0fnwebNt5EWlYSAyrTnjyyk=
-
-The file contains import paths, versions, and file hashes for the download as
-well as the contained go.mod file.
-
-With replace directives, it's possible to link together local copies of modules:
-
-replace (
-k8s.io/gengo => ./staging/src/k8s.io/gengo
-k8s.io/kube-openapi => ./staging/src/k8s.io/kube-openapi
-)
-
-When GO111MODULE=on, all of the Go tool commands become "module-aware." GOPATH
-is no longer required. Running "go build" for example will fetch dependencies
-from the Internet, checksum them, and extract to a staging directory (defaulting
-currently to GOPATH/pkg/gomod or so). Imports are automatically resolved to the
-appropriately versioned staging directory.
-
-There are various ways to control the download / extract behavior:
-
-  The GOPROXY environment variable allows further control over the
-  download source. If GOPROXY is unset, is the empty string, or is the
-  string "direct", downloads use the default direct connection to
-  version control systems. Setting GOPROXY to "off" disallows
-  downloading modules from any source. Otherwise, GOPROXY is expected to
-  be the URL of a module proxy, in which case the go command will fetch
-  all modules from that proxy. No matter the source of the modules,
-  downloaded modules must match existing entries in go.sum...
-
-  Even when downloading directly from version control systems, the go
-  command synthesizes explicit info, mod, and zip files and stores them
-  in its local cache, $GOPATH/pkg/mod/cache/download, the same as if it
-  had downloaded them directly from a proxy. The cache layout is the
-  same as the proxy URL space, so serving $GOPATH/pkg/mod/cache/download
-  at (or copying it to) https://example.com/proxy would let other users
-  access those cached module versions with
-  GOPROXY=https://example.com/proxy.
-
-GOPROXY additionally supports file:// URLs.
-
-This commit sets GOPATH to $(DL_DIR)/go-module, as the Go module system will
-download and cache code sources in the GOPATH/pkg/mod path.
-
-The go.mod and go.sum files can optionally be placed in $(2)_PKGDIR next to
-Config.in and other support files. They are copied in with a post-download hook,
-and "go mod download" is executed to pull the dependencies from the internet.
-
-A hook is added to execute "go mod vendor".
-
-Upstream vendor trees are still optionally supported, but can be overridden by
-placing go.mod into the Buildroot tree as described above. Package developers
-can alternatively specify LIBFOO_GOMOD to indicate the root module path. This
-allows the Go module tool to compile code using a legacy vendor/ tree, without a
-GOPATH to indicate the import path for the root module.
-
-DOCKER_ENGINE_GOMOD = github.com/docker/docker
-
-A Buildroot user can serve the dl/go-modules directory directly with a HTTP
-server and set GOPROXY such that all module downloads come from that server.
-This could be configurable eventually via the Buildroot KConfig architecture.
-
-During the build phase, the "-mod=vendor" option is used to indicate that the
-extracted vendor/ tree (from the post-extract step) is to be used.
-
-Go modules are never disabled with this approach. They are compatible with the
-legacy vendor/ tree approach by the above mechanisms.
-
-Reference: https://github.com/golang/go/wiki/Modules
+This commit introduces go.mod and go.sum files derived from the vendor.conf in
+the upstream runc repository.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/go.mk      |  7 +++++-
- package/pkg-golang.mk | 50 ++++++++++++++++++++++++++++---------------
- 2 files changed, 39 insertions(+), 18 deletions(-)
+ package/runc/go.mod  | 26 ++++++++++++++++++++++++
+ package/runc/go.sum  | 47 ++++++++++++++++++++++++++++++++++++++++++++
+ package/runc/runc.mk |  2 --
+ 3 files changed, 73 insertions(+), 2 deletions(-)
+ create mode 100644 package/runc/go.mod
+ create mode 100644 package/runc/go.sum
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 4daa2fe093..be05602f14 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -36,6 +36,9 @@ else ifeq ($(BR2_mips64el),y)
- GO_GOARCH = mips64le
- endif
- 
-+# GOPATH is used only for Go module downloads.
-+HOST_GO_GOPATH = $(DL_DIR)/go-module
+diff --git a/package/runc/go.mod b/package/runc/go.mod
+new file mode 100644
+index 0000000000..26eed99edb
+--- /dev/null
++++ b/package/runc/go.mod
+@@ -0,0 +1,26 @@
++module github.com/opencontainers/runc
 +
- HOST_GO_DEPENDENCIES = host-go-bootstrap
- HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
- HOST_GO_ROOT = $(HOST_DIR)/lib/go
-@@ -44,10 +47,12 @@ HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
- # For the convienience of target packages.
- HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
- HOST_GO_TARGET_ENV = \
--	GO111MODULE=off \
-+	GO111MODULE=on \
- 	GOARCH=$(GO_GOARCH) \
- 	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
-+	GOPROXY=off \
- 	GOROOT="$(HOST_GO_ROOT)" \
-+	GOPATH="$(HOST_GO_GOPATH)" \
- 	CC="$(TARGET_CC)" \
- 	CXX="$(TARGET_CXX)" \
- 	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 4f2c7e77e1..91651c5fca 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -57,6 +57,7 @@ endif
++// Derived from runc @ v1.0.0-rc6.
++require (
++	github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48
++	github.com/containerd/console v0.0.0-20180220200639-2748ece16665
++	github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b
++	github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf // indirect
++	github.com/cyphar/filepath-securejoin v0.2.1
++	github.com/docker/go-units v0.2.0
++	github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55
++	github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172
++	github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674
++	github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559
++	github.com/opencontainers/selinux v1.0.0-rc1
++	github.com/pkg/errors v0.8.0
++	github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea
++	github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235
++	github.com/stretchr/testify v1.3.0 // indirect
++	github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8
++	github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b
++	github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc
++	github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc // indirect
++	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 // indirect
++	golang.org/x/sys v0.0.0-20190204203706-41f3e6584952
++)
+diff --git a/package/runc/go.sum b/package/runc/go.sum
+new file mode 100644
+index 0000000000..b93484b06d
+--- /dev/null
++++ b/package/runc/go.sum
+@@ -0,0 +1,47 @@
++github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48 h1:AQMF0Xixllgf29MKlx/TGEhRk7bEDX5kxz8Ui8lOvEs=
++github.com/checkpoint-restore/go-criu v0.0.0-20181120144056-17b0214f6c48/go.mod h1:TrMrLQfeENAPYPRsJuq3jsqdlRh3lvi6trTZJG8+tho=
++github.com/containerd/console v0.0.0-20180220200639-2748ece16665 h1:8p4sC/YOZbLdxenlXANCdsPv2vt4JiBtYPO9mWql/Wc=
++github.com/containerd/console v0.0.0-20180220200639-2748ece16665/go.mod h1:Tj/on1eG8kiEhd0+fhSDzsPAFESxzBBvdyEgyryXffw=
++github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b h1:+mtZ0WjVZwTX0RVrXMXDwuYVaNeHGvWBW1UwJeMR+2M=
++github.com/coreos/go-systemd v0.0.0-20161114122254-48702e0da86b/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
++github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf h1:CAKfRE2YtTUIjjh1bkBtyYFaUT/WmOqsJjgtihT0vMI=
++github.com/coreos/pkg v0.0.0-20160727233714-3ac0863d7acf/go.mod h1:E3G3o1h8I7cfcXa63jLwjI0eiQQMgzzUDFVpN/nH/eA=
++github.com/cyphar/filepath-securejoin v0.2.1 h1:5DPkzz/0MwUpvR4fxASKzgApeq2OMFY5FfYtrX28Coo=
++github.com/cyphar/filepath-securejoin v0.2.1/go.mod h1:FpkQEhXnPnOthhzymB7CGsFk2G9VLXONKD9G7QGMM+4=
++github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
++github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
++github.com/docker/go-units v0.2.0 h1:TtZVwKVMsN8COBXUhH/x17NFxEFfIIK2i9DL/nz4zfE=
++github.com/docker/go-units v0.2.0/go.mod h1:fgPhTUdO+D/Jk86RDLlptpiXQzgHJF7gydDDbaIK4Dk=
++github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55 h1:oIgNYSrSUbNH5DJh6DMhU1PiOKOYIHNxrV3djLsLpEI=
++github.com/godbus/dbus v0.0.0-20151105175453-c7fdd8b5cd55/go.mod h1:/YcGZj5zSblfDWMMoOzV4fas9FZnQYTkDnsGvmh2Grw=
++github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172 h1:ib1Vbb6/KliPKsRcZdmCUnFGP7/BcCWgW9+gR+sUQk0=
++github.com/golang/protobuf v0.0.0-20170427213220-18c9bb326172/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
++github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674 h1:6adeeLyL1ODW0umMHTYaU+NkdFgYkHKSYC2cw3MDx2g=
++github.com/mrunalp/fileutils v0.0.0-20160610222446-ed869b029674/go.mod h1:x8F1gnqOkIEiO4rqoeEEEqQbo7HjGMTvyoq3gej4iT0=
++github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559 h1:pVIiB5BBYCSqbku9gTus5uZ+dmmZiWtmHAaI8Y1hpb4=
++github.com/opencontainers/runtime-spec v0.0.0-20190207185410-29686dbc5559/go.mod h1:jwyrGlmzljRJv/Fgzds9SsS/C5hL+LL3ko9hs6T5lQ0=
++github.com/opencontainers/selinux v1.0.0-rc1 h1:Q70KvmpJSrYzryl/d0tC3vWUiTn23cSdStKodlokEPs=
++github.com/opencontainers/selinux v1.0.0-rc1/go.mod h1:+BLncwf63G4dgOzykXAxcmnFlUaOlkDdmw/CqsW6pjs=
++github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=
++github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
++github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
++github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
++github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea h1:G1PmHXBlo7d4vTCVEoifjyLZPPe5N7/onNLXgtwsiW0=
++github.com/seccomp/libseccomp-golang v0.0.0-20170424173420-84e90a91acea/go.mod h1:GbW5+tmTXfcxTToHLXlScSlAvWlF4P2Ca7zGrPiEpWo=
++github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235 h1:a2XWU6egUZQhD52o2GEKr79zE+OuZmwLybyOQpoqhHQ=
++github.com/sirupsen/logrus v0.0.0-20170713114250-a3f95b5c4235/go.mod h1:pMByvHTf9Beacp5x1UXfOR9xyW/9antXMhjMPG0dEzc=
++github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
++github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
++github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
++github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8 h1:zLV6q4e8Jv9EHjNg/iHfzwDkCve6Ua5jCygptrtXHvI=
++github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8/go.mod h1:hkRG7XYTFWNJGYcbNJQlaLq0fg1yr4J4t/NcTQtrfww=
++github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b h1:NCe8LNa+eGKU8K2/UEbMBM303YWoS0/PrJlbSglCUh0=
++github.com/urfave/cli v0.0.0-20160917213806-d53eb991652b/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
++github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc h1:0HAHLwEY4k1VqaO1SzBi4XxT0KA06Cv+QW2LXknBk9g=
++github.com/vishvananda/netlink v0.0.0-20150820014904-1e2e08e8a2dc/go.mod h1:+SR5DhBJrl6ZM7CoCKvpw5BKroDKQ+PJqOg65H/2ktk=
++github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc h1:R83G5ikgLMxrBvLh22JhdfI8K6YXEPHx5P03Uu3DRs4=
++github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc/go.mod h1:ZjcWmFBXmLKZu9Nxj3WKYEafiSqer2rnvPr0en9UNpI=
++golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 h1:bjcUS9ztw9kFmmIxJInhon/0Is3p+EHBKNgquIzo1OI=
++golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
++golang.org/x/sys v0.0.0-20190204203706-41f3e6584952 h1:FDfvYgoVsA7TTZSbgiqjAbfPbK47CNHdWl3h/PJtii0=
++golang.org/x/sys v0.0.0-20190204203706-41f3e6584952/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 0539661266..4b2675d6e2 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -9,8 +9,6 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
  
- $(2)_BUILD_OPTS += \
- 	-ldflags "$$($(2)_LDFLAGS)" \
-+	-mod=vendor \
- 	-tags "$$($(2)_TAGS)" \
- 	-p $(PARALLEL_JOBS)
- 
-@@ -75,38 +76,53 @@ endif
- 
- $(2)_INSTALL_BINS ?= $(1)
- 
--# Source files in Go should be extracted in a precise folder in the hierarchy
--# of GOPATH. It usually resolves around domain/vendor/software. By default, we
--# derive domain/vendor/software from the upstream URL of the project, but we
--# allow $(2)_SRC_SUBDIR to be overridden if needed.
-+# Source files in Go usually use an import path resolved around
-+# domain/vendor/software. We infer domain/vendor/software from the upstream URL
-+# of the project. $(2)_GOMOD can be overridden.
- $(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
- $(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
- $(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
- 
--$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
--$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+-RUNC_WORKSPACE = Godeps/_workspace
 -
--# Configure step. Only define it if not already defined by the package .mk
--# file.
--ifndef $(2)_CONFIGURE_CMDS
--define $(2)_CONFIGURE_CMDS
--	mkdir -p $$(dir $$($(2)_SRC_PATH))
--	ln -sf $$(@D) $$($(2)_SRC_PATH)
-+$(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
-+
-+# Correctly configure the go.mod and go.sum files for the module system.
-+# TODO: GOPROXY: use fallback mechanism and Buildroot proxy
-+# TODO: Perform the downloading / vendoring such that "make source" is correct
-+define $(2)_APPLY_EXTRACT_GOMOD
-+	if [ -f $$($(2)_PKGDIR)/go.mod ]; then \
-+		cp $$($(2)_PKGDIR)/go.mod $$(@D)/go.mod; \
-+		if [ -f $$(@D)/go.sum ]; then \
-+			rm $$(@D)/go.sum; \
-+		fi; \
-+	fi; \
-+	if [ -f $$($(2)_PKGDIR)/go.sum ]; then \
-+		cp $$($(2)_PKGDIR)/go.sum $$(@D)/go.sum; \
-+	fi
-+	if [ ! -f $$(@D)/go.mod ] && [ -n "$$($(2)_GOMOD)" ]; then \
-+		printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
-+	fi
-+	if [ ! -d $$(@D)/vendor ]; then \
-+		cd $$(@D); \
-+		$$(GO_TARGET_ENV) \
-+			$$($(2)_GO_ENV) \
-+			GOPROXY="direct" \
-+			$$(GO_BIN) mod vendor -v; \
-+	fi
- endef
--endif
-+
-+$(2)_POST_EXTRACT_HOOKS += $(2)_APPLY_EXTRACT_GOMOD
+ RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
  
- # Build step. Only define it if not already defined by the package .mk
- # file.
- ifndef $(2)_BUILD_CMDS
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
--		cd $$($(2)_SRC_PATH); \
-+		cd $$(@D); \
- 		$$(GO_TARGET_ENV) \
--			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
- 			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
--			./$$(d)
-+			$$(d)
- 	)
- endef
- endif
+ RUNC_TAGS = cgo static_build
 -- 
 2.19.2
