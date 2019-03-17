@@ -1,49 +1,41 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon, 18 Mar 2019 06:12:34 +0800
-Subject: [Buildroot] [PATCH 1/1] package/python-aiorwlock: bump to version
- 0.6.0
-Message-ID: <20190317221234.1614-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Mar 2019 23:14:32 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/systemd: fix "Timed out
+ waiting for device /dev/console."
+In-Reply-To: <20190304192547.23954-1-xruppen@gmail.com> (Xavier Ruppen's
+ message of "Mon, 4 Mar 2019 20:25:47 +0100")
+References: <20190304192547.23954-1-xruppen@gmail.com>
+Message-ID: <87d0mp87xz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+>>>>> "Xavier" == Xavier Ruppen <xruppen@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-aiorwlock/python-aiorwlock.hash | 4 ++--
- package/python-aiorwlock/python-aiorwlock.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Buildroot built with systemd fails to open a login prompt on the
+ > serial port when /dev/console is specified as BR2_TARGET_GENERIC_GETTY_PORT
+ > (which is its default value):
 
-diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
-index 51d1a29f20..8556f5ebd3 100644
---- a/package/python-aiorwlock/python-aiorwlock.hash
-+++ b/package/python-aiorwlock/python-aiorwlock.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
--md5	ee741761e4c9b1612e9dccf7f8bccdd0  aiorwlock-0.5.0.tar.gz
--sha256	3cd892576d024934d72c3dd098033f276ace3495e71a1197daa8d21409a52174  aiorwlock-0.5.0.tar.gz
-+md5	8eccf28315b4f851f6f7e9332edeec52  aiorwlock-0.6.0.tar.gz
-+sha256	cd310f33a7ea3bf6fd76fcf0c1ba6e4d7eef4d5ded59e95859494425fb7e599d  aiorwlock-0.6.0.tar.gz
- # Locally computed sha256 checksums
- sha256	56fb2baf14d84c59c15abbfbb1fdf30a724017e2ce97894a8236764513d10397  LICENSE
-diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
-index ca6aa25294..48e74c02fd 100644
---- a/package/python-aiorwlock/python-aiorwlock.mk
-+++ b/package/python-aiorwlock/python-aiorwlock.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIORWLOCK_VERSION = 0.5.0
-+PYTHON_AIORWLOCK_VERSION = 0.6.0
- PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
--PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/0c/20/d30f332e6ecb2be467ab5603e277b26e3a8eb2a72f75bf8d309bdd4c0c82
-+PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/77/cf/2a2584c4fc1096ae959d7d189f205eb9c872ec58aca2cde16009d2d83b9e
- PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
- PYTHON_AIORWLOCK_LICENSE = Apache-2.0
- PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
+ > systemd[1]: dev-console.device: Job dev-console.device/start timed out.
+ > systemd[1]: Timed out waiting for device /dev/console.
+ > systemd[1]: Dependency failed for Serial Getty on console.
+ > systemd[1]: serial-getty at console.service: Job serial-getty at console.service/start failed with result 'dependency'.
+ > systemd[1]: dev-console.device: Job dev-console.device/start failed with result 'timeout'.
+ > systemd[1]: Reached target Login Prompts.
+ > systemd[1]: Reached target Multi-User System.
+
+ > According to this issue on Github [1], serial-getty at .service should
+ > not be instantiated on /dev/console, console-getty at .service should
+ > be used instead. This stems from the fact that there should be no
+ > dependency on /dev/console.
+
+ > [1] https://github.com/systemd/systemd/issues/10914
+
+ > Signed-off-by: Xavier Ruppen <xruppen@gmail.com>
+
+Committed to 2018.02.x and 2018.11.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
