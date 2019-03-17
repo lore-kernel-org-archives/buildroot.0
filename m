@@ -1,157 +1,148 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Mar 2019 17:07:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version 2.0.13
-Message-ID: <20190317160756.29049-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Mar 2019 17:21:10 +0100
+Subject: [Buildroot] [git commit] package/pkg-golang: add support for
+ building host packages
+Message-ID: <20190317162403.1AA01837C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patches (already in version)
+commit: https://git.buildroot.net/buildroot/commit/?id=aba08cd218315c8ce5ec97c5e2dd5edbcfa47fdd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+With this you can add:
+
+    $(eval $(host-golang-package))
+
+to a package .mk file to build for host.
+
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch   | 61 ----------------------
- ...include-files-in-configure-COLLISION-test.patch | 38 --------------
- package/keepalived/keepalived.hash                 |  2 +-
- package/keepalived/keepalived.mk                   |  2 +-
- 4 files changed, 2 insertions(+), 101 deletions(-)
- delete mode 100644 package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
- delete mode 100644 package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch
+ docs/manual/adding-packages-golang.txt |  7 +++++--
+ package/go/Config.in.host              |  6 ++++++
+ package/pkg-golang.mk                  | 37 +++++++++++++++++++++++++++++++---
+ 3 files changed, 45 insertions(+), 5 deletions(-)
 
-diff --git a/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch b/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
-deleted file mode 100644
-index 4402b48a8b..0000000000
---- a/package/keepalived/0001-Rename-TIMER_MAX-to-TIMER_MAXIMUM.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 7d4856e213f349bcd97b3644b01d6170b226de16 Mon Sep 17 00:00:00 2001
--From: Quentin Armitage <quentin@armitage.org.uk>
--Date: Tue, 20 Nov 2018 17:24:58 +0000
--Subject: [PATCH] Rename TIMER_MAX to TIMER_MAXIMUM
--
--ulibC defines TIMER_MAX, so to avoid naming conflict rename it.
--
--This issue was reported by Paul Gildea <gildeap@tcd.ie> who also
--provided the patch.
--
--Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/acassen/keepalived/commit/7d4856e213f349bcd97b3644b01d6170b226de16]
-----
-- lib/parser.c | 8 ++++----
-- lib/parser.h | 2 +-
-- 2 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/lib/parser.c b/lib/parser.c
--index 1d53595c0..cc9b644e2 100644
----- a/lib/parser.c
--+++ b/lib/parser.c
--@@ -1915,20 +1915,20 @@ read_timer(vector_t *strvec, size_t index, unsigned long *res, unsigned long min
-- #endif
-- 
-- 	if (!max_time)
---		max_time = TIMER_MAX;
--+		max_time = TIMER_MAXIMUM;
-- 
-- 	errno = 0;
-- 	timer = strtoul(vector_slot(strvec, index), &endptr, 10);
---	*res = (timer > TIMER_MAX ? TIMER_MAX : timer) * TIMER_HZ;
--+	*res = (timer > TIMER_MAXIMUM ? TIMER_MAXIMUM : timer) * TIMER_HZ;
-- 
-- 	if (FMT_STR_VSLOT(strvec, index)[0] == '-')
-- 		report_config_error(CONFIG_INVALID_NUMBER, "%snegative number '%s'", warn, FMT_STR_VSLOT(strvec, index));
-- 	else if (*endptr)
-- 		report_config_error(CONFIG_INVALID_NUMBER, "%sinvalid number '%s'", warn, FMT_STR_VSLOT(strvec, index));
---	else if (errno == ERANGE || timer > TIMER_MAX)
--+	else if (errno == ERANGE || timer > TIMER_MAXIMUM)
-- 		report_config_error(CONFIG_INVALID_NUMBER, "%snumber '%s' outside timer range", warn, FMT_STR_VSLOT(strvec, index));
-- 	else if (timer < min_time || timer > max_time)
---		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAX);
--+		report_config_error(CONFIG_INVALID_NUMBER, "number '%s' outside range [%ld, %ld]", FMT_STR_VSLOT(strvec, index), min_time, max_time ? max_time : TIMER_MAXIMUM);
-- 	else
-- 		return true;
-- 
--diff --git a/lib/parser.h b/lib/parser.h
--index 88a74474a..291aa8ffe 100644
----- a/lib/parser.h
--+++ b/lib/parser.h
--@@ -38,7 +38,7 @@
-- #define MAXBUF	1024
-- 
-- /* Maximum time read_timer can return */
---#define TIMER_MAX (ULONG_MAX / TIMER_HZ)
--+#define TIMER_MAXIMUM (ULONG_MAX / TIMER_HZ)
-- 
-- /* Configuration test errors. These should be in decreasing order of severity */
-- typedef enum {
-diff --git a/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch b/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch
-deleted file mode 100644
-index 76c88a76bf..0000000000
---- a/package/keepalived/0002-Fix-order-of-include-files-in-configure-COLLISION-test.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From e4dd33f16fe56d09c8d59d1254a4ed1d8e9bb29c Mon Sep 17 00:00:00 2001
--From: Quentin Armitage <quentin@armitage.org.uk>
--Date: Thu, 6 Dec 2018 12:16:08 +0000
--Subject: [PATCH] Fix order of include files in configure COLLISION test
--
--Since Linux 4.4.11 (commit 1575c09) including linux/if.h after
--net/if.h works, whereas until glibc fix their headers including
--net/if.h after linux/if.h causes compiler redefinition errors.
--
--Unfortunately the test for the collision was done the wrong way
--round, as identified in issue #1079. The patch included in the
--issue report corrects the order of inclusion of the header files.
--
--What we should do is ensure that glibc header files are included
--before Linux header files, so that at least if kernel headers from
--4.4.11 onwards are used, the conflict will not occur.
--
--Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from: https://github.com/acassen/keepalived/commit/e4dd33f16fe56d09c8d59d1254a4ed1d8e9bb29c]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 7a2e8ce1..9badcc62 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1349,8 +1349,8 @@ AC_MSG_CHECKING([for linux/if.h and net/if.h namespace collision])
-- SAV_CPPFLAGS="$CPPFLAGS"
-- CPPFLAGS="$CPPFLAGS $kernelinc"
-- AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
---    #include <net/if.h>
--     #include <linux/if.h>
--+    #include <net/if.h>
--   ]])],
--   [
--     AC_MSG_RESULT([no])
-diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
-index 3ad3e6e6ac..5f9f569ca7 100644
---- a/package/keepalived/keepalived.hash
-+++ b/package/keepalived/keepalived.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	40e0e55afed9ca313d621a9c5878579696fafb5504dab521aadaf20ba6e7f597  keepalived-2.0.10.tar.gz
-+sha256	c7fb38e8a322fb898fb9f6d5d566827a30aa5a4cd1774f474bb4041c85bcbc46  keepalived-2.0.13.tar.gz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 4f6db01722..fc6b01521d 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -4,7 +4,7 @@
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+index ae90eb7d4f..8c467689be 100644
+--- a/docs/manual/adding-packages-golang.txt
++++ b/docs/manual/adding-packages-golang.txt
+@@ -52,8 +52,11 @@ If you need CGO support in your package, you must add a dependency on
+ +BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
+ 
+ The main macro of the Go package infrastructure is
+-+golang-package+. It is similar to the +generic-package+ macro. Only
+-target packages are supported with +golang-package+.
+++golang-package+. It is similar to the +generic-package+ macro. The
++ability to build host packages is also available, with the
+++host-golang-package+ macro.
++Host packages built by +host-golang-package+ macro should depend on
++BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS.
+ 
+ Just like the generic infrastructure, the Go infrastructure works
+ by defining a number of variables before calling the +golang-package+.
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 893a448709..3f16dbaec3 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -18,3 +18,9 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	# Go doesn't support CGO linking on MIPS64x platforms
+ 	# See: https://github.com/karalabe/xgo/issues/46
+ 	depends on !BR2_mips64 && !BR2_mips64el
++
++# Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 4f2c7e77e1..b4e8a53065 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -25,12 +25,18 @@ GO_BIN = $(HOST_DIR)/bin/go
+ 
+ # We pass an empty GOBIN, otherwise "go install: cannot install
+ # cross-compiled binaries when GOBIN is set"
+-GO_TARGET_ENV = \
+-	$(HOST_GO_TARGET_ENV) \
++GO_COMMON_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	GOBIN= \
+ 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
+ 
++GO_TARGET_ENV = \
++	$(HOST_GO_TARGET_ENV) \
++	$(GO_COMMON_ENV)
++
++GO_HOST_ENV = \
++	$(GO_COMMON_ENV)
++
+ ################################################################################
+ # inner-golang-package -- defines how the configuration, compilation and
+ # installation of a Go package should be done, implements a few hooks to tune
+@@ -44,7 +50,6 @@ GO_TARGET_ENV = \
+ #             packages
+ #  argument 4 is the type (target or host)
  #
+-# NOTE Only type target is supported at the moment
  ################################################################################
  
--KEEPALIVED_VERSION = 2.0.10
-+KEEPALIVED_VERSION = 2.0.13
- KEEPALIVED_SITE = http://www.keepalived.org/software
- KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
- KEEPALIVED_LICENSE = GPL-2.0+
--- 
-2.14.1
+ define inner-golang-package
+@@ -98,6 +103,8 @@ endif
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+ ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++# Build package for target
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+@@ -109,6 +116,20 @@ define $(2)_BUILD_CMDS
+ 			./$$(d)
+ 	)
+ endef
++else
++# Build package for host
++define $(2)_BUILD_CMDS
++	$$(foreach d,$$($(2)_BUILD_TARGETS),\
++		cd $$($(2)_SRC_PATH); \
++		$$(GO_HOST_ENV) \
++			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
++			$$($(2)_GO_ENV) \
++			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
++			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
++			./$$(d)
++	)
++endef
++endif
+ endif
+ 
+ # Target installation step. Only define it if not already defined by the
+@@ -121,6 +142,15 @@ define $(2)_INSTALL_TARGET_CMDS
+ endef
+ endif
+ 
++# Host installation step
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$$(foreach d,$$($(2)_INSTALL_BINS),\
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
++	)
++endef
++endif
++
+ # Call the generic package infrastructure to generate the necessary make
+ # targets
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+@@ -132,3 +162,4 @@ endef # inner-golang-package
+ ################################################################################
+ 
+ golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
