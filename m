@@ -1,62 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Mar 2019 23:07:45 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] go: explicitly disable
- modules to avoid unintended network lookup
-Message-ID: <20190317220520.1AD3C8EC65@busybox.osuosl.org>
+Date: Sun, 17 Mar 2019 23:11:30 +0100
+Subject: [Buildroot] [PATCH] config-fragments: drop old crosstool-ng
+ toolchains
+In-Reply-To: <20190303215712.7862-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 3 Mar 2019 22:57:11 +0100")
+References: <20190303215712.7862-1-peter@korsgaard.com>
+Message-ID: <87lg1d8831.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53a135e4c8e636403ea5e06b76a899c7ed4fab73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Go "modules" refers to the dependency fetching, verification (hashing), and
-version control system built into Go as of 1.11.
+ > These toolchains are very old and cause a number of autobuilder failures
+ > that doesn't happen with more recent toolchains:
 
-It is not desirable to have Go modules enabled in Buildroot in the normal case,
-as Buildroot manages downloading the sources, and third party dependency
-managers are typically not used.
+ > Fixes (glibc 2.18 does not provide O_TMPFILE):
+ > http://autobuild.buildroot.net/results/c49e8361a1d4406eefd8fc1b35c8e5b061aa403b
 
-In the absence of the GO111MODULE environment variable, the Go compiler will
-correctly compile using the "vendor" version of dependencies downloaded by
-Buildroot during the compilation process for Go-based packages.
+ > Fixes (x86 toolchain built without libquadmath):
+ > http://autobuild.buildroot.net/results/2d9724f169ccd60c7feb1cb549f1e2e1e9219ac3/
 
-However, if the user sets the GO111MODULE=on environment variable, the Go
-compiler will download the Go dependencies for Buildroot packages, using the
-modules system. This is potentially unintended behavior from user environment
-variables.
+ > Use Codesourcery ARM toolchain (GCC 4.8.3) to provide a test with a old GCC
+ > version.
 
-This commit sets the GO111MODULE=off variable in the Go target and host
-compilation environments, disabling Go modules support for Buildroot mainline
-packages.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f7a2870dd1fef9ee41e78ea1bcbb2ec61e82eb67)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Committed to 2018.11.x, thanks.
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 7755a3f785..1558b55e21 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -42,6 +42,7 @@ HOST_GO_ROOT = $(HOST_DIR)/lib/go
- # For the convienience of target packages.
- HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
- HOST_GO_TARGET_ENV = \
-+	GO111MODULE=off \
- 	GOARCH=$(GO_GOARCH) \
- 	GOROOT="$(HOST_GO_ROOT)" \
- 	CC="$(TARGET_CC)" \
-@@ -61,6 +62,7 @@ endif
- # The go build system is not compatible with ccache, so use
- # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
- HOST_GO_MAKE_ENV = \
-+	GO111MODULE=off \
- 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
- 	GOROOT_FINAL=$(HOST_GO_ROOT) \
- 	GOROOT="$(@D)" \
+-- 
+Bye, Peter Korsgaard
