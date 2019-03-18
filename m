@@ -1,55 +1,49 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 18 Mar 2019 14:21:46 +0100
-Subject: [Buildroot] [PATCH] system/skeleton: remove password expiration
- from shadow
-Message-ID: <20190318132146.3574-1-arnout@mind.be>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Mon, 18 Mar 2019 16:51:22 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-03-17
+In-Reply-To: <20190318070113.E1E6A85CC3@whitealder.osuosl.org>
+References: <20190318070113.E1E6A85CC3@whitealder.osuosl.org>
+Message-ID: <20190318145122.GA4713@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fields in /etc/shadow were set as follows:
+Hi Peter, All,
 
-root::10933:0:99999:7:::
+On Mon, Mar 18, 2019 at 07:01:08AM -0000, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Build statistics for 2019-03-17
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>    2018.02.x |  31 |   0 |   0 |  31 |
+>    2018.11.x |  21 |   3 |   0 |  24 |
+>    2019.02.x |  30 |   2 |   0 |  32 |
+>       master | 245 |  62 |   3 | 310 |
+> 
+> Results for branch '2018.11.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                runc-v1.0.0-rc6 | 2 
+>                 libsquish-1.15 | 1 
+> 
+> 
+> Detail of failures
+> ------------------
+> 
+>         m68k |                 libsquish-1.15 | NOK | http://autobuild.buildroot.net/results/c7357d045b078c5742bde21c82904b4ec0defc35 |     
 
-This sets the date of last password change to Jan 1, 2000, the minimum
-password age to 0 days, the maximum password age to near-infinity, and a
-warning period of 7 days. In practice, this means the password never
-expires. So all of this is quite useless.
+Cherry-pick of the commit 57ee0f74ec226d2790af96de2b872135c1887f fixes
+the issue, the issue is related to:
 
-On the other hand, mkusers creates lines without all of these options.
-It just sets ::::: which disables password expiration completely.
+    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
 
-To make things consistent, do the same for the skeleton entries.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- system/skeleton/etc/shadow | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
-index 06778f13f9..37de977cba 100644
---- a/system/skeleton/etc/shadow
-+++ b/system/skeleton/etc/shadow
-@@ -1,9 +1,9 @@
--root::10933:0:99999:7:::
--daemon:*:10933:0:99999:7:::
--bin:*:10933:0:99999:7:::
--sys:*:10933:0:99999:7:::
--sync:*:10933:0:99999:7:::
--mail:*:10933:0:99999:7:::
--www-data:*:10933:0:99999:7:::
--operator:*:10933:0:99999:7:::
--nobody:*:10933:0:99999:7:::
-+root::::::::
-+daemon:*:::::::
-+bin:*:::::::
-+sys:*:::::::
-+sync:*:::::::
-+mail:*:::::::
-+www-data:*:::::::
-+operator:*:::::::
-+nobody:*:::::::
--- 
-2.20.1
+Regards,
+Vadim Kochan
