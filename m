@@ -1,78 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Mar 2019 18:44:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
- /lib/modules directory
-In-Reply-To: <20190318163010.8056-1-norbert.lange@andritz.com>
-References: <20190318163010.8056-1-norbert.lange@andritz.com>
-Message-ID: <20190318174436.GI14237@scaer>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 18 Mar 2019 10:46:53 -0700
+Subject: [Buildroot] [PATCH 3/3] boot: riscv: Remove riscv-pk
+In-Reply-To: <20190316084319.15b569e0@windsurf>
+References: <20190315230540.4311-1-alistair.francis@wdc.com>
+ <20190315230540.4311-3-alistair.francis@wdc.com>
+ <20190316084319.15b569e0@windsurf>
+Message-ID: <CAKmqyKMEcxAQd-i+Y9Zyy_St7q8pu=o70YZQE6dkOc=bE9mQSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-03-18 17:30 +0100, Norbert Lange spake thusly:
-> For read-only root file systems, the kernel-modules
-> will be mounted over this directory.
+On Sat, Mar 16, 2019 at 12:43 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Fri, 15 Mar 2019 23:06:39 +0000
+> Alistair Francis <Alistair.Francis@wdc.com> wrote:
+>
+> > Now that OpenSBI is supported remove BBL (riscv-pk).
+> >
+> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>
+> This commit is not enough: you do not update the
+> qemu_riscv64_virt_defconfig and qemu_riscv32_virt_defconfig, which use
+> riscv-pk. They should be converted to use opensbi instead, and of
+> course be runtime tested under Qemu.
 
-This does not mean anything.
+Ah ok. I didn't think about the defconfigs. I'll update those as well
+as the instructions.
 
-Either you build your kernel with Buildroot, and the kernel does the
-installation of modules in /lib/modules, and thus you do not need to
-create it, or you build your kernel outside of Buildroot and you install
-the modules at build time in there.
+Alistair
 
-So, having a read-only filesystem is of no consequence here.
-
-Also, I don;t see how "the kernel-modules will be mounted over this
-directory", which imply this is done at runtime. If your system uses
-special means to store the kernel modules, then it's your duty to
-provide it on your own, like as an overlay (or a specific package) that
-install those files/direcoties.
-
-> This directory should always exist for this reason,
-
-This is wrong: one can have a no-module kernel, in which case
-/lib/modules is useless.
-
-> just as /mnt and /opt are in the skeleton.
-
-Those are madanted by the FHS [0].
-
-[0] https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-> ---
->  package/skeleton-init-common/skeleton-init-common.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-> index e429b13d78..b39794eddc 100644
-> --- a/package/skeleton-init-common/skeleton-init-common.mk
-> +++ b/package/skeleton-init-common/skeleton-init-common.mk
-> @@ -20,6 +20,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
->  	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(TARGET_DIR))
->  	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
->  	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/modules
->  	$(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
->  	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
->  		$(TARGET_DIR_WARNING_FILE)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> And of course, it'd be nice if Mark Corbin, who added riscv-pk, could
+> give his opinion about the replacement of riscv-pk by opensbi.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
