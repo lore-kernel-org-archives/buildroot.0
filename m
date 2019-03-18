@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:08:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kf5-modemmanager-qt: link with
- libatomic when needed
-In-Reply-To: <20190317211016.2052-1-fontaine.fabrice@gmail.com>
-References: <20190317211016.2052-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190318220820.09814d6e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Mar 2019 22:10:47 +0100
+Subject: [Buildroot] [PATCH] libiio: bump to version 0.15
+In-Reply-To: <20190314212950.70b4100e@windsurf> (Thomas Petazzoni's message of
+ "Thu, 14 Mar 2019 21:29:50 +0100")
+References: <20190313082932.13596-1-ardeleanalex@gmail.com>
+ <20190314212950.70b4100e@windsurf>
+Message-ID: <87ef737uso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 22:10:16 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> On some architectures, atomic binutils are provided by the libatomic
-> library from gcc. Linking with libatomic is therefore necessary,
-> otherwise the build fails with:
-> 
-> sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-> 
-> This is often for example the case on sparcv8 32 bit.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b941a3deaa57cac79f1686d47ca6ababf2f0d5e4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Hi,
 
-Applied to master, thanks. As usual, I would prefer an upstreamable
-fix, though.
+ > I had a look at
+ > https://github.com/analogdevicesinc/libiio/releases/tag/v0.15, and it
+ > looks like between 0.14 and 0.15, the number of commits is fairly
+ > limited, and the vast majority of them are fixes. So I believe it
+ > should be OK to directly take this bump to 0.15 in the LTS release.
 
-Thomas
+ > Peter, do you agree ?
+
+Yes, agreed. I've cherry picked the commit to the 2019.02.x branch.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
