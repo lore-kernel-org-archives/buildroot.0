@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:14:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gcc: Initialize st in
- elf_is_symlink
-In-Reply-To: <20190318015933.3478-1-james.hilliard1@gmail.com>
-References: <20190318015933.3478-1-james.hilliard1@gmail.com>
-Message-ID: <20190318221417.74c1a981@windsurf>
+Date: Mon, 18 Mar 2019 22:19:16 +0100
+Subject: [Buildroot] [PATCH v2] package/gst1-plugins-bad: add webrtc
+ option
+In-Reply-To: <20190316221440.24465-1-ps.report@gmx.net>
+References: <20190316221440.24465-1-ps.report@gmx.net>
+Message-ID: <20190318221916.71f326de@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+On Sat, 16 Mar 2019 23:14:40 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-On Mon, 18 Mar 2019 09:59:33 +0800
-james.hilliard1 at gmail.com wrote:
-
-> From: James Hilliard <james.hilliard1@gmail.com>
+> - remove old webrtc Config.in.legacy entry introduced by [1] (misnamed
+>   webrtc option was introduced with 2017.02, renamed to webrtcdsp for
+>   2017.08 and although backported to 2017.02.4)
 > 
-> Fixes:
-> ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c: In function ?elf_is_symlink?:
-> ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
->    return S_ISLNK (st.st_mode);
->                      ^
+> [1] https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...race-Initialize-st-in-elf_is_symlink.patch | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/gcc/8.3.0/0001-libbacktrace-Initialize-st-in-elf_is_symlink.patch
+> Changes v1 -> v2:
+>   - renamed option form webrtcbin to webrtc
+>   - remove legacy webrtc Config.in.legacy entry
+> ---
+>  Config.in.legacy                                      | 10 ----------
+>  package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
+>  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   |  7 +++++++
+>  3 files changed, 18 insertions(+), 10 deletions(-)
 
-The patch has been rejected upstream, so I'm not really keen on merging
-this. In addition, you're not giving enough details on the conditions
-under which this issue was found. Which configuration ? Which host gcc
-version ? etc.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
