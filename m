@@ -1,64 +1,64 @@
-From: james.hilliard1 at gmail.com <james.hilliard1@gmail.com>
-Date: Mon, 18 Mar 2019 09:59:33 +0800
-Subject: [Buildroot] [PATCH 1/1] package/gcc: Initialize st in elf_is_symlink
-Message-ID: <20190318015933.3478-1-james.hilliard1@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 17 Mar 2019 22:50:14 -0600
+Subject: [Buildroot] [PATCH v10 1/6] binutils: install libiberty for
+ host build
+In-Reply-To: <20190206091531.104591-1-aduskett@gmail.com>
+References: <20190206091531.104591-1-aduskett@gmail.com>
+Message-ID: <CADvTj4qctL8a789f=Xr4NdSToLiK5RPg7D2iHYncvkJE2KqubA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hilliard <james.hilliard1@gmail.com>
+On Wed, Feb 6, 2019 at 2:15 AM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Add --enable-install-libiberty to HOST_BINUTILS_CONF_OPTS to allow
+> prelink-cross to build properly.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v7:
+>   - Add patch to series.
+>
+> Changes v7 -> v10:
+>   - None
+>
+>  package/binutils/binutils.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index 4531b8d9c8..388e2192b4 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -84,6 +84,7 @@ HOST_BINUTILS_CONF_OPTS = \
+>         --target=$(GNU_TARGET_NAME) \
+>         --disable-shared \
+>         --enable-static \
+> +       --enable-install-libiberty \
+This appears to break host-gdb due to this incompatible non-pic
+libiberty.a being in the library search path before the correct pic
+version:
+ -L/home/buildroot/buildroot/output/host/lib
+-L/home/buildroot/buildroot/output/build/host-gdb-8.2.1/bfd/../libiberty/pic
 
-Fixes:
-../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c: In function ?elf_is_symlink?:
-../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-   return S_ISLNK (st.st_mode);
-                     ^
+build error for host-gdb:
+/usr/bin/ld: /home/buildroot/buildroot/output/host/lib/libiberty.a(cp-demangle.o):
+relocation R_X86_64_PC32 against symbol `cplus_demangle_builtin_types'
+can not be used when making a shared object; recompile with -fPIC
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...race-Initialize-st-in-elf_is_symlink.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/gcc/8.3.0/0001-libbacktrace-Initialize-st-in-elf_is_symlink.patch
-
-diff --git a/package/gcc/8.3.0/0001-libbacktrace-Initialize-st-in-elf_is_symlink.patch b/package/gcc/8.3.0/0001-libbacktrace-Initialize-st-in-elf_is_symlink.patch
-new file mode 100644
-index 0000000000..22a6c38209
---- /dev/null
-+++ b/package/gcc/8.3.0/0001-libbacktrace-Initialize-st-in-elf_is_symlink.patch
-@@ -0,0 +1,32 @@
-+From a6c384f38421ed62d5acac30a90dc92de5cf4055 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Mon, 18 Mar 2019 09:17:39 +0800
-+Subject: [PATCH] [libbacktrace] Initialize st in elf_is_symlink
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes error: ?st.st_mode? may be used uninitialized in this function
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status: https://patchwork.ozlabs.org/patch/1057631/]
-+---
-+ libbacktrace/elf.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libbacktrace/elf.c b/libbacktrace/elf.c
-+index f4863f0bea5..6cc2a7dec22 100644
-+--- a/libbacktrace/elf.c
-++++ b/libbacktrace/elf.c
-+@@ -765,7 +765,7 @@ elf_syminfo (struct backtrace_state *state, uintptr_t addr,
-+ static int
-+ elf_is_symlink (const char *filename)
-+ {
-+-  struct stat st;
-++  struct stat st={0};
-+ 
-+   if (lstat (filename, &st) < 0)
-+     return 0;
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Deleting the incompatible
+/home/buildroot/buildroot/output/host/lib/libiberty.a allows host-gdb
+to build successfully.
+>         --with-sysroot=$(STAGING_DIR) \
+>         --enable-poison-system-directories \
+>         $(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
