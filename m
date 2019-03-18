@@ -1,42 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:57:19 +0100
-Subject: [Buildroot] [git commit] configs/qemu_riscv32_virt: upgrade to 4.20
- kernel
-Message-ID: <20190318215505.9DEBE8E203@busybox.osuosl.org>
+Date: Mon, 18 Mar 2019 22:19:08 +0100
+Subject: [Buildroot] [git commit] package/gst1-plugins-bad: add webrtc option
+Message-ID: <20190318215505.8FCEA8E203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e92d5624236e47e1abe44f2ace24fceb1882c0a5
+commit: https://git.buildroot.net/buildroot/commit/?id=baffecda1678d68ab6d16514ae1903d2d4dc1e5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+- remove old webrtc Config.in.legacy entry introduced by [1] (misnamed
+  webrtc option was introduced with 2017.02, renamed to webrtcdsp for
+  2017.08 and although backported to 2017.02.4)
+
+[1] https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_riscv32_virt_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                                        | 10 ----------
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 11 +++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  7 +++++++
+ 3 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index fb37da6a89..6f9a61b11c 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2030b51e1d..0a0bce41f9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -1685,16 +1685,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+ 	bool "mad (*.mp3 audio) removed"
+ 	select BR2_LEGACY
  
--# Linux headers same as kernel, a 4.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+# Linux headers same as kernel, a 4.20 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+-	bool "gst1-plugins-bad webrtc renamed to webrtcdsp"
+-	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
+-	select BR2_LEGACY
+-	help
+-	  The WebRTC plugin in GStreamer 1.x has always been named
+-	  webrtcdsp, but was wrongly introduced in Buildroot under the
+-	  name webrtc. Therefore, we have renamed the option to match
+-	  the actual name of the GStreamer plugin.
+-
+ config BR2_STRIP_none
+ 	bool "Strip command 'none' has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 869f0a9d45..6830902f3a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -558,6 +558,17 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
+ 	help
+ 	  Webp image format plugin
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
++	bool "webrtc"
++	depends on !BR2_STATIC_LIBS # libnice -> gnutls
++	select BR2_PACKAGE_GST1_PLUGINS_BASE # libgstsdp
++	select BR2_PACKAGE_LIBNICE
++	help
++	  WebRTC plugins (webrtcbin - a bin for webrtc connections)
++
++comment "webrtc needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
+ 	bool "webrtcdsp"
+ 	# All depends from webrtc-audio-processing
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index f5b081f972..e4e7661ac4 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -703,6 +703,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+ endif
  
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
++GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtcdsp
+ GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
