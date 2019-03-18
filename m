@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 21:56:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zlog: bump to version
- ccf8c36e918d6f3c7e6fe9e36eedf8583014c5c9
-In-Reply-To: <20190317172840.3511-1-fontaine.fabrice@gmail.com>
-References: <20190317172840.3511-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190318215611.71f3cb3e@windsurf>
+Date: Mon, 18 Mar 2019 21:56:28 +0100
+Subject: [Buildroot] [git commit] package/python-aiojobs: drop aiohttp
+ dependency
+Message-ID: <20190318205319.A8EB58E378@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 18:28:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=53e3860a0e22fca5348a781a5b2e70c19403d172
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Remove patches (already in version)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/zlog/0001-fix-compiling-on-Buildroot.patch | 32 ------------------
->  ...ove-Werror-and-avoid-build-failures-becau.patch | 38 ----------------------
->  package/zlog/zlog.hash                             |  3 +-
->  package/zlog/zlog.mk                               |  2 +-
->  4 files changed, 3 insertions(+), 72 deletions(-)
->  delete mode 100644 package/zlog/0001-fix-compiling-on-Buildroot.patch
->  delete mode 100644 package/zlog/0002-compile-Remove-Werror-and-avoid-build-failures-becau.patch
+aiohttp isn't a required dependency for aiojobs
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-aiojobs/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-aiojobs/Config.in b/package/python-aiojobs/Config.in
+index 54d6c02a8e..ab61985164 100644
+--- a/package/python-aiojobs/Config.in
++++ b/package/python-aiojobs/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_AIOJOBS
+ 	bool "python-aiojobs"
+ 	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
+ 	help
+ 	  Jobs scheduler for managing background task (asyncio).
+ 
