@@ -1,38 +1,35 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Mon, 18 Mar 2019 18:22:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: Fix loop
- positional declaration build error
-In-Reply-To: <20190318171237.032f635c@windsurf>
-References: <1552923418-22447-1-git-send-email-email@gmail.com>
- <20190318171237.032f635c@windsurf>
-Message-ID: <20190318162234.GA30399@lwo1-lhp-f71841>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 18 Mar 2019 17:30:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
+ /lib/modules directory
+Message-ID: <20190318163010.8056-1-norbert.lange@andritz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 18, 2019 at 05:12:37PM +0100, Thomas Petazzoni wrote:
-> On Mon, 18 Mar 2019 17:36:58 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > From: Vadim Kochan <vadim4j@gmail.com>
-> > 
-> > Move 'i' variable outside of the 'for' loop to separate declaration
-> > in lib/crc16.c
-> > 
-> > Fixes:
-> > 	http://autobuild.buildroot.net/results/332c9d2232c03440bf71794ee7850b1f6fd51d11/
-> > 
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> 
-> Thanks for the fix, but I already submitted a similar one, and upstream
-> U-Boot wants to handle this different, see
-> https://lists.denx.de/pipermail/u-boot/2019-February/358821.html. I
-> didn't get to doing the change upstream U-Boot suggested.
-> 
+For read-only root file systems, the kernel-modules
+will be mounted over this directory.
+This directory should always exist for this reason,
+just as /mnt and /opt are in the skeleton.
 
-OK, I've marked it as 'Rejected' :-)
+Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+---
+ package/skeleton-init-common/skeleton-init-common.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Vadim Kochan
+diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+index e429b13d78..b39794eddc 100644
+--- a/package/skeleton-init-common/skeleton-init-common.mk
++++ b/package/skeleton-init-common/skeleton-init-common.mk
+@@ -20,6 +20,7 @@ define SKELETON_INIT_COMMON_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_COMMON_PATH),$(TARGET_DIR))
+ 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+ 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/modules
+ 	$(SED) 's, at PATH@,$(BR2_SYSTEM_DEFAULT_PATH),' $(TARGET_DIR)/etc/profile
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+ 		$(TARGET_DIR_WARNING_FILE)
+-- 
+2.20.1
