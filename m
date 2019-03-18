@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 10:59:50 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-10-05
-In-Reply-To: <87wokw7bk3.fsf@dell.be.48ers.dk>
-References: <20181006060019.F38E92072B@mail.bootlin.com>
- <20181007044341.n33wz7romp36cw7a@sapphire.tkos.co.il>
- <20190315152113.4e9bc31a@windsurf>
- <87wokw7bk3.fsf@dell.be.48ers.dk>
-Message-ID: <20190318105950.74fd786f@windsurf>
+Date: Mon, 18 Mar 2019 11:05:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bird: add a unprivileged user
+In-Reply-To: <CAFtSRGCunAxWP2VizuD_yY8zzqnOqksuzKz-F=PiFHv+JdOb7A@mail.gmail.com>
+References: <20190205105630.17008-1-adrien@gallouet.fr>
+ <20190317174946.28ee07a5@windsurf>
+ <CAFtSRGCunAxWP2VizuD_yY8zzqnOqksuzKz-F=PiFHv+JdOb7A@mail.gmail.com>
+Message-ID: <20190318110547.177223b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Mar 2019 10:54:04 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Hello Adrien,
 
->  > Good suggestion. Fixed:  
-> 
->  >   https://git.buildroot.org/buildroot-test/commit/?id=e90dc8753f9deaca9ecb41a5874d7a559ee2557c  
-> 
-> NIT: This only sorted the overview, but not the detailed listing.
+Thanks for the feedback.
 
-Yes, I know. I pondered about sorting the detailed listing, but this
-would move the results about master towards the end of the e-mail,
-while those are the most important results I believe. So I did not
-change how the detailed listing was sorted.
+On Sun, 17 Mar 2019 20:56:16 +0100
+
+> I use BIRD with s6 on production and I didn't take the time
+> to write a correct start-stop-daemon script for it yet. In all cases,
+> BIRD only needs root privileges at startup and he can switch
+> to a less privileged one when started with -u USER -g GROUP.
+> 
+> If your prefer to wait, I'll resubmit a patch with the start-stop-daemon
+> script later.
+
+Yes, indeed, I think it makes more sense to have the new user created
+together with an init script that actually uses it.
+
+Thanks!
 
 Thomas
 -- 
