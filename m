@@ -1,114 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:26:50 +0100
-Subject: [Buildroot] [PATCH v2 5/5] boot: riscv: Initial commit of
- OpenSBI
-In-Reply-To: <20190318210106.6347-5-alistair.francis@wdc.com>
-References: <20190318210106.6347-1-alistair.francis@wdc.com>
- <20190318210106.6347-5-alistair.francis@wdc.com>
-Message-ID: <20190318222650.2dbb3591@windsurf>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 18 Mar 2019 22:28:28 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/binutils: upstream fixes for
+ 2.31.1
+In-Reply-To: <20190318220522.5b18fff5@windsurf>
+References: <20190317211848.3721-1-nolange79@gmail.com>
+ <20190318220522.5b18fff5@windsurf>
+Message-ID: <CADYdroNo+Um5YMrrndErZJX5ox0903zkeajOsrgmAtH7TKe0PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alistair,
+Am Mo., 18. M?rz 2019 um 22:05 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Hello Norbert,
+>
+> On Sun, 17 Mar 2019 22:18:48 +0100
+> Norbert Lange <nolange79@gmail.com> wrote:
+>
+> > combining musl and binutils 2.31.1 will
+> > produce static applications that crash
+> > immediately.
+> > Picked 3 upstream commits to remedy this.
+> >
+> > see https://sourceware.org/bugzilla/show_bug.cgi?id=23428
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  ...OPERTY_X86_ISA_1_USED-note-if-needed.patch | 568 +++++++++++++++++
+> >  ...ly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch | 588 ++++++++++++++++++
+> >  ...operly-add-X86_ISA_1_NEEDED-property.patch | 140 +++++
+> >  3 files changed, 1296 insertions(+)
+> >  create mode 100644 package/binutils/2.31.1/0012-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
+> >  create mode 100644 package/binutils/2.31.1/0013-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+> >  create mode 100644 package/binutils/2.31.1/0014-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
+>
+> Applied to master, thanks. So those commits are all in binutils 2.32,
+> so we're good there. What about binutils 2.30 ? Are they affected as
+> well, or not affected because the issue is a regression introduced
+> between binutils 2.30 and 2.31 ?
 
-On Mon, 18 Mar 2019 21:02:04 +0000
-Alistair Francis <Alistair.Francis@wdc.com> wrote:
+To my best knowledge  the bug was introduced in 2.31, as change to
+that version caused the programs to crash.
+The bug-report states the same. I cant point to a commit/feature that
+caused the issue.
 
-> OpenSBI is a much improved alternative to BBL (riscv-pk). Add OpenSBI
-> support to buildroot.
-> 
-> OpenSBI is also set as the default boot loader for RISC-V.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-
-This should be two separate commits:
-
- - One adding boot/opensbi/ as a new package
-
- - One updating the defconfig to use opensbi (and the new Image kernel
-   format)
-
-So overall, you should have the following commits:
-
-	linux: allow BR2_LINUX_KERNEL_IMAGE on RISC-V
-	boot/opensbi: new package
-	configs/qemu_riscv*_virt: use opensbi instead of riscv-pk
-
-
->  N:	Alvaro G. M <alvaro.gamez@hazent.com>
-> diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-> index 2da99580e5..f73f4278de 100644
-> --- a/board/qemu/riscv32-virt/readme.txt
-> +++ b/board/qemu/riscv32-virt/readme.txt
-> @@ -1,7 +1,11 @@
-> -Run the emulation with:
-> +Run Linux in emulation with:
->  
-> -  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-> +  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
->  
->  The login prompt will appear in the terminal that started Qemu.
->  
-> -Tested with QEMU 2.12.1
-> +It is also possible to boot u-boot in QEMU. Although at the time of testing there were some issues with the OpenSBI to u-boot hand off. Run u-boot in emulation with:
-> +
-> +  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/u-boot,addr=0x80400000 -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-
-The defconfig is not building U-Boot for RISC-V, so this part is not
-relevant in this readme.txt.
-
-> +It is also possible to boot u-boot in QEMU. Although at the time of testing there were some issues with the OpenSBI to u-boot hand off. Run u-boot in emulation with:
-> +
-> +  qemu-system-riscv64 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/u-boot,addr=0x80200000 -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-
-Ditto.
-
-> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-> new file mode 100644
-> index 0000000000..65d39aa664
-> --- /dev/null
-> +++ b/boot/opensbi/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_TARGET_OPENSBI
-> +	bool "opensbi"
-> +	depends on BR2_riscv
-> +	help
-> +	  OpenSBI aims to provide an open-source and extensible
-> +	  implementation of the RISC-V SBI specification for a platform
-> +	  specific firmware (M-mode) and a general purpose OS, hypervisor
-> +	  or bootloader (S-mode or HS-mode). OpenSBI implementation can
-> +	  be easily extended by RISC-V platform or System-on-Chip vendors
-> +	  to fit a particular hadware configuration.
-> +
-> +	  https://github.com/riscv/opensbi.git
-> +
-> +if BR2_TARGET_OPENSBI
-> +config BR2_TARGET_OPENSBI_PLAT
-> +	string "OpenSBI Platform"
-> +	default ""
-> +	help
-> +	  Specifies the OpenSBI platform to build. If no platform is specified only
-> +	  the OpenSBI platform independent static library libsbi.a is built. If a
-> +	  platform is specified then the platform specific static library libplatsbi.a
-> +	  and firmware examples are built.
-
-I'm pretty sure "make check-package" would whine here about the lines
-being too long. Could you make sure to run "make check-package" before
-your next submission ?
-
-> +OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
-> +ifneq ($(OPENSBI_PLAT),)
-> +	OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
-
-No indentation here.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards, Norbert
