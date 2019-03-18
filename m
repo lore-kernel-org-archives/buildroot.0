@@ -1,86 +1,61 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 18 Mar 2019 10:51:11 -0700
-Subject: [Buildroot] [PATCH 3/3] boot: riscv: Remove riscv-pk
-In-Reply-To: <38a561ae-aa81-431d-1629-c9720ba91291@embecosm.com>
-References: <20190315230540.4311-1-alistair.francis@wdc.com>
- <20190315230540.4311-3-alistair.francis@wdc.com>
- <20190316084319.15b569e0@windsurf>
- <38a561ae-aa81-431d-1629-c9720ba91291@embecosm.com>
-Message-ID: <CAKmqyKOgPmXomo_gstnkT6yYkZchv4m6__pgKqM12Rw=ZJft4g@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 18 Mar 2019 19:11:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
+ /lib/modules directory
+In-Reply-To: <20190318174436.GI14237@scaer>
+References: <20190318163010.8056-1-norbert.lange@andritz.com>
+ <20190318174436.GI14237@scaer>
+Message-ID: <CADYdroMoAzR6=nniTiBZvvs2fkwJJ7hGM-rd2OixxA6FpjRj7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 18, 2019 at 3:45 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
+Am Mo., 18. M?rz 2019 um 18:44 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
 >
-> Hello
+> On 2019-03-18 17:30 +0100, Norbert Lange spake thusly:
+> > For read-only root file systems, the kernel-modules
+> > will be mounted over this directory.
 >
-> On 16/03/2019 07:43, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > On Fri, 15 Mar 2019 23:06:39 +0000
-> > Alistair Francis <Alistair.Francis@wdc.com> wrote:
-> >
-> >> Now that OpenSBI is supported remove BBL (riscv-pk).
-> >>
-> >> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> > This commit is not enough: you do not update the
-> > qemu_riscv64_virt_defconfig and qemu_riscv32_virt_defconfig, which use
-> > riscv-pk. They should be converted to use opensbi instead, and of
-> > course be runtime tested under Qemu.
-> >
-> > And of course, it'd be nice if Mark Corbin, who added riscv-pk, could
-> > give his opinion about the replacement of riscv-pk by opensbi.
+> This does not mean anything.
 >
-> I don't think that removing support for riscv-pk at this stage is
-> desirable. I imagine that the majority (if not all) RISC-V systems have
-> been using riscv-pk (BBL) up until this point, including the HiFive
-> Unleashed board, so I expect that there are a lot of systems and people
-> with time invested in using it. That said, I always imagined a migration
-> path from riscv-pk to an alternative such as U-Boot (or OpenSBI or
-> whatever).
+> Either you build your kernel with Buildroot, and the kernel does the
+> installation of modules in /lib/modules, and thus you do not need to
+> create it, or you build your kernel outside of Buildroot and you install
+> the modules at build time in there.
+>
+> So, having a read-only filesystem is of no consequence here.
+>
+> Also, I don;t see how "the kernel-modules will be mounted over this
+> directory", which imply this is done at runtime. If your system uses
+> special means to store the kernel modules, then it's your duty to
+> provide it on your own, like as an overlay (or a specific package) that
+> install those files/direcoties.
 
-I agree that up until OpenSBI almost all boards would have been using
-BBL. The problem with BBL is that people were never investing time
-into it. There was never a formal release and the code base is
-difficult to maintain. I think that the sooner we can replace it the
-better. Yocto/OpenEmbedded has fully swapped and Fedora is looking at
-swapping as well.
-
-OpenSBI allows us to not compile the kernel into the boot loader when
-booting with QEMU. It also allows us to boot directly into u-boot on
-QEMU and on hardware (with u-boot 2019.04). I think leaving it in
-confuses people who might continue to use it as that is what they have
-seen before, even though it is a bad choice.
+If you prepare a kernel with an builtin initramfs containing
+the modules and an initscript to mount those over /lib/modules,
+then you wont have to touch the root fs.
+(can be replaced independently of each other).
 
 >
-> As the first release of OpenSBI was only at the end of January 2019, I
-> would strongly suggest that we keep riscv-pk for a period of time
-> (possibly commenting the intention to eventually deprecate it in favour
-> of OpenSBI). This will give OpenSBI time to mature and users of riscv-pk
-> a period to evaluate it and consider migrating.
+> > This directory should always exist for this reason,
 >
-> I do think that it would be a good start to test the existing QEMU virt
-> configurations with OpenSBI and then update them as necessary.
+> This is wrong: one can have a no-module kernel, in which case
+> /lib/modules is useless.
 
-Yep, I'll update the configurations in v2 as well as the
-documentation. OpenSBI is well tested on QEMU in general.
+One could also have nothing to use with  /mnt, /media and /opt.
 
-Alistair
+> > just as /mnt and /opt are in the skeleton.
+>
+> Those are madanted by the FHS [0].
 
->
-> Regards
->
-> Mark
->
-> >
-> > Thanks!
-> >
-> > Thomas
->
-> --
-> Mark Corbin
-> Embecosm Ltd.
-> https://www.embecosm.com
+Ok, if I red that right, then /boot and /srv would be required/mandated aswell?
+
+I guess I wont get the change up-streamed, and thats fine (minor annoyance
+that I cant use verbatim buildroot's with such kernels). But this seems
+to be pretty arbitrary given that buildroot seems rather lenient
+otherwise (for good reasons).
+
+Norbert.
