@@ -1,47 +1,86 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 18 Mar 2019 10:46:53 -0700
+Date: Mon, 18 Mar 2019 10:51:11 -0700
 Subject: [Buildroot] [PATCH 3/3] boot: riscv: Remove riscv-pk
-In-Reply-To: <20190316084319.15b569e0@windsurf>
+In-Reply-To: <38a561ae-aa81-431d-1629-c9720ba91291@embecosm.com>
 References: <20190315230540.4311-1-alistair.francis@wdc.com>
  <20190315230540.4311-3-alistair.francis@wdc.com>
  <20190316084319.15b569e0@windsurf>
-Message-ID: <CAKmqyKMEcxAQd-i+Y9Zyy_St7q8pu=o70YZQE6dkOc=bE9mQSA@mail.gmail.com>
+ <38a561ae-aa81-431d-1629-c9720ba91291@embecosm.com>
+Message-ID: <CAKmqyKOgPmXomo_gstnkT6yYkZchv4m6__pgKqM12Rw=ZJft4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 16, 2019 at 12:43 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Mon, Mar 18, 2019 at 3:45 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
 >
-> Hello,
+> Hello
 >
-> On Fri, 15 Mar 2019 23:06:39 +0000
-> Alistair Francis <Alistair.Francis@wdc.com> wrote:
->
-> > Now that OpenSBI is supported remove BBL (riscv-pk).
+> On 16/03/2019 07:43, Thomas Petazzoni wrote:
+> > Hello,
 > >
-> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> > On Fri, 15 Mar 2019 23:06:39 +0000
+> > Alistair Francis <Alistair.Francis@wdc.com> wrote:
+> >
+> >> Now that OpenSBI is supported remove BBL (riscv-pk).
+> >>
+> >> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> > This commit is not enough: you do not update the
+> > qemu_riscv64_virt_defconfig and qemu_riscv32_virt_defconfig, which use
+> > riscv-pk. They should be converted to use opensbi instead, and of
+> > course be runtime tested under Qemu.
+> >
+> > And of course, it'd be nice if Mark Corbin, who added riscv-pk, could
+> > give his opinion about the replacement of riscv-pk by opensbi.
 >
-> This commit is not enough: you do not update the
-> qemu_riscv64_virt_defconfig and qemu_riscv32_virt_defconfig, which use
-> riscv-pk. They should be converted to use opensbi instead, and of
-> course be runtime tested under Qemu.
+> I don't think that removing support for riscv-pk at this stage is
+> desirable. I imagine that the majority (if not all) RISC-V systems have
+> been using riscv-pk (BBL) up until this point, including the HiFive
+> Unleashed board, so I expect that there are a lot of systems and people
+> with time invested in using it. That said, I always imagined a migration
+> path from riscv-pk to an alternative such as U-Boot (or OpenSBI or
+> whatever).
 
-Ah ok. I didn't think about the defconfigs. I'll update those as well
-as the instructions.
+I agree that up until OpenSBI almost all boards would have been using
+BBL. The problem with BBL is that people were never investing time
+into it. There was never a formal release and the code base is
+difficult to maintain. I think that the sooner we can replace it the
+better. Yocto/OpenEmbedded has fully swapped and Fedora is looking at
+swapping as well.
+
+OpenSBI allows us to not compile the kernel into the boot loader when
+booting with QEMU. It also allows us to boot directly into u-boot on
+QEMU and on hardware (with u-boot 2019.04). I think leaving it in
+confuses people who might continue to use it as that is what they have
+seen before, even though it is a bad choice.
+
+>
+> As the first release of OpenSBI was only at the end of January 2019, I
+> would strongly suggest that we keep riscv-pk for a period of time
+> (possibly commenting the intention to eventually deprecate it in favour
+> of OpenSBI). This will give OpenSBI time to mature and users of riscv-pk
+> a period to evaluate it and consider migrating.
+>
+> I do think that it would be a good start to test the existing QEMU virt
+> configurations with OpenSBI and then update them as necessary.
+
+Yep, I'll update the configurations in v2 as well as the
+documentation. OpenSBI is well tested on QEMU in general.
 
 Alistair
 
 >
-> And of course, it'd be nice if Mark Corbin, who added riscv-pk, could
-> give his opinion about the replacement of riscv-pk by opensbi.
+> Regards
 >
-> Thanks!
+> Mark
 >
-> Thomas
+> >
+> > Thanks!
+> >
+> > Thomas
+>
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Mark Corbin
+> Embecosm Ltd.
+> https://www.embecosm.com
