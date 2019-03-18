@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:57:50 +0100
-Subject: [Buildroot] [git commit] configs/qemu_riscv64_virt: re-order options
-Message-ID: <20190318215505.A49718E203@busybox.osuosl.org>
+Date: Mon, 18 Mar 2019 22:59:03 +0100
+Subject: [Buildroot] [git commit] package/meson: bump version to 0.50.0
+Message-ID: <20190318215558.EC7A3890D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19064985e8383b205536b5468f2c3261f11eb70d
+commit: https://git.buildroot.net/buildroot/commit/?id=114e9dcd28e1001b74689215ec669b8940dc3ea9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the config layout, no functional change.
-
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_riscv64_virt_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index 65dbef4135..596edf2fcd 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -4,11 +4,11 @@ BR2_RISCV_64=y
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index fadef6df8a..e3d740b17c 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.49.2/meson-0.49.2.tar.gz.asc
+-sha256 ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd meson-0.49.2.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.50.0/meson-0.50.0.tar.gz.asc
++sha256 2a1bc42dda58206fb922cda5e1ca95cc03ad126321d26acc47d3493ec4e7021f meson-0.50.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 49e27f5527..fbfef7002f 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # System
- BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_GENERIC_GETTY=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # Linux headers same as kernel, a 4.20 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+-MESON_VERSION = 0.49.2
++MESON_VERSION = 0.50.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
