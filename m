@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:59:34 +0100
-Subject: [Buildroot] [PATCH v2 3/5] configs: qemu_riscv64_virt: Fix
- config layout
-In-Reply-To: <20190318210106.6347-3-alistair.francis@wdc.com>
-References: <20190318210106.6347-1-alistair.francis@wdc.com>
- <20190318210106.6347-3-alistair.francis@wdc.com>
-Message-ID: <20190318225934.51ec4aa3@windsurf>
+Date: Mon, 18 Mar 2019 22:59:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: drop autoreconf
+In-Reply-To: <20190318214103.2240-1-fontaine.fabrice@gmail.com>
+References: <20190318214103.2240-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190318225944.099fba04@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Mar 2019 21:02:03 +0000
-Alistair Francis <Alistair.Francis@wdc.com> wrote:
+On Mon, 18 Mar 2019 22:41:03 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the config layout, no functional change.
+> Commit 78d4ddbf3b416885d2e99b32363b174755f9bb30 removed all patches so
+> autoreconf is not needed anymore
 > 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  configs/qemu_riscv64_virt_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/keepalived/keepalived.mk | 2 --
+>  1 file changed, 2 deletions(-)
 
 Applied to master, thanks.
 
