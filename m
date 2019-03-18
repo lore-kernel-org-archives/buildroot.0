@@ -1,24 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 23:00:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/angularjs: bump version to 1.7.8
-In-Reply-To: <20190318214509.24478-1-aduskett@gmail.com>
-References: <20190318214509.24478-1-aduskett@gmail.com>
-Message-ID: <20190318230000.39b1b35c@windsurf>
+Date: Mon, 18 Mar 2019 23:00:03 +0100
+Subject: [Buildroot] [PATCH v1] package/meson: bump version to 0.50.0
+In-Reply-To: <20190318214324.5479-1-ps.report@gmx.net>
+References: <20190318214324.5479-1-ps.report@gmx.net>
+Message-ID: <20190318230003.5fe4ddbe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Mar 2019 17:45:09 -0400
-aduskett at gmail.com wrote:
+On Mon, 18 Mar 2019 22:43:24 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/angularjs/angularjs.hash | 4 ++--
->  package/angularjs/angularjs.mk   | 2 +-
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
