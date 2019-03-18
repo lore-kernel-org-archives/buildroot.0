@@ -1,55 +1,166 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 18 Mar 2019 13:30:03 -0700
-Subject: [Buildroot] [PATCH 1/3] arch: riscv: Add a RISC-V Platform
- option
-In-Reply-To: <20190316083610.15c4eea5@windsurf>
+Date: Mon, 18 Mar 2019 13:36:53 -0700
+Subject: [Buildroot] [PATCH 2/3] boot: riscv: Initial commit of OpenSBI
+In-Reply-To: <20190316084124.2dbf3e47@windsurf>
 References: <20190315230540.4311-1-alistair.francis@wdc.com>
- <20190316083610.15c4eea5@windsurf>
-Message-ID: <CAKmqyKP0C8jWnV64R+0KMRtZuLMbRijfh4y_bQBZgH6HXQvhag@mail.gmail.com>
+ <20190315230540.4311-2-alistair.francis@wdc.com>
+ <20190316084124.2dbf3e47@windsurf>
+Message-ID: <CAKmqyKPLkVz4nPPi_++2J=GF8n6Dzrx+RG6pZCDuhRq8oTk5LA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 16, 2019 at 12:36 AM Thomas Petazzoni
+On Sat, Mar 16, 2019 at 12:41 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello Alistair,
->
-> Thanks for your contribution.
+> Hello,
 >
 > On Fri, 15 Mar 2019 23:06:38 +0000
 > Alistair Francis <Alistair.Francis@wdc.com> wrote:
 >
-> > Add a RISC-V Platform option. At the moment only QEMU platforms are
-> > supported, but in the future this can be extended to include real
-> > hardware platforms (such as the Unleashed board).
-> >
-> > My goal is that this platform will set default config options (such as
-> > the default defconfig for the kernel) based on the platform value.
-> >
-> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> > index 8a57cb2e23..a8978856ad 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1383,6 +1383,7 @@ F:      arch/arch.mk.riscv
+> >  F:   arch/Config.in.riscv
+> >  F:   board/qemu/riscv32-virt/
+> >  F:   board/qemu/riscv64-virt/
+> > +F:   boot/opensbi/
 >
-> We never describe each and every board using Buildroot options. If we
-> were to do that, we would have gazillion of options for the thousands
-> of boards that exist.
+> Why is this added under the name of Mark Corbin, and not yours? Is Mark
+> fine with this? Why don't you add opensbi under your entry in the
+> DEVELOPERS file?
 
-Yep, that makes sense.
+I was just keeping all the RISC-V ones together, but you are right.
+I'll add it to mine.
 
 >
-> So, we are not going to accept this patch. What we do however is add a
-> number of defconfigs for well known platforms, just like:
 >
->   configs/qemu_riscv32_virt_defconfig
->   configs/qemu_riscv64_virt_defconfig
+> > diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> > new file mode 100644
+> > index 0000000000..01ee342215
+> > --- /dev/null
+> > +++ b/boot/opensbi/Config.in
+> > @@ -0,0 +1,25 @@
+> > +config BR2_TARGET_OPENSBI
+> > +     bool "OpenSBI"
+>
+> All lower-case "opensbi".
 
-Update in v2.
+Fixed
+
+>
+> > +     depends on BR2_riscv
+> > +     help
+> > +       OpenSBI aims to provide an open-source and extensible
+> > +       implementation of the RISC-V SBI specification for a platform
+> > +       specific firmware (M-mode) and a general purpose OS, hypervisor
+> > +       or bootloader (S-mode or HS-mode). OpenSBI implementation can
+> > +       be easily extended by RISC-V platform or System-on-Chip vendors
+> > +       to fit a particular hadware configuration.
+> > +
+> > +       https://github.com/riscv/opensbi.git
+> > +
+> > +if BR2_TARGET_OPENSBI
+> > +config BR2_TARGET_OPENSBI_USE_PLAT
+> > +     bool "Build OpenSBI for Platform"
+> > +     depends on BR2_TARGET_OPENSBI
+>
+> This "depends on" is not needed, you are already inside a if
+> BR2_TARGET_OPENSBI...endif block.
+>
+> But this option is not needed: you can simply decide whether you want
+> to do a "platform" build depending on whether the
+> BR2_TARGET_OPENSBI_PLAT option is empty or not.
+
+Ok, fixed.
+
+>
+> > +config BR2_TARGET_OPENSBI_PLAT
+> > +     string "OpenSBI Platform"
+> > +     depends on BR2_TARGET_OPENSBI_USE_PLAT
+> > +     default "qemu/virt" if BR2_RISCV_QEMU_VIRT
+> > +     default "qemu/sifive_u" if BR2_RISCV_QEMU_SIFIVE_U
+>
+> Instead of this, you should simply make it a string option, and it's
+> the responsibility of the user to fill it in with the right value.
+> Example defconfigs can help users for well-known platforms. That's how
+> we do things for Linux, U-Boot, and all other platform-specific
+> components.
+
+Fixed as well.
+
+>
+> > diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> > new file mode 100644
+> > index 0000000000..9da4e7f44e
+> > --- /dev/null
+> > +++ b/boot/opensbi/opensbi.mk
+> > @@ -0,0 +1,32 @@
+> > +################################################################################
+> > +#
+> > +# OpenSBI
+> > +#
+> > +################################################################################
+> > +
+> > +OPENSBI_VERSION = ca20ac0cd4c099006d4eea4d9ac7bd7b58e2ae0f
+> > +OPENSBI_SITE = git://github.com/riscv/opensbi.git
+> > +OPENSBI_LICENSE = BSD-2-Clause
+> > +OPENSBI_LICENSE_FILES = COPYING.BSD
+> > +OPENSBI_INSTALL_IMAGES = YES
+> > +
+> > +OPENSBI_MAKE_ENV = \
+> > +     CROSS_COMPILE=$(TARGET_CROSS)
+> > +
+> > +ifeq ($(BR2_TARGET_OPENSBI_USE_PLAT),y)
+> > +     OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG))
+>
+> So you're re-using the name of the U-Boot defconfig ? Aren't you
+> supposed to use BR2_TARGET_OPENSBI_PLAT here ?
+
+This was a typo.
+
+>
+> > +     OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+> > +endif
+>
+> I believe this block of code should instead be:
+>
+> OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
+> ifneq ($(OPENSBI_PLAT),)
+> OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+> endif
+
+Looks good to me, I'll use this.
+
+>
+> > +define OPENSBI_BUILD_CMDS
+> > +     $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+> > +endef
+> > +
+> > +ifeq ($(BR2_TARGET_OPENSBI_USE_PLAT),y)
+>
+> So when there's no platform defined, nothing gets installed ? This
+> looks weird.
+
+If no platform is defined then OpenSBI will just build a library that
+can be used by other projects. The idea here is to allow people to
+build that library. At the moment though nothing is using it.
+
+>
+> I'm not sure how much it makes sense for a build without a platform
+> defined. Shouldn't we do like U-Boot/Linux and simply disallow building
+> with an undefined platform/configuration ?
+
+I think it does make sense to allow building without a platform, but I
+can disable that if required.
 
 Alistair
 
 >
-> Best regards,
+> Thanks,
 >
 > Thomas
 > --
