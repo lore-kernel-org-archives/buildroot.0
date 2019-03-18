@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 22:19:16 +0100
-Subject: [Buildroot] [PATCH v2] package/gst1-plugins-bad: add webrtc
- option
-In-Reply-To: <20190316221440.24465-1-ps.report@gmx.net>
-References: <20190316221440.24465-1-ps.report@gmx.net>
-Message-ID: <20190318221916.71f326de@windsurf>
+Date: Mon, 18 Mar 2019 22:23:22 +0100
+Subject: [Buildroot] [PATCH v2 4/5] configs: qemu_riscv*: Build the
+ kernel Image file
+In-Reply-To: <20190318210106.6347-4-alistair.francis@wdc.com>
+References: <20190318210106.6347-1-alistair.francis@wdc.com>
+ <20190318210106.6347-4-alistair.francis@wdc.com>
+Message-ID: <20190318222322.4cb64d19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Mar 2019 23:14:40 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hello Alistair,
 
-> - remove old webrtc Config.in.legacy entry introduced by [1] (misnamed
->   webrtc option was introduced with 2017.02, renamed to webrtcdsp for
->   2017.08 and although backported to 2017.02.4)
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - renamed option form webrtcbin to webrtc
->   - remove legacy webrtc Config.in.legacy entry
-> ---
->  Config.in.legacy                                      | 10 ----------
->  package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
->  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   |  7 +++++++
->  3 files changed, 18 insertions(+), 10 deletions(-)
+On Mon, 18 Mar 2019 21:02:04 +0000
+Alistair Francis <Alistair.Francis@wdc.com> wrote:
 
-Applied to master, thanks.
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+
+This commit should have a non-empty commit log, and should actually be
+split into to:
+
+ - One allowing to enable BR2_LINUX_KERNEL_IMAGE on RISC-V
+
+ - One moving the defconfig to using OpenSBI, which requires using the
+   Image target if I understood correctly. As it is, the change to the
+   defconfigs in this commit is pretty useless: the new Image is not
+   generated. Worse: it probably breaks the defconfig because the Linux
+   kernel build no longer installs $(BINARIES_DIR)/vmlinux, which is
+   needed by riscv-pk. So your patch series is not bisectable.
+
+Best regards,
 
 Thomas
 -- 
