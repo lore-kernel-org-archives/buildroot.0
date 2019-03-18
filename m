@@ -1,121 +1,85 @@
 From: Alistair Francis <Alistair.Francis@wdc.com>
-Date: Mon, 18 Mar 2019 22:44:07 +0000
-Subject: [Buildroot] [PATCH v3 2/3] boot/opensbi: Initial commit of OpenSBI
- for RISC-V
+Date: Mon, 18 Mar 2019 22:44:08 +0000
+Subject: [Buildroot] [PATCH v3 3/3] configs: qemu_riscv*_virt: Use OpenSBI
+ by default
 In-Reply-To: <20190318224309.11805-1-alistair.francis@wdc.com>
 References: <20190318224309.11805-1-alistair.francis@wdc.com>
-Message-ID: <20190318224309.11805-2-alistair.francis@wdc.com>
+Message-ID: <20190318224309.11805-3-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenSBI is a much improved alternative to BBL (riscv-pk). Add OpenSBI
-support to buildroot.
+Use OpenSBI by default instead of riscv-pk (BBL).
 
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- DEVELOPERS              |  1 +
- boot/Config.in          |  1 +
- boot/opensbi/Config.in  | 25 +++++++++++++++++++++++++
- boot/opensbi/opensbi.mk | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 59 insertions(+)
- create mode 100644 boot/opensbi/Config.in
- create mode 100644 boot/opensbi/opensbi.mk
+ board/qemu/riscv32-virt/readme.txt  | 6 +++---
+ board/qemu/riscv64-virt/readme.txt  | 6 +++---
+ configs/qemu_riscv32_virt_defconfig | 5 ++++-
+ configs/qemu_riscv64_virt_defconfig | 5 ++++-
+ 4 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e0ac08e11..91eda42949 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -122,6 +122,7 @@ F:	package/kvazaar/
- F:	package/v4l2loopback/
+diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
+index 2da99580e5..fb441723fd 100644
+--- a/board/qemu/riscv32-virt/readme.txt
++++ b/board/qemu/riscv32-virt/readme.txt
+@@ -1,7 +1,7 @@
+-Run the emulation with:
++Run Linux in emulation with:
  
- N:	Alistair Francis <alistair@alistair23.me>
-+F:	boot/opensbi/
- F:	package/xen/
+-  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
++  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
  
- N:	Alvaro G. M <alvaro.gamez@hazent.com>
-diff --git a/boot/Config.in b/boot/Config.in
-index 74481e7545..97bd3de6e9 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -14,6 +14,7 @@ source "boot/lpc32xxcdl/Config.in"
- source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/optee-os/Config.in"
-+source "boot/opensbi/Config.in"
- source "boot/riscv-pk/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-new file mode 100644
-index 0000000000..5f3cc13312
---- /dev/null
-+++ b/boot/opensbi/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_TARGET_OPENSBI
-+	bool "opensbi"
-+	depends on BR2_riscv
-+	help
-+	  OpenSBI aims to provide an open-source and extensible
-+	  implementation of the RISC-V SBI specification for a platform
-+	  specific firmware (M-mode) and a general purpose OS,
-+	  hypervisor or bootloader (S-mode or HS-mode). OpenSBI
-+	  implementation can be easily extended by RISC-V platform or
-+	  System-on-Chip vendors to fit a particular hadware
-+	  configuration.
-+
-+	  https://github.com/riscv/opensbi.git
-+
-+if BR2_TARGET_OPENSBI
-+config BR2_TARGET_OPENSBI_PLAT
-+	string "OpenSBI Platform"
-+	default ""
-+	help
-+	  Specifies the OpenSBI platform to build. If no platform is
-+	  specified only the OpenSBI platform independent static
-+	  library libsbi.a is built. If a platform is specified then
-+	  the platform specific static library libplatsbi.a and firmware
-+	  examples are built.
-+endif
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-new file mode 100644
-index 0000000000..87e4b5c455
---- /dev/null
-+++ b/boot/opensbi/opensbi.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# OpenSBI
-+#
-+################################################################################
-+
-+OPENSBI_VERSION = ca20ac0cd4c099006d4eea4d9ac7bd7b58e2ae0f
-+OPENSBI_SITE = git://github.com/riscv/opensbi.git
-+OPENSBI_LICENSE = BSD-2-Clause
-+OPENSBI_LICENSE_FILES = COPYING.BSD
-+OPENSBI_INSTALL_IMAGES = YES
-+
-+OPENSBI_MAKE_ENV = \
-+	CROSS_COMPILE=$(TARGET_CROSS)
-+
-+OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
-+ifneq ($(OPENSBI_PLAT),)
-+OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
-+endif
-+
-+define OPENSBI_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+ifneq ($(OPENSBI_PLAT),)
-+define OPENSBI_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
-+	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-+endef
-+endif
-+
-+$(eval $(generic-package))
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 2.12.1
++Tested with QEMU 3.1
+diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
+index 9f6e35c867..0af27f7bf2 100644
+--- a/board/qemu/riscv64-virt/readme.txt
++++ b/board/qemu/riscv64-virt/readme.txt
+@@ -1,7 +1,7 @@
+-Run the emulation with:
++Run Linux in emulation with:
+ 
+-  qemu-system-riscv64 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
++  qemu-system-riscv64 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80200000 -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 2.12.1
++Tested with QEMU 3.1
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index 6f9a61b11c..96d971333a 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -20,6 +20,9 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
++BR2_LINUX_KERNEL_IMAGE=y
+ 
+ # Bootloader
+-BR2_TARGET_RISCV_PK=y
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_USE_PLAT=y
++BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 596edf2fcd..05d2764003 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -19,6 +19,9 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_IMAGE=y
+ 
+ # Bootloader
+-BR2_TARGET_RISCV_PK=y
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_USE_PLAT=y
++BR2_TARGET_OPENSBI_PLAT="qemu/virt"
 -- 
 2.21.0
