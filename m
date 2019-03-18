@@ -1,94 +1,40 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 18 Mar 2019 08:22:13 +0100
-Subject: [Buildroot] [PATCH 1/6] boot/arm-trusted-firmware: support
- 32bit Arm targets
-In-Reply-To: <CAN5uoS9QwY7g9swo_ngLxGX8XYi62Vy=S=czO1WvvCtBw7ADvA@mail.gmail.com>
-References: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
- <20190314232421.46ad28f2@windsurf>
- <CAN5uoS9QwY7g9swo_ngLxGX8XYi62Vy=S=czO1WvvCtBw7ADvA@mail.gmail.com>
-Message-ID: <CAN5uoS-iCBJ3T1J-UYRHbddwmw6dbTeUEFcLQ7vOpuJxdnzCoA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Mar 2019 10:54:04 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-05
+In-Reply-To: <20190315152113.4e9bc31a@windsurf> (Thomas Petazzoni's message of
+ "Fri, 15 Mar 2019 15:21:13 +0100")
+References: <20181006060019.F38E92072B@mail.bootlin.com>
+ <20181007044341.n33wz7romp36cw7a@sapphire.tkos.co.il>
+ <20190315152113.4e9bc31a@windsurf>
+Message-ID: <87wokw7bk3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas and all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Below an alternate proposal
+ > Hello,
+ > Better late than never!
 
-On Fri, 15 Mar 2019 at 10:00, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> On Thu, 14 Mar 2019 at 23:24, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > On Wed,  6 Mar 2019 11:11:35 +0100
-> > Etienne Carriere <etienne.carriere@linaro.org> wrote:
-> >
-> > > This change allows one to build the TF-A (Trusted Firmware A) for
-> > > 32bit Armv7 and Armv8 platforms which arm-trusted-firmware supports
-> > > since release v1.5.
-> > >
-> > > BR2_aarch64 is changed to BR2_ARM_CPU_ARMV8A as the later complemented
-> > > by BR2_ARM_CPU_ARMV7A better represents to architectures that can
-> > > support Arm Trusted Firmware A.
-> > >
-> > > When BR2_arm is enabled, TF-A is built in Aarch32 mode.
-> > > Selection between Armv8-A (default) and Armv7-A (ARM_ARCH_MAJOR=7) is
-> > > expected from BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
-> >
-> > It seems a bit annoying to require passing ARM_ARCH_MAJOR=7 in those
-> > additional variable. Why don't we do it automatically in
-> > arm-trusted-firmware.mk. We have all the knowledge required, no?
-> >
-> > > +ifeq ($(BR2_arm),y)
-> > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
-> >
-> > Can we do:
-> >
-> > ifeq ($(BR2_arm),y)
-> > ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32 ARM_ARCH_MAJOR=7
-> > else
-> > ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64 ARM_ARCH_MAJOR=8
-> > endif
-> >
-> > for example ?
->
-> Well... I guess yes. Until there comes Aarch32 Armv8-A platforms.
-> So, yes, you're right. Your change will relax ARM_ARCH_MAJOR from
-> ..._ADDITIONAL_VARIABLES.
->
+ > On Sun, 7 Oct 2018 07:43:41 +0300
+ > Baruch Siach <baruch@tkos.co.il> wrote:
 
-Below will better reflect the configuration:
+ >> >       branch |  OK | NOK | TIM | TOT |
+ >> >    2018.02.x |  28 |   0 |   0 |  28 |
+ >> >    2018.08.x |   4 |   0 |   0 |   4 |
+ >> >    2018.05.x |  25 |   2 |   0 |  27 |
+ >> >       master | 114 |  76 |   0 | 190 |  
+ >> 
+ >> Thanks for adding 2018.08.x. Shouldn't the list be sorted alphabetically?
 
-ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
-else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=8
-endif
+ > Good suggestion. Fixed:
 
-ifeq ($(BR2_arm),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
-else ifeq ($(BR2_aarch64),y)
-ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64
-endif
+ >   https://git.buildroot.org/buildroot-test/commit/?id=e90dc8753f9deaca9ecb41a5874d7a559ee2557c
 
-I will push a PATCH v3 with updates in the later commits of the series.
-Thanks.
+NIT: This only sorted the overview, but not the detailed listing.
 
-regards,
-etienne
-
-
-> regards,
-> etienne
->
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+-- 
+Bye, Peter Korsgaard
