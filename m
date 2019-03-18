@@ -1,37 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Mar 2019 21:57:58 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: correct license file
- hash
-In-Reply-To: <20190317204800.17703-1-martin@barkynet.com>
-References: <20190317204800.17703-1-martin@barkynet.com>
-Message-ID: <20190318215758.08ae858b@windsurf>
+From: Alistair Francis <Alistair.Francis@wdc.com>
+Date: Mon, 18 Mar 2019 21:02:02 +0000
+Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade to
+ 4.20 kernel
+In-Reply-To: <20190318210106.6347-1-alistair.francis@wdc.com>
+References: <20190318210106.6347-1-alistair.francis@wdc.com>
+Message-ID: <20190318210106.6347-2-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Mar 2019 20:47:59 +0000
-Martin Bark <martin@barkynet.com> wrote:
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ configs/qemu_riscv32_virt_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> The LICENSE file in nodejs 10.15.3 updated to include additional
-> 3rd party licenses.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/4bf66b9f05e9d04171156e44c7dd87619e429747
->  - http://autobuild.buildroot.net/results/a65776ba1045f12263a686933eb6a4b5d6ff7333
->  - http://autobuild.buildroot.net/results/aab619106a7d763f45e95a7ae3d85816fb4a6512
->  - http://autobuild.buildroot.net/results/bb6cb93f323be22e4c0efc05011042526c01f62c
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/nodejs/nodejs.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Both applied, thanks!
-
-Thomas
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index fb37da6a89..6f9a61b11c 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.20 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
