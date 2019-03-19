@@ -1,58 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2019 23:17:30 +0100
-Subject: [Buildroot] [PATCH v3, 2/2] package/uftp: openssl is optional,
- not mandatory
-In-Reply-To: <20190319221730.14794-1-fontaine.fabrice@gmail.com>
-References: <20190319221730.14794-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319221730.14794-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Mar 2019 23:42:30 +0100
+Subject: [Buildroot] [RFC] openssh: add option to allow login as root
+In-Reply-To: <20190319114156.10696-1-esben.haabendal@gmail.com> (Esben
+ Haabendal's message of "Tue, 19 Mar 2019 12:41:56 +0100")
+References: <20190319114156.10696-1-esben.haabendal@gmail.com>
+Message-ID: <87mulqebah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3:
- - Fix syntax mistake
+>>>>> "Esben" == Esben Haabendal <esben.haabendal@gmail.com> writes:
 
- package/uftp/Config.in | 1 -
- package/uftp/uftp.mk   | 8 ++++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ > From: Esben Haabendal <esben@haabendal.dk>
+ > What do you think. Is this kind of micro-management of a configuration
+ > file something that I should keep out of tree?
 
-diff --git a/package/uftp/Config.in b/package/uftp/Config.in
-index ca6e5f9a05..b88fb03ae2 100644
---- a/package/uftp/Config.in
-+++ b/package/uftp/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_UFTP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Encrypted UDP based FTP with multicast.
- 
-diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
-index f9f0502b49..abdb0a4def 100644
---- a/package/uftp/uftp.mk
-+++ b/package/uftp/uftp.mk
-@@ -6,11 +6,15 @@
- 
- UFTP_VERSION = 4.9.9
- UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
--UFTP_DEPENDENCIES = host-pkgconf openssl
- UFTP_LICENSE = GPL-3.0+
- UFTP_LICENSE_FILES = LICENSE.txt
- 
--UFTP_MAKE_OPTS = CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+UFTP_DEPENDENCIES += host-pkgconf openssl
-+UFTP_MAKE_OPTS += CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
-+else
-+UFTP_MAKE_OPTS += NO_ENCRYPTION=1
-+endif
- 
- define UFTP_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+We discussed it tonight on IRC and didn't really get to a good compromise.
+
+On one hand, we prefer to stick with upstream defaults (especially when
+security is involved), but it is true that dropbear allows root logins
+by default. We prefer to not add configuration options for these kind of
+detailed policy decisions, as openssh has a LOT of other configuration
+options - But silently allowing root logins when we have "always"
+disallowed it in the past also isn't nice.
+
+So all in all, this kind of policy tweaks are better done in a post
+build script.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
