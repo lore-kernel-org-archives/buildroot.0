@@ -1,38 +1,33 @@
-From: Alistair Francis <Alistair.Francis@wdc.com>
-Date: Tue, 19 Mar 2019 18:15:51 +0000
-Subject: [Buildroot] [PATCH v4 5/5] boot/riscv-pk: Deprecate riscv-pk and BBL
-In-Reply-To: <20190319181449.25067-1-alistair.francis@wdc.com>
-References: <20190319181449.25067-1-alistair.francis@wdc.com>
-Message-ID: <20190319181449.25067-5-alistair.francis@wdc.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Mar 2019 19:56:19 +0100
+Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
+In-Reply-To: <20190319112852.9592-1-esben.haabendal@gmail.com> (Esben
+ Haabendal's message of "Tue, 19 Mar 2019 12:28:49 +0100")
+References: <20190319112852.9592-1-esben.haabendal@gmail.com>
+Message-ID: <875zseitgs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
- boot/riscv-pk/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>> "Esben" == Esben Haabendal <esben.haabendal@gmail.com> writes:
 
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-index b4fe36590f..cf9c5cd8ee 100644
---- a/boot/riscv-pk/Config.in
-+++ b/boot/riscv-pk/Config.in
-@@ -3,10 +3,13 @@ comment "riscv-pk needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- 
- config BR2_TARGET_RISCV_PK
--	bool "riscv-pk"
-+	bool "riscv-pk (deprecated)"
- 	depends on BR2_riscv
- 	depends on BR2_LINUX_KERNEL
- 	help
-+	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
-+	  been deprecated. Please use OpenSBI instead.
-+
- 	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
- 	  Boot Loader (BBL) which has been designed to boot a Linux
- 	  kernel on a RISC-V processor.
+ > From: Esben Haabendal <esben@haabendal.dk>
+ > These patches fixes gummiboot for building with toolchains using
+ > newer gcc and glibc versions.
+
+ > Esben Haabendal (3):
+ >   gummiboot: use new official upstream git repository
+ >   gummiboot: upgrade to last commit before being removed
+ >   gummiboot: fix compatibility with newer glibc versions
+
+Out of interest, what is the use case for using gummiboot? We recently
+added systemd-boot support, so I was considering removing gummiboot as
+it is dead upstream.
+
+Notice that you currently cannot enable systemd-boot without the rest of
+systemd, so that may be a disadvantage.
+
 -- 
-2.21.0
+Bye, Peter Korsgaard
