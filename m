@@ -1,56 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:23:19 +0100
-Subject: [Buildroot] [PATCH 2/3] toolchain: Add necessary options to
- support 5.0 kernel headers
-In-Reply-To: <20190319000638.6259-3-joel@jms.id.au>
-References: <20190319000638.6259-1-joel@jms.id.au>
- <20190319000638.6259-3-joel@jms.id.au>
-Message-ID: <20190319222319.60fd2f2d@windsurf>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 19 Mar 2019 14:24:56 -0700
+Subject: [Buildroot] [PATCH v4 1/5] board/qemu/riscv32-virt: Update
+ linux config
+In-Reply-To: <20190319220554.79290acf@windsurf>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+ <20190319220554.79290acf@windsurf>
+Message-ID: <CAKmqyKMzcoR4+RfvwtyF0A3Yx9gAhHFJF-=Z9Wmt8skaE9ebug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joel,
+On Tue, Mar 19, 2019 at 2:05 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue, 19 Mar 2019 18:15:46 +0000
+> Alistair Francis <Alistair.Francis@wdc.com> wrote:
+>
+> > Update the Linux defconfig. This defconfig is the in tree defconfig with
+> > 32-bit support enabled.
+> >
+> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>
+> If it's just the in-tree defconfig + one option to enable 32-bit
+> support, what about using the in-tree defconfig directly + a small
+> config fragment to enable 32-bit support ?
 
-On Tue, 19 Mar 2019 10:36:37 +1030
-Joel Stanley <joel@jms.id.au> wrote:
+That would be great! That's what we do in OpenEmbedded. I couldn't
+figure out how to enable that though. How can I append a config to the
+arch defconfig?
 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  toolchain/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index bcbc3cf98432..f0bde8fbc870 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -397,10 +397,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
->  	bool
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
->  
-> +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> +	bool
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+Alistair
 
-This patch should come first in your series, because your PATCH 1/3
-does this:
-
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-
-i.e PATCH 1/3 depends on PATCH 2/3.
-
-Another thing that is missing in your series is another patch to add
-the 5.0 kernel header selection to
-toolchain/toolchain-external/toolchain-external-custom/Config.in.options.
-
-Could you fix these two issues and resend ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
