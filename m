@@ -1,56 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2019 21:46:42 +0100
-Subject: [Buildroot] [PATCH 3/3] package/uftp: openssl is optional,
- not mandatory
-In-Reply-To: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
-References: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319204642.28920-3-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 Mar 2019 21:48:42 +0100
+Subject: [Buildroot] [PATCH v10 1/6] binutils: install libiberty for
+ host build
+In-Reply-To: <ab8fc5b3-e0b7-6594-cf7f-dd03ae8de643@mind.be>
+References: <20190206091531.104591-1-aduskett@gmail.com>
+ <20190318220340.GK14237@scaer>
+ <ab8fc5b3-e0b7-6594-cf7f-dd03ae8de643@mind.be>
+Message-ID: <20190319204842.GE2702@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/uftp/Config.in | 1 -
- package/uftp/uftp.mk   | 6 +++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+Arnout, All,
 
-diff --git a/package/uftp/Config.in b/package/uftp/Config.in
-index ca6e5f9a05..b88fb03ae2 100644
---- a/package/uftp/Config.in
-+++ b/package/uftp/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_UFTP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Encrypted UDP based FTP with multicast.
- 
-diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
-index 1f75a5bac8..b8d4359da3 100644
---- a/package/uftp/uftp.mk
-+++ b/package/uftp/uftp.mk
-@@ -6,13 +6,17 @@
- 
- UFTP_VERSION = 4.9.9
- UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
--UFTP_DEPENDENCIES = openssl
- UFTP_LICENSE = GPL-3.0+
- UFTP_LICENSE_FILES = LICENSE.txt
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+UFTP_DEPENDENCIES += openssl
- ifeq ($(BR2_STATIC_LIBS),y)
- UFTP_MAKE_OPTS += CRYPT_LIB='-lssl -lcrypto -lz'
- endif
-+else
-+UFTP_MAKE_OPTS += NO_ENCRYPTION=1
-+endif
- 
- define UFTP_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+On 2019-03-19 19:08 +0100, Arnout Vandecappelle spake thusly:
+> On 18/03/2019 23:03, Yann E. MORIN wrote:
+> > First, with this very patch: it breaks hiost-gdb, which fails to build
+> > because there is an inconsistency with how ti tries to link with
+> > libiberty:
+> > 
+> >     http://autobuild.buildroot.org/results/109/1098d6380f12f5bbd6dbc69edb06bd953d1edc3d/build-end.log
+> > 
+> >     /usr/bin/ld: /home/buildroot/autobuild/instance-0/output/host/lib/libiberty.a(cplus-dem.o):
+> >     relocation R_X86_64_PC32 against symbol `_sch_istable' can not be used when making a shared object; recompile with -fPIC
+> >     /usr/bin/ld: final link failed: Bad value
+> 
+>  Maybe this is due to building host-binutils with --disable-shared
+> --enable-static? Maybe the solution is to just add --enable-shared, i.e. build
+> both shared and static?
+> 
+>  That does mean that ld etc. may now link dynamically with the various
+> libraries, but host tools should now be relocatable thinks to our rpath fixup,
+> so that shouldn't be a problem.
+
+Except wqe can't use binutils when we use an external toolchain, at
+least not in the current state anyway.
+
+So we have to find an anleternative.
+
+I was thinking of two solutions:
+
+  - change the existing host-binutils package to only install libiberty
+    (and maybe a few others?) when using an external toolchain, or
+
+  - introduce a new virtual package, host-binutils-libs, which package
+    would select when they need binutils libs; that virtual package
+    would then depend on host-binutils for the internal toolchain, or
+    would depend on host-bnutils-libs-for-real-this-time that just
+    builds the libs.
+
+TBH, I'm more inclined to look at the first solution, but it may make
+the package less maintainable over time. The second solution is maybe
+cleaner, but as you can seee, finding good neams is still not trivial.
+
+Finally, maybe we can find a middles ground, with host-binutils-libs a
+real package for external toolchains, and an empty package that just
+depends on binutils for internal toolchains.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
