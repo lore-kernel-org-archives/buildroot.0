@@ -1,172 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 21:09:23 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/busybox: udhcp
- CVE-2018-20679 patch
-Message-ID: <20190319202039.26DFE81932@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 21:00:29 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/busybox: udhcp
+ CVE-2019-5747 patch
+Message-ID: <20190319202043.D8C187FD6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519205c4b0dbc7dc74cb1520e0b1afdef0635d1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d267478615c4a98408f0b2b6748821ad9d130cbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-Patch to resolve CVE-2018-20679 which affects versions prior
+Patch to resolve CVE-2019-5747 which affects versions prior
 to 1.30.0
 
 More information can be found at:
-https://nvd.nist.gov/vuln/detail/CVE-2018-20679
+https://nvd.nist.gov/vuln/detail/CVE-2019-5747
 
 This applies to both master and 2019.02
 
 Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d65d1d066ba895f3ccb277d24199019663801721)
+(cherry picked from commit a49e8f34fffffaa7839861049add77fe6f4d7967)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...te-options-are-indeed-4-byte-closes-11506.patch | 136 +++++++++++++++++++++
- 1 file changed, 136 insertions(+)
+ ...te-options-are-indeed-4-byte-closes-11506.patch |  1 +
+ ...ing-DHCP_SUBNET-ensure-it-is-4-bytes-long.patch | 58 ++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/package/busybox/0008-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch b/package/busybox/0008-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+diff --git a/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch b/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+index bc1a48bf4b..b40979e359 100644
+--- a/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
++++ b/package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
+@@ -10,6 +10,7 @@ udhcp_get_option                                     231     248     +17
+ (add/remove: 1/0 grow/shrink: 1/0 up/down: 44/0)               Total: 44 bytes
+ 
+ Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+ ---
+  networking/udhcp/common.c | 19 +++++++++++++++++++
+  networking/udhcp/common.h |  4 ++++
+diff --git a/package/busybox/0005-udhcpc-when-decoding-DHCP_SUBNET-ensure-it-is-4-bytes-long.patch b/package/busybox/0005-udhcpc-when-decoding-DHCP_SUBNET-ensure-it-is-4-bytes-long.patch
 new file mode 100644
-index 0000000000..bc1a48bf4b
+index 0000000000..05939db4ab
 --- /dev/null
-+++ b/package/busybox/0008-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
-@@ -0,0 +1,136 @@
-+From 6d3b4bb24da9a07c263f3c1acf8df85382ff562c Mon Sep 17 00:00:00 2001
++++ b/package/busybox/0005-udhcpc-when-decoding-DHCP_SUBNET-ensure-it-is-4-bytes-long.patch
+@@ -0,0 +1,58 @@
++From 74d9f1ba37010face4bd1449df4d60dd84450b06 Mon Sep 17 00:00:00 2001
 +From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Mon, 17 Dec 2018 18:07:18 +0100
-+Subject: udhcpc: check that 4-byte options are indeed 4-byte, closes 11506
++Date: Mon, 7 Jan 2019 15:33:42 +0100
++Subject: udhcpc: when decoding DHCP_SUBNET, ensure it is 4 bytes long
 +
 +function                                             old     new   delta
-+udhcp_get_option32                                     -      27     +27
-+udhcp_get_option                                     231     248     +17
-+------------------------------------------------------------------------------
-+(add/remove: 1/0 grow/shrink: 1/0 up/down: 44/0)               Total: 44 bytes
++udhcp_run_script                                     795     801      +6
 +
 +Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 +---
-+ networking/udhcp/common.c | 19 +++++++++++++++++++
-+ networking/udhcp/common.h |  4 ++++
-+ networking/udhcp/dhcpc.c  |  6 +++---
-+ networking/udhcp/dhcpd.c  |  6 +++---
-+ 4 files changed, 29 insertions(+), 6 deletions(-)
++ networking/udhcp/common.c | 2 +-
++ networking/udhcp/common.h | 2 +-
++ networking/udhcp/dhcpc.c  | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
 +
 +diff --git a/networking/udhcp/common.c b/networking/udhcp/common.c
-+index e5fd74f91..41b05b855 100644
++index 4c2221b77..fc4de5716 100644
 +--- a/networking/udhcp/common.c
 ++++ b/networking/udhcp/common.c
-+@@ -272,6 +272,15 @@ uint8_t* FAST_FUNC udhcp_get_option(struct dhcp_packet *packet, int code)
-+ 			goto complain; /* complain and return NULL */
-+ 
-+ 		if (optionptr[OPT_CODE] == code) {
-++			if (optionptr[OPT_LEN] == 0) {
-++				/* So far no valid option with length 0 known.
-++				 * Having this check means that searching
-++				 * for DHCP_MESSAGE_TYPE need not worry
-++				 * that returned pointer might be unsafe
-++				 * to dereference.
-++				 */
-++				goto complain; /* complain and return NULL */
-++			}
-+ 			log_option("option found", optionptr);
-+ 			return optionptr + OPT_DATA;
-+ 		}
-+@@ -289,6 +298,16 @@ uint8_t* FAST_FUNC udhcp_get_option(struct dhcp_packet *packet, int code)
-+ 	return NULL;
-+ }
-+ 
-++uint8_t* FAST_FUNC udhcp_get_option32(struct dhcp_packet *packet, int code)
-++{
-++	uint8_t *r = udhcp_get_option(packet, code);
-++	if (r) {
-++		if (r[-1] != 4)
-++			r = NULL;
-++	}
-++	return r;
-++}
-++
-+ /* Return the position of the 'end' option (no bounds checking) */
-+ int FAST_FUNC udhcp_end_option(uint8_t *optionptr)
++@@ -302,7 +302,7 @@ uint8_t* FAST_FUNC udhcp_get_option32(struct dhcp_packet *packet, int code)
 + {
++ 	uint8_t *r = udhcp_get_option(packet, code);
++ 	if (r) {
++-		if (r[-1] != 4)
+++		if (r[-OPT_DATA + OPT_LEN] != 4)
++ 			r = NULL;
++ 	}
++ 	return r;
 +diff --git a/networking/udhcp/common.h b/networking/udhcp/common.h
-+index 7ad603d33..9511152ff 100644
++index 9511152ff..62f9a2a4a 100644
 +--- a/networking/udhcp/common.h
 ++++ b/networking/udhcp/common.h
-+@@ -205,6 +205,10 @@ extern const uint8_t dhcp_option_lengths[] ALIGN1;
-+ unsigned FAST_FUNC udhcp_option_idx(const char *name, const char *option_strings);
-+ 
-+ uint8_t *udhcp_get_option(struct dhcp_packet *packet, int code) FAST_FUNC;
-++/* Same as above + ensures that option length is 4 bytes
-++ * (returns NULL if size is different)
-++ */
-++uint8_t *udhcp_get_option32(struct dhcp_packet *packet, int code) FAST_FUNC;
-+ int udhcp_end_option(uint8_t *optionptr) FAST_FUNC;
-+ void udhcp_add_binary_option(struct dhcp_packet *packet, uint8_t *addopt) FAST_FUNC;
-+ #if ENABLE_UDHCPC || ENABLE_UDHCPD
++@@ -119,7 +119,7 @@ enum {
++ //#define DHCP_TIME_SERVER      0x04 /* RFC 868 time server (32-bit, 0 = 1.1.1900) */
++ //#define DHCP_NAME_SERVER      0x05 /* IEN 116 _really_ ancient kind of NS */
++ //#define DHCP_DNS_SERVER       0x06
++-//#define DHCP_LOG_SERVER       0x07 /* port 704 UDP log (not syslog)
+++//#define DHCP_LOG_SERVER       0x07 /* port 704 UDP log (not syslog) */
++ //#define DHCP_COOKIE_SERVER    0x08 /* "quote of the day" server */
++ //#define DHCP_LPR_SERVER       0x09
++ #define DHCP_HOST_NAME          0x0c /* 12: either client informs server or server gives name to client */
 +diff --git a/networking/udhcp/dhcpc.c b/networking/udhcp/dhcpc.c
-+index 4b23e4d39..5b3fd531c 100644
++index 5b3fd531c..dcec8cdfd 100644
 +--- a/networking/udhcp/dhcpc.c
 ++++ b/networking/udhcp/dhcpc.c
-+@@ -1691,7 +1691,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
-+  * They say ISC DHCP client supports this case.
-+  */
-+ 				server_addr = 0;
-+-				temp = udhcp_get_option(&packet, DHCP_SERVER_ID);
-++				temp = udhcp_get_option32(&packet, DHCP_SERVER_ID);
-+ 				if (!temp) {
-+ 					bb_error_msg("no server ID, using 0.0.0.0");
-+ 				} else {
-+@@ -1718,7 +1718,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
-+ 				struct in_addr temp_addr;
-+ 				uint8_t *temp;
-+ 
-+-				temp = udhcp_get_option(&packet, DHCP_LEASE_TIME);
-++				temp = udhcp_get_option32(&packet, DHCP_LEASE_TIME);
-+ 				if (!temp) {
-+ 					bb_error_msg("no lease time with ACK, using 1 hour lease");
-+ 					lease_seconds = 60 * 60;
-+@@ -1813,7 +1813,7 @@ int udhcpc_main(int argc UNUSED_PARAM, char **argv)
-+ 					uint32_t svid;
-+ 					uint8_t *temp;
-+ 
-+-					temp = udhcp_get_option(&packet, DHCP_SERVER_ID);
-++					temp = udhcp_get_option32(&packet, DHCP_SERVER_ID);
-+ 					if (!temp) {
-+  non_matching_svid:
-+ 						log1("received DHCP NAK with wrong"
-+diff --git a/networking/udhcp/dhcpd.c b/networking/udhcp/dhcpd.c
-+index a8cd3f03b..477856d11 100644
-+--- a/networking/udhcp/dhcpd.c
-++++ b/networking/udhcp/dhcpd.c
-+@@ -640,7 +640,7 @@ static void add_server_options(struct dhcp_packet *packet)
-+ static uint32_t select_lease_time(struct dhcp_packet *packet)
-+ {
-+ 	uint32_t lease_time_sec = server_config.max_lease_sec;
-+-	uint8_t *lease_time_opt = udhcp_get_option(packet, DHCP_LEASE_TIME);
-++	uint8_t *lease_time_opt = udhcp_get_option32(packet, DHCP_LEASE_TIME);
-+ 	if (lease_time_opt) {
-+ 		move_from_unaligned32(lease_time_sec, lease_time_opt);
-+ 		lease_time_sec = ntohl(lease_time_sec);
-+@@ -987,7 +987,7 @@ int udhcpd_main(int argc UNUSED_PARAM, char **argv)
-+ 		}
-+ 
-+ 		/* Get SERVER_ID if present */
-+-		server_id_opt = udhcp_get_option(&packet, DHCP_SERVER_ID);
-++		server_id_opt = udhcp_get_option32(&packet, DHCP_SERVER_ID);
-+ 		if (server_id_opt) {
-+ 			uint32_t server_id_network_order;
-+ 			move_from_unaligned32(server_id_network_order, server_id_opt);
-+@@ -1011,7 +1011,7 @@ int udhcpd_main(int argc UNUSED_PARAM, char **argv)
-+ 		}
-+ 
-+ 		/* Get REQUESTED_IP if present */
-+-		requested_ip_opt = udhcp_get_option(&packet, DHCP_REQUESTED_IP);
-++		requested_ip_opt = udhcp_get_option32(&packet, DHCP_REQUESTED_IP);
-+ 		if (requested_ip_opt) {
-+ 			move_from_unaligned32(requested_nip, requested_ip_opt);
-+ 		}
++@@ -531,7 +531,7 @@ static char **fill_envp(struct dhcp_packet *packet)
++ 		temp = udhcp_get_option(packet, code);
++ 		*curr = xmalloc_optname_optval(temp, &dhcp_optflags[i], opt_name);
++ 		putenv(*curr++);
++-		if (code == DHCP_SUBNET) {
+++		if (code == DHCP_SUBNET && temp[-OPT_DATA + OPT_LEN] == 4) {
++ 			/* Subnet option: make things like "$ip/$mask" possible */
++ 			uint32_t subnet;
++ 			move_from_unaligned32(subnet, temp);
 +-- 
 +cgit v1.2.1
 +
