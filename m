@@ -1,83 +1,161 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Mar 2019 16:38:23 +0100
-Subject: [Buildroot] [RFC PATCH] package/libcamera: Add libcamera package
-In-Reply-To: <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
-References: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
- <20190319125040.GA2702@scaer>
- <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
-Message-ID: <20190319153823.GB2702@scaer>
+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Date: Tue, 19 Mar 2019 18:23:58 +0100
+Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.1.0 is released
+Message-ID: <678ab76b-7707-93fb-1be4-8bb4cafdfcef@sigma-star.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kieran, All,
+Hi,
 
-On 2019-03-19 14:12 +0000, Kieran Bingham spake thusly:
-> On 19/03/2019 12:50, Yann E. MORIN wrote:
-> > On 2019-03-19 11:03 +0000, Kieran Bingham spake thusly:
-> >> diff --git a/DEVELOPERS b/DEVELOPERS
-> >> index c91325e28486..5bcdf208a62b 100644
-> >> --- a/DEVELOPERS
-> >> +++ b/DEVELOPERS
-> >> @@ -1260,6 +1260,9 @@ F:	package/ramsmp/
-> >>  N:	Kevin Joly <kevin.joly@sensefly.com>
-> >>  F:	package/libgphoto2/
-> >>  
-> >> +N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
-> >> +F:	package/libcamera/
-> Is it possible to put the libcamera mailinglist as a 'cc' target here as
-> well? or is it only individuals.
+mtd-utils-2.1.0 is released.
 
-The problem is that libcamera-dev is subscription-based too, so people
-who are not subscribed get a "pending-approval" message, which is not
-very interesting...
+Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.0.tar.bz2
+Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.0.tar.bz2.asc
+Signed git tag:        git://git.infradead.org/mtd-utils.git v2.1.0
 
-> If someone (other than me) updates the package, It would be nice for
-> that notification to go to the list.
 
-Well, the goal of the DEVELOPERS file is that someone-not-you update the
-package, they do Cc you. For example, with your patch applied, run:
+After quite some time that has passed since the last mtd-utils release, the
+new 2.1.0 release brings (as usual) a lot of fixes but also some new features.
 
-    ./utils/get-developers -p libcamera
+More precisely, it includes the long anticipated mkfs.ubifs support for file
+level encryption, better mkfs.ubifs tooling for SELinux and an lsblk like
+utility for inspecting the MTD/UBI stack on a system. Hence the minor version
+bump.
 
-Or:
+While the mkfs.ubifs encryption support has seen some use already and should
+work (TM) for most use cases, I expect that fixes for various untested edge
+cases will eventually be merged over the coming months up to the next patch
+level release.
 
-    git show |./get-developers -
 
-which will reprt you as the person to Cc on patches touching the
-libcamera package.
+Changes from 2.0.2 to 2.1.0:
 
-> > Also, as you already discovered, it's nice to pass a new package through
-> > utils/test-pkg as well (and although not mandatory, it's nice to provide
-> > that report after the --- line.)
-> 
-> I was going to ask how to do this - as it was skipping all 6, and then
-> all 43 toolchains with -a. But I've worked it out, so for the benefit of
-> others:
+Features:
+ - mkfs.ubifs: Implement support for file system encryption
+ - mkfs.ubifs: Implement selinux labelling support
+ - ubinize: add support for skipping CRC check of a static volume when opening
+ - ubimkvol: add support for skipping CRC check of a static volume when opening
+ - Add lsmtd program
 
-From the manual:
+Fixes:
+ - update various kernel headers
+ - Instead of doing preprocessor magic, just output off_t as long long
+ - fix verification percent display in flashcp
+ - mkfs.ubifs: fix double free
+ - mkfs.ubifs: Fix xattr nlink value
+ - ubinize: avoid to create two UBI_LAYOUT_VOLUME_ID volume
+ - common.h: fix prompt function
+ - libmtd: don't print an error message for devices without ecc support
+ - io_paral: Fix error handling of update_volume()
+ - ubimkvol: Initialize req to zero to make sure no flags are set by default
+ - libubi: add volume flags to ubi_mkvol_request
+ - mkfs.ubifs: add_xattr is not depending on host XATTR support
+ - Revert "Return correct error number in ubi_get_vol_info1" which
+   introduced a regression.
+ - make sure pkg-config is installed in configure script
+ - ubiformat: process command line arguments before handling file arguments
 
-    https://buildroot.org/downloads/manual/manual.html#_tips_and_tricks
+Cleanup:
+ - ubiformat: remove no-volume-table option
 
-    17.23.3. How to test your package
 
-> I had to create a libcamera.config and specify the EUDEV dependency:
-> 
->   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->   BR2_PACKAGE_LIBCAMERA=y
-> 
-> Then:
->  ./utils/test-pkg -c libcamera.config -p libcamera
+Raw short log since the 2.0.2 release:
+
+
+Andrij Abyzov (1):
+      mtd-utils: fixes verification percent display in flashcp
+
+Boris Brezillon (1):
+      ubi-utils: ubimkvol: Initialize req to zero to make sure no flags are set by default
+
+David Gstir (1):
+      mkfs.ubifs: fix default cipher in help output
+
+David Oberhollenzer (24):
+      ubiformat: process command line arguments first
+      ubiformat: remove no-volume-table option
+      mtd-utils: make sure pkg-config is installed in configure script
+      Revert "Return correct error number in ubi_get_vol_info1"
+      Add lsmtd program
+      Add manpage for lsmtd
+      Add configure switch to disable compiling/installing lsmtd
+      libmtd: don't print an error message for devices without ecc support
+      mtd-utils: common.h: fix prompt function
+      mkfs.ubifs: Add crypto helper functions
+      mkfs.ubifs: Implement UBIFS_FLG_DOUBLE_HASH
+      mkfs.ubifs: Move symlink data encryption to helper function
+      mkfs.ubifs: Seperate path encryption from symlink encryption helper
+      mkfs.ubifs: Cleanup add_dent_node, user path encryption helper
+      mkfs.ubifs: Replace constant values with parameters in init_fscrypt_context
+      mkfs.ubifs: Make encryption dependend on (not-yet-existant) command line options
+      mkfs.ubifs: Get key descriptor from command line and master key from file
+      mkfs.ubifs: Specify padding policy via command line
+      mkfs.ubifs: Initial support for encryption command lines
+      mkfs.ubifs: Remove cipher implementations from public header
+      mkfs.ubifs: Move fscrypt definitions and functions out of mkfs.ubifs.c
+      mkfs.ubifs: Cleanup over-long lines
+      mkfs.ubifs: Check length of master key
+      mkfs.ubifs: Accept 0x prefix for key descriptor
+
+Martin Lund (1):
+      ubi-tests: io_paral: Fix error handling of update_volume()
+
+Quentin Schulz (4):
+      UBI: update ubi-user.h and ubi-media.h
+      libubi: add volume flags to ubi_mkvol_request
+      ubi-utils: ubimkvol: add support for skipping CRC check of a static volume when opening
+      ubi-utils: ubinize: add support for skipping CRC check of a static volume when opening
+
+Richard Weinberger (30):
+      Import latest ubifs-media.h
+      common: Add round functions
+      mkfs.ubifs: Make r5 hash binary string aware
+      mkfs.ubifs: Add fscrypto defines
+      mkfs.ubifs: Add basic fscrypto functions
+      mkfs.ubifs: Implement UBIFS_FLG_ENCRYPTION
+      mkfs.ubifs: Implement basic fscrypto context passing
+      mkfs.ubifs: Implement fscrypto context store as xattr
+      mkfs.ubifs: Store directory name len in the temporary index
+      mkfs.ubifs: Implement filename encryption
+      mkfs.ubifs: Add dummy setup for crypto
+      mkfs.ubifs: Pass source/dest key len to key derive function
+      mkfs.ubifs: Add encrypted symlink support
+      mkfs.ubifs: Implement file contents encryption
+      mkfs.ubifs: Make sure we catch nodes that should or should not have name
+      mkfs.ubifs: Free all index entry names
+      mkfs.ubifs: Correctly use iv lengths in aes-cts mode
+      mkfs.ubifs: Enable Cipher selection
+      mkfs.ubifs: Use correct sizes for keys and hash lengths
+      mkfs.ubifs: Fixup AES-XTS mode
+      mkfs.ubifs: Compute encryption key descriptor automatically
+      mkfs.ubifs: Fix key descriptor printing
+      mkfs.ubifs: More fscryptctl compatibility
+      mkfs.ubifs: Move RAND_poll to crypto.c
+      mkfs.ubifs: Enable support for building without crypto
+      mkfs.ubifs: Print key descriptor only when generated
+      mkfs.ubifs: Use AES-256-XTS as default
+      mkfs.ubifs: Fix IV selection
+      mkfs.ubifs: Store compr_size in correct endianness.
+      mkfs.ubifs: Don't compress by default if filesystem is encrypted
+
+Ritesh Harjani (2):
+      mkfs.ubifs: add_xattr is not depending on host XATTR support
+      mkfs.ubifs: Implement selinux labelling support in mkfs.ubifs.
+
+Sascha Hauer (1):
+      mkfs.ubifs: Fix xattr nlink value
+
+Thorsten Glaser (1):
+      mtd-utils: Instead of doing preprocessor magic, just output off_t as long long
+
+Yufen Yu (2):
+      mtd-utils: avoid to create two UBI_LAYOUT_VOLUME_ID volume
+      mtd-utils: fixes double free in mkfs.ubifs
+
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+David
