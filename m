@@ -1,76 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 16:17:51 +0100
-Subject: [Buildroot] [PATCH] mtree: new package
-In-Reply-To: <20190319114344.11138-1-esben.haabendal@gmail.com>
-References: <20190319114344.11138-1-esben.haabendal@gmail.com>
-Message-ID: <20190319161751.0daebda7@windsurf>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 19 Mar 2019 15:20:46 +0000
+Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade
+ to 4.20 kernel
+In-Reply-To: <20190318210106.6347-2-alistair.francis@wdc.com>
+References: <20190318210106.6347-1-alistair.francis@wdc.com>
+ <20190318210106.6347-2-alistair.francis@wdc.com>
+Message-ID: <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Esben,
+Hello Alistair
 
-Nice to see you on the Buildroot mailing list :-)
+On 18/03/2019 21:02, Alistair Francis wrote:
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  configs/qemu_riscv32_virt_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+> index fb37da6a89..6f9a61b11c 100644
+> --- a/configs/qemu_riscv32_virt_defconfig
+> +++ b/configs/qemu_riscv32_virt_defconfig
+> @@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>  # Filesystem
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  
+> -# Linux headers same as kernel, a 4.15 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+> +# Linux headers same as kernel, a 4.20 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
 
-On Tue, 19 Mar 2019 12:43:44 +0100
-Esben Haabendal <esben.haabendal@gmail.com> wrote:
+I wasn't sure that the 4.20 kernel worked for riscv32 under qemu which
+is probably why it wasn't bumped from 4.15 in January when the
+qemu_riscv64_virt_defconfig kernel version was.
 
->  package/Config.in       |  1 +
->  package/mtree/Config.in | 10 ++++++++++
->  package/mtree/mtree.mk  | 15 +++++++++++++++
+How did you manage to test this? I've tried both qemu 2.12.0 and 3.1.0
+and neither version will boot the resulting kernel.
 
-Please add an entry to the DEVELOPERS file.
+Regards
 
-> diff --git a/package/mtree/Config.in b/package/mtree/Config.in
-> new file mode 100644
-> index 000000000000..97e1cf614972
-> --- /dev/null
-> +++ b/package/mtree/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_MTREE
-> +	bool "mtree"
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  mtree - utility for creating and verifying file hierarchies.
-> +
-> +	  Port of the mtree utility, originally only available in BSD
-> +	  distributions, to Linux and other operating systems.
-> +
-> +	  https://github.com/archiecobbs/mtree-port
-> diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
-> new file mode 100644
-> index 000000000000..b828dd53ffe3
-> --- /dev/null
-> +++ b/package/mtree/mtree.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# mtree
-> +#
-> +################################################################################
-> +
-> +MTREE_VERSION = 1.0.4
-> +MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
-> +MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
-> +MTREE_LICENSE = BSD-3-Clause
-> +MTREE_LICENSE_FILES = COPYING
+Mark
 
-You need:
-
-MTREE_DEPENDENCIES = openssl
-
-otherwise you have no guarantee that openssl will be built before
-mtree. You can test your package by doing "./utils/test-pkg -p mtree",
-it will test it with a number of toolchain configurations that we have
-chosen as they often exhibit a number of issues. This testing would
-have also revealed the missing openssl dependency.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
