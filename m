@@ -1,14 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Mar 2019 18:57:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
- /lib/modules directory
-In-Reply-To: <CADYdroPQYoDW=T7ZOdDNucb4O3wu4poD-ZVuLY1PApB4i_dMrg@mail.gmail.com>
-References: <20190318163010.8056-1-norbert.lange@andritz.com>
- <20190318174436.GI14237@scaer>
- <CADYdroMoAzR6=nniTiBZvvs2fkwJJ7hGM-rd2OixxA6FpjRj7A@mail.gmail.com>
- <20190318190315.GJ14237@scaer>
- <CADYdroPQYoDW=T7ZOdDNucb4O3wu4poD-ZVuLY1PApB4i_dMrg@mail.gmail.com>
-Message-ID: <dfeb8c8b-e3bc-f96c-4052-c6b55cf85653@mind.be>
+Date: Tue, 19 Mar 2019 19:08:45 +0100
+Subject: [Buildroot] [PATCH v10 1/6] binutils: install libiberty for
+ host build
+In-Reply-To: <20190318220340.GK14237@scaer>
+References: <20190206091531.104591-1-aduskett@gmail.com>
+ <20190318220340.GK14237@scaer>
+Message-ID: <ab8fc5b3-e0b7-6594-cf7f-dd03ae8de643@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,15 +14,24 @@ To: buildroot@busybox.net
 
 
 
-On 18/03/2019 21:43, Norbert Lange wrote:
-> Should I re-roll the patch next, or can we continue this discussion
-> until you decide on whether you will include the change.
+On 18/03/2019 23:03, Yann E. MORIN wrote:
+> First, with this very patch: it breaks hiost-gdb, which fails to build
+> because there is an inconsistency with how ti tries to link with
+> libiberty:
+> 
+>     http://autobuild.buildroot.org/results/109/1098d6380f12f5bbd6dbc69edb06bd953d1edc3d/build-end.log
+> 
+>     /usr/bin/ld: /home/buildroot/autobuild/instance-0/output/host/lib/libiberty.a(cplus-dem.o):
+>     relocation R_X86_64_PC32 against symbol `_sch_istable' can not be used when making a shared object; recompile with -fPIC
+>     /usr/bin/ld: final link failed: Bad value
 
- For me as well, the direction should be to remove things from the skeleton
-rather than adding to it. So if you would get rid of /media etc. I'd maybe be in
-favour of it, but I'm certainly not going to defend adding yet another directory.
+ Maybe this is due to building host-binutils with --disable-shared
+--enable-static? Maybe the solution is to just add --enable-shared, i.e. build
+both shared and static?
 
- I'll add Peter in Cc to draw a line in the sand.
+ That does mean that ld etc. may now link dynamically with the various
+libraries, but host tools should now be relocatable thinks to our rpath fixup,
+so that shouldn't be a problem.
 
  Regards,
  Arnout
