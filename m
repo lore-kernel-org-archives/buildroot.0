@@ -1,69 +1,106 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 Mar 2019 06:44:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpcap: fix
- bluez5_utils-headers dependency
-In-Reply-To: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
-References: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319044423.46h2z3cgmr6zdxjh@sapphire.tkos.co.il>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 19 Mar 2019 07:50:18 +0100
+Subject: [Buildroot] [PATCH 1/6] boot/arm-trusted-firmware: support
+ 32bit Arm targets
+In-Reply-To: <CAN5uoS-iCBJ3T1J-UYRHbddwmw6dbTeUEFcLQ7vOpuJxdnzCoA@mail.gmail.com>
+References: <7f15bfd5388e2171b13b44722b84149d9f361551.1551866509.git.etienne.carriere@linaro.org>
+ <20190314232421.46ad28f2@windsurf>
+ <CAN5uoS9QwY7g9swo_ngLxGX8XYi62Vy=S=czO1WvvCtBw7ADvA@mail.gmail.com>
+ <CAN5uoS-iCBJ3T1J-UYRHbddwmw6dbTeUEFcLQ7vOpuJxdnzCoA@mail.gmail.com>
+Message-ID: <CAN5uoS9-RWA40ofNLCG2+hypGvWKV6h3oGEtFxqk-MMtgf+0hA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Dear all,
 
-On Mon, Mar 18, 2019 at 11:40:42PM +0100, Fabrice Fontaine wrote:
-> Commit c46afc37dc877f1e94ffde0d77585290711b27ec changed bluez5-utils
-> dependency by bluez5_utils-headers without replacing the test on
-> BR2_PACKAGE_BLUEZ5_UTILS by BR2_PACKAGE_BLUEZ5_UTILS_HEADERS
-> 
-> Fix this mistake and also add a select on
-> BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS is set
-> so the user does not have to do it
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c6828df1f3782564451ddd4187ff026679bf37d8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, 18 Mar 2019 at 08:22, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> Hello Thomas and all,
+>
+> Below an alternate proposal
+>
+> On Fri, 15 Mar 2019 at 10:00, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > On Thu, 14 Mar 2019 at 23:24, Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > On Wed,  6 Mar 2019 11:11:35 +0100
+> > > Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> > >
+> > > > This change allows one to build the TF-A (Trusted Firmware A) for
+> > > > 32bit Armv7 and Armv8 platforms which arm-trusted-firmware supports
+> > > > since release v1.5.
+> > > >
+> > > > BR2_aarch64 is changed to BR2_ARM_CPU_ARMV8A as the later complemented
+> > > > by BR2_ARM_CPU_ARMV7A better represents to architectures that can
+> > > > support Arm Trusted Firmware A.
+> > > >
+> > > > When BR2_arm is enabled, TF-A is built in Aarch32 mode.
+> > > > Selection between Armv8-A (default) and Armv7-A (ARM_ARCH_MAJOR=7) is
+> > > > expected from BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
+> > >
+> > > It seems a bit annoying to require passing ARM_ARCH_MAJOR=7 in those
+> > > additional variable. Why don't we do it automatically in
+> > > arm-trusted-firmware.mk. We have all the knowledge required, no?
+> > >
+> > > > +ifeq ($(BR2_arm),y)
+> > > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
+> > >
+> > > Can we do:
+> > >
+> > > ifeq ($(BR2_arm),y)
+> > > ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32 ARM_ARCH_MAJOR=7
+> > > else
+> > > ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64 ARM_ARCH_MAJOR=8
+> > > endif
+> > >
+> > > for example ?
+> >
+> > Well... I guess yes. Until there comes Aarch32 Armv8-A platforms.
+> > So, yes, you're right. Your change will relax ARM_ARCH_MAJOR from
+> > ..._ADDITIONAL_VARIABLES.
+> >
+>
+> Below will better reflect the configuration:
+>
+> ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
+> else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=8
+> endif
+>
+> ifeq ($(BR2_arm),y)
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
+> else ifeq ($(BR2_aarch64),y)
+> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64
+> endif
+>
+> I will push a PATCH v3 with updates in the later commits of the series.
+> Thanks.
 
-Acked-by: Baruch Siach <baruch@tkos.co.il>
+Please see PATCH v2 at http://patchwork.ozlabs.org/patch/1058134/
 
-Thanks,
-baruch
+regards,
+etienne
 
-> ---
->  package/libpcap/Config.in  | 1 +
->  package/libpcap/libpcap.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libpcap/Config.in b/package/libpcap/Config.in
-> index 643acbef6e..74429f209a 100644
-> --- a/package/libpcap/Config.in
-> +++ b/package/libpcap/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBPCAP
->  	bool "libpcap"
-> +	select BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  A system-independent library for user-level network packet
-> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-> index 2f46426d37..ebceca5273 100644
-> --- a/package/libpcap/libpcap.mk
-> +++ b/package/libpcap/libpcap.mk
-> @@ -26,7 +26,7 @@ define LIBPCAP_CONFIG_REMOVE_RPATH
->  endef
->  LIBPCAP_POST_BUILD_HOOKS = LIBPCAP_CONFIG_REMOVE_RPATH
->  
-> -ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
-> +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),y)
->  LIBPCAP_DEPENDENCIES += bluez5_utils-headers
->  else
->  LIBPCAP_CONF_OPTS += --disable-bluetooth
-> -- 
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+> regards,
+> etienne
+>
+>
+> > regards,
+> > etienne
+> >
+> > >
+> > > Thomas
+> > > --
+> > > Thomas Petazzoni, CTO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
