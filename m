@@ -1,44 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Mar 2019 23:03:30 +0100
-Subject: [Buildroot] [PATCH v2 7/8] testing: test can use the locally
- generated qemu host tool
-In-Reply-To: <CAN5uoS9ZKu4ZS+1qz-Ow4PcNph+LUYJ_gVCBxOo2OEMojUeeMQ@mail.gmail.com>
-References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
- <1552951269-16967-7-git-send-email-etienne.carriere@linaro.org>
- <CAN5uoS9ZKu4ZS+1qz-Ow4PcNph+LUYJ_gVCBxOo2OEMojUeeMQ@mail.gmail.com>
-Message-ID: <3979fa63-09f6-c6a9-a90e-a1ba5fa27230@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2019 23:17:29 +0100
+Subject: [Buildroot] [PATCH v3, 1/2] package/uftp: fix openssl static linking
+Message-ID: <20190319221730.14794-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/051cfd993b65830c34e675d797e241c272b6f35a
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Use pkg-config instead of hard-coding libraries
 
-On 19/03/2019 08:05, Etienne Carriere wrote:
-> I made this to allow test_optee to use the qemu config from the platform.
-> But I wonder if it would be more suitable to have an generic option to
-> script run-tests to build the emulator within the test config.
+ package/uftp/uftp.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- That would indeed be a better idea IMO.
-
-> -        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-> +        if local:
-> +            basedir = os.path.join(self.builddir, "host/bin/")
-> +        else:
-> +            basedir = ""
-> +
-> +        qemu_cmd = [basedir + "qemu-system-{}".format(qemu_arch),
->                      "-serial", "stdio",
->                      "-display", "none"]
-
- Instead of constructing it like this, I think it would be simpler to always add
-output/host/bin to PATH. Unfortunately, however, pexpect only respects the PATH
-setting of the env argument since version 4.2.0 [1], and we can't rely on the
-system-installed pexpect to have that version. So you have to mess about with
-os.environ (which you'd want to restore to the original after running qemu).
-
- Regards,
- Arnout
-
-[1] https://github.com/pexpect/pexpect/pull/348
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index bbc362652b..f9f0502b49 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -6,16 +6,19 @@
+ 
+ UFTP_VERSION = 4.9.9
+ UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+-UFTP_DEPENDENCIES = openssl
++UFTP_DEPENDENCIES = host-pkgconf openssl
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
+ 
++UFTP_MAKE_OPTS = CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
++
+ define UFTP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+ endef
+ 
+ define UFTP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.14.1
