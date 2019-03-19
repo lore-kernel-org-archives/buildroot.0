@@ -1,43 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 21:57:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
- /lib/modules directory
-In-Reply-To: <dfeb8c8b-e3bc-f96c-4052-c6b55cf85653@mind.be> (Arnout
- Vandecappelle's message of "Tue, 19 Mar 2019 18:57:35 +0100")
-References: <20190318163010.8056-1-norbert.lange@andritz.com>
- <20190318174436.GI14237@scaer>
- <CADYdroMoAzR6=nniTiBZvvs2fkwJJ7hGM-rd2OixxA6FpjRj7A@mail.gmail.com>
- <20190318190315.GJ14237@scaer>
- <CADYdroPQYoDW=T7ZOdDNucb4O3wu4poD-ZVuLY1PApB4i_dMrg@mail.gmail.com>
- <dfeb8c8b-e3bc-f96c-4052-c6b55cf85653@mind.be>
-Message-ID: <875zsefupf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Mar 2019 21:59:17 +0100
+Subject: [Buildroot] [PATCH 2/3] package/uftp: fix openssl static linking
+In-Reply-To: <20190319204642.28920-2-fontaine.fabrice@gmail.com>
+References: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
+ <20190319204642.28920-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190319215917.3b01a8e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Tue, 19 Mar 2019 21:46:41 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
- > On 18/03/2019 21:43, Norbert Lange wrote:
- >> Should I re-roll the patch next, or can we continue this discussion
- >> until you decide on whether you will include the change.
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +UFTP_MAKE_OPTS += CRYPT_LIB='-lssl -lcrypto -lz'
 
- >  For me as well, the direction should be to remove things from the skeleton
- > rather than adding to it. So if you would get rid of /media etc. I'd maybe be in
- > favour of it, but I'm certainly not going to defend adding yet another directory.
+What about using pkg-config here ?
 
- >  I'll add Peter in Cc to draw a line in the sand.
+CRYPT_LIB=$(shell pkg-config --libs ssl)
 
-I'm with Arnout here. Buildroot has always been about minimalism, so
-having extra things just-in-case isn't really nice.
+this avoids hardcoding a bunch of assumptions about what OpenSSL
+depends on, and you can also drop the BR2_STATIC_LIBS condition.
 
-If you really want to, you can create extra directories in the target
-without any buildroot customizations, just call mkdir as a post-build
-script:
+What do you think ?
 
-BR2_ROOTFS_POST_BUILD_SCRIPT="mkdir"
-BR2_ROOTFS_POST_SCRIPT_ARGS="-p $(TARGET_DIR)/path/to/somewhere"
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
