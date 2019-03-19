@@ -1,40 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 20:47:57 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mender: add
- missing double quote in service file
-Message-ID: <20190319194532.8A36981E44@busybox.osuosl.org>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 19 Mar 2019 20:05:01 +0000
+Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade
+ to 4.20 kernel
+In-Reply-To: <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
+References: <20190318210106.6347-1-alistair.francis@wdc.com>
+ <20190318210106.6347-2-alistair.francis@wdc.com>
+ <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
+ <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
+Message-ID: <8cb8dcd1-54f2-6b8b-ec21-940918a8b671@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a70dbdf3a9605e2fcfec483d01269d710a3fca52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hello Alistair
 
-There was a missing double quotes that would prevent the service from
-starting.
+On 19/03/2019 18:02, Alistair Francis wrote:
+> On Tue, Mar 19, 2019 at 8:20 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
+>> Hello Alistair
+>>
+>> On 18/03/2019 21:02, Alistair Francis wrote:
+>>> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>>> ---
+>>>  configs/qemu_riscv32_virt_defconfig | 6 +++---
+>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+>>> index fb37da6a89..6f9a61b11c 100644
+>>> --- a/configs/qemu_riscv32_virt_defconfig
+>>> +++ b/configs/qemu_riscv32_virt_defconfig
+>>> @@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>>>  # Filesystem
+>>>  BR2_TARGET_ROOTFS_EXT2=y
+>>>
+>>> -# Linux headers same as kernel, a 4.15 series
+>>> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+>>> +# Linux headers same as kernel, a 4.20 series
+>>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+>>>
+>>>  # Kernel
+>>>  BR2_LINUX_KERNEL=y
+>>>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>>>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+>>> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
+>>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
+>> I wasn't sure that the 4.20 kernel worked for riscv32 under qemu which
+>> is probably why it wasn't bumped from 4.15 in January when the
+>> qemu_riscv64_virt_defconfig kernel version was.
+>>
+>> How did you manage to test this? I've tried both qemu 2.12.0 and 3.1.0
+>> and neither version will boot the resulting kernel.
+> I just tested this again and here are my results. All running on QEMU
+> 3.1.0 and using OpenSBI
+>
+> With current master + my OpenSBI patches -> I can boot the 4.20
+> kernel, but it never gets to a login prompt.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 93321e5f166d08426e38a14bce318e9807d7d45d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mender/mender.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is what happens for me when I build and test from master - no login
+prompt. I guess that it's because your qemu_riscv32_virt_defconfig
+kernel version update has been checked-in without the necessary opensbi
+or config updates.
 
-diff --git a/package/mender/mender.service b/package/mender/mender.service
-index 8b60a4f1aa..2a5f476ee5 100644
---- a/package/mender/mender.service
-+++ b/package/mender/mender.service
-@@ -12,7 +12,7 @@ if [ -L /var/lib/mender \
-     if rm -f /var/lib/mender >/dev/null 2>&1; then \
-         mkdir -p /var/lib/mender; \
-     else \
--        echo "No persistent location to store mender data. Data will be lost\
-+        echo "No persistent location to store mender data. Data will be lost" \
-         echo "at reboot. Are you sure this is what you want to do?"; \
-         mkdir -p "$(readlink /var/lib/mender)"; \
-     fi; \
+Regards
+
+Mark
+
+-- 
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
