@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:10:52 +0100
-Subject: [Buildroot] [git commit] package/libglib2: add optional dependency
- in libselinux
-Message-ID: <20190319210757.6549881DD3@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 22:11:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: check for selinux
+In-Reply-To: <20190319153149.84900-1-aduskett@gmail.com>
+References: <20190319153149.84900-1-aduskett@gmail.com>
+Message-ID: <20190319221121.5c33503b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f43ec6ce8d766d8954d4dd5366cef910c2b11b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 19 Mar 2019 11:31:49 -0400
+aduskett at gmail.com wrote:
 
-If libselinux is selected, explicitly set --enable-selinux in the
-configure options and build the library first.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> If libselinux is selected, explicitly set --enable-selinux in the configure
+> options and build the library first.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libglib2/libglib2.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libglib2/libglib2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d34bfabd52..63bfec32d6 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -137,6 +137,13 @@ LIBGLIB2_CONF_OPTS += --with-libiconv=gnu
- LIBGLIB2_DEPENDENCIES += libiconv
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LIBGLIB2_CONF_OPTS += --enable-selinux
-+LIBGLIB2_DEPENDENCIES += libselinux
-+else
-+LIBGLIB2_CONF_OPTS += --disable-selinux
-+endif
-+
- # Purge gdb-related files
- ifneq ($(BR2_PACKAGE_GDB),y)
- define LIBGLIB2_REMOVE_GDB_FILES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
