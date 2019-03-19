@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:06:15 +0100
-Subject: [Buildroot] [git commit] linux: allow BR2_LINUX_KERNEL_IMAGE on
- RISC-V
-Message-ID: <20190319210308.A58267FBD7@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 22:06:25 +0100
+Subject: [Buildroot] [PATCH v4 2/5] linux: Enable BR2_LINUX_KERNEL_IMAGE
+ on RISC-V
+In-Reply-To: <20190319181449.25067-2-alistair.francis@wdc.com>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+ <20190319181449.25067-2-alistair.francis@wdc.com>
+Message-ID: <20190319220625.3eb4e640@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a4d4d4d307fd21f19ae43e77ac21b85adad7f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 19 Mar 2019 18:15:47 +0000
+Alistair Francis <Alistair.Francis@wdc.com> wrote:
 
-We will need to build Image files for OpenSBI so allow that now.
+> We will need to build Image files for OpenSBI so allow that now.
+> 
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 818b94e1c0..dc10238053 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -258,7 +258,7 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
- 
- config BR2_LINUX_KERNEL_IMAGE
- 	bool "Image"
--	depends on BR2_aarch64
-+	depends on BR2_aarch64 || BR2_riscv
- 
- config BR2_LINUX_KERNEL_LINUX_BIN
- 	bool "linux.bin"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
