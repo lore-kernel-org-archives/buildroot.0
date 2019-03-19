@@ -1,62 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 20:09:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/flashrom: libftdi
- is optional, not mandatory
-Message-ID: <20190319191327.B8F9581E53@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 20:09:22 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/flashrom: remove
+ dmidecode dependency
+Message-ID: <20190319191327.A4E5781935@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a60ccf0f2b8c93fde8aba43cdb9dc7a376fe26eb
+commit: https://git.buildroot.net/buildroot/commit/?id=838e5efae235802c83fc389ca08748ba70d7b418
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+flashrom uses its own internal DMI decoder since version 0.9.8 and
+https://github.com/flashrom/flashrom/commit/4c6d3a4b732732eb20bfb0fc9d857abaa4c41c88
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 13121a1daa0de24934c2e53adeab919d60e317f3)
+(cherry picked from commit 7edb1e1c29a86df017586ca31952ffb9386014c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flashrom/Config.in   |  1 -
- package/flashrom/flashrom.mk | 13 ++++++++++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/flashrom/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 66fe359724..0a5a7248e1 100644
+index e7844a0a62..8f26a634e6 100644
 --- a/package/flashrom/Config.in
 +++ b/package/flashrom/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_FLASHROM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_FLASHROM
  	select BR2_PACKAGE_LIBUSB
  	select BR2_PACKAGE_LIBUSB_COMPAT
--	select BR2_PACKAGE_LIBFTDI
+ 	select BR2_PACKAGE_LIBFTDI
+-	# dmidecode is only a runtime dependency
+-	select BR2_PACKAGE_DMIDECODE
  	help
  	  flashrom is a utility for identifying, reading, writing,
  	  verifying and erasing flash chips. It is designed to flash
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 73d56f7f80..40198bac60 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -7,10 +7,21 @@
- FLASHROM_VERSION = 1.0
- FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = https://download.flashrom.org/releases
--FLASHROM_DEPENDENCIES = libusb libusb-compat libftdi host-pkgconf
-+FLASHROM_DEPENDENCIES = libusb libusb-compat host-pkgconf
- FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBFTDI),y)
-+FLASHROM_DEPENDENCIES += host-pkgconf libftdi
-+FLASHROM_MAKE_OPTS += \
-+	CONFIG_FT2232_SPI=yes \
-+	CONFIG_USBBLASTER_SPI=yes
-+else
-+FLASHROM_MAKE_OPTS += \
-+	CONFIG_FT2232_SPI=no \
-+	CONFIG_USBBLASTER_SPI=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCIUTILS),y)
- FLASHROM_DEPENDENCIES += pciutils
- FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=yes
