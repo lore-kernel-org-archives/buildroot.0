@@ -1,63 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 20:09:28 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/flashrom:
- pciutils is optional, not mandatory
-Message-ID: <20190319191327.AC673818AF@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 20:10:38 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/flashrom: disable
+ on microblaze and xtensa
+Message-ID: <20190319191327.D74B181935@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b18be52d41c90d66000d763a3ce496242d22294a
+commit: https://git.buildroot.net/buildroot/commit/?id=e99a7b8177d6cc4227181daf363a749b2e6f788e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cdf0fb462eec143ea881d43cdd0c69c86122f66b
+ - http://autobuild.buildroot.org/results/df4d9702959b610762e87cf21fac9de62365dae6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f317411f3391451f0815c8d4f2f95ed1b14770a6)
+(cherry picked from commit 582448032d97b9dc6b196d838f57ec7f695048ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flashrom/Config.in   |  1 -
- package/flashrom/flashrom.mk | 12 ++++++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/flashrom/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 8f26a634e6..66fe359724 100644
+index 948c774133..cf1f53c1a3 100644
 --- a/package/flashrom/Config.in
 +++ b/package/flashrom/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_FLASHROM
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_FLASHROM
  	bool "flashrom"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	select BR2_PACKAGE_PCIUTILS
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	select BR2_PACKAGE_LIBFTDI
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 70f47b5a04..73d56f7f80 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -7,13 +7,21 @@
- FLASHROM_VERSION = 1.0
- FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = https://download.flashrom.org/releases
--FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi host-pkgconf
-+FLASHROM_DEPENDENCIES = libusb libusb-compat libftdi host-pkgconf
- FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_PCIUTILS),y)
-+FLASHROM_DEPENDENCIES += pciutils
-+FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=yes
-+else
-+FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no
-+endif
-+
- define FLASHROM_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" -C $(@D)
-+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" \
-+		$(FLASHROM_MAKE_OPTS) -C $(@D)
- endef
- 
- define FLASHROM_INSTALL_TARGET_CMDS
++	depends on !BR2_microblaze && !BR2_xtensa # platform.h
+ 	help
+ 	  flashrom is a utility for identifying, reading, writing,
+ 	  verifying and erasing flash chips. It is designed to flash
