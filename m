@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:31:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpcap: fix
- bluez5_utils-headers dependency
-In-Reply-To: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
-References: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319223117.2693ff2b@windsurf>
+Date: Tue, 19 Mar 2019 22:34:22 +0100
+Subject: [Buildroot] [PATCH v1] package/meson: bump version to 0.50.0
+In-Reply-To: <20190318214324.5479-1-ps.report@gmx.net>
+References: <20190318214324.5479-1-ps.report@gmx.net>
+Message-ID: <20190319223422.64ba1be0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Mar 2019 23:40:42 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Peter,
 
-> Commit c46afc37dc877f1e94ffde0d77585290711b27ec changed bluez5-utils
-> dependency by bluez5_utils-headers without replacing the test on
-> BR2_PACKAGE_BLUEZ5_UTILS by BR2_PACKAGE_BLUEZ5_UTILS_HEADERS
-> 
-> Fix this mistake and also add a select on
-> BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS is set
-> so the user does not have to do it
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c6828df1f3782564451ddd4187ff026679bf37d8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, 18 Mar 2019 22:43:24 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libpcap/Config.in  | 1 +
->  package/libpcap/libpcap.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+I think this change broke the build of at-spi2-core:
+
+  http://autobuild.buildroot.net/?reason=at-spi2-core-2.28.0
+
+it is using meson, and it started failing to build on March 19, i.e not
+long after I merged the meson bump. The log also says:
+
+WARNING: Project targetting '>= 0.40.1' but tried to use feature introduced in '0.50.0': install arg in configure_file
+Configuring atspi-2.pc using configuration
+
+atspi/meson.build:60:0: ERROR: Subdir keyword must not be an absolute path.
+
+I think we need to backport
+https://github.com/GNOME/at-spi2-core/commit/44a812ea51223d82f21a098a2d45fcc5c329ce7a.patch
+from upstream.
+
+Best regards,
 
 Thomas
 -- 
