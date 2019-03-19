@@ -1,76 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Mar 2019 00:18:21 +0100
-Subject: [Buildroot] [RFC PATCH] package/libcamera: Add libcamera package
-In-Reply-To: <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
-References: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
- <20190319125040.GA2702@scaer>
- <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
-Message-ID: <100d21c9-da59-239c-29b2-e6d5bb38106d@mind.be>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue, 19 Mar 2019 16:47:19 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.3.13
+Message-ID: <20190319234719.9109-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes:
+https://mariadb.com/kb/en/library/mariadb-10313-release-notes/
 
+Changelog:
+https://mariadb.com/kb/en/mariadb-10313-changelog/
 
-On 19/03/2019 15:12, Kieran Bingham wrote:
-> Hi Yann,
-> 
-> Thank you for the review,
-> 
-> On 19/03/2019 12:50, Yann E. MORIN wrote:
->> Kieran, All,
->>
->> On 2019-03-19 11:03 +0000, Kieran Bingham spake thusly:
+Fixes the following security vulnerabilities:
 
-[snip]
->>> +LIBCAMERA_SITE_METHOD = git
->>> +LIBCAMERA_DEPENDENCIES = udev
+CVE-2019-2510 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB). Supported versions that are affected are 5.7.24 and
+prior and 8.0.13 and prior. Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server. Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
 
- Since this is a library, I'd expect _INSTALL_STAGING = YES.
+CVE-2019-2537 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.6.42
+and prior, 5.7.24 and prior and 8.0.13 and prior. Easily exploitable
+vulnerability allows high privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
 
->>> +LIBCAMERA_LICENSE = LGPL-2.0+
->>
->> This is not LGPL-2.0+, but LGPL-2.1+
-> 
-> Ugh, I should have remembered that, especially as I added the licenses...
-> 
->>
->> There are actually 2 other licenses applicable to this package: GPLv2.0+
->> and CC-BY-SA-4.0 (or later?).
->>
->> We usually specify what part of the package they apply to (correct me
->> if/where I am wrong):
->>
->>     LIBCAMERA_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (utils, test), CC-By_SA-4.0 (doc)
+Note that the hash for README.md changed due to Travis CI and Appveyor CI
+updates.
 
- AFAIU, we only specify licenses of stuff installed on target. Since
-/usr/share/doc gets removed in target-finalize, the doc license should not be
-relevant.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/mariadb/mariadb.hash | 12 ++++++------
+ package/mariadb/mariadb.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
- BTW it would be nice if there was a meson option to disable building docs. I
-don't know how it is for the libcamera doc, but doxygen and sphinx are sometimes
-a bit slow.
-
-> 
-> 
-> That looks accurate to me.
-> 
-> I've updated the patch.
-> 
->>
->> Please also specify the files that contain the license texts:
->>
->>     LIBCAMERA_LICENSE_FILES = \
->>         licenses/cc-by-sa-v4.0.txt \
->>         licenses/developer-certificate-of-origin.txt \
->>         licenses/gnu-gpl-2.0.txt \
->>         licenses/gnu-lgpl-2.1.txt
-
- Please also add hashes for these files.
-
- Thanks!
-
- Regards,
- Arnout
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index f68eb40224..db24f7bb9b 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,9 +1,9 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.11
+-md5 e13ab133060886cda814d68ebd1dc27b  mariadb-10.3.11.tar.gz
+-sha1 7b75d7ec06642f26ce197e07f5ba16283061cc87  mariadb-10.3.11.tar.gz
+-sha256 211655b794c9d5397ba3be6c90737eac02e882f296268299239db47ba328f1b2  mariadb-10.3.11.tar.gz
+-sha512 1adc1f9bbabf848726c669a7a0ab01257ba31882758b53fbf3b1316f2295670dba1c3d1f3292d7c1a749c701504588694a55d020839e690595897b0e20435298  mariadb-10.3.11.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.13
++md5 603ce42e35b9a688f2cca05275acb5cb  mariadb-10.3.13.tar.gz
++sha1 08467885412184e99b835732913d445fd2c4b1b3  mariadb-10.3.13.tar.gz
++sha256 b2aa857ef5b84f85a7ea60a1eac7b34c0ca5151c71a0d44ce2d7fb028d71459a  mariadb-10.3.13.tar.gz
++sha512 3cbd93291aa43b235e5b81d953ea69fb32df54fb518f922f69b5485952f01fae693c77b0efac37f414ed7ff132d3b58f899812bdb7be8a5b344c3640e2c3a0dd  mariadb-10.3.13.tar.gz
+ 
+ # Hash for license files
+-sha256 a298aaf95cb7e594d15b29ae6b5a9ee22a2be4344379fd29304df4e0f19f695a  README.md
++sha256 43f4b5b13cecbbdb04a180cbf6c2bd64237819d1a32165b7d475c1b392e6a8d1  README.md
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index e17649209a..356dd29af3 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.3.11
++MARIADB_VERSION = 10.3.13
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+-- 
+2.20.1
