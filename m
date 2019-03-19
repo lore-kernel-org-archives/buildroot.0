@@ -1,59 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:51:07 +0100
-Subject: [Buildroot] [PATCH v8 1/3] openjdk: new package
-In-Reply-To: <20190315205233.128763-1-aduskett@gmail.com>
-References: <20190315205233.128763-1-aduskett@gmail.com>
-Message-ID: <20190319225107.707b903f@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Mar 2019 23:00:12 +0100
+Subject: [Buildroot] [PATCH v2 6/8] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <1552951269-16967-6-git-send-email-etienne.carriere@linaro.org>
+References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
+ <1552951269-16967-6-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <fd4d553e-7db9-3e2e-7e2d-e266a352fa31@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+ Hi Etienne,
 
-On Fri, 15 Mar 2019 16:52:31 -0400
-aduskett at gmail.com wrote:
+ Just a few points I noticed, not a complete review...
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> OpenJDK is a free and open-source implementation of the Java Platform.
-> This package provides the option to build a client or a server JVM interpreter.
+On 19/03/2019 00:21, Etienne Carriere wrote:
+> +  ln -s ./u-boot.bin output/images/bl33.bin
+> +  ln -s ./tee-header_v2.bin output/images/bl32.bin
+> +  ln -s ./tee-pager_v2.bin output/images/bl32_extra1.bin
+> +  ln -s ./tee-pageable_v2.bin output/images/bl32_extra2.bin
 
-Since it was merged, this package caused a few build issues (but not
-that many). I had a quick look in order to hopefully help resolving
-them:
+ This should be done in a post-build script.
 
- - http://autobuild.buildroot.net/results/a03/a034e641fe163d4502fd9411af1d96c14d13c5f2/build-end.log
-   http://autobuild.buildroot.net/results/84f/84f423cc795ce0957801a5f7b35c0c800f527fb1/build-end.log
+ Also, don't use ./, i.e.
 
-   These are the same, the host machine tuple is not recognized. I
-   believe the fix is as easy as adding a POST_PATCH_HOOKS that copies
-   support/gnuconfig/config.sub over $(@D)/make/autoconf/build-aux/autoconf-config.sub
+ln -s u-boot.bin output/images/bl33.bin
 
- - http://autobuild.buildroot.net/results/f76/f763193801c4af8289c49832811395df49b1b876/build-end.log
+[snip]
+> +Note "-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic"
+> +brings virtfs support for file sharing with the hosted Linux OS.
 
-   This one has stuff like error: unknown type name
-   'snd_rawmidi_stream_t'; did you mean 'snd_pcm_stream_t'?. The problem is that the configuration has 
-   BR2_PACKAGE_ALSA_LIB_RAWMIDI disabled. I would recommend you to make
-   a build of OpenJDK with BR2_PACKAGE_ALSA_LIB=y but all its
-   sub-options disabled, and see which sub-options are mandatory for
-   OpenJDK to build. Then you can add the relevant select
-   BR2_PACKAGE_ALSA_LIB_foobaz to openjdk/Config.in
+ I thought virtfs was enabled with -virtfs. The netdev option creates a virtio
+net device and IIUC you use p9 to get an fs over that.
 
- - http://autobuild.buildroot.net/results/9d2/9d27e6389a18ddf4266511b58e827487d4a78437/build-end.log
+ But I don't think we typically enable or document that kind of feature in our
+qemu configs. Just enable the minimum that is needed to be able to get a console
+and a network connection.
 
-   This one is some weird OpenJDK specific stuff, I can't really help
-   here.
+ In fact, I think this defconfig should be as close as possible to the vexpress
+defconfig. But I'm not sure if the a9 supports trustzone, so perhaps it's better
+to switch the vexpress config to a15.
 
- - http://autobuild.buildroot.net/results/633/633b2361f7ab588fcc41fcbf5e92aa4eca895c6a/build-end.log
+[snip]
+> +# Qemu emulator for the Arm target
+> +BR2_PACKAGE_HOST_QEMU=y
+> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+> +BR2_PACKAGE_HOST_QEMU_VIRTFS=y
 
-   Same for this one.
+ Why is this needed? AFAICS there is nothing special about the Buildroot-built
+host-qemu, so the system-installed qemu should work just as well, no?
 
-Best regards,
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+ Regards,
+ Arnout
