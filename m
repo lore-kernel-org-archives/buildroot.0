@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 21:30:58 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/vsftpd: add patch
+Date: Tue, 19 Mar 2019 21:30:45 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/vsftpd: add patch
  to fix hang
-Message-ID: <20190319202829.39E0381E4E@busybox.osuosl.org>
+Message-ID: <20190319202834.4AFD881DA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e37abb31199c89649e09978262aac468a845f60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3b75fc839a8470913d853d4ca4d1430c48acd244
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 This fixes a hang due to SIGCHLD not being handled correctly by
 vsftpd. The patch comes from fedora and didn't make its way to
