@@ -1,106 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 21:27:40 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/wireshark: fix
- build with uclibc
-Message-ID: <20190319202702.A2E4081E4E@busybox.osuosl.org>
+Date: Tue, 19 Mar 2019 21:26:07 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/wireshark:
+ security bump to version 2.6.7
+Message-ID: <20190319202709.C3143825FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e50e03257b4953438fafce0db3b475e91241be5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6d7e29d490f57936e94aa7a94b7b5e7a8e559ef4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/c41d42fe3489bc63c42e7ce7a9eccb1b4ca7b9b2
+Fixes CVE-2019-9208, CVE-2019-9209 and CVE-2019-9214
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e68fdaf4146000c5bf331171c719e353e3385aa9)
+(cherry picked from commit 1de1fcb4d810cc9443c3fe4c1c108e649be83726)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...et-gtp-c-remove-unneeded-named-structures.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/0001-packet-gtp-c-remove-unneeded-named-structures.patch b/package/wireshark/0001-packet-gtp-c-remove-unneeded-named-structures.patch
-new file mode 100644
-index 0000000000..0a894a282e
---- /dev/null
-+++ b/package/wireshark/0001-packet-gtp-c-remove-unneeded-named-structures.patch
-@@ -0,0 +1,75 @@
-+From 020e25b660250c97c8085e64cf85074ccfcdd06b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 5 Mar 2019 20:59:49 +0100
-+Subject: [PATCH] packet-gtp.c: remove unneeded named structures
-+
-+In uclibc, _header is already in sigcontext.h:
-+
-+packet-gtp.c:2361:16: error: redefinition of 'struct _header'
-+ typedef struct _header {
-+                ^~~~~~~
-+In file included from /home/dawncrow/buildroot-test/scripts/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/bits/sigcontext.h:30:0,
-+                 from /home/dawncrow/buildroot-test/scripts/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/signal.h:311,
-+                 from /home/dawncrow/buildroot-test/scripts/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
-+                 from /home/dawncrow/buildroot-test/scripts/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:34,
-+                 from ../../epan/proto.h:28,
-+                 from ../../epan/packet.h:14,
-+                 from packet-gtp.c:43:
-+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/i686-buildroot-linux-uclibc/sysroot/usr/include/asm/sigcontext.h:173:8: note: originally defined here
-+ struct _header {
-+
-+To fix this issue, transform _header and other named structures (with
-+the exception of gtp_conv_info_t) into unnamed structures
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c41d42fe3489bc63c42e7ce7a9eccb1b4ca7b9b2
-+
-+Change-Id: I78116233c2a8dd7c54723b7cb558254bd5143bd2
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-on: https://code.wireshark.org/review/32335
-+Petri-Dish: Guy Harris <guy@alum.mit.edu>
-+Tested-by: Petri Dish Buildbot
-+Reviewed-by: Guy Harris <guy@alum.mit.edu>
-+[Retrieved from:
-+https://github.com/wireshark/wireshark/commit/020e25b660250c97c8085e64cf85074ccfcdd06b]
-+---
-+ epan/dissectors/packet-gtp.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/epan/dissectors/packet-gtp.c b/epan/dissectors/packet-gtp.c
-+index 4c40e7aa54..971197e4ae 100644
-+--- a/epan/dissectors/packet-gtp.c
-++++ b/epan/dissectors/packet-gtp.c
-+@@ -2170,7 +2170,7 @@ GHashTable* session_table;
-+ /* Relation between <teid,ip> -> frame */
-+ wmem_tree_t* frame_tree;
-+ 
-+-typedef struct gtp_info {
-++typedef struct {
-+     guint32 teid;
-+     guint32 frame;
-+ } gtp_info_t;
-+@@ -2482,7 +2482,7 @@ static int decode_gtp_node_addr(tvbuff_t * tvb, int offset, packet_info * pinfo,
-+ static int decode_gtp_priv_ext(tvbuff_t * tvb, int offset, packet_info * pinfo, proto_tree * tree, session_args_t * args _U_);
-+ static int decode_gtp_unknown(tvbuff_t * tvb, int offset, packet_info * pinfo, proto_tree * tree, session_args_t * args _U_);
-+ 
-+-typedef struct _gtp_opt {
-++typedef struct {
-+     int optcode;
-+     int (*decode) (tvbuff_t *, int, packet_info *, proto_tree *, session_args_t *);
-+ } gtp_opt_t;
-+@@ -2661,12 +2661,12 @@ id_to_str(tvbuff_t *tvb, gint offset)
-+ /* Next definitions and function check_field_presence checks if given field
-+  * in GTP packet is compliant with ETSI
-+  */
-+-typedef struct _header {
-++typedef struct {
-+     guint8 code;
-+     guint8 presence;
-+ } ext_header;
-+ 
-+-typedef struct _message {
-++typedef struct {
-+     guint8 code;
-+     ext_header fields[32];
-+ } _gtp_mess_items;
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index bad0a0fd45..071940e1c1 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.6.txt
+-sha256 487933ea075bdbb25d8df06017d9c4f49fc20eb7f6ec80af086718ed5550e863  wireshark-2.6.6.tar.xz
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.6.7.txt
++sha256 747b3e7a37414942959f76f198be49dcbcca936bda538c4408942ce71bfd2b71  wireshark-2.6.7.tar.xz
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index c01238826b..5f04af1f29 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 2.6.6
++WIRESHARK_VERSION = 2.6.7
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
