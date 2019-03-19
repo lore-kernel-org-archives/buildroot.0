@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 21:59:17 +0100
-Subject: [Buildroot] [PATCH 2/3] package/uftp: fix openssl static linking
-In-Reply-To: <20190319204642.28920-2-fontaine.fabrice@gmail.com>
-References: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
- <20190319204642.28920-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190319215917.3b01a8e9@windsurf>
+Date: Tue, 19 Mar 2019 22:02:43 +0100
+Subject: [Buildroot] [PATCH 3/3] gummiboot: fix compatibility with newer
+ glibc versions
+In-Reply-To: <20190319112852.9592-4-esben.haabendal@gmail.com>
+References: <20190319112852.9592-1-esben.haabendal@gmail.com>
+ <20190319112852.9592-4-esben.haabendal@gmail.com>
+Message-ID: <20190319220243.2d3fb3ef@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Mar 2019 21:46:41 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Esben,
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +UFTP_MAKE_OPTS += CRYPT_LIB='-lssl -lcrypto -lz'
+On Tue, 19 Mar 2019 12:28:52 +0100
+Esben Haabendal <esben.haabendal@gmail.com> wrote:
 
-What about using pkg-config here ?
+> From: Esben Haabendal <esben@haabendal.dk>
+> 
+> Signed-off-by: Esben Haabendal <esben@haabendal.dk>
 
-CRYPT_LIB=$(shell pkg-config --libs ssl)
+Since gummiboot is maintained in a Git repository upstream, we really
+like to have patches generated using "git format-patch", as it makes
+sense easier to handle. Also, we require all patches to have a
+Signed-off-by.
 
-this avoids hardcoding a bunch of assumptions about what OpenSSL
-depends on, and you can also drop the BR2_STATIC_LIBS condition.
-
-What do you think ?
+Thanks!
 
 Thomas
 -- 
