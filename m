@@ -1,78 +1,133 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 12:11:27 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-03-17
-In-Reply-To: <20190318131137.GA15193@lwo1-lhp-f71841> (Vadym Kochan's message
- of "Mon, 18 Mar 2019 15:11:37 +0200")
-References: <20190318070113.E1E6A85CC3@whitealder.osuosl.org>
- <20190318131137.GA15193@lwo1-lhp-f71841>
-Message-ID: <87va0f5db4.fsf@dell.be.48ers.dk>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Tue, 19 Mar 2019 11:25:29 +0000
+Subject: [Buildroot] [RFC PATCH] package/libcamera: Add libcamera package
+In-Reply-To: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
+References: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
+Message-ID: <5191db90-af78-b1ce-20f1-77e16e3a8596@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadym" == Vadym Kochan <vadim4j@gmail.com> writes:
+Hi All,
 
- > Hi All,
- > On Mon, Mar 18, 2019 at 07:01:08AM -0000, Thomas Petazzoni wrote:
- >> Hello,
- >> 
- >> Build statistics for 2019-03-17
- >> ===============================
- >> 
- >> branch |  OK | NOK | TIM | TOT |
- >> 2018.02.x |  31 |   0 |   0 |  31 |
- >> 2018.11.x |  21 |   3 |   0 |  24 |
- >> 2019.02.x |  30 |   2 |   0 |  32 |
- >> master | 245 |  62 |   3 | 310 |
- >> 
- >> Results for branch '2018.11.x'
- >> ==============================
- >> 
- >> Classification of failures by reason
- >> ------------------------------------
- >> 
- >> runc-v1.0.0-rc6 | 2 
- >> libsquish-1.15 | 1 
- >> 
- >> 
- >> Detail of failures
- >> ------------------
- >> 
- >> m68k |                 libsquish-1.15 | NOK | http://autobuild.buildroot.net/results/c7357d045b078c5742bde21c82904b4ec0defc35 |     
- >> i686 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/a63e9c9f026ce49dc299116affce0f85b567786d |     
- >> i686 |                runc-v1.0.0-rc6 | NOK | http://autobuild.buildroot.net/results/0ab86addc477d45542a5cb283d3636fb73da22da |     
- > I did try this defconfig with runc and pulled latest 2018.11.x branch but build
- > succeed.
+On 19/03/2019 11:03, Kieran Bingham wrote:
+>   http://libcamera.org/
+> 
+> Cameras are complex devices that need heavy hardware image processing
+> operations. Control of the processing is based on advanced algorithms
+> that must run on a programmable processor. This has traditionally been
+> implemented in a dedicated MCU in the camera, but in embedded devices
+> algorithms have been moved to the main CPU to save cost. Blurring the
+> boundary between camera devices and Linux often left the user with no
+> other option than a vendor-specific closed-source solution.
+> 
+> To address this problem the Linux media community has very recently
+> started collaboration with the industry to develop a camera stack that
+> will be open-source-friendly while still protecting vendor core IP.
+> libcamera was born out of that collaboration and will offer modern
+> camera support to Linux-based systems, including traditional Linux
+> distributions, ChromeOS and Android.
+> 
+> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> ---
+> We do not yet have an official 'release', so I'm sending this as an
+> early RFC, with
+>   LIBCAMERA_VERSION = origin/master
+> and no .hash file.
+> 
+> Is this still suitable to go in and be updated when we have a tagged
+> release later?
 
-You probably didn't build runc as I recently cherry picked:
 
-commit 82d40d87b0441ae4d88c05737f8d9322668b14da
-Author: Christian Stewart <christian@paral.in>
-Date:   Tue Feb 19 14:35:28 2019 -0800
 
-    runc: depend on linux headers >= 3.11 for O_TMPFILE
+As discussed on IRC, no - this is not acceptable. So I'll update this
+with a specific commit hash (after I fix the compiler warning that
+buildroot flushed out for us :D )
 
-    Fixes:
-    http://autobuild.buildroot.net/results/63e9d88ae5177541be463f1e2aafec59aa410479
 
-    Add dependency on headers >= 3.11 for O_TMPFILE, used by runc after the
-    fix for CVE-2019-5736 and propagate to the reverse dependencies of runc.
+Any comments on the rest are welcome still of course!
 
-    Notice that C library support for O_TMPFILE is also needed, which was added
-    in glibc 2.19 and musl 0.9.15.
+--
+Kieran
 
-    Signed-off-by: Christian Stewart <christian@paral.in>
-    [Peter: squash series, extend commit message, mention C library dependency,
-            fix indentation]
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-    (cherry picked from commit 905e976a6af224b3ed015c46fcea2d717c155f55)
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-And the defconfig uses a toolchain with linux headers 3.9.
+> 
+> 
+>  DEVELOPERS                     |  3 +++
+>  package/Config.in              |  1 +
+>  package/libcamera/Config.in    | 11 +++++++++++
+>  package/libcamera/libcamera.mk | 13 +++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/libcamera/Config.in
+>  create mode 100644 package/libcamera/libcamera.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c91325e28486..5bcdf208a62b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1260,6 +1260,9 @@ F:	package/ramsmp/
+>  N:	Kevin Joly <kevin.joly@sensefly.com>
+>  F:	package/libgphoto2/
+>  
+> +N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
+> +F:	package/libcamera/
+> +
+>  N:	Koen Martens <gmc@sonologic.nl>
+>  F:	package/capnproto/
+>  F:	package/linuxconsoletools/
+> diff --git a/package/Config.in b/package/Config.in
+> index b5321aeb49c9..a9d25e58b202 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1472,6 +1472,7 @@ menu "Multimedia"
+>  	source "package/libass/Config.in"
+>  	source "package/libbdplus/Config.in"
+>  	source "package/libbluray/Config.in"
+> +	source "package/libcamera/Config.in"
+>  	source "package/libdcadec/Config.in"
+>  	source "package/libdvbcsa/Config.in"
+>  	source "package/libdvbpsi/Config.in"
+> diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+> new file mode 100644
+> index 000000000000..c80f58c00f17
+> --- /dev/null
+> +++ b/package/libcamera/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBCAMERA
+> +	bool "libcamera"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	help
+> +	  libcamera provides a software stack to support complex devices that
+> +	  need heavy hardware image processing operations.
+> +
+> +	  http://www.libcamera.org/
+> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+> new file mode 100644
+> index 000000000000..4d908c7a3645
+> --- /dev/null
+> +++ b/package/libcamera/libcamera.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# libcamera
+> +#
+> +################################################################################
+> +
+> +LIBCAMERA_VERSION = origin/master
+> +LIBCAMERA_SITE = git://linuxtv.org/libcamera.git
+> +LIBCAMERA_SITE_METHOD = git
+> +LIBCAMERA_DEPENDENCIES = udev
+> +LIBCAMERA_LICENSE = LGPL-2.0+
+> +
+> +$(eval $(meson-package))
+> 
 
 -- 
-Bye, Peter Korsgaard
+Regards
+--
+Kieran
