@@ -1,10 +1,7 @@
 From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Tue, 19 Mar 2019 12:28:52 +0100
-Subject: [Buildroot] [PATCH 3/3] gummiboot: fix compatibility with newer
- glibc versions
-In-Reply-To: <20190319112852.9592-1-esben.haabendal@gmail.com>
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
-Message-ID: <20190319112852.9592-4-esben.haabendal@gmail.com>
+Date: Tue, 19 Mar 2019 12:41:56 +0100
+Subject: [Buildroot] [RFC] openssh: add option to allow login as root
+Message-ID: <20190319114156.10696-1-esben.haabendal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +10,48 @@ To: buildroot@busybox.net
 
 From: Esben Haabendal <esben@haabendal.dk>
 
-Signed-off-by: Esben Haabendal <esben@haabendal.dk>
----
- boot/gummiboot/0001-glibc-2.25-fix.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 boot/gummiboot/0001-glibc-2.25-fix.patch
+What do you think. Is this kind of micro-management of a configuration
+file something that I should keep out of tree?
 
-diff --git a/boot/gummiboot/0001-glibc-2.25-fix.patch b/boot/gummiboot/0001-glibc-2.25-fix.patch
-new file mode 100644
-index 000000000000..377098f9ea60
---- /dev/null
-+++ b/boot/gummiboot/0001-glibc-2.25-fix.patch
-@@ -0,0 +1,16 @@
-+Allow building with glibc with sys/sysmacros.h removed from sys/types.h.
+/Esben
+---
+ package/openssh/Config.in  | 10 ++++++++++
+ package/openssh/openssh.mk |  7 +++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 683a9c0e5191..bc4f40efa3de 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -9,3 +9,13 @@ config BR2_PACKAGE_OPENSSH
+ 	  friends.
+ 
+ 	  http://www.openssh.com/
 +
-+See https://sourceware.org/ml/libc-alpha/2015-11/msg00253.html for why
-+this was done.
++if BR2_PACKAGE_OPENSSH
 +
-+diff -urN gummiboot-43~orig/src/setup/setup.c gummiboot-43/src/setup/setup.c
-+--- gummiboot-43~orig/src/setup/setup.c	2019-03-14 22:28:34.533206018 +0100
-++++ gummiboot-43/src/setup/setup.c	2019-03-15 06:40:07.895651992 +0100
-+@@ -37,6 +37,7 @@
-+ #include <ftw.h>
-+ #include <stdbool.h>
-+ #include <blkid.h>
-++#include <sys/sysmacros.h>
-+ 
-+ #include "efivars.h"
-+ 
++config BR2_PACKAGE_OPENSSH_PERMIT_ROOT_LOGIN
++	bool "Allow SSH root login"
++	help
++	  Modify SSH server configuration to allow login as root.
++	  Warning: This might not be a good idea.  Use at own risk!
++
++endif
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4fef5caedb01..8d1c153a8752 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -88,4 +88,11 @@ endef
+ 
+ OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
+ 
++ifeq ($(BR2_PACKAGE_OPENSSH_PERMIT_ROOT_LOGIN),y)
++define OPENSSH_INSTALL_PERMIT_ROOT_LOGIN
++	$(SED) 's/\#PermitRootLogin prohibit-password/PermitRootLogin yes/' $(TARGET_DIR)/etc/ssh/sshd_config
++endef
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PERMIT_ROOT_LOGIN
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.21.0
