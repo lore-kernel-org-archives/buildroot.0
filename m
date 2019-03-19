@@ -1,56 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Mar 2019 23:01:28 +0100
-Subject: [Buildroot] [PATCH v2, 2/2] package/uftp: openssl is optional,
- not mandatory
-In-Reply-To: <20190319220128.12589-1-fontaine.fabrice@gmail.com>
-References: <20190319220128.12589-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319220128.12589-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 Mar 2019 23:03:15 +0100
+Subject: [Buildroot] [PATCH v2 2/2] pkg-generic: Cleanup some redundant
+ checks
+In-Reply-To: <20190317212014.3831-2-nolange79@gmail.com>
+References: <20190317212014.3831-1-nolange79@gmail.com>
+ <20190317212014.3831-2-nolange79@gmail.com>
+Message-ID: <20190319220315.GG2702@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/uftp/Config.in | 1 -
- package/uftp/uftp.mk   | 9 +++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Norbert, All,
 
-diff --git a/package/uftp/Config.in b/package/uftp/Config.in
-index ca6e5f9a05..b88fb03ae2 100644
---- a/package/uftp/Config.in
-+++ b/package/uftp/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_UFTP
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Encrypted UDP based FTP with multicast.
- 
-diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
-index f9f0502b49..d247ee620f 100644
---- a/package/uftp/uftp.mk
-+++ b/package/uftp/uftp.mk
-@@ -6,11 +6,16 @@
- 
- UFTP_VERSION = 4.9.9
- UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
--UFTP_DEPENDENCIES = host-pkgconf openssl
- UFTP_LICENSE = GPL-3.0+
- UFTP_LICENSE_FILES = LICENSE.txt
- 
--UFTP_MAKE_OPTS = CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+UFTP_DEPENDENCIES += host-pkgconf openssl
-+UFTP_MAKE_OPTS += CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
-+endif
-+else
-+UFTP_MAKE_OPTS += NO_ENCRYPTION=1
-+endif
- 
- define UFTP_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+On 2019-03-17 22:20 +0100, Norbert Lange spake thusly:
+> With the last change, packages will depend
+> only on host-{xz,lzip} if the source archives
+> have filenames requesting the corresponding compressor.
+> 
+> This allows using a single guard.
+
+This commit log is an improvement agaisnt the previous one, yet I still
+had to think a bit too hard to understand the reason that works.
+
+And I think there is an issue with that. Not today, but that opens up a
+case where we can introduce a subtil bug in the future.
+
+If, say, xz changes its distribution archive from .bz2 to .lz, iand lzip
+changes theirs from .gz to .xz, then we'd introduce a circular
+dependency at the make level, and make silently and arbitrarily drops
+one of the dependencies.
+
+However, now that I think about it, that is of not big consequence: in
+either case, the build woulld break on the first one we try to extract,
+and we would notice quite early and quite easily.
+
+Still, I'd like we think a bit harder about those special cases.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/pkg-generic.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 89da43d5e5..11f16cab18 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -604,18 +604,15 @@ endif
+>  
+>  ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+>  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
+> -endif
+>  
+> -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+>  ifneq ($$(filter .xz .lzma,$$(suffix $$($(2)_SOURCE))),)
+>  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
+>  endif
+> -endif
+>  
+> -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+>  ifeq ($$(suffix $$($(2)_SOURCE)),.lz)
+>  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
+>  endif
+> +
+>  endif
+>  
+>  ifeq ($$(BR2_CCACHE),y)
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
