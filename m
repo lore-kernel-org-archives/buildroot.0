@@ -1,58 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Mar 2019 23:00:12 +0100
-Subject: [Buildroot] [PATCH v2 6/8] configs/qemu_armv7a_tz_virt: Armv7-A
- emulation with TrustZone services
-In-Reply-To: <1552951269-16967-6-git-send-email-etienne.carriere@linaro.org>
-References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
- <1552951269-16967-6-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <fd4d553e-7db9-3e2e-7e2d-e266a352fa31@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Mar 2019 23:01:27 +0100
+Subject: [Buildroot] [PATCH v2, 1/2] package/uftp: fix openssl static linking
+Message-ID: <20190319220128.12589-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Etienne,
+Fixes:
+ - http://autobuild.buildroot.org/results/051cfd993b65830c34e675d797e241c272b6f35a
 
- Just a few points I noticed, not a complete review...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Use pkg-config instead of hard-coding libraries
 
-On 19/03/2019 00:21, Etienne Carriere wrote:
-> +  ln -s ./u-boot.bin output/images/bl33.bin
-> +  ln -s ./tee-header_v2.bin output/images/bl32.bin
-> +  ln -s ./tee-pager_v2.bin output/images/bl32_extra1.bin
-> +  ln -s ./tee-pageable_v2.bin output/images/bl32_extra2.bin
+ package/uftp/uftp.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- This should be done in a post-build script.
-
- Also, don't use ./, i.e.
-
-ln -s u-boot.bin output/images/bl33.bin
-
-[snip]
-> +Note "-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic"
-> +brings virtfs support for file sharing with the hosted Linux OS.
-
- I thought virtfs was enabled with -virtfs. The netdev option creates a virtio
-net device and IIUC you use p9 to get an fs over that.
-
- But I don't think we typically enable or document that kind of feature in our
-qemu configs. Just enable the minimum that is needed to be able to get a console
-and a network connection.
-
- In fact, I think this defconfig should be as close as possible to the vexpress
-defconfig. But I'm not sure if the a9 supports trustzone, so perhaps it's better
-to switch the vexpress config to a15.
-
-[snip]
-> +# Qemu emulator for the Arm target
-> +BR2_PACKAGE_HOST_QEMU=y
-> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-> +BR2_PACKAGE_HOST_QEMU_VIRTFS=y
-
- Why is this needed? AFAICS there is nothing special about the Buildroot-built
-host-qemu, so the system-installed qemu should work just as well, no?
-
-
-
- Regards,
- Arnout
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index bbc362652b..f9f0502b49 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -6,16 +6,19 @@
+ 
+ UFTP_VERSION = 4.9.9
+ UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+-UFTP_DEPENDENCIES = openssl
++UFTP_DEPENDENCIES = host-pkgconf openssl
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
+ 
++UFTP_MAKE_OPTS = CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
++
+ define UFTP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+ endef
+ 
+ define UFTP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.14.1
