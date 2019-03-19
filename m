@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 20:20:47 +0100
+Date: Tue, 19 Mar 2019 20:21:59 +0100
 Subject: [Buildroot] [PATCH v2 1/1] package/efl: Fix build with mesa
 In-Reply-To: <20190306231429.22849-1-vadim4j@gmail.com> (Vadim Kochan's
  message of "Thu, 7 Mar 2019 01:14:29 +0200")
 References: <20190306231429.22849-1-vadim4j@gmail.com>
-Message-ID: <87ef72hdrk.fsf@dell.be.48ers.dk>
+Message-ID: <87a7hqhdpk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,7 +31,7 @@ To: buildroot@busybox.net
  > v2:
  >     1) Add signed-off to efl fix patch
 
-Committed to 2019.02.x, thanks.
+Committed to 2018.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
