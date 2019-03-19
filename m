@@ -1,87 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Mar 2019 23:03:15 +0100
-Subject: [Buildroot] [PATCH v2 2/2] pkg-generic: Cleanup some redundant
- checks
-In-Reply-To: <20190317212014.3831-2-nolange79@gmail.com>
-References: <20190317212014.3831-1-nolange79@gmail.com>
- <20190317212014.3831-2-nolange79@gmail.com>
-Message-ID: <20190319220315.GG2702@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Mar 2019 23:03:30 +0100
+Subject: [Buildroot] [PATCH v2 7/8] testing: test can use the locally
+ generated qemu host tool
+In-Reply-To: <CAN5uoS9ZKu4ZS+1qz-Ow4PcNph+LUYJ_gVCBxOo2OEMojUeeMQ@mail.gmail.com>
+References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
+ <1552951269-16967-7-git-send-email-etienne.carriere@linaro.org>
+ <CAN5uoS9ZKu4ZS+1qz-Ow4PcNph+LUYJ_gVCBxOo2OEMojUeeMQ@mail.gmail.com>
+Message-ID: <3979fa63-09f6-c6a9-a90e-a1ba5fa27230@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
 
-On 2019-03-17 22:20 +0100, Norbert Lange spake thusly:
-> With the last change, packages will depend
-> only on host-{xz,lzip} if the source archives
-> have filenames requesting the corresponding compressor.
-> 
-> This allows using a single guard.
 
-This commit log is an improvement agaisnt the previous one, yet I still
-had to think a bit too hard to understand the reason that works.
+On 19/03/2019 08:05, Etienne Carriere wrote:
+> I made this to allow test_optee to use the qemu config from the platform.
+> But I wonder if it would be more suitable to have an generic option to
+> script run-tests to build the emulator within the test config.
 
-And I think there is an issue with that. Not today, but that opens up a
-case where we can introduce a subtil bug in the future.
+ That would indeed be a better idea IMO.
 
-If, say, xz changes its distribution archive from .bz2 to .lz, iand lzip
-changes theirs from .gz to .xz, then we'd introduce a circular
-dependency at the make level, and make silently and arbitrarily drops
-one of the dependencies.
-
-However, now that I think about it, that is of not big consequence: in
-either case, the build woulld break on the first one we try to extract,
-and we would notice quite early and quite easily.
-
-Still, I'd like we think a bit harder about those special cases.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/pkg-generic.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 89da43d5e5..11f16cab18 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -604,18 +604,15 @@ endif
->  
->  ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
-> -endif
->  
-> -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
->  ifneq ($$(filter .xz .lzma,$$(suffix $$($(2)_SOURCE))),)
->  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
->  endif
-> -endif
->  
-> -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
->  ifeq ($$(suffix $$($(2)_SOURCE)),.lz)
->  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
->  endif
+> -        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
+> +        if local:
+> +            basedir = os.path.join(self.builddir, "host/bin/")
+> +        else:
+> +            basedir = ""
 > +
->  endif
->  
->  ifeq ($$(BR2_CCACHE),y)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +        qemu_cmd = [basedir + "qemu-system-{}".format(qemu_arch),
+>                      "-serial", "stdio",
+>                      "-display", "none"]
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Instead of constructing it like this, I think it would be simpler to always add
+output/host/bin to PATH. Unfortunately, however, pexpect only respects the PATH
+setting of the env argument since version 4.2.0 [1], and we can't rely on the
+system-installed pexpect to have that version. So you have to mess about with
+os.environ (which you'd want to restore to the original after running qemu).
+
+ Regards,
+ Arnout
+
+[1] https://github.com/pexpect/pexpect/pull/348
