@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:02:43 +0100
-Subject: [Buildroot] [PATCH 3/3] gummiboot: fix compatibility with newer
- glibc versions
-In-Reply-To: <20190319112852.9592-4-esben.haabendal@gmail.com>
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
- <20190319112852.9592-4-esben.haabendal@gmail.com>
-Message-ID: <20190319220243.2d3fb3ef@windsurf>
+Date: Tue, 19 Mar 2019 22:03:10 +0100
+Subject: [Buildroot] [git commit] package/uftp: needs MMU, threads and wchar
+Message-ID: <20190319210005.C054282A23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Esben,
+commit: https://git.buildroot.net/buildroot/commit/?id=3bc0830d5de3e2b94f0565b7a7314b1515dd4612
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Mar 2019 12:28:52 +0100
-Esben Haabendal <esben.haabendal@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/47dd067dfdcaae99d50216f59ea6af115d8f1e1e
 
-> From: Esben Haabendal <esben@haabendal.dk>
-> 
-> Signed-off-by: Esben Haabendal <esben@haabendal.dk>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uftp/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Since gummiboot is maintained in a Git repository upstream, we really
-like to have patches generated using "git format-patch", as it makes
-sense easier to handle. Also, we require all patches to have a
-Signed-off-by.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uftp/Config.in b/package/uftp/Config.in
+index b6a8961628..ca6e5f9a05 100644
+--- a/package/uftp/Config.in
++++ b/package/uftp/Config.in
+@@ -1,7 +1,14 @@
+ config BR2_PACKAGE_UFTP
+ 	bool "uftp"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Encrypted UDP based FTP with multicast.
+ 
+ 	  http://uftp-multicast.sourceforge.net/
++
++comment "uftp needs a toolchain w/ threads, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
