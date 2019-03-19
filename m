@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:05:54 +0100
-Subject: [Buildroot] [PATCH v4 1/5] board/qemu/riscv32-virt: Update
- linux config
-In-Reply-To: <20190319181449.25067-1-alistair.francis@wdc.com>
-References: <20190319181449.25067-1-alistair.francis@wdc.com>
-Message-ID: <20190319220554.79290acf@windsurf>
+Date: Tue, 19 Mar 2019 22:06:15 +0100
+Subject: [Buildroot] [git commit] linux: allow BR2_LINUX_KERNEL_IMAGE on
+ RISC-V
+Message-ID: <20190319210308.A58267FBD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a3a4d4d4d307fd21f19ae43e77ac21b85adad7f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Mar 2019 18:15:46 +0000
-Alistair Francis <Alistair.Francis@wdc.com> wrote:
+We will need to build Image files for OpenSBI so allow that now.
 
-> Update the Linux defconfig. This defconfig is the in tree defconfig with
-> 32-bit support enabled.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If it's just the in-tree defconfig + one option to enable 32-bit
-support, what about using the in-tree defconfig directly + a small
-config fragment to enable 32-bit support ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 818b94e1c0..dc10238053 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -258,7 +258,7 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
+ 
+ config BR2_LINUX_KERNEL_IMAGE
+ 	bool "Image"
+-	depends on BR2_aarch64
++	depends on BR2_aarch64 || BR2_riscv
+ 
+ config BR2_LINUX_KERNEL_LINUX_BIN
+ 	bool "linux.bin"
