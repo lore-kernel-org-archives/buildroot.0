@@ -1,127 +1,35 @@
 From: Alistair Francis <Alistair.Francis@wdc.com>
-Date: Tue, 19 Mar 2019 18:15:46 +0000
-Subject: [Buildroot] [PATCH v4 1/5] board/qemu/riscv32-virt: Update linux
- config
-Message-ID: <20190319181449.25067-1-alistair.francis@wdc.com>
+Date: Tue, 19 Mar 2019 18:15:47 +0000
+Subject: [Buildroot] [PATCH v4 2/5] linux: Enable BR2_LINUX_KERNEL_IMAGE on
+ RISC-V
+In-Reply-To: <20190319181449.25067-1-alistair.francis@wdc.com>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+Message-ID: <20190319181449.25067-2-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the Linux defconfig. This defconfig is the in tree defconfig with
-32-bit support enabled.
+We will need to build Image files for OpenSBI so allow that now.
 
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- board/qemu/riscv32-virt/linux.config | 85 +++++++++++++++++++++++++---
- 1 file changed, 78 insertions(+), 7 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
-index c25583f768..b7d1825126 100644
---- a/board/qemu/riscv32-virt/linux.config
-+++ b/board/qemu/riscv32-virt/linux.config
-@@ -1,23 +1,94 @@
-+CONFIG_32BIT=y
-+CONFIG_PAGE_OFFSET=0xC0000000
-+CONFIG_PGTABLE_LEVELS=2
- CONFIG_ARCH_RV32I=y
-+# CONFIG_ARCH_RV64I is not set
-+CONFIG_MAXPHYSMEM_2GB=y
-+CONFIG_LBDAF=y
-+# CONFIG_SCSI_NSP32 is not set
-+CONFIG_GENERIC_ATOMIC64=y
-+CONFIG_GENERIC_LIB_ASHLDI3=y
-+CONFIG_GENERIC_LIB_ASHRDI3=y
-+CONFIG_GENERIC_LIB_LSHRDI3=y
-+CONFIG_GENERIC_LIB_UCMPDI2=y
-+CONFIG_GENERIC_LIB_UMODDI3=y
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CHECKPOINT_RESTORE=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EXPERT=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_SMP=y
--CONFIG_NR_CPUS=8
- CONFIG_PCI=y
--CONFIG_SYSVIPC=y
-+CONFIG_PCIE_XILINX=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
- CONFIG_INET=y
--# CONFIG_WIRELESS is not set
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_NETLINK_DIAG=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_BLK_DEV_LOOP=y
- CONFIG_VIRTIO_BLK=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI=y
-+CONFIG_SATA_AHCI_PLATFORM=y
- CONFIG_NETDEVICES=y
- CONFIG_VIRTIO_NET=y
--# CONFIG_ETHERNET is not set
--# CONFIG_WLAN is not set
-+CONFIG_MACB=y
-+CONFIG_E1000E=y
-+CONFIG_R8169=y
-+CONFIG_MICROSEMI_PHY=y
-+CONFIG_INPUT_MOUSEDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_VIRT_DRIVERS=y
-+CONFIG_HVC_RISCV_SBI=y
-+# CONFIG_PTP_1588_CLOCK is not set
-+CONFIG_DRM=y
-+CONFIG_DRM_RADEON=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_USB=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_UAS=y
- CONFIG_VIRTIO_MMIO=y
--CONFIG_EXT2_FS=y
-+CONFIG_SIFIVE_PLIC=y
-+CONFIG_RAS=y
- CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
- CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V4=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_CRYPTO_USER_API_HASH=y
-+CONFIG_PRINTK_TIME=y
-+# CONFIG_RCU_TRACE is not set
+diff --git a/linux/Config.in b/linux/Config.in
+index 818b94e1c0..dc10238053 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -258,7 +258,7 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
+ 
+ config BR2_LINUX_KERNEL_IMAGE
+ 	bool "Image"
+-	depends on BR2_aarch64
++	depends on BR2_aarch64 || BR2_riscv
+ 
+ config BR2_LINUX_KERNEL_LINUX_BIN
+ 	bool "linux.bin"
 -- 
 2.21.0
