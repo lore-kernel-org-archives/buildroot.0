@@ -1,37 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Mar 2019 19:08:45 +0100
-Subject: [Buildroot] [PATCH v10 1/6] binutils: install libiberty for
- host build
-In-Reply-To: <20190318220340.GK14237@scaer>
-References: <20190206091531.104591-1-aduskett@gmail.com>
- <20190318220340.GK14237@scaer>
-Message-ID: <ab8fc5b3-e0b7-6594-cf7f-dd03ae8de643@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Mar 2019 21:22:34 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/busybox: udhcp
+ CVE-2018-20679 patch
+In-Reply-To: <20190306142231.23490-1-jared.bents@rockwellcollins.com> (jared
+ bents's message of "Wed, 6 Mar 2019 08:22:30 -0600")
+References: <20190306142231.23490-1-jared.bents@rockwellcollins.com>
+Message-ID: <87zhpqfwc5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "jared" == jared bents <jared.bents@rockwellcollins.com> writes:
 
+ > From: Jared Bents <jared.bents@rockwellcollins.com>
+ > Patch to resolve CVE-2018-20679 which affects versions prior
+ > to 1.30.0
 
-On 18/03/2019 23:03, Yann E. MORIN wrote:
-> First, with this very patch: it breaks hiost-gdb, which fails to build
-> because there is an inconsistency with how ti tries to link with
-> libiberty:
-> 
->     http://autobuild.buildroot.org/results/109/1098d6380f12f5bbd6dbc69edb06bd953d1edc3d/build-end.log
-> 
->     /usr/bin/ld: /home/buildroot/autobuild/instance-0/output/host/lib/libiberty.a(cplus-dem.o):
->     relocation R_X86_64_PC32 against symbol `_sch_istable' can not be used when making a shared object; recompile with -fPIC
->     /usr/bin/ld: final link failed: Bad value
+ > More information can be found at:
+ > https://nvd.nist.gov/vuln/detail/CVE-2018-20679
 
- Maybe this is due to building host-binutils with --disable-shared
---enable-static? Maybe the solution is to just add --enable-shared, i.e. build
-both shared and static?
+ > This applies to both master and 2019.02
 
- That does mean that ld etc. may now link dynamically with the various
-libraries, but host tools should now be relocatable thinks to our rpath fixup,
-so that shouldn't be a problem.
+ > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
- Regards,
- Arnout
+Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
