@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 19:56:19 +0100
-Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
-In-Reply-To: <20190319112852.9592-1-esben.haabendal@gmail.com> (Esben
- Haabendal's message of "Tue, 19 Mar 2019 12:28:49 +0100")
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
-Message-ID: <875zseitgs.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Mar 2019 19:57:59 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-10-05
+In-Reply-To: <20190318105950.74fd786f@windsurf> (Thomas Petazzoni's message of
+ "Mon, 18 Mar 2019 10:59:50 +0100")
+References: <20181006060019.F38E92072B@mail.bootlin.com>
+ <20181007044341.n33wz7romp36cw7a@sapphire.tkos.co.il>
+ <20190315152113.4e9bc31a@windsurf> <87wokw7bk3.fsf@dell.be.48ers.dk>
+ <20190318105950.74fd786f@windsurf>
+Message-ID: <87zhpqhetk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esben.haabendal@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > From: Esben Haabendal <esben@haabendal.dk>
- > These patches fixes gummiboot for building with toolchains using
- > newer gcc and glibc versions.
+ > On Mon, 18 Mar 2019 10:54:04 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Esben Haabendal (3):
- >   gummiboot: use new official upstream git repository
- >   gummiboot: upgrade to last commit before being removed
- >   gummiboot: fix compatibility with newer glibc versions
+ >> > Good suggestion. Fixed:  
+ >> 
+ >> >   https://git.buildroot.org/buildroot-test/commit/?id=e90dc8753f9deaca9ecb41a5874d7a559ee2557c  
+ >> 
+ >> NIT: This only sorted the overview, but not the detailed listing.
 
-Out of interest, what is the use case for using gummiboot? We recently
-added systemd-boot support, so I was considering removing gummiboot as
-it is dead upstream.
+ > Yes, I know. I pondered about sorting the detailed listing, but this
+ > would move the results about master towards the end of the e-mail,
+ > while those are the most important results I believe. So I did not
+ > change how the detailed listing was sorted.
 
-Notice that you currently cannot enable systemd-boot without the rest of
-systemd, so that may be a disadvantage.
+Ok, fine by me.
 
 -- 
 Bye, Peter Korsgaard
