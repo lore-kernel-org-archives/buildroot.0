@@ -1,72 +1,31 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 19 Mar 2019 20:05:01 +0000
-Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade
- to 4.20 kernel
-In-Reply-To: <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
-References: <20190318210106.6347-1-alistair.francis@wdc.com>
- <20190318210106.6347-2-alistair.francis@wdc.com>
- <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
- <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
-Message-ID: <8cb8dcd1-54f2-6b8b-ec21-940918a8b671@embecosm.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Mar 2019 18:57:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/skeleton-init-common: Create
+ /lib/modules directory
+In-Reply-To: <CADYdroPQYoDW=T7ZOdDNucb4O3wu4poD-ZVuLY1PApB4i_dMrg@mail.gmail.com>
+References: <20190318163010.8056-1-norbert.lange@andritz.com>
+ <20190318174436.GI14237@scaer>
+ <CADYdroMoAzR6=nniTiBZvvs2fkwJJ7hGM-rd2OixxA6FpjRj7A@mail.gmail.com>
+ <20190318190315.GJ14237@scaer>
+ <CADYdroPQYoDW=T7ZOdDNucb4O3wu4poD-ZVuLY1PApB4i_dMrg@mail.gmail.com>
+Message-ID: <dfeb8c8b-e3bc-f96c-4052-c6b55cf85653@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alistair
 
-On 19/03/2019 18:02, Alistair Francis wrote:
-> On Tue, Mar 19, 2019 at 8:20 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
->> Hello Alistair
->>
->> On 18/03/2019 21:02, Alistair Francis wrote:
->>> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
->>> ---
->>>  configs/qemu_riscv32_virt_defconfig | 6 +++---
->>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
->>> index fb37da6a89..6f9a61b11c 100644
->>> --- a/configs/qemu_riscv32_virt_defconfig
->>> +++ b/configs/qemu_riscv32_virt_defconfig
->>> @@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->>>  # Filesystem
->>>  BR2_TARGET_ROOTFS_EXT2=y
->>>
->>> -# Linux headers same as kernel, a 4.15 series
->>> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
->>> +# Linux headers same as kernel, a 4.20 series
->>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
->>>
->>>  # Kernel
->>>  BR2_LINUX_KERNEL=y
->>>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->>>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
->>> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
->>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
->> I wasn't sure that the 4.20 kernel worked for riscv32 under qemu which
->> is probably why it wasn't bumped from 4.15 in January when the
->> qemu_riscv64_virt_defconfig kernel version was.
->>
->> How did you manage to test this? I've tried both qemu 2.12.0 and 3.1.0
->> and neither version will boot the resulting kernel.
-> I just tested this again and here are my results. All running on QEMU
-> 3.1.0 and using OpenSBI
->
-> With current master + my OpenSBI patches -> I can boot the 4.20
-> kernel, but it never gets to a login prompt.
 
-This is what happens for me when I build and test from master - no login
-prompt. I guess that it's because your qemu_riscv32_virt_defconfig
-kernel version update has been checked-in without the necessary opensbi
-or config updates.
+On 18/03/2019 21:43, Norbert Lange wrote:
+> Should I re-roll the patch next, or can we continue this discussion
+> until you decide on whether you will include the change.
 
-Regards
+ For me as well, the direction should be to remove things from the skeleton
+rather than adding to it. So if you would get rid of /media etc. I'd maybe be in
+favour of it, but I'm certainly not going to defend adding yet another directory.
 
-Mark
+ I'll add Peter in Cc to draw a line in the sand.
 
--- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+ Regards,
+ Arnout
