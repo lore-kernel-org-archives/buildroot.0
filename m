@@ -1,7 +1,10 @@
 From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Tue, 19 Mar 2019 12:28:49 +0100
-Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
-Message-ID: <20190319112852.9592-1-esben.haabendal@gmail.com>
+Date: Tue, 19 Mar 2019 12:28:50 +0100
+Subject: [Buildroot] [PATCH 1/3] gummiboot: use new official upstream git
+ repository
+In-Reply-To: <20190319112852.9592-1-esben.haabendal@gmail.com>
+References: <20190319112852.9592-1-esben.haabendal@gmail.com>
+Message-ID: <20190319112852.9592-2-esben.haabendal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +13,23 @@ To: buildroot@busybox.net
 
 From: Esben Haabendal <esben@haabendal.dk>
 
-These patches fixes gummiboot for building with toolchains using
-newer gcc and glibc versions.
+Signed-off-by: Esben Haabendal <esben@haabendal.dk>
+---
+ boot/gummiboot/gummiboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Esben Haabendal (3):
-  gummiboot: use new official upstream git repository
-  gummiboot: upgrade to last commit before being removed
-  gummiboot: fix compatibility with newer glibc versions
-
- boot/gummiboot/0001-glibc-2.25-fix.patch | 16 ++++++++++++++++
- boot/gummiboot/gummiboot.mk              |  4 ++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
- create mode 100644 boot/gummiboot/0001-glibc-2.25-fix.patch
-
+diff --git a/boot/gummiboot/gummiboot.mk b/boot/gummiboot/gummiboot.mk
+index 85a5daaeab69..0e67e5e8ce0e 100644
+--- a/boot/gummiboot/gummiboot.mk
++++ b/boot/gummiboot/gummiboot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GUMMIBOOT_SITE = http://cgit.freedesktop.org/gummiboot
++GUMMIBOOT_SITE = https://gitlab.freedesktop.org/archived-projects/gummiboot.git
+ GUMMIBOOT_SITE_METHOD = git
+ GUMMIBOOT_VERSION = 43
+ GUMMIBOOT_LICENSE = LGPL-2.1+
 -- 
 2.21.0
