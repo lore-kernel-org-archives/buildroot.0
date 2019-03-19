@@ -1,88 +1,121 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 19 Mar 2019 11:14:33 -0700
-Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade
- to 4.20 kernel
-In-Reply-To: <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
-References: <20190318210106.6347-1-alistair.francis@wdc.com>
- <20190318210106.6347-2-alistair.francis@wdc.com>
- <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
- <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
-Message-ID: <CAKmqyKO7vUtXuLHv=oWeuSysp9iqg1JbMi7VXOkL5cta20-D9Q@mail.gmail.com>
+From: Alistair Francis <Alistair.Francis@wdc.com>
+Date: Tue, 19 Mar 2019 18:15:48 +0000
+Subject: [Buildroot] [PATCH v4 3/5] boot/opensbi: Initial commit of OpenSBI
+ for RISC-V
+In-Reply-To: <20190319181449.25067-1-alistair.francis@wdc.com>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+Message-ID: <20190319181449.25067-3-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 19, 2019 at 11:02 AM Alistair Francis <alistair23@gmail.com> wrote:
->
-> On Tue, Mar 19, 2019 at 8:20 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
-> >
-> > Hello Alistair
-> >
-> > On 18/03/2019 21:02, Alistair Francis wrote:
-> > > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> > > ---
-> > >  configs/qemu_riscv32_virt_defconfig | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> > > index fb37da6a89..6f9a61b11c 100644
-> > > --- a/configs/qemu_riscv32_virt_defconfig
-> > > +++ b/configs/qemu_riscv32_virt_defconfig
-> > > @@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> > >  # Filesystem
-> > >  BR2_TARGET_ROOTFS_EXT2=y
-> > >
-> > > -# Linux headers same as kernel, a 4.15 series
-> > > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-> > > +# Linux headers same as kernel, a 4.20 series
-> > > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
-> > >
-> > >  # Kernel
-> > >  BR2_LINUX_KERNEL=y
-> > >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> > >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-> > > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-> > > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
-> >
-> > I wasn't sure that the 4.20 kernel worked for riscv32 under qemu which
-> > is probably why it wasn't bumped from 4.15 in January when the
-> > qemu_riscv64_virt_defconfig kernel version was.
-> >
-> > How did you manage to test this? I've tried both qemu 2.12.0 and 3.1.0
-> > and neither version will boot the resulting kernel.
->
-> I just tested this again and here are my results. All running on QEMU
-> 3.1.0 and using OpenSBI
->
-> With current master + my OpenSBI patches -> I can boot the 4.20
-> kernel, but it never gets to a login prompt.
->
-> With current master + my OpenSBI patches + defconfig update -> I can
-> boot the 4.20 kernel and I get to a login prompt.
->
-> I did some of my original tests with an updated defconfig but I
-> thought I tested without any changed. I'll send a patch to update the
-> defconfig.
+OpenSBI is a much improved alternative to BBL (riscv-pk). Add OpenSBI
+support to buildroot.
 
-I even tested BBL with my v4 series that I'm about to send and that
-boots to a login prompt.
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ DEVELOPERS              |  1 +
+ boot/Config.in          |  1 +
+ boot/opensbi/Config.in  | 25 +++++++++++++++++++++++++
+ boot/opensbi/opensbi.mk | 32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 59 insertions(+)
+ create mode 100644 boot/opensbi/Config.in
+ create mode 100644 boot/opensbi/opensbi.mk
 
-So everything should work with the updated config.
-
-Alistair
-
->
-> Alistair
->
-> >
-> > Regards
-> >
-> > Mark
-> >
-> > --
-> > Mark Corbin
-> > Embecosm Ltd.
-> > https://www.embecosm.com
-> >
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e0ac08e11..91eda42949 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -122,6 +122,7 @@ F:	package/kvazaar/
+ F:	package/v4l2loopback/
+ 
+ N:	Alistair Francis <alistair@alistair23.me>
++F:	boot/opensbi/
+ F:	package/xen/
+ 
+ N:	Alvaro G. M <alvaro.gamez@hazent.com>
+diff --git a/boot/Config.in b/boot/Config.in
+index 74481e7545..97bd3de6e9 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -14,6 +14,7 @@ source "boot/lpc32xxcdl/Config.in"
+ source "boot/mv-ddr-marvell/Config.in"
+ source "boot/mxs-bootlets/Config.in"
+ source "boot/optee-os/Config.in"
++source "boot/opensbi/Config.in"
+ source "boot/riscv-pk/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/shim/Config.in"
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+new file mode 100644
+index 0000000000..5f3cc13312
+--- /dev/null
++++ b/boot/opensbi/Config.in
+@@ -0,0 +1,25 @@
++config BR2_TARGET_OPENSBI
++	bool "opensbi"
++	depends on BR2_riscv
++	help
++	  OpenSBI aims to provide an open-source and extensible
++	  implementation of the RISC-V SBI specification for a platform
++	  specific firmware (M-mode) and a general purpose OS,
++	  hypervisor or bootloader (S-mode or HS-mode). OpenSBI
++	  implementation can be easily extended by RISC-V platform or
++	  System-on-Chip vendors to fit a particular hadware
++	  configuration.
++
++	  https://github.com/riscv/opensbi.git
++
++if BR2_TARGET_OPENSBI
++config BR2_TARGET_OPENSBI_PLAT
++	string "OpenSBI Platform"
++	default ""
++	help
++	  Specifies the OpenSBI platform to build. If no platform is
++	  specified only the OpenSBI platform independent static
++	  library libsbi.a is built. If a platform is specified then
++	  the platform specific static library libplatsbi.a and firmware
++	  examples are built.
++endif
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+new file mode 100644
+index 0000000000..13dffb9ce0
+--- /dev/null
++++ b/boot/opensbi/opensbi.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# OpenSBI
++#
++################################################################################
++
++OPENSBI_VERSION = v0.3
++OPENSBI_SITE = $(call github,riscv,opensbi,$(OPENSBI_VERSION))
++OPENSBI_LICENSE = BSD-2-Clause
++OPENSBI_LICENSE_FILES = COPYING.BSD
++OPENSBI_INSTALL_IMAGES = YES
++
++OPENSBI_MAKE_ENV = \
++	CROSS_COMPILE=$(TARGET_CROSS)
++
++OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
++ifneq ($(OPENSBI_PLAT),)
++OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
++endif
++
++define OPENSBI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++ifneq ($(OPENSBI_PLAT),)
++define OPENSBI_INSTALL_IMAGES_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
++	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
++endef
++endif
++
++$(eval $(generic-package))
+-- 
+2.21.0
