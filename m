@@ -1,77 +1,127 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 19 Mar 2019 11:02:56 -0700
-Subject: [Buildroot] [PATCH v2 2/5] configs: qemu_riscv32_virt: Upgrade
- to 4.20 kernel
-In-Reply-To: <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
-References: <20190318210106.6347-1-alistair.francis@wdc.com>
- <20190318210106.6347-2-alistair.francis@wdc.com>
- <d7dc0632-940c-e87f-14c9-42b231106723@embecosm.com>
-Message-ID: <CAKmqyKPN-EOw898Rk1sdQW0QwNOptWbZ4D7KmpaMgFwOqubckw@mail.gmail.com>
+From: Alistair Francis <Alistair.Francis@wdc.com>
+Date: Tue, 19 Mar 2019 18:15:46 +0000
+Subject: [Buildroot] [PATCH v4 1/5] board/qemu/riscv32-virt: Update linux
+ config
+Message-ID: <20190319181449.25067-1-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 19, 2019 at 8:20 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
->
-> Hello Alistair
->
-> On 18/03/2019 21:02, Alistair Francis wrote:
-> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> > ---
-> >  configs/qemu_riscv32_virt_defconfig | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> > index fb37da6a89..6f9a61b11c 100644
-> > --- a/configs/qemu_riscv32_virt_defconfig
-> > +++ b/configs/qemu_riscv32_virt_defconfig
-> > @@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> >  # Filesystem
-> >  BR2_TARGET_ROOTFS_EXT2=y
-> >
-> > -# Linux headers same as kernel, a 4.15 series
-> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-> > +# Linux headers same as kernel, a 4.20 series
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
-> >
-> >  # Kernel
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fe92d7905c6ea0ebeabeb725b8040754ede7c220"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
->
-> I wasn't sure that the 4.20 kernel worked for riscv32 under qemu which
-> is probably why it wasn't bumped from 4.15 in January when the
-> qemu_riscv64_virt_defconfig kernel version was.
->
-> How did you manage to test this? I've tried both qemu 2.12.0 and 3.1.0
-> and neither version will boot the resulting kernel.
+Update the Linux defconfig. This defconfig is the in tree defconfig with
+32-bit support enabled.
 
-I just tested this again and here are my results. All running on QEMU
-3.1.0 and using OpenSBI
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ board/qemu/riscv32-virt/linux.config | 85 +++++++++++++++++++++++++---
+ 1 file changed, 78 insertions(+), 7 deletions(-)
 
-With current master + my OpenSBI patches -> I can boot the 4.20
-kernel, but it never gets to a login prompt.
-
-With current master + my OpenSBI patches + defconfig update -> I can
-boot the 4.20 kernel and I get to a login prompt.
-
-I did some of my original tests with an updated defconfig but I
-thought I tested without any changed. I'll send a patch to update the
-defconfig.
-
-Alistair
-
->
-> Regards
->
-> Mark
->
-> --
-> Mark Corbin
-> Embecosm Ltd.
-> https://www.embecosm.com
->
+diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
+index c25583f768..b7d1825126 100644
+--- a/board/qemu/riscv32-virt/linux.config
++++ b/board/qemu/riscv32-virt/linux.config
+@@ -1,23 +1,94 @@
++CONFIG_32BIT=y
++CONFIG_PAGE_OFFSET=0xC0000000
++CONFIG_PGTABLE_LEVELS=2
+ CONFIG_ARCH_RV32I=y
++# CONFIG_ARCH_RV64I is not set
++CONFIG_MAXPHYSMEM_2GB=y
++CONFIG_LBDAF=y
++# CONFIG_SCSI_NSP32 is not set
++CONFIG_GENERIC_ATOMIC64=y
++CONFIG_GENERIC_LIB_ASHLDI3=y
++CONFIG_GENERIC_LIB_ASHRDI3=y
++CONFIG_GENERIC_LIB_LSHRDI3=y
++CONFIG_GENERIC_LIB_UCMPDI2=y
++CONFIG_GENERIC_LIB_UMODDI3=y
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_CGROUP_BPF=y
++CONFIG_NAMESPACES=y
++CONFIG_USER_NS=y
++CONFIG_CHECKPOINT_RESTORE=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EXPERT=y
++CONFIG_BPF_SYSCALL=y
+ CONFIG_SMP=y
+-CONFIG_NR_CPUS=8
+ CONFIG_PCI=y
+-CONFIG_SYSVIPC=y
++CONFIG_PCIE_XILINX=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
+-# CONFIG_WIRELESS is not set
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++CONFIG_NETLINK_DIAG=y
++CONFIG_DEVTMPFS=y
++CONFIG_BLK_DEV_LOOP=y
+ CONFIG_VIRTIO_BLK=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI=y
++CONFIG_SATA_AHCI_PLATFORM=y
+ CONFIG_NETDEVICES=y
+ CONFIG_VIRTIO_NET=y
+-# CONFIG_ETHERNET is not set
+-# CONFIG_WLAN is not set
++CONFIG_MACB=y
++CONFIG_E1000E=y
++CONFIG_R8169=y
++CONFIG_MICROSEMI_PHY=y
++CONFIG_INPUT_MOUSEDEV=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_OF_PLATFORM=y
+-CONFIG_VIRT_DRIVERS=y
++CONFIG_HVC_RISCV_SBI=y
++# CONFIG_PTP_1588_CLOCK is not set
++CONFIG_DRM=y
++CONFIG_DRM_RADEON=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_UAS=y
+ CONFIG_VIRTIO_MMIO=y
+-CONFIG_EXT2_FS=y
++CONFIG_SIFIVE_PLIC=y
++CONFIG_RAS=y
+ CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_AUTOFS4_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V4=y
++CONFIG_NFS_V4_1=y
++CONFIG_NFS_V4_2=y
++CONFIG_ROOT_NFS=y
++CONFIG_CRYPTO_USER_API_HASH=y
++CONFIG_PRINTK_TIME=y
++# CONFIG_RCU_TRACE is not set
+-- 
+2.21.0
