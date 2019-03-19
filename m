@@ -1,29 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Mar 2019 22:04:07 +0100
-Subject: [Buildroot] [PATCH 1/3] package/uftp: needs MMU,
- threads and wchar
-In-Reply-To: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
-References: <20190319204642.28920-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190319220407.3f3248a3@windsurf>
+Date: Tue, 19 Mar 2019 22:05:54 +0100
+Subject: [Buildroot] [PATCH v4 1/5] board/qemu/riscv32-virt: Update
+ linux config
+In-Reply-To: <20190319181449.25067-1-alistair.francis@wdc.com>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+Message-ID: <20190319220554.79290acf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Mar 2019 21:46:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/47dd067dfdcaae99d50216f59ea6af115d8f1e1e
+On Tue, 19 Mar 2019 18:15:46 +0000
+Alistair Francis <Alistair.Francis@wdc.com> wrote:
+
+> Update the Linux defconfig. This defconfig is the in tree defconfig with
+> 32-bit support enabled.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/uftp/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 
-Applied to master, thanks. Following my comment on PATCH 2/3, I have
-marked PATCH 2/3 and 3/3 as Changes Requested in Patchwork.
+If it's just the in-tree defconfig + one option to enable 32-bit
+support, what about using the in-tree defconfig directly + a small
+config fragment to enable 32-bit support ?
 
 Thanks!
 
