@@ -1,74 +1,69 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 18 Mar 2019 22:35:27 -0300 (BRT)
-Subject: [Buildroot] [PATCH v5] package/pamtester: new package
-In-Reply-To: <87lg2vtrcv.fsf@dell.be.48ers.dk>
-References: <1549290835-14995-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87lg2vtrcv.fsf@dell.be.48ers.dk>
-Message-ID: <639943914.2901998.1552959327484.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 19 Mar 2019 06:44:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpcap: fix
+ bluez5_utils-headers dependency
+In-Reply-To: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
+References: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190319044423.46h2z3cgmr6zdxjh@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Matthew Weber" <matthew.weber@rockwellcollins.com>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Segunda-feira, 4 de fevereiro de 2019 15:07:12
-> Subject: Re: [Buildroot] [PATCH v5] package/pamtester: new package
+Hi Fabrice,
 
->>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+On Mon, Mar 18, 2019 at 11:40:42PM +0100, Fabrice Fontaine wrote:
+> Commit c46afc37dc877f1e94ffde0d77585290711b27ec changed bluez5-utils
+> dependency by bluez5_utils-headers without replacing the test on
+> BR2_PACKAGE_BLUEZ5_UTILS by BR2_PACKAGE_BLUEZ5_UTILS_HEADERS
 > 
-> > From: Carlos Santos <casantos@datacom.com.br>
-> > Utility for testing pluggable authentication modules (PAM) facility.
+> Fix this mistake and also add a select on
+> BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS is set
+> so the user does not have to do it
 > 
-> > While specifically designed to help PAM module authors to test their
-> > modules, that might also be handy for system administrators interested
-> > in building a centralised authentication system using common standards
-> > such as NIS, SASL and LDAP.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c6828df1f3782564451ddd4187ff026679bf37d8
 > 
-> > One patch was included from the Debian bugtracker which fixes a
-> > spelling error.
-> 
-> I still don't understand why we need to carry such patch.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Because I'm a maniac and the misspelling puts me nervous.
+Acked-by: Baruch Siach <baruch@tkos.co.il>
 
-> > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
-> > Changes
-> > v4 -> v5
-> >  - fixed title of patch to be package/
-> >  - Added signed-offs in Debian patch
-> >  - Added license file hash
-> >  - Spelling of pamtester in kconfig comment
-> >  - DEVELOPERS entry needed fixup
-> > ---
-> 
-> > +++ b/package/pamtester/Config.in
-> > @@ -0,0 +1,15 @@
-> > +config BR2_PACKAGE_PAMTESTER
-> > +	bool "pamtester"
-> > +	depends on BR2_PACKAGE_LINUX_PAM
-> > +	help
-> > +	  A tiny utility for testing pluggable authentication modules
-> > +	  (PAM) facility. While specifically designed to help PAM module
-> > +	  authors to test their modules, that might also be handy for
-> > +	  system administrators interested in building a centralised
-> > +	  authentication system using common standards such as NIS, SASL
-> > +	  and LDAP.
-> > +
-> > +	  http://pamtester.sourceforge.net/
-> > +
-> > +comment "pamtester depends on linux-pam"
-> > +	depends on !BR2_PACKAGE_LINUX_PAM
-> 
-> I'm not sure this comment is really helpful, but OK.
-> 
-> Committed with the spelling fix patch dropped, thanks.
+Thanks,
+baruch
 
-I accept that as a sad fact of life. Thanks. ;-)
+> ---
+>  package/libpcap/Config.in  | 1 +
+>  package/libpcap/libpcap.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libpcap/Config.in b/package/libpcap/Config.in
+> index 643acbef6e..74429f209a 100644
+> --- a/package/libpcap/Config.in
+> +++ b/package/libpcap/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBPCAP
+>  	bool "libpcap"
+> +	select BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  A system-independent library for user-level network packet
+> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+> index 2f46426d37..ebceca5273 100644
+> --- a/package/libpcap/libpcap.mk
+> +++ b/package/libpcap/libpcap.mk
+> @@ -26,7 +26,7 @@ define LIBPCAP_CONFIG_REMOVE_RPATH
+>  endef
+>  LIBPCAP_POST_BUILD_HOOKS = LIBPCAP_CONFIG_REMOVE_RPATH
+>  
+> -ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
+> +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),y)
+>  LIBPCAP_DEPENDENCIES += bluez5_utils-headers
+>  else
+>  LIBPCAP_CONF_OPTS += --disable-bluetooth
+> -- 
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
