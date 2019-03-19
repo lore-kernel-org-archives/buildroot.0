@@ -1,73 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Mar 2019 22:50:17 +0100
-Subject: [Buildroot] [PATCH v2 1/2] pkg-generic: Depend on host-{xz,
- lzip} only for fitting archives
-In-Reply-To: <20190317212014.3831-1-nolange79@gmail.com>
-References: <20190317212014.3831-1-nolange79@gmail.com>
-Message-ID: <20190319215017.GF2702@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Mar 2019 22:51:07 +0100
+Subject: [Buildroot] [PATCH v8 1/3] openjdk: new package
+In-Reply-To: <20190315205233.128763-1-aduskett@gmail.com>
+References: <20190315205233.128763-1-aduskett@gmail.com>
+Message-ID: <20190319225107.707b903f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello Adam,
 
-On 2019-03-17 22:20 +0100, Norbert Lange spake thusly:
-> results in cleaner dependency graphs, and usually omits host-lzip
-> from being built.
+On Fri, 15 Mar 2019 16:52:31 -0400
+aduskett at gmail.com wrote:
 
-As for dependency graphs, there will still be a lot of package that may
-depend on host-xz, and that would still clutter it a bit more than
-necessary (we have much less packages needing host-lzip, 4 exactly).
-
-But that sure is still a nice improvement.
-
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/pkg-generic.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 4353bd3868..89da43d5e5 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -607,12 +607,16 @@ $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
->  endif
->  
->  ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> +ifneq ($$(filter .xz .lzma,$$(suffix $$($(2)_SOURCE))),)
->  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
->  endif
-> +endif
->  
->  ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> +ifeq ($$(suffix $$($(2)_SOURCE)),.lz)
+> OpenJDK is a free and open-source implementation of the Java Platform.
+> This package provides the option to build a client or a server JVM interpreter.
 
-Please use the same pattern here as for the other one. It helps with
-readability and maintainability.
+Since it was merged, this package caused a few build issues (but not
+that many). I had a quick look in order to hopefully help resolving
+them:
 
-Regards,
-Yann E. MORIN.
+ - http://autobuild.buildroot.net/results/a03/a034e641fe163d4502fd9411af1d96c14d13c5f2/build-end.log
+   http://autobuild.buildroot.net/results/84f/84f423cc795ce0957801a5f7b35c0c800f527fb1/build-end.log
 
->  $(2)_EXTRACT_DEPENDENCIES += $$(BR2_LZIP_HOST_DEPENDENCY)
->  endif
-> +endif
->  
->  ifeq ($$(BR2_CCACHE),y)
->  ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+   These are the same, the host machine tuple is not recognized. I
+   believe the fix is as easy as adding a POST_PATCH_HOOKS that copies
+   support/gnuconfig/config.sub over $(@D)/make/autoconf/build-aux/autoconf-config.sub
 
+ - http://autobuild.buildroot.net/results/f76/f763193801c4af8289c49832811395df49b1b876/build-end.log
+
+   This one has stuff like error: unknown type name
+   'snd_rawmidi_stream_t'; did you mean 'snd_pcm_stream_t'?. The problem is that the configuration has 
+   BR2_PACKAGE_ALSA_LIB_RAWMIDI disabled. I would recommend you to make
+   a build of OpenJDK with BR2_PACKAGE_ALSA_LIB=y but all its
+   sub-options disabled, and see which sub-options are mandatory for
+   OpenJDK to build. Then you can add the relevant select
+   BR2_PACKAGE_ALSA_LIB_foobaz to openjdk/Config.in
+
+ - http://autobuild.buildroot.net/results/9d2/9d27e6389a18ddf4266511b58e827487d4a78437/build-end.log
+
+   This one is some weird OpenJDK specific stuff, I can't really help
+   here.
+
+ - http://autobuild.buildroot.net/results/633/633b2361f7ab588fcc41fcbf5e92aa4eca895c6a/build-end.log
+
+   Same for this one.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
