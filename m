@@ -1,33 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Mar 2019 23:42:30 +0100
-Subject: [Buildroot] [RFC] openssh: add option to allow login as root
-In-Reply-To: <20190319114156.10696-1-esben.haabendal@gmail.com> (Esben
- Haabendal's message of "Tue, 19 Mar 2019 12:41:56 +0100")
-References: <20190319114156.10696-1-esben.haabendal@gmail.com>
-Message-ID: <87mulqebah.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Mar 2019 00:18:21 +0100
+Subject: [Buildroot] [RFC PATCH] package/libcamera: Add libcamera package
+In-Reply-To: <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
+References: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
+ <20190319125040.GA2702@scaer>
+ <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
+Message-ID: <100d21c9-da59-239c-29b2-e6d5bb38106d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esben.haabendal@gmail.com> writes:
 
- > From: Esben Haabendal <esben@haabendal.dk>
- > What do you think. Is this kind of micro-management of a configuration
- > file something that I should keep out of tree?
 
-We discussed it tonight on IRC and didn't really get to a good compromise.
+On 19/03/2019 15:12, Kieran Bingham wrote:
+> Hi Yann,
+> 
+> Thank you for the review,
+> 
+> On 19/03/2019 12:50, Yann E. MORIN wrote:
+>> Kieran, All,
+>>
+>> On 2019-03-19 11:03 +0000, Kieran Bingham spake thusly:
 
-On one hand, we prefer to stick with upstream defaults (especially when
-security is involved), but it is true that dropbear allows root logins
-by default. We prefer to not add configuration options for these kind of
-detailed policy decisions, as openssh has a LOT of other configuration
-options - But silently allowing root logins when we have "always"
-disallowed it in the past also isn't nice.
+[snip]
+>>> +LIBCAMERA_SITE_METHOD = git
+>>> +LIBCAMERA_DEPENDENCIES = udev
 
-So all in all, this kind of policy tweaks are better done in a post
-build script.
+ Since this is a library, I'd expect _INSTALL_STAGING = YES.
 
--- 
-Bye, Peter Korsgaard
+>>> +LIBCAMERA_LICENSE = LGPL-2.0+
+>>
+>> This is not LGPL-2.0+, but LGPL-2.1+
+> 
+> Ugh, I should have remembered that, especially as I added the licenses...
+> 
+>>
+>> There are actually 2 other licenses applicable to this package: GPLv2.0+
+>> and CC-BY-SA-4.0 (or later?).
+>>
+>> We usually specify what part of the package they apply to (correct me
+>> if/where I am wrong):
+>>
+>>     LIBCAMERA_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (utils, test), CC-By_SA-4.0 (doc)
+
+ AFAIU, we only specify licenses of stuff installed on target. Since
+/usr/share/doc gets removed in target-finalize, the doc license should not be
+relevant.
+
+ BTW it would be nice if there was a meson option to disable building docs. I
+don't know how it is for the libcamera doc, but doxygen and sphinx are sometimes
+a bit slow.
+
+> 
+> 
+> That looks accurate to me.
+> 
+> I've updated the patch.
+> 
+>>
+>> Please also specify the files that contain the license texts:
+>>
+>>     LIBCAMERA_LICENSE_FILES = \
+>>         licenses/cc-by-sa-v4.0.txt \
+>>         licenses/developer-certificate-of-origin.txt \
+>>         licenses/gnu-gpl-2.0.txt \
+>>         licenses/gnu-lgpl-2.1.txt
+
+ Please also add hashes for these files.
+
+ Thanks!
+
+ Regards,
+ Arnout
