@@ -1,72 +1,46 @@
-From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Tue, 19 Mar 2019 12:43:44 +0100
-Subject: [Buildroot] [PATCH] mtree: new package
-Message-ID: <20190319114344.11138-1-esben.haabendal@gmail.com>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 19 Mar 2019 11:54:13 +0000
+Subject: [Buildroot] [PATCH v3 2/3] boot/opensbi: Initial commit of
+ OpenSBI for RISC-V
+In-Reply-To: <20190318224309.11805-2-alistair.francis@wdc.com>
+References: <20190318224309.11805-1-alistair.francis@wdc.com>
+ <20190318224309.11805-2-alistair.francis@wdc.com>
+Message-ID: <ce95dc40-f08b-b1f8-7d0b-cbcd6db7e0d1@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Esben Haabendal <esben@haabendal.dk>
+Hello Alistair
 
-Signed-off-by: Esben Haabendal <esben@haabendal.dk>
----
- package/Config.in       |  1 +
- package/mtree/Config.in | 10 ++++++++++
- package/mtree/mtree.mk  | 15 +++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/mtree/Config.in
- create mode 100644 package/mtree/mtree.mk
+On 18/03/2019 22:44, Alistair Francis wrote:
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> new file mode 100644
+> index 0000000000..87e4b5c455
+> --- /dev/null
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# OpenSBI
+> +#
+> +################################################################################
+> +
+> +OPENSBI_VERSION = ca20ac0cd4c099006d4eea4d9ac7bd7b58e2ae0f
+> +OPENSBI_SITE = git://github.com/riscv/opensbi.git
+It makes things clearer for me if you use the v0.3 tag here instead of
+the commit hash for v0.3.
 
-diff --git a/package/Config.in b/package/Config.in
-index b5321aeb49c9..13f7fae09df6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -197,6 +197,7 @@ menu "Filesystem and flash utilities"
- 	source "package/mmc-utils/Config.in"
- 	source "package/mtd/Config.in"
- 	source "package/mtools/Config.in"
-+	source "package/mtree/Config.in"
- 	source "package/nfs-utils/Config.in"
- 	source "package/nilfs-utils/Config.in"
- 	source "package/ntfs-3g/Config.in"
-diff --git a/package/mtree/Config.in b/package/mtree/Config.in
-new file mode 100644
-index 000000000000..97e1cf614972
---- /dev/null
-+++ b/package/mtree/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_MTREE
-+	bool "mtree"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  mtree - utility for creating and verifying file hierarchies.
-+
-+	  Port of the mtree utility, originally only available in BSD
-+	  distributions, to Linux and other operating systems.
-+
-+	  https://github.com/archiecobbs/mtree-port
-diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
-new file mode 100644
-index 000000000000..b828dd53ffe3
---- /dev/null
-+++ b/package/mtree/mtree.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# mtree
-+#
-+################################################################################
-+
-+MTREE_VERSION = 1.0.4
-+MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
-+MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
-+MTREE_LICENSE = BSD-3-Clause
-+MTREE_LICENSE_FILES = COPYING
-+
-+MTREE_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-+
-+$(eval $(autotools-package))
+
+OPENSBI_VERSION = v0.3
+OPENSBI_SITE = $(call github,riscv,opensbi,$(OPENSBI_VERSION))
+
+Regards
+
+Mark
+
 -- 
-2.21.0
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
