@@ -1,25 +1,40 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 19 Mar 2019 15:23:34 -0000 (UTC)
-Subject: [Buildroot] [RFC] openssh: add option to allow login as root
-References: <20190319114156.10696-1-esben.haabendal@gmail.com>
-Message-ID: <q6r1hm$26sl$1@blaine.gmane.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 19 Mar 2019 11:31:49 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: check for selinux
+Message-ID: <20190319153149.84900-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-03-19, Esben Haabendal <esben.haabendal@gmail.com> wrote:
+From: Adam Duskett <Aduskett@gmail.com>
 
-> What do you think. Is this kind of micro-management of a
-> configuration file something that I should keep out of tree?
+If libselinux is selected, explicitly set --enable-selinux in the configure
+options and build the library first.
 
-I don't have a strong opinion either way.  I've always done things
-like that (including that exact setting change) with a postbuild
-script.  That works well for me, and it's actually kind of nice having
-all those custom configuration changes in that one place.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/libglib2/libglib2.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d34bfabd52..63bfec32d6 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -137,6 +137,13 @@ LIBGLIB2_CONF_OPTS += --with-libiconv=gnu
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LIBGLIB2_CONF_OPTS += --enable-selinux
++LIBGLIB2_DEPENDENCIES += libselinux
++else
++LIBGLIB2_CONF_OPTS += --disable-selinux
++endif
++
+ # Purge gdb-related files
+ ifneq ($(BR2_PACKAGE_GDB),y)
+ define LIBGLIB2_REMOVE_GDB_FILES
 -- 
-Grant Edwards               grant.b.edwards        Yow! I want to so HAPPY,
-                                  at               the VEINS in my neck STAND
-                              gmail.com            OUT!!
+2.20.1
