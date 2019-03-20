@@ -1,98 +1,53 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Wed, 20 Mar 2019 21:09:44 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
-Message-ID: <20190320210943.21377-1-adrien@gallouet.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Mar 2019 22:12:36 +0100
+Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
+In-Reply-To: <20190320003706.1126-2-alistair.francis@wdc.com>
+References: <20190320003706.1126-1-alistair.francis@wdc.com>
+ <20190320003706.1126-2-alistair.francis@wdc.com>
+Message-ID: <20190320221236.1ea9c11b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/bird/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++
- package/bird/bird.mk   | 16 +++++++++++++++
- 2 files changed, 62 insertions(+)
+Hello Francis,
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index a69551f94e..298348d098 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -20,4 +20,50 @@ config BR2_PACKAGE_BIRD_CLIENT
- 	help
- 	  Enable the BIRD client
- 
-+config BR2_PACKAGE_BIRD_BABEL
-+	bool "babel"
-+	help
-+	  Enable Babel protocol.
-+
-+config BR2_PACKAGE_BIRD_BFD
-+	bool "bfd"
-+	help
-+	  Enable BFD protocol.
-+
-+config BR2_PACKAGE_BIRD_BGP
-+	bool "bgp"
-+	default y
-+	help
-+	  Enable BGP protocol.
-+
-+config BR2_PACKAGE_BIRD_MRT
-+	bool "mrt"
-+	help
-+	  Enable MRT protocol.
-+
-+config BR2_PACKAGE_BIRD_OSPF
-+	bool "ospf"
-+	help
-+	  Enable OSPFv2 and OSPFv3 protocol.
-+
-+config BR2_PACKAGE_BIRD_PERF
-+	bool "perf"
-+	help
-+	  Enable Perf protocol.
-+
-+config BR2_PACKAGE_BIRD_PIPE
-+	bool "pipe"
-+	help
-+	  Enable Pipe protocol.
-+
-+config BR2_PACKAGE_BIRD_RADV
-+	bool "radv"
-+	help
-+	  Enable RAdv protocol.
-+
-+config BR2_PACKAGE_BIRD_STATIC
-+	bool "static"
-+	help
-+	  Enable Static protocol.
-+
- endif
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index e165be61c0..26bec01ebf 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -17,4 +17,20 @@ else
- BIRD_CONF_OPTS += --disable-client
- endif
- 
-+# BUG: RIP is needed for now
-+BR2_PACKAGE_BIRD_RIP=y
-+
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
-+
-+BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
-+
- $(eval $(autotools-package))
+You are respining the patches too fast, without answering some of the
+questions, and therefore there's still an issue, see below.
+
+On Wed, 20 Mar 2019 00:38:05 +0000
+Alistair Francis <Alistair.Francis@wdc.com> wrote:
+
+> +ifneq ($(OPENSBI_PLAT),)
+> +OPENSBI_PLAT_INSTALL = \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> +endif
+> +
+> +# Install libsbi.a in the host lib dir so it can be linked in the future.
+> +define OPENSBI_INSTALL_IMAGES_CMDS
+> +	$(OPENSBI_PLAT_INSTALL)
+> +	$(INSTALL) -m 0644 -D $(@D)/build/lib/libsbi.a $(HOST_DIR)/usr/lib
+
+I suppose that libsbi.a contains code cross-compiled for RISC-V, so
+installing it in $(HOST_DIR) is wrong in this case. It should go in
+$(STAGING_DIR).
+
+The second question, which I asked in my review of your v4 is whether
+this library is meant to be linked into bare-metal code (which is what
+I would expect for something related to firmware) or to Linux
+user-space applications. In the latter case, installing to
+$(STAGING_DIR)/usr/lib is the right thing to do. In the former case
+however, it should probably be installed elsewhere, maybe
+$(STAGING_DIR)/usr/share/opensbi (but I'm not a FHS expert).
+
+Also, when -D is used, the destination path should include the filename.
+
+Best regards,
+
+Thomas
 -- 
-2.19.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
