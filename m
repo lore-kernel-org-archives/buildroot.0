@@ -1,103 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Mar 2019 13:36:54 +0100
-Subject: [Buildroot] [PATCH] package/gesftpserver: bump version to latest
- stable
-Message-ID: <20190320123654.10985-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 20 Mar 2019 13:45:08 +0100
+Subject: [Buildroot] [PATCH v2] support/testing: add xserver + Mesa OpenGL
+ (GLX) + glxinfo
+Message-ID: <20190320124508.5344-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, gesftpserver wants to treat al warnings as errors, but there
-is an actual warning in the release, so we quiesce that by not treating
-warnings as errors.
+From: Romain Naour <romain.naour@gmail.com>
 
-We also backport a patch from upstream, to fix the ordering of some
-fields when sending file attributes.
+This test allow to check if the xserver with GLX is working properly.
+This is a basic test but it allow to trigger the current bug reported
+by [1].
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To test if the glxinfo test is working, you can change "-display :0" by
+"-display :1" in the glxinfo command line.
 
+[1] https://bugs.buildroot.org/show_bug.cgi?id=11591
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-Result of test-pkg -a (with the reason):
-                br-arm-basic [ 4/43]: SKIPPED   (no wchar)
-       br-arm-cortex-m4-full [ 7/43]: SKIPPED   (no MMU)
-        br-arm-full-nothread [ 9/43]: SKIPPED   (no thread)
-           br-m68k-5208-full [13/43]: SKIPPED   (no MMU)
-   br-powerpc-603e-basic-cpp [22/43]: SKIPPED   (no wchar)
-43 builds, 5 skipped, 0 build failed, 0 legal-info failed
+v2: add wait_for_xserver() (Peter)
+    Add some comments about grep error code
 ---
- ...r-of-v3-attributes-according-to-draft-iet.patch | 30 ++++++++++++++++++++++
- package/gesftpserver/gesftpserver.hash             |  3 ++-
- package/gesftpserver/gesftpserver.mk               |  6 ++++-
- 3 files changed, 37 insertions(+), 2 deletions(-)
- create mode 100644 package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
+ support/testing/tests/package/test_glxinfo.py | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 support/testing/tests/package/test_glxinfo.py
 
-diff --git a/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch b/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
+diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
 new file mode 100644
-index 0000000000..3697d0e525
+index 0000000000..1b625b9e10
 --- /dev/null
-+++ b/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
-@@ -0,0 +1,30 @@
-+From 4b5c7eb63894bd2b1fedeb2a8e9bd16bf3c8c555 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Bernd=20Holzm=C3=BCller?=
-+ <bernd.holzmueller@tiggerswelt.net>
-+Date: Mon, 11 Feb 2019 23:57:01 +0100
-+Subject: [PATCH] Change order of v3-attributes according to
-+ draft-ietf-secsh-filexfer-00/02
++++ b/support/testing/tests/package/test_glxinfo.py
+@@ -0,0 +1,65 @@
++import os
 +
-+[yann.morin.1998 at free.fr: backport from upstream]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ v3.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++import infra.basetest
 +
-+diff --git a/v3.c b/v3.c
-+index 57cc31e..1fd86ad 100644
-+--- a/v3.c
-++++ b/v3.c
-+@@ -121,8 +121,8 @@ static void v3_sendattrs(struct sftpjob *job, const struct sftpattr *attrs) {
-+       fatal("sending out-of-range mtime");
-+     if(a != attrs->atime.seconds)
-+       fatal("sending out-of-range mtime");
-+-    sftp_send_uint32(job->worker, m);
-+     sftp_send_uint32(job->worker, a);
-++    sftp_send_uint32(job->worker, m);
-+   }
-+   /* Note that we just discard unknown bits rather than reporting errors. */
-+ }
-+-- 
-+2.14.1
++GLXINFO_TIMEOUT = 120
 +
-diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
-index 1a8a5f3492..790cbe97c2 100644
---- a/package/gesftpserver/gesftpserver.hash
-+++ b/package/gesftpserver/gesftpserver.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 8ac1938d0f62a05799b2aeab489d6ce098c3fe53280a9b66c0957b1fdcbcbab9  sftpserver-0.2.2.tar.gz
-+sha256  4963b85787de3485085a5356c671c58b8b33125f528ff1b2fe8b534ed8a0c1bd  sftpserver-1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
-index 58c6270a09..ff7ce768ae 100644
---- a/package/gesftpserver/gesftpserver.mk
-+++ b/package/gesftpserver/gesftpserver.mk
-@@ -4,11 +4,15 @@
- #
- ################################################################################
- 
--GESFTPSERVER_VERSION = 0.2.2
-+GESFTPSERVER_VERSION = 1
- GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
- GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
- GESFTPSERVER_LICENSE = GPL-2.0+
- GESFTPSERVER_LICENSE_FILES = COPYING
++class TestGlxinfo(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_x86_core2=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-core2/tarballs/x86-core2--glibc--bleeding-edge-2018.11-1.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
++        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
++        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
++        BR2_PACKAGE_MESA3D_DEMOS=y
++        BR2_PACKAGE_MESA3D=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
++        BR2_PACKAGE_XORG7=y
++        BR2_PACKAGE_XSERVER_XORG_SERVER=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+# "Missing prototype" warning treated as error
-+GESFTPSERVER_CONF_OPTS = --disable-warnings-as-errors
++    def wait_for_xserver(self):
++        # xserver takes some time to start up
++        _, _ = self.emulator.run('while [ ! -e /var/run/xorg.pid ]; do sleep 1; done', 120)
 +
- # forgets to link against pthread when cross compiling
- GESFTPSERVER_CONF_ENV = LIBS=-lpthread
- 
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.ext2")
++        kern = os.path.join(self.builddir, "images", "bzImage")
++        # glxinfo overallocate memory and the minimum that seemed to work was 512MB
++        self.emulator.boot(arch="i386",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyS0"],
++                           options=["-M", "pc", "-m", "512", "-drive", "file={},if=virtio,format=raw".format(img)])
++        self.emulator.login()
++
++    def test_run(self):
++        self.login()
++        self.wait_for_xserver()
++
++        # The test case verifies that the xserver with GLX is working
++        cmd = "glxinfo -display :0 2>&1 >/dev/null | grep Error"
++        # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
++        _, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
++        # Test the return code of grep command:
++        # 0: glxinfo test is KO, there is an error returned by glxinfo.
++        # 1: glxinfo test is OK, there is no error returned by glxinfo.
++        self.assertEqual(exit_code, 1)
 -- 
-2.14.1
+2.20.1
