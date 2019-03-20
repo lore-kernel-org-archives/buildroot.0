@@ -1,74 +1,69 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Wed, 20 Mar 2019 14:28:59 -0700
-Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
-In-Reply-To: <20190320221236.1ea9c11b@windsurf>
-References: <20190320003706.1126-1-alistair.francis@wdc.com>
- <20190320003706.1126-2-alistair.francis@wdc.com>
- <20190320221236.1ea9c11b@windsurf>
-Message-ID: <CAKmqyKP7TfOOOkggSVJdJZVzp3mrOM1Vb9Y-mWQpEPPdrYXjVw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Mar 2019 22:33:30 +0100
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: support 32bit
+ Arm targets
+Message-ID: <20190320213117.0474281DFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 20, 2019 at 2:12 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Francis,
->
-> You are respining the patches too fast, without answering some of the
-> questions, and therefore there's still an issue, see below.
+commit: https://git.buildroot.net/buildroot/commit/?id=9dbc934217e170578d4cbfdf524bc1b3988d0b9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sorry, I didn't realise I didn't respond to a question.
+This change allows one to build the TF-A (Trusted Firmware A) for
+32bit architectures Armv7 and Armv8 platforms. TF-A supports these
+configuration since release v1.5.
 
->
-> On Wed, 20 Mar 2019 00:38:05 +0000
-> Alistair Francis <Alistair.Francis@wdc.com> wrote:
->
-> > +ifneq ($(OPENSBI_PLAT),)
-> > +OPENSBI_PLAT_INSTALL = \
-> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
-> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-> > +endif
-> > +
-> > +# Install libsbi.a in the host lib dir so it can be linked in the future.
-> > +define OPENSBI_INSTALL_IMAGES_CMDS
-> > +     $(OPENSBI_PLAT_INSTALL)
-> > +     $(INSTALL) -m 0644 -D $(@D)/build/lib/libsbi.a $(HOST_DIR)/usr/lib
->
-> I suppose that libsbi.a contains code cross-compiled for RISC-V, so
-> installing it in $(HOST_DIR) is wrong in this case. It should go in
-> $(STAGING_DIR).
+Change dependency on BR2_aarch64 into a dependency on either
+BR2_ARM_CPU_ARMV8A/BR2_ARM_CPU_ARMV7A to better define
+the target architectures supported by the package.
 
-Yes, it does contain cross compiled code. I have changed it to the STAGING_DIR.
+Set package configuration directive ARM_ARCH_MAJOR according to
+BR2_ARM_CPU_ARMV8A/BR2_ARM_CPU_ARMV7A. Set package configuration
+directive ARCH based on BR2_aarch64/BR2_arm.
 
->
-> The second question, which I asked in my review of your v4 is whether
-> this library is meant to be linked into bare-metal code (which is what
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in               |  3 ++-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-Sorry, I missed your question. It is meant to be linked into bare metal code.
-
-> I would expect for something related to firmware) or to Linux
-> user-space applications. In the latter case, installing to
-> $(STAGING_DIR)/usr/lib is the right thing to do. In the former case
-> however, it should probably be installed elsewhere, maybe
-> $(STAGING_DIR)/usr/share/opensbi (but I'm not a FHS expert).
-
-$(STAGING_DIR)/usr/share/opensbi looks good to me. I will use that.
-
->
-> Also, when -D is used, the destination path should include the filename.
-
-Ok, fixed.
-
-Alistair
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 823a3510b5..428a4ce155 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+ 	bool "ARM Trusted Firmware (ATF)"
+-	depends on BR2_aarch64 && BR2_TARGET_UBOOT
++	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
++		   BR2_TARGET_UBOOT
+ 	help
+ 	  Enable this option if you want to build the ATF for your ARM
+ 	  based embedded device.
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 8ca3864dd0..fb80bd1fbe 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -35,6 +35,18 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+ 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
+ 
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
++else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=8
++endif
++
++ifeq ($(BR2_arm),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch32
++else ifeq ($(BR2_aarch64),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64
++endif
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
