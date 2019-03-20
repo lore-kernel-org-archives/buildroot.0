@@ -1,48 +1,97 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 20 Mar 2019 21:36:17 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/jq: add oniguruma optional dependency
-In-Reply-To: <20190320203617.27496-1-fontaine.fabrice@gmail.com>
-References: <20190320203617.27496-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190320203617.27496-2-fontaine.fabrice@gmail.com>
+From: Esben Haabendal <esben.haabendal@gmail.com>
+Date: Wed, 20 Mar 2019 21:45:51 +0100
+Subject: [Buildroot] [PATCH v2] mtree: new package
+Message-ID: <20190320204551.16245-1-esben.haabendal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Esben Haabendal <esben@haabendal.dk>
+
+Signed-off-by: Esben Haabendal <esben@haabendal.dk>
 ---
-Changes v1 -> v2:
- - Always enable oniguruma on host-jq
+ DEVELOPERS              |  3 +++
+ package/Config.in       |  1 +
+ package/mtree/Config.in | 12 ++++++++++++
+ package/mtree/mtree.mk  | 23 +++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/mtree/Config.in
+ create mode 100644 package/mtree/mtree.mk
 
- package/jq/jq.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index aebe8c86e4..d8cab80c9a 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -17,8 +17,18 @@ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
- HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e0ac08e1136..4b827ae4d276 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -697,6 +697,9 @@ F:	package/mxsldr/
+ N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
+ F:	package/szip/
  
- # jq explicitly enables maintainer mode, which we don't need/want
--JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
--HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
-+JQ_CONF_OPTS += --disable-maintainer-mode
-+HOST_JQ_CONF_OPTS += --disable-maintainer-mode
++N:	Esben Haabendal <esben@haabendal.dk>
++F:	package/mtree/
 +
-+HOST_JQ_CONF_OPTS += --with-oniguruma
-+HOST_JQ_DEPENDENCIES += host-oniguruma
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
+ F:	package/optee-benchmark/
+diff --git a/package/Config.in b/package/Config.in
+index b5321aeb49c9..13f7fae09df6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -197,6 +197,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/mmc-utils/Config.in"
+ 	source "package/mtd/Config.in"
+ 	source "package/mtools/Config.in"
++	source "package/mtree/Config.in"
+ 	source "package/nfs-utils/Config.in"
+ 	source "package/nilfs-utils/Config.in"
+ 	source "package/ntfs-3g/Config.in"
+diff --git a/package/mtree/Config.in b/package/mtree/Config.in
+new file mode 100644
+index 000000000000..38375f012e28
+--- /dev/null
++++ b/package/mtree/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_MTREE
++	bool "mtree"
++	# mtree uses <fts.h> which is not included by default in uClibc
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_OPENSSL
++	help
++	  mtree - utility for creating and verifying file hierarchies.
 +
-+ifeq ($(BR2_PACKAGE_ONIGURUMA),y)
-+JQ_DEPENDENCIES += oniguruma
-+JQ_CONF_OPTS += --with-oniguruma
-+else
-+JQ_CONF_OPTS += --without-oniguruma
-+endif
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++	  Port of the mtree utility, originally only available in BSD
++	  distributions, to Linux and other operating systems.
++
++	  https://github.com/archiecobbs/mtree-port
+diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
+new file mode 100644
+index 000000000000..9c5fa2d44d19
+--- /dev/null
++++ b/package/mtree/mtree.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# mtree
++#
++################################################################################
++
++MTREE_VERSION = 1.0.4
++MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
++MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
++MTREE_LICENSE = BSD-3-Clause
++MTREE_LICENSE_FILES = COPYING
++
++MTREE_DEPENDENCIES = openssl
++
++MTREE_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++
++MTREE_TARGET_CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))"
++MTREE_TARGET_CPPFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
++MTREE_CONF_ENV = \
++	CPPFLAGS="$(MTREE_TARGET_CPPFLAGS)" \
++	CFLAGS="$(MTREE_TARGET_CFLAGS)"
++
++$(eval $(autotools-package))
 -- 
-2.14.1
+2.21.0
