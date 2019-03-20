@@ -1,38 +1,125 @@
 From: Alistair Francis <Alistair.Francis@wdc.com>
 Date: Wed, 20 Mar 2019 00:38:05 +0000
-Subject: [Buildroot] [PATCH v5 4/4] boot/riscv-pk: Deprecate riscv-pk and BBL
+Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
 In-Reply-To: <20190320003706.1126-1-alistair.francis@wdc.com>
 References: <20190320003706.1126-1-alistair.francis@wdc.com>
-Message-ID: <20190320003706.1126-4-alistair.francis@wdc.com>
+Message-ID: <20190320003706.1126-2-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+OpenSBI is a much improved alternative to BBL (riscv-pk). Add OpenSBI
+support to buildroot.
+
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- boot/riscv-pk/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ DEVELOPERS              |  1 +
+ boot/Config.in          |  1 +
+ boot/opensbi/Config.in  | 25 +++++++++++++++++++++++++
+ boot/opensbi/opensbi.mk | 37 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 boot/opensbi/Config.in
+ create mode 100644 boot/opensbi/opensbi.mk
 
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-index b4fe36590f..cf9c5cd8ee 100644
---- a/boot/riscv-pk/Config.in
-+++ b/boot/riscv-pk/Config.in
-@@ -3,10 +3,13 @@ comment "riscv-pk needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e0ac08e11..91eda42949 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -122,6 +122,7 @@ F:	package/kvazaar/
+ F:	package/v4l2loopback/
  
- config BR2_TARGET_RISCV_PK
--	bool "riscv-pk"
-+	bool "riscv-pk (deprecated)"
- 	depends on BR2_riscv
- 	depends on BR2_LINUX_KERNEL
- 	help
-+	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
-+	  been deprecated. Please use OpenSBI instead.
+ N:	Alistair Francis <alistair@alistair23.me>
++F:	boot/opensbi/
+ F:	package/xen/
+ 
+ N:	Alvaro G. M <alvaro.gamez@hazent.com>
+diff --git a/boot/Config.in b/boot/Config.in
+index 74481e7545..97bd3de6e9 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -14,6 +14,7 @@ source "boot/lpc32xxcdl/Config.in"
+ source "boot/mv-ddr-marvell/Config.in"
+ source "boot/mxs-bootlets/Config.in"
+ source "boot/optee-os/Config.in"
++source "boot/opensbi/Config.in"
+ source "boot/riscv-pk/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/shim/Config.in"
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+new file mode 100644
+index 0000000000..5f3cc13312
+--- /dev/null
++++ b/boot/opensbi/Config.in
+@@ -0,0 +1,25 @@
++config BR2_TARGET_OPENSBI
++	bool "opensbi"
++	depends on BR2_riscv
++	help
++	  OpenSBI aims to provide an open-source and extensible
++	  implementation of the RISC-V SBI specification for a platform
++	  specific firmware (M-mode) and a general purpose OS,
++	  hypervisor or bootloader (S-mode or HS-mode). OpenSBI
++	  implementation can be easily extended by RISC-V platform or
++	  System-on-Chip vendors to fit a particular hadware
++	  configuration.
 +
- 	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
- 	  Boot Loader (BBL) which has been designed to boot a Linux
- 	  kernel on a RISC-V processor.
++	  https://github.com/riscv/opensbi.git
++
++if BR2_TARGET_OPENSBI
++config BR2_TARGET_OPENSBI_PLAT
++	string "OpenSBI Platform"
++	default ""
++	help
++	  Specifies the OpenSBI platform to build. If no platform is
++	  specified only the OpenSBI platform independent static
++	  library libsbi.a is built. If a platform is specified then
++	  the platform specific static library libplatsbi.a and firmware
++	  examples are built.
++endif
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+new file mode 100644
+index 0000000000..341e2dcb19
+--- /dev/null
++++ b/boot/opensbi/opensbi.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# opensbi
++#
++################################################################################
++
++OPENSBI_VERSION = v0.3
++OPENSBI_SITE = $(call github,riscv,opensbi,$(OPENSBI_VERSION))
++OPENSBI_LICENSE = BSD-2-Clause
++OPENSBI_LICENSE_FILES = COPYING.BSD
++OPENSBI_INSTALL_IMAGES = YES
++
++OPENSBI_MAKE_ENV = \
++	CROSS_COMPILE=$(TARGET_CROSS)
++
++OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
++ifneq ($(OPENSBI_PLAT),)
++OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
++endif
++
++define OPENSBI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++ifneq ($(OPENSBI_PLAT),)
++OPENSBI_PLAT_INSTALL = \
++	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
++	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
++endif
++
++# Install libsbi.a in the host lib dir so it can be linked in the future.
++define OPENSBI_INSTALL_IMAGES_CMDS
++	$(OPENSBI_PLAT_INSTALL)
++	$(INSTALL) -m 0644 -D $(@D)/build/lib/libsbi.a $(HOST_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
 -- 
 2.21.0
