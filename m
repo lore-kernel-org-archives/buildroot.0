@@ -1,56 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 20 Mar 2019 23:28:47 +0100
-Subject: [Buildroot] [git commit] package/libfuse: Install udev rules and
- set permissions
-Message-ID: <20190320222553.6785982B3D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Mar 2019 23:31:15 +0100
+Subject: [Buildroot] [PATCH v2 1/4] package/libfuse: Install udev rules
+ and set permissions
+In-Reply-To: <20190315133033.5275-2-norbert.lange@andritz.com>
+References: <20190315133033.5275-1-norbert.lange@andritz.com>
+ <20190315133033.5275-2-norbert.lange@andritz.com>
+Message-ID: <5fa39c93-ea93-e1a2-1d3b-0d97352ecd0c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea62ff85b59aa1ff7757787061eb451b4b4780df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes some omissions from the installation.
 
-Install the udev rules.
+On 15/03/2019 14:30, Norbert Lange wrote:
+> This fixes some omissions from the installation.
+> 
+> Install the udev rules.
+> 
+> Tell buildroot about the fuse device.
+> 
+> Apply setuid permissions on the fusermount tool.
+> 
+> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
 
-Tell buildroot about the fuse device.
+ Applied to master, thanks.
 
-Apply setuid permissions on the fusermount tool.
-
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libfuse/libfuse.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index e8a79a3166..84027ebedb 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -14,11 +14,22 @@ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
- 	--disable-example \
- 	--enable-lib \
--	--enable-util
-+	--enable-util \
-+	UDEV_RULES_PATH=/lib/udev/rules.d
- 
- define LIBFUSE_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
- 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
-+	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
-+endef
-+
-+define LIBFUSE_DEVICES
-+	/dev/fuse  c  666  0  0  10  229  0  0  -
-+endef
-+
-+define LIBFUSE_PERMISSIONS
-+	/usr/bin/fusermount f 4755 0 0 - - - - -
- endef
- 
- $(eval $(autotools-package))
+ Regards,
+ Arnout
