@@ -1,54 +1,75 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Wed, 20 Mar 2019 09:43:36 +0000
-Subject: [Buildroot] [RFC PATCH] package/libcamera: Add libcamera package
-In-Reply-To: <20190320092930.GI2702@scaer>
-References: <20190319110326.15153-1-kieran.bingham@ideasonboard.com>
- <20190319125040.GA2702@scaer>
- <940dcdca-91e1-9460-35f7-782959a7ad02@ideasonboard.com>
- <100d21c9-da59-239c-29b2-e6d5bb38106d@mind.be>
- <824b7b41-dbdd-69f5-9c20-8965c95db69e@ideasonboard.com>
- <20190320092930.GI2702@scaer>
-Message-ID: <9c78dac2-f925-c1e4-e0f7-ec624474abea@ideasonboard.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 20 Mar 2019 12:51:45 +0100
+Subject: [Buildroot] [WIP] support/testing: add xserver + Mesa OpenGL
+ (GLX) + glxinfo
+In-Reply-To: <87imxypndq.fsf@dell.be.48ers.dk>
+References: <20190107235024.6819-1-romain.naour@gmail.com>
+ <87imxypndq.fsf@dell.be.48ers.dk>
+Message-ID: <4d73605c-e986-df32-118d-bec7b3a2dfda@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Peter,
 
-On 20/03/2019 09:29, Yann E. MORIN wrote:
-> Kieran, All,
+Le 05/02/2019 ? 10:58, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 > 
-> On 2019-03-20 09:25 +0000, Kieran Bingham spake thusly:
->> On 19/03/2019 23:18, Arnout Vandecappelle wrote:
->>>  AFAIU, we only specify licenses of stuff installed on target. Since
->>> /usr/share/doc gets removed in target-finalize, the doc license should not be
->>> relevant.
->> Ok, so should I just remove the CC licence?
+>  > This test allow to check if the xserver with GLX is working properly.
+>  > This is a basic test but it allow to trigger the current bug reported
+>  > by [1].
 > 
-> Yes, drop it both from the list and the files-list.
+>  > [1] https://bugs.buildroot.org/show_bug.cgi?id=11591
 > 
->> Are all of these relevant actually? I wonder if I should drop the
->> cc-by-sa-v4.0 if I'm dropping the docs licence above, and the DCO, as
->> that's only really about contributing to the project?
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>  > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  > ---
+>  >  support/testing/tests/package/test_glxinfo.py | 57 +++++++++++++++++++++++++++
+>  >  1 file changed, 57 insertions(+)
+>  >  create mode 100644 support/testing/tests/package/test_glxinfo.py
 > 
-> Yes, drop the CC license and the DCO.
-
-Ack, will do :)
-
-Thanks again for your time. Once I get the pending libcamera patches
-reviewed and integrated I'll repost a v2 and we should be nearly there :D
-
-
-Thank you for your help!
-
-
-> Regards,
-> Yann E. MORIN.
+> ..
 > 
+>  > +    def test_run(self):
+>  > +        self.login()
+>  > +
+> 
+> Dont we need to wait for the xserver to start?
 
--- 
-Regards
---
-Kieran
+The test succeed without wait_for_xserver.
+
+I can add a function wait_for_xserver (like wait_for_dockerd function in
+docker_compose test).
+
+    def wait_for_xserver(self):
+        # xserver takes some time to start up
+        _, _ = self.emulator.run('while [ pidof Xorg >/dev/null 2>&1 ]; do sleep
+1; done', 120)
+
+> 
+>  > +        # The test case verifies that the xserver with GLX is working
+>  > +        cmd = "glxinfo -display :0 2>&1 >/dev/null | grep Error"
+>  > +        # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
+> 
+> Why the redirect / grep when you ignore the output in emulator.run()?
+
+Actually the std outpout of glxinfo is redirected to /dev/null and the std error
+is redirected to the std input of grep.
+
+> 
+>> +        _, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
+>  > +        self.assertEqual(exit_code, 1)>
+> So your expect glxinfo to fail?
+> 
+So, we actually test the return code of grep command.
+
+If grep doesn't find "Error" then the test is OK (grep return code is 1).
+else grep find "Error" then the test is KO (grep return code is 0).
+
+I agree, it's a bit tricky here...
+
+Best regards,
+Romain
