@@ -1,38 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Mar 2019 22:44:21 +0100
-Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
-In-Reply-To: <CAKmqyKP7TfOOOkggSVJdJZVzp3mrOM1Vb9Y-mWQpEPPdrYXjVw@mail.gmail.com>
-References: <20190320003706.1126-1-alistair.francis@wdc.com>
- <20190320003706.1126-2-alistair.francis@wdc.com>
- <20190320221236.1ea9c11b@windsurf>
- <CAKmqyKP7TfOOOkggSVJdJZVzp3mrOM1Vb9Y-mWQpEPPdrYXjVw@mail.gmail.com>
-Message-ID: <20190320224421.440d3e5a@windsurf>
+Date: Wed, 20 Mar 2019 22:49:14 +0100
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: add support for
+ using OP-TEE as BL32
+Message-ID: <20190320214920.F1E5281507@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6959d628d421d88e7b12bb1cbbaaadaa0a2e20f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Mar 2019 14:28:59 -0700
-Alistair Francis <alistair23@gmail.com> wrote:
+This change allows one to build trusted firmware (TF-A) with OP-TEE as
+BL32 secure payload.
 
-> > I would expect for something related to firmware) or to Linux
-> > user-space applications. In the latter case, installing to
-> > $(STAGING_DIR)/usr/lib is the right thing to do. In the former case
-> > however, it should probably be installed elsewhere, maybe
-> > $(STAGING_DIR)/usr/share/opensbi (but I'm not a FHS expert).  
-> 
-> $(STAGING_DIR)/usr/share/opensbi looks good to me. I will use that.
+When BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_DEFAULT is enabled TF-A
+builds a BL32 stage according the TF-A configuration directive.  If
+these specify no BL32 stage then TF-A will build without BL32
+support. This is the default configuration and reflects TF-A legacy
+integration in BR.
 
-Then it should go to a OPENSBI_INSTALL_STAGING_CMDS variable, not in
-OPENSBI_INSTALL_IMAGES_CMDS.
+When BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE is enabled TF-A builds
+with support for the OP-TEE OS as BL32.
 
-Thanks!
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[Thomas: rename config options, simplify option prompts, and rework
+option description.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in               | 24 +++++++++++++++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 14 +++++++++++++
+ 2 files changed, 38 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 428a4ce155..92cd6e5642 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -91,6 +91,30 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
+ 	  bl31.bin.  This is used for example by the Xilinx version of
+ 	  U-Boot SPL to load ATF on the ZynqMP SoC.
+ 
++choice
++	prompt "BL32"
++	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_DEFAULT
++	help
++	  Select BL32 stage for the trusted firmware
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_DEFAULT
++	bool "Default"
++	help
++	  With this option selected, ATF will not use any BL32 stage,
++	  unless if one is explicitly chosen using the SPD (for
++	  AArch64) or AARCH32_SP (for AArch32) variables, which can be
++	  passed through
++	  BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
++	bool "OP-TEE OS"
++	depends on BR2_TARGET_OPTEE_OS
++	help
++	  This option allows to embed OP-TEE OS as the BL32 part of
++	  the ARM Trusted Firmware boot sequence.
++
++endchoice
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	bool "Use U-Boot as BL33"
+ 	depends on BR2_TARGET_UBOOT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index fb80bd1fbe..f35e91eefe 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -47,6 +47,20 @@ else ifeq ($(BR2_aarch64),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARCH=aarch64
+ endif
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE),y)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += optee-os
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
++	BL32=$(BINARIES_DIR)/tee-header_v2.bin \
++	BL32_EXTRA1=$(BINARIES_DIR)/tee-pager_v2.bin \
++	BL32_EXTRA2=$(BINARIES_DIR)/tee-pageable_v2.bin
++ifeq ($(BR2_aarch64),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SPD=opteed
++endif
++ifeq ($(BR2_arm),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
++endif
++endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/u-boot.bin
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
