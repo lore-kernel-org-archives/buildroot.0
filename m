@@ -1,180 +1,194 @@
-From: Alistair Francis <Alistair.Francis@wdc.com>
-Date: Wed, 20 Mar 2019 23:05:21 +0000
-Subject: [Buildroot] [PATCH v6 1/5] board/qemu/riscv32-virt: Convert
- defconfig into a fragment
-Message-ID: <20190320230422.13592-1-alistair.francis@wdc.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Mar 2019 00:10:58 +0100
+Subject: [Buildroot] [PATCH 2/2] package/uboot-tools: bump to version
+ 2019.01
+In-Reply-To: <20190208213119.15004-2-joerg.krause@embedded.rocks>
+References: <20190208213119.15004-1-joerg.krause@embedded.rocks>
+ <20190208213119.15004-2-joerg.krause@embedded.rocks>
+Message-ID: <f603edcf-9058-824c-8111-cabfd552a202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Convert the config to the arch defconfig plus a fragment. When this
-fragment is applied we will generate the same config as we previously
-did.
+ Hi Joerg,
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
- board/qemu/riscv32-virt/linux.config          |  23 ----
- board/qemu/riscv32-virt/linux.config.fragment | 104 ++++++++++++++++++
- configs/qemu_riscv32_virt_defconfig           |   4 +-
- 3 files changed, 106 insertions(+), 25 deletions(-)
- delete mode 100644 board/qemu/riscv32-virt/linux.config
- create mode 100644 board/qemu/riscv32-virt/linux.config.fragment
+On 08/02/2019 22:31, J?rg Krause wrote:
+> Adapt patch 0002 and 0003 for version 2019.01.
 
-diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
-deleted file mode 100644
-index c25583f768..0000000000
---- a/board/qemu/riscv32-virt/linux.config
-+++ /dev/null
-@@ -1,23 +0,0 @@
--CONFIG_ARCH_RV32I=y
--CONFIG_SMP=y
--CONFIG_NR_CPUS=8
--CONFIG_PCI=y
--CONFIG_SYSVIPC=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--# CONFIG_WIRELESS is not set
--CONFIG_VIRTIO_BLK=y
--CONFIG_NETDEVICES=y
--CONFIG_VIRTIO_NET=y
--# CONFIG_ETHERNET is not set
--# CONFIG_WLAN is not set
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_VIRT_DRIVERS=y
--CONFIG_VIRTIO_MMIO=y
--CONFIG_EXT2_FS=y
--CONFIG_EXT4_FS=y
--CONFIG_TMPFS=y
-diff --git a/board/qemu/riscv32-virt/linux.config.fragment b/board/qemu/riscv32-virt/linux.config.fragment
-new file mode 100644
-index 0000000000..2ecc83c8e1
---- /dev/null
-+++ b/board/qemu/riscv32-virt/linux.config.fragment
-@@ -0,0 +1,104 @@
-+CONFIG_ARCH_RV32I=y
-+# CONFIG_ARCH_RV64I is not set
-+# CONFIG_ATA is not set
-+# CONFIG_AUTOFS4_FS is not set
-+# CONFIG_AUTOFS_FS is not set
-+# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
-+# CONFIG_BLK_DEV_INITRD is not set
-+# CONFIG_BLK_DEV_LOOP is not set
-+# CONFIG_BPF_SYSCALL is not set
-+# CONFIG_CGROUPS is not set
-+# CONFIG_CHECKPOINT_RESTORE is not set
-+# CONFIG_CMODEL_MEDANY is not set
-+CONFIG_CMODEL_MEDLOW=y
-+CONFIG_CRYPTO_AEAD=y
-+CONFIG_CRYPTO_BLKCIPHER=y
-+CONFIG_CRYPTO_DEV_VIRTIO=y
-+CONFIG_CRYPTO_DRBG=y
-+CONFIG_CRYPTO_DRBG_MENU=y
-+CONFIG_CRYPTO_ECHAINIV=y
-+CONFIG_CRYPTO_ENGINE=y
-+CONFIG_CRYPTO_HMAC=y
-+CONFIG_CRYPTO_JITTERENTROPY=y
-+CONFIG_CRYPTO_MANAGER=y
-+CONFIG_CRYPTO_NULL=y
-+CONFIG_CRYPTO_RNG=y
-+CONFIG_CRYPTO_RNG_DEFAULT=y
-+CONFIG_CRYPTO_SHA256=y
-+# CONFIG_CRYPTO_USER_API_HASH is not set
-+# CONFIG_DEBUG_KERNEL is not set
-+CONFIG_DEBUG_MEMORY_INIT=y
-+# CONFIG_DRM is not set
-+# CONFIG_ETHERNET is not set
-+# CONFIG_EXPERT is not set
-+CONFIG_EXT2_FS=y
-+# CONFIG_EXT4_FS_POSIX_ACL is not set
-+# CONFIG_FB is not set
-+CONFIG_FRAME_WARN=1024
-+# CONFIG_FTRACE is not set
-+CONFIG_HID_A4TECH=y
-+CONFIG_HID_APPLE=y
-+CONFIG_HID_BELKIN=y
-+CONFIG_HID_CHERRY=y
-+CONFIG_HID_CHICONY=y
-+CONFIG_HID_CYPRESS=y
-+CONFIG_HID_EZKEY=y
-+CONFIG_HID_ITE=y
-+CONFIG_HID_KENSINGTON=y
-+CONFIG_HID_LOGITECH=y
-+CONFIG_HID_MICROSOFT=y
-+CONFIG_HID_MONTEREY=y
-+CONFIG_HID_REDRAGON=y
-+# CONFIG_HVC_RISCV_SBI is not set
-+CONFIG_HW_RANDOM=y
-+# CONFIG_I2C is not set
-+# CONFIG_IKCONFIG is not set
-+CONFIG_INPUT_FF_MEMLESS=y
-+# CONFIG_INPUT_MOUSEDEV is not set
-+# CONFIG_IP_ADVANCED_ROUTER is not set
-+# CONFIG_IP_MULTICAST is not set
-+# CONFIG_IP_PNP is not set
-+# CONFIG_KEYS is not set
-+CONFIG_MAXPHYSMEM_2GB=y
-+# CONFIG_MDIO_DEVICE is not set
-+# CONFIG_MODULES is not set
-+# CONFIG_MSDOS_FS is not set
-+# CONFIG_NETLINK_DIAG is not set
-+# CONFIG_NFS_FS is not set
-+# CONFIG_NLS is not set
-+CONFIG_PAGE_OFFSET=0xC0000000
-+# CONFIG_PCIE_XILINX is not set
-+CONFIG_PGTABLE_LEVELS=2
-+# CONFIG_PHYLIB is not set
-+# CONFIG_POSIX_MQUEUE is not set
-+# CONFIG_POWER_SUPPLY is not set
-+# CONFIG_PRINTK_TIME is not set
-+# CONFIG_PROC_CHILDREN is not set
-+# CONFIG_RAS is not set
-+# CONFIG_SCSI is not set
-+# CONFIG_SIFIVE_PLIC is not set
-+# CONFIG_SYNC_FILE is not set
-+# CONFIG_TMPFS_POSIX_ACL is not set
-+# CONFIG_TMPFS_XATTR is not set
-+# CONFIG_USB is not set
-+# CONFIG_USER_NS is not set
-+# CONFIG_VFAT_FS is not set
-+CONFIG_VIRT_DRIVERS=y
-+# CONFIG_VT_HW_CONSOLE_BINDING is not set
-+# CONFIG_WIRELESS is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_XZ_DEC is not set
-+CONFIG_32BIT=y
-+# CONFIG_EXT2_FS_XATTR is not set
-+CONFIG_GENERIC_ATOMIC64=y
-+CONFIG_GENERIC_LIB_ASHLDI3=y
-+CONFIG_GENERIC_LIB_ASHRDI3=y
-+CONFIG_GENERIC_LIB_LSHRDI3=y
-+CONFIG_GENERIC_LIB_UCMPDI2=y
-+# CONFIG_HID_LOGITECH_HIDPP is not set
-+CONFIG_LBDAF=y
-+# CONFIG_LOGIG940_FF is not set
-+# CONFIG_LOGIRUMBLEPAD2_FF is not set
-+# CONFIG_LOGITECH_FF is not set
-+# CONFIG_LOGIWHEELS_FF is not set
-+
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 6f9a61b11c..fab152e50a 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -18,8 +18,8 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
- 
- # Bootloader
- BR2_TARGET_RISCV_PK=y
--- 
-2.21.0
+ This is causing failures, e.g.
+
+http://autobuild.buildroot.net/results/f336dcecad8867fa1f05d99a6f4eac3bc4185a50
+
+In file included from tools/common/image-sig.c:1:
+./tools/../common/image-sig.c: In function ?fit_image_setup_verify?:
+./tools/../common/image-sig.c:188:56: error: expected expression before ?)? token
+  if (fdt_totalsize(fit) > CONFIG_FIT_SIGNATURE_MAX_SIZE) {
+
+ Easy to reproduce: enable BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT.
+
+ I guess CONFIG_FIT_SIGNATURE_MAX_SIZE just has to be defined as well in the .mk
+file.
+
+ Regards,
+ Arnout
+
+
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  ...-tools-only-in-no-dot-config-targets.patch | 12 +++----
+>  ...003-Make-FIT-support-really-optional.patch | 33 +++++++++++--------
+>  package/uboot-tools/uboot-tools.hash          |  2 +-
+>  package/uboot-tools/uboot-tools.mk            |  2 +-
+>  4 files changed, 27 insertions(+), 22 deletions(-)
+> 
+> diff --git a/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+> index c201bf749d..33a79b16af 100644
+> --- a/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+> +++ b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+> @@ -1,4 +1,4 @@
+> -From b8110293d70c4f43035dfd6a0904d342be6a08e0 Mon Sep 17 00:00:00 2001
+> +From 460646b3c4c1718860915c38586ee8d2fbda38e4 Mon Sep 17 00:00:00 2001
+>  From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+>  Date: Sun, 1 Feb 2015 21:53:47 +0100
+>  Subject: [PATCH] tools only in no dot config targets
+> @@ -25,18 +25,18 @@ Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+>  diff --git a/Makefile b/Makefile
+> -index 1cf15ce..75e85eb 100644
+> +index 6aa08964ff..fcec83d183 100644
+>  --- a/Makefile
+>  +++ b/Makefile
+> -@@ -425,7 +425,7 @@ timestamp_h := include/generated/timestamp_autogenerated.h
+> +@@ -443,7 +443,7 @@ defaultenv_h := include/generated/defaultenv_autogenerated.h
+>   
+>   no-dot-config-targets := clean clobber mrproper distclean \
+>   			 help %docs check% coccicheck \
+> --			 ubootversion backup tests
+> -+			 ubootversion backup tests tools-only
+> +-			 ubootversion backup tests check qcheck
+> ++			 ubootversion backup tests tools-only check qcheck
+>   
+>   config-targets := 0
+>   mixed-targets  := 0
+>  -- 
+> -2.7.4
+> +2.20.1
+>  
+> diff --git a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
+> index 8853198b43..329245ffdd 100644
+> --- a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
+> +++ b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
+> @@ -1,7 +1,10 @@
+> -From d9d7d7cf8b27516d45c66daa1bf0a18c878c4e33 Mon Sep 17 00:00:00 2001
+> +From 794aeeb82ab7c0304e343499ee5d82c1f1c5c39a Mon Sep 17 00:00:00 2001
+>  From: Carlos Santos <casantos@datacom.ind.br>
+>  Date: Sun, 8 May 2016 11:11:39 -0300
+>  Subject: [PATCH] Make FIT support really optional
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+>  
+>  Due to some mistakes in the source code, it was not possible to really
+>  turn FIT support off. This commit fixes the problem by means of the
+> @@ -22,6 +25,8 @@ Signed-off-by: Fabio Estevam <festevam@gmail.com>
+>  [Ricardo: fix conditional compilation and linking of the files mentioned above
+>  for 2016.07]
+>  Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> +[J?rg: adapt for 2019.01]
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>  ---
+>   common/bootm.c  | 2 ++
+>   include/bootm.h | 2 ++
+> @@ -29,10 +34,10 @@ Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>   3 files changed, 6 insertions(+), 4 deletions(-)
+>  
+>  diff --git a/common/bootm.c b/common/bootm.c
+> -index 2431019..7e1adc8 100644
+> +index 8bf84ebcb7..ecc29fb7b4 100644
+>  --- a/common/bootm.c
+>  +++ b/common/bootm.c
+> -@@ -901,6 +901,7 @@ void memmove_wd(void *to, void *from, size_t len, ulong chunksz)
+> +@@ -922,6 +922,7 @@ void memmove_wd(void *to, void *from, size_t len, ulong chunksz)
+>   	memmove(to, from, len);
+>   }
+>   
+> @@ -40,7 +45,7 @@ index 2431019..7e1adc8 100644
+>   static int bootm_host_load_image(const void *fit, int req_image_type)
+>   {
+>   	const char *fit_uname_config = NULL;
+> -@@ -965,5 +966,6 @@ int bootm_host_load_images(const void *fit, int cfg_noffset)
+> +@@ -986,5 +987,6 @@ int bootm_host_load_images(const void *fit, int cfg_noffset)
+>   	/* Return the first error we found */
+>   	return err;
+>   }
+> @@ -48,10 +53,10 @@ index 2431019..7e1adc8 100644
+>   
+>   #endif /* ndef USE_HOSTCC */
+>  diff --git a/include/bootm.h b/include/bootm.h
+> -index 4981377..94d62a1 100644
+> +index dbd6f49c2d..f5fe9cb2d3 100644
+>  --- a/include/bootm.h
+>  +++ b/include/bootm.h
+> -@@ -41,7 +41,9 @@ void lynxkdi_boot(image_header_t *hdr);
+> +@@ -42,7 +42,9 @@ void lynxkdi_boot(image_header_t *hdr);
+>   
+>   boot_os_fn *bootm_os_get_boot_func(int os);
+>   
+> @@ -62,18 +67,18 @@ index 4981377..94d62a1 100644
+>   int boot_selected_os(int argc, char * const argv[], int state,
+>   		     bootm_headers_t *images, boot_os_fn *boot_fn);
+>  diff --git a/tools/Makefile b/tools/Makefile
+> -index f72294a..ccf5120 100644
+> +index 081383d7a7..4d23c3941e 100644
+>  --- a/tools/Makefile
+>  +++ b/tools/Makefile
+> -@@ -54,6 +54,7 @@ mkenvimage-objs := mkenvimage.o os_support.o lib/crc32.o
+> - hostprogs-y += dumpimage mkimage
+> - hostprogs-$(CONFIG_FIT_SIGNATURE) += fit_info fit_check_sign
+> +@@ -58,6 +58,7 @@ hostprogs-$(CONFIG_FIT_SIGNATURE) += fit_info fit_check_sign
+> + 
+> + hostprogs-$(CONFIG_CMD_BOOTEFI_SELFTEST) += file2include
+>   
+>  +FIT_OBJS-$(CONFIG_FIT) := fit_common.o fit_image.o image-host.o common/image-fit.o
+>   FIT_SIG_OBJS-$(CONFIG_FIT_SIGNATURE) := common/image-sig.o
+> - # Flattened device tree objects
+> - LIBFDT_OBJS := $(addprefix lib/libfdt/, \
+> -@@ -68,16 +69,13 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
+> + 
+> + # The following files are synced with upstream DTC.
+> +@@ -80,16 +81,13 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
+>   # common objs for dumpimage and mkimage
+>   dumpimage-mkimage-objs := aisimage.o \
+>   			atmelimage.o \
+> @@ -92,5 +97,5 @@ index f72294a..ccf5120 100644
+>   			imagetool.o \
+>   			imximage.o \
+>  -- 
+> -2.9.1
+> +2.20.1
+>  
+> diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+> index 97d0bd0b5f..df2b8caf89 100644
+> --- a/package/uboot-tools/uboot-tools.hash
+> +++ b/package/uboot-tools/uboot-tools.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed:
+> -sha256  9f10df88bc91b35642e461217f73256bbaeeca9ae2db8db56197ba5e89e1f6d4  u-boot-2018.07.tar.bz2
+> +sha256  50bd7e5a466ab828914d080d5f6a432345b500e8fba1ad3b7b61e95e60d51c22  u-boot-2019.01.tar.bz2
+> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+> index 5ac7b1c293..d7a631fdc8 100644
+> --- a/package/uboot-tools/uboot-tools.mk
+> +++ b/package/uboot-tools/uboot-tools.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -UBOOT_TOOLS_VERSION = 2018.07
+> +UBOOT_TOOLS_VERSION = 2019.01
+>  UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+>  UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+>  UBOOT_TOOLS_LICENSE = GPL-2.0+
+> 
