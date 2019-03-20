@@ -1,44 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Mar 2019 14:46:35 +0100
-Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
-In-Reply-To: <CAOR3GqXSxZw3m+OD3FLCFOR0Gi-v3zNJGe2+3Bhy7R6av7LVhQ@mail.gmail.com>
- (Esben Haabendal's message of "Wed, 20 Mar 2019 13:59:49 +0100")
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
- <875zseitgs.fsf@dell.be.48ers.dk>
- <CAOR3GqXSxZw3m+OD3FLCFOR0Gi-v3zNJGe2+3Bhy7R6av7LVhQ@mail.gmail.com>
-Message-ID: <875zsdek04.fsf@dell.be.48ers.dk>
+From: Esben Haabendal <esben.haabendal@gmail.com>
+Date: Wed, 20 Mar 2019 14:47:51 +0100
+Subject: [Buildroot] [PATCH v2 0/3] Gummiboot fixup
+Message-ID: <20190320134754.14357-1-esben.haabendal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esbenhaabendal@gmail.com> writes:
+From: Esben Haabendal <esben@haabendal.dk>
 
- > On Tue, Mar 19, 2019 at 7:56 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> Out of interest, what is the use case for using gummiboot? We recently
- >> added systemd-boot support, so I was considering removing gummiboot as
- >> it is dead upstream.
- >> 
- >> Notice that you currently cannot enable systemd-boot without the rest of
- >> systemd, so that may be a disadvantage.
- >> 
+These patches fixes gummiboot for building with toolchains using
+newer gcc and glibc versions.
 
- > In this case, I am upgrading a system which is currently using gummiboot.
- > Switching to systemd-boot does not seem to bring anything meaningful
- > improvements,
- > as gummiboot does the job of booting the system.
+Changes since v1:
+ - Formatted patch with git format-patch and added SoB
 
-Ok. Out of interest, what is gummiboot adding over just directly booting
-a Linux kernel with CONFIG_EFI_STUB?
+Esben Haabendal (3):
+  gummiboot: use new official upstream git repository
+  gummiboot: upgrade to last commit before being removed
+  gummiboot: fix compatibility with newer glibc versions
 
- > And yes, this is not a systemd system, and transforming the entire
- > system to systemd is clearly a big thing compared to just fixing
- > building of gummiboot.
-
- > I would prefer if we could keep gummiboot support in buildroot for now.
-
-Fine by me. Will you add yourself to DEVELOPERS for gummiboot?
+ ...w-building-with-newer-glibc-versions.patch | 31 +++++++++++++++++++
+ boot/gummiboot/gummiboot.mk                   |  4 +--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100644 boot/gummiboot/0001-Allow-building-with-newer-glibc-versions.patch
 
 -- 
-Bye, Peter Korsgaard
+2.21.0
