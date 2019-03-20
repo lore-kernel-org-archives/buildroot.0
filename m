@@ -1,68 +1,95 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Mar 2019 01:23:42 +0100
-Subject: [Buildroot] [RFC] openssh: add option to allow login as root
-In-Reply-To: <87mulqebah.fsf@dell.be.48ers.dk>
-References: <20190319114156.10696-1-esben.haabendal@gmail.com>
- <87mulqebah.fsf@dell.be.48ers.dk>
-Message-ID: <f11c03b3-7edd-5c55-7287-61684f2c9a64@mind.be>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 19 Mar 2019 17:37:25 -0700
+Subject: [Buildroot] [PATCH v4 3/5] boot/opensbi: Initial commit of
+ OpenSBI for RISC-V
+In-Reply-To: <20190319220949.06f6ee34@windsurf>
+References: <20190319181449.25067-1-alistair.francis@wdc.com>
+ <20190319181449.25067-3-alistair.francis@wdc.com>
+ <20190319220949.06f6ee34@windsurf>
+Message-ID: <CAKmqyKP9xR-Uprioe9DsqNti_fbSjfRRS3mDqQcEQ2W_OQ3WsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Mar 19, 2019 at 2:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I was about to apply this patch, but there is still an issue (see
+> below). Since a new iteration will be needed, I'll point out some minor
+> nits as well that I would have normally fixed myself when applying, but
+> that you can fix together with the more significant issue.
+>
+> First minor nit: the commit title should be "boot/opensbi: new package"
+>
+> On Tue, 19 Mar 2019 18:15:48 +0000
+> Alistair Francis <Alistair.Francis@wdc.com> wrote:
+>
+>
+> > diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> > new file mode 100644
+> > index 0000000000..13dffb9ce0
+> > --- /dev/null
+> > +++ b/boot/opensbi/opensbi.mk
+> > @@ -0,0 +1,32 @@
+> > +################################################################################
+> > +#
+> > +# OpenSBI
+>
+> opensbi in lower-case
+>
+> > +#
+> > +################################################################################
+> > +
+> > +OPENSBI_VERSION = v0.3
+> > +OPENSBI_SITE = $(call github,riscv,opensbi,$(OPENSBI_VERSION))
+> > +OPENSBI_LICENSE = BSD-2-Clause
+> > +OPENSBI_LICENSE_FILES = COPYING.BSD
+> > +OPENSBI_INSTALL_IMAGES = YES
+> > +
+> > +OPENSBI_MAKE_ENV = \
+> > +     CROSS_COMPILE=$(TARGET_CROSS)
+> > +
+> > +OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
+> > +ifneq ($(OPENSBI_PLAT),)
+> > +OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+> > +endif
+> > +
+> > +define OPENSBI_BUILD_CMDS
+> > +     $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+> > +endef
+> > +
+> > +ifneq ($(OPENSBI_PLAT),)
+> > +define OPENSBI_INSTALL_IMAGES_CMDS
+> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> > +endef
+> > +endif
+>
+> So the issue that I have is that this package doesn't install anything
+> when OPENSBI_PLAT is empty. It doesn't install any image, it doesn't
+> install any library to STAGING_DIR.
+>
+> Should the libplatsbi.a library be installed in
+> $(STAGING_DIR)/usr/lib ? This location is normally for regular Linux
+> user-space libraries, which I suppose libplatsbi.a is not. Perhaps it
+> should be in another location ?
+>
+> In any case, it should be installed somewhere, otherwise the package is
+> pretty meaningless when OPENSBI_PLAT is empty.
 
+Fixed in v5.
 
-On 19/03/2019 23:42, Peter Korsgaard wrote:
->>>>>> "Esben" == Esben Haabendal <esben.haabendal@gmail.com> writes:
-> 
->  > From: Esben Haabendal <esben@haabendal.dk>
->  > What do you think. Is this kind of micro-management of a configuration
->  > file something that I should keep out of tree?
-> 
-> We discussed it tonight on IRC and didn't really get to a good compromise.
-> 
-> On one hand, we prefer to stick with upstream defaults (especially when
-> security is involved)
+Alistair
 
- This patch doesn't change the defaults.
-
-> , but it is true that dropbear allows root logins
-> by default.
-
- It's not nice that the default for dropbear and ssh is different, but that has
-little to do with deciding if this kind of configurability is relevant or not.
-
-> We prefer to not add configuration options for these kind of
-> detailed policy decisions,
-
- *That* is the crux of the matter. We normally only have configurability of
-compile-time options, and assume that anything else is handled in post-build
-scripts. The (only?) exception to that principle is the system menu.
-
- So *maybe* something global in the system menu could work, and then dropbear
-and openssh and whatnot would do whatever is needed to permit/disallow root
-login for that particular package. But I'm not exactly ecstatic about that option.
-
-> as openssh has a LOT of other configuration
-> options
-
- True, but permitting root login is clearly one that is a lot more
-important/relevant than all the others. Currently, the typical user will naively
-enable openssh, then try to ssh into the device, and fail...
-
-> But silently allowing root logins when we have "always"
-> disallowed it in the past also isn't nice.
-
- This is *definitely* a no-no.
-
-
-> So all in all, this kind of policy tweaks are better done in a post
-> build script.
-
- In the few projects where I've seen openssh used, it was always with a custom
-config file. Otherwise, there's not much reason to use openssh instead of
-dropbear I guess.
-
- Regards,
- Arnout
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
