@@ -1,153 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Mar 2019 22:18:59 +0100
-Subject: [Buildroot] [PATCH] package/libssh2: security bump to latest git
-Message-ID: <20190320211859.18155-1-peter@korsgaard.com>
+From: Esben Haabendal <esben.haabendal@gmail.com>
+Date: Wed, 20 Mar 2019 22:30:06 +0100
+Subject: [Buildroot] [PATCH v3] mtree: new package
+Message-ID: <20190320213006.28367-1-esben.haabendal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the version to latest git to fix the following security issues:
+From: Esben Haabendal <esben@haabendal.dk>
 
-CVE-2019-3855
- Possible integer overflow in transport read allows out-of-bounds write
- URL: https://www.libssh2.org/CVE-2019-3855.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3855.patch
-
-CVE-2019-3856
- Possible integer overflow in keyboard interactive handling allows
- out-of-bounds write
- URL: https://www.libssh2.org/CVE-2019-3856.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3856.patch
-
-CVE-2019-3857
- Possible integer overflow leading to zero-byte allocation and out-of-bounds
- write
- URL: https://www.libssh2.org/CVE-2019-3857.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3857.patch
-
-CVE-2019-3858
- Possible zero-byte allocation leading to an out-of-bounds read
- URL: https://www.libssh2.org/CVE-2019-3858.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3858.patch
-
-CVE-2019-3859
- Out-of-bounds reads with specially crafted payloads due to unchecked use of
- `_libssh2_packet_require` and `_libssh2_packet_requirev`
- URL: https://www.libssh2.org/CVE-2019-3859.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3859.patch
-
-CVE-2019-3860
- Out-of-bounds reads with specially crafted SFTP packets
- URL: https://www.libssh2.org/CVE-2019-3860.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3860.patch
-
-CVE-2019-3861
- Out-of-bounds reads with specially crafted SSH packets
- URL: https://www.libssh2.org/CVE-2019-3861.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3861.patch
-
-CVE-2019-3862
- Out-of-bounds memory comparison
- URL: https://www.libssh2.org/CVE-2019-3862.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3862.patch
-
-CVE-2019-3863
- Integer overflow in user authenicate keyboard interactive allows
- out-of-bounds writes
- URL: https://www.libssh2.org/CVE-2019-3863.html
- Patch: https://libssh2.org/1.8.0-CVE/CVE-2019-3863.txt
-
-Drop 0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch as that
-is now upstream.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Esben Haabendal <esben@haabendal.dk>
 ---
- ...-dereferencing-ambiguity-potentially-caus.patch | 51 ----------------------
- package/libssh2/libssh2.hash                       |  2 +-
- package/libssh2/libssh2.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 53 deletions(-)
- delete mode 100644 package/libssh2/0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch
+ DEVELOPERS               |  3 +++
+ package/Config.in        |  1 +
+ package/mtree/Config.in  | 15 +++++++++++++++
+ package/mtree/mtree.hash |  5 +++++
+ package/mtree/mtree.mk   | 17 +++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/mtree/Config.in
+ create mode 100644 package/mtree/mtree.hash
+ create mode 100644 package/mtree/mtree.mk
 
-diff --git a/package/libssh2/0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch b/package/libssh2/0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch
-deleted file mode 100644
-index 44eed2bac4..0000000000
---- a/package/libssh2/0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 28fe5e4de437f8fce6e428b7db9bc8640cda4c61 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Date: Thu, 13 Sep 2018 09:51:35 +0200
--Subject: [PATCH] openssl: fix dereferencing ambiguity potentially causing
-- build failure
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When dereferencing from *aes_ctr_cipher, being a pointer itself,
--ambiguity can occur with compiler and build can fail reporting:
--openssl.c:574:20: error: ?*aes_ctr_cipher? is a pointer; did you mean to use ?->??
--     *aes_ctr_cipher->nid = type;
--
--Sorround every *aes_ctr_cipher-> occurence with paranthesis like this
--(*aes_ctr_cipher)->
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Upstream: https://github.com/libssh2/libssh2/commit/b5b6673c2823a18753a14571a6c01bde33fa3a8b
-----
-- src/openssl.c | 14 +++++++-------
-- 1 file changed, 7 insertions(+), 7 deletions(-)
--
--diff --git a/src/openssl.c b/src/openssl.c
--index 678d5de..c26aaec 100644
----- a/src/openssl.c
--+++ b/src/openssl.c
--@@ -571,13 +571,13 @@ make_ctr_evp (size_t keylen, EVP_CIPHER **aes_ctr_cipher, int type)
--         EVP_CIPHER_meth_set_cleanup(*aes_ctr_cipher, aes_ctr_cleanup);
--     }
-- #else
---    *aes_ctr_cipher->nid = type;
---    *aes_ctr_cipher->block_size = 16;
---    *aes_ctr_cipher->key_len = keylen;
---    *aes_ctr_cipher->iv_len = 16;
---    *aes_ctr_cipher->init = aes_ctr_init;
---    *aes_ctr_cipher->do_cipher = aes_ctr_do_cipher;
---    *aes_ctr_cipher->cleanup = aes_ctr_cleanup;
--+    (*aes_ctr_cipher)->nid = type;
--+    (*aes_ctr_cipher)->block_size = 16;
--+    (*aes_ctr_cipher)->key_len = keylen;
--+    (*aes_ctr_cipher)->iv_len = 16;
--+    (*aes_ctr_cipher)->init = aes_ctr_init;
--+    (*aes_ctr_cipher)->do_cipher = aes_ctr_do_cipher;
--+    (*aes_ctr_cipher)->cleanup = aes_ctr_cleanup;
-- #endif
-- 
--     return *aes_ctr_cipher;
---- 
--2.17.1
--
-diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
-index d57c8d7062..c4732a2c07 100644
---- a/package/libssh2/libssh2.hash
-+++ b/package/libssh2/libssh2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 ec2b32b44ae5f8fe094f663f63953fb31314de838eb36e8c47e5a89137b5a1bc  libssh2-8b870ad771cbd9cd29edbb3dbb0878e950f868ab.tar.gz
-+sha256 468e7a81a8121c06cb099eef2e17106b0b8c2e1d890b1c0e34e1951f182babb1  libssh2-1b3cbaff518f32e5b70650d4b7b52361b1410d37.tar.gz
- sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9  COPYING
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 89cb733224..ed0dd40bec 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e0ac08e1136..4b827ae4d276 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -697,6 +697,9 @@ F:	package/mxsldr/
+ N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
+ F:	package/szip/
  
--LIBSSH2_VERSION = 8b870ad771cbd9cd29edbb3dbb0878e950f868ab
-+LIBSSH2_VERSION = 1b3cbaff518f32e5b70650d4b7b52361b1410d37
- LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
- LIBSSH2_LICENSE = BSD
- LIBSSH2_LICENSE_FILES = COPYING
++N:	Esben Haabendal <esben@haabendal.dk>
++F:	package/mtree/
++
+ N:	Etienne Carriere <etienne.carriere@linaro.org>
+ F:	boot/optee-os/
+ F:	package/optee-benchmark/
+diff --git a/package/Config.in b/package/Config.in
+index b5321aeb49c9..13f7fae09df6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -197,6 +197,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/mmc-utils/Config.in"
+ 	source "package/mtd/Config.in"
+ 	source "package/mtools/Config.in"
++	source "package/mtree/Config.in"
+ 	source "package/nfs-utils/Config.in"
+ 	source "package/nilfs-utils/Config.in"
+ 	source "package/ntfs-3g/Config.in"
+diff --git a/package/mtree/Config.in b/package/mtree/Config.in
+new file mode 100644
+index 000000000000..175d05d3bb0d
+--- /dev/null
++++ b/package/mtree/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MTREE
++	bool "mtree"
++	# mtree uses <fts.h> which is not included by default in uClibc
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	# fts.h does not support LFS (_FILE_OFFSET_BITS==64) in glibc versions
++	# older than 2.23, and codesourcery-arm is currently using glibc 2.18
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
++	select BR2_PACKAGE_OPENSSL
++	help
++	  mtree - utility for creating and verifying file hierarchies.
++
++	  Port of the mtree utility, originally only available in BSD
++	  distributions, to Linux and other operating systems.
++
++	  https://github.com/archiecobbs/mtree-port
+diff --git a/package/mtree/mtree.hash b/package/mtree/mtree.hash
+new file mode 100644
+index 000000000000..8dc54a201133
+--- /dev/null
++++ b/package/mtree/mtree.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256 fb5e99b28e270ab9a4622bd7142e9a7e9703fa08db3086398c52d33bb0505327  mtree-1.0.4.tar.gz
++
++# License file (locally computed as well)
++sha256 024360ed813a773260cee77ae84196da44a0842f45cd9bddad869de13d6c4bd2  COPYING
+diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
+new file mode 100644
+index 000000000000..6227508106c7
+--- /dev/null
++++ b/package/mtree/mtree.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# mtree
++#
++################################################################################
++
++MTREE_VERSION = 1.0.4
++MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
++MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
++MTREE_LICENSE = BSD-3-Clause
++MTREE_LICENSE_FILES = COPYING
++
++MTREE_DEPENDENCIES = openssl
++
++MTREE_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+2.21.0
