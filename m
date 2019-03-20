@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Mar 2019 22:59:12 +0100
-Subject: [Buildroot] [PATCH v2 3/8] boot/arm-trusted-firmware: support
- debug mode
-In-Reply-To: <1552951269-16967-3-git-send-email-etienne.carriere@linaro.org>
+Date: Wed, 20 Mar 2019 23:03:24 +0100
+Subject: [Buildroot] [PATCH v2 4/8] boot/arm-trusted-firmware: support
+ alternate image files
+In-Reply-To: <1552951269-16967-4-git-send-email-etienne.carriere@linaro.org>
 References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
- <1552951269-16967-3-git-send-email-etienne.carriere@linaro.org>
-Message-ID: <20190320225912.65450c7f@windsurf>
+ <1552951269-16967-4-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <20190320230324.23023b9b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +14,78 @@ To: buildroot@busybox.net
 
 Hello Etienne,
 
-On Tue, 19 Mar 2019 00:21:04 +0100
+On Tue, 19 Mar 2019 00:21:05 +0100
 Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-> When the trusted firmware is built with debug support (DEBUG defined),
-> the generated images are located at a specific path. The non debug
-> images are located in generated directory build/<platform>/release/
-> while the debug images are located in generated directory
-> build/<platform>/debug/.
+> Some platform may generate specific boot image files instead of
+> the generic files *.bin  when building TF-A package. This change
+> introduces new configuration directive for the arm-trusted-firmware
+> boot package.
 > 
-> This change introduces boolean BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
-> to define whether the release or debug configuration is used to build
-> trusted firmware. Note that enabling trusted firmware debug support, i.e
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="... DEBUG=1 ..."
-> without enabling BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG will fail since
-> Buildroot will get generated files from the wrong path.
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES is boolean.
+> When disabled, install boot image files are .../*.bin.
+> When enabled, BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES shall
+> lists the names of the generated boot image files.
 > 
 > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 
-I've applied with a few minor tweaks.
+I think this is more complicated than it needs to be. See an alternate
+proposal below.
 
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG
-> +	bool "Debug mode of the trusted firmware"
-
-"of the trusted firmware" is not really useful: options are already
-indented under the package they apply to, so there's no need to repeat
-the package name.
-
-> +	default n
-
-"default n" is the default, so it's not needed.
-
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES
+> +	bool "Use custom binary boot image filenames"
 > +	help
-> +	  Enable this directive if trusted firmware is built in debug
-> +	  mode.
+> +	  If not set, build generates the boot image files with the
+> +	  generic filename that is images with .bin extension. These
+> +	  are copied to the output images/ directory.
+> +
+> +	  If enabled, use BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGES
+> +	  to list the generated file names.
+> +
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES
+> +	string "Binary boot image filenames"
+> +	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES
+> +	help
+> +	  This is used when TF-A platform generates boot image files
+> +	  with custom file names. When so, this should list the path
+> +	  of the generated files location relatively to the package
+> +	  build root directory. These files are copied to the output
+> +	  images/ directory.
 
-The wording is strange: you don't want to enable this option (not
-directive) if trusted firmware is built in debug mode. You want to
-enable it to build ATF in debug mode.
+Just one new option:
 
-Thanks,
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES
+	string "Image names"
+	default "*.bin"
+	help
+	  ...
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES),y)
+> +define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+> +	$(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES)), \
+> +		cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/ \
+> +	)
+> +endef
+> +else
+> +define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+> +	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
+> +endef
+> +endif
+
+And then just:
+
+ARM_TRUSTED_FIRMWARE_IMAGE_NAMES = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES))
+
+define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+	$(foreach f,$(wildcard $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(ARM_TRUSTED_FIRMWARE_IMAGE_NAMES)), \
+		$(INSTALL) -D -m 0644 $(f) $(BINARIES_DIR)/$(notdir $(f))
+	)
+endef
+
+(totally untested of course)
+
+Could you try something like this ?
+
+Thanks!
 
 Thomas
 -- 
