@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Mar 2019 15:36:34 +0100
-Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
-In-Reply-To: <CAOR3GqU17TUskOwG_8DfwrcEt_AJcqzgD8=5j1c2Wa+LVveeSg@mail.gmail.com>
- (Esben Haabendal's message of "Wed, 20 Mar 2019 14:53:07 +0100")
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
- <875zseitgs.fsf@dell.be.48ers.dk>
- <CAOR3GqXSxZw3m+OD3FLCFOR0Gi-v3zNJGe2+3Bhy7R6av7LVhQ@mail.gmail.com>
- <875zsdek04.fsf@dell.be.48ers.dk>
- <CAOR3GqU17TUskOwG_8DfwrcEt_AJcqzgD8=5j1c2Wa+LVveeSg@mail.gmail.com>
-Message-ID: <871s31ehot.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Mar 2019 15:42:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.3.13
+In-Reply-To: <20190319234719.9109-1-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Tue, 19 Mar 2019 16:47:19 -0700")
+References: <20190319234719.9109-1-bluemrp9@gmail.com>
+Message-ID: <87woktd2tp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esbenhaabendal@gmail.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-Hi,
+ > Release notes:
+ > https://mariadb.com/kb/en/library/mariadb-10313-release-notes/
 
- >> Ok. Out of interest, what is gummiboot adding over just directly booting
- >> a Linux kernel with CONFIG_EFI_STUB?
- >> 
+ > Changelog:
+ > https://mariadb.com/kb/en/mariadb-10313-changelog/
 
- > With gummiboot, I can point to a separate initramfs file. I haven't figured
- > out
- > how to do that with CONFIG_EFI_STUB, as the CONFIG_CMDLINE args
- > are not processed by the EFI stub.
+ > Fixes the following security vulnerabilities:
 
-I have never tried, but it looks as if you can just set
-initrd=<path/to/initramfs/in/esp>
+ > CVE-2019-2510 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: InnoDB). Supported versions that are affected are 5.7.24 and
+ > prior and 8.0.13 and prior. Easily exploitable vulnerability allows high
+ > privileged attacker with network access via multiple protocols to compromise
+ > MySQL Server. Successful attacks of this vulnerability can result in
+ > unauthorized ability to cause a hang or frequently repeatable crash
+ > (complete DOS) of MySQL Server.
 
-https://www.kernel.org/doc/Documentation/efi-stub.txt
+ > CVE-2019-2537 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: DDL). Supported versions that are affected are 5.6.42
+ > and prior, 5.7.24 and prior and 8.0.13 and prior. Easily exploitable
+ > vulnerability allows high privileged attacker with network access via
+ > multiple protocols to compromise MySQL Server. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Server.
+
+ > Note that the hash for README.md changed due to Travis CI and Appveyor CI
+ > updates.
+
+Committed after changing subject to make it clear that this is a
+security bump, thanks.
 
 -- 
 Bye, Peter Korsgaard
