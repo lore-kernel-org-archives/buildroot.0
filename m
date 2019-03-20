@@ -1,58 +1,56 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Wed, 20 Mar 2019 23:06:29 +0100
-Subject: [Buildroot] [git commit] Revert "package/meson: bump version to
- 0.50.0"
-Message-ID: <20190320220327.4E717814A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] system/skeleton: remove password
+ expiration from shadow
+Message-ID: <20190320220327.47BF2814A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c37b81af64dd8d6729325d8edbe633e6a186bb3d
+commit: https://git.buildroot.net/buildroot/commit/?id=be8d11c7e55d8dfe395774c04a7a35b949aa6d97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 114e9dcd28e1001b74689215ec669b8940dc3ea9.
-Indeed, there is major issue with this version because c_std is not
-passed anymore when cross-compiling:
-https://github.com/mesonbuild/meson/issues/5097
+The fields in /etc/shadow were set as follows:
 
-As a result, some meson packages (at least systemd, libmpdclient,
-glib-networking) fail to build
+root::10933:0:99999:7:::
 
-Fixes:
- - http://autobuild.buildroot.org/results/9eae2181fb3fcfe12481e5496b7d87c0dcd109eb
- - http://autobuild.buildroot.org/results/e828c7925d9247e14d8a8694febfee8ce6c86e81
- - http://autobuild.buildroot.org/results/031aee7cf12ad882727eb2da5e953fd8813b52e2
+This sets the date of last password change to Jan 1, 2000, the minimum
+password age to 0 days, the maximum password age to near-infinity, and a
+warning period of 7 days. In practice, this means the password never
+expires. So all of this is quite useless.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On the other hand, mkusers creates lines without all of these options.
+It just sets ::::: which disables password expiration completely.
+
+To make things consistent, do the same for the skeleton entries.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ system/skeleton/etc/shadow | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index e3d740b17c..fadef6df8a 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.50.0/meson-0.50.0.tar.gz.asc
--sha256 2a1bc42dda58206fb922cda5e1ca95cc03ad126321d26acc47d3493ec4e7021f meson-0.50.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.49.2/meson-0.49.2.tar.gz.asc
-+sha256 ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd meson-0.49.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index fbfef7002f..49e27f5527 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.50.0
-+MESON_VERSION = 0.49.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
+index 06778f13f9..37de977cba 100644
+--- a/system/skeleton/etc/shadow
++++ b/system/skeleton/etc/shadow
+@@ -1,9 +1,9 @@
+-root::10933:0:99999:7:::
+-daemon:*:10933:0:99999:7:::
+-bin:*:10933:0:99999:7:::
+-sys:*:10933:0:99999:7:::
+-sync:*:10933:0:99999:7:::
+-mail:*:10933:0:99999:7:::
+-www-data:*:10933:0:99999:7:::
+-operator:*:10933:0:99999:7:::
+-nobody:*:10933:0:99999:7:::
++root::::::::
++daemon:*:::::::
++bin:*:::::::
++sys:*:::::::
++sync:*:::::::
++mail:*:::::::
++www-data:*:::::::
++operator:*:::::::
++nobody:*:::::::
