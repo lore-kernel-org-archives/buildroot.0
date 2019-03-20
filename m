@@ -1,35 +1,115 @@
-From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Wed, 20 Mar 2019 14:47:52 +0100
-Subject: [Buildroot] [PATCH v2 1/3] gummiboot: use new official upstream git
- repository
-In-Reply-To: <20190320134754.14357-1-esben.haabendal@gmail.com>
-References: <20190320134754.14357-1-esben.haabendal@gmail.com>
-Message-ID: <20190320134754.14357-2-esben.haabendal@gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Wed, 20 Mar 2019 14:25:26 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
+Message-ID: <20190320142526.8516-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Esben Haabendal <esben@haabendal.dk>
-
-Signed-off-by: Esben Haabendal <esben@haabendal.dk>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- boot/gummiboot/gummiboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bird/Config.in | 51 ++++++++++++++++++++++++++++++++++++++++++
+ package/bird/bird.mk   | 21 +++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
-diff --git a/boot/gummiboot/gummiboot.mk b/boot/gummiboot/gummiboot.mk
-index 85a5daaeab69..0e67e5e8ce0e 100644
---- a/boot/gummiboot/gummiboot.mk
-+++ b/boot/gummiboot/gummiboot.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index a69551f94e..6d3a05e3bb 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -20,4 +20,55 @@ config BR2_PACKAGE_BIRD_CLIENT
+ 	help
+ 	  Enable the BIRD client
  
--GUMMIBOOT_SITE = http://cgit.freedesktop.org/gummiboot
-+GUMMIBOOT_SITE = https://gitlab.freedesktop.org/archived-projects/gummiboot.git
- GUMMIBOOT_SITE_METHOD = git
- GUMMIBOOT_VERSION = 43
- GUMMIBOOT_LICENSE = LGPL-2.1+
++config BR2_PACKAGE_BIRD_BABEL
++	bool "babel"
++	help
++	  Enable Babel protocol.
++
++config BR2_PACKAGE_BIRD_BFD
++	bool "bfd"
++	help
++	  Enable BFD protocol.
++
++config BR2_PACKAGE_BIRD_BGP
++	bool "bgp"
++	default y
++	help
++	  Enable BGP protocol.
++
++config BR2_PACKAGE_BIRD_MRT
++	bool "mrt"
++	help
++	  Enable MRT protocol.
++
++config BR2_PACKAGE_BIRD_OSPF
++	bool "ospf"
++	help
++	  Enable OSPFv2 and OSPFv3 protocol.
++
++config BR2_PACKAGE_BIRD_PERF
++	bool "perf"
++	help
++	  Enable Perf protocol.
++
++config BR2_PACKAGE_BIRD_PIPE
++	bool "pipe"
++	help
++	  Enable Pipe protocol.
++
++config BR2_PACKAGE_BIRD_RADV
++	bool "radv"
++	help
++	  Enable RAdv protocol.
++
++config BR2_PACKAGE_BIRD_RIP
++	bool "rip"
++	help
++	  Enable RIP protocol.
++
++config BR2_PACKAGE_BIRD_STATIC
++	bool "static"
++	help
++	  Enable Static protocol.
++
+ endif
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index e165be61c0..7dc851a592 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -10,6 +10,8 @@ BIRD_LICENSE = GPL-2.0+
+ BIRD_LICENSE_FILES = README
+ BIRD_DEPENDENCIES = host-flex host-bison
+ 
++BIRD_CONF_OPTS += --disable-mpls-kernel --disable-libssh
++
+ ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
+ BIRD_CONF_OPTS += --enable-client
+ BIRD_DEPENDENCIES += ncurses readline
+@@ -17,4 +19,23 @@ else
+ BIRD_CONF_OPTS += --disable-client
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++BIRD_CONF_OPTS += --enable-pthreads
++else
++BIRD_CONF_OPTS += --disable-pthreads
++endif
++
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
++
++BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
++
+ $(eval $(autotools-package))
 -- 
-2.21.0
+2.19.1
