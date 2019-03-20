@@ -1,75 +1,21 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Mar 2019 20:20:19 +0100
-Subject: [Buildroot] [PATCH v5 1/4] board/qemu/riscv32-virt: Update
- linux config
-In-Reply-To: <20190320003706.1126-1-alistair.francis@wdc.com>
-References: <20190320003706.1126-1-alistair.francis@wdc.com>
-Message-ID: <3f551905-3796-fadb-7501-52fadbf575e7@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Mar 2019 21:15:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.27.0
+In-Reply-To: <20190320184446.20176-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Wed, 20 Mar 2019 20:44:46 +0200")
+References: <20190320184446.20176-1-asafka7@gmail.com>
+Message-ID: <87o965cnfe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alistair,
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-On 20/03/2019 01:38, Alistair Francis wrote:
-> Update the Linux defconfig. This defconfig is the in tree defconfig with
-> 32-bit support enabled.
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
- I would prefer two patches: a first patch that just converts the current
-linux.config into a config fragment, without changing anything, and then a
-second patch that adds features.
+Committed, thanks.
 
- To do the first patch, just do
-
-make linux-configure
-cp output/build/linux*/.config /tmp/riscv32.config
-(select BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG)
-make linux-reconfigure
-utils/diffconfig -m output/build/linux*/.config /tmp/riscv32.config > \
-	board/qemu/riscv32-virt/linux.config.fragment
-(set BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES)
-make linux-reconfigure
-diff -u output/build/linux*/.config /tmp/riscv32.config
-
- For the second patch, you either use the same procedure as above, or you just
-manually add the relevant symbols from the fragment.
-
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> ---
->  board/qemu/riscv32-virt/linux.config | 35 +++++++++++-----------------
->  configs/qemu_riscv32_virt_defconfig  |  4 ++--
->  2 files changed, 15 insertions(+), 24 deletions(-)
-> 
-> diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
-> index c25583f768..fa8a9fd650 100644
-> --- a/board/qemu/riscv32-virt/linux.config
-> +++ b/board/qemu/riscv32-virt/linux.config
-> @@ -1,23 +1,14 @@
-> +CONFIG_32BIT=y
-> +CONFIG_PAGE_OFFSET=0xC0000000
-
- This makes no sense... These are blind symbols, so their values will be ignored.
-
- Or am I missing something?
-
-[snip]
-> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> index 6f9a61b11c..15b4c5624c 100644
-> --- a/configs/qemu_riscv32_virt_defconfig
-> +++ b/configs/qemu_riscv32_virt_defconfig
-> @@ -18,8 +18,8 @@ BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
->  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
-> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config"
-
- Since it's a fragment, better call it linux.config.fragment or linux.fragment
-(we have both currently, but a bit more of linux.config.fragment).
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
