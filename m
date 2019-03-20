@@ -1,46 +1,49 @@
-From: Esben Haabendal <esbenhaabendal@gmail.com>
-Date: Wed, 20 Mar 2019 16:03:16 +0100
-Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
-In-Reply-To: <871s31ehot.fsf@dell.be.48ers.dk>
-References: <20190319112852.9592-1-esben.haabendal@gmail.com>
- <875zseitgs.fsf@dell.be.48ers.dk>
- <CAOR3GqXSxZw3m+OD3FLCFOR0Gi-v3zNJGe2+3Bhy7R6av7LVhQ@mail.gmail.com>
- <875zsdek04.fsf@dell.be.48ers.dk>
- <CAOR3GqU17TUskOwG_8DfwrcEt_AJcqzgD8=5j1c2Wa+LVveeSg@mail.gmail.com>
- <871s31ehot.fsf@dell.be.48ers.dk>
-Message-ID: <CAOR3GqV69iT1+1Qh3=j8MQygZGJApomnqB_xi1Hue3NrTRVTDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Mar 2019 17:23:58 +0100
+Subject: [Buildroot] [git commit] package/uftp: fix openssl static linking
+Message-ID: <20190320162104.C368581DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 20, 2019 at 3:36 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c11aae0e064ad285deaa7ccaf141cc9920a59442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >>>>> "Esben" == Esben Haabendal <esbenhaabendal@gmail.com> writes:
->
->   >> Ok. Out of interest, what is gummiboot adding over just directly
-> booting
->  >> a Linux kernel with CONFIG_EFI_STUB?
->
->  > With gummiboot, I can point to a separate initramfs file. I haven't
-> figured
->  > out
->  > how to do that with CONFIG_EFI_STUB, as the CONFIG_CMDLINE args
->  > are not processed by the EFI stub.
->
-> I have never tried, but it looks as if you can just set
-> initrd=<path/to/initramfs/in/esp>
->
-> https://www.kernel.org/doc/Documentation/efi-stub.txt
->
+Fixes:
+ - http://autobuild.buildroot.org/results/051cfd993b65830c34e675d797e241c272b6f35a
 
-Yes, you can use initrd=... if you provide the cmdline to the EFI stub.
-But if you compile in the cmdline using CONFIG_CMDLINE, it will
-not work, as it will only be available for Linux kernel, and not for
-EFI stub.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uftp/uftp.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-/Esben
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190320/64a132a5/attachment.html>
+diff --git a/package/uftp/uftp.mk b/package/uftp/uftp.mk
+index bbc362652b..f9f0502b49 100644
+--- a/package/uftp/uftp.mk
++++ b/package/uftp/uftp.mk
+@@ -6,16 +6,19 @@
+ 
+ UFTP_VERSION = 4.9.9
+ UFTP_SITE = http://sourceforge.net/projects/uftp-multicast/files/source-tar
+-UFTP_DEPENDENCIES = openssl
++UFTP_DEPENDENCIES = host-pkgconf openssl
+ UFTP_LICENSE = GPL-3.0+
+ UFTP_LICENSE_FILES = LICENSE.txt
+ 
++UFTP_MAKE_OPTS = CRYPT_LIB="`$(PKG_CONFIG_HOST_BINARY) --libs libssl`"
++
+ define UFTP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS)
+ endef
+ 
+ define UFTP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(UFTP_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
