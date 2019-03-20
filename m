@@ -1,74 +1,116 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 20 Mar 2019 03:05:13 -0600
-Subject: [Buildroot] [RFC] openssh: add option to allow login as root
-In-Reply-To: <87imwdexcs.fsf@dell.be.48ers.dk>
-References: <20190319114156.10696-1-esben.haabendal@gmail.com>
- <87mulqebah.fsf@dell.be.48ers.dk>
- <f11c03b3-7edd-5c55-7287-61684f2c9a64@mind.be>
- <87imwdexcs.fsf@dell.be.48ers.dk>
-Message-ID: <CADvTj4q9+uWVE-Yooj7gwVygHca0Y8KiKoHUBtRruf2jzyi8mQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Mar 2019 10:20:33 +0100
+Subject: [Buildroot] [PATCH v2 6/8] configs/qemu_armv7a_tz_virt: Armv7-A
+ emulation with TrustZone services
+In-Reply-To: <CAN5uoS-TB-qso-27HKP6G4zhHmh-VrvQ+KgkbTsF47SrQ08K9Q@mail.gmail.com>
+References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
+ <1552951269-16967-6-git-send-email-etienne.carriere@linaro.org>
+ <fd4d553e-7db9-3e2e-7e2d-e266a352fa31@mind.be>
+ <CAN5uoS-TB-qso-27HKP6G4zhHmh-VrvQ+KgkbTsF47SrQ08K9Q@mail.gmail.com>
+Message-ID: <0193b95d-b0cd-9076-b618-487a10fadeb8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 20, 2019 at 2:58 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
-> Hi,
->
->  >> We discussed it tonight on IRC and didn't really get to a good compromise.
->  >>
->  >> On one hand, we prefer to stick with upstream defaults (especially when
->  >> security is involved)
->
->  >  This patch doesn't change the defaults.
->
-> No, but the discussion on IRC included talking about if there should be
-> an option or if we should unconditionally allow/disallow root logins.
->
->  >> We prefer to not add configuration options for these kind of
->  >> detailed policy decisions,
->
->  >  *That* is the crux of the matter. We normally only have configurability of
->  > compile-time options, and assume that anything else is handled in post-build
->  > scripts. The (only?) exception to that principle is the system menu.
->
->  >  So *maybe* something global in the system menu could work, and then dropbear
->  > and openssh and whatnot would do whatever is needed to permit/disallow root
->  > login for that particular package. But I'm not exactly ecstatic about that option.
->
-> Me neither.
->
->
->  >> as openssh has a LOT of other configuration
->  >> options
->
->  >  True, but permitting root login is clearly one that is a lot more
->  > important/relevant than all the others. Currently, the typical user will naively
->  > enable openssh, then try to ssh into the device, and fail...
->
-> Correct. It will also fail for dropbear as the root user by default does
-> not have a password set.
->
->
->  >> So all in all, this kind of policy tweaks are better done in a post
->  >> build script.
->
->  >  In the few projects where I've seen openssh used, it was always with a custom
->  > config file. Otherwise, there's not much reason to use openssh instead of
->  > dropbear I guess.
->
-> Indeed. I always use dropbear as well.
-One reason for using openssh instead of dropbear without a custom
-config would be
-for sftp support.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+On 20/03/2019 09:49, Etienne Carriere wrote:
+> Hello Arnout,
+> 
+> 
+> On Tue, 19 Mar 2019 at 23:00, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>  Hi Etienne,
+>>
+>>  Just a few points I noticed, not a complete review...
+>>
+>> On 19/03/2019 00:21, Etienne Carriere wrote:
+>>> +  ln -s ./u-boot.bin output/images/bl33.bin
+>>> +  ln -s ./tee-header_v2.bin output/images/bl32.bin
+>>> +  ln -s ./tee-pager_v2.bin output/images/bl32_extra1.bin
+>>> +  ln -s ./tee-pageable_v2.bin output/images/bl32_extra2.bin
+>>
+>>  This should be done in a post-build script.
+> 
+> This file renaming is very specific to the Qemu platform due to Qemu
+> semihosting. If done at installation time, it should be part of
+> optee-os.mk or arm-trusted-firmware.mk. But such a change would be
+> relevant only for the Qemu based boards. It is not generic at all.
+
+ ... which is why I say it should be part of a post-build script that is
+specific for this defconfig. I'm talking about BR2_ROOTFS_POST_BUILD_SCRIPT.
+
+
+> I though it would be simpler to state this file renaming in the board
+> readme file, rather than a hack in boot/arm-trusted-firmware package
+> for the Qemu case.
+
+[snip]
+>>  In fact, I think this defconfig should be as close as possible to the vexpress
+>> defconfig. But I'm not sure if the a9 supports trustzone, so perhaps it's better
+>> to switch the vexpress config to a15.
+> 
+> c-a9 supports trustzone. But c-a15 is more handy to cover various
+> armv7-a cores flavors.
+> c-15 supports c-a9 features plus other features found in the armv7-a
+> family (virtualization, 40-bit addressing, ...)
+
+ ... which is exactly why a9 is interesting, because code built for a9 will run
+on most other cortexes while code built for a15 will possibly not run on a9.
+
+> The Qemu platforms upstreamed in TF-A and OP-TEE are based on c-a15.
+
+ That, however, is a good reason to use a15 for this defconfig.
+
+
+> That said, whether the proposed qemu_armv7a_tz_virt should replace
+> existing vexpress, I really cannot tell.
+
+ I never said to replace it! I said it should be as close as possible. IOW, any
+difference between the tz defconfig and the vexpress defconfig should have a
+good reason. And that reason should be explained in the commit message.
+
+ This reminds me: the defconfig should be named qemu_arm_vexpress_tz_defconfig
+so it is clear that it's a variant of qemu_arm_vexpress_defconfig.
+
+ I would also tend to merge the readme with the existing
+board/qemu/arm-vexpress/readme.txt because their content is a bit similar. But
+there are also reasons to split them (e.g., the script that scrapes the qemu
+launch command from the readme wouldn't work anymore).
+
+> Enabling arm-trustzone in
+> Qemu (-machine secure=on) may drop features that the current vexpress
+> supports (graphics?).
+> 
+>>
+>> [snip]
+>>> +# Qemu emulator for the Arm target
+>>> +BR2_PACKAGE_HOST_QEMU=y
+>>> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+>>> +BR2_PACKAGE_HOST_QEMU_VIRTFS=y
+>>
+>>  Why is this needed? AFAICS there is nothing special about the Buildroot-built
+>> host-qemu, so the system-installed qemu should work just as well, no?
+> 
+> By system-installed you mean the user OS, as my ubuntu, for example,
+> where I run Buildroot builds and tests?
+
+ Indeed, that's what I mean.
+
+> I think it is a shame I need to install a specific version of Qemu on
+> my host when Buildroot can produce the up-to-date Qemu tools.
+
+ Do you mean that trustzone emulation is a recent addition to qemu and is not
+yet available in the version shipped with e.g. Ubuntu 18.04? That would indeed
+be a valid reason to build qemu. But is should be explained in the commit log.
+
+ Otherwise, we should be consistent with all our qemu defconfigs. I agree that
+there is something to be said for building qemu as part of the defconfig. It
+would increase the build time, but probably not that much more compared to
+building the toolchain. But if we do this, it should be done for all qemu
+defconfigs, and the readme's should be updated.
+
+ Regards,
+ Arnout
