@@ -1,115 +1,37 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Wed, 20 Mar 2019 14:25:26 +0000
-Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
-Message-ID: <20190320142526.8516-1-adrien@gallouet.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Mar 2019 15:36:34 +0100
+Subject: [Buildroot] [PATCH 0/3] Gummiboot fixup
+In-Reply-To: <CAOR3GqU17TUskOwG_8DfwrcEt_AJcqzgD8=5j1c2Wa+LVveeSg@mail.gmail.com>
+ (Esben Haabendal's message of "Wed, 20 Mar 2019 14:53:07 +0100")
+References: <20190319112852.9592-1-esben.haabendal@gmail.com>
+ <875zseitgs.fsf@dell.be.48ers.dk>
+ <CAOR3GqXSxZw3m+OD3FLCFOR0Gi-v3zNJGe2+3Bhy7R6av7LVhQ@mail.gmail.com>
+ <875zsdek04.fsf@dell.be.48ers.dk>
+ <CAOR3GqU17TUskOwG_8DfwrcEt_AJcqzgD8=5j1c2Wa+LVveeSg@mail.gmail.com>
+Message-ID: <871s31ehot.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/bird/Config.in | 51 ++++++++++++++++++++++++++++++++++++++++++
- package/bird/bird.mk   | 21 +++++++++++++++++
- 2 files changed, 72 insertions(+)
+>>>>> "Esben" == Esben Haabendal <esbenhaabendal@gmail.com> writes:
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index a69551f94e..6d3a05e3bb 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -20,4 +20,55 @@ config BR2_PACKAGE_BIRD_CLIENT
- 	help
- 	  Enable the BIRD client
- 
-+config BR2_PACKAGE_BIRD_BABEL
-+	bool "babel"
-+	help
-+	  Enable Babel protocol.
-+
-+config BR2_PACKAGE_BIRD_BFD
-+	bool "bfd"
-+	help
-+	  Enable BFD protocol.
-+
-+config BR2_PACKAGE_BIRD_BGP
-+	bool "bgp"
-+	default y
-+	help
-+	  Enable BGP protocol.
-+
-+config BR2_PACKAGE_BIRD_MRT
-+	bool "mrt"
-+	help
-+	  Enable MRT protocol.
-+
-+config BR2_PACKAGE_BIRD_OSPF
-+	bool "ospf"
-+	help
-+	  Enable OSPFv2 and OSPFv3 protocol.
-+
-+config BR2_PACKAGE_BIRD_PERF
-+	bool "perf"
-+	help
-+	  Enable Perf protocol.
-+
-+config BR2_PACKAGE_BIRD_PIPE
-+	bool "pipe"
-+	help
-+	  Enable Pipe protocol.
-+
-+config BR2_PACKAGE_BIRD_RADV
-+	bool "radv"
-+	help
-+	  Enable RAdv protocol.
-+
-+config BR2_PACKAGE_BIRD_RIP
-+	bool "rip"
-+	help
-+	  Enable RIP protocol.
-+
-+config BR2_PACKAGE_BIRD_STATIC
-+	bool "static"
-+	help
-+	  Enable Static protocol.
-+
- endif
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index e165be61c0..7dc851a592 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -10,6 +10,8 @@ BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
- BIRD_DEPENDENCIES = host-flex host-bison
- 
-+BIRD_CONF_OPTS += --disable-mpls-kernel --disable-libssh
-+
- ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
- BIRD_CONF_OPTS += --enable-client
- BIRD_DEPENDENCIES += ncurses readline
-@@ -17,4 +19,23 @@ else
- BIRD_CONF_OPTS += --disable-client
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+BIRD_CONF_OPTS += --enable-pthreads
-+else
-+BIRD_CONF_OPTS += --disable-pthreads
-+endif
-+
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
-+BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
-+
-+BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
-+
- $(eval $(autotools-package))
+Hi,
+
+ >> Ok. Out of interest, what is gummiboot adding over just directly booting
+ >> a Linux kernel with CONFIG_EFI_STUB?
+ >> 
+
+ > With gummiboot, I can point to a separate initramfs file. I haven't figured
+ > out
+ > how to do that with CONFIG_EFI_STUB, as the CONFIG_CMDLINE args
+ > are not processed by the EFI stub.
+
+I have never tried, but it looks as if you can just set
+initrd=<path/to/initramfs/in/esp>
+
+https://www.kernel.org/doc/Documentation/efi-stub.txt
+
 -- 
-2.19.1
+Bye, Peter Korsgaard
