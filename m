@@ -1,97 +1,98 @@
-From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Wed, 20 Mar 2019 21:45:51 +0100
-Subject: [Buildroot] [PATCH v2] mtree: new package
-Message-ID: <20190320204551.16245-1-esben.haabendal@gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Wed, 20 Mar 2019 21:09:44 +0000
+Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
+Message-ID: <20190320210943.21377-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Esben Haabendal <esben@haabendal.dk>
-
-Signed-off-by: Esben Haabendal <esben@haabendal.dk>
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- DEVELOPERS              |  3 +++
- package/Config.in       |  1 +
- package/mtree/Config.in | 12 ++++++++++++
- package/mtree/mtree.mk  | 23 +++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/mtree/Config.in
- create mode 100644 package/mtree/mtree.mk
+ package/bird/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++
+ package/bird/bird.mk   | 16 +++++++++++++++
+ 2 files changed, 62 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e0ac08e1136..4b827ae4d276 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -697,6 +697,9 @@ F:	package/mxsldr/
- N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
- F:	package/szip/
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index a69551f94e..298348d098 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -20,4 +20,50 @@ config BR2_PACKAGE_BIRD_CLIENT
+ 	help
+ 	  Enable the BIRD client
  
-+N:	Esben Haabendal <esben@haabendal.dk>
-+F:	package/mtree/
-+
- N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
- F:	package/optee-benchmark/
-diff --git a/package/Config.in b/package/Config.in
-index b5321aeb49c9..13f7fae09df6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -197,6 +197,7 @@ menu "Filesystem and flash utilities"
- 	source "package/mmc-utils/Config.in"
- 	source "package/mtd/Config.in"
- 	source "package/mtools/Config.in"
-+	source "package/mtree/Config.in"
- 	source "package/nfs-utils/Config.in"
- 	source "package/nilfs-utils/Config.in"
- 	source "package/ntfs-3g/Config.in"
-diff --git a/package/mtree/Config.in b/package/mtree/Config.in
-new file mode 100644
-index 000000000000..38375f012e28
---- /dev/null
-+++ b/package/mtree/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_MTREE
-+	bool "mtree"
-+	# mtree uses <fts.h> which is not included by default in uClibc
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_OPENSSL
++config BR2_PACKAGE_BIRD_BABEL
++	bool "babel"
 +	help
-+	  mtree - utility for creating and verifying file hierarchies.
++	  Enable Babel protocol.
 +
-+	  Port of the mtree utility, originally only available in BSD
-+	  distributions, to Linux and other operating systems.
++config BR2_PACKAGE_BIRD_BFD
++	bool "bfd"
++	help
++	  Enable BFD protocol.
 +
-+	  https://github.com/archiecobbs/mtree-port
-diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
-new file mode 100644
-index 000000000000..9c5fa2d44d19
---- /dev/null
-+++ b/package/mtree/mtree.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# mtree
-+#
-+################################################################################
++config BR2_PACKAGE_BIRD_BGP
++	bool "bgp"
++	default y
++	help
++	  Enable BGP protocol.
 +
-+MTREE_VERSION = 1.0.4
-+MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
-+MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
-+MTREE_LICENSE = BSD-3-Clause
-+MTREE_LICENSE_FILES = COPYING
++config BR2_PACKAGE_BIRD_MRT
++	bool "mrt"
++	help
++	  Enable MRT protocol.
 +
-+MTREE_DEPENDENCIES = openssl
++config BR2_PACKAGE_BIRD_OSPF
++	bool "ospf"
++	help
++	  Enable OSPFv2 and OSPFv3 protocol.
 +
-+MTREE_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++config BR2_PACKAGE_BIRD_PERF
++	bool "perf"
++	help
++	  Enable Perf protocol.
 +
-+MTREE_TARGET_CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))"
-+MTREE_TARGET_CPPFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
-+MTREE_CONF_ENV = \
-+	CPPFLAGS="$(MTREE_TARGET_CPPFLAGS)" \
-+	CFLAGS="$(MTREE_TARGET_CFLAGS)"
++config BR2_PACKAGE_BIRD_PIPE
++	bool "pipe"
++	help
++	  Enable Pipe protocol.
 +
-+$(eval $(autotools-package))
++config BR2_PACKAGE_BIRD_RADV
++	bool "radv"
++	help
++	  Enable RAdv protocol.
++
++config BR2_PACKAGE_BIRD_STATIC
++	bool "static"
++	help
++	  Enable Static protocol.
++
+ endif
+diff --git a/package/bird/bird.mk b/package/bird/bird.mk
+index e165be61c0..26bec01ebf 100644
+--- a/package/bird/bird.mk
++++ b/package/bird/bird.mk
+@@ -17,4 +17,20 @@ else
+ BIRD_CONF_OPTS += --disable-client
+ endif
+ 
++# BUG: RIP is needed for now
++BR2_PACKAGE_BIRD_RIP=y
++
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
++BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
++
++BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
++
+ $(eval $(autotools-package))
 -- 
-2.21.0
+2.19.1
