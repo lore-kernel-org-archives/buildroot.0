@@ -1,107 +1,74 @@
-From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Wed, 20 Mar 2019 22:30:06 +0100
-Subject: [Buildroot] [PATCH v3] mtree: new package
-Message-ID: <20190320213006.28367-1-esben.haabendal@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 20 Mar 2019 14:28:59 -0700
+Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
+In-Reply-To: <20190320221236.1ea9c11b@windsurf>
+References: <20190320003706.1126-1-alistair.francis@wdc.com>
+ <20190320003706.1126-2-alistair.francis@wdc.com>
+ <20190320221236.1ea9c11b@windsurf>
+Message-ID: <CAKmqyKP7TfOOOkggSVJdJZVzp3mrOM1Vb9Y-mWQpEPPdrYXjVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Esben Haabendal <esben@haabendal.dk>
+On Wed, Mar 20, 2019 at 2:12 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Francis,
+>
+> You are respining the patches too fast, without answering some of the
+> questions, and therefore there's still an issue, see below.
 
-Signed-off-by: Esben Haabendal <esben@haabendal.dk>
----
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/mtree/Config.in  | 15 +++++++++++++++
- package/mtree/mtree.hash |  5 +++++
- package/mtree/mtree.mk   | 17 +++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/mtree/Config.in
- create mode 100644 package/mtree/mtree.hash
- create mode 100644 package/mtree/mtree.mk
+Sorry, I didn't realise I didn't respond to a question.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e0ac08e1136..4b827ae4d276 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -697,6 +697,9 @@ F:	package/mxsldr/
- N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
- F:	package/szip/
- 
-+N:	Esben Haabendal <esben@haabendal.dk>
-+F:	package/mtree/
-+
- N:	Etienne Carriere <etienne.carriere@linaro.org>
- F:	boot/optee-os/
- F:	package/optee-benchmark/
-diff --git a/package/Config.in b/package/Config.in
-index b5321aeb49c9..13f7fae09df6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -197,6 +197,7 @@ menu "Filesystem and flash utilities"
- 	source "package/mmc-utils/Config.in"
- 	source "package/mtd/Config.in"
- 	source "package/mtools/Config.in"
-+	source "package/mtree/Config.in"
- 	source "package/nfs-utils/Config.in"
- 	source "package/nilfs-utils/Config.in"
- 	source "package/ntfs-3g/Config.in"
-diff --git a/package/mtree/Config.in b/package/mtree/Config.in
-new file mode 100644
-index 000000000000..175d05d3bb0d
---- /dev/null
-+++ b/package/mtree/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MTREE
-+	bool "mtree"
-+	# mtree uses <fts.h> which is not included by default in uClibc
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# fts.h does not support LFS (_FILE_OFFSET_BITS==64) in glibc versions
-+	# older than 2.23, and codesourcery-arm is currently using glibc 2.18
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  mtree - utility for creating and verifying file hierarchies.
-+
-+	  Port of the mtree utility, originally only available in BSD
-+	  distributions, to Linux and other operating systems.
-+
-+	  https://github.com/archiecobbs/mtree-port
-diff --git a/package/mtree/mtree.hash b/package/mtree/mtree.hash
-new file mode 100644
-index 000000000000..8dc54a201133
---- /dev/null
-+++ b/package/mtree/mtree.hash
-@@ -0,0 +1,5 @@
-+# Locally computed
-+sha256 fb5e99b28e270ab9a4622bd7142e9a7e9703fa08db3086398c52d33bb0505327  mtree-1.0.4.tar.gz
-+
-+# License file (locally computed as well)
-+sha256 024360ed813a773260cee77ae84196da44a0842f45cd9bddad869de13d6c4bd2  COPYING
-diff --git a/package/mtree/mtree.mk b/package/mtree/mtree.mk
-new file mode 100644
-index 000000000000..6227508106c7
---- /dev/null
-+++ b/package/mtree/mtree.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# mtree
-+#
-+################################################################################
-+
-+MTREE_VERSION = 1.0.4
-+MTREE_SOURCE = mtree-$(MTREE_VERSION).tar.gz
-+MTREE_SITE = https://s3.amazonaws.com/archie-public/mtree-port
-+MTREE_LICENSE = BSD-3-Clause
-+MTREE_LICENSE_FILES = COPYING
-+
-+MTREE_DEPENDENCIES = openssl
-+
-+MTREE_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-+
-+$(eval $(autotools-package))
--- 
-2.21.0
+>
+> On Wed, 20 Mar 2019 00:38:05 +0000
+> Alistair Francis <Alistair.Francis@wdc.com> wrote:
+>
+> > +ifneq ($(OPENSBI_PLAT),)
+> > +OPENSBI_PLAT_INSTALL = \
+> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
+> > +     $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> > +endif
+> > +
+> > +# Install libsbi.a in the host lib dir so it can be linked in the future.
+> > +define OPENSBI_INSTALL_IMAGES_CMDS
+> > +     $(OPENSBI_PLAT_INSTALL)
+> > +     $(INSTALL) -m 0644 -D $(@D)/build/lib/libsbi.a $(HOST_DIR)/usr/lib
+>
+> I suppose that libsbi.a contains code cross-compiled for RISC-V, so
+> installing it in $(HOST_DIR) is wrong in this case. It should go in
+> $(STAGING_DIR).
+
+Yes, it does contain cross compiled code. I have changed it to the STAGING_DIR.
+
+>
+> The second question, which I asked in my review of your v4 is whether
+> this library is meant to be linked into bare-metal code (which is what
+
+Sorry, I missed your question. It is meant to be linked into bare metal code.
+
+> I would expect for something related to firmware) or to Linux
+> user-space applications. In the latter case, installing to
+> $(STAGING_DIR)/usr/lib is the right thing to do. In the former case
+> however, it should probably be installed elsewhere, maybe
+> $(STAGING_DIR)/usr/share/opensbi (but I'm not a FHS expert).
+
+$(STAGING_DIR)/usr/share/opensbi looks good to me. I will use that.
+
+>
+> Also, when -D is used, the destination path should include the filename.
+
+Ok, fixed.
+
+Alistair
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
