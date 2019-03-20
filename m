@@ -1,56 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 20 Mar 2019 20:10:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jq: security bump to version 1.6
-Message-ID: <20190320191001.6968-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Mar 2019 20:20:19 +0100
+Subject: [Buildroot] [PATCH v5 1/4] board/qemu/riscv32-virt: Update
+ linux config
+In-Reply-To: <20190320003706.1126-1-alistair.francis@wdc.com>
+References: <20190320003706.1126-1-alistair.francis@wdc.com>
+Message-ID: <3f551905-3796-fadb-7501-52fadbf575e7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2015-8863 and  CVE-2016-4074:
-  https://github.com/stedolan/jq/issues/1406
-- Add hash for license file
-- Disable oniguruma (enabled by default)
+ Hi Alistair,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jq/jq.hash | 3 ++-
- package/jq/jq.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+On 20/03/2019 01:38, Alistair Francis wrote:
+> Update the Linux defconfig. This defconfig is the in tree defconfig with
+> 32-bit support enabled.
 
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index 2cd640563a..449619b024 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  c4d2bfec6436341113419debf479d833692cc5cdab7eb0326b5a4d4fbe9f493c  jq-1.5.tar.gz
-+sha256  5de8c8e29aaa3fb9cc6b47bb27299f271354ebb72514e3accadc7d38b5bbaa72  jq-1.6.tar.gz
-+sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 79629faa5e..aebe8c86e4 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JQ_VERSION = 1.5
-+JQ_VERSION = 1.6
- JQ_SITE = https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)
- JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
-@@ -17,8 +17,8 @@ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
- HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
- 
- # jq explicitly enables maintainer mode, which we don't need/want
--JQ_CONF_OPTS += --disable-maintainer-mode
--HOST_JQ_CONF_OPTS += --disable-maintainer-mode
-+JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
-+HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.14.1
+ I would prefer two patches: a first patch that just converts the current
+linux.config into a config fragment, without changing anything, and then a
+second patch that adds features.
+
+ To do the first patch, just do
+
+make linux-configure
+cp output/build/linux*/.config /tmp/riscv32.config
+(select BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG)
+make linux-reconfigure
+utils/diffconfig -m output/build/linux*/.config /tmp/riscv32.config > \
+	board/qemu/riscv32-virt/linux.config.fragment
+(set BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES)
+make linux-reconfigure
+diff -u output/build/linux*/.config /tmp/riscv32.config
+
+ For the second patch, you either use the same procedure as above, or you just
+manually add the relevant symbols from the fragment.
+
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  board/qemu/riscv32-virt/linux.config | 35 +++++++++++-----------------
+>  configs/qemu_riscv32_virt_defconfig  |  4 ++--
+>  2 files changed, 15 insertions(+), 24 deletions(-)
+> 
+> diff --git a/board/qemu/riscv32-virt/linux.config b/board/qemu/riscv32-virt/linux.config
+> index c25583f768..fa8a9fd650 100644
+> --- a/board/qemu/riscv32-virt/linux.config
+> +++ b/board/qemu/riscv32-virt/linux.config
+> @@ -1,23 +1,14 @@
+> +CONFIG_32BIT=y
+> +CONFIG_PAGE_OFFSET=0xC0000000
+
+ This makes no sense... These are blind symbols, so their values will be ignored.
+
+ Or am I missing something?
+
+[snip]
+> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+> index 6f9a61b11c..15b4c5624c 100644
+> --- a/configs/qemu_riscv32_virt_defconfig
+> +++ b/configs/qemu_riscv32_virt_defconfig
+> @@ -18,8 +18,8 @@ BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
+> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux.config"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config"
+
+ Since it's a fragment, better call it linux.config.fragment or linux.fragment
+(we have both currently, but a bit more of linux.config.fragment).
+
+ Regards,
+ Arnout
