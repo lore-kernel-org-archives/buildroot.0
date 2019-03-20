@@ -1,76 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 20 Mar 2019 23:21:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
- vorbis
-Message-ID: <20190320222123.18503-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 20 Mar 2019 23:28:47 +0100
+Subject: [Buildroot] [git commit] package/libfuse: Install udev rules and
+ set permissions
+Message-ID: <20190320222553.6785982B3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
+commit: https://git.buildroot.net/buildroot/commit/?id=ea62ff85b59aa1ff7757787061eb451b4b4780df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This fixes some omissions from the installation.
+
+Install the udev rules.
+
+Tell buildroot about the fuse device.
+
+Apply setuid permissions on the fusermount tool.
+
+Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...FMPEG.cmake-fix-static-linking-with-vorbi.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/gerbera/0002-cmake-FindFFMPEG.cmake-fix-static-linking-with-vorbi.patch
+ package/libfuse/libfuse.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/gerbera/0002-cmake-FindFFMPEG.cmake-fix-static-linking-with-vorbi.patch b/package/gerbera/0002-cmake-FindFFMPEG.cmake-fix-static-linking-with-vorbi.patch
-new file mode 100644
-index 0000000000..7a7e9874ea
---- /dev/null
-+++ b/package/gerbera/0002-cmake-FindFFMPEG.cmake-fix-static-linking-with-vorbi.patch
-@@ -0,0 +1,48 @@
-+From 61fb053773b04e9379e0367ec80aaa9848d7cbbc Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 20 Mar 2019 23:03:33 +0100
-+Subject: [PATCH] cmake/FindFFMPEG.cmake: fix static linking with vorbis
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index e8a79a3166..84027ebedb 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -14,11 +14,22 @@ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBFUSE_CONF_OPTS = \
+ 	--disable-example \
+ 	--enable-lib \
+-	--enable-util
++	--enable-util \
++	UDEV_RULES_PATH=/lib/udev/rules.d
+ 
+ define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
++	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
++	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
++endef
 +
-+Add ogg to FFMPEG_LIBRARIES in FindFFMPEG.cmake otherwise static
-+linking will fail as ogg is a dependency of vorbis
++define LIBFUSE_DEVICES
++	/dev/fuse  c  666  0  0  10  229  0  0  -
++endef
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gerbera/gerbera/pull/434]
-+---
-+ cmake/FindFFMPEG.cmake | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/cmake/FindFFMPEG.cmake b/cmake/FindFFMPEG.cmake
-+index 7e9b0396..0a4a409f 100644
-+--- a/cmake/FindFFMPEG.cmake
-++++ b/cmake/FindFFMPEG.cmake
-+@@ -107,6 +107,11 @@ FIND_LIBRARY(FFMPEG_vorbis_LIBRARY vorbis
-+         /usr/lib
-+         )
-+ 
-++FIND_LIBRARY(FFMPEG_ogg_LIBRARY ogg
-++        /usr/local/lib
-++        /usr/lib
-++        )
-++
-+ FIND_LIBRARY(FFMPEG_dc1394_LIBRARY dc1394_control
-+         /usr/local/lib
-+         /usr/lib
-+@@ -176,6 +181,11 @@ IF (FFMPEG_INCLUDE_DIR)
-+                     LIST(APPEND FFMPEG_LIBRARIES ${FFMPEG_vorbis_LIBRARY})
-+                 ENDIF (FFMPEG_vorbis_LIBRARY)
-+ 
-++                # ogg is a dependency of vorbis 
-++                IF (FFMPEG_ogg_LIBRARY)
-++                    LIST(APPEND FFMPEG_LIBRARIES ${FFMPEG_ogg_LIBRARY})
-++                ENDIF (FFMPEG_ogg_LIBRARY)
-++
-+                 IF (FFMPEG_dc1394_LIBRARY)
-+                     LIST(APPEND FFMPEG_LIBRARIES ${FFMPEG_dc1394_LIBRARY})
-+                 ENDIF (FFMPEG_dc1394_LIBRARY)
-+-- 
-+2.14.1
-+
--- 
-2.14.1
++define LIBFUSE_PERMISSIONS
++	/usr/bin/fusermount f 4755 0 0 - - - - -
+ endef
+ 
+ $(eval $(autotools-package))
