@@ -1,52 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Mar 2019 17:57:41 +0100
-Subject: [Buildroot] [PATCH v5 2/4] boot/opensbi: new package
-In-Reply-To: <c96ecd37-86d7-bcc4-f9f4-e2f39b6f4a8d@embecosm.com>
-References: <20190320003706.1126-1-alistair.francis@wdc.com>
- <20190320003706.1126-2-alistair.francis@wdc.com>
- <20190320221236.1ea9c11b@windsurf>
- <c96ecd37-86d7-bcc4-f9f4-e2f39b6f4a8d@embecosm.com>
-Message-ID: <20190321175741.679d5926@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 21 Mar 2019 20:06:32 +0100
+Subject: [Buildroot] [PATCH v1] package/meson: bump version to 0.50.0
+In-Reply-To: <20190319223422.64ba1be0@windsurf>
+References: <20190318214324.5479-1-ps.report@gmx.net>
+ <20190319223422.64ba1be0@windsurf>
+Message-ID: <20190321200632.4dee85b7@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+Hello Thomas,
 
-Thanks for the heads-up!
+On Tue, 19 Mar 2019 22:34:22 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Thu, 21 Mar 2019 16:36:22 +0000
-Mark Corbin <mark.corbin@embecosm.com> wrote:
+> Hello Peter,
+>
+> On Mon, 18 Mar 2019 22:43:24 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/meson/meson.hash | 4 ++--
+> >  package/meson/meson.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> I think this change broke the build of at-spi2-core:
+>
+>   http://autobuild.buildroot.net/?reason=at-spi2-core-2.28.0
+>
+> it is using meson, and it started failing to build on March 19, i.e not
+> long after I merged the meson bump. The log also says:
+>
+> WARNING: Project targetting '>= 0.40.1' but tried to use feature introduced in '0.50.0': install arg in configure_file
+> Configuring atspi-2.pc using configuration
+>
+> atspi/meson.build:60:0: ERROR: Subdir keyword must not be an absolute path.
+>
+> I think we need to backport
+> https://github.com/GNOME/at-spi2-core/commit/44a812ea51223d82f21a098a2d45fcc5c329ce7a.patch
+> from upstream.
 
-> a) commit 'allow BR2_LINUX_KERNEL_IMAGE on RISC-V'
-> (a3a4d4d4d307fd21f19ae43e77ac21b85adad7f2) is causing riscv builds to
-> fail for the existing qemu defconfigs because OpenSBI hasn't been added
-> yet and riscv-pk expects a 'vmlinux' file.
+Yes, the patch fixes the problem for meson 0.50.0, will send an (already
+outdated because of the meson bump revert) patch....
 
-This one should be fixed by adding:
+Nevertheless thanks for report and investigation...
 
-BR2_LINUX_KERNEL_VMLINUX=y
+Regards,
+Peter
 
-in the defconfig.
-
-> b) commit 'configs/qemu_riscv32_virt: upgrade to 4.20 kernel'
-> (e92d5624236e47e1abe44f2ace24fceb1882c0a5) results in a kernel that
-> won't boot with QEMU due to lack of OpenSBI and/or required kernel
-> configuration updates.
-
-Which configuration updates are needed ? The ones that Alistair was
-pushing ? If they were need for the 4.20 bump to work, then they should
-have been part of the same commit :-/
-
-Anyway, Alistair has been respinning his series very frequently, so I
-assume we can get the remainder of the work merged very soon.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Best regards,
+>
+> Thomas
