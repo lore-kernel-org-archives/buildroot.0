@@ -1,54 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Mar 2019 08:51:20 +0100
-Subject: [Buildroot] [PATCH v3 3/3] upport/config-fragments/autobuild:
- test the Andes nds32 toolchain
-In-Reply-To: <20190321025103.GC12833@app09>
-References: <20190307021125.8530-1-nylon7@andestech.com>
- <20190307021125.8530-4-nylon7@andestech.com>
- <20190314224250.GD6876@scaer> <20190321025103.GC12833@app09>
-Message-ID: <20190321085120.4fb043b5@windsurf>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Thu, 21 Mar 2019 09:06:29 +0100
+Subject: [Buildroot] [PATCH v2 4/8] boot/arm-trusted-firmware: support
+ alternate image files
+In-Reply-To: <20190320230324.23023b9b@windsurf>
+References: <1552951269-16967-1-git-send-email-etienne.carriere@linaro.org>
+ <1552951269-16967-4-git-send-email-etienne.carriere@linaro.org>
+ <20190320230324.23023b9b@windsurf>
+Message-ID: <CAN5uoS-d5O3VDxdPNt7AbzqYjJ_D89jwozsO9viL4KD=FRPwPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nylon,
+Hi Thomas,
 
-On Thu, 21 Mar 2019 10:51:03 +0800
-Nylon Chen <nylon7@andestech.com> wrote:
+On Wed, 20 Mar 2019 at 23:03, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Etienne,
+>
+> On Tue, 19 Mar 2019 00:21:05 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> > Some platform may generate specific boot image files instead of
+> > the generic files *.bin  when building TF-A package. This change
+> > introduces new configuration directive for the arm-trusted-firmware
+> > boot package.
+> >
+> > BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES is boolean.
+> > When disabled, install boot image files are .../*.bin.
+> > When enabled, BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES shall
+> > lists the names of the generated boot image files.
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>
+> I think this is more complicated than it needs to be. See an alternate
+> proposal below.
+>
+> > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES
+> > +     bool "Use custom binary boot image filenames"
+> > +     help
+> > +       If not set, build generates the boot image files with the
+> > +       generic filename that is images with .bin extension. These
+> > +       are copied to the output images/ directory.
+> > +
+> > +       If enabled, use BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGES
+> > +       to list the generated file names.
+> > +
+> > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES
+> > +     string "Binary boot image filenames"
+> > +     depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES
+> > +     help
+> > +       This is used when TF-A platform generates boot image files
+> > +       with custom file names. When so, this should list the path
+> > +       of the generated files location relatively to the package
+> > +       build root directory. These files are copied to the output
+> > +       images/ directory.
+>
+> Just one new option:
+>
+> config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES
+>         string "Image names"
+>         default "*.bin"
+>         help
+>           ...
+> > +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES),y)
+> > +define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+> > +     $(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES)), \
+> > +             cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/ \
+> > +     )
+> > +endef
+> > +else
+> > +define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+> > +     cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
+> > +endef
+> > +endif
+>
+> And then just:
+>
+> ARM_TRUSTED_FIRMWARE_IMAGE_NAMES = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES))
+>
+> define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
+>         $(foreach f,$(wildcard $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(ARM_TRUSTED_FIRMWARE_IMAGE_NAMES)), \
+>                 $(INSTALL) -D -m 0644 $(f) $(BINARIES_DIR)/$(notdir $(f))
+>         )
+> endef
+>
+> (totally untested of course)
+>
+> Could you try something like this ?
 
-> > > diff --git a/support/config-fragments/autobuild/br-andes-nds32.config b/support/config-fragments/autobuild/br-andes-nds32.config
-> > > new file mode 100644
-> > > index 0000000000..cd093a20f9
-> > > --- /dev/null
-> > > +++ b/support/config-fragments/autobuild/br-andes-nds32.config
-> > > @@ -0,0 +1,9 @@
-> > > +BR2_nds32=y
-> > > +BR2_TOOLCHAIN_EXTERNAL=y
-> > > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> > > +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> > > +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz"  
-> I think I misunderstood the meaning of Thomas Petazzo.
-> 
-> I thought that as long as the pre-build remote toolcahin is given.(So I used our own pre-build remote toolchain)
-> 
-> It may take a few more days, we will contribute glibc back to upstream, and then we can compile it internally using buildroot.
+Sure, I'll test and send a update for the patch.
+Thanks,
+etienne
 
-It is perfectly fine to use a pre-built toolchain, I think what Yann
-explained is that since the source code of gcc/binutils/glibc/linux is
-available, it makes sense to *also* support building the toolchain with
-Buildroot.
-
-Also, it is not mandatory for the glibc support to be in upstream
-glibc. We support architectures for which the gcc, binutils or libc
-support is not yet fully upstreamed. For example, for RISC-V 32-bit,
-we're using a non-upstream glibc.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
