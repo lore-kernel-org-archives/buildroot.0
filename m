@@ -1,79 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Mar 2019 22:56:03 +0100
-Subject: [Buildroot] Eigen Package Update
-In-Reply-To: <CAPjgS+TBCbm65khaWX657uqui2sSvUPQxEEZb46M_9Fs-b6jXw@mail.gmail.com>
-References: <CAPjgS+TBCbm65khaWX657uqui2sSvUPQxEEZb46M_9Fs-b6jXw@mail.gmail.com>
-Message-ID: <20190321215603.GD2660@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 21 Mar 2019 22:56:56 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix xkbcommon option
+In-Reply-To: <20190321213313.GC2660@scaer>
+References: <20190321212323.22920-1-ps.report@gmx.net>
+ <20190321213313.GC2660@scaer>
+Message-ID: <20190321225656.675bb7ee@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reed, All,
+On Thu, 21 Mar 2019 22:33:13 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2019-03-21 14:42 -0700, Reed Nightingale spake thusly:
-> Hi all,
-> First time doing this, so hopefully I'm doing it somewhat right. Basically, looking to update the eigen package to 3.3.7, since
-> 3.3.4 doesn't play nicely with GCC7 (see? [1]http://eigen.tuxfamily.org/index.php?title=ChangeLog#Eigen_3.3.5 notes on
-> Wint-in-bool-context)
-> Patch below.
+> Peter, All,
+>
+> On 2019-03-21 22:23 +0100, Peter Seiderer spake thusly:
+> > - Qt 5.6: according to configure --help the command line option to
+> >   enable x11 xkbcommon support is '-system-xkbcommon-x11'
+> >
+> > - Qt 5.12: according to configure --help the command line option to
+> >   enable xkbcommon support is '-xkbcommon'
+> >
+> > Fixes [1]:
+> >
+> >   ERROR: Invalid value given for boolean command line option 'xkbcommon'.
+> >
+> > [1] http://autobuild.buildroot.net/results/87076d03bb92a9940447ca80fc1f202e35ef39da
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/qt5/qt5base/qt5base.mk | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> > index 14536980a8..b0469172c0 100644
+> > --- a/package/qt5/qt5base/qt5base.mk
+> > +++ b/package/qt5/qt5base/qt5base.mk
+> > @@ -153,7 +153,13 @@ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-dir
+> >  QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
+> >
+> >  ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+> > -QT5BASE_CONFIGURE_OPTS += -xcb -system-xkbcommon
+> > +QT5BASE_CONFIGURE_OPTS += -xcb
+> > +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+> > +QT5BASE_CONFIGURE_OPTS += -xcb -system-xkbcommon-x11
+> > +else
+> > +QT5BASE_CONFIGURE_OPTS += -xcb -xkbcommon
+>
+> Two things:
+>
+>  1. -xcb is passed twice: once uncoditionally on the Qt version, and
+>     once for each Qt version;
+>
+>  2. The build failure you reference is about a qt-5.12 build, which
+>     complains about an "Invalid value given for boolean command line
+>     option 'xkbcommon'".
 
-First, use git to perpare and send the patch. This will send a
-plain-text email, as html is definitely not nice.
+Should be:
 
-Secoind, preapre an appropriate commit log, which should look something
-like:
+ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+QT5BASE_CONFIGURE_OPTS += -xcb
+ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+QT5BASE_CONFIGURE_OPTS += -system-xkbcommon-x11
+else
+QT5BASE_CONFIGURE_OPTS += -xkbcommon
+endif
 
-    package/eigen: bump to 3.3.7
+So it becomes for
 
-    Version 3.3.7 fixes [blablabla what you told me on IRC.]
-    and further fixes [blabla some other gcc errors, whatever].
+- Qt 5.6:  '-system-xkbcommon'   --> '-system-xkbcommon-x11'
+- Qt 5.12: '-system-xkbcommon'   --> '-xkbcommon'
 
-    Signed-off-by: Your Real NAME <you@somewhere>
+Will fix it in the next patch iteration...
 
-Otherwise, the patch itself is pretty much what we'd expect, yes.
+>
+> So, it looks like qt-5.12 does not linke -xkbcommon, but this is exactly
+> what you are passing with this patch...
 
-> Reed
-> --------------
-> diff --git a/buildroot/package/eigen/eigen.hash b/buildroot/package/eigen/eigen.hash
-> index 4a1bcdf..e5c8404 100644
-> --- a/buildroot/package/eigen/eigen.hash
-> +++ b/buildroot/package/eigen/eigen.hash
-> @@ -1,5 +1,5 @@
-> ?# Locally computed
-> -sha256 dd254beb0bafc695d0f62ae1a222ff85b52dbaa3a16f76e781dce22d0d20a4a6 3.3.4.tar.bz2
-> +sha256 9f13cf90dedbe3e52a19f43000d71fdf72e986beb9a5436dddcd61ff9d77a3ce 3.3.7.tar.bz2
-> ?sha256 4f877e5ae4672568ef82cfd0023e2cef4a7cf55d867ab249efc9569a7eb9e5b1 COPYING.BSD
-> ?sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING.GPL
-> ?sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LGPL
-
-Can you double-check that the hashes for the license are still correct,
-by running:
-
-    make eigen-legal-info
+No, Qt 5.12 is given '-system-xkbcommon' without the patch, and
+interprets it as -xkbcommon=system and complains that 'system' is
+neither true or false...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> diff --git a/buildroot/package/eigen/eigen.mk b/buildroot/package/eigen/eigen.mk
-> index 27c4e21..5c9e028 100644
-> --- a/buildroot/package/eigen/eigen.mk
-> +++ b/buildroot/package/eigen/eigen.mk
-> @@ -4,7 +4,7 @@
-> ?#
-> ?################################################################################
-> ?
-> -EIGEN_VERSION = 3.3.4
-> +EIGEN_VERSION = 3.3.7
-> ?EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
-> ?EIGEN_SITE = [6]https://bitbucket.org/eigen/eigen/get
-> ?EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Did I misunderstand something?
+>
+> Cordialement,
+> Yann E. MORIN.
+>
+> > +endif
+> > +
+> >  QT5BASE_DEPENDENCIES   += \
+> >  	libxcb \
+> >  	xcb-util-wm \
+> > --
+> > 2.21.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
