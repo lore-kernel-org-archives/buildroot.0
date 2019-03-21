@@ -1,143 +1,113 @@
 From: Nylon Chen <nylon7@andestech.com>
-Date: Thu, 21 Mar 2019 10:36:10 +0800
-Subject: [Buildroot] [PATCH v3 1/3] arch: add support for Andes
- 32-bit(nds32)
-In-Reply-To: <20190314222211.GB6876@scaer>
+Date: Thu, 21 Mar 2019 10:51:03 +0800
+Subject: [Buildroot] [PATCH v3 3/3] upport/config-fragments/autobuild:
+ test the Andes nds32 toolchain
+In-Reply-To: <20190314224250.GD6876@scaer>
 References: <20190307021125.8530-1-nylon7@andestech.com>
- <20190307021125.8530-2-nylon7@andestech.com>
- <20190314222211.GB6876@scaer>
-Message-ID: <20190321023610.GB12833@app09>
+ <20190307021125.8530-4-nylon7@andestech.com>
+ <20190314224250.GD6876@scaer>
+Message-ID: <20190321025103.GC12833@app09>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Yann, All,
 
-sorry,i thought that i didn't send the letter successfully, so I sent it twice(the first time, i only sent to you ).
-
-Thank you for your comment
-
-On Fri, Mar 15, 2019 at 06:22:11AM +0800, Yann E. MORIN wrote:
+Again, Thank you for your comment.
+On Fri, Mar 15, 2019 at 06:42:50AM +0800, Yann E. MORIN wrote:
 > Nylon, All,
 > 
 > On 2019-03-07 10:11 +0800, Nylon Chen spake thusly:
-> > This commit provides basic support for the Andes 32-bit(nds32) architecture.
-> 
-> Out of curiosity, and just for my information: do you have examples of
-> products shipping with an nds32 CPU?
-> 
-> I have a few comments (the last one very minor), see below...
-> 
 > > Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
 > > Signed-off-by: Greentime Hu <greentime@andestech.com>
 > > Signed-off-by: Nylon Chen <nylon7@andestech.com>
 > > ---
-> >  DEVELOPERS           |  3 +++
-> >  arch/Config.in       | 12 ++++++++++++
-> >  arch/Config.in.nds32 | 19 +++++++++++++++++++
-> >  3 files changed, 34 insertions(+)
-> >  create mode 100644 arch/Config.in.nds32
+> >  support/config-fragments/autobuild/br-andes-nds32.config | 9 +++++++++
+> >  support/config-fragments/autobuild/toolchain-configs.csv | 1 +
+> >  2 files changed, 10 insertions(+)
+> >  create mode 100644 support/config-fragments/autobuild/br-andes-nds32.config
 > > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index c17ba6db99..06a20c68b6 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1605,6 +1605,9 @@ F:	package/trousers/
-> >  N:	Norbert Lange <nolange79@gmail.com>
-> >  F:	package/tcf-agent/
-> >  
-> > +N:	Nylon Chen <nylon7@andestech.com>
-> > +F:	arch/Config.in.nds32
-> > +
-> >  N:	Olaf Rempel <razzor@kopf-tisch.de>
-> >  F:	package/ctorrent/
-> >  
-> > diff --git a/arch/Config.in b/arch/Config.in
-> > index f50760a0cf..d82803c828 100644
-> > --- a/arch/Config.in
-> > +++ b/arch/Config.in
-> > @@ -154,6 +154,14 @@ config BR2_mips64el
-> >  	  http://www.mips.com/
-> >  	  http://en.wikipedia.org/wiki/MIPS_Technologies
-> >  
-> > +config BR2_nds32
-> > +	bool "nds32"
-> > +	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-> 
-> It would be nice that you provide a package for a pre-built toolchain,
-> like we have for a few of them, see:
-> 
->     toolchain/toolchain-external/
-> 
-> This is not mandatory, but would be a good addition.
-> 
-> It would even make the defconfig in your second patch a bit simpler.
-> 
-Ok,i will try this method
-> > +	select BR2_ARCH_HAS_MMU_MANDATORY
-> > +	help
-> > +	  nds32 is a 32-bit architecture developed by Andes Technology.
-> > +	  https://en.wikipedia.org/wiki/Andes_Technology
-> > +
-> >  config BR2_nios2
-> >  	bool "Nios II"
-> >  	select BR2_ARCH_HAS_MMU_MANDATORY
-> > @@ -419,6 +427,10 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
-> >  source "arch/Config.in.mips"
-> >  endif
-> >  
-> > +if BR2_nds32
-> > +source "arch/Config.in.nds32"
-> > +endif
-> > +
-> >  if BR2_nios2
-> >  source "arch/Config.in.nios2"
-> >  endif
-> > diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+> > diff --git a/support/config-fragments/autobuild/br-andes-nds32.config b/support/config-fragments/autobuild/br-andes-nds32.config
 > > new file mode 100644
-> > index 0000000000..38b1c2d4eb
+> > index 0000000000..cd093a20f9
 > > --- /dev/null
-> > +++ b/arch/Config.in.nds32
-> > @@ -0,0 +1,19 @@
-> > +config BR2_ARCH
-> > +	default "nds32"
-> > +
-> > +config BR2_ANDES_NDS32_FPU
-> > +	bool "Enable FPU coprocessor"
-> > +	help
-> > +	  You can say y here if your Andes CPU have a Floating-Point Coprocessor
-> > +	  or if you need FPU support for your user-space programs.
+> > +++ b/support/config-fragments/autobuild/br-andes-nds32.config
+> > @@ -0,0 +1,9 @@
+> > +BR2_nds32=y
+> > +BR2_TOOLCHAIN_EXTERNAL=y
+> > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> > +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> > +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz"
+I think I misunderstood the meaning of Thomas Petazzo.
+
+I thought that as long as the pre-build remote toolcahin is given.(So I used our own pre-build remote toolchain)
+
+It may take a few more days, we will contribute glibc back to upstream, and then we can compile it internally using buildroot.
+
+So in the next version(v4), I will remove this patch first.
 > 
-> So, the situation about FPU is always a bit icky for me.
+> I was going to add my reviewd-by tag, but then I notice that this
+> repository does not seem to be affilated with AndesTech, but it
+> looks like a "random" guy dropped a bunch of stuff.
 > 
-> If you say 'n' above, does that mean that you need to do a pure
-> soft-float build, or that the FP instrcution get trapped an emulated
-> by the kernel?
+> Yet, there are release notes to explain how to reproduce the toolchain:
 > 
-> If the former, then you may want to check whether you need to select
-> BR2_SOFT_FLOAT (a few packages have conditions based on that).
+>     https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases
 > 
-> > +config BR2_GCC_TARGET_ARCH
-> > +	default "v3"  if !BR2_ANDES_NDS32_FPU
-> > +	default "v3f" if BR2_ANDES_NDS32_FPU
+>     1. The source code of each component for this toolchain are located at
+>     the following path.
+>     a. gcc:
+>     path: https://github.com/andestech/gcc.git
+>     branch: nds32-8.1.0-upstream
+>     b. binutils
+>     path: https://github.com/andestech/binutils.git
+>     branch: nds32-binutils-2.30-branch-open
+>     c. glibc
+>     path: https://github.com/andestech/glibc.git
+>     branch: nds32-glibc-2.27-v0
+>     d. Linux
+>     path: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>     branch: master
 > 
-> I always find it nicer to have the positive logic come first. Also,
-> kconfig will stop on the first default stanza which condition is true,
-> so:
+>     2. User can manually generate this toolchain though build-toochain.sh
+>     in following git repo.
+>     https://github.com/andestech/build_script.git
 > 
->     config BR2_GCC_TARGET_ARCH
->         default "v3f" if BR2_ANDES_NDS32_FPU
->         default "v3"
+>     3. The git commit ID of each component in Andes internel git tree.
+>     binutils-2.30 : ee457e8114f09c1b4df7c834ad58b02c9f43c139
+>     gcc-8.1.0: 260e4b4bbb7f32b483482573c92c8caacf5c17ab
+>     linux-v4.17-rc3: 6da6c0db5316275015e8cc2959f12a17584aeb64
+>     glibc-2.27: e9f2165793aaf2f033a6cebff389ebbba5d799bd
 > 
-Here is my negligence, thank you for your suggestion, i will adopt
-> > +config BR2_ENDIAN
-> > +	default "LITTLE"
-> > +
-> > +config BR2_READELF_ARCH_NAME
-> > +	default "Andes Technology compact code size embedded RISC processor family"
-> > +
+> The instructions in 2. do not seem to deconected from what we do. There
+> is this one weird trick about build ing libgcc, but maybe it can be
+> coaxed into working to build with the Buildroot internal toolchain?
+> 
+> Apart from the weird location of the toolchain:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > +BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> > +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_17=y
+> > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="nds32le-linux"
+> > diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+> > index 3681bc519f..7a3b91df27 100644
+> > --- a/support/config-fragments/autobuild/toolchain-configs.csv
+> > +++ b/support/config-fragments/autobuild/toolchain-configs.csv
+> > @@ -25,6 +25,7 @@ support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
+> >  support/config-fragments/autobuild/arm-aarch64.config,x86_64
+> >  support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
+> >  support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
+> > +support/config-fragments/autobuild/br-andes-nds32.config,x86
+> >  support/config-fragments/autobuild/br-arc-full-internal.config,any
+> >  support/config-fragments/autobuild/br-arc-internal-glibc.config,any
+> >  support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
 > > -- 
 > > 2.18.0
 > > 
