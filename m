@@ -1,8 +1,8 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu, 21 Mar 2019 11:54:10 +0100
-Subject: [Buildroot] [PATCH v2] package/optee-client: fix build warnings
+Date: Thu, 21 Mar 2019 12:00:00 +0100
+Subject: [Buildroot] [PATCH v3] package/optee-client: fix build warnings
  from 3.4.0
-Message-ID: <1553165650-12974-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <1553166000-13510-1-git-send-email-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
