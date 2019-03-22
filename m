@@ -1,64 +1,37 @@
-From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Fri, 22 Mar 2019 19:39:03 +0100
-Subject: [Buildroot] [PATCH v4 5/6] qt5base: Fix inconsistencies when
- overriding qmake properties
-In-Reply-To: <20190322183904.22401-1-anaumann@ultratronik.de>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
-Message-ID: <20190322183904.22401-6-anaumann@ultratronik.de>
+From: Ed Blake <ed.blake@sondrel.com>
+Date: Fri, 22 Mar 2019 16:59:45 +0000
+Subject: [Buildroot] [PATCH 0/2] toolchain-external: add OpenMP support
+Message-ID: <20190322165929.14306-1-ed.blake@sondrel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When querying the qmake properties with our custom qt.conf present, I noticed
-that they were different from the built-in ones (without qt.conf).
-Most notably QT_INSTALL_PREFIX was a concatenated string of two absolute pathes
-(hostdir + sysroot).
+This patchset adds OpenMP support to toolchain-external. The first
+patch adds a new 'BR2_TOOLCHAIN_HAS_OPENMP' option which causes
+libgomp.so.* to be added to TOOLCHAIN_EXTERNAL_LIBS, and the second
+patch enables BR2_TOOLCHAIN_HAS_OPENMP for all supporting external
+toolchains.
 
-This is due to Prefix being set to our HOST_DIR and HostPrefix not being set at
-all. I guess this was also the root cause of the initial problem with
-qt.conf.in, because once Prefix and HostPrefix were set to their correct values,
-re-setting all the other default pathes became obsolete. (However, since our
-pathes for Headers, Plugins and Examples are non-default, they still have to be
-explicitely set.)
+Ed Blake (2):
+  toolchain-external: add option for OpenMP support
+  toolchain-external: enable OpenMP for supporting toolchains
 
-There is one additional exception to this: Omitting 'Settings' leads to the
-CONFIGURATION path being plain /usr, whereas the default without qt.conf is
-/usr/etc/xdg. Thus 'Settings' is now also explicitely set, in order to keep
-behaviour with/without qt.conf as similar as possible.
+ toolchain/Config.in                                           | 3 +++
+ toolchain/toolchain-external/pkg-toolchain-external.mk        | 4 ++++
+ .../toolchain-external-arm-aarch64-be/Config.in               | 1 +
+ .../toolchain-external-arm-aarch64/Config.in                  | 1 +
+ .../toolchain-external/toolchain-external-arm-arm/Config.in   | 1 +
+ .../toolchain-external-codescape-img-mips/Config.in           | 1 +
+ .../toolchain-external-codescape-mti-mips/Config.in           | 1 +
+ .../toolchain-external-codesourcery-amd64/Config.in           | 1 +
+ .../toolchain-external-codesourcery-mips/Config.in            | 1 +
+ .../toolchain-external-linaro-aarch64-be/Config.in            | 1 +
+ .../toolchain-external-linaro-aarch64/Config.in               | 1 +
+ .../toolchain-external-linaro-arm/Config.in                   | 1 +
+ .../toolchain-external-linaro-armeb/Config.in                 | 1 +
+ 13 files changed, 18 insertions(+)
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
----
- package/qt5/qt5base/qt.conf.in | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
-
-diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-index 9a0b9cd53b..46ebe61614 100644
---- a/package/qt5/qt5base/qt.conf.in
-+++ b/package/qt5/qt5base/qt.conf.in
-@@ -1,19 +1,8 @@
- [Paths]
--Prefix=@@HOST_DIR@@
-+Prefix=/usr
-+HostPrefix=@@HOST_DIR@@
- Sysroot=@@STAGING_DIR@@
- Headers=/usr/include/qt5
--Libraries=/usr/lib
--LibraryExecutables=/usr/libexec
--Binaries=/usr/bin
- Plugins=/usr/lib/qt/plugins
- Examples=/usr/lib/qt/examples
--Qml2Imports=/usr/qml
--Imports=/usr/imports
--Translations=/usr/translations
--Examples=/usr/lib/qt/examples
--Demos=/usr/lib/qt/examples
--Tests=/usr/tests
--Settings=/usr
--Documentation=/usr/doc
--ArchData=/usr
--Data=/usr
-+Settings=/usr/etc/xdg
 -- 
-2.21.0
+2.17.1
