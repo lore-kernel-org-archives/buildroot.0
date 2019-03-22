@@ -1,81 +1,128 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 22 Mar 2019 10:58:15 +0100
-Subject: [Buildroot] [PATCH v3 1/4] boot/arm-trusted-firmware: support
- alternate image files
-Message-ID: <20190322095818.19914-1-etienne.carriere@linaro.org>
+Date: Fri, 22 Mar 2019 10:58:17 +0100
+Subject: [Buildroot] [PATCH v3 3/4] support/testing: test can use the
+ locally generated qemu host tool
+In-Reply-To: <20190322095818.19914-1-etienne.carriere@linaro.org>
+References: <20190322095818.19914-1-etienne.carriere@linaro.org>
+Message-ID: <20190322095818.19914-3-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some platform may generate specific boot image files instead of
-the generic files *.bin  when building TF-A package. This change
-introduces new configuration directive for the arm-trusted-firmware
-boot package.
-
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES is boolean.
-When disabled, install boot image files are .../*.bin.
-When enabled, BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES shall
-lists the names of the generated boot image files.
+This change adds argument --local-emulator to run-tests to use a
+locally built emulator for the runtime test. Target test shall provide
+a config_emulator attribute unless what test is inconsistent.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v2 -> v3:
- - Replace BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_IMAGE_NAMES and
-   BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL_IMAGE_NAMES with unique config
-   BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES.
+  - Add an argument to run-tests to use locally built emulator.
+    Test can still enforce use of locally built emulator from
+    boot method argument local=True|False (still defaults to False).
 
 Changes v1 -> v2:
- - No change
+  - No commit not in v1 series.
 ---
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ support/testing/infra/basetest.py |  5 ++++-
+ support/testing/infra/emulator.py | 19 ++++++++++++++++---
+ support/testing/run-tests         |  4 ++++
+ 3 files changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index beb95fbf06..f4ed430aec 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -124,6 +124,13 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	  gets built before ATF, and that the appropriate BL33
- 	  variable pointing to u-boot.bin is passed when building ATF.
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index a176bc328a..c59e0a3443 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -51,6 +51,8 @@ class BRConfigTest(unittest.TestCase):
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES
-+        string "Image names"
-+        default "*.bin"
-+        help
-+	  File names of the generated boot images to be copied to
-+	  output directory images/.
+     def setUp(self):
+         self.show_msg("Starting")
++        if self.local_emulator:
++            self.config = self.config + self.config_emulator
+         self.b = Builder(self.config, self.builddir, self.logtofile)
+ 
+         if not self.keepbuilds:
+@@ -78,7 +80,8 @@ class BRTest(BRConfigTest):
+             self.show_msg("Building done")
+ 
+         self.emulator = Emulator(self.builddir, self.downloaddir,
+-                                 self.logtofile, self.timeout_multiplier)
++                                 self.logtofile, self.timeout_multiplier,
++                                 self.local_emulator)
+ 
+     def tearDown(self):
+         if self.emulator:
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 802e89d4b4..13e19df497 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -1,14 +1,19 @@
+ import pexpect
+ 
++import os
 +
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
- 	string "Additional ATF build variables"
- 	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 9a23e3d336..c3625cd986 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -136,6 +136,12 @@ define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF
- endef
- endif
+ import infra
  
-+define ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL
-+        $(foreach f, $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGE_NAMES)),
-+		echo $(f) && $(INSTALL) -D -m 0644 -t $(BINARIES_DIR) $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f)
-+        )
-+endef
+ 
+ class Emulator(object):
+ 
+-    def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier):
++    def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier,
++                 local_emulator):
+         self.qemu = None
+         self.downloaddir = downloaddir
+         self.logfile = infra.open_log_file(builddir, "run", logtofile)
++        self.builddir = builddir
++        self.local_emulator = local_emulator
+         # We use elastic runners on the cloud to runs our tests. Those runners
+         # can take a long time to run the emulator. Use a timeout multiplier
+         # when running the tests to avoid sporadic failures.
+@@ -30,13 +35,21 @@ class Emulator(object):
+     #
+     # options: array of command line options to pass to Qemu
+     #
+-    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
++    # local: if True, the locally built qemu host tool is used instead of a
++    # qemu host tool found from the PATH.
++    #
++    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None,
++             local=None):
+         if arch in ["armv7", "armv5"]:
+             qemu_arch = "arm"
+         else:
+             qemu_arch = arch
+ 
+-        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
++        qemu_bin = "qemu-system-{}".format(qemu_arch)
++        if self.local_emulator or local:
++            qemu_bin = os.path.join(self.builddir, 'host', 'bin', qemu_bin)
 +
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
-@@ -144,7 +150,7 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- endef
++        qemu_cmd = [qemu_bin,
+                     "-serial", "stdio",
+                     "-display", "none"]
  
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
--	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
-+	$(ARM_TRUSTED_FIRMWARE_BL_IMAGES_INSTALL)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
- 	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
- endef
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 813b927045..c667fc2e4f 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -31,6 +31,8 @@ def main():
+                         help='BR2_JLEVEL to use for each testcase')
+     parser.add_argument('--timeout-multiplier', type=int, default=1,
+                         help='increase timeouts (useful for slow machines)')
++    parser.add_argument('--local-emulator', action='store_true',
++                        help='use a locally built emulator')
+ 
+     args = parser.parse_args()
+ 
+@@ -107,6 +109,8 @@ def main():
+         return 1
+     BRConfigTest.timeout_multiplier = args.timeout_multiplier
+ 
++    BRConfigTest.local_emulator = args.local_emulator
++
+     nose2_args = ["-v",
+                   "-N", str(args.testcases),
+                   "-s", test_dir,
 -- 
 2.17.1
