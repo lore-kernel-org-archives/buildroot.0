@@ -1,37 +1,53 @@
 From: Ed Blake <ed.blake@sondrel.com>
-Date: Fri, 22 Mar 2019 16:59:45 +0000
-Subject: [Buildroot] [PATCH 0/2] toolchain-external: add OpenMP support
-Message-ID: <20190322165929.14306-1-ed.blake@sondrel.com>
+Date: Fri, 22 Mar 2019 16:59:48 +0000
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: add option for OpenMP
+ support
+In-Reply-To: <20190322165929.14306-1-ed.blake@sondrel.com>
+References: <20190322165929.14306-1-ed.blake@sondrel.com>
+Message-ID: <20190322165929.14306-2-ed.blake@sondrel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset adds OpenMP support to toolchain-external. The first
-patch adds a new 'BR2_TOOLCHAIN_HAS_OPENMP' option which causes
-libgomp.so.* to be added to TOOLCHAIN_EXTERNAL_LIBS, and the second
-patch enables BR2_TOOLCHAIN_HAS_OPENMP for all supporting external
-toolchains.
+Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
+support.
 
-Ed Blake (2):
-  toolchain-external: add option for OpenMP support
-  toolchain-external: enable OpenMP for supporting toolchains
+Signed-off-by: Ed Blake <ed.blake@sondrel.com>
+---
+ toolchain/Config.in                                    | 3 +++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+ 2 files changed, 7 insertions(+)
 
- toolchain/Config.in                                           | 3 +++
- toolchain/toolchain-external/pkg-toolchain-external.mk        | 4 ++++
- .../toolchain-external-arm-aarch64-be/Config.in               | 1 +
- .../toolchain-external-arm-aarch64/Config.in                  | 1 +
- .../toolchain-external/toolchain-external-arm-arm/Config.in   | 1 +
- .../toolchain-external-codescape-img-mips/Config.in           | 1 +
- .../toolchain-external-codescape-mti-mips/Config.in           | 1 +
- .../toolchain-external-codesourcery-amd64/Config.in           | 1 +
- .../toolchain-external-codesourcery-mips/Config.in            | 1 +
- .../toolchain-external-linaro-aarch64-be/Config.in            | 1 +
- .../toolchain-external-linaro-aarch64/Config.in               | 1 +
- .../toolchain-external-linaro-arm/Config.in                   | 1 +
- .../toolchain-external-linaro-armeb/Config.in                 | 1 +
- 13 files changed, 18 insertions(+)
-
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index bcbc3cf984..bf42e92e00 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
+ config BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	bool
+ 
++config BR2_TOOLCHAIN_HAS_OPENMP
++	bool
++
+ config BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	bool
+ 
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index db3570d96f..747837fdc6 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+ endif
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
++TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
++endif
++
+ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ 
+ 
 -- 
 2.17.1
