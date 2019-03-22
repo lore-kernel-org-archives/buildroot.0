@@ -1,128 +1,95 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 22 Mar 2019 10:58:17 +0100
-Subject: [Buildroot] [PATCH v3 3/4] support/testing: test can use the
- locally generated qemu host tool
+Date: Fri, 22 Mar 2019 10:58:18 +0100
+Subject: [Buildroot] [PATCH v3 4/4] support/testing: test_optee.py: test
+ optee boot and testsuite
 In-Reply-To: <20190322095818.19914-1-etienne.carriere@linaro.org>
 References: <20190322095818.19914-1-etienne.carriere@linaro.org>
-Message-ID: <20190322095818.19914-3-etienne.carriere@linaro.org>
+Message-ID: <20190322095818.19914-4-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds argument --local-emulator to run-tests to use a
-locally built emulator for the runtime test. Target test shall provide
-a config_emulator attribute unless what test is inconsistent.
+Run a Qemu emulation over qemu_armv7a_tz_virt_defconfig and
+run the embedded OP-TEE regression test suite (xtest).
+
+Tool xtest dumps traces that contain '# ' (hash + space) which
+corrupts infra/emulator.py sequence which use such traces to
+find shell prompt when command is completed. To overcome the issue
+the xtest traces are shown only if the test failed.
+
+One can run the test from something like:
+
+  $> support/testing/run-tests \
+         -o output/optee-runtest -d output/dwl \
+         tests.package.test_optee
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v2 -> v3:
-  - Add an argument to run-tests to use locally built emulator.
-    Test can still enforce use of locally built emulator from
-    boot method argument local=True|False (still defaults to False).
+  - Test provides a config_emulator attribute and mandates use of
+    the locally built emulator.
+  - Update qemu defconfig filename.
+  - Remove postprocessing of test image file since driven from the
+    selected defconfig
 
 Changes v1 -> v2:
-  - No commit not in v1 series.
+  - Add argument local=True to test emulator to use the qemu host
+    built from test configuration.
+  - Fix typo in trace "Silent test takes a while, be patient..."
 ---
- support/testing/infra/basetest.py |  5 ++++-
- support/testing/infra/emulator.py | 19 ++++++++++++++++---
- support/testing/run-tests         |  4 ++++
- 3 files changed, 24 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_optee.py | 42 +++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 support/testing/tests/package/test_optee.py
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index a176bc328a..c59e0a3443 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -51,6 +51,8 @@ class BRConfigTest(unittest.TestCase):
- 
-     def setUp(self):
-         self.show_msg("Starting")
-+        if self.local_emulator:
-+            self.config = self.config + self.config_emulator
-         self.b = Builder(self.config, self.builddir, self.logtofile)
- 
-         if not self.keepbuilds:
-@@ -78,7 +80,8 @@ class BRTest(BRConfigTest):
-             self.show_msg("Building done")
- 
-         self.emulator = Emulator(self.builddir, self.downloaddir,
--                                 self.logtofile, self.timeout_multiplier)
-+                                 self.logtofile, self.timeout_multiplier,
-+                                 self.local_emulator)
- 
-     def tearDown(self):
-         if self.emulator:
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 802e89d4b4..13e19df497 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -1,14 +1,19 @@
- import pexpect
- 
+diff --git a/support/testing/tests/package/test_optee.py b/support/testing/tests/package/test_optee.py
+new file mode 100644
+index 0000000000..44cee74fd8
+--- /dev/null
++++ b/support/testing/tests/package/test_optee.py
+@@ -0,0 +1,42 @@
 +import os
 +
- import infra
- 
- 
- class Emulator(object):
- 
--    def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier):
-+    def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier,
-+                 local_emulator):
-         self.qemu = None
-         self.downloaddir = downloaddir
-         self.logfile = infra.open_log_file(builddir, "run", logtofile)
-+        self.builddir = builddir
-+        self.local_emulator = local_emulator
-         # We use elastic runners on the cloud to runs our tests. Those runners
-         # can take a long time to run the emulator. Use a timeout multiplier
-         # when running the tests to avoid sporadic failures.
-@@ -30,13 +35,21 @@ class Emulator(object):
-     #
-     # options: array of command line options to pass to Qemu
-     #
--    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
-+    # local: if True, the locally built qemu host tool is used instead of a
-+    # qemu host tool found from the PATH.
-+    #
-+    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None,
-+             local=None):
-         if arch in ["armv7", "armv5"]:
-             qemu_arch = "arm"
-         else:
-             qemu_arch = arch
- 
--        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-+        qemu_bin = "qemu-system-{}".format(qemu_arch)
-+        if self.local_emulator or local:
-+            qemu_bin = os.path.join(self.builddir, 'host', 'bin', qemu_bin)
++import infra.basetest
 +
-+        qemu_cmd = [qemu_bin,
-                     "-serial", "stdio",
-                     "-display", "none"]
- 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 813b927045..c667fc2e4f 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -31,6 +31,8 @@ def main():
-                         help='BR2_JLEVEL to use for each testcase')
-     parser.add_argument('--timeout-multiplier', type=int, default=1,
-                         help='increase timeouts (useful for slow machines)')
-+    parser.add_argument('--local-emulator', action='store_true',
-+                        help='use a locally built emulator')
- 
-     args = parser.parse_args()
- 
-@@ -107,6 +109,8 @@ def main():
-         return 1
-     BRConfigTest.timeout_multiplier = args.timeout_multiplier
- 
-+    BRConfigTest.local_emulator = args.local_emulator
++# This test enforces locally built emulator to prevent old Qemu to
++# dump secure trace to stdio and corrupting trace synchro expected
++# through pexpect.
 +
-     nose2_args = ["-v",
-                   "-N", str(args.testcases),
-                   "-s", test_dir,
++class TestOptee(infra.basetest.BRTest):
++
++    with open(os.path.join(os.getcwd(), 'configs',
++                           'qemu_arm_vexpress_tz_defconfig'),
++              'r') as config_file:
++        config = "".join(line for line in config_file if line[:1] != '#') + \
++                 """
++                 BR2_PACKAGE_HOST_QEMU=y
++                 BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
++                 BR2_TOOLCHAIN_EXTERNAL=y
++                 """
++    config_emulator = ''
++
++    def test_run(self):
++
++        qemu_options = ['-machine', 'virt,secure=on']
++        qemu_options.extend(['-cpu', 'cortex-a15'])
++        qemu_options.extend(['-m', '1024'])
++        qemu_options.extend(['-semihosting-config', 'enable,target=native'])
++        qemu_options.extend(['-bios', 'bl1.bin'])
++
++        # This test expects Qemu is run from the image direcotry
++        os.chdir(os.path.join(self.builddir, 'images'))
++
++        self.emulator.boot(arch='armv7', options=qemu_options, local=True)
++        self.emulator.login()
++
++        # Trick traces since xtest prints "# " which corrupts emulator run
++        # method. Tests are dumped only if test fails.
++        cmd = 'echo "Silent test takes a while, be patient..."; ' + \
++              'xtest -t regression > /tmp/xtest.log ||' + \
++              '(cat /tmp/xtest.log && false)'
++        output, exit_code = self.emulator.run(cmd, timeout=240)
++        self.assertEqual(exit_code, 0)
 -- 
 2.17.1
