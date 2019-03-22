@@ -1,136 +1,106 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 22 Mar 2019 11:48:28 +0100
-Subject: [Buildroot] [PATCH v4] package/optee-client: fix build warnings
- from 3.4.0
-Message-ID: <20190322104828.21423-1-etienne.carriere@linaro.org>
+From: Refik TUZAKLI <refik.tuzakli@savronik.com.tr>
+Date: Fri, 22 Mar 2019 11:10:44 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/paho-mqtt-cpp: add paho-mqtt-cpp
+Message-ID: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch over current optee-client 3.4.0 to fix build issues
-reported by some toolchains with traces like:
-
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-                            ^
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-    arg = (struct tee_ioctl_open_session_arg *)buf;
-          ^
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-    arg = (struct tee_ioctl_invoke_arg *)buf;
-
-The optee-client patches have been in the OP-TEE project [1] & [2] and
-will be available in the OP-TEE next release planned 3.5.0.
-
-Fixes [3], [4], [5] and other failing builds reported by autobuild tests.
-
-[1] https://github.com/OP-TEE/optee_client/pull/146
-[2] https://github.com/OP-TEE/optee_client/pull/153
-[3] http://autobuild.buildroot.net/results/80e78cb0bb955e912d6cbe5b30c9b024e7efc802
-[4] http://autobuild.buildroot.net/results/a42c19897d03beb02fde2e7e6da25532be27d5ca
-[5] http://autobuild.buildroot.net/results/827087f91b7481d1c3effd615172bbee86317962
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
 ---
-Changes v3 -> v4:
-  - Update patch from [2] outcome
+ DEVELOPERS                               |  3 +++
+ package/Config.in                        |  1 +
+ package/paho-mqtt-cpp/Config.in          | 12 ++++++++++++
+ package/paho-mqtt-cpp/paho-mqtt-cpp.hash |  4 ++++
+ package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
+ create mode 100644 package/paho-mqtt-cpp/Config.in
+ create mode 100644 package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+ create mode 100644 package/paho-mqtt-cpp/paho-mqtt-cpp.mk
 
-Changes v2 -> v3:
-  - Update patch from [1] outcome
-
-Changes v1 -> v2:
-  - Updated commit comment with traces of the build issues that are fixed.
----
- .../0001-libteec-fix-build-warnings.patch     | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
- create mode 100644 package/optee-client/0001-libteec-fix-build-warnings.patch
-
-diff --git a/package/optee-client/0001-libteec-fix-build-warnings.patch b/package/optee-client/0001-libteec-fix-build-warnings.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e0ac08..23cbbcc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1836,6 +1836,9 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
++N:	Refik Tuzakli <refik.tuzakli@savronik.com.tr>
++F:	package/paho-mqtt-cpp/
++
+ N:	R?mi R?rolle <remi.rerolle@gmail.com>
+ F:	package/libfreeimage/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index b5321ae..e372e0c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1603,6 +1603,7 @@ menu "Networking"
+ 	source "package/openzwave/Config.in"
+ 	source "package/ortp/Config.in"
+ 	source "package/paho-mqtt-c/Config.in"
++	source "package/paho-mqtt-cpp/Config.in"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
+diff --git a/package/paho-mqtt-cpp/Config.in b/package/paho-mqtt-cpp/Config.in
 new file mode 100644
-index 0000000000..546a245d69
+index 0000000..c7675e1
 --- /dev/null
-+++ b/package/optee-client/0001-libteec-fix-build-warnings.patch
-@@ -0,0 +1,76 @@
-+From 867ea5c197e440b47c80765adb34af47188ee805 Mon Sep 17 00:00:00 2001
-+From: Victor Chong <victor.chong@linaro.org>
-+Date: Fri, 22 Mar 2019 06:37:13 +0000
-+Subject: [PATCH] libteec: fix build warnings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/paho-mqtt-cpp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PAHO_MQTT_CPP
++	bool "paho-mqtt-cpp"
++	depends on !BR2_STATIC_LIBS  # dlopen()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_PAHO_MQTT_C
++	help
++	  MQTT client C++ library
 +
-+Fix build warnings reported by the Buildroot team [1]:
++	  https://eclipse.org/paho/clients/cpp/
 +
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-+                            ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_open_session_arg *)buf;
-+        ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_invoke_arg *)buf;
-+        ^
++comment "paho-mqtt-cpp needs a toolchain w/ threads and dynamic library support"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+new file mode 100644
+index 0000000..20374e9
+--- /dev/null
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+@@ -0,0 +1,4 @@
++# Locally computed:
++sha256  9f78afb988e9ce9bb7cb74805053221efbb073b74683e222d1d087633178b51f  paho-mqtt-cpp-v1.0.0.tar.gz
++sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
++sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+new file mode 100644
+index 0000000..6afb637
+--- /dev/null
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# paho-mqtt-cpp
++#
++################################################################################
 +
-+This change is a squash of changes from [2] and [3].
++PAHO_MQTT_CPP_VERSION = v1.0.0
++PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,$(PAHO_MQTT_CPP_VERSION))
++PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
++PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
++PAHO_MQTT_CPP_INSTALL_STAGING = YES
++PAHO_MQTT_CPP_DEPENDENCIES = paho-mqtt-c
 +
-+[1] http://lists.busybox.net/pipermail/buildroot/2019-February/243437.html
-+[2] https://github.com/OP-TEE/optee_client/pull/146
-+[3] https://github.com/OP-TEE/optee_client/pull/153
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PAHO_MQTT_CPP_DEPENDENCIES += openssl
++PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
++else
++PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
++endif
++PAHO_MQTT_CPP_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
 +
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Signed-off-by: Victor Chong <victor.chong@linaro.org>
-+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
-+---
-+ libteec/src/tee_client_api.c | 14 ++++++++------
-+ 1 file changed, 8 insertions(+), 6 deletions(-)
-+
-+diff --git a/libteec/src/tee_client_api.c b/libteec/src/tee_client_api.c
-+index cf0b1f7..4d7b134 100644
-+--- a/libteec/src/tee_client_api.c
-++++ b/libteec/src/tee_client_api.c
-+@@ -481,11 +481,12 @@ TEEC_Result TEEC_OpenSession(TEEC_Context *ctx, TEEC_Session *session,
-+ 			uint32_t connection_method, const void *connection_data,
-+ 			TEEC_Operation *operation, uint32_t *ret_origin)
-+ {
-+-	size_t p_sz = TEEC_CONFIG_PAYLOAD_REF_COUNT *
-+-		      sizeof(struct tee_ioctl_param);
-++	const size_t arg_size = sizeof(struct tee_ioctl_open_session_arg) +
-++				TEEC_CONFIG_PAYLOAD_REF_COUNT *
-++					sizeof(struct tee_ioctl_param);
-+ 	union {
-+ 		struct tee_ioctl_open_session_arg arg;
-+-		uint8_t data[sizeof(struct tee_ioctl_open_session_arg) + p_sz];
-++		uint8_t data[arg_size];
-+ 	} buf;
-+ 	struct tee_ioctl_buf_data buf_data;
-+ 	struct tee_ioctl_open_session_arg *arg;
-+@@ -559,11 +560,12 @@ void TEEC_CloseSession(TEEC_Session *session)
-+ TEEC_Result TEEC_InvokeCommand(TEEC_Session *session, uint32_t cmd_id,
-+ 			TEEC_Operation *operation, uint32_t *error_origin)
-+ {
-+-	size_t p_sz = TEEC_CONFIG_PAYLOAD_REF_COUNT *
-+-			sizeof(struct tee_ioctl_param);
-++	const size_t arg_size = sizeof(struct tee_ioctl_invoke_arg) +
-++				TEEC_CONFIG_PAYLOAD_REF_COUNT *
-++					sizeof(struct tee_ioctl_param);
-+ 	union {
-+ 		struct tee_ioctl_invoke_arg arg;
-+-		uint8_t data[sizeof(struct tee_ioctl_invoke_arg) + p_sz];
-++		uint8_t data[arg_size];
-+ 	} buf;
-+ 	struct tee_ioctl_buf_data buf_data;
-+ 	struct tee_ioctl_invoke_arg *arg;
-+-- 
-+2.17.1
-+
++$(eval $(cmake-package))
 -- 
-2.17.1
+2.7.4
