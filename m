@@ -1,176 +1,168 @@
-From: Ed Blake <ed.blake@sondrel.com>
-Date: Fri, 22 Mar 2019 16:59:49 +0000
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: enable OpenMP for
- supporting toolchains
-In-Reply-To: <20190322165929.14306-1-ed.blake@sondrel.com>
-References: <20190322165929.14306-1-ed.blake@sondrel.com>
-Message-ID: <20190322165929.14306-3-ed.blake@sondrel.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 Mar 2019 21:34:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: use pkg-config to find
+ openssl
+Message-ID: <20190322203459.27576-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable OpenMP support in the following external toolchains:
+openssl can have multiples dependencies such as libatomic on sparcv8
+32 bits so drop first patch and add a new patch to use pkg-config
 
-toolchain-external-arm-aarch64-be
-toolchain-external-arm-aarch64
-toolchain-external-arm-arm
-toolchain-external-codescape-img-mips
-toolchain-external-codescape-mti-mips
-toolchain-external-codesourcery-amd64
-toolchain-external-codesourcery-mips
-toolchain-external-linaro-aarch64-be
-toolchain-external-linaro-aarch64
-toolchain-external-linaro-arm
-toolchain-external-linaro-armeb
+Fixes:
+ - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
 
-Signed-off-by: Ed Blake <ed.blake@sondrel.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../toolchain-external-arm-aarch64-be/Config.in                  | 1 +
- .../toolchain-external/toolchain-external-arm-aarch64/Config.in  | 1 +
- .../toolchain-external/toolchain-external-arm-arm/Config.in      | 1 +
- .../toolchain-external-codescape-img-mips/Config.in              | 1 +
- .../toolchain-external-codescape-mti-mips/Config.in              | 1 +
- .../toolchain-external-codesourcery-amd64/Config.in              | 1 +
- .../toolchain-external-codesourcery-mips/Config.in               | 1 +
- .../toolchain-external-linaro-aarch64-be/Config.in               | 1 +
- .../toolchain-external-linaro-aarch64/Config.in                  | 1 +
- .../toolchain-external/toolchain-external-linaro-arm/Config.in   | 1 +
- .../toolchain-external/toolchain-external-linaro-armeb/Config.in | 1 +
- 11 files changed, 11 insertions(+)
+ ...ressl.patch => 0001-enable-libressl.patch} |  0
+ .../0001-fix-openssl-static-link.patch        | 30 --------
+ ...re.ac-use-pkg-config-to-find-openssl.patch | 69 +++++++++++++++++++
+ package/fetchmail/fetchmail.mk                |  7 +-
+ 4 files changed, 70 insertions(+), 36 deletions(-)
+ rename package/fetchmail/{0002-enable-libressl.patch => 0001-enable-libressl.patch} (100%)
+ delete mode 100644 package/fetchmail/0001-fix-openssl-static-link.patch
+ create mode 100644 package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index d992be0190..76157730ec 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-@@ -10,6 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the AArch64 Big Endian architecture.
+diff --git a/package/fetchmail/0002-enable-libressl.patch b/package/fetchmail/0001-enable-libressl.patch
+similarity index 100%
+rename from package/fetchmail/0002-enable-libressl.patch
+rename to package/fetchmail/0001-enable-libressl.patch
+diff --git a/package/fetchmail/0001-fix-openssl-static-link.patch b/package/fetchmail/0001-fix-openssl-static-link.patch
+deleted file mode 100644
+index 1a5f4d6f71..0000000000
+--- a/package/fetchmail/0001-fix-openssl-static-link.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Fix checking for statically build OpenSSL with libz dependency
+-
+-Fixes
+-http://autobuild.buildroot.net/results/48a/48ad6d3659cf1f04581b7e3d115bebf454ff17fd/
+-
+-configure: Enabling OpenSSL support in /home/br/br/output/host/usr/i486-buildroot-linux-uclibc/sysroot/usr.
+-checking for additional library dependencies of SSL... error
+-configure: error: cannot link with SSL - check config.log
+-
+-In config.log multiple linking errors to libz can be found:
+-
+-configure:10099: /home/br/br/output/host/usr/bin/i486-ctng-linux-uclibc-gcc -o
+-  conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64
+-  /home/br/br/output/host/usr/i486-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+-  In function `zlib_stateful_c_zlib.c:(.text+0x56): undefined reference to `inflate'
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr fetchmail-6.3.26.org/configure.ac fetchmail-6.3.26/configure.ac
+---- fetchmail-6.3.26.org/configure.ac	2013-04-23 22:51:10.000000000 +0200
+-+++ fetchmail-6.3.26/configure.ac	2014-07-27 09:20:25.000000000 +0200
+-@@ -778,7 +778,7 @@
+-     AC_MSG_ERROR([SSL support enabled, but OpenSSL not found])
+-   fi
+-   LDFLAGS="$LDFLAGS -L$with_ssl/lib"
+--  LIBS="$LIBS -lssl -lcrypto"
+-+  LIBS="-lssl -lcrypto $LIBS"
+-   dnl check if -ldl is needed
+-   AC_MSG_CHECKING([for additional library dependencies of SSL])
+-   found=0
+diff --git a/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+new file mode 100644
+index 0000000000..dd48783922
+--- /dev/null
++++ b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+@@ -0,0 +1,69 @@
++From 1ed0af7f1bbcaccbd7356bd90596f5c942b64720 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 22 Mar 2019 20:24:54 +0100
++Subject: [PATCH 1/1] configure.ac: use pkg-config to find openssl
++
++openssl can have multiples dependencies such as libatomic on sparcv8
++32 bits
++
++Fixes:
++ - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/fetchmail/fetchmail/merge_requests/14]
++---
++ configure.ac | 37 +++++++++++++++++++------------------
++ 1 file changed, 19 insertions(+), 18 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 16b0fcba..3a75ec6e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -778,24 +778,25 @@ then
++   else
++     AC_MSG_ERROR([SSL support enabled, but OpenSSL not found])
++   fi
++-  LDFLAGS="$LDFLAGS -L$with_ssl/lib"
++-  LIBS="$LIBS -lssl -lcrypto"
++-  dnl check if -ldl is needed
++-  AC_MSG_CHECKING([for additional library dependencies of SSL])
++-  found=0
++-  save_LIBS="$LIBS"
++-  for i in "" "-ldl" ; do
++-      LIBS="$LDFLAGS $save_LIBS $i"
++-      AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],[SSL_library_init()])],[found=1; break])
++-  done
++-  if test $found = 0 ; then
++-      AC_MSG_RESULT([error])
++-      AC_MSG_ERROR([cannot link with SSL - check config.log])
++-  fi
++-  LIBS="$save_LIBS $i"
++-  if test "$i" = "" ; then i="(none)" ; fi
++-  AC_MSG_RESULT($i)
++-  dnl XXX FIXME: use pkg-config if available!
+++  PKG_CHECK_MODULES([SSL],[libssl],[LIBS="$LIBS $SSL_LIBS"],[
+++    LDFLAGS="$LDFLAGS -L$with_ssl/lib"
+++    LIBS="$LIBS -lssl -lcrypto"
+++    dnl check if -ldl is needed
+++    AC_MSG_CHECKING([for additional library dependencies of SSL])
+++    found=0
+++    save_LIBS="$LIBS"
+++    for i in "" "-ldl" ; do
+++        LIBS="$LDFLAGS $save_LIBS $i"
+++        AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],[SSL_library_init()])],[found=1; break])
+++    done
+++    if test $found = 0 ; then
+++        AC_MSG_RESULT([error])
+++        AC_MSG_ERROR([cannot link with SSL - check config.log])
+++    fi
+++    LIBS="$save_LIBS $i"
+++    if test "$i" = "" ; then i="(none)" ; fi
+++    AC_MSG_RESULT($i)
+++  ])
++   AC_DEFINE(SSL_ENABLE)
++ else
++   AC_MSG_WARN(Disabling SSL support.)
++-- 
++2.20.1
++
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 37bbeabf62..41505e8637 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -13,17 +13,12 @@ FETCHMAIL_LICENSE_FILES = COPYING
+ FETCHMAIL_AUTORECONF = YES
+ FETCHMAIL_GETTEXTIZE = YES
  
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-index fbb5e025e8..3d4a9b62a4 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-@@ -10,6 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the AArch64 architecture.
+-# needed to help fetchmail detecting the availability of openssl,
+-# because it doesn't use pkg-config
+-ifeq ($(BR2_STATIC_LIBS),y)
+-FETCHMAIL_CONF_ENV += LIBS="-lz"
+-endif
+-
+ FETCHMAIL_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr
  
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 0449737889..886b2a0aa3 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -17,6 +17,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the ARM architecture. It uses GCC 8.2.1,
- 	  GDB 8.1.1, glibc 2.28, Binutils 2.30. It generates code that
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-index be6e56a2cb..2341d08832 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Codescape IMG GNU Linux Toolchain 2018.09 for the MIPS
- 	  architecture, from MIPS Tech LLC. It uses gcc 6.3.0,
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-index 15d6284766..c58c55119a 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -10,6 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Codescape MTI GNU Linux Toolchain 2018.09 for the MIPS
- 	  architecture, from MIPS Tech LLC. It uses gcc 6.3.0,
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-index 9187333b95..c8ec970a4f 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
-index 734f0e4c7c..1a3bdc9393 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
-@@ -11,6 +11,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-index 9e7d2a6233..bac90374cf 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-@@ -10,6 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Toolchain for the AArch64 Big Endian architecture, from
- 	  http://www.linaro.org/engineering/armv8/
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-index aabf2cffe8..824eb76c72 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-@@ -10,6 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-index e880d5dbbd..beb38609c3 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-@@ -17,6 +17,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
- 	  GCC 2018.05 (based on gcc 7.3.1), Linaro GDB 2018.05 (based on
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-index ebc6edefb5..aa21e44860 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-@@ -13,6 +13,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ FETCHMAIL_DEPENDENCIES = \
+ 	ca-certificates \
++	host-pkgconf \
+ 	openssl \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
 -- 
-2.17.1
+2.20.1
