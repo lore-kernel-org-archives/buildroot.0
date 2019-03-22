@@ -1,81 +1,53 @@
-From: Nylon Chen <nylon7@andestech.com>
-Date: Fri, 22 Mar 2019 16:45:11 +0800
-Subject: [Buildroot] [PATCH v3 3/3] upport/config-fragments/autobuild:
- test the Andes nds32 toolchain
-In-Reply-To: <20190321111210.GA2660@scaer>
-References: <20190307021125.8530-1-nylon7@andestech.com>
- <20190307021125.8530-4-nylon7@andestech.com>
- <20190314224250.GD6876@scaer> <20190321025103.GC12833@app09>
- <20190321085120.4fb043b5@windsurf> <20190321111210.GA2660@scaer>
-Message-ID: <20190322084511.GB28644@app09>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 22 Mar 2019 10:11:40 +0100
+Subject: [Buildroot] [PATCH v3] package/optee-client: fix build warnings
+ from 3.4.0
+In-Reply-To: <1553166000-13510-1-git-send-email-etienne.carriere@linaro.org>
+References: <1553166000-13510-1-git-send-email-etienne.carriere@linaro.org>
+Message-ID: <CAN5uoS_=7DH4GDnfNXzziX-JD5C2Ptp2tmxqVk847vzEOiZW5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, All,
-
-On Thu, Mar 21, 2019 at 12:12:10PM +0100, Yann E. MORIN wrote:
-> Nylon, Thomas, All,
-> 
-> On 2019-03-21 08:51 +0100, Thomas Petazzoni spake thusly:
-> > On Thu, 21 Mar 2019 10:51:03 +0800
-> > Nylon Chen <nylon7@andestech.com> wrote:
-> > 
-> > > > > diff --git a/support/config-fragments/autobuild/br-andes-nds32.config b/support/config-fragments/autobuild/br-andes-nds32.config
-> > > > > new file mode 100644
-> > > > > index 0000000000..cd093a20f9
-> > > > > --- /dev/null
-> > > > > +++ b/support/config-fragments/autobuild/br-andes-nds32.config
-> > > > > @@ -0,0 +1,9 @@
-> > > > > +BR2_nds32=y
-> > > > > +BR2_TOOLCHAIN_EXTERNAL=y
-> > > > > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> > > > > +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> > > > > +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz"  
-> > > I think I misunderstood the meaning of Thomas Petazzo.
-> > > 
-> > > I thought that as long as the pre-build remote toolcahin is given.(So I used our own pre-build remote toolchain)
-> > > 
-> > > It may take a few more days, we will contribute glibc back to upstream, and then we can compile it internally using buildroot.
-> > 
-> > It is perfectly fine to use a pre-built toolchain, I think what Yann
-> > explained is that since the source code of gcc/binutils/glibc/linux is
-> > available, it makes sense to *also* support building the toolchain with
-> > Buildroot.
-> 
-> Exactly, yes.
-> 
-> But that can come later, in a followup series.
-> 
-> Regards,
-> Yann E. MORIN.
+On Thu, 21 Mar 2019 at 12:00, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
 >
-In order to get rid of rework.
+> Add a patch over current optee-client 3.4.0 to fix build issues
+> reported by some toolchains with traces like:
+>
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+>     ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
+>                             ^
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
+>     arg = (struct tee_ioctl_open_session_arg *)buf;
+>           ^
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
+>   /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
+>     arg = (struct tee_ioctl_invoke_arg *)buf;
+>
+> The optee-client patch is under review in the OP-TEE project [1] and
+> should be merged in the next OP-TEE release 3.5.0.
+>
+> Fixes [2], [3], [4] and other failing builds reported by autobuild tests.
+>
+> [1] https://github.com/OP-TEE/optee_client/pull/146
+> [2] http://autobuild.buildroot.net/results/80e78cb0bb955e912d6cbe5b30c9b024e7efc802
+> [3] http://autobuild.buildroot.net/results/a42c19897d03beb02fde2e7e6da25532be27d5ca
+> [4] http://autobuild.buildroot.net/results/827087f91b7481d1c3effd615172bbee86317962
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+> Changes v2 -> v3:
+>   - Update patch from [1] outcome
+>
 
-I prefer to send glibc to upstream and then come to this patch.
-> > Also, it is not mandatory for the glibc support to be in upstream
-> > glibc. We support architectures for which the gcc, binutils or libc
-> > support is not yet fully upstreamed. For example, for RISC-V 32-bit,
-> > we're using a non-upstream glibc.
-> > 
-> > Best regards,
-> > 
-> > Thomas
-> > -- 
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This fix fails to build with CLang
+(https://github.com/OP-TEE/optee_client/pull/153).
+I will submit a v3 to get it fixed.
+
+Regards,
+etienne
