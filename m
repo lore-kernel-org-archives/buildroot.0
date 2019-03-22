@@ -1,52 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Mar 2019 12:40:25 +0100
-Subject: [Buildroot] [PATCH v3 1/3] arch: add support for Andes
- 32-bit(nds32)
-In-Reply-To: <20190322083928.GA28644@app09>
-References: <20190307021125.8530-1-nylon7@andestech.com>
- <20190307021125.8530-2-nylon7@andestech.com>
- <20190314222211.GB6876@scaer> <20190321023610.GB12833@app09>
- <20190321111854.GB2660@scaer> <20190322083928.GA28644@app09>
-Message-ID: <20190322114025.GG2660@scaer>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Fri, 22 Mar 2019 14:26:01 +0100
+Subject: [Buildroot] reduce install size of SQLite module for Node.js
+Message-ID: <CAJiuCcc1ccSZowLF8Esh9_SL9eFKYCXS_Z=T06Wxsc3RSChr-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nylon, All,
+Hi Buildroot users,
 
-On 2019-03-22 16:39 +0800, Nylon Chen spake thusly:
-> On Thu, Mar 21, 2019 at 07:18:54PM +0800, Yann E. MORIN wrote:
-> > On 2019-03-21 10:36 +0800, Nylon Chen spake thusly:
-> > > On Fri, Mar 15, 2019 at 06:22:11AM +0800, Yann E. MORIN wrote:
-> > > > On 2019-03-07 10:11 +0800, Nylon Chen spake thusly:
-> > > > > +config BR2_ANDES_NDS32_FPU
-> > > > > +	bool "Enable FPU coprocessor"
-> > > > > +	help
-> > > > > +	  You can say y here if your Andes CPU have a Floating-Point Coprocessor
-> > > > > +	  or if you need FPU support for your user-space programs.
-> > > > So, the situation about FPU is always a bit icky for me.
-[--SNIP--]
-> BR2_ANDES_NDS32_FPU are selector, we can depend on it switch v3 or v3f
-> toolcahin
-> 
-> After we add new defconfig(for v3f),I will be adding BR2_SOFT_FLOAT
->(-msoft-float) to arch/Config.in.nds32
+I need to install a Node.js app requiring the SQLite Node.js module
+and my target is a RPi Zero.
 
-Then if the v3f is currently the only supported alternative, do not
-offer the FPU choice in this initial integration.
+I try different method but all of them result in an heavy folder >25M
+where the source are kept.
+On my X86 without SQLite lib install on the machine the Node.js module
+is around 4,8M.
 
-Adding support for the v3 (not f) and the FPU selection can be done in a
-later patch, then.
+1) I try in the makefile of the Node.js app.
+### package/my-app/my-app.mk
+define MY_APP_INSTALL_TARGET_CMDS
+        $(NPM) --prefix $(@D) install
+        mkdir -p $(TARGET_DIR)/usr/my_app
+        cp -r $(@D)/* $(TARGET_DIR)/usr/my_app
+endef
 
-Regards,
-Yann E. MORIN.
+$(eval $(generic-package))
+###
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+As the SQLite module is not pre-compiled for the RPi npm will built it
+from source (https://www.npmjs.com/package/sqlite3)
+
+And this will leave all the source and dependencies on the target
+(folder is >25M).
+
+2) I try with a built-in SQLite lib :
+with this settings :
+ BR2_PACKAGE_SQLITE=y
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="sqlite3"
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS="sqlite"
+
+But same issue the folder is still huge and keep the source.
+
+Do you know, if it's possible and how i can tell npm to only install
+the release module and not keep the source ?
+
+Thanks,
+Clement
