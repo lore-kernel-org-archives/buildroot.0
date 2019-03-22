@@ -1,106 +1,52 @@
-From: Refik TUZAKLI <refik.tuzakli@savronik.com.tr>
-Date: Fri, 22 Mar 2019 11:10:44 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/paho-mqtt-cpp: add paho-mqtt-cpp
-Message-ID: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 22 Mar 2019 12:40:25 +0100
+Subject: [Buildroot] [PATCH v3 1/3] arch: add support for Andes
+ 32-bit(nds32)
+In-Reply-To: <20190322083928.GA28644@app09>
+References: <20190307021125.8530-1-nylon7@andestech.com>
+ <20190307021125.8530-2-nylon7@andestech.com>
+ <20190314222211.GB6876@scaer> <20190321023610.GB12833@app09>
+ <20190321111854.GB2660@scaer> <20190322083928.GA28644@app09>
+Message-ID: <20190322114025.GG2660@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
----
- DEVELOPERS                               |  3 +++
- package/Config.in                        |  1 +
- package/paho-mqtt-cpp/Config.in          | 12 ++++++++++++
- package/paho-mqtt-cpp/paho-mqtt-cpp.hash |  4 ++++
- package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/paho-mqtt-cpp/Config.in
- create mode 100644 package/paho-mqtt-cpp/paho-mqtt-cpp.hash
- create mode 100644 package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+Nylon, All,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e0ac08..23cbbcc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1836,6 +1836,9 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
- F:	package/uhttpd/
- F:	package/ustream-ssl/
- 
-+N:	Refik Tuzakli <refik.tuzakli@savronik.com.tr>
-+F:	package/paho-mqtt-cpp/
-+
- N:	R?mi R?rolle <remi.rerolle@gmail.com>
- F:	package/libfreeimage/
- 
-diff --git a/package/Config.in b/package/Config.in
-index b5321ae..e372e0c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1603,6 +1603,7 @@ menu "Networking"
- 	source "package/openzwave/Config.in"
- 	source "package/ortp/Config.in"
- 	source "package/paho-mqtt-c/Config.in"
-+	source "package/paho-mqtt-cpp/Config.in"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
- 	source "package/rabbitmq-c/Config.in"
-diff --git a/package/paho-mqtt-cpp/Config.in b/package/paho-mqtt-cpp/Config.in
-new file mode 100644
-index 0000000..c7675e1
---- /dev/null
-+++ b/package/paho-mqtt-cpp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PAHO_MQTT_CPP
-+	bool "paho-mqtt-cpp"
-+	depends on !BR2_STATIC_LIBS  # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_PAHO_MQTT_C
-+	help
-+	  MQTT client C++ library
-+
-+	  https://eclipse.org/paho/clients/cpp/
-+
-+comment "paho-mqtt-cpp needs a toolchain w/ threads and dynamic library support"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-new file mode 100644
-index 0000000..20374e9
---- /dev/null
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
-@@ -0,0 +1,4 @@
-+# Locally computed:
-+sha256  9f78afb988e9ce9bb7cb74805053221efbb073b74683e222d1d087633178b51f  paho-mqtt-cpp-v1.0.0.tar.gz
-+sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
-+sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-new file mode 100644
-index 0000000..6afb637
---- /dev/null
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# paho-mqtt-cpp
-+#
-+################################################################################
-+
-+PAHO_MQTT_CPP_VERSION = v1.0.0
-+PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,$(PAHO_MQTT_CPP_VERSION))
-+PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
-+PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
-+PAHO_MQTT_CPP_INSTALL_STAGING = YES
-+PAHO_MQTT_CPP_DEPENDENCIES = paho-mqtt-c
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+PAHO_MQTT_CPP_DEPENDENCIES += openssl
-+PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
-+else
-+PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
-+endif
-+PAHO_MQTT_CPP_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-+
-+$(eval $(cmake-package))
+On 2019-03-22 16:39 +0800, Nylon Chen spake thusly:
+> On Thu, Mar 21, 2019 at 07:18:54PM +0800, Yann E. MORIN wrote:
+> > On 2019-03-21 10:36 +0800, Nylon Chen spake thusly:
+> > > On Fri, Mar 15, 2019 at 06:22:11AM +0800, Yann E. MORIN wrote:
+> > > > On 2019-03-07 10:11 +0800, Nylon Chen spake thusly:
+> > > > > +config BR2_ANDES_NDS32_FPU
+> > > > > +	bool "Enable FPU coprocessor"
+> > > > > +	help
+> > > > > +	  You can say y here if your Andes CPU have a Floating-Point Coprocessor
+> > > > > +	  or if you need FPU support for your user-space programs.
+> > > > So, the situation about FPU is always a bit icky for me.
+[--SNIP--]
+> BR2_ANDES_NDS32_FPU are selector, we can depend on it switch v3 or v3f
+> toolcahin
+> 
+> After we add new defconfig(for v3f),I will be adding BR2_SOFT_FLOAT
+>(-msoft-float) to arch/Config.in.nds32
+
+Then if the v3f is currently the only supported alternative, do not
+offer the FPU choice in this initial integration.
+
+Adding support for the v3 (not f) and the FPU selection can be done in a
+later patch, then.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
