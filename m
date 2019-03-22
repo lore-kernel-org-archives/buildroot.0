@@ -1,49 +1,48 @@
-From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Date: Fri, 22 Mar 2019 13:19:21 +1100
-Subject: [Buildroot] [PATCH] lvm2: Update to 2.02.183
-Message-ID: <20190322021921.25949-1-sam@mendozajonas.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 22 Mar 2019 06:59:46 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-03-20
+In-Reply-To: <20190321070043.3390386D73@whitealder.osuosl.org>
+References: <20190321070043.3390386D73@whitealder.osuosl.org>
+Message-ID: <20190322045946.hpus3subzuiobdhd@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In particular update to solve an issue where LVM would fail to
-initialise LVM devices when asynchronous IO was not available and it
-would fail to fall back to synchronous IO. [0][1]
+Hi All,
 
-[0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
-[1] https://github.com/open-power/petitboot/issues/60
+On Thu, Mar 21, 2019 at 07:00:38AM -0000, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Build statistics for 2019-03-20
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>    2018.02.x |  30 |   3 |   0 |  33 |
+>    2018.11.x |  39 |   0 |   0 |  39 |
+>    2019.02.x |  33 |   3 |   1 |  37 |
+>       master | 226 |  66 |   2 | 294 |
+> 
+> Results for branch '2018.02.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                    attr-2.4.48 | 1 
+>                  mplayer-1.3.0 | 1 
+>              qt5location-5.6.3 | 1 
+> 
+> 
+> Detail of failures
+> ------------------
+> 
+>         bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/97de444eae5e8baf191b05e31f07ca00558bfda8 |     
+This made me crazy until I realized that Blackfin adds "_" to all
+symbols. So, it really can be fixed (I checked) if to prepend symbols in
+libattr/libattr.lds with "_" (at least for each libattr_* symbol).
 
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 697a413995..ad0d93b144 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,5 @@
- # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
--sha512 6e0a10ab48be4f0c751447c6ab88b8f9fa1dcd1d703de77966e8507b173df70b1987fa0be252c31dfce9e0ee70e5f439db58c8f534e24144a70f254c091554ee  LVM2.2.02.180.tgz
-+sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 152381d65d..7fdb9a7e30 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.180
-+LVM2_VERSION = 2.02.183
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
--- 
-2.21.0
+Regards,
+Vadim Kochan
