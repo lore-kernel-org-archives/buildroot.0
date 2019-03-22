@@ -1,66 +1,49 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Fri, 22 Mar 2019 19:39:02 +0100
-Subject: [Buildroot] [PATCH v4 4/6] quazip: Patch .pro file to correctly
- crosscompile and use qmake infra
+Date: Fri, 22 Mar 2019 19:38:59 +0100
+Subject: [Buildroot] [PATCH v4 1/6] qt5base: Do not build shared libs if
+ BR2_STATIC_LIBS is chosen
 In-Reply-To: <20190322183904.22401-1-anaumann@ultratronik.de>
 References: <20190322183904.22401-1-anaumann@ultratronik.de>
-Message-ID: <20190322183904.22401-5-anaumann@ultratronik.de>
+Message-ID: <20190322183904.22401-2-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The quazip .pro files uses the target only prefix for cross staging install.
-This breaks using the new qmake infra, so add a minor patch to fix this.
+Traditionally we configured qt5 to always build shared libraries. This resulted
+in many conditionals when setting buildroot to static-libs only, because each
+module's target install had to be guarded.
+So to avoid this and simplify target install in a subsequent commit, configure
+qt to build (and install) only the type of libs which the buildroot defconfig
+is set to.
+Unfortunately it seems that Qt does not support building both dynamic and static
+libs at the same time, so we still set it shared if buildroot asks for both.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- .../0001-Fix-crosscompile-staging-install.patch  | 16 ++++++++++++++++
- package/quazip/quazip.mk                         | 10 ----------
- 2 files changed, 16 insertions(+), 10 deletions(-)
- create mode 100644 package/quazip/0001-Fix-crosscompile-staging-install.patch
+ package/qt5/qt5base/qt5base.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/quazip/0001-Fix-crosscompile-staging-install.patch b/package/quazip/0001-Fix-crosscompile-staging-install.patch
-new file mode 100644
-index 0000000000..96cae37283
---- /dev/null
-+++ b/package/quazip/0001-Fix-crosscompile-staging-install.patch
-@@ -0,0 +1,16 @@
-+Index: quazip-0.7.6/quazip/quazip.pro
-+===================================================================
-+--- quazip-0.7.6.orig/quazip/quazip.pro
-++++ quazip-0.7.6/quazip/quazip.pro
-+@@ -47,9 +47,9 @@ CONFIG(debug, debug|release) {
-+ }
-+ 
-+ unix:!symbian {
-+-    headers.path=$$PREFIX/include/quazip
-++    headers.path=$$[QT_INSTALL_PREFIX]/include/quazip
-+     headers.files=$$HEADERS
-+-    target.path=$$PREFIX/lib/$${LIB_ARCH}
-++    target.path=$$[QT_INSTALL_PREFIX]/lib/$${LIB_ARCH}
-+     QMAKE_PKGCONFIG_DESTDIR = pkgconfig
-+     INSTALLS += headers target
-+ 
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index eef423b58a..1b34c9fc2a 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -13,14 +13,4 @@ QUAZIP_DEPENDENCIES = \
- QUAZIP_LICENSE = LGPL-2.1
- QUAZIP_LICENSE_FILES = COPYING
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 14536980a8..a8bec84123 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -24,8 +24,13 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-iconv \
+ 	-system-zlib \
+ 	-system-pcre \
+-	-no-pch \
+-	-shared
++	-no-pch
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++QT5BASE_CONFIGURE_OPTS += -shared
++else ifeq ($(BR2_STATIC_LIBS),y)
++QT5BASE_CONFIGURE_OPTS += -static
++endif
  
--QUAZIP_CONF_OPTS = PREFIX=/usr
--
--define QUAZIP_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
--endef
--
--define QUAZIP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
--endef
--
- $(eval $(qmake-package))
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5BASE_DEPENDENCIES += pcre
 -- 
 2.21.0
