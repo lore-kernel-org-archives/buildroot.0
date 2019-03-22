@@ -1,108 +1,68 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Mar 2019 23:13:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/supertux: fix build on powerpc64le
-Message-ID: <20190322221314.23264-1-fontaine.fabrice@gmail.com>
+Date: Fri, 22 Mar 2019 23:54:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: add
+ BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+Message-ID: <20190322225451.24545-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+openjdk does not support arc or riscv, see:
+https://github.com/openjdk/jdk/blob/d85131a4d11d5767ae3afacd8627a4a8f8cbab95/make/autoconf/platform.m4
+
 Fixes:
- - http://autobuild.buildroot.org/results/c484079b2736eb3c21adff257f3e3ab1acc67f9a
+ - http://autobuild.buildroot.org/results/c5782d6b52516d07469adf6600d4fc69c4016157
+ - http://autobuild.buildroot.org/results/8437ebe0fd228c2d8856255411026f30e39778e3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/supertux/0001-Fix-build-on-PowerPC.patch | 81 ++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 package/supertux/0001-Fix-build-on-PowerPC.patch
+ package/openjdk/Config.in | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/supertux/0001-Fix-build-on-PowerPC.patch b/package/supertux/0001-Fix-build-on-PowerPC.patch
-new file mode 100644
-index 0000000000..e40abac6b0
---- /dev/null
-+++ b/package/supertux/0001-Fix-build-on-PowerPC.patch
-@@ -0,0 +1,81 @@
-+From cfcd478fe69ca1b3923f388a349a4f67ac2c03aa Mon Sep 17 00:00:00 2001
-+From: Shawn Anastasio <shawn@anastas.io>
-+Date: Sun, 3 Feb 2019 13:22:57 -0600
-+Subject: [PATCH] Fix build on PowerPC
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index dd1f3c59cf..f243afbec8 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -2,8 +2,20 @@ config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_HOSTARCH = "x86_64"
+ 
++config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_m68k
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_sh
++	default y if BR2_sparc || BR2_sparc64
 +
-+On PowerPC-based architectures, SDL includes the altivec.h header
-+for SIMD intrinsics. Unfortunately, altivec.h defines some types which
-+conflict with C++ types like bool and std::vector. This commit adds
-+a wrapper for altivec.h which resolves these conflicts and allows
-+supertux to build and run.
-+
-+Tested on a ppc64le workstation.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/SuperTux/supertux/pull/1056/commits/cfcd478fe69ca1b3923f388a349a4f67ac2c03aa]
-+---
-+ CMakeLists.txt    | 15 ++++++++++++++-
-+ src/ppc/altivec.h |  6 ++++++
-+ 2 files changed, 20 insertions(+), 1 deletion(-)
-+ create mode 100644 src/ppc/altivec.h
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 70b9673b50..b9b6ea3ea6 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -376,6 +376,11 @@ endif()
-+ 
-+ include(ConfigureChecks)
-+ 
-++# Include altivec wrapper on ppc
-++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
-++  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ppc)
-++endif()
-++
-+ 
-+ ## Also build external/squirrel
-+ 
-+@@ -420,6 +425,13 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt)
-+   message(FATAL_ERROR "tinygettext submodule is not checked out or ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt is missing")
-+ endif()
-+ 
-++# Include altivec wrapper on ppc
-++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
-++  set(TINYGETTEXT_CXX_FLAGS "-isystem ${CMAKE_CURRENT_SOURCE_DIR}/src/ppc ${CMAKE_CXX_FLAGS}")
-++else()
-++  set(TINYGETTEXT_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-++endif()
-++
-+ set(TINYGETTEXT_PREFIX ${CMAKE_BINARY_DIR}/tinygettext/)
-+ ExternalProject_Add(tinygettext
-+   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/tinygettext/"
-+@@ -428,7 +440,7 @@ ExternalProject_Add(tinygettext
-+   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-+   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
-+   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-+-  -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-++  -DCMAKE_CXX_FLAGS=${TINYGETTEXT_CXX_FLAGS}
-+   -DBUILD_SHARED_LIBS=OFF
-+   -DHAVE_SDL=ON
-+   -DVCPKG_BUILD=${VCPKG_BUILD}
-+@@ -443,6 +455,7 @@ set_target_properties(tinygettext_lib PROPERTIES IMPORTED_LOCATION "${TINYGETTEX
-+ 
-+ include_directories(SYSTEM ${TINYGETTEXT_PREFIX}/include)
-+ 
-++
-+ ## external/SDL_ttf with patches
-+ find_package(Freetype REQUIRED)
-+ find_package(RAQM)
-+diff --git a/src/ppc/altivec.h b/src/ppc/altivec.h
-+new file mode 100644
-+index 0000000000..7ede8246ed
-+--- /dev/null
-++++ b/src/ppc/altivec.h
-+@@ -0,0 +1,6 @@
-++#include_next <altivec.h>
-++
-++// The altivec headers redefine vector and bool which conflict
-++// with C++'s bool type and std::vector. Undefine them here.
-++#undef vector
-++#undef bool
+ config BR2_PACKAGE_OPENJDK
+ 	bool "openjdk"
++	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ 	depends on !BR2_SOFT_FLOAT
+ 	depends on !BR2_STATIC_LIBS # glibc
+ 	depends on BR2_INSTALL_LIBSTDCPP # cups
+@@ -59,14 +71,17 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
+ endif
+ 
+ comment "openjdk needs X.Org"
++	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+ comment "openjdk needs glibc, and a toolchain w/ wchar, dynamic library, threads, C++"
++	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+ 
+ comment "openjdk does not support soft float configurations"
++	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_SOFT_FLOAT
 -- 
 2.14.1
