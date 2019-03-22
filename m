@@ -1,65 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Mar 2019 21:38:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with kernel <
- 4.1
-Message-ID: <20190322203831.28022-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 22 Mar 2019 22:07:03 +0100
+Subject: [Buildroot] [PATCH 0/3 v3] support/graphs: speedup graph-depends
+ (branch yem/graphs-from-make-2)
+Message-ID: <cover.1553288807.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a33433abeb122cfb15f7f21ab777e84040bdcb8b
+Hello All!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...l_parser.c-fix-build-with-kernel-4.1.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/keepalived/0001-global_parser.c-fix-build-with-kernel-4.1.patch
+This two-patch series bring tremendous speedups to graph-depends (and to
+-rdepends as well) by using the newly-introduced show-dependency-tree.
 
-diff --git a/package/keepalived/0001-global_parser.c-fix-build-with-kernel-4.1.patch b/package/keepalived/0001-global_parser.c-fix-build-with-kernel-4.1.patch
-new file mode 100644
-index 0000000000..0c395b5101
---- /dev/null
-+++ b/package/keepalived/0001-global_parser.c-fix-build-with-kernel-4.1.patch
-@@ -0,0 +1,37 @@
-+From 50e7b848feb7976c58c70edc64bf1056050aa1a3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 22 Mar 2019 09:18:44 +0100
-+Subject: [PATCH] global_parser.c: fix build with kernel < 4.1
-+
-+NFT_TABLE_MAXNAMELEN has been added only in kernel 4.1 with
-+https://github.com/torvalds/linux/commit/1cae565e8b746f484f1ff1b71d2a1c89d7cf0668
-+
-+So define it to 32 if it is not defined
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a33433abeb122cfb15f7f21ab777e84040bdcb8b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ keepalived/core/global_parser.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/keepalived/core/global_parser.c b/keepalived/core/global_parser.c
-+index 65442408..eec82e8a 100644
-+--- a/keepalived/core/global_parser.c
-++++ b/keepalived/core/global_parser.c
-+@@ -60,6 +60,11 @@
-+ 
-+ #define LVS_MAX_TIMEOUT		(86400*31)	/* 31 days */
-+ 
-++/* For kernels < 4.1 */
-++#ifndef NFT_TABLE_MAXNAMELEN
-++#define NFT_TABLE_MAXNAMELEN 32
-++#endif
-++
-+ /* data handlers */
-+ /* Global def handlers */
-+ #ifdef _WITH_LINKBEAT_
-+-- 
-+2.20.1
-+
+The first patch is a cleanup in the PHONY rules.
+
+The second patch is a preparatory fixup for the mandatory-deps removal.
+
+The third patch is the actual speedup.
+
+Changes v2 -> v3:
+  - fix the %-graph-rdepends  (Thomas P.)
+  - simplify by using defaultdicts()  (Thomas P.)
+  - return the deps and rdeps
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit f4f7dd9557cf139f6014ada77e947152d5a82fb3
+
+  package/libssh2: security bump to latest git (2019-03-21 00:00:54 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to e26ba891857584eb10bbfbe76ec45be8eb2551b8
+
+  support/graph-depends: use the new make-based dependency tree (2019-03-22 21:49:53 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/pkg-generic: mark some rule PHONY
+      support/graph-depends: don't eliminate mandatory deps for reverse graphs
+      support/graph-depends: use the new make-based dependency tree
+
+ package/pkg-generic.mk        |   3 +
+ support/scripts/brpkgutil.py  |  97 ++++++++++++-----------------
+ support/scripts/graph-depends | 138 +++++++++---------------------------------
+ 3 files changed, 70 insertions(+), 168 deletions(-)
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
