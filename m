@@ -1,41 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Mar 2019 08:48:28 +0100
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 22 Mar 2019 10:29:19 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2019-03-20
-In-Reply-To: <20190322045946.hpus3subzuiobdhd@vkochan-ThinkPad-T470p>
+In-Reply-To: <20190321070043.3390386D73@whitealder.osuosl.org>
 References: <20190321070043.3390386D73@whitealder.osuosl.org>
- <20190322045946.hpus3subzuiobdhd@vkochan-ThinkPad-T470p>
-Message-ID: <20190322084828.20ae4592@windsurf>
+Message-ID: <20190322102919.GC13496@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+On Thu, 21 Mar 2019 07:00:38 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Fri, 22 Mar 2019 06:59:46 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+> [...]
+>
+>          arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/77571d7ea2914638e30f017e8a4965eb89960802 |     
+>          arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/2520e6d94a82669b5d8e1aabeb10884fd43f1912 |     
 
+These two are the same. It looks like some issue related to some header
+not being #include'd. I'll take a stab at solving this, along with the
+other build failures for this package which have been accumulating in the
+last couple of weeks.
 
-> > Detail of failures
-> > ------------------
-> > 
-> >         bfin |                    attr-2.4.48 | NOK | http://autobuild.buildroot.net/results/97de444eae5e8baf191b05e31f07ca00558bfda8 |       
-> This made me crazy until I realized that Blackfin adds "_" to all
-> symbols. So, it really can be fixed (I checked) if to prepend symbols in
-> libattr/libattr.lds with "_" (at least for each libattr_* symbol).
+Cheers,
 
-Don't bother fixing bfin issues, we dropped support for this
-architecture. We should probably drop the autobuilder config fragment
-in 2018.02.x as well. Or simply wait until 2018.02.x goes end-of-life
-(which should happen very soon now), and stop testing 2018.02.x in the
-autobuilders.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190322/1981ab07/attachment.asc>
