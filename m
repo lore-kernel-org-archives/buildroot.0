@@ -1,35 +1,125 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 22 Mar 2019 10:29:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-03-20
-In-Reply-To: <20190321070043.3390386D73@whitealder.osuosl.org>
-References: <20190321070043.3390386D73@whitealder.osuosl.org>
-Message-ID: <20190322102919.GC13496@momiji>
+From: Nylon Chen <nylon7@andestech.com>
+Date: Fri, 22 Mar 2019 16:39:28 +0800
+Subject: [Buildroot] [PATCH v3 1/3] arch: add support for Andes
+ 32-bit(nds32)
+In-Reply-To: <20190321111854.GB2660@scaer>
+References: <20190307021125.8530-1-nylon7@andestech.com>
+ <20190307021125.8530-2-nylon7@andestech.com>
+ <20190314222211.GB6876@scaer> <20190321023610.GB12833@app09>
+ <20190321111854.GB2660@scaer>
+Message-ID: <20190322083928.GA28644@app09>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 21 Mar 2019 07:00:38 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Yann, All,
 
-> [...]
+Again, thank you for your comment
+
+On Thu, Mar 21, 2019 at 07:18:54PM +0800, Yann E. MORIN wrote:
+> Nylon, All,
+> 
+> On 2019-03-21 10:36 +0800, Nylon Chen spake thusly:
+> > On Fri, Mar 15, 2019 at 06:22:11AM +0800, Yann E. MORIN wrote:
+> > > On 2019-03-07 10:11 +0800, Nylon Chen spake thusly:
+> > > > This commit provides basic support for the Andes 32-bit(nds32) architecture.
+> [--SNIP--]
+> > > > +config BR2_nds32
+> > > > +	bool "nds32"
+> > > > +	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+> > > It would be nice that you provide a package for a pre-built toolchain,
+> > > like we have for a few of them, see:
+> > > 
+> > >     toolchain/toolchain-external/
+> > > 
+> > > This is not mandatory, but would be a good addition.
+> > > 
+> > > It would even make the defconfig in your second patch a bit simpler.
+> > > 
+> > Ok,i will try this method
+> 
+> As I said: it is not mandatory; we can accept adding the nds32
+> architecture without an external-toolchain package.
+> 
+> It would be _nice_, though, but that can come later, in a followup
+> series.
 >
->          arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/77571d7ea2914638e30f017e8a4965eb89960802 |     
->          arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/2520e6d94a82669b5d8e1aabeb10884fd43f1912 |     
+Ok, thanks
+> > > > +config BR2_ANDES_NDS32_FPU
+> > > > +	bool "Enable FPU coprocessor"
+> > > > +	help
+> > > > +	  You can say y here if your Andes CPU have a Floating-Point Coprocessor
+> > > > +	  or if you need FPU support for your user-space programs.
+> > > 
+> > > So, the situation about FPU is always a bit icky for me.
+> > > 
+> > > If you say 'n' above, does that mean that you need to do a pure
+> > > soft-float build, or that the FP instrcution get trapped an emulated
+> > > by the kernel?
+> > > 
+> > > If the former, then you may want to check whether you need to select
+> > > BR2_SOFT_FLOAT (a few packages have conditions based on that).
+> 
+> This is an important question, but you did not reply to it.
+>
+Sorry I'm missing this comment.
 
-These two are the same. It looks like some issue related to some header
-not being #include'd. I'll take a stab at solving this, along with the
-other build failures for this package which have been accumulating in the
-last couple of weeks.
+BR2_ANDES_NDS32_FPU are selector,we can depend on it switch v3 or v3f toolcahin
 
-Cheers,
-
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190322/1981ab07/attachment.asc>
+After we add new defconfig(for v3f),I will be adding BR2_SOFT_FLOAT(-msoft-float) to arch/Config.in.nds32
+> > > > +config BR2_GCC_TARGET_ARCH
+> > > > +	default "v3"  if !BR2_ANDES_NDS32_FPU
+> > > > +	default "v3f" if BR2_ANDES_NDS32_FPU
+> > > 
+> > > I always find it nicer to have the positive logic come first. Also,
+> > > kconfig will stop on the first default stanza which condition is true,
+> > > so:
+> > > 
+> > >     config BR2_GCC_TARGET_ARCH
+> > >         default "v3f" if BR2_ANDES_NDS32_FPU
+> > >         default "v3"
+> > > 
+> > Here is my negligence, thank you for your suggestion, i will adopt
+> 
+> This was not about neglicence on your side, don't worry! ;-)
+> 
+> It is just about some (mostly-unwritten) conventional rules, with a bit
+> of personal preferences, so nothing you could have known.
+> 
+> This patchset is pretty good, now, and we're now looking at the minor
+> details.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > > > +config BR2_ENDIAN
+> > > > +	default "LITTLE"
+> > > > +
+> > > > +config BR2_READELF_ARCH_NAME
+> > > > +	default "Andes Technology compact code size embedded RISC processor family"
+> > > > +
+> > > > -- 
+> > > > 2.18.0
+> > > > 
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > > 
+> > > -- 
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
