@@ -1,55 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Mar 2019 22:07:05 +0100
-Subject: [Buildroot] [PATCH 1/3 v3] package/pkg-generic: mark some rule PHONY
+Date: Fri, 22 Mar 2019 22:07:06 +0100
+Subject: [Buildroot] [PATCH 2/3 v3] support/graph-depends: don't eliminate
+ mandatory deps for reverse graphs
 In-Reply-To: <cover.1553288807.git.yann.morin.1998@free.fr>
 References: <cover.1553288807.git.yann.morin.1998@free.fr>
-Message-ID: <fff0f5edad2cf9c48a7a78ec0cf2cc62dda44ad9.1553288807.git.yann.morin.1998@free.fr>
+Message-ID: <e80973941296758686f7129ecf12d6bee9037c4e.1553288807.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The %-graph-rdepends should be marked PHONY, as the %-graph-depends is.
+We we simplify the dependency graph, we try to remove so-called
+mandatory dependencies from each package, and for each mandatory that
+was thus removed, reattach it to the root-package of the graph.
 
-The %-show-dependency-tree should also be a PHONY rule, because it does
-not actually create a file. Furthermore, to avoid the "Nothing to be
-done for .." message, give that rule an actual recipe that just does
-nothing.
+This was made so that mandatory dependencies (which are dependencies of
+all packages, or at least of a lot of packages) do not clutter the
+dependency graph, but that they are still shown in the graph, as
+dependencies of the root package.
+
+However, these mandatory dependencies are only _direct_ dependencies.
+As such, it does not make sense to reattach a mandatory dependency when
+doing a reverse graph. Worse, it can actually be incorrect.
+
+For example, 'skeleton' is a mandatory dependency, and as such is
+removed from all packages. But when doing a reverse graph, skeleton is
+now in the dependency chain of, e.g. skeleton-init-none; it should then
+not be removed.
+
+In short: the notion of mandatory dependencies does not make sense in
+the case of a reverse graph.
+
+Consequently, skip over the mandatory dependency removal when doing a
+reverse graph.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ support/scripts/graph-depends | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index db7f06ddbe..dd3e20ca57 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -859,6 +859,7 @@ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPEND
- 	$$(info $(1))
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 29134c8237..7ed28440bb 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -216,13 +216,17 @@ def check_circular_deps(deps):
  
- $(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_ALL_DEPENDENCIES))
-+	@:
- 	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
- 	$$(info $(1) -> $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(d)))
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+-def remove_extra_deps(deps, rootpkg, transitive):
+-    for pkg in list(deps.keys()):
+-        if not pkg == rootpkg:
+-            for d in get_mandatory_deps(pkg, deps):
+-                if d not in deps[rootpkg]:
+-                    deps[rootpkg].append(d)
+-            deps[pkg] = remove_mandatory_deps(pkg, deps)
++def remove_extra_deps(deps, rootpkg, transitive, arrow_dir):
++    # For the direct dependencies, find and eliminate mandatory
++    # deps, and add them to the root package. Don't do it for a
++    # reverse graph, because mandatory deps are only direct deps.
++    if arrow_dir == "forward":
++        for pkg in list(deps.keys()):
++            if not pkg == rootpkg:
++                for d in get_mandatory_deps(pkg, deps):
++                    if d not in deps[rootpkg]:
++                        deps[rootpkg].append(d)
++                deps[pkg] = remove_mandatory_deps(pkg, deps)
+     for pkg in list(deps.keys()):
+         if not transitive or pkg == rootpkg:
+             deps[pkg] = remove_transitive_deps(pkg, deps)
+@@ -420,7 +424,7 @@ def main():
+     if check_only:
+         sys.exit(0)
  
-@@ -1079,6 +1080,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
- 	$(1)-external-deps \
- 	$(1)-extract \
- 	$(1)-graph-depends \
-+	$(1)-graph-rdepends \
- 	$(1)-install \
- 	$(1)-install-host \
- 	$(1)-install-images \
-@@ -1091,6 +1093,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
- 	$(1)-reconfigure \
- 	$(1)-reinstall \
- 	$(1)-rsync \
-+	$(1)-show-dependency-tree \
- 	$(1)-show-depends \
- 	$(1)-show-version \
- 	$(1)-source
+-    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive)
++    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, arrow_dir)
+     dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
+                                           if pkg != "all" and not pkg.startswith("root")])
+ 
 -- 
 2.14.1
