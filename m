@@ -1,68 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Mar 2019 23:54:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: add
- BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
-Message-ID: <20190322225451.24545-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 23 Mar 2019 01:17:53 -0300
+Subject: [Buildroot] [PATCH] configs/freescale_imx8mqevk: bump packages to
+ imx_4.14.78_1.0.0_ga
+Message-ID: <20190323041753.1537-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openjdk does not support arc or riscv, see:
-https://github.com/openjdk/jdk/blob/d85131a4d11d5767ae3afacd8627a4a8f8cbab95/make/autoconf/platform.m4
+Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.78_1.0.0_ga
+release.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c5782d6b52516d07469adf6600d4fc69c4016157
- - http://autobuild.buildroot.org/results/8437ebe0fd228c2d8856255411026f30e39778e3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/openjdk/Config.in | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ configs/freescale_imx8mqevk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index dd1f3c59cf..f243afbec8 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -2,8 +2,20 @@ config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_HOSTARCH = "x86_64"
- 
-+config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_m68k
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_sh
-+	default y if BR2_sparc || BR2_sparc64
-+
- config BR2_PACKAGE_OPENJDK
- 	bool "openjdk"
-+	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
- 	depends on !BR2_SOFT_FLOAT
- 	depends on !BR2_STATIC_LIBS # glibc
- 	depends on BR2_INSTALL_LIBSTDCPP # cups
-@@ -59,14 +71,17 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
- endif
- 
- comment "openjdk needs X.Org"
-+	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_XORG7
- 
- comment "openjdk needs glibc, and a toolchain w/ wchar, dynamic library, threads, C++"
-+	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
- 
- comment "openjdk does not support soft float configurations"
-+	depends on BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_SOFT_FLOAT
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index 895713b1c1..7e96ee7fc0 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.62_1.0.0_beta"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
 -- 
-2.14.1
+2.17.1
