@@ -1,65 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:29:02 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libopenssl:
- security bump to version 1.0.2r
-Message-ID: <20190324090405.5028D82B3E@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 24 Mar 2019 10:20:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/radvd: bump to version 2.18
+Message-ID: <20190324092019.28717-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f405a5be13faa3cf1d46a95ef1cfb5896b92529d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Add hash for license file
 
-Fixes the following security issue:
-
-0-byte record padding oracle (CVE-2019-1559)
-
-If an application encounters a fatal protocol error and then calls
-SSL_shutdown() twice (once to send a close_notify, and once to receive one)
-then OpenSSL can respond differently to the calling application if a 0 byte
-record is received with invalid padding compared to if a 0 byte record is
-received with an invalid MAC.  If the application then behaves differently
-based on that in a way that is detectable to the remote peer, then this
-amounts to a padding oracle that could be used to decrypt data.
-
-For more details, see the advisory:
-
-https://mta.openssl.org/pipermail/openssl-announce/2019-February/000148.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libopenssl/libopenssl.hash | 8 ++++----
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/radvd/radvd.hash | 5 +++--
+ package/radvd/radvd.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 83fb8bd513..7e6e6057ee 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,7 +1,7 @@
--# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha256
--sha256	5744cfcbcec2b1b48629f7354203bc1e5e9b5466998bbccc5b5fcde3b18eb684	openssl-1.0.2q.tar.gz
--# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha1
--sha1	692f5f2f1b114f8adaadaa3e7be8cce1907f38c5				openssl-1.0.2q.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2r.tar.gz.sha256
-+sha256	ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6	openssl-1.0.2r.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2r.tar.gz.sha1
-+sha1	b9aec1fa5cedcfa433aed37c8fe06b0ab0ce748d				openssl-1.0.2r.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index dc15abf66a..a53e78c07e 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index ac6014b776..9ade027d27 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,3 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.12.tar.gz.sha256
+-sha256	b070e77238e789e298a82cba2b1bfb0b0180b4ebc1adfc4e75058adfdbff747b	radvd-2.12.tar.xz
++# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
++sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
++sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 88221875a3..5679e613d4 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.0.2q
-+LIBOPENSSL_VERSION = 1.0.2r
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-RADVD_VERSION = 2.12
+-RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
++RADVD_VERSION = 2.18
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+ # We need to ignore <linux/if_arp.h>, because radvd already includes
+-- 
+2.20.1
