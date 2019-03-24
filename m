@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:08:44 +0100
-Subject: [Buildroot] [PATCH 11/12] package/x11r7/xlib_xtrans: bump
- version to 1.4.0
-In-Reply-To: <20190324201443.21347-11-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 24 Mar 2019 21:14:41 +0100")
+Date: Sun, 24 Mar 2019 23:09:06 +0100
+Subject: [Buildroot] [PATCH 12/12] package/x11r7/xutil_makedepend: bump
+ version to 1.0.6
+In-Reply-To: <20190324201443.21347-12-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 24 Mar 2019 21:14:42 +0100")
 References: <20190324201443.21347-1-bernd.kuhls@t-online.de>
- <20190324201443.21347-11-bernd.kuhls@t-online.de>
-Message-ID: <87zhpkncwj.fsf@dell.be.48ers.dk>
+ <20190324201443.21347-12-bernd.kuhls@t-online.de>
+Message-ID: <87va07orgd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
