@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:12:25 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXdmcp: security bump
- version to 1.1.3
-Message-ID: <20190324081038.886B281302@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 09:06:19 +0100
+Subject: [Buildroot] [git commit] lvm2: Update to 2.02.183
+Message-ID: <20190324081038.661E9825A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a60253925c7730f3b9ca65edf38c729192b27b5
+commit: https://git.buildroot.net/buildroot/commit/?id=ba9442dfe3dd2655a1b3e1cfe7e8a377bfbcf1c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-2625:
-https://lists.x.org/archives/xorg-announce/2019-March/002974.html
+In particular update to solve an issue where LVM would fail to
+initialise LVM devices when asynchronous IO was not available and it
+would fail to fall back to synchronous IO. [0][1]
 
-Added all hashes provided by upstream and license hash.
+[0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
+[1] https://github.com/open-power/petitboot/issues/60
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash | 9 +++++++--
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-index 6b50cb1c79..0dbea635f2 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002554.html
--sha256	81fe09867918fff258296e1e1e159f0dc639cb30d201c53519f25ab73af4e4e2	libXdmcp-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002974.html
-+md5 115c5c12ecce0e749cd91d999a5fd160  libXdmcp-1.1.3.tar.bz2
-+sha1 0a8f8a274f829331efb1e8e2027c38631b204dd0  libXdmcp-1.1.3.tar.bz2
-+sha256 20523b44aaa513e17c009e873ad7bbc301507a3224c232610ce2e099011c6529  libXdmcp-1.1.3.tar.bz2
-+sha512 cb1d4650f97d66e73acd2465ec7d757b9b797cce2f85e301860a44997a461837eea845ec9bd5b639ec5ca34c804f8bdd870697a5ce3f4e270b687c9ef74f25ec  libXdmcp-1.1.3.tar.bz2
-+# Locally computed
-+sha256 8a3c3f35b0dbcb60a4e242b9e4394a352a65bb27deb2938ea1e2e62a626e16e9  COPYING
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 44a6f00543..1182903e87 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 697a413995..ad0d93b144 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,5 +1,5 @@
+ # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
+-sha512 6e0a10ab48be4f0c751447c6ab88b8f9fa1dcd1d703de77966e8507b173df70b1987fa0be252c31dfce9e0ee70e5f439db58c8f534e24144a70f254c091554ee  LVM2.2.02.180.tgz
++sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
+ # Locally computed sha256 checksums
+ sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
+ sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 152381d65d..7fdb9a7e30 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXDMCP_VERSION = 1.1.2
-+XLIB_LIBXDMCP_VERSION = 1.1.3
- XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
- XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
+-LVM2_VERSION = 2.02.180
++LVM2_VERSION = 2.02.183
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
+ LVM2_INSTALL_STAGING = YES
