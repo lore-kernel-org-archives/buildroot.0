@@ -1,51 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:06:19 +0100
-Subject: [Buildroot] [git commit] lvm2: Update to 2.02.183
-Message-ID: <20190324081038.661E9825A7@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 09:29:12 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libopenssl:
+ security bump to version 1.0.2r
+Message-ID: <20190324082556.E532181D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba9442dfe3dd2655a1b3e1cfe7e8a377bfbcf1c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=71fec4456f0e45d59da6ee5731d60789e0a607ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-In particular update to solve an issue where LVM would fail to
-initialise LVM devices when asynchronous IO was not available and it
-would fail to fall back to synchronous IO. [0][1]
+Fixes the following security issue:
 
-[0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
-[1] https://github.com/open-power/petitboot/issues/60
+0-byte record padding oracle (CVE-2019-1559)
 
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+If an application encounters a fatal protocol error and then calls
+SSL_shutdown() twice (once to send a close_notify, and once to receive one)
+then OpenSSL can respond differently to the calling application if a 0 byte
+record is received with invalid padding compared to if a 0 byte record is
+received with an invalid MAC.  If the application then behaves differently
+based on that in a way that is detectable to the remote peer, then this
+amounts to a padding oracle that could be used to decrypt data.
+
+For more details, see the advisory:
+
+https://mta.openssl.org/pipermail/openssl-announce/2019-February/000148.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libopenssl/libopenssl.hash | 8 ++++----
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 697a413995..ad0d93b144 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,5 @@
- # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
--sha512 6e0a10ab48be4f0c751447c6ab88b8f9fa1dcd1d703de77966e8507b173df70b1987fa0be252c31dfce9e0ee70e5f439db58c8f534e24144a70f254c091554ee  LVM2.2.02.180.tgz
-+sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 152381d65d..7fdb9a7e30 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 83fb8bd513..7e6e6057ee 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha256
+-sha256	5744cfcbcec2b1b48629f7354203bc1e5e9b5466998bbccc5b5fcde3b18eb684	openssl-1.0.2q.tar.gz
+-# From https://www.openssl.org/source/openssl-1.0.2q.tar.gz.sha1
+-sha1	692f5f2f1b114f8adaadaa3e7be8cce1907f38c5				openssl-1.0.2q.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2r.tar.gz.sha256
++sha256	ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6	openssl-1.0.2r.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2r.tar.gz.sha1
++sha1	b9aec1fa5cedcfa433aed37c8fe06b0ab0ce748d				openssl-1.0.2r.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index dc15abf66a..a53e78c07e 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.180
-+LVM2_VERSION = 2.02.183
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 1.0.2q
++LIBOPENSSL_VERSION = 1.0.2r
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
