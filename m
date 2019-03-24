@@ -1,46 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:01:08 +0100
-Subject: [Buildroot] [git commit] package/radvd: bump to version 2.18
-Message-ID: <20190324220643.6E72E81827@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:05:20 +0100
+Subject: [Buildroot] [git commit] putty: security bump to version 0.71
+Message-ID: <20190324220643.8F3CA7FE17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b63dc9bfef0ed3213344c71ec1615a8fb257c60f
+commit: https://git.buildroot.net/buildroot/commit/?id=b6f47c0a4327074c0aff80cc2b2e22e5c8eef692
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+CVE-2019-9894: A remotely triggerable memory overwrite in RSA key
+exchange can occur before host key verification.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2019-9895: A remotely triggerable buffer overflow exists in any kind
+of server-to-client forwarding.
+
+CVE-2019-9897: Multiple denial-of-service attacks that can be triggered
+by writing to the terminal.
+
+CVE-2019-9898: Potential recycling of random numbers used in
+cryptography.
+
+Disable static build for now. When building statically configure defines
+NO_GSSAPI. Build with NO_GSSAPI is currently broken. The issue has been
+reported upstream.
+
+Cc: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/radvd/radvd.hash | 5 +++--
- package/radvd/radvd.mk   | 3 +--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/putty/Config.in  | 5 +++--
+ package/putty/putty.hash | 9 ++++++---
+ package/putty/putty.mk   | 2 +-
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index ac6014b776..9ade027d27 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,2 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.12.tar.gz.sha256
--sha256	b070e77238e789e298a82cba2b1bfb0b0180b4ebc1adfc4e75058adfdbff747b	radvd-2.12.tar.xz
-+# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
-+sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
-+sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 88221875a3..5679e613d4 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,8 +4,7 @@
+diff --git a/package/putty/Config.in b/package/putty/Config.in
+index cd8b3bb213..f901c71da2 100644
+--- a/package/putty/Config.in
++++ b/package/putty/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PUTTY
+ 	bool "putty"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  PuTTY is a free SSH and Telnet client. Without GTK2
+ 	  activated, only the commandline tools plink, pscp, psftp,
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_PUTTY
+ 
+ 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
+ 
+-comment "putty needs a toolchain w/ wchar"
++comment "putty needs a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index e0527105c1..30f51848f8 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,3 +1,6 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.70/{sha256,sha512}sums
+-sha256 bb8aa49d6e96c5a8e18a057f3150a1695ed99a24eef699e783651d1f24e7b0be                                                                 putty-0.70.tar.gz
+-sha512 2aaf4fa2b4ad2d82eb5cdc4419ade79e0c5d8bd3c093db92b3c048e6107f85a5f1647f9d8203cda0906ce2b926725a75319f981cb32e6f1ebf50b1f738564fed putty-0.70.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.71/{sha256,sha512}sums
++sha256 2f931ce2f89780cc8ca7bbed90fcd22c44515d2773f5fa954069e209b48ec6b8                                                                 putty-0.71.tar.gz
++sha512 f8791210bd5925b26d51b13f0558eea15dbac40808051165b236d6436226f5c2b0aa7d69288ed9e2bddc1066455678cfd0af73ef6b715a136c42f3b6f754ac07 putty-0.71.tar.gz
++
++# Locally calculated
++sha256 b517b4a9504ba0f651d5e590245197b88d9a81d073905cc798cc9464c5ca7ba8  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index 52f2d4c3dd..c72c05320d 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RADVD_VERSION = 2.12
--RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
-+RADVD_VERSION = 2.18
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
- # We need to ignore <linux/if_arp.h>, because radvd already includes
+-PUTTY_VERSION = 0.70
++PUTTY_VERSION = 0.71
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_SUBDIR = unix
+ PUTTY_LICENSE = MIT
