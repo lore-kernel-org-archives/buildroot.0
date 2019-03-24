@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:04:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: add optional
- brotli dependency
-In-Reply-To: <20190324140938.2273-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Mar 2019 15:09:38 +0100")
-References: <20190324140938.2273-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1goq67w.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 23:04:56 +0100
+Subject: [Buildroot] [PATCH] package/dropbear: add upstream patch fixing
+ TTY mode reset regression
+In-Reply-To: <20190324142912.25518-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 24 Mar 2019 15:29:12 +0100")
+References: <20190324142912.25518-1-peter@korsgaard.com>
+Message-ID: <87ftrcq67r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Official brotli support has been added in version 2.10.8 and
- > https://github.com/Microsoft/cpprestsdk/commit/f3824aa8d01705656e7ee4c0c49ae6980c868b20
+ > 2019.77 added a regression related to resetting TTY mode on exit.  Add an
+ > upstream patch to fix it.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the mailing list:
+ > https://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2019q1/002157.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
