@@ -1,35 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:13:14 +0100
-Subject: [Buildroot] [PATCH] package/dropbear: bump version to 2019.77
-In-Reply-To: <20190323233441.21610-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 24 Mar 2019 00:34:41 +0100")
-References: <20190323233441.21610-1-peter@korsgaard.com>
-Message-ID: <87o960adwl.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 09:03:37 +0100
+Subject: [Buildroot] [git commit] package/qt5base: fix xkbcommon option
+Message-ID: <20190324081038.59909825A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=00de545ca78df14c8376d5f68df736ef65493687
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patches as they are now upstream.  Add a hash for the license file.
- > Verified that runtime test still works:
+- Qt 5.6: according to configure --help the command line option to
+  enable x11 xkbcommon support is '-system-xkbcommon-x11'
 
- > ./support/testing/run-tests -o tests.package.test_dropbear
- > 20:42:44 TestDropbear                             Starting
- > 20:42:45 TestDropbear                             Building
- > 20:44:18 TestDropbear                             Building done
- > 20:44:24 TestDropbear                             Cleaning up
- > .
- > ----------------------------------------------------------------------
- > Ran 1 test in 100.727s
+- Qt 5.12: according to configure --help the command line option to
+  enable xkbcommon support is '-xkbcommon'
 
- > OK
+Fixes [1]:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  ERROR: Invalid value given for boolean command line option 'xkbcommon'.
 
-Committed, thanks.
+[1] http://autobuild.buildroot.net/results/87076d03bb92a9940447ca80fc1f202e35ef39da
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 14536980a8..fa0466dea8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -153,7 +153,13 @@ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-dir
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),directfb)
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+-QT5BASE_CONFIGURE_OPTS += -xcb -system-xkbcommon
++QT5BASE_CONFIGURE_OPTS += -xcb
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++QT5BASE_CONFIGURE_OPTS += -system-xkbcommon-x11
++else
++QT5BASE_CONFIGURE_OPTS += -xkbcommon
++endif
++
+ QT5BASE_DEPENDENCIES   += \
+ 	libxcb \
+ 	xcb-util-wm \
