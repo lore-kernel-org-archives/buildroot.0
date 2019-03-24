@@ -1,28 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:05:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/eigen: bump to 3.3.7
-In-Reply-To: <1553209210-29505-1-git-send-email-reed.nightingale@gmail.com>
- (reed nightingale's message of "Thu, 21 Mar 2019 16:00:10 -0700")
-References: <1553209210-29505-1-git-send-email-reed.nightingale@gmail.com>
-Message-ID: <87imw8bstc.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 09:07:34 +0100
+Subject: [Buildroot] [PATCH] lvm2: Update to 2.02.183
+In-Reply-To: <20190322021921.25949-1-sam@mendozajonas.com> (Samuel
+ Mendoza-Jonas's message of "Fri, 22 Mar 2019 13:19:21 +1100")
+References: <20190322021921.25949-1-sam@mendozajonas.com>
+Message-ID: <87ef6wbsqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "reed" == reed nightingale <reed.nightingale@gmail.com> writes:
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
 
- > From: Reed Nightingale <reed.nightingale@gmail.com>
- > Bumped the version of eigen to 3.3.7, which fixes issues when
- > compiling with GCC7 (notably int-in-bool-context errors, fixed in
- > 3.3.5), in addition to various other issues noted in the eigen change
- > logs: http://eigen.tuxfamily.org/index.php?title=ChangeLog
- > Legal hashes are unchanged in 3.3.7
+ > In particular update to solve an issue where LVM would fail to
+ > initialise LVM devices when asynchronous IO was not available and it
+ > would fail to fall back to synchronous IO. [0][1]
 
- > Signed-off-by: Reed Nightingale <reed.nightingale@gmail.com>
+ > [0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
+ > [1] https://github.com/open-power/petitboot/issues/60
+
+ > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 
 Committed, thanks.
+
+Should this also be applied to the 2019.02 series?
 
 -- 
 Bye, Peter Korsgaard
