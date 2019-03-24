@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:07:51 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: bump version
- to 1.5.2
-Message-ID: <20190324220643.C0BC3802F1@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:01:08 +0100
+Subject: [Buildroot] [git commit] package/radvd: bump to version 2.18
+Message-ID: <20190324220643.6E72E81827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb7282f08e2b968ebb49403a04f73bd5878b781e
+commit: https://git.buildroot.net/buildroot/commit/?id=b63dc9bfef0ed3213344c71ec1615a8fb257c60f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream and license hash.
+Add hash for license file
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXrandr/xlib_libXrandr.hash | 9 +++++++--
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/radvd/radvd.hash | 5 +++--
+ package/radvd/radvd.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-index 84a50cb5de..ed53669537 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2016-October/002724.html
--sha256 1ff9e7fa0e4adea912b16a5f0cfa7c1d35b0dcda0e216831f7715c8a3abcf51a  libXrandr-1.5.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002979.html
-+md5 18f3b20d522f45e4dadd34afb5bea048  libXrandr-1.5.2.tar.bz2
-+sha1 7a1f6df239341b76fd59ebbe101d6f180adb43bb  libXrandr-1.5.2.tar.bz2
-+sha256 8aea0ebe403d62330bb741ed595b53741acf45033d3bda1792f1d4cc3daee023  libXrandr-1.5.2.tar.bz2
-+sha512 fcd005f9839e7ef980607128a5d76d7b671cc2f5755949e03c569c500d7e987cb3f6932750ab8bf6e2c1086ec69dde09d5831f0c2098b9f9ad46be4f56db0d87  libXrandr-1.5.2.tar.bz2
-+# Locally computed
-+sha256 73777e5be1cef2827d843e4b186803f050c66db472cf8076d88e2b5f71696e67  COPYING
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-index 1bfd78f73d..23a0d974d0 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index ac6014b776..9ade027d27 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,3 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.12.tar.gz.sha256
+-sha256	b070e77238e789e298a82cba2b1bfb0b0180b4ebc1adfc4e75058adfdbff747b	radvd-2.12.tar.xz
++# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
++sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
++sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 88221875a3..5679e613d4 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXRANDR_VERSION = 1.5.1
-+XLIB_LIBXRANDR_VERSION = 1.5.2
- XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
- XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRANDR_LICENSE = MIT
+-RADVD_VERSION = 2.12
+-RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
++RADVD_VERSION = 2.18
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+ # We need to ignore <linux/if_arp.h>, because radvd already includes
