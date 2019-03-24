@@ -1,44 +1,204 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Mar 2019 10:20:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/radvd: bump to version 2.18
-Message-ID: <20190324092019.28717-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Mar 2019 10:34:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
+ ffmpeg
+Message-ID: <20190324093452.3238-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Fixes:
+ - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
+ - http://autobuild.buildroot.org/results/95e410e5ab34c6d4626a58f97c0d2d5e6829a300
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/radvd/radvd.hash | 5 +++--
- package/radvd/radvd.mk   | 3 +--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...cmake-FindFFMPEG-cmake-use-pkgconfig.patch | 175 ++++++++++++++++++
+ 1 file changed, 175 insertions(+)
+ create mode 100644 package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index ac6014b776..9ade027d27 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,2 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.12.tar.gz.sha256
--sha256	b070e77238e789e298a82cba2b1bfb0b0180b4ebc1adfc4e75058adfdbff747b	radvd-2.12.tar.xz
-+# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
-+sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
-+sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 88221875a3..5679e613d4 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--RADVD_VERSION = 2.12
--RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
-+RADVD_VERSION = 2.18
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
- # We need to ignore <linux/if_arp.h>, because radvd already includes
+diff --git a/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch b/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch
+new file mode 100644
+index 0000000000..c1ae49c7c0
+--- /dev/null
++++ b/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch
+@@ -0,0 +1,175 @@
++From fbbc07ce53e884b1603461ee5642d5f02788678d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 21 Mar 2019 16:32:44 +0100
++Subject: [PATCH] cmake/FindFFMPEG.cmake: use pkgconfig
++
++ffmpeg has too many optional dependencies (opus, openssl, ...) instead
++of trying to find them all one by one, use pkg-config to get them and
++fallback on current mechanism
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
++ - http://autobuild.buildroot.org/results/95e410e5ab34c6d4626a58f97c0d2d5e6829a300
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from:
++https://github.com/gerbera/gerbera/commit/fbbc07ce53e884b1603461ee5642d5f02788678d]
++---
++ cmake/FindFFMPEG.cmake | 147 +++++++++++++++++++++--------------------
++ 1 file changed, 75 insertions(+), 72 deletions(-)
++
++diff --git a/cmake/FindFFMPEG.cmake b/cmake/FindFFMPEG.cmake
++index 0a4a409f..9548b566 100644
++--- a/cmake/FindFFMPEG.cmake
+++++ b/cmake/FindFFMPEG.cmake
++@@ -82,70 +82,76 @@ ENDIF (NOT FFMPEG_INCLUDE_DIR)
++ # ffmpeg uses relative includes such as <ffmpeg/avformat.h> or <libavcodec/avformat.h>
++ get_filename_component(FFMPEG_INCLUDE_DIR ${FFMPEG_INCLUDE_DIR} ABSOLUTE)
++ 
++-FIND_LIBRARY(FFMPEG_avformat_LIBRARY avformat
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_avcodec_LIBRARY avcodec
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_avutil_LIBRARY avutil
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_swresample_LIBRARY swresample
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_vorbis_LIBRARY vorbis
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_dc1394_LIBRARY dc1394_control
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_vorbisenc_LIBRARY vorbisenc
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_theora_LIBRARY theora
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_dts_LIBRARY dts
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_gsm_LIBRARY gsm
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_swscale_LIBRARY swscale
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_z_LIBRARY z
++-        /usr/local/lib
++-        /usr/lib
++-        )
++-
++-FIND_LIBRARY(FFMPEG_bz2_LIBRARY bz2
++-        /usr/local/lib
++-        /usr/lib
++-        )
+++CHECK_STRUCT_HAS_MEMBER("struct AVStream" codecpar libavformat/avformat.h HAVE_AVSTREAM_CODECPAR LANGUAGE C)
+++
+++FIND_PACKAGE(PkgConfig QUIET)
+++PKG_CHECK_MODULES(FFMPEG QUIET libavformat)
+++IF (NOT FFMPEG_FOUND)
+++	FIND_LIBRARY(FFMPEG_avformat_LIBRARY avformat
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_avcodec_LIBRARY avcodec
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_avutil_LIBRARY avutil
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_swresample_LIBRARY swresample
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_vorbis_LIBRARY vorbis
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_dc1394_LIBRARY dc1394_control
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_vorbisenc_LIBRARY vorbisenc
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_theora_LIBRARY theora
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_dts_LIBRARY dts
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_gsm_LIBRARY gsm
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_swscale_LIBRARY swscale
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_z_LIBRARY z
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++
+++	FIND_LIBRARY(FFMPEG_bz2_LIBRARY bz2
+++		/usr/local/lib
+++		/usr/lib
+++		)
+++ENDIF(NOT FFMPEG_FOUND)
++ 
++ SET(FFMPEG_LIBRARIES)
++ IF (FFMPEG_INCLUDE_DIR)
++@@ -205,9 +211,6 @@ IF (FFMPEG_INCLUDE_DIR)
++                 ENDIF (FFMPEG_bz2_LIBRARY)
++ 
++                 SET(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} CACHE INTERNAL "All presently found FFMPEG libraries.")
++-
++-                CHECK_STRUCT_HAS_MEMBER("struct AVStream" codecpar libavformat/avformat.h HAVE_AVSTREAM_CODECPAR LANGUAGE C)
++-
++             ENDIF (FFMPEG_avutil_LIBRARY)
++         ENDIF (FFMPEG_avcodec_LIBRARY)
++     ENDIF (FFMPEG_avformat_LIBRARY)
 -- 
 2.20.1
