@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Mar 2019 21:14:36 +0100
-Subject: [Buildroot] [PATCH 06/12] package/x11r7/xlib_libXmu: bump version
- to 1.1.3
+Date: Sun, 24 Mar 2019 21:14:35 +0100
+Subject: [Buildroot] [PATCH 05/12] package/x11r7/xlib_libXft: bump version
+ to 2.3.3
 In-Reply-To: <20190324201443.21347-1-bernd.kuhls@t-online.de>
 References: <20190324201443.21347-1-bernd.kuhls@t-online.de>
-Message-ID: <20190324201443.21347-6-bernd.kuhls@t-online.de>
+Message-ID: <20190324201443.21347-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all hashes provided by upstream and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXmu/xlib_libXmu.hash | 9 +++++++--
- package/x11r7/xlib_libXmu/xlib_libXmu.mk   | 2 +-
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 9 +++++++--
+ package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.hash b/package/x11r7/xlib_libXmu/xlib_libXmu.hash
-index 2c96d960b4..8cad2389bc 100644
---- a/package/x11r7/xlib_libXmu/xlib_libXmu.hash
-+++ b/package/x11r7/xlib_libXmu/xlib_libXmu.hash
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index 6eacf06ef1..bd0838b4dd 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
 @@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-September/056009.html
--sha256	756edc7c383254eef8b4e1b733c3bf1dc061b523c9f9833ac7058378b8349d0b	libXmu-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002978.html
-+md5 ac774cff8b493f566088a255dbf91201  libXmu-1.1.3.tar.bz2
-+sha1 7ff54ce38379fb795aebed38f6be404ee0dfeec6  libXmu-1.1.3.tar.bz2
-+sha256 9c343225e7c3dc0904f2122b562278da5fed639b1b5e880d25111561bac5b731  libXmu-1.1.3.tar.bz2
-+sha512 8c6cc65b22aa031ad870dd92736681a068a0878a425a53dbed909943da1136c4a24034d467cfd3785c3a8d78f66850b69f1ebe1eb24aaf9bc176b1d171a5c762  libXmu-1.1.3.tar.bz2
+-# From http://lists.freedesktop.org/pipermail/xorg/2014-June/056668.html
+-sha256	f5a3c824761df351ca91827ac221090943ef28b248573486050de89f4bfcdc4c	libXft-2.3.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002976.html
++md5 4a433c24627b4ff60a4dd403a0990796  libXft-2.3.3.tar.bz2
++sha1 48f543fe495f545df1794fa36a0a708558ae298c  libXft-2.3.3.tar.bz2
++sha256 225c68e616dd29dbb27809e45e9eadf18e4d74c50be43020ef20015274529216  libXft-2.3.3.tar.bz2
++sha512 28fdaf3baa3b156a4a7fdd6e39c4d8026d7d21eaa9be27c9797c8d329dab691a1bc82ea6042f9d4729a9343d93787536fb7e4b606f722f33cbe608b2e79910e8  libXft-2.3.3.tar.bz2
 +# Locally computed
-+sha256 e65a4a8bbf8b0dfd2439d6bc6d86df03e2b8e693b757593b25149e099aeb8ec4  COPYING
-diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.mk b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
-index b3f3db3e5d..3218e0ec39 100644
---- a/package/x11r7/xlib_libXmu/xlib_libXmu.mk
-+++ b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
++sha256 7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 9c5757e657..489cfe4c56 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXMU_VERSION = 1.1.2
-+XLIB_LIBXMU_VERSION = 1.1.3
- XLIB_LIBXMU_SOURCE = libXmu-$(XLIB_LIBXMU_VERSION).tar.bz2
- XLIB_LIBXMU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXMU_LICENSE = MIT
+-XLIB_LIBXFT_VERSION = 2.3.2
++XLIB_LIBXFT_VERSION = 2.3.3
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
+ XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
 -- 
 2.20.1
