@@ -1,129 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:01:32 +0100
-Subject: [Buildroot] [git commit] package/moarvm: bump to version 2019.03
-Message-ID: <20190324220643.74FAC7FE17@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:07:51 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: bump version
+ to 1.5.2
+Message-ID: <20190324220643.C0BC3802F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af81f3216eaf4dd91ac3d10b24a75c141940a579
+commit: https://git.buildroot.net/buildroot/commit/?id=fb7282f08e2b968ebb49403a04f73bd5878b781e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Added all hashes provided by upstream and license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Fix-Name-Collision-With-LibTomMath-Funcs.patch | 65 ----------------------
- package/moarvm/moarvm.hash                         |  3 +-
- package/moarvm/moarvm.mk                           |  5 +-
- 3 files changed, 4 insertions(+), 69 deletions(-)
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash | 9 +++++++--
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch b/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch
-deleted file mode 100644
-index 4af4d3264e..0000000000
---- a/package/moarvm/0001-Fix-Name-Collision-With-LibTomMath-Funcs.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From ead5f4da759465cf6fc2ceab7c431d3550a3323f Mon Sep 17 00:00:00 2001
--From: Timo Paulssen <timonator@perpetuum-immobile.de>
--Date: Tue, 15 Jan 2019 12:35:56 +0100
--Subject: [PATCH] Fix Name Collision With Existing LibTomMath Function
--
--fixes #1032
--
--Upstream: https://github.com/MoarVM/MoarVM/commit/f7204a3ee5199dd70f26d6fe133008cc86c63bbe
--(backported mp_get_double() as other functions weren't yet used)
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- src/math/bigintops.c | 12 ++++++------
-- 1 file changed, 6 insertions(+), 6 deletions(-)
--
--diff --git a/src/math/bigintops.c b/src/math/bigintops.c
--index 2275593..8ab7ed6 100644
----- a/src/math/bigintops.c
--+++ b/src/math/bigintops.c
--@@ -45,7 +45,7 @@ int MVM_bigint_mp_set_uint64(mp_int * a, MVMuint64 b) {
--   return MP_OKAY;
-- }
-- 
---static MVMnum64 mp_get_double(mp_int *a) {
--+static MVMnum64 MVM_mp_get_double(mp_int *a) {
--     MVMnum64 d    = 0.0;
--     MVMnum64 sign = SIGN(a) == MP_NEG ? -1.0 : 1.0;
--     int i;
--@@ -680,8 +680,8 @@ MVMObject * MVM_bigint_pow(MVMThreadContext *tc, MVMObject *a, MVMObject *b,
--         }
--     }
--     else {
---        MVMnum64 f_base = mp_get_double(base);
---        MVMnum64 f_exp = mp_get_double(exponent);
--+        MVMnum64 f_base = MVM_mp_get_double(base);
--+        MVMnum64 f_exp = MVM_mp_get_double(exponent);
--         r = MVM_repr_box_num(tc, num_type, pow(f_base, f_exp));
--     }
--     clear_temp_bigints(tmp, 2);
--@@ -880,7 +880,7 @@ MVMnum64 MVM_bigint_to_num(MVMThreadContext *tc, MVMObject *a) {
-- 
--     if (MVM_BIGINT_IS_BIG(ba)) {
--         mp_int *ia = ba->u.bigint;
---        return mp_get_double(ia);
--+        return MVM_mp_get_double(ia);
--     } else {
--         return (double)ba->u.smallint.value;
--     }
--@@ -913,11 +913,11 @@ MVMnum64 MVM_bigint_div_num(MVMThreadContext *tc, MVMObject *a, MVMObject *b) {
--             mp_init(&reduced_b);
--             mp_div_2d(ia, max_size - 1023, &reduced_a, NULL);
--             mp_div_2d(ib, max_size - 1023, &reduced_b, NULL);
---            c = mp_get_double(&reduced_a) / mp_get_double(&reduced_b);
--+            c = MVM_mp_get_double(&reduced_a) / MVM_mp_get_double(&reduced_b);
--             mp_clear(&reduced_a);
--             mp_clear(&reduced_b);
--         } else {
---            c = mp_get_double(ia) / mp_get_double(ib);
--+            c = MVM_mp_get_double(ia) / MVM_mp_get_double(ib);
--         }
--         clear_temp_bigints(tmp, 2);
--     } else {
---- 
--1.9.1
--
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 409486ac70..4aed49da6c 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 7cb9b7a871b14ac9b6cddc57e646d277177c4b3b21220e6fbc204084a15a4e41  MoarVM-2017.05.tar.gz
-+sha256 24b00e5228894fa6f70e9caa73114e5c6ec3686b6305e6e463807a93f70ffc04  MoarVM-2019.03.tar.gz
-+sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 705c93934d..0f2dadf6d2 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+index 84a50cb5de..ed53669537 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002724.html
+-sha256 1ff9e7fa0e4adea912b16a5f0cfa7c1d35b0dcda0e216831f7715c8a3abcf51a  libXrandr-1.5.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002979.html
++md5 18f3b20d522f45e4dadd34afb5bea048  libXrandr-1.5.2.tar.bz2
++sha1 7a1f6df239341b76fd59ebbe101d6f180adb43bb  libXrandr-1.5.2.tar.bz2
++sha256 8aea0ebe403d62330bb741ed595b53741acf45033d3bda1792f1d4cc3daee023  libXrandr-1.5.2.tar.bz2
++sha512 fcd005f9839e7ef980607128a5d76d7b671cc2f5755949e03c569c500d7e987cb3f6932750ab8bf6e2c1086ec69dde09d5831f0c2098b9f9ad46be4f56db0d87  libXrandr-1.5.2.tar.bz2
++# Locally computed
++sha256 73777e5be1cef2827d843e4b186803f050c66db472cf8076d88e2b5f71696e67  COPYING
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 1bfd78f73d..23a0d974d0 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2017.05
-+MOARVM_VERSION = 2019.03
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
- MOARVM_LICENSE_FILES = Artistic2.txt
- MOARVM_INSTALL_STAGING = YES
--MOARVM_DEPENDENCIES = host-lua host-pkgconf libuv libtommath libatomic_ops
-+MOARVM_DEPENDENCIES = host-pkgconf libuv libtommath libatomic_ops
- 
- MOARVM_CONF_OPTS = \
- 	--build=$(GNU_HOST_NAME) \
-@@ -20,7 +20,6 @@ MOARVM_CONF_OPTS = \
- 	--ld="$(TARGET_CC)" \
- 	--prefix="/usr" \
- 	--pkgconfig=$(PKG_CONFIG_HOST_BINARY) \
--	--lua=$(HOST_DIR)/bin/lua \
- 	--has-libuv \
- 	--has-libtommath \
- 	--has-libatomic
+-XLIB_LIBXRANDR_VERSION = 1.5.1
++XLIB_LIBXRANDR_VERSION = 1.5.2
+ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
+ XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
