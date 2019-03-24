@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Mar 2019 21:14:39 +0100
-Subject: [Buildroot] [PATCH 09/12] package/x11r7/xlib_libXxf86dga: bump
- version to 1.1.5
+Date: Sun, 24 Mar 2019 21:14:33 +0100
+Subject: [Buildroot] [PATCH 03/12] package/x11r7/xdriver_xf86-video-ati:
+ bump version to 19.0.1
 In-Reply-To: <20190324201443.21347-1-bernd.kuhls@t-online.de>
 References: <20190324201443.21347-1-bernd.kuhls@t-online.de>
-Message-ID: <20190324201443.21347-9-bernd.kuhls@t-online.de>
+Message-ID: <20190324201443.21347-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream and license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash | 9 +++++++--
- package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 10 +++++-----
+ .../xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
-index 29560b7e8d..f0172c346c 100644
---- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
-+++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002235.html
--sha256	8eecd4b6c1df9a3704c04733c2f4fa93ef469b55028af5510b25818e2456c77e	libXxf86dga-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002982.html
-+md5 0ddeafc13b33086357cfa96fae41ee8e  libXxf86dga-1.1.5.tar.bz2
-+sha1 332ba80d1b3d06473f7bbfe1612e7c5b58fbdf69  libXxf86dga-1.1.5.tar.bz2
-+sha256 2b98bc5f506c6140d4eddd3990842d30f5dae733b64f198a504f07461bdb7203  libXxf86dga-1.1.5.tar.bz2
-+sha512 0e77c4003aeba737b10c17d55aeefa935fc57c4ba9e8f79a834f3f8c690d6a1d98f69ad707eded784346c1cf40c41829719d257283b5eae3207147fb4c79ed89  libXxf86dga-1.1.5.tar.bz2
-+# Locally computed
-+sha256 dd27933ebc5c063128b158b085e4c442a36b0e6f704cf753116da119610191da  COPYING
-diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
-index 59ebd2b413..62fe06c1a5 100644
---- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
-+++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 4b6cce7af8..34d9ded346 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002967.html
+-md5 0a95c1c8158d658bd0b3ac38a1b31382  xf86-video-ati-19.0.0.tar.bz2
+-sha1 c7bb5d25ca725b8fa625a5f1a6948433e51b98a5  xf86-video-ati-19.0.0.tar.bz2
+-sha256 dd907d318884bb6e81e7e62da7bb34af26aeeed3a81c21e0b46a4f3cae3ff457  xf86-video-ati-19.0.0.tar.bz2
+-sha512 0674c8befa926fd3b431ce80d90f2cd0de17314efe7fd3a5ed0d78018d6cd32625b514bf68436a47eb15e5ad4b50317f3c09fd687b77e69a067d1210ee459827  xf86-video-ati-19.0.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002986.html
++md5 47eccf71823206ade9629cba69de7ef6  xf86-video-ati-19.0.1.tar.bz2
++sha1 e8899c2d237381d9278429a1427e02fcba1d5174  xf86-video-ati-19.0.1.tar.bz2
++sha256 5cb6015d8664546ad1311bc9c363d7bc41ebf60e7046ceb44dd38e5b707961b0  xf86-video-ati-19.0.1.tar.bz2
++sha512 e04c5395e3a49d81b8f7a4b0e11fe8c9ebd17af056a4eab4541873796dce05b103c93fb185f3a00873010df0655cd7311e6d27e177aeb7345c4c8017bbd1eb17  xf86-video-ati-19.0.1.tar.bz2
+ # Locally computed
+ sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 45401b7841..c9344f8596 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXXF86DGA_VERSION = 1.1.4
-+XLIB_LIBXXF86DGA_VERSION = 1.1.5
- XLIB_LIBXXF86DGA_SOURCE = libXxf86dga-$(XLIB_LIBXXF86DGA_VERSION).tar.bz2
- XLIB_LIBXXF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXXF86DGA_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 19.0.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 19.0.1
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
 -- 
 2.20.1
