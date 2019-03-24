@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:11:44 +0100
-Subject: [Buildroot] [PATCH] configs/freescale_imx8mqevk: bump packages
- to imx_4.14.78_1.0.0_ga
-In-Reply-To: <20190323041753.1537-1-festevam@gmail.com> (Fabio Estevam's
- message of "Sat, 23 Mar 2019 01:17:53 -0300")
-References: <20190323041753.1537-1-festevam@gmail.com>
-Message-ID: <871s2wbsjj.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 09:12:10 +0100
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
+ 16.2.1
+In-Reply-To: <20190323165427.29835-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 23 Mar 2019 17:54:27 +0100")
+References: <20190323165427.29835-1-peter@korsgaard.com>
+Message-ID: <87wokoadyd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.78_1.0.0_ga
- > release.
+ > Fixes the following security issue:
+ > AST-2019-001: Remote crash vulnerability with SDP protocol violation
+ > When Asterisk makes an outgoing call, a very specific SDP protocol violation
+ > by the remote party can cause Asterisk to crash (CVE-2019-7251)
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > https://downloads.asterisk.org/pub/security/AST-2019-001.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
