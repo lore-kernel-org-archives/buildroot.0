@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:11:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/supertux: fix build on
- powerpc64le
-In-Reply-To: <20190322221314.23264-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 22 Mar 2019 23:13:14 +0100")
-References: <20190322221314.23264-1-fontaine.fabrice@gmail.com>
-Message-ID: <875zs8bskc.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 09:11:44 +0100
+Subject: [Buildroot] [PATCH] configs/freescale_imx8mqevk: bump packages
+ to imx_4.14.78_1.0.0_ga
+In-Reply-To: <20190323041753.1537-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Sat, 23 Mar 2019 01:17:53 -0300")
+References: <20190323041753.1537-1-festevam@gmail.com>
+Message-ID: <871s2wbsjj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c484079b2736eb3c21adff257f3e3ab1acc67f9a
+ > Bump kernel, U-Boot and ATF packages to the NXP imx_4.14.78_1.0.0_ga
+ > release.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
