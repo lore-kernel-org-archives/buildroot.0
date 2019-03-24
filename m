@@ -1,24 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:09:06 +0100
-Subject: [Buildroot] [PATCH 12/12] package/x11r7/xutil_makedepend: bump
- version to 1.0.6
-In-Reply-To: <20190324201443.21347-12-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 24 Mar 2019 21:14:42 +0100")
-References: <20190324201443.21347-1-bernd.kuhls@t-online.de>
- <20190324201443.21347-12-bernd.kuhls@t-online.de>
-Message-ID: <87va07orgd.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 23:02:54 +0100
+Subject: [Buildroot] [git commit] package/intel-gmmlib: needs dynamic library
+Message-ID: <20190324220643.8237B838AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=735bedd0d32e18210c38d10ef74f69fc750114c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Added all hashes provided by upstream and license hash.
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/0121befb9b4ba6cffc47ce7f861ed81077fc900f
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/intel-gmmlib/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
+index ef92a91128..9d5fbd9cae 100644
+--- a/package/intel-gmmlib/Config.in
++++ b/package/intel-gmmlib/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_INTEL_GMMLIB
+ 	bool "intel-gmmlib"
+ 	depends on BR2_x86_64
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  The Intel(R) Graphics Memory Management Library provides
+ 	  device specific and buffer management for the Intel(R)
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_INTEL_GMMLIB
+ 	  Media Driver for VAAPI.
+ 
+ 	  https://github.com/intel/gmmlib
++
++comment "intel-gmmlib needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
