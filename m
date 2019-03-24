@@ -1,87 +1,172 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 15:29:12 +0100
-Subject: [Buildroot] [PATCH] package/dropbear: add upstream patch fixing TTY
- mode reset regression
-Message-ID: <20190324142912.25518-1-peter@korsgaard.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sun, 24 Mar 2019 23:29:39 +0530
+Subject: [Buildroot] [PATCH] package/unixbench: new package
+Message-ID: <20190324175940.25686-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2019.77 added a regression related to resetting TTY mode on exit.  Add an
-upstream patch to fix it.
+UnixBench is the original BYTE UNIX benchmark suite, updated and revised by many people over the years.
+The purpose of UnixBench is to provide a basic indicator of the performance of a Unix-like system.
 
-For more details, see the mailing list:
-https://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2019q1/002157.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- ...ion-where-TTY-modes-weren-t-reset-for-cli.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ .../unixbench/0001-remove-make-check.patch    | 25 +++++++++++++
+ package/unixbench/Config.in                   | 19 ++++++++++
+ package/unixbench/unixbench                   |  3 ++
+ package/unixbench/unixbench.hash              |  2 ++
+ package/unixbench/unixbench.mk                | 36 +++++++++++++++++++
+ 7 files changed, 89 insertions(+)
+ create mode 100644 package/unixbench/0001-remove-make-check.patch
+ create mode 100644 package/unixbench/Config.in
+ create mode 100644 package/unixbench/unixbench
+ create mode 100644 package/unixbench/unixbench.hash
+ create mode 100644 package/unixbench/unixbench.mk
 
-diff --git a/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c0a4814a86..fa0357aabc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -236,6 +236,9 @@ F:	package/luasec/
+ F:	package/lua-ev/
+ F:	package/orbit/
+ 
++N:	Atharva Lele <itsatharva@gmail.com>
++F:	package/unixbench
++
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	package/qt5/qt5scxml/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index b5321aeb49..521308c1d8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -132,6 +132,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+ 	source "package/uclibc-ng-test/Config.in"
++	source "package/unixbench/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/vmtouch/Config.in"
+ 	source "package/whetstone/Config.in"
+diff --git a/package/unixbench/0001-remove-make-check.patch b/package/unixbench/0001-remove-make-check.patch
 new file mode 100644
-index 0000000000..9967aebc96
+index 0000000000..331fab5c44
 --- /dev/null
-+++ b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
-@@ -0,0 +1,56 @@
-+From 7bc6280613f5ab4ee86c14c779739070e5784dfe Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Sun, 24 Mar 2019 20:41:02 +0800
-+Subject: [PATCH] Fix regression where TTY modes weren't reset for client
++++ b/package/unixbench/0001-remove-make-check.patch
+@@ -0,0 +1,25 @@
++diff --git a/UnixBench/Run b/UnixBench/Run
++index b4abd26..46d5414 100755
++--- a/UnixBench/Run
+++++ b/UnixBench/Run
++@@ -875,13 +875,13 @@ sub preChecks {
++ 
++     # Check that the required files are in the proper places.
++     my $make = $ENV{MAKE} || "make";
++-    system("$make check");
++-    if ($? != 0) {
++-        system("$make all");
++-        if ($? != 0) {
++-            abortRun("\"$make all\" failed");
++-        }
++-    }
+++#    system("$make check");
+++#    if ($? != 0) {
+++#        system("$make all");
+++#        if ($? != 0) {
+++#            abortRun("\"$make all\" failed");
+++#        }
+++#    }
++ 
++     # Create a script to kill this run.
++     system("echo \"kill -9 $$\" > \"${TMPDIR}/kill_run\"");
+diff --git a/package/unixbench/Config.in b/package/unixbench/Config.in
+new file mode 100644
+index 0000000000..ffcc5803f7
+--- /dev/null
++++ b/package/unixbench/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_UNIXBENCH
++		select BR2_PACKAGE_PERL
++		bool "unixbench"
++		help
++		  UnixBench is the original BYTE UNIX benchmark suite, updated and
++		  revised by many people over the years.
++         
++		  The purpose of UnixBench is to provide a basic indicator of the
++		  performance of a Unix-like system; hence multiple tests are used
++		  to test various aspects of the system's performance. These test
++		  results are then compared to the scores from a baseline system to
++		  produce an index value, which is easier to handle than raw scores.
++		  The entire set of index values is then combined to make an overall
++		  index for the system.
++         
++		  Some simple graphics tests are included to test 2D and 3D performance
++		  of the system. Multi-CPU systems are also handled.
++         
++		  https://github.com/kdlucas/byte-unixbench
+diff --git a/package/unixbench/unixbench b/package/unixbench/unixbench
+new file mode 100644
+index 0000000000..01412efbb4
+--- /dev/null
++++ b/package/unixbench/unixbench
+@@ -0,0 +1,3 @@
++#!/bin/bash
++cd /usr/lib/unixbench
++exec ./Run "${@}"
+diff --git a/package/unixbench/unixbench.hash b/package/unixbench/unixbench.hash
+new file mode 100644
+index 0000000000..ccec430c66
+--- /dev/null
++++ b/package/unixbench/unixbench.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 1677dcdcbed78805848b3c3fd58a6d052b677b6a4ee7add4db74acc4d3364a79 unixbench-070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a.tar.gz
+diff --git a/package/unixbench/unixbench.mk b/package/unixbench/unixbench.mk
+new file mode 100644
+index 0000000000..06f1903871
+--- /dev/null
++++ b/package/unixbench/unixbench.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# unixbench
++#
++################################################################################
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli-chansession.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
++UNIXBENCH_VERSION = 070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a
++UNIXBENCH_SITE = $(call github,kdlucas,byte-unixbench,$(UNIXBENCH_VERSION))
++UNIXBENCH_LICENSE = GPL-2.0
++UNIXBENCH_LICENSE_FILE = LICENSE.txt
 +
-+diff --git a/cli-chansession.c b/cli-chansession.c
-+index 8b72e27..cfd3401 100644
-+--- a/cli-chansession.c
-++++ b/cli-chansession.c
-+@@ -35,7 +35,7 @@
-+ #include "chansession.h"
-+ #include "agentfwd.h"
-+ 
-+-static void cli_cleanupchansess(const struct Channel *channel);
-++static void cli_closechansess(const struct Channel *channel);
-+ static int cli_initchansess(struct Channel *channel);
-+ static void cli_chansessreq(struct Channel *channel);
-+ static void send_chansess_pty_req(const struct Channel *channel);
-+@@ -51,8 +51,8 @@ const struct ChanType clichansess = {
-+ 	cli_initchansess, /* inithandler */
-+ 	NULL, /* checkclosehandler */
-+ 	cli_chansessreq, /* reqhandler */
-+-	NULL, /* closehandler */
-+-	cli_cleanupchansess, /* cleanup */
-++	cli_closechansess, /* closehandler */
-++	NULL, /* cleanup */
-+ };
-+ 
-+ static void cli_chansessreq(struct Channel *channel) {
-+@@ -84,7 +84,7 @@ out:
-+ 	
-+ 
-+ /* If the main session goes, we close it up */
-+-static void cli_cleanupchansess(const struct Channel *UNUSED(channel)) {
-++static void cli_closechansess(const struct Channel *UNUSED(channel)) {
-+ 	cli_tty_cleanup(); /* Restore tty modes etc */
-+ 
-+ 	/* This channel hasn't gone yet, so we have > 1 */
-+@@ -388,8 +388,8 @@ static const struct ChanType cli_chan_netcat = {
-+ 	cli_init_netcat, /* inithandler */
-+ 	NULL,
-+ 	NULL,
-++	cli_closechansess,
-+ 	NULL,
-+-	cli_cleanupchansess
-+ };
-+ 
-+ void cli_send_netcat_request() {
-+-- 
-+2.11.0
++# UnixBench tries to compile its binaries regargless of them being compiled
++# or not. The patch will disable that since we may not always have a compiler
++# onboard.
 +
++# set UB_GCC_OPTIONS to default optimization from UnixBench (Line #88 in makefile).
++# cross compilation fails if UnixBench makefile tries to detect
++# architecture and OS. This is due to cross compiler not supporting
++# 'native' value for -march and -mtune flags.
++define UNIXBENCH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) \
++		CC="$(TARGET_CC)" -C $(@D)/UnixBench \
++		UB_GCC_OPTIONS="$(TARGET_CFLAGS)"
++endef
++
++# UnixBench doesn't have any install script of its own. Since $(INSTALL)
++# cannot copy whole directories, we have to copy files and then chmod them.
++define UNIXBENCH_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib/unixbench
++	cp -a $(@D)/UnixBench/{pgms,results,testdir,tmp,Run} $(TARGET_DIR)/usr/lib/unixbench/
++	chmod -R 0755 $(TARGET_DIR)/usr/lib/unixbench
++	$(INSTALL) -D -m 0755 $(UNIXBENCH_PKGDIR)/unixbench $(TARGET_DIR)/usr/bin/unixbench
++endef
++
++$(eval $(generic-package))
 -- 
-2.11.0
+2.21.0
