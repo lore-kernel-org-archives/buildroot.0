@@ -1,37 +1,23 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Mar 2019 19:27:03 +0100
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 Mar 2019 19:37:03 +0100
 Subject: [Buildroot] [PATCH] package/unixbench: new package
 In-Reply-To: <20190324175940.25686-1-itsatharva@gmail.com>
 References: <20190324175940.25686-1-itsatharva@gmail.com>
-Message-ID: <20190324182703.GJ2660@scaer>
+Message-ID: <81f09ffd-c49d-d42a-3d90-36d022bb79fe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, All,
+Hi Atharva,
 
-On 2019-03-24 23:29 +0530, Atharva Lele spake thusly:
+Thanks for you contribution!
+
+Le 24/03/2019 ? 18:59, Atharva Lele a ?crit?:
 > UnixBench is the original BYTE UNIX benchmark suite, updated and revised by many people over the years.
 > The purpose of UnixBench is to provide a basic indicator of the performance of a Unix-like system.
-
-Although it is nice to have a brief explanation of what the package is,
-a commit log is should contain the explanations of the packaging itself.
-
-I.e. all the tricks you had to do to make it work. You (and I because I
-helped on IRC) know what's going on, but think about the others: you
-have to explain them.
-
-Also, there is *one* person you should also consider explaining this
-package: yourself in the future. When you come back months, or even
-years from now, on this package, you will have forgotten why you did
-what you did.
-
-For example, here you would explain why you need to patch-out the Run
-script. You would also explain why you pass CC and UB_GCC_OPTION on the
-command line.
-
+> 
 > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 > ---
 >  DEVELOPERS                                    |  3 ++
@@ -58,19 +44,33 @@ command line.
 >  
 > +N:	Atharva Lele <itsatharva@gmail.com>
 > +F:	package/unixbench
-
-This is adirectory, so should be terminated with a '/' (see the other
-entries around).
-
-[--SNIP--]
+> +
+>  N:	Bartosz Bilas <b.bilas@grinn-global.com>
+>  F:	package/qt5/qt5scxml/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index b5321aeb49..521308c1d8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -132,6 +132,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/trace-cmd/Config.in"
+>  	source "package/trinity/Config.in"
+>  	source "package/uclibc-ng-test/Config.in"
+> +	source "package/unixbench/Config.in"
+>  	source "package/valgrind/Config.in"
+>  	source "package/vmtouch/Config.in"
+>  	source "package/whetstone/Config.in"
 > diff --git a/package/unixbench/0001-remove-make-check.patch b/package/unixbench/0001-remove-make-check.patch
 > new file mode 100644
 > index 0000000000..331fab5c44
 > --- /dev/null
 > +++ b/package/unixbench/0001-remove-make-check.patch
 
-Patches themselves should have a commit log of their own, and should
-also carry your signed-off-by as well.
+You should add some comments on this patch and add your SoB line.
+See
+https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+
+Also use a git formatted patch since the upstream project use git.
 
 > @@ -0,0 +1,25 @@
 > +diff --git a/UnixBench/Run b/UnixBench/Run
@@ -96,7 +96,7 @@ also carry your signed-off-by as well.
 > ++#        }
 > ++#    }
 
-Don't keep commented-out lines; just remove them.
+You should just remove these lines instead.
 
 > + 
 > +     # Create a script to kill this run.
@@ -110,11 +110,11 @@ Don't keep commented-out lines; just remove them.
 > +config BR2_PACKAGE_UNIXBENCH
 > +		select BR2_PACKAGE_PERL
 
-Perl depends on MMU, so you have to propagate that dependency to
-UnixBench as well.
+Perl is a runtime dependency (add a comment # Runtime).
+Also, since perl package depends on MMU unixbench must also depend on it.
 
-Also, did you try a minimalist build with no other package and see if
-something is missing at runtime?
+I believe, unixbench should depend on perl instead.
+The user must select perl interpreter in order to be able to select unixbench.
 
 > +		bool "unixbench"
 > +		help
@@ -131,14 +131,34 @@ something is missing at runtime?
 > +         
 > +		  Some simple graphics tests are included to test 2D and 3D performance
 > +		  of the system. Multi-CPU systems are also handled.
+
+So, how behave/build these graphics tests if the target doesn't have a GPU ?
+
 > +         
 > +		  https://github.com/kdlucas/byte-unixbench
 
-There should be only one leading TAB, not two. Please run:
+There is two tab instead of one.
+See: https://buildroot.org/downloads/manual/manual.html#_config_files
 
-    $ ./utils/check-package package/unixbench/*
+Also it's recommended to use utils/check-package script.
+See: https://buildroot.org/downloads/manual/manual.html#_tips_and_tricks
 
-[--SNIP--]
+> diff --git a/package/unixbench/unixbench b/package/unixbench/unixbench
+> new file mode 100644
+> index 0000000000..01412efbb4
+> --- /dev/null
+> +++ b/package/unixbench/unixbench
+> @@ -0,0 +1,3 @@
+> +#!/bin/bash
+
+unixbench script needs bash interpreter here.
+sh should be enough.
+
+> +cd /usr/lib/unixbench
+> +exec ./Run "${@}"
+
+Why "Run" can't be used outside of /usr/lib/unixbench ?
+
 > diff --git a/package/unixbench/unixbench.hash b/package/unixbench/unixbench.hash
 > new file mode 100644
 > index 0000000000..ccec430c66
@@ -148,7 +168,7 @@ There should be only one leading TAB, not two. Please run:
 > +# sha256 locally computed
 > +sha256 1677dcdcbed78805848b3c3fd58a6d052b677b6a4ee7add4db74acc4d3364a79 unixbench-070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a.tar.gz
 
-Please also add a hash for the license file.
+Add a hash for the LICENSE.txt file.
 
 > diff --git a/package/unixbench/unixbench.mk b/package/unixbench/unixbench.mk
 > new file mode 100644
@@ -162,6 +182,8 @@ Please also add a hash for the license file.
 > +#
 > +################################################################################
 > +
+
+Add a comment to explain why you are using this specific hash.
 > +UNIXBENCH_VERSION = 070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a
 > +UNIXBENCH_SITE = $(call github,kdlucas,byte-unixbench,$(UNIXBENCH_VERSION))
 > +UNIXBENCH_LICENSE = GPL-2.0
@@ -170,86 +192,35 @@ Please also add a hash for the license file.
 > +# UnixBench tries to compile its binaries regargless of them being compiled
 > +# or not. The patch will disable that since we may not always have a compiler
 > +# onboard.
-
-The comment above should go as the commjit log of the patch.
-
+> +
 > +# set UB_GCC_OPTIONS to default optimization from UnixBench (Line #88 in makefile).
 > +# cross compilation fails if UnixBench makefile tries to detect
 > +# architecture and OS. This is due to cross compiler not supporting
 > +# 'native' value for -march and -mtune flags.
-
-I'm afraid this comment is not entirely clear for those that did not
-follow on IRC and for posterity. Let me suggest an alternative
-formulation:
-
-    # Auto-detection would set CFLAGS for the host machine, using
-    # -march=native and -mtune=native, which does not make sense for
-    # cross-compilation and so a cross-gcc fails in this case.
-    # Setting UB_GCC_OPTIONS skips this auto-detection and forces
-    # the CFLAGS we are interested in.
-
 > +define UNIXBENCH_BUILD_CMDS
 > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
 > +	$(MAKE) \
 > +		CC="$(TARGET_CC)" -C $(@D)/UnixBench \
 > +		UB_GCC_OPTIONS="$(TARGET_CFLAGS)"
-
-It's better to keep all variables together and the -C option first:
-
-    $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-        -C $(@D)/UnixBench \
-        CC="$(TARGET_CC)" \
-        UB_GCC_OPTIONS="$(TARGET_CFLAGS)"
-
-Also, I wonder if we should not also pass TARGET_LDFLAGS too...
-
 > +endef
 > +
 > +# UnixBench doesn't have any install script of its own. Since $(INSTALL)
 > +# cannot copy whole directories, we have to copy files and then chmod them.
-
-That last part does not make sense, and does not reflect what you are
-doing below:
-
 > +define UNIXBENCH_INSTALL_TARGET_CMDS
 > +	mkdir -p $(TARGET_DIR)/usr/lib/unixbench
 > +	cp -a $(@D)/UnixBench/{pgms,results,testdir,tmp,Run} $(TARGET_DIR)/usr/lib/unixbench/
+
+I only see pgms, testdir and Run inside UnixBench directory.
+testdir doesn't seems useful on the target.
+
+results and tmp are probably generated while building unixbench package.
+
+Best regards,
+Romain
+
 > +	chmod -R 0755 $(TARGET_DIR)/usr/lib/unixbench
-
-... here, you only chmod the directory, not the individual files. And it
-is not needed to do that chmod to begin with.
-
-And 'cp -a' does keep the executable bit on the executables compiled by
-UnixBench.
-
-So, this is overall a pretty good first patch. I've certainly seen
-worse, by far!
-
-So, now I've made my review, others may also chime in and provide thir
-comments as well. Wait a bit (one day or two), then apply the requested
-changes and resend the patch.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
 > +	$(INSTALL) -D -m 0755 $(UNIXBENCH_PKGDIR)/unixbench $(TARGET_DIR)/usr/bin/unixbench
 > +endef
 > +
 > +$(eval $(generic-package))
-> -- 
-> 2.21.0
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
