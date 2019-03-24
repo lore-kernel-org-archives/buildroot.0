@@ -1,86 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:05:20 +0100
-Subject: [Buildroot] [git commit] putty: security bump to version 0.71
-Message-ID: <20190324220643.8F3CA7FE17@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:06:52 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXext: bump version
+ to 1.3.4
+Message-ID: <20190324220643.AC1AD81827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6f47c0a4327074c0aff80cc2b2e22e5c8eef692
+commit: https://git.buildroot.net/buildroot/commit/?id=45fcea570355f144a0d743c9dceca1152f6de0e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2019-9894: A remotely triggerable memory overwrite in RSA key
-exchange can occur before host key verification.
+Added all hashes provided by upstream and license hash.
 
-CVE-2019-9895: A remotely triggerable buffer overflow exists in any kind
-of server-to-client forwarding.
-
-CVE-2019-9897: Multiple denial-of-service attacks that can be triggered
-by writing to the terminal.
-
-CVE-2019-9898: Potential recycling of random numbers used in
-cryptography.
-
-Disable static build for now. When building statically configure defines
-NO_GSSAPI. Build with NO_GSSAPI is currently broken. The issue has been
-reported upstream.
-
-Cc: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/Config.in  | 5 +++--
- package/putty/putty.hash | 9 ++++++---
- package/putty/putty.mk   | 2 +-
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXext/xlib_libXext.hash | 9 +++++++--
+ package/x11r7/xlib_libXext/xlib_libXext.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-index cd8b3bb213..f901c71da2 100644
---- a/package/putty/Config.in
-+++ b/package/putty/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PUTTY
- 	bool "putty"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  PuTTY is a free SSH and Telnet client. Without GTK2
- 	  activated, only the commandline tools plink, pscp, psftp,
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_PUTTY
- 
- 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
- 
--comment "putty needs a toolchain w/ wchar"
-+comment "putty needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index e0527105c1..30f51848f8 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,3 +1,6 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.70/{sha256,sha512}sums
--sha256 bb8aa49d6e96c5a8e18a057f3150a1695ed99a24eef699e783651d1f24e7b0be                                                                 putty-0.70.tar.gz
--sha512 2aaf4fa2b4ad2d82eb5cdc4419ade79e0c5d8bd3c093db92b3c048e6107f85a5f1647f9d8203cda0906ce2b926725a75319f981cb32e6f1ebf50b1f738564fed putty-0.70.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.71/{sha256,sha512}sums
-+sha256 2f931ce2f89780cc8ca7bbed90fcd22c44515d2773f5fa954069e209b48ec6b8                                                                 putty-0.71.tar.gz
-+sha512 f8791210bd5925b26d51b13f0558eea15dbac40808051165b236d6436226f5c2b0aa7d69288ed9e2bddc1066455678cfd0af73ef6b715a136c42f3b6f754ac07 putty-0.71.tar.gz
-+
-+# Locally calculated
-+sha256 b517b4a9504ba0f651d5e590245197b88d9a81d073905cc798cc9464c5ca7ba8  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 52f2d4c3dd..c72c05320d 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.hash b/package/x11r7/xlib_libXext/xlib_libXext.hash
+index 45b754448c..45810d5d14 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.hash
++++ b/package/x11r7/xlib_libXext/xlib_libXext.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/pipermail/xorg/2014-July/056771.html
+-sha256	b518d4d332231f313371fdefac59e3776f4f0823bcb23cf7c7305bfb57b16e35	libXext-1.3.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002975.html
++md5 f5b48bb76ba327cd2a8dc7a383532a95  libXext-1.3.4.tar.bz2
++sha1 14e2451162e8766173b5b14c73e94a22b1fcab55  libXext-1.3.4.tar.bz2
++sha256 59ad6fcce98deaecc14d39a672cf218ca37aba617c9a0f691cac3bcd28edf82b  libXext-1.3.4.tar.bz2
++sha512 09146397d95f80c04701be1cc0a9c580ab5a085842ac31d17dfb6d4c2e42b4253b89cba695e54444e520be359883a76ffd02f42484c9e2ba2c33a5a40c29df4a  libXext-1.3.4.tar.bz2
++# Locally computed
++sha256 80767ac915f2f0f94de9efb15f0197a59b6f1e609cae85059f8703272dc3e146  COPYING
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
+index 02fee222b6..c63a3b23cc 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.mk
++++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.70
-+PUTTY_VERSION = 0.71
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_SUBDIR = unix
- PUTTY_LICENSE = MIT
+-XLIB_LIBXEXT_VERSION = 1.3.3
++XLIB_LIBXEXT_VERSION = 1.3.4
+ XLIB_LIBXEXT_SOURCE = libXext-$(XLIB_LIBXEXT_VERSION).tar.bz2
+ XLIB_LIBXEXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXEXT_LICENSE = MIT
