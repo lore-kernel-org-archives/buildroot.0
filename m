@@ -1,87 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:02:02 +0100
-Subject: [Buildroot] [git commit] package/dropbear: add upstream patch
- fixing TTY mode reset regression
-Message-ID: <20190324220643.7BC117FE17@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:08:32 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxkbfile: bump
+ version to 1.1.0
+Message-ID: <20190324220643.D5111802F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d2c91bf0d18f355cd568c337d074c7c5c412ae3
+commit: https://git.buildroot.net/buildroot/commit/?id=2ee0d5ae727f4d65f454fd169ecfdc79ae3dd71b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2019.77 added a regression related to resetting TTY mode on exit.  Add an
-upstream patch to fix it.
+Added all hashes provided by upstream and license hash.
 
-For more details, see the mailing list:
-https://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2019q1/002157.html
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ion-where-TTY-modes-weren-t-reset-for-cli.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash | 9 +++++++--
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
-new file mode 100644
-index 0000000000..9967aebc96
---- /dev/null
-+++ b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
-@@ -0,0 +1,56 @@
-+From 7bc6280613f5ab4ee86c14c779739070e5784dfe Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Sun, 24 Mar 2019 20:41:02 +0800
-+Subject: [PATCH] Fix regression where TTY modes weren't reset for client
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli-chansession.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/cli-chansession.c b/cli-chansession.c
-+index 8b72e27..cfd3401 100644
-+--- a/cli-chansession.c
-++++ b/cli-chansession.c
-+@@ -35,7 +35,7 @@
-+ #include "chansession.h"
-+ #include "agentfwd.h"
-+ 
-+-static void cli_cleanupchansess(const struct Channel *channel);
-++static void cli_closechansess(const struct Channel *channel);
-+ static int cli_initchansess(struct Channel *channel);
-+ static void cli_chansessreq(struct Channel *channel);
-+ static void send_chansess_pty_req(const struct Channel *channel);
-+@@ -51,8 +51,8 @@ const struct ChanType clichansess = {
-+ 	cli_initchansess, /* inithandler */
-+ 	NULL, /* checkclosehandler */
-+ 	cli_chansessreq, /* reqhandler */
-+-	NULL, /* closehandler */
-+-	cli_cleanupchansess, /* cleanup */
-++	cli_closechansess, /* closehandler */
-++	NULL, /* cleanup */
-+ };
-+ 
-+ static void cli_chansessreq(struct Channel *channel) {
-+@@ -84,7 +84,7 @@ out:
-+ 	
-+ 
-+ /* If the main session goes, we close it up */
-+-static void cli_cleanupchansess(const struct Channel *UNUSED(channel)) {
-++static void cli_closechansess(const struct Channel *UNUSED(channel)) {
-+ 	cli_tty_cleanup(); /* Restore tty modes etc */
-+ 
-+ 	/* This channel hasn't gone yet, so we have > 1 */
-+@@ -388,8 +388,8 @@ static const struct ChanType cli_chan_netcat = {
-+ 	cli_init_netcat, /* inithandler */
-+ 	NULL,
-+ 	NULL,
-++	cli_closechansess,
-+ 	NULL,
-+-	cli_cleanupchansess
-+ };
-+ 
-+ void cli_send_netcat_request() {
-+-- 
-+2.11.0
-+
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
+index 759b2aef83..03e61bdc5e 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002592.html
+-sha256	51817e0530961975d9513b773960b4edd275f7d5c72293d5a151ed4f42aeb16a	libxkbfile-1.0.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002977.html
++md5 dd7e1e946def674e78c0efbc5c7d5b3b  libxkbfile-1.1.0.tar.bz2
++sha1 487f314b6dbc17e93d0fe1e3741392156a9ca895  libxkbfile-1.1.0.tar.bz2
++sha256 758dbdaa20add2db4902df0b1b7c936564b7376c02a0acd1f2a331bd334b38c7  libxkbfile-1.1.0.tar.bz2
++sha512 1c6a57564e916ccdc3df3c49b9f3589f701df0cec55112c12ddc35ac3ed556608c28fe98e5ba0ac1962e9a65ed1e90eb7e6169b564951bf55a7cf3499b745826  libxkbfile-1.1.0.tar.bz2
++# Locally computed
++sha256 e1b3fdad8037ab3f986ef9caaa7c8da47d8d55875e680c7d6011f6c07363ea7c  COPYING
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+index 97755fae84..6b68496650 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXKBFILE_VERSION = 1.0.9
++XLIB_LIBXKBFILE_VERSION = 1.1.0
+ XLIB_LIBXKBFILE_SOURCE = libxkbfile-$(XLIB_LIBXKBFILE_VERSION).tar.bz2
+ XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXKBFILE_LICENSE = MIT
