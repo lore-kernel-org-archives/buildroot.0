@@ -1,39 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Mar 2019 12:45:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: needs dynamic library
-Message-ID: <20190324114554.26799-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Mar 2019 13:00:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: add optional nftables
+ dependency
+Message-ID: <20190324120016.28701-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0121befb9b4ba6cffc47ce7f861ed81077fc900f
+nftables support has been added since version 2.0.11 and
+https://github.com/acassen/keepalived/commit/aa12175ea638912a7789e832634d7ccf80fdf48d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/intel-gmmlib/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/keepalived/keepalived.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-index ef92a91128..9d5fbd9cae 100644
---- a/package/intel-gmmlib/Config.in
-+++ b/package/intel-gmmlib/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_INTEL_GMMLIB
- 	bool "intel-gmmlib"
- 	depends on BR2_x86_64
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  The Intel(R) Graphics Memory Management Library provides
- 	  device specific and buffer management for the Intel(R)
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_INTEL_GMMLIB
- 	  Media Driver for VAAPI.
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index fcdb43ce13..d93f8be057 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -46,4 +46,14 @@ else
+ KEEPALIVED_CONF_OPTS += --disable-libiptc
+ endif
  
- 	  https://github.com/intel/gmmlib
++ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
++KEEPALIVED_DEPENDENCIES += iptables
++KEEPALIVED_CONF_OPTS += --enable-nftables
++else ifeq ($(BR2_PACKAGE_NFTABLES),y)
++KEEPALIVED_DEPENDENCIES += nftables
++KEEPALIVED_CONF_OPTS += --enable-nftables
++else
++KEEPALIVED_CONF_OPTS += --disable-nftables
++endif
 +
-+comment "intel-gmmlib needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+ $(eval $(autotools-package))
 -- 
 2.20.1
