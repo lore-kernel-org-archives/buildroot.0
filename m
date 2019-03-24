@@ -1,30 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 09:07:34 +0100
-Subject: [Buildroot] [PATCH] lvm2: Update to 2.02.183
-In-Reply-To: <20190322021921.25949-1-sam@mendozajonas.com> (Samuel
- Mendoza-Jonas's message of "Fri, 22 Mar 2019 13:19:21 +1100")
-References: <20190322021921.25949-1-sam@mendozajonas.com>
-Message-ID: <87ef6wbsqh.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Mar 2019 09:09:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with
+ kernel < 4.1
+In-Reply-To: <20190322203831.28022-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 22 Mar 2019 21:38:31 +0100")
+References: <20190322203831.28022-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7hkbsn2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > In particular update to solve an issue where LVM would fail to
- > initialise LVM devices when asynchronous IO was not available and it
- > would fail to fall back to synchronous IO. [0][1]
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a33433abeb122cfb15f7f21ab777e84040bdcb8b
 
- > [0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
- > [1] https://github.com/open-power/petitboot/issues/60
-
- > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
-
-Should this also be applied to the 2019.02 series?
 
 -- 
 Bye, Peter Korsgaard
