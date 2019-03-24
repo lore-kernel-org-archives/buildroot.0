@@ -1,42 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 24 Mar 2019 09:31:15 +0200
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 24 Mar 2019 00:45:13 -0700
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2019-03-23
-In-Reply-To: <CAMo8BfL-nXFNUMCgQ2Ffyakjt_0tpAexexv7KmToddRPWOa3Yg@mail.gmail.com>
+In-Reply-To: <87tvfsn2yk.fsf@tarshish>
 References: <20190324070053.10948878B8@hemlock.osuosl.org>
  <CAMo8BfL-nXFNUMCgQ2Ffyakjt_0tpAexexv7KmToddRPWOa3Yg@mail.gmail.com>
-Message-ID: <87tvfsn2yk.fsf@tarshish>
+ <87tvfsn2yk.fsf@tarshish>
+Message-ID: <CAMo8BfL+BLdP8q1r6HHbfHy-=DY+EksjodW26t1A2+7O9eJMHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
+Hi Baruch,
 
-On Sun, Mar 24 2019, Max Filippov wrote:
-
-> On Sun, Mar 24, 2019 at 12:00 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>       xtensa |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/90e2bf9b85d9c7ef60b904800ca5b24f75ff5f50 |
+On Sun, Mar 24, 2019 at 12:31 AM Baruch Siach <baruch@tkos.co.il> wrote:
+> You might want to take a look at this one as well:
 >
-> Bug in xtensa linker:
-> /home/buildroot/autobuild/instance-3/output/host/lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
-> BFD (GNU Binutils) 2.31.1 internal error, aborting at
-> elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
-> I'll take a look.
+>   http://autobuild.buildroot.net/?reason=libssh-0.8.7
+>
+> A number of -Werror=strict-overflow build issues were fixed in previous
+> releases (see the Buildroot commit log), but this one remains. It only
+> happens with the xtensa toolchain for some reason.
 
-You might want to take a look at this one as well:
+Sure, thanks for the tip.
 
-  http://autobuild.buildroot.net/?reason=libssh-0.8.7
-
-A number of -Werror=strict-overflow build issues were fixed in previous
-releases (see the Buildroot commit log), but this one remains. It only
-happens with the xtensa toolchain for some reason.
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-- 
+Thanks.
+-- Max
