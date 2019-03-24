@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:07:15 +0100
-Subject: [Buildroot] [PATCH 04/12] package/x11r7/xlib_libXext: bump
- version to 1.3.4
-In-Reply-To: <20190324201443.21347-4-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 24 Mar 2019 21:14:34 +0100")
+Date: Sun, 24 Mar 2019 23:07:30 +0100
+Subject: [Buildroot] [PATCH 05/12] package/x11r7/xlib_libXft: bump
+ version to 2.3.3
+In-Reply-To: <20190324201443.21347-5-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 24 Mar 2019 21:14:35 +0100")
 References: <20190324201443.21347-1-bernd.kuhls@t-online.de>
- <20190324201443.21347-4-bernd.kuhls@t-online.de>
-Message-ID: <87tvfsorjg.fsf@dell.be.48ers.dk>
+ <20190324201443.21347-5-bernd.kuhls@t-online.de>
+Message-ID: <87pnqgorj1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
