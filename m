@@ -1,50 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:08:13 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXvMC: bump version
- to 1.0.11
-Message-ID: <20190324220643.C8B307FE17@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:02:02 +0100
+Subject: [Buildroot] [git commit] package/dropbear: add upstream patch
+ fixing TTY mode reset regression
+Message-ID: <20190324220643.7BC117FE17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c786b53444181ec1fc68e7d48572b7dfd73a71d7
+commit: https://git.buildroot.net/buildroot/commit/?id=7d2c91bf0d18f355cd568c337d074c7c5c412ae3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream and license hash.
+2019.77 added a regression related to resetting TTY mode on exit.  Add an
+upstream patch to fix it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For more details, see the mailing list:
+https://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2019q1/002157.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXvMC/xlib_libXvMC.hash | 9 +++++++--
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ ...ion-where-TTY-modes-weren-t-reset-for-cli.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-index 380c811989..ac8457870c 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2016-October/002728.html
--sha256 e501a079b5dfaef0897c56152770c77e05e362065cec58910289aa567277ee2e  libXvMC-1.0.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002981.html
-+md5 707175185a2e0490b8173686c657324f  libXvMC-1.0.11.tar.bz2
-+sha1 9dbcb89c8adc7709b8a70ea0cde168f69d06859f  libXvMC-1.0.11.tar.bz2
-+sha256 4a2e34d444a683a7c010b01b23cefe2b8043a063ce4dc6a9b855836b5262622d  libXvMC-1.0.11.tar.bz2
-+sha512 4fe49e956ac97a45d851292cbba7bf242706aaf3bd9eb7ea4d2fc50e40745115d857a4fe179d2b87bc7cb6f9ac93911e89a167f02f6d1ae25a59df9a517a2476  libXvMC-1.0.11.tar.bz2
-+# Locally computed
-+sha256 b7c709df281675a07eb60a71c5fa2599d1ef538eb79ae7ad6e774b10e4a804c4  COPYING
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-index c970182fe5..713abc7448 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXVMC_VERSION = 1.0.10
-+XLIB_LIBXVMC_VERSION = 1.0.11
- XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.bz2
- XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXVMC_LICENSE = MIT
+diff --git a/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
+new file mode 100644
+index 0000000000..9967aebc96
+--- /dev/null
++++ b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
+@@ -0,0 +1,56 @@
++From 7bc6280613f5ab4ee86c14c779739070e5784dfe Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Sun, 24 Mar 2019 20:41:02 +0800
++Subject: [PATCH] Fix regression where TTY modes weren't reset for client
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ cli-chansession.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/cli-chansession.c b/cli-chansession.c
++index 8b72e27..cfd3401 100644
++--- a/cli-chansession.c
+++++ b/cli-chansession.c
++@@ -35,7 +35,7 @@
++ #include "chansession.h"
++ #include "agentfwd.h"
++ 
++-static void cli_cleanupchansess(const struct Channel *channel);
+++static void cli_closechansess(const struct Channel *channel);
++ static int cli_initchansess(struct Channel *channel);
++ static void cli_chansessreq(struct Channel *channel);
++ static void send_chansess_pty_req(const struct Channel *channel);
++@@ -51,8 +51,8 @@ const struct ChanType clichansess = {
++ 	cli_initchansess, /* inithandler */
++ 	NULL, /* checkclosehandler */
++ 	cli_chansessreq, /* reqhandler */
++-	NULL, /* closehandler */
++-	cli_cleanupchansess, /* cleanup */
+++	cli_closechansess, /* closehandler */
+++	NULL, /* cleanup */
++ };
++ 
++ static void cli_chansessreq(struct Channel *channel) {
++@@ -84,7 +84,7 @@ out:
++ 	
++ 
++ /* If the main session goes, we close it up */
++-static void cli_cleanupchansess(const struct Channel *UNUSED(channel)) {
+++static void cli_closechansess(const struct Channel *UNUSED(channel)) {
++ 	cli_tty_cleanup(); /* Restore tty modes etc */
++ 
++ 	/* This channel hasn't gone yet, so we have > 1 */
++@@ -388,8 +388,8 @@ static const struct ChanType cli_chan_netcat = {
++ 	cli_init_netcat, /* inithandler */
++ 	NULL,
++ 	NULL,
+++	cli_closechansess,
++ 	NULL,
++-	cli_cleanupchansess
++ };
++ 
++ void cli_send_netcat_request() {
++-- 
++2.11.0
++
