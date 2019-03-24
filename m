@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Mar 2019 23:07:25 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXft: bump version to
- 2.3.3
-Message-ID: <20190324220643.B21F881827@busybox.osuosl.org>
+Date: Sun, 24 Mar 2019 23:08:20 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXxf86dga: bump
+ version to 1.1.5
+Message-ID: <20190324220643.CEB26802F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b90cb4d6b3f88c9a91d92e127d2b0ccf25be748
+commit: https://git.buildroot.net/buildroot/commit/?id=417a609222f566cb5ee6a357b842da95dcf774a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all hashes provided by upstream and license hash.
@@ -17,34 +17,34 @@ Added all hashes provided by upstream and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXft/xlib_libXft.hash | 9 +++++++--
- package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash | 9 +++++++--
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
-index 6eacf06ef1..bd0838b4dd 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.hash
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
+diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
+index 29560b7e8d..f0172c346c 100644
+--- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
++++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash
 @@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/pipermail/xorg/2014-June/056668.html
--sha256	f5a3c824761df351ca91827ac221090943ef28b248573486050de89f4bfcdc4c	libXft-2.3.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-March/002976.html
-+md5 4a433c24627b4ff60a4dd403a0990796  libXft-2.3.3.tar.bz2
-+sha1 48f543fe495f545df1794fa36a0a708558ae298c  libXft-2.3.3.tar.bz2
-+sha256 225c68e616dd29dbb27809e45e9eadf18e4d74c50be43020ef20015274529216  libXft-2.3.3.tar.bz2
-+sha512 28fdaf3baa3b156a4a7fdd6e39c4d8026d7d21eaa9be27c9797c8d329dab691a1bc82ea6042f9d4729a9343d93787536fb7e4b606f722f33cbe608b2e79910e8  libXft-2.3.3.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002235.html
+-sha256	8eecd4b6c1df9a3704c04733c2f4fa93ef469b55028af5510b25818e2456c77e	libXxf86dga-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002982.html
++md5 0ddeafc13b33086357cfa96fae41ee8e  libXxf86dga-1.1.5.tar.bz2
++sha1 332ba80d1b3d06473f7bbfe1612e7c5b58fbdf69  libXxf86dga-1.1.5.tar.bz2
++sha256 2b98bc5f506c6140d4eddd3990842d30f5dae733b64f198a504f07461bdb7203  libXxf86dga-1.1.5.tar.bz2
++sha512 0e77c4003aeba737b10c17d55aeefa935fc57c4ba9e8f79a834f3f8c690d6a1d98f69ad707eded784346c1cf40c41829719d257283b5eae3207147fb4c79ed89  libXxf86dga-1.1.5.tar.bz2
 +# Locally computed
-+sha256 7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
-index 9c5757e657..489cfe4c56 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.mk
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
++sha256 dd27933ebc5c063128b158b085e4c442a36b0e6f704cf753116da119610191da  COPYING
+diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+index 59ebd2b413..62fe06c1a5 100644
+--- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
++++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFT_VERSION = 2.3.2
-+XLIB_LIBXFT_VERSION = 2.3.3
- XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
- XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFT_LICENSE = MIT
+-XLIB_LIBXXF86DGA_VERSION = 1.1.4
++XLIB_LIBXXF86DGA_VERSION = 1.1.5
+ XLIB_LIBXXF86DGA_SOURCE = libXxf86dga-$(XLIB_LIBXXF86DGA_VERSION).tar.bz2
+ XLIB_LIBXXF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXXF86DGA_LICENSE = MIT
