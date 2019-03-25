@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 17:36:00 +0100
-Subject: [Buildroot] [PATCH] package/file: security bump to version 5.36
-In-Reply-To: <cd8c9e5890d36e5b0c3d8a895ff19f2d361f4a27.1552392750.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Mar 2019 14:12:30 +0200")
-References: <cd8c9e5890d36e5b0c3d8a895ff19f2d361f4a27.1552392750.git.baruch@tkos.co.il>
-Message-ID: <878sx2nc7j.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 17:38:12 +0100
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p13
+In-Reply-To: <9993804707449d150ef5399717529cc1bcf0ec74.1552372692.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 12 Mar 2019 08:38:12 +0200")
+References: <9993804707449d150ef5399717529cc1bcf0ec74.1552372692.git.baruch@tkos.co.il>
+Message-ID: <874l7qnc3v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > CVE-2019-8906: do_core_note in readelf.c in libmagic.a in file 5.35 has
- > an out-of-bounds read because memcpy is misused.
+ > Fixes CVE-2019-8936: Crafted null dereference attack in authenticated
+ > mode 6 packet.
 
- > CVE-2019-8904: do_bid_note in readelf.c in libmagic.a in file 5.35 has a
- > stack-based buffer over-read, related to file_printf and file_vprintf.
-
- > Update license files hashes; removal of trailing white spaces.
+ > Drop upstream patches.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
