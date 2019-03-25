@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:52:14 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/mosquitto: bump
+Date: Mon, 25 Mar 2019 18:52:03 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/mosquitto: bump
  version to 1.5.8
-Message-ID: <20190325175011.BF7D5838D8@busybox.osuosl.org>
+Message-ID: <20190325175022.BD99D838D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bae28f321e1cf49fa0cc956d39473c8e2832bba0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=91f446e32c262e6515137b336f4f0a60478c820a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Bugfix release, fixing a number of issues discovered post-1.5.7
 
@@ -37,7 +37,7 @@ index 17a467a721..25b9910138 100644
  # License files
  sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
 diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index ae23c54016..97fc4444f3 100644
+index e8a6ef74f4..368291b736 100644
 --- a/package/mosquitto/mosquitto.mk
 +++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
