@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:23:41 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/x11r7/xapp_xdm:
+Date: Mon, 25 Mar 2019 21:23:31 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/x11r7/xapp_xdm:
  security bump to version 1.1.12
-Message-ID: <20190325202057.635668134B@busybox.osuosl.org>
+Message-ID: <20190325202106.7F0A6814E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5da7852f08644cf0e77ef45576db317fa531aac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=48b328c19578cab09594f94a2f1659d12ecd51a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes CVE-2013-2179.
 
@@ -43,7 +43,7 @@ index 207d769fbf..605be9debc 100644
 +# Locally computed
 +sha256 b33b4bebbd6511b3e15315e8e29d67f25334ee45da8b7da6e6e97c53a70c6923  COPYING
 diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
-index 2c213a6bf0..2daea48351 100644
+index 422ee53b10..3c91e21579 100644
 --- a/package/x11r7/xapp_xdm/xapp_xdm.mk
 +++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
 @@ -4,7 +4,7 @@
