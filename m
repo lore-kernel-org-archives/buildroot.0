@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 19:10:42 +0100
-Subject: [Buildroot] [PATCH v1 1/1] package/busybox: version bump to
- 1.30.1
-In-Reply-To: <20190325162819.13056-1-jared.bents@rockwellcollins.com>
-References: <20190325162819.13056-1-jared.bents@rockwellcollins.com>
-Message-ID: <20190325191042.0279e322@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 25 Mar 2019 20:22:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: add optional
+ nftables dependency
+In-Reply-To: <20190325185421.6141a000@windsurf>
+References: <20190324120016.28701-1-fontaine.fabrice@gmail.com>
+ <87h8bsmq9q.fsf@tarshish> <20190325185421.6141a000@windsurf>
+Message-ID: <20190325182227.dr6qkvvh4dq3gb55@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Mar 2019 11:28:19 -0500
-jared.bents at rockwellcollins.com wrote:
+Hi Thomas,
 
-> From: Jared Bents <jared.bents@rockwellcollins.com>
+On Mon, Mar 25, 2019 at 06:54:21PM +0100, Thomas Petazzoni wrote:
+> On Sun, 24 Mar 2019 14:05:21 +0200
+> Baruch Siach <baruch@tkos.co.il> wrote:
 > 
-> Update from version 1.29.3 to 1.30.1. The new version
-> includes the removed patches.
+> > > +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
+> > > +KEEPALIVED_DEPENDENCIES += iptables
+> > > +KEEPALIVED_CONF_OPTS += --enable-nftables  
+> > 
+> > What do you need that for? Please explain in the commit log and in an
+> > inline comment.
 > 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  ...l.sh-don-t-clobber-dangling-symlinks.patch |  38 -----
->  ...tions-are-indeed-4-byte-closes-11506.patch | 137 ------------------
->  ...HCP_SUBNET-ensure-it-is-4-bytes-long.patch |  58 --------
->  package/busybox/busybox.hash                  |   4 +-
->  package/busybox/busybox.mk                    |   2 +-
->  5 files changed, 3 insertions(+), 236 deletions(-)
->  delete mode 100644 package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
->  delete mode 100644 package/busybox/0004-udhcpc-check-that-4-byte-options-are-indeed-4-byte-closes-11506.patch
->  delete mode 100644 package/busybox/0005-udhcpc-when-decoding-DHCP_SUBNET-ensure-it-is-4-bytes-long.patch
+> I'm not sure what needs to be further explained. The fact that nftables
+> can be provided either by the iptables package or by the nftables
+> package ? Baruch, could you clarify what additional explanations you
+> are looking for ?
 
-Applied to master, thanks.
+I had the impression that BR2_PACKAGE_IPTABLES_NFTABLES itself depends on 
+BR2_PACKAGE_NFTABLES to provide nftables support. I see now that this is not 
+the case. Still, the fact that --enable-nftables enables support for both 
+packages looks strange. So I think that a comment that says something like 
+"iptables and nftables both provide compatible API" would be nice.
 
-Thomas
+BTW, what happens when both BR2_PACKAGE_NFTABLES and 
+BR2_PACKAGE_IPTABLES_NFTABLES are enabled? Do both coexist? If they do, I see 
+no way for keepalived to know which library to link against. iptables will 
+always build before keepalived because it optionally depends on 
+BR2_PACKAGE_IPTABLES anyway. But nftables might not build before keepalived in 
+that case.
+
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
