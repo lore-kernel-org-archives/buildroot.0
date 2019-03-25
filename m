@@ -1,195 +1,40 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 25 Mar 2019 11:52:51 +0100
-Subject: [Buildroot] [PATCH v5] package/optee-client: fix build warnings
- from 3.4.0
-Message-ID: <20190325105251.5914-1-etienne.carriere@linaro.org>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Mon, 25 Mar 2019 12:59:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: Fix loop
+ positional declaration build error
+In-Reply-To: <20190318171237.032f635c@windsurf>
+References: <1552923418-22447-1-git-send-email-email@gmail.com>
+ <20190318171237.032f635c@windsurf>
+Message-ID: <20190325105916.GA10869@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch over current optee-client 3.4.0 to fix build issues
-reported by some toolchains with traces like:
+Hi Thomas,
 
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-                            ^
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-    arg = (struct tee_ioctl_open_session_arg *)buf;
-          ^
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-  /path/to/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-    arg = (struct tee_ioctl_invoke_arg *)buf;
+On Mon, Mar 18, 2019 at 05:12:37PM +0100, Thomas Petazzoni wrote:
+> On Mon, 18 Mar 2019 17:36:58 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > From: Vadim Kochan <vadim4j@gmail.com>
+> > 
+> > Move 'i' variable outside of the 'for' loop to separate declaration
+> > in lib/crc16.c
+> > 
+> > Fixes:
+> > 	http://autobuild.buildroot.net/results/332c9d2232c03440bf71794ee7850b1f6fd51d11/
+> > 
+> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> 
+> Thanks for the fix, but I already submitted a similar one, and upstream
+> U-Boot wants to handle this different, see
+> https://lists.denx.de/pipermail/u-boot/2019-February/358821.html. I
+> didn't get to doing the change upstream U-Boot suggested.
+> 
 
-The optee-client patches have been in the OP-TEE project [1] & [2] and
-will be available in the OP-TEE next release planned 3.5.0.
+So, may be then just add your patch to the u-boot-tools package ?
 
-Fixes [3], [4], [5] and other failing builds reported by autobuild tests.
-
-[1] https://github.com/OP-TEE/optee_client/pull/146
-[2] https://github.com/OP-TEE/optee_client/pull/153
-[3] http://autobuild.buildroot.net/results/80e78cb0bb955e912d6cbe5b30c9b024e7efc802
-[4] http://autobuild.buildroot.net/results/a42c19897d03beb02fde2e7e6da25532be27d5ca
-[5] http://autobuild.buildroot.net/results/827087f91b7481d1c3effd615172bbee86317962
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
-Changes v4 -> v5:
-  - Fix buggy content sent in v3. Apologies.
-
-Changes v3 -> v4:
-  - Update patch from [2] outcome
-
-Changes v2 -> v3:
-  - Update patch from [1] outcome
-
-Changes v1 -> v2:
-  - Updated commit comment with traces of the build issues that are fixed.
----
- .../0001-libteec-fix-build-warnings.patch     | 132 ++++++++++++++++++
- 1 file changed, 132 insertions(+)
- create mode 100644 package/optee-client/0001-libteec-fix-build-warnings.patch
-
-diff --git a/package/optee-client/0001-libteec-fix-build-warnings.patch b/package/optee-client/0001-libteec-fix-build-warnings.patch
-new file mode 100644
-index 0000000000..be87e9f46e
---- /dev/null
-+++ b/package/optee-client/0001-libteec-fix-build-warnings.patch
-@@ -0,0 +1,132 @@
-+From dfb382a43c237f411d8994721cee5f9c216acb0b Mon Sep 17 00:00:00 2001
-+From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Wed, 20 Mar 2019 10:01:23 +0100
-+Subject: [PATCH] libteec: fix build warnings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fix build warnings reported by the Buildroot team [1]:
-+
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function 'TEEC_InitializeContext':
-+/home/thomas/projets/outputs/armv5-ctng-linux-gnueabi/build/optee-client-3.4.0/libteec/src/tee_client_api.c:149:28: error: 'gen_caps' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+    ctx->reg_mem = gen_caps & TEE_GEN_CAP_REG_MEM;
-+                            ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_OpenSession?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:507:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_open_session_arg *)buf;
-+        ^
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c: In function ?TEEC_InvokeCommand?:
-+/home/thomas/projets/buildroot/output/build/optee-client-3.4.0/libteec/src/tee_client_api.c:581:8: error: cast increases required alignment of target type [-Werror=cast-align]
-+  arg = (struct tee_ioctl_invoke_arg *)buf;
-+        ^
-+
-+This change is a squash of changes from [2] and [3].
-+
-+[1] http://lists.busybox.net/pipermail/buildroot/2019-February/243437.html
-+[2] https://github.com/OP-TEE/optee_client/pull/146
-+[3] https://github.com/OP-TEE/optee_client/pull/153
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Signed-off-by: Victor Chong <victor.chong@linaro.org>
-+---
-+ libteec/src/tee_client_api.c | 36 +++++++++++++++++++++++-------------
-+ 1 file changed, 23 insertions(+), 13 deletions(-)
-+
-+diff --git a/libteec/src/tee_client_api.c b/libteec/src/tee_client_api.c
-+index 698092b..4d7b134 100644
-+--- a/libteec/src/tee_client_api.c
-++++ b/libteec/src/tee_client_api.c
-+@@ -140,7 +140,7 @@ TEEC_Result TEEC_InitializeContext(const char *name, TEEC_Context *ctx)
-+ 		return TEEC_ERROR_BAD_PARAMETERS;
-+ 
-+ 	for (n = 0; n < TEEC_MAX_DEV_SEQ; n++) {
-+-		uint32_t gen_caps;
-++		uint32_t gen_caps = 0;
-+ 
-+ 		snprintf(devname, sizeof(devname), "/dev/tee%zu", n);
-+ 		fd = teec_open_dev(devname, name, &gen_caps);
-+@@ -481,10 +481,13 @@ TEEC_Result TEEC_OpenSession(TEEC_Context *ctx, TEEC_Session *session,
-+ 			uint32_t connection_method, const void *connection_data,
-+ 			TEEC_Operation *operation, uint32_t *ret_origin)
-+ {
-+-	uint64_t buf[(sizeof(struct tee_ioctl_open_session_arg) +
-+-			TEEC_CONFIG_PAYLOAD_REF_COUNT *
-+-				sizeof(struct tee_ioctl_param)) /
-+-			sizeof(uint64_t)] = { 0 };
-++	const size_t arg_size = sizeof(struct tee_ioctl_open_session_arg) +
-++				TEEC_CONFIG_PAYLOAD_REF_COUNT *
-++					sizeof(struct tee_ioctl_param);
-++	union {
-++		struct tee_ioctl_open_session_arg arg;
-++		uint8_t data[arg_size];
-++	} buf;
-+ 	struct tee_ioctl_buf_data buf_data;
-+ 	struct tee_ioctl_open_session_arg *arg;
-+ 	struct tee_ioctl_param *params;
-+@@ -493,6 +496,8 @@ TEEC_Result TEEC_OpenSession(TEEC_Context *ctx, TEEC_Session *session,
-+ 	TEEC_SharedMemory shm[TEEC_CONFIG_PAYLOAD_REF_COUNT];
-+ 	int rc;
-+ 
-++	memset(&buf, 0, sizeof(buf));
-++
-+ 	(void)&connection_data;
-+ 
-+ 	if (!ctx || !session) {
-+@@ -501,10 +506,10 @@ TEEC_Result TEEC_OpenSession(TEEC_Context *ctx, TEEC_Session *session,
-+ 		goto out;
-+ 	}
-+ 
-+-	buf_data.buf_ptr = (uintptr_t)buf;
-++	buf_data.buf_ptr = (uintptr_t)&buf;
-+ 	buf_data.buf_len = sizeof(buf);
-+ 
-+-	arg = (struct tee_ioctl_open_session_arg *)buf;
-++	arg = &buf.arg;
-+ 	arg->num_params = TEEC_CONFIG_PAYLOAD_REF_COUNT;
-+ 	params = (struct tee_ioctl_param *)(arg + 1);
-+ 
-+@@ -555,10 +560,13 @@ void TEEC_CloseSession(TEEC_Session *session)
-+ TEEC_Result TEEC_InvokeCommand(TEEC_Session *session, uint32_t cmd_id,
-+ 			TEEC_Operation *operation, uint32_t *error_origin)
-+ {
-+-	uint64_t buf[(sizeof(struct tee_ioctl_invoke_arg) +
-+-			TEEC_CONFIG_PAYLOAD_REF_COUNT *
-+-				sizeof(struct tee_ioctl_param)) /
-+-			sizeof(uint64_t)] = { 0 };
-++	const size_t arg_size = sizeof(struct tee_ioctl_invoke_arg) +
-++				TEEC_CONFIG_PAYLOAD_REF_COUNT *
-++					sizeof(struct tee_ioctl_param);
-++	union {
-++		struct tee_ioctl_invoke_arg arg;
-++		uint8_t data[arg_size];
-++	} buf;
-+ 	struct tee_ioctl_buf_data buf_data;
-+ 	struct tee_ioctl_invoke_arg *arg;
-+ 	struct tee_ioctl_param *params;
-+@@ -567,6 +575,8 @@ TEEC_Result TEEC_InvokeCommand(TEEC_Session *session, uint32_t cmd_id,
-+ 	TEEC_SharedMemory shm[TEEC_CONFIG_PAYLOAD_REF_COUNT];
-+ 	int rc;
-+ 
-++	memset(&buf, 0, sizeof(buf));
-++
-+ 	if (!session) {
-+ 		eorig = TEEC_ORIGIN_API;
-+ 		res = TEEC_ERROR_BAD_PARAMETERS;
-+@@ -575,10 +585,10 @@ TEEC_Result TEEC_InvokeCommand(TEEC_Session *session, uint32_t cmd_id,
-+ 
-+ 	bm_timestamp();
-+ 
-+-	buf_data.buf_ptr = (uintptr_t)buf;
-++	buf_data.buf_ptr = (uintptr_t)&buf;
-+ 	buf_data.buf_len = sizeof(buf);
-+ 
-+-	arg = (struct tee_ioctl_invoke_arg *)buf;
-++	arg = &buf.arg;
-+ 	arg->num_params = TEEC_CONFIG_PAYLOAD_REF_COUNT;
-+ 	params = (struct tee_ioctl_param *)(arg + 1);
-+ 
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Regards,
+Vadim Kochan
