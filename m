@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:18:46 +0100
-Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
-In-Reply-To: <20190218121508.htf6s7bazcggmozg@gmail.com> (Artem Senichev's
- message of "Mon, 18 Feb 2019 15:15:08 +0300")
-References: <20190218121508.htf6s7bazcggmozg@gmail.com>
-Message-ID: <878sx2lnbt.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 21:19:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kexec: update to 2.0.18
+In-Reply-To: <20190313083557.13418-1-adrien@gallouet.fr> ("Adrien
+ =?utf-8?Q?Gallou=C3=ABt=22's?=
+ message of "Wed, 13 Mar 2019 08:35:58 +0000")
+References: <20190313083557.13418-1-adrien@gallouet.fr>
+Message-ID: <874l7qlnad.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Artem" == Artem Senichev <artemsen@gmail.com> writes:
+>>>>> "Adrien" == Adrien Gallou?t <adrien@gallouet.fr> writes:
 
- > kexec has fully support of ppc64 platform:
- > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
- > Added BR2_powerpc64 platform support.
+ > This release fixes the following issue with new kernels:
+ > kexec --load bzImage --reuse-cmdline
+ > Unhandled rela relocation: R_X86_64_PLT32
 
- > Signed-off-by: Artem Senichev <artemsen@gmail.com>
+ > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 
 Committed to 2019.02.x, thanks.
 
