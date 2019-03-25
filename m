@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:45:03 +0100
-Subject: [Buildroot] [PATCH 1/2] package/linux-headers: fix support for
- -rc kernels
-In-Reply-To: <20190306212815.19759-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 6 Mar 2019 22:28:14 +0100")
+Date: Mon, 25 Mar 2019 21:46:43 +0100
+Subject: [Buildroot] [PATCH 2/2] linux{,
+ -headers}: support downloads of v5+
+In-Reply-To: <20190306212815.19759-2-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 6 Mar 2019 22:28:15 +0100")
 References: <20190306212815.19759-1-arnout@mind.be>
-Message-ID: <87imw6k7jk.fsf@dell.be.48ers.dk>
+ <20190306212815.19759-2-arnout@mind.be>
+Message-ID: <87ef6uk7gs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > -rc kernels after v3.x are no longer available in the testing
- > subdirectory. Instead they should be fetched from cgit.
+ > With the arrival of linux v5.0, we need yet another condition to set
+ > _SITE correctly. Instead of continuing this madness, solve the problem
+ > generically: use v2.6 for 2.6.*, and use the number before the first dot
+ > in the other cases.
 
- > Commit ff4cccbdcf5417a5a8c251ff302791a306023cc1 did this for linux
- > itself, now we also do it for linux-headers.
-
- > When fetched from cgit, .tar.xz can't be used. Adding this to the
- > existing condition is not so simple, so refactor how _SOURCE is set:
- > simply set it explicitly in each branch of the condition. While more
- > verbose (it is repeated 4 times), it's easier to understand and to
- > maintain.
+ > While we're at it, remove the comment which has been incorrect since
+ > 80d7b68167a5c8893e906ace6b5f0b0166336406 (7 years ago).
 
  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
