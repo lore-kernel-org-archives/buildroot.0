@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 22:17:03 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/beecrypt: fix
+Date: Mon, 25 Mar 2019 22:15:36 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/beecrypt: fix
  build without C++
-Message-ID: <20190325211609.B378781E48@busybox.osuosl.org>
+Message-ID: <20190325211649.5121E81807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfd0c6a9e4e22bd0e6c884d331715e22a84b8828
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1d7ca925359efca3e4ef72662b03022f16151cc6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Do not check for C++ compiler as C++ support has been disabled since
 commit dd4d3c18d6753e1224fbe59d91a4b44f39bc38c0 otherwise
