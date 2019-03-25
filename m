@@ -1,81 +1,67 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 25 Mar 2019 22:51:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump version to 0.10.2
-Message-ID: <20190325215102.20059-1-nolange79@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 25 Mar 2019 23:13:08 +0100
+Subject: [Buildroot] [PATCH v4 1/6] qt5base: Do not build shared libs if
+ BR2_STATIC_LIBS is chosen
+In-Reply-To: <20190322183904.22401-2-anaumann@ultratronik.de>
+References: <20190322183904.22401-1-anaumann@ultratronik.de>
+ <20190322183904.22401-2-anaumann@ultratronik.de>
+Message-ID: <4d310445-b8fe-1c37-07d7-989fe9ee1270@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <norbert.lange@andritz.com>
 
-This includes a fix that might delay application startup
-considerably (11486a15008b9).
 
-Adapted the patch to point to the correct file.
+On 22/03/2019 19:38, Andreas Naumann wrote:
+> Traditionally we configured qt5 to always build shared libraries. This resulted
+> in many conditionals when setting buildroot to static-libs only, because each
+> module's target install had to be guarded.
+> So to avoid this and simplify target install in a subsequent commit, configure
+> qt to build (and install) only the type of libs which the buildroot defconfig
+> is set to.
+> Unfortunately it seems that Qt does not support building both dynamic and static
+> libs at the same time, so we still set it shared if buildroot asks for both.
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 14536980a8..a8bec84123 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -24,8 +24,13 @@ QT5BASE_CONFIGURE_OPTS += \
+>  	-no-iconv \
+>  	-system-zlib \
+>  	-system-pcre \
+> -	-no-pch \
+> -	-shared
+> +	-no-pch
+> +
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> +QT5BASE_CONFIGURE_OPTS += -shared
+> +else ifeq ($(BR2_STATIC_LIBS),y)
+> +QT5BASE_CONFIGURE_OPTS += -static
+> +endif
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- .../0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch  | 10 +++++-----
- package/liburcu/liburcu.hash                           |  6 +++---
- package/liburcu/liburcu.mk                             |  2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ For cmake-package, we do the equivalent of
 
-diff --git a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-index 585abc0322..658e1721f0 100644
---- a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-+++ b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-@@ -12,13 +12,13 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-  urcu/compiler.h | 9 ++++++++-
-  1 file changed, 8 insertions(+), 1 deletion(-)
- 
--diff --git a/urcu/compiler.h b/urcu/compiler.h
-+diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
- index 1e30903..56115f1 100644
----- a/urcu/compiler.h
--+++ b/urcu/compiler.h
-+--- a/include/urcu/compiler.h
-++++ b/include/urcu/compiler.h
- @@ -118,10 +118,17 @@
-  				+ __GNUC_PATCHLEVEL__)
-- 
-+
-  /*
- + * Official gcc releases from 4.8.0 to 4.8.2 have the following bug,
- + * however, many arm toolchain providers have the included the fix for
-@@ -35,6 +35,6 @@ index 1e30903..56115f1 100644
-  #   error Your gcc version produces clobbered frame accesses
-  #  endif
-  # endif
---- 
-+--
- 1.9.0
- 
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 5866d805ca..01ce51aabd 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,4 +1,4 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2.sha1
--sha1  61d1d0d1b955c7a67a7253317647304d04b400a0  userspace-rcu-0.9.2.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.10.2.tar.bz2.sha1
-+sha1  70ac938acdc738bee7e2e1f462a7991a25ba2439  userspace-rcu-0.10.2.tar.bz2
- # Locally generated
--sha256 8f7fa313b1e0a3f742cea24ce63a39c0efe63e615a769e2961e55bd2663ecaa3 userspace-rcu-0.9.2.tar.bz2
-+sha256 b3f6888daf6fe02c1f8097f4a0898e41b5fe9975e121dc792b9ddef4b17261cc  userspace-rcu-0.10.2.tar.bz2
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index d8579f6c28..8ddfb3fb84 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURCU_VERSION = 0.9.2
-+LIBURCU_VERSION = 0.10.2
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
--- 
-2.20.1
+ifeq ($(BR2_STATIC_LIBS),y)
+QT5BASE_CONFIGURE_OPTS += -static
+else
+QT5BASE_CONFIGURE_OPTS += -shared
+endif
+
+which is IMO both correct and readable.
+
+ Regards,
+ Arnout
+
+
+>  
+>  ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+>  QT5BASE_DEPENDENCIES += pcre
+> 
