@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:52:03 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/mosquitto: bump
- version to 1.5.8
-Message-ID: <20190325175022.BD99D838D8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Mar 2019 18:54:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: add optional
+ nftables dependency
+In-Reply-To: <87h8bsmq9q.fsf@tarshish>
+References: <20190324120016.28701-1-fontaine.fabrice@gmail.com>
+ <87h8bsmq9q.fsf@tarshish>
+Message-ID: <20190325185421.6141a000@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91f446e32c262e6515137b336f4f0a60478c820a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+On Sun, 24 Mar 2019 14:05:21 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-Bugfix release, fixing a number of issues discovered post-1.5.7
+> > +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
+> > +KEEPALIVED_DEPENDENCIES += iptables
+> > +KEEPALIVED_CONF_OPTS += --enable-nftables  
+> 
+> What do you need that for? Please explain in the commit log and in an
+> inline comment.
 
-https://mosquitto.org/blog/2019/02/version-1-5-8-released/
+I'm not sure what needs to be further explained. The fact that nftables
+can be provided either by the iptables package or by the nftables
+package ? Baruch, could you clarify what additional explanations you
+are looking for ?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 24cc2eaa335a34633b71a7db7c972ab64b5e7739)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 17a467a721..25b9910138 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 d4024c3388502d50be4192991e90d66dfb344376104df3f63846c9f201779955  mosquitto-1.5.7.tar.gz
-+sha256 78d7e70c3794dc3a1d484b4f2f8d3addebe9c2da3f5a1cebe557f7d13beb0da4  mosquitto-1.5.8.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index e8a6ef74f4..368291b736 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.7
-+MOSQUITTO_VERSION = 1.5.8
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
