@@ -1,22 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 17:33:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: add optional spandsp
- dependency
-In-Reply-To: <20190310113153.782-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Mar 2019 12:31:53 +0100")
-References: <20190310113153.782-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d0mencbr.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 17:32:56 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/wireshark: add
+ optional spandsp dependency
+Message-ID: <20190325163003.B263383A52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c01e8508b06d785a20e68dc8d555915999aaf5d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ee772dad7b76dcc49bc86b5a232ccdcedec60904)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Committed to 2018.11.x and 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 53ae0bcfa9..ba07fbba55 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -145,6 +145,13 @@ else
+ WIRESHARK_CONF_OPTS += --without-snappy
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SPANDSP),y)
++WIRESHARK_CONF_OPTS += --with-spandsp
++WIRESHARK_DEPENDENCIES += spandsp
++else
++WIRESHARK_CONF_OPTS += --without-spandsp
++endif
++
+ define WIRESHARK_REMOVE_DOCS
+ 	find $(TARGET_DIR)/usr/share/wireshark -name '*.txt' -print0 \
+ 		-o -name '*.html' -print0 | xargs -0 rm -f
