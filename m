@@ -1,52 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 22:23:19 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
- bump to version 4.9.5
-Message-ID: <20190325212400.1DD3081805@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Mar 2019 22:27:33 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/paho-mqtt-cpp: add
+ paho-mqtt-cpp
+In-Reply-To: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
+References: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
+Message-ID: <20190325222733.458e094b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59f9971694acd60fcda11f5ea731fd05e99daba1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hello,
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.5.html
+On Fri, 22 Mar 2019 11:10:44 +0000
+Refik TUZAKLI <refik.tuzakli@savronik.com.tr> wrote:
 
-Fixes CVE-2019-3824:
-ldb: Out of bound read in ldb_wildcard_compare
+> Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e7d67faac5be820b1c8019eb249adf8765d4cf42)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I have applied your patch, with a few changes.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index de349c3049..70cea4809b 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.4.tar.asc
--sha256 6d98a8d8bcccbe788e4bbb406362e6676311aca711a3f3cc9b3a404bb9ff0b4f  samba-4.9.4.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.5.tar.asc
-+sha256 078956d2d98e22011265afd4b7221efe4861067dcba4a031583b01f34d423700  samba-4.9.5.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9f771cf82f..9b226a0e05 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.4
-+SAMBA4_VERSION = 4.9.5
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+First, the traditional commit title for new packages is:
+
+	package/<pkg>: new package
+
+> diff --git a/package/paho-mqtt-cpp/Config.in b/package/paho-mqtt-cpp/Config.in
+> new file mode 100644
+> index 0000000..c7675e1
+> --- /dev/null
+> +++ b/package/paho-mqtt-cpp/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_PAHO_MQTT_CPP
+> +	bool "paho-mqtt-cpp"
+> +	depends on !BR2_STATIC_LIBS  # dlopen()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+You forgot:
+
+	depends on BR2_INSTALL_LIBSTDCPP
+
+since obviously, paho-mqtt-cpp uses C++.
+
+But also another dependency was needed (a more tricky one):
+
+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+
+this is needed because paho-mqtt-cpp uses std::future.
+
+> +PAHO_MQTT_CPP_VERSION = v1.0.0
+> +PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,$(PAHO_MQTT_CPP_VERSION))
+> +PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
+> +PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
+> +PAHO_MQTT_CPP_INSTALL_STAGING = YES
+> +PAHO_MQTT_CPP_DEPENDENCIES = paho-mqtt-c
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +PAHO_MQTT_CPP_DEPENDENCIES += openssl
+> +PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
+> +else
+> +PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
+> +endif
+> +PAHO_MQTT_CPP_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+
+I moved this line earlier in the .mk file, used = instead of += since
+it's unconditional, and added a comment above it to explain why we are
+using this option.
+
+Patch applied to master with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
