@@ -1,25 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 22:21:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
- curl and libidn2
-In-Reply-To: <20190308215200.11949-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 8 Mar 2019 22:52:00 +0100")
-References: <20190308215200.11949-1-fontaine.fabrice@gmail.com>
-Message-ID: <871s2uk5uo.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 22:20:53 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gerbera: fix
+ static build with curl and libidn2
+Message-ID: <20190325211810.73FF180FFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3d0ad9cc82258cd969d88a8d29e9c6192e13757d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
+Fixes:
+ - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7553b6ad23961be3f91798328fa8e955658dbd72)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...txt-fix-static-build-with-curl-and-libidn.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
+new file mode 100644
+index 0000000000..94f742c3f8
+--- /dev/null
++++ b/package/gerbera/0001-CMakeLists.txt-fix-static-build-with-curl-and-libidn.patch
+@@ -0,0 +1,41 @@
++From de0e7fe3b56cff79c11aedc89448814fab8d1877 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 8 Mar 2019 19:11:11 +0100
++Subject: [PATCH] MakeLists.txt: fix static build with curl and libidn2
++
++curl can be statically linked with libidn2, in this case, build fails:
++/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/m68k-buildroot-linux-uclibc/sysroot/usr/lib/libcurl.a(libcurl_la-url.o): In function `free_idnconverted_hostname.isra.1':
++url.c:(.text+0xf4): undefined reference to `idn2_free'
++
++To fix this issue, add a call to pkg_check_modules to retrieve any
++needed dependencies
++
++Fixes:
++ - http://autobuild.buildroot.org/results/be5893b507d22a23951efeea20c18642742cef5a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/gerbera/gerbera/pull/429]
++---
++ CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d0eed230..e6b62c96 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -443,7 +443,11 @@ if(WITH_MYSQL)
++ endif()
++ 
++ if(WITH_CURL)
++-    find_package (CURL REQUIRED)
+++    find_package(PkgConfig QUIET)
+++    pkg_check_modules (CURL QUIET libcurl)
+++    if (NOT CURL_FOUND)
+++        find_package (CURL REQUIRED)
+++    endif()
++     if (CURL_FOUND)
++         include_directories(${CURL_INCLUDE_DIRS})
++         target_link_libraries (gerbera ${CURL_LIBRARIES})
++-- 
++2.20.1
++
