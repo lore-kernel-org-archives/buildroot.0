@@ -1,38 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 22:13:17 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/musl: remove
- rcrt1.o from target installation
-Message-ID: <20190325211649.4AA4A81807@busybox.osuosl.org>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 25 Mar 2019 22:20:35 +0100
+Subject: [Buildroot] [PATCH v2 2/2] pkg-generic: Cleanup some redundant
+ checks
+In-Reply-To: <20190319220315.GG2702@scaer>
+References: <20190317212014.3831-1-nolange79@gmail.com>
+ <20190317212014.3831-2-nolange79@gmail.com>
+ <20190319220315.GG2702@scaer>
+Message-ID: <CADYdroPj2+X1GobjL870_Zrai9SzGBDNJ7k2T+DpQz5FDdWsjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5219bb25bf28939d23d876b069911228b3fc41d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Am Di., 19. M?rz 2019 um 23:03 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Norbert, All,
+>
+> On 2019-03-17 22:20 +0100, Norbert Lange spake thusly:
+> > With the last change, packages will depend
+> > only on host-{xz,lzip} if the source archives
+> > have filenames requesting the corresponding compressor.
+> >
+> > This allows using a single guard.
+>
+> This commit log is an improvement agaisnt the previous one, yet I still
+> had to think a bit too hard to understand the reason that works.
+>
+> And I think there is an issue with that. Not today, but that opens up a
+> case where we can introduce a subtil bug in the future.
+>
+> If, say, xz changes its distribution archive from .bz2 to .lz, iand lzip
+> changes theirs from .gz to .xz, then we'd introduce a circular
+> dependency at the make level, and make silently and arbitrarily drops
+> one of the dependencies.
 
-rcrt1.o is a new startup for "static-pie" apps, and only needed for
-building, should not end up in the target filesystem.
+What would you do in that case anyway?
+(besides I dont think lzip is getting any traction, or that a sane compressor
+package should use anything but gzip for "boostrapping").
 
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit de5fef8c0482889743fb27542ccb013c10f1db8a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/musl/musl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> However, now that I think about it, that is of not big consequence: in
+> either case, the build woulld break on the first one we try to extract,
+> and we would notice quite early and quite easily.
+>
+> Still, I'd like we think a bit harder about those special cases.
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 90c753926e..ff807c0cba 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -58,7 +58,7 @@ endef
- define MUSL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) install-libs
--	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o Scrt1.o)
-+	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o rcrt1.o Scrt1.o)
- endef
- 
- $(eval $(generic-package))
+I really don't think the patch makes things worse.
+
+Norbert
