@@ -1,110 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 17:26:52 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/xen: fix build
- with gcc 8.1
-Message-ID: <20190325162536.B8D8781E4B@busybox.osuosl.org>
+Date: Mon, 25 Mar 2019 17:31:13 +0100
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: rename tpm2-tss
+ libraries in the help text
+In-Reply-To: <20190308132710.11116-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Fri, 8 Mar 2019 14:27:09 +0100")
+References: <20190308132710.11116-1-romain.naour@smile.fr>
+Message-ID: <87lg12ncfi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3399de9e616402fa79a831acb5cbfc91d919c54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/df5abe6ca8b4c8935f3d5c257aef816190771200
+ > Since tpm2-tss version 2.0.0, tpm2 libraries have been renamed.
+ > libsapi renamed to libtss2-sys
+ > https://github.com/tpm2-software/tpm2-tss/commit/5f0ab55d4e46077cb8f0c53a76c5ebd15a088d26
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b2bf1b7458891ae652e3493ae87d1f7c4776a8b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-make-32-bit-gcc-8-1-non-debug-build-work.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ > libtcti-device renamed to libtss2-tcti-device
+ > libtcti-socket renamed to libtss2-tcti-mssim
+ > https://github.com/tpm2-software/tpm2-tss/commit/b8584accbd96e38eaea250e31ed3ea580d2bca27
 
-diff --git a/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch b/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch
-new file mode 100644
-index 0000000000..9c51c554cd
---- /dev/null
-+++ b/package/xen/0004-xenpmd-make-32-bit-gcc-8-1-non-debug-build-work.patch
-@@ -0,0 +1,79 @@
-+From e75c9dc85fdeeeda0b98d8cd8d784e0508c3ffb8 Mon Sep 17 00:00:00 2001
-+From: Wei Liu <wei.liu2@citrix.com>
-+Date: Thu, 26 Jul 2018 15:58:54 +0100
-+Subject: [PATCH] xenpmd: make 32 bit gcc 8.1 non-debug build work
-+
-+32 bit gcc 8.1 non-debug build yields:
-+
-+xenpmd.c:354:23: error: '%02x' directive output may be truncated writing between 2 and 8 bytes into a region of size 3 [-Werror=format-truncation=]
-+     snprintf(val, 3, "%02x",
-+                       ^~~~
-+xenpmd.c:354:22: note: directive argument in the range [40, 2147483778]
-+     snprintf(val, 3, "%02x",
-+                      ^~~~~~
-+xenpmd.c:354:5: note: 'snprintf' output between 3 and 9 bytes into a destination of size 3
-+     snprintf(val, 3, "%02x",
-+     ^~~~~~~~~~~~~~~~~~~~~~~~
-+              (unsigned int)(9*4 +
-+              ~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->model_number) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->serial_number) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->battery_type) +
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+                             strlen(info->oem_info) + 4));
-+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+All info->* used in calculation are 32 bytes long, and the parsing
-+code makes sure they are null-terminated, so the end result of the
-+expression won't exceed 255, which should be able to be fit into 3
-+bytes in hexadecimal format.
-+
-+Add an assertion to make gcc happy.
-+
-+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
-+Acked-by: Ian Jackson <ian.jackson@eu.citrix.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/xen-project/xen/commit/e75c9dc85fdeeeda0b98d8cd8d784e0508c3ffb8]
-+---
-+ tools/xenpmd/xenpmd.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/tools/xenpmd/xenpmd.c b/tools/xenpmd/xenpmd.c
-+index 56412a9a81c..1c801caa712 100644
-+--- a/tools/xenpmd/xenpmd.c
-++++ b/tools/xenpmd/xenpmd.c
-+@@ -40,6 +40,7 @@
-+ #include <unistd.h>
-+ #include <sys/stat.h>
-+ #include <xenstore.h>
-++#include <assert.h>
-+ 
-+ /* #define RUN_STANDALONE */
-+ #define RUN_IN_SIMULATE_MODE
-+@@ -345,18 +346,17 @@ void write_ulong_lsb_first(char *temp_val, unsigned long val)
-+ void write_battery_info_to_xenstore(struct battery_info *info)
-+ {
-+     char val[1024], string_info[256];
-++    unsigned int len;
-+ 
-+     xs_mkdir(xs, XBT_NULL, "/pm");
-+    
-+     memset(val, 0, 1024);
-+     memset(string_info, 0, 256);
-+     /* write 9 dwords (so 9*4) + length of 4 strings + 4 null terminators */
-+-    snprintf(val, 3, "%02x", 
-+-             (unsigned int)(9*4 +
-+-                            strlen(info->model_number) +
-+-                            strlen(info->serial_number) +
-+-                            strlen(info->battery_type) +
-+-                            strlen(info->oem_info) + 4));
-++    len = 9 * 4 + strlen(info->model_number) + strlen(info->serial_number) +
-++          strlen(info->battery_type) + strlen(info->oem_info) + 4;
-++    assert(len < 255);
-++    snprintf(val, 3, "%02x", len);
-+     write_ulong_lsb_first(val+2, info->present);
-+     write_ulong_lsb_first(val+10, info->design_capacity);
-+     write_ulong_lsb_first(val+18, info->last_full_capacity);
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Carlos Santos <casantos@datacom.com.br>
+
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
