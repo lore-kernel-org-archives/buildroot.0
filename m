@@ -1,28 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:24:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xdm: security bump
- to version 1.1.12
-In-Reply-To: <20190314202616.19906-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 14 Mar 2019 21:26:15 +0100")
-References: <20190314202616.19906-1-bernd.kuhls@t-online.de>
-Message-ID: <87r2auk8h8.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 21:40:53 +0100
+Subject: [Buildroot] [PATCH] package/libpcap: disable dbus to break
+ circular dependency
+In-Reply-To: <87d1255df9dbfe03c8503a1fdb74bb2385675351.1552156094.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 9 Mar 2019 20:28:14 +0200")
+References: <87d1255df9dbfe03c8503a1fdb74bb2385675351.1552156094.git.baruch@tkos.co.il>
+Message-ID: <87mulik7qi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2013-2179.
- > Release notes:
- > https://lists.x.org/archives/xorg-announce/2019-March/002959.html
+ > The optional dbus dependency of libpcap creates a circular dependency
+ > chain:
 
- > Added all license hashes provided by upstream and license hash.
+ > $ make libpcap-show-recursive-depends
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Recursion detected for  : systemd
+ > which is a dependency of: dbus
+ > which is a dependency of: libpcap
+ > which is a dependency of: iptables
+ > which is a dependency of: systemd
+ > make: *** [package/libpcap/libpcap.mk:55: libpcap-show-recursive-depends] Error 1
 
-Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
+ > Of all these dependencies the one of libpcap on dbus seems to be less
+ > useful. Drop it.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/0b5d18bff816cbcee11e8645449701722d956de5/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed to 2019.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
