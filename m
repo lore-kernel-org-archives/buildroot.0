@@ -1,36 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 18:54:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: add optional
- nftables dependency
-In-Reply-To: <87h8bsmq9q.fsf@tarshish>
-References: <20190324120016.28701-1-fontaine.fabrice@gmail.com>
- <87h8bsmq9q.fsf@tarshish>
-Message-ID: <20190325185421.6141a000@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Mar 2019 18:56:55 +0100
+Subject: [Buildroot] [PATCH] package/openjpeg: security bump to latest
+ git version
+In-Reply-To: <20190312202000.28239-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 12 Mar 2019 21:20:00 +0100")
+References: <20190312202000.28239-1-peter@korsgaard.com>
+Message-ID: <87r2aultw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 24 Mar 2019 14:05:21 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-> > +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
-> > +KEEPALIVED_DEPENDENCIES += iptables
-> > +KEEPALIVED_CONF_OPTS += --enable-nftables  
-> 
-> What do you need that for? Please explain in the commit log and in an
-> inline comment.
+ > Current git contains fixes for a number of post-2.3.0 security issues:
+ > git shortlog --no-merges -i --grep cve --grep overflow --grep zero v2.3.0..
+ > Even Rouault (2):
+ >       Avoid out-of-bounds write overflow due to uint32 overflow computation on images with huge dimensions.
+ >       color_apply_icc_profile: avoid potential heap buffer overflow
 
-I'm not sure what needs to be further explained. The fact that nftables
-can be provided either by the iptables package or by the nftables
-package ? Baruch, could you clarify what additional explanations you
-are looking for ?
+ > Hugo Lefeuvre (4):
+ >       convertbmp: fix issues with zero bitmasks
+ >       jp3d/jpwl convert: fix write stack buffer overflow
+ >       jp2: convert: fix null pointer dereference
+ >       convertbmp: detect invalid file dimensions early
 
-Thanks!
+ > Karol Babioch (2):
+ >       jp3d: Replace sprintf() by snprintf() in volumetobin()
+ >       opj_mj2_extract: Check provided output prefix for length
 
-Thomas
+ > Stefan Weil (1):
+ >       Fix some potential overflow issues (#1161)
+
+ > Young_X (5):
+ >       [MJ2] To avoid divisions by zero / undefined behaviour on shift
+ >       [JPWL] fix CVE-2018-16375
+ >       [JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
+ >       [JPWL] opj_compress: reorder checks related to code block dimensions to avoid potential int overflow
+ >       [JP3D] To avoid divisions by zero / undefined behaviour on shift (CVE-2018-14423
+
+ > ichlubna (1):
+ >       openjp3d: Int overflow fixed (#1159)
+
+ > setharnold (1):
+ >       fix unchecked integer multiplication overflow
+
+ > Drop now upstreamed 0004-install-static-lib.patch.
+
+ > Add a hash for the LICENSE file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
