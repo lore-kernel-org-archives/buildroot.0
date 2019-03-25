@@ -1,40 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:20:19 +0100
-Subject: [Buildroot] [PATCH] package/bash: add upstream patches up to
- patch level 23
-In-Reply-To: <20190313093955.27965-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Mar 2019 10:39:55 +0100")
-References: <20190313093955.27965-1-peter@korsgaard.com>
-Message-ID: <87zhpik8os.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Mar 2019 21:22:26 +0100
+Subject: [Buildroot] [PATCH v2] package/avahi: add upstream security fix
+In-Reply-To: <20190312234651.13693-1-panfilov.artyom@gmail.com> (Artem
+ Panfilov's message of "Wed, 13 Mar 2019 02:46:51 +0300")
+References: <20190312234651.13693-1-panfilov.artyom@gmail.com>
+Message-ID: <87va06k8l9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Artem" == Artem Panfilov <panfilov.artyom@gmail.com> writes:
 
- > We unfortunately cannot easily download these because of the file names (not
- > ending in patch) and patch format (p0), so convert to p1 format and include
- > in package/bash with the following script:
+ > Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
+ > inadvertently responds to IPv6 unicast queries with source addresses
+ > that are not on-link, which allows remote attackers to cause a denial
+ > of service (traffic amplification) and may cause information leakage
+ > by obtaining potentially sensitive information from the responding
+ > device via port-5353 UDP packets.
 
- > j=1; for i in 19 20 21 22 23; do
- >     file=$(printf '%04d-patch44-0%d.patch' $j $i)
- >     cat > $file << EOF
- > From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-0$i
+ > Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - add "Signed-off-by" and "Backported from" tags in patch
 
- > EOF
- >     curl https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-0$i | \
- >         sed -e 's|^\*\*\* \.\./|*** |' -e 's|^--- |--- b/|' >> $file
-
- >     j=$(( j + 1 ))
- > done
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.02.x, thanks.
+Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
