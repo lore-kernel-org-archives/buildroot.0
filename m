@@ -1,37 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 17:57:13 +0100
-Subject: [Buildroot] [PATCH 1/3] package/owfs: drop unneeded first patch
-In-Reply-To: <20190324221019.10193-1-fontaine.fabrice@gmail.com>
-References: <20190324221019.10193-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190325175714.0553de84@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Mar 2019 17:57:27 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: add option for
+ OpenMP support
+In-Reply-To: <20190325112550.56b40d7d@blake-linux>
+References: <20190322165929.14306-1-ed.blake@sondrel.com>
+ <20190322165929.14306-2-ed.blake@sondrel.com>
+ <20190322211534.GH2660@scaer> <20190325112550.56b40d7d@blake-linux>
+Message-ID: <20190325165727.GK2660@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Sun, 24 Mar 2019 23:10:17 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Patch is not needed since version 3.1p2 and
-> https://github.com/owfs/owfs/commit/2982df8ca648bd9cec4d820151046b044ef504e0
-> because localtime_r is now correctly checked
+On 2019-03-25 11:27 +0000, Ed Blake spake thusly:
+> Hi Yann,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...1-configure.ac-check-for-localtime_r.patch | 35 -------------------
->  ...1-include-sys-sysmacros.h-for-major.patch} |  0
->  package/owfs/owfs.mk                          |  2 +-
->  3 files changed, 1 insertion(+), 36 deletions(-)
->  delete mode 100644 package/owfs/0001-configure.ac-check-for-localtime_r.patch
->  rename package/owfs/{0002-include-sys-sysmacros.h-for-major.patch => 0001-include-sys-sysmacros.h-for-major.patch} (100%)
+> On Fri, 22 Mar 2019 22:15:34 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > Ed, All,
+> > 
+> > On 2019-03-22 16:59 +0000, Ed Blake spake thusly:
+> > > Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
+> > > support.  
+> > 
+> > With your series, there is no user of libgomp in Buildroot, so I
+> > suppose this is for your own local packages, right?
+> 
+> Yes, it's for a local package.
+> 
+> > Actually, if we have packages in Buildroot that may use OpenMP, then it
+> > is only optional for them, then. Do you know of such a package? The goal
+> > being to actually add a runtime-test that gomp works.
+> 
+> The following packages *could* use OpenMP, but currently disable it:
+> 
+> imagemagick
+> beecrypt
+> libraw
+> gettext
+> 
+> And the following package uses OpenMP if BR2_GCC_ENABLE_OPENMP is enabled:
+> 
+> fftw
+> 
+> I wonder if BR2_GCC_ENABLE_OPENMP should select BR2_TOOLCHAIN_HAS_OPENMP, in
+> the same way that BR2_TOOLCHAIN_BUILDROOT_FORTRAN selects BR2_TOOLCHAIN_HAS_FORTRAN.
 
-Series applied to master. Thanks!
+Ah, yes, that would indeed be good.
 
-Thomas
+> Then BR2_TOOLCHAIN_HAS_OPENMP would be checked in the fftw makefile instead of
+> BR2_GCC_ENABLE_OPENMP.
+
+Then yes, it would be nice if your series would do:
+
+ 1. introduce BR2_TOOLCHAIN_HAS_OPENMP
+ 2. BR2_GCC_ENABLE_OPENMP select BR2_TOOLCHAIN_HAS_OPENMP
+ 3. external toolchain select BR2_TOOLCHAIN_HAS_OPENMP
+ 4. fftw switches to using BR2_TOOLCHAIN_HAS_OPENMP
+
+Care to have a look and respin your series, please?
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> 
+> Ed.
+>  
+> > > Signed-off-by: Ed Blake <ed.blake@sondrel.com>  
+> > 
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > > ---
+> > >  toolchain/Config.in                                    | 3 +++
+> > >  toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+> > >  2 files changed, 7 insertions(+)
+> > > 
+> > > diff --git a/toolchain/Config.in b/toolchain/Config.in
+> > > index bcbc3cf984..bf42e92e00 100644
+> > > --- a/toolchain/Config.in
+> > > +++ b/toolchain/Config.in
+> > > @@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
+> > >  config BR2_TOOLCHAIN_HAS_UCONTEXT
+> > >  	bool
+> > >  
+> > > +config BR2_TOOLCHAIN_HAS_OPENMP
+> > > +	bool
+> > > +
+> > >  config BR2_TOOLCHAIN_SUPPORTS_PIE
+> > >  	bool
+> > >  
+> > > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > > index db3570d96f..747837fdc6 100644
+> > > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > > @@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+> > >  endif
+> > >  endif
+> > >  
+> > > +ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
+> > > +TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
+> > > +endif
+> > > +
+> > >  TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+> > >  
+> > >  
+> > > -- 
+> > > 2.17.1
+> > > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot  
+> > 
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
