@@ -1,75 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 22:27:33 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/paho-mqtt-cpp: add
- paho-mqtt-cpp
-In-Reply-To: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
-References: <1553253044-29318-1-git-send-email-refik.tuzakli@savronik.com.tr>
-Message-ID: <20190325222733.458e094b@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 25 Mar 2019 22:36:09 +0100
+Subject: [Buildroot] [PATCH] package/putty: disable for uClibc
+In-Reply-To: <27bfbaf6559b347026d81f24451b3a43a8c99a9f.1553548086.git.baruch@tkos.co.il>
+References: <27bfbaf6559b347026d81f24451b3a43a8c99a9f.1553548086.git.baruch@tkos.co.il>
+Message-ID: <864edbd3-c06e-785f-42d0-b49852bd7b9a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 22 Mar 2019 11:10:44 +0000
-Refik TUZAKLI <refik.tuzakli@savronik.com.tr> wrote:
 
-> Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+On 25/03/2019 22:08, Baruch Siach wrote:
+> putty now uses the futimes() BSD extension that uClibc does not
+> implement.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
+> http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
+> http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
 
-I have applied your patch, with a few changes.
+ Although it's true that it also eventually fails to link due to futimes(), the
+actual errors in the autobuilders are about POLLRDNORM and POLLRDBAND, which
+require _XOPEN_SOURCE to be set.
 
-First, the traditional commit title for new packages is:
+ This is quite heavy fallout for something marked as "security bump"...
 
-	package/<pkg>: new package
+ Regards,
+ Arnout
 
-> diff --git a/package/paho-mqtt-cpp/Config.in b/package/paho-mqtt-cpp/Config.in
-> new file mode 100644
-> index 0000000..c7675e1
-> --- /dev/null
-> +++ b/package/paho-mqtt-cpp/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PAHO_MQTT_CPP
-> +	bool "paho-mqtt-cpp"
-> +	depends on !BR2_STATIC_LIBS  # dlopen()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-You forgot:
-
-	depends on BR2_INSTALL_LIBSTDCPP
-
-since obviously, paho-mqtt-cpp uses C++.
-
-But also another dependency was needed (a more tricky one):
-
-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-
-this is needed because paho-mqtt-cpp uses std::future.
-
-> +PAHO_MQTT_CPP_VERSION = v1.0.0
-> +PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,$(PAHO_MQTT_CPP_VERSION))
-> +PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
-> +PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
-> +PAHO_MQTT_CPP_INSTALL_STAGING = YES
-> +PAHO_MQTT_CPP_DEPENDENCIES = paho-mqtt-c
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +PAHO_MQTT_CPP_DEPENDENCIES += openssl
-> +PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
-> +else
-> +PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
-> +endif
-> +PAHO_MQTT_CPP_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-
-I moved this line earlier in the .mk file, used = instead of += since
-it's unconditional, and added a comment above it to explain why we are
-using this option.
-
-Patch applied to master with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> Cc: Alexander Dahl <post@lespocky.de>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/putty/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/putty/Config.in b/package/putty/Config.in
+> index f901c71da297..065a7152f705 100644
+> --- a/package/putty/Config.in
+> +++ b/package/putty/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_PUTTY
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_USE_WCHAR
+>  	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # futimes
+>  	help
+>  	  PuTTY is a free SSH and Telnet client. Without GTK2
+>  	  activated, only the commandline tools plink, pscp, psftp,
+> @@ -11,6 +12,7 @@ config BR2_PACKAGE_PUTTY
+>  
+>  	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
+>  
+> -comment "putty needs a toolchain w/ wchar, dynamic library"
+> +comment "putty needs a glibc or musl toolchain w/ wchar, dynamic library"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+> +		BR2_TOOLCHAIN_USES_UCLIBC
+> 
