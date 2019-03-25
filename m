@@ -1,140 +1,167 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:14:32 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/php: security
- bump to version 7.2.16
-Message-ID: <20190325171107.0DF8C82B59@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Mar 2019 18:14:01 +0100
+Subject: [Buildroot] [git commit] package/fetchmail: use pkg-config to find
+ openssl
+Message-ID: <20190325171249.6373C838D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07802ff814e1426ce793a7362d6832fabaac559d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3aa3a72b45238c4cf240b947531d253a53a46d35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-php-7.2.16 fixes a number of security issues (no CVE known, bugtracker issues
-not yet public): https://www.php.net/ChangeLog-7.php#7.2.16
+openssl can have multiples dependencies such as libatomic on sparcv8
+32 bits so drop first patch and add a new patch to use pkg-config
 
-Drop 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch as the
-flock detection has been removed since commit 9222702633 (Avoid dependency
-on "struct flock" fields order.)
+Fixes:
+ - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9a455a6c9bd45c2620e0e6ade2c89f7b99c6a28a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ck-mechanism-is-obviously-linux-so-force-.patch | 80 ----------------------
- package/php/php.hash                               |  2 +-
- package/php/php.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 82 deletions(-)
+ ...e-libressl.patch => 0001-enable-libressl.patch} |  0
+ .../fetchmail/0001-fix-openssl-static-link.patch   | 30 ----------
+ ...nfigure.ac-use-pkg-config-to-find-openssl.patch | 69 ++++++++++++++++++++++
+ package/fetchmail/fetchmail.mk                     |  7 +--
+ 4 files changed, 70 insertions(+), 36 deletions(-)
 
-diff --git a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch b/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+diff --git a/package/fetchmail/0002-enable-libressl.patch b/package/fetchmail/0001-enable-libressl.patch
+similarity index 100%
+rename from package/fetchmail/0002-enable-libressl.patch
+rename to package/fetchmail/0001-enable-libressl.patch
+diff --git a/package/fetchmail/0001-fix-openssl-static-link.patch b/package/fetchmail/0001-fix-openssl-static-link.patch
 deleted file mode 100644
-index c5d3740920..0000000000
---- a/package/php/0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch
+index 1a5f4d6f71..0000000000
+--- a/package/fetchmail/0001-fix-openssl-static-link.patch
 +++ /dev/null
-@@ -1,80 +0,0 @@
--From bedbd41ef0a5ce80b83a6f6eaebd7c90f0bc5615 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 9 Aug 2016 11:52:19 +0200
--Subject: [PATCH] OPcache: flock mechanism is obviously linux so force it.
+@@ -1,30 +0,0 @@
+-Fix checking for statically build OpenSSL with libz dependency
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Fixes
+-http://autobuild.buildroot.net/results/48a/48ad6d3659cf1f04581b7e3d115bebf454ff17fd/
+-
+-configure: Enabling OpenSSL support in /home/br/br/output/host/usr/i486-buildroot-linux-uclibc/sysroot/usr.
+-checking for additional library dependencies of SSL... error
+-configure: error: cannot link with SSL - check config.log
+-
+-In config.log multiple linking errors to libz can be found:
+-
+-configure:10099: /home/br/br/output/host/usr/bin/i486-ctng-linux-uclibc-gcc -o
+-  conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64
+-  /home/br/br/output/host/usr/i486-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+-  In function `zlib_stateful_c_zlib.c:(.text+0x56): undefined reference to `inflate'
+-
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: update for 7.2.12 & 7.2.15]
-----
-- ext/opcache/config.m4 | 34 ++--------------------------------
-- 1 file changed, 2 insertions(+), 32 deletions(-)
 -
--diff --git a/ext/opcache/config.m4 b/ext/opcache/config.m4
--index fbb9b21..ffddc8e 100644
----- a/ext/opcache/config.m4
--+++ b/ext/opcache/config.m4
--@@ -343,58 +343,8 @@ int main() {
--     msg=yes,msg=no,msg=no)
--   AC_MSG_RESULT([$msg])
-- 
---flock_type=unknown
---AC_MSG_CHECKING(for struct flock layout)
---
---if test "$flock_type" = "unknown"; then
---AC_TRY_RUN([
---  #include <fcntl.h>
---  struct flock lock = { 1, 2, 3, 4, 5, 6, 7 };
---  int main() {
---    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 6 && lock.l_len== 7) {
---		return 0;
---    }
---    return 1;
---  }
---], [
---    flock_type=aix64
---    AC_DEFINE([HAVE_FLOCK_AIX64], [], [Struct flock is 64-bit AIX-type])
---], [])
---fi
---
---if test "$flock_type" = "unknown"; then
---AC_TRY_RUN([
---  #include <fcntl.h>
---  struct flock lock = { 1, 2, 3, 4, 5 };
---  int main() {
---    if(lock.l_type == 1 && lock.l_whence == 2 && lock.l_start == 3 && lock.l_len == 4) {
---		return 0;
---    }
---    return 1;
---  }
---], [
---	flock_type=linux
---    AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
---], [])
---fi
---
---if test "$flock_type" = "unknown"; then
---AC_TRY_RUN([
---  #include <fcntl.h>
---  struct flock lock = { 1, 2, 3, 4, 5 };
---  int main() {
---    if(lock.l_start == 1 && lock.l_len == 2 && lock.l_type == 4 && lock.l_whence == 5) {
---		return 0;
---    }
---    return 1;
---  }
---], [
---	flock_type=bsd
---    AC_DEFINE([HAVE_FLOCK_BSD], [], [Struct flock is BSD-type])
---], [])
---fi
---
---AC_MSG_RESULT([$flock_type])
--+flock_type=linux
--+AC_DEFINE([HAVE_FLOCK_LINUX], [], [Struct flock is Linux-type])
-- 
-- if test "$flock_type" = "unknown"; then
-- 	AC_MSG_ERROR([Don't know how to define struct flock on this system[,] set --enable-opcache=no])
---- 
--2.7.4
+-diff -uNr fetchmail-6.3.26.org/configure.ac fetchmail-6.3.26/configure.ac
+---- fetchmail-6.3.26.org/configure.ac	2013-04-23 22:51:10.000000000 +0200
+-+++ fetchmail-6.3.26/configure.ac	2014-07-27 09:20:25.000000000 +0200
+-@@ -778,7 +778,7 @@
+-     AC_MSG_ERROR([SSL support enabled, but OpenSSL not found])
+-   fi
+-   LDFLAGS="$LDFLAGS -L$with_ssl/lib"
+--  LIBS="$LIBS -lssl -lcrypto"
+-+  LIBS="-lssl -lcrypto $LIBS"
+-   dnl check if -ldl is needed
+-   AC_MSG_CHECKING([for additional library dependencies of SSL])
+-   found=0
+diff --git a/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+new file mode 100644
+index 0000000000..dd48783922
+--- /dev/null
++++ b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+@@ -0,0 +1,69 @@
++From 1ed0af7f1bbcaccbd7356bd90596f5c942b64720 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 22 Mar 2019 20:24:54 +0100
++Subject: [PATCH 1/1] configure.ac: use pkg-config to find openssl
++
++openssl can have multiples dependencies such as libatomic on sparcv8
++32 bits
++
++Fixes:
++ - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/fetchmail/fetchmail/merge_requests/14]
++---
++ configure.ac | 37 +++++++++++++++++++------------------
++ 1 file changed, 19 insertions(+), 18 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 16b0fcba..3a75ec6e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -778,24 +778,25 @@ then
++   else
++     AC_MSG_ERROR([SSL support enabled, but OpenSSL not found])
++   fi
++-  LDFLAGS="$LDFLAGS -L$with_ssl/lib"
++-  LIBS="$LIBS -lssl -lcrypto"
++-  dnl check if -ldl is needed
++-  AC_MSG_CHECKING([for additional library dependencies of SSL])
++-  found=0
++-  save_LIBS="$LIBS"
++-  for i in "" "-ldl" ; do
++-      LIBS="$LDFLAGS $save_LIBS $i"
++-      AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],[SSL_library_init()])],[found=1; break])
++-  done
++-  if test $found = 0 ; then
++-      AC_MSG_RESULT([error])
++-      AC_MSG_ERROR([cannot link with SSL - check config.log])
++-  fi
++-  LIBS="$save_LIBS $i"
++-  if test "$i" = "" ; then i="(none)" ; fi
++-  AC_MSG_RESULT($i)
++-  dnl XXX FIXME: use pkg-config if available!
+++  PKG_CHECK_MODULES([SSL],[libssl],[LIBS="$LIBS $SSL_LIBS"],[
+++    LDFLAGS="$LDFLAGS -L$with_ssl/lib"
+++    LIBS="$LIBS -lssl -lcrypto"
+++    dnl check if -ldl is needed
+++    AC_MSG_CHECKING([for additional library dependencies of SSL])
+++    found=0
+++    save_LIBS="$LIBS"
+++    for i in "" "-ldl" ; do
+++        LIBS="$LDFLAGS $save_LIBS $i"
+++        AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <openssl/ssl.h>],[SSL_library_init()])],[found=1; break])
+++    done
+++    if test $found = 0 ; then
+++        AC_MSG_RESULT([error])
+++        AC_MSG_ERROR([cannot link with SSL - check config.log])
+++    fi
+++    LIBS="$save_LIBS $i"
+++    if test "$i" = "" ; then i="(none)" ; fi
+++    AC_MSG_RESULT($i)
+++  ])
++   AC_DEFINE(SSL_ENABLE)
++ else
++   AC_MSG_WARN(Disabling SSL support.)
++-- 
++2.20.1
++
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 37bbeabf62..41505e8637 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -13,17 +13,12 @@ FETCHMAIL_LICENSE_FILES = COPYING
+ FETCHMAIL_AUTORECONF = YES
+ FETCHMAIL_GETTEXTIZE = YES
+ 
+-# needed to help fetchmail detecting the availability of openssl,
+-# because it doesn't use pkg-config
+-ifeq ($(BR2_STATIC_LIBS),y)
+-FETCHMAIL_CONF_ENV += LIBS="-lz"
+-endif
 -
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 89cdbd204b..865cee4ee7 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 75e90012faef700dffb29311f3d24fa25f1a5e0f70254a9b8d5c794e25e938ce  php-7.2.15.tar.xz
-+sha256 7d91ed3c1447c6358a3d53f84599ef854aca4c3622de7435e2df115bf196e482  php-7.2.16.tar.xz
+ FETCHMAIL_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr
  
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index cf1984c612..a2f573ea7f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ FETCHMAIL_DEPENDENCIES = \
+ 	ca-certificates \
++	host-pkgconf \
+ 	openssl \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
--PHP_VERSION = 7.2.15
-+PHP_VERSION = 7.2.16
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
