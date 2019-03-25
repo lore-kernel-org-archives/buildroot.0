@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 21:21:54 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/avahi: add
+Date: Mon, 25 Mar 2019 21:21:22 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/avahi: add
  upstream security fix
-Message-ID: <20190325201908.2474583968@busybox.osuosl.org>
+Message-ID: <20190325201915.036A07FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc9e42fa02ac6cd367f8f26c1d379ba6400d53eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=46f6b048ecad5a11d755f374048166ef78604f3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2017-6519: avahi-daemon in Avahi through 0.6.32 and 0.7
 inadvertently responds to IPv6 unicast queries with source addresses
