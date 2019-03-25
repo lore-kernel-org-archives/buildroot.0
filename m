@@ -1,40 +1,104 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Mon, 25 Mar 2019 12:59:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: Fix loop
- positional declaration build error
-In-Reply-To: <20190318171237.032f635c@windsurf>
-References: <1552923418-22447-1-git-send-email-email@gmail.com>
- <20190318171237.032f635c@windsurf>
-Message-ID: <20190325105916.GA10869@lwo1-lhp-f71841>
+From: Ed Blake <ed.blake@sondrel.com>
+Date: Mon, 25 Mar 2019 11:27:41 +0000
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: add option for
+ OpenMP support
+In-Reply-To: <20190322211534.GH2660@scaer>
+References: <20190322165929.14306-1-ed.blake@sondrel.com>
+ <20190322165929.14306-2-ed.blake@sondrel.com> <20190322211534.GH2660@scaer>
+Message-ID: <20190325112550.56b40d7d@blake-linux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann,
 
-On Mon, Mar 18, 2019 at 05:12:37PM +0100, Thomas Petazzoni wrote:
-> On Mon, 18 Mar 2019 17:36:58 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > From: Vadim Kochan <vadim4j@gmail.com>
-> > 
-> > Move 'i' variable outside of the 'for' loop to separate declaration
-> > in lib/crc16.c
-> > 
-> > Fixes:
-> > 	http://autobuild.buildroot.net/results/332c9d2232c03440bf71794ee7850b1f6fd51d11/
-> > 
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> 
-> Thanks for the fix, but I already submitted a similar one, and upstream
-> U-Boot wants to handle this different, see
-> https://lists.denx.de/pipermail/u-boot/2019-February/358821.html. I
-> didn't get to doing the change upstream U-Boot suggested.
-> 
+On Fri, 22 Mar 2019 22:15:34 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-So, may be then just add your patch to the u-boot-tools package ?
+> Ed, All,
+> 
+> On 2019-03-22 16:59 +0000, Ed Blake spake thusly:
+> > Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
+> > support.  
+> 
+> With your series, there is no user of libgomp in Buildroot, so I
+> suppose this is for your own local packages, right?
+
+Yes, it's for a local package.
+
+> Actually, if we have packages in Buildroot that may use OpenMP, then it
+> is only optional for them, then. Do you know of such a package? The goal
+> being to actually add a runtime-test that gomp works.
+
+The following packages *could* use OpenMP, but currently disable it:
+
+imagemagick
+beecrypt
+libraw
+gettext
+
+And the following package uses OpenMP if BR2_GCC_ENABLE_OPENMP is enabled:
+
+fftw
+
+I wonder if BR2_GCC_ENABLE_OPENMP should select BR2_TOOLCHAIN_HAS_OPENMP, in
+the same way that BR2_TOOLCHAIN_BUILDROOT_FORTRAN selects BR2_TOOLCHAIN_HAS_FORTRAN.
+
+Then BR2_TOOLCHAIN_HAS_OPENMP would be checked in the fftw makefile instead of
+BR2_GCC_ENABLE_OPENMP.
 
 Regards,
-Vadim Kochan
+
+Ed.
+ 
+> > Signed-off-by: Ed Blake <ed.blake@sondrel.com>  
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > ---
+> >  toolchain/Config.in                                    | 3 +++
+> >  toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+> >  2 files changed, 7 insertions(+)
+> > 
+> > diff --git a/toolchain/Config.in b/toolchain/Config.in
+> > index bcbc3cf984..bf42e92e00 100644
+> > --- a/toolchain/Config.in
+> > +++ b/toolchain/Config.in
+> > @@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
+> >  config BR2_TOOLCHAIN_HAS_UCONTEXT
+> >  	bool
+> >  
+> > +config BR2_TOOLCHAIN_HAS_OPENMP
+> > +	bool
+> > +
+> >  config BR2_TOOLCHAIN_SUPPORTS_PIE
+> >  	bool
+> >  
+> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > index db3570d96f..747837fdc6 100644
+> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > @@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+> >  endif
+> >  endif
+> >  
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
+> > +TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
+> > +endif
+> > +
+> >  TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+> >  
+> >  
+> > -- 
+> > 2.17.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot  
+> 
