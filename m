@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:12:43 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/php: security
+Date: Mon, 25 Mar 2019 18:14:32 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/php: security
  bump to version 7.2.16
-Message-ID: <20190325171050.DEEC582B59@busybox.osuosl.org>
+Message-ID: <20190325171107.0DF8C82B59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a455a6c9bd45c2620e0e6ade2c89f7b99c6a28a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=07802ff814e1426ce793a7362d6832fabaac559d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 php-7.2.16 fixes a number of security issues (no CVE known, bugtracker issues
 not yet public): https://www.php.net/ChangeLog-7.php#7.2.16
@@ -19,6 +19,8 @@ Drop 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch as the
 flock detection has been removed since commit 9222702633 (Avoid dependency
 on "struct flock" fields order.)
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9a455a6c9bd45c2620e0e6ade2c89f7b99c6a28a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...ck-mechanism-is-obviously-linux-so-force-.patch | 80 ----------------------
@@ -124,7 +126,7 @@ index 89cdbd204b..865cee4ee7 100644
  # License file
  sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 67baadcc7c..e765fbf84e 100644
+index cf1984c612..a2f573ea7f 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
