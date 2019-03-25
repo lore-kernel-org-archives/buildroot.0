@@ -1,104 +1,39 @@
-From: Ed Blake <ed.blake@sondrel.com>
-Date: Mon, 25 Mar 2019 11:27:41 +0000
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: add option for
- OpenMP support
-In-Reply-To: <20190322211534.GH2660@scaer>
-References: <20190322165929.14306-1-ed.blake@sondrel.com>
- <20190322165929.14306-2-ed.blake@sondrel.com> <20190322211534.GH2660@scaer>
-Message-ID: <20190325112550.56b40d7d@blake-linux>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Mar 2019 13:20:54 +0100
+Subject: [Buildroot] [PATCH v3 0/3] qt5webkit: fix build issue using
+ system leveldb
+In-Reply-To: <c4c22d85-4525-8c32-b4c0-dce3cadb51de@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 7 Mar 2019 23:27:24 +0100")
+References: <20190102205630.18725-1-gael.portay@collabora.com>
+ <c4c22d85-4525-8c32-b4c0-dce3cadb51de@mind.be>
+Message-ID: <87k1gnno0p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Fri, 22 Mar 2019 22:15:34 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ >  Hi Gael,
+ > On 02/01/2019 21:56, Ga?l PORTAY wrote:
+ >> This patchset fixes the build issue reported by autobuilder [0].
+ >> 
+ >> /home/naourr/work/instance-2/output/build/qt5webkit-5.9.1/Source/WebCore//.obj/platform/leveldb/LevelDBDatabase.o:
+ >> In function
+ >> `WebCore::LevelDBDatabase::openInMemory(WebCore::LevelDBComparator
+ >> const*)':
+ >> LevelDBDatabase.cpp.text._ZN7WebCore15LevelDBDatabase12openInMemoryEPKNS_17LevelDBComparatorE+0x34):
+ >> undefined reference to `leveldb::NewMemEnv(leveldb::Env*)'
+ >> collect2: error: ld returned 1 exit status
+ >> make[3]: *** [Makefile.api:97: ../lib/libQt5WebKit.so.5.9.1] Error 1
+ >> 
+ >> The issue happens when the package leveldb is enabled.
 
-> Ed, All,
-> 
-> On 2019-03-22 16:59 +0000, Ed Blake spake thusly:
-> > Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
-> > support.  
-> 
-> With your series, there is no user of libgomp in Buildroot, so I
-> suppose this is for your own local packages, right?
+ >  Series applied to master, thanks. I renamed the patch because two other patches
+ > to leveldb have been added in the meantime.
 
-Yes, it's for a local package.
+Series committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
 
-> Actually, if we have packages in Buildroot that may use OpenMP, then it
-> is only optional for them, then. Do you know of such a package? The goal
-> being to actually add a runtime-test that gomp works.
-
-The following packages *could* use OpenMP, but currently disable it:
-
-imagemagick
-beecrypt
-libraw
-gettext
-
-And the following package uses OpenMP if BR2_GCC_ENABLE_OPENMP is enabled:
-
-fftw
-
-I wonder if BR2_GCC_ENABLE_OPENMP should select BR2_TOOLCHAIN_HAS_OPENMP, in
-the same way that BR2_TOOLCHAIN_BUILDROOT_FORTRAN selects BR2_TOOLCHAIN_HAS_FORTRAN.
-
-Then BR2_TOOLCHAIN_HAS_OPENMP would be checked in the fftw makefile instead of
-BR2_GCC_ENABLE_OPENMP.
-
-Regards,
-
-Ed.
- 
-> > Signed-off-by: Ed Blake <ed.blake@sondrel.com>  
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  toolchain/Config.in                                    | 3 +++
-> >  toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
-> >  2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/toolchain/Config.in b/toolchain/Config.in
-> > index bcbc3cf984..bf42e92e00 100644
-> > --- a/toolchain/Config.in
-> > +++ b/toolchain/Config.in
-> > @@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
-> >  config BR2_TOOLCHAIN_HAS_UCONTEXT
-> >  	bool
-> >  
-> > +config BR2_TOOLCHAIN_HAS_OPENMP
-> > +	bool
-> > +
-> >  config BR2_TOOLCHAIN_SUPPORTS_PIE
-> >  	bool
-> >  
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index db3570d96f..747837fdc6 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
-> >  endif
-> >  endif
-> >  
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
-> > +TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
-> > +endif
-> > +
-> >  TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
-> >  
-> >  
-> > -- 
-> > 2.17.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> 
+-- 
+Bye, Peter Korsgaard
