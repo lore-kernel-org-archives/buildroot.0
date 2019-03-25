@@ -1,47 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 18:24:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: use pkg-config to
- find openssl
-In-Reply-To: <20190322203459.27576-1-fontaine.fabrice@gmail.com>
-References: <20190322203459.27576-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190325182413.21a32d3b@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 25 Mar 2019 12:33:57 -0500
+Subject: [Buildroot] [PATCH] package/libssh2: security bump to latest git
+In-Reply-To: <253e0999-90aa-778a-c247-1926d48d5475@mind.be>
+References: <20190320211859.18155-1-peter@korsgaard.com>
+ <253e0999-90aa-778a-c247-1926d48d5475@mind.be>
+Message-ID: <CANQCQpbUNbvyO=EMEKBS5Z4zXGguGx3FoQohaJ1Bnt938_m4cQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Arnout / Peter,
 
-On Fri, 22 Mar 2019 21:34:59 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, Mar 20, 2019 at 6:02 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 20/03/2019 22:18, Peter Korsgaard wrote:
+> > Bump the version to latest git to fix the following security issues:
 
-> openssl can have multiples dependencies such as libatomic on sparcv8
-> 32 bits so drop first patch and add a new patch to use pkg-config
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ressl.patch => 0001-enable-libressl.patch} |  0
->  .../0001-fix-openssl-static-link.patch        | 30 --------
->  ...re.ac-use-pkg-config-to-find-openssl.patch | 69 +++++++++++++++++++
->  package/fetchmail/fetchmail.mk                |  7 +-
->  4 files changed, 70 insertions(+), 36 deletions(-)
->  rename package/fetchmail/{0002-enable-libressl.patch => 0001-enable-libressl.patch} (100%)
->  delete mode 100644 package/fetchmail/0001-fix-openssl-static-link.patch
->  create mode 100644 package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+I didn't check the version details but wondered if we were based off
+of 1.8.x or latest?  I noticed they just dropped a 1.8.1 last week and
+a 1.9 is pending
+(https://www.libssh2.org/mail/libssh2-devel-archive-2019-03/0023.shtml).
 
-Applied to master, thanks. Really great to see this effort towards
-using pkg-config in more packages, and great as well to see that you
-have already submitted this patch for upstream inclusion. Keep up the
-good work!
 
-Thanks,
+>
+> [snip]
+> >
+> > Drop 0003-openssl-fix-dereferencing-ambiguity-potentially-caus.patch as that
+> > is now upstream.
+> >
+> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>
+>  Applied to master, thanks.
+>
+>  Regards,
+>  Arnout
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+
+--
+
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
