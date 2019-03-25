@@ -1,70 +1,22 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 25 Mar 2019 11:37:33 -0400
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: Add architecture support
- list
-Message-ID: <20190325153733.14885-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Mar 2019 17:19:06 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/log4cplus: add optional
+ qt5 dependency
+In-Reply-To: <20190303101252.3374-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Mar 2019 11:12:52 +0100")
+References: <20190303101252.3374-1-fontaine.fabrice@gmail.com>
+Message-ID: <877ecnnczp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-This list is taken from make/autoconf/platform.m4 and fixes
-http://autobuild.buildroot.net/results/df7/df7f393ec62f0e38034837ffa591ac5af424c373
-http://autobuild.buildroot.net/results/c57/c5782d6b52516d07469adf6600d4fc69c4016157
-http://autobuild.buildroot.net/results/f36/f36b96c91604dda021ee05dd0a79c4f7e89e5a5b
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/openjdk/Config.in | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Committed to 2019.02.x, thanks.
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index dd1f3c59cf..0e48ae2c76 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -2,8 +2,22 @@ config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_HOSTARCH = "x86_64"
- 
-+# Taken from make/autoconf/platform.m4
-+config BR2_PACKAGE_OPENJDK_BIN_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_m68k
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_sh
-+	default y if BR2_sparc || BR2_sparc64
-+
- config BR2_PACKAGE_OPENJDK
- 	bool "openjdk"
-+	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_OPENJDK_BIN_ARCH_SUPPORTS
- 	depends on !BR2_SOFT_FLOAT
- 	depends on !BR2_STATIC_LIBS # glibc
- 	depends on BR2_INSTALL_LIBSTDCPP # cups
-@@ -59,14 +73,17 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
- endif
- 
- comment "openjdk needs X.Org"
-+	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_XORG7
- 
- comment "openjdk needs glibc, and a toolchain w/ wchar, dynamic library, threads, C++"
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
- 
- comment "openjdk does not support soft float configurations"
-+	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_SOFT_FLOAT
 -- 
-2.20.1
+Bye, Peter Korsgaard
