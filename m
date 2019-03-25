@@ -1,83 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 17:55:35 +0100
-Subject: [Buildroot] [git commit] package/owfs: drop unneeded first patch
-Message-ID: <20190325165244.8BBBD82B54@busybox.osuosl.org>
+Date: Mon, 25 Mar 2019 17:57:13 +0100
+Subject: [Buildroot] [PATCH 1/3] package/owfs: drop unneeded first patch
+In-Reply-To: <20190324221019.10193-1-fontaine.fabrice@gmail.com>
+References: <20190324221019.10193-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190325175714.0553de84@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff75269b9aadb34bb7ba4737471a61b4858d726d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Patch is not needed since version 3.1p2 and
-https://github.com/owfs/owfs/commit/2982df8ca648bd9cec4d820151046b044ef504e0
-because localtime_r is now correctly checked
+On Sun, 24 Mar 2019 23:10:17 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-configure.ac-check-for-localtime_r.patch  | 35 ----------------------
- ...> 0001-include-sys-sysmacros.h-for-major.patch} |  0
- package/owfs/owfs.mk                               |  2 +-
- 3 files changed, 1 insertion(+), 36 deletions(-)
+> Patch is not needed since version 3.1p2 and
+> https://github.com/owfs/owfs/commit/2982df8ca648bd9cec4d820151046b044ef504e0
+> because localtime_r is now correctly checked
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...1-configure.ac-check-for-localtime_r.patch | 35 -------------------
+>  ...1-include-sys-sysmacros.h-for-major.patch} |  0
+>  package/owfs/owfs.mk                          |  2 +-
+>  3 files changed, 1 insertion(+), 36 deletions(-)
+>  delete mode 100644 package/owfs/0001-configure.ac-check-for-localtime_r.patch
+>  rename package/owfs/{0002-include-sys-sysmacros.h-for-major.patch => 0001-include-sys-sysmacros.h-for-major.patch} (100%)
 
-diff --git a/package/owfs/0001-configure.ac-check-for-localtime_r.patch b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-deleted file mode 100644
-index b25aa59878..0000000000
---- a/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 75e92438bcdb78a90912366b07bf503646806686 Mon Sep 17 00:00:00 2001
--From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
--Date: Sun, 21 Feb 2016 17:02:06 +0100
--Subject: [PATCH] configure.ac: check for localtime_r
--
--HAVE_LOCALTIME_R is used in owftp.c, so it should be checked for.
--
--Without this, static build fails because localtime_r is defined twice.
--
--Upstream-Status: Submitted
--https://sourceforge.net/p/owfs/mailman/message/34873667/
--
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
--[Bernd: rebased against version 3.2p1]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index c22dde9..12fdd18 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1646,7 +1646,7 @@
-- AC_FUNC_STRFTIME
-- AC_FUNC_STRTOD
-- AC_TYPE_SIGNAL
---AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline])
--+AC_CHECK_FUNCS([accept daemon getaddrinfo freeaddrinfo gethostbyname2_r gethostbyaddr_r gethostbyname_r getservbyname_r getopt getopt_long gmtime_r gettimeofday localtime_r inet_ntop inet_pton memchr memset select socket strcasecmp strchr strdup strncasecmp strtol strtoul twalk tsearch tfind tdelete tdestroy vasprintf strsep vsprintf vsnprintf writev getline localtime_r])
-- 
-- save_LIBS="$LIBS"
-- LIBS=""
---- 
--2.7.0
--
-diff --git a/package/owfs/0002-include-sys-sysmacros.h-for-major.patch b/package/owfs/0001-include-sys-sysmacros.h-for-major.patch
-similarity index 100%
-rename from package/owfs/0002-include-sys-sysmacros.h-for-major.patch
-rename to package/owfs/0001-include-sys-sysmacros.h-for-major.patch
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index e120147151..2d0f24fb7c 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -9,7 +9,7 @@ OWFS_SITE = http://downloads.sourceforge.net/project/owfs/owfs/$(OWFS_VERSION)
- OWFS_DEPENDENCIES = host-pkgconf
- OWFS_CONF_OPTS = --disable-owperl --without-perl5 --disable-owtcl --without-tcl
- 
--# 0001-configure.ac-check-for-localtime_r.patch touches configure.ac
-+# We're patching configure.ac
- OWFS_AUTORECONF = YES
- 
- # owtcl license is declared in module/ownet/c/src/include/ow_functions.h
+Series applied to master. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
