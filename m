@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 18:51:34 +0100
-Subject: [Buildroot] [PATCH v5 1/2] Revert "gst1-libav: switch to
- unbundled"
-In-Reply-To: <20190323122818.32101-1-bernd.kuhls@t-online.de>
+Date: Mon, 25 Mar 2019 18:52:33 +0100
+Subject: [Buildroot] [PATCH v5 2/2] package/ffmpeg: bump to version 4.1.2
+In-Reply-To: <20190323122818.32101-2-bernd.kuhls@t-online.de>
 References: <20190323122818.32101-1-bernd.kuhls@t-online.de>
-Message-ID: <20190325185134.710ea04b@windsurf>
+ <20190323122818.32101-2-bernd.kuhls@t-online.de>
+Message-ID: <20190325185233.700819c9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 23 Mar 2019 13:28:17 +0100
+Hello,
+
+On Sat, 23 Mar 2019 13:28:18 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> This reverts commit 5dcb8aa0ba46e16b929c7c7fc9cea2d6c26201f4.
-> 
-> This patch re-enables the usage of bundled ffmpeg code because
-> gst1-libav 1.14.x is blocking the bump to ffmpeg 4.x.
-> 
-> A fix to build the bundled ffmpeg code on arm/aarch64 was added.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v5: no changes, gstreamer 2.16.x with support for ffmpeg 4.x
->     was not released yet
+> +config BR2_PACKAGE_FFMPEG_FFSERVER
+> +	bool "Build ffserver"
 
-Applied to master, thanks.
+That's a pretty bad title for Config.in.legacy, so I changed it to:
+
+	bool "ffmpeg ffserver removed"
+
+> +	depends on BR2_USE_MMU # fork()
+
+Replicating this dependency is not necessary. However, "select
+BR2_LEGACY" was missing.
+
+I fixed those two issues and applied. Thanks!
 
 Thomas
 -- 
