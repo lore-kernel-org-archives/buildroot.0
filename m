@@ -1,62 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Mar 2019 22:36:09 +0100
-Subject: [Buildroot] [PATCH] package/putty: disable for uClibc
-In-Reply-To: <27bfbaf6559b347026d81f24451b3a43a8c99a9f.1553548086.git.baruch@tkos.co.il>
-References: <27bfbaf6559b347026d81f24451b3a43a8c99a9f.1553548086.git.baruch@tkos.co.il>
-Message-ID: <864edbd3-c06e-785f-42d0-b49852bd7b9a@mind.be>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 25 Mar 2019 22:51:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump version to 0.10.2
+Message-ID: <20190325215102.20059-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Norbert Lange <norbert.lange@andritz.com>
 
+This includes a fix that might delay application startup
+considerably (11486a15008b9).
 
-On 25/03/2019 22:08, Baruch Siach wrote:
-> putty now uses the futimes() BSD extension that uClibc does not
-> implement.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
-> http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
-> http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
+Adapted the patch to point to the correct file.
 
- Although it's true that it also eventually fails to link due to futimes(), the
-actual errors in the autobuilders are about POLLRDNORM and POLLRDBAND, which
-require _XOPEN_SOURCE to be set.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ .../0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch  | 10 +++++-----
+ package/liburcu/liburcu.hash                           |  6 +++---
+ package/liburcu/liburcu.mk                             |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
- This is quite heavy fallout for something marked as "security bump"...
-
- Regards,
- Arnout
-
-> 
-> Cc: Alexander Dahl <post@lespocky.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/putty/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/putty/Config.in b/package/putty/Config.in
-> index f901c71da297..065a7152f705 100644
-> --- a/package/putty/Config.in
-> +++ b/package/putty/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_PUTTY
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_USE_WCHAR
->  	depends on !BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # futimes
->  	help
->  	  PuTTY is a free SSH and Telnet client. Without GTK2
->  	  activated, only the commandline tools plink, pscp, psftp,
-> @@ -11,6 +12,7 @@ config BR2_PACKAGE_PUTTY
->  
->  	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
->  
-> -comment "putty needs a toolchain w/ wchar, dynamic library"
-> +comment "putty needs a glibc or musl toolchain w/ wchar, dynamic library"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-> +		BR2_TOOLCHAIN_USES_UCLIBC
-> 
+diff --git a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
+index 585abc0322..658e1721f0 100644
+--- a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
++++ b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
+@@ -12,13 +12,13 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+  urcu/compiler.h | 9 ++++++++-
+  1 file changed, 8 insertions(+), 1 deletion(-)
+ 
+-diff --git a/urcu/compiler.h b/urcu/compiler.h
++diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
+ index 1e30903..56115f1 100644
+---- a/urcu/compiler.h
+-+++ b/urcu/compiler.h
++--- a/include/urcu/compiler.h
+++++ b/include/urcu/compiler.h
+ @@ -118,10 +118,17 @@
+  				+ __GNUC_PATCHLEVEL__)
+- 
++
+  /*
+ + * Official gcc releases from 4.8.0 to 4.8.2 have the following bug,
+ + * however, many arm toolchain providers have the included the fix for
+@@ -35,6 +35,6 @@ index 1e30903..56115f1 100644
+  #   error Your gcc version produces clobbered frame accesses
+  #  endif
+  # endif
+--- 
++--
+ 1.9.0
+ 
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index 5866d805ca..01ce51aabd 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,4 +1,4 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2.sha1
+-sha1  61d1d0d1b955c7a67a7253317647304d04b400a0  userspace-rcu-0.9.2.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.10.2.tar.bz2.sha1
++sha1  70ac938acdc738bee7e2e1f462a7991a25ba2439  userspace-rcu-0.10.2.tar.bz2
+ # Locally generated
+-sha256 8f7fa313b1e0a3f742cea24ce63a39c0efe63e615a769e2961e55bd2663ecaa3 userspace-rcu-0.9.2.tar.bz2
++sha256 b3f6888daf6fe02c1f8097f4a0898e41b5fe9975e121dc792b9ddef4b17261cc  userspace-rcu-0.10.2.tar.bz2
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index d8579f6c28..8ddfb3fb84 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURCU_VERSION = 0.9.2
++LIBURCU_VERSION = 0.10.2
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
+-- 
+2.20.1
