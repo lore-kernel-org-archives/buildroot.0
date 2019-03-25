@@ -1,118 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:55:53 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openjpeg:
- security bump to latest git version
-Message-ID: <20190325175346.E232583AD2@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 25 Mar 2019 18:59:32 +0100
+Subject: [Buildroot] [PATCH 1/2] package/odhcp6c: bump to version
+ d2e247d8d87ecf8c60fcf0acdad05667bd379521
+Message-ID: <20190325175933.16531-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3404b10ba4ec07638436d50c9a3d3e6a87a8e58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+- Remove patch (already in version)
+- Add hash for license file
 
-Current git contains fixes for a number of post-2.3.0 security issues:
-
-git shortlog --no-merges -i --grep cve --grep overflow --grep zero v2.3.0..
-Even Rouault (2):
-      Avoid out-of-bounds write overflow due to uint32 overflow computation on images with huge dimensions.
-      color_apply_icc_profile: avoid potential heap buffer overflow
-
-Hugo Lefeuvre (4):
-      convertbmp: fix issues with zero bitmasks
-      jp3d/jpwl convert: fix write stack buffer overflow
-      jp2: convert: fix null pointer dereference
-      convertbmp: detect invalid file dimensions early
-
-Karol Babioch (2):
-      jp3d: Replace sprintf() by snprintf() in volumetobin()
-      opj_mj2_extract: Check provided output prefix for length
-
-Stefan Weil (1):
-      Fix some potential overflow issues (#1161)
-
-Young_X (5):
-      [MJ2] To avoid divisions by zero / undefined behaviour on shift
-      [JPWL] fix CVE-2018-16375
-      [JPWL] imagetotga(): fix read heap buffer overflow if numcomps < 3 (#987)
-      [JPWL] opj_compress: reorder checks related to code block dimensions to avoid potential int overflow
-      [JP3D] To avoid divisions by zero / undefined behaviour on shift (CVE-2018-14423
-
-ichlubna (1):
-      openjp3d: Int overflow fixed (#1159)
-
-setharnold (1):
-      fix unchecked integer multiplication overflow
-
-Drop now upstreamed 0004-install-static-lib.patch.
-
-Add a hash for the LICENSE file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5e8c81875a26551e780e409a0647916e626c969)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openjpeg/0004-install-static-lib.patch | 27 --------------------------
- package/openjpeg/openjpeg.hash                 |  3 ++-
- package/openjpeg/openjpeg.mk                   |  4 ++--
- 3 files changed, 4 insertions(+), 30 deletions(-)
+ .../0001-dhcpv6-fix-strncpy-bounds.patch      | 28 -------------------
+ package/odhcp6c/odhcp6c.hash                  |  3 +-
+ package/odhcp6c/odhcp6c.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 30 deletions(-)
+ delete mode 100644 package/odhcp6c/0001-dhcpv6-fix-strncpy-bounds.patch
 
-diff --git a/package/openjpeg/0004-install-static-lib.patch b/package/openjpeg/0004-install-static-lib.patch
+diff --git a/package/odhcp6c/0001-dhcpv6-fix-strncpy-bounds.patch b/package/odhcp6c/0001-dhcpv6-fix-strncpy-bounds.patch
 deleted file mode 100644
-index 4a3bbfa28a..0000000000
---- a/package/openjpeg/0004-install-static-lib.patch
+index abf5191522..0000000000
+--- a/package/odhcp6c/0001-dhcpv6-fix-strncpy-bounds.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--From 66297f07a43d2770a97c8456d20202f3d051d980 Mon Sep 17 00:00:00 2001
--From: Even Rouault <even.rouault@spatialys.com>
--Date: Mon, 9 Oct 2017 11:40:43 +0200
--Subject: [PATCH] Unix build: fix regression of 2.3.0 where a shared-only or
-- static-only build lacks the installation target for the library (#1019, fixes
-- regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
+@@ -1,28 +0,0 @@
+-From 327f73dd7093d04c2dbea13ee30fc3dfafc5e944 Mon Sep 17 00:00:00 2001
+-From: Hans Dedecker <dedeckeh@gmail.com>
+-Date: Sat, 21 Apr 2018 13:40:29 +0200
+-Subject: [PATCH] dhcpv6: fix strncpy bounds
 -
--Downloaded from upstream commit
--https://github.com/uclouvain/openjpeg/commit/66297f07a43d2770a97c8456d20202f3d051d980
+-Fixes dhcpv6.c:138:2: error: 'strncpy' specified bound 16 equals destination size [-Werror=stringop-truncation]                                                                                                        strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Hans Dedecker <dedeckeh@gmail.com>
+-[Retrieved (and backported) from:
+-https://github.com/openwrt/odhcp6c/commit/327f73dd7093d04c2dbea13ee30fc3dfafc5e944]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- src/lib/openjp2/CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
+- src/dhcpv6.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.txt
--index 0b4520384..f8990ccf0 100644
----- a/src/lib/openjp2/CMakeLists.txt
--+++ b/src/lib/openjp2/CMakeLists.txt
--@@ -99,6 +99,7 @@ else()
--     set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME} openjp2_static)
--   else()
--     add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
--+    set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME})
--   endif()
-- endif()
+-diff --git a/src/dhcpv6.c b/src/dhcpv6.c
+-index 0b3585c..d70d533 100644
+---- a/src/dhcpv6.c
+-+++ b/src/dhcpv6.c
+-@@ -135,7 +135,7 @@ int init_dhcpv6(const char *ifname, unsigned int options, int sol_timeout)
+- 	// Detect interface
+- 	struct ifreq ifr;
+--	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
+-+	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name) - 1);
+- 	if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0)
+- 		return -1;
 - 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index dd3cf26cf0..8a6fda48c4 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
+diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
+index 688d77dc62..8b16fa98bb 100644
+--- a/package/odhcp6c/odhcp6c.hash
++++ b/package/odhcp6c/odhcp6c.hash
 @@ -1,2 +1,3 @@
- # Locally computed:
--sha256 3dc787c1bb6023ba846c2a0d9b1f6e179f1cd255172bde9eb75b01f1e6c7d71a  openjpeg-2.3.0.tar.gz
-+sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
-+sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 9a8fdab7a4..6036ab95a3 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256 d84a713010865215301b4186c7b5368c9f006e6d3b9b52b99bd25e2d9e7a1dfc odhcp6c-7533a6243dc3ac5a747cf6ccbc4d0539dafd3e07.tar.gz
++sha256 6d472320ccfa2e57197596869507f2a4bf9900a502939404bf0c033dceeadf5f odhcp6c-d2e247d8d87ecf8c60fcf0acdad05667bd379521.tar.gz
++sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4 COPYING
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index 31867d7217..735b47420f 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENJPEG_VERSION = 2.3.0
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
+-ODHCP6C_VERSION = 7533a6243dc3ac5a747cf6ccbc4d0539dafd3e07
++ODHCP6C_VERSION = d2e247d8d87ecf8c60fcf0acdad05667bd379521
+ ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
+ ODHCP6C_LICENSE = GPL-2.0
+ ODHCP6C_LICENSE_FILES = COPYING
+-- 
+2.20.1
