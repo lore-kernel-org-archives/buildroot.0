@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 11:42:48 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] qt5webkit: select leveldb
+Date: Mon, 25 Mar 2019 11:41:10 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] qt5webkit: select leveldb
  package and memenv
-Message-ID: <20190325121748.876F482DE4@busybox.osuosl.org>
+Message-ID: <20190325121753.C9BB382DE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00c1a5a6bf321593cc72d168619b9498b4499b48
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ebe2c9accde81e168ecab0e2935ff9baf4e2b916
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 This patch fixes the build issue reported by autobuilder [0].
 
