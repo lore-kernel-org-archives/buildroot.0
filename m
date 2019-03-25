@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 18:56:09 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/openjpeg:
+Date: Mon, 25 Mar 2019 18:55:53 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openjpeg:
  security bump to latest git version
-Message-ID: <20190325175340.592BA83AD2@busybox.osuosl.org>
+Message-ID: <20190325175346.E232583AD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6eb5e585c57065608103466fdf47f467020a8687
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e3404b10ba4ec07638436d50c9a3d3e6a87a8e58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Current git contains fixes for a number of post-2.3.0 security issues:
 
