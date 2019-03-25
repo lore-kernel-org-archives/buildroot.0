@@ -1,67 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Mar 2019 18:01:08 +0100
-Subject: [Buildroot] [PATCH v2] board: rename pine64 to pine64_a64
-In-Reply-To: <CAMty3ZAodmPT6=aX3wFvwY-r6O6p5XVN3qgG5s5E-anft1Ku2Q@mail.gmail.com>
-References: <20190202040519.14568-1-philip.a.molloy@gmail.com>
- <CAMty3ZAodmPT6=aX3wFvwY-r6O6p5XVN3qgG5s5E-anft1Ku2Q@mail.gmail.com>
-Message-ID: <20190325180108.15704071@windsurf>
+Date: Mon, 25 Mar 2019 18:05:11 +0100
+Subject: [Buildroot] [git commit] package/libgpiod: bump version to v1.3
+Message-ID: <20190325170153.ABAFD83883@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fe38071106696e48931e95b2ed0129c4f6bc7d60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I haven't seen the original patch. Was it sent to the Buildroot mailing
-list ? It doesn't seem like it reached the mailing list.
+This is a new minor release. Changes are summarized in NEWS.
 
-Philip: did you register on the mailing list before sending your
-patch ? If not, could you subscribe to the mailing list and resend ?
-Thanks!
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 25 Mar 2019 10:43:45 +0530
-Jagan Teki <jagan@amarulasolutions.com> wrote:
-
-> >  N:     James Hilliard <james.hilliard1@gmail.com>
-> > diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/a64/boot.cmd
-> > similarity index 100%
-> > rename from board/pine64/pine64/boot.cmd
-> > rename to board/pine64/a64/boot.cmd
-> > diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/a64/genimage.cfg
-> > similarity index 100%
-> > rename from board/pine64/pine64/genimage.cfg
-> > rename to board/pine64/a64/genimage.cfg  
-> 
-> pine64 is vendor who produced pine64 board. and same vendor producing
-> sopine. so renaming to a64 doesn't valid.
-
-What? I'm sorry I don't understand what you mean here.
-
-The typical Buildroot folder organization is:
-
-	board/<vendor>/<boardname>/
-
-pine64 is indeed a vendor name, and a64 is a board name, according to
-https://www.pine64.org/?page_id=46823. So the change looks perfect
-correct to me. It will allow to add support for other boards produced
-by Pine64, in board/pine64/<boardname>/.
-
-> > -Pine64 link:
-> > +Pine A64 link:
-> >  https://www.pine64.org/?page_id=1194  
-> 
-> It has wiki link below, that intern routing pine64 board link. wiki
-> has Mainline stuff information.
-
-I'm not a native English speaker, so I might be wrong, but I believe
-"that intern routing pine64 board link" doesn't make any sense in
-English. What are you trying to say here ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index e68ebdb8c7..6c896622b6 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 736d8b511ad247c2acb01b592f2bbe5e757e14e1d8347b2d80683081ab4b31b8  libgpiod-1.2.1.tar.xz
++sha256 6ec837f23e8f2196e5976dec4ac81403170830075e7f33ede1394eaf67f2e962  libgpiod-1.3.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index c46ffa871c..76fa3399dc 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.2.1
++LIBGPIOD_VERSION = 1.3
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
