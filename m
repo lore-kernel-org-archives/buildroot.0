@@ -1,44 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 11:43:08 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] leveldb: install memenv
- static library and header
-Message-ID: <20190325121743.A1E7082DE4@busybox.osuosl.org>
+Date: Mon, 25 Mar 2019 11:45:26 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] qt5webkit: select leveldb
+ package and memenv
+Message-ID: <20190325121743.AF649812A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6a1400310cc49135aab3c4c72914db5e1f3fa22
+commit: https://git.buildroot.net/buildroot/commit/?id=8a10d9ce311c6cb0490d76921cae55618c258354
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The project builds a tiny static library that consists of a single
-symbol which creates an in-memory LevelDB database.
+This patch fixes the build issue reported by autobuilder [0].
 
-That library is not installed by default and may be used by other
-projects.
+        /home/naourr/work/instance-2/output/build/qt5webkit-5.9.1/Source/WebCore//.obj/platform/leveldb/LevelDBDatabase.o: In function
+	`WebCore::LevelDBDatabase::openInMemory(WebCore::LevelDBComparator const*)':
+	LevelDBDatabase.cpp.text._ZN7WebCore15LevelDBDatabase12openInMemoryEPKNS_17LevelDBComparatorE+0x34): undefined reference to `leveldb::NewMemEnv(leveldb::Env*)'
+        collect2: error: ld returned 1 exit status
+        make[3]: *** [Makefile.api:97: ../lib/libQt5WebKit.so.5.9.1]
+	Error 1
 
-This commit installs in the staging directory the libmemenv.a static
-library and the memenv.h header file.
+The issue happens when both packages leveldb and qt5webkit are enabled.
+
+QtWebKit builds its own copy of leveldb [1] (as a third-party) if the
+system does not provided it (i.e. buildroot). It builds it differently
+and this is the origin of that issue. Instead of using the Makefile
+provided by leveldb [2], QtWebKit uses qmake to build that library [3].
+
+The missing symbol issue happens because the symbol leveldb::NewMemEnv
+is bundled in the static library libmemenv.a (aside libleveldb.so).
+This static library consists of this single symbol which is like an
+extra that is built but *NOT* shipped by default at installation in the
+staging directory. Unfortunatly, that symbol is required later by
+WebCore [4].
+
+The copy built by QtWebKit is an all-in-one library including both
+libleveldb and libmemenv; thus QtWebKit links against libleveldb only.
+Also, the linker finds the buildroot's copy first (not the third-party):
+that explains why it is complaining about a missing symbol. That copy
+does not have the symbol leveldb::NewMemEnv.
+
+Fortunatly, QtWebKit provides a facility to link against the system
+leveldb package. The qmake flag WEBKIT_CONFIG+=use_system_leveldb tells
+Qt5WebKit to link against libleveldb *AND* libmemenv [5].
+
+To fix that issue, this commit selects the package leveldb that now
+installs the libmemenv static library and its header. It ensures that
+QtWebKit has everything it needs to be built. It also sets the
+appropriate qmake configure flags to tell QtWebKit to use the leveldb
+copy built by buildroot instead of the bundled one.
+
+[0]: http://autobuild.buildroot.net/results/46033e82adf592c3b92c6d50cfaf45bd58beeaa4
+[1]: https://github.com/qt/qtwebkit/tree/5.9/Source/ThirdParty/leveldb
+[2]: https://github.com/qt/qtwebkit/blob/5.9/Source/ThirdParty/leveldb/Makefile#L167-L169
+[3]: https://github.com/qt/qtwebkit/blob/5.9/Source/ThirdParty/leveldb/Target.pri#L80
+[4]: https://github.com/qt/qtwebkit/blob/5.9/Source/WebCore/platform/leveldb/LevelDBDatabase.cpp#L185
+[5]: https://github.com/qt/qtwebkit/blob/5.9/Source/WebCore/WebCore.pri#L254
+[6]: https://github.com/google/leveldb/commit/739c25100e46576cdcdfff2d6f43f9f7008103c7
 
 Signed-off-by: Ga??l PORTAY <gael.portay@collabora.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 16f847340d07dce620e4c3fc0a099aa79898d86a)
+(cherry picked from commit 2d7c746ed8c89ad262ef0c6db5460ade1fc35973)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/leveldb/leveldb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qt5/qt5webkit/Config.in    | 3 +++
+ package/qt5/qt5webkit/qt5webkit.mk | 4 +++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-index af9e879828..6078cd496c 100644
---- a/package/leveldb/leveldb.mk
-+++ b/package/leveldb/leveldb.mk
-@@ -25,6 +25,8 @@ define LEVELDB_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) \
- 		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
- 		$(LEVELDB_MAKE_ARGS) -C $(@D) install
-+	$(INSTALL) -D -m 0644 $(@D)/out-static/libmemenv.a $(STAGING_DIR)/usr/lib/libmemenv.a
-+	$(INSTALL) -D -m 0644 $(@D)/helpers/memenv/memenv.h $(STAGING_DIR)/usr/include/helpers/memenv/memenv.h
- endef
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 72c641b9f7..e8008f7bab 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -3,10 +3,13 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
++	depends on BR2_INSTALL_LIBSTDCPP # leveldb
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
++	depends on BR2_TOOLCHAIN_HAS_THREADS # leveldb
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	# assumes a FPU is available on MIPS
+ 	depends on !BR2_MIPS_SOFT_FLOAT
++	select BR2_PACKAGE_LEVELDB
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_ICU
+ 	select BR2_PACKAGE_QT5BASE_GUI
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 5186671663..ef992afa53 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -16,7 +16,7 @@ endif
+ QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
+ QT5WEBKIT_DEPENDENCIES = \
+ 	host-bison host-flex host-gperf host-python host-ruby \
+-	qt5base sqlite
++	leveldb qt5base sqlite
+ QT5WEBKIT_INSTALL_STAGING = YES
  
- define LEVELDB_INSTALL_TARGET_CMDS
+ QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
+@@ -44,6 +44,8 @@ define QT5WEBKIT_PYTHON2_SYMLINK
+ endef
+ QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
+ 
++QT5WEBKIT_QMAKEFLAGS += WEBKIT_CONFIG+=use_system_leveldb
++
+ # The mesa's EGL/eglplatform.h header includes X11 headers unless the flag
+ # MESA_EGL_NO_X11_HEADERS is defined. Tell to not include X11 headers if
+ # the libxcb is not selected.
