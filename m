@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 17:34:26 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/file: security
+Date: Mon, 25 Mar 2019 17:34:01 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/file: security
  bump to version 5.36
-Message-ID: <20190325163211.5181C80435@busybox.osuosl.org>
+Message-ID: <20190325163216.C51FD817FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5b0621a0be5631835ea6bf392dac7e3fa641d1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=85c408fcc02834b1830e63928aaca995db390fff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 CVE-2019-8906: do_core_note in readelf.c in libmagic.a in file 5.35 has
 an out-of-bounds read because memcpy is misused.
