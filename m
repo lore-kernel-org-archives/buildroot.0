@@ -1,45 +1,70 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 25 Mar 2019 15:29:43 +0100
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.3
-Message-ID: <20190325142943.15540-1-brgl@bgdev.pl>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 25 Mar 2019 11:37:33 -0400
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: Add architecture support
+ list
+Message-ID: <20190325153733.14885-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+From: Adam Duskett <Aduskett@gmail.com>
 
-This is a new minor release. Changes are summarized in NEWS.
+This list is taken from make/autoconf/platform.m4 and fixes
+http://autobuild.buildroot.net/results/df7/df7f393ec62f0e38034837ffa591ac5af424c373
+http://autobuild.buildroot.net/results/c57/c5782d6b52516d07469adf6600d4fc69c4016157
+http://autobuild.buildroot.net/results/f36/f36b96c91604dda021ee05dd0a79c4f7e89e5a5b
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openjdk/Config.in | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index e68ebdb8c7..6c896622b6 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 736d8b511ad247c2acb01b592f2bbe5e757e14e1d8347b2d80683081ab4b31b8  libgpiod-1.2.1.tar.xz
-+sha256 6ec837f23e8f2196e5976dec4ac81403170830075e7f33ede1394eaf67f2e962  libgpiod-1.3.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index c46ffa871c..76fa3399dc 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index dd1f3c59cf..0e48ae2c76 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -2,8 +2,22 @@ config BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_HOSTARCH = "x86_64"
  
--LIBGPIOD_VERSION = 1.2.1
-+LIBGPIOD_VERSION = 1.3
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
++# Taken from make/autoconf/platform.m4
++config BR2_PACKAGE_OPENJDK_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_m68k
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_sh
++	default y if BR2_sparc || BR2_sparc64
++
+ config BR2_PACKAGE_OPENJDK
+ 	bool "openjdk"
++	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENJDK_BIN_ARCH_SUPPORTS
+ 	depends on !BR2_SOFT_FLOAT
+ 	depends on !BR2_STATIC_LIBS # glibc
+ 	depends on BR2_INSTALL_LIBSTDCPP # cups
+@@ -59,14 +73,17 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
+ endif
+ 
+ comment "openjdk needs X.Org"
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+ comment "openjdk needs glibc, and a toolchain w/ wchar, dynamic library, threads, C++"
+ 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+ 
+ comment "openjdk does not support soft float configurations"
++	depends on BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_SOFT_FLOAT
 -- 
 2.20.1
