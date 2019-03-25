@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 17:36:44 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] ntp: security bump to
+Date: Mon, 25 Mar 2019 17:36:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] ntp: security bump to
  version 4.2.8p13
-Message-ID: <20190325163452.0C89C81D54@busybox.osuosl.org>
+Message-ID: <20190325163501.E23EA81D54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94c3e6db049fc57fc400f0ccea271f539b75c806
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c19f815add28c5dbd6bbf944c42236679da4593f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes CVE-2019-8936: Crafted null dereference attack in authenticated
 mode 6 packet.
@@ -112,7 +112,7 @@ index 2fd8a8322b..4014936e61 100644
 +sha256 288772cecfcd9a53694ffab108d1825a31ba77f3a8466b0401baeca3bc232a38  ntp-4.2.8p13.tar.gz
 +sha256 3828da5fc8126889d6a64432288ace08526c490bf5427d799931689069968d91  COPYRIGHT
 diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index af3c1aad9f..3851d945d4 100644
+index c62d59e81a..d53fcc5d0b 100644
 --- a/package/ntp/ntp.mk
 +++ b/package/ntp/ntp.mk
 @@ -5,7 +5,7 @@
