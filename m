@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Mar 2019 19:02:11 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/go: set GOCACHE
+Date: Mon, 25 Mar 2019 19:00:22 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/go: set GOCACHE
  to a host path
-Message-ID: <20190325190410.8201E8153A@busybox.osuosl.org>
+Message-ID: <20190325190422.4528381D32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a0cee96f23e60cd5bbf90c111fe6328536ba2bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=af99ecabd504c8f0237d37ac0e050dbad7ceffac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Set the GOCACHE environment variable properly.
 
