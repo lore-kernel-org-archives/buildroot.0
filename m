@@ -1,116 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Mar 2019 01:09:39 +0100
-Subject: [Buildroot] [PATCH v4 0/6] Qt5 qmake infra with generic target
- install
-In-Reply-To: <20190322183904.22401-1-anaumann@ultratronik.de>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
-Message-ID: <59832315-10f8-3d04-c40c-70ece2e8d531@mind.be>
+From: Philip Molloy <philip@philipmolloy.com>
+Date: Tue, 26 Mar 2019 00:07:45 +0000
+Subject: [Buildroot] [PATCH 1/1] board: rename pine64 to pine64_a64
+Message-ID: <Oqsf6ZigkT9qL6qRMvO1f_TiFird6B1pMrBmVFLQRMFfs8Wv_lt0OuqT_zUwe0rxjTolUCzKj2jIQJ5u8BB-O6LGmJESAiwSWtgiGpkTyOk=@philipmolloy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Submitting a patch that I previously sent using an unregistered e-mail address. See the following for more information:
 
+http://lists.busybox.net/pipermail/buildroot/2019-March/245825.html
 
-On 22/03/2019 19:38, Andreas Naumann wrote:
-> Hi all,
-> 
-> here is the fourth iteration of my efforts to prepare Qt5 packages for ppsh.
-> 
-> Originally I had prepared v3 with a fix for the reinstall issue found by Thomas,
-> which included conversion to a new qmake infra as suggested by Arnout.
-> 
-> However, having done that I had the idea to use a folder inside the package 
-> build dir as INSTALL_ROOT, which makes it possible to to isolate the staging
-> files and copy them to target without relying on timestamps. So I ditched v3
-> and carried on doing that as v4. (If somebody is interested in v3 I can still
->  send it.)
-> 
-> This avoids the controversial discussed "install to staging only" approach,
-> for which I'm not sure if it actually has enough advantages to be worth the
-> hassle of dealing with timestamps and such.
+Signed-off-by: Philip Molloy <philip@philipmolloy.com>
+---
+ DEVELOPERS                                         | 2 +-
+ board/pine64/{pine64 => a64}/boot.cmd              | 0
+ board/pine64/{pine64 => a64}/genimage.cfg          | 0
+ board/pine64/{pine64 => a64}/readme.txt            | 8 ++++----
+ configs/{pine64_defconfig => pine64_a64_defconfig} | 4 ++--
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+ rename board/pine64/{pine64 => a64}/boot.cmd (100%)
+ rename board/pine64/{pine64 => a64}/genimage.cfg (100%)
+ rename board/pine64/{pine64 => a64}/readme.txt (80%)
+ rename configs/{pine64_defconfig => pine64_a64_defconfig} (93%)
 
- I've given feedback on all patches and marked as changes requested. Except for
-patch 5, which I think can be applied as is. It would be nice to do that first,
-because then my comment about the .la/.prl fixup wouldn't apply any more.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 002ffa09c7..527fa85280 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1030,7 +1030,7 @@ F:	configs/orangepi_pc2_defconfig
+ F:	configs/orangepi_prime_defconfig
+ F:	configs/orangepi_win_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+-F:	configs/pine64_defconfig
++F:	configs/pine64_a64_defconfig
+ F:	configs/pine64_sopine_defconfig
 
+ N:	James Hilliard <james.hilliard1@gmail.com>
+diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/a64/boot.cmd
+similarity index 100%
+rename from board/pine64/pine64/boot.cmd
+rename to board/pine64/a64/boot.cmd
+diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/a64/genimage.cfg
+similarity index 100%
+rename from board/pine64/pine64/genimage.cfg
+rename to board/pine64/a64/genimage.cfg
+diff --git a/board/pine64/pine64/readme.txt b/board/pine64/a64/readme.txt
+similarity index 80%
+rename from board/pine64/pine64/readme.txt
+rename to board/pine64/a64/readme.txt
+index 85226fdd17..c35bf62037 100644
+--- a/board/pine64/pine64/readme.txt
++++ b/board/pine64/a64/readme.txt
+@@ -2,10 +2,10 @@ Intro
+ =====
 
-> 
-> 
-> regards,
-> Andreas
-> 
-> 
-> 
-> v3 -> v4:
->   - changed time-stamp based target install to using INSTALL_ROOT
->   - exclude ppsh specific patches>
-> v2 -> v3 (not published):
->   - convert to qmake infra
->   - use a custom .stamp_staging_started to fix the -reinstall issue
+ This default configuration will allow you to start experimenting with the
+-buildroot environment for the Pine64. With the current configuration
++buildroot environment for the Pine A64. With the current configuration
+ it will bring-up the board, and allow access through the serial console.
 
- I think the quazip patch is also new.
+-Pine64 link:
++Pine A64 link:
+ https://www.pine64.org/?page_id=1194
 
- Regards,
- Arnout
+ Wiki link:
+@@ -16,7 +16,7 @@ This configuration uses U-Boot mainline and kernel mainline.
+ How to build
+ ============
 
-> 
-> v1 -> v2:
->   - added generic qmake target install
->   - added removal of la/prl fixup (optional)
->   - rebased and reordered (together with ppsh-v7) on master
->   - split patches to separate qmake rework from ppsh specifics
->   - added handling of pkg-config search pathes for ppsh
-> 
-> 
-> Andreas Naumann (6):
->   qt5base: Do not build shared libs if BR2_STATIC_LIBS is chosen
->   qt5: Provide generic qmake package infrastructure
->   qt5: Convert packages to qmake infra
->   quazip: Patch .pro file to correctly crosscompile and use qmake infra
->   qt5base: Fix inconsistencies when overriding qmake properties
->   qt5: Remove *.la/*.prl fixup script
-> 
->  package/Makefile.in                           |   1 +
->  package/pkg-qmake.mk                          | 108 ++++++++++++++++++
->  package/qextserialport/qextserialport.mk      |  22 +---
->  package/qt-webkit-kiosk/qt-webkit-kiosk.mk    |  11 +-
->  package/qt5/qt53d/qt53d.mk                    |  39 +------
->  package/qt5/qt5base/qt.conf.in                |  17 +--
->  package/qt5/qt5base/qt5base.mk                |  88 ++------------
->  package/qt5/qt5canvas3d/qt5canvas3d.mk        |  26 +----
->  package/qt5/qt5charts/qt5charts.mk            |  41 +------
->  .../qt5/qt5connectivity/qt5connectivity.mk    |  60 +---------
->  package/qt5/qt5declarative/qt5declarative.mk  |  48 +-------
->  package/qt5/qt5enginio/qt5enginio.mk          |  39 +------
->  .../qt5graphicaleffects.mk                    |  18 +--
->  .../qt5/qt5imageformats/qt5imageformats.mk    |  20 +---
->  package/qt5/qt5location/qt5location.mk        |  50 +-------
->  package/qt5/qt5multimedia/qt5multimedia.mk    |  47 +-------
->  .../qt5/qt5quickcontrols/qt5quickcontrols.mk  |  41 +------
->  .../qt5quickcontrols2/qt5quickcontrols2.mk    |  40 +------
->  package/qt5/qt5script/qt5script.mk            |  32 +-----
->  package/qt5/qt5scxml/qt5scxml.mk              |  37 +-----
->  package/qt5/qt5sensors/qt5sensors.mk          |  40 +------
->  package/qt5/qt5serialbus/qt5serialbus.mk      |  38 +-----
->  package/qt5/qt5serialport/qt5serialport.mk    |  32 +-----
->  package/qt5/qt5svg/qt5svg.mk                  |  40 +------
->  package/qt5/qt5tools/qt5tools.mk              |   6 +-
->  .../qt5virtualkeyboard/qt5virtualkeyboard.mk  |  63 +---------
->  package/qt5/qt5wayland/qt5wayland.mk          |  43 +------
->  package/qt5/qt5webchannel/qt5webchannel.mk    |  40 +------
->  package/qt5/qt5webengine/qt5webengine.mk      |  50 +-------
->  .../qt5webkit-examples/qt5webkit-examples.mk  |  23 +---
->  package/qt5/qt5webkit/qt5webkit.mk            |  30 ++---
->  package/qt5/qt5websockets/qt5websockets.mk    |  40 +------
->  package/qt5/qt5x11extras/qt5x11extras.mk      |  21 +---
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk  |  32 +-----
->  package/qt5cinex/qt5cinex.mk                  |   9 +-
->  ...001-Fix-crosscompile-staging-install.patch |  16 +++
->  package/quazip/quazip.mk                      |  18 +--
->  package/qwt/qwt.mk                            |   9 +-
->  38 files changed, 190 insertions(+), 1145 deletions(-)
->  create mode 100644 package/pkg-qmake.mk
->  create mode 100644 package/quazip/0001-Fix-crosscompile-staging-install.patch
-> 
+-    $ make pine64_defconfig
++    $ make pine64_a64_defconfig
+
+     $ make
+
+@@ -34,5 +34,5 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
+   $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+   $ sudo sync
+
+-Insert the micro SDcard in your Pine64 and power it up. The console
++Insert the micro SDcard in your Pine A64 and power it up. The console
+ is on the serial line, 115200 8N1.
+diff --git a/configs/pine64_defconfig b/configs/pine64_a64_defconfig
+similarity index 93%
+rename from configs/pine64_defconfig
+rename to configs/pine64_a64_defconfig
+index 6e8eb15d73..17b10715e8 100644
+--- a/configs/pine64_defconfig
++++ b/configs/pine64_a64_defconfig
+@@ -37,11 +37,11 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
+
+ # Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to PINE A64"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/a64/genimage.cfg"
+--
+2.17.2
