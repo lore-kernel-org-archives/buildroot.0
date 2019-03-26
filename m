@@ -1,50 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Mar 2019 12:31:43 +0100
-Subject: [Buildroot] bdaddr from bluez-utils 5.x package
-In-Reply-To: <CALtfCQaALkdTHOTbx-vBX7L_KSUzpuJG2QMqZMS8jOqRXiSyuQ@mail.gmail.com>
- (Oscar Gomez Fuente's message of "Tue, 26 Mar 2019 11:53:52 +0100")
-References: <CALtfCQaALkdTHOTbx-vBX7L_KSUzpuJG2QMqZMS8jOqRXiSyuQ@mail.gmail.com>
-Message-ID: <87k1glub1c.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Mar 2019 12:46:19 +0100
+Subject: [Buildroot] [git commit] package/fetchmail: fix shared build
+Message-ID: <20190326114254.3AE47865A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3dc3b4c2798ff76666ba6b3b83ae5942b76e6091
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi everyone,
- > I am checking buildroot-2019.02 vs buildroot-2018.02.5 and it seems to
- > be that using the bluez-utils 5.x has disappeared the utility bdadd in
- > order to change the Bluetooth address from different devices using
- > this format:
+Update second patch to fix shared build
 
- > NEW_BT_MAC=00:11:22:33:44:55
- > /usr/bin/bdaddr -i hci0 $NEW_BT_MAC
+Fixes:
+ - http://autobuild.buildroot.org/results/c27b9c82e68ade29b45dc84ecce5fe6653fbb7da
 
-Ehh, are you sure you don't have some kind of local changes in your
-2018.02.5 tree? Looking at the bluez-utils5 git repo I see that bdaddr
-has been marked noinst since
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit 301904d649db6df8ae4735d7a90109993d9a4523
-Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Date:   Wed Jan 4 14:47:13 2017 +0200
-
-    build: Promote experiemental tools
-
-    This promotes many tools that were behind --enable-experimental which are
-    in fact used as stable tools for a while.
-
-Which is part of the 5.43 release, so bdaddr should get built on both
-2018.02.x and 2019.02.x, but not installed into TARGET_DIR.
-
-find -name bdaddr
-./build/bluez5_utils-5.48/tools/bdaddr
-
- > Could anyone confirm that?
- > Is there any other alternative for changing the mac address?
-
-Sorry, I don't know. Perhaps ask the bluez developers?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+index dd48783922..aefed7f2e4 100644
+--- a/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
++++ b/package/fetchmail/0002-configure.ac-use-pkg-config-to-find-openssl.patch
+@@ -42,7 +42,7 @@ index 16b0fcba..3a75ec6e 100644
+ -  if test "$i" = "" ; then i="(none)" ; fi
+ -  AC_MSG_RESULT($i)
+ -  dnl XXX FIXME: use pkg-config if available!
+-+  PKG_CHECK_MODULES([SSL],[libssl],[LIBS="$LIBS $SSL_LIBS"],[
+++  PKG_CHECK_MODULES([SSL],[libssl libcrypto],[LIBS="$LIBS $SSL_LIBS"],[
+ +    LDFLAGS="$LDFLAGS -L$with_ssl/lib"
+ +    LIBS="$LIBS -lssl -lcrypto"
+ +    dnl check if -ldl is needed
