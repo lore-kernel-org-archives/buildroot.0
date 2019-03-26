@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Mar 2019 20:17:42 +0100
-Subject: [Buildroot] [git commit] package/gcc: select
- BR2_TOOLCHAIN_HAS_OPENMP if BR2_GCC_ENABLE_OPENMP
-Message-ID: <20190326191521.D35A081520@busybox.osuosl.org>
+Date: Tue, 26 Mar 2019 20:17:21 +0100
+Subject: [Buildroot] [git commit] toolchain-external: introduce
+ BR2_TOOLCHAIN_HAS_OPENMP
+Message-ID: <20190326191521.CC6DE87F45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d586541bd85a14229f3ac943974d53571b90a2e2
+commit: https://git.buildroot.net/buildroot/commit/?id=9c808710f6f0be9d7923d937768d7da8461666cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_TOOLCHAIN_HAS_OPENMP is also selected by external toolchains, so
-can be used by packages to determine OpenMP support.
+Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
+support.
 
 Signed-off-by: Ed Blake <ed.blake@sondrel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ toolchain/Config.in                                    | 3 +++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 222251f43c..8e22a4c155 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -127,6 +127,7 @@ config BR2_GCC_ENABLE_LTO
- config BR2_GCC_ENABLE_OPENMP
- 	bool "Enable compiler OpenMP support"
- 	depends on !BR2_PTHREADS_NONE && !BR2_arc && !BR2_microblaze
-+	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Enable OpenMP support for the compiler
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3f297f6b43..552220123f 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
+ config BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	bool
+ 
++config BR2_TOOLCHAIN_HAS_OPENMP
++	bool
++
+ config BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	bool
+ 
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index db3570d96f..747837fdc6 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+ endif
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
++TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
++endif
++
+ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ 
  
