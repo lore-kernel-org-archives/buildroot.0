@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Mar 2019 21:33:39 +0100
-Subject: [Buildroot] [PATCH] gummiboot: fix linking for non-host
- compatible targets
-In-Reply-To: <20190326130757.4521-1-esben.haabendal@gmail.com>
-References: <20190326130757.4521-1-esben.haabendal@gmail.com>
-Message-ID: <a98e9eba-82d2-a387-a99b-56c15ceeba40@mind.be>
+Date: Tue, 26 Mar 2019 21:49:28 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/ecryptfs-utils: Add support
+ without gettext
+In-Reply-To: <20190326192819.GL2660@scaer>
+References: <20190315023456.15988-1-vadim4j@gmail.com>
+ <20190326192819.GL2660@scaer>
+Message-ID: <6be479f6-983d-e383-5038-437de745f0a8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +14,14 @@ To: buildroot@busybox.net
 
 
 
-On 26/03/2019 14:07, Esben Haabendal wrote:
-> + $(gummiboot_solib): $(gummiboot_objects)
-> +-	$(AM_V_CCLD)$(LD) $(efi_ldflags) $(gummiboot_objects) \
-> ++	$(AM_V_CCLD)$(EFI_LD) $(efi_ldflags) $(gummiboot_objects) \
-> + 		-o $@ -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name); \
-                                             ^^^^ Shouldn't this be EFI_CC?
-> + 	nm -D -u $@ | grep ' U ' && exit 1 || :
+On 26/03/2019 20:28, Yann E. MORIN wrote:
+> Also, it is usualy bad practice to generate such scripts from configure.
+> Instead, they should be generated in Makefile.am as new targets. Yes,
+> this is a bit more involved, but is much cleaner: when you change such a
+> script, you just have to run 'make' again, rather than re-run configure.
 
- Is nm the same on all architectures? Of course, since gummiboot is x86 only, it
-doesn't matter much.
+ Is that really so? I thought automake would generate a rule that just re-runs
+config.status when such a file changes. Haven't tested though.
 
  Regards,
  Arnout
