@@ -1,52 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 26 Mar 2019 22:52:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qjson: drop Qt4 patch
-Message-ID: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Mar 2019 22:55:13 +0100
+Subject: [Buildroot] [External] Re: Gsoc Interest : Follow upstream
+ updates and CVEs of packages
+In-Reply-To: <CALKvhuNt9awxn-ks40nMfu2tDmyCWSpWd+O0-V44BxLjp-B1mw@mail.gmail.com>
+References: <CALKvhuOFNyav9hJ73YgEFMx8mig3j36GHAdXOnJvFykcaCUVGQ@mail.gmail.com>
+ <CANQCQpa-bccz8tigO4K=oJ1jzBcOANOicS1n5XxpFKq0vAVdYA@mail.gmail.com>
+ <CALKvhuP5XrG_b2pRDb5fHo=EVoXhm6q_ajq2ZUA4AWzwSG9PEg@mail.gmail.com>
+ <CANQCQpZKU8viN3xRurpy9V+1vJ_T8QkT2kUaD1_uzPREOd9mbw@mail.gmail.com>
+ <CANQCQpZ=D4zHeZu4_MM8iRmrMr5t941iEixvJwohVN4Kax3Thw@mail.gmail.com>
+ <CALKvhuNt9awxn-ks40nMfu2tDmyCWSpWd+O0-V44BxLjp-B1mw@mail.gmail.com>
+Message-ID: <ac97c9c0-ad13-2171-afa9-5671fe6185b2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that Qt4 has been removed, drop patch
+ Hi Manas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-Qt4-package-error-in-CMakeLists.txt.patch | 26 -------------------
- 1 file changed, 26 deletions(-)
- delete mode 100644 package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
+On 13/03/2019 14:19, Manas Mangaonkar wrote:
+>> With respect to what breakages?? Test builds or versions not listed in
+>> NVD?? 
+> 
+> For example if a packager,user tries to package something or build something for
+> buildroot.but then due to some upstream dependency issues
+> or other problems it does not build.Then this can be automatically reported as a
+> issue in the upstream repo.This is a git specific approach though.
+> but this could work for everything
 
-diff --git a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch b/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
-deleted file mode 100644
-index a9e34e4c26..0000000000
---- a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 254858bbf443bded2e80480e9f9032ce166b923e Mon Sep 17 00:00:00 2001
--From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
--Date: Fri, 2 Dec 2016 23:00:58 +0100
--Subject: [PATCH] CMake, Qt4: check specifically for QtCore, fixes #96
--
--Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 31d9987..2fde79f 100755
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -62,7 +62,7 @@ IF (Qt5Core_FOUND)
-- ELSE()
--   MESSAGE ("Qt5 not found, searching for Qt4")
--   # Find Qt4
---  FIND_PACKAGE( Qt4 4.5 REQUIRED )
--+  FIND_PACKAGE( Qt4 4.5 REQUIRED QtCore)
--   # QStringBuilder is supported since Qt 4.8 for both QString and QByteArray
--   IF (NOT (${QT_VERSION_MINOR} STRLESS "8"))
--     MESSAGE ("Enable QStringBuilder")
---- 
--2.7.4
--
--- 
-2.20.1
+ The project we had in mind was more about identifying open CVEs (or other
+vulnerabilities) on Buildroot packages, not on problems with building them. For
+the latter, we already have the autobuild infrastructure that serves very well.
+
+
+>> I don't think a NVD only approach makes sense.? It could be a
+>> start but there are tools that centralize feeds.? I'd suggest
+>> reviewing Debian, Gentoo, and other distros approaches and tooling for
+>> this situation.
+> 
+> As a packager at fedora,currently we have automated update posting on bugzilling
+> whenver we have updates available
+
+ We have that too (since recently) [1]. Well, not creating bugs automatically,
+and the bulk of the packages don't have a match at release-monitoring yet, but
+it's a start :-)
+
+> but not automated build breakage notifier due
+> to upstream.
+
+ We don't have anything like automatic updates, and I'm not sure if we would
+want it....
+
+> as far as i know same goes for Debian.There does exist one tool that releases to
+> Github then to pypi and then to fedora(which is fedora's own gsoc project).
+> So modifying it with buildroot functionality and other custom functions for
+> buildroot and tracking cve would be something to consider.
+> 
+> Owasp tracking project looks interesting.
+
+ The eye candy scares the hell out of me :-)
+
+ But it's true, if we can convert [1] into a BoM for Dependency-Track then that
+tool can take care of identifying vulnerabilities.
+
+
+ Regards,
+ Arnout
+
+
+[1] http://autobuild.buildroot.net/stats/
