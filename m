@@ -1,33 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Mar 2019 22:26:52 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/lego_ev3_defconfig: enable
- brickd by default
-In-Reply-To: <20190223010454.7335-2-david@lechnology.com>
-References: <20190223010454.7335-1-david@lechnology.com>
- <20190223010454.7335-2-david@lechnology.com>
-Message-ID: <20190326222652.2e256f2d@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Mar 2019 22:45:22 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/ecryptfs-utils: Add support
+ without gettext
+In-Reply-To: <6be479f6-983d-e383-5038-437de745f0a8@mind.be>
+References: <20190315023456.15988-1-vadim4j@gmail.com>
+ <20190326192819.GL2660@scaer>
+ <6be479f6-983d-e383-5038-437de745f0a8@mind.be>
+Message-ID: <20190326214522.GM2660@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 22 Feb 2019 19:04:54 -0600
-David Lechner <david@lechnology.com> wrote:
+Arnout, All,
 
-> This enables the brickd package by default on LEGO MINDSTORM EV3. This
-> program is important because it shuts down the system on low battery.
-> Without this, rechargeable batteries could be damaged.
+On 2019-03-26 21:49 +0100, Arnout Vandecappelle spake thusly:
+> On 26/03/2019 20:28, Yann E. MORIN wrote:
+> > Also, it is usualy bad practice to generate such scripts from configure.
+> > Instead, they should be generated in Makefile.am as new targets. Yes,
+> > this is a bit more involved, but is much cleaner: when you change such a
+> > script, you just have to run 'make' again, rather than re-run configure.
 > 
-> Signed-off-by: David Lechner <david@lechnology.com>
-> ---
->  configs/lego_ev3_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+>  Is that really so? I thought automake would generate a rule that just re-runs
+> config.status when such a file changes. Haven't tested though.
 
-Applied to master, thanks.
+Hmm.. Maybe. It's been a while I wrote my last autotool package.
 
-Thomas
+In any case, I still remember that it's good practice to only generate
+from ./configure things that are needed to do the actual build, and that
+anything not needed to run 'make' should be handled in Makefile.am.
+
+(pushing the comparison to the limits: if they were C files, you'd
+compile them from Makefile.am, not configure).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
