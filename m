@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Mar 2019 15:02:37 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/nodejs: security
+Date: Tue, 26 Mar 2019 15:02:47 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/nodejs: security
  bump to version 8.15.1
-Message-ID: <20190326135911.E066181D89@busybox.osuosl.org>
+Message-ID: <20190326135919.4A9488476B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f9c21347ced65bbdee893486b8f28c86ee1a8c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9a8d6af0f2393020d5b3df23fafc27076cc5a6f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes the following security issues:
 
@@ -41,7 +41,7 @@ index 5a06e5328c..ad8ad4ad99 100644
  # Hash for license file
  sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 446cb77dbf..06d2eaad99 100644
+index d266493de9..65f95016dd 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
