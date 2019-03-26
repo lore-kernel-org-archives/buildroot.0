@@ -1,53 +1,71 @@
 From: Ed Blake <ed.blake@sondrel.com>
-Date: Tue, 26 Mar 2019 12:30:45 +0000
-Subject: [Buildroot] [PATCH v2 1/4] toolchain-external: introduce
- BR2_TOOLCHAIN_HAS_OPENMP
+Date: Tue, 26 Mar 2019 12:30:47 +0000
+Subject: [Buildroot] [PATCH v2 4/4] package: use BR2_TOOLCHAIN_HAS_OPENMP
 In-Reply-To: <20190326123032.9905-1-ed.blake@sondrel.com>
 References: <20190326123032.9905-1-ed.blake@sondrel.com>
-Message-ID: <20190326123032.9905-2-ed.blake@sondrel.com>
+Message-ID: <20190326123032.9905-5-ed.blake@sondrel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new BR2_TOOLCHAIN_HAS_OPENMP option for toolchains with OpenMP
-support.
+Switch from using BR2_GCC_ENABLE_OPENMP to BR2_TOOLCHAIN_HAS_OPENMP to
+determine OpenMP support in the following packages:
+
+fftw
+flann
+opencv3
 
 Signed-off-by: Ed Blake <ed.blake@sondrel.com>
 ---
- toolchain/Config.in                                    | 3 +++
- toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
- 2 files changed, 7 insertions(+)
+ package/fftw/fftw.mk       | 4 ++--
+ package/flann/flann.mk     | 2 +-
+ package/opencv3/opencv3.mk | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index bcbc3cf984..bf42e92e00 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -168,6 +168,9 @@ config BR2_TOOLCHAIN_HAS_SSP
- config BR2_TOOLCHAIN_HAS_UCONTEXT
- 	bool
- 
-+config BR2_TOOLCHAIN_HAS_OPENMP
-+	bool
-+
- config BR2_TOOLCHAIN_SUPPORTS_PIE
- 	bool
- 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index db3570d96f..747837fdc6 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -144,6 +144,10 @@ TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index bcfdb9c96a..279244a5dc 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -27,10 +27,10 @@ endif
+ # Generic optimisations
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ FFTW_COMMON_CONF_OPTS += --enable-threads
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
++FFTW_COMMON_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_OPENMP),--without,--with)-combined-threads
+ else
+ FFTW_COMMON_CONF_OPTS += --disable-threads
  endif
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
++FFTW_COMMON_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_OPENMP),--enable,--disable)-openmp
+ 
+ include $(sort $(wildcard package/fftw/*/*.mk))
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index ef61815bba..d091ec18a0 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
+@@ -14,7 +14,7 @@ FLANN_CONF_OPTS = \
+ 	-DBUILD_PYTHON_BINDINGS=OFF \
+ 	-DBUILD_MATLAB_BINDINGS=OFF \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_FLANN_EXAMPLES),ON,OFF) \
+-	-DUSE_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF) \
++	-DUSE_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF) \
+ 	-DPYTHON_EXECUTABLE=OFF \
+ 	-DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
+ 
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3a2594b584..292ce81432 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -279,7 +279,7 @@ else
+ OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
  endif
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
-+TOOLCHAIN_EXTERNAL_LIBS += libgomp.so.*
-+endif
-+
- TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+-OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
++OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF)
  
- 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PNG),y)
+ OPENCV3_CONF_OPTS += -DWITH_PNG=ON
 -- 
 2.17.1
