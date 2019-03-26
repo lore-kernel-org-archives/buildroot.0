@@ -1,46 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Mar 2019 22:45:22 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ecryptfs-utils: Add support
- without gettext
-In-Reply-To: <6be479f6-983d-e383-5038-437de745f0a8@mind.be>
-References: <20190315023456.15988-1-vadim4j@gmail.com>
- <20190326192819.GL2660@scaer>
- <6be479f6-983d-e383-5038-437de745f0a8@mind.be>
-Message-ID: <20190326214522.GM2660@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Mar 2019 22:52:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qjson: drop Qt4 patch
+Message-ID: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Now that Qt4 has been removed, drop patch
 
-On 2019-03-26 21:49 +0100, Arnout Vandecappelle spake thusly:
-> On 26/03/2019 20:28, Yann E. MORIN wrote:
-> > Also, it is usualy bad practice to generate such scripts from configure.
-> > Instead, they should be generated in Makefile.am as new targets. Yes,
-> > this is a bit more involved, but is much cleaner: when you change such a
-> > script, you just have to run 'make' again, rather than re-run configure.
-> 
->  Is that really so? I thought automake would generate a rule that just re-runs
-> config.status when such a file changes. Haven't tested though.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-Qt4-package-error-in-CMakeLists.txt.patch | 26 -------------------
+ 1 file changed, 26 deletions(-)
+ delete mode 100644 package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
 
-Hmm.. Maybe. It's been a while I wrote my last autotool package.
-
-In any case, I still remember that it's good practice to only generate
-from ./configure things that are needed to do the actual build, and that
-anything not needed to run 'make' should be handled in Makefile.am.
-
-(pushing the comparison to the limits: if they were C files, you'd
-compile them from Makefile.am, not configure).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch b/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
+deleted file mode 100644
+index a9e34e4c26..0000000000
+--- a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 254858bbf443bded2e80480e9f9032ce166b923e Mon Sep 17 00:00:00 2001
+-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+-Date: Fri, 2 Dec 2016 23:00:58 +0100
+-Subject: [PATCH] CMake, Qt4: check specifically for QtCore, fixes #96
+-
+-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 31d9987..2fde79f 100755
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -62,7 +62,7 @@ IF (Qt5Core_FOUND)
+- ELSE()
+-   MESSAGE ("Qt5 not found, searching for Qt4")
+-   # Find Qt4
+--  FIND_PACKAGE( Qt4 4.5 REQUIRED )
+-+  FIND_PACKAGE( Qt4 4.5 REQUIRED QtCore)
+-   # QStringBuilder is supported since Qt 4.8 for both QString and QByteArray
+-   IF (NOT (${QT_VERSION_MINOR} STRLESS "8"))
+-     MESSAGE ("Enable QStringBuilder")
+--- 
+-2.7.4
+-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
