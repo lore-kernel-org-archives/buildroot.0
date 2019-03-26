@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Mar 2019 18:45:00 +0100
-Subject: [Buildroot] [PATCH v1] package/at-spi2-core: fix build with
- meson 0.50.0
-In-Reply-To: <20190321190756.32410-1-ps.report@gmx.net>
-References: <20190321190756.32410-1-ps.report@gmx.net>
-Message-ID: <20190326184500.4f1d9cf0@windsurf>
+Date: Tue, 26 Mar 2019 18:45:13 +0100
+Subject: [Buildroot] [git commit] package/git: use pkg-config to get ssl
+ dependencies
+Message-ID: <20190326174153.126D787F44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 21 Mar 2019 20:07:56 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ae9640a9fc11c315aeb989941d9555065da8b24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add upstream patch [1] to fix build with meson 0.50.0 (as suggested
-> by Thomas Petazzoni ).
-> 
-> Fixes [2]:
-> 
->   atspi/meson.build:60:0: ERROR: Subdir keyword must not be an absolute path.
-> 
-> [1] https://github.com/GNOME/at-spi2-core/commit/44a812ea51223d82f21a098a2d45fcc5c329ce7a.patch
-> [1] http://autobuild.buildroot.net/results/83250522c79b5749fc8236ba2b0e873a12747413
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->   - no need to apply the patch as the meson bump to 0.50.0 is reverted
->     (see [3])
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-Applied to master, thanks.
+/home/test/autobuild/run/instance-2/output/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a(ssl_cert.o): In function `CRYPTO_DOWN_REF':
+/home/test/autobuild/run/instance-2/output/build/libopenssl-1.1.1a/include/internal/refcount.h:50: undefined reference to `__atomic_fetch_sub_4'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This is often for example the case on sparcv8 32 bit.
+
+To fix this issue, use pkg-config to retrieve openssl dependencies
+including atomic library, these dependencies must be passed to
+LIB_4_CRYPTO IN GIT_MAKE_OPTS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3093897d14a854a7252b25b2fa1f8fdcbb26c9b7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/git/git.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 9b176d3661..aec30e3eb3 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -12,9 +12,9 @@ GIT_LICENSE_FILES = COPYING LGPL-2.1
+ GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-GIT_DEPENDENCIES += openssl
++GIT_DEPENDENCIES += host-pkgconf openssl
+ GIT_CONF_OPTS += --with-openssl
+-GIT_CONF_ENV_LIBS += $(if $(BR2_STATIC_LIBS),-lz)
++GIT_MAKE_OPTS += LIB_4_CRYPTO="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
+ else
+ GIT_CONF_OPTS += --without-openssl
+ endif
