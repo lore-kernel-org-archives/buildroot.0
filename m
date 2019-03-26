@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Mar 2019 15:01:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/nodejs: security
+Date: Tue, 26 Mar 2019 15:02:37 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/nodejs: security
  bump to version 8.15.1
-Message-ID: <20190326135819.EAE9384060@busybox.osuosl.org>
+Message-ID: <20190326135911.E066181D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18ae511d81846b9f28b34940e5f36d3ca95648f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f9c21347ced65bbdee893486b8f28c86ee1a8c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes the following security issues:
 
@@ -20,6 +20,8 @@ OpenSSL: 0-byte record padding oracle (CVE-2019-1559)
 For more details, see the CHANGELOG:
 https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.15.1
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 18ae511d81846b9f28b34940e5f36d3ca95648f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/nodejs/nodejs.hash | 4 ++--
