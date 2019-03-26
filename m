@@ -1,72 +1,84 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Mar 2019 23:02:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to version
- 0.101.2
-Message-ID: <20190326220255.14363-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Mar 2019 23:09:40 +0100
+Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
+In-Reply-To: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
+References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
+Message-ID: <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://blog.clamav.net/2019/03/clamav-01012-and-01003-patches-have.html
+ Hi Atharva,
 
-- Fixes for the following vulnerabilities affecting 0.101.1 and prior:
-  - CVE-2019-1787:
-    An out-of-bounds heap read condition may occur when scanning PDF
-    documents. The defect is a failure to correctly keep track of the number
-    of bytes remaining in a buffer when indexing file data.
-  - CVE-2019-1789:
-    An out-of-bounds heap read condition may occur when scanning PE files
-    (i.e. Windows EXE and DLL files) that have been packed using Aspack as a
-    result of inadequate bound-checking.
-  - CVE-2019-1788:
-    An out-of-bounds heap write condition may occur when scanning OLE2 files
-    such as Microsoft Office 97-2003 documents. The invalid write happens when
-    an invalid pointer is mistakenly used to initialize a 32bit integer to
-    zero. This is likely to crash the application.
+On 17/03/2019 14:46, Atharva Lele wrote:
+> Hey all,
+> I am Atharva. I'm an Electronics Engineering student from Pune, India. I'm
+> currently studying in my 3rd year of engineering. I'm interested in Embedded
+> Systems and Linux. I'm currently interning at a startup which is working on an
+> Embedded Linux OS and am working on a camera driver. I have dabbled in making a
+> custom kernel for a phone (Nexus 6) and have it up on XDA-Developers.
+> 
+> My skills include:
+> - C Programming
+> - Python (Have completed Data Analyst path from dataquest.io <http://dataquest.io>)
+> - Basic understanding of how the Linux Kernel works
+> - Linux Camera driver architecture
+> - Basics of building a root file system from scratch
+> 
+> My current buildroot knowledge is limited to configuring and building a root
+> file system image for a given embedded system. I am working on increasing my
+> knowledge of how buildroot works.
 
-- Fixes for the following vulnerabilities affecting 0.101.1 and 0.101.0 only:
-  - CVE-2019-1786:
-    An out-of-bounds heap read condition may occur when scanning malformed PDF
-    documents as a result of improper bounds-checking.
-  - CVE-2019-1785:
-    A path-traversal write condition may occur as a result of improper input
-    validation when scanning RAR archives. Issue reported by aCaB.
-  - CVE-2019-1798:
-    A use-after-free condition may occur as a result of improper error
-    handling when scanning nested RAR archives. Issue reported by David L.
+ Building a rootfs for some board and submitting a new package are great steps.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ If you want to understand more about why a build system like Buildroot exists,
+Linux From Scratch is also a nice tool to learn about bootstrapping a system.
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 9ac68e7607..4b61cd9654 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 fa368fa9b2f57638696150c7d108b06dec284e8d8e3b8e702c784947c01fb806  clamav-0.101.1.tar.gz
-+sha256 0a12ebdf6ff7a74c0bde2bdc2b55cae33449e6dd953ec90824a9e01291277634  clamav-0.101.2.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 8900b4819a..5bb0aa09d9 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.101.1
-+CLAMAV_VERSION = 0.101.2
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
--- 
-2.20.1
+
+> I'm interested in two of the GSoC topics mentioned on the buildroot ideas list:
+> - _Reproducible Builds_
+> ? I have two of the needed skills and willing to learn about Jenkins. I also
+> like the idea of reproducible builds and would love to work on it.
+
+ Reproducible builds have not received a lot of love in Buildroot in the last
+year or so, so it would definitely be great to have somebody work on that.
+
+ You could start looking at the existing tools in Gentoo, Fedora, Debian that
+evaluate reproducibility (i.e. that inject variation).
+
+ Or you could start on your own, build some configuration, clean and build
+again, and check if the images are binary identical.
+
+
+> - _Follow upstream updates and CVEs of packages_
+> ? Security updates are very important to me and I would love to work on tracking
+> CVEs. I have worked on datasets while learning Python and I think that that
+> experience will be helpful in this topic.
+
+ It'll be more about using REST APIs of various existing online databases,
+rather than working with a database itself. We only have +-2000 packages so that
+still fits in a simple Python dict.
+
+
+> I'd love to discuss both the ideas on IRC and hear suggestions and feedback.
+
+ If you're still interested in doing a GSoC project for Buildroot, you'll have
+to come up with a proposal eventually (by April 9). So it would be good to
+launch some ideas here that we can discuss.
+
+ Regards,
+ Arnout
+
+
+> Looking forward to working with all of you if I get selected.
+> 
+> Regards,
+> Atharva Lele
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
