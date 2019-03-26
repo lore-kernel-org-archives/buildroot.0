@@ -1,83 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Mar 2019 20:16:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
-In-Reply-To: <20190320210943.21377-1-adrien@gallouet.fr>
-References: <20190320210943.21377-1-adrien@gallouet.fr>
-Message-ID: <20190326201636.13216e35@windsurf>
+Date: Tue, 26 Mar 2019 20:18:33 +0100
+Subject: [Buildroot] [git commit] package: use BR2_TOOLCHAIN_HAS_OPENMP
+Message-ID: <20190326191521.E75128806D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aea1a0e5a350e20570c8e4d753a30335cdf40bc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Mar 2019 21:09:44 +0000
-Adrien Gallou?t <adrien@gallouet.fr> wrote:
+Switch from using BR2_GCC_ENABLE_OPENMP to BR2_TOOLCHAIN_HAS_OPENMP to
+determine OpenMP support in the following packages:
 
-> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> ---
->  package/bird/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++
->  package/bird/bird.mk   | 16 +++++++++++++++
->  2 files changed, 62 insertions(+)
+fftw
+flann
+opencv3
 
-I've applied, but I had to fix a number of things, see below.
+Signed-off-by: Ed Blake <ed.blake@sondrel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fftw/fftw.mk       | 4 ++--
+ package/flann/flann.mk     | 2 +-
+ package/opencv3/opencv3.mk | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> 
-> diff --git a/package/bird/Config.in b/package/bird/Config.in
-> index a69551f94e..298348d098 100644
-> --- a/package/bird/Config.in
-> +++ b/package/bird/Config.in
-> @@ -20,4 +20,50 @@ config BR2_PACKAGE_BIRD_CLIENT
->  	help
->  	  Enable the BIRD client
-
-I added a Config.in comment here to make it clear the below options are
-for configuring the list of supported protocols.
-
-> +# BUG: RIP is needed for now
-> +BR2_PACKAGE_BIRD_RIP=y
-
-BR2_PACKAGE_* is reserved for config options. Variables in a package
-should be prefixed by the package name.
-
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
-> +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
-> +
-> +BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
-
-So I've changed all of this by:
-
-# BUG: RIP is mandatory for now
-BIRD_PROTOCOLS = \
-        rip \
-        $(if $(BR2_PACKAGE_BIRD_BFD),bfd) \
-        $(if $(BR2_PACKAGE_BIRD_BABEL),babel) \
-        $(if $(BR2_PACKAGE_BIRD_BGP),bgp) \
-        $(if $(BR2_PACKAGE_BIRD_MRT),mrt) \
-        $(if $(BR2_PACKAGE_BIRD_OSPF),ospf) \
-        $(if $(BR2_PACKAGE_BIRD_PERF),perf) \
-        $(if $(BR2_PACKAGE_BIRD_PIPE),pipe) \
-        $(if $(BR2_PACKAGE_BIRD_RADV),radv) \
-        $(if $(BR2_PACKAGE_BIRD_RIP),rip) \
-        $(if $(BR2_PACKAGE_BIRD_STATIC),static)
-
-BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BIRD_PROTOCOLS)))
-
-and applied to master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index bcfdb9c96a..279244a5dc 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -27,10 +27,10 @@ endif
+ # Generic optimisations
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ FFTW_COMMON_CONF_OPTS += --enable-threads
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
++FFTW_COMMON_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_OPENMP),--without,--with)-combined-threads
+ else
+ FFTW_COMMON_CONF_OPTS += --disable-threads
+ endif
+-FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
++FFTW_COMMON_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_OPENMP),--enable,--disable)-openmp
+ 
+ include $(sort $(wildcard package/fftw/*/*.mk))
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index ef61815bba..d091ec18a0 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
+@@ -14,7 +14,7 @@ FLANN_CONF_OPTS = \
+ 	-DBUILD_PYTHON_BINDINGS=OFF \
+ 	-DBUILD_MATLAB_BINDINGS=OFF \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_FLANN_EXAMPLES),ON,OFF) \
+-	-DUSE_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF) \
++	-DUSE_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF) \
+ 	-DPYTHON_EXECUTABLE=OFF \
+ 	-DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
+ 
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3a2594b584..292ce81432 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -279,7 +279,7 @@ else
+ OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
+ endif
+ 
+-OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
++OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_TOOLCHAIN_HAS_OPENMP),ON,OFF)
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PNG),y)
+ OPENCV3_CONF_OPTS += -DWITH_PNG=ON
