@@ -1,13 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Mar 2019 10:50:09 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/libfuse: common files from
- libfuse3 are prefered
-In-Reply-To: <CADYdroNPCTNv0uVUNX_h-q8EefuR6ZN8sZgDorBwE-zuARHb1w@mail.gmail.com>
-References: <20190315133033.5275-1-norbert.lange@andritz.com>
- <20190315133033.5275-5-norbert.lange@andritz.com>
- <d521258a-7802-ef6f-961b-3dc52717bf43@mind.be>
- <CADYdroNPCTNv0uVUNX_h-q8EefuR6ZN8sZgDorBwE-zuARHb1w@mail.gmail.com>
-Message-ID: <c4b04ef3-3938-0ad4-4c7a-14ea7d3036e9@mind.be>
+Date: Tue, 26 Mar 2019 11:09:32 +0100
+Subject: [Buildroot] [PATCH v4 2/6] qt5: Provide generic qmake package
+ infrastructure
+In-Reply-To: <20190326081814.0109d351@windsurf>
+References: <20190322183904.22401-1-anaumann@ultratronik.de>
+ <20190322183904.22401-3-anaumann@ultratronik.de>
+ <e5be61b9-45e1-ddea-2b8a-9ba7511383b3@mind.be>
+ <20190326081814.0109d351@windsurf>
+Message-ID: <42086765-6c53-b726-f09e-184209193b0d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,125 +16,177 @@ To: buildroot@busybox.net
 
 
 
-On 25/03/2019 22:12, Norbert Lange wrote:
-> Am Mi., 20. M?rz 2019 um 23:55 Uhr schrieb Arnout Vandecappelle
-> <arnout@mind.be>:
->>
->>
->>
->> On 15/03/2019 14:30, Norbert Lange wrote:
->>> if both libfuse and libfuse3 are co-installed,
->>> make sure libfuse3 will be build first and
->>
->>  Why does libfuse3 have to be installed first? Are there any files that are
->> installed by both after this patch? If so, please list them here. But then the
->> sentence below is not true :-)
+On 26/03/2019 08:18, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I consider the common files part of libfuse3, so if you
-> 'make libfuse' it should be ready-to-use.
-
- You mean when you do 'make libfuse' without selecting libfuse in .config?
-That's a use case we definitely don't support (it works now, but it's not really
-meant to work).
-
- Your patch makes sure that libfuse and libfuse3 install non-overlapping files,
-so there is no need to add it to _DEPENDENCIES.
-
-> The common files are just the udev-rules (which currently are named differently
-[snip]
->>  However, this patch should also be squashed with the one adding libfuse3. Or,
->> if you want to separate things a little (possibly a good idea), then originally
->> libfuse3 should depend on !libfuse, and this patch would lift the dependency again.
+> On Tue, 26 Mar 2019 00:16:47 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
 > 
-> K, primary though was that the first patch would be faster to accept.
-
- Well, the libfuse3 patch can't be applied as is because it conflicts with
-libfuse... So to make it faster to accept, the patch adding libfuse3 should make
-it depend on !libfuse.
-
-[snip]
->>> -define LIBFUSE_INSTALL_TARGET_CMDS
->>> -     cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
->>> -     cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
->>> +# From libfuse3 README:
->>> +# libfuse 3 is designed to be co-installable with libfuse 2. However, some
->>> +# files will be installed by both libfuse 2 and libfuse 3
->>> +# (e.g. /etc/fuse.conf, the udev and init scripts, and the mount.fuse(8) manpage).
->>> +# These files should be taken from libfuse 3. The format/content is guaranteed
->>> +# to remain backwards compatible with libfuse 2.
->>> +#
->>> +# The way we handle this is to let libfuse3 install as usual,
->>> +# but libfuse has to be carefull to not overwrite any common files.
->>> +# Also some files are named diferently (udev-rules),
->>> +# but only the newer is needed.
->>> +# To ensure this, we install in a temporary directory and
->>> +# hand-pick the few unique files
->>> +
->>> +LIBFUSE_INSTALL_TARGET_OPTS = install DESTDIR=$(@D)/tmpinstall
->>> +
->>> +define LIBFUSE_INSTALL_TARGET_POST
->>> +     cp -dpf $(@D)/tmpinstall/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
->>> +endef
+>>> This is done by re-running the install step of the qmake generated Makefile
+>>> with the package build directory prepended (to the staging/host path). Even
+>>> though this does create lengthy pathes it allows for easy separation of the
+>>> staging files from the host destined files by just omitting the resulting
+>>> BUILD_DIR+HOST_DIR path from the following rsync call to the real target folder.  
 >>
->>  This is way too complicated.
+>>  We have not converged yet on whether this is the right approach. So maybe, in
+>> order to move forward, it would be better to split the patch up into a first bit
+>> that creates the qmake package but does not define target install steps, then
+>> convert the relevant packages to qmake packages, and finally change the qmake
+>> infra to do target install and changes all the packages again. It's more work to
+>> do it this way, obviously, but it would allow us to already commit part of the
+>> series before we have converged on it completely.
 > 
-> But more robust, specifically if you rebuild single packages (I know
-> this is probably not officially supported).
+> While I understand your idea of splitting things up further in terms of
+> patches, I think we can try to agree on how the target installation
+> step should be done and use the approach proposed by Andreas to
 
- It is supported, but I don't see how it creates a problem. There could be a
-problem if libfuse3 would call it something that matches libfuse.so*, but it
-doesn't (and it never will).
+ Sure, that's why I said "maybe". It's not a requirement, but it is also
+frustrating to respinning a series and seeing no progress on it. That's why I
+proposed the option.
 
->>  Since we anyway have custom commands for target install, you can do it like this:
->>
->> ifeq ($(BR2_PACKAGE_LIBFUSE3),)
->> define LIBFUSE_INSTALL_SUPPORT_FILES
->>         cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
->>         mkdir -p $(TARGET_DIR)/lib/udev/rules.d
->>         cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules \
->>                 $(TARGET_DIR)/lib/udev/rules.d
->> endef
->> endif
->>
->> define LIBFUSE_INSTALL_TARGET_CMDS
->>         cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
->>         $(LIBFUSE_INSTALL_SUPPORT_FILES)
->> endef
+> directly have the qmake infrastructure use this target installation
+> logic. Andreas has already done lots of work on this (and building Qt5
+> modules takes a lot of time, so I suppose this patch series is annoying
+> like hell to build-test), so I'd like to not raise the barrier too high
+> here.
 > 
-> This only shifts the issue to the staging directory. installing both might
-> cause conflicts (like having 99-fuse.rules and 90-fuse-rules) in the future.
+>>> In addition, rsync excludes all header-, documentation- and cmake-pathes as well
+>>> as libtool and prl files in order to avoid unnecessary files accumulating in
+>>> target.  
+>>
+>>  All of these (except *.prl) are anyway cleaned up in target finalize, so by
+>> itself it's not that useful.
+> 
+> Yes, I also felt that all those exclusions were not really needed, we
+> should probably keep things simple: rsync everything, and really on
+> target-finalize for doing the cleanup.
+> 
+>>> Getting rid of the many conditional install commands is possible because qmake
+>>> already takes care of this when generating the Makefile install targets with the
+>>> given or autodetected configure options of each package.
+>>>
+>>> However, custom install steps may have to remain in cases where a particular
+>>> buildroot option has no corresponding setting in the packages configuration
+>>> options.  
+>>
+>>  This is also something that probably will need more discussion.
+> 
+> Why ?
 
- We don't care about staging, in fact I think we would really prefer to have
-everything there in case both packages are installed.
+ Uh, I don't see that either anymore...
 
-> Using a temporary dir for atleast one of the packages cleanly goes around any
-> potential issues.
-> Its easier to maintain (especially per-package), if a file is renamed the build
-> will break vs. just causing issues when either both libfuse* packages
-> are installed or not.
+ Oh, wait, now I remember: at the time I wrote that, I thought that I was going
+to give the feedback somewhere that we should have a list of files (wildcards)
+to copy from staging to target instead of requiring custom install commands. But
+I never got around to making that comment :-)
 
- I don't see how this installating in tmpinstall handles that.
+ Anyway, keeping custom install commands is definitely the way to go as a first
+step.
+
+> 
+>>> +	$$(MAKE) -C $$($$(PKG)_SRCDIR) INSTALL_ROOT=$$($$(PKG)_SRCDIR)/tmp-target-install $$($(2)_INSTALL_STAGING_OPTS)  
+>>
+>>  This part really needs some explanation in the comment above, because it is
+>> *very* counter-intuitive. You should explain why INSTALL_ROOT is used here and
+>> not for staging install, and what its effect is exactly, i.e. that qmake
+>> configures things with STAGING_DIR as the prefix and that INSTALL_ROOT goes
+>> before it, so you end up with everything under
+>> $(@D)/tmp-target-install/$(STAGING_DIR)
+>>
+>>  However, I'm not sure that this is the way we want to go. What is wrong with
+>> the pkg-files-list? You said before that it was incorrect, but if that is the
+>> case, it should be fixed.
+> 
+> At this point, I find the approach proposed by Andreas to be pretty
+> nice.
+
+ I'm also starting to warm up to it... Norbert has used the same approach for
+libfuse, and mentioned that it is something that could be generalized to all
+packages. And I'm starting to see the merit of that.
+
+ I feel more comfortable to do that experiment here than in the libfuse package,
+because here it is in infra so relatively easy to change. For example, I guess
+it would also be nice to do a common install (in an additional step that both
+target and staging install depend on, or maybe just as part of the build step)
+into a PPD-like additional directory, and copy from there to the actual target
+and staging, preferably using the hardlink approach instead of actual copying.
+I'm just dreaming out loud here.
+
+> We don't yet use pkg-files-list really as part of the build
+> process anywhere, I feel a bit more comfortable at this point with what
+> Andreas is proposing. No strong argument on this, just a general
+> feeling.
+
+ Okay, fair enough, let's not go for the pkg-files-list approach.
+
+ Andreas, could you include this sentence from Thomas in the commit message so
+we remember what the reason was to choose for this approach rather than
+pkg-files-list?
 
 
-> (TBH I think a common infrastructure to install in a temp dir would be ideal)
+> One advantage of Andreas approach is that it does not create a
+> dependency between the target installation step and the staging
+> installation step. They can happen in whatever order, or even in
+> parallel (think top-level parallel build). Indeed our package
+> infrastructure does not enforce any dependency between target
+> installation and staging installation.
 
- You do have a point there. I think it even was one of the options we considered
-in our extensive discussion of PPD in Prague back in 2017 [1]. I don't remember
-why we didn't stick to that possibility. Perhaps it was because of all the
-packages with custom staging/target install commands that would need to be
-adapted. But possibly that was before we thought of the trick to rewrite
-STAGING_DIR and TARGET_DIR during the installation steps.
+ Actually it does:
 
- Maybe indeed this approach would be a good follow-up of PPD, and it would be a
-giant step in the direction of the target-from-staging approach that Yann would
-like to see.
+ifeq ($$($(2)_INSTALL_STAGING),YES)
+$(1)-install-staging:                   $$($(2)_TARGET_INSTALL_STAGING)
+$$($(2)_TARGET_INSTALL_STAGING):        $$($(2)_TARGET_BUILD)
+# Some packages use install-staging stuff for install-target
+$$($(2)_TARGET_INSTALL_TARGET):         $$($(2)_TARGET_INSTALL_STAGING)
+else
+$(1)-install-staging:
+endif
 
- That said, for the time being, I'd prefer new stuff to stick to our existing
-approach of copying from staging to target, except for cases where it is really
-difficult to do differently (e.g. the qt5 stuff). And we can use that as a
-learning path to generalise to all packages.
+
+ Introduced by:
+
+commit 6c5c08b854e4490697076ae3c5a9c587d8672c63
+Author: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date:   Fri Feb 14 10:55:05 2014
+
+    package: add support for top-level parallel make
+
+    To be able to use top-level parallel make we must not depend in a rule
+    on the order of evaluation of the prerequisites, so instead of relying
+    on the left to right ordering of evaluation of the prerequisites add
+    an explicit rule to describe the dependencies.
+
+    We cannot use the pattern rules because they must have the same
+    dependency for every package, but we need to change the dependencies
+    depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
+    more flexible way like $(2)_TARGET_% variables.
+
+    So add explicit dependencies for the following stamp files:
+      $(2)_TARGET_EXTRACT
+      $(2)_TARGET_PATCH
+      $(2)_TARGET_CONFIGURE
+      $(2)_TARGET_BUILD
+      $(2)_TARGET_INSTALL_STAGING
+      $(2)_TARGET_INSTALL_TARGET
+      $(2)_TARGET_INSTALL_IMAGES
+      $(2)_TARGET_INSTALL_HOST
+
+    Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+
+2014... We've been working too long on this stuff...
+
 
  Regards,
  Arnout
 
-[1] https://elinux.org/Buildroot:DeveloperDaysELCE2017
+> The solution of doing staging
+> installation, and then use the pkg-file-list of files installed to
+> staging for the target installation would require adding such a
+> dependency between the target installation and staging installation.
+> 
+> Best regards,
+> 
+> Thomas
+> 
