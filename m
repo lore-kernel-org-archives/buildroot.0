@@ -1,81 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Mar 2019 01:03:44 +0100
-Subject: [Buildroot] [PATCH v4 4/6] quazip: Patch .pro file to correctly
- crosscompile and use qmake infra
-In-Reply-To: <20190322183904.22401-5-anaumann@ultratronik.de>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-5-anaumann@ultratronik.de>
-Message-ID: <b3a49305-0d36-e13b-2dd0-416df4ec1cc6@mind.be>
+From: LP C <lpdev@cordier.org>
+Date: Tue, 26 Mar 2019 01:04:36 +0100
+Subject: [Buildroot] [PATCH v3 0/4] *** Add Intel QuickSync support to
+ ffmpeg ***
+In-Reply-To: <ea-mime-5c8245d9-2d55-45d16710@www-6.netcourrier.com>
+References: <ea-mime-5c8245d9-2d55-45d16710@www-6.netcourrier.com>
+Message-ID: <1553547885.local-9ba03600-5870-v1.5.5-b7939d38@getmailspring.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mar 8 2019, at 11:37 am, lpdev at cordier.org wrote:
+> > De : Louis-Paul Cordier <lpdev@cordier.org>
+> > ? : buildroot at buildroot.org
+> > Sujet : [PATCH v3 0/4] *** Add Intel QuickSync support to ffmpeg ***
+> > Date : 05/02/2019 19:19:42 Europe/Paris
+> > Copie ? : Louis-Paul Cordier <lpdev@cordier.org>;
+> > Bernd Kuhls <bernd.kuhls@t-online.de>;
+> > Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+> >
+> > In addition of the existing VAAPI for hardware encoding, Intel provides
+> > the libmfx API embeded in its Intel MediaSDK. Intel MediaSDK improves
+> > encoding quality, is faster, and makes use of all encoding capabilities
+> > on Intel platforms.
+> >
+> > MFX test procedure (h264):
+> >
+> > 1. Retrieve sample data (https://github.com/Intel-Media-SDK/samples)
+> > 2. Run ./sample_multi_transcode -i::h264 test_stream.264 -o::h264 out.264.
+> > 3. Test should pass.
+> >
+> > FFMpeg QuickSync test procedure (h264):
+> >
+> > 1. Download test video: https://peach.blender.org/trailer-page/
+> > 2. Run ffmpeg -y -hwaccel qsv -qsv_device /dev/dri/renderD128 -c:v
+> > h264_qsv -i /trailer_1080p.mov -c:v h264_qsv -framerate 60 -acodec
+> > copy out.mp4
+> >
+> > Louis-Paul Cordier (4):
+> > package/intel-mediadriver: new package
+> > package/intel-mediasdk: new package
+> > package/ffmpeg: bump to version 4.1
+> > package/ffmpeg: enable Intel QuickSync support.
+> >
+> > Config.in.legacy | 6 ++
+> > DEVELOPERS | 2 +
+> > package/Config.in | 2 +
+> > package/ffmpeg/0001-ffmpeg-pthreads.patch | 34 ------
+> > ...cenc-Fix-building-with-libfdk-aac-v2.patch | 100 ------------------
+> > ...stently-use-a-proper-version-check-m.patch | 99 -----------------
+> > ...dk-aac-Don-t-use-defined-in-a-define.patch | 72 -------------
+> > package/ffmpeg/Config.in | 6 --
+> > package/ffmpeg/ffmpeg.hash | 2 +-
+> > package/ffmpeg/ffmpeg.mk | 15 +--
+> > package/intel-mediadriver/Config.in | 21 ++++
+> > .../intel-mediadriver/intel-mediadriver.hash | 3 +
+> > .../intel-mediadriver/intel-mediadriver.mk | 30 ++++++
+> > package/intel-mediasdk/Config.in | 15 +++
+> > package/intel-mediasdk/intel-mediasdk.hash | 3 +
+> > package/intel-mediasdk/intel-mediasdk.mk | 17 +++
+> > 16 files changed, 108 insertions(+), 319 deletions(-)
+> > delete mode 100644 package/ffmpeg/0001-ffmpeg-pthreads.patch
+> > delete mode 100644 package/ffmpeg/0002-libfdk-aacenc-Fix-building-with-libfdk-aac-v2.patch
+> > delete mode 100644 package/ffmpeg/0003-libfdk-aac-Consistently-use-a-proper-version-check-m.patch
+> > delete mode 100644 package/ffmpeg/0004-libfdk-aac-Don-t-use-defined-in-a-define.patch
+> > create mode 100644 package/intel-mediadriver/Config.in
+> > create mode 100644 package/intel-mediadriver/intel-mediadriver.hash
+> > create mode 100644 package/intel-mediadriver/intel-mediadriver.mk
+> > create mode 100644 package/intel-mediasdk/Config.in
+> > create mode 100644 package/intel-mediasdk/intel-mediasdk.hash
+> > create mode 100644 package/intel-mediasdk/intel-mediasdk.mk
+> >
+> > --
+> > 2.20.1
+> >
+>
+> Hi all,
+>
+> I rebump conerning my last patches, that take into consideration all the suggestions of the community.
+> Thanks for your time!
+> Louis-Paul CORDIER
+Hi all,
+Now that FFMpeg has been bump recently to version 4.1.2, all constraints against the merge of this patch serie has been lifted. Everything has been cleaned accordingly to the different requests.
+Would love to see this merged.
+Don't hesitate if you have further remarks.
+BR
 
-
-On 22/03/2019 19:39, Andreas Naumann wrote:
-> The quazip .pro files uses the target only prefix for cross staging install.
-> This breaks using the new qmake infra, so add a minor patch to fix this.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  .../0001-Fix-crosscompile-staging-install.patch  | 16 ++++++++++++++++
->  package/quazip/quazip.mk                         | 10 ----------
->  2 files changed, 16 insertions(+), 10 deletions(-)
->  create mode 100644 package/quazip/0001-Fix-crosscompile-staging-install.patch
-> 
-> diff --git a/package/quazip/0001-Fix-crosscompile-staging-install.patch b/package/quazip/0001-Fix-crosscompile-staging-install.patch
-> new file mode 100644
-> index 0000000000..96cae37283
-> --- /dev/null
-> +++ b/package/quazip/0001-Fix-crosscompile-staging-install.patch
-> @@ -0,0 +1,16 @@
-
- You need a commit message and a SoB here. Also, preferably a git formatted patch.
-
- There's an active upstream at https://github.com/stachenov/quazip so please
-send a PR.
-
-> +Index: quazip-0.7.6/quazip/quazip.pro
-> +===================================================================
-> +--- quazip-0.7.6.orig/quazip/quazip.pro
-> ++++ quazip-0.7.6/quazip/quazip.pro
-> +@@ -47,9 +47,9 @@ CONFIG(debug, debug|release) {
-> + }
-> + 
-> + unix:!symbian {
-> +-    headers.path=$$PREFIX/include/quazip
-> ++    headers.path=$$[QT_INSTALL_PREFIX]/include/quazip
-> +     headers.files=$$HEADERS
-> +-    target.path=$$PREFIX/lib/$${LIB_ARCH}
-> ++    target.path=$$[QT_INSTALL_PREFIX]/lib/$${LIB_ARCH}
-> +     QMAKE_PKGCONFIG_DESTDIR = pkgconfig
-> +     INSTALLS += headers target
-> + 
-> diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-> index eef423b58a..1b34c9fc2a 100644
-> --- a/package/quazip/quazip.mk
-> +++ b/package/quazip/quazip.mk
-> @@ -13,14 +13,4 @@ QUAZIP_DEPENDENCIES = \
->  QUAZIP_LICENSE = LGPL-2.1
->  QUAZIP_LICENSE_FILES = COPYING
->  
-> -QUAZIP_CONF_OPTS = PREFIX=/usr
-> -
-> -define QUAZIP_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
-> -endef
-> -
-> -define QUAZIP_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
-
- How come this used to work if they were using PREFIX instead of QT_INSTALL_PREFIX?
-
- Regards,
- Arnout
-
-> -endef
-> -
->  $(eval $(qmake-package))
-> 
+Louis-Paul C
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190326/307107d2/attachment.html>
