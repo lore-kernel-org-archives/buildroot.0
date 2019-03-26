@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Mar 2019 15:00:21 +0100
-Subject: [Buildroot] [git commit] boot/riscv-pk: deprecate riscv-pk and BBL
-Message-ID: <20190326135700.5437581E4F@busybox.osuosl.org>
+Date: Tue, 26 Mar 2019 15:01:17 +0100
+Subject: [Buildroot] [PATCH v6 4/5] configs: qemu_riscv*_virt: Use
+ OpenSBI by default
+In-Reply-To: <20190320230422.13592-4-alistair.francis@wdc.com>
+References: <20190320230422.13592-1-alistair.francis@wdc.com>
+ <20190320230422.13592-4-alistair.francis@wdc.com>
+Message-ID: <20190326150117.6d04b5c3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e2ea4ea95bbabda3979b4a788ec0d42b93ee2c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 20 Mar 2019 23:05:21 +0000
+Alistair Francis <Alistair.Francis@wdc.com> wrote:
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/riscv-pk/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> Use OpenSBI by default instead of riscv-pk (BBL).
+> 
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  board/qemu/riscv32-virt/readme.txt  | 6 +++---
+>  board/qemu/riscv64-virt/readme.txt  | 6 +++---
+>  configs/qemu_riscv32_virt_defconfig | 5 ++++-
+>  configs/qemu_riscv64_virt_defconfig | 5 ++++-
+>  4 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/boot/riscv-pk/Config.in b/boot/riscv-pk/Config.in
-index b4fe36590f..cf9c5cd8ee 100644
---- a/boot/riscv-pk/Config.in
-+++ b/boot/riscv-pk/Config.in
-@@ -3,10 +3,13 @@ comment "riscv-pk needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- 
- config BR2_TARGET_RISCV_PK
--	bool "riscv-pk"
-+	bool "riscv-pk (deprecated)"
- 	depends on BR2_riscv
- 	depends on BR2_LINUX_KERNEL
- 	help
-+	  The RISC-V Proxy Kernel (pk) and Boot Loader (BBL) have
-+	  been deprecated. Please use OpenSBI instead.
-+
- 	  The RISC-V Proxy Kernel (pk) package contains the Berkeley
- 	  Boot Loader (BBL) which has been designed to boot a Linux
- 	  kernel on a RISC-V processor.
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
