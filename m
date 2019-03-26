@@ -1,79 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Mar 2019 19:09:04 +0200
-Subject: [Buildroot] [PATCH] package/putty: disable for uClibc
-In-Reply-To: <864edbd3-c06e-785f-42d0-b49852bd7b9a@mind.be>
-References: <27bfbaf6559b347026d81f24451b3a43a8c99a9f.1553548086.git.baruch@tkos.co.il>
- <864edbd3-c06e-785f-42d0-b49852bd7b9a@mind.be>
-Message-ID: <877eclmukv.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Mar 2019 18:07:48 +0100
+Subject: [Buildroot] [PATCH] package/busybox: busybox.config: enable base64
+ applet
+Message-ID: <20190326170749.10182-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+base64 reuses the uuencode logic, so only adds very little extra overhead,
+is enabled by default upstream and is used more often than uuencode - So
+enable it in the default busybox config.
 
-On Mon, Mar 25 2019, Arnout Vandecappelle wrote:
-> On 25/03/2019 22:08, Baruch Siach wrote:
->> putty now uses the futimes() BSD extension that uClibc does not
->> implement.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
->> http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
->> http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
->
->  Although it's true that it also eventually fails to link due to futimes(), the
-> actual errors in the autobuilders are about POLLRDNORM and POLLRDBAND, which
-> require _XOPEN_SOURCE to be set.
->
->  This is quite heavy fallout for something marked as "security bump"...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Indeed. Fortunately, upstream has responded promptly to my build failure
-report. Simon Tatham suggested a patch that fixes this issue, and
-another uClibc build issue for ARM.
-
-I'll send a followup patch with these fixes.
-
-baruch
-
->
->  Regards,
->  Arnout
->
->>
->> Cc: Alexander Dahl <post@lespocky.de>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  package/putty/Config.in | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/putty/Config.in b/package/putty/Config.in
->> index f901c71da297..065a7152f705 100644
->> --- a/package/putty/Config.in
->> +++ b/package/putty/Config.in
->> @@ -3,6 +3,7 @@ config BR2_PACKAGE_PUTTY
->>  	depends on BR2_USE_MMU # fork()
->>  	depends on BR2_USE_WCHAR
->>  	depends on !BR2_STATIC_LIBS
->> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # futimes
->>  	help
->>  	  PuTTY is a free SSH and Telnet client. Without GTK2
->>  	  activated, only the commandline tools plink, pscp, psftp,
->> @@ -11,6 +12,7 @@ config BR2_PACKAGE_PUTTY
->>
->>  	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
->>
->> -comment "putty needs a toolchain w/ wchar, dynamic library"
->> +comment "putty needs a glibc or musl toolchain w/ wchar, dynamic library"
->>  	depends on BR2_USE_MMU
->> -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
->> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
->> +		BR2_TOOLCHAIN_USES_UCLIBC
->>
-
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 38de13d4d9..1d9560d655 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -321,7 +321,7 @@ CONFIG_UNIQ=y
+ CONFIG_UNLINK=y
+ CONFIG_USLEEP=y
+ CONFIG_UUDECODE=y
+-# CONFIG_BASE64 is not set
++CONFIG_BASE64=y
+ CONFIG_UUENCODE=y
+ CONFIG_WC=y
+ # CONFIG_FEATURE_WC_LARGE is not set
+-- 
+2.11.0
