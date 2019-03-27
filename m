@@ -1,50 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 20:13:44 +0100
-Subject: [Buildroot] [git commit] package/libcurl: bump to version 7.64.1
-Message-ID: <20190327191025.AD17E83919@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 20:14:31 +0100
+Subject: [Buildroot] [git commit] package/pure-ftpd: add optional openldap
+ dependency
+Message-ID: <20190327191107.C963587F45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48da1bc9fdebeaa011648c9b208b17f28a0878e3
+commit: https://git.buildroot.net/buildroot/commit/?id=4f67a6c7d29ffb0bb2b8dcc190fdd71de5be84bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contains a number of fixes for issues discovered post-7.64.0.  For details,
-see the list of changes:
-
-https://curl.haxx.se/changes.html#7_64_1
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pure-ftpd/pure-ftpd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b158600eca..d321adcd62 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
-+sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 509dbdb54e..852054a4bd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index ae3ca9d1f0..7012268874 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -31,6 +31,13 @@ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ PURE_FTPD_DEPENDENCIES += libsodium
+ endif
  
--LIBCURL_VERSION = 7.64.0
-+LIBCURL_VERSION = 7.64.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++PURE_FTPD_CONF_OPTS += --with-ldap
++PURE_FTPD_DEPENDENCIES += openldap
++else
++PURE_FTPD_CONF_OPTS += --without-ldap
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PURE_FTPD_CONF_OPTS += --with-tls
+ PURE_FTPD_DEPENDENCIES += openssl
