@@ -1,12 +1,14 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Wed, 27 Mar 2019 23:08:20 +0100
-Subject: [Buildroot] [PATCH v4 1/6] qt5base: Do not build shared libs if
- BR2_STATIC_LIBS is chosen
-In-Reply-To: <4d310445-b8fe-1c37-07d7-989fe9ee1270@mind.be>
+Date: Wed, 27 Mar 2019 23:10:15 +0100
+Subject: [Buildroot] [PATCH v4 2/6] qt5: Provide generic qmake package
+ infrastructure
+In-Reply-To: <42086765-6c53-b726-f09e-184209193b0d@mind.be>
 References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-2-anaumann@ultratronik.de>
- <4d310445-b8fe-1c37-07d7-989fe9ee1270@mind.be>
-Message-ID: <3abfba4d-b0c8-7467-af49-70854b956c67@andin.de>
+ <20190322183904.22401-3-anaumann@ultratronik.de>
+ <e5be61b9-45e1-ddea-2b8a-9ba7511383b3@mind.be>
+ <20190326081814.0109d351@windsurf>
+ <42086765-6c53-b726-f09e-184209193b0d@mind.be>
+Message-ID: <2b455f83-78f6-432c-eb27-ceece04209c8@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +17,227 @@ To: buildroot@busybox.net
 
 
 
-Am 25.03.19 um 23:13 schrieb Arnout Vandecappelle:
+Am 26.03.19 um 11:09 schrieb Arnout Vandecappelle:
 > 
 > 
-> On 22/03/2019 19:38, Andreas Naumann wrote:
->> Traditionally we configured qt5 to always build shared libraries. 
->> This resulted in many conditionals when setting buildroot to 
->> static-libs only, because each module's target install had to be 
->> guarded. So to avoid this and simplify target install in a 
->> subsequent commit, configure qt to build (and install) only the 
->> type of libs which the buildroot defconfig is set to. Unfortunately
->> it seems that Qt does not support building both dynamic and static
->> libs at the same time, so we still set it shared if buildroot asks
->> for both.
+> On 26/03/2019 08:18, Thomas Petazzoni wrote:
+>> Hello,
 >> 
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de> --- 
->> package/qt5/qt5base/qt5base.mk | 9 +++++++-- 1 file changed, 7 
->> insertions(+), 2 deletions(-)
+>> On Tue, 26 Mar 2019 00:16:47 +0100 Arnout Vandecappelle
+>> <arnout@mind.be> wrote:
 >> 
->> diff --git a/package/qt5/qt5base/qt5base.mk 
->> b/package/qt5/qt5base/qt5base.mk index 14536980a8..a8bec84123 
->> 100644 --- a/package/qt5/qt5base/qt5base.mk +++ 
->> b/package/qt5/qt5base/qt5base.mk @@ -24,8 +24,13 @@ 
->> QT5BASE_CONFIGURE_OPTS += \ -no-iconv \ -system-zlib \ -system-pcre
->> \ -	-no-pch \ -	-shared +	-no-pch + +ifeq 
->> ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y) 
->> +QT5BASE_CONFIGURE_OPTS += -shared +else ifeq 
->> ($(BR2_STATIC_LIBS),y) +QT5BASE_CONFIGURE_OPTS += -static +endif
+>>>> This is done by re-running the install step of the qmake
+>>>> generated Makefile with the package build directory prepended
+>>>> (to the staging/host path). Even though this does create
+>>>> lengthy pathes it allows for easy separation of the staging
+>>>> files from the host destined files by just omitting the
+>>>> resulting BUILD_DIR+HOST_DIR path from the following rsync call
+>>>> to the real target folder.
+>>> 
+>>> We have not converged yet on whether this is the right approach.
+>>> So maybe, in order to move forward, it would be better to split
+>>> the patch up into a first bit that creates the qmake package but
+>>> does not define target install steps, then convert the relevant
+>>> packages to qmake packages, and finally change the qmake infra to
+>>> do target install and changes all the packages again. It's more
+>>> work to do it this way, obviously, but it would allow us to
+>>> already commit part of the series before we have converged on it
+>>> completely.
+>> 
+>> While I understand your idea of splitting things up further in
+>> terms of patches, I think we can try to agree on how the target
+>> installation step should be done and use the approach proposed by
+>> Andreas to
 > 
-> For cmake-package, we do the equivalent of
-> 
-> ifeq ($(BR2_STATIC_LIBS),y) QT5BASE_CONFIGURE_OPTS += -static else 
-> QT5BASE_CONFIGURE_OPTS += -shared endif
-> 
-> which is IMO both correct and readable.
+> Sure, that's why I said "maybe". It's not a requirement, but it is
+> also frustrating to respinning a series and seeing no progress on it.
+> That's why I proposed the option.
 
-True. Same thing, simpler code. I take it.
+Splitting the conversion of each package (and doing this one package at
+a time?) really seems like a lot work and I dont know if it leads to a
+nicer history.
+I propose to split up the infra introduction in two parts
+(config,build,staging vs target install), but keep the conversion of
+each package in one patch. Or maybe one patch for the straightforward
+cases and the rest individually?
+
+> 
+>> directly have the qmake infrastructure use this target
+>> installation logic. Andreas has already done lots of work on this
+>> (and building Qt5 modules takes a lot of time, so I suppose this
+>> patch series is annoying like hell to build-test), so I'd like to
+>> not raise the barrier too high here.
+>> 
+>>>> In addition, rsync excludes all header-, documentation- and
+>>>> cmake-pathes as well as libtool and prl files in order to avoid
+>>>> unnecessary files accumulating in target.
+>>> 
+>>> All of these (except *.prl) are anyway cleaned up in target
+>>> finalize, so by itself it's not that useful.
+>> 
+>> Yes, I also felt that all those exclusions were not really needed,
+>> we should probably keep things simple: rsync everything, and really
+>> on target-finalize for doing the cleanup.
+
+Ok, so I add removal of *.prl to target-finalize instead.
+
+>> 
+>>>> Getting rid of the many conditional install commands is
+>>>> possible because qmake already takes care of this when
+>>>> generating the Makefile install targets with the given or
+>>>> autodetected configure options of each package.
+>>>> 
+>>>> However, custom install steps may have to remain in cases where
+>>>> a particular buildroot option has no corresponding setting in
+>>>> the packages configuration options.
+>>> 
+>>> This is also something that probably will need more discussion.
+>> 
+>> Why ?
+> 
+> Uh, I don't see that either anymore...
+> 
+> Oh, wait, now I remember: at the time I wrote that, I thought that I
+> was going to give the feedback somewhere that we should have a list
+> of files (wildcards) to copy from staging to target instead of
+> requiring custom install commands. But I never got around to making
+> that comment :-)
+
+If we copy everything from staging anyway, what's the list of additional
+files good for? The thing is, sometimes we need to copy additional files
+from the build directory or the buildroot package directory to target.
+
+> 
+> Anyway, keeping custom install commands is definitely the way to go
+> as a first step.
+
+I dont know how this can be fixed later, except upstream in some cases.
+
+> 
+>> 
+>>>> +	$$(MAKE) -C $$($$(PKG)_SRCDIR)
+>>>> INSTALL_ROOT=$$($$(PKG)_SRCDIR)/tmp-target-install
+>>>> $$($(2)_INSTALL_STAGING_OPTS)
+>>> 
+>>> This part really needs some explanation in the comment above,
+>>> because it is *very* counter-intuitive. You should explain why
+>>> INSTALL_ROOT is used here and not for staging install, and what
+>>> its effect is exactly, i.e. that qmake configures things with
+>>> STAGING_DIR as the prefix and that INSTALL_ROOT goes before it,
+>>> so you end up with everything under 
+>>> $(@D)/tmp-target-install/$(STAGING_DIR)
+
+I'll add explanation.
+
+>>> 
+>>> However, I'm not sure that this is the way we want to go. What is
+>>> wrong with the pkg-files-list? You said before that it was
+>>> incorrect, but if that is the case, it should be fixed.
+
+pkg-files-list currently breaks the parallel build. I did send a patch
+for that.
+However I suspect the lists might still not be correct because if a
+package provides a file which already exists it wont be recorded, right?
+This situation is problematic anyway but currently solved by at least a
+deterministic package build/install order in which "the last wins".
+Using the staging pkg-files-list for target install would reverse that
+to "first package wins".
+Finally, when building in parallel, this will become a real issue.
+
+>> 
+>> At this point, I find the approach proposed by Andreas to be
+>> pretty nice.
+> 
+> I'm also starting to warm up to it... Norbert has used the same
+> approach for libfuse, and mentioned that it is something that could
+> be generalized to all packages. And I'm starting to see the merit of
+> that.
+> 
+> I feel more comfortable to do that experiment here than in the
+> libfuse package, because here it is in infra so relatively easy to
+> change. For example, I guess it would also be nice to do a common
+> install (in an additional step that both target and staging install
+> depend on, or maybe just as part of the build step) into a PPD-like
+> additional directory, and copy from there to the actual target and
+> staging, preferably using the hardlink approach instead of actual
+> copying. I'm just dreaming out loud here.
+> 
+>> We don't yet use pkg-files-list really as part of the build process
+>> anywhere, I feel a bit more comfortable at this point with what 
+>> Andreas is proposing. No strong argument on this, just a general 
+>> feeling.
+> 
+> Okay, fair enough, let's not go for the pkg-files-list approach.
+> 
+> Andreas, could you include this sentence from Thomas in the commit
+> message so we remember what the reason was to choose for this
+> approach rather than pkg-files-list?
+
+Will do.
+
 
 Regards,
 Andreas
 
+
+
+> 
+> 
+>> One advantage of Andreas approach is that it does not create a 
+>> dependency between the target installation step and the staging 
+>> installation step. They can happen in whatever order, or even in 
+>> parallel (think top-level parallel build). Indeed our package 
+>> infrastructure does not enforce any dependency between target 
+>> installation and staging installation.
+> 
+> Actually it does:
+> 
+> ifeq ($$($(2)_INSTALL_STAGING),YES) $(1)-install-staging:
+> $$($(2)_TARGET_INSTALL_STAGING) $$($(2)_TARGET_INSTALL_STAGING):
+> $$($(2)_TARGET_BUILD) # Some packages use install-staging stuff for
+> install-target $$($(2)_TARGET_INSTALL_TARGET):
+> $$($(2)_TARGET_INSTALL_STAGING) else $(1)-install-staging: endif
+> 
+> 
+> Introduced by:
+> 
+> commit 6c5c08b854e4490697076ae3c5a9c587d8672c63 Author: Fabio
+> Porcedda <fabio.porcedda@gmail.com> Date:   Fri Feb 14 10:55:05 2014
+> 
+> package: add support for top-level parallel make
+> 
+> To be able to use top-level parallel make we must not depend in a
+> rule on the order of evaluation of the prerequisites, so instead of
+> relying on the left to right ordering of evaluation of the
+> prerequisites add an explicit rule to describe the dependencies.
+> 
+> We cannot use the pattern rules because they must have the same 
+> dependency for every package, but we need to change the dependencies 
+> depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a 
+> more flexible way like $(2)_TARGET_% variables.
+> 
+> So add explicit dependencies for the following stamp files: 
+> $(2)_TARGET_EXTRACT $(2)_TARGET_PATCH $(2)_TARGET_CONFIGURE 
+> $(2)_TARGET_BUILD $(2)_TARGET_INSTALL_STAGING 
+> $(2)_TARGET_INSTALL_TARGET $(2)_TARGET_INSTALL_IMAGES 
+> $(2)_TARGET_INSTALL_HOST
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> 
+> 2014... We've been working too long on this stuff...
+> 
 > 
 > Regards, Arnout
 > 
-> 
+>> The solution of doing staging installation, and then use the
+>> pkg-file-list of files installed to staging for the target
+>> installation would require adding such a dependency between the
+>> target installation and staging installation.
 >> 
->> ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y) QT5BASE_DEPENDENCIES += 
->> pcre
+>> Best regards,
+>> 
+>> Thomas
 >> 
 > 
