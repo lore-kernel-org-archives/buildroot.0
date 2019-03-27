@@ -1,36 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 09:48:23 +0100
-Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
-In-Reply-To: <20190327090838.7595b6cd@windsurf> (Thomas Petazzoni's message of
- "Wed, 27 Mar 2019 09:08:38 +0100")
-References: <20190218121508.htf6s7bazcggmozg@gmail.com>
- <878sx2lnbt.fsf@dell.be.48ers.dk> <20190327090838.7595b6cd@windsurf>
-Message-ID: <87mulgu2i0.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2019 10:17:42 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: bump to version 7.64.1
+Message-ID: <20190327091742.4959-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Contains a number of fixes for issues discovered post-7.64.0.  For details,
+see the list of changes:
 
- > On Mon, 25 Mar 2019 21:18:46 +0100
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+https://curl.haxx.se/changes.html#7_64_1
 
- >> >>>>> "Artem" == Artem Senichev <artemsen@gmail.com> writes:  
- >> 
- >> > kexec has fully support of ppc64 platform:
- >> > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
- >> > Added BR2_powerpc64 platform support.  
- >> 
- >> > Signed-off-by: Artem Senichev <artemsen@gmail.com>  
- >> 
- >> Committed to 2019.02.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > No, you didn't apply this one to 2019.02.x, but the "package/kexec:
- > enable powerpc64le platforms" one. Notice the subtle difference ? :-)
-
-Sorry, -ETOOMANYPATCHES ;)
-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index b158600eca..d321adcd62 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
++sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 509dbdb54e..852054a4bd 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.64.0
++LIBCURL_VERSION = 7.64.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-Bye, Peter Korsgaard
+2.11.0
