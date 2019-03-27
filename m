@@ -1,90 +1,47 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 27 Mar 2019 23:14:35 +0100
-Subject: [Buildroot] [PATCH v4 4/6] quazip: Patch .pro file to correctly
- crosscompile and use qmake infra
-In-Reply-To: <b3a49305-0d36-e13b-2dd0-416df4ec1cc6@mind.be>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-5-anaumann@ultratronik.de>
- <b3a49305-0d36-e13b-2dd0-416df4ec1cc6@mind.be>
-Message-ID: <6aaec3cf-7106-b2cd-e6c9-6816daa5c68e@andin.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Mar 2019 23:18:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rdesktop: security bump to
+ version 1.8.4
+In-Reply-To: <20190327203714.3629-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Mar 2019 21:37:14 +0100")
+References: <20190327203714.3629-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ef6sotaf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > - Switch site to github
+ > - Remove second patch (already in version)
+ > - Add hash for license file
+ > - Fix memory corruption in process_bitmap_data - CVE-2018-8794
+ > - Fix remote code execution in process_bitmap_data - CVE-2018-8795
+ > - Fix remote code execution in process_plane - CVE-2018-8797
+ > - Fix Denial of Service in mcs_recv_connect_response - CVE-2018-20175
+ > - Fix Denial of Service in mcs_parse_domain_params - CVE-2018-20175
+ > - Fix Denial of Service in sec_parse_crypt_info - CVE-2018-20176
+ > - Fix Denial of Service in sec_recv - CVE-2018-20176
+ > - Fix minor information leak in rdpdr_process - CVE-2018-8791
+ > - Fix Denial of Service in cssp_read_tsrequest - CVE-2018-8792
+ > - Fix remote code execution in cssp_read_tsrequest - CVE-2018-8793
+ > - Fix Denial of Service in process_bitmap_data - CVE-2018-8796
+ > - Fix minor information leak in rdpsnd_process_ping - CVE-2018-8798
+ > - Fix Denial of Service in process_secondary_order - CVE-2018-8799
+ > - Fix remote code execution in in ui_clip_handle_data - CVE-2018-8800
+ > - Fix major information leak in ui_clip_handle_data - CVE-2018-20174
+ > - Fix memory corruption in rdp_in_unistr - CVE-2018-20177
+ > - Fix Denial of Service in process_demand_active - CVE-2018-20178
+ > - Fix remote code execution in lspci_process - CVE-2018-20179
+ > - Fix remote code execution in rdpsnddbg_process - CVE-2018-20180
+ > - Fix remote code execution in seamless_process - CVE-2018-20181
+ > - Fix remote code execution in seamless_process_line - CVE-2018-20182
 
-Am 26.03.19 um 01:03 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 22/03/2019 19:39, Andreas Naumann wrote:
->> The quazip .pro files uses the target only prefix for cross staging
->> install. This breaks using the new qmake infra, so add a minor
->> patch to fix this.
->> 
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de> --- 
->> .../0001-Fix-crosscompile-staging-install.patch  | 16
->> ++++++++++++++++ package/quazip/quazip.mk                         |
->> 10 ---------- 2 files changed, 16 insertions(+), 10 deletions(-) 
->> create mode 100644
->> package/quazip/0001-Fix-crosscompile-staging-install.patch
->> 
->> diff --git
->> a/package/quazip/0001-Fix-crosscompile-staging-install.patch
->> b/package/quazip/0001-Fix-crosscompile-staging-install.patch new
->> file mode 100644 index 0000000000..96cae37283 --- /dev/null +++
->> b/package/quazip/0001-Fix-crosscompile-staging-install.patch @@
->> -0,0 +1,16 @@
-> 
-> You need a commit message and a SoB here. Also, preferably a git
-> formatted patch.> There's an active upstream at
-> https://github.com/stachenov/quazip so please send a PR.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-OK.
+Committed, thanks.
 
-> 
->> +Index: quazip-0.7.6/quazip/quazip.pro 
->> +===================================================================
->>
->> 
-+--- quazip-0.7.6.orig/quazip/quazip.pro
->> ++++ quazip-0.7.6/quazip/quazip.pro +@@ -47,9 +47,9 @@
->> CONFIG(debug, debug|release) { + } + + unix:!symbian { +-
->> headers.path=$$PREFIX/include/quazip ++
->> headers.path=$$[QT_INSTALL_PREFIX]/include/quazip +
->> headers.files=$$HEADERS +-
->> target.path=$$PREFIX/lib/$${LIB_ARCH} ++
->> target.path=$$[QT_INSTALL_PREFIX]/lib/$${LIB_ARCH} +
->> QMAKE_PKGCONFIG_DESTDIR = pkgconfig +     INSTALLS += headers
->> target + diff --git a/package/quazip/quazip.mk
->> b/package/quazip/quazip.mk index eef423b58a..1b34c9fc2a 100644 ---
->> a/package/quazip/quazip.mk +++ b/package/quazip/quazip.mk @@ -13,14
->> +13,4 @@ QUAZIP_DEPENDENCIES = \ QUAZIP_LICENSE = LGPL-2.1 
->> QUAZIP_LICENSE_FILES = COPYING
->> 
->> -QUAZIP_CONF_OPTS = PREFIX=/usr - -define
->> QUAZIP_INSTALL_STAGING_CMDS -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->> install INSTALL_ROOT=$(STAGING_DIR) -endef - -define
->> QUAZIP_INSTALL_TARGET_CMDS -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->> install INSTALL_ROOT=$(TARGET_DIR)
-> 
-> How come this used to work if they were using PREFIX instead of
-> QT_INSTALL_PREFIX?
-
-Using PREFIX leads to cross-install not being natively supported, but
-only with the addition of INSTALL_PREFIX. Thomas tried to utilize this
-behaviour for our purpose. However, if a package has files for the
-build-host, they will leak into STAGING_DIR and have to be identified
-and removed in a later step. This is not optimal which is why Thomas was
-looking for another solution in the first place.
-
-Regards,
-Andreas
-
-> 
-> Regards, Arnout
-> 
->> -endef - $(eval $(qmake-package))
->> 
-> 
+-- 
+Bye, Peter Korsgaard
