@@ -1,41 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Mar 2019 17:52:36 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/bird: BFD protocol needs threads
-Message-ID: <20190327165236.28415-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Mar 2019 17:55:03 +0100
+Subject: [Buildroot] [PATCH 1/3] package/s6-linux-init: Build also for
+ the host
+In-Reply-To: <20190216212835.25503-2-vadim4j@gmail.com>
+References: <20190216212835.25503-1-vadim4j@gmail.com>
+ <20190216212835.25503-2-vadim4j@gmail.com>
+Message-ID: <20190327175503.5be2fb03@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e1f879cb34f9cfbbd14b75f63d25897c5bee53cd
+Hello Vadim,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Baruch Siach):
- - Fix comment message
+I am not familiar with s6, so sorry if I'm asking silly questions in
+this review.
 
- package/bird/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+On Sat, 16 Feb 2019 23:28:33 +0200
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index 63170ee470..fe34f96a45 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -29,9 +29,13 @@ config BR2_PACKAGE_BIRD_BABEL
- 
- config BR2_PACKAGE_BIRD_BFD
- 	bool "bfd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Enable BFD protocol.
- 
-+comment "BFD protocol needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_BIRD_BGP
- 	bool "bgp"
- 	default y
+> Add strict dependency for host-s6-linux-init to use s6-linux-init-maker
+> on the host during the rootfs generation.
+
+I think the wording is not great here: "strict dependency" does not
+mean anything in the typical Buildroot speak. I think you wanted to say
+"We add host-s6-linux-init as a dependency of the target s6-linux-init,
+so that the latter can use the s6-linux-init-maker program as part of
+its build process".
+
+However, I think adding this dependency should belong to PATCH 2/3,
+where s6-linux-init is actually changed to use s6-linux-init-maker.
+Indeed, as I understand it, it's only starting with PATCH 2/3 that
+s6-linux-init will need this program. Is this correct ?
+
+If it is, then PATCH 1/3 should only change s6-linux-init.mk to add the
+host variant of s6-linux-init.
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
