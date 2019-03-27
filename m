@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:29:17 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/fltk: add
+Date: Wed, 27 Mar 2019 15:29:10 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/fltk: add
  optional xlib_libXrender dependency
-Message-ID: <20190327142629.8214E88122@busybox.osuosl.org>
+Message-ID: <20190327142633.8D3C182502@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd75c62acac6c3a7ef06bc602d262c992cd34d14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f15e362922d758e9960fed9069ab9f0f61284762
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 xlib_libXrender is enabled by default and has been added since version
 1.3.4-1 and
