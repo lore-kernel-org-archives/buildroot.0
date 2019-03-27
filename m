@@ -1,117 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 22:50:36 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] libseccomp: bump to
- version 2.3.3
-Message-ID: <20190327214710.3B584835E4@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 22:50:07 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libseccomp:
+ security bump to version 2.4.0
+Message-ID: <20190327214714.A850E835E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c72d419aa708a39467a5b2c2c72d24be3e9d824d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=61047b38d4438dd9d1574d8cefa3804a6060b8a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
-- Update patch and sent it upstream
-- Remove LIBSECCOMP_FIXUP_M4_DIR (not needed anymore)
-- Add hash for license file
+From the advisory:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c091a9d88b75d038c791af5425078fe2f1b9b200)
+Jann Horn  identified a problem in current versions of
+libseccomp where the library did not correctly generate 64-bit syscall
+argument comparisons using the arithmetic operators (LT, GT, LE, GE).
+Jann has done a search using codesearch.debian.net and it would appear
+that only systemd and Tor are using libseccomp in such a way as to
+trigger the bad code.  In the case of systemd this appears to affect
+the socket address family and scheduling class filters.  In the case
+of Tor it appears that the bad filters could impact the memory
+addresses passed to mprotect(2).
+
+The libseccomp v2.4.0 release fixes this problem, and should be a
+direct drop-in replacement for previous v2.x releases.
+
+https://www.openwall.com/lists/oss-security/2019/03/15/1
+
+v2.4.0 adds a new scmp_api_level utility, so update 0001-remove-static.patch
+to match.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 02300786c2fcba2cf641a040a2d87c4022ddb7fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libseccomp/0001-remove-static.patch | 41 +++++++++++++++++------------
- package/libseccomp/libseccomp.hash          |  3 ++-
- package/libseccomp/libseccomp.mk            |  8 +-----
- 3 files changed, 27 insertions(+), 25 deletions(-)
+ package/libseccomp/0001-remove-static.patch | 18 +++++++++++-------
+ package/libseccomp/libseccomp.hash          |  2 +-
+ package/libseccomp/libseccomp.mk            |  2 +-
+ 3 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/package/libseccomp/0001-remove-static.patch b/package/libseccomp/0001-remove-static.patch
-index 6fd81f96d5..9f0ac210c7 100644
+index 9f0ac210c7..60a1ff00b6 100644
 --- a/package/libseccomp/0001-remove-static.patch
 +++ b/package/libseccomp/0001-remove-static.patch
-@@ -1,24 +1,28 @@
--Do not force static link, it breaks build with
--# BR2_STATIC_LIBS is not set
-+From 8632287cf6863b580340f846ac14adf2609abdb0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 2 Jun 2018 13:45:22 +0200
-+Subject: [PATCH] remove static
-+
-+Do not force static link of tools, it breaks build with:
- BR2_SHARED_LIBS=y
+@@ -1,4 +1,4 @@
+-From 8632287cf6863b580340f846ac14adf2609abdb0 Mon Sep 17 00:00:00 2001
++From 5d010fb06eae43b284e5ccc322f6de47eb42b751 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 2 Jun 2018 13:45:22 +0200
+ Subject: [PATCH] remove static
+@@ -14,16 +14,18 @@ and slighly updated to work with 2.3.3
  
-+Patch retrieved from
-+https://git.buildroot.net/buildroot/tree/package/libseccomp/0001-remove-static.patch
-+and slighly updated to work with 2.3.3
-+
-+[Upstream status: https://github.com/seccomp/libseccomp/pull/121]
-+
  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Peter: updated for v2.4.0 which adds scmp_api_level]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+- tools/Makefile.am | 2 --
+- 1 file changed, 2 deletions(-)
++ tools/Makefile.am | 3 ---
++ 1 file changed, 3 deletions(-)
  
--diff -uNr libseccomp-2.2.0.org/tests/Makefile.am libseccomp-2.2.0/tests/Makefile.am
----- libseccomp-2.2.0.org/tests/Makefile.am	2015-02-11 21:57:11.000000000 +0100
--+++ libseccomp-2.2.0/tests/Makefile.am	2015-03-29 16:03:49.668946652 +0200
--@@ -16,7 +16,6 @@
-- # along with this library; if not, see <http://www.gnu.org/licenses>.
-- #
-- 
---AM_LDFLAGS = -static
-- LDADD = util.la ../src/libseccomp.la
-- 
-- check_LTLIBRARIES = util.la
--diff -uNr libseccomp-2.2.0.org/tools/Makefile.am libseccomp-2.2.0/tools/Makefile.am
----- libseccomp-2.2.0.org/tools/Makefile.am	2015-02-11 21:57:11.000000000 +0100
--+++ libseccomp-2.2.0/tools/Makefile.am	2015-03-29 16:03:46.164992302 +0200
--@@ -33,8 +33,6 @@
-+diff --git a/tools/Makefile.am b/tools/Makefile.am
-+index 70b4aed..ef74270 100644
-+--- a/tools/Makefile.am
-++++ b/tools/Makefile.am
-+@@ -35,8 +35,6 @@ scmp_bpf_disasm_SOURCES = scmp_bpf_disasm.c bpf.h util.h
-  scmp_bpf_sim_SOURCES = scmp_bpf_sim.c bpf.h util.h
+ diff --git a/tools/Makefile.am b/tools/Makefile.am
+-index 70b4aed..ef74270 100644
++index f768365..5f9d571 100644
+ --- a/tools/Makefile.am
+ +++ b/tools/Makefile.am
+-@@ -35,8 +35,6 @@ scmp_bpf_disasm_SOURCES = scmp_bpf_disasm.c bpf.h util.h
+- scmp_bpf_sim_SOURCES = scmp_bpf_sim.c bpf.h util.h
++@@ -37,10 +37,7 @@ scmp_bpf_sim_SOURCES = scmp_bpf_sim.c bpf.h util.h
++ scmp_api_level_SOURCES = scmp_api_level.c
   
   scmp_sys_resolver_LDADD = ../src/libseccomp.la
-@@ -27,3 +31,6 @@ diff -uNr libseccomp-2.2.0.org/tools/Makefile.am libseccomp-2.2.0/tools/Makefile
+ -scmp_sys_resolver_LDFLAGS = -static
+@@ -31,6 +33,8 @@ index 70b4aed..ef74270 100644
  -scmp_arch_detect_LDFLAGS = -static
   scmp_bpf_disasm_LDADD = util.la
   scmp_bpf_sim_LDADD = util.la
-+-- 
-+2.14.1
-+
++ scmp_api_level_LDADD = ../src/libseccomp.la
++-scmp_api_level_LDFLAGS = -static
+ -- 
+-2.14.1
++2.11.0
+ 
 diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-index ef390ff562..0362ce9ba4 100644
+index 0362ce9ba4..0823903c36 100644
 --- a/package/libseccomp/libseccomp.hash
 +++ b/package/libseccomp/libseccomp.hash
-@@ -1,2 +1,3 @@
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 09864282ae579c34bd5ef75ef3487200adfecaa51f5cffc7c7ad1ed2f89f5d6c libseccomp-v2.3.1.tar.gz
-+sha256 5a52495207f00d1254707f11226e17c16ec53f5038d65bbabf1892873fa2fe5b libseccomp-v2.3.3.tar.gz
-+sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b LICENSE
+-sha256 5a52495207f00d1254707f11226e17c16ec53f5038d65bbabf1892873fa2fe5b libseccomp-v2.3.3.tar.gz
++sha256 b7ee0299157fb7a6a81c99f2e0d7e64429b7d7c0eae43c3a6ef91e87eeed2868 libseccomp-v2.4.0.tar.gz
+ sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b LICENSE
 diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index 9a241a5513..afa2d36122 100644
+index afa2d36122..90b981f042 100644
 --- a/package/libseccomp/libseccomp.mk
 +++ b/package/libseccomp/libseccomp.mk
-@@ -4,17 +4,11 @@
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSECCOMP_VERSION = v2.3.1
-+LIBSECCOMP_VERSION = v2.3.3
+-LIBSECCOMP_VERSION = v2.3.3
++LIBSECCOMP_VERSION = v2.4.0
  LIBSECCOMP_SITE = $(call github,seccomp,libseccomp,$(LIBSECCOMP_VERSION))
  LIBSECCOMP_LICENSE = LGPL-2.1
  LIBSECCOMP_LICENSE_FILES = LICENSE
- LIBSECCOMP_INSTALL_STAGING = YES
- LIBSECCOMP_AUTORECONF = YES
- 
--# Needed for autoreconf to work properly, see ./autogen.sh
--define LIBSECCOMP_FIXUP_M4_DIR
--	mkdir $(@D)/m4
--endef
--LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
--
- $(eval $(autotools-package))
