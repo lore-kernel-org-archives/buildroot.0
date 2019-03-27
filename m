@@ -1,66 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Mar 2019 20:40:46 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/keepalived: add optional nftables dependency
-In-Reply-To: <20190327175612.2wsme2jawbxa2wjv@sapphire.tkos.co.il>
-References: <20190327174542.22224-1-fontaine.fabrice@gmail.com>
- <20190327175612.2wsme2jawbxa2wjv@sapphire.tkos.co.il>
-Message-ID: <d79ab549-3695-5157-57ad-26d2ccbd35e4@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Mar 2019 20:50:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/scons: bump to version 3.0.5
+Message-ID: <20190327195027.16858-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Add hash for license file
+- Don't remove host-python2 dependency as most of the packages using
+  scons (such as mongodb or gnuradio) haven't moved to python3 yet
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/scons/scons.hash | 3 ++-
+ package/scons/scons.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 27/03/2019 18:56, Baruch Siach wrote:
-> Hi Fabrice,
-> 
-> On Wed, Mar 27, 2019 at 06:45:42PM +0100, Fabrice Fontaine wrote:
->> nftables support has been added since version 2.0.11 and
->> https://github.com/acassen/keepalived/commit/aa12175ea638912a7789e832634d7ccf80fdf48d
->>
->> It depends on libmnl and libnftnl
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->> Changes v1 -> v2 (after review of Baruch Siach, Thomas Petazzoni and
->> Arnout Vandecappelle)
->>  - nftables support depends on libmnl and libnftnl, it does not depend
->>    on iptables's nftables option or nftables package
->>
->>  package/keepalived/keepalived.mk | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
->> index fcdb43ce13..4790cf5689 100644
->> --- a/package/keepalived/keepalived.mk
->> +++ b/package/keepalived/keepalived.mk
->> @@ -46,4 +46,11 @@ else
->>  KEEPALIVED_CONF_OPTS += --disable-libiptc
->>  endif
->>  
->> +ifeq ($(BR2_PACKAGE_LIBMNL)$(BR2_PACKAGE_LIBNFTNL),yy)
->> +KEEPALIVED_DEPENDENCIES += libmnl libnftnl
-> 
-> BR2_PACKAGE_LIBNFTNL selects BR2_PACKAGE_LIBMNL already. So I think you can 
-> test for BR2_PACKAGE_LIBNFTNL and depend on libnftnl alone.
-
- If it directly uses libmnl functions, then I prefer to have it like this. That
-way, if libnfnl ever looses its dependency on libmnl for whatever reason,
-keepalived doesn't break.
-
- Regards,
- Arnout
-
-> 
->> +KEEPALIVED_CONF_OPTS += --enable-nftables
->> +else
->> +KEEPALIVED_CONF_OPTS += --disable-nftables
->> +endif
->> +
->>  $(eval $(autotools-package))
-> 
-> baruch
-> 
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index b3cdea0d70..ed31301562 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  0b25218ae7b46a967db42f2a53721645b3d42874a65f9552ad16ce26d30f51f2  scons-2.5.1.tar.gz
++sha256  df676f23dc6d4bfa384fc389d95dcd21ab907e6349d4c848958ba4befb73c73e  scons-3.0.5.tar.gz
++sha256  c4248451b6a4cd09870de4fb82a857feb9f98174167b07500c19ed0263fd4db7  LICENSE.txt
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index 14be589e2b..cc2e45562a 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SCONS_VERSION = 2.5.1
++SCONS_VERSION = 3.0.5
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
+-- 
+2.20.1
