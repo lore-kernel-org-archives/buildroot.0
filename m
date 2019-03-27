@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:22:40 +0100
-Subject: [Buildroot] [PATCH 1/2] package/putty: enable static build
-In-Reply-To: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 26 Mar 2019 20:27:19 +0200")
+Date: Wed, 27 Mar 2019 23:22:58 +0100
+Subject: [Buildroot] [PATCH 2/2] package/putty: fix build with uClibc
+In-Reply-To: <64b39558536fb15d8447ea0e5acb294ebba642c1.1553624840.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 26 Mar 2019 20:27:20 +0200")
 References: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
-Message-ID: <871s2sot3j.fsf@dell.be.48ers.dk>
+ <64b39558536fb15d8447ea0e5acb294ebba642c1.1553624840.git.baruch@tkos.co.il>
+Message-ID: <87wokkneil.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Add upstream patch fixing build when NO_GSSAPI is defined which is the
- > case on static builds.
+ > Add patches fixing a number of build issues with uClibc. The issue fixed
+ > in patch #2 has been reported upstream. Patch #3 has been suggested by
+ > upstream but not applied yet.
+
+ > Drop the _SUBDIR assignment. The configure script moved to top level
+ > directory since upstream commit a947c49bec3 from 2014. This allows
+ > AUTORECONF to find configure.ac.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
+ > http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
+ > http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
 
  > Cc: Alexander Dahl <post@lespocky.de>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
