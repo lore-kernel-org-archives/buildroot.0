@@ -1,83 +1,92 @@
-From: Esben Haabendal <esben.haabendal@gmail.com>
-Date: Wed, 27 Mar 2019 23:28:58 +0100
-Subject: [Buildroot] [PATCH v4] mtree: new package
-In-Reply-To: <20190327201803.6b1a832d@windsurf> (Thomas Petazzoni's message of
- "Wed, 27 Mar 2019 20:18:03 +0100")
-References: <20190326142411.6943-1-esben.haabendal@gmail.com>
- <20190327201803.6b1a832d@windsurf>
-Message-ID: <87bm1w9ck5.fsf@haabendal.dk>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Thu, 28 Mar 2019 01:08:29 +0200
+Subject: [Buildroot] [PATCH v4 0/2] add gettext-tiny package
+Message-ID: <20190327230831.31468-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Add lightweight alternative for the GNU gettext package - gettext-tiny.
+The sources are used from sabotage-linux project. Some files are used
+from the original gettext gnu like po/*, gettextize and some m4 files.
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+The original gettext package is renamed to gettext-gnu because now gettext is
+a virtual package and gettext-gnu and gettext-tiny became as gettext providers.
 
-> On Tue, 26 Mar 2019 15:24:11 +0100
-> Esben Haabendal <esben.haabendal@gmail.com> wrote:
->
->> diff --git a/package/mtree/Config.in b/package/mtree/Config.in
->> new file mode 100644
->> index 000000000000..175d05d3bb0d
->> --- /dev/null
->> +++ b/package/mtree/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_MTREE
->> +	bool "mtree"
->> +	# mtree uses <fts.h> which is not included by default in uClibc
->> +	depends on BR2_TOOLCHAIN_USES_GLIBC
->> +	# fts.h does not support LFS (_FILE_OFFSET_BITS==64) in glibc versions
->> +	# older than 2.23, and codesourcery-arm is currently using glibc 2.18
->> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
->
-> My memory is a bit fuzzy on this, but we have some workarounds for this
-> issue in other packages:
->
-> # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-> # large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
-> # for more information.
-> LIBCGROUP_CONF_ENV = \
->         CXXFLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS" \
->         CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS"
->
->
-> # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-> # large file support.
-> # See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-> RESTORECOND_MAKE_OPTS += \
->         $(TARGET_CONFIGURE_OPTS) \
->         CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
->         CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS" \
->         ARCH="$(BR2_ARCH)"
->
-> and in a few other places.
->
-> Is it the same problem ?
+There is only the case when BR2_PACKAGE_GETTEXT is selected directly - by
+ecryptfs-utils, for this case the gettext-tiny install gettext-wrapper for the
+target, the wrapper just echoes the messages w/o any translation.
 
-Yes, sounds very much like the same problem.
+v4:
+    1) Refactored by Thomas Pettazoni, with extracting required gettext-gnu files from
+       from downloaded archive rather than from direct URL link per each file.
 
-> If it has been resolved in glibc 2.23, should
-> we remove those work-arounds ?
+    2) Allow gettext-tiny to be installed for the target which only installs
+       gettext tool echo-wrapper provided by Yann E. Morin.
 
-It depends.  If we do that, people using external toolchains with glibc
-older than 2.23 would see breakage.
+    3) Fixed author and SoB emails in *-format-not-a-string-literal-error-for-gc.patch
 
-> I just would like to make sure we don't work around this problem in
-> different ways in different packages.
+v3:
+    1) Rebased on master.
 
-Sounds like a good plan.  Unfortunately, I don't see that any of the
-proposed workaround generally good.
+    2) Drop wine related patch which is already applied.
 
-For packages where large file support is not deemed an important
-feature, The -U_FILE_OFFSET_BITS workaround is good.  But for packages
-where large file support could be relevant, it seems like a bad idea to
-disable it just to stay compatible with old glibc versions that only a
-few people use together with new buildroot versions.
 
-If you like, I will switch to the -U_FILE_OFFSET_BITS for mtree
-package.  I personally don't need large file support...
+v2:
+    1) Add patch to disable gettext option for "wine" if NLS is disabled.
 
-/Esben
+    2) Fix build issue with libuio by adding config.rpath by separate package
+       patch:
+
+           0002-Add-config.rpath-from-gettext-gnu-distro-0.19.8.1.patch
+
+    3) Use gettext-tiny only as for HOST alternative and if NLS is disabled.
+       There is no option to manually select gettext-gnu or gettext-tiny which
+       is controlled by gettext virtual package.
+
+    4) Drop "files" folder with copied files from original gettext gnu, but
+       download them from:
+
+           https://git.savannah.gnu.org/cgit/gettext.git
+
+       Thanks to Yann E. Morin for help with this.
+
+    5) gettextize is preprocessed from the original gettextize.in
+
+    6) Use only host-generic-package for gettext-tiny, hence remove "target"
+       related stuff.
+
+Vadim Kochan (2):
+  package/gettext: turn into virtual package
+  package/gettext-tiny: new package
+
+ DEVELOPERS                                         |   1 +
+ package/Config.in                                  |   2 +
+ .../0001-error_print_progname.patch                |   0
+ .../0002-Update-after-gnulib-changed.patch         |   0
+ package/gettext-gnu/Config.in                      |  24 +++++
+ .../gettext.hash => gettext-gnu/gettext-gnu.hash}  |   0
+ package/gettext-gnu/gettext-gnu.mk                 | 103 +++++++++++++++++++
+ ...-format-not-a-string-literal-error-for-gc.patch |  55 ++++++++++
+ package/gettext-tiny/Config.in                     |  18 ++++
+ package/gettext-tiny/gettext-tiny.hash             |   5 +
+ package/gettext-tiny/gettext-tiny.mk               | 114 +++++++++++++++++++++
+ package/gettext-tiny/gettext-wrapper               |  24 +++++
+ package/gettext/Config.in                          |  25 ++---
+ package/gettext/gettext.mk                         |  96 +----------------
+ 14 files changed, 357 insertions(+), 110 deletions(-)
+ rename package/{gettext => gettext-gnu}/0001-error_print_progname.patch (100%)
+ rename package/{gettext => gettext-gnu}/0002-Update-after-gnulib-changed.patch (100%)
+ create mode 100644 package/gettext-gnu/Config.in
+ rename package/{gettext/gettext.hash => gettext-gnu/gettext-gnu.hash} (100%)
+ create mode 100644 package/gettext-gnu/gettext-gnu.mk
+ create mode 100644 package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
+ create mode 100644 package/gettext-tiny/Config.in
+ create mode 100644 package/gettext-tiny/gettext-tiny.hash
+ create mode 100644 package/gettext-tiny/gettext-tiny.mk
+ create mode 100644 package/gettext-tiny/gettext-wrapper
+
+-- 
+2.14.1
