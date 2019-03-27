@@ -1,31 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 17:52:33 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/wavemon: remove NPTL
- dependency
-In-Reply-To: <20190216105027.26055-1-fontaine.fabrice@gmail.com>
-References: <20190216105027.26055-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190327175233.6342b03a@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Mar 2019 17:52:36 +0100
+Subject: [Buildroot] [PATCH v2, 1/1] package/bird: BFD protocol needs threads
+Message-ID: <20190327165236.28415-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 Feb 2019 11:50:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/e1f879cb34f9cfbbd14b75f63d25897c5bee53cd
 
-> wavemon does not use pthread_mutexattr_setrobust since version 0.8.2 and
-> https://github.com/uoaerg/wavemon/commit/d271685e03bc896829d8cc01ca0de28cd7b6ba72
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wavemon/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Baruch Siach):
+ - Fix comment message
 
-Applied to master, thanks.
+ package/bird/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index 63170ee470..fe34f96a45 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -29,9 +29,13 @@ config BR2_PACKAGE_BIRD_BABEL
+ 
+ config BR2_PACKAGE_BIRD_BFD
+ 	bool "bfd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Enable BFD protocol.
+ 
++comment "BFD protocol needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_BIRD_BGP
+ 	bool "bgp"
+ 	default y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
