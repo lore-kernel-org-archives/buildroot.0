@@ -1,90 +1,51 @@
-From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Wed, 27 Mar 2019 09:24:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
-In-Reply-To: <20190326201636.13216e35@windsurf>
-References: <20190320210943.21377-1-adrien@gallouet.fr>
- <20190326201636.13216e35@windsurf>
-Message-ID: <CAFtSRGAyVRCX=P-HbZoeYfeRiU_cJ1GDkxkp4sxqaKH5V0XJDQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Mar 2019 09:31:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to
+ version 0.101.2
+In-Reply-To: <20190326220255.14363-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 26 Mar 2019 23:02:53 +0100")
+References: <20190326220255.14363-1-bernd.kuhls@t-online.de>
+Message-ID: <87r2asu39c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 26, 2019 at 8:16 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 20 Mar 2019 21:09:44 +0000
-> Adrien Gallou?t <adrien@gallouet.fr> wrote:
->
-> > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
-> > ---
-> >  package/bird/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++
-> >  package/bird/bird.mk   | 16 +++++++++++++++
-> >  2 files changed, 62 insertions(+)
->
-> I've applied, but I had to fix a number of things, see below.
->
-> >
-> > diff --git a/package/bird/Config.in b/package/bird/Config.in
-> > index a69551f94e..298348d098 100644
-> > --- a/package/bird/Config.in
-> > +++ b/package/bird/Config.in
-> > @@ -20,4 +20,50 @@ config BR2_PACKAGE_BIRD_CLIENT
-> >       help
-> >         Enable the BIRD client
->
-> I added a Config.in comment here to make it clear the below options are
-> for configuring the list of supported protocols.
->
-> > +# BUG: RIP is needed for now
-> > +BR2_PACKAGE_BIRD_RIP=y
->
-> BR2_PACKAGE_* is reserved for config options. Variables in a package
-> should be prefixed by the package name.
->
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
-> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
-> > +
-> > +BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
->
-> So I've changed all of this by:
->
-> # BUG: RIP is mandatory for now
-> BIRD_PROTOCOLS = \
->         rip \
->         $(if $(BR2_PACKAGE_BIRD_BFD),bfd) \
->         $(if $(BR2_PACKAGE_BIRD_BABEL),babel) \
->         $(if $(BR2_PACKAGE_BIRD_BGP),bgp) \
->         $(if $(BR2_PACKAGE_BIRD_MRT),mrt) \
->         $(if $(BR2_PACKAGE_BIRD_OSPF),ospf) \
->         $(if $(BR2_PACKAGE_BIRD_PERF),perf) \
->         $(if $(BR2_PACKAGE_BIRD_PIPE),pipe) \
->         $(if $(BR2_PACKAGE_BIRD_RADV),radv) \
->         $(if $(BR2_PACKAGE_BIRD_RIP),rip) \
->         $(if $(BR2_PACKAGE_BIRD_STATIC),static)
->
-> BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BIRD_PROTOCOLS)))
->
-> and applied to master.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Hi Thomas,
-Thanks to you!
+ > Release notes:
+ > https://blog.clamav.net/2019/03/clamav-01012-and-01003-patches-have.html
+
+ > - Fixes for the following vulnerabilities affecting 0.101.1 and prior:
+ >   - CVE-2019-1787:
+ >     An out-of-bounds heap read condition may occur when scanning PDF
+ >     documents. The defect is a failure to correctly keep track of the number
+ >     of bytes remaining in a buffer when indexing file data.
+ >   - CVE-2019-1789:
+ >     An out-of-bounds heap read condition may occur when scanning PE files
+ >     (i.e. Windows EXE and DLL files) that have been packed using Aspack as a
+ >     result of inadequate bound-checking.
+ >   - CVE-2019-1788:
+ >     An out-of-bounds heap write condition may occur when scanning OLE2 files
+ >     such as Microsoft Office 97-2003 documents. The invalid write happens when
+ >     an invalid pointer is mistakenly used to initialize a 32bit integer to
+ >     zero. This is likely to crash the application.
+
+ > - Fixes for the following vulnerabilities affecting 0.101.1 and 0.101.0 only:
+ >   - CVE-2019-1786:
+ >     An out-of-bounds heap read condition may occur when scanning malformed PDF
+ >     documents as a result of improper bounds-checking.
+ >   - CVE-2019-1785:
+ >     A path-traversal write condition may occur as a result of improper input
+ >     validation when scanning RAR archives. Issue reported by aCaB.
+ >   - CVE-2019-1798:
+ >     A use-after-free condition may occur as a result of improper error
+ >     handling when scanning nested RAR archives. Issue reported by David L.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
