@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:04:20 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x]
+Date: Wed, 27 Mar 2019 23:04:11 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x]
  package/x11r7/xlib_libXdmcp: security bump version to 1.1.3
-Message-ID: <20190327220213.F1A8C8156B@busybox.osuosl.org>
+Message-ID: <20190327220219.CFC2D83ACF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c1a68a4b3af6ff5d83b7e6db5d5703b368e2d0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a3768a2f0d4a6c4ef6fa2ddcdce13e6384b8f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes CVE-2017-2625:
 https://lists.x.org/archives/xorg-announce/2019-March/002974.html
