@@ -1,29 +1,26 @@
-From: Philip Molloy <philip@philipmolloy.com>
-Date: Wed, 27 Mar 2019 14:28:55 +0000
-Subject: [Buildroot] [PATCH 1/1] board: rename pine64 to pine64_a64
-In-Reply-To: <f5986370-bc62-a919-56ec-efbd42d3a4a3@mind.be>
-References: <Oqsf6ZigkT9qL6qRMvO1f_TiFird6B1pMrBmVFLQRMFfs8Wv_lt0OuqT_zUwe0rxjTolUCzKj2jIQJ5u8BB-O6LGmJESAiwSWtgiGpkTyOk=@philipmolloy.com>
- <20190326082523.2790a720@windsurf>
- <f5986370-bc62-a919-56ec-efbd42d3a4a3@mind.be>
-Message-ID: <3NE1XazYiqG-SZqt-6ueuu5qE-mjPq_EFJIFsU4w9yQ6tgf2WyDf6H2j4bt2orOh9uiXJjiGRFmwcMFEF505ExXAzeCvkwtwWXMjtDi8SEk=@philipmolloy.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Mar 2019 15:29:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fltk: add optional
+ xlib_libXrender dependency
+In-Reply-To: <20190317152929.27559-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 17 Mar 2019 16:29:29 +0100")
+References: <20190317152929.27559-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2ass84a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On 26/03/2019 08:25, Thomas Petazzoni wrote:
->
-> > This is not a proper commit log: we don't really care about what
-> > happened to the patch before. However, a proper commit log should
-> > explain why you are doing this change.
->
-> So, a better commit message would be (but I don't know if this is correct):
->
-> Pine64 is the name of the company that makes the board; the board itself is
-> called A64.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Unfortunately, that was not intended to be a commit message. I'm having a hard time migrating my e-mail service and tried to submit the patch by manually composing the e-mail rather than using git-send-email. I'll submit an updated patch once I've sorted out my e-mail woes.
+ > xlib_libXrender is enabled by default and has been added since version
+ > 1.3.4-1 and
+ > https://github.com/fltk/fltk/commit/a6c4b29a184ce7708819f4706877eedcd99a30f5
 
-Best,
-Phil
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
