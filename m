@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:39:22 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python-aiojobs:
- drop aiohttp dependency
-Message-ID: <20190327143607.BC29E81314@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 15:42:19 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/binutils: upstream fixes for
+ 2.31.1
+In-Reply-To: <20190317211848.3721-1-nolange79@gmail.com> (Norbert Lange's
+ message of "Sun, 17 Mar 2019 22:18:48 +0100")
+References: <20190317211848.3721-1-nolange79@gmail.com>
+Message-ID: <87a7hgs7jo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5113a17c334f6815f72db145239ef0dd17782d32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
 
-aiohttp isn't a required dependency for aiojobs
+ > combining musl and binutils 2.31.1 will
+ > produce static applications that crash
+ > immediately.
+ > Picked 3 upstream commits to remedy this.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 53e3860a0e22fca5348a781a5b2e70c19403d172)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-aiojobs/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > see https://sourceware.org/bugzilla/show_bug.cgi?id=23428
 
-diff --git a/package/python-aiojobs/Config.in b/package/python-aiojobs/Config.in
-index 54d6c02a8e..ab61985164 100644
---- a/package/python-aiojobs/Config.in
-+++ b/package/python-aiojobs/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_AIOJOBS
- 	bool "python-aiojobs"
- 	depends on BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
- 	help
- 	  Jobs scheduler for managing background task (asyncio).
- 
+ > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
