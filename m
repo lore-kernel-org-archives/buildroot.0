@@ -1,53 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:00:28 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] lvm2: Update to 2.02.183
-Message-ID: <20190327215821.1590681D34@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 23:01:21 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/supertux: fix
+ build on powerpc64le
+Message-ID: <20190327215821.1B7398160F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00eb766a9240df5a29e10137c40ab46fd0acc897
+commit: https://git.buildroot.net/buildroot/commit/?id=45e5cdcf2f955c052b7c099acf72880909fe628a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In particular update to solve an issue where LVM would fail to
-initialise LVM devices when asynchronous IO was not available and it
-would fail to fall back to synchronous IO. [0][1]
+Fixes:
+ - http://autobuild.buildroot.org/results/c484079b2736eb3c21adff257f3e3ab1acc67f9a
 
-[0] https://bugzilla.redhat.com/show_bug.cgi?id=1650652
-[1] https://github.com/open-power/petitboot/issues/60
-
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ba9442dfe3dd2655a1b3e1cfe7e8a377bfbcf1c8)
+(cherry picked from commit 8867e95a21e91f7a4b02ba6d5c1e8c688eb1a38f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/supertux/0001-Fix-build-on-PowerPC.patch | 81 ++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 697a413995..ad0d93b144 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,5 @@
- # From ftp://sources.redhat.com/pub/lvm2/sha512.sum
--sha512 6e0a10ab48be4f0c751447c6ab88b8f9fa1dcd1d703de77966e8507b173df70b1987fa0be252c31dfce9e0ee70e5f439db58c8f534e24144a70f254c091554ee  LVM2.2.02.180.tgz
-+sha512 3947523c6b0862ada40677ed171ed0cf95e070119e377296fc5ccb153e9c4212d34c0b16a887dbd68ccf265525345dabfed2aa59fb3604555429a7e2ecfff4d7  LVM2.2.02.183.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 152381d65d..7fdb9a7e30 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.180
-+LVM2_VERSION = 2.02.183
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
+diff --git a/package/supertux/0001-Fix-build-on-PowerPC.patch b/package/supertux/0001-Fix-build-on-PowerPC.patch
+new file mode 100644
+index 0000000000..e40abac6b0
+--- /dev/null
++++ b/package/supertux/0001-Fix-build-on-PowerPC.patch
+@@ -0,0 +1,81 @@
++From cfcd478fe69ca1b3923f388a349a4f67ac2c03aa Mon Sep 17 00:00:00 2001
++From: Shawn Anastasio <shawn@anastas.io>
++Date: Sun, 3 Feb 2019 13:22:57 -0600
++Subject: [PATCH] Fix build on PowerPC
++
++On PowerPC-based architectures, SDL includes the altivec.h header
++for SIMD intrinsics. Unfortunately, altivec.h defines some types which
++conflict with C++ types like bool and std::vector. This commit adds
++a wrapper for altivec.h which resolves these conflicts and allows
++supertux to build and run.
++
++Tested on a ppc64le workstation.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/SuperTux/supertux/pull/1056/commits/cfcd478fe69ca1b3923f388a349a4f67ac2c03aa]
++---
++ CMakeLists.txt    | 15 ++++++++++++++-
++ src/ppc/altivec.h |  6 ++++++
++ 2 files changed, 20 insertions(+), 1 deletion(-)
++ create mode 100644 src/ppc/altivec.h
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 70b9673b50..b9b6ea3ea6 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -376,6 +376,11 @@ endif()
++ 
++ include(ConfigureChecks)
++ 
+++# Include altivec wrapper on ppc
+++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
+++  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ppc)
+++endif()
+++
++ 
++ ## Also build external/squirrel
++ 
++@@ -420,6 +425,13 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt)
++   message(FATAL_ERROR "tinygettext submodule is not checked out or ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt is missing")
++ endif()
++ 
+++# Include altivec wrapper on ppc
+++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
+++  set(TINYGETTEXT_CXX_FLAGS "-isystem ${CMAKE_CURRENT_SOURCE_DIR}/src/ppc ${CMAKE_CXX_FLAGS}")
+++else()
+++  set(TINYGETTEXT_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+++endif()
+++
++ set(TINYGETTEXT_PREFIX ${CMAKE_BINARY_DIR}/tinygettext/)
++ ExternalProject_Add(tinygettext
++   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/tinygettext/"
++@@ -428,7 +440,7 @@ ExternalProject_Add(tinygettext
++   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
++   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
++   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
++-  -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+++  -DCMAKE_CXX_FLAGS=${TINYGETTEXT_CXX_FLAGS}
++   -DBUILD_SHARED_LIBS=OFF
++   -DHAVE_SDL=ON
++   -DVCPKG_BUILD=${VCPKG_BUILD}
++@@ -443,6 +455,7 @@ set_target_properties(tinygettext_lib PROPERTIES IMPORTED_LOCATION "${TINYGETTEX
++ 
++ include_directories(SYSTEM ${TINYGETTEXT_PREFIX}/include)
++ 
+++
++ ## external/SDL_ttf with patches
++ find_package(Freetype REQUIRED)
++ find_package(RAQM)
++diff --git a/src/ppc/altivec.h b/src/ppc/altivec.h
++new file mode 100644
++index 0000000000..7ede8246ed
++--- /dev/null
+++++ b/src/ppc/altivec.h
++@@ -0,0 +1,6 @@
+++#include_next <altivec.h>
+++
+++// The altivec headers redefine vector and bool which conflict
+++// with C++'s bool type and std::vector. Undefine them here.
+++#undef vector
+++#undef bool
