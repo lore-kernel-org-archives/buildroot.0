@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 22:34:45 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libssh2: security
+Date: Wed, 27 Mar 2019 22:32:09 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/libssh2: security
  bump to latest git
-Message-ID: <20190327214546.4C42188102@busybox.osuosl.org>
+Message-ID: <20190327214551.7252F884A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb4c55b0b5152248d0c61a6037c15b7971ad831e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e81bf17e1ef70e9b26e4effe3f43cfcc9a8012ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Bump the version to latest git to fix the following security issues:
 
@@ -143,7 +143,7 @@ index d57c8d7062..c4732a2c07 100644
 +sha256 468e7a81a8121c06cb099eef2e17106b0b8c2e1d890b1c0e34e1951f182babb1  libssh2-1b3cbaff518f32e5b70650d4b7b52361b1410d37.tar.gz
  sha256 e15ed284a15e80115467d6d7f030f0d89d8fabbecd78fb6e0f861f0cfc128fd9  COPYING
 diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 0e13701b29..e3d0957942 100644
+index 89cb733224..ed0dd40bec 100644
 --- a/package/libssh2/libssh2.mk
 +++ b/package/libssh2/libssh2.mk
 @@ -4,7 +4,7 @@
