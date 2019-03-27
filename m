@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 22:25:19 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/jq: security bump
+Date: Wed, 27 Mar 2019 22:25:27 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/jq: security bump
  to version 1.6
-Message-ID: <20190327212436.99BDC88102@busybox.osuosl.org>
+Message-ID: <20190327212441.8314B88102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c679de05d1c54a39164abd2c0e52962edf61da6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1f464e0314a76fc60eb54679f62a5c65165f0687
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 - Fix CVE-2015-8863 and  CVE-2016-4074:
   https://github.com/stedolan/jq/issues/1406
