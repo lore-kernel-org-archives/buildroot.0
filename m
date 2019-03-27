@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 22:32:09 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libssh2: security
+Date: Wed, 27 Mar 2019 22:31:53 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libssh2: security
  bump to latest git
-Message-ID: <20190327214551.7252F884A5@busybox.osuosl.org>
+Message-ID: <20190327214558.345D281DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e81bf17e1ef70e9b26e4effe3f43cfcc9a8012ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b5735379c5713aa994e4bf4209692cb4e0f6e3c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Bump the version to latest git to fix the following security issues:
 
