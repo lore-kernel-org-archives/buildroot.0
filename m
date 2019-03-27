@@ -1,218 +1,197 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:17:06 +0100
-Subject: [Buildroot] [git commit] package/rdesktop: security bump to version
- 1.8.4
-Message-ID: <20190327221945.00EF887F43@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 23:22:03 +0100
+Subject: [Buildroot] [git commit] package/putty: fix build with uClibc
+Message-ID: <20190327221945.1E74487F43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=992e84c49ebfdef2fbe2fa3d475e0a388cf59218
+commit: https://git.buildroot.net/buildroot/commit/?id=35b72be8fea5c3b6426441a9efa18a2ad3c319a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch site to github
-- Remove second patch (already in version)
-- Add hash for license file
-- Fix memory corruption in process_bitmap_data - CVE-2018-8794
-- Fix remote code execution in process_bitmap_data - CVE-2018-8795
-- Fix remote code execution in process_plane - CVE-2018-8797
-- Fix Denial of Service in mcs_recv_connect_response - CVE-2018-20175
-- Fix Denial of Service in mcs_parse_domain_params - CVE-2018-20175
-- Fix Denial of Service in sec_parse_crypt_info - CVE-2018-20176
-- Fix Denial of Service in sec_recv - CVE-2018-20176
-- Fix minor information leak in rdpdr_process - CVE-2018-8791
-- Fix Denial of Service in cssp_read_tsrequest - CVE-2018-8792
-- Fix remote code execution in cssp_read_tsrequest - CVE-2018-8793
-- Fix Denial of Service in process_bitmap_data - CVE-2018-8796
-- Fix minor information leak in rdpsnd_process_ping - CVE-2018-8798
-- Fix Denial of Service in process_secondary_order - CVE-2018-8799
-- Fix remote code execution in in ui_clip_handle_data - CVE-2018-8800
-- Fix major information leak in ui_clip_handle_data - CVE-2018-20174
-- Fix memory corruption in rdp_in_unistr - CVE-2018-20177
-- Fix Denial of Service in process_demand_active - CVE-2018-20178
-- Fix remote code execution in lspci_process - CVE-2018-20179
-- Fix remote code execution in rdpsnddbg_process - CVE-2018-20180
-- Fix remote code execution in seamless_process - CVE-2018-20181
-- Fix remote code execution in seamless_process_line - CVE-2018-20182
+Add patches fixing a number of build issues with uClibc. The issue fixed
+in patch #2 has been reported upstream. Patch #3 has been suggested by
+upstream but not applied yet.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Drop the _SUBDIR assignment. The configure script moved to top level
+directory since upstream commit a947c49bec3 from 2014. This allows
+AUTORECONF to find configure.ac.
+
+Fixes:
+http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
+http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
+http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
+
+Cc: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rdesktop/0002-openssl11.patch | 130 ----------------------------------
- package/rdesktop/rdesktop.hash        |   6 +-
- package/rdesktop/rdesktop.mk          |   6 +-
- 3 files changed, 7 insertions(+), 135 deletions(-)
+ .../0002-unix-uxpoll-need-_XOPEN_SOURCE.patch      | 39 +++++++++
+ package/putty/0003-Fix-uClibc-build-issues.patch   | 93 ++++++++++++++++++++++
+ package/putty/putty.mk                             |  3 +-
+ 3 files changed, 134 insertions(+), 1 deletion(-)
 
-diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
-deleted file mode 100644
-index 050d6f6903..0000000000
---- a/package/rdesktop/0002-openssl11.patch
-+++ /dev/null
-@@ -1,130 +0,0 @@
--From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
--From: Jani Hakala <jjhakala@gmail.com>
--Date: Thu, 16 Jun 2016 14:28:15 +0300
--Subject: [PATCH] Fix OpenSSL 1.1 compability issues
--
--Some data types have been made opaque in OpenSSL version 1.1 so
--stack allocation and accessing struct fields directly does not work.
--
--Downloaded from upstream commit
--https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
-- 1 file changed, 40 insertions(+), 25 deletions(-)
--
--diff --git a/ssl.c b/ssl.c
--index 48751255..032e9b9e 100644
----- a/ssl.c
--+++ b/ssl.c
--@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-- 		  uint8 * exponent)
-- {
-- 	BN_CTX *ctx;
---	BIGNUM mod, exp, x, y;
--+	BIGNUM *mod, *exp, *x, *y;
-- 	uint8 inr[SEC_MAX_MODULUS_SIZE];
-- 	int outlen;
-- 
--@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-- 	reverse(inr, len);
-- 
-- 	ctx = BN_CTX_new();
---	BN_init(&mod);
---	BN_init(&exp);
---	BN_init(&x);
---	BN_init(&y);
---
---	BN_bin2bn(modulus, modulus_size, &mod);
---	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
---	BN_bin2bn(inr, len, &x);
---	BN_mod_exp(&y, &x, &exp, &mod, ctx);
---	outlen = BN_bn2bin(&y, out);
--+	mod = BN_new();
--+	exp = BN_new();
--+	x = BN_new();
--+	y = BN_new();
--+
--+	BN_bin2bn(modulus, modulus_size, mod);
--+	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
--+	BN_bin2bn(inr, len, x);
--+	BN_mod_exp(y, x, exp, mod, ctx);
--+	outlen = BN_bn2bin(y, out);
-- 	reverse(out, outlen);
-- 	if (outlen < (int) modulus_size)
-- 		memset(out + outlen, 0, modulus_size - outlen);
-- 
---	BN_free(&y);
---	BN_clear_free(&x);
---	BN_free(&exp);
---	BN_free(&mod);
--+	BN_free(y);
--+	BN_clear_free(x);
--+	BN_free(exp);
--+	BN_free(mod);
-- 	BN_CTX_free(ctx);
-- }
-- 
--@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
-- 
-- 	   Kudos to Richard Levitte for the following (. intiutive .) 
-- 	   lines of code that resets the OID and let's us extract the key. */
---	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
--+
--+	X509_PUBKEY *key = NULL;
--+	X509_ALGOR *algor = NULL;
--+
--+	key = X509_get_X509_PUBKEY(cert);
--+	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
--+
--+	nid = OBJ_obj2nid(algor->algorithm);
--+
-- 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
-- 	{
-- 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
---		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
---		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
--+		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
--+				       0, NULL, NULL, 0);
-- 	}
-- 	epk = X509_get_pubkey(cert);
-- 	if (NULL == epk)
--@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
-- {
-- 	int len;
-- 
---	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
---	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
--+	BIGNUM *e = NULL;
--+	BIGNUM *n = NULL;
--+
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+	e = rkey->e;
--+	n = rkey->n;
--+#else
--+	RSA_get0_key(rkey, &e, &n, NULL);
--+#endif
--+
--+	if ((BN_num_bytes(e) > (int) max_exp_len) ||
--+	    (BN_num_bytes(n) > (int) max_mod_len))
-- 	{
-- 		return 1;
-- 	}
---	len = BN_bn2bin(rkey->e, exponent);
--+	len = BN_bn2bin(e, exponent);
-- 	reverse(exponent, len);
---	len = BN_bn2bin(rkey->n, modulus);
--+	len = BN_bn2bin(n, modulus);
-- 	reverse(modulus, len);
-- 	return 0;
-- }
--@@ -229,8 +247,5 @@ void
-- rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
-- 	       unsigned char *md)
-- {
---	HMAC_CTX ctx;
---	HMAC_CTX_init(&ctx);
-- 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
---	HMAC_CTX_cleanup(&ctx);
-- }
-diff --git a/package/rdesktop/rdesktop.hash b/package/rdesktop/rdesktop.hash
-index cc1f55b771..a43fab76fa 100644
---- a/package/rdesktop/rdesktop.hash
-+++ b/package/rdesktop/rdesktop.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/rdesktop/files/rdesktop/1.8.3/
--md5	86e8b368a7c715e74ded92e0d7912dc5	rdesktop-1.8.3.tar.gz
--sha1	aa1e56043782e04a0121357b24874e3ad6ae7b1d	rdesktop-1.8.3.tar.gz
-+# Locally calculated
-+sha256	516f04df92f16eba04c96bbf9aeb05b9da686689c2bb5c107e0941583e09f933	rdesktop-1.8.4.tar.gz
-+sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
-diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
-index da8a80ef92..d97422cf13 100644
---- a/package/rdesktop/rdesktop.mk
-+++ b/package/rdesktop/rdesktop.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/putty/0002-unix-uxpoll-need-_XOPEN_SOURCE.patch b/package/putty/0002-unix-uxpoll-need-_XOPEN_SOURCE.patch
+new file mode 100644
+index 0000000000..fb4b6c26e5
+--- /dev/null
++++ b/package/putty/0002-unix-uxpoll-need-_XOPEN_SOURCE.patch
+@@ -0,0 +1,39 @@
++From c1b9d07d39e33e40d2ad04be176367cf48271cfd Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 26 Mar 2019 20:00:45 +0200
++Subject: [PATCH] unix/uxpoll: need _XOPEN_SOURCE
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The code needs _XOPEN_SOURCE for some poll() flags.
++
++Fix this build failure with uClibc:
++
++./../unix/uxpoll.c: In function ???pollwrap_add_fd_rwx???:
++./../unix/uxpoll.c:75:32: error: ???POLLRDNORM??? undeclared (first use in this function); did you mean ???POLLNVAL????
++ #define SELECT_R_IN (POLLIN  | POLLRDNORM | POLLRDBAND)
++                                ^
++./../unix/uxpoll.c:87:19: note: in expansion of macro ???SELECT_R_IN???
++         events |= SELECT_R_IN;
++                   ^~~~~~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: issue reported to upstream developers
++
++ unix/uxpoll.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/unix/uxpoll.c b/unix/uxpoll.c
++index bbc5490d125d..6fe6ac7ba0c1 100644
++--- a/unix/uxpoll.c
+++++ b/unix/uxpoll.c
++@@ -1,3 +1,4 @@
+++#define _XOPEN_SOURCE
++ #include <poll.h>
++ 
++ #include "putty.h"
++-- 
++2.20.1
++
+diff --git a/package/putty/0003-Fix-uClibc-build-issues.patch b/package/putty/0003-Fix-uClibc-build-issues.patch
+new file mode 100644
+index 0000000000..ceefded976
+--- /dev/null
++++ b/package/putty/0003-Fix-uClibc-build-issues.patch
+@@ -0,0 +1,93 @@
++From 0554cfbb926a2ba26efda08865b270af8536e0bb Mon Sep 17 00:00:00 2001
++From: Simon Tatham <anakin@pobox.com>
++Date: Tue, 26 Mar 2019 20:03:09 +0200
++Subject: [PATCH] Fix uClibc build issues
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fix two uClibc build failures.
++
++Missing sys/auxv.h header:
++
++./../unix/uxutils.c:5:10: fatal error: sys/auxv.h: No such file or directory
++ #include <sys/auxv.h>
++          ^~~~~~~~~~~~
++
++Missing futimes() implementation:
++
++./../unix/uxsftpserver.c: In function ???uss_fsetstat???:
++./../unix/uxsftpserver.c:441:25: warning: implicit declaration of function ???futimes???; did you mean ???lutimes???? [-Wimplicit-function-declaration]
++ #define FD_PREFIX(func) f ## func
++                         ^
++./../unix/uxsftpserver.c:435:17: note: in expansion of macro ???FD_PREFIX???
++             if (api_prefix(utimes)(api_arg, tv) < 0)                    \
++                 ^~~~~~~~~~
++./../unix/uxsftpserver.c:470:5: note: in expansion of macro ???SETSTAT_GUTS???
++     SETSTAT_GUTS(FD_PREFIX, fd, attrs, success);
++     ^~~~~~~~~~~~
++
++unix/uxsftpserver.o: In function `uss_fsetstat':
++uxsftpserver.c:(.text+0x1058): undefined reference to `futimes'
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: patch suggested by upstream developer Simon Tatham
++
++ configure.ac        |  3 ++-
++ unix/uxsftpserver.c | 10 ++++++++++
++ unix/uxutils.c      |  3 ++-
++ 3 files changed, 14 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 35552ed24dbe..1949ef62f219 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -173,8 +173,9 @@ AC_CHECK_LIB(X11, XOpenDisplay,
++              [GTK_LIBS="-lX11 $GTK_LIBS"
++               AC_DEFINE([HAVE_LIBX11],[],[Define if libX11.a is available])])
++ 
++-AC_CHECK_FUNCS([getaddrinfo posix_openpt ptsname setresuid strsignal updwtmpx fstatat dirfd])
+++AC_CHECK_FUNCS([getaddrinfo posix_openpt ptsname setresuid strsignal updwtmpx fstatat dirfd futimes])
++ AC_CHECK_DECLS([CLOCK_MONOTONIC], [], [], [[#include <time.h>]])
+++AC_CHECK_HEADERS([sys/auxv.h asm/hwcap.h])
++ AC_SEARCH_LIBS([clock_gettime], [rt], [AC_DEFINE([HAVE_CLOCK_GETTIME],[],[Define if clock_gettime() is available])])
++ 
++ AC_CACHE_CHECK([for SO_PEERCRED and dependencies], [x_cv_linux_so_peercred], [
++diff --git a/unix/uxsftpserver.c b/unix/uxsftpserver.c
++index 6fab0ba090d6..a90344e04219 100644
++--- a/unix/uxsftpserver.c
+++++ b/unix/uxsftpserver.c
++@@ -412,6 +412,16 @@ static void uss_fstat(SftpServer *srv, SftpReplyBuilder *reply,
++     }
++ }
++ 
+++#if !HAVE_FUTIMES
+++static inline int futimes(int fd, const struct timeval tv[2])
+++{
+++    /* If the OS doesn't support futimes(3) then we have to pretend it
+++     * always returns failure */
+++    errno = EINVAL;
+++    return -1;
+++}
+++#endif
+++
++ /*
++  * The guts of setstat and fsetstat, macroised so that they can call
++  * fchown(fd,...) or chown(path,...) depending on parameters.
++diff --git a/unix/uxutils.c b/unix/uxutils.c
++index fcbcc4d422c1..f01bc2c14a2d 100644
++--- a/unix/uxutils.c
+++++ b/unix/uxutils.c
++@@ -1,6 +1,7 @@
++ #include "ssh.h"
++ 
++-#if defined __linux__ && (defined __arm__ || defined __aarch64__)
+++#if defined __linux__ && (defined __arm__ || defined __aarch64__) && \
+++    HAVE_SYS_AUXV_H && HAVE_ASM_HWCAP_H
++ 
++ #include <sys/auxv.h>
++ #include <asm/hwcap.h>
++-- 
++2.20.1
++
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index c72c05320d..68622a5743 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -6,11 +6,12 @@
  
--RDESKTOP_VERSION = 1.8.3
--RDESKTOP_SITE = http://downloads.sourceforge.net/project/rdesktop/rdesktop/$(RDESKTOP_VERSION)
-+RDESKTOP_VERSION = 1.8.4
-+RDESKTOP_SITE = $(call github,rdesktop,rdesktop,v$(RDESKTOP_VERSION))
- RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
- 	$(if $(BR2_PACKAGE_ALSA_LIB_PCM),alsa-lib) \
- 	$(if $(BR2_PACKAGE_LIBAO),libao) \
-@@ -13,6 +13,8 @@ RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
- RDESKTOP_CONF_OPTS = --with-openssl=$(STAGING_DIR)/usr --disable-credssp
- RDESKTOP_LICENSE = GPL-3.0+
- RDESKTOP_LICENSE_FILES = COPYING
-+# From git
-+RDESKTOP_AUTORECONF = YES
+ PUTTY_VERSION = 0.71
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+-PUTTY_SUBDIR = unix
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
+ PUTTY_CONF_OPTS = --disable-gtktest
+ PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
++# Patching configure.ac
++PUTTY_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_PCSC_LITE),y)
- RDESKTOP_DEPENDENCIES += pcsc-lite
+ ifeq ($(BR2_PACKAGE_LIBGTK2),y)
+ PUTTY_CONF_OPTS += --with-gtk=2
