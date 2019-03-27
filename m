@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 20:12:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qjson: drop Qt4 patch
-In-Reply-To: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
-References: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190327201246.5a822e40@windsurf>
+Date: Wed, 27 Mar 2019 20:13:14 +0100
+Subject: [Buildroot] [git commit] package/bird: BFD protocol needs threads
+Message-ID: <20190327190951.A290B8816C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 Mar 2019 22:52:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=141dce524283fc65ca0b751c314625816a70e4eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Now that Qt4 has been removed, drop patch
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-Qt4-package-error-in-CMakeLists.txt.patch | 26 -------------------
->  1 file changed, 26 deletions(-)
->  delete mode 100644 package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/e1f879cb34f9cfbbd14b75f63d25897c5bee53cd
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bird/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index 63170ee470..fe34f96a45 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -29,9 +29,13 @@ config BR2_PACKAGE_BIRD_BABEL
+ 
+ config BR2_PACKAGE_BIRD_BFD
+ 	bool "bfd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Enable BFD protocol.
+ 
++comment "BFD protocol needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_BIRD_BGP
+ 	bool "bgp"
+ 	default y
