@@ -1,166 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 19:54:09 +0100
-Subject: [Buildroot] [PATCH 3/3] package/s6-rc: Allow to integrate s6-rc
- services
-In-Reply-To: <20190216212835.25503-4-vadim4j@gmail.com>
-References: <20190216212835.25503-1-vadim4j@gmail.com>
- <20190216212835.25503-4-vadim4j@gmail.com>
-Message-ID: <20190327195409.14931f34@windsurf>
+Date: Wed, 27 Mar 2019 19:54:29 +0100
+Subject: [Buildroot] [git commit] package/glm: bump to version 0.9.9.4
+Message-ID: <20190327190627.E7F8E82595@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e1f99209ae6c3617db19507c7664d38cf1c9314
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 16 Feb 2019 23:28:35 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+- Disable tests as they are enabled by default since version 0.9.9.1:
+  https://github.com/g-truc/glm/commit/d307d390193f4027faec48ac79d7f74b2bec6e56
+- Static and shared libraries are always built since version 0.9.9.1:
+  https://github.com/g-truc/glm/commit/a23dd2f800185a5e233534fed82fc5c2840fbe5c
+  So, disable them as GLM is header-only (it should be noted that
+  upstream wants to keep those libraries as the commit to disable them
+  has been reverted:
+  https://github.com/g-truc/glm/commit/ca8372490eb8742d402878c9e930b891225982e6
+- Add hash for license file (now in manual.md#section0)
 
-> It allows to install s6-rc services by post-build, rootfs-overlay or some
-> package into /etc/s6/rc/service which will be compiled as s6-rc db as
-> /etc/s6/rc/compiled-initial. Services are compiled on stage when rootfs overlay
-> & post-build already performed.
+Fixes:
+ - http://autobuild.buildroot.org/results/3cf1fd3387bd4952470edcfcb93d44f58c9e7ff7
 
-This last sentence is confusing. What about "Services at compiled after
-the rootfs overlay have been copied and post-build scripts have been
-executed".
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glm/glm.hash |  3 ++-
+ package/glm/glm.mk   | 10 ++++++++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-> Added rc.init & rc.shutdown scripts which are needed to run s6-rc
-> services.
-
-Isn't this already done in PATCH 2/3 ?
-
-> This is very basic s6-rc system support which even does not have the
-> basic stuff like /proc /sys /dev setup, but this might be added in
-> future work.
-> 
-> All above is only possible if BR2_INIT_S6 is selected.
-
-"possible" ? "enabled" perhaps ?
-
-
-> diff --git a/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
-> new file mode 100644
-> index 0000000000..baf1706bb3
-> --- /dev/null
-> +++ b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
-> @@ -0,0 +1,76 @@
-> +From cb89562fcec582bbb5bc9a3bf5faf33338e6b535 Mon Sep 17 00:00:00 2001
-> +From: Vadim Kochan <vadim4j@gmail.com>
-> +Date: Wed, 13 Feb 2019 03:36:03 +0200
-> +Subject: [PATCH] configure: Allow to specify compiled base dir
-> +
-> +It allows to specify different s6-rc compiled dir (for example
-> +/etc/s6/rc/compiled), without specifying it as command line argument
-> +for s6-rc* tools.
-> +
-> +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-
-Has this patch been submitted upstream ? What does they say about it ?
-Why can't we use the command line argument and avoid the patch ?
-
-
-> diff --git a/package/s6-rc/rc.init b/package/s6-rc/rc.init
-> new file mode 100644
-> index 0000000000..6709c6488b
-> --- /dev/null
-> +++ b/package/s6-rc/rc.init
-> @@ -0,0 +1,4 @@
-> +#! /usr/bin/execlineb -P
-> +
-> +if { s6-rc-init /run/service }
-> +if { s6-rc -t 600000 -- change default }
-
-So this will replace the dummy rc.init script created in PATCH 2/3. So
-why is PATCH 2/3 creating a rc.init file ?
-
-> diff --git a/package/s6-rc/rc.shutdown b/package/s6-rc/rc.shutdown
-> new file mode 100644
-> index 0000000000..58d49b5cfd
-> --- /dev/null
-> +++ b/package/s6-rc/rc.shutdown
-> @@ -0,0 +1,3 @@
-> +#! /usr/bin/execlineb -P
-> +
-> +s6-rc -da change
-
-Same question.
-
-> diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-> index 222ba139c6..6bba54a28a 100644
-> --- a/package/s6-rc/s6-rc.mk
-> +++ b/package/s6-rc/s6-rc.mk
-> @@ -11,6 +11,13 @@ S6_RC_LICENSE_FILES = COPYING
->  S6_RC_INSTALL_STAGING = YES
->  S6_RC_DEPENDENCIES = s6
->  
-> +ifeq ($(BR2_INIT_S6),y)
-> +# Needs s6-rc-compile to create initial rc db, also
-> +# build after s6-linux-init to rewrite rc.init for run
-> +# s6-rc services.
-> +S6_RC_DEPENDENCIES += host-s6-rc s6-linux-init
-
-Why do we rewrite rc.init ?
-
-> +endif
-> +
->  S6_RC_CONF_OPTS = \
->  	--prefix=/usr \
->  	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-> @@ -20,6 +27,7 @@ S6_RC_CONF_OPTS = \
->  	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
->  	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
->  	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-> +	$(if $(BR2_INIT_S6),--compiledir=/etc/s6/rc/compiled,) \
-
-You can drop the last comma, it is not necessary since you don't have a
-"else" part in the condition.
-
->  	$(SHARED_STATIC_LIBS_OPTS)
->  
->  define S6_RC_CONFIGURE_CMDS
-> @@ -44,6 +52,31 @@ define S6_RC_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
->  endef
->  
-> +ifeq ($(BR2_INIT_S6),y)
-> +
-> +define S6_RC_PREPARE_INIT_RC
-> +	mkdir -p $(TARGET_DIR)/etc/s6/rc/service/default
-> +	echo bundle > $(TARGET_DIR)/etc/s6/rc/service/default/type
-> +	touch $(TARGET_DIR)/etc/s6/rc/service/default/contents
-> +
-> +	mkdir -p $(TARGET_DIR)/etc/s6/rc/compiled-initial
-> +	ln -sf compiled-initial $(TARGET_DIR)/etc/s6/rc/compiled
-
-Why do we have this "compiled-initial" thing and a symlink to it ?
-
-> +
-> +	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.init $(TARGET_DIR)/etc/rc.init
-> +	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.shutdown $(TARGET_DIR)/etc/rc.shutdown
-> +endef
-> +S6_RC_POST_INSTALL_TARGET_HOOKS += S6_RC_PREPARE_INIT_RC
-> +
-> +define S6_RC_FINALIZE_INIT_RC
-> +	rm -rf $(TARGET_DIR)/etc/s6/rc/compiled-initial
-> +	$(HOST_DIR)/bin/s6-rc-compile -v 1 \
-> +		$(TARGET_DIR)/etc/s6/rc/compiled-initial \
-> +		$(TARGET_DIR)/etc/s6/rc/service
-> +endef
-> +S6_RC_ROOTFS_PRE_CMD_HOOKS += S6_RC_FINALIZE_INIT_RC
-
-Meh, I really don't like that this gets executed as a "rootfs pre
-command" hook, but I understand the reasoning behind doing this after
-rootfs overlay / post-build scripts have been handled. Do we need to
-add another sort of hook at the end of the target-finalize target ?
-Should we move the place where TARGET_FINALIZE_HOOKS are executed ? I'm
-not sure.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/glm/glm.hash b/package/glm/glm.hash
+index c87d4ca2f6..9d5c94301d 100644
+--- a/package/glm/glm.hash
++++ b/package/glm/glm.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 a220e60f8711265595be3221e530d632d5823641ecd46a3a54bc174933bff14c  glm-0.9.8.4.tar.gz
++sha256 3a073eb8f3be07cee74481db0e1f78eda553b554941e405c863ab64de6a2e954  glm-0.9.9.4.tar.gz
++sha256 337130631a714eeae017556cad101d5324c2961214120b6214741d3d43667086  manual.md
+diff --git a/package/glm/glm.mk b/package/glm/glm.mk
+index 1f23146dda..e15d4fea49 100644
+--- a/package/glm/glm.mk
++++ b/package/glm/glm.mk
+@@ -4,14 +4,20 @@
+ #
+ ################################################################################
+ 
+-GLM_VERSION = 0.9.8.4
++GLM_VERSION = 0.9.9.4
+ GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
+ GLM_LICENSE = MIT
+-GLM_LICENSE_FILES = copying.txt
++GLM_LICENSE_FILES = manual.md
+ 
+ # GLM is a header-only library, it only makes sense
+ # to have it installed into the staging directory.
+ GLM_INSTALL_STAGING = YES
+ GLM_INSTALL_TARGET = NO
+ 
++# Don't build libraries as GLM is header-only
++GLM_CONF_OPTS = \
++	-DGLM_TEST_ENABLE=OFF \
++	-DBUILD_SHARED_LIBS=OFF \
++	-DBUILD_STATIC_LIBS=OFF
++
+ $(eval $(cmake-package))
