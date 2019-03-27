@@ -1,58 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 27 Mar 2019 19:56:12 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/keepalived: add optional nftables dependency
-In-Reply-To: <20190327174542.22224-1-fontaine.fabrice@gmail.com>
-References: <20190327174542.22224-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190327175612.2wsme2jawbxa2wjv@sapphire.tkos.co.il>
+From: Griffin98 <griffin98@protonmail.com>
+Date: Wed, 27 Mar 2019 18:01:11 +0000
+Subject: [Buildroot] Application for GSoC 2019
+Message-ID: <MaRd7Vz-JL7q0r-ND0Fc0yd2ssbogpg4Ug3OTzZJvpFY0vuUi2NP_rbEEcXIHG3JW-zRNhOR3cn2cp_rpTN7u814-elpGb7QFwjvRQJ6Sy8=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Respected,
 
-On Wed, Mar 27, 2019 at 06:45:42PM +0100, Fabrice Fontaine wrote:
-> nftables support has been added since version 2.0.11 and
-> https://github.com/acassen/keepalived/commit/aa12175ea638912a7789e832634d7ccf80fdf48d
-> 
-> It depends on libmnl and libnftnl
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Baruch Siach, Thomas Petazzoni and
-> Arnout Vandecappelle)
->  - nftables support depends on libmnl and libnftnl, it does not depend
->    on iptables's nftables option or nftables package
-> 
->  package/keepalived/keepalived.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-> index fcdb43ce13..4790cf5689 100644
-> --- a/package/keepalived/keepalived.mk
-> +++ b/package/keepalived/keepalived.mk
-> @@ -46,4 +46,11 @@ else
->  KEEPALIVED_CONF_OPTS += --disable-libiptc
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBMNL)$(BR2_PACKAGE_LIBNFTNL),yy)
-> +KEEPALIVED_DEPENDENCIES += libmnl libnftnl
+I want to work with your Organization as of Google Summer of Code 2019. My details are as follows:
 
-BR2_PACKAGE_LIBNFTNL selects BR2_PACKAGE_LIBMNL already. So I think you can 
-test for BR2_PACKAGE_LIBNFTNL and depend on libnftnl alone.
+Name: Dhyey Patel
 
-> +KEEPALIVED_CONF_OPTS += --enable-nftables
-> +else
-> +KEEPALIVED_CONF_OPTS += --disable-nftables
-> +endif
-> +
->  $(eval $(autotools-package))
+Github Profile: github.com/griffin98
+Programming Skills :- C/C++, Embedded Linux,Embedded Android, Shell Scripting, Python(Scripting, ML).
 
-baruch
+Past Work Experience:
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1) LineageOS Official Maintainer of Galaxy s5(exynos)[DISCONTINUED]
+link: https://github.com/TeamExyKings/android_device_samsung_k3g/commits/lineage-15.1
+https://review.lineageos.org/q/griffin98
+2) Worked on Android Kernels and Firmwares
+link: https://github.com/TeamExyKings/android_kernel_samsung_k3g/commits/working
+3) Worked on Natural Language Processing RASA Stack in Python.
+Link: didn?t opensourced yet.
+4) Worked on Few Python Project As well.
+
+Proposed Project to work : "Follow upstream updates and CVEs of packages".
+Motivation: Previously i worked on CVE tracker for kernel. Which some simply python flask application which uses RESTFUL API  to update the list of CVEs from https://cve.mitre.org/ and compare the kernel.Flask APP display the stats of Patched and Unpatched CVEs. Main motive of the tracker was to help developers to keep track of pending CVEs.
+
+Regards,
+
+Dhyey Patel
+
+Sent with [ProtonMail](https://protonmail.com) Secure Email.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190327/6682275f/attachment.html>
