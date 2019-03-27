@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 22:50:07 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/libseccomp:
+Date: Wed, 27 Mar 2019 22:49:59 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libseccomp:
  security bump to version 2.4.0
-Message-ID: <20190327214714.A850E835E4@busybox.osuosl.org>
+Message-ID: <20190327214722.4EA2A88102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61047b38d4438dd9d1574d8cefa3804a6060b8a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2fb549c388266c6752712c56d9835343de587aca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 From the advisory:
 
