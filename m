@@ -1,32 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 20:12:20 +0100
-Subject: [Buildroot] [PATCH] configs/snps_arc*_defconfig: update linux
- version
-In-Reply-To: <20190327105555.831-1-Evgeniy.Didin@synopsys.com>
-References: <20190327105555.831-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20190327201220.38c53208@windsurf>
+Date: Wed, 27 Mar 2019 20:12:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qjson: drop Qt4 patch
+In-Reply-To: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
+References: <20190326215240.15027-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190327201246.5a822e40@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 27 Mar 2019 13:55:55 +0300
-Evgeniy Didin <evgeniy.didin@synopsys.com> wrote:
+On Tue, 26 Mar 2019 22:52:40 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> With this commit we update for ARC boards Linux kernel
-> version to 4.19.31 and Linux headers version to 4.19.
+> Now that Qt4 has been removed, drop patch
 > 
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  configs/snps_arc700_axs101_defconfig  | 6 +++---
->  configs/snps_archs38_axs103_defconfig | 6 +++---
->  configs/snps_archs38_haps_defconfig   | 6 +++---
->  configs/snps_archs38_hsdk_defconfig   | 6 +++---
->  configs/snps_archs38_vdk_defconfig    | 6 +++---
->  5 files changed, 15 insertions(+), 15 deletions(-)
+>  ...-Qt4-package-error-in-CMakeLists.txt.patch | 26 -------------------
+>  1 file changed, 26 deletions(-)
+>  delete mode 100644 package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
 
 Applied to master, thanks.
 
