@@ -1,43 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:37:38 +0100
-Subject: [Buildroot] [PATCH v2] package/libpcap: fix bluez circular
- dependency
-In-Reply-To: <45321e8446f7e16a4c1d5f4a9b827c5d2e75bdc3.1552849786.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 17 Mar 2019 21:09:46 +0200")
-References: <45321e8446f7e16a4c1d5f4a9b827c5d2e75bdc3.1552849786.git.baruch@tkos.co.il>
-Message-ID: <87mulgs7rh.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2019 15:37:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpcap: fix
+ bluez5_utils-headers dependency
+In-Reply-To: <20190318224042.4568-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 18 Mar 2019 23:40:42 +0100")
+References: <20190318224042.4568-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imw4s7r3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The optional bluez_utils dependency of libpcap creates a circular
- > dependency:
+ > Commit c46afc37dc877f1e94ffde0d77585290711b27ec changed bluez5-utils
+ > dependency by bluez5_utils-headers without replacing the test on
+ > BR2_PACKAGE_BLUEZ5_UTILS by BR2_PACKAGE_BLUEZ5_UTILS_HEADERS
 
- > $ make dbus-show-recursive-depends
-
- > Recursion detected for  : systemd
- > which is a dependency of: dbus
- > which is a dependency of: bluez_utils
- > which is a dependency of: libpcap
- > which is a dependency of: iptables
- > which is a dependency of: systemd
- > make: *** [package/dbus/dbus.mk:121: dbus-show-recursive-depends] Error 1
-
- > Drop support for bluez_utils. For bluez5_utils, which also depends on
- > dbus, we only need the headers in the bluez5_utils-headers package. Use
- > that to break the circular dependency.
+ > Fix this mistake and also add a select on
+ > BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS is set
+ > so the user does not have to do it
 
  > Fixes:
- > http://autobuild.buildroot.net/results/9c3/9c3ee798fa6bb501a20a7892c0b085d2b279b664/
+ >  - http://autobuild.buildroot.org/results/c6828df1f3782564451ddd4187ff026679bf37d8
 
- > Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: keep bluez5_utils, and use bluez5_utils-headers (Yann)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x, thanks.
 
