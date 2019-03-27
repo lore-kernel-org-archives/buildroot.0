@@ -1,77 +1,90 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 27 Mar 2019 18:26:09 +0530
-Subject: [Buildroot] [PATCH v2] board: rename pine64 to pine64_a64
-In-Reply-To: <20190325180108.15704071@windsurf>
-References: <20190202040519.14568-1-philip.a.molloy@gmail.com>
- <CAMty3ZAodmPT6=aX3wFvwY-r6O6p5XVN3qgG5s5E-anft1Ku2Q@mail.gmail.com>
- <20190325180108.15704071@windsurf>
-Message-ID: <CAMty3ZDPhsZiDxtgy0FFvTKA7rydTtPHsRFf2GgNuaWSQ=Db+g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 27 Mar 2019 14:46:32 +0100
+Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
+ 'source-check' target
+In-Reply-To: <20190317155719.14839925@windsurf>
+References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+ <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
+Message-ID: <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 25, 2019 at 10:31 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+
+
+On 17/03/2019 15:57, Thomas Petazzoni wrote:
 > Hello,
->
-> I haven't seen the original patch. Was it sent to the Buildroot mailing
-> list ? It doesn't seem like it reached the mailing list.
->
-> Philip: did you register on the mailing list before sending your
-> patch ? If not, could you subscribe to the mailing list and resend ?
-> Thanks!
->
-> On Mon, 25 Mar 2019 10:43:45 +0530
-> Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> > >  N:     James Hilliard <james.hilliard1@gmail.com>
-> > > diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/a64/boot.cmd
-> > > similarity index 100%
-> > > rename from board/pine64/pine64/boot.cmd
-> > > rename to board/pine64/a64/boot.cmd
-> > > diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/a64/genimage.cfg
-> > > similarity index 100%
-> > > rename from board/pine64/pine64/genimage.cfg
-> > > rename to board/pine64/a64/genimage.cfg
-> >
-> > pine64 is vendor who produced pine64 board. and same vendor producing
-> > sopine. so renaming to a64 doesn't valid.
->
-> What? I'm sorry I don't understand what you mean here.
->
-> The typical Buildroot folder organization is:
->
->         board/<vendor>/<boardname>/
->
-> pine64 is indeed a vendor name, and a64 is a board name, according to
-> https://www.pine64.org/?page_id=46823. So the change looks perfect
-> correct to me. It will allow to add support for other boards produced
-> by Pine64, in board/pine64/<boardname>/.
+> 
+> On Sun, 17 Mar 2019 15:32:15 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+>> As discussed with Thomas P., it all depends on the semantics we want to
+>> give to source-check. But the one implemented by your series does not
+>> seem that interesting in the end. Yes, it makes your remote-worker-with-
+>> a-slow-connection maybe a bit more bearable.
+>>
+>> It also means that all it says is that, right at the time of source-check,
+>> here is actually "something" named as you expect, but there is no
+>> guarantee that a 'make source' later will be able to get that "something"
+>> anyway.
+>>
+>> So, I am still not entirely convinced by the usefulness of source-check.
+> 
+> Just to add to Yann's explanations, here are the two aspects that makes
+> the proposed semantic of "source-check" a bit weak:
+> 
+>  - It only says "something" was available at the specified download
+>    location, but not that this something matches the hash we have in
+>    the package hash file. Hence a successful "make source-check" does
+>    not guarantee a successful "make source".
+> 
+>  - It only says at the time of "make source-check" that "something" was
+>    available at the specified download location, but 2 minutes later
+>    the file could be removed upstream, the tag be dropped, etc. Hence a
+>    successful "make source-check" does not guarantee a successful "make
+>    source".
+> 
+> So, a "make source-check" does not provide you much guarantees. It only
+> tells you that at the time of the source-check, "something" was
+> available at the specified download location, but you don't know if
+> that "something" is correct and that it will still be around when
+> you'll do your build.
+> 
+> If we are willing to accept this very weak semantic of source-check,
+> then fair enough, but we (and our users) have to be aware of the very
+> limited guarantees that source-check provides.
 
-The above link is for LTS which typically share different dts. The
-existing support is been added for non LTS based
-https://www.pine64.org/?page_id=1194
+ For the use case of Thomas DS, this weak semantic is perfectly fine. What it
+tries to protect against is the common mistake that you add or bump a package
+and forget to upload the source to PRIMARY_SITE. As explained by Thomas DS,
+doing a full download is eventually still needed, but takes much longer:
+source-check may take in the order of 1 minute while the full download takes 10
+minutes. That makes all the difference for immediate feedback to the developer,
+and it doesn't significantly slow down a good pipeline.
 
-So the board name is PINE same as SOPINE on here
-https://www.pine64.org/?page_id=1491
+ Indeed, it does not protect against uploading the wrong tarball with the
+correct name. It also doesn't protect against forgetting to update the hash
+file. It also doesn't protect against the package failing to build. It also
+doesn't protect against bugs in the code which become only apparent at run time.
+But all of these are checked later in CI, and the source check captures an
+important (and likely) class of mistakes early on.
 
-We can structure board/pine64/pine and board/pine64/sopine (which is
-already present).
+ It is true that this is a very narrow use case. However, I think it passes two
+tests for acceptance:
 
->
-> > > -Pine64 link:
-> > > +Pine A64 link:
-> > >  https://www.pine64.org/?page_id=1194
-> >
-> > It has wiki link below, that intern routing pine64 board link. wiki
-> > has Mainline stuff information.
->
-> I'm not a native English speaker, so I might be wrong, but I believe
-> "that intern routing pine64 board link" doesn't make any sense in
-> English. What are you trying to say here ?
+* It does not make Buildroot (much) more complex.
 
-What I'm saying here is, the wiki has board link and we may not
-specify explicitly.
+* There is no way to do this with scripting outside of Buildroot.
+
+ Regarding that second point: in fact there would be a way, if we would instead
+have a command to print everything that would be downloaded. That would be very
+similar to patch 1/9, but would remove the need for the other patches in the
+series. The advantage of this approach is that there could be other uses for
+printing the list of sources. But that would be back to the drawing board for
+Thomas DS, so I doubt he's enthusiastic about that option :-) Plus, we have no
+actual example of an additional use case.
+
+ Regards,
+ Arnout
