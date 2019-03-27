@@ -1,51 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 27 Mar 2019 18:47:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: BFD protocol needs threads
-In-Reply-To: <20190327164059.24223-1-fontaine.fabrice@gmail.com>
-References: <20190327164059.24223-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190327164713.qgjxfmne77hrmxua@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Mar 2019 17:46:44 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/pure-ftpd: add optional openldap dependency
+Message-ID: <20190327164644.27596-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Fix patch so it applies cleanly on master
 
-On Wed, Mar 27, 2019 at 05:40:59PM +0100, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/e1f879cb34f9cfbbd14b75f63d25897c5bee53cd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/bird/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/bird/Config.in b/package/bird/Config.in
-> index 63170ee470..bb5fbf92d5 100644
-> --- a/package/bird/Config.in
-> +++ b/package/bird/Config.in
-> @@ -29,9 +29,13 @@ config BR2_PACKAGE_BIRD_BABEL
->  
->  config BR2_PACKAGE_BIRD_BFD
->  	bool "bfd"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  Enable BFD protocol.
->  
-> +comment "BFD protocol needs threads"
+ package/pure-ftpd/pure-ftpd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-We usually use the language "X needs a toolchain w/ threads".
-
-baruch
-
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
->  config BR2_PACKAGE_BIRD_BGP
->  	bool "bgp"
->  	default y
-
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index ae3ca9d1f0..7012268874 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -31,6 +31,13 @@ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ PURE_FTPD_DEPENDENCIES += libsodium
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++PURE_FTPD_CONF_OPTS += --with-ldap
++PURE_FTPD_DEPENDENCIES += openldap
++else
++PURE_FTPD_CONF_OPTS += --without-ldap
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PURE_FTPD_CONF_OPTS += --with-tls
+ PURE_FTPD_DEPENDENCIES += openssl
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.14.1
