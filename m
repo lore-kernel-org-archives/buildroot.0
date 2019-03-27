@@ -1,47 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:55:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/kf5-modemmanager-qt: link with libatomic when needed
-Message-ID: <20190327145328.4E66B81DFE@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 15:58:46 +0100
+Subject: [Buildroot] [git commit] linux: allow BR2_LINUX_KERNEL_IMAGE on
+ RISC-V
+In-Reply-To: <20190319210308.A58267FBD7@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 19 Mar 2019 22:06:15 +0100")
+References: <20190319210308.A58267FBD7@busybox.osuosl.org>
+Message-ID: <871s2ss6s9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=249e67e10bea76eb225583c2e83009ed5769bf99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=a3a4d4d4d307fd21f19ae43e77ac21b85adad7f2
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+ > We will need to build Image files for OpenSBI so allow that now.
 
-This is often for example the case on sparcv8 32 bit.
+ > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/b941a3deaa57cac79f1686d47ca6ababf2f0d5e4
+Committed to 2019.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3cb7546d95bbe227562040d6439b0ab4b62b7c9b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-index 9bbeeaa760..20fbc102c6 100644
---- a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-+++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-@@ -13,4 +13,9 @@ KF5_MODEMMANAGER_QT_LICENSE_FILE = COPYING.LIB
- KF5_MODEMMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules modem-manager qt5base
- KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+KF5_MODEMMANAGER_QT_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+endif
-+
- $(eval $(cmake-package))
+-- 
+Bye, Peter Korsgaard
