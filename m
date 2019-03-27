@@ -1,36 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Mar 2019 17:37:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: add optional openldap
- dependency
-Message-ID: <20190327163720.23339-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Mar 2019 17:40:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bird: BFD protocol needs threads
+Message-ID: <20190327164059.24223-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/e1f879cb34f9cfbbd14b75f63d25897c5bee53cd
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pure-ftpd/pure-ftpd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/bird/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 2fd68de971..8a71ea3b24 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -31,6 +31,13 @@ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
- PURE_FTPD_DEPENDENCIES += libsodium
- endif
+diff --git a/package/bird/Config.in b/package/bird/Config.in
+index 63170ee470..bb5fbf92d5 100644
+--- a/package/bird/Config.in
++++ b/package/bird/Config.in
+@@ -29,9 +29,13 @@ config BR2_PACKAGE_BIRD_BABEL
  
-+ifeq ($(BR2_PACKAGE_OPENLDAP),y)
-+PURE_FTPD_CONF_OPTS += --with-ldap
-+PURE_FTPD_DEPENDENCIES += openldap
-+else
-+PURE_FTPD_CONF_OPTS += --without-ldap
-+endif
+ config BR2_PACKAGE_BIRD_BFD
+ 	bool "bfd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Enable BFD protocol.
+ 
++comment "BFD protocol needs threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PURE_FTPD_CONF_OPTS += --with-tls
- PURE_FTPD_DEPENDENCIES += host-pkgconf openssl
+ config BR2_PACKAGE_BIRD_BGP
+ 	bool "bgp"
+ 	default y
 -- 
 2.14.1
