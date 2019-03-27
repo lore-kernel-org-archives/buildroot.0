@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 09:07:52 +0100
+Date: Wed, 27 Mar 2019 09:08:38 +0100
 Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
-In-Reply-To: <20190218121508.htf6s7bazcggmozg@gmail.com>
+In-Reply-To: <878sx2lnbt.fsf@dell.be.48ers.dk>
 References: <20190218121508.htf6s7bazcggmozg@gmail.com>
-Message-ID: <20190327090752.75895bad@windsurf>
+ <878sx2lnbt.fsf@dell.be.48ers.dk>
+Message-ID: <20190327090838.7595b6cd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Feb 2019 15:15:08 +0300
-Artem Senichev <artemsen@gmail.com> wrote:
+On Mon, 25 Mar 2019 21:18:46 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> kexec has fully support of ppc64 platform:
-> https://www.kernel.org/doc/Documentation/kdump/kdump.txt
-> Added BR2_powerpc64 platform support.
+> >>>>> "Artem" == Artem Senichev <artemsen@gmail.com> writes:  
 > 
-> Signed-off-by: Artem Senichev <artemsen@gmail.com>
-> ---
->  package/kexec/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  > kexec has fully support of ppc64 platform:
+>  > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
+>  > Added BR2_powerpc64 platform support.  
+> 
+>  > Signed-off-by: Artem Senichev <artemsen@gmail.com>  
+> 
+> Committed to 2019.02.x, thanks.
 
-Applied to master, thanks.
+No, you didn't apply this one to 2019.02.x, but the "package/kexec:
+enable powerpc64le platforms" one. Notice the subtle difference ? :-)
 
 Thomas
 -- 
