@@ -1,112 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:01:21 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/supertux: fix
- build on powerpc64le
-Message-ID: <20190327215821.1B7398160F@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 23:02:14 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/asterisk:
+ security bump to version 16.2.1
+Message-ID: <20190327220005.122138810A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45e5cdcf2f955c052b7c099acf72880909fe628a
+commit: https://git.buildroot.net/buildroot/commit/?id=54c54e16558d1018cffce7717c5c2f0a6d259cae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/c484079b2736eb3c21adff257f3e3ab1acc67f9a
+Fixes the following security issue:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+AST-2019-001: Remote crash vulnerability with SDP protocol violation
+When Asterisk makes an outgoing call, a very specific SDP protocol violation
+by the remote party can cause Asterisk to crash (CVE-2019-7251)
+
+https://downloads.asterisk.org/pub/security/AST-2019-001.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8867e95a21e91f7a4b02ba6d5c1e8c688eb1a38f)
+(cherry picked from commit 391a1e5df7a57abfcebd1ca260b56c76c941e5ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/supertux/0001-Fix-build-on-PowerPC.patch | 81 ++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/supertux/0001-Fix-build-on-PowerPC.patch b/package/supertux/0001-Fix-build-on-PowerPC.patch
-new file mode 100644
-index 0000000000..e40abac6b0
---- /dev/null
-+++ b/package/supertux/0001-Fix-build-on-PowerPC.patch
-@@ -0,0 +1,81 @@
-+From cfcd478fe69ca1b3923f388a349a4f67ac2c03aa Mon Sep 17 00:00:00 2001
-+From: Shawn Anastasio <shawn@anastas.io>
-+Date: Sun, 3 Feb 2019 13:22:57 -0600
-+Subject: [PATCH] Fix build on PowerPC
-+
-+On PowerPC-based architectures, SDL includes the altivec.h header
-+for SIMD intrinsics. Unfortunately, altivec.h defines some types which
-+conflict with C++ types like bool and std::vector. This commit adds
-+a wrapper for altivec.h which resolves these conflicts and allows
-+supertux to build and run.
-+
-+Tested on a ppc64le workstation.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/SuperTux/supertux/pull/1056/commits/cfcd478fe69ca1b3923f388a349a4f67ac2c03aa]
-+---
-+ CMakeLists.txt    | 15 ++++++++++++++-
-+ src/ppc/altivec.h |  6 ++++++
-+ 2 files changed, 20 insertions(+), 1 deletion(-)
-+ create mode 100644 src/ppc/altivec.h
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 70b9673b50..b9b6ea3ea6 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -376,6 +376,11 @@ endif()
-+ 
-+ include(ConfigureChecks)
-+ 
-++# Include altivec wrapper on ppc
-++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
-++  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ppc)
-++endif()
-++
-+ 
-+ ## Also build external/squirrel
-+ 
-+@@ -420,6 +425,13 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt)
-+   message(FATAL_ERROR "tinygettext submodule is not checked out or ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt is missing")
-+ endif()
-+ 
-++# Include altivec wrapper on ppc
-++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
-++  set(TINYGETTEXT_CXX_FLAGS "-isystem ${CMAKE_CURRENT_SOURCE_DIR}/src/ppc ${CMAKE_CXX_FLAGS}")
-++else()
-++  set(TINYGETTEXT_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-++endif()
-++
-+ set(TINYGETTEXT_PREFIX ${CMAKE_BINARY_DIR}/tinygettext/)
-+ ExternalProject_Add(tinygettext
-+   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/tinygettext/"
-+@@ -428,7 +440,7 @@ ExternalProject_Add(tinygettext
-+   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-+   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
-+   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-+-  -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-++  -DCMAKE_CXX_FLAGS=${TINYGETTEXT_CXX_FLAGS}
-+   -DBUILD_SHARED_LIBS=OFF
-+   -DHAVE_SDL=ON
-+   -DVCPKG_BUILD=${VCPKG_BUILD}
-+@@ -443,6 +455,7 @@ set_target_properties(tinygettext_lib PROPERTIES IMPORTED_LOCATION "${TINYGETTEX
-+ 
-+ include_directories(SYSTEM ${TINYGETTEXT_PREFIX}/include)
-+ 
-++
-+ ## external/SDL_ttf with patches
-+ find_package(Freetype REQUIRED)
-+ find_package(RAQM)
-+diff --git a/src/ppc/altivec.h b/src/ppc/altivec.h
-+new file mode 100644
-+index 0000000000..7ede8246ed
-+--- /dev/null
-++++ b/src/ppc/altivec.h
-+@@ -0,0 +1,6 @@
-++#include_next <altivec.h>
-++
-++// The altivec headers redefine vector and bool which conflict
-++// with C++'s bool type and std::vector. Undefine them here.
-++#undef vector
-++#undef bool
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index e126372f57..d8cc56695c 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  d74ba84ad92cd710eb071940e6057ef644d71864431d91aaafe0717a8939afc3  asterisk-16.1.1.tar.gz
++sha256  c022e9d5410ed94ab1aa51ba1e2a8b196f0dfa15bcd0bd545d06efee4c786578  asterisk-16.2.1.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 3b4d97a258..65f8d3fdf9 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 16.1.1
++ASTERISK_VERSION = 16.2.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
