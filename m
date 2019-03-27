@@ -1,107 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 19:43:12 +0100
-Subject: [Buildroot] [PATCH 2/3] package/s6-linux-init: Allow to install
- as init system
-In-Reply-To: <20190216212835.25503-3-vadim4j@gmail.com>
-References: <20190216212835.25503-1-vadim4j@gmail.com>
- <20190216212835.25503-3-vadim4j@gmail.com>
-Message-ID: <20190327194312.163ffdee@windsurf>
+Date: Wed, 27 Mar 2019 19:46:26 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: add resolutionkms
+ option
+Message-ID: <20190327184419.6F074880CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=fad79feac2249dac036ffc3029ff6e5b10d0d4c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 16 Feb 2019 23:28:34 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+resolutionkms has been added in version 10.2.5 and
+https://github.com/vmware/open-vm-tools/commit/dc95efcb7d4bb7d865b7d37f9aaafe6fb8009e59
 
-> +ifeq ($(BR2_INIT_S6),y)
-> +
-> +# Don't let Busybox to install it's own tools like poweroff, reboot, halt, etc
-> +S6_LINUX_INIT_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+It depends on udev and libdrm's vmwgfx option
 
-The comment is not good: i doesn't prevent Busybox from installing
-these programs, but it ensures Busybox is built before, and therefore
-we have the ability to "win" over Busybox as we can overwrite those
-programs.
+Fixes:
+ - http://autobuild.buildroot.org/results/92f7c88917066b1d3e15ee0d1baafe01c0cb29c8
 
-However, this is not how we handle this situation. In fact, we handle
-it in exactly the opposite way. In package/busybox/busybox.mk, we add
-to BUSYBOX_DEPENDENCIES all packages that install programs that
-"conflict" with Busybox applets. This way, we are sure they are built
-before Busybox. And the installation process of Busybox has been
-carefully modified to not overwrite an existing program by a Busybox
-applet if this program already exists.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openvmtools/Config.in      | 14 ++++++++++++++
+ package/openvmtools/openvmtools.mk |  7 +++++++
+ 2 files changed, 21 insertions(+)
 
-So, you should use the same model for s6-linux-init.
-
-> +
-> +S6_LINUX_INIT_MAKER_OPTS = -b /usr/bin -c /etc/s6
-> +
-> +ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
-> +S6_LINUX_INIT_MAKER_OPTS += -d 0
-> +else
-> +S6_LINUX_INIT_MAKER_OPTS += $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS),,-d 1)
-
-So you need -d1 in which cases ? Where udev is used ?
-
-What about:
-
-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
-S6_LINUX_INIT_MAKER_OPTS += -d 0
-else ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV)$(BR2_PACKAGE_HAS_UDEV),y)
-S6_LINUX_INIT_MAKER_OPTS += -d 1
-endif
-
-or something like that ?
-
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-> +S6_LINUX_INIT_MAKER_OPTS += -G "/sbin/getty -L \
-> +			  $(SYSTEM_GETTY_OPTIONS) \
-> +			  $(SYSTEM_GETTY_PORT) \
-> +			  $(SYSTEM_GETTY_BAUDRATE) \
-> +			  $(SYSTEM_GETTY_TERM)"
-
-I'd say keep this on one single line.
-
-> +endif
-> +
-> +define S6_LINUX_INIT_INSTALL_INIT
-> +	ln -sf ../etc/s6/init $(TARGET_DIR)/sbin/init
-> +
-> +	ln -sf /usr/bin/s6-reboot $(TARGET_DIR)/sbin/reboot
-> +	ln -sf /usr/bin/s6-poweroff $(TARGET_DIR)/sbin/poweroff
-> +	ln -sf /usr/bin/s6-halt $(TARGET_DIR)/sbin/halt
-> +
-> +	echo "#! /usr/bin/execlineb -P" > $(@D)/rc.init
-
-What is this empty script doing ? Perhaps we should have it as a file
-in package/s6-linux-init/ instead of generating it.
-
-> +	$(INSTALL) -m 0755 $(@D)/rc.init $(TARGET_DIR)/etc/rc.init
-> +	echo "#! /usr/bin/execlineb -P" > $(@D)/rc.shutdown
-> +	$(INSTALL) -m 0755 $(@D)/rc.shutdown $(TARGET_DIR)/etc/rc.shutdown
-
-Same question about what this empty script is doing.
-
-> +	rm -rf $(TARGET_DIR)/etc/s6
-
-Any reason to have this rm -rf ?
-
-> +	$(HOST_DIR)/bin/s6-linux-init-maker $(S6_LINUX_INIT_MAKER_OPTS) $(TARGET_DIR)/etc/s6
-> +endef
-> +S6_LINUX_INIT_POST_INSTALL_TARGET_HOOKS += S6_LINUX_INIT_INSTALL_INIT
-> +
-> +endif # BR2_INIT_S6
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 72c0293de7..97860f8c6f 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -45,6 +45,20 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ comment "PAM support needs a glibc toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
++	bool "resolutionkms support"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_i386 || BR2_x86_64 # libdrm vmwgfx
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_VMWGFX
++	help
++	  Enable support for resolutionkms
++
++comment "resolutionkms needs udev, a toolchain w/ threads"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
++
+ endif
+ 
+ comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 0dc2956d02..145ee61895 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -47,6 +47,13 @@ else
+ OPENVMTOOLS_CONF_OPTS += --without-pam
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS),y)
++OPENVMTOOLS_CONF_OPTS += --enable-resolutionkms
++OPENVMTOOLS_DEPENDENCIES += libdrm udev
++else
++OPENVMTOOLS_CONF_OPTS += --disable-resolutionkms
++endif
++
+ # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
+ # defined in lib/misc/hostinfoPosix.c
+ # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
