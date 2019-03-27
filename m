@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 10:44:56 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] package/cups: security
+Date: Wed, 27 Mar 2019 10:44:42 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/cups: security
  bump to version 2.2.10
-Message-ID: <20190327094324.A3EC18154C@busybox.osuosl.org>
+Message-ID: <20190327094331.8EC4B81732@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24e84b2c11568997b1cd981ed5275f4ec5fa2d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ef54e736827176bf7964843584b97587b8f6eb19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 - Fixes CVE-2018-4700: Linux session cookies used a predictable random
   number seed: https://github.com/apple/cups/releases/tag/v2.2.10.
