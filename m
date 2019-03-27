@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:05:35 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x]
+Date: Wed, 27 Mar 2019 23:04:20 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x]
  package/x11r7/xlib_libXdmcp: security bump version to 1.1.3
-Message-ID: <20190327220209.16FF0884A5@busybox.osuosl.org>
+Message-ID: <20190327220213.F1A8C8156B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1011580971ad55632a7a9dc9a04919a58f47967
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3c1a68a4b3af6ff5d83b7e6db5d5703b368e2d0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 Fixes CVE-2017-2625:
 https://lists.x.org/archives/xorg-announce/2019-March/002974.html
@@ -41,7 +41,7 @@ index 6b50cb1c79..0dbea635f2 100644
 +# Locally computed
 +sha256 8a3c3f35b0dbcb60a4e242b9e4394a352a65bb27deb2938ea1e2e62a626e16e9  COPYING
 diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index ec1b861b92..7e6ed05d5e 100644
+index 44a6f00543..1182903e87 100644
 --- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
 +++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
 @@ -4,7 +4,7 @@
