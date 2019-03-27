@@ -1,50 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:28:04 +0100
-Subject: [Buildroot] [PATCH] core/pkg-infra: tweak only .la files that
- need it
-In-Reply-To: <20190210213818.5232-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 10 Feb 2019 22:38:18 +0100")
-References: <20190210213818.5232-1-yann.morin.1998@free.fr>
-Message-ID: <871s2stmrv.fsf@dell.be.48ers.dk>
+From: Philip Molloy <philip@philipmolloy.com>
+Date: Wed, 27 Mar 2019 14:28:55 +0000
+Subject: [Buildroot] [PATCH 1/1] board: rename pine64 to pine64_a64
+In-Reply-To: <f5986370-bc62-a919-56ec-efbd42d3a4a3@mind.be>
+References: <Oqsf6ZigkT9qL6qRMvO1f_TiFird6B1pMrBmVFLQRMFfs8Wv_lt0OuqT_zUwe0rxjTolUCzKj2jIQJ5u8BB-O6LGmJESAiwSWtgiGpkTyOk=@philipmolloy.com>
+ <20190326082523.2790a720@windsurf>
+ <f5986370-bc62-a919-56ec-efbd42d3a4a3@mind.be>
+Message-ID: <3NE1XazYiqG-SZqt-6ueuu5qE-mjPq_EFJIFsU4w9yQ6tgf2WyDf6H2j4bt2orOh9uiXJjiGRFmwcMFEF505ExXAzeCvkwtwWXMjtDi8SEk=@philipmolloy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> On 26/03/2019 08:25, Thomas Petazzoni wrote:
+>
+> > This is not a proper commit log: we don't really care about what
+> > happened to the patch before. However, a proper commit log should
+> > explain why you are doing this change.
+>
+> So, a better commit message would be (but I don't know if this is correct):
+>
+> Pine64 is the name of the company that makes the board; the board itself is
+> called A64.
 
- > Currently, when we tweak the .la files, we do so unconditionally on all
- > .la files, even those we already fixed in a previous run.
+Unfortunately, that was not intended to be a commit message. I'm having a hard time migrating my e-mail service and tried to submit the patch by manually composing the e-mail rather than using git-send-email. I'll submit an updated patch once I've sorted out my e-mail woes.
 
- > This has the nasty side effect that each .la file will be reported as
- > being touched by all packages that are installed after the package that
- > actually installed said .la file.
-
- > Since we can't easily know what files were installed by a package (that
- > is an instrumentation hook, and comes after the mangling), we use a
- > trick (like is done in libtool?): we do mangle all files, each into a
- > temporary location; if the result is identical to the input, we remove
- > the temporary, while if the result differs from the output, we move
- > the temporary to replace the input.
-
- > Reported-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
- > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
-
- > ---
- > Changes v1 -> v2:
- >   - drop spurious trailing semicolon on sed command line  (Thomas DS.)
- >   - use $$(find ...) instead of $(find ...), as we don't want it to be
- >     evaluated by the Makefile, but by the shell
- >   - silence the output of cmp
- >   - typoes in commit log  (Thomas DS.)
-
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best,
+Phil
