@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 10:17:42 +0100
-Subject: [Buildroot] [PATCH] package/libcurl: bump to version 7.64.1
-Message-ID: <20190327091742.4959-1-peter@korsgaard.com>
+Date: Wed, 27 Mar 2019 10:43:49 +0100
+Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: Generate package config
+ if it is not specified
+In-Reply-To: <20190317102736.51bd10fb@windsurf> (Thomas Petazzoni's message of
+ "Sun, 17 Mar 2019 10:27:36 +0100")
+References: <1551443622-29498-1-git-send-email-email@gmail.com>
+ <20190317102736.51bd10fb@windsurf>
+Message-ID: <87imw4tzxm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a number of fixes for issues discovered post-7.64.0.  For details,
-see the list of changes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-https://curl.haxx.se/changes.html#7_64_1
+ > Hello Vadim,
+ > On Fri,  1 Mar 2019 14:33:42 +0200
+ > Vadim Kochan <vadim4j@gmail.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ >> From: Vadim Kochan <vadim4j@gmail.com>
+ >> 
+ >> It is possible to generate one-line config for the package just by
+ >> normalize it to the form:
+ >> 
+ >> BR2_PACKAGE_${pkg_replaced-to_and_uppercase}
+ >> 
+ >> it simplifes a bit of testing package where no additional config options
+ >> are needed.
+ >> 
+ >> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+ >> ---
+ >> utils/test-pkg | 17 ++++++++++++++++-
+ >> 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b158600eca..d321adcd62 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
-+sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 509dbdb54e..852054a4bd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.64.0
-+LIBCURL_VERSION = 7.64.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ > Applied to master, thanks. I was initially a bit skeptical because if
+ > the package has a dependency, your solution does not work very well,
+ > and users could believe that the package is going to be tested while it
+ > won't. But in fact in that case all tests are going to be "SKIPPED"
+ > because the BR2_PACKAGE_FOO=y line is not in the final .config. This
+ > will clearly tell the user that much not testing has happened. So I'm
+ > fine with this, and therefore I applied.
+
+While this isn't a bugfix, it seems quite safe and can be useful for
+users - So I've committed it to 2019.02.x as well, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
