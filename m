@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:20:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rtptools: bump to version 1.0.22
-In-Reply-To: <20190327212753.15357-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 27 Mar 2019 22:27:53 +0100")
-References: <20190327212753.15357-1-fontaine.fabrice@gmail.com>
-Message-ID: <875zs4ot7d.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2019 23:22:40 +0100
+Subject: [Buildroot] [PATCH 1/2] package/putty: enable static build
+In-Reply-To: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 26 Mar 2019 20:27:19 +0200")
+References: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
+Message-ID: <871s2sot3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > - Remove patch (already in version) and drop autoreconf
- > - Replace COPYRIGHT by LICENSE (and add its hash)
- > - License is now BSD-3-Clause:
- >   https://github.com/cu-irt/rtptools/commit/ed971d5e2b875294f22c0762d60aa7e409823789
- > - Disable clang (enabled by default)
+ > Add upstream patch fixing build when NO_GSSAPI is defined which is the
+ > case on static builds.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Alexander Dahl <post@lespocky.de>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
