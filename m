@@ -1,34 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 09:08:38 +0100
-Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
-In-Reply-To: <878sx2lnbt.fsf@dell.be.48ers.dk>
-References: <20190218121508.htf6s7bazcggmozg@gmail.com>
- <878sx2lnbt.fsf@dell.be.48ers.dk>
-Message-ID: <20190327090838.7595b6cd@windsurf>
+From: =?UTF-8?Q?Adrien_Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Wed, 27 Mar 2019 09:24:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bird: add optional protocols
+In-Reply-To: <20190326201636.13216e35@windsurf>
+References: <20190320210943.21377-1-adrien@gallouet.fr>
+ <20190326201636.13216e35@windsurf>
+Message-ID: <CAFtSRGAyVRCX=P-HbZoeYfeRiU_cJ1GDkxkp4sxqaKH5V0XJDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Mar 2019 21:18:46 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Tue, Mar 26, 2019 at 8:16 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed, 20 Mar 2019 21:09:44 +0000
+> Adrien Gallou?t <adrien@gallouet.fr> wrote:
+>
+> > Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+> > ---
+> >  package/bird/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++
+> >  package/bird/bird.mk   | 16 +++++++++++++++
+> >  2 files changed, 62 insertions(+)
+>
+> I've applied, but I had to fix a number of things, see below.
+>
+> >
+> > diff --git a/package/bird/Config.in b/package/bird/Config.in
+> > index a69551f94e..298348d098 100644
+> > --- a/package/bird/Config.in
+> > +++ b/package/bird/Config.in
+> > @@ -20,4 +20,50 @@ config BR2_PACKAGE_BIRD_CLIENT
+> >       help
+> >         Enable the BIRD client
+>
+> I added a Config.in comment here to make it clear the below options are
+> for configuring the list of supported protocols.
+>
+> > +# BUG: RIP is needed for now
+> > +BR2_PACKAGE_BIRD_RIP=y
+>
+> BR2_PACKAGE_* is reserved for config options. Variables in a package
+> should be prefixed by the package name.
+>
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BFD),bfd,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BABEL),babel,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_BGP),bgp,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_MRT),mrt,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_OSPF),ospf,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PERF),perf,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_PIPE),pipe,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RADV),radv,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_RIP),rip,)
+> > +BR2_PACKAGE_BIRD_PROTOCOLS += $(if $(BR2_PACKAGE_BIRD_STATIC),static,)
+> > +
+> > +BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BR2_PACKAGE_BIRD_PROTOCOLS)))
+>
+> So I've changed all of this by:
+>
+> # BUG: RIP is mandatory for now
+> BIRD_PROTOCOLS = \
+>         rip \
+>         $(if $(BR2_PACKAGE_BIRD_BFD),bfd) \
+>         $(if $(BR2_PACKAGE_BIRD_BABEL),babel) \
+>         $(if $(BR2_PACKAGE_BIRD_BGP),bgp) \
+>         $(if $(BR2_PACKAGE_BIRD_MRT),mrt) \
+>         $(if $(BR2_PACKAGE_BIRD_OSPF),ospf) \
+>         $(if $(BR2_PACKAGE_BIRD_PERF),perf) \
+>         $(if $(BR2_PACKAGE_BIRD_PIPE),pipe) \
+>         $(if $(BR2_PACKAGE_BIRD_RADV),radv) \
+>         $(if $(BR2_PACKAGE_BIRD_RIP),rip) \
+>         $(if $(BR2_PACKAGE_BIRD_STATIC),static)
+>
+> BIRD_CONF_OPTS += --with-protocols=$(subst $(space),$(comma),$(strip $(BIRD_PROTOCOLS)))
+>
+> and applied to master.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-> >>>>> "Artem" == Artem Senichev <artemsen@gmail.com> writes:  
-> 
->  > kexec has fully support of ppc64 platform:
->  > https://www.kernel.org/doc/Documentation/kdump/kdump.txt
->  > Added BR2_powerpc64 platform support.  
-> 
->  > Signed-off-by: Artem Senichev <artemsen@gmail.com>  
-> 
-> Committed to 2019.02.x, thanks.
-
-No, you didn't apply this one to 2019.02.x, but the "package/kexec:
-enable powerpc64le platforms" one. Notice the subtle difference ? :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Hi Thomas,
+Thanks to you!
