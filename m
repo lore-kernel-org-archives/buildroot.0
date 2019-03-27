@@ -1,67 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Mar 2019 18:11:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glm: bump to version 0.9.9.4
-Message-ID: <20190327171103.32303-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 27 Mar 2019 18:25:50 +0100
+Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
+ 'source-check' target
+In-Reply-To: <20190327173548.7db271b5@windsurf>
+References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+ <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
+ <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
+ <20190327173548.7db271b5@windsurf>
+Message-ID: <0a9e8f22-a95f-47d3-612e-23bcca6c20a6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable tests as they are enabled by default since version 0.9.9.1:
-  https://github.com/g-truc/glm/commit/d307d390193f4027faec48ac79d7f74b2bec6e56
-- Static and shared libraries are always built since version 0.9.9.1:
-  https://github.com/g-truc/glm/commit/a23dd2f800185a5e233534fed82fc5c2840fbe5c
-  So, disable them as GLM is header-only (it should be noted that
-  upstream wants to keep those libraries as the commit to disable them
-  has been reverted:
-  https://github.com/g-truc/glm/commit/ca8372490eb8742d402878c9e930b891225982e6
-- Add hash for license file (now in manual.md#section0)
 
-Fixes:
- - http://autobuild.buildroot.org/results/3cf1fd3387bd4952470edcfcb93d44f58c9e7ff7
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/glm/glm.hash |  3 ++-
- package/glm/glm.mk   | 10 ++++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+On 27/03/2019 17:35, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Thanks a lot for sharing your feedback in this discussion, it's very
+> useful.
+> 
+> On Wed, 27 Mar 2019 14:46:32 +0100
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>  For the use case of Thomas DS, this weak semantic is perfectly fine. What it
+>> tries to protect against is the common mistake that you add or bump a package
+>> and forget to upload the source to PRIMARY_SITE. As explained by Thomas DS,
+>> doing a full download is eventually still needed, but takes much longer:
+>> source-check may take in the order of 1 minute while the full download takes 10
+>> minutes. That makes all the difference for immediate feedback to the developer,
+>> and it doesn't significantly slow down a good pipeline.
+>>
+>>  Indeed, it does not protect against uploading the wrong tarball with the
+>> correct name. It also doesn't protect against forgetting to update the hash
+>> file. It also doesn't protect against the package failing to build. It also
+>> doesn't protect against bugs in the code which become only apparent at run time.
+>> But all of these are checked later in CI, and the source check captures an
+>> important (and likely) class of mistakes early on.
+> 
+> Interesting perspective indeed :-)
+> 
+>>  It is true that this is a very narrow use case. However, I think it passes two
+>> tests for acceptance:
+>>
+>> * It does not make Buildroot (much) more complex.
+>>
+>> * There is no way to do this with scripting outside of Buildroot.
+> 
+> True.
+> 
+>>  Regarding that second point: in fact there would be a way, if we would instead
+>> have a command to print everything that would be downloaded. That would be very
+>> similar to patch 1/9, but would remove the need for the other patches in the
+>> series. The advantage of this approach is that there could be other uses for
+>> printing the list of sources. But that would be back to the drawing board for
+>> Thomas DS, so I doubt he's enthusiastic about that option :-) Plus, we have no
+>> actual example of an additional use case.
+> 
+> We already have "make external-deps" but it only prints the file names,
+> not the full URL.
 
-diff --git a/package/glm/glm.hash b/package/glm/glm.hash
-index c87d4ca2f6..9d5c94301d 100644
---- a/package/glm/glm.hash
-+++ b/package/glm/glm.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 a220e60f8711265595be3221e530d632d5823641ecd46a3a54bc174933bff14c  glm-0.9.8.4.tar.gz
-+sha256 3a073eb8f3be07cee74481db0e1f78eda553b554941e405c863ab64de6a2e954  glm-0.9.9.4.tar.gz
-+sha256 337130631a714eeae017556cad101d5324c2961214120b6214741d3d43667086  manual.md
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-index 1f23146dda..e15d4fea49 100644
---- a/package/glm/glm.mk
-+++ b/package/glm/glm.mk
-@@ -4,14 +4,20 @@
- #
- ################################################################################
- 
--GLM_VERSION = 0.9.8.4
-+GLM_VERSION = 0.9.9.4
- GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
- GLM_LICENSE = MIT
--GLM_LICENSE_FILES = copying.txt
-+GLM_LICENSE_FILES = manual.md
- 
- # GLM is a header-only library, it only makes sense
- # to have it installed into the staging directory.
- GLM_INSTALL_STAGING = YES
- GLM_INSTALL_TARGET = NO
- 
-+# Don't build libraries as GLM is header-only
-+GLM_CONF_OPTS = \
-+	-DGLM_TEST_ENABLE=OFF \
-+	-DBUILD_SHARED_LIBS=OFF \
-+	-DBUILD_STATIC_LIBS=OFF
-+
- $(eval $(cmake-package))
--- 
-2.14.1
+ True! So, we could extend external-deps with printing the URL (similar to how
+printvars uses RAW_VARS maybe, to not break existing scripts using
+external-deps). We could have variables to ask for primary, upstream or secondary.
+
+ Regards,
+ Arnout
+
+
+> Does Thomas really want to check the BR2_PRIMARY_SITE or the original
+> Mercurial repository ? If he wants to check BR2_PRIMARY_SITE (which
+> contains only tarballs), then he could run "make external-deps" and
+> checks that the tarballs are here. But I suppose that's not what Thomas
+> wants: he really wants to check the upstream Mercurial repository, no?
+> 
+> Best regards,
+> 
+> Thomas
+> 
