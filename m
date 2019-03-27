@@ -1,134 +1,30 @@
-From: Evgeniy Didin <evgeniy.didin@synopsys.com>
-Date: Wed, 27 Mar 2019 13:55:55 +0300
-Subject: [Buildroot] [PATCH] configs/snps_arc*_defconfig: update linux
- version
-Message-ID: <20190327105555.831-1-Evgeniy.Didin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Mar 2019 11:51:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-uvloop: bump to version
+ 0.12.2
+In-Reply-To: <20190326200844.15409-2-asafka7@gmail.com>
+References: <20190326200844.15409-1-asafka7@gmail.com>
+ <20190326200844.15409-2-asafka7@gmail.com>
+Message-ID: <20190327115100.1066d12f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit we update for ARC boards Linux kernel
-version to 4.19.31 and Linux headers version to 4.19.
+On Tue, 26 Mar 2019 22:08:44 +0200
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
----
- configs/snps_arc700_axs101_defconfig  | 6 +++---
- configs/snps_archs38_axs103_defconfig | 6 +++---
- configs/snps_archs38_haps_defconfig   | 6 +++---
- configs/snps_archs38_hsdk_defconfig   | 6 +++---
- configs/snps_archs38_vdk_defconfig    | 6 +++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-uvloop/python-uvloop.hash | 4 ++--
+>  package/python-uvloop/python-uvloop.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
-index 4f796b438b..5d9b5a5139 100644
---- a/configs/snps_arc700_axs101_defconfig
-+++ b/configs/snps_arc700_axs101_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
- BR2_LINUX_KERNEL_DEFCONFIG="axs101"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
-index 456d4cba2e..c6e2b10f0f 100644
---- a/configs/snps_archs38_axs103_defconfig
-+++ b/configs/snps_archs38_axs103_defconfig
-@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-diff --git a/configs/snps_archs38_haps_defconfig b/configs/snps_archs38_haps_defconfig
-index 2ef49b4d44..cb5edea2c8 100644
---- a/configs/snps_archs38_haps_defconfig
-+++ b/configs/snps_archs38_haps_defconfig
-@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
- BR2_LINUX_KERNEL_DEFCONFIG="haps_hs_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 4c337e5ce7..0fc708eee1 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arcle=y
- BR2_archs38=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="hsdk"
-@@ -13,7 +13,7 @@ BR2_SYSTEM_DHCP="eth0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
- BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
- 
-diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
-index f8766cff8a..7c7834f9bd 100644
---- a/configs/snps_archs38_vdk_defconfig
-+++ b/configs/snps_archs38_vdk_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- 
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
- BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+Applied to master, thanks.
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
