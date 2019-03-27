@@ -1,53 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 27 Mar 2019 20:11:31 +0100
-Subject: [Buildroot] [git commit] package/qjson: drop Qt4 patch
-Message-ID: <20190327190830.6F9A982B3D@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 20:11:53 +0100
+Subject: [Buildroot] [git commit] configs/snps_arc*_defconfig: update linux
+ version
+Message-ID: <20190327190830.75FAA811D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c70629735cea391bbe3f45f235e86e45f7e0fc41
+commit: https://git.buildroot.net/buildroot/commit/?id=1deec02bc88f187d8379b6ed62f5cfacd3ba8074
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that Qt4 has been removed, drop patch
+With this commit we update for ARC boards Linux kernel
+version to 4.19.31 and Linux headers version to 4.19.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-fix-Qt4-package-error-in-CMakeLists.txt.patch | 26 ----------------------
- 1 file changed, 26 deletions(-)
+ configs/snps_arc700_axs101_defconfig  | 6 +++---
+ configs/snps_archs38_axs103_defconfig | 6 +++---
+ configs/snps_archs38_haps_defconfig   | 6 +++---
+ configs/snps_archs38_hsdk_defconfig   | 6 +++---
+ configs/snps_archs38_vdk_defconfig    | 6 +++---
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch b/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
-deleted file mode 100644
-index a9e34e4c26..0000000000
---- a/package/qjson/0001-fix-Qt4-package-error-in-CMakeLists.txt.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 254858bbf443bded2e80480e9f9032ce166b923e Mon Sep 17 00:00:00 2001
--From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
--Date: Fri, 2 Dec 2016 23:00:58 +0100
--Subject: [PATCH] CMake, Qt4: check specifically for QtCore, fixes #96
--
--Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 31d9987..2fde79f 100755
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -62,7 +62,7 @@ IF (Qt5Core_FOUND)
-- ELSE()
--   MESSAGE ("Qt5 not found, searching for Qt4")
--   # Find Qt4
---  FIND_PACKAGE( Qt4 4.5 REQUIRED )
--+  FIND_PACKAGE( Qt4 4.5 REQUIRED QtCore)
--   # QStringBuilder is supported since Qt 4.8 for both QString and QByteArray
--   IF (NOT (${QT_VERSION_MINOR} STRLESS "8"))
--     MESSAGE ("Enable QStringBuilder")
---- 
--2.7.4
--
+diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
+index 4f796b438b..5d9b5a5139 100644
+--- a/configs/snps_arc700_axs101_defconfig
++++ b/configs/snps_arc700_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ 
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
+index 456d4cba2e..c6e2b10f0f 100644
+--- a/configs/snps_archs38_axs103_defconfig
++++ b/configs/snps_archs38_axs103_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ 
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_haps_defconfig b/configs/snps_archs38_haps_defconfig
+index 2ef49b4d44..cb5edea2c8 100644
+--- a/configs/snps_archs38_haps_defconfig
++++ b/configs/snps_archs38_haps_defconfig
+@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
+ BR2_LINUX_KERNEL_DEFCONFIG="haps_hs_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index 4c337e5ce7..0fc708eee1 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arcle=y
+ BR2_archs38=y
+ 
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+@@ -13,7 +13,7 @@ BR2_SYSTEM_DHCP="eth0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
+ BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
+ 
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index f8766cff8a..7c7834f9bd 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
