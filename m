@@ -1,82 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 27 Mar 2019 18:25:50 +0100
-Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
- 'source-check' target
-In-Reply-To: <20190327173548.7db271b5@windsurf>
-References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
- <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
- <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
- <20190327173548.7db271b5@windsurf>
-Message-ID: <0a9e8f22-a95f-47d3-612e-23bcca6c20a6@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Mar 2019 18:45:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: add optional
+ nftables dependency
+In-Reply-To: <85eb5528-6572-ddee-eecc-a9f13a413c72@mind.be>
+References: <20190324120016.28701-1-fontaine.fabrice@gmail.com>
+ <87h8bsmq9q.fsf@tarshish> <20190325185421.6141a000@windsurf>
+ <20190325182227.dr6qkvvh4dq3gb55@sapphire.tkos.co.il>
+ <85eb5528-6572-ddee-eecc-a9f13a413c72@mind.be>
+Message-ID: <CAPi7W82CBRNowAqDiteNi_Q+WtxJmr4b3Rn6s265B3Bu82L78w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear all,
 
+Le lun. 25 mars 2019 ? 22:22, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 25/03/2019 19:22, Baruch Siach wrote:
+> > BTW, what happens when both BR2_PACKAGE_NFTABLES and
+> > BR2_PACKAGE_IPTABLES_NFTABLES are enabled? Do both coexist? If they do, I see
+> > no way for keepalived to know which library to link against. iptables will
+> > always build before keepalived because it optionally depends on
+> > BR2_PACKAGE_IPTABLES anyway. But nftables might not build before keepalived in
+> > that case.
+>
+>  I guess the configure script will prefer one over the other if both are available.
+>
+>  If the configure script prefers iptables over nftables, then the proposed patch
+> looks good to me. If, however, the configure script prefers nftables over
+> iptables, then the patch is wrong because the keepalived would be built
+> differently depending on whether nftables is built first or not.
+I sent a v2, nftables support in keepalived depends on libmnl and
+libnftnl, it does not depend on iptables/nftables applications.
+>
+>  Regards,
+>  Arnout
+Best Regards,
 
-On 27/03/2019 17:35, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Thanks a lot for sharing your feedback in this discussion, it's very
-> useful.
-> 
-> On Wed, 27 Mar 2019 14:46:32 +0100
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>  For the use case of Thomas DS, this weak semantic is perfectly fine. What it
->> tries to protect against is the common mistake that you add or bump a package
->> and forget to upload the source to PRIMARY_SITE. As explained by Thomas DS,
->> doing a full download is eventually still needed, but takes much longer:
->> source-check may take in the order of 1 minute while the full download takes 10
->> minutes. That makes all the difference for immediate feedback to the developer,
->> and it doesn't significantly slow down a good pipeline.
->>
->>  Indeed, it does not protect against uploading the wrong tarball with the
->> correct name. It also doesn't protect against forgetting to update the hash
->> file. It also doesn't protect against the package failing to build. It also
->> doesn't protect against bugs in the code which become only apparent at run time.
->> But all of these are checked later in CI, and the source check captures an
->> important (and likely) class of mistakes early on.
-> 
-> Interesting perspective indeed :-)
-> 
->>  It is true that this is a very narrow use case. However, I think it passes two
->> tests for acceptance:
->>
->> * It does not make Buildroot (much) more complex.
->>
->> * There is no way to do this with scripting outside of Buildroot.
-> 
-> True.
-> 
->>  Regarding that second point: in fact there would be a way, if we would instead
->> have a command to print everything that would be downloaded. That would be very
->> similar to patch 1/9, but would remove the need for the other patches in the
->> series. The advantage of this approach is that there could be other uses for
->> printing the list of sources. But that would be back to the drawing board for
->> Thomas DS, so I doubt he's enthusiastic about that option :-) Plus, we have no
->> actual example of an additional use case.
-> 
-> We already have "make external-deps" but it only prints the file names,
-> not the full URL.
-
- True! So, we could extend external-deps with printing the URL (similar to how
-printvars uses RAW_VARS maybe, to not break existing scripts using
-external-deps). We could have variables to ask for primary, upstream or secondary.
-
- Regards,
- Arnout
-
-
-> Does Thomas really want to check the BR2_PRIMARY_SITE or the original
-> Mercurial repository ? If he wants to check BR2_PRIMARY_SITE (which
-> contains only tarballs), then he could run "make external-deps" and
-> checks that the tarballs are here. But I suppose that's not what Thomas
-> wants: he really wants to check the upstream Mercurial repository, no?
-> 
-> Best regards,
-> 
-> Thomas
-> 
+Fabrice
