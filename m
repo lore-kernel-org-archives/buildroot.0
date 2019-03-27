@@ -1,39 +1,90 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Wed, 27 Mar 2019 23:13:37 +0100
-Subject: [Buildroot] [PATCH v4 6/6] qt5: Remove *.la/*.prl fixup script
-In-Reply-To: <20190322183904.22401-7-anaumann@ultratronik.de>
+Date: Wed, 27 Mar 2019 23:14:35 +0100
+Subject: [Buildroot] [PATCH v4 4/6] quazip: Patch .pro file to correctly
+ crosscompile and use qmake infra
+In-Reply-To: <b3a49305-0d36-e13b-2dd0-416df4ec1cc6@mind.be>
 References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-7-anaumann@ultratronik.de>
-Message-ID: <502c3f48-3eb7-7d0b-dff6-c00bcbdf9658@andin.de>
+ <20190322183904.22401-5-anaumann@ultratronik.de>
+ <b3a49305-0d36-e13b-2dd0-416df4ec1cc6@mind.be>
+Message-ID: <6aaec3cf-7106-b2cd-e6c9-6816daa5c68e@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I'd really be interested if somebody remembers why this was needed. *.la
-files are fixed in another generic step anyway, so why do it twice?
-Also, I have not found absolute /usr/lib pathes in any of the prl files
-without this.
 
-regards,
+Am 26.03.19 um 01:03 schrieb Arnout Vandecappelle:
+> 
+> 
+> On 22/03/2019 19:39, Andreas Naumann wrote:
+>> The quazip .pro files uses the target only prefix for cross staging
+>> install. This breaks using the new qmake infra, so add a minor
+>> patch to fix this.
+>> 
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de> --- 
+>> .../0001-Fix-crosscompile-staging-install.patch  | 16
+>> ++++++++++++++++ package/quazip/quazip.mk                         |
+>> 10 ---------- 2 files changed, 16 insertions(+), 10 deletions(-) 
+>> create mode 100644
+>> package/quazip/0001-Fix-crosscompile-staging-install.patch
+>> 
+>> diff --git
+>> a/package/quazip/0001-Fix-crosscompile-staging-install.patch
+>> b/package/quazip/0001-Fix-crosscompile-staging-install.patch new
+>> file mode 100644 index 0000000000..96cae37283 --- /dev/null +++
+>> b/package/quazip/0001-Fix-crosscompile-staging-install.patch @@
+>> -0,0 +1,16 @@
+> 
+> You need a commit message and a SoB here. Also, preferably a git
+> formatted patch.> There's an active upstream at
+> https://github.com/stachenov/quazip so please send a PR.
+
+OK.
+
+> 
+>> +Index: quazip-0.7.6/quazip/quazip.pro 
+>> +===================================================================
+>>
+>> 
++--- quazip-0.7.6.orig/quazip/quazip.pro
+>> ++++ quazip-0.7.6/quazip/quazip.pro +@@ -47,9 +47,9 @@
+>> CONFIG(debug, debug|release) { + } + + unix:!symbian { +-
+>> headers.path=$$PREFIX/include/quazip ++
+>> headers.path=$$[QT_INSTALL_PREFIX]/include/quazip +
+>> headers.files=$$HEADERS +-
+>> target.path=$$PREFIX/lib/$${LIB_ARCH} ++
+>> target.path=$$[QT_INSTALL_PREFIX]/lib/$${LIB_ARCH} +
+>> QMAKE_PKGCONFIG_DESTDIR = pkgconfig +     INSTALLS += headers
+>> target + diff --git a/package/quazip/quazip.mk
+>> b/package/quazip/quazip.mk index eef423b58a..1b34c9fc2a 100644 ---
+>> a/package/quazip/quazip.mk +++ b/package/quazip/quazip.mk @@ -13,14
+>> +13,4 @@ QUAZIP_DEPENDENCIES = \ QUAZIP_LICENSE = LGPL-2.1 
+>> QUAZIP_LICENSE_FILES = COPYING
+>> 
+>> -QUAZIP_CONF_OPTS = PREFIX=/usr - -define
+>> QUAZIP_INSTALL_STAGING_CMDS -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>> install INSTALL_ROOT=$(STAGING_DIR) -endef - -define
+>> QUAZIP_INSTALL_TARGET_CMDS -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>> install INSTALL_ROOT=$(TARGET_DIR)
+> 
+> How come this used to work if they were using PREFIX instead of
+> QT_INSTALL_PREFIX?
+
+Using PREFIX leads to cross-install not being natively supported, but
+only with the addition of INSTALL_PREFIX. Thomas tried to utilize this
+behaviour for our purpose. However, if a package has files for the
+build-host, they will leak into STAGING_DIR and have to be identified
+and removed in a later step. This is not optimal which is why Thomas was
+looking for another solution in the first place.
+
+Regards,
 Andreas
 
-
-Am 22.03.19 um 19:39 schrieb Andreas Naumann:
-> After fixing Prefix in our custom qt.conf, Qt computes and embeds the
-> correct sysroot prefixed pathes in all *.la and *.prl files.
 > 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de> --- 
-> package/pkg-qmake.mk | 1 - 1 file changed, 1 deletion(-)
+> Regards, Arnout
 > 
-> diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk index 
-> 11cfb809fc..9293253fae 100644 --- a/package/pkg-qmake.mk +++ 
-> b/package/pkg-qmake.mk @@ -77,7 +77,6 @@ define 
-> $(2)_INSTALL_STAGING_CMDS $$(TARGET_MAKE_ENV) \ $$($(2)_MAKE_ENV) \ 
-> $$(MAKE) -C $$($$(PKG)_SRCDIR) $$($(2)_INSTALL_STAGING_OPTS) - 
-> $$(QT5_LA_PRL_FILES_FIXUP) endef endif
-> 
+>> -endef - $(eval $(qmake-package))
+>> 
 > 
