@@ -1,31 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 08:48:41 +0100
-Subject: [Buildroot] [PATCH v5] package/optee-client: fix build warnings
- from 3.4.0
-In-Reply-To: <20190325180955.179bcc55@windsurf> (Thomas Petazzoni's message of
- "Mon, 25 Mar 2019 18:09:55 +0100")
-References: <20190325105251.5914-1-etienne.carriere@linaro.org>
- <20190325180955.179bcc55@windsurf>
-Message-ID: <87wokku59i.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Mar 2019 09:07:52 +0100
+Subject: [Buildroot] [PATCH] package/kexec: enable powerpc64 platform
+In-Reply-To: <20190218121508.htf6s7bazcggmozg@gmail.com>
+References: <20190218121508.htf6s7bazcggmozg@gmail.com>
+Message-ID: <20190327090752.75895bad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+On Mon, 18 Feb 2019 15:15:08 +0300
+Artem Senichev <artemsen@gmail.com> wrote:
 
-Hi,
+> kexec has fully support of ppc64 platform:
+> https://www.kernel.org/doc/Documentation/kdump/kdump.txt
+> Added BR2_powerpc64 platform support.
+> 
+> Signed-off-by: Artem Senichev <artemsen@gmail.com>
+> ---
+>  package/kexec/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
- > Basically, to generate the patches, you should ideally do:
+Applied to master, thanks.
 
- > 	git checkout v3.4.0
- > 	git cherry-pick 9dbc61b3767ab1c3dfd0a19af02926b92ae09247
- > 	git cherry-pick 16c8f548786c70df04d3a1e61bf89abce9b92389
- > 	git format-patch -N HEAD~2
-
-Please use git cherry-pick -xs to add a reference to the original commit
-sha1 and add your signed-off-by.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
