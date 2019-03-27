@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 15:29:01 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/fltk: add
- optional xlib_libXrender dependency
-Message-ID: <20190327142641.2644082502@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 15:37:38 +0100
+Subject: [Buildroot] [PATCH v2] package/libpcap: fix bluez circular
+ dependency
+In-Reply-To: <45321e8446f7e16a4c1d5f4a9b827c5d2e75bdc3.1552849786.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 17 Mar 2019 21:09:46 +0200")
+References: <45321e8446f7e16a4c1d5f4a9b827c5d2e75bdc3.1552849786.git.baruch@tkos.co.il>
+Message-ID: <87mulgs7rh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d56572e447fb84730cad43dd50684b6f85a2bd72
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-xlib_libXrender is enabled by default and has been added since version
-1.3.4-1 and
-https://github.com/fltk/fltk/commit/a6c4b29a184ce7708819f4706877eedcd99a30f5
+ > The optional bluez_utils dependency of libpcap creates a circular
+ > dependency:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 65895f36eea0139c3d590cd5982be5504b2de9ce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fltk/fltk.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > $ make dbus-show-recursive-depends
 
-diff --git a/package/fltk/fltk.mk b/package/fltk/fltk.mk
-index 611d79da50..c37a13176c 100644
---- a/package/fltk/fltk.mk
-+++ b/package/fltk/fltk.mk
-@@ -54,4 +54,11 @@ else
- FLTK_CONF_OPTS += --disable-xinerama
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+FLTK_DEPENDENCIES += xlib_libXrender
-+FLTK_CONF_OPTS += --enable-xrender
-+else
-+FLTK_CONF_OPTS += --disable-xrender
-+endif
-+
- $(eval $(autotools-package))
+ > Recursion detected for  : systemd
+ > which is a dependency of: dbus
+ > which is a dependency of: bluez_utils
+ > which is a dependency of: libpcap
+ > which is a dependency of: iptables
+ > which is a dependency of: systemd
+ > make: *** [package/dbus/dbus.mk:121: dbus-show-recursive-depends] Error 1
+
+ > Drop support for bluez_utils. For bluez5_utils, which also depends on
+ > dbus, we only need the headers in the bluez5_utils-headers package. Use
+ > that to break the circular dependency.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/9c3/9c3ee798fa6bb501a20a7892c0b085d2b279b664/
+
+ > Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: keep bluez5_utils, and use bluez5_utils-headers (Yann)
+
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
