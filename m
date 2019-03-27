@@ -1,317 +1,218 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:21:24 +0100
-Subject: [Buildroot] [git commit] package/putty: enable static build
-Message-ID: <20190327221945.16E3487F43@busybox.osuosl.org>
+Date: Wed, 27 Mar 2019 23:17:06 +0100
+Subject: [Buildroot] [git commit] package/rdesktop: security bump to version
+ 1.8.4
+Message-ID: <20190327221945.00EF887F43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6f73f3d26ce723657e764424b8a4f32cd6f53cd
+commit: https://git.buildroot.net/buildroot/commit/?id=992e84c49ebfdef2fbe2fa3d475e0a388cf59218
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch fixing build when NO_GSSAPI is defined which is the
-case on static builds.
+- Switch site to github
+- Remove second patch (already in version)
+- Add hash for license file
+- Fix memory corruption in process_bitmap_data - CVE-2018-8794
+- Fix remote code execution in process_bitmap_data - CVE-2018-8795
+- Fix remote code execution in process_plane - CVE-2018-8797
+- Fix Denial of Service in mcs_recv_connect_response - CVE-2018-20175
+- Fix Denial of Service in mcs_parse_domain_params - CVE-2018-20175
+- Fix Denial of Service in sec_parse_crypt_info - CVE-2018-20176
+- Fix Denial of Service in sec_recv - CVE-2018-20176
+- Fix minor information leak in rdpdr_process - CVE-2018-8791
+- Fix Denial of Service in cssp_read_tsrequest - CVE-2018-8792
+- Fix remote code execution in cssp_read_tsrequest - CVE-2018-8793
+- Fix Denial of Service in process_bitmap_data - CVE-2018-8796
+- Fix minor information leak in rdpsnd_process_ping - CVE-2018-8798
+- Fix Denial of Service in process_secondary_order - CVE-2018-8799
+- Fix remote code execution in in ui_clip_handle_data - CVE-2018-8800
+- Fix major information leak in ui_clip_handle_data - CVE-2018-20174
+- Fix memory corruption in rdp_in_unistr - CVE-2018-20177
+- Fix Denial of Service in process_demand_active - CVE-2018-20178
+- Fix remote code execution in lspci_process - CVE-2018-20179
+- Fix remote code execution in rdpsnddbg_process - CVE-2018-20180
+- Fix remote code execution in seamless_process - CVE-2018-20181
+- Fix remote code execution in seamless_process_line - CVE-2018-20182
 
-Cc: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-compilation-with-NO_GSSAPI.patch      | 266 +++++++++++++++++++++
- package/putty/Config.in                            |   5 +-
- 2 files changed, 268 insertions(+), 3 deletions(-)
+ package/rdesktop/0002-openssl11.patch | 130 ----------------------------------
+ package/rdesktop/rdesktop.hash        |   6 +-
+ package/rdesktop/rdesktop.mk          |   6 +-
+ 3 files changed, 7 insertions(+), 135 deletions(-)
 
-diff --git a/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch b/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch
-new file mode 100644
-index 0000000000..56a29e19dc
---- /dev/null
-+++ b/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch
-@@ -0,0 +1,266 @@
-+From 7ad08649a223a4cd61e67d8334a147f55c79399d Mon Sep 17 00:00:00 2001
-+From: Jacob Nevins <jacobn@chiark.greenend.org.uk>
-+Date: Mon, 25 Mar 2019 23:46:59 +0000
-+Subject: [PATCH] Fix compilation with NO_GSSAPI.
-+
-+This is a fairly shallow patch, which removes the UI and interactions
-+with external libraries. Some other machinery (which is dead code in
-+this configuration) is left in place.
-+
-+Adapted by me from a patch by Jeroen Roovers.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 7ad08649a22
-+
-+ config.c        |  4 ++++
-+ settings.c      | 12 ++++++++++--
-+ ssh.c           | 16 +++++++++++++++-
-+ ssh2transport.c |  3 +--
-+ ssh2userauth.c  |  8 ++++++--
-+ sshserver.c     | 13 ++++++++++++-
-+ 6 files changed, 48 insertions(+), 8 deletions(-)
-+
-+diff --git a/config.c b/config.c
-+index 9c299feecc21..6528a9696584 100644
-+--- a/config.c
-++++ b/config.c
-+@@ -2442,10 +2442,12 @@ void setup_config_box(struct controlbox *b, bool midsession,
-+ 			      HELPCTX(ssh_kexlist),
-+ 			      kexlist_handler, P(NULL));
-+             c->listbox.height = KEX_MAX;
-++#ifndef NO_GSSAPI
-+ 	    ctrl_checkbox(s, "Attempt GSSAPI key exchange",
-+ 			  'k', HELPCTX(ssh_gssapi),
-+ 			  conf_checkbox_handler,
-+ 			  I(CONF_try_gssapi_kex));
-++#endif
-+ 
-+ 	    s = ctrl_getset(b, "Connection/SSH/Kex", "repeat",
-+ 			    "Options controlling key re-exchange");
-+@@ -2455,11 +2457,13 @@ void setup_config_box(struct controlbox *b, bool midsession,
-+ 			 conf_editbox_handler,
-+ 			 I(CONF_ssh_rekey_time),
-+ 			 I(-1));
-++#ifndef NO_GSSAPI
-+             ctrl_editbox(s, "Minutes between GSS checks (0 for never)", NO_SHORTCUT, 20,
-+                          HELPCTX(ssh_kex_repeat),
-+                          conf_editbox_handler,
-+                          I(CONF_gssapirekey),
-+                          I(-1));
-++#endif
-+ 	    ctrl_editbox(s, "Max data before rekey (0 for no limit)", 'x', 20,
-+ 			 HELPCTX(ssh_kex_repeat),
-+ 			 conf_editbox_handler,
-+diff --git a/settings.c b/settings.c
-+index 8d56302677d9..54f5ab7b2919 100644
-+--- a/settings.c
-++++ b/settings.c
-+@@ -592,21 +592,25 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
-+     write_setting_b(sesskey, "Compression", conf_get_bool(conf, CONF_compression));
-+     write_setting_b(sesskey, "TryAgent", conf_get_bool(conf, CONF_tryagent));
-+     write_setting_b(sesskey, "AgentFwd", conf_get_bool(conf, CONF_agentfwd));
-++#ifndef NO_GSSAPI
-+     write_setting_b(sesskey, "GssapiFwd", conf_get_bool(conf, CONF_gssapifwd));
-++#endif
-+     write_setting_b(sesskey, "ChangeUsername", conf_get_bool(conf, CONF_change_username));
-+     wprefs(sesskey, "Cipher", ciphernames, CIPHER_MAX, conf, CONF_ssh_cipherlist);
-+     wprefs(sesskey, "KEX", kexnames, KEX_MAX, conf, CONF_ssh_kexlist);
-+     wprefs(sesskey, "HostKey", hknames, HK_MAX, conf, CONF_ssh_hklist);
-+     write_setting_i(sesskey, "RekeyTime", conf_get_int(conf, CONF_ssh_rekey_time));
-++#ifndef NO_GSSAPI
-+     write_setting_i(sesskey, "GssapiRekey", conf_get_int(conf, CONF_gssapirekey));
-++#endif
-+     write_setting_s(sesskey, "RekeyBytes", conf_get_str(conf, CONF_ssh_rekey_data));
-+     write_setting_b(sesskey, "SshNoAuth", conf_get_bool(conf, CONF_ssh_no_userauth));
-+     write_setting_b(sesskey, "SshBanner", conf_get_bool(conf, CONF_ssh_show_banner));
-+     write_setting_b(sesskey, "AuthTIS", conf_get_bool(conf, CONF_try_tis_auth));
-+     write_setting_b(sesskey, "AuthKI", conf_get_bool(conf, CONF_try_ki_auth));
-++#ifndef NO_GSSAPI
-+     write_setting_b(sesskey, "AuthGSSAPI", conf_get_bool(conf, CONF_try_gssapi_auth));
-+     write_setting_b(sesskey, "AuthGSSAPIKEX", conf_get_bool(conf, CONF_try_gssapi_kex));
-+-#ifndef NO_GSSAPI
-+     wprefs(sesskey, "GSSLibs", gsslibkeywords, ngsslibs, conf, CONF_ssh_gsslist);
-+     write_setting_filename(sesskey, "GSSCustom", conf_get_filename(conf, CONF_ssh_gss_custom));
-+ #endif
-+@@ -937,7 +941,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gppb(sesskey, "TryAgent", true, conf, CONF_tryagent);
-+     gppb(sesskey, "AgentFwd", false, conf, CONF_agentfwd);
-+     gppb(sesskey, "ChangeUsername", false, conf, CONF_change_username);
-++#ifndef NO_GSSAPI
-+     gppb(sesskey, "GssapiFwd", false, conf, CONF_gssapifwd);
-++#endif
-+     gprefs(sesskey, "Cipher", "\0",
-+ 	   ciphernames, CIPHER_MAX, conf, CONF_ssh_cipherlist);
-+     {
-+@@ -990,7 +996,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gprefs(sesskey, "HostKey", "ed25519,ecdsa,rsa,dsa,WARN",
-+            hknames, HK_MAX, conf, CONF_ssh_hklist);
-+     gppi(sesskey, "RekeyTime", 60, conf, CONF_ssh_rekey_time);
-++#ifndef NO_GSSAPI
-+     gppi(sesskey, "GssapiRekey", GSS_DEF_REKEY_MINS, conf, CONF_gssapirekey);
-++#endif
-+     gpps(sesskey, "RekeyBytes", "1G", conf, CONF_ssh_rekey_data);
-+     {
-+ 	/* SSH-2 only by default */
-+@@ -1007,9 +1015,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gppb(sesskey, "SshBanner", true, conf, CONF_ssh_show_banner);
-+     gppb(sesskey, "AuthTIS", false, conf, CONF_try_tis_auth);
-+     gppb(sesskey, "AuthKI", true, conf, CONF_try_ki_auth);
-++#ifndef NO_GSSAPI
-+     gppb(sesskey, "AuthGSSAPI", true, conf, CONF_try_gssapi_auth);
-+     gppb(sesskey, "AuthGSSAPIKEX", true, conf, CONF_try_gssapi_kex);
-+-#ifndef NO_GSSAPI
-+     gprefs(sesskey, "GSSLibs", "\0",
-+ 	   gsslibkeywords, ngsslibs, conf, CONF_ssh_gsslist);
-+     gppfile(sesskey, "GSSCustom", conf, CONF_ssh_gss_custom);
-+diff --git a/ssh.c b/ssh.c
-+index e35ebc64e2b5..e8ad61b8085d 100644
-+--- a/ssh.c
-++++ b/ssh.c
-+@@ -50,7 +50,9 @@ struct Ssh {
-+     ssh_sharing_state *connshare;
-+     bool attempting_connshare;
-+ 
-++#ifndef NO_GSSAPI
-+     struct ssh_connection_shared_gss_state gss_state;
-++#endif
-+ 
-+     char *savedhost;
-+     int savedport;
-+@@ -252,10 +254,18 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-+                     conf_get_bool(ssh->conf, CONF_tryagent), username,
-+                     conf_get_bool(ssh->conf, CONF_change_username),
-+                     conf_get_bool(ssh->conf, CONF_try_ki_auth),
-++#ifndef NO_GSSAPI
-+                     conf_get_bool(ssh->conf, CONF_try_gssapi_auth),
-+                     conf_get_bool(ssh->conf, CONF_try_gssapi_kex),
-+                     conf_get_bool(ssh->conf, CONF_gssapifwd),
-+-                    &ssh->gss_state);
-++                    &ssh->gss_state
-++#else
-++                    false,
-++                    false,
-++                    false,
-++                    NULL
-++#endif
-++                    );
-+                 ssh_connect_ppl(ssh, userauth_layer);
-+                 transport_child_layer = userauth_layer;
-+ 
-+@@ -267,7 +277,11 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-+                 ssh->fullhostname,
-+                 ssh_verstring_get_local(old_bpp),
-+                 ssh_verstring_get_remote(old_bpp),
-++#ifndef NO_GSSAPI
-+                 &ssh->gss_state,
-++#else
-++                NULL,
-++#endif
-+                 &ssh->stats, transport_child_layer, false);
-+             ssh_connect_ppl(ssh, ssh->base_layer);
-+ 
-+diff --git a/ssh2transport.c b/ssh2transport.c
-+index 8640d89d4be4..5e8955a0275f 100644
-+--- a/ssh2transport.c
-++++ b/ssh2transport.c
-+@@ -1781,6 +1781,7 @@ static void ssh2_transport_gss_update(struct ssh2_transport_state *s,
-+     if (mins > 0 && s->gss_ctxt_lifetime <= mins * 60)
-+         s->gss_status |= GSS_CTXT_EXPIRES;
-+ }
-++#endif /* NO_GSSAPI */
-+ 
-+ ptrlen ssh2_transport_get_session_id(PacketProtocolLayer *ppl)
-+ {
-+@@ -1805,8 +1806,6 @@ void ssh2_transport_notify_auth_done(PacketProtocolLayer *ppl)
-+     queue_idempotent_callback(&s->ppl.ic_process_queue);
-+ }
-+ 
-+-#endif /* NO_GSSAPI */
-+-
-+ static bool ssh2_transport_get_specials(
-+     PacketProtocolLayer *ppl, add_special_fn_t add_special, void *ctx)
-+ {
-+diff --git a/ssh2userauth.c b/ssh2userauth.c
-+index fc4139230557..7f5a129295ab 100644
-+--- a/ssh2userauth.c
-++++ b/ssh2userauth.c
-+@@ -613,8 +613,10 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-+                  * Scan it for method identifiers we know about.
-+                  */
-+                 bool srv_pubkey = false, srv_passwd = false;
-+-                bool srv_keyb_inter = false, srv_gssapi = false;
-+-                bool srv_gssapi_keyex_auth = false;
-++                bool srv_keyb_inter = false;
-++#ifndef NO_GSSAPI
-++                bool srv_gssapi = false, srv_gssapi_keyex_auth = false;
-++#endif
-+ 
-+                 for (ptrlen method; get_commasep_word(&methods, &method) ;) {
-+                     if (ptrlen_eq_string(method, "publickey"))
-+@@ -623,10 +625,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-+                         srv_passwd = true;
-+                     else if (ptrlen_eq_string(method, "keyboard-interactive"))
-+                         srv_keyb_inter = true;
-++#ifndef NO_GSSAPI
-+                     else if (ptrlen_eq_string(method, "gssapi-with-mic"))
-+                         srv_gssapi = true;
-+                     else if (ptrlen_eq_string(method, "gssapi-keyex"))
-+                         srv_gssapi_keyex_auth = true;
-++#endif
-+                 }
-+ 
-+                 /*
-+diff --git a/sshserver.c b/sshserver.c
-+index 5f6e7ddeeaec..5c34bb356757 100644
-+--- a/sshserver.c
-++++ b/sshserver.c
-+@@ -50,7 +50,9 @@ struct server {
-+     PacketProtocolLayer *base_layer;
-+     ConnectionLayer *cl;
-+ 
-++#ifndef NO_GSSAPI
-+     struct ssh_connection_shared_gss_state gss_state;
-++#endif
-+ };
-+ 
-+ static void ssh_server_free_callback(void *vsrv);
-+@@ -245,9 +247,11 @@ Plug *ssh_server_plug(
-+     bufchain_init(&srv->out_raw);
-+     bufchain_init(&srv->dummy_user_input);
-+ 
-++#ifndef NO_GSSAPI
-+     /* FIXME: replace with sensible */
-+     srv->gss_state.libs = snew(struct ssh_gss_liblist);
-+     srv->gss_state.libs->nlibraries = 0;
-++#endif
-+ 
-+     return &srv->plug;
-+ }
-+@@ -297,7 +301,9 @@ static void ssh_server_free_callback(void *vsrv)
-+     conf_free(srv->conf);
-+     log_free(srv->logctx);
-+ 
-++#ifndef NO_GSSAPI
-+     sfree(srv->gss_state.libs);        /* FIXME: replace with sensible */
-++#endif
-+ 
-+     sfree(srv);
-+ 
-+@@ -442,7 +448,12 @@ static void server_got_ssh_version(struct ssh_version_receiver *rcv,
-+             srv->conf, NULL, 0, NULL,
-+             ssh_verstring_get_remote(old_bpp),
-+             ssh_verstring_get_local(old_bpp),
-+-            &srv->gss_state, &srv->stats, transport_child_layer, true);
-++#ifndef NO_GSSAPI
-++            &srv->gss_state,
-++#else
-++            NULL,
-++#endif
-++            &srv->stats, transport_child_layer, true);
-+         ssh2_transport_provide_hostkeys(
-+             srv->base_layer, srv->hostkeys, srv->nhostkeys);
-+         if (userauth_layer)
-+-- 
-+2.20.1
-+
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-index f901c71da2..cd8b3bb213 100644
---- a/package/putty/Config.in
-+++ b/package/putty/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PUTTY
- 	bool "putty"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  PuTTY is a free SSH and Telnet client. Without GTK2
- 	  activated, only the commandline tools plink, pscp, psftp,
-@@ -11,6 +10,6 @@ config BR2_PACKAGE_PUTTY
+diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
+deleted file mode 100644
+index 050d6f6903..0000000000
+--- a/package/rdesktop/0002-openssl11.patch
++++ /dev/null
+@@ -1,130 +0,0 @@
+-From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
+-From: Jani Hakala <jjhakala@gmail.com>
+-Date: Thu, 16 Jun 2016 14:28:15 +0300
+-Subject: [PATCH] Fix OpenSSL 1.1 compability issues
+-
+-Some data types have been made opaque in OpenSSL version 1.1 so
+-stack allocation and accessing struct fields directly does not work.
+-
+-Downloaded from upstream commit
+-https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
+- 1 file changed, 40 insertions(+), 25 deletions(-)
+-
+-diff --git a/ssl.c b/ssl.c
+-index 48751255..032e9b9e 100644
+---- a/ssl.c
+-+++ b/ssl.c
+-@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
+- 		  uint8 * exponent)
+- {
+- 	BN_CTX *ctx;
+--	BIGNUM mod, exp, x, y;
+-+	BIGNUM *mod, *exp, *x, *y;
+- 	uint8 inr[SEC_MAX_MODULUS_SIZE];
+- 	int outlen;
+- 
+-@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
+- 	reverse(inr, len);
+- 
+- 	ctx = BN_CTX_new();
+--	BN_init(&mod);
+--	BN_init(&exp);
+--	BN_init(&x);
+--	BN_init(&y);
+--
+--	BN_bin2bn(modulus, modulus_size, &mod);
+--	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
+--	BN_bin2bn(inr, len, &x);
+--	BN_mod_exp(&y, &x, &exp, &mod, ctx);
+--	outlen = BN_bn2bin(&y, out);
+-+	mod = BN_new();
+-+	exp = BN_new();
+-+	x = BN_new();
+-+	y = BN_new();
+-+
+-+	BN_bin2bn(modulus, modulus_size, mod);
+-+	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
+-+	BN_bin2bn(inr, len, x);
+-+	BN_mod_exp(y, x, exp, mod, ctx);
+-+	outlen = BN_bn2bin(y, out);
+- 	reverse(out, outlen);
+- 	if (outlen < (int) modulus_size)
+- 		memset(out + outlen, 0, modulus_size - outlen);
+- 
+--	BN_free(&y);
+--	BN_clear_free(&x);
+--	BN_free(&exp);
+--	BN_free(&mod);
+-+	BN_free(y);
+-+	BN_clear_free(x);
+-+	BN_free(exp);
+-+	BN_free(mod);
+- 	BN_CTX_free(ctx);
+- }
+- 
+-@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
+- 
+- 	   Kudos to Richard Levitte for the following (. intiutive .) 
+- 	   lines of code that resets the OID and let's us extract the key. */
+--	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
+-+
+-+	X509_PUBKEY *key = NULL;
+-+	X509_ALGOR *algor = NULL;
+-+
+-+	key = X509_get_X509_PUBKEY(cert);
+-+	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
+-+
+-+	nid = OBJ_obj2nid(algor->algorithm);
+-+
+- 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
+- 	{
+- 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
+--		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
+--		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
+-+		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
+-+				       0, NULL, NULL, 0);
+- 	}
+- 	epk = X509_get_pubkey(cert);
+- 	if (NULL == epk)
+-@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
+- {
+- 	int len;
+- 
+--	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
+--	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
+-+	BIGNUM *e = NULL;
+-+	BIGNUM *n = NULL;
+-+
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+	e = rkey->e;
+-+	n = rkey->n;
+-+#else
+-+	RSA_get0_key(rkey, &e, &n, NULL);
+-+#endif
+-+
+-+	if ((BN_num_bytes(e) > (int) max_exp_len) ||
+-+	    (BN_num_bytes(n) > (int) max_mod_len))
+- 	{
+- 		return 1;
+- 	}
+--	len = BN_bn2bin(rkey->e, exponent);
+-+	len = BN_bn2bin(e, exponent);
+- 	reverse(exponent, len);
+--	len = BN_bn2bin(rkey->n, modulus);
+-+	len = BN_bn2bin(n, modulus);
+- 	reverse(modulus, len);
+- 	return 0;
+- }
+-@@ -229,8 +247,5 @@ void
+- rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
+- 	       unsigned char *md)
+- {
+--	HMAC_CTX ctx;
+--	HMAC_CTX_init(&ctx);
+- 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
+--	HMAC_CTX_cleanup(&ctx);
+- }
+diff --git a/package/rdesktop/rdesktop.hash b/package/rdesktop/rdesktop.hash
+index cc1f55b771..a43fab76fa 100644
+--- a/package/rdesktop/rdesktop.hash
++++ b/package/rdesktop/rdesktop.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/rdesktop/files/rdesktop/1.8.3/
+-md5	86e8b368a7c715e74ded92e0d7912dc5	rdesktop-1.8.3.tar.gz
+-sha1	aa1e56043782e04a0121357b24874e3ad6ae7b1d	rdesktop-1.8.3.tar.gz
++# Locally calculated
++sha256	516f04df92f16eba04c96bbf9aeb05b9da686689c2bb5c107e0941583e09f933	rdesktop-1.8.4.tar.gz
++sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
+diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
+index da8a80ef92..d97422cf13 100644
+--- a/package/rdesktop/rdesktop.mk
++++ b/package/rdesktop/rdesktop.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
+-RDESKTOP_VERSION = 1.8.3
+-RDESKTOP_SITE = http://downloads.sourceforge.net/project/rdesktop/rdesktop/$(RDESKTOP_VERSION)
++RDESKTOP_VERSION = 1.8.4
++RDESKTOP_SITE = $(call github,rdesktop,rdesktop,v$(RDESKTOP_VERSION))
+ RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
+ 	$(if $(BR2_PACKAGE_ALSA_LIB_PCM),alsa-lib) \
+ 	$(if $(BR2_PACKAGE_LIBAO),libao) \
+@@ -13,6 +13,8 @@ RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
+ RDESKTOP_CONF_OPTS = --with-openssl=$(STAGING_DIR)/usr --disable-credssp
+ RDESKTOP_LICENSE = GPL-3.0+
+ RDESKTOP_LICENSE_FILES = COPYING
++# From git
++RDESKTOP_AUTORECONF = YES
  
--comment "putty needs a toolchain w/ wchar, dynamic library"
-+comment "putty needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on !BR2_USE_WCHAR
+ ifeq ($(BR2_PACKAGE_PCSC_LITE),y)
+ RDESKTOP_DEPENDENCIES += pcsc-lite
