@@ -1,129 +1,40 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 27 Mar 2019 15:13:38 +0100
-Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
- 'source-check' target
-In-Reply-To: <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
-References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
- <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
- <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
-Message-ID: <CAAXf6LUD3Hz-FX8=dRv8mSn1XESpDGrueBSpOUHDhxAJXnAPsg@mail.gmail.com>
+Date: Wed, 27 Mar 2019 15:27:12 +0100
+Subject: [Buildroot] [PATCH] package/mtd: backport patch to remove
+ errors for devices without ecc support
+In-Reply-To: <20190327141103.w45fwp43glxkrf77@sapphire.tkos.co.il>
+References: <20190327140153.1332-1-patrickdepinguin@gmail.com>
+ <20190327141103.w45fwp43glxkrf77@sapphire.tkos.co.il>
+Message-ID: <CAAXf6LUv0rjCHGNgSTPX=1Uk6SJ4oycYuP8ySNRQ9Y6HPNzUMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mi?., 27 mar. 2019 a las 14:46, Arnout Vandecappelle
-(<arnout@mind.be>) escribi?:
+El mi?., 27 mar. 2019 a las 15:11, Baruch Siach (<baruch@tkos.co.il>) escribi?:
 >
+> Hi Thomas,
 >
->
-> On 17/03/2019 15:57, Thomas Petazzoni wrote:
-> > Hello,
+> On Wed, Mar 27, 2019 at 03:01:53PM +0100, Thomas De Schampheleire wrote:
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > >
-> > On Sun, 17 Mar 2019 15:32:15 +0100
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Since the introduction of mtd-utils 2.0.2, following error can appear on
+> > e.g. flash_erase calls:
 > >
-> >> As discussed with Thomas P., it all depends on the semantics we want to
-> >> give to source-check. But the one implemented by your series does not
-> >> seem that interesting in the end. Yes, it makes your remote-worker-with-
-> >> a-slow-connection maybe a bit more bearable.
-> >>
-> >> It also means that all it says is that, right at the time of source-check,
-> >> here is actually "something" named as you expect, but there is no
-> >> guarantee that a 'make source' later will be able to get that "something"
-> >> anyway.
-> >>
-> >> So, I am still not entirely convinced by the usefulness of source-check.
+> >     libmtd: error!: ECCGETLAYOUT ioctl request failed
+> >             error 122 (Operation not supported)
 > >
-> > Just to add to Yann's explanations, here are the two aspects that makes
-> > the proposed semantic of "source-check" a bit weak:
+> > The error should only be printed if there was an actual error in the
+> > ECCGETLAYOUT ioctl call, not when the ioctl is not supported.
 > >
-> >  - It only says "something" was available at the specified download
-> >    location, but not that this something matches the hash we have in
-> >    the package hash file. Hence a successful "make source-check" does
-> >    not guarantee a successful "make source".
-> >
-> >  - It only says at the time of "make source-check" that "something" was
-> >    available at the specified download location, but 2 minutes later
-> >    the file could be removed upstream, the tag be dropped, etc. Hence a
-> >    successful "make source-check" does not guarantee a successful "make
-> >    source".
-> >
-> > So, a "make source-check" does not provide you much guarantees. It only
-> > tells you that at the time of the source-check, "something" was
-> > available at the specified download location, but you don't know if
-> > that "something" is correct and that it will still be around when
-> > you'll do your build.
-> >
-> > If we are willing to accept this very weak semantic of source-check,
-> > then fair enough, but we (and our users) have to be aware of the very
-> > limited guarantees that source-check provides.
+> > Backport an upstream patch that fixes this issue.
 >
->  For the use case of Thomas DS, this weak semantic is perfectly fine. What it
-> tries to protect against is the common mistake that you add or bump a package
-> and forget to upload the source to PRIMARY_SITE. As explained by Thomas DS,
-> doing a full download is eventually still needed, but takes much longer:
-> source-check may take in the order of 1 minute while the full download takes 10
-> minutes. That makes all the difference for immediate feedback to the developer,
-> and it doesn't significantly slow down a good pipeline.
+> Why not bump to 2.1.0 instead?
 >
->  Indeed, it does not protect against uploading the wrong tarball with the
-> correct name. It also doesn't protect against forgetting to update the hash
-> file. It also doesn't protect against the package failing to build. It also
-> doesn't protect against bugs in the code which become only apparent at run time.
-> But all of these are checked later in CI, and the source check captures an
-> important (and likely) class of mistakes early on.
 
-Thanks for writing this out. It conveys my thoughts very well.
+Ah, because at the time I wrote this patch, it was not yet released :-)
 
->
->  It is true that this is a very narrow use case. However, I think it passes two
-> tests for acceptance:
->
-> * It does not make Buildroot (much) more complex.
->
-> * There is no way to do this with scripting outside of Buildroot.
->
->  Regarding that second point: in fact there would be a way, if we would instead
-> have a command to print everything that would be downloaded. That would be very
-> similar to patch 1/9, but would remove the need for the other patches in the
-> series. The advantage of this approach is that there could be other uses for
-> printing the list of sources. But that would be back to the drawing board for
-> Thomas DS, so I doubt he's enthusiastic about that option :-) Plus, we have no
-> actual example of an additional use case.
+But yes, that would be the logical thing to do...
 
-I'm not against exploring this, if you think it is better.
-
-Question is what exactly you would print, e.g. all possible URLs, the
-main URL, only the one via PRIMARY_SITE (which are in fact two
-possible ones, either with or without the package directory).
-And how to describe the 'site method'?
-
-For my own use case, everything is expected on the primary site via
-scp, except our own Mercurial repositories (which are checked via 'hg'
-or with an optimization via a special scp URL).
-I would thus need a list of tarball names to check via scp, and a list
-of repositories+revisions.
-
-One could envision an output format with one package per line, each
-line listing the different possible URLs where the package could be
-obtained, space-separated.
-The external script could then have a logic that checks that at least
-one URL for each line can be accessed. The URLs could be those that
-the dl-wrapper receives, i.e. with prefixes like git|git+ssh:// that
-identify the method.
-
-In the general case, the external script would need to duplicate some
-logic that Buildroot is already handling. I.e. how to process git,
-wget, etc. URLs. If I'm the only user of this feature, it's fine with
-me.
-
-Best regards,
-Thomas
-
-
->
->  Regards,
->  Arnout
->
+/Thomas
