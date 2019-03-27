@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:22:58 +0100
-Subject: [Buildroot] [PATCH 2/2] package/putty: fix build with uClibc
-In-Reply-To: <64b39558536fb15d8447ea0e5acb294ebba642c1.1553624840.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 26 Mar 2019 20:27:20 +0200")
-References: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
- <64b39558536fb15d8447ea0e5acb294ebba642c1.1553624840.git.baruch@tkos.co.il>
-Message-ID: <87wokkneil.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2019 23:18:54 +0100
+Subject: [Buildroot] [git commit] package/sqlite: bump to version 3.27.2
+Message-ID: <20190327221945.079B5884A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=612f0bcb9672e70742d3ca0dd4fff9affa25d11d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add patches fixing a number of build issues with uClibc. The issue fixed
- > in patch #2 has been reported upstream. Patch #3 has been suggested by
- > upstream but not applied yet.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Drop the _SUBDIR assignment. The configure script moved to top level
- > directory since upstream commit a947c49bec3 from 2014. This allows
- > AUTORECONF to find configure.ac.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/801/801e2b2909363b5dcd9735362bb921e017569edc/
- > http://autobuild.buildroot.net/results/398/3984c6cdd3398645c8ad98bbe23af9090cf4bfcf/
- > http://autobuild.buildroot.net/results/632/632f93046f9cceffd9b604911542426c10967e0f/
-
- > Cc: Alexander Dahl <post@lespocky.de>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 7be42a0aca..5e2bc7030a 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 5d6dc7634ec59e7a6fffa8758c1e184b2522c2e5  sqlite-autoconf-3250300.tar.gz
++sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
+ # Calculated based on the hash above
+-sha256 00ebf97be13928941940cc71de3d67e9f852698233cd98ce2d178fd08092f3dd  sqlite-autoconf-3250300.tar.gz
++sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 6cf5710e5d..95ededd8c4 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3250300
++SQLITE_VERSION = 3270200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = https://www.sqlite.org/2018
++SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
