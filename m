@@ -1,27 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Mar 2019 23:06:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXdmcp: security
- bump version to 1.1.3
-In-Reply-To: <20190323202358.17416-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 23 Mar 2019 21:23:58 +0100")
-References: <20190323202358.17416-1-bernd.kuhls@t-online.de>
-Message-ID: <87o95wotv3.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Mar 2019 23:07:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: needs dynamic
+ library
+In-Reply-To: <20190324114554.26799-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Mar 2019 12:45:54 +0100")
+References: <20190324114554.26799-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k1gkottg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes CVE-2017-2625:
- > https://lists.x.org/archives/xorg-announce/2019-March/002974.html
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/0121befb9b4ba6cffc47ce7f861ed81077fc900f
 
- > Added all hashes provided by upstream and license hash.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2018.02.x, 2018.11.x and 2019.02.x, thanks.
+Committed to 2019.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
