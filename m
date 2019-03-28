@@ -1,76 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Mar 2019 19:01:00 +0100
-Subject: [Buildroot] [git commit] support/testing: add lua-http test
-Message-ID: <20190328180054.53332886DB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Mar 2019 19:13:16 +0100
+Subject: [Buildroot] [PATCH v4] mtree: new package
+In-Reply-To: <87tvfnav5a.fsf@gmail.com>
+References: <20190326142411.6943-1-esben.haabendal@gmail.com>
+ <20190327201803.6b1a832d@windsurf> <87bm1w9ck5.fsf@haabendal.dk>
+ <20190328121441.02648d09@windsurf> <87tvfnav5a.fsf@gmail.com>
+Message-ID: <02a2e44d-45e9-f3fc-8c1f-5cf7a8b8f5d8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5593ed554f85d2bcdf87edc5e20b3a3f0cd3b8e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml                                 |  2 ++
- support/testing/tests/package/test_lua_http.py | 37 ++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b89df33755..68f542f679 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -334,6 +334,8 @@ tests.package.test_lua.TestLua: { extends: .runtime_test }
- tests.package.test_lua.TestLuajit: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
-+tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
-+tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
- tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
- tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
- tests.package.test_luaexpat.TestLuaLuaExpat: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_lua_http.py b/support/testing/tests/package/test_lua_http.py
-new file mode 100644
-index 0000000000..ba6096a1b1
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_http.py
-@@ -0,0 +1,37 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaHttp(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_HTTP=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
-+        self.module_test("http.client")
-+        self.module_test("http.cookie")
-+        self.module_test("http.proxies")
-+        self.module_test("http.server")
-+        self.module_test("http.socks")
-+        self.module_test("http.websocket")
-+
-+
-+class TestLuajitHttp(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUA_HTTP=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
-+        self.module_test("http.client")
-+        self.module_test("http.cookie")
-+        self.module_test("http.proxies")
-+        self.module_test("http.server")
-+        self.module_test("http.socks")
-+        self.module_test("http.websocket")
+On 28/03/2019 16:14, Esben Haabendal wrote:
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+>> Hello Esben,
+>>
+>> On Wed, 27 Mar 2019 23:28:58 +0100
+>> Esben Haabendal <esben.haabendal@gmail.com> wrote:
+>>
+>>>> If it has been resolved in glibc 2.23, should
+>>>> we remove those work-arounds ?  
+>>>
+>>> It depends.  If we do that, people using external toolchains with glibc
+>>> older than 2.23 would see breakage.
+>>>
+>>>> I just would like to make sure we don't work around this problem in
+>>>> different ways in different packages.  
+>>>
+>>> Sounds like a good plan.  Unfortunately, I don't see that any of the
+>>> proposed workaround generally good.
+>>>
+>>> For packages where large file support is not deemed an important
+>>> feature, The -U_FILE_OFFSET_BITS workaround is good.  But for packages
+>>> where large file support could be relevant, it seems like a bad idea to
+>>> disable it just to stay compatible with old glibc versions that only a
+>>> few people use together with new buildroot versions.
+>>>
+>>> If you like, I will switch to the -U_FILE_OFFSET_BITS for mtree
+>>> package.  I personally don't need large file support...
+>>
+>> OK, I did a bit of testing, taking as example the libcgroup package. I
+>> confirmed that without -U_FILE_OFFSET_BITS, libcgroup fails to build
+>> with the Sourcery ARM toolchain (old glibc), but builds perfectly fine
+>> with the Linaro toolchain (recent glibc).
+>>
+>> So, from there, you have two options:
+>>
+>>  (1) You don't have much time and you're not willing to not much
+>>      additional work. In this case, use the -U_FILE_OFFSET_BITS trick in
+>>      mtree. This way, we have the same quirk/workaround everywhere for this
+>>      fts.h problem.
+>>
+>>  (2) You have more time. In this case, add a hidden option in
+>>      toolchain/Config.in called BR2_TOOLCHAIN_HAS_BROKEN_FTS. This hidden
+>>      option should be selected by the broken ARM Codesourcery toolchain.
+>>      Then all packages that do the -U_FILE_OFFSET_BITS trick can be changed
+>>      to only do it when BR2_TOOLCHAIN_HAS_BROKEN_FTS is enabled
+>>      (including mtree, of course).
+>>
+>>      Obviously, this leaves old custom external toolchains potentially
+>>      broken, as for these, the work around will not be applied. If this
+>>      turns out to really be a problem in practice, we can always add an
+>>      option BR2_TOOLCHAIN_EXTERNAL_CUSTOM_HAS_BROKEN_FTS, and let the
+>>      user enable it + a check that if this option is not enabled, the
+>>      external toolchain really does not have broken fts.h.
+>>
+>> Let me know which option you chose :-)
+> 
+> I think I will give option 2 a try.  Sounds like a nice solution :-)
+
+ To be honest, I'm more inclined to remove the -U completely and add an
+autobuilder exception... I don't believe we have to go too far to work around
+bugs in old toolchains.
+
+ Regards,
+ Arnout
