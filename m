@@ -1,99 +1,49 @@
-From: Manas Mangaonkar <manasmangaonkar@gmail.com>
-Date: Thu, 28 Mar 2019 22:15:13 +0530
-Subject: [Buildroot] [External] Re: Gsoc Interest : Follow upstream
- updates and CVEs of packages
-In-Reply-To: <ac97c9c0-ad13-2171-afa9-5671fe6185b2@mind.be>
-References: <CALKvhuOFNyav9hJ73YgEFMx8mig3j36GHAdXOnJvFykcaCUVGQ@mail.gmail.com>
- <CANQCQpa-bccz8tigO4K=oJ1jzBcOANOicS1n5XxpFKq0vAVdYA@mail.gmail.com>
- <CALKvhuP5XrG_b2pRDb5fHo=EVoXhm6q_ajq2ZUA4AWzwSG9PEg@mail.gmail.com>
- <CANQCQpZKU8viN3xRurpy9V+1vJ_T8QkT2kUaD1_uzPREOd9mbw@mail.gmail.com>
- <CANQCQpZ=D4zHeZu4_MM8iRmrMr5t941iEixvJwohVN4Kax3Thw@mail.gmail.com>
- <CALKvhuNt9awxn-ks40nMfu2tDmyCWSpWd+O0-V44BxLjp-B1mw@mail.gmail.com>
- <ac97c9c0-ad13-2171-afa9-5671fe6185b2@mind.be>
-Message-ID: <CALKvhuO9_8B3vr9bxh7ZeLcaJNXe-8=e1wnFw8-akM+DDugW4Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Mar 2019 17:48:57 +0100
+Subject: [Buildroot] [PATCH v2] package/nfs-utils: making nfs server
+ optional
+In-Reply-To: <1553781189-15924-1-git-send-email-angelo@amarulasolutions.com>
+References: <1553781189-15924-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20190328174857.7c1d188e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Angelo,
 
-I think it is too late to start preparing a proposal for gsoc now.I am
-kinda backing out form this idea.
-Sorry
-I saw someone else was interested in working on this.
-Again sorry for taking your time
-- Manas
+On Thu, 28 Mar 2019 14:53:09 +0100
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-On Wed, Mar 27, 2019 at 3:25 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> +ifeq ($(BR2_PACKAGE_NFS_UTILS_SERVER),y)
+>  define NFS_UTILS_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+>  		$(TARGET_DIR)/etc/init.d/S60nfs
+> @@ -95,6 +96,7 @@ define NFS_UTILS_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
+>  		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
+>  endef
+> +endif
 
->  Hi Manas,
->
-> On 13/03/2019 14:19, Manas Mangaonkar wrote:
-> >> With respect to what breakages?  Test builds or versions not listed in
-> >> NVD?
-> >
-> > For example if a packager,user tries to package something or build
-> something for
-> > buildroot.but then due to some upstream dependency issues
-> > or other problems it does not build.Then this can be automatically
-> reported as a
-> > issue in the upstream repo.This is a git specific approach though.
-> > but this could work for everything
->
->  The project we had in mind was more about identifying open CVEs (or other
-> vulnerabilities) on Buildroot packages, not on problems with building
-> them. For
-> the latter, we already have the autobuild infrastructure that serves very
-> well.
->
->
-> >> I don't think a NVD only approach makes sense.  It could be a
-> >> start but there are tools that centralize feeds.  I'd suggest
-> >> reviewing Debian, Gentoo, and other distros approaches and tooling for
-> >> this situation.
-> >
-> > As a packager at fedora,currently we have automated update posting on
-> bugzilling
-> > whenver we have updates available
->
->  We have that too (since recently) [1]. Well, not creating bugs
-> automatically,
-> and the bulk of the packages don't have a match at release-monitoring yet,
-> but
-> it's a start :-)
->
-> > but not automated build breakage notifier due
-> > to upstream.
->
->  We don't have anything like automatic updates, and I'm not sure if we
-> would
-> want it....
->
-> > as far as i know same goes for Debian.There does exist one tool that
-> releases to
-> > Github then to pypi and then to fedora(which is fedora's own gsoc
-> project).
-> > So modifying it with buildroot functionality and other custom functions
-> for
-> > buildroot and tracking cve would be something to consider.
-> >
-> > Owasp tracking project looks interesting.
->
->  The eye candy scares the hell out of me :-)
->
->  But it's true, if we can convert [1] into a BoM for Dependency-Track then
-> that
-> tool can take care of identifying vulnerabilities.
->
->
->  Regards,
->  Arnout
->
->
-> [1] http://autobuild.buildroot.net/stats/
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190328/e6f1fa05/attachment.html>
+This is only removing the installation of the init script/systemd unit
+files, not really disabling the server.
+
+Shouldn't we do like BR2_PACKAGE_NFS_UTILS_RPCDEBUG,
+BR2_PACKAGE_NFS_UTILS_RPC_LOCKD and BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
+are doing, and also remove the unnecessary programs ?
+
+Another question is: the systemd stuff installs a nfs-client.service
+unit file, and you're no longer installing this. It's named
+nfs-client... so it seems to be needed even when you are just a client.
+
+In fact, I think *some* of the daemons are needed even when you are
+just a client. See what nfs-client.service is doing.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
