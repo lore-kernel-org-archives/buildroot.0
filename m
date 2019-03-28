@@ -1,207 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:32:26 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gerbera: fix
- static build with ffmpeg
-Message-ID: <20190328093045.53891807F9@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 10:35:37 +0100
+Subject: [Buildroot] [PATCH 1/3] package/owfs: drop unneeded first patch
+In-Reply-To: <20190324221019.10193-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Mar 2019 23:10:17 +0100")
+References: <20190324221019.10193-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bm1vnxxy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5377e9545b78a14e69e47bb7a7e88dcea97fa96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
- - http://autobuild.buildroot.org/results/95e410e5ab34c6d4626a58f97c0d2d5e6829a300
+ > Patch is not needed since version 3.1p2 and
+ > https://github.com/owfs/owfs/commit/2982df8ca648bd9cec4d820151046b044ef504e0
+ > because localtime_r is now correctly checked
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8795cb2082437e4d27fa24fae66fdad350439e67)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch | 175 +++++++++++++++++++++
- 1 file changed, 175 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch b/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch
-new file mode 100644
-index 0000000000..b5f79173b6
---- /dev/null
-+++ b/package/gerbera/0002-cmake-FindFFMPEG-cmake-use-pkgconfig.patch
-@@ -0,0 +1,175 @@
-+From fbbc07ce53e884b1603461ee5642d5f02788678d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 21 Mar 2019 16:32:44 +0100
-+Subject: [PATCH] cmake/FindFFMPEG.cmake: use pkgconfig
-+
-+ffmpeg has too many optional dependencies (opus, openssl, ...) instead
-+of trying to find them all one by one, use pkg-config to get them and
-+fallback on current mechanism
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
-+ - http://autobuild.buildroot.org/results/95e410e5ab34c6d4626a58f97c0d2d5e6829a300
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported) from:
-+https://github.com/gerbera/gerbera/commit/fbbc07ce53e884b1603461ee5642d5f02788678d]
-+---
-+ cmake/FindFFMPEG.cmake | 147 +++++++++++++++++++++--------------------
-+ 1 file changed, 75 insertions(+), 72 deletions(-)
-+
-+diff --git a/cmake/FindFFMPEG.cmake b/cmake/FindFFMPEG.cmake
-+index 0a4a409f..9548b566 100644
-+--- a/cmake/FindFFMPEG.cmake
-++++ b/cmake/FindFFMPEG.cmake
-+@@ -82,70 +82,76 @@ ENDIF (NOT FFMPEG_INCLUDE_DIR)
-+ # ffmpeg uses relative includes such as <ffmpeg/avformat.h> or <libavcodec/avformat.h>
-+ get_filename_component(FFMPEG_INCLUDE_DIR ${FFMPEG_INCLUDE_DIR} ABSOLUTE)
-+ 
-+-FIND_LIBRARY(FFMPEG_avformat_LIBRARY avformat
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_avcodec_LIBRARY avcodec
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_avutil_LIBRARY avutil
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_swresample_LIBRARY swresample
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_vorbis_LIBRARY vorbis
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_dc1394_LIBRARY dc1394_control
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_vorbisenc_LIBRARY vorbisenc
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_theora_LIBRARY theora
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_dts_LIBRARY dts
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_gsm_LIBRARY gsm
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_swscale_LIBRARY swscale
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_z_LIBRARY z
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-+-
-+-FIND_LIBRARY(FFMPEG_bz2_LIBRARY bz2
-+-        /usr/local/lib
-+-        /usr/lib
-+-        )
-++CHECK_STRUCT_HAS_MEMBER("struct AVStream" codecpar libavformat/avformat.h HAVE_AVSTREAM_CODECPAR LANGUAGE C)
-++
-++FIND_PACKAGE(PkgConfig QUIET)
-++PKG_CHECK_MODULES(FFMPEG QUIET libavformat libavutil)
-++IF (NOT FFMPEG_FOUND)
-++	FIND_LIBRARY(FFMPEG_avformat_LIBRARY avformat
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_avcodec_LIBRARY avcodec
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_avutil_LIBRARY avutil
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_swresample_LIBRARY swresample
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_vorbis_LIBRARY vorbis
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_dc1394_LIBRARY dc1394_control
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_vorbisenc_LIBRARY vorbisenc
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_theora_LIBRARY theora
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_dts_LIBRARY dts
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_gsm_LIBRARY gsm
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_swscale_LIBRARY swscale
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_z_LIBRARY z
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++
-++	FIND_LIBRARY(FFMPEG_bz2_LIBRARY bz2
-++		/usr/local/lib
-++		/usr/lib
-++		)
-++ENDIF(NOT FFMPEG_FOUND)
-+ 
-+ SET(FFMPEG_LIBRARIES)
-+ IF (FFMPEG_INCLUDE_DIR)
-+@@ -205,9 +211,6 @@ IF (FFMPEG_INCLUDE_DIR)
-+                 ENDIF (FFMPEG_bz2_LIBRARY)
-+ 
-+                 SET(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} CACHE INTERNAL "All presently found FFMPEG libraries.")
-+-
-+-                CHECK_STRUCT_HAS_MEMBER("struct AVStream" codecpar libavformat/avformat.h HAVE_AVSTREAM_CODECPAR LANGUAGE C)
-+-
-+             ENDIF (FFMPEG_avutil_LIBRARY)
-+         ENDIF (FFMPEG_avcodec_LIBRARY)
-+     ENDIF (FFMPEG_avformat_LIBRARY)
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
