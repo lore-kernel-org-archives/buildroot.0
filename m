@@ -1,49 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Mar 2019 21:31:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openldap: don't patch libtool
-In-Reply-To: <20190328185416.01eb56c6@windsurf>
-References: <20190328172937.11268-1-fontaine.fabrice@gmail.com>
- <20190328185416.01eb56c6@windsurf>
-Message-ID: <CAPi7W83jjGhMgEy7_c4pnHynxeC4Ym5vtCpCUhS_JkJ4YtDXnQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Mar 2019 21:59:59 +0100
+Subject: [Buildroot] [PATCH v4] mtree: new package
+In-Reply-To: <20190328210043.41fc2c0d@windsurf> (Thomas Petazzoni's message of
+ "Thu, 28 Mar 2019 21:00:43 +0100")
+References: <20190326142411.6943-1-esben.haabendal@gmail.com>
+ <20190327201803.6b1a832d@windsurf> <87bm1w9ck5.fsf@haabendal.dk>
+ <20190328121441.02648d09@windsurf> <87tvfnav5a.fsf@gmail.com>
+ <02a2e44d-45e9-f3fc-8c1f-5cf7a8b8f5d8@mind.be>
+ <20190328210043.41fc2c0d@windsurf>
+Message-ID: <87ef6qlnow.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Le jeu. 28 mars 2019 ? 18:54, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Thu, 28 Mar 2019 18:29:37 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > openldap uses its own libtool, static build with atomic fails with our
-> > patches since February 6th 2019 on:
-> >
-> > /bin/sh ../../libtool --mode=link /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os   -static  -static   -o idtest idtest.o liblber.la ../../libraries/liblutil/liblutil.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lz -pthread -latomic -lcrypto -lz -pthread -latomic
-> >
-> > /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -static -o etest etest.o -pthread -pthread ./.libs/liblber.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib ../../libraries/liblutil/liblutil.a -lssl -lcrypto -lz -pthread /home/buildroot/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/5.4.0/../../../../or1k-buildroot-linux-uclibc/lib//libatomic.so
-> >
-> > To fix this error, set OPENLDAP_LIBTOOL_PATCH to NO
->
-> Do you understand why openldap is specifically affected ? I'm a bit
-> worried about "randomly" disabling libtool patching.
-Nope, I don't understand why this issue is only affecting openldap and
-I don't understand why the failures started on February 6th. There was
-no updates on openldap so perhaps there is a specific issue with some
-of the toolchains or with our libtool patches?
-I'll take some time to investigate.
+ > On Thu, 28 Mar 2019 19:13:16 +0100
+ > Arnout Vandecappelle <arnout@mind.be> wrote:
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+ >> > I think I will give option 2 a try.  Sounds like a nice solution :-)  
+ >> 
+ >> To be honest, I'm more inclined to remove the -U completely and add an
+ >> autobuilder exception... I don't believe we have to go too far to work around
+ >> bugs in old toolchains.
 
-Fabrice
+ > I'm fine with this as well. It means we would no longer support glibc
+ > 2.19 anymore.
+
+Didn't you just last month argue against removing support for glibc <
+2.19 support (the runc security fix):
+
+http://lists.busybox.net/pipermail/buildroot/2019-February/244056.html
+
+I don't have a problem dropping support for ancient toolchains when they
+add too much complexity, but the lack of large file support is mtree is
+probably not really reason enough.
+
+-- 
+Bye, Peter Korsgaard
