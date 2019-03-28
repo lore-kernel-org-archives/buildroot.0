@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 28 Mar 2019 18:20:46 +0100
-Subject: [Buildroot] [PATCH 2/4] package/lua-http: bump to version 0.3
+Date: Thu, 28 Mar 2019 18:20:47 +0100
+Subject: [Buildroot] [PATCH 3/4] support/testing: add lua-http test
 In-Reply-To: <20190328172048.30238-1-francois.perrad@gadz.org>
 References: <20190328172048.30238-1-francois.perrad@gadz.org>
-Message-ID: <20190328172048.30238-2-francois.perrad@gadz.org>
+Message-ID: <20190328172048.30238-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,66 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-http/Config.in     | 1 +
- package/lua-http/lua-http.hash | 4 ++--
- package/lua-http/lua-http.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ .gitlab-ci.yml                                |  2 +
+ .../testing/tests/package/test_lua_http.py    | 37 +++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 support/testing/tests/package/test_lua_http.py
 
-diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
-index 8aaec69ef..cbf71563b 100644
---- a/package/lua-http/Config.in
-+++ b/package/lua-http/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LUA_HTTP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
- 	select BR2_PACKAGE_LPEG # runtime
- 	select BR2_PACKAGE_LUA_BASEXX # runtime
-+	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
- 	select BR2_PACKAGE_LUA_COMPAT53 if !BR2_PACKAGE_LUA_5_3 # runtime
- 	select BR2_PACKAGE_LUA_CQUEUES # runtime
- 	select BR2_PACKAGE_LUA_FIFO # runtime
-diff --git a/package/lua-http/lua-http.hash b/package/lua-http/lua-http.hash
-index 3c7bcebd3..d41b494e9 100644
---- a/package/lua-http/lua-http.hash
-+++ b/package/lua-http/lua-http.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 d68591eeeeb60c4187469eae89f5bad02d753a8c0adaa460d453b0734222645a  http-0.2-0.src.rock
--sha256 10650e71ba335c76955bbbec2b1f5b9d5655f2e0fdc6c7cecae5bd28a376302c  lua-http-0.2/LICENSE.md
-+sha256 98318213be7b5ca60780c39f4736d5a3328631bc2c5dbfb8949b0db80e32746f  http-0.3-0.src.rock
-+sha256 817cdf831c9d7cd1a2706b4b99dcc6f61a7a2345b7c9d39ed99e87d36338f4c8  lua-http-0.3/LICENSE.md
-diff --git a/package/lua-http/lua-http.mk b/package/lua-http/lua-http.mk
-index 9bc416b8a..00dcefa0d 100644
---- a/package/lua-http/lua-http.mk
-+++ b/package/lua-http/lua-http.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_HTTP_VERSION_UPSTREAM = 0.2
-+LUA_HTTP_VERSION_UPSTREAM = 0.3
- LUA_HTTP_VERSION = $(LUA_HTTP_VERSION_UPSTREAM)-0
- LUA_HTTP_NAME_UPSTREAM = http
- LUA_HTTP_SUBDIR = lua-http-$(LUA_HTTP_VERSION_UPSTREAM)
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index ec143b1d2..681b0d3f5 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -332,6 +332,8 @@ tests.package.test_lua.TestLua: { extends: .runtime_test }
+ tests.package.test_lua.TestLuajit: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
+ tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
++tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
++tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
+ tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
+ tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
+ tests.package.test_luaexpat.TestLuaLuaExpat: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_lua_http.py b/support/testing/tests/package/test_lua_http.py
+new file mode 100644
+index 000000000..ba6096a1b
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_http.py
+@@ -0,0 +1,37 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaHttp(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_HTTP=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
++        self.module_test("http.client")
++        self.module_test("http.cookie")
++        self.module_test("http.proxies")
++        self.module_test("http.server")
++        self.module_test("http.socks")
++        self.module_test("http.websocket")
++
++
++class TestLuajitHttp(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_HTTP=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
++        self.module_test("http.client")
++        self.module_test("http.cookie")
++        self.module_test("http.proxies")
++        self.module_test("http.server")
++        self.module_test("http.socks")
++        self.module_test("http.websocket")
 -- 
 2.17.1
