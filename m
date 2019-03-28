@@ -1,64 +1,113 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Thu, 28 Mar 2019 07:27:40 +0000
-Subject: [Buildroot] Buildroot autobuilder failures with Temporary failure
- in name resolution [was RE: [arc-buildroot] [autobuild.buildroot.net] Your
- build results for 2019-03-27]
-Message-ID: <4881796E12491D4BB15146FE0209CE6468239BF0@de02wembxa.internal.synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Mar 2019 09:58:43 +0100
+Subject: [Buildroot] [PATCH v4 2/6] qt5: Provide generic qmake package
+ infrastructure
+In-Reply-To: <2b455f83-78f6-432c-eb27-ceece04209c8@andin.de>
+References: <20190322183904.22401-1-anaumann@ultratronik.de>
+ <20190322183904.22401-3-anaumann@ultratronik.de>
+ <e5be61b9-45e1-ddea-2b8a-9ba7511383b3@mind.be>
+ <20190326081814.0109d351@windsurf>
+ <42086765-6c53-b726-f09e-184209193b0d@mind.be>
+ <2b455f83-78f6-432c-eb27-ceece04209c8@andin.de>
+Message-ID: <2d6cbad4-6270-6d2b-c4a6-863d78591e7c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Thursday, March 28, 2019 10:01 AM
-> To: ARC Maintainers <arc-buildroot@synopsys.com>
-> Subject: [arc-buildroot] [autobuild.buildroot.net] Your build results for 2019-03-27
+
+On 27/03/2019 23:10, Andreas Naumann wrote:
 > 
-> Hello,
 > 
-> This is the list of Buildroot build failures that occured on
-> 2019-03-27, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
+> Am 26.03.19 um 11:09 schrieb Arnout Vandecappelle:
+>>
+>>
+>> On 26/03/2019 08:18, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> On Tue, 26 Mar 2019 00:16:47 +0100 Arnout Vandecappelle
+>>> <arnout@mind.be> wrote:
+>>>
+>>>>> This is done by re-running the install step of the qmake
+>>>>> generated Makefile with the package build directory prepended
+>>>>> (to the staging/host path). Even though this does create
+>>>>> lengthy pathes it allows for easy separation of the staging
+>>>>> files from the host destined files by just omitting the
+>>>>> resulting BUILD_DIR+HOST_DIR path from the following rsync call
+>>>>> to the real target folder.
+>>>>
+>>>> We have not converged yet on whether this is the right approach.
+>>>> So maybe, in order to move forward, it would be better to split
+>>>> the patch up into a first bit that creates the qmake package but
+>>>> does not define target install steps, then convert the relevant
+>>>> packages to qmake packages, and finally change the qmake infra to
+>>>> do target install and changes all the packages again. It's more
+>>>> work to do it this way, obviously, but it would allow us to
+>>>> already commit part of the series before we have converged on it
+>>>> completely.
+>>>
+>>> While I understand your idea of splitting things up further in
+>>> terms of patches, I think we can try to agree on how the target
+>>> installation step should be done and use the approach proposed by
+>>> Andreas to
+>>
+>> Sure, that's why I said "maybe". It's not a requirement, but it is
+>> also frustrating to respinning a series and seeing no progress on it.
+>> That's why I proposed the option.
 > 
-> Results for the 'master' branch
-> ===============================
-> 
-> Build failures related to your architectures:
-> 
->          arc |      glibc-arc-2018.09-release | https://urldefense.proofpoint.com/v2/url?u=http-
-> 3A__autobuild.buildroot.net_results_bb2e4bb000c8f7d31cf37c7d765d3554e7dfe3ea&d=DwICAg&c=DPL6_X_6JkXFx7
-> AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=KIjN8ZuI7quOdxJac99HJF91IPK3FjIVahOw8y1Orck&s
-> =DBGosorH5qwAs9Ub7ZaB8KCwYLCOeLB5uOeWyzNTaZU&e=
+> Splitting the conversion of each package (and doing this one package at
+> a time?) really seems like a lot work and I dont know if it leads to a
+> nicer history.
+> I propose to split up the infra introduction in two parts
+> (config,build,staging vs target install), but keep the conversion of
+> each package in one patch. Or maybe one patch for the straightforward
+> cases and the rest individually?
+
+ Sounds good to me. As Thomas wrote: you don't have to do it if it's too much work.
+
+ IIUC your proposal would be:
+
+1. Basic qmake infra
+2. Convert all packages to qmake infra (trivial because the difficult cases
+still use custom staging/target install commands, you just don't remove them).
+3. Add target install support to qmake infra
+4. Convert all easy packages to target install from qmake infra (i.e. just
+remove the target install commands)
+5-N. Convert difficult packages.
+
+ I repeat: it would be nicer this way, but if it's take too much time to do it,
+we'll accept it as just two or three patches as well.
 
 [snip]
+>>>> However, I'm not sure that this is the way we want to go. What is
+>>>> wrong with the pkg-files-list? You said before that it was
+>>>> incorrect, but if that is the case, it should be fixed.
+> 
+> pkg-files-list currently breaks the parallel build. I did send a patch
+> for that.
+> However I suspect the lists might still not be correct because if a
+> package provides a file which already exists it wont be recorded, right?
 
->          arc |                  uclibc-1.0.31 | https://urldefense.proofpoint.com/v2/url?u=http-
-> 3A__autobuild.buildroot.net_results_d26a913230855ae549280d0db3e589e2bacba0bf&d=DwICAg&c=DPL6_X_6JkXFx7
-> AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=KIjN8ZuI7quOdxJac99HJF91IPK3FjIVahOw8y1Orck&s
-> =gQyiosPdIeIZMW1eLl8jkChd48HZI933eCqr_mydKgA&e=
+ It will be recorded twice in that case. And the check-uniq-files script checks
+in the finalize step that this doesn't actually happen.
 
-Some builds on your server are failing due to DNS problems, like that:
-------------------------->8-----------------------
->>> uclibc 1.0.31 Downloading
---2019-03-27 04:35:45--  https://downloads.uclibc-ng.org/releases/1.0.31/uClibc-ng-1.0.31.tar.xz
-Resolving downloads.uclibc-ng.org (downloads.uclibc-ng.org)... failed: Temporary failure in name resolution.
-------------------------->8-----------------------
-and
-------------------------->8-----------------------
->>> glibc arc-2018.09-release Downloading
---2019-03-27 04:36:26--  https://github.com/foss-for-synopsys-dwc-arc-processors/glibc/archive/arc-2018.09-release/glibc-arc-2018.09-release.tar.gz
-Resolving github.com (github.com)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address 'github.com'
---2019-03-27 04:36:56--  http://sources.buildroot.net/glibc/glibc-arc-2018.09-release.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... failed: Temporary failure in name resolution.
-------------------------->8-----------------------
+> This situation is problematic anyway but currently solved by at least a
+> deterministic package build/install order in which "the last wins".
+> Using the staging pkg-files-list for target install would reverse that
+> to "first package wins".
+> Finally, when building in parallel, this will become a real issue.
 
-Is it a known problem?
+ Yes and no. It's not an issue because each package installs in its own
+host/staging/target dirs. It may become an issue when combining these dirs from
+different packages, but that combination is still deterministic (it is not done
+in parallel and the order is fixed with sort).
 
--Alexey
+ But since we agreed to tmpinstall anyway, the point is moot.
+
+ Regards,
+ Arnout
+
+
+[snip]
