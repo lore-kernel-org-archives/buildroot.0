@@ -1,31 +1,26 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Thu, 28 Mar 2019 09:33:48 +0000
-Subject: [Buildroot] Buildroot autobuilder failures with Temporary
- failure in name resolution [was RE: [arc-buildroot]
- [autobuild.buildroot.net] Your build results for 2019-03-27]
-In-Reply-To: <f0757f8d-72fc-e1c4-ed2a-be9cc70af311@micronovasrl.com>
-References: <4881796E12491D4BB15146FE0209CE6468239BF0@de02wembxa.internal.synopsys.com>
- <f0757f8d-72fc-e1c4-ed2a-be9cc70af311@micronovasrl.com>
-Message-ID: <4881796E12491D4BB15146FE0209CE6468239D15@de02wembxa.internal.synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Mar 2019 10:34:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
+ ffmpeg
+In-Reply-To: <20190324093452.3238-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Mar 2019 10:34:52 +0100")
+References: <20190324093452.3238-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ftr7ny06.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-[snip]
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/2b99fabd798db84a0fce26ad696c58e54c6ff626
+ >  - http://autobuild.buildroot.org/results/95e410e5ab34c6d4626a58f97c0d2d5e6829a300
 
-> > Is it a known problem?
-> 
-> I've just checked it.
-> Probably it was a DNS problem due to OVH datacenter where our server is
-> located.
-> 
-> I've tried to wget all 3 urls now and it works correctly.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thanks for checking!
-Hopefully this problem goes away for good now :)
+Committed to 2019.02.x, thanks.
 
--Alexey
+-- 
+Bye, Peter Korsgaard
