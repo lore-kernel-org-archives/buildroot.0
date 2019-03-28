@@ -1,320 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:24:40 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/putty: enable
- static build
-Message-ID: <20190328092752.3997E886E0@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 28 Mar 2019 10:31:51 +0100
+Subject: [Buildroot] Buildroot autobuilder failures with Temporary
+ failure in name resolution [was RE: [arc-buildroot]
+ [autobuild.buildroot.net] Your build results for 2019-03-27]
+In-Reply-To: <4881796E12491D4BB15146FE0209CE6468239BF0@de02wembxa.internal.synopsys.com>
+References: <4881796E12491D4BB15146FE0209CE6468239BF0@de02wembxa.internal.synopsys.com>
+Message-ID: <f0757f8d-72fc-e1c4-ed2a-be9cc70af311@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc7e68c8ddacf1457d183ed9aeb180783a26ab5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hi Alexey,
 
-Add upstream patch fixing build when NO_GSSAPI is defined which is the
-case on static builds.
+Il 28/03/2019 08:27, Alexey Brodkin ha scritto:
+> Hi Giulio,
+> 
+>> -----Original Message-----
+>> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Sent: Thursday, March 28, 2019 10:01 AM
+>> To: ARC Maintainers <arc-buildroot@synopsys.com>
+>> Subject: [arc-buildroot] [autobuild.buildroot.net] Your build results for 2019-03-27
+>>
+>> Hello,
+>>
+>> This is the list of Buildroot build failures that occured on
+>> 2019-03-27, and for which you are a registered architecture developer
+>> or package developer. Please help us improving the quality of
+>> Buildroot by investigating those build failures and sending patches to
+>> fix them. Thanks!
+>>
+>> Results for the 'master' branch
+>> ===============================
+>>
+>> Build failures related to your architectures:
+>>
+>>           arc |      glibc-arc-2018.09-release | https://urldefense.proofpoint.com/v2/url?u=http-
+>> 3A__autobuild.buildroot.net_results_bb2e4bb000c8f7d31cf37c7d765d3554e7dfe3ea&d=DwICAg&c=DPL6_X_6JkXFx7
+>> AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=KIjN8ZuI7quOdxJac99HJF91IPK3FjIVahOw8y1Orck&s
+>> =DBGosorH5qwAs9Ub7ZaB8KCwYLCOeLB5uOeWyzNTaZU&e=
+> 
+> [snip]
+> 
+>>           arc |                  uclibc-1.0.31 | https://urldefense.proofpoint.com/v2/url?u=http-
+>> 3A__autobuild.buildroot.net_results_d26a913230855ae549280d0db3e589e2bacba0bf&d=DwICAg&c=DPL6_X_6JkXFx7
+>> AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=KIjN8ZuI7quOdxJac99HJF91IPK3FjIVahOw8y1Orck&s
+>> =gQyiosPdIeIZMW1eLl8jkChd48HZI933eCqr_mydKgA&e=
+> 
+> Some builds on your server are failing due to DNS problems, like that:
+> ------------------------->8-----------------------
+>>>> uclibc 1.0.31 Downloading
+> --2019-03-27 04:35:45--  https://downloads.uclibc-ng.org/releases/1.0.31/uClibc-ng-1.0.31.tar.xz
+> Resolving downloads.uclibc-ng.org (downloads.uclibc-ng.org)... failed: Temporary failure in name resolution.
+> ------------------------->8-----------------------
+> and
+> ------------------------->8-----------------------
+>>>> glibc arc-2018.09-release Downloading
+> --2019-03-27 04:36:26--  https://github.com/foss-for-synopsys-dwc-arc-processors/glibc/archive/arc-2018.09-release/glibc-arc-2018.09-release.tar.gz
+> Resolving github.com (github.com)... failed: Temporary failure in name resolution.
+> wget: unable to resolve host address 'github.com'
+> --2019-03-27 04:36:56--  http://sources.buildroot.net/glibc/glibc-arc-2018.09-release.tar.gz
+> Resolving sources.buildroot.net (sources.buildroot.net)... failed: Temporary failure in name resolution.
+> ------------------------->8-----------------------
+> 
+> Is it a known problem?
 
-Cc: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a6f73f3d26ce723657e764424b8a4f32cd6f53cd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Fix-compilation-with-NO_GSSAPI.patch      | 266 +++++++++++++++++++++
- package/putty/Config.in                            |   5 +-
- 2 files changed, 268 insertions(+), 3 deletions(-)
+I've just checked it.
+Probably it was a DNS problem due to OVH datacenter where our server is
+located.
 
-diff --git a/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch b/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch
-new file mode 100644
-index 0000000000..56a29e19dc
---- /dev/null
-+++ b/package/putty/0001-Fix-compilation-with-NO_GSSAPI.patch
-@@ -0,0 +1,266 @@
-+From 7ad08649a223a4cd61e67d8334a147f55c79399d Mon Sep 17 00:00:00 2001
-+From: Jacob Nevins <jacobn@chiark.greenend.org.uk>
-+Date: Mon, 25 Mar 2019 23:46:59 +0000
-+Subject: [PATCH] Fix compilation with NO_GSSAPI.
-+
-+This is a fairly shallow patch, which removes the UI and interactions
-+with external libraries. Some other machinery (which is dead code in
-+this configuration) is left in place.
-+
-+Adapted by me from a patch by Jeroen Roovers.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 7ad08649a22
-+
-+ config.c        |  4 ++++
-+ settings.c      | 12 ++++++++++--
-+ ssh.c           | 16 +++++++++++++++-
-+ ssh2transport.c |  3 +--
-+ ssh2userauth.c  |  8 ++++++--
-+ sshserver.c     | 13 ++++++++++++-
-+ 6 files changed, 48 insertions(+), 8 deletions(-)
-+
-+diff --git a/config.c b/config.c
-+index 9c299feecc21..6528a9696584 100644
-+--- a/config.c
-++++ b/config.c
-+@@ -2442,10 +2442,12 @@ void setup_config_box(struct controlbox *b, bool midsession,
-+ 			      HELPCTX(ssh_kexlist),
-+ 			      kexlist_handler, P(NULL));
-+             c->listbox.height = KEX_MAX;
-++#ifndef NO_GSSAPI
-+ 	    ctrl_checkbox(s, "Attempt GSSAPI key exchange",
-+ 			  'k', HELPCTX(ssh_gssapi),
-+ 			  conf_checkbox_handler,
-+ 			  I(CONF_try_gssapi_kex));
-++#endif
-+ 
-+ 	    s = ctrl_getset(b, "Connection/SSH/Kex", "repeat",
-+ 			    "Options controlling key re-exchange");
-+@@ -2455,11 +2457,13 @@ void setup_config_box(struct controlbox *b, bool midsession,
-+ 			 conf_editbox_handler,
-+ 			 I(CONF_ssh_rekey_time),
-+ 			 I(-1));
-++#ifndef NO_GSSAPI
-+             ctrl_editbox(s, "Minutes between GSS checks (0 for never)", NO_SHORTCUT, 20,
-+                          HELPCTX(ssh_kex_repeat),
-+                          conf_editbox_handler,
-+                          I(CONF_gssapirekey),
-+                          I(-1));
-++#endif
-+ 	    ctrl_editbox(s, "Max data before rekey (0 for no limit)", 'x', 20,
-+ 			 HELPCTX(ssh_kex_repeat),
-+ 			 conf_editbox_handler,
-+diff --git a/settings.c b/settings.c
-+index 8d56302677d9..54f5ab7b2919 100644
-+--- a/settings.c
-++++ b/settings.c
-+@@ -592,21 +592,25 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
-+     write_setting_b(sesskey, "Compression", conf_get_bool(conf, CONF_compression));
-+     write_setting_b(sesskey, "TryAgent", conf_get_bool(conf, CONF_tryagent));
-+     write_setting_b(sesskey, "AgentFwd", conf_get_bool(conf, CONF_agentfwd));
-++#ifndef NO_GSSAPI
-+     write_setting_b(sesskey, "GssapiFwd", conf_get_bool(conf, CONF_gssapifwd));
-++#endif
-+     write_setting_b(sesskey, "ChangeUsername", conf_get_bool(conf, CONF_change_username));
-+     wprefs(sesskey, "Cipher", ciphernames, CIPHER_MAX, conf, CONF_ssh_cipherlist);
-+     wprefs(sesskey, "KEX", kexnames, KEX_MAX, conf, CONF_ssh_kexlist);
-+     wprefs(sesskey, "HostKey", hknames, HK_MAX, conf, CONF_ssh_hklist);
-+     write_setting_i(sesskey, "RekeyTime", conf_get_int(conf, CONF_ssh_rekey_time));
-++#ifndef NO_GSSAPI
-+     write_setting_i(sesskey, "GssapiRekey", conf_get_int(conf, CONF_gssapirekey));
-++#endif
-+     write_setting_s(sesskey, "RekeyBytes", conf_get_str(conf, CONF_ssh_rekey_data));
-+     write_setting_b(sesskey, "SshNoAuth", conf_get_bool(conf, CONF_ssh_no_userauth));
-+     write_setting_b(sesskey, "SshBanner", conf_get_bool(conf, CONF_ssh_show_banner));
-+     write_setting_b(sesskey, "AuthTIS", conf_get_bool(conf, CONF_try_tis_auth));
-+     write_setting_b(sesskey, "AuthKI", conf_get_bool(conf, CONF_try_ki_auth));
-++#ifndef NO_GSSAPI
-+     write_setting_b(sesskey, "AuthGSSAPI", conf_get_bool(conf, CONF_try_gssapi_auth));
-+     write_setting_b(sesskey, "AuthGSSAPIKEX", conf_get_bool(conf, CONF_try_gssapi_kex));
-+-#ifndef NO_GSSAPI
-+     wprefs(sesskey, "GSSLibs", gsslibkeywords, ngsslibs, conf, CONF_ssh_gsslist);
-+     write_setting_filename(sesskey, "GSSCustom", conf_get_filename(conf, CONF_ssh_gss_custom));
-+ #endif
-+@@ -937,7 +941,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gppb(sesskey, "TryAgent", true, conf, CONF_tryagent);
-+     gppb(sesskey, "AgentFwd", false, conf, CONF_agentfwd);
-+     gppb(sesskey, "ChangeUsername", false, conf, CONF_change_username);
-++#ifndef NO_GSSAPI
-+     gppb(sesskey, "GssapiFwd", false, conf, CONF_gssapifwd);
-++#endif
-+     gprefs(sesskey, "Cipher", "\0",
-+ 	   ciphernames, CIPHER_MAX, conf, CONF_ssh_cipherlist);
-+     {
-+@@ -990,7 +996,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gprefs(sesskey, "HostKey", "ed25519,ecdsa,rsa,dsa,WARN",
-+            hknames, HK_MAX, conf, CONF_ssh_hklist);
-+     gppi(sesskey, "RekeyTime", 60, conf, CONF_ssh_rekey_time);
-++#ifndef NO_GSSAPI
-+     gppi(sesskey, "GssapiRekey", GSS_DEF_REKEY_MINS, conf, CONF_gssapirekey);
-++#endif
-+     gpps(sesskey, "RekeyBytes", "1G", conf, CONF_ssh_rekey_data);
-+     {
-+ 	/* SSH-2 only by default */
-+@@ -1007,9 +1015,9 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
-+     gppb(sesskey, "SshBanner", true, conf, CONF_ssh_show_banner);
-+     gppb(sesskey, "AuthTIS", false, conf, CONF_try_tis_auth);
-+     gppb(sesskey, "AuthKI", true, conf, CONF_try_ki_auth);
-++#ifndef NO_GSSAPI
-+     gppb(sesskey, "AuthGSSAPI", true, conf, CONF_try_gssapi_auth);
-+     gppb(sesskey, "AuthGSSAPIKEX", true, conf, CONF_try_gssapi_kex);
-+-#ifndef NO_GSSAPI
-+     gprefs(sesskey, "GSSLibs", "\0",
-+ 	   gsslibkeywords, ngsslibs, conf, CONF_ssh_gsslist);
-+     gppfile(sesskey, "GSSCustom", conf, CONF_ssh_gss_custom);
-+diff --git a/ssh.c b/ssh.c
-+index e35ebc64e2b5..e8ad61b8085d 100644
-+--- a/ssh.c
-++++ b/ssh.c
-+@@ -50,7 +50,9 @@ struct Ssh {
-+     ssh_sharing_state *connshare;
-+     bool attempting_connshare;
-+ 
-++#ifndef NO_GSSAPI
-+     struct ssh_connection_shared_gss_state gss_state;
-++#endif
-+ 
-+     char *savedhost;
-+     int savedport;
-+@@ -252,10 +254,18 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-+                     conf_get_bool(ssh->conf, CONF_tryagent), username,
-+                     conf_get_bool(ssh->conf, CONF_change_username),
-+                     conf_get_bool(ssh->conf, CONF_try_ki_auth),
-++#ifndef NO_GSSAPI
-+                     conf_get_bool(ssh->conf, CONF_try_gssapi_auth),
-+                     conf_get_bool(ssh->conf, CONF_try_gssapi_kex),
-+                     conf_get_bool(ssh->conf, CONF_gssapifwd),
-+-                    &ssh->gss_state);
-++                    &ssh->gss_state
-++#else
-++                    false,
-++                    false,
-++                    false,
-++                    NULL
-++#endif
-++                    );
-+                 ssh_connect_ppl(ssh, userauth_layer);
-+                 transport_child_layer = userauth_layer;
-+ 
-+@@ -267,7 +277,11 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
-+                 ssh->fullhostname,
-+                 ssh_verstring_get_local(old_bpp),
-+                 ssh_verstring_get_remote(old_bpp),
-++#ifndef NO_GSSAPI
-+                 &ssh->gss_state,
-++#else
-++                NULL,
-++#endif
-+                 &ssh->stats, transport_child_layer, false);
-+             ssh_connect_ppl(ssh, ssh->base_layer);
-+ 
-+diff --git a/ssh2transport.c b/ssh2transport.c
-+index 8640d89d4be4..5e8955a0275f 100644
-+--- a/ssh2transport.c
-++++ b/ssh2transport.c
-+@@ -1781,6 +1781,7 @@ static void ssh2_transport_gss_update(struct ssh2_transport_state *s,
-+     if (mins > 0 && s->gss_ctxt_lifetime <= mins * 60)
-+         s->gss_status |= GSS_CTXT_EXPIRES;
-+ }
-++#endif /* NO_GSSAPI */
-+ 
-+ ptrlen ssh2_transport_get_session_id(PacketProtocolLayer *ppl)
-+ {
-+@@ -1805,8 +1806,6 @@ void ssh2_transport_notify_auth_done(PacketProtocolLayer *ppl)
-+     queue_idempotent_callback(&s->ppl.ic_process_queue);
-+ }
-+ 
-+-#endif /* NO_GSSAPI */
-+-
-+ static bool ssh2_transport_get_specials(
-+     PacketProtocolLayer *ppl, add_special_fn_t add_special, void *ctx)
-+ {
-+diff --git a/ssh2userauth.c b/ssh2userauth.c
-+index fc4139230557..7f5a129295ab 100644
-+--- a/ssh2userauth.c
-++++ b/ssh2userauth.c
-+@@ -613,8 +613,10 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-+                  * Scan it for method identifiers we know about.
-+                  */
-+                 bool srv_pubkey = false, srv_passwd = false;
-+-                bool srv_keyb_inter = false, srv_gssapi = false;
-+-                bool srv_gssapi_keyex_auth = false;
-++                bool srv_keyb_inter = false;
-++#ifndef NO_GSSAPI
-++                bool srv_gssapi = false, srv_gssapi_keyex_auth = false;
-++#endif
-+ 
-+                 for (ptrlen method; get_commasep_word(&methods, &method) ;) {
-+                     if (ptrlen_eq_string(method, "publickey"))
-+@@ -623,10 +625,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
-+                         srv_passwd = true;
-+                     else if (ptrlen_eq_string(method, "keyboard-interactive"))
-+                         srv_keyb_inter = true;
-++#ifndef NO_GSSAPI
-+                     else if (ptrlen_eq_string(method, "gssapi-with-mic"))
-+                         srv_gssapi = true;
-+                     else if (ptrlen_eq_string(method, "gssapi-keyex"))
-+                         srv_gssapi_keyex_auth = true;
-++#endif
-+                 }
-+ 
-+                 /*
-+diff --git a/sshserver.c b/sshserver.c
-+index 5f6e7ddeeaec..5c34bb356757 100644
-+--- a/sshserver.c
-++++ b/sshserver.c
-+@@ -50,7 +50,9 @@ struct server {
-+     PacketProtocolLayer *base_layer;
-+     ConnectionLayer *cl;
-+ 
-++#ifndef NO_GSSAPI
-+     struct ssh_connection_shared_gss_state gss_state;
-++#endif
-+ };
-+ 
-+ static void ssh_server_free_callback(void *vsrv);
-+@@ -245,9 +247,11 @@ Plug *ssh_server_plug(
-+     bufchain_init(&srv->out_raw);
-+     bufchain_init(&srv->dummy_user_input);
-+ 
-++#ifndef NO_GSSAPI
-+     /* FIXME: replace with sensible */
-+     srv->gss_state.libs = snew(struct ssh_gss_liblist);
-+     srv->gss_state.libs->nlibraries = 0;
-++#endif
-+ 
-+     return &srv->plug;
-+ }
-+@@ -297,7 +301,9 @@ static void ssh_server_free_callback(void *vsrv)
-+     conf_free(srv->conf);
-+     log_free(srv->logctx);
-+ 
-++#ifndef NO_GSSAPI
-+     sfree(srv->gss_state.libs);        /* FIXME: replace with sensible */
-++#endif
-+ 
-+     sfree(srv);
-+ 
-+@@ -442,7 +448,12 @@ static void server_got_ssh_version(struct ssh_version_receiver *rcv,
-+             srv->conf, NULL, 0, NULL,
-+             ssh_verstring_get_remote(old_bpp),
-+             ssh_verstring_get_local(old_bpp),
-+-            &srv->gss_state, &srv->stats, transport_child_layer, true);
-++#ifndef NO_GSSAPI
-++            &srv->gss_state,
-++#else
-++            NULL,
-++#endif
-++            &srv->stats, transport_child_layer, true);
-+         ssh2_transport_provide_hostkeys(
-+             srv->base_layer, srv->hostkeys, srv->nhostkeys);
-+         if (userauth_layer)
-+-- 
-+2.20.1
-+
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-index f901c71da2..cd8b3bb213 100644
---- a/package/putty/Config.in
-+++ b/package/putty/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PUTTY
- 	bool "putty"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  PuTTY is a free SSH and Telnet client. Without GTK2
- 	  activated, only the commandline tools plink, pscp, psftp,
-@@ -11,6 +10,6 @@ config BR2_PACKAGE_PUTTY
- 
- 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
- 
--comment "putty needs a toolchain w/ wchar, dynamic library"
-+comment "putty needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on !BR2_USE_WCHAR
+I've tried to wget all 3 urls now and it works correctly.
+
+Best regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
