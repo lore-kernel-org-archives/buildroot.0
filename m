@@ -1,72 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 23:09:06 +0100
-Subject: [Buildroot] Buildroot 2018.11.4 released
-Message-ID: <874l7mlkhp.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 29 Mar 2019 00:00:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openldap: don't patch libtool
+In-Reply-To: <CAPi7W83jjGhMgEy7_c4pnHynxeC4Ym5vtCpCUhS_JkJ4YtDXnQ@mail.gmail.com>
+References: <20190328172937.11268-1-fontaine.fabrice@gmail.com>
+ <20190328185416.01eb56c6@windsurf>
+ <CAPi7W83jjGhMgEy7_c4pnHynxeC4Ym5vtCpCUhS_JkJ4YtDXnQ@mail.gmail.com>
+Message-ID: <CAPi7W81VVd+YaHfjtZohWvPD6Kyqw=u8g6ZbxTu6AbRkxKKx6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Le jeu. 28 mars 2019 ? 21:31, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Hello Thomas,
+>
+> Le jeu. 28 mars 2019 ? 18:54, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> >
+> > Hello Fabrice,
+> >
+> > On Thu, 28 Mar 2019 18:29:37 +0100
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > openldap uses its own libtool, static build with atomic fails with our
+> > > patches since February 6th 2019 on:
+> > >
+> > > /bin/sh ../../libtool --mode=link /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os   -static  -static   -o idtest idtest.o liblber.la ../../libraries/liblutil/liblutil.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lz -pthread -latomic -lcrypto -lz -pthread -latomic
+> > >
+> > > /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -static -o etest etest.o -pthread -pthread ./.libs/liblber.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib ../../libraries/liblutil/liblutil.a -lssl -lcrypto -lz -pthread /home/buildroot/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/5.4.0/../../../../or1k-buildroot-linux-uclibc/lib//libatomic.so
+> > >
+> > > To fix this error, set OPENLDAP_LIBTOOL_PATCH to NO
+> >
+> > Do you understand why openldap is specifically affected ? I'm a bit
+> > worried about "randomly" disabling libtool patching.
+> Nope, I don't understand why this issue is only affecting openldap and
+> I don't understand why the failures started on February 6th. There was
+> no updates on openldap so perhaps there is a specific issue with some
+> of the toolchains or with our libtool patches?
+> I'll take some time to investigate.
+The issue is raised by this openldap specific patch (added in 2005) on
+ltmain.sh:
+https://github.com/openldap/openldap/commit/7b6a088a2590fdad10286d10050b769e48554e13.
+This patch adds a use_static_libs that is not managed by
+https://git.buildroot.net/buildroot/tree/support/libtool/buildroot-libtool-v1.5.patch.
 
-Buildroot 2018.11.4 is released - Go download it at:
+So, the issue can be fixed if I patch ltmain.sh to revert those
+changes. However, I suppose that this patch won't be upstreamable.
+>
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> Best Regards,
+>
+> Fabrice
+Best Regards,
 
-http://buildroot.org/downloads/buildroot-2018.11.4.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.11.4.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.11.4 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2018.11.3 release.
-
-- Security fixes for avahi, busybox, clamav, cups, file, jq, libopenssl,
-  libraw, libseccomp, libssh2, mariadb, nodejs, ntp, openjpeg, perl,
-  php, putty, rdesktop, samba4, systemd, tor, wireshark, xapp_xdm,
-  xlib_libXdmcp
-
-- Fixes for download/compilation/runtime issues in beecrypt, binutils,
-  botan, devmem2, efl, fetchmail, fltk, gcc, gdb, git, go,
-  gst-plugins-bad, iproute2, kf5-modemmanager-qt, leveldb, libsoxr,
-  mosquitto, qt5webkit, runc, swupdate, systemd, vsftpd, wireshark, xen
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.4
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Notice that the 2018.11.x series is now end of life. Please migrate to
-the 2019.02 series instead which will be supported until March 2020.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.11.3..
-
-    19  Fabrice Fontaine
-    13  Peter Korsgaard
-     7  Bernd Kuhls
-     6  Baruch Siach
-     3  Christian Stewart
-     3  Ga?l PORTAY
-     2  Jared Bents
-     2  J?rg Krause
-     2  Xavier Ruppen
-     1  Abdelmalek Benelouezzane
-     1  Alexey Brodkin
-     1  Artem Panfilov
-     1  Norbert Lange
-     1  Ryan Coe
-     1  Thomas De Schampheleire
-     1  Vadim Kochan
-
--- 
-Bye, Peter Korsgaard
+Fabrice
