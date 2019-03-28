@@ -1,53 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 11:14:31 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: bump to
- version 7.64.1
-Message-ID: <20190328101107.94184886CC@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 11:14:40 +0100
+Subject: [Buildroot] [PATCH] package/libcurl: bump to version 7.64.1
+In-Reply-To: <20190327091742.4959-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 27 Mar 2019 10:17:42 +0100")
+References: <20190327091742.4959-1-peter@korsgaard.com>
+Message-ID: <87va03l2zz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53711fdce97f96c02bf9fb007083f7d2bd0f0495
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Contains a number of fixes for issues discovered post-7.64.0.  For details,
-see the list of changes:
+ > Contains a number of fixes for issues discovered post-7.64.0.  For details,
+ > see the list of changes:
 
-https://curl.haxx.se/changes.html#7_64_1
+ > https://curl.haxx.se/changes.html#7_64_1
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 48da1bc9fdebeaa011648c9b208b17f28a0878e3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b158600eca..d321adcd62 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
-+sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 509dbdb54e..852054a4bd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.64.0
-+LIBCURL_VERSION = 7.64.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
