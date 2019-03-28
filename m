@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:48:57 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/git: use
+Date: Thu, 28 Mar 2019 10:48:46 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/git: use
  pkg-config to get ssl dependencies
-Message-ID: <20190328094529.C8EAC81DA4@busybox.osuosl.org>
+Message-ID: <20190328094533.C7723886CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c912fe22f572d86da1823dde80c351dc1e51433
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b34dc6522e66c8c284fba5dd654d0c7334c62d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 On some architectures, atomic binutils are provided by the libatomic
 library from gcc. Linking with libatomic is therefore necessary,
