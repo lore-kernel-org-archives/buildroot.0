@@ -1,55 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 23:04:10 +0100
-Subject: [Buildroot] [git commit branch/2018.11.x] Update for 2018.11.4
-Message-ID: <20190328220133.8B7348833B@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 23:09:06 +0100
+Subject: [Buildroot] Buildroot 2018.11.4 released
+Message-ID: <874l7mlkhp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=962bef5d075581a7853af4e835b584a658b8f2c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 12 ++++++++++++
- Makefile |  4 ++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index 45a153c799..79ea6ca01d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,15 @@
-+2018.11.4, Released March 28th, 2019
-+
-+	Important / security related fixes.
-+
-+	Updated/fixed packages: avahi, beecrypt, binutils, botan,
-+	busybox, clamav, cups, devmem2, efl, fetchmail, file, fltk,
-+	gcc, gdb, git, go, gst-plugins-bad, iproute2, jq,
-+	kf5-modemmanager-qt, leveldb, libopenssl, libraw, libseccomp,
-+	libsoxr, libssh2, mariadb, mosquitto, nodejs, ntp, openjpeg,
-+	perl, php, putty, qt5webkit, rdesktop, runc, samba4, swupdate,
-+	systemd, tor, vsftpd, wireshark, xapp_xdm, xen, xlib_libXdmcp
-+
- 2018.11.3, Released February 23th, 2019
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 105ee47322..a895fcc7aa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.11.3
-+export BR2_VERSION := 2018.11.4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1550960000
-+BR2_VERSION_EPOCH = 1553810000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2018.11.4 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2018.11.4.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2018.11.4.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2018.11.4 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2018.11.3 release.
+
+- Security fixes for avahi, busybox, clamav, cups, file, jq, libopenssl,
+  libraw, libseccomp, libssh2, mariadb, nodejs, ntp, openjpeg, perl,
+  php, putty, rdesktop, samba4, systemd, tor, wireshark, xapp_xdm,
+  xlib_libXdmcp
+
+- Fixes for download/compilation/runtime issues in beecrypt, binutils,
+  botan, devmem2, efl, fetchmail, fltk, gcc, gdb, git, go,
+  gst-plugins-bad, iproute2, kf5-modemmanager-qt, leveldb, libsoxr,
+  mosquitto, qt5webkit, runc, swupdate, systemd, vsftpd, wireshark, xen
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.4
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Notice that the 2018.11.x series is now end of life. Please migrate to
+the 2019.02 series instead which will be supported until March 2020.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.11.3..
+
+    19  Fabrice Fontaine
+    13  Peter Korsgaard
+     7  Bernd Kuhls
+     6  Baruch Siach
+     3  Christian Stewart
+     3  Ga?l PORTAY
+     2  Jared Bents
+     2  J?rg Krause
+     2  Xavier Ruppen
+     1  Abdelmalek Benelouezzane
+     1  Alexey Brodkin
+     1  Artem Panfilov
+     1  Norbert Lange
+     1  Ryan Coe
+     1  Thomas De Schampheleire
+     1  Vadim Kochan
+
+-- 
+Bye, Peter Korsgaard
