@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:30:42 +0100
-Subject: [Buildroot] [PATCH] putty: security bump to version 0.71
-In-Reply-To: <d3ffe9037b75e0b286b21564dd939f2d5fa1b4e9.1553455273.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 24 Mar 2019 21:21:13 +0200")
-References: <d3ffe9037b75e0b286b21564dd939f2d5fa1b4e9.1553455273.git.baruch@tkos.co.il>
-Message-ID: <87sgv7ny65.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Mar 2019 10:30:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/putty: enable static build
+In-Reply-To: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 26 Mar 2019 20:27:19 +0200")
+References: <957950c9628264383a7a83b04c082c4b56ef5314.1553624840.git.baruch@tkos.co.il>
+Message-ID: <87o95vny5p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > CVE-2019-9894: A remotely triggerable memory overwrite in RSA key
- > exchange can occur before host key verification.
-
- > CVE-2019-9895: A remotely triggerable buffer overflow exists in any kind
- > of server-to-client forwarding.
-
- > CVE-2019-9897: Multiple denial-of-service attacks that can be triggered
- > by writing to the terminal.
-
- > CVE-2019-9898: Potential recycling of random numbers used in
- > cryptography.
-
- > Disable static build for now. When building statically configure defines
- > NO_GSSAPI. Build with NO_GSSAPI is currently broken. The issue has been
- > reported upstream.
+ > Add upstream patch fixing build when NO_GSSAPI is defined which is the
+ > case on static builds.
 
  > Cc: Alexander Dahl <post@lespocky.de>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
