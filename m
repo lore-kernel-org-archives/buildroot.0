@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Mar 2019 18:54:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openldap: don't patch libtool
-In-Reply-To: <20190328172937.11268-1-fontaine.fabrice@gmail.com>
-References: <20190328172937.11268-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190328185416.01eb56c6@windsurf>
+Date: Thu, 28 Mar 2019 18:56:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: Allow to build
+ with uclibc but w/o mausezahn
+In-Reply-To: <20190304085741.13782-1-vadim4j@gmail.com>
+References: <20190304085741.13782-1-vadim4j@gmail.com>
+Message-ID: <20190328185612.493d0b70@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Vadim,
 
-On Thu, 28 Mar 2019 18:29:37 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon,  4 Mar 2019 10:57:41 +0200
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-> openldap uses its own libtool, static build with atomic fails with our
-> patches since February 6th 2019 on:
+> mausezahn can't be build with uclibc because uclibc
+> does not provide ceill() function, so it does not allow
+> to build all netsniff-ng's tools with uclibc.
 > 
-> /bin/sh ../../libtool --mode=link /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os   -static  -static   -o idtest idtest.o liblber.la ../../libraries/liblutil/liblutil.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib -lz -pthread -latomic -lcrypto -lz -pthread -latomic
+> Fix it by moving mausezahn under separate config option,
+> which has own dependencies and packages selection (libnet & libcli).
 > 
-> /home/buildroot/autobuild/run/instance-0/output/host/bin/or1k-linux-gcc -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -static -o etest etest.o -pthread -pthread ./.libs/liblber.a -L/home/buildroot/autobuild/run/instance-0/output/host/bin/../or1k-buildroot-linux-uclibc/sysroot/usr/lib ../../libraries/liblutil/liblutil.a -lssl -lcrypto -lz -pthread /home/buildroot/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/5.4.0/../../../../or1k-buildroot-linux-uclibc/lib//libatomic.so
-> 
-> To fix this error, set OPENLDAP_LIBTOOL_PATCH to NO
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-Do you understand why openldap is specifically affected ? I'm a bit
-worried about "randomly" disabling libtool patching.
+Applied to master with a few changes.
+
+> -config BR2_PACKAGE_NETSNIFF_NG
+> +menuconfig BR2_PACKAGE_NETSNIFF_NG
+
+Kept "config" here. We don't typically have a "menuconfig" for just one
+sub-option.
+
+> +NETSNIFF_NG_TOOLS = netsniff-ng trafgen astraceroute flowtop ifpps bpfc curvetun
+
+I changed this to use the allbutmausezahn and install_allbutmausezahn targets.
+
+Thanks!
 
 Thomas
 -- 
