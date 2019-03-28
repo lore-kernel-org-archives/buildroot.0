@@ -1,72 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Mar 2019 18:54:59 +0100
-Subject: [Buildroot] [git commit] package/lua-binaryheap: new package
-Message-ID: <20190328180054.458F0886DB@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 19:01:19 +0100
+Subject: [Buildroot] [git commit] package/lua-resty-http: bump to 0.13
+Message-ID: <20190328180054.59AAC886DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=782ce96aaaeb1eff3183bae2118c8f905c300622
+commit: https://git.buildroot.net/buildroot/commit/?id=a779cf826ac1dd434c7b3bf50bbbe7e118e4d377
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                          |  1 +
- package/lua-binaryheap/Config.in           |  6 ++++++
- package/lua-binaryheap/lua-binaryheap.hash |  2 ++
- package/lua-binaryheap/lua-binaryheap.mk   | 12 ++++++++++++
- 4 files changed, 21 insertions(+)
+ package/lua-resty-http/lua-resty-http.hash | 2 +-
+ package/lua-resty-http/lua-resty-http.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f73c8cbffc..512eed7eaa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -603,6 +603,7 @@ menu "Lua libraries/modules"
- 	source "package/lrandom/Config.in"
- 	source "package/lsqlite3/Config.in"
- 	source "package/lua-basexx/Config.in"
-+	source "package/lua-binaryheap/Config.in"
- 	source "package/lua-bit32/Config.in"
- 	source "package/lua-cjson/Config.in"
- 	source "package/lua-coat/Config.in"
-diff --git a/package/lua-binaryheap/Config.in b/package/lua-binaryheap/Config.in
-new file mode 100644
-index 0000000000..fa0b304a58
---- /dev/null
-+++ b/package/lua-binaryheap/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LUA_BINARYHEAP
-+	bool "lua-binaryheap"
-+	help
-+	  Binary heap implementation in pure Lua.
-+
-+	  https://github.com/Tieske/binaryheap.lua
-diff --git a/package/lua-binaryheap/lua-binaryheap.hash b/package/lua-binaryheap/lua-binaryheap.hash
-new file mode 100644
-index 0000000000..3713ea331e
---- /dev/null
-+++ b/package/lua-binaryheap/lua-binaryheap.hash
-@@ -0,0 +1,2 @@
-+# computed by luarocks/buildroot
-+sha256 ecce14dedfa7a1938aa2383c83036b98461876934f169384a2cec6bb46462d87  binaryheap-0.4-1.src.rock
-diff --git a/package/lua-binaryheap/lua-binaryheap.mk b/package/lua-binaryheap/lua-binaryheap.mk
-new file mode 100644
-index 0000000000..56958e6ff9
---- /dev/null
-+++ b/package/lua-binaryheap/lua-binaryheap.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# lua-binaryheap
-+#
-+################################################################################
-+
-+LUA_BINARYHEAP_VERSION = 0.4-1
-+LUA_BINARYHEAP_NAME_UPSTREAM = binaryheap
-+LUA_BINARYHEAP_SUBDIR = binaryheap.lua-version_0v4
-+LUA_BINARYHEAP_LICENSE = MIT
-+
-+$(eval $(luarocks-package))
+diff --git a/package/lua-resty-http/lua-resty-http.hash b/package/lua-resty-http/lua-resty-http.hash
+index 486a110a74..e8318ab413 100644
+--- a/package/lua-resty-http/lua-resty-http.hash
++++ b/package/lua-resty-http/lua-resty-http.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 4628413a5a2828645e3ddb38a2a0c764e81443cbd1a011357eeed7e983750329  lua-resty-http-0.12-0.src.rock
++sha256 e31b96c622f539d69a9e84febf06d9a1df0f55aa3bfd904dd7c4ac6ed64fe3fe  lua-resty-http-0.13-0.src.rock
+ sha256 407e4b1412d8afa317dc703a1d318866c3de87d78899402125cbd90548c6057d  lua-resty-http/LICENSE
+diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
+index 2aee63d782..6494ad104d 100644
+--- a/package/lua-resty-http/lua-resty-http.mk
++++ b/package/lua-resty-http/lua-resty-http.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_RESTY_HTTP_VERSION = 0.12-0
++LUA_RESTY_HTTP_VERSION = 0.13-0
+ LUA_RESTY_HTTP_SUBDIR = lua-resty-http
+ LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
+ LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
