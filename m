@@ -1,272 +1,202 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Mar 2019 20:22:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.4
-Message-ID: <20190328192227.20045-1-fontaine.fabrice@gmail.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri, 29 Mar 2019 00:55:24 +0530
+Subject: [Buildroot] [PATCH v2] package/unixbench: new package
+Message-ID: <20190328192524.28352-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patches (already in version) and autoreconf
-- Add hash for license file
+UnixBench tries to compile its binaries regargless of them being
+compiled or not. We patch it to disable this behaviour since
+we may not always have a compiler onboard.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- .../qlibc/0001-remove-absolute-paths.patch    |  19 ---
- package/qlibc/0002-obey-destdir.patch         | 144 ------------------
- .../qlibc/0003-fix-openssl-mysql-checks.patch |  36 -----
- package/qlibc/qlibc.hash                      |   3 +-
- package/qlibc/qlibc.mk                        |   4 +-
- 5 files changed, 3 insertions(+), 203 deletions(-)
- delete mode 100644 package/qlibc/0001-remove-absolute-paths.patch
- delete mode 100644 package/qlibc/0002-obey-destdir.patch
- delete mode 100644 package/qlibc/0003-fix-openssl-mysql-checks.patch
+Changes v1 -> v2:
+  - fixed entry into DEVELOPERS files (suggested by Yann E. Morin)
+  - added commit log to .patch file (suggested by Yann, Romain)
+  - removed commented out lines (suggested by Yann, Romain)
+  - UnixBench now depends on having a MMU and selects Perl for
+    runtime (Suggested by Yann, Romain)
+  - added hash for LICENSE file (suggested by Yann, Romain)
+  - now makefile does not copy unnecessary directories onto target
+    (suggested by Romain)
 
-diff --git a/package/qlibc/0001-remove-absolute-paths.patch b/package/qlibc/0001-remove-absolute-paths.patch
-deleted file mode 100644
-index 5976c3c4db..0000000000
---- a/package/qlibc/0001-remove-absolute-paths.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Remove absolute paths to host locations
--
--Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
--
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -85,10 +85,8 @@
-- 
-- ## Set path
-- PATH="$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
---CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include"
-- CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
-- CPPFLAGS="$CPPFLAGS -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
---LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
-- 
-- ## Set autoconf setting
-- #AC_CANONICAL_TARGET
-diff --git a/package/qlibc/0002-obey-destdir.patch b/package/qlibc/0002-obey-destdir.patch
-deleted file mode 100644
-index f007aa4f24..0000000000
---- a/package/qlibc/0002-obey-destdir.patch
-+++ /dev/null
-@@ -1,144 +0,0 @@
--From dbdc772a35244b45c725a72fad5ddade9bd7d521 Mon Sep 17 00:00:00 2001
--From: pcarpent <pierre-francois.carpentier@c-s.fr>
--Date: Tue, 15 Dec 2015 10:23:44 +0100
--Subject: [PATCH] fix makefile
--
--add DESTDIR variables in install targets
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--(downloaded from upstream commit not included in v2.4.1
-- https://github.com/wolkykim/qlibc/commit/dbdc772a35244b45c725a72fad5ddade9bd7d521)
-----
-- src/Makefile.in | 110 ++++++++++++++++++++++++++++----------------------------
-- 1 file changed, 55 insertions(+), 55 deletions(-)
--
--diff --git a/src/Makefile.in b/src/Makefile.in
--index 8a7ab43..4e274ed 100644
----- a/src/Makefile.in
--+++ b/src/Makefile.in
--@@ -122,70 +122,70 @@ qlibcext: ${QLIBCEXT_OBJS}
-- install: ${INSTALL_TARGETS}
-- 
-- install-qlibc: qlibc
---	${MKDIR_P} ${INST_INCDIR}/qlibc
---	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibc.h ${INST_INCDIR}/qlibc/qlibc.h
---	${MKDIR_P} ${INST_INCDIR}/qlibc/containers/
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qtreetbl.h ${INST_INCDIR}/qlibc/containers/qtreetbl.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhashtbl.h ${INST_INCDIR}/qlibc/containers/qhashtbl.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhasharr.h ${INST_INCDIR}/qlibc/containers/qhasharr.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlisttbl.h ${INST_INCDIR}/qlibc/containers/qlisttbl.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlist.h ${INST_INCDIR}/qlibc/containers/qlist.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qvector.h ${INST_INCDIR}/qlibc/containers/qvector.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qqueue.h ${INST_INCDIR}/qlibc/containers/qqueue.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qstack.h ${INST_INCDIR}/qlibc/containers/qstack.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qgrow.h ${INST_INCDIR}/qlibc/containers/qgrow.h
---	${MKDIR_P} ${INST_INCDIR}/qlibc/utilities/
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qcount.h ${INST_INCDIR}/qlibc/utilities/qcount.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qencode.h ${INST_INCDIR}/qlibc/utilities/qencode.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qfile.h ${INST_INCDIR}/qlibc/utilities/qfile.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qhash.h ${INST_INCDIR}/qlibc/utilities/qhash.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qio.h ${INST_INCDIR}/qlibc/utilities/qio.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsocket.h ${INST_INCDIR}/qlibc/utilities/qsocket.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qstring.h ${INST_INCDIR}/qlibc/utilities/qstring.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsystem.h ${INST_INCDIR}/qlibc/utilities/qsystem.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qtime.h ${INST_INCDIR}/qlibc/utilities/qtime.h
---	${MKDIR_P} ${INST_INCDIR}/qlibc/ipc/
---	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qsem.h ${INST_INCDIR}/qlibc/ipc/qsem.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qshm.h ${INST_INCDIR}/qlibc/ipc/qshm.h
---	${MKDIR_P} ${INST_LIBDIR}
---	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_LIBNAME} ${INST_LIBDIR}/${QLIBC_LIBNAME}
---	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_SLIBREALNAME} ${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
---	( cd ${INST_LIBDIR}; ${LN_S} -f ${QLIBC_SLIBREALNAME} ${QLIBC_SLIBNAME} )
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibc.h $(DESTDIR)/${INST_INCDIR}/qlibc/qlibc.h
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/containers/
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qtreetbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qtreetbl.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhashtbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qhashtbl.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhasharr.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qhasharr.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlisttbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qlisttbl.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlist.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qlist.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qvector.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qvector.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qqueue.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qqueue.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qstack.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qstack.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qgrow.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qgrow.h
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qcount.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qcount.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qencode.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qencode.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qfile.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qfile.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qhash.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qhash.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qio.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qio.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsocket.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qsocket.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qstring.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qstring.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsystem.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qsystem.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qtime.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qtime.h
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qsem.h $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/qsem.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qshm.h $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/qshm.h
--+	${MKDIR_P} $(DESTDIR)/${INST_LIBDIR}
--+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_LIBNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBC_LIBNAME}
--+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_SLIBREALNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
--+	( cd $(DESTDIR)/${INST_LIBDIR}; ${LN_S} -f ${QLIBC_SLIBREALNAME} ${QLIBC_SLIBNAME} )
-- 
-- uninstall-qlibc:
---	${RM} -f ${INST_INCDIR}/qlibc/qlibc.h
---	${RM} -rf ${INST_INCDIR}/qlibc/containers
---	${RM} -rf ${INST_INCDIR}/qlibc/utilities
---	${RM} -rf ${INST_INCDIR}/qlibc/ipc
---	${RM} -f ${INST_LIBDIR}/${QLIBC_LIBNAME}
---	${RM} -f ${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
---	${RM} -f ${INST_LIBDIR}/${QLIBC_SLIBNAME}
--+	${RM} -f $(DESTDIR)/${INST_INCDIR}/qlibc/qlibc.h
--+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/containers
--+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/utilities
--+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/ipc
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_LIBNAME}
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBNAME}
-- 
-- install-qlibcext: qlibcext
---	${MKDIR_P} ${INST_INCDIR}/qlibc
---	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibcext.h ${INST_INCDIR}/qlibc/qlibcext.h
---	${MKDIR_P} ${INST_INCDIR}/qlibc/extensions/
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qconfig.h ${INST_INCDIR}/qlibc/extensions/qconfig.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qaconf.h ${INST_INCDIR}/qlibc/extensions/qaconf.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qlog.h ${INST_INCDIR}/qlibc/extensions/qlog.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qhttpclient.h ${INST_INCDIR}/qlibc/extensions/qhttpclient.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qdatabase.h ${INST_INCDIR}/qlibc/extensions/qdatabase.h
---	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qtokenbucket.h ${INST_INCDIR}/qlibc/extensions/qtokenbucket.h
---	${MKDIR_P} ${INST_LIBDIR}
---	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_LIBNAME} ${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
---	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_SLIBREALNAME} ${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
---	( cd ${INST_LIBDIR}; ${LN_S} -f ${QLIBCEXT_SLIBREALNAME} ${QLIBCEXT_SLIBNAME} )
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibcext.h $(DESTDIR)/${INST_INCDIR}/qlibc/qlibcext.h
--+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qconfig.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qconfig.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qaconf.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qaconf.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qlog.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qlog.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qhttpclient.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qhttpclient.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qdatabase.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qdatabase.h
--+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qtokenbucket.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qtokenbucket.h
--+	${MKDIR_P} $(DESTDIR)/${INST_LIBDIR}
--+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_LIBNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
--+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_SLIBREALNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
--+	( cd $(DESTDIR)/${INST_LIBDIR}; ${LN_S} -f ${QLIBCEXT_SLIBREALNAME} ${QLIBCEXT_SLIBNAME} )
-- 
-- uninstall-qlibcext:
---	${RM} -f ${INST_INCDIR}/qlibc/qlibcext.h
---	${RM} -rf ${INST_INCDIR}/qlibc/extensions
---	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
---	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
---	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_SLIBNAME}
--+	${RM} -f $(DESTDIR)/${INST_INCDIR}/qlibc/qlibcext.h
--+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/extensions
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
--+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBNAME}
-- 
-- deinstall: uninstall
-- uninstall: uninstall-qlibc uninstall-qlibcext
---	${RMDIR} ${INST_INCDIR}/qlibc
--+	${RMDIR} $(DESTDIR)/${INST_INCDIR}/qlibc
-- 
-- clean:
-- 	${RM} -f ${QLIBC_OBJS}
-diff --git a/package/qlibc/0003-fix-openssl-mysql-checks.patch b/package/qlibc/0003-fix-openssl-mysql-checks.patch
-deleted file mode 100644
-index bb609b2446..0000000000
---- a/package/qlibc/0003-fix-openssl-mysql-checks.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Allow to explicitly disable openssl and mysql
--
--AC_ARG_WITH() is being incorrectly used: the third argument indicates
--the action that needs to be taken when a value was passed, when not
--the option is enabled. Therefore, the result of the existing code was
--that when you passed --without-mysql or --without-openssl, the
--$withval variable would get the value 'yes', which is obviously wrong.
--
--Instead, we simply empty this third argument, because $withval is
--already properly filled with 'yes' or 'no' by the AC_ARG_WITH()
--function.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -170,7 +170,7 @@
-- ## --with section
-- ##
-- 
---AC_ARG_WITH([openssl],[AS_HELP_STRING([--with-openssl], [This will enable HTTPS support in qhttpclient extension API. When it's enabled, user applications will need to link openssl library with -lssl option.])],[withval=yes],[withval=no])
--+AC_ARG_WITH([openssl],[AS_HELP_STRING([--with-openssl], [This will enable HTTPS support in qhttpclient extension API. When it's enabled, user applications will need to link openssl library with -lssl option.])],[],[withval=no])
-- if test "$withval" = yes; then
-- 	if test "$with_openssl" = yes; then
-- 		with_openssl="/usr/include"
--@@ -185,7 +185,7 @@
-- 	fi
-- fi
-- 
---AC_ARG_WITH([mysql],[AS_HELP_STRING([--with-mysql], [This will enable MySQL database support in qdatabase extension API. When it's enabled, user applications need to link mysql client library. (ex: -lmysqlclient)])],[withval=yes],[withval=no])
--+AC_ARG_WITH([mysql],[AS_HELP_STRING([--with-mysql], [This will enable MySQL database support in qdatabase extension API. When it's enabled, user applications need to link mysql client library. (ex: -lmysqlclient)])],[],[withval=no])
-- if test "$withval" = yes; then
-- 	if test "$with_mysql" = yes; then
-- 		with_mysql="/usr/include/mysql"
-diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
-index 6b8e4d8940..8fa0cf6503 100644
---- a/package/qlibc/qlibc.hash
-+++ b/package/qlibc/qlibc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 1f9aa5eefd28c45d409130a35104816d41405da64fe900f70a1c41150891501a  qlibc-v2.4.1.tar.gz
-+sha256 93512e2203aaadda7aa62039b29500d9236b878e16f070328c58dc9d23da94d7  qlibc-v2.4.4.tar.gz
-+sha256 7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
-diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
-index 55c7aa3b05..b186dfd32f 100644
---- a/package/qlibc/qlibc.mk
-+++ b/package/qlibc/qlibc.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+---
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ .../unixbench/0001-remove-make-check.patch    | 37 +++++++++++++++++
+ package/unixbench/Config.in                   | 18 ++++++++
+ package/unixbench/unixbench                   |  3 ++
+ package/unixbench/unixbench.hash              |  3 ++
+ package/unixbench/unixbench.mk                | 41 +++++++++++++++++++
+ 7 files changed, 106 insertions(+)
+ create mode 100644 package/unixbench/0001-remove-make-check.patch
+ create mode 100644 package/unixbench/Config.in
+ create mode 100644 package/unixbench/unixbench
+ create mode 100644 package/unixbench/unixbench.hash
+ create mode 100644 package/unixbench/unixbench.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c0a4814a86..f8b920d019 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -236,6 +236,9 @@ F:	package/luasec/
+ F:	package/lua-ev/
+ F:	package/orbit/
  
--QLIBC_VERSION = v2.4.1
-+QLIBC_VERSION = v2.4.4
- QLIBC_SITE = $(call github,wolkykim,qlibc,$(QLIBC_VERSION))
- QLIBC_LICENSE = BSD-2-Clause
- QLIBC_LICENSE_FILES = LICENSE
++N:	Atharva Lele <itsatharva@gmail.com>
++F:	package/unixbench/
++
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	package/qt5/qt5scxml/
  
--# We're patching configure.ac
--QLIBC_AUTORECONF = YES
- QLIBC_INSTALL_STAGING = YES
- QLIBC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
+diff --git a/package/Config.in b/package/Config.in
+index b5321aeb49..521308c1d8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -132,6 +132,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+ 	source "package/uclibc-ng-test/Config.in"
++	source "package/unixbench/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/vmtouch/Config.in"
+ 	source "package/whetstone/Config.in"
+diff --git a/package/unixbench/0001-remove-make-check.patch b/package/unixbench/0001-remove-make-check.patch
+new file mode 100644
+index 0000000000..e8f5d683a1
+--- /dev/null
++++ b/package/unixbench/0001-remove-make-check.patch
+@@ -0,0 +1,37 @@
++From dc6b30c57a35aca7119d18f916dcd0a40c0fc047 Mon Sep 17 00:00:00 2001
++From: Atharva Lele <itsatharva@gmail.com>
++Date: Thu, 28 Mar 2019 22:58:16 +0530
++Subject: [PATCH] remove make check
++
++Our target board/system may not always have an oboard
++compiler. And, we already have the built binaries.
++
++Remove the make command from the Run script
++to avoid erroring out while executing the program.
++
++Signed-off-by: Atharva Lele <itsatharva@gmail.com>
++---
++ Run | 7 -------
++ 1 file changed, 7 deletions(-)
++
++diff --git a/UnixBench/Run b/UnixBench/Run
++index b4abd26..e86a08a 100755
++--- a/UnixBench/Run
+++++ b/UnixBench/Run
++@@ -875,13 +875,6 @@ sub preChecks {
++ 
++     # Check that the required files are in the proper places.
++     my $make = $ENV{MAKE} || "make";
++-    system("$make check");
++-    if ($? != 0) {
++-        system("$make all");
++-        if ($? != 0) {
++-            abortRun("\"$make all\" failed");
++-        }
++-    }
++ 
++     # Create a script to kill this run.
++     system("echo \"kill -9 $$\" > \"${TMPDIR}/kill_run\"");
++-- 
++2.21.0
++
+diff --git a/package/unixbench/Config.in b/package/unixbench/Config.in
+new file mode 100644
+index 0000000000..b2ba055bfb
+--- /dev/null
++++ b/package/unixbench/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_UNIXBENCH
++	bool "unixbench"
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_PERL # runtime
++	help
++	  UnixBench is the original BYTE UNIX benchmark suite,
++	  updated and revised by many people over the years.
++
++	  The purpose of UnixBench is to provide a basic indicator
++	  of the performance of a Unix-like system; hence multiple
++	  tests are used to test various aspects of the system's
++	  performance. These test results are then compared to the
++	  scores from a baseline system to produce an index value,
++	  which is easier to handle than raw scores. The entire set
++	  of index values is then combined to make an overall index
++	  for the system. Multi-CPU systems are supported.
++
++	  https://github.com/kdlucas/byte-unixbench
+diff --git a/package/unixbench/unixbench b/package/unixbench/unixbench
+new file mode 100644
+index 0000000000..18863553a9
+--- /dev/null
++++ b/package/unixbench/unixbench
+@@ -0,0 +1,3 @@
++#!/bin/sh
++cd /usr/lib/unixbench
++exec ./Run "${@}"
+diff --git a/package/unixbench/unixbench.hash b/package/unixbench/unixbench.hash
+new file mode 100644
+index 0000000000..fdc50b2627
+--- /dev/null
++++ b/package/unixbench/unixbench.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256 1677dcdcbed78805848b3c3fd58a6d052b677b6a4ee7add4db74acc4d3364a79 unixbench-070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.txt
+diff --git a/package/unixbench/unixbench.mk b/package/unixbench/unixbench.mk
+new file mode 100644
+index 0000000000..570ef6a75f
+--- /dev/null
++++ b/package/unixbench/unixbench.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# unixbench
++#
++################################################################################
++
++# The latest updates to the git tree of UnixBench enable setting compiler flags
++# using make. They also fix various compiler warnings and update the makefile
++# structure. The tree hasn't been updated since early 2018, and the binaries
++# built from the latest commit have been stable.
++UNIXBENCH_VERSION = 070030e09f6effdf0c6721e8fcc3a5c6fb5bed1a
++UNIXBENCH_SITE = $(call github,kdlucas,byte-unixbench,$(UNIXBENCH_VERSION))
++UNIXBENCH_LICENSE = GPL-2.0
++UNIXBENCH_LICENSE_FILE = LICENSE.txt
++
++# UnixBench tries to compile its binaries regargless of them being compiled
++# or not. The patch will disable that since we may not always have a compiler
++# onboard.
++
++# Auto detection would set CFLAGS for the host machine, using -march=native
++# and -mtune=native which does not make sense for cross compilation, resulting
++# in a failed compile. Setting UB_GCC_OPTIONS skips the detection process
++# and forces CFLAGS we're interested in.
++define UNIXBENCH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(MAKE) \
++		-C $(@D)/UnixBench \
++		UB_GCC_OPTIONS="$(TARGET_CFLAGS)" \
++		CC="$(TARGET_CC)"
++endef
++
++# Copy the compiled files into the proper location and install the binary.
++# pgms stores binaries, results stores results, Run is the perl script to
++# run the benchmark.
++define UNIXBENCH_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib/unixbench
++	cp -a $(@D)/UnixBench/{pgms,results,Run} $(TARGET_DIR)/usr/lib/unixbench/
++	$(INSTALL) -D -m 0755 $(UNIXBENCH_PKGDIR)/unixbench $(TARGET_DIR)/usr/bin/unixbench
++endef
++
++$(eval $(generic-package))
 -- 
-2.20.1
+2.21.0
