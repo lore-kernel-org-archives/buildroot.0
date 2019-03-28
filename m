@@ -1,289 +1,149 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Mar 2019 21:28:52 +0100
-Subject: [Buildroot] [PATCH 6/8] package/rpm: security bump to 4.14.2.1
+Date: Thu, 28 Mar 2019 21:28:53 +0100
+Subject: [Buildroot] [PATCH 7/8] package/rpm: add optional openssl dependency
 In-Reply-To: <20190328202854.26337-1-fontaine.fabrice@gmail.com>
 References: <20190328202854.26337-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190328202854.26337-6-fontaine.fabrice@gmail.com>
+Message-ID: <20190328202854.26337-7-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove first and second patches (already in version)
-- Remove third and fourth patches (not needed since:
-  https://github.com/rpm-software-management/rpm/commit/245b5a3b4b6d616adf47361137987e90f8dab22c)
-- Add hash for license file
-- Drop autoreconf (as configure.ac is not patched anymore)
-- Use new --with-crypto option
-- Restrict symlink following on installation (CVE-2017-7500,
-  CVE-2017-7501)
+openssl support has been added in version 4.14.0 with
+https://github.com/rpm-software-management/rpm/commit/64028f9a1c25ada8ffc7a48775f526600edcbf85
+
+Add a patch from upstream to fix build with openssl ad MD2 is disabled
+by default:
+https://github.com/rpm-software-management/rpm/pull/453
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...nstead-of-compile-for-gcc-flags-test.patch | 33 -----------
- ...ure-ac-correct-stack-protector-check.patch | 45 ---------------
- ...enable-disable-sepdebugcrcfix-buildi.patch | 55 -------------------
- ...cfix.c-fix-build-with-recent-binutil.patch | 43 ---------------
- package/rpm/rpm.hash                          |  7 ++-
- package/rpm/rpm.mk                            | 12 ++--
- 6 files changed, 9 insertions(+), 186 deletions(-)
- delete mode 100644 package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
- delete mode 100644 package/rpm/0002-configure-ac-correct-stack-protector-check.patch
- delete mode 100644 package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
- delete mode 100644 package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
+ ...for-unused-MD2-and-RIPEMD160-digests.patch | 82 +++++++++++++++++++
+ package/rpm/Config.in                         |  2 +-
+ package/rpm/rpm.mk                            |  5 +-
+ 3 files changed, 87 insertions(+), 2 deletions(-)
+ create mode 100644 package/rpm/0001-Rip-out-partial-support-for-unused-MD2-and-RIPEMD160-digests.patch
 
-diff --git a/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch b/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
-deleted file mode 100644
-index 6f6a2aba51..0000000000
---- a/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From b5f1895aae096836d6e8e155ee289e1b10fcabcb Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 10 Oct 2015 23:17:44 +0200
--Subject: [PATCH] configure.ac: use link instead of compile for gcc flags test
--
--The logic that tests whether gcc supports or not certain flags uses
--AC_COMPILE_IFELSE(). However, when checking for stack smashing
--protection support, an AC_LINK_IFELSE() test is needed, since the
--build might work but not the link stage if certain libraries are
--missing for proper stack smashing protection support.
--
--Therefore, this commit switches to use AC_LINK_IFELSE().
--
--[Upstream commit: https://github.com/rpm-software-management/rpm/commit/b5f1895aae096836d6e8e155ee289e1b10fcabcb]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: James Knight <james.d.knight@live.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 6ece8c9fd..822294c3f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
--     echo
--     for flag in $cflags_to_try; do
--         CFLAGS="$CFLAGS $flag -Werror"
---        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
--+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
--                 echo "   $flag"
--                 RPMCFLAGS="$RPMCFLAGS $flag"
--         ],[])
-diff --git a/package/rpm/0002-configure-ac-correct-stack-protector-check.patch b/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
-deleted file mode 100644
-index 9d2942b4fa..0000000000
---- a/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From c810a0aca3f1148d2072d44b91b8cc9caeb4cf19 Mon Sep 17 00:00:00 2001
--From: James Knight <james.knight@rockwellcollins.com>
--Date: Wed, 16 Nov 2016 15:54:46 -0500
--Subject: [PATCH] configure.ac: correct stack protector check
--
--If a used toolchain accepts the `-fstack-protector` option but does not
--provide a stack smashing protector implementation (ex. libssp), linking
--will fail:
--
-- .libs/rpmio.o: In function `Fdescr':
-- rpmio.c:(.text+0x672): undefined reference to `__stack_chk_fail_local'
-- .libs/rpmio.o: In function `Fdopen':
-- rpmio.c:(.text+0xce9): undefined reference to `__stack_chk_fail_local'
-- .libs/rpmio.o: In function `ufdCopy':
-- rpmio.c:(.text+0x10f7): undefined reference to `__stack_chk_fail_local'
-- ...
--
--This is a result of testing for `-fstack-protector` support using a main
--that GCC does not inject guards. GCC's manual notes that stack protector
--code is only added when "[functions] that call alloca, and functions
--with buffers larger than 8 bytes" [1]. This commit adjusts the stack
--protector check to allocate memory on the stack (via `alloca`).
--
--[1]: https://gcc.gnu.org/onlinedocs/gcc-4.4.2/gcc/Optimize-Options.html
--
--Signed-off-by: James Knight <james.knight@rockwellcollins.com>
--[Upstream commit: https://github.com/rpm-software-management/rpm/commit/c810a0aca3f1148d2072d44b91b8cc9caeb4cf19]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index a9730d3bc..b4b3fe8fb 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
--     echo
--     for flag in $cflags_to_try; do
--         CFLAGS="$CFLAGS $flag -Werror"
---        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
--+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])],[
--                 echo "   $flag"
--                 RPMCFLAGS="$RPMCFLAGS $flag"
--         ],[])
-diff --git a/package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch b/package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
-deleted file mode 100644
-index e1fd0697e6..0000000000
---- a/package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From edadcf67980764c104c25c7c1a0ba91257b89698 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 8 Dec 2016 23:33:30 +0100
--Subject: [PATCH 1/2] Detect bfd.h to enable/disable sepdebugcrcfix building
--
--tools/sepdebugcrcfix includes <bfd.h>, but this header from binutils
--is not checked in the configure script. Due to this, sepdebugcrcfix is
--attempted to be built even when <bfd.h> is not available. This commit
--addresses that by adding the appropriate configure check.
--
--This fixes the following build error:
--
--tools/sepdebugcrcfix.c:31:17: fatal error: bfd.h: No such file or directory
--compilation terminated.
--make[3]: *** [tools/sepdebugcrcfix.o] Error 1
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- Makefile.am  | 2 ++
-- configure.ac | 3 +++
-- 2 files changed, 5 insertions(+)
--
--diff --git a/Makefile.am b/Makefile.am
--index 863138c..d8a68f0 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -168,9 +168,11 @@ elfdeps_SOURCES =	tools/elfdeps.c
-- elfdeps_LDADD =		rpmio/librpmio.la
-- elfdeps_LDADD +=	@WITH_LIBELF_LIB@ @WITH_POPT_LIB@
-- 
--+if HAS_BFD_H
-- rpmlibexec_PROGRAMS +=	sepdebugcrcfix
-- sepdebugcrcfix_SOURCES = tools/sepdebugcrcfix.c
-- sepdebugcrcfix_LDADD =	@WITH_LIBELF_LIB@
--+endif # HAS_BFD_H
-- endif
-- endif
-- 
--diff --git a/configure.ac b/configure.ac
--index c5ae701..b99ecb8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -242,6 +242,9 @@ AC_CHECK_HEADERS([dwarf.h], [
-- ])
-- AM_CONDITIONAL(LIBDWARF,[test "$WITH_LIBDWARF" = yes])
-- 
--+AC_CHECK_HEADERS([bfd.h])
--+AM_CONDITIONAL(HAS_BFD_H, [test "${ac_cv_header_bfd_h}" = "yes"])
--+
-- #=================
-- # Check for beecrypt library if requested.
-- AC_ARG_WITH(beecrypt, [  --with-beecrypt         build with beecrypt support ],,[with_beecrypt=no])
---- 
--2.7.4
--
-diff --git a/package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch b/package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
-deleted file mode 100644
-index bebe94511d..0000000000
---- a/package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 65afab91444d4996a8e61d1e2d27d52e18417ef5 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 8 Dec 2016 23:45:55 +0100
--Subject: [PATCH 2/2] tools/sepdebugcrcfix.c: fix build with recent binutils
--
--Moderately recent binutils versions install a <bfd.h> header that
--checks if config.h is included. While this makes sense in binutils
--itself, it does not outside. So the binutils developers have added a
--check: if PACKAGE or PACKAGE_VERSION are defined, they assume you're
--re-using bfd.h outside of binutils, and therefore including it without
--including config.h is legit.
--
--So we take the same approch as numerous users of bfd.h: fake a PACKAGE
--definition. See for example tools/perf/util/srcline.c in the Linux
--kernel source tree.
--
--This fixes the following build error:
--
--In file included from tools/sepdebugcrcfix.c:31:0:
--/home/test/autobuild/run/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/bfd.h:35:2: error: #error config.h must be included before this header
-- #error config.h must be included before this header
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- tools/sepdebugcrcfix.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/tools/sepdebugcrcfix.c b/tools/sepdebugcrcfix.c
--index cd7fa02..e7b480f 100644
----- a/tools/sepdebugcrcfix.c
--+++ b/tools/sepdebugcrcfix.c
--@@ -28,6 +28,8 @@
-- #include <error.h>
-- #include <libelf.h>
-- #include <gelf.h>
--+/* Needed to please <bfd.h> */
--+#define PACKAGE "rpm"
-- #include <bfd.h>
-- 
-- #define _(x) x
---- 
--2.7.4
--
-diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
-index 7ae9ec73d9..b550e12721 100644
---- a/package/rpm/rpm.hash
-+++ b/package/rpm/rpm.hash
-@@ -1,2 +1,5 @@
--# From http://rpm.org/wiki/Releases/4.13.0.1
--sha1 9566f95f38fcb214e439c552f378c2f64ba0aff9  rpm-4.13.0.1.tar.bz2
-+# From https://rpm.org/wiki/Releases/4.14.2.1.html
-+sha256 1139c24b7372f89c0a697096bf9809be70ba55e006c23ff47305c1849d98acda  rpm-4.14.2.1.tar.bz2
+diff --git a/package/rpm/0001-Rip-out-partial-support-for-unused-MD2-and-RIPEMD160-digests.patch b/package/rpm/0001-Rip-out-partial-support-for-unused-MD2-and-RIPEMD160-digests.patch
+new file mode 100644
+index 0000000000..e080d98fe8
+--- /dev/null
++++ b/package/rpm/0001-Rip-out-partial-support-for-unused-MD2-and-RIPEMD160-digests.patch
+@@ -0,0 +1,82 @@
++From ff4b9111aeba01dd025dd133ce617fb80f7398a0 Mon Sep 17 00:00:00 2001
++From: Panu Matilainen <pmatilai@redhat.com>
++Date: Tue, 26 Jun 2018 10:46:14 +0300
++Subject: [PATCH] Rip out partial support for unused MD2 and RIPEMD160 digests
 +
-+#?Hash for license file
-+sha256 d56f4f1f290f6920cb053aef0dbcd0b853cda289e2568b364ddbfce220a6f3e0  COPYING
++Inspired by #453, adding configure-checks for unused digests algorithms
++seems nonsensical, at no point in rpm history have these algorithms been
++used for anything in rpm so there's not even backward compatibility to
++care about. So the question becomes why do we appear to have (some)
++support for those unused algorithms? So lets don't, problem solved...
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/rpm-software-management/rpm/commit/ff4b9111aeba01dd025dd133ce617fb80f7398a0]
++---
++ rpmio/digest_beecrypt.c | 7 -------
++ rpmio/digest_nss.c      | 2 --
++ rpmio/digest_openssl.c  | 6 ------
++ 3 files changed, 15 deletions(-)
++
++diff --git a/rpmio/digest_beecrypt.c b/rpmio/digest_beecrypt.c
++index 597027e25..653a39491 100644
++--- a/rpmio/digest_beecrypt.c
+++++ b/rpmio/digest_beecrypt.c
++@@ -132,10 +132,6 @@ DIGEST_CTX rpmDigestInit(int hashalgo, rpmDigestFlags flags)
++ 	ctx->Digest = (void *) sha512Digest;
++ 	break;
++ #endif
++-    case PGPHASHALGO_RIPEMD160:
++-    case PGPHASHALGO_MD2:
++-    case PGPHASHALGO_TIGER192:
++-    case PGPHASHALGO_HAVAL_5_160:
++     default:
++ 	free(ctx);
++ 	return NULL;
++@@ -292,9 +288,6 @@ static int pgpVerifySigRSA(pgpDigAlg pgpkey, pgpDigAlg pgpsig, uint8_t *hash, si
++     case PGPHASHALGO_SHA1:
++         prefix = "3021300906052b0e03021a05000414";
++         break;
++-    case PGPHASHALGO_MD2:
++-        prefix = "3020300c06082a864886f70d020205000410";
++-        break;
++     case PGPHASHALGO_SHA256:
++         prefix = "3031300d060960864801650304020105000420";
++         break;
++diff --git a/rpmio/digest_nss.c b/rpmio/digest_nss.c
++index 992d9acf6..50f8c8e90 100644
++--- a/rpmio/digest_nss.c
+++++ b/rpmio/digest_nss.c
++@@ -116,7 +116,6 @@ static HASH_HashType getHashType(int hashalgo)
++ {
++     switch (hashalgo) {
++     case PGPHASHALGO_MD5:	return HASH_AlgMD5;
++-    case PGPHASHALGO_MD2:	return HASH_AlgMD2;
++     case PGPHASHALGO_SHA1:	return HASH_AlgSHA1;
++ #ifdef SHA224_LENGTH
++     case PGPHASHALGO_SHA224:	return HASH_AlgSHA224;
++@@ -216,7 +215,6 @@ static SECOidTag getHashAlg(unsigned int hashalgo)
++ {
++     switch (hashalgo) {
++     case PGPHASHALGO_MD5:	return SEC_OID_MD5;
++-    case PGPHASHALGO_MD2:	return SEC_OID_MD2;
++     case PGPHASHALGO_SHA1:	return SEC_OID_SHA1;
++ #ifdef SHA224_LENGTH
++     case PGPHASHALGO_SHA224:	return SEC_OID_SHA224;
++diff --git a/rpmio/digest_openssl.c b/rpmio/digest_openssl.c
++index 18e52a724..0ae48dd1d 100644
++--- a/rpmio/digest_openssl.c
+++++ b/rpmio/digest_openssl.c
++@@ -172,12 +172,6 @@ static const EVP_MD *getEVPMD(int hashalgo)
++     case PGPHASHALGO_SHA1:
++         return EVP_sha1();
++ 
++-    case PGPHASHALGO_RIPEMD160:
++-        return EVP_ripemd160();
++-
++-    case PGPHASHALGO_MD2:
++-        return EVP_md2();
++-
++     case PGPHASHALGO_SHA256:
++         return EVP_sha256();
++ 
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 58451a9fcc..555ad12eff 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_RPM
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_BEECRYPT if !BR2_PACKAGE_LIBNSS
++	select BR2_PACKAGE_BEECRYPT if !BR2_PACKAGE_LIBNSS && !BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	select BR2_PACKAGE_FILE
+ 	select BR2_PACKAGE_POPT
 diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 103fd7630f..fe9f898bd3 100644
+index fe9f898bd3..626e6bf94c 100644
 --- a/package/rpm/rpm.mk
 +++ b/package/rpm/rpm.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RPM_VERSION_MAJOR = 4.13
--RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
-+RPM_VERSION_MAJOR = 4.14
-+RPM_VERSION = $(RPM_VERSION_MAJOR).2.1
- RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
- RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
- RPM_DEPENDENCIES = \
-@@ -20,10 +20,6 @@ RPM_DEPENDENCIES = \
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
- 
--# 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
--# 0002-configure-ac-correct-stack-protector-check.patch
--RPM_AUTORECONF = YES
--
- RPM_CONF_OPTS = \
- 	--disable-python \
- 	--disable-rpath \
-@@ -55,11 +51,11 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBNSS),y)
+@@ -53,10 +53,13 @@ ifeq ($(BR2_PACKAGE_LIBNSS),y)
  RPM_DEPENDENCIES += libnss
--RPM_CONF_OPTS += --without-beecrypt
-+RPM_CONF_OPTS += --with-crypto=nss
+ RPM_CONF_OPTS += --with-crypto=nss
  RPM_CFLAGS += -I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr
- else
+-else
++else ifeq ($(BR2_PACKAGE_BEECRYPT),y)
  RPM_DEPENDENCIES += beecrypt
--RPM_CONF_OPTS += --with-beecrypt
-+RPM_CONF_OPTS += --with-crypto=beecrypt
+ RPM_CONF_OPTS += --with-crypto=beecrypt
  RPM_CFLAGS += -I$(STAGING_DIR)/usr/include/beecrypt
++else
++RPM_DEPENDENCIES += openssl
++RPM_CONF_OPTS += --with-crypto=openssl
  endif
  
+ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
 -- 
 2.20.1
