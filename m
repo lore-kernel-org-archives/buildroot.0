@@ -1,40 +1,158 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 11:15:25 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pure-ftpd: add
- optional openldap dependency
-Message-ID: <20190328101204.016EF8163C@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 11:18:02 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] package/rdesktop: Fix
+ build with OpenSSL 1.1.x
+Message-ID: <20190328101441.5629383916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18c18e572ea84a8919f22339747c409a3c9ca5ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a1026bae3e2f65947ed507fe342cf30c215e1995
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4f67a6c7d29ffb0bb2b8dcc190fdd71de5be84bc)
+(cherry picked from commit 003f579d58fd0b535c2a5e8df4acd45a76190570)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pure-ftpd/pure-ftpd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/rdesktop/0002-openssl11.patch | 130 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index ae3ca9d1f0..7012268874 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -31,6 +31,13 @@ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
- PURE_FTPD_DEPENDENCIES += libsodium
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENLDAP),y)
-+PURE_FTPD_CONF_OPTS += --with-ldap
-+PURE_FTPD_DEPENDENCIES += openldap
-+else
-+PURE_FTPD_CONF_OPTS += --without-ldap
-+endif
+diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
+new file mode 100644
+index 0000000000..050d6f6903
+--- /dev/null
++++ b/package/rdesktop/0002-openssl11.patch
+@@ -0,0 +1,130 @@
++From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
++From: Jani Hakala <jjhakala@gmail.com>
++Date: Thu, 16 Jun 2016 14:28:15 +0300
++Subject: [PATCH] Fix OpenSSL 1.1 compability issues
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PURE_FTPD_CONF_OPTS += --with-tls
- PURE_FTPD_DEPENDENCIES += openssl
++Some data types have been made opaque in OpenSSL version 1.1 so
++stack allocation and accessing struct fields directly does not work.
++
++Downloaded from upstream commit
++https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
++ 1 file changed, 40 insertions(+), 25 deletions(-)
++
++diff --git a/ssl.c b/ssl.c
++index 48751255..032e9b9e 100644
++--- a/ssl.c
+++++ b/ssl.c
++@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 		  uint8 * exponent)
++ {
++ 	BN_CTX *ctx;
++-	BIGNUM mod, exp, x, y;
+++	BIGNUM *mod, *exp, *x, *y;
++ 	uint8 inr[SEC_MAX_MODULUS_SIZE];
++ 	int outlen;
++ 
++@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 	reverse(inr, len);
++ 
++ 	ctx = BN_CTX_new();
++-	BN_init(&mod);
++-	BN_init(&exp);
++-	BN_init(&x);
++-	BN_init(&y);
++-
++-	BN_bin2bn(modulus, modulus_size, &mod);
++-	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
++-	BN_bin2bn(inr, len, &x);
++-	BN_mod_exp(&y, &x, &exp, &mod, ctx);
++-	outlen = BN_bn2bin(&y, out);
+++	mod = BN_new();
+++	exp = BN_new();
+++	x = BN_new();
+++	y = BN_new();
+++
+++	BN_bin2bn(modulus, modulus_size, mod);
+++	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
+++	BN_bin2bn(inr, len, x);
+++	BN_mod_exp(y, x, exp, mod, ctx);
+++	outlen = BN_bn2bin(y, out);
++ 	reverse(out, outlen);
++ 	if (outlen < (int) modulus_size)
++ 		memset(out + outlen, 0, modulus_size - outlen);
++ 
++-	BN_free(&y);
++-	BN_clear_free(&x);
++-	BN_free(&exp);
++-	BN_free(&mod);
+++	BN_free(y);
+++	BN_clear_free(x);
+++	BN_free(exp);
+++	BN_free(mod);
++ 	BN_CTX_free(ctx);
++ }
++ 
++@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
++ 
++ 	   Kudos to Richard Levitte for the following (. intiutive .) 
++ 	   lines of code that resets the OID and let's us extract the key. */
++-	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
+++
+++	X509_PUBKEY *key = NULL;
+++	X509_ALGOR *algor = NULL;
+++
+++	key = X509_get_X509_PUBKEY(cert);
+++	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
+++
+++	nid = OBJ_obj2nid(algor->algorithm);
+++
++ 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
++ 	{
++ 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
++-		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
++-		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
+++		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
+++				       0, NULL, NULL, 0);
++ 	}
++ 	epk = X509_get_pubkey(cert);
++ 	if (NULL == epk)
++@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
++ {
++ 	int len;
++ 
++-	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
++-	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
+++	BIGNUM *e = NULL;
+++	BIGNUM *n = NULL;
+++
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++	e = rkey->e;
+++	n = rkey->n;
+++#else
+++	RSA_get0_key(rkey, &e, &n, NULL);
+++#endif
+++
+++	if ((BN_num_bytes(e) > (int) max_exp_len) ||
+++	    (BN_num_bytes(n) > (int) max_mod_len))
++ 	{
++ 		return 1;
++ 	}
++-	len = BN_bn2bin(rkey->e, exponent);
+++	len = BN_bn2bin(e, exponent);
++ 	reverse(exponent, len);
++-	len = BN_bn2bin(rkey->n, modulus);
+++	len = BN_bn2bin(n, modulus);
++ 	reverse(modulus, len);
++ 	return 0;
++ }
++@@ -229,8 +247,5 @@ void
++ rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
++ 	       unsigned char *md)
++ {
++-	HMAC_CTX ctx;
++-	HMAC_CTX_init(&ctx);
++ 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
++-	HMAC_CTX_cleanup(&ctx);
++ }
