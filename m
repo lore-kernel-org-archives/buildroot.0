@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 11:18:10 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/rdesktop:
+Date: Thu, 28 Mar 2019 11:17:39 +0100
+Subject: [Buildroot] [git commit branch/2018.11.x] package/rdesktop:
  security bump to version 1.8.4
-Message-ID: <20190328101441.6069288727@busybox.osuosl.org>
+Message-ID: <20190328101446.049AA88727@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d46f092a3f7c1b38b1998de22fe759c1c4c18670
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c5fd451d8b86af3f710e0f9ce44929863f5d834
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.11.x
 
 - Switch site to github
 - Remove second patch (already in version)
