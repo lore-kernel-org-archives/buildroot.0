@@ -1,45 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 11:13:34 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wavemon: remove
- NPTL dependency
-Message-ID: <20190328101011.DC1C981488@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 11:14:31 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: bump to
+ version 7.64.1
+Message-ID: <20190328101107.94184886CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d06dd1f554369650b6a5cbf9e72177ca6ec537a
+commit: https://git.buildroot.net/buildroot/commit/?id=53711fdce97f96c02bf9fb007083f7d2bd0f0495
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-wavemon does not use pthread_mutexattr_setrobust since version 0.8.2 and
-https://github.com/uoaerg/wavemon/commit/d271685e03bc896829d8cc01ca0de28cd7b6ba72
+Contains a number of fixes for issues discovered post-7.64.0.  For details,
+see the list of changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://curl.haxx.se/changes.html#7_64_1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8cefb9bb7fd87d3edbe62dcb4c490054f1396e5e)
+(cherry picked from commit 48da1bc9fdebeaa011648c9b208b17f28a0878e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wavemon/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
-index b72a617759..0cb4cb5c69 100644
---- a/package/wavemon/Config.in
-+++ b/package/wavemon/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_WAVEMON
- 	bool "wavemon"
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBNL
- 	help
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_WAVEMON
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index b158600eca..d321adcd62 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.64.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 2f2f13fa34d44aa29cb444077ad7dc4dc6d189584ad552e0aaeb06e608af6001  curl-7.64.0.tar.xz
++sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 509dbdb54e..852054a4bd 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/uoaerg/wavemon
- 
--comment "wavemon needs a toolchain w/ NPTL"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+comment "wavemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-LIBCURL_VERSION = 7.64.0
++LIBCURL_VERSION = 7.64.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
