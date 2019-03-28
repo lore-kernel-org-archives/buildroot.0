@@ -1,7 +1,7 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu, 28 Mar 2019 14:51:26 +0100
-Subject: [Buildroot] [PATCH] package/nfs-utils: making nfs server optional
-Message-ID: <1553781086-10979-1-git-send-email-angelo@amarulasolutions.com>
+Date: Thu, 28 Mar 2019 14:53:09 +0100
+Subject: [Buildroot] [PATCH v2] package/nfs-utils: making nfs server optional
+Message-ID: <1553781189-15924-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,17 @@ only client tools are used and not the nfs server.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/nfs-utils/Config.in    | 7 +++++++
+v1->v2: Fixing minor formatting nitpick.
+
+ package/nfs-utils/Config.in    | 6 ++++++
  package/nfs-utils/nfs-utils.mk | 2 ++
- 2 files changed, 9 insertions(+)
+ 2 files changed, 8 insertions(+)
 
 diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 055b711..6030476 100644
+index 055b711..50c47aa 100644
 --- a/package/nfs-utils/Config.in
 +++ b/package/nfs-utils/Config.in
-@@ -30,4 +30,11 @@ config BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
+@@ -30,4 +30,10 @@ config BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
  	help
  	  NFS remote quota server
  
@@ -30,7 +32,6 @@ index 055b711..6030476 100644
 +        default y
 +        help
 +          Install the NFS server daemon
-+
 +
  endif
 diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
