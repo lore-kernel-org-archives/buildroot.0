@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:39:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: use pkg-config to
- find openssl
-In-Reply-To: <20190322203459.27576-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 22 Mar 2019 21:34:59 +0100")
-References: <20190322203459.27576-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y34zmj74.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Mar 2019 10:39:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: fix shared build
+In-Reply-To: <20190325210508.8125-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 25 Mar 2019 22:05:08 +0100")
+References: <20190325210508.8125-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvfnmj6o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > openssl can have multiples dependencies such as libatomic on sparcv8
- > 32 bits so drop first patch and add a new patch to use pkg-config
-
+ > Update second patch to fix shared build
  > Fixes:
- >  - http://autobuild.buildroot.org/results/58e5aa7c6ba8fe7474071d7a3cba6ed3a1b4cff4
+ >  - http://autobuild.buildroot.org/results/c27b9c82e68ade29b45dc84ecce5fe6653fbb7da
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
