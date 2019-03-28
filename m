@@ -1,64 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Mar 2019 19:49:51 +0100
-Subject: [Buildroot] [git commit] toolchain-external: add a check for OpenMP
- support
-Message-ID: <20190328185003.7E35A81D34@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 19:53:49 +0100
+Subject: [Buildroot] [PATCH 0/2] Add OpenMP support for custom external
+ toolchains
+In-Reply-To: <cover.1553798445.git.ed.blake@sondrel.com>
+References: <cover.1553798445.git.ed.blake@sondrel.com>
+Message-ID: <20190328195349.76a5a3d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef206d8cc71d05e8a82c03677145f3435fe5007a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 28 Mar 2019 18:48:14 +0000
+Ed Blake <ed.blake@sondrel.com> wrote:
 
-Signed-off-by: Ed Blake <ed.blake@sondrel.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/helpers.mk                                   | 18 ++++++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  3 +++
- 2 files changed, 21 insertions(+)
+> Ed Blake (2):
+>   toolchain-external: introduce BR2_TOOLCHAIN_EXTERNAL_OPENMP
+>   toolchain-external: add a check for OpenMP support
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index e5520c00c3..03355f56dd 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -359,6 +359,24 @@ check_fortran = \
- 	fi ; \
- 	rm -f $${__o}* \
- 
-+#
-+#
-+# Check that the external toolchain supports OpenMP
-+#
-+# $1: cross-gcc path
-+#
-+check_openmp = \
-+	__CROSS_CC=$(strip $1) ; \
-+	__o=$(BUILD_DIR)/.br-toolchain-test-openmp.tmp ; \
-+	printf '\#include <omp.h>\nint main(void) { return omp_get_thread_num(); }' | \
-+	$${__CROSS_CC} -fopenmp -x c -o $${__o} - ; \
-+	if test $$? -ne 0 ; then \
-+		rm -f $${__o}* ; \
-+		echo "OpenMP support is selected but is not available in external toolchain"; \
-+		exit 1 ; \
-+	fi ; \
-+	rm -f $${__o}* \
-+
- #
- # Check that the cross-compiler given in the configuration exists
- #
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 747837fdc6..baf719ad1f 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -545,6 +545,9 @@ define $(2)_CONFIGURE_CMDS
- 	if test "$$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
- 		$$(call check_fortran,$$(TOOLCHAIN_EXTERNAL_FC)) ; \
- 	fi ; \
-+	if test "$$(BR2_TOOLCHAIN_HAS_OPENMP)" = "y" ; then \
-+		$$(call check_openmp,$$(TOOLCHAIN_EXTERNAL_CC)) ; \
-+	fi ; \
- 	if test "$$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
- 		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
- 	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+Thanks, applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
