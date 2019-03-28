@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 28 Mar 2019 18:20:47 +0100
-Subject: [Buildroot] [PATCH 3/4] support/testing: add lua-http test
+Date: Thu, 28 Mar 2019 18:20:48 +0100
+Subject: [Buildroot] [PATCH 4/4] package/lua-resty-http: bump to 0.13
 In-Reply-To: <20190328172048.30238-1-francois.perrad@gadz.org>
 References: <20190328172048.30238-1-francois.perrad@gadz.org>
-Message-ID: <20190328172048.30238-3-francois.perrad@gadz.org>
+Message-ID: <20190328172048.30238-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .gitlab-ci.yml                                |  2 +
- .../testing/tests/package/test_lua_http.py    | 37 +++++++++++++++++++
- 2 files changed, 39 insertions(+)
- create mode 100644 support/testing/tests/package/test_lua_http.py
+ package/lua-resty-http/lua-resty-http.hash | 2 +-
+ package/lua-resty-http/lua-resty-http.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ec143b1d2..681b0d3f5 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -332,6 +332,8 @@ tests.package.test_lua.TestLua: { extends: .runtime_test }
- tests.package.test_lua.TestLuajit: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
- tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
-+tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
-+tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
- tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
- tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
- tests.package.test_luaexpat.TestLuaLuaExpat: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_lua_http.py b/support/testing/tests/package/test_lua_http.py
-new file mode 100644
-index 000000000..ba6096a1b
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_http.py
-@@ -0,0 +1,37 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaHttp(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_HTTP=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
-+        self.module_test("http.client")
-+        self.module_test("http.cookie")
-+        self.module_test("http.proxies")
-+        self.module_test("http.server")
-+        self.module_test("http.socks")
-+        self.module_test("http.websocket")
-+
-+
-+class TestLuajitHttp(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUA_HTTP=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("http.version", script="local ver=require[[http.version]]; print(ver.name, ver.version)")
-+        self.module_test("http.client")
-+        self.module_test("http.cookie")
-+        self.module_test("http.proxies")
-+        self.module_test("http.server")
-+        self.module_test("http.socks")
-+        self.module_test("http.websocket")
+diff --git a/package/lua-resty-http/lua-resty-http.hash b/package/lua-resty-http/lua-resty-http.hash
+index 486a110a7..e8318ab41 100644
+--- a/package/lua-resty-http/lua-resty-http.hash
++++ b/package/lua-resty-http/lua-resty-http.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 4628413a5a2828645e3ddb38a2a0c764e81443cbd1a011357eeed7e983750329  lua-resty-http-0.12-0.src.rock
++sha256 e31b96c622f539d69a9e84febf06d9a1df0f55aa3bfd904dd7c4ac6ed64fe3fe  lua-resty-http-0.13-0.src.rock
+ sha256 407e4b1412d8afa317dc703a1d318866c3de87d78899402125cbd90548c6057d  lua-resty-http/LICENSE
+diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
+index 2aee63d78..6494ad104 100644
+--- a/package/lua-resty-http/lua-resty-http.mk
++++ b/package/lua-resty-http/lua-resty-http.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_RESTY_HTTP_VERSION = 0.12-0
++LUA_RESTY_HTTP_VERSION = 0.13-0
+ LUA_RESTY_HTTP_SUBDIR = lua-resty-http
+ LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
+ LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
 -- 
 2.17.1
