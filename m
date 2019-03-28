@@ -1,47 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Mar 2019 10:57:48 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: needs
- wchar
-Message-ID: <20190328095757.918128152B@busybox.osuosl.org>
+Date: Thu, 28 Mar 2019 10:57:37 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] clamav: needs C++
+Message-ID: <20190328095757.7EE9388770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5dd6b76e908f275a7d34a352040de5a38545bab
+commit: https://git.buildroot.net/buildroot/commit/?id=2a1faf3ac8cc83718923dd0c8edc208a589d8325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes
-http://autobuild.buildroot.net/results/77c/77cd536a0fab78eabe27e055d28db2da354008d7/
+clamav needs C++ since bump to version 0.101.1 and
+https://github.com/Cisco-Talos/clamav-devel/commit/d39cb6581f3c854476044f069d2393fc44702c36
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 25ff9dc1fb45e0325b51de4b0687766dee0888bc)
+Fixes:
+ - http://autobuild.buildroot.org/results/be14aa571309cda32a5963feed9fd7f220e87fe6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4d85d5038ec0a7fb127cd58a48dfd7113c9c22c4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/clamav/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 56bf0af38c..2017011b67 100644
+index bc934ea452..56bf0af38c 100644
 --- a/package/clamav/Config.in
 +++ b/package/clamav/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CLAMAV
- 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CLAMAV
+ 	bool "clamav"
++	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
  	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_CLAMAV
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_CLAMAV
  
  	  http://www.clamav.net
  
--comment "clamav needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "clamav needs a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-comment "clamav needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "clamav needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
  	depends on BR2_USE_MMU
