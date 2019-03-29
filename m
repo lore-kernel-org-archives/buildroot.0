@@ -1,58 +1,62 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri, 29 Mar 2019 16:00:27 -0700
-Subject: [Buildroot] Problems with package/mtd on host after update
-Message-ID: <CAGt4E5s49bpiLA6r+xsNPtGGaxEH8pjs0VPcJOv0fGK7_nCduw@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Fri, 29 Mar 2019 22:04:56 +0000
+Subject: [Buildroot] [PATCH] toolchain-external: Fix paths in libstdc++ gdb
+ python file
+Message-ID: <20190329220445.22941-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The python file libstdc++.so.6.0.25-gdb.py contains two paths:
+pythondir = '/share/gcc-8.2.1/python'
+libdir = '/arm-linux-gnueabihf/lib'
 
-Since the switch from mtd-utils 2.0.2 to mtd-utils 2.1.0, I have
-noticed several issues when building mtd-utils for the host. (The idea
-of using Buildroot's mtd-utils is to be independent of Linux distros
-on the host machine.)
+The latter is the location of the file in the toolchain and the former
+the location of a python module to be used by gdb.  The python code in
+the file subtracts libdir from the end of the current
+libstdc++.so.6.0.25-gdb.py location and appends pythondir, to find the
+current path to the python module.
 
-1) It builds without CRYPTO support on the host, because it's using
-host/bin/pkg-config to search for OpenSSL. Of course, this won't find
-the system installation of OpenSSL, and the OpenSSL package in
-Buildroot doesn't support host build. So, there's no OpenSSL on the
-host.
+Buildroot installs this file into the stage, at which point the paths
+above are no longer correct.
 
-2) Because it builds without CRYPTO, mkfs.ubifs bails with an assertion error.
+This patch uses sed to fixup the paths to reflect the installed
+location, relative to HOST_DIR, and the location of the python module
+relative to HOST_DIR.
 
-mkfs.ubifs: ubifs-utils/mkfs.ubifs/fscrypt.h:166:
-inherit_fscrypt_context: Assertion `0' failed.
+and
 
-The error stems from
-http://git.infradead.org/mtd-utils.git/blob/HEAD:/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#l2105
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ .../toolchain-external-arm-arm.mk                        | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Calls to inherit_fscrypt_context() are unconditional and, since
-WITH_CRYPTO is false, inherit_fscrypt_context() calls assert(0).
-
-One can re-build mtd-utils with CPPFLAGS=-DNDEBUG to silence the
-assert. However, Buildroot doesn't do this out of the box and,
-besides, it would be nicer to build it with crypto enabled. That means
-1) would need to be addressed.
-
-3) Once past the crypto assertion, mkfs.ubifs bails again. This time
-with "Expected symlink", but without specifying what file it is
-objecting to.
-
-The error stems from
-http://git.infradead.org/mtd-utils.git/blob/HEAD:/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#l1535
-
-I tracked the offending file down to dev/console (i.e. a character
-device file) that is being included in the root file system. Clearly
-!S_ISLNK() seems to narrow a restriction here.
-
-All of these problems are new with mtd-utils 2.1.0. The previous
-version was able to process our root file system without issues.
-
-I am assuming that it makes sense to at least report the S_ISLNK()
-issue upstream, as well.
-
-Regards,
--Markus
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 0c21affd7b..040ad3a780 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -9,4 +9,20 @@ TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downlo
+ 
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-8.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-linux-gnueabihf.tar.xz
+ 
++TOOLCHAIN_EXTERNAL_ARM_ARM_LIBSTDCPP_GDB_PY = libstdc++.so.6.0.25-gdb.py
++TOOLCHAIN_EXTERNAL_ARM_ARM_PYTHON_DIR = /share/gcc-8.2.1/python
++
++# LIBSTDCPP_GDB_PY contains embedded paths that are used by gdb to find
++# PYTHON_DIR using the location of LIBSTDCPP_GDB_PY.  They need to be adjusted
++# to reflect LIBSTDCPP_GDB_PY's new location in STAGING_DIR.
++define TOOLCHAIN_EXTERNAL_ARM_ARM_FIXUP_LIBSTDCPP_PYTHON
++	@echo Fixing paths in $(TOOLCHAIN_EXTERNAL_ARM_ARM_LIBSTDCPP_GDB_PY)
++	sed -Ei \
++		-e "s:'($(TOOLCHAIN_EXTERNAL_ARM_ARM_PYTHON_DIR)):$(patsubst $(HOST_DIR)/%,/%,'$(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR))\1:" \
++		-e "s:'/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib:'$(patsubst $(HOST_DIR)/%,/%,$(STAGING_DIR)/usr/lib):" \
++		$(STAGING_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_ARM_ARM_LIBSTDCPP_GDB_PY)
++endef
++
++TOOLCHAIN_EXTERNAL_ARM_ARM_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_ARM_ARM_FIXUP_LIBSTDCPP_PYTHON
++
+ $(eval $(toolchain-external-package))
+-- 
+2.14.5
