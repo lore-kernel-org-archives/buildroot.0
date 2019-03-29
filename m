@@ -1,71 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 29 Mar 2019 13:44:46 +0300
-Subject: [Buildroot] [PATCH 1/2] package/mtd: fix build without openssl
-Message-ID: <4dfb0750e6edabebc3180054ac16ef875d7f41a0.1553856287.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Mar 2019 14:45:01 +0100
+Subject: [Buildroot] [PATCH-2019.02] package/glibc: bump version for
+ additional post-2.28 security fixes
+In-Reply-To: <20190329094714.10437-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 29 Mar 2019 10:47:14 +0100")
+References: <20190329094714.10437-1-peter@korsgaard.com>
+Message-ID: <87muldkd5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that removes dependency on openssl header when openssl is
-not installed.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/a78/a78544def5c17edccdf5db821318b8efa3fc7b8f/
-http://autobuild.buildroot.net/results/ed8/ed82ef6c15d7f59c9b93d237f53fc09513ed5c4f/
-http://autobuild.buildroot.net/results/ede/ede17d68948fd478c366673b7d22f07cee3bd09a/
+ > Fixes the following security vulnerabilities:
+ >   CVE-2019-6488: On x32, the size_t parameter may be passed in the lower
+ >   32 bits of a 64-bit register with with non-zero upper 32 bit.  When it
+ >   happened, accessing the 32-bit size_t value as the full 64-bit register
+ >   in the assembly string/memory functions would cause a buffer overflow.
+ >   Reported by H.J. Lu.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...mkfs.ubifs-fix-build-without-openssl.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
+ >   CVE-2019-7309: x86-64 memcmp used signed Jcc instructions to check
+ >   size.  For x86-64, memcmp on an object size larger than SSIZE_MAX
+ >   has undefined behavior.  On x32, the size_t argument may be passed
+ >   in the lower 32 bits of the 64-bit RDX register with non-zero upper
+ >   32 bits.  When it happened with the sign bit of RDX register set,
+ >   memcmp gave the wrong result since it treated the size argument as
+ >   zero.  Reported by H.J. Lu.
 
-diff --git a/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch b/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
-new file mode 100644
-index 000000000000..863383080632
---- /dev/null
-+++ b/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
-@@ -0,0 +1,38 @@
-+From 451b6fd8f6b619ae75d283df02edd835c8e3c627 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 29 Mar 2019 13:29:41 +0300
-+Subject: [PATCH] mkfs.ubifs: fix build without openssl
-+
-+Exclude openssl headers when WITH_CRYPTO is not defined.
-+
-+Fixes this build failure:
-+
-+In file included from ubifs-utils/mkfs.ubifs/mkfs.ubifs.c:25:0:
-+ubifs-utils/mkfs.ubifs/mkfs.ubifs.h:49:10: fatal error: openssl/rand.h: No such file or directory
-+ #include <openssl/rand.h>
-+          ^~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://lists.infradead.org/pipermail/linux-mtd/2019-March/088508.html
-+
-+ ubifs-utils/mkfs.ubifs/mkfs.ubifs.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h b/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
-+index aa032392155b..8f0186043079 100644
-+--- a/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
-++++ b/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
-+@@ -46,7 +46,9 @@
-+ #include <uuid.h>
-+ #include <sys/file.h>
-+ 
-++#ifdef WITH_CRYPTO
-+ #include <openssl/rand.h>
-++#endif
-+ 
-+ #include <mtd/ubifs-media.h>
-+ 
-+-- 
-+2.20.1
-+
+ >   CVE-2016-10739: The getaddrinfo function could successfully parse IPv4
+ >   addresses with arbitrary trailing characters, potentially leading to data
+ >   or command injection issues in applications.
+
+ >   CVE-2019-9169: Attempted case-insensitive regular-expression match
+ >   via proceed_next_node in posix/regexec.c leads to heap-based buffer
+ >   over-read.  Reported by Hongxu Chen.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
