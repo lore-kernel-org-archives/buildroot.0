@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Mar 2019 14:45:01 +0100
-Subject: [Buildroot] [PATCH-2019.02] package/glibc: bump version for
- additional post-2.28 security fixes
-In-Reply-To: <20190329094714.10437-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 29 Mar 2019 10:47:14 +0100")
-References: <20190329094714.10437-1-peter@korsgaard.com>
-Message-ID: <87muldkd5u.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Mar 2019 14:51:26 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19, 20}.x / 5.0.x series
+Message-ID: <20190329134812.B013F817E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=85961d741e3327e65f615b4936b02bb8e725dc84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes the following security vulnerabilities:
- >   CVE-2019-6488: On x32, the size_t parameter may be passed in the lower
- >   32 bits of a 64-bit register with with non-zero upper 32 bit.  When it
- >   happened, accessing the 32-bit size_t value as the full 64-bit register
- >   in the assembly string/memory functions would cause a buffer overflow.
- >   Reported by H.J. Lu.
+Notice: 4.20.x is now EOL.
 
- >   CVE-2019-7309: x86-64 memcmp used signed Jcc instructions to check
- >   size.  For x86-64, memcmp on an object size larger than SSIZE_MAX
- >   has undefined behavior.  On x32, the size_t argument may be passed
- >   in the lower 32 bits of the 64-bit RDX register with non-zero upper
- >   32 bits.  When it happened with the sign bit of RDX register set,
- >   memcmp gave the wrong result since it treated the size argument as
- >   zero.  Reported by H.J. Lu.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop 4.19.x/4.20.x/5.0.x, linux / hash changes]
+(cherry picked from commit 198b4cff10aa7e25bac28b54721638119e8fd1f1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- >   CVE-2016-10739: The getaddrinfo function could successfully parse IPv4
- >   addresses with arbitrary trailing characters, potentially leading to data
- >   or command injection issues in applications.
-
- >   CVE-2019-9169: Attempted case-insensitive regular-expression match
- >   via proceed_next_node in posix/regexec.c leads to heap-based buffer
- >   over-read.  Reported by Hongxu Chen.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7ad634899c..52ab36080c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -250,12 +250,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.176"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.160"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.177"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.166"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.103"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.109"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
