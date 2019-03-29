@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Mar 2019 15:06:00 +0100
-Subject: [Buildroot] [git commit] Update for 2018.11.4
-Message-ID: <20190329140626.E0F37890C9@busybox.osuosl.org>
+Date: Fri, 29 Mar 2019 15:09:44 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2018.11.4
+Message-ID: <20190329140626.E8C2E890C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2dbb7a0f66b4fa0ff4d93f768bbccec467c8623
+commit: https://git.buildroot.net/buildroot/commit/?id=bf8e36cf2f36d4740889af6b264e19d973b10904
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop Makefile changes]
-(cherry picked from commit 962bef5d075581a7853af4e835b584a658b8f2c0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 365d2bbe4e..b028ac4d87 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -210,6 +210,18 @@
- 	#11656: Custom device tree and u-boot boot.scr not integrated..
- 	#11666: Touchscreen with (Py)Qt5 should use tslib instead of evdev
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 20be2e77bd..7680f91c46 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
-+2018.11.4, Released March 28th, 2019
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.11.4 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 March 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.11.4 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.11.3 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.4">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-March/246388.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.11.4.tar.bz2">2018.11.4 release</a>.</p>
 +
-+	Important / security related fixes.
++	  <p>Notice that the 2018.11.x series is now end of life. Please migrate to
++	  the 2019.02 series instead which will be supported until March 2020.</p>
++      </div>
++    </div>
++  </li>
 +
-+	Updated/fixed packages: avahi, beecrypt, binutils, botan,
-+	busybox, clamav, cups, devmem2, efl, fetchmail, file, fltk,
-+	gcc, gdb, git, go, gst-plugins-bad, iproute2, jq,
-+	kf5-modemmanager-qt, leveldb, libopenssl, libraw, libseccomp,
-+	libsoxr, libssh2, mariadb, mosquitto, nodejs, ntp, openjpeg,
-+	perl, php, putty, qt5webkit, rdesktop, runc, samba4, swupdate,
-+	systemd, tor, vsftpd, wireshark, xapp_xdm, xen, xlib_libXdmcp
-+
- 2018.11.3, Released February 23th, 2019
- 
- 	Important / security related fixes.
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
