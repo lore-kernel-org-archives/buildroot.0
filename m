@@ -1,66 +1,63 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 29 Mar 2019 19:05:25 +0100
-Subject: [Buildroot] [PATCH 2/2] support/testing/tests/package/test_perl_*:
- regeneration
-In-Reply-To: <20190329180525.17320-1-francois.perrad@gadz.org>
-References: <20190329180525.17320-1-francois.perrad@gadz.org>
-Message-ID: <20190329180525.17320-2-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 29 Mar 2019 20:00:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.0.1
+Message-ID: <20190329190029.28053-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/testing/tests/package/test_perl_class_load.py  | 1 +
- support/testing/tests/package/test_perl_libwww_perl.py | 1 +
- support/testing/tests/package/test_perl_mail_dkim.py   | 2 ++
- support/testing/tests/package/test_perl_x10.py         | 1 +
- 4 files changed, 5 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/support/testing/tests/package/test_perl_class_load.py b/support/testing/tests/package/test_perl_class_load.py
-index fbcd904aa..042297002 100644
---- a/support/testing/tests/package/test_perl_class_load.py
-+++ b/support/testing/tests/package/test_perl_class_load.py
-@@ -25,4 +25,5 @@ class TestPerlClassLoad(TestPerlBase):
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 63bcd8686f..e40a8556e4 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-     def test_run(self):
-         self.login()
-+        self.module_test("Params::Util")
-         self.module_test("Class::Load")
-diff --git a/support/testing/tests/package/test_perl_libwww_perl.py b/support/testing/tests/package/test_perl_libwww_perl.py
-index af9f7c7ed..7b30e4b94 100644
---- a/support/testing/tests/package/test_perl_libwww_perl.py
-+++ b/support/testing/tests/package/test_perl_libwww_perl.py
-@@ -36,6 +36,7 @@ class TestPerllibwwwperl(TestPerlBase):
-         self.module_test("LWP::UserAgent")
-         self.module_test("LWP::Authen::Basic")
-         self.module_test("LWP::Authen::Digest")
-+        self.module_test("HTML::Parser")
-         self.module_test("HTTP::Message")
-         self.module_test("HTTP::Daemon")
-         self.module_test("WWW::RobotRules")
-diff --git a/support/testing/tests/package/test_perl_mail_dkim.py b/support/testing/tests/package/test_perl_mail_dkim.py
-index 7affce82b..cd9e75795 100644
---- a/support/testing/tests/package/test_perl_mail_dkim.py
-+++ b/support/testing/tests/package/test_perl_mail_dkim.py
-@@ -25,4 +25,6 @@ class TestPerlMailDKIM(TestPerlBase):
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.0.0
++MESA3D_HEADERS_VERSION = 19.0.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 42dde03c27..6495191b0f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-March/000501.html
+-md5 d0d76cd8b00bc1308e37985d4a45d3c5  mesa-19.0.0.tar.xz
+-sha1 d6353eab5e8949d14f15138fb726f5e298c70485  mesa-19.0.0.tar.xz
+-sha256 5a549dfb40ec31e5c36c47aadac04554cb2e2a8d144a046a378fc16da57e38f8  mesa-19.0.0.tar.xz
+-sha512 5759b85275bcd145513cf14a9ef7505595766fb33b82c53738f74ede462e5850580d48ab4af326b41209e7f4b05aab75539f2bfebf67c3098a4680ea95c37591  mesa-19.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-March/000505.html
++md5 19636bb3da35c21f43040d31e575d5ce  mesa-19.0.1.tar.xz
++sha1 41e825653b29c847912d51a37ff4cff4bab3d878  mesa-19.0.1.tar.xz
++sha256 6884163c0ea9e4c98378ab8fecd72fe7b5f437713a14471beda378df247999d4  mesa-19.0.1.tar.xz
++sha512 13afade840dfc44198b08298c9ebeb24c626c98bfff3ec6d08daaaea690ea9d47af466c877146f9afa3b45035e02c1e21fdc4b53a79c99e38dfc6126efe8ece5  mesa-19.0.1.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f6c45d2525..928e9eb1b9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-     def test_run(self):
-         self.login()
-+        self.module_test("Crypt::OpenSSL::Random")
-+        self.module_test("Crypt::OpenSSL::RSA")
-         self.module_test("Mail::DKIM")
-diff --git a/support/testing/tests/package/test_perl_x10.py b/support/testing/tests/package/test_perl_x10.py
-index 84feb74e6..b587804a9 100644
---- a/support/testing/tests/package/test_perl_x10.py
-+++ b/support/testing/tests/package/test_perl_x10.py
-@@ -19,4 +19,5 @@ class TestPerlX10(TestPerlBase):
- 
-     def test_run(self):
-         self.login()
-+        self.module_test("Device::SerialPort")
-         self.module_test("X10")
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.0.0
++MESA3D_VERSION = 19.0.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.17.1
+2.20.1
