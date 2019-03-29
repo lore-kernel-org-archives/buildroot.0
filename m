@@ -1,53 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Mar 2019 17:05:01 +0100
-Subject: [Buildroot] [git commit] package/sunxi-mali-mainline-driver: bump
- version
-Message-ID: <20190329160134.A57A689039@busybox.osuosl.org>
+Date: Fri, 29 Mar 2019 17:06:03 +0100
+Subject: [Buildroot] [git commit] package/gst1-libav: fix powerpc build
+Message-ID: <20190329160252.37FF18A2D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3da4e07ff9f4ab9a6a6016c784d7ef522b4d38cb
+commit: https://git.buildroot.net/buildroot/commit/?id=0c6f83c3eb63940808644281575844573c45477a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For 5.0 support.
+AS "hack" is also needed for powerpc builds otherwise build fails on:
+AS	libavcodec/ppc/fft_altivec.o
+/home/buildroot/autobuild/run/instance-2/output/host/bin/powerpc64-linux-as: invalid option -- '_'
 
-git shortlog --invert-grep --grep travis --no-merges e28c274f85c65ebec82cdf0f8d021895e105d917..
-Giulio Benetti (2):
-      README: update instructions to copy libraries
-      README: add arm64 build instructions
+This error is raised because CPPFLAGS are (wrongly) passed to AS
 
-Roman Stratiienko (1):
-      mali: support building against 5.0
+Fixes:
+ - http://autobuild.buildroot.org/results/6710e72452fe70788d75191b8b735f90beff9361
+ - http://autobuild.buildroot.org/results/a1f22975d4a4a6cfc553a450da464a431702800f
+ - http://autobuild.buildroot.org/results/be2d161443c5ab24979e6b9389eb21a53d4b4066
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 2 +-
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-libav/gst1-libav.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-index f2b18926de..83b1b269b2 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c5f787cc498cc3e156efa70acc3fbf8dc636fba0f677aac66bdded2fda4a529d  sunxi-mali-mainline-driver-e28c274f85c65ebec82cdf0f8d021895e105d917.tar.gz
-+sha256 bf328106ee2510208ed4be3659b7c01149f35e4b138747e62d8ae73fb81a7b6f  sunxi-mali-mainline-driver-c12e16553576b050e74a8ed404cb555ce4b8e573.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index a77ee91f7e..a999c4cd5b 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 97e069a35f..254ab719ae 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -15,8 +15,8 @@ GST1_LIBAV_LICENSE = GPL-2.0+
+ GST1_LIBAV_LICENSE_FILES = COPYING
+ GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
  
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = e28c274f85c65ebec82cdf0f8d021895e105d917
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = c12e16553576b050e74a8ed404cb555ce4b8e573
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
- SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
+-# fixes arm build: https://bugzilla.gnome.org/show_bug.cgi?id=694416
+-ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be),y)
++# fixes arm/powerpc build: https://bugzilla.gnome.org/show_bug.cgi?id=694416
++ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+ GST1_LIBAV_CONF_ENV = AS="$(TARGET_CROSS)gcc"
+ endif
+ 
