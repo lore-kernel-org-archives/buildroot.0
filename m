@@ -1,47 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 29 Mar 2019 16:30:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst1-libav: fix build on mips64el
-Message-ID: <20190329153039.21860-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Mar 2019 17:00:52 +0100
+Subject: [Buildroot] [git commit] package/mtd: add openssl optional
+ dependency
+Message-ID: <20190329155722.187B689046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply the same behavior for CPU in gst1-libav than in ffmpeg:
- - use generic cpu for all mips architectures
- - use GCC_TARGET_{ARCH,CPU} instead of BR2_TARGET_{ARCH,CPU}
+commit: https://git.buildroot.net/buildroot/commit/?id=f1d1347bde41d35630d65898d27d87b99a519cb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/776028a43bd180b4895efc74321e3aee56cbcb47
+mkfs.ubifs now uses openssl when available.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/mtd/mtd.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 254ab719ae..73e47a0639 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -35,10 +35,14 @@ GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index aa19e94c39..94c8b8b1da 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -21,6 +21,12 @@ endif
+ ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
+ MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
+ MTD_CONF_OPTS += --with-ubifs
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MTD_DEPENDENCIES += openssl
++MTD_CONF_OPTS += --with-crypto
++else
++MTD_CONF_OPTS += --without-crypto
++endif
+ else
+ MTD_CONF_OPTS += --without-ubifs
  endif
- 
- # Generic CPU setup for bundled ffmpeg
--ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
--GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
--else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
--GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
-+# Default to --cpu=generic for MIPS architecture, in order to avoid a
-+# build failure on mips64r6.
-+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=generic
-+else ifneq ($(GCC_TARGET_CPU),)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(GCC_TARGET_CPU)
-+else ifneq ($(GCC_TARGET_ARCH),)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(GCC_TARGET_ARCH)
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
--- 
-2.14.1
