@@ -1,26 +1,124 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 28 Mar 2019 20:02:42 -0300
-Subject: [Buildroot] [PATCH 1/1] configs/imx8mpico: new defconfig
-In-Reply-To: <20190310163043.4217-1-juju@cotds.org>
-References: <20190310163043.4217-1-juju@cotds.org>
-Message-ID: <CAOMZO5AzzARDLvwtELZnAzPeMz6uGx+zKy=YdQpgtN7KHK2O+Q@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 28 Mar 2019 18:51:33 -0700
+Subject: [Buildroot] [PATCH] package/binutils: xtensa: fix
+ shrink_dynamic_reloc_sections
+Message-ID: <20190329015133.9535-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+This fixes the following build error caused by link-time relaxation
+removing copies of literals that reference undefined weak symbols with
+PLT entries created due to -rdynamic option passed to g++ link command:
 
-On Sun, Mar 10, 2019 at 1:31 PM Julien Olivain <juju@cotds.org> wrote:
+  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
+  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
 
-> +In case the board was flashed with a wrong u-boot, or the eMMC is
-> +erased, u-boot can be loaded by USB Serial Download boot mode, using
-> +imx-usb-loader. See [3] and [4].
+Fixes:
+http://autobuild.buildroot.net/results/d41/d41aae8a448c316187f9fbde40f1d077182bb244/
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...fix-shrink_dynamic_reloc_sections-for-exp.patch | 41 ++++++++++++++++++++++
+ ...fix-shrink_dynamic_reloc_sections-for-exp.patch | 41 ++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+ create mode 100644 package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
 
-I am curious about this: have you managed to test loading U-Boot on
-i.MX8 via imx-usb-loader?
-
-If so, care to provide more details?
-
-Thanks
+diff --git a/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch b/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+new file mode 100644
+index 000000000000..b80e1fa7ce06
+--- /dev/null
++++ b/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+@@ -0,0 +1,41 @@
++From 278989f23735aa501be1052e085540c75c126dbb Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 28 Mar 2019 17:03:57 -0700
++Subject: [PATCH] bfd: xtensa: fix shrink_dynamic_reloc_sections for
++ export-dynamic
++
++shrink_dynamic_reloc_sections must remove PLT entry that was created for
++an undefined weak symbol in the presence of --export-dynamic option when
++relaxation coalesces literals pointing to that symbol. This fixes the
++following assertion:
++
++  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
++  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
++
++2019-03-28  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Add
++	info->export_dynamic to the conditional.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c                                         |  3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index c3df3d6db756..37ea200eea74 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -10083,7 +10083,8 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
++       && (input_section->flags & SEC_ALLOC) != 0
++       && (dynamic_symbol || bfd_link_pic (info))
++       && (!h || h->root.type != bfd_link_hash_undefweak
++-	  || (dynamic_symbol && bfd_link_dll (info))))
+++	  || (dynamic_symbol
+++	      && (bfd_link_dll (info) || info->export_dynamic))))
++     {
++       asection *srel;
++       bfd_boolean is_plt = FALSE;
++-- 
++2.11.0
++
+diff --git a/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch b/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+new file mode 100644
+index 000000000000..b80e1fa7ce06
+--- /dev/null
++++ b/package/binutils/2.32/0003-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+@@ -0,0 +1,41 @@
++From 278989f23735aa501be1052e085540c75c126dbb Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 28 Mar 2019 17:03:57 -0700
++Subject: [PATCH] bfd: xtensa: fix shrink_dynamic_reloc_sections for
++ export-dynamic
++
++shrink_dynamic_reloc_sections must remove PLT entry that was created for
++an undefined weak symbol in the presence of --export-dynamic option when
++relaxation coalesces literals pointing to that symbol. This fixes the
++following assertion:
++
++  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
++  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
++
++2019-03-28  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Add
++	info->export_dynamic to the conditional.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c                                         |  3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index c3df3d6db756..37ea200eea74 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -10083,7 +10083,8 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
++       && (input_section->flags & SEC_ALLOC) != 0
++       && (dynamic_symbol || bfd_link_pic (info))
++       && (!h || h->root.type != bfd_link_hash_undefweak
++-	  || (dynamic_symbol && bfd_link_dll (info))))
+++	  || (dynamic_symbol
+++	      && (bfd_link_dll (info) || info->export_dynamic))))
++     {
++       asection *srel;
++       bfd_boolean is_plt = FALSE;
++-- 
++2.11.0
++
+-- 
+2.11.0
