@@ -1,54 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Mar 2019 15:27:56 +0100
-Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.12
-Message-ID: <20190329142801.E44FB886D7@busybox.osuosl.org>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Fri, 29 Mar 2019 14:39:59 +0000
+Subject: [Buildroot] [PATCH 1/1] configs/qemu_riscv*_virt: use mainline
+ kernel
+Message-ID: <20190329143959.28423-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2bc504367392fdcb1fa663d5d5f8a8057f89908
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Update the RISC-V QEMU virt machine defconfigs to use the
+mainline 4.20.17 kernel instead of the version from the
+riscv-linux repository.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This change has been tested with QEMU 3.1.0.
+
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
- CHANGES  | 11 +++++++++++
- Makefile |  4 ++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ configs/qemu_riscv32_virt_defconfig | 5 ++---
+ configs/qemu_riscv64_virt_defconfig | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 819950ee5b..b16ed3ed47 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,14 @@
-+2018.02.12, Released March 29th, 2019
-+
-+	Important / security related fixes.
-+
-+	Updated/fixed packages: avahi, beecrypt, busybox, clamav,
-+	cups, devmem2, fetchmail, file, fltk, gcc, gdb, git, jq,
-+	leveldb, libopenssl, libraw, libseccomp, libssh2,
-+	libunistring, mariadb, mosquitto, nodejs, ntp, openjpeg, perl,
-+	php, putty, qt5webkit, rdesktop, systemd, wireshark, vsftpd,
-+	xapp_xdm, xlib_libXdmcp
-+
- 2018.02.11, Released February 23th, 2019
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index 5d3e06bf3c..84f7b6ab9c 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -15,9 +15,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
  
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 37504ae1ce..f15079acc9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
+ BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 05d2764003..12afac44fb 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -15,9 +15,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
  
- # Set and export the version string
--export BR2_VERSION := 2018.02.11
-+export BR2_VERSION := 2018.02.12
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1550952000
-+BR2_VERSION_EPOCH = 1553870000
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8fe28cb58bcb235034b64cbbb7550a8a43fd88be"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_IMAGE=y
  
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+-- 
+2.19.1
