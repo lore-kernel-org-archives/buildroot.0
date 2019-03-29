@@ -1,35 +1,271 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Mar 2019 17:06:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst1-libav: fix build on
- mips64el
-In-Reply-To: <20190329153039.21860-1-fontaine.fabrice@gmail.com>
-References: <20190329153039.21860-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190329170645.716abac9@windsurf>
+Date: Fri, 29 Mar 2019 17:07:21 +0100
+Subject: [Buildroot] [git commit] package/qlibc: bump to version 2.4.4
+Message-ID: <20190329160344.9A25683616@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 Mar 2019 16:30:39 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c296b7d5f5d053141661ba3eb0eb9c37de906041
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Apply the same behavior for CPU in gst1-libav than in ffmpeg:
->  - use generic cpu for all mips architectures
->  - use GCC_TARGET_{ARCH,CPU} instead of BR2_TARGET_{ARCH,CPU}
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/776028a43bd180b4895efc74321e3aee56cbcb47
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gstreamer1/gst1-libav/gst1-libav.mk | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+- Remove patches (already in version) and autoreconf
+- Add hash for license file
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qlibc/0001-remove-absolute-paths.patch    |  19 ---
+ package/qlibc/0002-obey-destdir.patch             | 144 ----------------------
+ package/qlibc/0003-fix-openssl-mysql-checks.patch |  36 ------
+ package/qlibc/qlibc.hash                          |   3 +-
+ package/qlibc/qlibc.mk                            |   4 +-
+ 5 files changed, 3 insertions(+), 203 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qlibc/0001-remove-absolute-paths.patch b/package/qlibc/0001-remove-absolute-paths.patch
+deleted file mode 100644
+index 5976c3c4db..0000000000
+--- a/package/qlibc/0001-remove-absolute-paths.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Remove absolute paths to host locations
+-
+-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+-
+-Index: b/configure.ac
+-===================================================================
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -85,10 +85,8 @@
+- 
+- ## Set path
+- PATH="$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+--CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include"
+- CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
+- CPPFLAGS="$CPPFLAGS -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
+--LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
+- 
+- ## Set autoconf setting
+- #AC_CANONICAL_TARGET
+diff --git a/package/qlibc/0002-obey-destdir.patch b/package/qlibc/0002-obey-destdir.patch
+deleted file mode 100644
+index f007aa4f24..0000000000
+--- a/package/qlibc/0002-obey-destdir.patch
++++ /dev/null
+@@ -1,144 +0,0 @@
+-From dbdc772a35244b45c725a72fad5ddade9bd7d521 Mon Sep 17 00:00:00 2001
+-From: pcarpent <pierre-francois.carpentier@c-s.fr>
+-Date: Tue, 15 Dec 2015 10:23:44 +0100
+-Subject: [PATCH] fix makefile
+-
+-add DESTDIR variables in install targets
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-(downloaded from upstream commit not included in v2.4.1
+- https://github.com/wolkykim/qlibc/commit/dbdc772a35244b45c725a72fad5ddade9bd7d521)
+----
+- src/Makefile.in | 110 ++++++++++++++++++++++++++++----------------------------
+- 1 file changed, 55 insertions(+), 55 deletions(-)
+-
+-diff --git a/src/Makefile.in b/src/Makefile.in
+-index 8a7ab43..4e274ed 100644
+---- a/src/Makefile.in
+-+++ b/src/Makefile.in
+-@@ -122,70 +122,70 @@ qlibcext: ${QLIBCEXT_OBJS}
+- install: ${INSTALL_TARGETS}
+- 
+- install-qlibc: qlibc
+--	${MKDIR_P} ${INST_INCDIR}/qlibc
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibc.h ${INST_INCDIR}/qlibc/qlibc.h
+--	${MKDIR_P} ${INST_INCDIR}/qlibc/containers/
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qtreetbl.h ${INST_INCDIR}/qlibc/containers/qtreetbl.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhashtbl.h ${INST_INCDIR}/qlibc/containers/qhashtbl.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhasharr.h ${INST_INCDIR}/qlibc/containers/qhasharr.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlisttbl.h ${INST_INCDIR}/qlibc/containers/qlisttbl.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlist.h ${INST_INCDIR}/qlibc/containers/qlist.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qvector.h ${INST_INCDIR}/qlibc/containers/qvector.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qqueue.h ${INST_INCDIR}/qlibc/containers/qqueue.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qstack.h ${INST_INCDIR}/qlibc/containers/qstack.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qgrow.h ${INST_INCDIR}/qlibc/containers/qgrow.h
+--	${MKDIR_P} ${INST_INCDIR}/qlibc/utilities/
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qcount.h ${INST_INCDIR}/qlibc/utilities/qcount.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qencode.h ${INST_INCDIR}/qlibc/utilities/qencode.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qfile.h ${INST_INCDIR}/qlibc/utilities/qfile.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qhash.h ${INST_INCDIR}/qlibc/utilities/qhash.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qio.h ${INST_INCDIR}/qlibc/utilities/qio.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsocket.h ${INST_INCDIR}/qlibc/utilities/qsocket.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qstring.h ${INST_INCDIR}/qlibc/utilities/qstring.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsystem.h ${INST_INCDIR}/qlibc/utilities/qsystem.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qtime.h ${INST_INCDIR}/qlibc/utilities/qtime.h
+--	${MKDIR_P} ${INST_INCDIR}/qlibc/ipc/
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qsem.h ${INST_INCDIR}/qlibc/ipc/qsem.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qshm.h ${INST_INCDIR}/qlibc/ipc/qshm.h
+--	${MKDIR_P} ${INST_LIBDIR}
+--	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_LIBNAME} ${INST_LIBDIR}/${QLIBC_LIBNAME}
+--	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_SLIBREALNAME} ${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
+--	( cd ${INST_LIBDIR}; ${LN_S} -f ${QLIBC_SLIBREALNAME} ${QLIBC_SLIBNAME} )
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibc.h $(DESTDIR)/${INST_INCDIR}/qlibc/qlibc.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/containers/
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qtreetbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qtreetbl.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhashtbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qhashtbl.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qhasharr.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qhasharr.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlisttbl.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qlisttbl.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qlist.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qlist.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qvector.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qvector.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qqueue.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qqueue.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qstack.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qstack.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/containers/qgrow.h $(DESTDIR)/${INST_INCDIR}/qlibc/containers/qgrow.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qcount.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qcount.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qencode.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qencode.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qfile.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qfile.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qhash.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qhash.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qio.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qio.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsocket.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qsocket.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qstring.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qstring.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qsystem.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qsystem.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/utilities/qtime.h $(DESTDIR)/${INST_INCDIR}/qlibc/utilities/qtime.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qsem.h $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/qsem.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/ipc/qshm.h $(DESTDIR)/${INST_INCDIR}/qlibc/ipc/qshm.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_LIBDIR}
+-+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_LIBNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBC_LIBNAME}
+-+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBC_SLIBREALNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
+-+	( cd $(DESTDIR)/${INST_LIBDIR}; ${LN_S} -f ${QLIBC_SLIBREALNAME} ${QLIBC_SLIBNAME} )
+- 
+- uninstall-qlibc:
+--	${RM} -f ${INST_INCDIR}/qlibc/qlibc.h
+--	${RM} -rf ${INST_INCDIR}/qlibc/containers
+--	${RM} -rf ${INST_INCDIR}/qlibc/utilities
+--	${RM} -rf ${INST_INCDIR}/qlibc/ipc
+--	${RM} -f ${INST_LIBDIR}/${QLIBC_LIBNAME}
+--	${RM} -f ${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
+--	${RM} -f ${INST_LIBDIR}/${QLIBC_SLIBNAME}
+-+	${RM} -f $(DESTDIR)/${INST_INCDIR}/qlibc/qlibc.h
+-+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/containers
+-+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/utilities
+-+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/ipc
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_LIBNAME}
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBREALNAME}
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBC_SLIBNAME}
+- 
+- install-qlibcext: qlibcext
+--	${MKDIR_P} ${INST_INCDIR}/qlibc
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibcext.h ${INST_INCDIR}/qlibc/qlibcext.h
+--	${MKDIR_P} ${INST_INCDIR}/qlibc/extensions/
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qconfig.h ${INST_INCDIR}/qlibc/extensions/qconfig.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qaconf.h ${INST_INCDIR}/qlibc/extensions/qaconf.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qlog.h ${INST_INCDIR}/qlibc/extensions/qlog.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qhttpclient.h ${INST_INCDIR}/qlibc/extensions/qhttpclient.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qdatabase.h ${INST_INCDIR}/qlibc/extensions/qdatabase.h
+--	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qtokenbucket.h ${INST_INCDIR}/qlibc/extensions/qtokenbucket.h
+--	${MKDIR_P} ${INST_LIBDIR}
+--	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_LIBNAME} ${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
+--	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_SLIBREALNAME} ${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
+--	( cd ${INST_LIBDIR}; ${LN_S} -f ${QLIBCEXT_SLIBREALNAME} ${QLIBCEXT_SLIBNAME} )
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/qlibcext.h $(DESTDIR)/${INST_INCDIR}/qlibc/qlibcext.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qconfig.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qconfig.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qaconf.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qaconf.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qlog.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qlog.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qhttpclient.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qhttpclient.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qdatabase.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qdatabase.h
+-+	${INSTALL_DATA} ${QLIBC_INCDIR}/extensions/qtokenbucket.h $(DESTDIR)/${INST_INCDIR}/qlibc/extensions/qtokenbucket.h
+-+	${MKDIR_P} $(DESTDIR)/${INST_LIBDIR}
+-+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_LIBNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
+-+	${INSTALL_DATA} ${QLIBC_LIBDIR}/${QLIBCEXT_SLIBREALNAME} $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
+-+	( cd $(DESTDIR)/${INST_LIBDIR}; ${LN_S} -f ${QLIBCEXT_SLIBREALNAME} ${QLIBCEXT_SLIBNAME} )
+- 
+- uninstall-qlibcext:
+--	${RM} -f ${INST_INCDIR}/qlibc/qlibcext.h
+--	${RM} -rf ${INST_INCDIR}/qlibc/extensions
+--	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
+--	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
+--	${RM} -f ${INST_LIBDIR}/${QLIBCEXT_SLIBNAME}
+-+	${RM} -f $(DESTDIR)/${INST_INCDIR}/qlibc/qlibcext.h
+-+	${RM} -rf $(DESTDIR)/${INST_INCDIR}/qlibc/extensions
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_LIBNAME}
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBREALNAME}
+-+	${RM} -f $(DESTDIR)/${INST_LIBDIR}/${QLIBCEXT_SLIBNAME}
+- 
+- deinstall: uninstall
+- uninstall: uninstall-qlibc uninstall-qlibcext
+--	${RMDIR} ${INST_INCDIR}/qlibc
+-+	${RMDIR} $(DESTDIR)/${INST_INCDIR}/qlibc
+- 
+- clean:
+- 	${RM} -f ${QLIBC_OBJS}
+diff --git a/package/qlibc/0003-fix-openssl-mysql-checks.patch b/package/qlibc/0003-fix-openssl-mysql-checks.patch
+deleted file mode 100644
+index bb609b2446..0000000000
+--- a/package/qlibc/0003-fix-openssl-mysql-checks.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-Allow to explicitly disable openssl and mysql
+-
+-AC_ARG_WITH() is being incorrectly used: the third argument indicates
+-the action that needs to be taken when a value was passed, when not
+-the option is enabled. Therefore, the result of the existing code was
+-that when you passed --without-mysql or --without-openssl, the
+-$withval variable would get the value 'yes', which is obviously wrong.
+-
+-Instead, we simply empty this third argument, because $withval is
+-already properly filled with 'yes' or 'no' by the AC_ARG_WITH()
+-function.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure.ac
+-===================================================================
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -170,7 +170,7 @@
+- ## --with section
+- ##
+- 
+--AC_ARG_WITH([openssl],[AS_HELP_STRING([--with-openssl], [This will enable HTTPS support in qhttpclient extension API. When it's enabled, user applications will need to link openssl library with -lssl option.])],[withval=yes],[withval=no])
+-+AC_ARG_WITH([openssl],[AS_HELP_STRING([--with-openssl], [This will enable HTTPS support in qhttpclient extension API. When it's enabled, user applications will need to link openssl library with -lssl option.])],[],[withval=no])
+- if test "$withval" = yes; then
+- 	if test "$with_openssl" = yes; then
+- 		with_openssl="/usr/include"
+-@@ -185,7 +185,7 @@
+- 	fi
+- fi
+- 
+--AC_ARG_WITH([mysql],[AS_HELP_STRING([--with-mysql], [This will enable MySQL database support in qdatabase extension API. When it's enabled, user applications need to link mysql client library. (ex: -lmysqlclient)])],[withval=yes],[withval=no])
+-+AC_ARG_WITH([mysql],[AS_HELP_STRING([--with-mysql], [This will enable MySQL database support in qdatabase extension API. When it's enabled, user applications need to link mysql client library. (ex: -lmysqlclient)])],[],[withval=no])
+- if test "$withval" = yes; then
+- 	if test "$with_mysql" = yes; then
+- 		with_mysql="/usr/include/mysql"
+diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
+index 6b8e4d8940..8fa0cf6503 100644
+--- a/package/qlibc/qlibc.hash
++++ b/package/qlibc/qlibc.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 1f9aa5eefd28c45d409130a35104816d41405da64fe900f70a1c41150891501a  qlibc-v2.4.1.tar.gz
++sha256 93512e2203aaadda7aa62039b29500d9236b878e16f070328c58dc9d23da94d7  qlibc-v2.4.4.tar.gz
++sha256 7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
+diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
+index 55c7aa3b05..b186dfd32f 100644
+--- a/package/qlibc/qlibc.mk
++++ b/package/qlibc/qlibc.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-QLIBC_VERSION = v2.4.1
++QLIBC_VERSION = v2.4.4
+ QLIBC_SITE = $(call github,wolkykim,qlibc,$(QLIBC_VERSION))
+ QLIBC_LICENSE = BSD-2-Clause
+ QLIBC_LICENSE_FILES = LICENSE
+ 
+-# We're patching configure.ac
+-QLIBC_AUTORECONF = YES
+ QLIBC_INSTALL_STAGING = YES
+ QLIBC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
