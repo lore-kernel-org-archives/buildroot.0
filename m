@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Mar 2019 15:09:44 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2018.11.4
-Message-ID: <20190329140626.E8C2E890C9@busybox.osuosl.org>
+Date: Fri, 29 Mar 2019 15:27:56 +0100
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.12
+Message-ID: <20190329142801.E44FB886D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf8e36cf2f36d4740889af6b264e19d973b10904
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=c2bc504367392fdcb1fa663d5d5f8a8057f89908
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES  | 11 +++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 20be2e77bd..7680f91c46 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 819950ee5b..b16ed3ed47 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,14 @@
++2018.02.12, Released March 29th, 2019
++
++	Important / security related fixes.
++
++	Updated/fixed packages: avahi, beecrypt, busybox, clamav,
++	cups, devmem2, fetchmail, file, fltk, gcc, gdb, git, jq,
++	leveldb, libopenssl, libraw, libseccomp, libssh2,
++	libunistring, mariadb, mosquitto, nodejs, ntp, openjpeg, perl,
++	php, putty, qt5webkit, rdesktop, systemd, wireshark, vsftpd,
++	xapp_xdm, xlib_libXdmcp
++
+ 2018.02.11, Released February 23th, 2019
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.11.4 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 March 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.11.4 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.11.3 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.11.4">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-March/246388.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.11.4.tar.bz2">2018.11.4 release</a>.</p>
-+
-+	  <p>Notice that the 2018.11.x series is now end of life. Please migrate to
-+	  the 2019.02 series instead which will be supported until March 2020.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 37504ae1ce..f15079acc9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02.11
++export BR2_VERSION := 2018.02.12
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1550952000
++BR2_VERSION_EPOCH = 1553870000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
