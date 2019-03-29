@@ -1,39 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Mar 2019 22:19:35 +0100
-Subject: [Buildroot] [PATCH] Makefile: release: really drop build/docs from
- release tarball
-Message-ID: <20190329211935.22375-1-peter@korsgaard.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Fri, 29 Mar 2019 22:11:13 +0000
+Subject: [Buildroot] [PATCH] toolchain-external: Fix paths in libstdc++
+ gdb python file
+In-Reply-To: <20190329220445.22941-1-tpiepho@impinj.com>
+References: <20190329220445.22941-1-tpiepho@impinj.com>
+Message-ID: <1553897472.7410.66.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 15cb98769e4 (release: remove manual build files from release
-tarballs) tried to remove the temporary files from the manual build from the
-release tarball, but manual-clean only removes build/docs/manual and leaves
-build/docs in the tarball.
+On Fri, 2019-03-29 at 22:04 +0000, Trent Piepho wrote:
+> 
+> This patch uses sed to fixup the paths to reflect the installed
+> location, relative to HOST_DIR, and the location of the python module
+> relative to HOST_DIR.
+> 
+> 
+> +		-e "s:'($(TOOLCHAIN_EXTERNAL_ARM_ARM_PYTHON_DIR)):$(patsubst $(HOST_DIR)/%,/%,'$(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR))\1:" \
+> 
 
-Instead use 'make clean' to completely remove the build directory from the
-tarball.
+There's a typo in this line that my test didn't catch because the file
+was already fixed when I re-ran the install after making a small
+change.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should have the second single quote moved to the beginning of the
+replacement text.
 
-diff --git a/Makefile b/Makefile
-index 37bbc421ad..60bf7d7d08 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1174,7 +1174,7 @@ release: OUT = buildroot-$(BR2_VERSION)
- release:
- 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
- 	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
--	$(MAKE) O=$(OUT) manual-clean
-+	$(MAKE) O=$(OUT) clean
- 	tar rf $(OUT).tar $(OUT)
- 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
--- 
-2.11.0
+
++		-e "s:'($(TOOLCHAIN_EXTERNAL_ARM_ARM_PYTHON_DIR)):'$(patsubst $(HOST_DIR)/%,/%,$(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR))\1:" \> 
