@@ -1,37 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Mar 2019 21:02:53 +0100
-Subject: [Buildroot] [PATCH] package/buysbox: fix build with individual
- binaries
-In-Reply-To: <87sgv4i1c9.fsf@dell.be.48ers.dk>
-References: <20190330084641.9269-1-yann.morin.1998@free.fr>
- <87sgv4i1c9.fsf@dell.be.48ers.dk>
-Message-ID: <20190330200253.GA2587@scaer>
+From: Philip Molloy <philip@philipmolloy.com>
+Date: Sat, 30 Mar 2019 21:27:45 +0000
+Subject: [Buildroot] [PATCH v2 1/1] board: rename pine64 to pine64_a64
+Message-ID: <lNEO_Exlu8W8Rjcd0oJ5vQ2ptr6KvnyYieAxGJuwAPSSa4Go3VPYfrZObxeECm6eCv1iWrGk1aaI8GXfqh1qEMvKZ5Nm_H0Ul49slqofIKA=@philipmolloy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+The link to https://www.pine64.org/?page_id=1194 in
+board/pine64/pine64/readme.txt loads a page for the "PINE A64" board.
+Follow the convention of using the model name to identify the board.
 
-On 2019-03-30 20:55 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > Fixes:
->  >     http://autobuild.buildroot.org/results/053/0539b3765eaa99029c4185ae89db6adb9e867078/
->  > ---
->  > Peter, this is a candidate for 2019.02.x.
-> Sure? This issue afaik got introduced by the bump to 1.30.1.
+Signed-off-by: Philip Molloy <philip@philipmolloy.com>
+---
+ DEVELOPERS                                         | 2 +-
+ board/pine64/{pine64 => a64}/boot.cmd              | 0
+ board/pine64/{pine64 => a64}/genimage.cfg          | 0
+ board/pine64/{pine64 => a64}/readme.txt            | 8 ++++----
+ configs/{pine64_defconfig => pine64_a64_defconfig} | 4 ++--
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+ rename board/pine64/{pine64 => a64}/boot.cmd (100%)
+ rename board/pine64/{pine64 => a64}/genimage.cfg (100%)
+ rename board/pine64/{pine64 => a64}/readme.txt (80%)
+ rename configs/{pine64_defconfig => pine64_a64_defconfig} (93%)
 
-Dang, I am pretty sure I did checkout 2019.02 before sending this, but
-it seems I failed somewhere... Indeed, it's only for master. Sorry...
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 002ffa09c7..527fa85280 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1030,7 +1030,7 @@ F:	configs/orangepi_pc2_defconfig
+ F:	configs/orangepi_prime_defconfig
+ F:	configs/orangepi_win_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+-F:	configs/pine64_defconfig
++F:	configs/pine64_a64_defconfig
+ F:	configs/pine64_sopine_defconfig
 
-Regards,
-Yann E. MORIN.
+ N:	James Hilliard <james.hilliard1@gmail.com>
+diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/a64/boot.cmd
+similarity index 100%
+rename from board/pine64/pine64/boot.cmd
+rename to board/pine64/a64/boot.cmd
+diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/a64/genimage.cfg
+similarity index 100%
+rename from board/pine64/pine64/genimage.cfg
+rename to board/pine64/a64/genimage.cfg
+diff --git a/board/pine64/pine64/readme.txt b/board/pine64/a64/readme.txt
+similarity index 80%
+rename from board/pine64/pine64/readme.txt
+rename to board/pine64/a64/readme.txt
+index 85226fdd17..c35bf62037 100644
+--- a/board/pine64/pine64/readme.txt
++++ b/board/pine64/a64/readme.txt
+@@ -2,10 +2,10 @@ Intro
+ =====
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ This default configuration will allow you to start experimenting with the
+-buildroot environment for the Pine64. With the current configuration
++buildroot environment for the Pine A64. With the current configuration
+ it will bring-up the board, and allow access through the serial console.
+
+-Pine64 link:
++Pine A64 link:
+ https://www.pine64.org/?page_id=1194
+
+ Wiki link:
+@@ -16,7 +16,7 @@ This configuration uses U-Boot mainline and kernel mainline.
+ How to build
+ ============
+
+-    $ make pine64_defconfig
++    $ make pine64_a64_defconfig
+
+     $ make
+
+@@ -34,5 +34,5 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
+   $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+   $ sudo sync
+
+-Insert the micro SDcard in your Pine64 and power it up. The console
++Insert the micro SDcard in your Pine A64 and power it up. The console
+ is on the serial line, 115200 8N1.
+diff --git a/configs/pine64_defconfig b/configs/pine64_a64_defconfig
+similarity index 93%
+rename from configs/pine64_defconfig
+rename to configs/pine64_a64_defconfig
+index 6e8eb15d73..17b10715e8 100644
+--- a/configs/pine64_defconfig
++++ b/configs/pine64_a64_defconfig
+@@ -37,11 +37,11 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
+
+ # Filesystem
+-BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to PINE A64"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/a64/genimage.cfg"
+--
+2.17.2
