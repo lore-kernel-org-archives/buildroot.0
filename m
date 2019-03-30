@@ -1,17 +1,18 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Mar 2019 15:49:44 +0100
+Date: Sat, 30 Mar 2019 15:49:47 +0100
 Subject: [Buildroot] [PATCH v2,
- 5/8] package/rpm: add optional dbus dependency
+ 8/8] package/rpm: add optional zstd dependency
 In-Reply-To: <20190330144947.27638-1-fontaine.fabrice@gmail.com>
 References: <20190330144947.27638-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190330144947.27638-5-fontaine.fabrice@gmail.com>
+Message-ID: <20190330144947.27638-8-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It should be noted that dbus is enabled by default
+zstd support has been in version 4.14.0 and
+https://github.com/rpm-software-management/rpm/commit/3684424fe297c996bb05bb64631336fa2903df12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -22,22 +23,22 @@ Changes v1 -> v2 (after review of Thomas Petazzoni):
  1 file changed, 7 insertions(+)
 
 diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 0eb6e7f3c7..fe9f898bd3 100644
+index 626e6bf94c..5fd7256618 100644
 --- a/package/rpm/rpm.mk
 +++ b/package/rpm/rpm.mk
-@@ -35,6 +35,13 @@ else
- RPM_CONF_OPTS += --without-acl
+@@ -92,6 +92,13 @@ ifeq ($(BR2_PACKAGE_BINUTILS),y)
+ RPM_DEPENDENCIES += binutils
  endif
  
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+RPM_DEPENDENCIES += dbus
-+RPM_CONF_OPTS += --enable-plugins
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++RPM_DEPENDENCIES += zstd
++RPM_CONF_OPTS += --enable-zstd
 +else
-+RPM_CONF_OPTS += --disable-plugins
++RPM_CONF_OPTS += --disable-zstd
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- RPM_DEPENDENCIES += libcap
- RPM_CONF_OPTS += --with-cap
+ # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
+ RPM_CONF_ENV = \
+ 	ac_cv_prog_cc_c99='-std=gnu99' \
 -- 
 2.20.1
