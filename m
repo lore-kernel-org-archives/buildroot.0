@@ -1,45 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Mar 2019 14:31:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: disable on nios2 and
- microblaze
-Message-ID: <20190330133107.19895-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Mar 2019 15:08:12 +0100
+Subject: [Buildroot] [git commit] package/busybox: fix build with individual
+ binaries
+Message-ID: <20190330140450.68D3588252@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=371799fb54d7bbf55688776f9167f8f97c4c68c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
- - http://autobuild.buildroot.org/results/4d7be00514f5276a9fd533adfdbc3d5183bb59ca
- - http://autobuild.buildroot.org/results/64706f96db793777de9d3ec63b0a47d776cf33fd
+    http://autobuild.buildroot.org/results/053/0539b3765eaa99029c4185ae89db6adb9e867078/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Kudos to Thomas for pinpointing the actual issue.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/haproxy/Config.in | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ ...-mark-scripted_main-as-externally-visible.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index 78cbf6e103..670de5a3ee 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -1,7 +1,16 @@
--config BR2_PACKAGE_HAPROXY
--	bool "haproxy"
-+config BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
-+	bool
-+	default y
-+	# internal compiler error: in do_output_reload, at reload1.c:7978
-+	depends on !BR2_microblaze
-+	# src/proto_http.c:6330:1: internal compiler error: Segmentation fault
-+	depends on !BR2_nios2
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
- 	depends on !(BR2_sh4 && !BR2_TOOLCHAIN_GCC_AT_LEAST_7)
+diff --git a/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
+new file mode 100644
+index 0000000000..d3b174dd4a
+--- /dev/null
++++ b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
+@@ -0,0 +1,53 @@
++From eb5830223d452944b96e526b2f44158bda5c5c56 Mon Sep 17 00:00:00 2001
++From: Ron Yorston <rmy@pobox.com>
++Date: Sat, 30 Mar 2019 07:47:12 +0000
++Subject: [PATCH] libbb: mark scripted_main() as externally visible
 +
-+config BR2_PACKAGE_HAPROXY
-+	bool "haproxy"
-+	depends on BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	help
--- 
-2.20.1
++Building with individual binaries enabled fails when embedded
++script applets are included:
++
++   /tmp/ccIvMFZg.o: In function `main':
++   applet.c:(.text.main+0x20): undefined reference to `scripted_main'
++
++Mark scripted_main() as externally visible.
++
++Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
++Signed-off-by: Ron Yorston <rmy@pobox.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status: reported, patch pending;
++    http://lists.busybox.net/pipermail/busybox/2019-March/087148.html
++    http://lists.busybox.net/pipermail/busybox/2019-March/087149.html
++---
++ include/libbb.h   | 2 +-
++ libbb/appletlib.c | 1 +
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/include/libbb.h b/include/libbb.h
++index e0d5521e4..a20d5e403 100644
++--- a/include/libbb.h
+++++ b/include/libbb.h
++@@ -1347,7 +1347,7 @@ void bb_logenv_override(void) FAST_FUNC;
++ 
++ /* Embedded script support */
++ char *get_script_content(unsigned n) FAST_FUNC;
++-int scripted_main(int argc, char** argv);
+++int scripted_main(int argc, char** argv) MAIN_EXTERNALLY_VISIBLE;
++ 
++ /* Applets which are useful from another applets */
++ int bb_cat(char** argv) FAST_FUNC;
++diff --git a/libbb/appletlib.c b/libbb/appletlib.c
++index c15014a34..fa19e8488 100644
++--- a/libbb/appletlib.c
+++++ b/libbb/appletlib.c
++@@ -770,6 +770,7 @@ static int find_script_by_name(const char *name)
++ 	return -1;
++ }
++ 
+++int scripted_main(int argc UNUSED_PARAM, char **argv) MAIN_EXTERNALLY_VISIBLE;
++ int scripted_main(int argc UNUSED_PARAM, char **argv)
++ {
++ 	int script = find_script_by_name(applet_name);
++-- 
++2.14.1
++
