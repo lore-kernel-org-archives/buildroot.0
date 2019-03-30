@@ -1,120 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Mar 2019 14:28:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc 8
-Message-ID: <20190330132830.19249-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Mar 2019 14:31:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: disable on nios2 and
+ microblaze
+Message-ID: <20190330133107.19895-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch was wrongly removed in d0dcca4705aaae85ce4ef0dc637b95fd4e81b9b3
-
 Fixes:
- - http://autobuild.buildroot.org/results/beac5f07c3b56596a6d9d5a1bcf29eb2837c4829
+ - http://autobuild.buildroot.org/results/4d7be00514f5276a9fd533adfdbc3d5183bb59ca
+ - http://autobuild.buildroot.org/results/64706f96db793777de9d3ec63b0a47d776cf33fd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ated-destination-buffer-with-strncpy.patch | 91 +++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+ package/haproxy/Config.in | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-new file mode 100644
-index 0000000000..cb2b1fee48
---- /dev/null
-+++ b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-@@ -0,0 +1,91 @@
-+From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
-+From: Philippe Gerum <rpm@xenomai.org>
-+Date: Wed, 24 Oct 2018 11:28:49 +0200
-+Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
-+ strncpy()
+diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
+index 78cbf6e103..670de5a3ee 100644
+--- a/package/haproxy/Config.in
++++ b/package/haproxy/Config.in
+@@ -1,7 +1,16 @@
+-config BR2_PACKAGE_HAPROXY
+-	bool "haproxy"
++config BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
++	bool
++	default y
++	# internal compiler error: in do_output_reload, at reload1.c:7978
++	depends on !BR2_microblaze
++	# src/proto_http.c:6330:1: internal compiler error: Segmentation fault
++	depends on !BR2_nios2
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
+ 	depends on !(BR2_sh4 && !BR2_TOOLCHAIN_GCC_AT_LEAST_7)
 +
-+GCC 8.x introduced -Wstringop-truncation to help detecting likely
-+unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
-+character into the destination buffer whenever n < sizeof(src).
-+
-+Fix unsafe strncpy() calls when we do expect a null-terminated
-+destination buffer.
-+
-+Signed-off-by: Philippe Gerum <rpm@xenomai.org>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
-+---
-+ demo/posix/cobalt/can-rtt.c        | 4 ++--
-+ demo/posix/cobalt/eth_p_all.c      | 3 ++-
-+ demo/posix/cyclictest/cyclictest.c | 4 ++--
-+ 3 files changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
-+index 61cad05e5..dd212d804 100644
-+--- a/demo/posix/cobalt/can-rtt.c
-++++ b/demo/posix/cobalt/can-rtt.c
-+@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
-+ 	return -1;
-+     }
-+ 
-+-    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
-++    namecpy(ifr.ifr_name, rxdev);
-+     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
-+ 
-+     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
-+@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
-+ 	    goto failure1;
-+ 	}
-+ 
-+-	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
-++	namecpy(ifr.ifr_name, txdev);
-+ 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
-+ 
-+ 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
-+diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
-+index 6ac12ab3e..91aef9fbd 100644
-+--- a/demo/posix/cobalt/eth_p_all.c
-++++ b/demo/posix/cobalt/eth_p_all.c
-+@@ -40,6 +40,7 @@
-+ #include <net/if.h>
-+ #include <arpa/inet.h>
-+ #include <netinet/ether.h>
-++#include <boilerplate/ancillaries.h>
-+ 
-+ char buffer[10*1024];
-+ int sock;
-+@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
-+ 	if (argc > 1) {
-+ 		struct ifreq ifr;
-+ 
-+-		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
-++		namecpy(ifr.ifr_name, argv[1]);
-+ 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
-+ 			perror("cannot get interface index");
-+ 			close(sock);
-+diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
-+index ebe5461db..76983bd02 100644
-+--- a/demo/posix/cyclictest/cyclictest.c
-++++ b/demo/posix/cyclictest/cyclictest.c
-+@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-+ 		case 'F':
-+ 		case OPT_FIFO:
-+ 			use_fifo = 1;
-+-			strncpy(fifopath, optarg, strlen(optarg));
-++			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
-+ 			break;
-+ 
-+ 		case 'H':
-+@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-+ 		case 'T':
-+ 		case OPT_TRACER:
-+ 			tracetype = CUSTOM;
-+-			strncpy(tracer, optarg, sizeof(tracer));
-++			strncpy(tracer, optarg, sizeof(tracer) - 1);
-+ 			break;
-+ 		case 'u':
-+ 		case OPT_UNBUFFERED:
-+-- 
-+2.18.1
-+
++config BR2_PACKAGE_HAPROXY
++	bool "haproxy"
++	depends on BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
+ 	help
 -- 
 2.20.1
