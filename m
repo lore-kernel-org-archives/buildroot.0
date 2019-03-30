@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 30 Mar 2019 00:26:02 -0300
-Subject: [Buildroot] [PATCH 2/2] support/testing: introduce specific
- error classes
-References: <20190215213549.8476-2-patrickdepinguin@gmail.com>
-Message-ID: <5c9ee1ca98157_29f73fa56c14b2b0433cf@ultri5.mail>
+Date: Sat, 30 Mar 2019 00:30:01 -0300
+Subject: [Buildroot] [PATCH v3 3/4] support/testing: test can use the
+ locally generated qemu host tool
+References: <20190322095818.19914-3-etienne.carriere@linaro.org>
+Message-ID: <5c9ee2b9d0ea5_29f73fa56c112b2c43513@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,85 @@ To: buildroot@busybox.net
 
 Hello,
 
-See some nits below.
++ Arnout
 
-On Fri, Feb 15, 2019 at 07:35 PM, Thomas De Schampheleire wrote:
+On Fri, Mar 22, 2019 at 06:58 AM, Etienne Carriere wrote:
 
-> Rather than using 'SystemError' with a text string, introduce specific error
-> classes. These can now be caught specifically, without having to check the
-> error string, like was done in tests.download.test_scp, or without catching
-> too much like in the case of tests.download.test_git.
+> This change adds argument --local-emulator to run-tests to use a
+> locally built emulator for the runtime test. Target test shall provide
+> a config_emulator attribute unless what test is inconsistent.
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 > ---
->  support/testing/infra/__init__.py           |  3 +++
->  support/testing/infra/builder.py            |  4 +--
->  support/testing/infra/emulator.py           |  4 +--
->  support/testing/infra/exceptions.py         | 27 +++++++++++++++++++++
+> Changes v2 -> v3:
+>   - Add an argument to run-tests to use locally built emulator.
+>     Test can still enforce use of locally built emulator from
+>     boot method argument local=True|False (still defaults to False).
 
-Please run flake8 and fix the warnings it generates.
-support/testing/infra/__init__.py:9:1: F401 'infra.exceptions' imported but unused
-support/testing/infra/exceptions.py:3:1: E302 expected 2 blank lines, found 1
+I am not strongly against it.
+But let me ask:
+Are you or someone else having trouble with any other test case when using
+"old" qemu versions from host?
+
+If the answer is no, maybe we should keep things simple and use a patch very
+similar to v2 of this one, just adding the host-qemu to the test case config
+fragment and the 'local' argument to Emulator.run.
+I say similar to v2 because I think your implementation in v3 with the
+'qemu_bin' variable is better than v2.
+
+If the answer is yes, be aware that one could download the docker image that we
+use in GitLab CI and run the tests inside it. This image has qemu 2.8.1 that
+currently run all tests we have without any problem AFAIK.
+
+IMO, we remove --local-emulator and add local=True and host-qemu to the config
+fragment of any tests (currently only the one in the next patch) that needs a
+qemu newer than 2.8.1. 
+
+
+Another approach "to have an generic option to script run-tests to build the
+emulator within the test config" (quoting your reply to v2) would be:
+Instead of adding a command line argument to run-tests, create a new flag in
+the test case class, perhaps named "build_emulator". If that flag is True, the
+host-qemu is automatically added to the config fragment by the test infra. The
+same flag could be propagated to the Emulator.init so we don't need to pass
+'local' to Emulator.run.
+If for some reason a flag (boolean) is not enough, for example if the host-qemu
+would not always be set with same options (I don't know if that is the case),
+the test case that needs the local build of emulator could pass config_emulator
+and that would make the test infra to know that it needs to build and use the
+locally built emulator. Again, no need to pass 'local' to Emulator.run or the
+user to pass a command line argument.
+This way the test case tells the test infra that it needs an emulator built
+locally instead of the user that starts the test.
+Thoughts?
 
 [snip]
-> +++ b/support/testing/infra/__init__.py
-> @@ -5,6 +5,9 @@ import tempfile
->  import subprocess
->  from urllib2 import urlopen, HTTPError, URLError
+> @@ -30,13 +35,21 @@ class Emulator(object):
+>      #
+>      # options: array of command line options to pass to Qemu
+>      #
+> -    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
+> +    # local: if True, the locally built qemu host tool is used instead of a
+> +    # qemu host tool found from the PATH.
+> +    #
+> +    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None,
+> +             local=None):
+
+A better default value is local=False
+
+>          if arch in ["armv7", "armv5"]:
+>              qemu_arch = "arm"
+>          else:
+>              qemu_arch = arch
 >  
-> +# make exceptions available to all tests with just 'import infra'
-> +import infra.exceptions
-
-So here you can use:
-import infra.exceptions  # noqa: F401
-
-[snip]
-> +++ b/support/testing/tests/download/test_scp.py
-> @@ -37,9 +37,5 @@ class TestScpPrimarySite(infra.basetest.BRConfigTest):
->              self.b.build(["{}-dirclean".format(package),
->                            "{}-source".format(package)],
->                           env)
-> -        except SystemError as e: # FIXME: introduce specific Exception classes
-> -            if str(e) == 'Build failed':
-> -                self.assertFalse('Download error, search for ERROR in the log')
-> -            else:
-> -                # an unexpected error
-> -                raise
-> +        except infra.exceptions.BuildError:
-> +            self.assertFalse('Download error, search for ERROR in the log')
-
-Any reason to not do this?
-
-        except infra.exceptions.BuildError:
-            raise infra.exceptions.TestError('Download error, search for ERROR in the log')
+> -        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
+> +        qemu_bin = "qemu-system-{}".format(qemu_arch)
+> +        if self.local_emulator or local:
+> +            qemu_bin = os.path.join(self.builddir, 'host', 'bin', qemu_bin)
+> +
+> +        qemu_cmd = [qemu_bin,
+>                      "-serial", "stdio",
+>                      "-display", "none"]
 
 
 Regards,
