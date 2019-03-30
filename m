@@ -1,9 +1,7 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 30 Mar 2019 00:33:46 -0300
-Subject: [Buildroot] [PATCH v3 4/4] support/testing: test_optee.py: test
- optee boot and testsuite
-References: <20190322095818.19914-4-etienne.carriere@linaro.org>
-Message-ID: <5c9ee39a76ba3_29f73fa56c0d01a0437d9@ultri5.mail>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Mar 2019 07:00:29 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-03-29
+Message-ID: <20190330070040.E96C12EC4F@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,144 +10,111 @@ To: buildroot@busybox.net
 
 Hello,
 
-Looks good, except for the chdir stuff.
-Also a lot of nits below.
+Build statistics for 2019-03-29
+===============================
 
-On Fri, Mar 22, 2019 at 06:58 AM, Etienne Carriere wrote:
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  21 |   1 |   0 |  22 |
+      master | 195 |  53 |   2 | 250 |
 
-[snip]
-> ---
->  support/testing/tests/package/test_optee.py | 42 +++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 support/testing/tests/package/test_optee.py
+Results for branch 'master'
+===========================
 
-Please run flake8 and fix the warning it generates.
-test_optee.py:9:1: E302 expected 2 blank lines, found 1
+Classification of failures by reason
+------------------------------------
 
-Please run 'make .gitlab-ci.yml'. BTW the same is also missing in the defconfig
-patch 2.
-
-> 
-> diff --git a/support/testing/tests/package/test_optee.py b/support/testing/tests/package/test_optee.py
-> new file mode 100644
-> index 0000000000..44cee74fd8
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_optee.py
-> @@ -0,0 +1,42 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +# This test enforces locally built emulator to prevent old Qemu to
-> +# dump secure trace to stdio and corrupting trace synchro expected
-> +# through pexpect.
-> +
-> +class TestOptee(infra.basetest.BRTest):
-> +
-> +    with open(os.path.join(os.getcwd(), 'configs',
-> +                           'qemu_arm_vexpress_tz_defconfig'),
-> +              'r') as config_file:
-
-Regarding the use of open(), I see no better option here.
-
-Regarding the use of os.getcwd(), I would prefer to have my patch applied
-before this one:
-http://patchwork.ozlabs.org/patch/992697/
-So here you could use:
-    with open(infra.basepath('configs/qemu_armv7a_tz_virt_defconfig'), 'r') as config_file:
-This way we would keep the logic to get any path in a single point in the test
-infra.
-But this suggestion depends on what the maintainers think about my patch.
-If you like the idea you can add my patch to your series.
-
-> +        config = "".join(line for line in config_file if line[:1] != '#') + \
-> +                 """
-
-nit: for consistence with all other test cases, please use one less indent:
-        config = "".join(line for line in config_file if line[:1] != '#') + \
-            """
-
-> +                 BR2_PACKAGE_HOST_QEMU=y
-> +                 BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-
-Shouldn't these 2 lines be in the config_emulator below ...
-
-> +                 BR2_TOOLCHAIN_EXTERNAL=y
-> +                 """
-> +    config_emulator = ''
-
-... like this?
-     config_emulator = \
-         """
-         BR2_PACKAGE_HOST_QEMU=y
-         BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-         """
-
-But see my question on patch 3 before changing this.
-
-> +
-> +    def test_run(self):
-> +
-> +        qemu_options = ['-machine', 'virt,secure=on']
-> +        qemu_options.extend(['-cpu', 'cortex-a15'])
-> +        qemu_options.extend(['-m', '1024'])
-> +        qemu_options.extend(['-semihosting-config', 'enable,target=native'])
-> +        qemu_options.extend(['-bios', 'bl1.bin'])
-> +
-> +        # This test expects Qemu is run from the image direcotry
-
-s/direcotry/directory/
-
-> +        os.chdir(os.path.join(self.builddir, 'images'))
-
-This is not good.
-When running multiple test cases, it will make any test case that runs after
-this one to fail, see:
-
-$ ./support/testing/run-tests -o o -k \
-  tests.core.test_post_scripts.TestPostScripts \
-  tests.package.test_optee.TestOptee
-20:14:02 TestOptee                                Starting
-20:17:01 TestOptee                                Cleaning up
-.20:17:01 TestPostScripts                          Starting
-E
-======================================================================
-ERROR: test_run (tests.core.test_post_scripts.TestPostScripts)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 76, in setUp
-    super(BRTest, self).setUp()
-  File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 62, in setUp
-    self.b.configure(make_extra_opts=["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
-  File "/home/ricardo/src/buildroot/support/testing/infra/builder.py", line 48, in configure
-    raise SystemError("Cannot olddefconfig")
-SystemError: Cannot olddefconfig
-
-A better solution is to add a new optional parameter to Emulator.boot method,
-perhaps named "cwd" that defaults to None and is passed to pexpect.spawn(...,
-cwd=cwd) (not tested).
-This way the Emulator class is aware that qemu must run from a directory, only
-for the test cases that pass this.
-
-> +
-> +        self.emulator.boot(arch='armv7', options=qemu_options, local=True)
-> +        self.emulator.login()
-> +
-> +        # Trick traces since xtest prints "# " which corrupts emulator run
-> +        # method. Tests are dumped only if test fails.
-> +        cmd = 'echo "Silent test takes a while, be patient..."; ' + \
-> +              'xtest -t regression > /tmp/xtest.log ||' + \
-> +              '(cat /tmp/xtest.log && false)'
-> +        output, exit_code = self.emulator.run(cmd, timeout=240)
-
-'output' is currently not tested.
-It's better to use the convention:
-        _, exit_code = self.emulator.run(cmd, timeout=240)
-
-> +        self.assertEqual(exit_code, 0)
-> -- 
-> 2.17.1
+                busybox-1.30.1 | 22
+      host-uboot-tools-2019.01 | 8 
+                host-mtd-2.1.0 | 6 
+           uboot-tools-2019.01 | 4 
+                host-go-1.12.1 | 2 
+                   netsurf-3.8 | 2 
+                  ffmpeg-4.1.2 | 1 
+             gst1-libav-1.14.4 | 1 
+                      gzip-1.9 | 1 
+lua-gd-e60b13b7977bb3424d70... | 1 
+                   mimic-1.1.0 | 1 
+                   netsnmp-5.8 | 1 
+                       netsurf | 1 
+             openjdk-jdk-12+33 | 1 
+               openldap-2.4.47 | 1 
+                          opus | 1 
+              qt5enginio-1.6.3 | 1 
 
 
-Regards,
-Ricardo
+Detail of failures
+------------------
+
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/28e21d38ed20a58c45ee957457dce1c842d5bb70 |     
+         arc |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/68006492884a616c0d8a068d7ffc8cbd4d1c1068 |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/97e066c556eae8f76155ae8cad17eba4013e9f46 |     
+microblazeel |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/0f233c694788a4ccfc6c582a156b3704b569c592 |     
+        i686 |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/42aa6b43cbcf6daa714a3d55c576303bf6cafb84 |     
+     sparc64 |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/4cb988b925250b861cddeca352e40bd13760f980 |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/e2c4924effe8d071c5f3d1f17586209447ebf53c |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/5e7becd5565acbc223f93751d7c516064b0ec86b |     
+  aarch64_be |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/040318338c883df02b375db04ea184fc55c74f34 |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/7a531c22205ea5b2b7d8576e5937cd4b5c3552c1 |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/90cbd0c7a28e03753e176cbb0bc47703cbce0a37 |     
+        or1k |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/67198b15e72832c8e1797d553649156e8df43f5a |     
+      x86_64 |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/2134737f6ab9b184aeb9a5666679c88fab1948f8 |     
+      x86_64 |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/a43d887799ad24ca0925c1bcce74a5352de568f5 |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/1e547cedac35a83526dc67eb68ddb67529b83b28 |     
+ powerpc64le |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/6d42da59843fee5f706c946aed0c73e4d9908562 |     
+ powerpc64le |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/dbbeb5e449986b8893d6eeed5ab5f005f2a0f83e |     
+         arm |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/d67e4cf441e55d93236530547d4b51994d0c5f8b |     
+microblazeel |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/59d0609ca3a9e985e099f60549c18e6faa8c85c0 |     
+microblazeel |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/ab45ab9de3b29acf540ecbae4340272669227001 |     
+     sparc64 |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/e19594832f21621b996ea51b6f3f1a4240403ae2 |     
+         arc |                 busybox-1.30.1 | NOK | http://autobuild.buildroot.net/results/74eb7c9465fd6af99435b6fddfa964f6986eeafb |     
+      mipsel |                   ffmpeg-4.1.2 | NOK | http://autobuild.buildroot.net/results/b8903e3bc99ea7fef86abc22726dc6d10b6d1c00 |     
+   powerpc64 |              gst1-libav-1.14.4 | NOK | http://autobuild.buildroot.net/results/6710e72452fe70788d75191b8b735f90beff9361 |     
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/b9b72a27856f87fc5249ffe8a0e11030e71e25d8 | ORPH
+         arm |                 host-go-1.12.1 | NOK | http://autobuild.buildroot.net/results/1f98a1364b17733c885f99e01062a7c29ccdc792 |     
+         arm |                 host-go-1.12.1 | NOK | http://autobuild.buildroot.net/results/396ac8a080c389827d58b76a556f5ba4cc230fd6 |     
+      x86_64 |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/ede17d68948fd478c366673b7d22f07cee3bd09a |     
+      xtensa |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/ed82ef6c15d7f59c9b93d237f53fc09513ed5c4f |     
+      xtensa |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/a78544def5c17edccdf5db821318b8efa3fc7b8f |     
+      xtensa |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/c985bdb633a4567213b478c3b108dd1bc28440cd |     
+         arc |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/61104c198fd52cbc6faaaa9f850197e05880cf51 |     
+microblazeel |                 host-mtd-2.1.0 | NOK | http://autobuild.buildroot.net/results/3046a543f6a5080c765c785e5d7a4df3e61a2b10 |     
+         arm |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/7ac8c862e3c67fa1001819bed04126581d5803e4 |     
+         arm |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/227559e17a01e1c6805b40df833f571954129896 |     
+      x86_64 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/af5a2804fc7c4a5a757d1e8f1df822cd98985102 |     
+      x86_64 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/6c4bd8144c239c05257a119ce421576938c9b5f1 |     
+     powerpc |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/fa66763984dc35f59befc3e16843996aa4572ae6 |     
+        m68k |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/42c895baaa7b4a9f68a265c5bb1fc00911a17544 |     
+       nios2 |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/e3e9a57e495391ccbe9baf2f523025183f3b8002 |     
+         arm |       host-uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/d345cfc35144c025ccacd944a3fcdd277a7183cb |     
+     riscv64 | lua-gd-e60b13b7977bb3424d70... | NOK | http://autobuild.buildroot.net/results/d9735d1f9476690eb611296ccf83b8f41bf9d32e |     
+     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/c87f56d9f8c8c700bedb82d5a6cfd21054ca6bd7 |     
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/d0b967b104667d8e52e7d0f77a7a003ed41807f4 | ORPH
+         arm |                        netsurf | TIM | http://autobuild.buildroot.net/results/bec4a459650c083fdcea6dd5c45741825770d3fa |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e0baf53f9c000dce4b925755504dac6765affd3d |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/52cee48819cb7ae431c20c2f2f140db153a199fa |     
+         arm |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/a7e592978b4321816a19c92b733c98f5cc88c40e |     
+      xtensa |                openldap-2.4.47 | NOK | http://autobuild.buildroot.net/results/e1b9961e67259529306512dd14abd6b69b324d84 |     
+microblazeel |                           opus | TIM | http://autobuild.buildroot.net/results/cc5562504960de220892faa7ac6b6be5bbb9c1b9 |     
+         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/197f1558968452c529ffb237e54589efbadbe8be |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/c278d691a1d54b2aaed8160b2f97bd364fb0457c |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/5beefd1089bc559d09735362cd2634f36e16f897 |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/445c2b63f1cd9e01f7252b467253ff816adedf4c |     
+         arm |            uboot-tools-2019.01 | NOK | http://autobuild.buildroot.net/results/ea3a42917665e214be6212a9905e94b40d8dd1f9 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                   netsurf-3.8 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/31170a61ffdbaa587160ebf1b362d048711b4697 |     
+
+
+-- 
+http://autobuild.buildroot.net
