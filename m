@@ -1,53 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Mar 2019 18:48:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/omxplayer: bump to version
- f06235cc9690a6d58187514452df8cf8fcdaacec
-Message-ID: <20190330174833.19097-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Mar 2019 20:53:52 +0100
+Subject: [Buildroot] [PATCH] package/dovecot: security bump to version
+ 2.3.5.1
+Message-ID: <20190330195352.32164-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix build with ffmpeg 4.x
-- Update hash of license file, GPL mailing address was fixed:
-  https://github.com/popcornmix/omxplayer/commit/5da1379efc32878b6151110aef73f91b6c433cdb
+Fixes the following security issue:
 
-Fixes:
- - http://autobuild.buildroot.org/results/e413c9b2ad7b97f0552f2477293ca5fe861df06c
+ * CVE-2019-7524: Missing input buffer size validation leads into
+   arbitrary buffer overflow when reading fts or pop3 uidl header
+   from Dovecot index. Exploiting this requires direct write access to
+   the index files.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/omxplayer/omxplayer.hash | 6 +++---
- package/omxplayer/omxplayer.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/omxplayer/omxplayer.hash b/package/omxplayer/omxplayer.hash
-index ad084e2643..fcbf730ab3 100644
---- a/package/omxplayer/omxplayer.hash
-+++ b/package/omxplayer/omxplayer.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha1    258316ff94a1f1e5e47a5bb1a28d324ab08871a9                          omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
--sha256  c16498258ee78c59f9705b621e4b5b7b0673e1687d94681f9dc52451b1ceba48  omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
-+sha1    a9106203f822fe88eb35980479f46a555086d4a7                          omxplayer-f06235cc9690a6d58187514452df8cf8fcdaacec.tar.gz
-+sha256  af2d9450f8947842ea8c401fe9f71eec444013ebbdee29f2ac828c9c493c1329  omxplayer-f06235cc9690a6d58187514452df8cf8fcdaacec.tar.gz
- 
- # Hash for license file:
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  60e78ba9f921bb06bcf957575245414b1577c9688a63ddd73bc65f9d48fe31c9  COPYING
-diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
-index 6999269161..072274cdfc 100644
---- a/package/omxplayer/omxplayer.mk
-+++ b/package/omxplayer/omxplayer.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index a37cc68cf6..a1c2c8ff84 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 bfe112ec6d11f7d6c6f7f0440e3b6e2c840c15cec1e99466b5495765d54aaaff  dovecot-2.3.5.tar.gz
++sha256 d78f9d479e3b2caa808160f86bfec1c9c7b46344d8b14b88f5fa9bbbf8c7c33f  dovecot-2.3.5.1.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 0960d20da7..e56517b0a2 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OMXPLAYER_VERSION = 2ee17b22a6149a043a2e402580504f282c615373
-+OMXPLAYER_VERSION = f06235cc9690a6d58187514452df8cf8fcdaacec
- OMXPLAYER_SITE = $(call github,popcornmix,omxplayer,$(OMXPLAYER_VERSION))
- OMXPLAYER_LICENSE = GPL-2.0+
- OMXPLAYER_LICENSE_FILES = COPYING
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5.1
+ DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 -- 
-2.20.1
+2.11.0
