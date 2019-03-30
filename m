@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 30 Mar 2019 00:30:01 -0300
-Subject: [Buildroot] [PATCH v3 3/4] support/testing: test can use the
- locally generated qemu host tool
-References: <20190322095818.19914-3-etienne.carriere@linaro.org>
-Message-ID: <5c9ee2b9d0ea5_29f73fa56c112b2c43513@ultri5.mail>
+Date: Sat, 30 Mar 2019 00:33:46 -0300
+Subject: [Buildroot] [PATCH v3 4/4] support/testing: test_optee.py: test
+ optee boot and testsuite
+References: <20190322095818.19914-4-etienne.carriere@linaro.org>
+Message-ID: <5c9ee39a76ba3_29f73fa56c0d01a0437d9@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,85 +12,143 @@ To: buildroot@busybox.net
 
 Hello,
 
-+ Arnout
+Looks good, except for the chdir stuff.
+Also a lot of nits below.
 
 On Fri, Mar 22, 2019 at 06:58 AM, Etienne Carriere wrote:
 
-> This change adds argument --local-emulator to run-tests to use a
-> locally built emulator for the runtime test. Target test shall provide
-> a config_emulator attribute unless what test is inconsistent.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-> Changes v2 -> v3:
->   - Add an argument to run-tests to use locally built emulator.
->     Test can still enforce use of locally built emulator from
->     boot method argument local=True|False (still defaults to False).
-
-I am not strongly against it.
-But let me ask:
-Are you or someone else having trouble with any other test case when using
-"old" qemu versions from host?
-
-If the answer is no, maybe we should keep things simple and use a patch very
-similar to v2 of this one, just adding the host-qemu to the test case config
-fragment and the 'local' argument to Emulator.run.
-I say similar to v2 because I think your implementation in v3 with the
-'qemu_bin' variable is better than v2.
-
-If the answer is yes, be aware that one could download the docker image that we
-use in GitLab CI and run the tests inside it. This image has qemu 2.8.1 that
-currently run all tests we have without any problem AFAIK.
-
-IMO, we remove --local-emulator and add local=True and host-qemu to the config
-fragment of any tests (currently only the one in the next patch) that needs a
-qemu newer than 2.8.1. 
-
-
-Another approach "to have an generic option to script run-tests to build the
-emulator within the test config" (quoting your reply to v2) would be:
-Instead of adding a command line argument to run-tests, create a new flag in
-the test case class, perhaps named "build_emulator". If that flag is True, the
-host-qemu is automatically added to the config fragment by the test infra. The
-same flag could be propagated to the Emulator.init so we don't need to pass
-'local' to Emulator.run.
-If for some reason a flag (boolean) is not enough, for example if the host-qemu
-would not always be set with same options (I don't know if that is the case),
-the test case that needs the local build of emulator could pass config_emulator
-and that would make the test infra to know that it needs to build and use the
-locally built emulator. Again, no need to pass 'local' to Emulator.run or the
-user to pass a command line argument.
-This way the test case tells the test infra that it needs an emulator built
-locally instead of the user that starts the test.
-Thoughts?
-
 [snip]
-> @@ -30,13 +35,21 @@ class Emulator(object):
->      #
->      # options: array of command line options to pass to Qemu
->      #
-> -    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
-> +    # local: if True, the locally built qemu host tool is used instead of a
-> +    # qemu host tool found from the PATH.
-> +    #
-> +    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None,
-> +             local=None):
+> ---
+>  support/testing/tests/package/test_optee.py | 42 +++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_optee.py
 
-A better default value is local=False
+Please run flake8 and fix the warning it generates.
+test_optee.py:9:1: E302 expected 2 blank lines, found 1
 
->          if arch in ["armv7", "armv5"]:
->              qemu_arch = "arm"
->          else:
->              qemu_arch = arch
->  
-> -        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-> +        qemu_bin = "qemu-system-{}".format(qemu_arch)
-> +        if self.local_emulator or local:
-> +            qemu_bin = os.path.join(self.builddir, 'host', 'bin', qemu_bin)
+Please run 'make .gitlab-ci.yml'. BTW the same is also missing in the defconfig
+patch 2.
+
+> 
+> diff --git a/support/testing/tests/package/test_optee.py b/support/testing/tests/package/test_optee.py
+> new file mode 100644
+> index 0000000000..44cee74fd8
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_optee.py
+> @@ -0,0 +1,42 @@
+> +import os
 > +
-> +        qemu_cmd = [qemu_bin,
->                      "-serial", "stdio",
->                      "-display", "none"]
+> +import infra.basetest
+> +
+> +# This test enforces locally built emulator to prevent old Qemu to
+> +# dump secure trace to stdio and corrupting trace synchro expected
+> +# through pexpect.
+> +
+> +class TestOptee(infra.basetest.BRTest):
+> +
+> +    with open(os.path.join(os.getcwd(), 'configs',
+> +                           'qemu_arm_vexpress_tz_defconfig'),
+> +              'r') as config_file:
+
+Regarding the use of open(), I see no better option here.
+
+Regarding the use of os.getcwd(), I would prefer to have my patch applied
+before this one:
+http://patchwork.ozlabs.org/patch/992697/
+So here you could use:
+    with open(infra.basepath('configs/qemu_armv7a_tz_virt_defconfig'), 'r') as config_file:
+This way we would keep the logic to get any path in a single point in the test
+infra.
+But this suggestion depends on what the maintainers think about my patch.
+If you like the idea you can add my patch to your series.
+
+> +        config = "".join(line for line in config_file if line[:1] != '#') + \
+> +                 """
+
+nit: for consistence with all other test cases, please use one less indent:
+        config = "".join(line for line in config_file if line[:1] != '#') + \
+            """
+
+> +                 BR2_PACKAGE_HOST_QEMU=y
+> +                 BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+
+Shouldn't these 2 lines be in the config_emulator below ...
+
+> +                 BR2_TOOLCHAIN_EXTERNAL=y
+> +                 """
+> +    config_emulator = ''
+
+... like this?
+     config_emulator = \
+         """
+         BR2_PACKAGE_HOST_QEMU=y
+         BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+         """
+
+But see my question on patch 3 before changing this.
+
+> +
+> +    def test_run(self):
+> +
+> +        qemu_options = ['-machine', 'virt,secure=on']
+> +        qemu_options.extend(['-cpu', 'cortex-a15'])
+> +        qemu_options.extend(['-m', '1024'])
+> +        qemu_options.extend(['-semihosting-config', 'enable,target=native'])
+> +        qemu_options.extend(['-bios', 'bl1.bin'])
+> +
+> +        # This test expects Qemu is run from the image direcotry
+
+s/direcotry/directory/
+
+> +        os.chdir(os.path.join(self.builddir, 'images'))
+
+This is not good.
+When running multiple test cases, it will make any test case that runs after
+this one to fail, see:
+
+$ ./support/testing/run-tests -o o -k \
+  tests.core.test_post_scripts.TestPostScripts \
+  tests.package.test_optee.TestOptee
+20:14:02 TestOptee                                Starting
+20:17:01 TestOptee                                Cleaning up
+.20:17:01 TestPostScripts                          Starting
+E
+======================================================================
+ERROR: test_run (tests.core.test_post_scripts.TestPostScripts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 76, in setUp
+    super(BRTest, self).setUp()
+  File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 62, in setUp
+    self.b.configure(make_extra_opts=["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
+  File "/home/ricardo/src/buildroot/support/testing/infra/builder.py", line 48, in configure
+    raise SystemError("Cannot olddefconfig")
+SystemError: Cannot olddefconfig
+
+A better solution is to add a new optional parameter to Emulator.boot method,
+perhaps named "cwd" that defaults to None and is passed to pexpect.spawn(...,
+cwd=cwd) (not tested).
+This way the Emulator class is aware that qemu must run from a directory, only
+for the test cases that pass this.
+
+> +
+> +        self.emulator.boot(arch='armv7', options=qemu_options, local=True)
+> +        self.emulator.login()
+> +
+> +        # Trick traces since xtest prints "# " which corrupts emulator run
+> +        # method. Tests are dumped only if test fails.
+> +        cmd = 'echo "Silent test takes a while, be patient..."; ' + \
+> +              'xtest -t regression > /tmp/xtest.log ||' + \
+> +              '(cat /tmp/xtest.log && false)'
+> +        output, exit_code = self.emulator.run(cmd, timeout=240)
+
+'output' is currently not tested.
+It's better to use the convention:
+        _, exit_code = self.emulator.run(cmd, timeout=240)
+
+> +        self.assertEqual(exit_code, 0)
+> -- 
+> 2.17.1
 
 
 Regards,
