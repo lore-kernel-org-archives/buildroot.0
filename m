@@ -1,86 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Mar 2019 15:08:12 +0100
-Subject: [Buildroot] [git commit] package/busybox: fix build with individual
+Date: Sat, 30 Mar 2019 15:08:45 +0100
+Subject: [Buildroot] [PATCH] package/buysbox: fix build with individual
  binaries
-Message-ID: <20190330140450.68D3588252@busybox.osuosl.org>
+In-Reply-To: <20190330084641.9269-1-yann.morin.1998@free.fr>
+References: <20190330084641.9269-1-yann.morin.1998@free.fr>
+Message-ID: <20190330150845.4f98153f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371799fb54d7bbf55688776f9167f8f97c4c68c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 30 Mar 2019 09:46:41 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Fixes:
-    http://autobuild.buildroot.org/results/053/0539b3765eaa99029c4185ae89db6adb9e867078/
+> Fixes:
+>     http://autobuild.buildroot.org/results/053/0539b3765eaa99029c4185ae89db6adb9e867078/
+> 
+> Kudos to Thomas for pinpointing the actual issue.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> 
+> ---
+> Peter, this is a candidate for 2019.02.x.
+> ---
+>  ...-mark-scripted_main-as-externally-visible.patch | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
 
-Kudos to Thomas for pinpointing the actual issue.
+Applied to master, thanks.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-mark-scripted_main-as-externally-visible.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
-new file mode 100644
-index 0000000000..d3b174dd4a
---- /dev/null
-+++ b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
-@@ -0,0 +1,53 @@
-+From eb5830223d452944b96e526b2f44158bda5c5c56 Mon Sep 17 00:00:00 2001
-+From: Ron Yorston <rmy@pobox.com>
-+Date: Sat, 30 Mar 2019 07:47:12 +0000
-+Subject: [PATCH] libbb: mark scripted_main() as externally visible
-+
-+Building with individual binaries enabled fails when embedded
-+script applets are included:
-+
-+   /tmp/ccIvMFZg.o: In function `main':
-+   applet.c:(.text.main+0x20): undefined reference to `scripted_main'
-+
-+Mark scripted_main() as externally visible.
-+
-+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+Signed-off-by: Ron Yorston <rmy@pobox.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: reported, patch pending;
-+    http://lists.busybox.net/pipermail/busybox/2019-March/087148.html
-+    http://lists.busybox.net/pipermail/busybox/2019-March/087149.html
-+---
-+ include/libbb.h   | 2 +-
-+ libbb/appletlib.c | 1 +
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/libbb.h b/include/libbb.h
-+index e0d5521e4..a20d5e403 100644
-+--- a/include/libbb.h
-++++ b/include/libbb.h
-+@@ -1347,7 +1347,7 @@ void bb_logenv_override(void) FAST_FUNC;
-+ 
-+ /* Embedded script support */
-+ char *get_script_content(unsigned n) FAST_FUNC;
-+-int scripted_main(int argc, char** argv);
-++int scripted_main(int argc, char** argv) MAIN_EXTERNALLY_VISIBLE;
-+ 
-+ /* Applets which are useful from another applets */
-+ int bb_cat(char** argv) FAST_FUNC;
-+diff --git a/libbb/appletlib.c b/libbb/appletlib.c
-+index c15014a34..fa19e8488 100644
-+--- a/libbb/appletlib.c
-++++ b/libbb/appletlib.c
-+@@ -770,6 +770,7 @@ static int find_script_by_name(const char *name)
-+ 	return -1;
-+ }
-+ 
-++int scripted_main(int argc UNUSED_PARAM, char **argv) MAIN_EXTERNALLY_VISIBLE;
-+ int scripted_main(int argc UNUSED_PARAM, char **argv)
-+ {
-+ 	int script = find_script_by_name(applet_name);
-+-- 
-+2.14.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
