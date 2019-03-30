@@ -1,165 +1,120 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 30 Mar 2019 11:19:40 +0100
-Subject: [Buildroot] [RFC 1/1] package/[wpe]webkit[gtk]: common config
- BR2_PACKAGE_WEBKIT_ARCH_SUPPORT[_JIT]
-In-Reply-To: <20190330101940.25868-1-francois.perrad@gadz.org>
-References: <20190330101940.25868-1-francois.perrad@gadz.org>
-Message-ID: <20190330101940.25868-2-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 30 Mar 2019 14:28:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc 8
+Message-ID: <20190330132830.19249-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/midori/Config.in       |  4 ++--
- package/webkitgtk/Config.in    |  8 ++++----
- package/webkitgtk/webkitgtk.mk |  2 +-
- package/wpewebkit/Config.in    | 36 +++-------------------------------
- package/wpewebkit/wpewebkit.mk |  2 +-
- 5 files changed, 11 insertions(+), 41 deletions(-)
+Patch was wrongly removed in d0dcca4705aaae85ce4ef0dc637b95fd4e81b9b3
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index f0767c85f..460fc6fbf 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,5 +1,5 @@
- comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
--	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_MIDORI
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # webkitgtk -> icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
--	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	# GCR can only be used with the X11 backend
- 	select BR2_PACKAGE_GCR if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_GRANITE
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 8714677b6..3e5e8d7b6 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	bool
- 	# ARM needs BLX, so v5t+, BE completely untested so disabled
- 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
-+config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT
- 	bool
- 	# ARM needs NEON for JIT.
- 	default y if BR2_ARM_CPU_HAS_NEON
-@@ -29,7 +29,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT
- 	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
- 
- comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
--	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_HOST_GCC_AT_LEAST_4_8 || \
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LIBGTK3
--	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_ENCHANT
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c17bbc802..3c2965a6b 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -27,7 +27,7 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_WOFF2=ON
- 
--ifeq ($(BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT),y)
-+ifeq ($(BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
- else
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 04ebe5452..a8f7375a1 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -1,42 +1,12 @@
--config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
--	bool
--	# ARM needs BLX, so v5t+, BE completely untested so disabled
--	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
--	default y if BR2_aarch64 || BR2_aarch64_be
--	default y if BR2_i386 || BR2_x86_64
--	# Disabled on MIPS big endian due to sigbus
--	default y if BR2_mipsel || BR2_mips64el
--	# Disabled on PowerPC pending runtime testing
--	# Disabled on SuperH because of segfault
--	depends on BR2_USE_MMU # libglib2
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
--
--config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT
--	bool
--	# ARM needs NEON for JIT.
--	default y if BR2_ARM_CPU_HAS_NEON
--	# AArch64 is supported upstream but not well tested on big-endian mode.
--	default y if BR2_aarch64
--	# i386 & x86_64 don't have any special requirements.
--	default y if BR2_i386
--	default y if BR2_x86_64
--	# JIT is known not to work on MIPS64.
--	# Plain MIPS32 (pre R2) is not well tested and likely broken, and R6
--	# is unsupported, see https://bugs.webkit.org/show_bug.cgi?id=191258
--	# The MIPS support is completely untested in big-endian mode.
--	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
--	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
--
- comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.8, host gcc >= 4.8"
--	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
- 
- comment "wpewebkit needs an OpenGL ES w/ EGL backend"
--	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL
- 
-@@ -51,7 +21,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
--	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_HARFBUZZ
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 89df9b725..43f8c16e9 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -21,7 +21,7 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_MINIBROWSER=OFF
- 
--ifeq ($(BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT),y)
-+ifeq ($(BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS_JIT),y)
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=ON
- else
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
+Fixes:
+ - http://autobuild.buildroot.org/results/beac5f07c3b56596a6d9d5a1bcf29eb2837c4829
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ated-destination-buffer-with-strncpy.patch | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+
+diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+new file mode 100644
+index 0000000000..cb2b1fee48
+--- /dev/null
++++ b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+@@ -0,0 +1,91 @@
++From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
++From: Philippe Gerum <rpm@xenomai.org>
++Date: Wed, 24 Oct 2018 11:28:49 +0200
++Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
++ strncpy()
++
++GCC 8.x introduced -Wstringop-truncation to help detecting likely
++unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
++character into the destination buffer whenever n < sizeof(src).
++
++Fix unsafe strncpy() calls when we do expect a null-terminated
++destination buffer.
++
++Signed-off-by: Philippe Gerum <rpm@xenomai.org>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
++---
++ demo/posix/cobalt/can-rtt.c        | 4 ++--
++ demo/posix/cobalt/eth_p_all.c      | 3 ++-
++ demo/posix/cyclictest/cyclictest.c | 4 ++--
++ 3 files changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
++index 61cad05e5..dd212d804 100644
++--- a/demo/posix/cobalt/can-rtt.c
+++++ b/demo/posix/cobalt/can-rtt.c
++@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
++ 	return -1;
++     }
++ 
++-    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
+++    namecpy(ifr.ifr_name, rxdev);
++     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
++ 
++     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
++@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
++ 	    goto failure1;
++ 	}
++ 
++-	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
+++	namecpy(ifr.ifr_name, txdev);
++ 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
++ 
++ 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
++diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
++index 6ac12ab3e..91aef9fbd 100644
++--- a/demo/posix/cobalt/eth_p_all.c
+++++ b/demo/posix/cobalt/eth_p_all.c
++@@ -40,6 +40,7 @@
++ #include <net/if.h>
++ #include <arpa/inet.h>
++ #include <netinet/ether.h>
+++#include <boilerplate/ancillaries.h>
++ 
++ char buffer[10*1024];
++ int sock;
++@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
++ 	if (argc > 1) {
++ 		struct ifreq ifr;
++ 
++-		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
+++		namecpy(ifr.ifr_name, argv[1]);
++ 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
++ 			perror("cannot get interface index");
++ 			close(sock);
++diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
++index ebe5461db..76983bd02 100644
++--- a/demo/posix/cyclictest/cyclictest.c
+++++ b/demo/posix/cyclictest/cyclictest.c
++@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
++ 		case 'F':
++ 		case OPT_FIFO:
++ 			use_fifo = 1;
++-			strncpy(fifopath, optarg, strlen(optarg));
+++			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
++ 			break;
++ 
++ 		case 'H':
++@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
++ 		case 'T':
++ 		case OPT_TRACER:
++ 			tracetype = CUSTOM;
++-			strncpy(tracer, optarg, sizeof(tracer));
+++			strncpy(tracer, optarg, sizeof(tracer) - 1);
++ 			break;
++ 		case 'u':
++ 		case OPT_UNBUFFERED:
++-- 
++2.18.1
++
 -- 
-2.17.1
+2.20.1
