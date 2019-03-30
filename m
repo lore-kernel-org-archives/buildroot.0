@@ -1,100 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Mar 2019 09:18:11 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.1
-Message-ID: <20190330081506.7500D884A6@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Mar 2019 09:46:41 +0100
+Subject: [Buildroot] [PATCH] package/buysbox: fix build with individual
+ binaries
+Message-ID: <20190330084641.9269-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd57581fca2cf4d116fe227dc34d4484bfda93f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+    http://autobuild.buildroot.org/results/053/0539b3765eaa99029c4185ae89db6adb9e867078/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Kudos to Thomas for pinpointing the actual issue.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+Peter, this is a candidate for 2019.02.x.
+---
+ ...-mark-scripted_main-as-externally-visible.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index a3d69cdcd8..ec4d6b614c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2019.02</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2019.02.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.02.tar.gz">buildroot-2019.02.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.1.tar.gz">buildroot-2019.02.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.02.tar.bz2">buildroot-2019.02.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.1.tar.bz2">buildroot-2019.02.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 265d28f4fe..27f31e0868 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 March 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-March/246465.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.1.tar.bz2">2019.02.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
+new file mode 100644
+index 0000000000..d3b174dd4a
+--- /dev/null
++++ b/package/busybox/0003-libbb-mark-scripted_main-as-externally-visible.patch
+@@ -0,0 +1,53 @@
++From eb5830223d452944b96e526b2f44158bda5c5c56 Mon Sep 17 00:00:00 2001
++From: Ron Yorston <rmy@pobox.com>
++Date: Sat, 30 Mar 2019 07:47:12 +0000
++Subject: [PATCH] libbb: mark scripted_main() as externally visible
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++Building with individual binaries enabled fails when embedded
++script applets are included:
++
++   /tmp/ccIvMFZg.o: In function `main':
++   applet.c:(.text.main+0x20): undefined reference to `scripted_main'
++
++Mark scripted_main() as externally visible.
++
++Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
++Signed-off-by: Ron Yorston <rmy@pobox.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status: reported, patch pending;
++    http://lists.busybox.net/pipermail/busybox/2019-March/087148.html
++    http://lists.busybox.net/pipermail/busybox/2019-March/087149.html
++---
++ include/libbb.h   | 2 +-
++ libbb/appletlib.c | 1 +
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/include/libbb.h b/include/libbb.h
++index e0d5521e4..a20d5e403 100644
++--- a/include/libbb.h
+++++ b/include/libbb.h
++@@ -1347,7 +1347,7 @@ void bb_logenv_override(void) FAST_FUNC;
++ 
++ /* Embedded script support */
++ char *get_script_content(unsigned n) FAST_FUNC;
++-int scripted_main(int argc, char** argv);
+++int scripted_main(int argc, char** argv) MAIN_EXTERNALLY_VISIBLE;
++ 
++ /* Applets which are useful from another applets */
++ int bb_cat(char** argv) FAST_FUNC;
++diff --git a/libbb/appletlib.c b/libbb/appletlib.c
++index c15014a34..fa19e8488 100644
++--- a/libbb/appletlib.c
+++++ b/libbb/appletlib.c
++@@ -770,6 +770,7 @@ static int find_script_by_name(const char *name)
++ 	return -1;
++ }
++ 
+++int scripted_main(int argc UNUSED_PARAM, char **argv) MAIN_EXTERNALLY_VISIBLE;
++ int scripted_main(int argc UNUSED_PARAM, char **argv)
++ {
++ 	int script = find_script_by_name(applet_name);
++-- 
++2.14.1
++
+-- 
+2.14.1
