@@ -1,101 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 13:54:12 +0200
-Subject: [Buildroot] [git commit] package/thttpd: security bump to version
- 2.29
-Message-ID: <20190331115127.BB1D48A58E@busybox.osuosl.org>
+Date: Sun, 31 Mar 2019 13:54:45 +0200
+Subject: [Buildroot] [git commit] package/omxplayer: bump to version
+ f06235cc9690a6d58187514452df8cf8fcdaacec
+Message-ID: <20190331115127.D4ED58A58E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48e6230e5fd764f301aa9509938957700799959d
+commit: https://git.buildroot.net/buildroot/commit/?id=7a2a0ea42951f8dc31a53498190a134786b6fb2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch site to "real" upstream instead of debian as debian does not
-  have latest version
-- Drop patch (not needed anymore as getline was renamed in my_getline)
-- Add hash for license file
-- Fix CVE-2013-0348 and CVE-2017-17663
+- Fix build with ffmpeg 4.x
+- Update hash of license file, GPL mailing address was fixed:
+  https://github.com/popcornmix/omxplayer/commit/5da1379efc32878b6151110aef73f91b6c433cdb
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e413c9b2ad7b97f0552f2477293ca5fe861df06c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/thttpd/0001-getline.patch | 26 --------------------------
- package/thttpd/thttpd.hash        |  6 +++---
- package/thttpd/thttpd.mk          | 16 ++--------------
- 3 files changed, 5 insertions(+), 43 deletions(-)
+ package/omxplayer/omxplayer.hash | 6 +++---
+ package/omxplayer/omxplayer.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/thttpd/0001-getline.patch b/package/thttpd/0001-getline.patch
-deleted file mode 100644
-index 35c366aef1..0000000000
---- a/package/thttpd/0001-getline.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Fix glibc/eglibc getline() conflicting functions.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--
--diff -Nura thttpd-2.25b.orig/extras/htpasswd.c thttpd-2.25b/extras/htpasswd.c
----- thttpd-2.25b.orig/extras/htpasswd.c	2001-12-18 21:08:08.000000000 -0300
--+++ thttpd-2.25b/extras/htpasswd.c	2011-11-25 11:42:47.198582812 -0300
--@@ -49,7 +49,7 @@
--     while((line[y++] = line[x++]));
-- }
-- 
---static int getline(char *s, int n, FILE *f) {
--+static int get_line(char *s, int n, FILE *f) {
--     register int i=0;
-- 
--     while(1) {
--@@ -189,7 +189,7 @@
--     strcpy(user,argv[2]);
-- 
--     found = 0;
---    while(!(getline(line,MAX_STRING_LEN,f))) {
--+    while(!(get_line(line,MAX_STRING_LEN,f))) {
--         if(found || (line[0] == '#') || (!line[0])) {
--             putline(tfp,line);
--             continue;
-diff --git a/package/thttpd/thttpd.hash b/package/thttpd/thttpd.hash
-index 2400f5bc8d..4bdd7fe74b 100644
---- a/package/thttpd/thttpd.hash
-+++ b/package/thttpd/thttpd.hash
-@@ -1,3 +1,3 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/t/thttpd/thttpd_2.25b-11.dsc
--sha256	07719b08b1cff6a21c08697a7bcb4395425b07ee753106262fb62a03a7d32360	thttpd_2.25b.orig.tar.gz
--sha256	4d213c18daf121d21412cc54864fbca250e1773a91df6573373e1d2273a2cec9	thttpd_2.25b-11.diff.gz
-+# Locally calculated
-+sha256	99c09f47da326b1e7b5295c45549d2b65534dce27c44812cf7eef1441681a397	thttpd-2.29.tar.gz
-+sha256	be059e6b8219d5bb5480fa6a2864bbb34892f56951d03d08b356bc1fa8c81a01	thttpd.c
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index f1bee01345..29611fff2c 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -4,23 +4,11 @@
+diff --git a/package/omxplayer/omxplayer.hash b/package/omxplayer/omxplayer.hash
+index ad084e2643..fcbf730ab3 100644
+--- a/package/omxplayer/omxplayer.hash
++++ b/package/omxplayer/omxplayer.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha1    258316ff94a1f1e5e47a5bb1a28d324ab08871a9                          omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
+-sha256  c16498258ee78c59f9705b621e4b5b7b0673e1687d94681f9dc52451b1ceba48  omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
++sha1    a9106203f822fe88eb35980479f46a555086d4a7                          omxplayer-f06235cc9690a6d58187514452df8cf8fcdaacec.tar.gz
++sha256  af2d9450f8947842ea8c401fe9f71eec444013ebbdee29f2ac828c9c493c1329  omxplayer-f06235cc9690a6d58187514452df8cf8fcdaacec.tar.gz
+ 
+ # Hash for license file:
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  60e78ba9f921bb06bcf957575245414b1577c9688a63ddd73bc65f9d48fe31c9  COPYING
+diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+index 6999269161..072274cdfc 100644
+--- a/package/omxplayer/omxplayer.mk
++++ b/package/omxplayer/omxplayer.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--THTTPD_VERSION = 2.25b
--THTTPD_SOURCE = thttpd_$(THTTPD_VERSION).orig.tar.gz
--THTTPD_PATCH = thttpd_$(THTTPD_VERSION)-11.diff.gz
--THTTPD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/t/thttpd
-+THTTPD_VERSION = 2.29
-+THTTPD_SITE = https://acme.com/software/thttpd
- THTTPD_LICENSE = BSD-2-Clause
- THTTPD_LICENSE_FILES = thttpd.c
- 
--ifneq ($(THTTPD_PATCH),)
--define THTTPD_DEBIAN_PATCHES
--	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
--	fi
--endef
--endif
--
--THTTPD_POST_PATCH_HOOKS = THTTPD_DEBIAN_PATCHES
--
- THTTPD_MAKE = $(MAKE1)
- 
- define THTTPD_INSTALL_TARGET_CMDS
+-OMXPLAYER_VERSION = 2ee17b22a6149a043a2e402580504f282c615373
++OMXPLAYER_VERSION = f06235cc9690a6d58187514452df8cf8fcdaacec
+ OMXPLAYER_SITE = $(call github,popcornmix,omxplayer,$(OMXPLAYER_VERSION))
+ OMXPLAYER_LICENSE = GPL-2.0+
+ OMXPLAYER_LICENSE_FILES = COPYING
