@@ -1,34 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 15:14:32 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/jq: add oniguruma optional dependency
-In-Reply-To: <20190320203617.27496-2-fontaine.fabrice@gmail.com>
-References: <20190320203617.27496-1-fontaine.fabrice@gmail.com>
- <20190320203617.27496-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190331151432.52efa3b8@windsurf>
+Date: Sun, 31 Mar 2019 15:17:01 +0200
+Subject: [Buildroot] [git commit] system/skeleton: remove password
+ expiration from shadow
+In-Reply-To: <20190320220327.47BF2814A6@busybox.osuosl.org>
+References: <20190320220327.47BF2814A6@busybox.osuosl.org>
+Message-ID: <20190331151701.4de2bc12@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-On Wed, 20 Mar 2019 21:36:17 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, 20 Mar 2019 23:06:29 +0100
+Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
 
->  # jq explicitly enables maintainer mode, which we don't need/want
-> -JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
-> -HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
-> +JQ_CONF_OPTS += --disable-maintainer-mode
-> +HOST_JQ_CONF_OPTS += --disable-maintainer-mode
-> +
-> +HOST_JQ_CONF_OPTS += --with-oniguruma
-> +HOST_JQ_DEPENDENCIES += host-oniguruma
+> commit: https://git.buildroot.net/buildroot/commit/?id=be8d11c7e55d8dfe395774c04a7a35b949aa6d97
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The fields in /etc/shadow were set as follows:
+> 
+> root::10933:0:99999:7:::
+> 
+> This sets the date of last password change to Jan 1, 2000, the minimum
+> password age to 0 days, the maximum password age to near-infinity, and a
+> warning period of 7 days. In practice, this means the password never
+> expires. So all of this is quite useless.
+> 
+> On the other hand, mkusers creates lines without all of these options.
+> It just sets ::::: which disables password expiration completely.
+> 
+> To make things consistent, do the same for the skeleton entries.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-What decided you to add onigurama as a mandatory dependency for
-host-jq ? What feature does it bring ? Do we really need it as a
-mandatory dependency ?
+It seems like you applied your own patch here, but without replying to
+your original e-mail to say it was applied, and the patch state in
+patchwork was also not set to Accepted. Seems like you perhaps pushed
+it by mistake.
+
+Anyway, no big deal, I was about to apply it, and that's what made me
+discover that it was already applied :)
+
+Best regards,
 
 Thomas
 -- 
