@@ -1,165 +1,172 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 31 Mar 2019 16:56:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tegrarcm: bump to version 1.8
-Message-ID: <20190331145647.24516-1-fontaine.fabrice@gmail.com>
+Date: Sun, 31 Mar 2019 17:12:05 +0200
+Subject: [Buildroot] [PATCH v2,1/2] package/oniguruma: new package
+Message-ID: <20190331151206.23277-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- Add hash for license file
+Oniguruma is a modern and flexible regular expressions
+library. It encompasses features from different regular
+expression implementations that traditionally exist in
+different languages.
+
+https://github.com/kkos/oniguruma
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...me-cryptopp-is-system-wide-installed.patch | 114 ------------------
- package/tegrarcm/tegrarcm.hash                |   3 +-
- package/tegrarcm/tegrarcm.mk                  |   2 +-
- 3 files changed, 3 insertions(+), 116 deletions(-)
- delete mode 100644 package/tegrarcm/0001-Don-t-assume-cryptopp-is-system-wide-installed.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Remove host variant
 
-diff --git a/package/tegrarcm/0001-Don-t-assume-cryptopp-is-system-wide-installed.patch b/package/tegrarcm/0001-Don-t-assume-cryptopp-is-system-wide-installed.patch
-deleted file mode 100644
-index 3c738d86a4..0000000000
---- a/package/tegrarcm/0001-Don-t-assume-cryptopp-is-system-wide-installed.patch
-+++ /dev/null
-@@ -1,114 +0,0 @@
--From 5ea6b3859ebe16ff47856b58262b14463e119c13 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 19 Apr 2016 22:14:42 +0200
--Subject: [PATCH] Don't assume cryptopp is system-wide installed
--
--The current build system adds "-isystem /usr/include/$(CRYPTOLIB)" to
--AM_CPPFLAGS, but this is wrong because cryptopp might not be installed
--in this location. Instead, the build system should simply include
--<cryptopp/...> or <crypto++/...> and rely on the compiler include
--path.
--
--The tricky part is that it can be <cryptopp/...> or <crypto++/...>. To
--solve this, we use a solution similar to the one used in
--https://github.com/bingmann/crypto-speedtest/blob/master/m4/cryptopp.m4
--and
--https://github.com/bingmann/crypto-speedtest/blob/master/src/speedtest_cryptopp.cpp:
--the configure script fills in a variable called
--CRYPTOLIB_HEADER_PREFIX, and we use that in the C++ code to include
--the right header file.
--
--It is worth mentioning that doing #include
--<CRYPTOLIB_HEADER_PREFIX/foobar.h> doesn't work, and we have to use an
--intermediate #define'd constant to overcome this C preprocessor
--limitation.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted upstream at https://github.com/NVIDIA/tegrarcm/pull/2
-----
-- configure.ac     |  1 +
-- src/Makefile.am  |  2 +-
-- src/aes-cmac.cpp | 28 +++++++++++++++++-----------
-- 3 files changed, 19 insertions(+), 12 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 943654f..620e158 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -33,6 +33,7 @@ AC_LINK_IFELSE(
-- 		[AC_MSG_ERROR([libcrypto++/libcryptopp is not installed.])])]
-- )
-- AC_SUBST(CRYPTOLIB)
--+AC_DEFINE_UNQUOTED([CRYPTOLIB_HEADER_PREFIX], [$CRYPTOLIB], [Location of cryptolib header])
-- LDFLAGS=$SAVED_LDFLAGS
-- AC_LANG(C)
-- 
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 3dad0e6..35a606f 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -1,5 +1,5 @@
-- AM_CFLAGS = -Wall -std=c99
---AM_CPPFLAGS = -isystem /usr/include/$(CRYPTOLIB) $(LIBUSB_CFLAGS)
--+AM_CPPFLAGS = $(LIBUSB_CFLAGS)
-- 
-- bin_PROGRAMS = tegrarcm
-- tegrarcm_SOURCES = \
--diff --git a/src/aes-cmac.cpp b/src/aes-cmac.cpp
--index 24c89f8..da8be5a 100644
----- a/src/aes-cmac.cpp
--+++ b/src/aes-cmac.cpp
--@@ -26,6 +26,9 @@
--  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
--  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--  */
--+
--+#include "config.h"
--+
-- #include <iostream>
-- using std::cout;
-- using std::cerr;
--@@ -40,26 +43,29 @@ using std::string;
-- #include <cstdlib>
-- using std::exit;
-- 
---#include "cryptlib.h"
---using CryptoPP::Exception;
--+#define CRYPTOPP_INCLUDE_CRYPTLIB	<CRYPTOLIB_HEADER_PREFIX/cryptlib.h>
--+#define CRYPTOPP_INCLUDE_CMAC		<CRYPTOLIB_HEADER_PREFIX/cmac.h>
--+#define CRYPTOPP_INCLUDE_AES		<CRYPTOLIB_HEADER_PREFIX/aes.h>
--+#define CRYPTOPP_INCLUDE_HEX		<CRYPTOLIB_HEADER_PREFIX/hex.h>
--+#define CRYPTOPP_INCLUDE_FILTERS	<CRYPTOLIB_HEADER_PREFIX/filters.h>
--+#define CRYPTOPP_INCLUDE_SECBLOCK	<CRYPTOLIB_HEADER_PREFIX/secblock.h>
-- 
---#include "cmac.h"
---using CryptoPP::CMAC;
--+#include CRYPTOPP_INCLUDE_CRYPTLIB
--+#include CRYPTOPP_INCLUDE_CMAC
--+#include CRYPTOPP_INCLUDE_AES
--+#include CRYPTOPP_INCLUDE_HEX
--+#include CRYPTOPP_INCLUDE_FILTERS
--+#include CRYPTOPP_INCLUDE_SECBLOCK
-- 
---#include "aes.h"
--+using CryptoPP::Exception;
--+using CryptoPP::CMAC;
-- using CryptoPP::AES;
---
---#include "hex.h"
-- using CryptoPP::HexEncoder;
-- using CryptoPP::HexDecoder;
---
---#include "filters.h"
-- using CryptoPP::StringSink;
-- using CryptoPP::StringSource;
-- using CryptoPP::HashFilter;
-- using CryptoPP::HashVerificationFilter;
---
---#include "secblock.h"
-- using CryptoPP::SecByteBlock;
-- 
-- extern "C" int cmac_hash(const unsigned char *msg, int len, unsigned char *cmac_buf)
---- 
--2.6.4
--
-diff --git a/package/tegrarcm/tegrarcm.hash b/package/tegrarcm/tegrarcm.hash
-index 4194a4cd21..3849f0f6c7 100644
---- a/package/tegrarcm/tegrarcm.hash
-+++ b/package/tegrarcm/tegrarcm.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256  538cb0af237ab33e070d3aeb6cc828cd7ef453753ba2ccc21b87ed43faac51bd  tegrarcm-v1.7.tar.gz
-+sha256  08329ee0247499b28ec37b0cc639f35443792dfb9bc4a8a182eea63dae6f64ea  tegrarcm-v1.8.tar.gz
-+sha256  5f20d276321cb37346d911712a813cb7ce4c8e3a570bffc919bec820eeef13f6  LICENSE
-diff --git a/package/tegrarcm/tegrarcm.mk b/package/tegrarcm/tegrarcm.mk
-index ad4c317b35..c84cf7f644 100644
---- a/package/tegrarcm/tegrarcm.mk
-+++ b/package/tegrarcm/tegrarcm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TEGRARCM_VERSION = v1.7
-+TEGRARCM_VERSION = v1.8
- TEGRARCM_SITE = $(call github,NVIDIA,tegrarcm,$(TEGRARCM_VERSION))
- TEGRARCM_LICENSE = BSD-3-Clause / NVIDIA Software License (src/miniloader)
- TEGRARCM_LICENSE_FILES = LICENSE
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/oniguruma/0001-fix-cross-compilation.patch | 61 ++++++++++++++++++++++
+ package/oniguruma/Config.in                        |  9 ++++
+ package/oniguruma/oniguruma.hash                   |  3 ++
+ package/oniguruma/oniguruma.mk                     | 15 ++++++
+ 6 files changed, 90 insertions(+)
+ create mode 100644 package/oniguruma/0001-fix-cross-compilation.patch
+ create mode 100644 package/oniguruma/Config.in
+ create mode 100644 package/oniguruma/oniguruma.hash
+ create mode 100644 package/oniguruma/oniguruma.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cea8755104..8230ad6bb7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -826,6 +826,7 @@ F:	package/mongodb/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
++F:	package/oniguruma/
+ F:	package/oprofile/
+ F:	package/pcmanfm/
+ F:	package/python-backcall/
+diff --git a/package/Config.in b/package/Config.in
+index 88bf65b9f2..e617120397 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1771,6 +1771,7 @@ menu "Text and terminal handling"
+ 	source "package/linenoise/Config.in"
+ 	source "package/ncurses/Config.in"
+ 	source "package/newt/Config.in"
++	source "package/oniguruma/Config.in"
+ 	source "package/pcre/Config.in"
+ 	source "package/pcre2/Config.in"
+ 	source "package/popt/Config.in"
+diff --git a/package/oniguruma/0001-fix-cross-compilation.patch b/package/oniguruma/0001-fix-cross-compilation.patch
+new file mode 100644
+index 0000000000..9186cfd625
+--- /dev/null
++++ b/package/oniguruma/0001-fix-cross-compilation.patch
+@@ -0,0 +1,61 @@
++From 39619b1c04640375b2fc2c29991137b741a47976 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 20 Mar 2019 20:33:11 +0100
++Subject: [PATCH] fix cross-compilation
++
++Don't add -I$(includedir) to CPPFLAGS or cross-compilation will fail on:
++
++libtool: compile: /home/fabrice/buildroot/output/host/bin/m68k-linux-gcc -DHAVE_CONFIG_H -I. -I.. -I/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
++-D_FILE_OFFSET_BITS=64 -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-dwarf2-cfi-asm -Wl,-elf2flt -c regparse.c -o regparse.o
++m68k-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/kkos/oniguruma/pull/137]
++---
++ sample/Makefile.am | 2 +-
++ src/Makefile.am    | 2 +-
++ test/Makefile.am   | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/sample/Makefile.am b/sample/Makefile.am
++index fd809fa..320afcf 100644
++--- a/sample/Makefile.am
+++++ b/sample/Makefile.am
++@@ -4,7 +4,7 @@ lib_onig = ../src/libonig.la
++ LDADD  = $(lib_onig)
++ 
++ AM_LDFLAGS  = -L$(prefix)/lib
++-AM_CPPFLAGS = -I$(top_srcdir)/src -I$(includedir)
+++AM_CPPFLAGS = -I$(top_srcdir)/src
++ 
++ TESTS = encode listcap names posix simple sql syntax user_property callout echo count bug_fix
++ 
++diff --git a/src/Makefile.am b/src/Makefile.am
++index ba7807a..1330620 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -2,7 +2,7 @@
++ libname = libonig.la
++ 
++ AM_CFLAGS = -Wall
++-AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir)
+++AM_CPPFLAGS = -I$(top_srcdir)
++ 
++ include_HEADERS = oniguruma.h oniggnu.h
++ 
++diff --git a/test/Makefile.am b/test/Makefile.am
++index c623aa3..67b5d1e 100644
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -3,7 +3,7 @@ lib_onig = ../src/libonig.la
++ 
++ AM_LDFLAGS  = -L$(prefix)/lib
++ AM_CFLAGS = -Wall -Wno-invalid-source-encoding
++-AM_CPPFLAGS = -I$(top_srcdir)/src -I$(includedir)
+++AM_CPPFLAGS = -I$(top_srcdir)/src
++ 
++ if ENABLE_POSIX_API
++ TESTS = test_utf8 testc testp testcu
++-- 
++2.14.1
++
+diff --git a/package/oniguruma/Config.in b/package/oniguruma/Config.in
+new file mode 100644
+index 0000000000..2e8b41c1d6
+--- /dev/null
++++ b/package/oniguruma/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_ONIGURUMA
++	bool "oniguruma"
++	help
++	  Oniguruma is a modern and flexible regular expressions
++	  library. It encompasses features from different regular
++	  expression implementations that traditionally exist in
++	  different languages.
++
++	  https://github.com/kkos/oniguruma
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+new file mode 100644
+index 0000000000..4d3392c972
+--- /dev/null
++++ b/package/oniguruma/oniguruma.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  733a91e257c20cb17b81596db48fd0fbd2e0074fe922ae4c2bc4fefcec110aae  oniguruma-6.9.1.tar.gz
++sha256  84e55812150474adf4170d4656744dfcc5f260ff7602e447a70bf13c56203e4b  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+new file mode 100644
+index 0000000000..1f992c2b94
+--- /dev/null
++++ b/package/oniguruma/oniguruma.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# oniguruma
++#
++################################################################################
++
++ONIGURUMA_VERSION = 6.9.1
++ONIGURUMA_SITE = $(call github,kkos,oniguruma,v$(ONIGURUMA_VERSION))
++ONIGURUMA_LICENSE = BSD-2-Clause
++ONIGURUMA_LICENSE_FILES = COPYING
++# From git
++ONIGURUMA_AUTORECONF = YES
++ONIGURUMA_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-2.20.1
+2.14.1
