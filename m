@@ -1,44 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 31 Mar 2019 17:12:06 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/jq: add oniguruma optional dependency
-In-Reply-To: <20190331151206.23277-1-fontaine.fabrice@gmail.com>
-References: <20190331151206.23277-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190331151206.23277-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Mar 2019 17:34:29 +0200
+Subject: [Buildroot] [PATCH] package/gettext-tiny: fix build of libintl.a
+Message-ID: <20190331153429.7380-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since libintl.a can be pulled in during the build of other shared libs,
+it must be compiled with -fPIC, which is what gettext-tiny's Makefile
+would do.
+
+Since we provide our own CFLAGS, they override those in the Makefile.
+
+Fix that by ensurign that -fPIC is used when building the static
+library.
+
+Fixes:
+    http://autobuild.buildroot.org/results/a38/a3800fd4ef2536cc2b82d38ea752baa2b227bc64/
+
+Also, since GETTEXT_TINY_OPTS is used only once and contains a single
+definition, get rid of it altogether.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Don't enable oniguruma on host-jq
+ package/gettext-tiny/gettext-tiny.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/jq/jq.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index aebe8c86e4..bf96f0cecb 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -17,8 +17,15 @@ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
- HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 3fe2de30b6..c9052d0d7c 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -9,7 +9,6 @@ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VER
+ GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+ GETTEXT_TINY_INSTALL_STAGING = YES
+ GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
+-GETTEXT_TINY_OPTS = LIBINTL=NOOP
  
- # jq explicitly enables maintainer mode, which we don't need/want
--JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
-+JQ_CONF_OPTS += --disable-maintainer-mode
- HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
+ GETTEXT_TINY_PROVIDES = gettext
  
-+ifeq ($(BR2_PACKAGE_ONIGURUMA),y)
-+JQ_DEPENDENCIES += oniguruma
-+JQ_CONF_OPTS += --with-oniguruma
-+else
-+JQ_CONF_OPTS += --without-oniguruma
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+@@ -56,7 +55,8 @@ endif
+ define HOST_GETTEXT_TINY_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		$(GETTEXT_TINY_OPTS)
++		CFLAGS="$(HOST_CFLAGS) -fPIC" \
++		LIBINTL=NOOP
+ 
+ 	cp $(@D)/extra/gettextize.in $(@D)/gettextize
+ 
 -- 
 2.14.1
