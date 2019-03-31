@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 15:23:45 +0200
-Subject: [Buildroot] [git commit] package/gettext-tiny: take GNU gettext
- from our own directory
-Message-ID: <20190331132103.673BF82B58@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Mar 2019 15:27:38 +0200
+Subject: [Buildroot] [PATCH v2,
+ 2/2] package/jq: add oniguruma optional dependency
+In-Reply-To: <20190331151432.52efa3b8@windsurf>
+References: <20190320203617.27496-1-fontaine.fabrice@gmail.com>
+ <20190320203617.27496-2-fontaine.fabrice@gmail.com>
+ <20190331151432.52efa3b8@windsurf>
+Message-ID: <CAPi7W82rGMuVdjVtgS2DbuqoFg2RWtU5YYembKoXiBot3P=01Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=038dda0cd5e65481c57957d8f72410711e77c665
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Even though gettext-tiny re-uses the gettext-gnu source code, it makes
-a separate download in the gettext-tiny download folder, so use this
-one, and not the one from the gettext-gnu download folder, which may
-not exist.
+Le dim. 31 mars 2019 ? 15:14, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Wed, 20 Mar 2019 21:36:17 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> >  # jq explicitly enables maintainer mode, which we don't need/want
+> > -JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
+> > -HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
+> > +JQ_CONF_OPTS += --disable-maintainer-mode
+> > +HOST_JQ_CONF_OPTS += --disable-maintainer-mode
+> > +
+> > +HOST_JQ_CONF_OPTS += --with-oniguruma
+> > +HOST_JQ_DEPENDENCIES += host-oniguruma
+>
+> What decided you to add onigurama as a mandatory dependency for
+> host-jq ? What feature does it bring ? Do we really need it as a
+> mandatory dependency ?
+I decided to keep it because it's enabled by default in upstream but I
+can send a v2 without it as no package depends on this feature.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/4e289f30bc6e58ad81611e8e04779134dcbe1241/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gettext-tiny/gettext-tiny.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 9efd798451..a555fbef50 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -35,7 +35,7 @@ HOST_GETTEXT_TINY_EXTRA_DOWNLOADS = $(GETTEXT_GNU_SITE)/$(GETTEXT_GNU_SOURCE)
- define HOST_GETTEXT_TINY_EXTRACT_GNU_GETTEXT
- 	mkdir -p $(@D)/gettext-gnu
- 	$(call suitable-extractor,$(GETTEXT_GNU_SOURCE)) \
--		$(GETTEXT_GNU_DL_DIR)/$(GETTEXT_GNU_SOURCE) | \
-+		$(GETTEXT_TINY_DL_DIR)/$(GETTEXT_GNU_SOURCE) | \
- 		$(TAR) --strip-components=1 -C $(@D)/gettext-gnu $(TAR_OPTIONS) -
- endef
- HOST_GETTEXT_TINY_POST_EXTRACT_HOOKS += HOST_GETTEXT_TINY_EXTRACT_GNU_GETTEXT
+Fabrice
