@@ -1,44 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 14:30:00 +0200
-Subject: [Buildroot] [PATCH v4 0/2] add gettext-tiny package
-In-Reply-To: <20190331142907.5b459037@windsurf>
-References: <20190327230831.31468-1-vadim4j@gmail.com>
- <20190331142907.5b459037@windsurf>
-Message-ID: <20190331143000.5ed20d14@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Mar 2019 14:39:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/scons: remove python from SCONS
+In-Reply-To: <20190331142524.71fb464c@windsurf>
+References: <20190331121810.28608-1-fontaine.fabrice@gmail.com>
+ <20190331142524.71fb464c@windsurf>
+Message-ID: <CAPi7W80cGNfGwAoZ-Zxw4jTy4qeSx+xENNQQ+qH7jzmb439J4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Sun, 31 Mar 2019 14:29:07 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Le dim. 31 mars 2019 ? 14:25, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Sun, 31 Mar 2019 14:18:10 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
+> > index ad19802823..64ba647ab0 100644
+> > --- a/package/alljoyn-base/alljoyn-base.mk
+> > +++ b/package/alljoyn-base/alljoyn-base.mk
+> > @@ -11,7 +11,7 @@ ALLJOYN_BASE_SITE = \
+> >  # See https://allseenalliance.org/alliance/ip-policy
+> >  ALLJOYN_BASE_LICENSE = ISC
+> >
+> > -ALLJOYN_BASE_DEPENDENCIES = host-scons alljoyn openssl
+> > +ALLJOYN_BASE_DEPENDENCIES = host-python host-scons alljoyn openssl
+> >  ALLJOYN_BASE_INSTALL_STAGING = YES
+>
+> Hm, don't we have a problem when BR2_PACKAGE_PYTHON3=y ? In this case,
+> scons being a host-python-package, it will be installed for
+> host-python3, i.e in /usr/lib/python3/.../, so how can it then work to
+> call it using python2 ?
+I tested it with the defconfig from the alljoyn autobuild falures
+(which have BR2_PACKAGE_PYTHON3=y) and it works because scons script
+is installed in $(HOST_DIR)/bin/scons and scons libraries are
+installed in $(HOST_DIR)/lib/scons-$(SCONS_VERSION) because we pass
+this path through --install-lib in scons.mk.
+But perhaps you should try to rebuild it too with these defconfigs to
+double-check that I did not miss something.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-> A couple of notes/suggestions:
-> 
->  - It would be nice if you could work with upstream gettext-tiny to
->    make sure gettext-tiny provides everything we need, without the need
->    to bring some files from gettext-gnu.
-> 
->  - The ecryptfs-utils package can probably see its BR2_USE_WCHAR
->    dependency removed. Indeed, when BR2_SYSTEM_ENABLE_NLS is disabled,
->    we use gettext-tiny, and wchar is no longer needed. And
->    BR2_SYSTEM_ENABLE_NLS depends on wchar.
-> 
->  - I have sent a patch for utils/genrandconfig that randomly sets BR2_SYSTEM_ENABLE_NLS=y in the autobuilder configurations, in order to test this situation.
-
-Gah, I hit Ctrl+Enter and it sent the e-mail before I finished. I meant
-to wrap this line, and say:
-
-Thanks a lot for this contribution, it was not trivial, but it's
-definitely a nice improvement!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
