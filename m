@@ -1,54 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 14:42:31 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: Fix paths in libstdc++
- gdb python file
-In-Reply-To: <20190329220445.22941-1-tpiepho@impinj.com>
-References: <20190329220445.22941-1-tpiepho@impinj.com>
-Message-ID: <20190331144231.13d5b9ca@windsurf>
+Date: Sun, 31 Mar 2019 14:47:12 +0200
+Subject: [Buildroot] [git commit] package/quota: add optional netlink
+ dependency
+Message-ID: <20190331124437.2D9D07FDB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Trent,
+commit: https://git.buildroot.net/buildroot/commit/?id=47048e6012278ad69bb3d60d2778ad300276b45f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Mar 2019 22:04:56 +0000
-Trent Piepho <tpiepho@impinj.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quota/quota.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> The python file libstdc++.so.6.0.25-gdb.py contains two paths:
-> pythondir = '/share/gcc-8.2.1/python'
-> libdir = '/arm-linux-gnueabihf/lib'
-> 
-> The latter is the location of the file in the toolchain and the former
-> the location of a python module to be used by gdb.  The python code in
-> the file subtracts libdir from the end of the current
-> libstdc++.so.6.0.25-gdb.py location and appends pythondir, to find the
-> current path to the python module.
-> 
-> Buildroot installs this file into the stage, at which point the paths
-> above are no longer correct.
-> 
-> This patch uses sed to fixup the paths to reflect the installed
-> location, relative to HOST_DIR, and the location of the python module
-> relative to HOST_DIR.
-> 
-> and
-
-And ?
-
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> ---
->  .../toolchain-external-arm-arm.mk                        | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-
-Is this problem specific to the ARM ARM toolchain ? I guess other
-toolchains will have the same file, so probably we want a more generic
-fix ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 46ef243ecc..836baf6071 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -11,6 +11,13 @@ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
+ QUOTA_LIBS = $(TARGET_NLS_LIBS)
+ 
++ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBNL),yy)
++QUOTA_DEPENDENCIES += host-pkgconf dbus libnl
++QUOTA_CONF_OTS += --enable-netlink
++else
++QUOTA_CONF_OPTS += --disable-netlink
++endif
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
+ QUOTA_DEPENDENCIES += host-pkgconf e2fsprogs
+ QUOTA_CONF_OPTS += --enable-ext2direct
