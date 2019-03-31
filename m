@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Mar 2019 19:44:49 +0200
-Subject: [Buildroot] [PATCH 14/14] package/perl-xml-libxml: bump to version
- 2.0134
+Date: Sun, 31 Mar 2019 19:44:46 +0200
+Subject: [Buildroot] [PATCH 11/14] package/perl-net-ping: bump to version
+ 2.72
 In-Reply-To: <20190331174449.1461-1-francois.perrad@gadz.org>
 References: <20190331174449.1461-1-francois.perrad@gadz.org>
-Message-ID: <20190331174449.1461-14-francois.perrad@gadz.org>
+Message-ID: <20190331174449.1461-11-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
- package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
+ package/perl-net-ping/perl-net-ping.hash | 4 ++--
+ package/perl-net-ping/perl-net-ping.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
-index a3f4d5d64..4842f4fec 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.hash
-+++ b/package/perl-xml-libxml/perl-xml-libxml.hash
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
+index c3bff0339..2842827c8 100644
+--- a/package/perl-net-ping/perl-net-ping.hash
++++ b/package/perl-net-ping/perl-net-ping.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    43546fd9a3974f19323f9fb04861ece9 XML-LibXML-2.0132.tar.gz
--sha256 721452e3103ca188f5968ab06d5ba29fe8e00e49f4767790882095050312d476 XML-LibXML-2.0132.tar.gz
-+md5    dce687dd8b7e82d1c359fd74b1852f64 XML-LibXML-2.0134.tar.gz
-+sha256 f0bca4d0c2da35d879fee4cd13f352014186cedab27ab5e191f39b5d7d4f46cf XML-LibXML-2.0134.tar.gz
+-md5    58110451d15d27b46ebc6a53f1697ff1 Net-Ping-2.71.tar.gz
+-sha256 0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f Net-Ping-2.71.tar.gz
++md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
++sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
  
  # computed by scancpan
- sha256 5046a7ec515cc1542beafdf2eadeeff24cc221fc3fde9913dd144fd263ae6100 LICENSE
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 3218d34d5..23d3e988f 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+ sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
+index 5e8f53be1..b422c4eab 100644
+--- a/package/perl-net-ping/perl-net-ping.mk
++++ b/package/perl-net-ping/perl-net-ping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_XML_LIBXML_VERSION = 2.0132
-+PERL_XML_LIBXML_VERSION = 2.0134
- PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
- PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
+-PERL_NET_PING_VERSION = 2.71
++PERL_NET_PING_VERSION = 2.72
+ PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
+ PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
 -- 
 2.17.1
