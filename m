@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 13:55:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/thttpd: security bump to
- version 2.29
-In-Reply-To: <20190330154631.28343-1-fontaine.fabrice@gmail.com>
-References: <20190330154631.28343-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190331135555.16f9d2bc@windsurf>
+Date: Sun, 31 Mar 2019 13:55:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: security bump to version
+ 1.7.3
+In-Reply-To: <20190330174249.30431-1-bernd.kuhls@t-online.de>
+References: <20190330174249.30431-1-bernd.kuhls@t-online.de>
+Message-ID: <20190331135559.7595cb76@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 30 Mar 2019 16:46:31 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 30 Mar 2019 18:42:49 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> - Switch site to "real" upstream instead of debian as debian does not
->   have latest version
-> - Drop patch (not needed anymore as getline was renamed in my_getline)
-> - Add hash for license file
-> - Fix CVE-2013-0348 and CVE-2017-17663
+> Changelog: https://wiki.znc.in/ChangeLog/1.7.3
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Fixes CVE-2019-9917:
+> http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9917
+> - ZNC before 1.7.3-rc1 allows an existing remote user to cause a Denial
+>   of Service (crash) via invalid encoding.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/thttpd/0001-getline.patch | 26 --------------------------
->  package/thttpd/thttpd.hash        |  6 +++---
->  package/thttpd/thttpd.mk          | 16 ++--------------
->  3 files changed, 5 insertions(+), 43 deletions(-)
->  delete mode 100644 package/thttpd/0001-getline.patch
+>  package/znc/znc.hash | 2 +-
+>  package/znc/znc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
