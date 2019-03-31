@@ -1,31 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 14:21:06 +0200
-Subject: [Buildroot] [PATCH] utils/genrandconfig: test configurations with
- BR2_SYSTEM_ENABLE_NLS
-Message-ID: <20190331122106.4090-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Mar 2019 14:25:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/scons: remove python from SCONS
+In-Reply-To: <20190331121810.28608-1-fontaine.fabrice@gmail.com>
+References: <20190331121810.28608-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190331142524.71fb464c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/genrandconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Hello Fabrice,
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index a2190d6d25..6cb1bed214 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -360,6 +360,8 @@ def gen_config(args):
-         configlines.append("BR2_PACKAGE_PYTHON_PY_ONLY=y\n")
-     if randint(0, 5) == 0:
-         configlines.append("BR2_OPTIMIZE_2=y\n")
-+    if randint(0, 4) == 0:
-+        configlines.append("BR2_SYSTEM_ENABLE_NLS=y\n")
- 
-     # Write out the configuration file
-     if not os.path.exists(args.outputdir):
+On Sun, 31 Mar 2019 14:18:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
+> index ad19802823..64ba647ab0 100644
+> --- a/package/alljoyn-base/alljoyn-base.mk
+> +++ b/package/alljoyn-base/alljoyn-base.mk
+> @@ -11,7 +11,7 @@ ALLJOYN_BASE_SITE = \
+>  # See https://allseenalliance.org/alliance/ip-policy
+>  ALLJOYN_BASE_LICENSE = ISC
+>  
+> -ALLJOYN_BASE_DEPENDENCIES = host-scons alljoyn openssl
+> +ALLJOYN_BASE_DEPENDENCIES = host-python host-scons alljoyn openssl
+>  ALLJOYN_BASE_INSTALL_STAGING = YES
+
+Hm, don't we have a problem when BR2_PACKAGE_PYTHON3=y ? In this case,
+scons being a host-python-package, it will be installed for
+host-python3, i.e in /usr/lib/python3/.../, so how can it then work to
+call it using python2 ?
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
