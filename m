@@ -1,9 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Mar 2019 19:44:39 +0200
-Subject: [Buildroot] [PATCH 04/14] package/perl-dbi: bump to version 1.642
+Date: Sun, 31 Mar 2019 19:44:40 +0200
+Subject: [Buildroot] [PATCH 05/14] package/perl-file-slurp: bump to version
+ 9999.26
 In-Reply-To: <20190331174449.1461-1-francois.perrad@gadz.org>
 References: <20190331174449.1461-1-francois.perrad@gadz.org>
-Message-ID: <20190331174449.1461-4-francois.perrad@gadz.org>
+Message-ID: <20190331174449.1461-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-dbi/perl-dbi.hash | 4 ++--
- package/perl-dbi/perl-dbi.mk   | 2 +-
+ package/perl-file-slurp/perl-file-slurp.hash | 4 ++--
+ package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-dbi/perl-dbi.hash b/package/perl-dbi/perl-dbi.hash
-index 1d0b7e9ad..100d07038 100644
---- a/package/perl-dbi/perl-dbi.hash
-+++ b/package/perl-dbi/perl-dbi.hash
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
+index 4ed670ec7..922f08564 100644
+--- a/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    e77fd37fcf77fc88fde029c1b75ded54 DBI-1.641.tar.gz
--sha256 5509e532cdd0e3d91eda550578deaac29e2f008a12b64576e8c261bb92e8c2c1 DBI-1.641.tar.gz
-+md5    f2ba18b5cea1c8cb322a62be0a847f3d DBI-1.642.tar.gz
-+sha256 3f2025023a56286cebd15cb495e36ccd9b456c3cc229bf2ce1f69e9ebfc27f5d DBI-1.642.tar.gz
+-md5    52afbe79bbf2b86c11ac4986030a9275 File-Slurp-9999.25.tar.gz
+-sha256 c7ea97bae61bc68404476ce69277f6f796d31ab58c9c40ee390d9d5a1c5ce3c1 File-Slurp-9999.25.tar.gz
++md5    bc0b52b58c369b167f12e5f6abb0cf42 File-Slurp-9999.26.tar.gz
++sha256 1e278d25df46310a8d2cd0aca9b8c2703f1eae838a99a8cb91e96950e88e0930 File-Slurp-9999.26.tar.gz
  
  # computed by scancpan
- sha256 33453c8b0d8d474a42669ac702a13c20f39c91a34b3df4e6ca778fc2f0f711c7 LICENSE
-diff --git a/package/perl-dbi/perl-dbi.mk b/package/perl-dbi/perl-dbi.mk
-index 835e8bdfe..3b824d748 100644
---- a/package/perl-dbi/perl-dbi.mk
-+++ b/package/perl-dbi/perl-dbi.mk
+ sha256 87744d1995d9a41ef32478c98f08167a13a1e09d96c3bb00ade315e3290facef README.md
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index 4ceba25f5..5ec770a3e 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DBI_VERSION = 1.641
-+PERL_DBI_VERSION = 1.642
- PERL_DBI_SOURCE = DBI-$(PERL_DBI_VERSION).tar.gz
- PERL_DBI_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TI/TIMB
- PERL_DBI_LICENSE = Artistic or GPL-1.0+
+-PERL_FILE_SLURP_VERSION = 9999.25
++PERL_FILE_SLURP_VERSION = 9999.26
+ PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+ PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+ PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.17.1
