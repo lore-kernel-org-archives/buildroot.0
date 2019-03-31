@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 13:59:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vdr: bump to version 2.4.0
-In-Reply-To: <20190330144350.26730-1-fontaine.fabrice@gmail.com>
-References: <20190330144350.26730-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190331135930.414543bd@windsurf>
+Date: Sun, 31 Mar 2019 14:01:36 +0200
+Subject: [Buildroot] [git commit] utils/scancpan: add a check of XS
+ dependencies in generated test
+Message-ID: <20190331115901.00C9A8A539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 30 Mar 2019 15:43:50 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f4a30ae5bd06357b1c1cab96a8d3708896451dea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Add a dependency to glibc for execinfo.h and drop first patch (as it
->   was useful only for uclibc)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/vdr/0001-getloadavg.patch             | 55 -------------------
->  ...{0002-libjpeg.patch => 0001-libjpeg.patch} |  0
->  package/vdr/Config.in                         |  6 +-
->  package/vdr/vdr.hash                          |  7 ++-
->  package/vdr/vdr.mk                            |  4 +-
->  5 files changed, 9 insertions(+), 63 deletions(-)
->  delete mode 100644 package/vdr/0001-getloadavg.patch
->  rename package/vdr/{0002-libjpeg.patch => 0001-libjpeg.patch} (100%)
+The XS modules have a high propability to fail (compared to Pure Perl modules),
+so it is valuable to check XS dependencies before the check of the main module.
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scancpan | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scancpan b/utils/scancpan
+index 8073ad1978..0e7585e312 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -845,6 +845,14 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{};
+         say {$fh} qq{    def test_run(self):};
+         say {$fh} qq{        self.login()};
++        foreach my $dep (sort grep { $is_xs{$_} } @indirect) {
++            $dep =~ s|-|::|g;
++            say {$fh} qq{        self.module_test("${dep}")};
++        }
++        foreach my $dep (sort grep { $is_xs{$_} } @{$deps_runtime{$distname}}) {
++            $dep =~ s|-|::|g;
++            say {$fh} qq{        self.module_test("${dep}")};
++        }
+         say {$fh} qq{        self.module_test("${modname}")};
+         close $fh;
+     }
