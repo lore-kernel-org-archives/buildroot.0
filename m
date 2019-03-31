@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 15:17:01 +0200
-Subject: [Buildroot] [git commit] system/skeleton: remove password
- expiration from shadow
-In-Reply-To: <20190320220327.47BF2814A6@busybox.osuosl.org>
-References: <20190320220327.47BF2814A6@busybox.osuosl.org>
-Message-ID: <20190331151701.4de2bc12@windsurf>
+Date: Sun, 31 Mar 2019 15:23:45 +0200
+Subject: [Buildroot] [git commit] package/gettext-tiny: take GNU gettext
+ from our own directory
+Message-ID: <20190331132103.673BF82B58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=038dda0cd5e65481c57957d8f72410711e77c665
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Mar 2019 23:06:29 +0100
-Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
+Even though gettext-tiny re-uses the gettext-gnu source code, it makes
+a separate download in the gettext-tiny download folder, so use this
+one, and not the one from the gettext-gnu download folder, which may
+not exist.
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=be8d11c7e55d8dfe395774c04a7a35b949aa6d97
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> The fields in /etc/shadow were set as follows:
-> 
-> root::10933:0:99999:7:::
-> 
-> This sets the date of last password change to Jan 1, 2000, the minimum
-> password age to 0 days, the maximum password age to near-infinity, and a
-> warning period of 7 days. In practice, this means the password never
-> expires. So all of this is quite useless.
-> 
-> On the other hand, mkusers creates lines without all of these options.
-> It just sets ::::: which disables password expiration completely.
-> 
-> To make things consistent, do the same for the skeleton entries.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
 
-It seems like you applied your own patch here, but without replying to
-your original e-mail to say it was applied, and the patch state in
-patchwork was also not set to Accepted. Seems like you perhaps pushed
-it by mistake.
+  http://autobuild.buildroot.net/results/4e289f30bc6e58ad81611e8e04779134dcbe1241/
 
-Anyway, no big deal, I was about to apply it, and that's what made me
-discover that it was already applied :)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gettext-tiny/gettext-tiny.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 9efd798451..a555fbef50 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -35,7 +35,7 @@ HOST_GETTEXT_TINY_EXTRA_DOWNLOADS = $(GETTEXT_GNU_SITE)/$(GETTEXT_GNU_SOURCE)
+ define HOST_GETTEXT_TINY_EXTRACT_GNU_GETTEXT
+ 	mkdir -p $(@D)/gettext-gnu
+ 	$(call suitable-extractor,$(GETTEXT_GNU_SOURCE)) \
+-		$(GETTEXT_GNU_DL_DIR)/$(GETTEXT_GNU_SOURCE) | \
++		$(GETTEXT_TINY_DL_DIR)/$(GETTEXT_GNU_SOURCE) | \
+ 		$(TAR) --strip-components=1 -C $(@D)/gettext-gnu $(TAR_OPTIONS) -
+ endef
+ HOST_GETTEXT_TINY_POST_EXTRACT_HOOKS += HOST_GETTEXT_TINY_EXTRACT_GNU_GETTEXT
