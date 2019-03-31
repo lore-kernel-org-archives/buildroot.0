@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Mar 2019 19:44:37 +0200
-Subject: [Buildroot] [PATCH 02/14] package/perl-data-uuid: bump to version
- 1.224
+Date: Sun, 31 Mar 2019 19:44:38 +0200
+Subject: [Buildroot] [PATCH 03/14] package/perl-date-manip: bump to version
+ 6.76
 In-Reply-To: <20190331174449.1461-1-francois.perrad@gadz.org>
 References: <20190331174449.1461-1-francois.perrad@gadz.org>
-Message-ID: <20190331174449.1461-2-francois.perrad@gadz.org>
+Message-ID: <20190331174449.1461-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-data-uuid/perl-data-uuid.hash | 4 ++--
- package/perl-data-uuid/perl-data-uuid.mk   | 2 +-
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-data-uuid/perl-data-uuid.hash b/package/perl-data-uuid/perl-data-uuid.hash
-index 5086936d4..280567177 100644
---- a/package/perl-data-uuid/perl-data-uuid.hash
-+++ b/package/perl-data-uuid/perl-data-uuid.hash
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index b290e8ea2..ca4263fd4 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7619929e8fe205a7fb83bc1c29ecbf99 Data-UUID-1.221.tar.gz
--sha256 3cc7b2a3a7b74b45a059e013f7fd878078500ea4b7269036f84556b022078667 Data-UUID-1.221.tar.gz
-+md5    71510bbcce760c394591fca83a9b5e6d Data-UUID-1.224.tar.gz
-+sha256 c958c17502bbef5eccf40c040874895747f7f9b9f9e5192c18688370981bf47c Data-UUID-1.224.tar.gz
+-md5    d922d5fe4a00521dc171ac3ee65a9d61 Date-Manip-6.75.tar.gz
+-sha256 c1fbcfbe2ab1a84e57f191807e87c97985da00926f64d1aae598c8756acbb67d Date-Manip-6.75.tar.gz
++md5    a539820a8725e79c67826158a6b940a1 Date-Manip-6.76.tar.gz
++sha256 1c87c78c03e3479e3b695952c0a5c11d3593ca9a5340dfb14d0be3d3e7ad63a8 Date-Manip-6.76.tar.gz
  
  # computed by scancpan
- sha256 0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb LICENSE
-diff --git a/package/perl-data-uuid/perl-data-uuid.mk b/package/perl-data-uuid/perl-data-uuid.mk
-index 6ce393960..00dccdb7e 100644
---- a/package/perl-data-uuid/perl-data-uuid.mk
-+++ b/package/perl-data-uuid/perl-data-uuid.mk
+ sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index cc668184e..cc999b828 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATA_UUID_VERSION = 1.221
-+PERL_DATA_UUID_VERSION = 1.224
- PERL_DATA_UUID_SOURCE = Data-UUID-$(PERL_DATA_UUID_VERSION).tar.gz
- PERL_DATA_UUID_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
- # The license is documented at
+-PERL_DATE_MANIP_VERSION = 6.75
++PERL_DATE_MANIP_VERSION = 6.76
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.17.1
