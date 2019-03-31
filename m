@@ -1,7 +1,8 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Mar 2019 18:03:56 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2019.78
-Message-ID: <20190331160356.29392-1-francois.perrad@gadz.org>
+Date: Sun, 31 Mar 2019 19:44:36 +0200
+Subject: [Buildroot] [PATCH 01/14] package/perl-class-inspector: bump to
+ version 1.34
+Message-ID: <20190331174449.1461-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,97 +11,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...here-TTY-modes-weren-t-reset-for-cli.patch | 56 -------------------
- package/dropbear/dropbear.hash                |  2 +-
- package/dropbear/dropbear.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
- delete mode 100644 package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
+ package/perl-class-inspector/perl-class-inspector.hash | 6 +++---
+ package/perl-class-inspector/perl-class-inspector.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch b/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
-deleted file mode 100644
-index 9967aebc9..000000000
---- a/package/dropbear/0001-Fix-regression-where-TTY-modes-weren-t-reset-for-cli.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 7bc6280613f5ab4ee86c14c779739070e5784dfe Mon Sep 17 00:00:00 2001
--From: Matt Johnston <matt@ucc.asn.au>
--Date: Sun, 24 Mar 2019 20:41:02 +0800
--Subject: [PATCH] Fix regression where TTY modes weren't reset for client
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- cli-chansession.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/cli-chansession.c b/cli-chansession.c
--index 8b72e27..cfd3401 100644
----- a/cli-chansession.c
--+++ b/cli-chansession.c
--@@ -35,7 +35,7 @@
-- #include "chansession.h"
-- #include "agentfwd.h"
-- 
---static void cli_cleanupchansess(const struct Channel *channel);
--+static void cli_closechansess(const struct Channel *channel);
-- static int cli_initchansess(struct Channel *channel);
-- static void cli_chansessreq(struct Channel *channel);
-- static void send_chansess_pty_req(const struct Channel *channel);
--@@ -51,8 +51,8 @@ const struct ChanType clichansess = {
-- 	cli_initchansess, /* inithandler */
-- 	NULL, /* checkclosehandler */
-- 	cli_chansessreq, /* reqhandler */
---	NULL, /* closehandler */
---	cli_cleanupchansess, /* cleanup */
--+	cli_closechansess, /* closehandler */
--+	NULL, /* cleanup */
-- };
-- 
-- static void cli_chansessreq(struct Channel *channel) {
--@@ -84,7 +84,7 @@ out:
-- 	
-- 
-- /* If the main session goes, we close it up */
---static void cli_cleanupchansess(const struct Channel *UNUSED(channel)) {
--+static void cli_closechansess(const struct Channel *UNUSED(channel)) {
-- 	cli_tty_cleanup(); /* Restore tty modes etc */
-- 
-- 	/* This channel hasn't gone yet, so we have > 1 */
--@@ -388,8 +388,8 @@ static const struct ChanType cli_chan_netcat = {
-- 	cli_init_netcat, /* inithandler */
-- 	NULL,
-- 	NULL,
--+	cli_closechansess,
-- 	NULL,
---	cli_cleanupchansess
-- };
-- 
-- void cli_send_netcat_request() {
---- 
--2.11.0
--
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index dcd85aa53..aa0e80a20 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256 d91f78ebe633be1d071fd1b7e5535b9693794048b019e9f4bea257e1992b458d dropbear-2019.77.tar.bz2
-+sha256 525965971272270995364a0eb01f35180d793182e63dd0b0c3eb0292291644a4 dropbear-2019.78.tar.bz2
+diff --git a/package/perl-class-inspector/perl-class-inspector.hash b/package/perl-class-inspector/perl-class-inspector.hash
+index 181c09ace..fcbefdcbf 100644
+--- a/package/perl-class-inspector/perl-class-inspector.hash
++++ b/package/perl-class-inspector/perl-class-inspector.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    db471d6ecf47fa054726553319b7c34f Class-Inspector-1.32.tar.gz
+-sha256 cefadc8b5338e43e570bc43f583e7c98d535c17b196bcf9084bb41d561cc0535 Class-Inspector-1.32.tar.gz
++md5    657ec026aae1b28ee9368849fea8be75 Class-Inspector-1.34.tar.gz
++sha256 fe9a86dcb3ccc7a99d6865e6b674a14d20164f76bd84f2eb43aafcc6bf1cf0d8 Class-Inspector-1.34.tar.gz
  
- # License file, locally computed
- sha256 cfa32d49e9022265375e533a4a5ef9e37d4aaa604119d612c46816aa1e59fe52 LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index ea3fe4c98..e10c85160 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+ # computed by scancpan
+-sha256 3ed0185f73a0570b72a2dc95c6bde500dc800c6f778ccbd688df4f88e6e65232 LICENSE
++sha256 401fe9c98bdb5707df71447fb93141f8cb2d85337d45505f5ae50a776a3f6666 LICENSE
+diff --git a/package/perl-class-inspector/perl-class-inspector.mk b/package/perl-class-inspector/perl-class-inspector.mk
+index c265194f1..52e2032b5 100644
+--- a/package/perl-class-inspector/perl-class-inspector.mk
++++ b/package/perl-class-inspector/perl-class-inspector.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2019.77
-+DROPBEAR_VERSION = 2019.78
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+-PERL_CLASS_INSPECTOR_VERSION = 1.32
++PERL_CLASS_INSPECTOR_VERSION = 1.34
+ PERL_CLASS_INSPECTOR_SOURCE = Class-Inspector-$(PERL_CLASS_INSPECTOR_VERSION).tar.gz
+ PERL_CLASS_INSPECTOR_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PL/PLICEASE
+ PERL_CLASS_INSPECTOR_LICENSE = Artistic or GPL-1.0+
 -- 
 2.17.1
