@@ -1,28 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 31 Mar 2019 19:37:37 +0000
-Subject: [Buildroot] [Bug 11731] buildroot 2019.02 systemd - long start
- Network name resolution service
-In-Reply-To: <bug-11731-163@https.bugs.busybox.net/>
-References: <bug-11731-163@https.bugs.busybox.net/>
-Message-ID: <bug-11731-163-CMMTP5ERp8@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 31 Mar 2019 22:20:29 +0200
+Subject: [Buildroot] [PATCH] package/uboot-tools: fix
+ CONFIG_FIT_SIGNATURE_MAX_SIZE build failure
+Message-ID: <20190331202029.97561-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11731
+When CONFIG_FIT_SIGNATURE is enabled for building,
+CONFIG_FIT_SIGNATURE_MAX_SIZE must be defined since it's a dependency of
+CONFIG_FIT_SIGNATURE. Using uboot Kconfig, CONFIG_GIT_SIGNATURE_MAX_SIZE
+is set to its default(0x10000000) according to Kconfig, but Buildroot
+doesn't use uboot Kconfig, it passes directly CONFIG_* as make
+arguments.
 
-Alexey <skif@skif-web.ru> changed:
+Append CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 after
+CONFIG_FIT_SIGNATURE=y to UBOOT_TOOLS_MAKE_OPTS and
+HOST_UBOOT_TOOLS_MAKE_OPTS.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|unspecified                 |2019.02
+Fixes:
+http://autobuild.buildroot.net/results/612/6126848e08d9273911e7d5b0151847aa2293ed87/
+http://autobuild.buildroot.net/results/b49/b49ae4977b605ed24783161618f383551f1662b8/
 
---- Comment #1 from Alexey <skif@skif-web.ru> ---
-Updates:
-Bug occur only if PAM enabled
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/uboot-tools/uboot-tools.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index d7a631fdc8..2966ccf6d0 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -28,7 +28,7 @@ UBOOT_TOOLS_DEPENDENCIES += dtc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+-UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y
++UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
+ UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
+ endif
+ 
+@@ -91,7 +91,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+-HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y
++HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
+ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
+ endif
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
