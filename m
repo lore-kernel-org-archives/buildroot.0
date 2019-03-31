@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 15:02:07 +0200
-Subject: [Buildroot] [git commit] package/rpm: add optional libcap dependency
-Message-ID: <20190331130146.1DB5F804FB@busybox.osuosl.org>
+Date: Sun, 31 Mar 2019 15:02:16 +0200
+Subject: [Buildroot] [git commit] package/rpm: fix threads comment
+Message-ID: <20190331130146.2BC2B88125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=951831b46f57c820fe4f7440f3870a9446e4bc82
+commit: https://git.buildroot.net/buildroot/commit/?id=f1940ef66d7cf85259744f86b97bfee271416a4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+rpm depends on pthreads because it uses it, not because of beecrypt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpm/rpm.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/rpm/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 78f429f8b6..0eb6e7f3c7 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -25,7 +25,6 @@ RPM_CONF_OPTS = \
- 	--disable-rpath \
- 	--with-external-db \
- 	--with-gnu-ld \
--	--without-cap \
- 	--without-hackingdocs \
- 	--without-lua
- 
-@@ -36,6 +35,13 @@ else
- RPM_CONF_OPTS += --without-acl
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+RPM_DEPENDENCIES += libcap
-+RPM_CONF_OPTS += --with-cap
-+else
-+RPM_CONF_OPTS += --without-cap
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBNSS),y)
- RPM_DEPENDENCIES += libnss
- RPM_CONF_OPTS += --with-crypto=nss
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index aa857ef2be..58451a9fcc 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_RPM
+ 	bool "rpm"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_BEECRYPT if !BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_BERKELEYDB
