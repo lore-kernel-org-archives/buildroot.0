@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Mar 2019 19:44:46 +0200
-Subject: [Buildroot] [PATCH 11/14] package/perl-net-ping: bump to version
- 2.72
+Date: Sun, 31 Mar 2019 19:44:44 +0200
+Subject: [Buildroot] [PATCH 09/14] package/perl-lwp-mediatypes: bump to
+ version 6.04
 In-Reply-To: <20190331174449.1461-1-francois.perrad@gadz.org>
 References: <20190331174449.1461-1-francois.perrad@gadz.org>
-Message-ID: <20190331174449.1461-11-francois.perrad@gadz.org>
+Message-ID: <20190331174449.1461-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-ping/perl-net-ping.hash | 4 ++--
- package/perl-net-ping/perl-net-ping.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-lwp-mediatypes/Config.in                | 2 +-
+ package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash | 6 +++---
+ package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
-index c3bff0339..2842827c8 100644
---- a/package/perl-net-ping/perl-net-ping.hash
-+++ b/package/perl-net-ping/perl-net-ping.hash
+diff --git a/package/perl-lwp-mediatypes/Config.in b/package/perl-lwp-mediatypes/Config.in
+index 488109014..c1f58a6f3 100644
+--- a/package/perl-lwp-mediatypes/Config.in
++++ b/package/perl-lwp-mediatypes/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_PERL_LWP_MEDIATYPES
+ 	help
+ 	  guess media type for a file or a URL.
+ 
+-	  https://metacpan.org/release/LWP-MediaTypes
++	  https://github.com/libwww-perl/lwp-mediatypes
+diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
+index b459bb066..e125c0d57 100644
+--- a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
++++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    58110451d15d27b46ebc6a53f1697ff1 Net-Ping-2.71.tar.gz
--sha256 0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f Net-Ping-2.71.tar.gz
-+md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
-+sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
+-md5    8c5f25fb64b974d22aff424476ba13c9 LWP-MediaTypes-6.02.tar.gz
+-sha256 18790b0cc5f0a51468495c3847b16738f785a2d460403595001e0b932e5db676 LWP-MediaTypes-6.02.tar.gz
++md5    84b799a90c0d2ce52897a7cb4c0478d0 LWP-MediaTypes-6.04.tar.gz
++sha256 8f1bca12dab16a1c2a7c03a49c5e58cce41a6fec9519f0aadfba8dad997919d9 LWP-MediaTypes-6.04.tar.gz
  
  # computed by scancpan
- sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
-index 5e8f53be1..b422c4eab 100644
---- a/package/perl-net-ping/perl-net-ping.mk
-+++ b/package/perl-net-ping/perl-net-ping.mk
-@@ -4,7 +4,7 @@
+-sha256 0844071ccbc184e7376c61051986c0b7bc3f0e6094c052ceaafd3d057673c17d README
++sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENSE
+diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
+index 3ba2abc89..687a84427 100644
+--- a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
++++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_NET_PING_VERSION = 2.71
-+PERL_NET_PING_VERSION = 2.72
- PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
- PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
+-PERL_LWP_MEDIATYPES_VERSION = 6.02
++PERL_LWP_MEDIATYPES_VERSION = 6.04
+ PERL_LWP_MEDIATYPES_SOURCE = LWP-MediaTypes-$(PERL_LWP_MEDIATYPES_VERSION).tar.gz
+-PERL_LWP_MEDIATYPES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_LWP_MEDIATYPES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LWP_MEDIATYPES_LICENSE = Artistic or GPL-1.0+
+-PERL_LWP_MEDIATYPES_LICENSE_FILES = README
++PERL_LWP_MEDIATYPES_LICENSE_FILES = LICENSE
+ PERL_LWP_MEDIATYPES_DISTNAME = LWP-MediaTypes
+ 
+ $(eval $(perl-package))
 -- 
 2.17.1
