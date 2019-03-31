@@ -1,25 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 14:03:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 19.0.1
-In-Reply-To: <20190329190029.28053-1-bernd.kuhls@t-online.de>
-References: <20190329190029.28053-1-bernd.kuhls@t-online.de>
-Message-ID: <20190331140353.0e6599f1@windsurf>
+Date: Sun, 31 Mar 2019 14:03:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xcompmgr: bump
+ version to 1.1.8
+In-Reply-To: <20190329190131.28280-1-bernd.kuhls@t-online.de>
+References: <20190329190131.28280-1-bernd.kuhls@t-online.de>
+Message-ID: <20190331140356.02b97085@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 Mar 2019 20:00:29 +0100
+On Fri, 29 Mar 2019 20:01:31 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Added hashes provided by upstream and license hash.
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
->  package/mesa3d/mesa3d.hash               | 10 +++++-----
->  package/mesa3d/mesa3d.mk                 |  2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+>  package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash | 9 +++++++--
+>  package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk   | 2 +-
+>  2 files changed, 8 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
