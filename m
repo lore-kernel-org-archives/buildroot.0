@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 21:16:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tegrarcm: bump to version 1.8
-In-Reply-To: <20190331145647.24516-1-fontaine.fabrice@gmail.com>
-References: <20190331145647.24516-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190331211641.42d3e848@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 31 Mar 2019 19:37:37 +0000
+Subject: [Buildroot] [Bug 11731] buildroot 2019.02 systemd - long start
+ Network name resolution service
+In-Reply-To: <bug-11731-163@https.bugs.busybox.net/>
+References: <bug-11731-163@https.bugs.busybox.net/>
+Message-ID: <bug-11731-163-CMMTP5ERp8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Mar 2019 16:56:47 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=11731
 
-> - Remove patch (already in version)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...me-cryptopp-is-system-wide-installed.patch | 114 ------------------
->  package/tegrarcm/tegrarcm.hash                |   3 +-
->  package/tegrarcm/tegrarcm.mk                  |   2 +-
->  3 files changed, 3 insertions(+), 116 deletions(-)
->  delete mode 100644 package/tegrarcm/0001-Don-t-assume-cryptopp-is-system-wide-installed.patch
+Alexey <skif@skif-web.ru> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Version|unspecified                 |2019.02
 
-Thomas
+--- Comment #1 from Alexey <skif@skif-web.ru> ---
+Updates:
+Bug occur only if PAM enabled
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
