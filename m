@@ -1,55 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 31 Mar 2019 14:39:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/scons: remove python from SCONS
-In-Reply-To: <20190331142524.71fb464c@windsurf>
-References: <20190331121810.28608-1-fontaine.fabrice@gmail.com>
- <20190331142524.71fb464c@windsurf>
-Message-ID: <CAPi7W80cGNfGwAoZ-Zxw4jTy4qeSx+xENNQQ+qH7jzmb439J4A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Mar 2019 14:42:31 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: Fix paths in libstdc++
+ gdb python file
+In-Reply-To: <20190329220445.22941-1-tpiepho@impinj.com>
+References: <20190329220445.22941-1-tpiepho@impinj.com>
+Message-ID: <20190331144231.13d5b9ca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Trent,
 
-Le dim. 31 mars 2019 ? 14:25, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Sun, 31 Mar 2019 14:18:10 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
-> > index ad19802823..64ba647ab0 100644
-> > --- a/package/alljoyn-base/alljoyn-base.mk
-> > +++ b/package/alljoyn-base/alljoyn-base.mk
-> > @@ -11,7 +11,7 @@ ALLJOYN_BASE_SITE = \
-> >  # See https://allseenalliance.org/alliance/ip-policy
-> >  ALLJOYN_BASE_LICENSE = ISC
-> >
-> > -ALLJOYN_BASE_DEPENDENCIES = host-scons alljoyn openssl
-> > +ALLJOYN_BASE_DEPENDENCIES = host-python host-scons alljoyn openssl
-> >  ALLJOYN_BASE_INSTALL_STAGING = YES
->
-> Hm, don't we have a problem when BR2_PACKAGE_PYTHON3=y ? In this case,
-> scons being a host-python-package, it will be installed for
-> host-python3, i.e in /usr/lib/python3/.../, so how can it then work to
-> call it using python2 ?
-I tested it with the defconfig from the alljoyn autobuild falures
-(which have BR2_PACKAGE_PYTHON3=y) and it works because scons script
-is installed in $(HOST_DIR)/bin/scons and scons libraries are
-installed in $(HOST_DIR)/lib/scons-$(SCONS_VERSION) because we pass
-this path through --install-lib in scons.mk.
-But perhaps you should try to rebuild it too with these defconfigs to
-double-check that I did not miss something.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+On Fri, 29 Mar 2019 22:04:56 +0000
+Trent Piepho <tpiepho@impinj.com> wrote:
 
-Fabrice
+> The python file libstdc++.so.6.0.25-gdb.py contains two paths:
+> pythondir = '/share/gcc-8.2.1/python'
+> libdir = '/arm-linux-gnueabihf/lib'
+> 
+> The latter is the location of the file in the toolchain and the former
+> the location of a python module to be used by gdb.  The python code in
+> the file subtracts libdir from the end of the current
+> libstdc++.so.6.0.25-gdb.py location and appends pythondir, to find the
+> current path to the python module.
+> 
+> Buildroot installs this file into the stage, at which point the paths
+> above are no longer correct.
+> 
+> This patch uses sed to fixup the paths to reflect the installed
+> location, relative to HOST_DIR, and the location of the python module
+> relative to HOST_DIR.
+> 
+> and
+
+And ?
+
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+> ---
+>  .../toolchain-external-arm-arm.mk                        | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+
+Is this problem specific to the ARM ARM toolchain ? I guess other
+toolchains will have the same file, so probably we want a more generic
+fix ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
