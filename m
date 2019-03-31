@@ -1,38 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 15:33:11 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/jq: add oniguruma optional dependency
-In-Reply-To: <CAPi7W82rGMuVdjVtgS2DbuqoFg2RWtU5YYembKoXiBot3P=01Q@mail.gmail.com>
-References: <20190320203617.27496-1-fontaine.fabrice@gmail.com>
- <20190320203617.27496-2-fontaine.fabrice@gmail.com>
- <20190331151432.52efa3b8@windsurf>
- <CAPi7W82rGMuVdjVtgS2DbuqoFg2RWtU5YYembKoXiBot3P=01Q@mail.gmail.com>
-Message-ID: <20190331153311.6298e214@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Mar 2019 16:49:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpm: drop binutils optional
+ dependency
+Message-ID: <20190331144934.24152-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Mar 2019 15:27:38 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Since bump to version 4.14.2.1, binutils is not an optional dependency
+anymore as bfd.h has been droped in 4.14.0 with
+https://github.com/rpm-software-management/rpm/commit/245b5a3b4b6d616adf47361137987e90f8dab22c
 
-> > What decided you to add onigurama as a mandatory dependency for
-> > host-jq ? What feature does it bring ? Do we really need it as a
-> > mandatory dependency ?  
-> I decided to keep it because it's enabled by default in upstream but I
-> can send a v2 without it as no package depends on this feature.
+So drop it and manage optional elfutils dependency through a
+single line (and drop binutils/elfutils comment)
 
-We normally try to keep the dependencies as minimal as possible, so
-until we have a use-case for this, I'd prefer to not have this
-dependency for the host variant.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rpm/rpm.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-This means the onigurama package should only add a target variant.
-
-Thanks!
-
-Thomas
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 5fd7256618..75a03abf4d 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -12,6 +12,7 @@ RPM_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	berkeleydb \
+ 	$(if $(BR2_PACKAGE_BZIP2),bzip2) \
++	$(if $(BR2_PACKAGE_ELFUTILS),elfutils) \
+ 	file \
+ 	popt \
+ 	$(if $(BR2_PACKAGE_XZ),xz) \
+@@ -82,16 +83,6 @@ else
+ RPM_CONF_OPTS += --without-selinux
+ endif
+ 
+-# For the elfutils and binutils dependencies, there are no
+-# configuration options to explicitly enable/disable them.
+-ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+-RPM_DEPENDENCIES += elfutils
+-endif
+-
+-ifeq ($(BR2_PACKAGE_BINUTILS),y)
+-RPM_DEPENDENCIES += binutils
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZSTD),y)
+ RPM_DEPENDENCIES += zstd
+ RPM_CONF_OPTS += --enable-zstd
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
