@@ -1,59 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Mar 2019 20:54:43 +0200
-Subject: [Buildroot] [git commit] package/gettext-tiny: fix build of
- libintl.a
-Message-ID: <20190331185220.8DCD07FAE3@busybox.osuosl.org>
+Date: Sun, 31 Mar 2019 20:54:22 +0200
+Subject: [Buildroot] [git commit] package/gettext-tiny: fix licensing
+Message-ID: <20190331185220.87AF38390E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01e0fec161ed4aa94fc1c594283200e2eb0b07fa
+commit: https://git.buildroot.net/buildroot/commit/?id=916f02c7d98a704a03ef8c9efe37044d2f84d758
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since libintl.a can be pulled in during the build of other shared libs,
-it must be compiled with -fPIC, which is what gettext-tiny's Makefile
-would do.
-
-Since we provide our own CFLAGS, they override those in the Makefile.
-
-Fix that by ensuring that -fPIC is used when building the static
-library.
+Fix the license list: it should be a space-separated list of files, it
+is not a comma-separated list.
 
 Fixes:
-    http://autobuild.buildroot.org/results/a38/a3800fd4ef2536cc2b82d38ea752baa2b227bc64/
+    http://autobuild.buildroot.org/results/74b/74be940e5757d18452b0eb97b9973c278be20345/
 
-Also, since GETTEXT_TINY_OPTS is used only once and contains a single
-definition, get rid of it altogether.
+Add hashes for the license files while at it, and cleanup the hash file
+as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gettext-tiny/gettext-tiny.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gettext-tiny/gettext-tiny.hash | 6 ++++--
+ package/gettext-tiny/gettext-tiny.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 755f7f6ecf..672e964186 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -1,5 +1,7 @@
+ # Locally Computed:
+ sha256 654dcd52f2650476c8822b60bee89c20a0aa7f6a1bf6001701eeacd71a9e388b  gettext-tiny-v0.3.1.tar.gz
++sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+ # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+-md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
+-sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
++md5  df3f5690eaa30fd228537b00cb7b7590         gettext-0.19.8.1.tar.xz
++sha1 e0fe90ede22f7f16bbde7bdea791a835f2773fc9 gettext-0.19.8.1.tar.xz
 diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 3fe2de30b6..c9052d0d7c 100644
+index a555fbef50..3fe2de30b6 100644
 --- a/package/gettext-tiny/gettext-tiny.mk
 +++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -9,7 +9,6 @@ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VER
+@@ -8,7 +8,7 @@ GETTEXT_TINY_VERSION = v0.3.1
+ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
  GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
  GETTEXT_TINY_INSTALL_STAGING = YES
- GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
--GETTEXT_TINY_OPTS = LIBINTL=NOOP
+-GETTEXT_TINY_LICENSE_FILES = LICENSE, extra/COPYING
++GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
+ GETTEXT_TINY_OPTS = LIBINTL=NOOP
  
  GETTEXT_TINY_PROVIDES = gettext
- 
-@@ -56,7 +55,8 @@ endif
- define HOST_GETTEXT_TINY_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
--		$(GETTEXT_TINY_OPTS)
-+		CFLAGS="$(HOST_CFLAGS) -fPIC" \
-+		LIBINTL=NOOP
- 
- 	cp $(@D)/extra/gettextize.in $(@D)/gettextize
- 
