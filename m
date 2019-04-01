@@ -1,134 +1,50 @@
-From: jonsmirl at gmail.com <jonsmirl@gmail.com>
-Date: Mon, 1 Apr 2019 16:03:28 -0400
-Subject: [Buildroot] Help making package file for libp11
-In-Reply-To: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
-References: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
-Message-ID: <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 1 Apr 2019 21:56:40 +0200
+Subject: [Buildroot] [git commit] package/perl-libwww-perl: bump to version
+ 6.38
+Message-ID: <20190401200604.775118B7C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The error is coming from pkg-generic.mk, step_check_build_dir()
+commit: https://git.buildroot.net/buildroot/commit/?id=0946ae0d44d0fd2bd2089c4f94b6f0dc11d60952
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libp11 is trying to install a crypto engine for openssl. It uses pkg_config
-to get the path
-enginesexecdir="`$PKG_CONFIG --variable=enginesdir --silence-errors
-libcrypto`"
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-The path returned from pkg_config is /usr/lib/engines-1.1
-
-But then the buildroot build system is mangling the enginesexecdir path
-into...
-/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/engines-1.1
-
-So where does this path mangling happen? Why is it using a host path?
-
-
-
-
-
-On Sun, Mar 31, 2019 at 10:57 PM jonsmirl at gmail.com <jonsmirl@gmail.com>
-wrote:
-
-> I made up a package file for libp11 based off from other posts to the
-> list...
->
-> LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
-> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
-> LIBP11_DEPENDENCIES = openssl
-> LIBP11_INSTALL_STAGING = YES
-> LIBP11_LICENSE = LGPLv2.1
-> LIBP11_LICENSE_FILES = COPYING
-> LIBP11_AUTORECONF = YES
->
-> LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
-> ifeq ($(BR2_PACKAGE_P11_KIT),y)
-> LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-> endif
->
-> $(eval $(autotools-package))
->
-> -----------------------------
->
-> I'm getting an error with the path at the install stage...
-> Can anyone give me a clue as to what is wrong?
->
-> make[2]: Entering directory
->
-> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> make[3]: Entering directory
->
-> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> make[3]: Nothing to be done for `install-exec-am'.
->  /bin/mkdir -p
-> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
->  /usr/bin/install -c -m 644 NEWS
->
-> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
-> make[3]: Leaving directory
->
-> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> make[2]: Leaving directory
->
-> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> make[1]: Leaving directory
->
-> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
-> for la in $(find
->
-> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
-> -name "*.la"); do \
-> cp -a "${la}" "${la}.fixed" && \
-> /bin/sed -i -e
-> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR
-> @:g"
-> \
-> -e
-> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR
-> @:g"
-> \
-> -e
-> "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
-> @:g"
-> \
-> -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-> -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
-> @:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
-> \
-> -e "s:@STAGING_DIR
-> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
-> \
-> -e "s:@BASE_DIR
-> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
-> \
-> "${la}.fixed" && \
-> if cmp -s "${la}" "${la}.fixed"; then \
-> rm -f "${la}.fixed"; \
-> else \
-> mv "${la}.fixed" "${la}"; \
-> fi || exit 1; \
-> done
-> libp11: installs files in
->
-> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
-> make: ***
-> [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
-> Error 1
-> make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
->
->
-> --
-> Jon Smirl
-> jonsmirl at gmail.com
->
-
-
--- 
-Jon Smirl
-jonsmirl at gmail.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/1de96048/attachment.html>
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index b6d8382af4..3d49792ff2 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    20062717e4084d2f56d84c7ab4c91ec1 libwww-perl-6.36.tar.gz
+-sha256 75c034ab4b37f4b9506dc644300697505582cf9545bcf2e2079e7263f675290a libwww-perl-6.36.tar.gz
++md5    db69a100747c8a9693f7d61d20ae354c libwww-perl-6.38.tar.gz
++sha256 a8e0849b8d2798fc45a2a5f2fe45c96cbbad5baf3bcbe64a3bf85f210e78708c libwww-perl-6.38.tar.gz
+ 
+ # computed by scancpan
+ sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index c3367e10c4..02164e503a 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PERL_LIBWWW_PERL_VERSION = 6.36
++PERL_LIBWWW_PERL_VERSION = 6.38
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+-PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LIBWWW_PERL_LICENSE_FILES = LICENSE
+ PERL_LIBWWW_PERL_DISTNAME = libwww-perl
