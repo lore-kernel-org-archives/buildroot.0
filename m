@@ -1,49 +1,395 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Apr 2019 20:23:44 +0200
-Subject: [Buildroot] [PATCH 0/7] Bump docker packages to v18.09.4
-Message-ID: <20190401182352.26342-1-peter@korsgaard.com>
+Date: Mon,  1 Apr 2019 20:23:45 +0200
+Subject: [Buildroot] [PATCH 1/7] package/runc: bump to version 1.0.0-rc7
+In-Reply-To: <20190401182352.26342-1-peter@korsgaard.com>
+References: <20190401182352.26342-1-peter@korsgaard.com>
+Message-ID: <20190401182352.26342-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the docker packages to the v18.09.4 release.
+This includes an improved fix for CVE-2019-5736 without the ~10MB memory
+overhead per container and with fallback code using mkostemp(3) when
+O_TMPFILE isn't available.
 
-Unit test is still successful:
-./support/testing/run-tests -o output-test tests.package.test_docker_compose
-19:38:21 TestDockerCompose                        Starting
-19:38:23 TestDockerCompose                        Building
-20:14:18 TestDockerCompose                        Building done
-20:15:03 TestDockerCompose                        Cleaning up
-.
-Ran 1 test in 2211.902s
+For more details, see the announcement:
+https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc7
 
-OK
-
-Peter Korsgaard (7):
-  package/runc: bump to version 1.0.0-rc7
-  Revert "package/runc: blacklist Codesourcery ARM toolchain"
-  Revert "runc: depend on linux headers >= 3.11 for O_TMPFILE"
-  package/docker-containerd: bump version to v1.2.5
-  package/docker-containerd: refer to official website
-  package/docker-engine: bump to version v18.09.4
-  package/docker-cli: bump to version v18.09.4
-
- package/docker-cli/docker-cli.hash                 |   2 +-
- package/docker-cli/docker-cli.mk                   |   2 +-
- package/docker-containerd/Config.in                |   8 +-
- package/docker-containerd/docker-containerd.hash   |   2 +-
- package/docker-containerd/docker-containerd.mk     |   2 +-
- package/docker-engine/Config.in                    |   8 +-
- package/docker-engine/docker-engine.hash           |   2 +-
- package/docker-engine/docker-engine.mk             |   2 +-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
  ...ne-proc-self-exe-to-avoid-exposing-host-b.patch | 338 ---------------------
- package/runc/Config.in                             |   8 +-
  package/runc/runc.hash                             |   2 +-
  package/runc/runc.mk                               |   2 +-
- 12 files changed, 14 insertions(+), 364 deletions(-)
+ 3 files changed, 2 insertions(+), 340 deletions(-)
  delete mode 100644 package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
 
+diff --git a/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch b/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
+deleted file mode 100644
+index a0bc7ba300..0000000000
+--- a/package/runc/0001-nsenter-clone-proc-self-exe-to-avoid-exposing-host-b.patch
++++ /dev/null
+@@ -1,338 +0,0 @@
+-From 0a8e4117e7f715d5fbeef398405813ce8e88558b Mon Sep 17 00:00:00 2001
+-From: Aleksa Sarai <asarai@suse.de>
+-Date: Wed, 9 Jan 2019 13:40:01 +1100
+-Subject: [PATCH] nsenter: clone /proc/self/exe to avoid exposing host binary
+- to container
+-
+-There are quite a few circumstances where /proc/self/exe pointing to a
+-pretty important container binary is a _bad_ thing, so to avoid this we
+-have to make a copy (preferably doing self-clean-up and not being
+-writeable).
+-
+-We require memfd_create(2) -- though there is an O_TMPFILE fallback --
+-but we can always extend this to use a scratch MNT_DETACH overlayfs or
+-tmpfs. The main downside to this approach is no page-cache sharing for
+-the runc binary (which overlayfs would give us) but this is far less
+-complicated.
+-
+-This is only done during nsenter so that it happens transparently to the
+-Go code, and any libcontainer users benefit from it. This also makes
+-ExtraFiles and --preserve-fds handling trivial (because we don't need to
+-worry about it).
+-
+-Fixes: CVE-2019-5736
+-Co-developed-by: Christian Brauner <christian.brauner@ubuntu.com>
+-Signed-off-by: Aleksa Sarai <asarai@suse.de>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- libcontainer/nsenter/cloned_binary.c | 268 +++++++++++++++++++++++++++++++++++
+- libcontainer/nsenter/nsexec.c        |  11 ++
+- 2 files changed, 279 insertions(+)
+- create mode 100644 libcontainer/nsenter/cloned_binary.c
+-
+-diff --git a/libcontainer/nsenter/cloned_binary.c b/libcontainer/nsenter/cloned_binary.c
+-new file mode 100644
+-index 00000000..c8a42c23
+---- /dev/null
+-+++ b/libcontainer/nsenter/cloned_binary.c
+-@@ -0,0 +1,268 @@
+-+/*
+-+ * Copyright (C) 2019 Aleksa Sarai <cyphar@cyphar.com>
+-+ * Copyright (C) 2019 SUSE LLC
+-+ *
+-+ * Licensed under the Apache License, Version 2.0 (the "License");
+-+ * you may not use this file except in compliance with the License.
+-+ * You may obtain a copy of the License at
+-+ *
+-+ *     http://www.apache.org/licenses/LICENSE-2.0
+-+ *
+-+ * Unless required by applicable law or agreed to in writing, software
+-+ * distributed under the License is distributed on an "AS IS" BASIS,
+-+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-+ * See the License for the specific language governing permissions and
+-+ * limitations under the License.
+-+ */
+-+
+-+#define _GNU_SOURCE
+-+#include <unistd.h>
+-+#include <stdio.h>
+-+#include <stdlib.h>
+-+#include <stdbool.h>
+-+#include <string.h>
+-+#include <limits.h>
+-+#include <fcntl.h>
+-+#include <errno.h>
+-+
+-+#include <sys/types.h>
+-+#include <sys/stat.h>
+-+#include <sys/vfs.h>
+-+#include <sys/mman.h>
+-+#include <sys/sendfile.h>
+-+#include <sys/syscall.h>
+-+
+-+/* Use our own wrapper for memfd_create. */
+-+#if !defined(SYS_memfd_create) && defined(__NR_memfd_create)
+-+#  define SYS_memfd_create __NR_memfd_create
+-+#endif
+-+#ifdef SYS_memfd_create
+-+#  define HAVE_MEMFD_CREATE
+-+/* memfd_create(2) flags -- copied from <linux/memfd.h>. */
+-+#  ifndef MFD_CLOEXEC
+-+#    define MFD_CLOEXEC       0x0001U
+-+#    define MFD_ALLOW_SEALING 0x0002U
+-+#  endif
+-+int memfd_create(const char *name, unsigned int flags)
+-+{
+-+	return syscall(SYS_memfd_create, name, flags);
+-+}
+-+#endif
+-+
+-+/* This comes directly from <linux/fcntl.h>. */
+-+#ifndef F_LINUX_SPECIFIC_BASE
+-+#  define F_LINUX_SPECIFIC_BASE 1024
+-+#endif
+-+#ifndef F_ADD_SEALS
+-+#  define F_ADD_SEALS (F_LINUX_SPECIFIC_BASE + 9)
+-+#  define F_GET_SEALS (F_LINUX_SPECIFIC_BASE + 10)
+-+#endif
+-+#ifndef F_SEAL_SEAL
+-+#  define F_SEAL_SEAL   0x0001	/* prevent further seals from being set */
+-+#  define F_SEAL_SHRINK 0x0002	/* prevent file from shrinking */
+-+#  define F_SEAL_GROW   0x0004	/* prevent file from growing */
+-+#  define F_SEAL_WRITE  0x0008	/* prevent writes */
+-+#endif
+-+
+-+#define RUNC_SENDFILE_MAX 0x7FFFF000 /* sendfile(2) is limited to 2GB. */
+-+#ifdef HAVE_MEMFD_CREATE
+-+#  define RUNC_MEMFD_COMMENT "runc_cloned:/proc/self/exe"
+-+#  define RUNC_MEMFD_SEALS \
+-+	(F_SEAL_SEAL | F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_WRITE)
+-+#endif
+-+
+-+static void *must_realloc(void *ptr, size_t size)
+-+{
+-+	void *old = ptr;
+-+	do {
+-+		ptr = realloc(old, size);
+-+	} while(!ptr);
+-+	return ptr;
+-+}
+-+
+-+/*
+-+ * Verify whether we are currently in a self-cloned program (namely, is
+-+ * /proc/self/exe a memfd). F_GET_SEALS will only succeed for memfds (or rather
+-+ * for shmem files), and we want to be sure it's actually sealed.
+-+ */
+-+static int is_self_cloned(void)
+-+{
+-+	int fd, ret, is_cloned = 0;
+-+
+-+	fd = open("/proc/self/exe", O_RDONLY|O_CLOEXEC);
+-+	if (fd < 0)
+-+		return -ENOTRECOVERABLE;
+-+
+-+#ifdef HAVE_MEMFD_CREATE
+-+	ret = fcntl(fd, F_GET_SEALS);
+-+	is_cloned = (ret == RUNC_MEMFD_SEALS);
+-+#else
+-+	struct stat statbuf = {0};
+-+	ret = fstat(fd, &statbuf);
+-+	if (ret >= 0)
+-+		is_cloned = (statbuf.st_nlink == 0);
+-+#endif
+-+	close(fd);
+-+	return is_cloned;
+-+}
+-+
+-+/*
+-+ * Basic wrapper around mmap(2) that gives you the file length so you can
+-+ * safely treat it as an ordinary buffer. Only gives you read access.
+-+ */
+-+static char *read_file(char *path, size_t *length)
+-+{
+-+	int fd;
+-+	char buf[4096], *copy = NULL;
+-+
+-+	if (!length)
+-+		return NULL;
+-+
+-+	fd = open(path, O_RDONLY | O_CLOEXEC);
+-+	if (fd < 0)
+-+		return NULL;
+-+
+-+	*length = 0;
+-+	for (;;) {
+-+		int n;
+-+
+-+		n = read(fd, buf, sizeof(buf));
+-+		if (n < 0)
+-+			goto error;
+-+		if (!n)
+-+			break;
+-+
+-+		copy = must_realloc(copy, (*length + n) * sizeof(*copy));
+-+		memcpy(copy + *length, buf, n);
+-+		*length += n;
+-+	}
+-+	close(fd);
+-+	return copy;
+-+
+-+error:
+-+	close(fd);
+-+	free(copy);
+-+	return NULL;
+-+}
+-+
+-+/*
+-+ * A poor-man's version of "xargs -0". Basically parses a given block of
+-+ * NUL-delimited data, within the given length and adds a pointer to each entry
+-+ * to the array of pointers.
+-+ */
+-+static int parse_xargs(char *data, int data_length, char ***output)
+-+{
+-+	int num = 0;
+-+	char *cur = data;
+-+
+-+	if (!data || *output != NULL)
+-+		return -1;
+-+
+-+	while (cur < data + data_length) {
+-+		num++;
+-+		*output = must_realloc(*output, (num + 1) * sizeof(**output));
+-+		(*output)[num - 1] = cur;
+-+		cur += strlen(cur) + 1;
+-+	}
+-+	(*output)[num] = NULL;
+-+	return num;
+-+}
+-+
+-+/*
+-+ * "Parse" out argv and envp from /proc/self/cmdline and /proc/self/environ.
+-+ * This is necessary because we are running in a context where we don't have a
+-+ * main() that we can just get the arguments from.
+-+ */
+-+static int fetchve(char ***argv, char ***envp)
+-+{
+-+	char *cmdline = NULL, *environ = NULL;
+-+	size_t cmdline_size, environ_size;
+-+
+-+	cmdline = read_file("/proc/self/cmdline", &cmdline_size);
+-+	if (!cmdline)
+-+		goto error;
+-+	environ = read_file("/proc/self/environ", &environ_size);
+-+	if (!environ)
+-+		goto error;
+-+
+-+	if (parse_xargs(cmdline, cmdline_size, argv) <= 0)
+-+		goto error;
+-+	if (parse_xargs(environ, environ_size, envp) <= 0)
+-+		goto error;
+-+
+-+	return 0;
+-+
+-+error:
+-+	free(environ);
+-+	free(cmdline);
+-+	return -EINVAL;
+-+}
+-+
+-+static int clone_binary(void)
+-+{
+-+	int binfd, memfd;
+-+	ssize_t sent = 0;
+-+
+-+#ifdef HAVE_MEMFD_CREATE
+-+	memfd = memfd_create(RUNC_MEMFD_COMMENT, MFD_CLOEXEC | MFD_ALLOW_SEALING);
+-+#else
+-+	memfd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR | O_CLOEXEC, 0711);
+-+#endif
+-+	if (memfd < 0)
+-+		return -ENOTRECOVERABLE;
+-+
+-+	binfd = open("/proc/self/exe", O_RDONLY | O_CLOEXEC);
+-+	if (binfd < 0)
+-+		goto error;
+-+
+-+	sent = sendfile(memfd, binfd, NULL, RUNC_SENDFILE_MAX);
+-+	close(binfd);
+-+	if (sent < 0)
+-+		goto error;
+-+
+-+#ifdef HAVE_MEMFD_CREATE
+-+	int err = fcntl(memfd, F_ADD_SEALS, RUNC_MEMFD_SEALS);
+-+	if (err < 0)
+-+		goto error;
+-+#else
+-+	/* Need to re-open "memfd" as read-only to avoid execve(2) giving -EXTBUSY. */
+-+	int newfd;
+-+	char *fdpath = NULL;
+-+
+-+	if (asprintf(&fdpath, "/proc/self/fd/%d", memfd) < 0)
+-+		goto error;
+-+	newfd = open(fdpath, O_RDONLY | O_CLOEXEC);
+-+	free(fdpath);
+-+	if (newfd < 0)
+-+		goto error;
+-+
+-+	close(memfd);
+-+	memfd = newfd;
+-+#endif
+-+	return memfd;
+-+
+-+error:
+-+	close(memfd);
+-+	return -EIO;
+-+}
+-+
+-+int ensure_cloned_binary(void)
+-+{
+-+	int execfd;
+-+	char **argv = NULL, **envp = NULL;
+-+
+-+	/* Check that we're not self-cloned, and if we are then bail. */
+-+	int cloned = is_self_cloned();
+-+	if (cloned > 0 || cloned == -ENOTRECOVERABLE)
+-+		return cloned;
+-+
+-+	if (fetchve(&argv, &envp) < 0)
+-+		return -EINVAL;
+-+
+-+	execfd = clone_binary();
+-+	if (execfd < 0)
+-+		return -EIO;
+-+
+-+	fexecve(execfd, argv, envp);
+-+	return -ENOEXEC;
+-+}
+-diff --git a/libcontainer/nsenter/nsexec.c b/libcontainer/nsenter/nsexec.c
+-index 28269dfc..7750af35 100644
+---- a/libcontainer/nsenter/nsexec.c
+-+++ b/libcontainer/nsenter/nsexec.c
+-@@ -534,6 +534,9 @@ void join_namespaces(char *nslist)
+- 	free(namespaces);
+- }
+- 
+-+/* Defined in cloned_binary.c. */
+-+extern int ensure_cloned_binary(void);
+-+
+- void nsexec(void)
+- {
+- 	int pipenum;
+-@@ -549,6 +552,14 @@ void nsexec(void)
+- 	if (pipenum == -1)
+- 		return;
+- 
+-+	/*
+-+	 * We need to re-exec if we are not in a cloned binary. This is necessary
+-+	 * to ensure that containers won't be able to access the host binary
+-+	 * through /proc/self/exe. See CVE-2019-5736.
+-+	 */
+-+	if (ensure_cloned_binary() < 0)
+-+		bail("could not ensure we are a cloned binary");
+-+
+- 	/* Parse all of the netlink configuration. */
+- 	nl_parse(pipenum, &config);
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 1636e5b8e9..24c30f5726 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	a221f8380e7b5806031f54d423af6dde24c305dad49868056cf70e5f5f4ef771  runc-v1.0.0-rc6.tar.gz
++sha256	e8388b812d93a8a131a2a2fdd851847295c8e341721002940dadd2999fb81b51  runc-v1.0.0-rc7.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 0539661266..56463b468e 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = v1.0.0-rc6
++RUNC_VERSION = v1.0.0-rc7
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
 -- 
 2.11.0
