@@ -1,64 +1,61 @@
-From: Mohamed Dawod <mhm.dawod@gmail.com>
-Date: Mon, 1 Apr 2019 21:07:15 +0200
-Subject: [Buildroot] [GSoC19] Motivation
-Message-ID: <CAGCTLNTuWB7E_txmWm9s+fOU5EJsyU1guWNOUM8c40B5WDOoog@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 1 Apr 2019 21:40:02 +0200
+Subject: [Buildroot] [git commit] package/vim: fix build for the host if NLS
+ is disabled
+Message-ID: <20190401193659.12F2C8B75D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
-I hope this email finds you well.
+commit: https://git.buildroot.net/buildroot/commit/?id=547e4e076f5d5b5d0002c0a4b0aba0ca4d939369
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My name is Mohamed.
-I am a 4th year Computer Engineering student at Faculty of Engineering -
-Cairo University.
-*LinkedIn Profile* : https://www.linkedin.com/in/mohameddawod96/
-*Github Profile* : https://github.com/Dawody
-I would like to work in Project *"Support for distributed builds with
-IceCC"*
+host-vim started fail after gettext-tiny was introduced in:
 
-I have 2 years of experience in this failed.
-1. I studied Operating systems and Distributed systems in the faculty.
+    5367a1b package/gettext-tiny: new package
 
-2. I learnt How to build Linux From Scratch  (LFS8.3).
+which forces to use host-gettext-tiny as gnu's host-gettext
+replacament if NLS is disabled, and msgfmt from gettext-tiny's package
+crashes while processing translation files, so fix it by use
+'--disable-nls' for a host-vim because host variant does not require
+any tranalations.
 
-3. I learnt Embedded Linux. I worked as Embedded Linux Engineer Inter in
-the last summer.
-- I built a complete linux based operating system for specific kit to
-execute qt5 apps.
-- I changed the default windowing system to wayland, and I customized
-wayland to fit the project needs.
-- I used yoctoproject, bitbake and openembedded and other open source
-layers.
+Fixes:
 
+  http://autobuild.buildroot.net/results/0948ab6fd959940c836e06f5b632b36443a53451
+  http://autobuild.buildroot.net/results/cfa6f78caea012ea4423e807ce8ceb997bc1f908
+  http://autobuild.buildroot.net/results/6d417ab6a0e369b6c7023ce7d40d9b31fa0adeaf
+  http://autobuild.buildroot.net/results/4369725cdea72b168dfa760d54ac038f2e0506de
+  http://autobuild.buildroot.net/results/a9b72f138595e39be51b37d93bc43e0e8a39e5f6
+  http://autobuild.buildroot.net/results/dadf5e71942b807bb4d18108c043ce81b349781c
+  http://autobuild.buildroot.net/results/05d48cc5ef1068537d45169a4930927060e1cd7a
+  http://autobuild.buildroot.net/results/993392c1213889e4e2bb9c06235d2f2f16a5cafe
+  http://autobuild.buildroot.net/results/314acaa9e87e8e896a6af7d49ee0e59643ced500
 
-I am interested in operating systems and building embedded linux systems.
-From my experiment with bitbake and openembedded, I found that It really
-takes so much time to build complete embedded linux system.
-so I think that distributing this process can be a great achievement.
-Although I didn't use Buildroot or IceCC before, but  I could learn yocto,
-bitbake and openembedded and building projects with them during my summer
-internship without a direct supervision. It's well-known that Yocto Project
-has a steep learning curve.
-so I hope that I can learn buildroot and IceCC in short free time to start
-the project.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vim/vim.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I am looking forward to be accepted in this project because I would like to
-dig deeper in this field as I adore it,
-and because it may be my last chance to participate in GSoC, I wouldn't
-like to lose this chance.
-
-Thank You,
-Regards,
-
--- 
-
-Mohamed Dawod
-Computer Engineering Department
-Faculty of Engineering
-Cairo University
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/106088c7/attachment.html>
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index ee0c8b61e4..56716cbdd0 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -80,6 +80,14 @@ VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
+ endif
+ 
+ HOST_VIM_DEPENDENCIES = host-ncurses
++HOST_VIM_CONF_OPTS = \
++	--with-tlib=ncurses \
++	--enable-gui=no \
++	--without-x \
++	--disable-acl \
++	--disable-gpm \
++	--disable-selinux \
++	--disable-nls
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
