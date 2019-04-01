@@ -1,43 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:14:08 +0200
-Subject: [Buildroot] [PATCH 13/14] package/perl-sub-quote: bump to
- version 2.006003
-In-Reply-To: <20190331174449.1461-13-francois.perrad@gadz.org>
-References: <20190331174449.1461-1-francois.perrad@gadz.org>
- <20190331174449.1461-13-francois.perrad@gadz.org>
-Message-ID: <20190401221408.3b03e5e5@windsurf>
+Date: Mon, 1 Apr 2019 22:33:29 +0200
+Subject: [Buildroot] [git commit] package/live555: security bump to version
+ 2019.03.06
+Message-ID: <20190401202947.80B8D8A645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ed30a85e5a327dc2c0a840b3ee3ba3ad41400c9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 Mar 2019 19:44:48 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Fixes the following security issues:
 
-> -# computed by scancpan
-> -sha256 8f7a1d60c718174b7752562007b2643d4a1c23f901cbeb7774015805efe0a817 README
+- CVE-2019-6256: A Denial of Service issue was discovered in the LIVE555
+  Streaming Media libraries as used in Live555 Media Server 0.93.  It can
+  cause an RTSPServer crash in handleHTTPCmd_TunnelingPOST, when
+  RTSP-over-HTTP tunneling is supported, via x-sessioncookie HTTP headers in
+  a GET request and a POST request within the same TCP session.  This occurs
+  because of a call to an incorrect virtual function pointer in the
+  readSocket function in GroupsockHelper.cpp.
 
-Why is this being removed ?
+- CVE-2019-7314: liblivemedia in Live555 before 2019.02.03 mishandles the
+  termination of an RTSP stream after RTP/RTCP-over-RTSP has been set up,
+  which could lead to a Use-After-Free error that causes the RTSP server to
+  crash (Segmentation fault) or possibly have unspecified other impact.
 
-> -PERL_SUB_QUOTE_VERSION = 2.005001
-> +PERL_SUB_QUOTE_VERSION = 2.006003
->  PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
->  PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
->  PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
-> -PERL_SUB_QUOTE_LICENSE_FILES = README
+- CVE-2019-9215: n Live555 before 2019.02.27, malformed headers lead to
+  invalid memory access in the parseAuthorizationHeader function.
 
-And here ?
+The normal live555 web site is temporarily unavailable, so use an
+alternative _SITE / drop upstream hash.
 
-The README file didn't change substantially, so I kept it as a license
-file.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/live555/live555.hash | 4 +---
+ package/live555/live555.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 024dcac124..f8e5b5e68c 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,5 +1,3 @@
+-# From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
+ # Locally generated
+-sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
++sha256 0bd0c26d980425d9a419d835193e292a08a968f175da1902da4b495f126d5abd  live.2019.03.06.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 6a6d353650..250eea236c 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2018.10.17
++LIVE555_VERSION = 2019.03.06
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+-LIVE555_SITE = http://www.live555.com/liveMedia/public
++LIVE555_SITE = http://www.live555.com
+ LIVE555_LICENSE = LGPL-2.1+
+ LIVE555_LICENSE_FILES = COPYING
+ LIVE555_INSTALL_STAGING = YES
