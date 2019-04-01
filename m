@@ -1,39 +1,41 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Mon, 1 Apr 2019 15:56:55 +0200
-Subject: [Buildroot] dl_dir problem with building using legal-info
-Message-ID: <9f90c933-8494-9a82-ab12-7f67873fda9e@ginzinger.com>
+From: Shyam Saini <shyam.saini@amarulasolutions.com>
+Date: Mon, 1 Apr 2019 19:28:27 +0530
+Subject: [Buildroot] [PATCH 1/3] toolchain: add necessary options to
+ support 5.0 kernel headers
+In-Reply-To: <20190401150246.33d62c60@windsurf>
+References: <20190401123051.19455-1-shyam.saini@amarulasolutions.com>
+ <20190401150246.33d62c60@windsurf>
+Message-ID: <CA+drQ_PnGoAwEK5Mi5KOoawp5DN1yLEKR__41JJmLZ5AprykGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
+>
+> Hello,
 
-It seems like the plan might be to move from one "dl" directory
-containing the tarballs, old_dl_dir, to the per-package directories in "dl".
+Hi Thomas,
 
-So: I reuse the tarballs in "legal-info" for building. (think: no
-internet connection). legal-info contains directories *with versions*.
-In any case, it's easy by finding all archives and copying them to "dl"
-before building.
+> On Mon,  1 Apr 2019 18:00:49 +0530
+> Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
+>
+> > Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+> > ---
+> >  toolchain/Config.in | 5 +++++
+> >  1 file changed, 5 insertions(+)
+>
+> 5.0 headers are already supported in Buildroot, see:
+>
+>   https://git.buildroot.org/buildroot/commit/toolchain?id=3385946b7ab709cc89aeee67195fb3bdd2422145
+>
+> and related patches.
+>
+> Make sure to rebase your patches on the latest master before sending
+> them, you would have noticed that this was already implemented.
 
-If old_dl_dir would be removed from the download scripts, this would
-break for me. The per-package directories in "dl" *don't contain
-versions* and I guess there's no trivial way to recreate this directory
-structure. So I thought I'd talk about this before old_dl_dir is gone...
+Sorry, I missed these updates though I'm subscribed to mailing list.
 
-In short: Before removing to look in old_dl_dir, please don't break this
-use-case :) Is there an even better way to build using legal-info that
-I'm not aware of already? If not, what could we implement?
+will take care about this next time.
 
-thanks a lot,
-
-                              martin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3616 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/10633aa1/attachment.bin>
+Thanks
