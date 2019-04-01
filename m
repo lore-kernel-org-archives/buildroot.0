@@ -1,45 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 21:44:16 +0200
-Subject: [Buildroot] [GSoC19] Motivation
-In-Reply-To: <CAGCTLNTuWB7E_txmWm9s+fOU5EJsyU1guWNOUM8c40B5WDOoog@mail.gmail.com>
-References: <CAGCTLNTuWB7E_txmWm9s+fOU5EJsyU1guWNOUM8c40B5WDOoog@mail.gmail.com>
-Message-ID: <20190401214416.1e265d6f@windsurf>
+Date: Mon, 1 Apr 2019 21:46:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vim: fix build for the host if
+ NLS is disabled
+In-Reply-To: <1554124857-10946-1-git-send-email-email@gmail.com>
+References: <1554124857-10946-1-git-send-email-email@gmail.com>
+Message-ID: <20190401214626.679bff62@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mohamed,
+Hello Vadim,
 
-On Mon, 1 Apr 2019 21:07:15 +0200
-Mohamed Dawod <mhm.dawod@gmail.com> wrote:
+On Mon,  1 Apr 2019 16:20:57 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-> I am looking forward to be accepted in this project because I would like to
-> dig deeper in this field as I adore it,
-> and because it may be my last chance to participate in GSoC, I wouldn't
-> like to lose this chance.
+>  HOST_VIM_DEPENDENCIES = host-ncurses
+> +HOST_VIM_CONF_OPTS = --with-tlib=ncurses \
+> +		     --enable-gui=no \
+> +		     --without-x \
+> +		     --disable-acl \
+> +		     --disable-gpm \
+> +		     --disable-selinux \
+> +		     --disable-nls
 
-Thanks a lot for introducing yourself, and for your interest in our
-topic related to IceCC.
+Indentation should have been just one tab. I fixed that up and applied.
 
-In order to show your interest and skills, could you try to submit one
-patch doing some useful contribution to Buildroot ?
+However, for target packages, we are passing --enable-nls/--disable-nls
+in the autotools-package infrastructure. Perhaps we should simply do
+the same for host packages and always pass --disable-nls ? We have a
+few host packages already passing --disable-nls:
 
-You could for example look at http://autobuild.buildroot.net/stats/ for
-some package that is not up-to-date, update it to a newer version, test
-it on some target (real HW or Qemu) and provide a patch doing the
-update. Of course, make sure to read a bit the mailing list to see the
-best practices. Check out also the Buildroot manual which has some
-indications on how to contribute.
+package/acl/acl.mk:ACL_CONF_OPTS = --disable-nls
+package/acl/acl.mk:HOST_ACL_CONF_OPTS = --disable-nls
+package/attr/attr.mk:ATTR_CONF_OPTS = --disable-nls
+package/attr/attr.mk:HOST_ATTR_CONF_OPTS = --disable-nls
+package/gcc/gcc-initial/gcc-initial.mk: --disable-nls \
+package/gutenprint/gutenprint.mk:       --disable-nls \
+package/gutenprint/gutenprint.mk:       --disable-nls-macos \
+package/lvm2/lvm2.mk:   --disable-nls \
+package/ushare/ushare.mk:USHARE_CONF_OPTS += --disable-nls
+package/vim/vim.mk:     --disable-nls
 
-Alternatively, you could have a look at http://autobuild.buildroot.net/
-and try to solve some of the build failures, but this is more difficult
-for a newcomer.
+Since it works for target packages, I think it should be OK to do the
+same for host packages, no?
 
-Thanks!
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
