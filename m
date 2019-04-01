@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:07:56 +0200
-Subject: [Buildroot] [git commit] package/perl-xml-libxml: bump to version
- 2.0134
-Message-ID: <20190401200604.A80CB8B7C1@busybox.osuosl.org>
+Date: Mon, 1 Apr 2019 21:56:40 +0200
+Subject: [Buildroot] [git commit] package/perl-date-manip: bump to version
+ 6.76
+Message-ID: <20190401200604.5007F811C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0776986358c374d2ea0f969adf7a20275cdcff23
+commit: https://git.buildroot.net/buildroot/commit/?id=82f4017b0ef9e4e730f0c2d5684218a61433fc2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
- package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
-index a3f4d5d643..4842f4fec2 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.hash
-+++ b/package/perl-xml-libxml/perl-xml-libxml.hash
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index b290e8ea24..ca4263fd4b 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    43546fd9a3974f19323f9fb04861ece9 XML-LibXML-2.0132.tar.gz
--sha256 721452e3103ca188f5968ab06d5ba29fe8e00e49f4767790882095050312d476 XML-LibXML-2.0132.tar.gz
-+md5    dce687dd8b7e82d1c359fd74b1852f64 XML-LibXML-2.0134.tar.gz
-+sha256 f0bca4d0c2da35d879fee4cd13f352014186cedab27ab5e191f39b5d7d4f46cf XML-LibXML-2.0134.tar.gz
+-md5    d922d5fe4a00521dc171ac3ee65a9d61 Date-Manip-6.75.tar.gz
+-sha256 c1fbcfbe2ab1a84e57f191807e87c97985da00926f64d1aae598c8756acbb67d Date-Manip-6.75.tar.gz
++md5    a539820a8725e79c67826158a6b940a1 Date-Manip-6.76.tar.gz
++sha256 1c87c78c03e3479e3b695952c0a5c11d3593ca9a5340dfb14d0be3d3e7ad63a8 Date-Manip-6.76.tar.gz
  
  # computed by scancpan
- sha256 5046a7ec515cc1542beafdf2eadeeff24cc221fc3fde9913dd144fd263ae6100 LICENSE
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 3218d34d53..23d3e988fa 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+ sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index cc668184ee..cc999b8282 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_XML_LIBXML_VERSION = 2.0132
-+PERL_XML_LIBXML_VERSION = 2.0134
- PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
- PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
+-PERL_DATE_MANIP_VERSION = 6.75
++PERL_DATE_MANIP_VERSION = 6.76
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
