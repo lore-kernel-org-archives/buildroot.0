@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:36:44 +0200
-Subject: [Buildroot] [git commit] configs/engicam_imx6qdl_icore: bump to
- Linux kernel 5.0
-Message-ID: <20190401203324.2372D811C4@busybox.osuosl.org>
+Date: Mon, 1 Apr 2019 22:37:56 +0200
+Subject: [Buildroot] [PATCH] package/live555: security bump to version
+ 2019.03.06
+In-Reply-To: <20190401195203.4143-1-peter@korsgaard.com>
+References: <20190401195203.4143-1-peter@korsgaard.com>
+Message-ID: <20190401223756.1ef2b2e6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e12cba598a1d3fc3e302c142e0c92476b1d8735
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  1 Apr 2019 21:52:03 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-This bumps to linux/linux-headers 5.0.
+> Fixes the following security issues:
+> 
+> - CVE-2019-6256: A Denial of Service issue was discovered in the LIVE555
+>   Streaming Media libraries as used in Live555 Media Server 0.93.  It can
+>   cause an RTSPServer crash in handleHTTPCmd_TunnelingPOST, when
+>   RTSP-over-HTTP tunneling is supported, via x-sessioncookie HTTP headers in
+>   a GET request and a POST request within the same TCP session.  This occurs
+>   because of a call to an incorrect virtual function pointer in the
+>   readSocket function in GroupsockHelper.cpp.
+> 
+> - CVE-2019-7314: liblivemedia in Live555 before 2019.02.03 mishandles the
+>   termination of an RTSP stream after RTP/RTCP-over-RTSP has been set up,
+>   which could lead to a Use-After-Free error that causes the RTSP server to
+>   crash (Segmentation fault) or possibly have unspecified other impact.
+> 
+> - CVE-2019-9215: n Live555 before 2019.02.27, malformed headers lead to
+>   invalid memory access in the parseAuthorizationHeader function.
+> 
+> The normal live555 web site is temporarily unavailable, so use an
+> alternative _SITE / drop upstream hash.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/live555/live555.hash | 4 +---
+>  package/live555/live555.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 
-Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/engicam_imx6qdl_icore_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
-index 6090360871..ffb2ddf085 100644
---- a/configs/engicam_imx6qdl_icore_defconfig
-+++ b/configs/engicam_imx6qdl_icore_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+# Linux headers same as kernel, a 5.0 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
