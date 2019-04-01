@@ -1,36 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 21:52:53 +0200
-Subject: [Buildroot] [PATCH] package/gettext-tiny: host and target
- legal-info are different
-In-Reply-To: <20190331214035.14080-1-yann.morin.1998@free.fr>
-References: <20190331214035.14080-1-yann.morin.1998@free.fr>
-Message-ID: <20190401215253.7eb77a6a@windsurf>
+From: jonsmirl at gmail.com <jonsmirl@gmail.com>
+Date: Mon, 1 Apr 2019 16:03:28 -0400
+Subject: [Buildroot] Help making package file for libp11
+In-Reply-To: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
+References: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
+Message-ID: <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Mar 2019 23:40:35 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+The error is coming from pkg-generic.mk, step_check_build_dir()
 
-> For the target, we only ever use the gettext-tiny dorce, while for the
-> host we also use that of gettext-gnu.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/572/5724b246cf411d95702fcff6dbf2b809b899108c/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Vadim Kochan <vadim4j@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/gettext-tiny/gettext-tiny.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+libp11 is trying to install a crypto engine for openssl. It uses pkg_config
+to get the path
+enginesexecdir="`$PKG_CONFIG --variable=enginesdir --silence-errors
+libcrypto`"
 
-Applied to master, thanks.
+The path returned from pkg_config is /usr/lib/engines-1.1
 
-Thomas
+But then the buildroot build system is mangling the enginesexecdir path
+into...
+/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/engines-1.1
+
+So where does this path mangling happen? Why is it using a host path?
+
+
+
+
+
+On Sun, Mar 31, 2019 at 10:57 PM jonsmirl at gmail.com <jonsmirl@gmail.com>
+wrote:
+
+> I made up a package file for libp11 based off from other posts to the
+> list...
+>
+> LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
+> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+> LIBP11_DEPENDENCIES = openssl
+> LIBP11_INSTALL_STAGING = YES
+> LIBP11_LICENSE = LGPLv2.1
+> LIBP11_LICENSE_FILES = COPYING
+> LIBP11_AUTORECONF = YES
+>
+> LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
+> ifeq ($(BR2_PACKAGE_P11_KIT),y)
+> LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+> endif
+>
+> $(eval $(autotools-package))
+>
+> -----------------------------
+>
+> I'm getting an error with the path at the install stage...
+> Can anyone give me a clue as to what is wrong?
+>
+> make[2]: Entering directory
+>
+> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> make[3]: Entering directory
+>
+> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> make[3]: Nothing to be done for `install-exec-am'.
+>  /bin/mkdir -p
+> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+>  /usr/bin/install -c -m 644 NEWS
+>
+> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+> make[3]: Leaving directory
+>
+> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> make[2]: Leaving directory
+>
+> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> make[1]: Leaving directory
+>
+> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
+> for la in $(find
+>
+> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
+> -name "*.la"); do \
+> cp -a "${la}" "${la}.fixed" && \
+> /bin/sed -i -e
+> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR
+> @:g"
+> \
+> -e
+> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR
+> @:g"
+> \
+> -e
+> "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+> @:g"
+> \
+> -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+> -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+> @:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
+> \
+> -e "s:@STAGING_DIR
+> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
+> \
+> -e "s:@BASE_DIR
+> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
+> \
+> "${la}.fixed" && \
+> if cmp -s "${la}" "${la}.fixed"; then \
+> rm -f "${la}.fixed"; \
+> else \
+> mv "${la}.fixed" "${la}"; \
+> fi || exit 1; \
+> done
+> libp11: installs files in
+>
+> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
+> make: ***
+> [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
+> Error 1
+> make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
+>
+>
+> --
+> Jon Smirl
+> jonsmirl at gmail.com
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Jon Smirl
+jonsmirl at gmail.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/1de96048/attachment.html>
