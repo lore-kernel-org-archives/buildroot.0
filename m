@@ -1,42 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Apr 2019 20:23:51 +0200
-Subject: [Buildroot] [PATCH 7/7] package/docker-cli: bump to version v18.09.4
+Date: Mon,  1 Apr 2019 20:23:46 +0200
+Subject: [Buildroot] [PATCH 2/7] Revert "package/runc: blacklist
+ Codesourcery ARM toolchain"
 In-Reply-To: <20190401182352.26342-1-peter@korsgaard.com>
 References: <20190401182352.26342-1-peter@korsgaard.com>
-Message-ID: <20190401182352.26342-8-peter@korsgaard.com>
+Message-ID: <20190401182352.26342-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This reverts commit ce76a989022baa6395b874ed44b9246bba053f8a.
+
+With the bump to 1.0.0-rc7, runc no longer needs O_TMPFILE.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/docker-containerd/Config.in | 2 --
+ package/docker-engine/Config.in     | 2 --
+ package/runc/Config.in              | 2 --
+ 3 files changed, 6 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 9782f34baa..41686f0de8 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	29f3a435bfcd52dbe26f6315ee92bffc0220a537608935a2c3870f6b729fc16e  docker-cli-v18.09.2.tar.gz
-+sha256	f9be44f395617f3f75faac69ad90f93c94ee4050c193bfa05eddb520a27c5d44  docker-cli-v18.09.4.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index c3dd536937..65701d1530 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = v18.09.2
-+DOCKER_CLI_VERSION = v18.09.4
- DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
- 
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index ffa2b208f2..8d80d8623b 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # runc
+ 	depends on BR2_USE_MMU # util-linux
+ 	select BR2_PACKAGE_RUNC # runtime dependency
+ 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
+@@ -36,4 +35,3 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index bc36b05bed..8364759ae1 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # docker-containerd -> runc
+ 	depends on BR2_USE_MMU # docker-containerd
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+@@ -57,5 +56,4 @@ comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	depends on BR2_USE_MMU
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+index 8939193048..2f32bce207 100644
+--- a/package/runc/Config.in
++++ b/package/runc/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_RUNC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.19
+ 	help
+ 	  runC is a CLI tool for spawning and running containers
+ 	  according to the OCP specification.
+@@ -17,4 +16,3 @@ comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
+ 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
 -- 
 2.11.0
