@@ -1,53 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:07:35 +0200
-Subject: [Buildroot] [git commit] package/perl-net-ssh2: bump to version 0.70
-Message-ID: <20190401200604.986938B7C1@busybox.osuosl.org>
+Date: Mon, 1 Apr 2019 22:01:11 +0200
+Subject: [Buildroot] [git commit] package/perl-net-ping: bump to version 2.72
+Message-ID: <20190401200604.909477F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42d1599acec5ff9b63628cc0911e6c4a917e9c86
+commit: https://git.buildroot.net/buildroot/commit/?id=fd24e6ffecbce808eadd10cbc33b48d9b548a95c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The license file hash changed due to a copyright year update:
-
--Copyright (C) 2011-2018 by Salvador Fandino (salva at cpan.org).
-+Copyright (C) 2011-2019 by Salvador Fandino (salva at cpan.org).
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: explain why the license file hash is changed]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
- package/perl-net-ssh2/perl-net-ssh2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-ping/perl-net-ping.hash | 4 ++--
+ package/perl-net-ping/perl-net-ping.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
-index 7a84949a6e..006f79477c 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.hash
-+++ b/package/perl-net-ssh2/perl-net-ssh2.hash
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
+index c3bff0339d..2842827c85 100644
+--- a/package/perl-net-ping/perl-net-ping.hash
++++ b/package/perl-net-ping/perl-net-ping.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    94ed21d4557a6bbc3cb6bfd7c3479ef0 Net-SSH2-0.69.tar.gz
--sha256 2fc85e1434b8a6e77142d85e3cea5a081ca71da5d02c4212b9970d3a3924baa6 Net-SSH2-0.69.tar.gz
-+md5    ef8d282c410728aa452fb380a7d22b05 Net-SSH2-0.70.tar.gz
-+sha256 47236af8f4a5e4cfa3036f7969d940247349b65b032478a0c72ba0b2e398b000 Net-SSH2-0.70.tar.gz
+-md5    58110451d15d27b46ebc6a53f1697ff1 Net-Ping-2.71.tar.gz
+-sha256 0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f Net-Ping-2.71.tar.gz
++md5    eb90f86dcc31126e88be02ecb62d5303 Net-Ping-2.72.tar.gz
++sha256 555af602f54229cd81fef7da1a81516800f3155c6dc4d07dc71be1de3253dd6a Net-Ping-2.72.tar.gz
  
  # computed by scancpan
--sha256 6db904d7c8127a33df4666961088c97586c24644a4980dc50d0676ef4c0509f7 README
-+sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
-index 7860c7f05f..e75d01d9bd 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.mk
-+++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+ sha256 9441a22309a2b40ff1282ac1906c137f07f5e521e7b1ec162b251f6006051b47 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
+index 5e8f53be1e..b422c4eaba 100644
+--- a/package/perl-net-ping/perl-net-ping.mk
++++ b/package/perl-net-ping/perl-net-ping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_SSH2_VERSION = 0.69
-+PERL_NET_SSH2_VERSION = 0.70
- PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
- PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
- PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_PING_VERSION = 2.71
++PERL_NET_PING_VERSION = 2.72
+ PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
+ PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_NET_PING_LICENSE = Artistic or GPL-1.0+
