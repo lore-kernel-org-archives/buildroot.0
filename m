@@ -1,25 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:13:32 +0200
-Subject: [Buildroot] [PATCH 12/14] package/perl-net-ssh2: bump to
- version 0.70
-In-Reply-To: <20190331174449.1461-12-francois.perrad@gadz.org>
+Date: Mon, 1 Apr 2019 22:14:08 +0200
+Subject: [Buildroot] [PATCH 13/14] package/perl-sub-quote: bump to
+ version 2.006003
+In-Reply-To: <20190331174449.1461-13-francois.perrad@gadz.org>
 References: <20190331174449.1461-1-francois.perrad@gadz.org>
- <20190331174449.1461-12-francois.perrad@gadz.org>
-Message-ID: <20190401221332.4091787e@windsurf>
+ <20190331174449.1461-13-francois.perrad@gadz.org>
+Message-ID: <20190401221408.3b03e5e5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Mar 2019 19:44:47 +0200
+Hello,
+
+On Sun, 31 Mar 2019 19:44:48 +0200
 Francois Perrad <fperrad@gmail.com> wrote:
 
->  # computed by scancpan
-> -sha256 6db904d7c8127a33df4666961088c97586c24644a4980dc50d0676ef4c0509f7 README
-> +sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
+> -# computed by scancpan
+> -sha256 8f7a1d60c718174b7752562007b2643d4a1c23f901cbeb7774015805efe0a817 README
 
-This change must come with an explanation in the commit log.
+Why is this being removed ?
+
+> -PERL_SUB_QUOTE_VERSION = 2.005001
+> +PERL_SUB_QUOTE_VERSION = 2.006003
+>  PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
+>  PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+>  PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
+> -PERL_SUB_QUOTE_LICENSE_FILES = README
+
+And here ?
+
+The README file didn't change substantially, so I kept it as a license
+file.
 
 Thanks,
 
