@@ -1,78 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Apr 2019 20:23:46 +0200
-Subject: [Buildroot] [PATCH 2/7] Revert "package/runc: blacklist
- Codesourcery ARM toolchain"
+Date: Mon,  1 Apr 2019 20:23:48 +0200
+Subject: [Buildroot] [PATCH 4/7] package/docker-containerd: bump version to
+ v1.2.5
 In-Reply-To: <20190401182352.26342-1-peter@korsgaard.com>
 References: <20190401182352.26342-1-peter@korsgaard.com>
-Message-ID: <20190401182352.26342-3-peter@korsgaard.com>
+Message-ID: <20190401182352.26342-5-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit ce76a989022baa6395b874ed44b9246bba053f8a.
+Contains a number of bugfixes. For more details, see the announcement:
 
-With the bump to 1.0.0-rc7, runc no longer needs O_TMPFILE.
+https://github.com/containerd/containerd/releases/tag/v1.2.5
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in | 2 --
- package/docker-engine/Config.in     | 2 --
- package/runc/Config.in              | 2 --
- 3 files changed, 6 deletions(-)
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index ffa2b208f2..8d80d8623b 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-@@ -36,4 +35,3 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index bc36b05bed..8364759ae1 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
-@@ -57,5 +56,4 @@ comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index 8939193048..2f32bce207 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.19
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCP specification.
-@@ -17,4 +16,3 @@ comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index cae88f40e2..fc7b6fcb49 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256	ff4c2ad680c9e2484e335868a54b0c1ea49d9165dd5b38b64ef7d9dacf2b96b4  docker-containerd-v1.2.3.tar.gz
++sha256	b92819bde71de947329814a3c649b8adb106cc03be16aae217b94297f4b843a1  docker-containerd-v1.2.5.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 9088c17660..586fd1fa08 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = v1.2.3
++DOCKER_CONTAINERD_VERSION = v1.2.5
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
 -- 
 2.11.0
