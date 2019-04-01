@@ -1,92 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Apr 2019 20:23:47 +0200
-Subject: [Buildroot] [PATCH 3/7] Revert "runc: depend on linux headers >=
- 3.11 for O_TMPFILE"
-In-Reply-To: <20190401182352.26342-1-peter@korsgaard.com>
-References: <20190401182352.26342-1-peter@korsgaard.com>
-Message-ID: <20190401182352.26342-4-peter@korsgaard.com>
+From: Mohamed Dawod <mhm.dawod@gmail.com>
+Date: Mon, 1 Apr 2019 21:07:15 +0200
+Subject: [Buildroot] [GSoC19] Motivation
+Message-ID: <CAGCTLNTuWB7E_txmWm9s+fOU5EJsyU1guWNOUM8c40B5WDOoog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 905e976a6af224b3ed015c46fcea2d717c155f55.
+Greetings,
+I hope this email finds you well.
 
-With the bump to 1.0.0-rc7, runc no longer needs O_TMPFILE.
+My name is Mohamed.
+I am a 4th year Computer Engineering student at Faculty of Engineering -
+Cairo University.
+*LinkedIn Profile* : https://www.linkedin.com/in/mohameddawod96/
+*Github Profile* : https://github.com/Dawody
+I would like to work in Project *"Support for distributed builds with
+IceCC"*
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-containerd/Config.in | 4 +---
- package/docker-engine/Config.in     | 6 ++----
- package/runc/Config.in              | 6 ++----
- 3 files changed, 5 insertions(+), 11 deletions(-)
+I have 2 years of experience in this failed.
+1. I studied Operating systems and Distributed systems in the faculty.
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 8d80d8623b..35867df21a 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
-@@ -33,5 +32,4 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8364759ae1..1fd229fcbb 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-@@ -51,9 +50,8 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 
- endif
- 
--comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.11"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index 2f32bce207..f181ee334f 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  runC is a CLI tool for spawning and running containers
-@@ -11,8 +10,7 @@ config BR2_PACKAGE_RUNC
- 
- 	  https://github.com/opencontainers/runc
- 
--comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
-+comment "runc needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
- 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
+2. I learnt How to build Linux From Scratch  (LFS8.3).
+
+3. I learnt Embedded Linux. I worked as Embedded Linux Engineer Inter in
+the last summer.
+- I built a complete linux based operating system for specific kit to
+execute qt5 apps.
+- I changed the default windowing system to wayland, and I customized
+wayland to fit the project needs.
+- I used yoctoproject, bitbake and openembedded and other open source
+layers.
+
+
+I am interested in operating systems and building embedded linux systems.
+From my experiment with bitbake and openembedded, I found that It really
+takes so much time to build complete embedded linux system.
+so I think that distributing this process can be a great achievement.
+Although I didn't use Buildroot or IceCC before, but  I could learn yocto,
+bitbake and openembedded and building projects with them during my summer
+internship without a direct supervision. It's well-known that Yocto Project
+has a steep learning curve.
+so I hope that I can learn buildroot and IceCC in short free time to start
+the project.
+
+I am looking forward to be accepted in this project because I would like to
+dig deeper in this field as I adore it,
+and because it may be my last chance to participate in GSoC, I wouldn't
+like to lose this chance.
+
+Thank You,
+Regards,
+
 -- 
-2.11.0
+
+Mohamed Dawod
+Computer Engineering Department
+Faculty of Engineering
+Cairo University
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/106088c7/attachment.html>
