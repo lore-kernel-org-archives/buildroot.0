@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 21:56:40 +0200
-Subject: [Buildroot] [git commit] package/perl-date-manip: bump to version
- 6.76
-Message-ID: <20190401200604.5007F811C3@busybox.osuosl.org>
+Date: Mon, 1 Apr 2019 22:07:35 +0200
+Subject: [Buildroot] [git commit] package/perl-net-ssh2: bump to version 0.70
+Message-ID: <20190401200604.986938B7C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82f4017b0ef9e4e730f0c2d5684218a61433fc2b
+commit: https://git.buildroot.net/buildroot/commit/?id=42d1599acec5ff9b63628cc0911e6c4a917e9c86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The license file hash changed due to a copyright year update:
+
+-Copyright (C) 2011-2018 by Salvador Fandino (salva at cpan.org).
++Copyright (C) 2011-2019 by Salvador Fandino (salva at cpan.org).
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: explain why the license file hash is changed]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-date-manip/perl-date-manip.hash | 4 ++--
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index b290e8ea24..ca4263fd4b 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+index 7a84949a6e..006f79477c 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.hash
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    d922d5fe4a00521dc171ac3ee65a9d61 Date-Manip-6.75.tar.gz
--sha256 c1fbcfbe2ab1a84e57f191807e87c97985da00926f64d1aae598c8756acbb67d Date-Manip-6.75.tar.gz
-+md5    a539820a8725e79c67826158a6b940a1 Date-Manip-6.76.tar.gz
-+sha256 1c87c78c03e3479e3b695952c0a5c11d3593ca9a5340dfb14d0be3d3e7ad63a8 Date-Manip-6.76.tar.gz
+-md5    94ed21d4557a6bbc3cb6bfd7c3479ef0 Net-SSH2-0.69.tar.gz
+-sha256 2fc85e1434b8a6e77142d85e3cea5a081ca71da5d02c4212b9970d3a3924baa6 Net-SSH2-0.69.tar.gz
++md5    ef8d282c410728aa452fb380a7d22b05 Net-SSH2-0.70.tar.gz
++sha256 47236af8f4a5e4cfa3036f7969d940247349b65b032478a0c72ba0b2e398b000 Net-SSH2-0.70.tar.gz
  
  # computed by scancpan
- sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index cc668184ee..cc999b8282 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
+-sha256 6db904d7c8127a33df4666961088c97586c24644a4980dc50d0676ef4c0509f7 README
++sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index 7860c7f05f..e75d01d9bd 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.75
-+PERL_DATE_MANIP_VERSION = 6.76
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSH2_VERSION = 0.69
++PERL_NET_SSH2_VERSION = 0.70
+ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+ PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
