@@ -1,66 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Apr 2019 10:42:35 +0200
-Subject: [Buildroot] Application for GSoC 2019
-In-Reply-To: <MaRd7Vz-JL7q0r-ND0Fc0yd2ssbogpg4Ug3OTzZJvpFY0vuUi2NP_rbEEcXIHG3JW-zRNhOR3cn2cp_rpTN7u814-elpGb7QFwjvRQJ6Sy8=@protonmail.com>
-References: <MaRd7Vz-JL7q0r-ND0Fc0yd2ssbogpg4Ug3OTzZJvpFY0vuUi2NP_rbEEcXIHG3JW-zRNhOR3cn2cp_rpTN7u814-elpGb7QFwjvRQJ6Sy8=@protonmail.com>
-Message-ID: <e271432d-9859-9adb-3b88-47654c1acd22@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon,  1 Apr 2019 11:26:12 +0200
+Subject: [Buildroot] [PATCH] package/wpebackend-fdo: package needs wayland
+ libegl
+Message-ID: <20190401092612.4614-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Dhyey,
+Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+wayland type, build breaks due to different EGLNativeWindowType types
+depending on backends(fb,x11,wl).
 
- [Adding Matt in Cc since he's the main interested party in this CVE tracking.]
+Add 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND' to Config.in to avoid
+building if there is not a wayland egl backend.
 
-On 27/03/2019 19:01, Griffin98 wrote:
-> Respected,
-> 
-> I want to work with your Organization as of Google Summer of Code 2019. My
-> details are as follows:
-> 
-> _Name_: Dhyey Patel
-> 
-> _Github Profile_: github.com/griffin98 <http://github.com/griffin98>
-> _Programming Skills_ :- C/C++, Embedded Linux,Embedded Android, Shell Scripting,
-> Python(Scripting, ML).
-> 
-> _Past Work Experience_:
-> 
-> 
-> 1) LineageOS Official Maintainer of Galaxy s5(exynos)[DISCONTINUED]
-> link:
-> https://github.com/TeamExyKings/android_device_samsung_k3g/commits/lineage-15.1
-> https://review.lineageos.org/q/griffin98
-> 2) Worked on Android Kernels and Firmwares
-> link: https://github.com/TeamExyKings/android_kernel_samsung_k3g/commits/working
-> 3) Worked on Natural Language Processing RASA Stack in Python.
-> Link: didn?t opensourced yet.
-> 4) Worked on Few Python Project As well.
-> 
-> _Proposed Project to work_ : "Follow upstream updates and CVEs of packages".
-> Motivation: Previously i worked on CVE tracker for kernel. Which some simply
-> python flask application which uses RESTFUL API? to update the list of CVEs from
-> https://cve.mitre.org/ and compare the kernel.Flask APP display the stats of
-> Patched and Unpatched CVEs. Main motive of the tracker was to help developers to
-> keep track of pending CVEs.
+Fixes:
+http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
 
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/wpebackend-fdo/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- That looks like interesting related project. Do you have a public repo with
-that code somewhere?
-
-
- I've also taken a look at your draft proposal on the GSoC website. Note that
-the part about tracking release-monitoring.org has already been implemented in
-support/scripts/pkg-stats. The main goal of the project would be to identify
-which CVEs are still open in the Buildroot package (and possibly which of those
-would be closed by going to a more recent upstream version).
-
-
- It would also be better to post this idea on the mailing list, so more people
-can comment on it. The GSoC website is only visible to the few people who are
-official mentors, and we don't get any notification about updates there.
-
- Regards,
- Arnout
+diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+index 2f5f965403..7d5ffb1fe0 100644
+--- a/package/wpebackend-fdo/Config.in
++++ b/package/wpebackend-fdo/Config.in
+@@ -1,6 +1,6 @@
+ comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 
+ config BR2_PACKAGE_WPEBACKEND_FDO
+ 	bool "wpebackend-fdo"
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBWPE
+ 	select BR2_PACKAGE_WAYLAND
+-- 
+2.17.1
