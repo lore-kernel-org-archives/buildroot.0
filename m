@@ -1,64 +1,44 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Mon, 1 Apr 2019 22:28:42 +0530
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
-References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
- <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
- <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
- <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
-Message-ID: <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Apr 2019 19:13:11 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/quota: add optional openldap dependency
+Message-ID: <20190401171311.28799-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Don't enable openldap in static build because openldap has too many
+optional dependencies (gmp, gnutls, nss, openssl, ...) and openldap
+doesn't provide a pkg-config file (and does not want to do it:
+http://www.openldap.org/lists/openldap-bugs/201406/msg00020.html)
 
-I have shared my draft proposal on GSoC's website. I read on the mailing
-list that GSoC
-doesn't notify you guys about this, so I thought I would let you know.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Disable openldap in static build
 
-Arnout, Yann:
-CC'd both of you since you are the ones I've had contact with about GSoC.
-Hope that's okay.
+ package/quota/quota.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Regards,
-Atharva Lele
-
-
-On Mon, Apr 1, 2019 at 2:55 PM Atharva Lele <itsatharva@gmail.com> wrote:
-
-> The internship ends this month, so I?ll be free to work on GSoC from
-> May-August.
->
-> Regards,
-> Atharva
->
-> On Mon, 1 Apr 2019 at 2:17 PM, Arnout Vandecappelle <arnout@mind.be>
-> wrote:
->
->>  [Sending this privately since it's not really of interest to the list.]
->>
->> On 26/03/2019 23:09, Arnout Vandecappelle wrote:
->> >  I'm currently interning at a startup which is working on an
->> > Embedded Linux OS and am working on a camera driver.
->>
->>  Yann observed that the GSoC rules don't allow you to be an intern at the
->> same
->> time as you're doing the GSoC project. So, just to be sure: this
->> internship will
->> be over by the time the GSoC development starts, right? And you will be
->> free to
->> work on GSoC in the June-August period?
->>
->>  Regards,
->>  Arnout
->>
-> --
-> Regards,
-> Atharva Lele
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190401/41c4cb0c/attachment.html>
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 3377250766..5f1e427d0b 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -29,6 +29,13 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ QUOTA_DEPENDENCIES += libtirpc host-pkgconf
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP):$(BR2_STATIC_LIBS),y:)
++QUOTA_DEPENDENCIES += openldap
++QUOTA_CONF_OPTS += --enable-ldapmail
++else
++QUOTA_CONF_OPTS += --disable-ldapmail
++endif
++
+ QUOTA_CONF_ENV = LIBS="$(QUOTA_LIBS)"
+ 
+ $(eval $(autotools-package))
+-- 
+2.14.1
