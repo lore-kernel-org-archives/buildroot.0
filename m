@@ -1,69 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:33:29 +0200
-Subject: [Buildroot] [git commit] package/live555: security bump to version
- 2019.03.06
-Message-ID: <20190401202947.80B8D8A645@busybox.osuosl.org>
+Date: Mon, 1 Apr 2019 22:35:30 +0200
+Subject: [Buildroot] [git commit] configs/engicam_imx6ul_isiot: fix use of
+ incorrect uboot defconfig file
+Message-ID: <20190401203324.0365F8125F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed30a85e5a327dc2c0a840b3ee3ba3ad41400c9e
+commit: https://git.buildroot.net/buildroot/commit/?id=93db2a9149d85786f216c9136ec66f99bbc5a851
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+In u-boot v2018.03 release, configs/imx6ul_isiot_mmc_defconfig was
+removed and afterwards both emmc and mmc use the same
+imx6ul_isiot_emmc_defconfig file so fix the same.
 
-- CVE-2019-6256: A Denial of Service issue was discovered in the LIVE555
-  Streaming Media libraries as used in Live555 Media Server 0.93.  It can
-  cause an RTSPServer crash in handleHTTPCmd_TunnelingPOST, when
-  RTSP-over-HTTP tunneling is supported, via x-sessioncookie HTTP headers in
-  a GET request and a POST request within the same TCP session.  This occurs
-  because of a call to an incorrect virtual function pointer in the
-  readSocket function in GroupsockHelper.cpp.
-
-- CVE-2019-7314: liblivemedia in Live555 before 2019.02.03 mishandles the
-  termination of an RTSP stream after RTP/RTCP-over-RTSP has been set up,
-  which could lead to a Use-After-Free error that causes the RTSP server to
-  crash (Segmentation fault) or possibly have unspecified other impact.
-
-- CVE-2019-9215: n Live555 before 2019.02.27, malformed headers lead to
-  invalid memory access in the parseAuthorizationHeader function.
-
-The normal live555 web site is temporarily unavailable, so use an
-alternative _SITE / drop upstream hash.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/live555/live555.hash | 4 +---
- package/live555/live555.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ configs/engicam_imx6ul_isiot_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 024dcac124..f8e5b5e68c 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,3 @@
--# From http://live555.com/liveMedia/public/live555-latest-md5.txt
--md5 3383dea853735b7a73eda6ddb52b6372 live.2018.10.17.tar.gz
- # Locally generated
--sha256 7c68d9c95b39acd309a2b6a4fc14c3837544a9be3f64062ed38d1ad6f68dc9e8  live.2018.10.17.tar.gz
-+sha256 0bd0c26d980425d9a419d835193e292a08a968f175da1902da4b495f126d5abd  live.2019.03.06.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 6a6d353650..250eea236c 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2018.10.17
-+LIVE555_VERSION = 2019.03.06
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
--LIVE555_SITE = http://www.live555.com/liveMedia/public
-+LIVE555_SITE = http://www.live555.com
- LIVE555_LICENSE = LGPL-2.1+
- LIVE555_LICENSE_FILES = COPYING
- LIVE555_INSTALL_STAGING = YES
+diff --git a/configs/engicam_imx6ul_isiot_defconfig b/configs/engicam_imx6ul_isiot_defconfig
+index 0fe499732b..9ba11361e7 100644
+--- a/configs/engicam_imx6ul_isiot_defconfig
++++ b/configs/engicam_imx6ul_isiot_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_isiot_mmc"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_isiot_emmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
