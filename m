@@ -1,48 +1,61 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon,  1 Apr 2019 11:26:12 +0200
-Subject: [Buildroot] [PATCH] package/wpebackend-fdo: package needs wayland
- libegl
-Message-ID: <20190401092612.4614-1-giulio.benetti@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  1 Apr 2019 12:11:56 +0200
+Subject: [Buildroot] [PATCH] package/gst-omx: default to pass
+ --with-omx-target=generic
+Message-ID: <20190401101157.6510-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
-wayland type, build breaks due to different EGLNativeWindowType types
-depending on backends(fb,x11,wl).
+target defaults to none, which isn't a legal target:
 
-Add 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND' to Config.in to avoid
-building if there is not a wayland egl backend.
+configure: Using none as OpenMAX IL target
+configure: error: invalid OpenMAX IL target, you must specify one of --with-omx-target={generic,rpi,bellagio,tizonia,zynqultrascaleplus}
 
-Fixes:
-http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+Instead default to 'generic', fixing the build with E.G. nvidia-tegra23.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpebackend-fdo/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst-omx/gst-omx.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-index 2f5f965403..7d5ffb1fe0 100644
---- a/package/wpebackend-fdo/Config.in
-+++ b/package/wpebackend-fdo/Config.in
-@@ -1,6 +1,6 @@
- comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index 5dda1eb145..b8a8cd8457 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
+@@ -11,9 +11,10 @@ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ GST_OMX_LICENSE = LGPL-2.1
+ GST_OMX_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_WPEBACKEND_FDO
- 	bool "wpebackend-fdo"
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBWPE
- 	select BR2_PACKAGE_WAYLAND
++GST_OMX_VARIANT = generic
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-GST_OMX_CONF_OPTS = \
+-	--with-omx-target=rpi
++GST_OMX_VARIANT = rpi
+ GST_OMX_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) \
+ 		-I$(STAGING_DIR)/usr/include/IL \
+@@ -22,8 +23,7 @@ GST_OMX_CONF_ENV = \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BELLAGIO),y)
+-GST_OMX_CONF_OPTS = \
+-	--with-omx-target=bellagio
++GST_OMX_VARIANT = bellagio
+ GST_OMX_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) \
+ 		-DOMX_VERSION_MAJOR=1 \
+@@ -32,6 +32,8 @@ GST_OMX_CONF_ENV = \
+ 		-DOMX_VERSION_STEP=0"
+ endif
+ 
++GST_OMX_CONF_OPTS += --with-omx-target=$(GST_OMX_VARIANT)
++
+ GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
+ 
+ # adjust library paths to where buildroot installs them
 -- 
-2.17.1
+2.11.0
