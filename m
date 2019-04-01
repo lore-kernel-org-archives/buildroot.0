@@ -1,45 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Apr 2019 22:43:15 +0200
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20190227
-Message-ID: <20190401204315.18226-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 1 Apr 2019 22:43:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fmt: bump version to 5.3.0
+In-Reply-To: <20190401164218.13606-1-bernd.kuhls@t-online.de>
+References: <20190401164218.13606-1-bernd.kuhls@t-online.de>
+Message-ID: <20190401224323.199e6be0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
+On Mon,  1 Apr 2019 18:42:18 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/fmt/fmt.hash | 2 +-
+>  package/fmt/fmt.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 70558de720..5f092a3f8c 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-January/003805.html
--sha256 edd13c7631af169e3838621b1a1bff3ef73cf7bc778eec2bd55f7c1089ffdf9b  WireGuard-0.0.20190123.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
-+sha256 fcdb26fd2692d9e1dee54d14418603c38fbb973a06ce89d08fbe45292ff37f79  WireGuard-0.0.20190227.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 8d6cdb8e56..246b104d6f 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20190123
-+WIREGUARD_VERSION = 0.0.20190227
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+Applied to master, thanks.
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
