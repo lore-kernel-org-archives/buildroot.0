@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 23:10:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] pkg-generic: Cleanup some redundant
- checks
-In-Reply-To: <20190317212014.3831-2-nolange79@gmail.com>
-References: <20190317212014.3831-1-nolange79@gmail.com>
- <20190317212014.3831-2-nolange79@gmail.com>
-Message-ID: <20190401231015.40aff37c@windsurf>
+Date: Mon, 1 Apr 2019 23:11:18 +0200
+Subject: [Buildroot] [git commit] package/quota: fix syntax error
+Message-ID: <20190401210732.978AC81522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+commit: https://git.buildroot.net/buildroot/commit/?id=259d7a2766a4c7b6f39d214672b5c1da185c3fe0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Mar 2019 22:20:14 +0100
-Norbert Lange <nolange79@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quota/quota.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> With the last change, packages will depend
-> only on host-{xz,lzip} if the source archives
-> have filenames requesting the corresponding compressor.
-> 
-> This allows using a single guard.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/pkg-generic.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-
-I hesitated a bit on this. Originally, I was quite in favor of the
-change and found Yann's opinion a bit too strict. However, after
-applying the patch, and looking at the code, I ended up feeling a bit
-like Yann: even though there are less lines of code, the conditions
-become a bit tricky, while currently, they are perfectly clear.
-
-So I'll mark this patch as Rejected. Of course, if other BR maintainers
-object, we can revisit, my choice is not super strong.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index e356d91a06..5f1e427d0b 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -13,7 +13,7 @@ QUOTA_LIBS = $(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBNL),yy)
+ QUOTA_DEPENDENCIES += host-pkgconf dbus libnl
+-QUOTA_CONF_OTS += --enable-netlink
++QUOTA_CONF_OPTS += --enable-netlink
+ else
+ QUOTA_CONF_OPTS += --disable-netlink
+ endif
