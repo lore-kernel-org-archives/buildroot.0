@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Apr 2019 22:43:00 +0200
-Subject: [Buildroot] [git commit] package/fmt: bump version to 5.3.0
-Message-ID: <20190401203924.A8F9C86FEF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  1 Apr 2019 22:43:15 +0200
+Subject: [Buildroot] [PATCH] package/wireguard: bump version to 0.0.20190227
+Message-ID: <20190401204315.18226-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62797bd01a9f0f62f4bb7d52ad666ac82ffee17c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details of the changes, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 78665d2fa7..a124a1b7ed 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 70558de720..5f092a3f8c 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2019-January/003805.html
+-sha256 edd13c7631af169e3838621b1a1bff3ef73cf7bc778eec2bd55f7c1089ffdf9b  WireGuard-0.0.20190123.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
++sha256 fcdb26fd2692d9e1dee54d14418603c38fbb973a06ce89d08fbe45292ff37f79  WireGuard-0.0.20190227.tar.xz
  # Locally calculated
--sha256 73d4cab4fa8a3482643d8703de4d9522d7a56981c938eca42d929106ff474b44  fmt-5.1.0.tar.gz
-+sha256 defa24a9af4c622a7134076602070b45721a43c51598c8456ec6f2c4dbb51c89  fmt-5.3.0.tar.gz
- sha256 560d39617dfb4b4e4088597291a070ed6c3a8d67668114ed475c673430c3e49a  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 39fd7e22d9..17dfb87b74 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 8d6cdb8e56..246b104d6f 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMT_VERSION = 5.1.0
-+FMT_VERSION = 5.3.0
- FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
- FMT_LICENSE = BSD-2-Clause
- FMT_LICENSE_FILES = LICENSE.rst
+-WIREGUARD_VERSION = 0.0.20190123
++WIREGUARD_VERSION = 0.0.20190227
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
+-- 
+2.11.0
