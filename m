@@ -1,45 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  1 Apr 2019 17:15:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.1.3
-Message-ID: <20190401151558.600-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 1 Apr 2019 17:47:51 +0200
+Subject: [Buildroot] dl_dir problem with building using legal-info
+In-Reply-To: <9f90c933-8494-9a82-ab12-7f67873fda9e@ginzinger.com>
+References: <9f90c933-8494-9a82-ab12-7f67873fda9e@ginzinger.com>
+Message-ID: <20190401174751.581e16a4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/refs/heads/release/4.1:/Changelog
+Martin,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 1 Apr 2019 15:56:55 +0200
+Martin Kepplinger <martin.kepplinger@ginzinger.com> wrote:
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 208dfb5cf6..ba51af9847 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 b95f0ae44798ab1434155ac7f81f30a7e9760a02282e4b5898372c22a335347b  ffmpeg-4.1.2.tar.xz
-+sha256 0c3020452880581a8face91595b239198078645e7d7184273b8bcc7758beb63d  ffmpeg-4.1.3.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f7f882cb95..17e4fa7074 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.1.2
-+FFMPEG_VERSION = 4.1.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+> It seems like the plan might be to move from one "dl" directory
+> containing the tarballs, old_dl_dir, to the per-package directories in "dl".
+> 
+> So: I reuse the tarballs in "legal-info" for building. (think: no
+> internet connection). legal-info contains directories *with versions*.
+> In any case, it's easy by finding all archives and copying them to "dl"
+> before building.
+> 
+> If old_dl_dir would be removed from the download scripts, this would
+> break for me. The per-package directories in "dl" *don't contain
+> versions* and I guess there's no trivial way to recreate this directory
+> structure. So I thought I'd talk about this before old_dl_dir is gone...
+> 
+> In short: Before removing to look in old_dl_dir, please don't break this
+> use-case :) Is there an even better way to build using legal-info that
+> I'm not aware of already? If not, what could we implement?
+
+Why don't you use "make source" ? That's the intended target to
+populate the dl/ directory with everything that is needed to do a build
+with no internet connection.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
