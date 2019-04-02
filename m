@@ -1,53 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Apr 2019 22:56:02 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libfuse: bump version to 2.9.9
-In-Reply-To: <20190402205602.1823-1-peter@korsgaard.com>
-References: <20190402205602.1823-1-peter@korsgaard.com>
-Message-ID: <20190402205602.1823-2-peter@korsgaard.com>
+Date: Tue, 02 Apr 2019 22:56:57 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/libfuse: Install udev rules
+ and set permissions
+In-Reply-To: <20190315133033.5275-2-norbert.lange@andritz.com> (Norbert
+ Lange's message of "Fri, 15 Mar 2019 14:30:30 +0100")
+References: <20190315133033.5275-1-norbert.lange@andritz.com>
+ <20190315133033.5275-2-norbert.lange@andritz.com>
+Message-ID: <8736n0gm7a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a number of fixes for issues discovered post-2.9.8.  From the
-release notes:
+>>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
 
-- Fixed readdir bug when non-zero offsets are given to filler and the
-  filesystem client, after reading a whole directory, re-reads it from a
-  non-zero offset e.g.  by calling seekdir followed by readdir.
+ > This fixes some omissions from the installation.
+ > Install the udev rules.
 
-https://github.com/libfuse/libfuse/releases/tag/fuse-2.9.9
+ > Tell buildroot about the fuse device.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfuse/libfuse.hash | 2 +-
- package/libfuse/libfuse.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Apply setuid permissions on the fusermount tool.
 
-diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
-index 3d1b973071..f522325945 100644
---- a/package/libfuse/libfuse.hash
-+++ b/package/libfuse/libfuse.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	5e84f81d8dd527ea74f39b6bc001c874c02bad6871d7a9b0c14efb57430eafe3	fuse-2.9.8.tar.gz
-+sha256	d0e69d5d608cc22ff4843791ad097f554dd32540ddc9bed7638cc6fea7c1b4b5	fuse-2.9.9.tar.gz
+ > Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+ > ---
+ >  package/libfuse/libfuse.mk | 13 ++++++++++++-
+ >  1 file changed, 12 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+ > index e8a79a3166..84027ebedb 100644
+ > --- a/package/libfuse/libfuse.mk
+ > +++ b/package/libfuse/libfuse.mk
+ > @@ -14,11 +14,22 @@ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ >  LIBFUSE_CONF_OPTS = \
+ >  	--disable-example \
+ >  	--enable-lib \
+ > -	--enable-util
+ > +	--enable-util \
+ > +	UDEV_RULES_PATH=/lib/udev/rules.d
  
- # Hash for license files:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index ab0131b057..074dc59886 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFUSE_VERSION = 2.9.8
-+LIBFUSE_VERSION = 2.9.9
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
+ >  define LIBFUSE_INSTALL_TARGET_CMDS
+ >  	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+ >  	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+ > +	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
+ > +	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
+
+It would have been nicer to only do this if (e)udev was enabled. I've
+sent a patch to do so:
+
+https://patchwork.ozlabs.org/patch/1074963/
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
