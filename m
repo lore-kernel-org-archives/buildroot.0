@@ -1,72 +1,100 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  2 Apr 2019 19:11:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
- openssl
-Message-ID: <20190402171156.25871-1-fontaine.fabrice@gmail.com>
+Date: Tue,  2 Apr 2019 19:18:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/quota: fix build on m68k
+Message-ID: <20190402171835.26696-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+PIE breaks the build on m68k, so add an upstream patch to disable PIE.
+Obviously, when we start seriously testing the BR2_RELRO_FULL option, we
+will realize that it is broken on some architectures, and will probably
+disable it on m68k.
+
 Fixes:
- - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
+ - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...make-FindLibUpnp.cmake-fix-static-linking.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+ .../0001-configure.ac-add-disable-pie-option.patch | 55 ++++++++++++++++++++++
+ package/quota/quota.mk                             |  1 +
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/quota/0001-configure.ac-add-disable-pie-option.patch
 
-diff --git a/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+diff --git a/package/quota/0001-configure.ac-add-disable-pie-option.patch b/package/quota/0001-configure.ac-add-disable-pie-option.patch
 new file mode 100644
-index 0000000000..510bf2837f
+index 0000000000..c3b57fea66
 --- /dev/null
-+++ b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
-@@ -0,0 +1,44 @@
-+From e2f8e6c30e43c1818a6677d17de87f53c9414405 Mon Sep 17 00:00:00 2001
++++ b/package/quota/0001-configure.ac-add-disable-pie-option.patch
+@@ -0,0 +1,55 @@
++From cb20e19028a8996de9305502ba5e5da3bd1181bf Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 2 Apr 2019 10:44:06 +0200
-+Subject: [PATCH] cmake/FindLibUpnp.cmake: fix static linking
++Date: Tue, 2 Apr 2019 09:19:36 +0200
++Subject: [PATCH] configure.ac: add --disable-pie option
 +
-+Fix static linking with an openssl enabled upnp:
-+ - remove libupnp-1.8 from pkg_check_modules call otherwise test will
-+   fail if libupnp-1.8.pc is not found
-+ - add PC_UPNP_LIBRARIES to UPNP_LIBRARIES
++PIE is not necessarily supported on all architectures, so add an option
++to allow the user to disable the PIE.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
++This fixes the build on the m68k architecture:
++ - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gerbera/gerbera/pull/443]
++[Upstream status: merged]
 +---
-+ cmake/FindLibUpnp.cmake | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ Makefile.am  |  2 +-
++ configure.ac | 12 ++++++++++++
++ 2 files changed, 13 insertions(+), 1 deletion(-)
 +
-+diff --git a/cmake/FindLibUpnp.cmake b/cmake/FindLibUpnp.cmake
-+index ec198d4d..5d2b032d 100644
-+--- a/cmake/FindLibUpnp.cmake
-++++ b/cmake/FindLibUpnp.cmake
-+@@ -8,7 +8,7 @@
-+ #  UPNP_HAS_REUSEADDR - If LinUPnP was built with SO_REUSEADDR support
++diff --git a/Makefile.am b/Makefile.am
++index 638198d..332bd67 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,5 +1,5 @@
++ ACLOCAL_AMFLAGS = -I m4
++-AM_LDFLAGS = -pie
+++AM_LDFLAGS = @PIE_LDFLAGS@
 + 
-+ find_package(PkgConfig QUIET)
-+-pkg_check_modules (PC_UPNP QUIET libupnp-1.8 libupnp)
-++pkg_search_module (PC_UPNP QUIET libupnp-1.8 libupnp)
++ doc_DATA = \
++        README.mailserver \
++diff --git a/configure.ac b/configure.ac
++index 095ff86..5af4235 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -55,6 +55,18 @@ AS_IF([test "x${prefix}" = "xNONE"], [
++   AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/share/locale", [Locale-specific data directory])
++ ])
 + 
-+ find_path(UPNP_INCLUDE_DIR upnp.h
-+     HINTS ${PC_UPNP_INCLUDEDIR} ${PC_UPNP_INCLUDE_DIRS}
-+@@ -41,7 +41,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(UPnP
-+     VERSION_VAR UPNP_VERSION_STRING)
+++# ================
+++# Check for ldflags
+++# ================
+++AC_ARG_ENABLE([pie],
+++   [AS_HELP_STRING([--disable-pie], [Disable Position Independent Executable])],
+++   [enable_pie="$enableval"],
+++   [enable_pie=yes]
+++)
+++AS_IF([test x"$enable_pie" != "xno"], [
+++    PIE_LDFLAGS="-pie"
+++])
+++AC_SUBST([PIE_LDFLAGS])
 + 
-+ if (UPNP_FOUND)
-+-    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY})
-++    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY} ${PC_UPNP_LIBRARIES})
-+     set (UPNP_INCLUDE_DIRS ${UPNP_INCLUDE_DIR} )
-+ endif ()
-+ 
++ # ================
++ # Check for cflags
 +-- 
 +2.14.1
 +
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 5f1e427d0b..8c7563d289 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -10,6 +10,7 @@ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
+ QUOTA_LIBS = $(TARGET_NLS_LIBS)
++QUOTA_CONF_OPTS = --disable-pie
+ 
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBNL),yy)
+ QUOTA_DEPENDENCIES += host-pkgconf dbus libnl
 -- 
 2.14.1
