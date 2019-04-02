@@ -1,112 +1,47 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 2 Apr 2019 21:00:55 +0530
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
-References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
- <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
- <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
- <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
- <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
- <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
-Message-ID: <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Tue, 2 Apr 2019 18:48:23 +0300
+Subject: [Buildroot] [PATCH 1/3] package/s6-linux-init: Build also for
+ the host
+In-Reply-To: <20190327175503.5be2fb03@windsurf>
+References: <20190216212835.25503-1-vadim4j@gmail.com>
+ <20190216212835.25503-2-vadim4j@gmail.com>
+ <20190327175503.5be2fb03@windsurf>
+Message-ID: <20190402154823.GA3682@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I've made comments on the document.
+Hi Thomas,
 
-I've replied to your comments on there. We can discuss a bit more and I
-think then I'll
-make necessary changes to the document.
+On Wed, Mar 27, 2019 at 05:55:03PM +0100, Thomas Petazzoni wrote:
+> Hello Vadim,
+> 
+> I am not familiar with s6, so sorry if I'm asking silly questions in
+> this review.
+> 
+> On Sat, 16 Feb 2019 23:28:33 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > Add strict dependency for host-s6-linux-init to use s6-linux-init-maker
+> > on the host during the rootfs generation.
+> 
+> I think the wording is not great here: "strict dependency" does not
+> mean anything in the typical Buildroot speak. I think you wanted to say
+> "We add host-s6-linux-init as a dependency of the target s6-linux-init,
+> so that the latter can use the s6-linux-init-maker program as part of
+> its build process".
+> 
+> However, I think adding this dependency should belong to PATCH 2/3,
+> where s6-linux-init is actually changed to use s6-linux-init-maker.
+> Indeed, as I understand it, it's only starting with PATCH 2/3 that
+> s6-linux-init will need this program. Is this correct ?
 
-> I'm not sure if Yann is OK with using
-> Googly stuff though.
-
-Is there any other platform that he would be comfortable working on?
-I'll gladly move things over to there.
-
-> Once the plan fleshes out a little, I think you should post it on the
-mailing
-> list so others can comment as well.
-
-Will do.
+Yes, will move it to the PATCH 2/3.
+> 
+> If it is, then PATCH 1/3 should only change s6-linux-init.mk to add the
+> host variant of s6-linux-init.
 
 Regards,
-Atharva Lele
-
-
-On Tue, Apr 2, 2019 at 2:51 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-
->
->
-> On 01/04/2019 18:58, Atharva Lele wrote:
-> > Hi all,
-> >
-> > I have shared my draft proposal on GSoC's website. I read on the mailing
-> list
-> > that GSoC
-> > doesn't notify you guys about this, so I thought I would let you know.
-> >
-> > Arnout, Yann:
-> > CC'd both of you since you are the ones I've had contact with about
-> GSoC. Hope
-> > that's okay.
->
->  I've made comments on the document. I'm not sure if Yann is OK with using
-> Googly stuff though.
->
->  Once the plan fleshes out a little, I think you should post it on the
-> mailing
-> list so others can comment as well.
->
->  Regards,
->  Arnout
->
->
-> >
-> > Regards,
-> > Atharva Lele
-> >
-> >
-> > On Mon, Apr 1, 2019 at 2:55 PM Atharva Lele <itsatharva@gmail.com
-> > <mailto:itsatharva@gmail.com>> wrote:
-> >
-> >     The internship ends this month, so I?ll be free to work on GSoC from
-> May-August.
-> >
-> >     Regards,
-> >     Atharva
-> >
-> >     On Mon, 1 Apr 2019 at 2:17 PM, Arnout Vandecappelle <arnout@mind.be
-> >     <mailto:arnout@mind.be>> wrote:
-> >
-> >          [Sending this privately since it's not really of interest to
-> the list.]
-> >
-> >         On 26/03/2019 23:09, Arnout Vandecappelle wrote:
-> >         >  I'm currently interning at a startup which is working on an
-> >         > Embedded Linux OS and am working on a camera driver.
-> >
-> >          Yann observed that the GSoC rules don't allow you to be an
-> intern at
-> >         the same
-> >         time as you're doing the GSoC project. So, just to be sure: this
-> >         internship will
-> >         be over by the time the GSoC development starts, right? And you
-> will be
-> >         free to
-> >         work on GSoC in the June-August period?
-> >
-> >          Regards,
-> >          Arnout
-> >
-> >     --
-> >     Regards,
-> >     Atharva Lele
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190402/d22657a0/attachment.html>
+Vadim Kochan
