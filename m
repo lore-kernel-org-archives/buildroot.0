@@ -1,64 +1,43 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Tue,  2 Apr 2019 16:49:35 +0200
-Subject: [Buildroot] [PATCH] package/luajit: bump to version 2.1.x
- developpment version
-Message-ID: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Apr 2019 16:57:52 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: bump version to 2.1.2
+Message-ID: <20190402145753.25555-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to integrate bcc (front end tool for eBPF) into buildroot
-and testing it on a Raspberry PI 3; We need to upgrade the version
-of luajit to 2.1.0 to support aarch64.
+Fixes a number of issues discovered post-2.1.1. For details, see:
+https://github.com/tpm2-software/tpm2-tss/releases/tag/2.1.2
 
-Currently, luajit aarch64_be support has not been tested.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/Config.in   | 2 +-
- package/luajit/luajit.hash | 4 ++--
- package/luajit/luajit.mk   | 5 ++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/tpm2-tss/tpm2-tss.hash | 2 +-
+ package/tpm2-tss/tpm2-tss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 88c5bcb..9ecf6b4 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	bool
--	default y if BR2_i386 || \
-+	default y if BR2_i386 || BR2_aarch64 || \
- 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
- 		BR2_powerpc || BR2_arm || BR2_armeb || \
- 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 2081d12..b422bc9 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,2 +1,2 @@
--# Hashes from: http://luajit.org/download.html
--md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
-+# Localy generated
-+sha256 ad5077bd861241bf5e50ae4bf543d291c5fcffab95ccc3218401131f503e45bd luajit-f0e865dd4861520258299d0f2a56491bd9d602e1.tar.gz
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 5b08a42..9a06691 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index 8d62320239..a9a9f3c963 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 b3f3a0319a3ed9d03465755b57bc60ec5e3b3bac2a0d1d2c79ca1ed412aed8ce  tpm2-tss-2.1.1.tar.gz
++sha256 aba502ba70c7697a4ef1ff01a81802d4c6570509dd94acee74bb06d6d1e9f68c  tpm2-tss-2.1.2.tar.gz
+ sha256 f7da3c2da12cec3348bb7ee9e2a9e651a241450b2efb67da29d5a75ef2da058a  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 672f483d44..3b730acdeb 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAJIT_VERSION = 2.0.5
--LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
--LUAJIT_SITE = http://luajit.org/download
-+LUAJIT_VERSION = f0e865dd4861520258299d0f2a56491bd9d602e1
-+LUAJIT_SITE = $(call github,luajit,luajit,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- 
+-TPM2_TSS_VERSION = 2.1.1
++TPM2_TSS_VERSION = 2.1.2
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
 -- 
-2.7.4
+2.11.0
