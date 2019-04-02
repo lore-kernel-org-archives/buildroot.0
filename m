@@ -1,23 +1,45 @@
-From: Philip Molloy <philip@philipmolloy.com>
-Date: Tue, 02 Apr 2019 20:47:04 +0000
-Subject: [Buildroot] Building U-Boot tools from the same source as U-Boot
-Message-ID: <2Y33zxBDORlgwoH3fxYVQaMDaUMU8f0QA0bJxUmQoZOTBYSE82zmf7279qlnT894bLCWFPcQRJXYtmlzbiv1b_GBOAT6iR7HN3s0qny9XvI=@philipmolloy.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Apr 2019 22:56:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libfuse: only install udev rules if
+ (e)udev is enabled
+Message-ID: <20190402205602.1823-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+No point in installing udev rules if nothing will use it.
 
-I maintain a slightly patched up-to-date mainline U-Boot at work. I point to that using BR2_TARGET_UBOOT_CUSTOM_GIT. I noticed today that the U-Boot user space tools (i.e. fw_printenv and fw_setenv) were built with a default environment that doesn't match our custom environment that we store in a text file and gets compiled into the U-Boot binary and a standalone U-Boot binary environment.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libfuse/libfuse.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-The default environment that finds its way into the tools is defined here:
-http://git.denx.de/?p=u-boot.git;a=blob;f=tools/env/fw_env_private.h;h=86be16dabc621b61e2f97274457042f76d39d0f6;hb=HEAD#l48
-
-If the environment is corrupted the tool will print a warning and use the default environment that is compiled into the tool, but not error out.
-
-Is there a way to use the same source for BR2_TARGET_UBOOT and BR2_PACKAGE_UBOOT_TOOLS? It seems like that would be a good practice anyway, but appears to be especially important in this case.
-
-Best,
-Philip
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 84027ebedb..ab0131b057 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -17,11 +17,18 @@ LIBFUSE_CONF_OPTS = \
+ 	--enable-util \
+ 	UDEV_RULES_PATH=/lib/udev/rules.d
+ 
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define LIBFUSE_INSTALL_UDEV
++	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
++	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
++endef
++
++LIBFUSE_POST_INSTALL_TARGET_HOOKS += LIBFUSE_INSTALL_UDEV
++endif
++
+ define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+-	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
+-	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
+ endef
+ 
+ define LIBFUSE_DEVICES
+-- 
+2.11.0
