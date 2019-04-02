@@ -1,88 +1,55 @@
-From: Mohamed Dawod <mhm.dawod@gmail.com>
-Date: Tue, 2 Apr 2019 05:14:42 +0200
-Subject: [Buildroot] [GSoC19] Motivation
-In-Reply-To: <20190401214416.1e265d6f@windsurf>
-References: <CAGCTLNTuWB7E_txmWm9s+fOU5EJsyU1guWNOUM8c40B5WDOoog@mail.gmail.com>
- <20190401214416.1e265d6f@windsurf>
-Message-ID: <CAGCTLNQiJT9j3yxha=X3vm4pK33W82P=iemytFQ6ja7wJcKAag@mail.gmail.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Tue, 2 Apr 2019 06:48:06 +0200
+Subject: [Buildroot] dl_dir problem with building using legal-info
+In-Reply-To: <20190401174751.581e16a4@windsurf>
+References: <9f90c933-8494-9a82-ab12-7f67873fda9e@ginzinger.com>
+ <20190401174751.581e16a4@windsurf>
+Message-ID: <dd7ab5ff-cddb-004d-19ef-506412a86313@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> In order to show your interest and skills, could you try to submit one
-> patch doing some useful contribution to Buildroot ?
->
-> You could for example look at http://autobuild.buildroot.net/stats/ for
-> some package that is not up-to-date, update it to a newer version, test
-> it on some target (real HW or Qemu) and provide a patch doing the
-> update. Of course, make sure to read a bit the mailing list to see the
-> best practices. Check out also the Buildroot manual which has some
-> indications on how to contribute.
->
+On 01.04.19 17:47, Thomas Petazzoni wrote:
+> Martin,
+> 
+> On Mon, 1 Apr 2019 15:56:55 +0200
+> Martin Kepplinger <martin.kepplinger@ginzinger.com> wrote:
+> 
+>> It seems like the plan might be to move from one "dl" directory
+>> containing the tarballs, old_dl_dir, to the per-package directories in "dl".
+>>
+>> So: I reuse the tarballs in "legal-info" for building. (think: no
+>> internet connection). legal-info contains directories *with versions*.
+>> In any case, it's easy by finding all archives and copying them to "dl"
+>> before building.
+>>
+>> If old_dl_dir would be removed from the download scripts, this would
+>> break for me. The per-package directories in "dl" *don't contain
+>> versions* and I guess there's no trivial way to recreate this directory
+>> structure. So I thought I'd talk about this before old_dl_dir is gone...
+>>
+>> In short: Before removing to look in old_dl_dir, please don't break this
+>> use-case :) Is there an even better way to build using legal-info that
+>> I'm not aware of already? If not, what could we implement?
+> 
+> Why don't you use "make source" ? That's the intended target to
+> populate the dl/ directory with everything that is needed to do a build
+> with no internet connection.
+> 
 
-Ok, I will try to do this task. I will start NOW.
+because I need (to package) legal-info (patches, configs and licenses
+included) anyways. I would have to duplicate what legal-info does if I'd
+switch to using the "dl" directory directly (as a starting point).
 
-Unfortunately, My midterm exams will start next week. I need to finish the
-project proposal this week because it will be very hard to work during
-exams.
-so I suggest to give higher priority to the project proposal more than the
-task of contribution.
-I promise I will finish the contribution task after the exams if I couldn't
-finish it before the exams.
-Are you agree for that ?
+thanks
 
-thank you in advance,
-
-On Mon, Apr 1, 2019 at 9:44 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Mohamed,
->
-> On Mon, 1 Apr 2019 21:07:15 +0200
-> Mohamed Dawod <mhm.dawod@gmail.com> wrote:
->
-> > I am looking forward to be accepted in this project because I would like
-> to
-> > dig deeper in this field as I adore it,
-> > and because it may be my last chance to participate in GSoC, I wouldn't
-> > like to lose this chance.
->
-> Thanks a lot for introducing yourself, and for your interest in our
-> topic related to IceCC.
->
-> In order to show your interest and skills, could you try to submit one
-> patch doing some useful contribution to Buildroot ?
->
-> You could for example look at http://autobuild.buildroot.net/stats/ for
-> some package that is not up-to-date, update it to a newer version, test
-> it on some target (real HW or Qemu) and provide a patch doing the
-> update. Of course, make sure to read a bit the mailing list to see the
-> best practices. Check out also the Buildroot manual which has some
-> indications on how to contribute.
->
-> Alternatively, you could have a look at http://autobuild.buildroot.net/
-> and try to solve some of the build failures, but this is more difficult
-> for a newcomer.
->
-> Thanks!
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
-
--- 
-
-Mohamed Dawod
-Computer Engineering Department
-Faculty of Engineering
-Cairo University
+                                   martin
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190402/ccacddcd/attachment.html>
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3616 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190402/453f9105/attachment.bin>
