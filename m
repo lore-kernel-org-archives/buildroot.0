@@ -1,59 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Apr 2019 08:31:15 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst-omx: make variant
- mutually exclusive
-Message-ID: <20190402062926.169C78CA2C@busybox.osuosl.org>
+Date: Tue, 2 Apr 2019 08:31:27 +0200
+Subject: [Buildroot] [git commit] package/wireguard: bump version to
+ 0.0.20190227
+Message-ID: <20190402062926.1F5F18CA35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b217aad9c0242209e41155280b91a8d79fee305
+commit: https://git.buildroot.net/buildroot/commit/?id=dde9d60c4f23b354c2a1cc45d1b52245cc62eebf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit cc419509506 added the GST_OMX_VARIANT option which gets a default
-value that gets overridden by subsequent conditions. check-package
-doesn't like that, so instead make the three cases explicitly mutually
-exclusive.
+For details of the changes, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.mk | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index b8a8cd8457..bb325ad1d2 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -11,8 +11,6 @@ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- GST_OMX_LICENSE = LGPL-2.1
- GST_OMX_LICENSE_FILES = COPYING
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 70558de720..5f092a3f8c 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2019-January/003805.html
+-sha256 edd13c7631af169e3838621b1a1bff3ef73cf7bc778eec2bd55f7c1089ffdf9b  WireGuard-0.0.20190123.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
++sha256 fcdb26fd2692d9e1dee54d14418603c38fbb973a06ce89d08fbe45292ff37f79  WireGuard-0.0.20190227.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 8d6cdb8e56..246b104d6f 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--GST_OMX_VARIANT = generic
--
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- GST_OMX_VARIANT = rpi
- GST_OMX_CONF_ENV = \
-@@ -20,9 +18,7 @@ GST_OMX_CONF_ENV = \
- 		-I$(STAGING_DIR)/usr/include/IL \
- 		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
- 		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
--endif
--
--ifeq ($(BR2_PACKAGE_BELLAGIO),y)
-+else ifeq ($(BR2_PACKAGE_BELLAGIO),y)
- GST_OMX_VARIANT = bellagio
- GST_OMX_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) \
-@@ -30,6 +26,8 @@ GST_OMX_CONF_ENV = \
- 		-DOMX_VERSION_MINOR=1 \
- 		-DOMX_VERSION_REVISION=2 \
- 		-DOMX_VERSION_STEP=0"
-+else
-+GST_OMX_VARIANT = generic
- endif
- 
- GST_OMX_CONF_OPTS += --with-omx-target=$(GST_OMX_VARIANT)
+-WIREGUARD_VERSION = 0.0.20190123
++WIREGUARD_VERSION = 0.0.20190227
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
