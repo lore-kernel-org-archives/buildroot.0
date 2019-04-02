@@ -1,29 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Apr 2019 08:32:28 +0200
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst-omx: make variant
- mutually exclusive
-In-Reply-To: <20190401220228.4923-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 2 Apr 2019 00:02:28 +0200")
-References: <20190401220228.4923-1-arnout@mind.be>
-Message-ID: <877eccj4sj.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Apr 2019 08:32:57 +0200
+Subject: [Buildroot] [PATCH] package/wireguard: bump version to
+ 0.0.20190227
+In-Reply-To: <20190401204315.18226-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 1 Apr 2019 22:43:15 +0200")
+References: <20190401204315.18226-1-peter@korsgaard.com>
+Message-ID: <8736n0j4rq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Commit cc419509506 added the GST_OMX_VARIANT option which gets a default
- > value that gets overridden by subsequent conditions. check-package
- > doesn't like that, so instead make the three cases explicitly mutually
- > exclusive.
+ > For details of the changes, see the announcement:
+ > https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
-
-Funky - I do run check-package in a post-commit hook, but I must have
-missed the warnings.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
