@@ -1,62 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Apr 2019 20:41:43 +0200
-Subject: [Buildroot] Failed to build in a user namespace without the
- root user
-In-Reply-To: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
- (Esben Nielsen's message of "Sun, 31 Mar 2019 23:51:18 +0200")
-References: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
-Message-ID: <87ftr0gsgo.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 2 Apr 2019 21:52:39 +0200
+Subject: [Buildroot] [PATCH v4 1/2] arch: add support for Andes
+ 32-bit(nds32)
+In-Reply-To: <20190402072340.17989-2-nylon7@andestech.com>
+References: <20190402072340.17989-1-nylon7@andestech.com>
+ <20190402072340.17989-2-nylon7@andestech.com>
+Message-ID: <20190402195239.GA8892@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Nielsen <nielsen.esben@gmail.com> writes:
+Nylon, All,
 
- > I try to build in an unpriviliged container (using bubblewrap), where
- > I only have a single user id, not uid 0.
+On 2019-04-02 15:23 +0800, Nylon Chen spake thusly:
+> This commit provides basic support for the Andes 32-bit(nds32) architecture.
+> 
+> Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+> Signed-off-by: Greentime Hu <greentime@andestech.com>
+> Signed-off-by: Nylon Chen <nylon7@andestech.com>
 
-Sounds special, but OK.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > I found the issue was in fakeroot, which per default when it does
- > chown, it also asks the kernel if the id it does chown to actually
- > exists. This is the default behaviour.
+Regards,
+Yann E. MORIN.
 
-Sorry, where do you see that? Looking at the fakeroot code, the only
-thing FAKEROOTDONTTRYCHOWN controls is if the wrapped chown also calls
-the real chown syscall:
-
-int chown(const char *path, uid_t owner, gid_t group){
-..
-  if(!dont_try_chown())
-    r=next_lchown(path,owner,group);
-  else
-    r=0;
-  if(r&&(errno==EPERM))
-    r=0;
-
-  return r;
-
-Does lchown(path, 0, 0); return anything else than EPERM in your
-bubblewrap setup?
-
-
- > Shouldn't it totally ignore the uid and gid map in the user namespace
- > in the kernel?
-
-The goal is indeed that Buildroot builds do not differ based on the
-build host. We are not there yet though.
-
-
- > Shoudln't that be default in buildroot? It is totally irrelevant,
- > which is uids are mapped on the host when building a rootfs to run
- > somewhere else.
-
-I have no problem with setting this environment variable the one place
-in fs/common.mk where we invoke fakeroot as there is indeed no reason to
-try to perform a chown "for real" for the Buildroot use cases, but I
-would like to understand what goes wrong exactly for you?
+> ---
+>  DEVELOPERS           |  3 +++
+>  arch/Config.in       | 12 ++++++++++++
+>  arch/Config.in.nds32 | 11 +++++++++++
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 arch/Config.in.nds32
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1001d55815..ef4ff81ab1 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1655,6 +1655,9 @@ F:	package/trousers/
+>  N:	Norbert Lange <nolange79@gmail.com>
+>  F:	package/tcf-agent/
+>  
+> +N:	Nylon Chen <nylon7@andestech.com>
+> +F:	arch/Config.in.nds32
+> +
+>  N:	Olaf Rempel <razzor@kopf-tisch.de>
+>  F:	package/ctorrent/
+>  
+> diff --git a/arch/Config.in b/arch/Config.in
+> index f50760a0cf..d82803c828 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -154,6 +154,14 @@ config BR2_mips64el
+>  	  http://www.mips.com/
+>  	  http://en.wikipedia.org/wiki/MIPS_Technologies
+>  
+> +config BR2_nds32
+> +	bool "nds32"
+> +	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+> +	select BR2_ARCH_HAS_MMU_MANDATORY
+> +	help
+> +	  nds32 is a 32-bit architecture developed by Andes Technology.
+> +	  https://en.wikipedia.org/wiki/Andes_Technology
+> +
+>  config BR2_nios2
+>  	bool "Nios II"
+>  	select BR2_ARCH_HAS_MMU_MANDATORY
+> @@ -419,6 +427,10 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
+>  source "arch/Config.in.mips"
+>  endif
+>  
+> +if BR2_nds32
+> +source "arch/Config.in.nds32"
+> +endif
+> +
+>  if BR2_nios2
+>  source "arch/Config.in.nios2"
+>  endif
+> diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+> new file mode 100644
+> index 0000000000..9c5db20e6f
+> --- /dev/null
+> +++ b/arch/Config.in.nds32
+> @@ -0,0 +1,11 @@
+> +config BR2_ARCH
+> +	default "nds32"
+> +
+> +config BR2_GCC_TARGET_ARCH
+> +	default "v3"
+> +
+> +config BR2_ENDIAN
+> +	default "LITTLE"
+> +
+> +config BR2_READELF_ARCH_NAME
+> +	default "Andes Technology compact code size embedded RISC processor family"
+> -- 
+> 2.18.0
+> 
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
