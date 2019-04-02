@@ -1,47 +1,64 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue,  2 Apr 2019 17:23:58 +0300
-Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: Fix build caused by
- extra 'install' target
-Message-ID: <1554215038-2515-1-git-send-email-email@gmail.com>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Tue,  2 Apr 2019 16:49:35 +0200
+Subject: [Buildroot] [PATCH] package/luajit: bump to version 2.1.x
+ developpment version
+Message-ID: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vadim Kochan <vadim4j@gmail.com>
+In order to integrate bcc (front end tool for eBPF) into buildroot
+and testing it on a Raspberry PI 3; We need to upgrade the version
+of luajit to 2.1.0 to support aarch64.
 
-After commit:
+Currently, luajit aarch64_be support has not been tested.
 
-	b0f98d5 package/netsniff-ng: allow to build with uclibc but w/o mausezahn
-
-the different build and install targets are specified depending if
-masuezahn tool is able to be selected or not. It works for the build
-case but for the install the old 'install' target was not removed from
-the make invocation and it still forces to install the mausezahn, so fix
-it by remove this target.
-
-Fixes:
-	http://autobuild.buildroot.net/results/cc44ed737799c9ac73628c82b86bd526b1c43310/
-	http://autobuild.buildroot.net/results/72d0753532720604d51c05663af7fbfe37434339/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Cc: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/netsniff-ng/netsniff-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luajit/Config.in   | 2 +-
+ package/luajit/luajit.hash | 4 ++--
+ package/luajit/luajit.mk   | 5 ++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index 8dd06b6..415e86d 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -54,7 +54,7 @@ endef
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 88c5bcb..9ecf6b4 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_i386 || \
++	default y if BR2_i386 || BR2_aarch64 || \
+ 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+ 		BR2_powerpc || BR2_arm || BR2_armeb || \
+ 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 2081d12..b422bc9 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://luajit.org/download.html
+-md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
++# Localy generated
++sha256 ad5077bd861241bf5e50ae4bf543d291c5fcffab95ccc3218401131f503e45bd luajit-f0e865dd4861520258299d0f2a56491bd9d602e1.tar.gz
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 5b08a42..9a06691 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
  
- define NETSNIFF_NG_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install \
-+		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc \
- 			-C $(@D) $(NETSNIFF_NG_INSTALL_MAKE_TARGET)
- endef
+-LUAJIT_VERSION = 2.0.5
+-LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
+-LUAJIT_SITE = http://luajit.org/download
++LUAJIT_VERSION = f0e865dd4861520258299d0f2a56491bd9d602e1
++LUAJIT_SITE = $(call github,luajit,luajit,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
  
 -- 
 2.7.4
