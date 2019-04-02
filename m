@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Apr 2019 08:31:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tiff: security bump to version
- 4.0.10
-In-Reply-To: <20190401211449.19641-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 1 Apr 2019 23:14:49 +0200")
-References: <20190401211449.19641-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bm1oj4tu.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Apr 2019 08:32:28 +0200
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst-omx: make variant
+ mutually exclusive
+In-Reply-To: <20190401220228.4923-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 2 Apr 2019 00:02:28 +0200")
+References: <20190401220228.4923-1-arnout@mind.be>
+Message-ID: <877eccj4sj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > - Drop patch (already in version)
- > - Add hash for license file
- > - Fix around 10 CVEs:
- >   https://www.cvedetails.com/vulnerability-list/vendor_id-2224/product_id-3881/version_id-216413/
- > - Add an upstream patch for CVE-2019-6128
+ > Commit cc419509506 added the GST_OMX_VARIANT option which gets a default
+ > value that gets overridden by subsequent conditions. check-package
+ > doesn't like that, so instead make the three cases explicitly mutually
+ > exclusive.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Funky - I do run check-package in a post-commit hook, but I must have
+missed the warnings.
 
 Committed, thanks.
 
