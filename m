@@ -1,54 +1,191 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Apr 2019 22:56:57 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/libfuse: Install udev rules
- and set permissions
-In-Reply-To: <20190315133033.5275-2-norbert.lange@andritz.com> (Norbert
- Lange's message of "Fri, 15 Mar 2019 14:30:30 +0100")
-References: <20190315133033.5275-1-norbert.lange@andritz.com>
- <20190315133033.5275-2-norbert.lange@andritz.com>
-Message-ID: <8736n0gm7a.fsf@dell.be.48ers.dk>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 3 Apr 2019 00:23:38 +0300
+Subject: [Buildroot] [PATCH 3/3] package/s6-rc: Allow to integrate s6-rc
+ services
+In-Reply-To: <20190327195409.14931f34@windsurf>
+References: <20190216212835.25503-1-vadim4j@gmail.com>
+ <20190216212835.25503-4-vadim4j@gmail.com>
+ <20190327195409.14931f34@windsurf>
+Message-ID: <20190402212338.tjnjkvfftjypaa7c@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
+Hi Thomas,
 
- > This fixes some omissions from the installation.
- > Install the udev rules.
+On Wed, Mar 27, 2019 at 07:54:09PM +0100, Thomas Petazzoni wrote:
+> Hello Vadim,
+> 
+> On Sat, 16 Feb 2019 23:28:35 +0200
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > It allows to install s6-rc services by post-build, rootfs-overlay or some
+> > package into /etc/s6/rc/service which will be compiled as s6-rc db as
+> > /etc/s6/rc/compiled-initial. Services are compiled on stage when rootfs overlay
+> > & post-build already performed.
+> 
+> This last sentence is confusing. What about "Services at compiled after
+> the rootfs overlay have been copied and post-build scripts have been
+> executed".
+> 
+> > Added rc.init & rc.shutdown scripts which are needed to run s6-rc
+> > services.
+> 
+> Isn't this already done in PATCH 2/3 ?
 
- > Tell buildroot about the fuse device.
+Yeah, I messed things up a bit... Initially I was thinking to have ability
+to have 2 s6 init options:
 
- > Apply setuid permissions on the fusermount tool.
+    1) s6-linut-init only - with customized everything by user
 
- > Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
- > ---
- >  package/libfuse/libfuse.mk | 13 ++++++++++++-
- >  1 file changed, 12 insertions(+), 1 deletion(-)
+    2) s6-rc - this is s6-linux-init + s6 solution, so thats why I
+    was rewritting what created by s6-linux-init
 
- > diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
- > index e8a79a3166..84027ebedb 100644
- > --- a/package/libfuse/libfuse.mk
- > +++ b/package/libfuse/libfuse.mk
- > @@ -14,11 +14,22 @@ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- >  LIBFUSE_CONF_OPTS = \
- >  	--disable-example \
- >  	--enable-lib \
- > -	--enable-util
- > +	--enable-util \
- > +	UDEV_RULES_PATH=/lib/udev/rules.d
- 
- >  define LIBFUSE_INSTALL_TARGET_CMDS
- >  	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
- >  	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
- > +	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
- > +	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
+but now I think s6-rc should be enough, and I think that PATCH 2/3 & 3/3
+might be squashed.
 
-It would have been nicer to only do this if (e)udev was enabled. I've
-sent a patch to do so:
+> 
+> > This is very basic s6-rc system support which even does not have the
+> > basic stuff like /proc /sys /dev setup, but this might be added in
+> > future work.
+> > 
+> > All above is only possible if BR2_INIT_S6 is selected.
+> 
+> "possible" ? "enabled" perhaps ?
+> 
+> 
+> > diff --git a/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
+> > new file mode 100644
+> > index 0000000000..baf1706bb3
+> > --- /dev/null
+> > +++ b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
+> > @@ -0,0 +1,76 @@
+> > +From cb89562fcec582bbb5bc9a3bf5faf33338e6b535 Mon Sep 17 00:00:00 2001
+> > +From: Vadim Kochan <vadim4j@gmail.com>
+> > +Date: Wed, 13 Feb 2019 03:36:03 +0200
+> > +Subject: [PATCH] configure: Allow to specify compiled base dir
+> > +
+> > +It allows to specify different s6-rc compiled dir (for example
+> > +/etc/s6/rc/compiled), without specifying it as command line argument
+> > +for s6-rc* tools.
+> > +
+> > +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> 
+> Has this patch been submitted upstream ? What does they say about it ?
+> Why can't we use the command line argument and avoid the patch ?
 
-https://patchwork.ozlabs.org/patch/1074963/
+Without this patch then it needs to manually type this path /etc/s6/rc/compiled,
+in case if to run s6-rc from command-line.
 
--- 
-Bye, Peter Korsgaard
+> 
+> 
+> > diff --git a/package/s6-rc/rc.init b/package/s6-rc/rc.init
+> > new file mode 100644
+> > index 0000000000..6709c6488b
+> > --- /dev/null
+> > +++ b/package/s6-rc/rc.init
+> > @@ -0,0 +1,4 @@
+> > +#! /usr/bin/execlineb -P
+> > +
+> > +if { s6-rc-init /run/service }
+> > +if { s6-rc -t 600000 -- change default }
+> 
+> So this will replace the dummy rc.init script created in PATCH 2/3. So
+> why is PATCH 2/3 creating a rc.init file ?
+
+As I wrote above - these patches might be squashed.
+
+> 
+> > diff --git a/package/s6-rc/rc.shutdown b/package/s6-rc/rc.shutdown
+> > new file mode 100644
+> > index 0000000000..58d49b5cfd
+> > --- /dev/null
+> > +++ b/package/s6-rc/rc.shutdown
+> > @@ -0,0 +1,3 @@
+> > +#! /usr/bin/execlineb -P
+> > +
+> > +s6-rc -da change
+> 
+> Same question.
+> 
+> > diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+> > index 222ba139c6..6bba54a28a 100644
+> > --- a/package/s6-rc/s6-rc.mk
+> > +++ b/package/s6-rc/s6-rc.mk
+> > @@ -11,6 +11,13 @@ S6_RC_LICENSE_FILES = COPYING
+> >  S6_RC_INSTALL_STAGING = YES
+> >  S6_RC_DEPENDENCIES = s6
+> >  
+> > +ifeq ($(BR2_INIT_S6),y)
+> > +# Needs s6-rc-compile to create initial rc db, also
+> > +# build after s6-linux-init to rewrite rc.init for run
+> > +# s6-rc services.
+> > +S6_RC_DEPENDENCIES += host-s6-rc s6-linux-init
+> 
+> Why do we rewrite rc.init ?
+> 
+> > +endif
+> > +
+> >  S6_RC_CONF_OPTS = \
+> >  	--prefix=/usr \
+> >  	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
+> > @@ -20,6 +27,7 @@ S6_RC_CONF_OPTS = \
+> >  	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
+> >  	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
+> >  	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+> > +	$(if $(BR2_INIT_S6),--compiledir=/etc/s6/rc/compiled,) \
+> 
+> You can drop the last comma, it is not necessary since you don't have a
+> "else" part in the condition.
+> 
+> >  	$(SHARED_STATIC_LIBS_OPTS)
+> >  
+> >  define S6_RC_CONFIGURE_CMDS
+> > @@ -44,6 +52,31 @@ define S6_RC_INSTALL_STAGING_CMDS
+> >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> >  endef
+> >  
+> > +ifeq ($(BR2_INIT_S6),y)
+> > +
+> > +define S6_RC_PREPARE_INIT_RC
+> > +	mkdir -p $(TARGET_DIR)/etc/s6/rc/service/default
+> > +	echo bundle > $(TARGET_DIR)/etc/s6/rc/service/default/type
+> > +	touch $(TARGET_DIR)/etc/s6/rc/service/default/contents
+> > +
+> > +	mkdir -p $(TARGET_DIR)/etc/s6/rc/compiled-initial
+> > +	ln -sf compiled-initial $(TARGET_DIR)/etc/s6/rc/compiled
+> 
+> Why do we have this "compiled-initial" thing and a symlink to it ?
+
+Hm, this is for case when upgrade to new s6-rc db on the target, so
+it will just need to point link on newer db.
+
+> 
+> > +
+> > +	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.init $(TARGET_DIR)/etc/rc.init
+> > +	$(INSTALL) -m 0755 $(S6_RC_PKGDIR)/rc.shutdown $(TARGET_DIR)/etc/rc.shutdown
+> > +endef
+> > +S6_RC_POST_INSTALL_TARGET_HOOKS += S6_RC_PREPARE_INIT_RC
+> > +
+> > +define S6_RC_FINALIZE_INIT_RC
+> > +	rm -rf $(TARGET_DIR)/etc/s6/rc/compiled-initial
+> > +	$(HOST_DIR)/bin/s6-rc-compile -v 1 \
+> > +		$(TARGET_DIR)/etc/s6/rc/compiled-initial \
+> > +		$(TARGET_DIR)/etc/s6/rc/service
+> > +endef
+> > +S6_RC_ROOTFS_PRE_CMD_HOOKS += S6_RC_FINALIZE_INIT_RC
+> 
+> Meh, I really don't like that this gets executed as a "rootfs pre
+> command" hook, but I understand the reasoning behind doing this after
+> rootfs overlay / post-build scripts have been handled. Do we need to
+> add another sort of hook at the end of the target-finalize target ?
+> Should we move the place where TARGET_FINALIZE_HOOKS are executed ? I'm
+> not sure.
+> 
+
+So, then use TARGET_FINALIZE_HOOKS for the 1st step ?
+
+Regards,
+Vadim Kochan
