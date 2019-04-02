@@ -1,55 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Apr 2019 09:06:50 +0200
-Subject: [Buildroot] [PATCH v3 3/4] support/testing: test can use the
- locally generated qemu host tool
-In-Reply-To: <5c9ee2b9d0ea5_29f73fa56c112b2c43513@ultri5.mail>
-References: <20190322095818.19914-3-etienne.carriere@linaro.org>
- <5c9ee2b9d0ea5_29f73fa56c112b2c43513@ultri5.mail>
-Message-ID: <20190402090650.645aeef7@windsurf>
+From: Nylon Chen <nylon7@andestech.com>
+Date: Tue, 2 Apr 2019 15:23:38 +0800
+Subject: [Buildroot] [PATCH v4 0/2] Add prebuilt nds32 toolchain, ae3xx board
+Message-ID: <20190402072340.17989-1-nylon7@andestech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo and Etienne,
+v4:
+    1) removed BR2_ANDES_NDS32_FPU option
+    2) removed test the Andes nds32 toolchain patch
 
-On Sat, 30 Mar 2019 00:30:01 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+v3:
+    1) DEVELOPERS file must be alphabetic ordering of developer names
+    2) removed BR2_TOOLCHAIN_HAS_NATIVE_RPC option
+    3) removed package modifications because we do not support building nds32 toolchain by Buildroot
+    4) replace BR2_LINUX_KERNEL_CUSTOM_VERSION and BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE with BR2_LINUX_KERNEL_CUSTOM_VERSION and BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+    5) add BR2_ANDES_NDS32_FPU option
 
-> I am not strongly against it.
-> But let me ask:
-> Are you or someone else having trouble with any other test case when using
-> "old" qemu versions from host?
-> 
-> If the answer is no, maybe we should keep things simple and use a patch very
-> similar to v2 of this one, just adding the host-qemu to the test case config
-> fragment and the 'local' argument to Emulator.run.
-> I say similar to v2 because I think your implementation in v3 with the
-> 'qemu_bin' variable is better than v2.
+Nylon Chen (2):
+  arch: add support for Andes 32-bit(nds32)
+  configs/andes_nds32_ae3xx: new defconfig
 
-I totally agree here. Having this option --local-emulator doesn't make
-much sense. We would have to use it for some tests, but not for some
-other tests.
+ DEVELOPERS                                    |  5 ++
+ arch/Config.in                                | 12 +++++
+ arch/Config.in.nds32                          | 11 +++++
+ board/andes/ae3xx/ae3xx.fragment              |  1 +
+ ...0001-nds32-Fix-boot-messages-garbled.patch | 28 +++++++++++
+ board/andes/readme.txt                        | 49 +++++++++++++++++++
+ configs/andes_ae3xx_defconfig                 | 14 ++++++
+ 7 files changed, 120 insertions(+)
+ create mode 100644 arch/Config.in.nds32
+ create mode 100644 board/andes/ae3xx/ae3xx.fragment
+ create mode 100644 board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
+ create mode 100644 board/andes/readme.txt
+ create mode 100644 configs/andes_ae3xx_defconfig
 
-Instead, we want each test to know whether it needs a recent enough
-version of Qemu, or whether the system-provided Qemu version is good
-enough.
-
-> Another approach "to have an generic option to script run-tests to build the
-> emulator within the test config" (quoting your reply to v2) would be:
-> Instead of adding a command line argument to run-tests, create a new flag in
-> the test case class, perhaps named "build_emulator". If that flag is True, the
-> host-qemu is automatically added to the config fragment by the test infra. The
-> same flag could be propagated to the Emulator.init so we don't need to pass
-> 'local' to Emulator.run.
-
-Yes, something like that sounds good.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
