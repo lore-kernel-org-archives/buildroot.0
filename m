@@ -1,100 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  2 Apr 2019 15:21:42 +0200
-Subject: [Buildroot] [PATCH] package: add bats-core package
-Message-ID: <20190402132142.28200-1-peter@korsgaard.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue,  2 Apr 2019 17:23:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: Fix build caused by
+ extra 'install' target
+Message-ID: <1554215038-2515-1-git-send-email-email@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A bash-based automated testing system.
+From: Vadim Kochan <vadim4j@gmail.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+After commit:
+
+	b0f98d5 package/netsniff-ng: allow to build with uclibc but w/o mausezahn
+
+the different build and install targets are specified depending if
+masuezahn tool is able to be selected or not. It works for the build
+case but for the install the old 'install' target was not removed from
+the make invocation and it still forces to install the mausezahn, so fix
+it by remove this target.
+
+Fixes:
+	http://autobuild.buildroot.net/results/cc44ed737799c9ac73628c82b86bd526b1c43310/
+	http://autobuild.buildroot.net/results/72d0753532720604d51c05663af7fbfe37434339/
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/bats-core/Config.in      | 11 +++++++++++
- package/bats-core/bats-core.hash |  5 +++++
- package/bats-core/bats-core.mk   | 16 ++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/bats-core/Config.in
- create mode 100644 package/bats-core/bats-core.hash
- create mode 100644 package/bats-core/bats-core.mk
+ package/netsniff-ng/netsniff-ng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1001d55815..c668c82cf1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1716,6 +1716,7 @@ F:	configs/orangepi_pc_defconfig
- F:	configs/pandaboard_defconfig
- F:	configs/roseapplepi_defconfig
- F:	configs/sheevaplug_defconfig
-+F:	package/bats-core/
- F:	package/docker-compose/
- F:	package/dump1090/
- F:	package/flickcurl/
-diff --git a/package/Config.in b/package/Config.in
-index db79b61971..d4fb61240c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -138,6 +138,7 @@ menu "Debugging, profiling and benchmark"
- endmenu
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 8dd06b6..415e86d 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -54,7 +54,7 @@ endef
  
- menu "Development tools"
-+	source "package/bats-core/Config.in"
- 	source "package/binutils/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-diff --git a/package/bats-core/Config.in b/package/bats-core/Config.in
-new file mode 100644
-index 0000000000..73c38e5a04
---- /dev/null
-+++ b/package/bats-core/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_BATS_CORE
-+	bool "bats"
-+	depends on BR2_PACKAGE_BASH # runtime
-+	help
-+	  Bats: Bash Automated Testing System
-+
-+	  Bats is a TAP-compliant testing framework for Bash. It
-+	  provides a simple way to verify that the UNIX programs you
-+	  write behave as expected.
-+
-+	  https://github.com/bats-core/bats-core
-diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
-new file mode 100644
-index 0000000000..04e00ab601
---- /dev/null
-+++ b/package/bats-core/bats-core.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256 855d8b8bed466bc505e61123d12885500ef6fcdb317ace1b668087364717ea82  bats-core-v1.1.0.tar.gz
-+
-+# License files
-+sha256 55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
-diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
-new file mode 100644
-index 0000000000..739e7fc1f0
---- /dev/null
-+++ b/package/bats-core/bats-core.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# bats-core
-+#
-+################################################################################
-+
-+BATS_CORE_VERSION = v1.1.0
-+BATS_CORE_SITE = $(call github,bats-core,bats-core,$(BATS_CORE_VERSION))
-+BATS_CORE_LICENSE = MIT
-+BATS_CORE_LICENSE_FILES = LICENSE.md
-+
-+define BATS_CORE_INSTALL_TARGET_CMDS
-+	$(@D)/install.sh $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
+ define NETSNIFF_NG_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc install \
++		PREFIX=$(TARGET_DIR)/usr ETCDIR=$(TARGET_DIR)/etc \
+ 			-C $(@D) $(NETSNIFF_NG_INSTALL_MAKE_TARGET)
+ endef
+ 
 -- 
-2.11.0
+2.7.4
