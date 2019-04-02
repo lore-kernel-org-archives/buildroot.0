@@ -1,42 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Apr 2019 20:19:29 +0200
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
-References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
- <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
- <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
- <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
- <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
- <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
- <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
-Message-ID: <20190402181929.GJ2587@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Apr 2019 20:41:43 +0200
+Subject: [Buildroot] Failed to build in a user namespace without the
+ root user
+In-Reply-To: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
+ (Esben Nielsen's message of "Sun, 31 Mar 2019 23:51:18 +0200")
+References: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
+Message-ID: <87ftr0gsgo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, Arnout, All,
+>>>>> "Esben" == Esben Nielsen <nielsen.esben@gmail.com> writes:
 
-On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
-> > I've made comments on the document.
-> I've replied to your comments on there. We can discuss a bit more and I think then I'll
-> make necessary changes to the document.
-> > I'm not sure if Yann is OK with using
-> > Googly stuff though.
-> Is there any other platform that he would be comfortable working on?
-> I'll gladly move things over to there.
+ > I try to build in an unpriviliged container (using bubblewrap), where
+ > I only have a single user id, not uid 0.
 
-Nope, that's fine. It's part of the GSoC ecosystem, so I'll play by the
-GSoC rules. ;-) I'll do my part of the review later tonight.
+Sounds special, but OK.
 
-Regards,
-Yann E. MORIN.
+ > I found the issue was in fakeroot, which per default when it does
+ > chown, it also asks the kernel if the id it does chown to actually
+ > exists. This is the default behaviour.
+
+Sorry, where do you see that? Looking at the fakeroot code, the only
+thing FAKEROOTDONTTRYCHOWN controls is if the wrapped chown also calls
+the real chown syscall:
+
+int chown(const char *path, uid_t owner, gid_t group){
+..
+  if(!dont_try_chown())
+    r=next_lchown(path,owner,group);
+  else
+    r=0;
+  if(r&&(errno==EPERM))
+    r=0;
+
+  return r;
+
+Does lchown(path, 0, 0); return anything else than EPERM in your
+bubblewrap setup?
+
+
+ > Shouldn't it totally ignore the uid and gid map in the user namespace
+ > in the kernel?
+
+The goal is indeed that Buildroot builds do not differ based on the
+build host. We are not there yet though.
+
+
+ > Shoudln't that be default in buildroot? It is totally irrelevant,
+ > which is uids are mapped on the host when building a rootfs to run
+ > somewhere else.
+
+I have no problem with setting this environment variable the one place
+in fs/common.mk where we invoke fakeroot as there is indeed no reason to
+try to perform a chown "for real" for the Buildroot use cases, but I
+would like to understand what goes wrong exactly for you?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
