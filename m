@@ -1,52 +1,72 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Tue, 2 Apr 2019 19:08:53 +0300
-Subject: [Buildroot] [PATCH 3/3] package/s6-rc: Allow to integrate s6-rc
- services
-In-Reply-To: <20190328152346.297748d0@windsurf>
-References: <20190216212835.25503-1-vadim4j@gmail.com>
- <20190216212835.25503-4-vadim4j@gmail.com>
- <20190327195409.14931f34@windsurf>
- <7bb98b03-837a-2494-3de0-b8267a8b7d56@mind.be>
- <be747f83-7044-2f47-a3bd-351bb8a59f37@mind.be>
- <20190328152346.297748d0@windsurf>
-Message-ID: <20190402160853.GC3682@lwo1-lhp-f71841>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Apr 2019 19:11:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
+ openssl
+Message-ID: <20190402171156.25871-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Thomas, Eric, All
+Fixes:
+ - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
 
-On Thu, Mar 28, 2019 at 03:23:46PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 27 Mar 2019 21:37:38 +0100
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-> > On 27/03/2019 21:35, Arnout Vandecappelle wrote:
-> > >  If such a review is done, I wouldn't mind moving the hooks after the
-> > > overlay/post-build.  
-> > 
-> >  Something essential I forgot to mention: for this s6 patch, the same approach
-> > as python should be followed: do it as a TARGET_FINALIZE_HOOK. Too bad that it
-> > doesn't help for init scripts added in the overlay, but such is life.
-> 
-> The downside is that for custom sysv init scripts or systemd unit
-> files, you can put them in an overlay/post-build, but for s6 "service"
-> files, you cannot do that: they must be installed by a package.
-> 
-> But perhaps that is an acceptable thing, at least in a first step.
-> 
-> Vadim: what do you think ? Would you be OK with a solution where only
-> packages can install s6 service files ?
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...make-FindLibUpnp.cmake-fix-static-linking.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
 
-I think it might be enough for the first step, then to add custom s6
-scripts it will be needed to add special custom package in custom exernal tree
-which will install the needed s6 scripts. BTW, to manually re-install the
-services by buildroot from command line it will be needed to call re-installation
-of all packages to re-generate s6-init db again.
-
-Regards,
-Vadim Kochan
+diff --git a/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+new file mode 100644
+index 0000000000..510bf2837f
+--- /dev/null
++++ b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+@@ -0,0 +1,44 @@
++From e2f8e6c30e43c1818a6677d17de87f53c9414405 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 2 Apr 2019 10:44:06 +0200
++Subject: [PATCH] cmake/FindLibUpnp.cmake: fix static linking
++
++Fix static linking with an openssl enabled upnp:
++ - remove libupnp-1.8 from pkg_check_modules call otherwise test will
++   fail if libupnp-1.8.pc is not found
++ - add PC_UPNP_LIBRARIES to UPNP_LIBRARIES
++
++Fixes:
++ - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/gerbera/gerbera/pull/443]
++---
++ cmake/FindLibUpnp.cmake | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/FindLibUpnp.cmake b/cmake/FindLibUpnp.cmake
++index ec198d4d..5d2b032d 100644
++--- a/cmake/FindLibUpnp.cmake
+++++ b/cmake/FindLibUpnp.cmake
++@@ -8,7 +8,7 @@
++ #  UPNP_HAS_REUSEADDR - If LinUPnP was built with SO_REUSEADDR support
++ 
++ find_package(PkgConfig QUIET)
++-pkg_check_modules (PC_UPNP QUIET libupnp-1.8 libupnp)
+++pkg_search_module (PC_UPNP QUIET libupnp-1.8 libupnp)
++ 
++ find_path(UPNP_INCLUDE_DIR upnp.h
++     HINTS ${PC_UPNP_INCLUDEDIR} ${PC_UPNP_INCLUDE_DIRS}
++@@ -41,7 +41,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(UPnP
++     VERSION_VAR UPNP_VERSION_STRING)
++ 
++ if (UPNP_FOUND)
++-    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY})
+++    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY} ${PC_UPNP_LIBRARIES})
++     set (UPNP_INCLUDE_DIRS ${UPNP_INCLUDE_DIR} )
++ endif ()
++ 
++-- 
++2.14.1
++
+-- 
+2.14.1
