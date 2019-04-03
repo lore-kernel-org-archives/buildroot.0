@@ -1,34 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Apr 2019 22:15:44 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: drop package/lunit reference
-Message-ID: <20190403201204.5E0DE7FD96@busybox.osuosl.org>
+Date: Wed, 03 Apr 2019 22:16:38 +0200
+Subject: [Buildroot] [PATCH 2/2] package/lunit: remove it
+In-Reply-To: <20190403130609.14927-2-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Wed, 3 Apr 2019 15:06:09 +0200")
+References: <20190403130609.14927-1-francois.perrad@gadz.org>
+ <20190403130609.14927-2-francois.perrad@gadz.org>
+Message-ID: <874l7eg7yx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0049eca6f4632ceae45dcd8ed9180ad00b596793
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Now that the package has been removed, get-developers complains:
+ > it was replaced by its fork lunitx which supports all versions of Lua
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  Config.in.legacy         |  8 ++++++++
+ >  package/Config.in        |  1 -
+ >  package/lunit/Config.in  | 11 -----------
+ >  package/lunit/lunit.hash |  3 ---
+ >  package/lunit/lunit.mk   | 11 -----------
+ >  5 files changed, 8 insertions(+), 26 deletions(-)
 
-WARNING: 'package/lunit/' doesn't match any file
+You forgot to remove the reference in DEVELOPERS, so now get-developers
+complains about it.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+I've pushed a commit to fix that.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1001d55815..4ffb473487 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -863,7 +863,6 @@ F:	package/lpty/
- F:	package/lrandom/
- F:	package/lsqlite3/
- F:	package/lua*
--F:	package/lunit/
- F:	package/lzlib/
- F:	package/moarvm/
- F:	package/netsurf/
+-- 
+Bye, Peter Korsgaard
