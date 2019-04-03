@@ -1,31 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Apr 2019 10:01:09 +0200
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Wed, 3 Apr 2019 08:11:35 +0000
 Subject: [Buildroot] [PATCH] gnutls: security bump to 3.6.7.1
-In-Reply-To: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
- (=?utf-8?Q?=22S=C3=B8rensen=2C?= Stefan"'s message of "Wed, 3 Apr 2019
- 06:14:32 +0000")
+In-Reply-To: <87h8bffrga.fsf@dell.be.48ers.dk>
 References: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
-Message-ID: <87h8bffrga.fsf@dell.be.48ers.dk>
+ <87h8bffrga.fsf@dell.be.48ers.dk>
+Message-ID: <b8fc60a6fc72431a6caa166bd3ebb19a01077cb8.camel@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?rensen," == S?rensen, Stefan <Stefan.Sorensen@spectralink.com> writes:
+On Wed, 2019-04-03 at 10:01 +0200, Peter Korsgaard wrote:
 
- > Fixes the following security issues:
- >  * CVE-2019-3836: It was discovered in gnutls before version 3.6.7 upstream
- >    that there is an uninitialized pointer access in gnutls versions 3.6.3 or
- >    later which can be triggered by certain post-handshake messages
+> These issues were fixed in 3.6.7, weren't they? I don't see 3.6.7.1
+> announced yet, what is the delta?
 
- >  * CVE-2019-3829: A vulnerability was found in gnutls versions from 3.5.8
- >    before 3.6.7. A memory corruption (double free) vulnerability in the
- >    certificate verification API. Any client or server application that
- >    verifies X.509 certificates with GnuTLS 3.5.8 or later is affected.
+Guess I might have jumped the gun a bit...
 
-These issues were fixed in 3.6.7, weren't they? I don't see 3.6.7.1
-announced yet, what is the delta?
+Only change is that a file was missing from the release tarball:
+https://gitlab.com/gnutls/gnutls/issues/745
 
--- 
-Bye, Peter Korsgaard
+Stefan
