@@ -1,49 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 21:56:16 +0200
-Subject: [Buildroot] [PATCH] gnutls: security bump to 3.6.7.1
-In-Reply-To: <b8fc60a6fc72431a6caa166bd3ebb19a01077cb8.camel@spectralink.com>
-References: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
- <87h8bffrga.fsf@dell.be.48ers.dk>
- <b8fc60a6fc72431a6caa166bd3ebb19a01077cb8.camel@spectralink.com>
-Message-ID: <20190403215616.5c7882f6@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Apr 2019 22:01:08 +0200
+Subject: [Buildroot] [PATCH] package/biosdevname: fix configure failure
+In-Reply-To: <20190403134553.126164-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Wed, 3 Apr 2019 15:45:53 +0200")
+References: <20190403134553.126164-1-giulio.benetti@micronovasrl.com>
+Message-ID: <878swqg8or.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-On Wed, 3 Apr 2019 08:11:35 +0000
-"S?rensen, Stefan" <Stefan.Sorensen@spectralink.com> wrote:
+ > On version bump to 0.7.3 SITE has been modified to use github
+ > instead of http tarball. Github tarball doesn't contain ./configure file
+ > differently from 0.7.2 http tarball, so need to autoreconf and generate
+ > it.
 
-> On Wed, 2019-04-03 at 10:01 +0200, Peter Korsgaard wrote:
-> 
-> > These issues were fixed in 3.6.7, weren't they? I don't see 3.6.7.1
-> > announced yet, what is the delta?  
-> 
-> Guess I might have jumped the gun a bit...
-> 
-> Only change is that a file was missing from the release tarball:
-> https://gitlab.com/gnutls/gnutls/issues/745
+ > Add BIOSDEVNAME_AUTORECONF = YES to package recipe.
 
-There is a 3.6.7.1 tarball: https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3fc/3fc31982af87210b66cbe412410d11c85c9cebd6/
 
-However, your patch breaks legal-info for gnutls:
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-ERROR: doc/COPYING has wrong sha256 hash:
-ERROR: expected: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
-ERROR: got     : e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+Fabrice, what went wrong here?
 
-Note: don't do just a hash update: compare the COPYING file
-before/after the bump, and document the change in the commit log to
-explain why the hash has changed.
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
