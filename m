@@ -1,60 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  3 Apr 2019 21:39:43 +0200
-Subject: [Buildroot] [PATCH] package/webkitgtk: bump version to 2.22.7
-Message-ID: <20190403193943.27399-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 3 Apr 2019 21:39:30 +0200
+Subject: [Buildroot] [git commit] package/libfuse: only install udev rules
+ if (e)udev is enabled
+Message-ID: <20190403193600.68D8F8D1ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2.22.7 contains a number of bugfixes. From the announcement:
+commit: https://git.buildroot.net/buildroot/commit/?id=4cba22bbfa21ac27d28cfb7e9973c2c91e30568f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- - Fix rendering of glyphs in Hebrew (and possibly other languages) when
-   Unicode NFC normalization is used.
-
- - Fix several crashes and race conditions.
-
-https://webkitgtk.org/2019/03/01/webkitgtk2.22.7-released.html
-
-Change SITE to https as the webserver uses HSTS.
+No point in installing udev rules if nothing will use it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libfuse/libfuse.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index ed2511976d..d024343d5e 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.22.6.tar.xz.sums
--md5 7c21a30f7f078f0b712caf0c7ee966a4 webkitgtk-2.22.6.tar.xz
--sha1 26a8f8951da03aa4dfc2c25257b6899ea3c2558f webkitgtk-2.22.6.tar.xz
--sha256 df90db9c0db0a2072b945fa3e1d45865922bd686c4659cce6cb5897ce357c85b webkitgtk-2.22.6.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.22.7.tar.xz.sums
-+md5 47386c10a9c3975f933c85404f35ff3b webkitgtk-2.22.7.tar.xz
-+sha1 5f45147f6fc4b6a0dd3c545bf857679313230507 webkitgtk-2.22.7.tar.xz
-+sha256 4be6f7d605cd0a690fd26e8aa83b089a33ad9d419148eafcfb60580dd2af30ff webkitgtk-2.22.7.tar.xz
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 84027ebedb..ab0131b057 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -17,11 +17,18 @@ LIBFUSE_CONF_OPTS = \
+ 	--enable-util \
+ 	UDEV_RULES_PATH=/lib/udev/rules.d
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c17bbc8028..a30c61460a 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define LIBFUSE_INSTALL_UDEV
++	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
++	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
++endef
++
++LIBFUSE_POST_INSTALL_TARGET_HOOKS += LIBFUSE_INSTALL_UDEV
++endif
++
+ define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+-	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
+-	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
+ endef
  
--WEBKITGTK_VERSION = 2.22.6
--WEBKITGTK_SITE = http://www.webkitgtk.org/releases
-+WEBKITGTK_VERSION = 2.22.7
-+WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
- WEBKITGTK_LICENSE = LGPL-2.1+, BSD-2-Clause
--- 
-2.11.0
+ define LIBFUSE_DEVICES
