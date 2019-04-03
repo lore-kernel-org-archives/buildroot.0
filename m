@@ -1,41 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 23:18:30 +0200
-Subject: [Buildroot] [PATCH next 1/1] package/libwebsockets: bump
- version to 3.1.0
-In-Reply-To: <CAFSsvmo4vvANQse18AxJ8RyK4KZfLWBBZVAafeNUAM_G5EKc=g@mail.gmail.com>
-References: <20190223201736.106101-1-aduskett@gmail.com>
- <20190225222058.1d0a106b@windsurf.home>
- <CAFSsvmo4vvANQse18AxJ8RyK4KZfLWBBZVAafeNUAM_G5EKc=g@mail.gmail.com>
-Message-ID: <20190403231830.2cc94b07@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 3 Apr 2019 23:24:02 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: improve linking avoiding -ldrm to
+ be appended when -lavutil is linked
+In-Reply-To: <20190130160116.3782-1-giulio.benetti@micronovasrl.com>
+References: <0535ae91-47fa-5a31-5ff6-7977c5bbbe8b@mind.be>
+ <20190130160116.3782-1-giulio.benetti@micronovasrl.com>
+Message-ID: <21201cfd-37b6-631f-3630-a40c27b2896f@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Il 30/01/2019 17:01, Giulio Benetti ha scritto:
+> Upstream ffmpeg patch[1] has a drawback. Linking against libavutil
+> results in appending -ldrm to library list in linker command tail, but
+> in shared linking this is no needed at all since shared linking is
+> transparent about library dependecies, hence -ldrm in this case is not
+> needed.
+> 
+> Add patch to avoid this behaviour by:
+> - Introducing new variable "privatelibs" that is assigned to
+>    "Libs.private:" when creating various .pc files.
+> - Move $LIBDRM from extralibs_avutil to privatelibs_avutil
+> 
+> [1]
+> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   ...BDRM-to-Libs.private-instead-of-Libs.patch | 59 +++++++++++++++++++
+>   1 file changed, 59 insertions(+)
+>   create mode 100644 package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
+> 
+> diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
+> new file mode 100644
+> index 0000000000..f19c74f228
+> --- /dev/null
+> +++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
+> @@ -0,0 +1,59 @@
+> +From e34be93d478ad510960d03549572805a0430144c Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +Date: Sun, 21 Oct 2018 22:43:39 +0200
+> +Subject: [PATCH] configure: add LIBDRM to Libs.private instead of Libs
+> +
+> +Currently LIBDRM is appended to Libs: in libavutil.pc. This causes
+> +every program linking with avutil to link with -ldrm in both shared and
+> +static linking cases. In shared linking case it makes no sense, since
+> +-ldrm is a dependency of libavutil and is transparent while linking with
+> +libavutil
+> +
+> +- Add privatelibs_avutil variable for explicit private libraries to be
+> +  appended to Libs.private:
+> +- Add $LIBDRM to privatelibs_avutil.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +---
+> + configure                     | 3 ++-
+> + ffbuild/pkgconfig_generate.sh | 3 ++-
+> + 2 files changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure b/configure
+> +index 9fe7760822..0996d8a85d 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -7096,7 +7096,8 @@ source_path=${source_path}
+> + LIBPREF=${LIBPREF}
+> + LIBSUF=${LIBSUF}
+> +
+> +-extralibs_avutil="$LIBRT $LIBDRM $LIBM"
+> ++extralibs_avutil="$LIBRT $LIBM"
+> ++privatelibs_avutil="$LIBDRM"
+> + extralibs_avcodec="$extralibs"
+> + extralibs_avformat="$extralibs"
+> + extralibs_avdevice="$extralibs"
+> +diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
+> +index e5de6716d2..b86486a107 100755
+> +--- a/ffbuild/pkgconfig_generate.sh
+> ++++ b/ffbuild/pkgconfig_generate.sh
+> +@@ -13,6 +13,7 @@ name=lib${shortname}
+> + fullname=${name}${build_suffix}
+> + comment=$2
+> + libs=$(eval echo \$extralibs_${shortname})
+> ++privatelibs=$(eval echo \$privatelibs_${shortname})
+> + deps=$(eval echo \$${shortname}_deps)
+> +
+> + for dep in $deps; do
+> +@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
+> + Requires.private: $($shared && echo $requires)
+> + Conflicts:
+> + Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
+> +-Libs.private: $($shared && echo $libs)
+> ++Libs.private: $($shared && echo $libs) ${privatelibs}
+> + Cflags: -I\${includedir}
+> + EOF
+> +
+> +--
+> +2.17.1
+> +
+> 
 
-On Wed, 27 Feb 2019 12:19:17 -0500
-Adam Duskett <aduskett@gmail.com> wrote:
+This patch applied to 3.4.x version and wasn't vital since it didn't 
+create build failure.
+FFmpeg will upstream patches only for security bugs, so this patch 
+doesn't make sense.
+I set it rejected on Patchwork.
 
-> We are removing the check for three reasons that I can see:
-> 1) Libwebsockets works just fine with both libev and libevent with
-> this check removed.
-> 2) Some people may be using libwebsockets with libev and libevent
-> installed, and this is the least disruptive patch.
-> 3) If I had set a check in the make file that favored either libev or
-> libevent over the other, who is to say that one should take
->     precedence over the other?
-
-Where do we stand with this? I remember we discussed it on IRC.
-
-If libwebsockets is only using libev *or* libevent, this should be
-reflected in the .mk file, and the libwebsockets should not be patched.
-
-Thanks!
-
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
