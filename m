@@ -1,36 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 09:18:56 +0200
-Subject: [Buildroot] [PATCH] package/luajit: bump to version 2.1.x
- developpment version
-In-Reply-To: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <20190403091856.274fdc7e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Apr 2019 09:24:42 +0200
+Subject: [Buildroot] [PATCH] package/apache: security bump to version
+ 2.4.39
+In-Reply-To: <20190402181616.20819-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 2 Apr 2019 20:16:16 +0200")
+References: <20190402181616.20819-1-peter@korsgaard.com>
+Message-ID: <87mul7ft51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue,  2 Apr 2019 16:49:35 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+ > Fixes the following security vulnerabilities:
+ >   *) SECURITY: CVE-2019-0197 (cve.mitre.org)
+ >      mod_http2: fixes a possible crash when HTTP/2 was enabled for a http:
+ >      host or H2Upgrade was enabled for h2 on a https: host. An Upgrade
+ >      request from http/1.1 to http/2 that was not the first request on a
+ >      connection could lead to a misconfiguration and crash. Servers that
+ >      never enabled the h2 protocol or only enabled it for https: and
+ >      did not set "H2Upgrade on" are unaffected by this issue.
+ >      [Stefan Eissing]
 
-> In order to integrate bcc (front end tool for eBPF) into buildroot
-> and testing it on a Raspberry PI 3; We need to upgrade the version
-> of luajit to 2.1.0 to support aarch64.
-> 
-> Currently, luajit aarch64_be support has not been tested.
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
+ >   *) SECURITY: CVE-2019-0196 (cve.mitre.org)
+ >      mod_http2: using fuzzed network input, the http/2 request
+ >      handling could be made to access freed memory in string
+ >      comparision when determining the method of a request and
+ >      thus process the request incorrectly. [Stefan Eissing]
 
-Perhaps this can be done as part of a larger patch series that
-introduces 'bcc' as well ? By that time, hopefully LuaJIT 2.1.0 will
-have been released, and we'll be good ?
+ >   *) SECURITY: CVE-2019-0211 (cve.mitre.org)
+ >      MPMs unix: Fix a local priviledge escalation vulnerability by not
+ >      maintaining each child's listener bucket number in the scoreboard,
+ >      preventing unprivileged code like scripts run by/on the server (e.g. via
+ >      mod_php) from modifying it persistently to abuse the priviledged main
+ >      process.  [Charles Fol <folcharles gmail.com>, Yann Ylavic]
 
-Thomas
+ >   *) SECURITY: CVE-2019-0196 (cve.mitre.org)
+ >      mod_http2: using fuzzed network input, the http/2 request
+ >      handling could be made to access freed memory in string
+ >      comparision when determining the method of a request and
+ >      thus process the request incorrectly. [Stefan Eissing]
+
+ >   *) SECURITY: CVE-2019-0217 (cve.mitre.org)
+ >      mod_auth_digest: Fix a race condition checking user credentials which
+ >      could allow a user with valid credentials to impersonate another,
+ >      under a threaded MPM.  PR 63124.  [Simon Kappel <simon.kappel axis.com>]
+
+ >   *) SECURITY: CVE-2019-0215 (cve.mitre.org)
+ >      mod_ssl: Fix access control bypass for per-location/per-dir client
+ >      certificate verification in TLSv1.3.
+
+ >   *) SECURITY: CVE-2019-0220 (cve.mitre.org)
+ >      Merge consecutive slashes in URL's. Opt-out with
+ >      `MergeSlashes OFF`. [Eric Covener]
+
+ > For more details, see the CHANGES file:
+ > https://www.apache.org/dist/httpd/CHANGES_2.4.39
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
