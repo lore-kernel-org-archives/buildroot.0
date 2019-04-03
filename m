@@ -1,47 +1,61 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Thu, 4 Apr 2019 00:11:53 +0300
-Subject: [Buildroot] [PATCH 1/1] pkg-autotools-infra: disable NLS for
- the host by default
-In-Reply-To: <20190403213422.0980f4f5@windsurf>
-References: <1554306055-16183-1-git-send-email-email@gmail.com>
- <20190403213422.0980f4f5@windsurf>
-Message-ID: <20190403211153.xectvdadhe7nf4lu@vkochan-ThinkPad-T470p>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed,  3 Apr 2019 23:12:31 +0200
+Subject: [Buildroot] [PATCH] package/bayer2rgb-neon: bump version
+Message-ID: <20190403211231.99053-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Actually build fails with musl libc due to missing header inclusion
+<unistd.h> (usually included by stdlib.h) in package code which in order
+contains type definition of ssize_t.
+A Git repository has been setted up for this project as upstream, and
+contains a commit which solves build failure removing the use of ssize_t
+at all.
+No other http tarballs have been released on current site, so
+development seems to continue on Git repository.
 
-On Wed, Apr 03, 2019 at 09:34:22PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed,  3 Apr 2019 18:40:55 +0300
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > From: Vadim Kochan <vadim4j@gmail.com>
-> > 
-> > There is no need for language translaion feature for the host packages,
-> > anyway some of them disable it explicitly, so lets do it automatically
-> > at least for the host-autotools- kind of packages.
-> > 
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> 
-> Thanks for the patch. One question below, though.
-> 
-> > +		--disable-nls \
-> > +		--disable-nls-macos \
+- Set SITE_METHOD = git
+- Switch site to: https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+- Bump version to latest commit to include commit which fixes build
+  failure.
 
-Yeahh, sorry I took it from guterprint, but it should be removed at all.
+Fixes:
+http://autobuild.buildroot.net/results/c84/c84b65642cb1b2d246f3a92ac957af5c5fcb86e8/
 
-> 
-> What is --disable-nls-macos ? Why do we need to pass it even though no
-> package is passing it right now ?
-> 
-> It should perhaps be a separate patch, or at the very least be
-> explained in the commit log.
-> 
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/bayer2rgb-neon/bayer2rgb-neon.hash | 2 +-
+ package/bayer2rgb-neon/bayer2rgb-neon.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Vadim Kochan
+diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.hash b/package/bayer2rgb-neon/bayer2rgb-neon.hash
+index bc0d6b1d51..1f4f5f33b3 100644
+--- a/package/bayer2rgb-neon/bayer2rgb-neon.hash
++++ b/package/bayer2rgb-neon/bayer2rgb-neon.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b14c8b2b86207fe8222f79bef83dc3ae94222827f1882466ca65705238d15085 bayer2rgb-neon-v0.4.tar.bz2
++sha256 1a84dcf6557c2017ebe258502f60575e0971511c548fc88aee5ab68ca0bb268a bayer2rgb-neon-bef3ecafe290d61a50fd27da3e5d0df6f4b88045.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.mk b/package/bayer2rgb-neon/bayer2rgb-neon.mk
+index f6914e4214..02651dcfee 100644
+--- a/package/bayer2rgb-neon/bayer2rgb-neon.mk
++++ b/package/bayer2rgb-neon/bayer2rgb-neon.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-BAYER2RGB_NEON_VERSION = v0.4
+-BAYER2RGB_NEON_SOURCE = bayer2rgb-neon-$(BAYER2RGB_NEON_VERSION).tar.bz2
+-BAYER2RGB_NEON_SITE = https://git.phytec.de/bayer2rgb-neon/snapshot
++BAYER2RGB_NEON_VERSION = bef3ecafe290d61a50fd27da3e5d0df6f4b88045
++BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git
++BAYER2RGB_NEON_SITE_METHOD = git
+ BAYER2RGB_NEON_LICENSE = GPL-3.0
+ BAYER2RGB_NEON_LICENSE_FILES = COPYING
+ BAYER2RGB_NEON_INSTALL_STAGING = YES
+-- 
+2.17.1
