@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 21:34:22 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-autotools-infra: disable NLS for
- the host by default
-In-Reply-To: <1554306055-16183-1-git-send-email-email@gmail.com>
-References: <1554306055-16183-1-git-send-email-email@gmail.com>
-Message-ID: <20190403213422.0980f4f5@windsurf>
+Date: Wed, 3 Apr 2019 21:34:51 +0200
+Subject: [Buildroot] [PATCH] package/wget: security bump to version
+ 1.20.2
+In-Reply-To: <20190403155628.23335-1-peter@korsgaard.com>
+References: <20190403155628.23335-1-peter@korsgaard.com>
+Message-ID: <20190403213451.3fa2a711@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed,  3 Apr 2019 17:56:28 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Wed,  3 Apr 2019 18:40:55 +0300
-Vadim Kochan <vadim4j@gmail.com> wrote:
-
-> From: Vadim Kochan <vadim4j@gmail.com>
+> From NEWS:
 > 
-> There is no need for language translaion feature for the host packages,
-> anyway some of them disable it explicitly, so lets do it automatically
-> at least for the host-autotools- kind of packages.
+> * Changes in Wget 1.20.2
+> ** Fixed a buffer overflow vulnerability
 > 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> For more details, see the announcement:
+> https://lists.gnu.org/archive/html/info-gnu/2019-04/msg00000.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/wget/wget.hash | 4 ++--
+>  package/wget/wget.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for the patch. One question below, though.
-
-> +		--disable-nls \
-> +		--disable-nls-macos \
-
-What is --disable-nls-macos ? Why do we need to pass it even though no
-package is passing it right now ?
-
-It should perhaps be a separate patch, or at the very least be
-explained in the commit log.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
