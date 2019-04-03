@@ -1,35 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 3 Apr 2019 13:32:58 +0200
-Subject: [Buildroot] [PATCH v3] package/libcamera: Add libcamera package
-In-Reply-To: <20190403112902.29930-1-kieran.bingham@ideasonboard.com>
-References: <20190403112902.29930-1-kieran.bingham@ideasonboard.com>
-Message-ID: <4b4aeae9-67d5-f958-91ad-cfb0db784c2d@mind.be>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  3 Apr 2019 15:06:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lua-lunitx: new package
+Message-ID: <20190403130609.14927-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                  |  1 +
+ package/lua-lunitx/Config.in       |  6 ++++++
+ package/lua-lunitx/lua-lunitx.hash |  3 +++
+ package/lua-lunitx/lua-lunitx.mk   | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/lua-lunitx/Config.in
+ create mode 100644 package/lua-lunitx/lua-lunitx.hash
+ create mode 100644 package/lua-lunitx/lua-lunitx.mk
 
-
-On 03/04/2019 13:29, Kieran Bingham wrote:
-> +LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
-> +LIBCAMERA_VERSION = d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080
-> +LIBCAMERA_SITE_METHOD = git
-
- That debug line gave me the idea... you can use an http download on gitlab:
-
-LIBCAMERA_SITE =
-https://gitlab.com/libcamera/libcamera/-/archive/$(LIBCAMERA_VERSION)
-LIBCAMERA_SOURCE = libcamera-$(LIBCAMERA_VERSION).tar.bz2
-
- Only, I'm not sure how stable the tarball generation is, i.e. if it will always
-yield the same hash.
-
-
- Either way:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
+diff --git a/package/Config.in b/package/Config.in
+index db79b61971..287f3493be 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -622,6 +622,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-http/Config.in"
+ 	source "package/lua-iconv/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
++	source "package/lua-lunitx/Config.in"
+ 	source "package/lua-markdown/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+diff --git a/package/lua-lunitx/Config.in b/package/lua-lunitx/Config.in
+new file mode 100644
+index 0000000000..ea900e6328
+--- /dev/null
++++ b/package/lua-lunitx/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LUA_LUNITX
++	bool "lua-lunitx"
++	help
++	  Lunitx is a unit testing framework for lua, written in lua.
++
++	  https://github.com/dcurrie/lunit
+diff --git a/package/lua-lunitx/lua-lunitx.hash b/package/lua-lunitx/lua-lunitx.hash
+new file mode 100644
+index 0000000000..b97b93f090
+--- /dev/null
++++ b/package/lua-lunitx/lua-lunitx.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256 2299facf4977f9b663e1ad402098139116a87a693c3df66e1f6b89e2cf47646f  lunitx-0.8-1.src.rock
++sha256 3fcfcd6010d73bc2b22505b6a91779022a82661809a3e4e0a0bdd7b3463def8f  lunit/LICENSE
+diff --git a/package/lua-lunitx/lua-lunitx.mk b/package/lua-lunitx/lua-lunitx.mk
+new file mode 100644
+index 0000000000..e12cf07249
+--- /dev/null
++++ b/package/lua-lunitx/lua-lunitx.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# lua-lunitx
++#
++################################################################################
++
++LUA_LUNITX_VERSION = 0.8-1
++LUA_LUNITX_NAME_UPSTREAM = lunitx
++LUA_LUNITX_SUBDIR = lunit
++LUA_LUNITX_LICENSE = MIT
++LUA_LUNITX_LICENSE_FILES = $(LUA_LUNITX_SUBDIR)/LICENSE
++
++$(eval $(luarocks-package))
+-- 
+2.17.1
