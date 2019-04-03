@@ -1,50 +1,936 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 3 Apr 2019 01:19:03 +0300
-Subject: [Buildroot] [PATCH 3/3] package/s6-rc: Allow to integrate s6-rc
- services
-In-Reply-To: <20190402212338.tjnjkvfftjypaa7c@vkochan-ThinkPad-T470p>
-References: <20190216212835.25503-1-vadim4j@gmail.com>
- <20190216212835.25503-4-vadim4j@gmail.com>
- <20190327195409.14931f34@windsurf>
- <20190402212338.tjnjkvfftjypaa7c@vkochan-ThinkPad-T470p>
-Message-ID: <20190402221903.4pshl3ci6ajgnj66@vkochan-ThinkPad-T470p>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue,  2 Apr 2019 19:20:19 -0700
+Subject: [Buildroot] [PATCH] package/binutils: fix loops relaxation in
+ xtensa gas
+Message-ID: <20190403022019.31752-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Loop relaxation logic in xtensa gas may produce code in which LEND
+register doesn't match actual zero overhead loop end. Fix relaxation
+code so that it produces a literal or a pair of const16 instructions
+with associated relocation record that works correctly in the presence
+of other relaxations. This fixes crash in X11 server caused by window
+movement.
 
-[SNIP]
+Loop relaxation has limited of 32K range, this fix removes this
+limitation.
 
-> > > diff --git a/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
-> > > new file mode 100644
-> > > index 0000000000..baf1706bb3
-> > > --- /dev/null
-> > > +++ b/package/s6-rc/0001-configure-Allow-to-specify-compiled-base-dir.patch
-> > > @@ -0,0 +1,76 @@
-> > > +From cb89562fcec582bbb5bc9a3bf5faf33338e6b535 Mon Sep 17 00:00:00 2001
-> > > +From: Vadim Kochan <vadim4j@gmail.com>
-> > > +Date: Wed, 13 Feb 2019 03:36:03 +0200
-> > > +Subject: [PATCH] configure: Allow to specify compiled base dir
-> > > +
-> > > +It allows to specify different s6-rc compiled dir (for example
-> > > +/etc/s6/rc/compiled), without specifying it as command line argument
-> > > +for s6-rc* tools.
-> > > +
-> > > +Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > 
-> > Has this patch been submitted upstream ? What does they say about it ?
-> > Why can't we use the command line argument and avoid the patch ?
-> 
-> Without this patch then it needs to manually type this path /etc/s6/rc/compiled,
-> in case if to run s6-rc from command-line.
+Fixes:
+http://autobuild.buildroot.net/results/e05522ce540f4ac23f9a3a8fec724694d9a23101/
 
-Sorry, this is not a good explanation. By default s6-linux-init is
-installed to /etc/s6-init and s6-rc into /etc/s6-rc, but I decided to
-put them together into /etc/s6, thats why it needs patch which allows to
-define new default db's base dir in /etc/s6.
- 
-Regards,
-Vadim Kochan
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...terals-const16-for-xtensa-loop-relaxation.patch | 294 +++++++++++++++++++++
+ ...terals-const16-for-xtensa-loop-relaxation.patch | 294 +++++++++++++++++++++
+ ...terals-const16-for-xtensa-loop-relaxation.patch | 294 +++++++++++++++++++++
+ 3 files changed, 882 insertions(+)
+ create mode 100644 package/binutils/2.30/0010-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+ create mode 100644 package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+ create mode 100644 package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+
+diff --git a/package/binutils/2.30/0010-gas-use-literals-const16-for-xtensa-loop-relaxation.patch b/package/binutils/2.30/0010-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+new file mode 100644
+index 000000000000..ed617bcaf759
+--- /dev/null
++++ b/package/binutils/2.30/0010-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+@@ -0,0 +1,294 @@
++From 0dbdfb7918d0b0cfcb8883b24c1291574bf5bb7c Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Apr 2019 14:32:42 -0700
++Subject: [PATCH] gas: use literals/const16 for xtensa loop relaxation
++
++Loop opcode relaxation that uses addi/addmi doesn't work well with other
++relaxations that may cause code movement. Instead of encoding fixed loop
++end offset in the relaxed sequence use l32r or a pair of const16 to load
++loop end address. This way the address of the loop end gets a relocation
++record and it gets updated appropriately.
++
++gas/
++2019-04-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/tc-xtensa.c (convert_frag_immed): Drop
++	convert_frag_immed_finish_loop invocation.
++	(convert_frag_immed_finish_loop): Drop declaration and
++	definition.
++	* config/xtensa-relax.c (widen_spec_list): Replace loop
++	widening that uses addi/addmi with widening that uses l32r
++	and const16.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c    | 120 ----------------------------------------------
++ gas/config/xtensa-relax.c |  77 ++++++++++++++++++++---------
++ 2 files changed, 55 insertions(+), 142 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 3bdbbc931cfc..0cc06361cf6f 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10668,7 +10668,6 @@ convert_frag_fill_nop (fragS *fragP)
++ static fixS *fix_new_exp_in_seg
++   (segT, subsegT, fragS *, int, int, expressionS *, int,
++    bfd_reloc_code_real_type);
++-static void convert_frag_immed_finish_loop (segT, fragS *, TInsn *);
++ 
++ static void
++ convert_frag_immed (segT segP,
++@@ -10910,9 +10909,6 @@ convert_frag_immed (segT segP,
++ 	}
++     }
++ 
++-  if (expanded && xtensa_opcode_is_loop (isa, orig_tinsn.opcode) == 1)
++-    convert_frag_immed_finish_loop (segP, fragP, &orig_tinsn);
++-
++   if (expanded && is_direct_call_opcode (orig_tinsn.opcode))
++     {
++       /* Add an expansion note on the expanded instruction.  */
++@@ -10949,122 +10945,6 @@ fix_new_exp_in_seg (segT new_seg,
++ }
++ 
++ 
++-/* Relax a loop instruction so that it can span loop >256 bytes.
++-
++-                  loop    as, .L1
++-          .L0:
++-                  rsr     as, LEND
++-                  wsr     as, LBEG
++-                  addi    as, as, lo8 (label-.L1)
++-                  addmi   as, as, mid8 (label-.L1)
++-                  wsr     as, LEND
++-                  isync
++-                  rsr     as, LCOUNT
++-                  addi    as, as, 1
++-          .L1:
++-                  <<body>>
++-          label:
++-*/
++-
++-static void
++-convert_frag_immed_finish_loop (segT segP, fragS *fragP, TInsn *tinsn)
++-{
++-  TInsn loop_insn;
++-  TInsn addi_insn;
++-  TInsn addmi_insn;
++-  unsigned long target;
++-  static xtensa_insnbuf insnbuf = NULL;
++-  unsigned int loop_length, loop_length_hi, loop_length_lo;
++-  xtensa_isa isa = xtensa_default_isa;
++-  addressT loop_offset;
++-  addressT addi_offset = 9;
++-  addressT addmi_offset = 12;
++-  fragS *next_fragP;
++-  int target_count;
++-
++-  if (!insnbuf)
++-    insnbuf = xtensa_insnbuf_alloc (isa);
++-
++-  /* Get the loop offset.  */
++-  loop_offset = get_expanded_loop_offset (tinsn->opcode);
++-
++-  /* Validate that there really is a LOOP at the loop_offset.  Because
++-     loops are not bundleable, we can assume that the instruction will be
++-     in slot 0.  */
++-  tinsn_from_chars (&loop_insn, fragP->fr_opcode + loop_offset, 0);
++-  tinsn_immed_from_frag (&loop_insn, fragP, 0);
++-
++-  gas_assert (xtensa_opcode_is_loop (isa, loop_insn.opcode) == 1);
++-  addi_offset += loop_offset;
++-  addmi_offset += loop_offset;
++-
++-  gas_assert (tinsn->ntok == 2);
++-  if (tinsn->tok[1].X_op == O_constant)
++-    target = tinsn->tok[1].X_add_number;
++-  else if (tinsn->tok[1].X_op == O_symbol)
++-    {
++-      /* Find the fragment.  */
++-      symbolS *sym = tinsn->tok[1].X_add_symbol;
++-      gas_assert (S_GET_SEGMENT (sym) == segP
++-	      || S_GET_SEGMENT (sym) == absolute_section);
++-      target = (S_GET_VALUE (sym) + tinsn->tok[1].X_add_number);
++-    }
++-  else
++-    {
++-      as_bad (_("invalid expression evaluation type %d"), tinsn->tok[1].X_op);
++-      target = 0;
++-    }
++-
++-  loop_length = target - (fragP->fr_address + fragP->fr_fix);
++-  loop_length_hi = loop_length & ~0x0ff;
++-  loop_length_lo = loop_length & 0x0ff;
++-  if (loop_length_lo >= 128)
++-    {
++-      loop_length_lo -= 256;
++-      loop_length_hi += 256;
++-    }
++-
++-  /* Because addmi sign-extends the immediate, 'loop_length_hi' can be at most
++-     32512.  If the loop is larger than that, then we just fail.  */
++-  if (loop_length_hi > 32512)
++-    as_bad_where (fragP->fr_file, fragP->fr_line,
++-		  _("loop too long for LOOP instruction"));
++-
++-  tinsn_from_chars (&addi_insn, fragP->fr_opcode + addi_offset, 0);
++-  gas_assert (addi_insn.opcode == xtensa_addi_opcode);
++-
++-  tinsn_from_chars (&addmi_insn, fragP->fr_opcode + addmi_offset, 0);
++-  gas_assert (addmi_insn.opcode == xtensa_addmi_opcode);
++-
++-  set_expr_const (&addi_insn.tok[2], loop_length_lo);
++-  tinsn_to_insnbuf (&addi_insn, insnbuf);
++-
++-  fragP->tc_frag_data.is_insn = TRUE;
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addi_offset, 0);
++-
++-  set_expr_const (&addmi_insn.tok[2], loop_length_hi);
++-  tinsn_to_insnbuf (&addmi_insn, insnbuf);
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addmi_offset, 0);
++-
++-  /* Walk through all of the frags from here to the loop end
++-     and mark them as no_transform to keep them from being modified
++-     by the linker.  If we ever have a relocation for the
++-     addi/addmi of the difference of two symbols we can remove this.  */
++-
++-  target_count = 0;
++-  for (next_fragP = fragP; next_fragP != NULL;
++-       next_fragP = next_fragP->fr_next)
++-    {
++-      next_fragP->tc_frag_data.is_no_transform = TRUE;
++-      if (next_fragP->tc_frag_data.is_loop_target)
++-	target_count++;
++-      if (target_count == 2)
++-	break;
++-    }
++-}
++-
++ 
++ /* A map that keeps information on a per-subsegment basis.  This is
++    maintained during initial assembly, but is invalid once the
++diff --git a/gas/config/xtensa-relax.c b/gas/config/xtensa-relax.c
++index cb296ed85ed2..daf15d52c259 100644
++--- a/gas/config/xtensa-relax.c
+++++ b/gas/config/xtensa-relax.c
++@@ -87,13 +87,7 @@
++    when the first and second operands are not the same as specified
++    by the "| %at!=%as" precondition clause.
++    {"l32i %at,%as,%imm | %at!=%as",
++-   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}
++-
++-   There is special case for loop instructions here, but because we do
++-   not currently have the ability to represent the difference of two
++-   symbols, the conversion requires special code in the assembler to
++-   write the operands of the addi/addmi pair representing the
++-   difference of the old and new loop end label.  */
+++   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}  */
++ 
++ #include "as.h"
++ #include "xtensa-isa.h"
++@@ -306,44 +300,83 @@ static string_pattern_pair widen_spec_list[] =
++   {"l32i %at,%as,%imm | %at!=%as ? IsaUseConst16",
++    "const16 %at,HI16U(%imm); const16 %at,LOW16U(%imm); add %at,%at,%as; l32i %at,%at,0"},
++ 
++-  /* This is only PART of the loop instruction.  In addition,
++-     hardcoded into its use is a modification of the final operand in
++-     the instruction in bytes 9 and 12.  */
++-  {"loop %as,%label | %as!=1 ? IsaUseLoops",
+++  /* Widening loops with literals.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "loop %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz    %as,%label;"
+++   "bltz    %as,%label;"
+++   "loopgtz %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz     %as,%label;"
+++   "loopnez %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++
+++  /* Widening loops with const16.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "loop %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz    %as,%label;"
++    "bltz    %as,%label;"
++    "loopgtz %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopnez %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz     %as,%label;"
++    "loopnez %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++ 
++   /* Relaxing to wide branches.  Order is important here.  With wide
++-- 
++2.11.0
++
+diff --git a/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch b/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+new file mode 100644
+index 000000000000..ed617bcaf759
+--- /dev/null
++++ b/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+@@ -0,0 +1,294 @@
++From 0dbdfb7918d0b0cfcb8883b24c1291574bf5bb7c Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Apr 2019 14:32:42 -0700
++Subject: [PATCH] gas: use literals/const16 for xtensa loop relaxation
++
++Loop opcode relaxation that uses addi/addmi doesn't work well with other
++relaxations that may cause code movement. Instead of encoding fixed loop
++end offset in the relaxed sequence use l32r or a pair of const16 to load
++loop end address. This way the address of the loop end gets a relocation
++record and it gets updated appropriately.
++
++gas/
++2019-04-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/tc-xtensa.c (convert_frag_immed): Drop
++	convert_frag_immed_finish_loop invocation.
++	(convert_frag_immed_finish_loop): Drop declaration and
++	definition.
++	* config/xtensa-relax.c (widen_spec_list): Replace loop
++	widening that uses addi/addmi with widening that uses l32r
++	and const16.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c    | 120 ----------------------------------------------
++ gas/config/xtensa-relax.c |  77 ++++++++++++++++++++---------
++ 2 files changed, 55 insertions(+), 142 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 3bdbbc931cfc..0cc06361cf6f 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10668,7 +10668,6 @@ convert_frag_fill_nop (fragS *fragP)
++ static fixS *fix_new_exp_in_seg
++   (segT, subsegT, fragS *, int, int, expressionS *, int,
++    bfd_reloc_code_real_type);
++-static void convert_frag_immed_finish_loop (segT, fragS *, TInsn *);
++ 
++ static void
++ convert_frag_immed (segT segP,
++@@ -10910,9 +10909,6 @@ convert_frag_immed (segT segP,
++ 	}
++     }
++ 
++-  if (expanded && xtensa_opcode_is_loop (isa, orig_tinsn.opcode) == 1)
++-    convert_frag_immed_finish_loop (segP, fragP, &orig_tinsn);
++-
++   if (expanded && is_direct_call_opcode (orig_tinsn.opcode))
++     {
++       /* Add an expansion note on the expanded instruction.  */
++@@ -10949,122 +10945,6 @@ fix_new_exp_in_seg (segT new_seg,
++ }
++ 
++ 
++-/* Relax a loop instruction so that it can span loop >256 bytes.
++-
++-                  loop    as, .L1
++-          .L0:
++-                  rsr     as, LEND
++-                  wsr     as, LBEG
++-                  addi    as, as, lo8 (label-.L1)
++-                  addmi   as, as, mid8 (label-.L1)
++-                  wsr     as, LEND
++-                  isync
++-                  rsr     as, LCOUNT
++-                  addi    as, as, 1
++-          .L1:
++-                  <<body>>
++-          label:
++-*/
++-
++-static void
++-convert_frag_immed_finish_loop (segT segP, fragS *fragP, TInsn *tinsn)
++-{
++-  TInsn loop_insn;
++-  TInsn addi_insn;
++-  TInsn addmi_insn;
++-  unsigned long target;
++-  static xtensa_insnbuf insnbuf = NULL;
++-  unsigned int loop_length, loop_length_hi, loop_length_lo;
++-  xtensa_isa isa = xtensa_default_isa;
++-  addressT loop_offset;
++-  addressT addi_offset = 9;
++-  addressT addmi_offset = 12;
++-  fragS *next_fragP;
++-  int target_count;
++-
++-  if (!insnbuf)
++-    insnbuf = xtensa_insnbuf_alloc (isa);
++-
++-  /* Get the loop offset.  */
++-  loop_offset = get_expanded_loop_offset (tinsn->opcode);
++-
++-  /* Validate that there really is a LOOP at the loop_offset.  Because
++-     loops are not bundleable, we can assume that the instruction will be
++-     in slot 0.  */
++-  tinsn_from_chars (&loop_insn, fragP->fr_opcode + loop_offset, 0);
++-  tinsn_immed_from_frag (&loop_insn, fragP, 0);
++-
++-  gas_assert (xtensa_opcode_is_loop (isa, loop_insn.opcode) == 1);
++-  addi_offset += loop_offset;
++-  addmi_offset += loop_offset;
++-
++-  gas_assert (tinsn->ntok == 2);
++-  if (tinsn->tok[1].X_op == O_constant)
++-    target = tinsn->tok[1].X_add_number;
++-  else if (tinsn->tok[1].X_op == O_symbol)
++-    {
++-      /* Find the fragment.  */
++-      symbolS *sym = tinsn->tok[1].X_add_symbol;
++-      gas_assert (S_GET_SEGMENT (sym) == segP
++-	      || S_GET_SEGMENT (sym) == absolute_section);
++-      target = (S_GET_VALUE (sym) + tinsn->tok[1].X_add_number);
++-    }
++-  else
++-    {
++-      as_bad (_("invalid expression evaluation type %d"), tinsn->tok[1].X_op);
++-      target = 0;
++-    }
++-
++-  loop_length = target - (fragP->fr_address + fragP->fr_fix);
++-  loop_length_hi = loop_length & ~0x0ff;
++-  loop_length_lo = loop_length & 0x0ff;
++-  if (loop_length_lo >= 128)
++-    {
++-      loop_length_lo -= 256;
++-      loop_length_hi += 256;
++-    }
++-
++-  /* Because addmi sign-extends the immediate, 'loop_length_hi' can be at most
++-     32512.  If the loop is larger than that, then we just fail.  */
++-  if (loop_length_hi > 32512)
++-    as_bad_where (fragP->fr_file, fragP->fr_line,
++-		  _("loop too long for LOOP instruction"));
++-
++-  tinsn_from_chars (&addi_insn, fragP->fr_opcode + addi_offset, 0);
++-  gas_assert (addi_insn.opcode == xtensa_addi_opcode);
++-
++-  tinsn_from_chars (&addmi_insn, fragP->fr_opcode + addmi_offset, 0);
++-  gas_assert (addmi_insn.opcode == xtensa_addmi_opcode);
++-
++-  set_expr_const (&addi_insn.tok[2], loop_length_lo);
++-  tinsn_to_insnbuf (&addi_insn, insnbuf);
++-
++-  fragP->tc_frag_data.is_insn = TRUE;
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addi_offset, 0);
++-
++-  set_expr_const (&addmi_insn.tok[2], loop_length_hi);
++-  tinsn_to_insnbuf (&addmi_insn, insnbuf);
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addmi_offset, 0);
++-
++-  /* Walk through all of the frags from here to the loop end
++-     and mark them as no_transform to keep them from being modified
++-     by the linker.  If we ever have a relocation for the
++-     addi/addmi of the difference of two symbols we can remove this.  */
++-
++-  target_count = 0;
++-  for (next_fragP = fragP; next_fragP != NULL;
++-       next_fragP = next_fragP->fr_next)
++-    {
++-      next_fragP->tc_frag_data.is_no_transform = TRUE;
++-      if (next_fragP->tc_frag_data.is_loop_target)
++-	target_count++;
++-      if (target_count == 2)
++-	break;
++-    }
++-}
++-
++ 
++ /* A map that keeps information on a per-subsegment basis.  This is
++    maintained during initial assembly, but is invalid once the
++diff --git a/gas/config/xtensa-relax.c b/gas/config/xtensa-relax.c
++index cb296ed85ed2..daf15d52c259 100644
++--- a/gas/config/xtensa-relax.c
+++++ b/gas/config/xtensa-relax.c
++@@ -87,13 +87,7 @@
++    when the first and second operands are not the same as specified
++    by the "| %at!=%as" precondition clause.
++    {"l32i %at,%as,%imm | %at!=%as",
++-   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}
++-
++-   There is special case for loop instructions here, but because we do
++-   not currently have the ability to represent the difference of two
++-   symbols, the conversion requires special code in the assembler to
++-   write the operands of the addi/addmi pair representing the
++-   difference of the old and new loop end label.  */
+++   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}  */
++ 
++ #include "as.h"
++ #include "xtensa-isa.h"
++@@ -306,44 +300,83 @@ static string_pattern_pair widen_spec_list[] =
++   {"l32i %at,%as,%imm | %at!=%as ? IsaUseConst16",
++    "const16 %at,HI16U(%imm); const16 %at,LOW16U(%imm); add %at,%at,%as; l32i %at,%at,0"},
++ 
++-  /* This is only PART of the loop instruction.  In addition,
++-     hardcoded into its use is a modification of the final operand in
++-     the instruction in bytes 9 and 12.  */
++-  {"loop %as,%label | %as!=1 ? IsaUseLoops",
+++  /* Widening loops with literals.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "loop %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz    %as,%label;"
+++   "bltz    %as,%label;"
+++   "loopgtz %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz     %as,%label;"
+++   "loopnez %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++
+++  /* Widening loops with const16.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "loop %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz    %as,%label;"
++    "bltz    %as,%label;"
++    "loopgtz %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopnez %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz     %as,%label;"
++    "loopnez %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++ 
++   /* Relaxing to wide branches.  Order is important here.  With wide
++-- 
++2.11.0
++
+diff --git a/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch b/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+new file mode 100644
+index 000000000000..ed617bcaf759
+--- /dev/null
++++ b/package/binutils/2.32/0004-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+@@ -0,0 +1,294 @@
++From 0dbdfb7918d0b0cfcb8883b24c1291574bf5bb7c Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Apr 2019 14:32:42 -0700
++Subject: [PATCH] gas: use literals/const16 for xtensa loop relaxation
++
++Loop opcode relaxation that uses addi/addmi doesn't work well with other
++relaxations that may cause code movement. Instead of encoding fixed loop
++end offset in the relaxed sequence use l32r or a pair of const16 to load
++loop end address. This way the address of the loop end gets a relocation
++record and it gets updated appropriately.
++
++gas/
++2019-04-02  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/tc-xtensa.c (convert_frag_immed): Drop
++	convert_frag_immed_finish_loop invocation.
++	(convert_frag_immed_finish_loop): Drop declaration and
++	definition.
++	* config/xtensa-relax.c (widen_spec_list): Replace loop
++	widening that uses addi/addmi with widening that uses l32r
++	and const16.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c    | 120 ----------------------------------------------
++ gas/config/xtensa-relax.c |  77 ++++++++++++++++++++---------
++ 2 files changed, 55 insertions(+), 142 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 3bdbbc931cfc..0cc06361cf6f 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10668,7 +10668,6 @@ convert_frag_fill_nop (fragS *fragP)
++ static fixS *fix_new_exp_in_seg
++   (segT, subsegT, fragS *, int, int, expressionS *, int,
++    bfd_reloc_code_real_type);
++-static void convert_frag_immed_finish_loop (segT, fragS *, TInsn *);
++ 
++ static void
++ convert_frag_immed (segT segP,
++@@ -10910,9 +10909,6 @@ convert_frag_immed (segT segP,
++ 	}
++     }
++ 
++-  if (expanded && xtensa_opcode_is_loop (isa, orig_tinsn.opcode) == 1)
++-    convert_frag_immed_finish_loop (segP, fragP, &orig_tinsn);
++-
++   if (expanded && is_direct_call_opcode (orig_tinsn.opcode))
++     {
++       /* Add an expansion note on the expanded instruction.  */
++@@ -10949,122 +10945,6 @@ fix_new_exp_in_seg (segT new_seg,
++ }
++ 
++ 
++-/* Relax a loop instruction so that it can span loop >256 bytes.
++-
++-                  loop    as, .L1
++-          .L0:
++-                  rsr     as, LEND
++-                  wsr     as, LBEG
++-                  addi    as, as, lo8 (label-.L1)
++-                  addmi   as, as, mid8 (label-.L1)
++-                  wsr     as, LEND
++-                  isync
++-                  rsr     as, LCOUNT
++-                  addi    as, as, 1
++-          .L1:
++-                  <<body>>
++-          label:
++-*/
++-
++-static void
++-convert_frag_immed_finish_loop (segT segP, fragS *fragP, TInsn *tinsn)
++-{
++-  TInsn loop_insn;
++-  TInsn addi_insn;
++-  TInsn addmi_insn;
++-  unsigned long target;
++-  static xtensa_insnbuf insnbuf = NULL;
++-  unsigned int loop_length, loop_length_hi, loop_length_lo;
++-  xtensa_isa isa = xtensa_default_isa;
++-  addressT loop_offset;
++-  addressT addi_offset = 9;
++-  addressT addmi_offset = 12;
++-  fragS *next_fragP;
++-  int target_count;
++-
++-  if (!insnbuf)
++-    insnbuf = xtensa_insnbuf_alloc (isa);
++-
++-  /* Get the loop offset.  */
++-  loop_offset = get_expanded_loop_offset (tinsn->opcode);
++-
++-  /* Validate that there really is a LOOP at the loop_offset.  Because
++-     loops are not bundleable, we can assume that the instruction will be
++-     in slot 0.  */
++-  tinsn_from_chars (&loop_insn, fragP->fr_opcode + loop_offset, 0);
++-  tinsn_immed_from_frag (&loop_insn, fragP, 0);
++-
++-  gas_assert (xtensa_opcode_is_loop (isa, loop_insn.opcode) == 1);
++-  addi_offset += loop_offset;
++-  addmi_offset += loop_offset;
++-
++-  gas_assert (tinsn->ntok == 2);
++-  if (tinsn->tok[1].X_op == O_constant)
++-    target = tinsn->tok[1].X_add_number;
++-  else if (tinsn->tok[1].X_op == O_symbol)
++-    {
++-      /* Find the fragment.  */
++-      symbolS *sym = tinsn->tok[1].X_add_symbol;
++-      gas_assert (S_GET_SEGMENT (sym) == segP
++-	      || S_GET_SEGMENT (sym) == absolute_section);
++-      target = (S_GET_VALUE (sym) + tinsn->tok[1].X_add_number);
++-    }
++-  else
++-    {
++-      as_bad (_("invalid expression evaluation type %d"), tinsn->tok[1].X_op);
++-      target = 0;
++-    }
++-
++-  loop_length = target - (fragP->fr_address + fragP->fr_fix);
++-  loop_length_hi = loop_length & ~0x0ff;
++-  loop_length_lo = loop_length & 0x0ff;
++-  if (loop_length_lo >= 128)
++-    {
++-      loop_length_lo -= 256;
++-      loop_length_hi += 256;
++-    }
++-
++-  /* Because addmi sign-extends the immediate, 'loop_length_hi' can be at most
++-     32512.  If the loop is larger than that, then we just fail.  */
++-  if (loop_length_hi > 32512)
++-    as_bad_where (fragP->fr_file, fragP->fr_line,
++-		  _("loop too long for LOOP instruction"));
++-
++-  tinsn_from_chars (&addi_insn, fragP->fr_opcode + addi_offset, 0);
++-  gas_assert (addi_insn.opcode == xtensa_addi_opcode);
++-
++-  tinsn_from_chars (&addmi_insn, fragP->fr_opcode + addmi_offset, 0);
++-  gas_assert (addmi_insn.opcode == xtensa_addmi_opcode);
++-
++-  set_expr_const (&addi_insn.tok[2], loop_length_lo);
++-  tinsn_to_insnbuf (&addi_insn, insnbuf);
++-
++-  fragP->tc_frag_data.is_insn = TRUE;
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addi_offset, 0);
++-
++-  set_expr_const (&addmi_insn.tok[2], loop_length_hi);
++-  tinsn_to_insnbuf (&addmi_insn, insnbuf);
++-  xtensa_insnbuf_to_chars
++-    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addmi_offset, 0);
++-
++-  /* Walk through all of the frags from here to the loop end
++-     and mark them as no_transform to keep them from being modified
++-     by the linker.  If we ever have a relocation for the
++-     addi/addmi of the difference of two symbols we can remove this.  */
++-
++-  target_count = 0;
++-  for (next_fragP = fragP; next_fragP != NULL;
++-       next_fragP = next_fragP->fr_next)
++-    {
++-      next_fragP->tc_frag_data.is_no_transform = TRUE;
++-      if (next_fragP->tc_frag_data.is_loop_target)
++-	target_count++;
++-      if (target_count == 2)
++-	break;
++-    }
++-}
++-
++ 
++ /* A map that keeps information on a per-subsegment basis.  This is
++    maintained during initial assembly, but is invalid once the
++diff --git a/gas/config/xtensa-relax.c b/gas/config/xtensa-relax.c
++index cb296ed85ed2..daf15d52c259 100644
++--- a/gas/config/xtensa-relax.c
+++++ b/gas/config/xtensa-relax.c
++@@ -87,13 +87,7 @@
++    when the first and second operands are not the same as specified
++    by the "| %at!=%as" precondition clause.
++    {"l32i %at,%as,%imm | %at!=%as",
++-   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}
++-
++-   There is special case for loop instructions here, but because we do
++-   not currently have the ability to represent the difference of two
++-   symbols, the conversion requires special code in the assembler to
++-   write the operands of the addi/addmi pair representing the
++-   difference of the old and new loop end label.  */
+++   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}  */
++ 
++ #include "as.h"
++ #include "xtensa-isa.h"
++@@ -306,44 +300,83 @@ static string_pattern_pair widen_spec_list[] =
++   {"l32i %at,%as,%imm | %at!=%as ? IsaUseConst16",
++    "const16 %at,HI16U(%imm); const16 %at,LOW16U(%imm); add %at,%at,%as; l32i %at,%at,0"},
++ 
++-  /* This is only PART of the loop instruction.  In addition,
++-     hardcoded into its use is a modification of the final operand in
++-     the instruction in bytes 9 and 12.  */
++-  {"loop %as,%label | %as!=1 ? IsaUseLoops",
+++  /* Widening loops with literals.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "loop %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz    %as,%label;"
+++   "bltz    %as,%label;"
+++   "loopgtz %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+++   "beqz     %as,%label;"
+++   "loopnez %as,%LABEL;"
+++   "rsr.lend    %as;"		/* LEND */
+++   "wsr.lbeg    %as;"		/* LBEG */
+++   "LITERAL     %label;"
+++   "l32r        %as, %LITERAL;"
+++   "nop;"
+++   "wsr.lend    %as;"
+++   "isync;"
+++   "rsr.lcount    %as;"		/* LCOUNT */
+++   "addi    %as, %as, 1;"
+++   "LABEL"},
+++
+++  /* Widening loops with const16.  */
+++  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "loop %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz    %as,%label;"
++    "bltz    %as,%label;"
++    "loopgtz %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++-  {"loopnez %as,%label | %as!=1 ? IsaUseLoops",
+++  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
++    "beqz     %as,%label;"
++    "loopnez %as,%LABEL;"
++    "rsr.lend    %as;"		/* LEND */
++    "wsr.lbeg    %as;"		/* LBEG */
++-   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
++-   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+++   "const16     %as,HI16U(%label);"
+++   "const16     %as,LOW16U(%label);"
++    "wsr.lend    %as;"
++    "isync;"
++    "rsr.lcount    %as;"		/* LCOUNT */
++-   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+++   "addi    %as, %as, 1;"
++    "LABEL"},
++ 
++   /* Relaxing to wide branches.  Order is important here.  With wide
++-- 
++2.11.0
++
+-- 
+2.11.0
