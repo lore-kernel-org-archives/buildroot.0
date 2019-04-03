@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 21:35:02 +0200
-Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.4.2
-In-Reply-To: <20190403184253.17934-1-joerg.krause@embedded.rocks>
-References: <20190403184253.17934-1-joerg.krause@embedded.rocks>
-Message-ID: <20190403213502.5ce747f4@windsurf>
+Date: Wed, 3 Apr 2019 21:38:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lua-lunitx: new package
+In-Reply-To: <20190403130609.14927-1-francois.perrad@gadz.org>
+References: <20190403130609.14927-1-francois.perrad@gadz.org>
+Message-ID: <20190403213801.09cf5967@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  3 Apr 2019 20:42:53 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+On Wed,  3 Apr 2019 15:06:08 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Drop upstream patch 0001, which is included in the new version.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  ...01-Use-uint64_t-instead-of-u_int64_t.patch | 72 -------------------
->  package/upmpdcli/upmpdcli.hash                |  4 +-
->  package/upmpdcli/upmpdcli.mk                  |  2 +-
->  3 files changed, 3 insertions(+), 75 deletions(-)
->  delete mode 100644 package/upmpdcli/0001-Use-uint64_t-instead-of-u_int64_t.patch
+>  package/Config.in                  |  1 +
+>  package/lua-lunitx/Config.in       |  6 ++++++
+>  package/lua-lunitx/lua-lunitx.hash |  3 +++
+>  package/lua-lunitx/lua-lunitx.mk   | 13 +++++++++++++
+>  4 files changed, 23 insertions(+)
+>  create mode 100644 package/lua-lunitx/Config.in
+>  create mode 100644 package/lua-lunitx/lua-lunitx.hash
+>  create mode 100644 package/lua-lunitx/lua-lunitx.mk
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
