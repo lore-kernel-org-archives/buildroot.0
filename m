@@ -1,199 +1,145 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Wed, 3 Apr 2019 12:19:28 +0200
-Subject: [Buildroot] [PATCH v3 4/4] support/testing: test_optee.py: test
- optee boot and testsuite
-In-Reply-To: <5c9ee39a76ba3_29f73fa56c0d01a0437d9@ultri5.mail>
-References: <20190322095818.19914-4-etienne.carriere@linaro.org>
- <5c9ee39a76ba3_29f73fa56c0d01a0437d9@ultri5.mail>
-Message-ID: <CAN5uoS-sKGtsQqep=pU5iX_4iNApu-TcpmsqxOWscdZFNnbrfg@mail.gmail.com>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Wed,  3 Apr 2019 18:22:46 +0700
+Subject: [Buildroot] [PATCH] package/libcamera: Add libcamera package
+Message-ID: <20190403112246.25471-1-kieran.bingham@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+  http://libcamera.org/
 
-On Sat, 30 Mar 2019 at 04:33, Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
->
-> Hello,
->
-> Looks good, except for the chdir stuff.
-> Also a lot of nits below.
->
-> On Fri, Mar 22, 2019 at 06:58 AM, Etienne Carriere wrote:
->
-> [snip]
-> > ---
-> >  support/testing/tests/package/test_optee.py | 42 +++++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >  create mode 100644 support/testing/tests/package/test_optee.py
->
-> Please run flake8 and fix the warning it generates.
-> test_optee.py:9:1: E302 expected 2 blank lines, found 1
+Cameras are complex devices that need heavy hardware image processing
+operations. Control of the processing is based on advanced algorithms
+that must run on a programmable processor. This has traditionally been
+implemented in a dedicated MCU in the camera, but in embedded devices
+algorithms have been moved to the main CPU to save cost. Blurring the
+boundary between camera devices and Linux often left the user with no
+other option than a vendor-specific closed-source solution.
 
-Sure, sorry. Python newbie bad habit.
+To address this problem the Linux media community has very recently
+started collaboration with the industry to develop a camera stack that
+will be open-source-friendly while still protecting vendor core IP.
+libcamera was born out of that collaboration and will offer modern
+camera support to Linux-based systems, including traditional Linux
+distributions, ChromeOS and Android.
 
->
-> Please run 'make .gitlab-ci.yml'. BTW the same is also missing in the defconfig
-> patch 2.
+The project has not made an official release as of yet, so we're
+using the latest sha1 from master
 
-Ok.
+We utilise C++ 11 but we mandate GCC5+ due to a bug [0] in earlier
+versions which result in compile failures on our code base.
 
->
-> >
-> > diff --git a/support/testing/tests/package/test_optee.py b/support/testing/tests/package/test_optee.py
-> > new file mode 100644
-> > index 0000000000..44cee74fd8
-> > --- /dev/null
-> > +++ b/support/testing/tests/package/test_optee.py
-> > @@ -0,0 +1,42 @@
-> > +import os
-> > +
-> > +import infra.basetest
-> > +
-> > +# This test enforces locally built emulator to prevent old Qemu to
-> > +# dump secure trace to stdio and corrupting trace synchro expected
-> > +# through pexpect.
-> > +
-> > +class TestOptee(infra.basetest.BRTest):
-> > +
-> > +    with open(os.path.join(os.getcwd(), 'configs',
-> > +                           'qemu_arm_vexpress_tz_defconfig'),
-> > +              'r') as config_file:
->
-> Regarding the use of open(), I see no better option here.
->
-> Regarding the use of os.getcwd(), I would prefer to have my patch applied
-> before this one:
-> http://patchwork.ozlabs.org/patch/992697/
-> So here you could use:
->     with open(infra.basepath('configs/qemu_armv7a_tz_virt_defconfig'), 'r') as config_file:
-> This way we would keep the logic to get any path in a single point in the test
-> infra.
-> But this suggestion depends on what the maintainers think about my patch.
-> If you like the idea you can add my patch to your series.
+[0] Bug 54316 - [C++11] move constructor for stringstream
+    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54316
 
-Ok, thanks, it will be more consistent with the runtime env.
-Maybe I could simply merge your proposal in my change (and append your
-s-o-b tag to it), if you agree.
+Documentation and Tests are disabled from the build.
 
->
-> > +        config = "".join(line for line in config_file if line[:1] != '#') + \
-> > +                 """
->
-> nit: for consistence with all other test cases, please use one less indent:
->         config = "".join(line for line in config_file if line[:1] != '#') + \
->             """
+With the following added to libcamera.config:
 
-ok.
+  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+  BR2_PACKAGE_LIBCAMERA=y
 
->
-> > +                 BR2_PACKAGE_HOST_QEMU=y
-> > +                 BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
->
-> Shouldn't these 2 lines be in the config_emulator below ...
->
-> > +                 BR2_TOOLCHAIN_EXTERNAL=y
-> > +                 """
-> > +    config_emulator = ''
->
-> ... like this?
->      config_emulator = \
->          """
->          BR2_PACKAGE_HOST_QEMU=y
->          BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
->          """
+./utils/test-pkg -c libcamera.config -p libcamera
+                             br-arm-full [1/6]: SKIPPED
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: SKIPPED
 
-yes. true.
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+---
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/libcamera/Config.in      | 13 +++++++++++++
+ package/libcamera/libcamera.hash |  4 ++++
+ package/libcamera/libcamera.mk   | 19 +++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/libcamera/Config.in
+ create mode 100644 package/libcamera/libcamera.hash
+ create mode 100644 package/libcamera/libcamera.mk
 
-> But see my question on patch 3 before changing this.
->
-
-true again, I think I will remove this config_emulator from the test
-case and move it to a generic config in basetest.py.
-
-
->
-> > +
-> > +    def test_run(self):
-> > +
-> > +        qemu_options = ['-machine', 'virt,secure=on']
-> > +        qemu_options.extend(['-cpu', 'cortex-a15'])
-> > +        qemu_options.extend(['-m', '1024'])
-> > +        qemu_options.extend(['-semihosting-config', 'enable,target=native'])
-> > +        qemu_options.extend(['-bios', 'bl1.bin'])
-> > +
-> > +        # This test expects Qemu is run from the image direcotry
->
-> s/direcotry/directory/
-
-thanks.
-
->
-> > +        os.chdir(os.path.join(self.builddir, 'images'))
->
-> This is not good.
-> When running multiple test cases, it will make any test case that runs after
-> this one to fail, see:
->
-> $ ./support/testing/run-tests -o o -k \
->   tests.core.test_post_scripts.TestPostScripts \
->   tests.package.test_optee.TestOptee
-> 20:14:02 TestOptee                                Starting
-> 20:17:01 TestOptee                                Cleaning up
-> .20:17:01 TestPostScripts                          Starting
-> E
-> ======================================================================
-> ERROR: test_run (tests.core.test_post_scripts.TestPostScripts)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 76, in setUp
->     super(BRTest, self).setUp()
->   File "/home/ricardo/src/buildroot/support/testing/infra/basetest.py", line 62, in setUp
->     self.b.configure(make_extra_opts=["BR2_EXTERNAL={}".format(":".join(self.br2_external))])
->   File "/home/ricardo/src/buildroot/support/testing/infra/builder.py", line 48, in configure
->     raise SystemError("Cannot olddefconfig")
-> SystemError: Cannot olddefconfig
->
-> A better solution is to add a new optional parameter to Emulator.boot method,
-> perhaps named "cwd" that defaults to None and is passed to pexpect.spawn(...,
-> cwd=cwd) (not tested).
-> This way the Emulator class is aware that qemu must run from a directory, only
-> for the test cases that pass this.
-
-Ok. Indeed my proposal is bad.
-I will go this way, and try to come up with something not too ugly.
-
->
-> > +
-> > +        self.emulator.boot(arch='armv7', options=qemu_options, local=True)
-> > +        self.emulator.login()
-> > +
-> > +        # Trick traces since xtest prints "# " which corrupts emulator run
-> > +        # method. Tests are dumped only if test fails.
-> > +        cmd = 'echo "Silent test takes a while, be patient..."; ' + \
-> > +              'xtest -t regression > /tmp/xtest.log ||' + \
-> > +              '(cat /tmp/xtest.log && false)'
-> > +        output, exit_code = self.emulator.run(cmd, timeout=240)
->
-> 'output' is currently not tested.
-> It's better to use the convention:
->         _, exit_code = self.emulator.run(cmd, timeout=240)
-
-Ok thanks, will fix.
-
->
-> > +        self.assertEqual(exit_code, 0)
-> > --
-> > 2.17.1
->
->
-> Regards,
-> Ricardo
-
-Thanks again for your feedback.
-
-Regards,
-etienne
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c91325e28486..5bcdf208a62b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1260,6 +1260,9 @@ F:	package/ramsmp/
+ N:	Kevin Joly <kevin.joly@sensefly.com>
+ F:	package/libgphoto2/
+ 
++N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
++F:	package/libcamera/
++
+ N:	Koen Martens <gmc@sonologic.nl>
+ F:	package/capnproto/
+ F:	package/linuxconsoletools/
+diff --git a/package/Config.in b/package/Config.in
+index b5321aeb49c9..a9d25e58b202 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1472,6 +1472,7 @@ menu "Multimedia"
+ 	source "package/libass/Config.in"
+ 	source "package/libbdplus/Config.in"
+ 	source "package/libbluray/Config.in"
++	source "package/libcamera/Config.in"
+ 	source "package/libdcadec/Config.in"
+ 	source "package/libdvbcsa/Config.in"
+ 	source "package/libdvbpsi/Config.in"
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+new file mode 100644
+index 000000000000..cc5e84424c38
+--- /dev/null
++++ b/package/libcamera/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBCAMERA
++	bool "libcamera"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# C++11 + https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54316
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on BR2_PACKAGE_HAS_UDEV
++	help
++	  libcamera provides a software stack to support
++	  complex devices that need heavy hardware image
++	  processing operations.
++
++		http://www.libcamera.org/
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+new file mode 100644
+index 000000000000..7d5392dde2bb
+--- /dev/null
++++ b/package/libcamera/libcamera.hash
+@@ -0,0 +1,4 @@
++sha256 2c01dc76d98ef257660f8ef3f4f17f042e112b5eca6b364ad615220c96fbd066  libcamera-d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
++sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
++
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+new file mode 100644
+index 000000000000..342d5e34cad0
+--- /dev/null
++++ b/package/libcamera/libcamera.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libcamera
++#
++################################################################################
++
++LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
++#LIBCAMERA_SITE = https://gitlab.com/libcamera/libcamera.git
++LIBCAMERA_VERSION = d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080
++LIBCAMERA_SITE_METHOD = git
++LIBCAMERA_DEPENDENCIES = udev
++LIBCAMERA_CONF_OPTS = -Dtests=false -Ddocumentation=false
++LIBCAMERA_INSTALL_STAGING = yes
++LIBCAMERA_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (utils)
++LIBCAMERA_LICENSE_FILES = \
++	licenses/gnu-gpl-2.0.txt \
++	licenses/gnu-lgpl-2.1.txt
++
++$(eval $(meson-package))
+-- 
+2.19.1
