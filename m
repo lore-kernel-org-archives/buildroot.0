@@ -1,36 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Apr 2019 22:17:35 +0200
-Subject: [Buildroot] Failed to build in a user namespace without the
- root user
-In-Reply-To: <CA+gSDyT9ReuV4VxZc_3U3zspS8SeBbNzNFXqbLVrSComcgn8-w@mail.gmail.com>
- (Esben Nielsen's message of "Wed, 3 Apr 2019 17:46:45 +0200")
-References: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
- <87ftr0gsgo.fsf@dell.be.48ers.dk>
- <CA+gSDyT9ReuV4VxZc_3U3zspS8SeBbNzNFXqbLVrSComcgn8-w@mail.gmail.com>
-Message-ID: <87zhp6etcw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 3 Apr 2019 22:17:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: bump version to 2.1.2
+In-Reply-To: <20190402145753.25555-1-peter@korsgaard.com>
+References: <20190402145753.25555-1-peter@korsgaard.com>
+Message-ID: <20190403221738.78321ecc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Nielsen <nielsen.esben@gmail.com> writes:
+On Tue,  2 Apr 2019 16:57:52 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Without FAKEROOTDONTTRYCHOWN it ends up in the kernel, which does a
- > lookup in the current user namespace and looks for uid 0 - which is
- > not there. Then it returns EINVAL, not EPERM.
- > When I set FAKEROOTDONTTRYCHOWN (from outside buildroot), I don't get that.
+> Fixes a number of issues discovered post-2.1.1. For details, see:
+> https://github.com/tpm2-software/tpm2-tss/releases/tag/2.1.2
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/tpm2-tss/tpm2-tss.hash | 2 +-
+>  package/tpm2-tss/tpm2-tss.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hints how to reproduce:
+Both applied. Thanks!
 
- > bwrap --bind / / --uid 1000 --gid 1000 --dev /dev <make command>
-
- > bwrap 0.3.0 is compiled as user without suid bit set.
-
-Ok, thanks. I've send a patch with a more detailed commit message doing
-just that. Can you give it a try?
-
-https://patchwork.ozlabs.org/patch/1076377/
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
