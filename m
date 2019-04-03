@@ -1,52 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  3 Apr 2019 17:56:28 +0200
-Subject: [Buildroot] [PATCH] package/wget: security bump to version 1.20.2
-Message-ID: <20190403155628.23335-1-peter@korsgaard.com>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Thu, 4 Apr 2019 01:23:13 +0700
+Subject: [Buildroot] [PATCH v3] package/libcamera: Add libcamera package
+In-Reply-To: <4b4aeae9-67d5-f958-91ad-cfb0db784c2d@mind.be>
+References: <20190403112902.29930-1-kieran.bingham@ideasonboard.com>
+ <4b4aeae9-67d5-f958-91ad-cfb0db784c2d@mind.be>
+Message-ID: <463828c0-337d-62f6-6d0e-7e9b00152600@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From NEWS:
+Hi Arnout,
 
-* Changes in Wget 1.20.2
-** Fixed a buffer overflow vulnerability
+On 03/04/2019 12:32, Arnout Vandecappelle wrote:
+> 
+> 
+> On 03/04/2019 13:29, Kieran Bingham wrote:
+>> +LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+>> +LIBCAMERA_VERSION = d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080
+>> +LIBCAMERA_SITE_METHOD = git
+> 
+>  That debug line gave me the idea... you can use an http download on gitlab:
 
-For more details, see the announcement:
-https://lists.gnu.org/archive/html/info-gnu/2019-04/msg00000.html
+Thanks, but we're not actually using gitlab. That was a repo I had
+control over which I was able to push public branches to for testing and
+debugging the buildroot build.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wget/wget.hash | 4 ++--
- package/wget/wget.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> LIBCAMERA_SITE =
+> https://gitlab.com/libcamera/libcamera/-/archive/$(LIBCAMERA_VERSION)
+> LIBCAMERA_SOURCE = libcamera-$(LIBCAMERA_VERSION).tar.bz2
+> 
+>  Only, I'm not sure how stable the tarball generation is, i.e. if it will always
+> yield the same hash.
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 7d1a1c5521..e49768ee2c 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.20.1.tar.lz.sig
-+# https://ftp.gnu.org/gnu/wget/wget-1.20.2.tar.lz.sig
- # with key 1CB27DBC98614B2D5841646D08302DB6A2670428
--sha256 0f63e84dd23dc53ab3ab6f483c3afff8301e54c165783f772101cdd9b1c64928  wget-1.20.1.tar.lz
-+sha256 84d3cbece8c08e130a8da0a72cf6e543a2adf58ca8ecf28726560b06243d4ce6  wget-1.20.2.tar.lz
- # Locally calculated
- sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 5cdecbcc81..50405e5bf9 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WGET_VERSION = 1.20.1
-+WGET_VERSION = 1.20.2
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+I'm afraid I don't believe this would work with the git.linuxtv.org ...
+I think it's just a basic gitolite instance or such.
+
+>  Either way:
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Great thanks.
+
+
+> 
+>  Regards,
+>  Arnout
+> 
+
 -- 
-2.11.0
+Regards
+--
+Kieran
