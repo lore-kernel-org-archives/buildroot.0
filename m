@@ -1,99 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 21:35:46 +0200
-Subject: [Buildroot] [git commit] package/lunit: remove package
-Message-ID: <20190403193440.BA75A8D385@busybox.osuosl.org>
+Date: Wed, 3 Apr 2019 21:38:15 +0200
+Subject: [Buildroot] [git commit] package/quota: fix build on m68k
+Message-ID: <20190403193440.C2C1C8D385@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f33ec411627c20004dd39c40f17aa6b9d8ab488
+commit: https://git.buildroot.net/buildroot/commit/?id=feef4b733c4e5a6ee89d1554d29786304be7a720
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-it was replaced by its fork lunitx which supports all versions of Lua.
+PIE breaks the build on m68k, so add an upstream patch to disable PIE.
+Obviously, when we start seriously testing the BR2_RELRO_FULL option, we
+will realize that it is broken on some architectures, and will probably
+disable it on m68k.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy         |  8 ++++++++
- package/Config.in        |  1 -
- package/lunit/Config.in  | 11 -----------
- package/lunit/lunit.hash |  3 ---
- package/lunit/lunit.mk   | 11 -----------
- 5 files changed, 8 insertions(+), 26 deletions(-)
+ .../0001-configure.ac-add-disable-pie-option.patch | 55 ++++++++++++++++++++++
+ package/quota/quota.mk                             |  1 +
+ 2 files changed, 56 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cafa1c0674..ec5079da65 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2019.05"
- 
-+config BR2_PACKAGE_LUNIT
-+	bool "lunit package removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LUA_LUNITX
-+	help
-+	  The lunit package was removed in favor of its fork lunitx,
-+	  which supports all versions of Lua.
+diff --git a/package/quota/0001-configure.ac-add-disable-pie-option.patch b/package/quota/0001-configure.ac-add-disable-pie-option.patch
+new file mode 100644
+index 0000000000..c3b57fea66
+--- /dev/null
++++ b/package/quota/0001-configure.ac-add-disable-pie-option.patch
+@@ -0,0 +1,55 @@
++From cb20e19028a8996de9305502ba5e5da3bd1181bf Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 2 Apr 2019 09:19:36 +0200
++Subject: [PATCH] configure.ac: add --disable-pie option
 +
- config BR2_PACKAGE_FFMPEG_FFSERVER
- 	bool "ffmpeg ffserver removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 287f3493be..6fd047ec8c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -649,7 +649,6 @@ menu "Lua libraries/modules"
- 	source "package/luasocket/Config.in"
- 	source "package/luasql-sqlite3/Config.in"
- 	source "package/lua-valua/Config.in"
--	source "package/lunit/Config.in"
- 	source "package/lutok/Config.in"
- 	source "package/luv/Config.in"
- 	source "package/luvi/Config.in"
-diff --git a/package/lunit/Config.in b/package/lunit/Config.in
-deleted file mode 100644
-index d6c2c6b157..0000000000
---- a/package/lunit/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_LUNIT
--	bool "lunit"
--	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
--	help
--	  A unit testing framework for Lua.
--
--	  http://www.mroth.net/lunit/
--
--comment "lunit needs a Lua 5.1 interpreter"
--	depends on !BR2_PACKAGE_LUA_5_1
--	depends on !BR2_PACKAGE_LUAJIT
-diff --git a/package/lunit/lunit.hash b/package/lunit/lunit.hash
-deleted file mode 100644
-index bd168ba8f5..0000000000
---- a/package/lunit/lunit.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# computed by luarocks/buildroot
--sha256 b19854c685337ddcec2fe9c22113d2cd14715d52ccd2676abe2fa49b61a2ec4d  lunit-0.5-2.src.rock
--sha256 316317e9e9b7eac811e1be56738e2434fb4a0c39ecd660f3b34dad739bfb3707  lunit-0.5/LICENSE
-diff --git a/package/lunit/lunit.mk b/package/lunit/lunit.mk
-deleted file mode 100644
-index 34e22db757..0000000000
---- a/package/lunit/lunit.mk
-+++ /dev/null
-@@ -1,11 +0,0 @@
--################################################################################
--#
--# lunit
--#
--################################################################################
--
--LUNIT_VERSION = 0.5-2
--LUNIT_LICENSE = MIT
--LUNIT_LICENSE_FILES = $(LUNIT_SUBDIR)/LICENSE
--
--$(eval $(luarocks-package))
++PIE is not necessarily supported on all architectures, so add an option
++to allow the user to disable the PIE.
++
++This fixes the build on the m68k architecture:
++ - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: merged]
++---
++ Makefile.am  |  2 +-
++ configure.ac | 12 ++++++++++++
++ 2 files changed, 13 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 638198d..332bd67 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,5 +1,5 @@
++ ACLOCAL_AMFLAGS = -I m4
++-AM_LDFLAGS = -pie
+++AM_LDFLAGS = @PIE_LDFLAGS@
++ 
++ doc_DATA = \
++        README.mailserver \
++diff --git a/configure.ac b/configure.ac
++index 095ff86..5af4235 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -55,6 +55,18 @@ AS_IF([test "x${prefix}" = "xNONE"], [
++   AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/share/locale", [Locale-specific data directory])
++ ])
++ 
+++# ================
+++# Check for ldflags
+++# ================
+++AC_ARG_ENABLE([pie],
+++   [AS_HELP_STRING([--disable-pie], [Disable Position Independent Executable])],
+++   [enable_pie="$enableval"],
+++   [enable_pie=yes]
+++)
+++AS_IF([test x"$enable_pie" != "xno"], [
+++    PIE_LDFLAGS="-pie"
+++])
+++AC_SUBST([PIE_LDFLAGS])
++ 
++ # ================
++ # Check for cflags
++-- 
++2.14.1
++
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 5f1e427d0b..8c7563d289 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -10,6 +10,7 @@ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
+ QUOTA_LIBS = $(TARGET_NLS_LIBS)
++QUOTA_CONF_OPTS = --disable-pie
+ 
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBNL),yy)
+ QUOTA_DEPENDENCIES += host-pkgconf dbus libnl
