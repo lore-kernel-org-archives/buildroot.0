@@ -1,90 +1,105 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 3 Apr 2019 16:44:53 +0200
-Subject: [Buildroot] [PATCH] package/bayer2rgb-neon: fix build failure
- with musl libc
-In-Reply-To: <20190403144220.9090-1-giulio.benetti@micronovasrl.com>
-References: <20190403144220.9090-1-giulio.benetti@micronovasrl.com>
-Message-ID: <cae2e1d4-e0fe-dbe8-c4b1-d7003ddcfad5@micronovasrl.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed,  3 Apr 2019 18:40:55 +0300
+Subject: [Buildroot] [PATCH 1/1] pkg-autotools-infra: disable NLS for the
+ host by default
+Message-ID: <1554306055-16183-1-git-send-email-email@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 03/04/2019 16:42, Giulio Benetti ha scritto:
-> Musl libc doesn't provide ssize_t type through <stdlib.h>, need to
-> directly include <unistd.h>.
-> 
-> Add patch to include <unistd.h> in main header included in every .c/.cc
-> file.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2e9/2e99d0066fadb0802dd0d898215b2f6867603d69/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   .../0001-bayer2rgb.h-add-missing-header.patch | 36 +++++++++++++++++++
->   1 file changed, 36 insertions(+)
->   create mode 100644 package/bayer2rgb-neon/0001-bayer2rgb.h-add-missing-header.patch
-> 
-> diff --git a/package/bayer2rgb-neon/0001-bayer2rgb.h-add-missing-header.patch b/package/bayer2rgb-neon/0001-bayer2rgb.h-add-missing-header.patch
-> new file mode 100644
-> index 0000000000..65302f3baf
-> --- /dev/null
-> +++ b/package/bayer2rgb-neon/0001-bayer2rgb.h-add-missing-header.patch
-> @@ -0,0 +1,36 @@
-> +From 98e22511b0b134626b4ae38089ec1725100349de Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +Date: Wed, 3 Apr 2019 16:24:16 +0200
-> +Subject: [PATCH] bayer2rgb.h: add missing header
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +The ssize_t type requires the unistd.h header. This fixes build with
-> +musl libc:
-> +
-> +src/convert-dumb.cc:229:2: error: ?ssize_t? was not declared in this
-> +scope
-> +  ssize_t   stride;
-> +  ^
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +---
-> + src/bayer2rgb.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/bayer2rgb.h b/src/bayer2rgb.h
-> +index 3c96209..5337dbd 100644
-> +--- a/src/bayer2rgb.h
-> ++++ b/src/bayer2rgb.h
-> +@@ -19,6 +19,7 @@
-> +
-> + #include <stdlib.h>
-> + #include <stdint.h>
-> ++#include <unistd.h>
-> +
-> + #ifdef __cplusplus
-> + extern "C" {
-> +--
-> +2.17.1
-> +
-> 
+From: Vadim Kochan <vadim4j@gmail.com>
 
-I've directly contacted the maintainers/constributors to upstream using 
-git log e-mails since I couldn't find any other way.
+There is no need for language translaion feature for the host packages,
+anyway some of them disable it explicitly, so lets do it automatically
+at least for the host-autotools- kind of packages.
 
-Added them in Cc.
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ package/acl/acl.mk                     | 1 -
+ package/attr/attr.mk                   | 1 -
+ package/gcc/gcc-initial/gcc-initial.mk | 1 -
+ package/gutenprint/gutenprint.mk       | 2 --
+ package/pkg-autotools.mk               | 2 ++
+ package/vim/vim.mk                     | 3 +--
+ 6 files changed, 3 insertions(+), 7 deletions(-)
 
-Best regards
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 038bc7a..8dce274 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -15,7 +15,6 @@ HOST_ACL_DEPENDENCIES = host-attr
+ ACL_INSTALL_STAGING = YES
+ 
+ ACL_CONF_OPTS = --disable-nls
+-HOST_ACL_CONF_OPTS = --disable-nls
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 348dcd2..ba77e80 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -12,7 +12,6 @@ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ ATTR_INSTALL_STAGING = YES
+ 
+ ATTR_CONF_OPTS = --disable-nls
+-HOST_ATTR_CONF_OPTS = --disable-nls
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 1decca8..f5bc6c5 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -38,7 +38,6 @@ HOST_GCC_INITIAL_CONF_OPTS = \
+ 	--disable-threads \
+ 	--with-newlib \
+ 	--disable-largefile \
+-	--disable-nls \
+ 	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+ 
+ HOST_GCC_INITIAL_CONF_ENV = \
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 65b8d31..6c42319 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -61,8 +61,6 @@ HOST_GUTENPRINT_CONF_OPTS = \
+ 	--disable-samples \
+ 	--without-gimp2 \
+ 	--without-doc \
+-	--disable-nls \
+-	--disable-nls-macos \
+ 	--without-foomatic \
+ 	--without-foomatic3 \
+ 	--disable-escputil \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 45de993..3f139f8 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -232,6 +232,8 @@ define $(2)_CONFIGURE_CMDS
+ 		--disable-debug \
+ 		--with-xmlto=no \
+ 		--with-fop=no \
++		--disable-nls \
++		--disable-nls-macos \
+ 		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+ 	)
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 56716cb..c19d835 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -86,8 +86,7 @@ HOST_VIM_CONF_OPTS = \
+ 	--without-x \
+ 	--disable-acl \
+ 	--disable-gpm \
+-	--disable-selinux \
+-	--disable-nls
++	--disable-selinux
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.7.4
