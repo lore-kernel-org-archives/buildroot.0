@@ -1,120 +1,45 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 3 Apr 2019 23:24:02 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: improve linking avoiding -ldrm to
- be appended when -lavutil is linked
-In-Reply-To: <20190130160116.3782-1-giulio.benetti@micronovasrl.com>
-References: <0535ae91-47fa-5a31-5ff6-7977c5bbbe8b@mind.be>
- <20190130160116.3782-1-giulio.benetti@micronovasrl.com>
-Message-ID: <21201cfd-37b6-631f-3630-a40c27b2896f@micronovasrl.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Apr 2019 23:30:12 +0200
+Subject: [Buildroot] [PATCH 0/2] [AUTOBUILD] Store package files list in
+ results (branch yem/files-list)
+In-Reply-To: <20190403231356.77a41b10@windsurf>
+References: <cover.1554054435.git.yann.morin.1998@free.fr>
+ <20190403231356.77a41b10@windsurf>
+Message-ID: <20190403213012.GC2659@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 30/01/2019 17:01, Giulio Benetti ha scritto:
-> Upstream ffmpeg patch[1] has a drawback. Linking against libavutil
-> results in appending -ldrm to library list in linker command tail, but
-> in shared linking this is no needed at all since shared linking is
-> transparent about library dependecies, hence -ldrm in this case is not
-> needed.
-> 
-> Add patch to avoid this behaviour by:
-> - Introducing new variable "privatelibs" that is assigned to
->    "Libs.private:" when creating various .pc files.
-> - Move $LIBDRM from extralibs_avutil to privatelibs_avutil
-> 
-> [1]
-> https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/c50dc77ac708e98d02da7c422a6b9cbf9f565aa5
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   ...BDRM-to-Libs.private-instead-of-Libs.patch | 59 +++++++++++++++++++
->   1 file changed, 59 insertions(+)
->   create mode 100644 package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
-> 
-> diff --git a/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
-> new file mode 100644
-> index 0000000000..f19c74f228
-> --- /dev/null
-> +++ b/package/ffmpeg/0002-configure-add-LIBDRM-to-Libs.private-instead-of-Libs.patch
-> @@ -0,0 +1,59 @@
-> +From e34be93d478ad510960d03549572805a0430144c Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +Date: Sun, 21 Oct 2018 22:43:39 +0200
-> +Subject: [PATCH] configure: add LIBDRM to Libs.private instead of Libs
-> +
-> +Currently LIBDRM is appended to Libs: in libavutil.pc. This causes
-> +every program linking with avutil to link with -ldrm in both shared and
-> +static linking cases. In shared linking case it makes no sense, since
-> +-ldrm is a dependency of libavutil and is transparent while linking with
-> +libavutil
-> +
-> +- Add privatelibs_avutil variable for explicit private libraries to be
-> +  appended to Libs.private:
-> +- Add $LIBDRM to privatelibs_avutil.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +---
-> + configure                     | 3 ++-
-> + ffbuild/pkgconfig_generate.sh | 3 ++-
-> + 2 files changed, 4 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index 9fe7760822..0996d8a85d 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -7096,7 +7096,8 @@ source_path=${source_path}
-> + LIBPREF=${LIBPREF}
-> + LIBSUF=${LIBSUF}
-> +
-> +-extralibs_avutil="$LIBRT $LIBDRM $LIBM"
-> ++extralibs_avutil="$LIBRT $LIBM"
-> ++privatelibs_avutil="$LIBDRM"
-> + extralibs_avcodec="$extralibs"
-> + extralibs_avformat="$extralibs"
-> + extralibs_avdevice="$extralibs"
-> +diff --git a/ffbuild/pkgconfig_generate.sh b/ffbuild/pkgconfig_generate.sh
-> +index e5de6716d2..b86486a107 100755
-> +--- a/ffbuild/pkgconfig_generate.sh
-> ++++ b/ffbuild/pkgconfig_generate.sh
-> +@@ -13,6 +13,7 @@ name=lib${shortname}
-> + fullname=${name}${build_suffix}
-> + comment=$2
-> + libs=$(eval echo \$extralibs_${shortname})
-> ++privatelibs=$(eval echo \$privatelibs_${shortname})
-> + deps=$(eval echo \$${shortname}_deps)
-> +
-> + for dep in $deps; do
-> +@@ -39,7 +40,7 @@ Requires: $($shared || echo $requires)
-> + Requires.private: $($shared && echo $requires)
-> + Conflicts:
-> + Libs: -L\${libdir} $rpath -l${fullname#lib} $($shared || echo $libs)
-> +-Libs.private: $($shared && echo $libs)
-> ++Libs.private: $($shared && echo $libs) ${privatelibs}
-> + Cflags: -I\${includedir}
-> + EOF
-> +
-> +--
-> +2.17.1
-> +
-> 
+Thomas, All,
 
-This patch applied to 3.4.x version and wasn't vital since it didn't 
-create build failure.
-FFmpeg will upstream patches only for security bugs, so this patch 
-doesn't make sense.
-I set it rejected on Patchwork.
+On 2019-04-03 23:13 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 31 Mar 2019 19:48:20 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > Yann E. MORIN (2):
+> >       [AUTOBUILD] autobuild-run: add helper function to copy-if-exists
+> >       [AUTOBUILD] autobuild-run: also copy packages files lists if they exist
+> 
+> Both applied. I hope those additional files will not be too big: we
+> keep all those files for all build results, so it can add up quite a
+> bit over time. The build results currently take 64 GB of disk space,
+> and require 1303600 files.
 
-Best regards
+I would expect those files to be of about the same size as the build.log
+snippet we keep.
+
+If it turns out to be a problem, then we can restrict that to only failed
+builds.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
