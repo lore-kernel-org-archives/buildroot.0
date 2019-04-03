@@ -1,78 +1,52 @@
-From: Esben Nielsen <nielsen.esben@gmail.com>
-Date: Wed, 3 Apr 2019 17:46:45 +0200
-Subject: [Buildroot] Failed to build in a user namespace without the
- root user
-In-Reply-To: <87ftr0gsgo.fsf@dell.be.48ers.dk>
-References: <CA+gSDyRCnG0HuJ4QVsFoROqCHBkn+MR7H39BQBmzHfHRm2B5gA@mail.gmail.com>
- <87ftr0gsgo.fsf@dell.be.48ers.dk>
-Message-ID: <CA+gSDyT9ReuV4VxZc_3U3zspS8SeBbNzNFXqbLVrSComcgn8-w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  3 Apr 2019 17:56:28 +0200
+Subject: [Buildroot] [PATCH] package/wget: security bump to version 1.20.2
+Message-ID: <20190403155628.23335-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without FAKEROOTDONTTRYCHOWN it ends up in the kernel, which does a
-lookup in the current user namespace and looks for uid 0 - which is
-not there. Then it returns EINVAL, not EPERM.
-When I set FAKEROOTDONTTRYCHOWN (from outside buildroot), I don't get that.
+From NEWS:
 
-Hints how to reproduce:
+* Changes in Wget 1.20.2
+** Fixed a buffer overflow vulnerability
 
-bwrap --bind / / --uid 1000 --gid 1000 --dev /dev <make command>
+For more details, see the announcement:
+https://lists.gnu.org/archive/html/info-gnu/2019-04/msg00000.html
 
-bwrap 0.3.0 is compiled as user without suid bit set.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wget/wget.hash | 4 ++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-/Esben
-
-
-On Tue, Apr 2, 2019 at 8:41 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Esben" == Esben Nielsen <nielsen.esben@gmail.com> writes:
->
->  > I try to build in an unpriviliged container (using bubblewrap), where
->  > I only have a single user id, not uid 0.
->
-> Sounds special, but OK.
->
->  > I found the issue was in fakeroot, which per default when it does
->  > chown, it also asks the kernel if the id it does chown to actually
->  > exists. This is the default behaviour.
->
-> Sorry, where do you see that? Looking at the fakeroot code, the only
-> thing FAKEROOTDONTTRYCHOWN controls is if the wrapped chown also calls
-> the real chown syscall:
->
-> int chown(const char *path, uid_t owner, gid_t group){
-> ..
->   if(!dont_try_chown())
->     r=next_lchown(path,owner,group);
->   else
->     r=0;
->   if(r&&(errno==EPERM))
->     r=0;
->
->   return r;
->
-> Does lchown(path, 0, 0); return anything else than EPERM in your
-> bubblewrap setup?
->
->
->  > Shouldn't it totally ignore the uid and gid map in the user namespace
->  > in the kernel?
->
-> The goal is indeed that Buildroot builds do not differ based on the
-> build host. We are not there yet though.
->
->
->  > Shoudln't that be default in buildroot? It is totally irrelevant,
->  > which is uids are mapped on the host when building a rootfs to run
->  > somewhere else.
->
-> I have no problem with setting this environment variable the one place
-> in fs/common.mk where we invoke fakeroot as there is indeed no reason to
-> try to perform a chown "for real" for the Buildroot use cases, but I
-> would like to understand what goes wrong exactly for you?
->
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 7d1a1c5521..e49768ee2c 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.20.1.tar.lz.sig
++# https://ftp.gnu.org/gnu/wget/wget-1.20.2.tar.lz.sig
+ # with key 1CB27DBC98614B2D5841646D08302DB6A2670428
+-sha256 0f63e84dd23dc53ab3ab6f483c3afff8301e54c165783f772101cdd9b1c64928  wget-1.20.1.tar.lz
++sha256 84d3cbece8c08e130a8da0a72cf6e543a2adf58ca8ecf28726560b06243d4ce6  wget-1.20.2.tar.lz
+ # Locally calculated
+ sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 5cdecbcc81..50405e5bf9 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.20.1
++WGET_VERSION = 1.20.2
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
+-- 
+2.11.0
