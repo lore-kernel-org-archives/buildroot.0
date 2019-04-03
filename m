@@ -1,99 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 22:24:46 +0200
-Subject: [Buildroot] [git commit] package/bats-core: new package
-Message-ID: <20190403202810.1945E8CA1F@busybox.osuosl.org>
+Date: Wed, 3 Apr 2019 22:32:35 +0200
+Subject: [Buildroot] [PATCH] package/uboot-tools: fix
+ CONFIG_FIT_SIGNATURE_MAX_SIZE build failure
+In-Reply-To: <20190331202029.97561-1-giulio.benetti@micronovasrl.com>
+References: <20190331202029.97561-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190403223235.7d04da12@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=157a9c431c8a8271dc6c68cacefdee22516d5a61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-A bash-based automated testing system.
+On Sun, 31 Mar 2019 22:20:29 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/bats-core/Config.in      | 11 +++++++++++
- package/bats-core/bats-core.hash |  5 +++++
- package/bats-core/bats-core.mk   | 16 ++++++++++++++++
- 5 files changed, 34 insertions(+)
+> When CONFIG_FIT_SIGNATURE is enabled for building,
+> CONFIG_FIT_SIGNATURE_MAX_SIZE must be defined since it's a dependency of
+> CONFIG_FIT_SIGNATURE. Using uboot Kconfig, CONFIG_GIT_SIGNATURE_MAX_SIZE
+> is set to its default(0x10000000) according to Kconfig, but Buildroot
+> doesn't use uboot Kconfig, it passes directly CONFIG_* as make
+> arguments.
+> 
+> Append CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 after
+> CONFIG_FIT_SIGNATURE=y to UBOOT_TOOLS_MAKE_OPTS and
+> HOST_UBOOT_TOOLS_MAKE_OPTS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/612/6126848e08d9273911e7d5b0151847aa2293ed87/
+> http://autobuild.buildroot.net/results/b49/b49ae4977b605ed24783161618f383551f1662b8/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/uboot-tools/uboot-tools.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4ffb473487..36e3ab20c8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1715,6 +1715,7 @@ F:	configs/orangepi_pc_defconfig
- F:	configs/pandaboard_defconfig
- F:	configs/roseapplepi_defconfig
- F:	configs/sheevaplug_defconfig
-+F:	package/bats-core/
- F:	package/docker-compose/
- F:	package/dump1090/
- F:	package/flickcurl/
-diff --git a/package/Config.in b/package/Config.in
-index 6fd047ec8c..e5a93dba1f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -138,6 +138,7 @@ menu "Debugging, profiling and benchmark"
- endmenu
- 
- menu "Development tools"
-+	source "package/bats-core/Config.in"
- 	source "package/binutils/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-diff --git a/package/bats-core/Config.in b/package/bats-core/Config.in
-new file mode 100644
-index 0000000000..73c38e5a04
---- /dev/null
-+++ b/package/bats-core/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_BATS_CORE
-+	bool "bats"
-+	depends on BR2_PACKAGE_BASH # runtime
-+	help
-+	  Bats: Bash Automated Testing System
-+
-+	  Bats is a TAP-compliant testing framework for Bash. It
-+	  provides a simple way to verify that the UNIX programs you
-+	  write behave as expected.
-+
-+	  https://github.com/bats-core/bats-core
-diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
-new file mode 100644
-index 0000000000..04e00ab601
---- /dev/null
-+++ b/package/bats-core/bats-core.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256 855d8b8bed466bc505e61123d12885500ef6fcdb317ace1b668087364717ea82  bats-core-v1.1.0.tar.gz
-+
-+# License files
-+sha256 55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
-diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
-new file mode 100644
-index 0000000000..739e7fc1f0
---- /dev/null
-+++ b/package/bats-core/bats-core.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# bats-core
-+#
-+################################################################################
-+
-+BATS_CORE_VERSION = v1.1.0
-+BATS_CORE_SITE = $(call github,bats-core,bats-core,$(BATS_CORE_VERSION))
-+BATS_CORE_LICENSE = MIT
-+BATS_CORE_LICENSE_FILES = LICENSE.md
-+
-+define BATS_CORE_INSTALL_TARGET_CMDS
-+	$(@D)/install.sh $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
+Applied to master, thanks. Long term I think we should try to use the
+Kconfig stuff even for uboot-tools, but for a short term solution, your
+patch is fine.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
