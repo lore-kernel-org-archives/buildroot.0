@@ -1,24 +1,30 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Wed, 3 Apr 2019 08:11:35 +0000
-Subject: [Buildroot] [PATCH] gnutls: security bump to 3.6.7.1
-In-Reply-To: <87h8bffrga.fsf@dell.be.48ers.dk>
-References: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
- <87h8bffrga.fsf@dell.be.48ers.dk>
-Message-ID: <b8fc60a6fc72431a6caa166bd3ebb19a01077cb8.camel@spectralink.com>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Wed, 3 Apr 2019 11:15:47 +0200
+Subject: [Buildroot] [PATCH] package/luajit: bump to version 2.1.x
+ developpment version
+In-Reply-To: <20190403091856.274fdc7e@windsurf>
+References: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <20190403091856.274fdc7e@windsurf>
+Message-ID: <CAHpTZwkvHogtHue284vA0qUnUT7ygzA3O2Qx=Hdjor3tfKt2Bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2019-04-03 at 10:01 +0200, Peter Korsgaard wrote:
+Hi,
 
-> These issues were fixed in 3.6.7, weren't they? I don't see 3.6.7.1
-> announced yet, what is the delta?
+To answer the question of Fran?ois : The luajit2.1.0-beta3 version in
+http://luajit.org/download.html has not been changed since 2 years (last
+change in May 2017), so I guess it is better to take a version which is up
+to date.
 
-Guess I might have jumped the gun a bit...
+To answer the question of Thamas : We have successfully tested bcc on a
+raspberry PI 3, however; the purpose of this patch is to check that it does
+not break the build process in buildroot (for example luajit2.1.0 is adding
+support for aarch64; we need to ensure that it is safe).
 
-Only change is that a file was missing from the release tarball:
-https://gitlab.com/gnutls/gnutls/issues/745
-
-Stefan
+Regards.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190403/8b06e2ea/attachment.html>
