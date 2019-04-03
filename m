@@ -1,55 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 3 Apr 2019 21:32:30 +0200
-Subject: [Buildroot] [git commit] package/wget: security bump to version
- 1.20.2
-Message-ID: <20190403192850.235B88B7F8@busybox.osuosl.org>
+Date: Wed, 3 Apr 2019 21:33:27 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+Message-ID: <20190403213327.299f23ca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c21d440c8a79a6af284ec5793481d1b8a0b298ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-From NEWS:
+On Wed,  3 Apr 2019 20:32:01 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-* Changes in Wget 1.20.2
-** Fixed a buffer overflow vulnerability
+> Since version 0.49.0 the Meson build system has native support for
+> looking for `libgcrypt-config` if no pkg-config file is found. As the
+> latest version 1.8.4 of libgcrypt does not provide a .pc file, using
+> `libgcrypt-config` is the only way for detecting the required libraries
+> when linking agains libgrypt.
+> 
+> The `libgcrypt-config` entry is necessary for updating package mpd,
+> which switched from the Autotools to the Meson build system when bumping
+> from version 0.20 to 0.21.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/meson/cross-compilation.conf.in | 1 +
+>  package/meson/meson.mk                  | 1 +
+>  package/pkg-meson.mk                    | 1 +
+>  3 files changed, 3 insertions(+)
+> 
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index fc8e27f7eb..b68499a6fa 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+>  ar = '@TARGET_CROSS at ar'
+>  strip = '@TARGET_CROSS at strip'
+>  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> +libgcrypt-config = '@STAGING_DIR@/usr/bin/libgcrypt-config'
 
-For more details, see the announcement:
-https://lists.gnu.org/archive/html/info-gnu/2019-04/msg00000.html
+Hm, this is a bit annoying. We really have no other solution but to
+pass this through cross-compilation.conf ? It cannot be passed on the
+meson command line, on a per-package basis, like we do for the autotools ?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wget/wget.hash | 4 ++--
- package/wget/wget.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks,
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 7d1a1c5521..e49768ee2c 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.20.1.tar.lz.sig
-+# https://ftp.gnu.org/gnu/wget/wget-1.20.2.tar.lz.sig
- # with key 1CB27DBC98614B2D5841646D08302DB6A2670428
--sha256 0f63e84dd23dc53ab3ab6f483c3afff8301e54c165783f772101cdd9b1c64928  wget-1.20.1.tar.lz
-+sha256 84d3cbece8c08e130a8da0a72cf6e543a2adf58ca8ecf28726560b06243d4ce6  wget-1.20.2.tar.lz
- # Locally calculated
- sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 5cdecbcc81..50405e5bf9 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WGET_VERSION = 1.20.1
-+WGET_VERSION = 1.20.2
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
