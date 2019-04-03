@@ -1,66 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed,  3 Apr 2019 20:32:01 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config in
- cross file
-Message-ID: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+Date: Wed,  3 Apr 2019 20:41:03 +0200
+Subject: [Buildroot] [PATCH] package/libupnpp: bump to version 0.17.1
+Message-ID: <20190403184103.13529-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 0.49.0 the Meson build system has native support for
-looking for `libgcrypt-config` if no pkg-config file is found. As the
-latest version 1.8.4 of libgcrypt does not provide a .pc file, using
-`libgcrypt-config` is the only way for detecting the required libraries
-when linking agains libgrypt.
-
-The `libgcrypt-config` entry is necessary for updating package mpd,
-which switched from the Autotools to the Meson build system when bumping
-from version 0.20 to 0.21.
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/meson/cross-compilation.conf.in | 1 +
- package/meson/meson.mk                  | 1 +
- package/pkg-meson.mk                    | 1 +
- 3 files changed, 3 insertions(+)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index fc8e27f7eb..b68499a6fa 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+libgcrypt-config = '@STAGING_DIR@/usr/bin/libgcrypt-config'
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index f08c3a4f27..24f32894f4 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.0.tar.gz.sha256
+-sha256  7035dda48207c254cbd8cd64e4e679a9e5f085a35d28c19bc2ddeba0deaff58b  libupnpp-0.17.0.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.1.tar.gz.sha256
++sha256  90403b55583e932a9a04905a01bf452016a56aecbeade5c9e1454a5fbb6f01b0  libupnpp-0.17.1.tar.gz
  
- [properties]
- needs_exe_wrapper = true
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 49e27f5527..113ff058f7 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -61,6 +61,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
- 	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
- 	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
- 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	    -e "s%@STAGING_DIR@%$(STAGING_DIR)%g" \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 886fcf7205..6ec45b8b82 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -71,6 +71,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
- 	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
- 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
-+	    -e "s%@STAGING_DIR@%$$(STAGING_DIR)%g" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 3619050f10..53a64bded8 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.17.0
++LIBUPNPP_VERSION = 0.17.1
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
 -- 
 2.21.0
