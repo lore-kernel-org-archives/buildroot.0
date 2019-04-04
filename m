@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 23:23:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: add h264 support
-In-Reply-To: <20190404130854.18876-1-skif@skif-web.ru>
-References: <20190404130854.18876-1-skif@skif-web.ru>
-Message-ID: <20190404232301.3250a15d@windsurf>
+Date: Thu, 4 Apr 2019 23:24:03 +0200
+Subject: [Buildroot] [git commit] package/jq: add oniguruma optional
+ dependency
+Message-ID: <20190404212020.D55F0811DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+commit: https://git.buildroot.net/buildroot/commit/?id=802bdcb25c57dd7f0a87ad7524b5f5f51d8a44ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/jq/jq.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-On Thu,  4 Apr 2019 16:08:54 +0300
-Alexey Lukyanchuk <skif@skif-web.ru> wrote:
-
-> +config BR2_PACKAGE_FREERDP_H264
-> +        bool "h264 support"
-> +        depends on BR2_PACKAGE_X264
-> +        default y
-> +        help
-> +                h264 codec support for freerdp
-> +
-
-I think we would prefer to handle it like cups or ffmpeg, i.e as
-"automatic dependencies", without an explicit Config.in option.
-
-> +ifeq ($(BR2_PACKAGE_FREERDP_H264),y)
-> +       FREERDP_CONF_OPTS += -DWITH_GFX_H264=ON
-> +       FREERDP_DEPENDENCIES += x264
-> +endif
-
-i.e, make this:
-
-ifeq ($(BR2_PACKAGE_X264),y)
-FREERDP_CONF_OPTS += -DWITH_GFX_H264=ON
-FREERDP_DEPENDENCIES += x264
-else
-FREERDP_CONF_OPTS += -DWITH_GFX_H264=OFF
-endif
-
-Could you rework your patch accordingly and send an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index aebe8c86e4..bf96f0cecb 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -17,8 +17,15 @@ JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
+ HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
+ 
+ # jq explicitly enables maintainer mode, which we don't need/want
+-JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
++JQ_CONF_OPTS += --disable-maintainer-mode
+ HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
+ 
++ifeq ($(BR2_PACKAGE_ONIGURUMA),y)
++JQ_DEPENDENCIES += oniguruma
++JQ_CONF_OPTS += --with-oniguruma
++else
++JQ_CONF_OPTS += --without-oniguruma
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
