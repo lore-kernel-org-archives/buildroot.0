@@ -1,49 +1,71 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu,  4 Apr 2019 17:39:04 +0200
-Subject: [Buildroot] [PATCH] package/android-tools: fix static build failure
- due to missing -latomic
-Message-ID: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Thu, 4 Apr 2019 21:25:05 +0530
+Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
+In-Reply-To: <20190402181929.GJ2587@scaer>
+References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
+ <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
+ <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
+ <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
+ <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
+ <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
+ <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
+ <20190402181929.GJ2587@scaer>
+Message-ID: <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During static linking build fails because -lcrypto doesn't inherit its
-dependency like -latomic. So need to fix Makefile before building.
+> I'll do my part of the review later tonight.
 
-Add check in package recipe for TOOLCHAIN_HAS_LIBATOMIC. If toolchain
-has libatomic use sed to append -latomic at the end of libs list in
-adbd.mk makefile.
+I have modified and added some parts (in blue color) and highlighted which
+parts
+to remove (in red color). Also replied to your comments.
 
-Fixes:
-http://autobuild.buildroot.net/results/d75/d75a6cf99f58fb5f42abaf9d54cde28224bc44fb/
+If you have any more suggestions please let me know. Meanwhile I will keep
+looking
+for more information to improve the technicalities of my draft.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/android-tools/android-tools.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Regards,
+Atharva Lele
 
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 6f6ca7729b..cd06afa2c2 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -12,6 +12,16 @@ HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
- ANDROID_TOOLS_LICENSE = Apache-2.0
- ANDROID_TOOLS_LICENSE_FILES = debian/copyright
- 
-+# Uses __atomic_fetch_add_4. In adbd.mk Makefile there is no hunk to the end of
-+# linking command. So need to add -latomic to LIBS using sed to provide
-+# -latomic at the correct place in the linking command.
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+define ANDROID_TOOLS_FIX_MAKEFILE
-+	$(SED) 's/-lz -lcrypt/-lz -lcrypt -latomic/' $(@D)/debian/makefiles/adbd.mk
-+endef
-+ANDROID_TOOLS_POST_PATCH_HOOKS = ANDROID_TOOLS_FIX_MAKEFILE
-+endif
-+
- # Extract the Debian tarball inside the sources
- define ANDROID_TOOLS_DEBIAN_EXTRACT
- 	$(call suitable-extractor,$(notdir $(ANDROID_TOOLS_EXTRA_DOWNLOADS))) \
--- 
-2.17.1
+
+On Tue, Apr 2, 2019 at 11:49 PM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+
+> Atharva, Arnout, All,
+>
+> On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
+> > > I've made comments on the document.
+> > I've replied to your comments on there. We can discuss a bit more and I
+> think then I'll
+> > make necessary changes to the document.
+> > > I'm not sure if Yann is OK with using
+> > > Googly stuff though.
+> > Is there any other platform that he would be comfortable working on?
+> > I'll gladly move things over to there.
+>
+> Nope, that's fine. It's part of the GSoC ecosystem, so I'll play by the
+> GSoC rules. ;-) I'll do my part of the review later tonight.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190404/06287b55/attachment.html>
