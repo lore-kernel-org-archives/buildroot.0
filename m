@@ -1,42 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 22:21:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: fix
- build with host-gettext-tiny
-In-Reply-To: <20190402203237.14733-1-fontaine.fabrice@gmail.com>
-References: <20190402203237.14733-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190404222124.0ed5b312@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 4 Apr 2019 22:27:35 +0200
+Subject: [Buildroot] [PATCH] package/bayer2rgb-neon: bump version
+In-Reply-To: <20190404221925.7faa6db5@windsurf>
+References: <20190403211231.99053-1-giulio.benetti@micronovasrl.com>
+ <20190404221925.7faa6db5@windsurf>
+Message-ID: <50fadbb1-3089-3545-47eb-8847fafe8567@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-+Giulio and Vadim in Cc.
-
-On Tue,  2 Apr 2019 22:32:37 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Don't build and intall i18n if BR2_SYSTEM_ENABLE_NLS is not set
-> otherwise build will fail with host-gettext-tiny on:
+Il 04/04/2019 22:19, Thomas Petazzoni ha scritto:
+> Hello Giulio,
 > 
-> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
-> fopen: No such file or directory
+> On Wed,  3 Apr 2019 23:12:31 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> Actually build fails with musl libc due to missing header inclusion
+>> <unistd.h> (usually included by stdlib.h) in package code which in order
+>> contains type definition of ssize_t.
+>> A Git repository has been setted up for this project as upstream, and
+>> contains a commit which solves build failure removing the use of ssize_t
+>> at all.
+>> No other http tarballs have been released on current site, so
+>> development seems to continue on Git repository.
+>>
+>> - Set SITE_METHOD = git
+>> - Switch site to: https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+>> - Bump version to latest commit to include commit which fixes build
+>>    failure.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/c84/c84b65642cb1b2d246f3a92ac957af5c5fcb86e8/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> 
+> Do we have an indication of what is the real upstream location for this
+> project ?
+> 
+> You're saying "a Git repo has been set up for this project as
+> upstream". What indication you have that this is the most "official"
+> upstream ?
 
-This looked a lot like the msgfmt issue that was causing build issues
-with rygel, and that got fixed by upgrading gettext-tiny.
-Unfortunately, I tried it, and even with the new gettext-tiny version,
-I still get those failures.
+It's been pointed to me privately by Enrico that I add in Cc.
+Add Cc Stefano too.
 
-However, I believe the right course of action is to fix the issue in
-gettext-tiny itself. Could someone report the bug to upstream
-gettext-tiny ?
+Enrico, can you please confirm that this url:
+https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+is the real upstream of the project?
 
-Thanks!
+Thank you very much.
 
-Thomas
+Next there is e-mail he sent me.
+
+"""""""""""""""""""""""""""""""
+Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+
+ > The ssize_t type requires the unistd.h header. This fixes build with
+ > musl libc:
+ >
+ > src/convert-dumb.cc:229:2: error: ?ssize_t? was not declared in this
+ > scope
+ >   ssize_t   stride;
+ >   ^
+
+Thanks for the report.  I removed 'ssize_t' completely because it does
+make sense at this place.
+
+           https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+
+
+Enrico
+"""""""""""""""""""""""""""""""
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
