@@ -1,39 +1,49 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Thu, 4 Apr 2019 18:10:37 +0300
-Subject: [Buildroot] [Q] Make kconfig more flexible with selecting options
-Message-ID: <CAMw6YJJjLr3GwmZzBMymTGnirpW8BoVD9o4B-Hye69=QRLA83g@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu,  4 Apr 2019 17:39:04 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: fix static build failure
+ due to missing -latomic
+Message-ID: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All!
+During static linking build fails because -lcrypto doesn't inherit its
+dependency like -latomic. So need to fix Makefile before building.
 
-I am almost sure that the idea will be rejected but I will try)
+Add check in package recipe for TOOLCHAIN_HAS_LIBATOMIC. If toolchain
+has libatomic use sed to append -latomic at the end of libs list in
+adbd.mk makefile.
 
-I am trying to make external buildroot trees ability to select any
-config option,
-even if it is not boolean or tristate.
+Fixes:
+http://autobuild.buildroot.net/results/d75/d75a6cf99f58fb5f42abaf9d54cde28224bc44fb/
 
-For example, I have external rpi br2 tree which in case of u-boot would
-select default uboot board name as "rpi_3_32b" (BR2_TARGET_UBOOT_BOARD_DEFCONFIG
-if it not set already), something like this:
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/android-tools/android-tools.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-----------------
-config XXX
-    default BR2_TARGET_UBOOT_BOARD_DEFCONFIG "rpi_3_32b"
------------------
-
-of course to make it possible it needs to extend the kconfig parser,
-there is one
-RFC which I think allows to select config option with value other than
-tristate or boolean:
-
-    https://marc.info/?l=linux-kbuild&m=127956469118089&w=2
-
-and the linux kernel community rejected this approach ( I did not dig
-into the implementation in details).
-
-Regards,
-Vadim Kochan
+diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
+index 6f6ca7729b..cd06afa2c2 100644
+--- a/package/android-tools/android-tools.mk
++++ b/package/android-tools/android-tools.mk
+@@ -12,6 +12,16 @@ HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
+ ANDROID_TOOLS_LICENSE = Apache-2.0
+ ANDROID_TOOLS_LICENSE_FILES = debian/copyright
+ 
++# Uses __atomic_fetch_add_4. In adbd.mk Makefile there is no hunk to the end of
++# linking command. So need to add -latomic to LIBS using sed to provide
++# -latomic at the correct place in the linking command.
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++define ANDROID_TOOLS_FIX_MAKEFILE
++	$(SED) 's/-lz -lcrypt/-lz -lcrypt -latomic/' $(@D)/debian/makefiles/adbd.mk
++endef
++ANDROID_TOOLS_POST_PATCH_HOOKS = ANDROID_TOOLS_FIX_MAKEFILE
++endif
++
+ # Extract the Debian tarball inside the sources
+ define ANDROID_TOOLS_DEBIAN_EXTRACT
+ 	$(call suitable-extractor,$(notdir $(ANDROID_TOOLS_EXTRA_DOWNLOADS))) \
+-- 
+2.17.1
