@@ -1,55 +1,46 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 4 Apr 2019 22:38:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: fix
- build with host-gettext-tiny
-In-Reply-To: <20190404222124.0ed5b312@windsurf>
-References: <20190402203237.14733-1-fontaine.fabrice@gmail.com>
- <20190404222124.0ed5b312@windsurf>
-Message-ID: <788e07ba-6280-66ff-23c7-e6e25e7cc212@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 4 Apr 2019 22:45:39 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: fix static build
+ failure due to missing -latomic
+In-Reply-To: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+References: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190404224539.2d79cf30@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Giulio,
 
-Il 04/04/2019 22:21, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> +Giulio and Vadim in Cc.
-> 
-> On Tue,  2 Apr 2019 22:32:37 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> Don't build and intall i18n if BR2_SYSTEM_ENABLE_NLS is not set
->> otherwise build will fail with host-gettext-tiny on:
->>
->> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
->> fopen: No such file or directory
-> 
-> This looked a lot like the msgfmt issue that was causing build issues
-> with rygel, and that got fixed by upgrading gettext-tiny.
-> Unfortunately, I tried it, and even with the new gettext-tiny version,
-> I still get those failures.
-> 
-> However, I believe the right course of action is to fix the issue in
-> gettext-tiny itself. Could someone report the bug to upstream
-> gettext-tiny ?
+On Thu,  4 Apr 2019 17:39:04 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-I'm going to reproduce the problem and see if I'm able to fix it if it's 
-easier enough and then upstream.
-Otherwise I will open an issue on their github.
+> +# Uses __atomic_fetch_add_4. In adbd.mk Makefile there is no hunk to the end of
+> +# linking command. So need to add -latomic to LIBS using sed to provide
+> +# -latomic at the correct place in the linking command.
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +define ANDROID_TOOLS_FIX_MAKEFILE
+> +	$(SED) 's/-lz -lcrypt/-lz -lcrypt -latomic/' $(@D)/debian/makefiles/adbd.mk
+> +endef
+> +ANDROID_TOOLS_POST_PATCH_HOOKS = ANDROID_TOOLS_FIX_MAKEFILE
+> +endif
 
-Best regards
+Instead of this, please do regular patch on adbd.mk that does this:
+
+-LIBS+= -lc -lpthread -lz -lcrypto -lcrypt `pkg-config --libs glib-2.0 gio-2.0`
++LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto` -lcrypt `pkg-config --libs glib-2.0 gio-2.0`
+
+and that's it.
+
+Also, adding host-pkgconf to ANDROID_TOOLS_DEPENDENCIES when adbd is
+selected would be necessary (but it should already be needed anyway, as
+pkg-config is already used to detect glib).
+
+Thanks!
+
+Thomas
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
