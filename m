@@ -1,71 +1,45 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu, 4 Apr 2019 21:25:05 +0530
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <20190402181929.GJ2587@scaer>
-References: <CABM+sgq=ZdJqU0ytnZHXLo+3iEqc2HwoZtfzLaf2NXmEm2QEDg@mail.gmail.com>
- <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
- <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
- <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
- <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
- <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
- <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
- <20190402181929.GJ2587@scaer>
-Message-ID: <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu,  4 Apr 2019 20:52:28 +0200
+Subject: [Buildroot] [PATCH] package/dbus-python: fix build failure due to
+ wrong auto-detected extra libs
+Message-ID: <20190404185228.112789-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I'll do my part of the review later tonight.
+Using Python 3, during configuration, if PYTHON_EXTRA_LIBS is not
+defined, ./configure will launch a python script to retrieve LIBS and
+SYSLIBS variables, but this is done using host-python resulting in
+obtaining libraries that are not present in target. So while trying to
+link configuration test it fails complaining it can't find a
+library(i.e. libintl).
 
-I have modified and added some parts (in blue color) and highlighted which
-parts
-to remove (in red color). Also replied to your comments.
+Set PYTHON_EXTRA_LIBS the same as PYTHON_LIBS to be sure host libs are
+not used at all.
 
-If you have any more suggestions please let me know. Meanwhile I will keep
-looking
-for more information to improve the technicalities of my draft.
+Fixes:
+http://autobuild.buildroot.net/results/4078ee9e8aa304f044dc92e9345c28341349d468/
 
-Regards,
-Atharva Lele
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/dbus-python/dbus-python.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-On Tue, Apr 2, 2019 at 11:49 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-
-> Atharva, Arnout, All,
->
-> On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
-> > > I've made comments on the document.
-> > I've replied to your comments on there. We can discuss a bit more and I
-> think then I'll
-> > make necessary changes to the document.
-> > > I'm not sure if Yann is OK with using
-> > > Googly stuff though.
-> > Is there any other platform that he would be comfortable working on?
-> > I'll gladly move things over to there.
->
-> Nope, that's fine. It's part of the GSoC ecosystem, so I'll play by the
-> GSoC rules. ;-) I'll do my part of the review later tonight.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190404/06287b55/attachment.html>
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index d6af7454af..49f0de5455 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -25,7 +25,8 @@ DBUS_PYTHON_DEPENDENCIES += python3 host-python3
+ DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON=$(HOST_DIR)/bin/python3 \
+ 	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
+-	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
++	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`" \
++	PYTHON_EXTRA_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
+ endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.17.1
