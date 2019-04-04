@@ -1,67 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 22:51:43 +0200
-Subject: [Buildroot] [git commit] package/tpm2-tools: drop unused dbus /
- libglib2 dependencies
-Message-ID: <20190404205008.3E3DA8D50F@busybox.osuosl.org>
+Date: Thu, 4 Apr 2019 22:51:22 +0200
+Subject: [Buildroot] [PATCH] package/dbus-python: fix build failure due
+ to wrong auto-detected extra libs
+In-Reply-To: <20190404185228.112789-1-giulio.benetti@micronovasrl.com>
+References: <20190404185228.112789-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190404225122.04f97af3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f63a58c35018d55bb56900922bd81369e214e4a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-tpm2-tools does not need dbus or libglib2, so remove them and the
-corresponding toolchain dependencies.
+On Thu,  4 Apr 2019 20:52:28 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-The confusion may have come from the upstream travis configuration, which
-also builds tpm2-abrmd (which uses dbus+libglib2).
+> Using Python 3, during configuration, if PYTHON_EXTRA_LIBS is not
+> defined, ./configure will launch a python script to retrieve LIBS and
+> SYSLIBS variables, but this is done using host-python resulting in
+> obtaining libraries that are not present in target. So while trying to
+> link configuration test it fails complaining it can't find a
+> library(i.e. libintl).
+> 
+> Set PYTHON_EXTRA_LIBS the same as PYTHON_LIBS to be sure host libs are
+> not used at all.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/4078ee9e8aa304f044dc92e9345c28341349d468/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tpm2-tools/Config.in     | 11 ++---------
- package/tpm2-tools/tpm2-tools.mk |  2 +-
- 2 files changed, 3 insertions(+), 10 deletions(-)
+So it started failing with the introduction of gettext-tiny ? Do we
+understand why it makes a difference for dbus-python ?
 
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index d8660a8f71..35ca63bf64 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -1,12 +1,7 @@
- config BR2_PACKAGE_TPM2_TOOLS
- 	bool "tpm2-tools"
--	depends on BR2_USE_MMU # dbus, libglib
--	depends on BR2_USE_WCHAR # libglib -> gettext
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
--	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_TPM2_TSS
- 	help
-@@ -23,7 +18,5 @@ config BR2_PACKAGE_TPM2_TOOLS
- 
- 	  https://github.com/tpm2-software/tpm2-tools
- 
--comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+comment "tpm2-tools needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 381873a8f9..9e50170297 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -8,7 +8,7 @@ TPM2_TOOLS_VERSION = 3.1.4
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
- TPM2_TOOLS_LICENSE = BSD-2-Clause
- TPM2_TOOLS_LICENSE_FILES = LICENSE
--TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
-+TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
- 
- # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
- # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
