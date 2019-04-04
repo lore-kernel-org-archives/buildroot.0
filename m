@@ -1,10 +1,11 @@
 From: =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
-Date: Thu, 4 Apr 2019 09:01:42 +0200 (CEST)
-Subject: [Buildroot] [PATCH 2/3] toolchain/toolchain-external-custom:
- support Linux 5.1
-In-Reply-To: <1905283465.159802.1554361271608.JavaMail.zimbra@kalray.eu>
+Date: Thu, 4 Apr 2019 09:03:04 +0200 (CEST)
+Subject: [Buildroot] [PATCH 3/3] package/linux-headers: add support for
+ Linux 5.1 kernel headers
+In-Reply-To: <2016794590.159827.1554361302233.JavaMail.zimbra@kalray.eu>
 References: <1905283465.159802.1554361271608.JavaMail.zimbra@kalray.eu>
-Message-ID: <2016794590.159827.1554361302233.JavaMail.zimbra@kalray.eu>
+ <2016794590.159827.1554361302233.JavaMail.zimbra@kalray.eu>
+Message-ID: <436454902.159974.1554361384065.JavaMail.zimbra@kalray.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
