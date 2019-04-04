@@ -1,59 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 21:42:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkgconf: add host link to
- pkg-config
-In-Reply-To: <20190404192413.10205-2-stuart.summers@intel.com>
-References: <20190404192413.10205-1-stuart.summers@intel.com>
- <20190404192413.10205-2-stuart.summers@intel.com>
-Message-ID: <20190404214227.014dc818@windsurf>
+Date: Thu, 4 Apr 2019 21:45:56 +0200
+Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
+ PKCS#11 engine
+In-Reply-To: <20181207181314.24051-1-tpiepho@impinj.com>
+References: <20181207181314.24051-1-tpiepho@impinj.com>
+Message-ID: <20190404214556.10f7ef0d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stuart,
+Hello Trent,
 
-Thanks for the patch.
+On Fri, 7 Dec 2018 18:13:30 +0000
+Trent Piepho <tpiepho@impinj.com> wrote:
 
-On Thu,  4 Apr 2019 12:24:13 -0700
-Stuart Summers <stuart.summers@intel.com> wrote:
+> Library for using PKCS#11, which includes an engine for OpenSSL that
+> lets it use PKCS#11 modules.  Which is really what this package is
+> about, not that libp11 library itself, which has no users outside the of
+> OpenSSL engine.
+> 
+> If p11-kit is enabled, configure the engine to use that as the default
+> PKCS#11 module.  That module is a sort of multiplexer that allows
+> multiple modules to be used at once, so it makes sense to use it even if
+> there are other modules present, e.g. softhsm2, nssckbi, pkcs11-proxy,
+> ykcs11, etc.
+> 
+> A host package is created too, with a host configuration option.  Since
+> this a dynamically loaded module, there is no build time reason to
+> select it from a host package.  It could be used by host openssl, to
+> allow host rauc to sign a software update bundle using a key from a HSM
+> with a PKCS#11 interface.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-> A patch was added to the Linux kernel in 5.1.0-rc3 which
-> adds a requirement that the host build environment include
-> pkg-config. Since pkg-config was deprecated in buildroot,
-> add a link in the host directory to /usr/bin/pkg-config.
+Thanks, I've applied after doing a number of changes, mainly to fix
+build failures. See below.
 
-pkg-config is definitely not deprecated at all, and Buildroot's pkgconf
-package is already installing it as $(HOST_DIR)/usr/bin/pkg-config:
+> ---
+>  package/Config.in             |  1 +
+>  package/Config.in.host        |  1 +
+>  package/libp11/Config.in      |  7 +++++++
+>  package/libp11/Config.in.host |  6 ++++++
+>  package/libp11/libp11.hash    |  3 +++
+>  package/libp11/libp11.mk      | 21 +++++++++++++++++++++
 
-define HOST_PKGCONF_INSTALL_WRAPPER
-        $(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
-                $(HOST_DIR)/bin/pkg-config
+An entry in the DEVELOPERS file was missing.
 
-However, the wrapper assumes by default we are building for the target,
-and therefore returns results valid for cross-compilation. To return
-results valid for native build, the following environment variables
-need to be passed:
 
-        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-        PKG_CONFIG_SYSROOT_DIR="/" \
-        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+> diff --git a/package/libp11/Config.in b/package/libp11/Config.in
+> new file mode 100644
+> index 0000000000..0b9a739db3
+> --- /dev/null
+> +++ b/package/libp11/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_LIBP11
+> +	bool "libp11"
 
-> Also add a new config option to enforce building host-pkgconf
-> before building the Linux kernel.
+This lacked a:
 
-Do we need a new option ? If pkg-config is only used by Linux to detect
-libelf, what about just adding host-pkgconf to LINUX_DEPENDENCIES when
-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF is enabled ?
+	depends on !BR2_STATIC_LIBS
 
-> +define HOST_PKGCONF_LINK_PKGCONFIG
-> +	ln -sf pkgconf $(HOST_DIR)/usr/bin/pkg-config
-> +endef
+as libp11 requires dlopen(). This was detected by
+using ./utils/test-pkg.
 
-This is definitely wrong and will break the wrapper we install.
+> diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+> new file mode 100644
+> index 0000000000..9dc098870e
+> --- /dev/null
+> +++ b/package/libp11/libp11.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# libp11
+> +#
+> +################################################################################
+> +
+> +LIBP11_VERSION = 0.4.9
+> +LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
+> +LIBP11_DEPENDENCIES = openssl
+
+It also needs host-pkgconf, because pkg-config is used to detect
+OpenSSL.
+
+Then, even with this fixed, the package didn't build because it was
+installing its OpenSSL modules in the wrong folder, as pkg-config
+--variable enginesdir libcrypto returned a bogus value. I fixed that by
+passing --with-enginesdir.
+
+> +LIBP11_INSTALL_STAGING = YES
+> +LIBP11_LICENSE = LGPLv2.1
+
+I fixed the license information as well, as pointed out by Frank
+Hunleth in a previous review.
+
+Thanks!
 
 Thomas
 -- 
