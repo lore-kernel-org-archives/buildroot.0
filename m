@@ -1,87 +1,104 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 5 Apr 2019 02:05:03 +0300
-Subject: [Buildroot] [PATCH 1/1] infra/Makefile.in: Fix format_arg
- issues after bump gettext-tiny to c6dcdcd
-In-Reply-To: <20190404224700.1346-1-vadim4j@gmail.com>
-References: <20190404224700.1346-1-vadim4j@gmail.com>
-Message-ID: <20190404230503.ohxfkac6extrghuv@vkochan-ThinkPad-T470p>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Fri,  5 Apr 2019 09:54:57 +1100
+Subject: [Buildroot] [PATCH v2] package/make: include patch for gl_lstat
+ support
+Message-ID: <20190404225457.5075-1-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Include upstream commit 193f1e8 "glob: Do not assume glibc glob
+internals". Without this if building glibc with host-make it will fail
+with a segfault in make:
 
-On Fri, Apr 05, 2019 at 01:47:00AM +0300, Vadim Kochan wrote:
-> After bump gettext-tiny to c6dcdcd there was change which enabled
-> gettext's macroses by default in:
-> 
->     https://github.com/sabotage-linux/gettext-tiny/commit/58187329ad9f00eb8c39379e7ee0b608dd14bab8
-> 
-> it leads libglib2 to fail with format_arg issues. So fix it by disabling
-> these macroses and use rather external functions which requires linking.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
-> I dont feel like this is a good solution actually. I need to clearly understand
-> why just using gettext's macrosses does not work for libglib2. But anyway I am
-> sending this patch to show the possible solution.
-> 
->  package/Makefile.in | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index dc818a2c18..c719d39235 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -159,6 +159,9 @@ TARGET_HARDENED += -D_FORTIFY_SOURCE=2
->  endif
->  
->  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> +TARGET_CPPFLAGS += -DLIBINTL_NO_MACROS=1
-> +endif
->  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
->  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
->  TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-> @@ -220,6 +223,9 @@ UNZIP := $(shell which unzip || type -p unzip) -q
->  APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
->  
->  HOST_CPPFLAGS  = -I$(HOST_DIR)/include
-> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> +HOST_CPPFLAGS += -DLIBINTL_NO_MACROS=1
-> +endif
->  HOST_CFLAGS   ?= -O2
->  HOST_CFLAGS   += $(HOST_CPPFLAGS)
->  HOST_CXXFLAGS += $(HOST_CFLAGS)
-> -- 
-> 2.14.1
-> 
+>>> glibc glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 Building
+PATH="/scratch/builds/host-make/host/bin:/scratch/builds/host-make/host/sbin:/home/sam/bin:/home/sam/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"  /scratch/builds/host-make/host/bin/host-make -j25  -C /scratch/builds/host-make/build/glibc-glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1/build
+/scratch/builds/host-make/host/bin/host-make -r PARALLELMFLAGS="" -C /scratch/builds/host-make/build/glibc-glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 objdir=`pwd` all
+Segmentation fault (core dumped)
 
-So issue is caused by libglib2 here:
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+---
+ ...b-Do-not-assume-glibc-glob-internals.patch | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch
 
-    libglib2-2.56.4/gio/gunixconnection.c +566
-
-with the code:
-
----------------8<------------------------------
-560           g_set_error (error,
-561                        G_IO_ERROR,
-562                        G_IO_ERROR_FAILED,
-563                        ngettext("Expecting 1 control message, got %d",
-564                                 "Expecting 1 control message, got %d",
-565                                 nscm),
-566                        nscm);
-567           goto out;
---------------->8------------------------------
-
-so g_set_error takes formatted string which gcc does not like, but in
-case of disabled INTL macrosses in gettext-tiny the declared functions
-are used with special gcc attibutes which does not cause the issue.
-
-I think that may be package/Makefile.in is not good place for this but
-better to add another patch which will disable these macrosses ?
-
-Regards,
-Vadim Kochan
+diff --git a/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch b/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch
+new file mode 100644
+index 0000000000..33ded3c501
+--- /dev/null
++++ b/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch
+@@ -0,0 +1,70 @@
++From 193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4 Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Sun, 24 Sep 2017 09:12:58 -0400
++Subject: [PATCH] glob: Do not assume glibc glob internals.
++
++It has been proposed that glibc glob start using gl_lstat,
++which the API allows it to do.  GNU 'make' should not get in
++the way of this.  See:
++https://sourceware.org/ml/libc-alpha/2017-09/msg00409.html
++
++* dir.c (local_lstat): New function, like local_stat.
++(dir_setup_glob): Use it to initialize gl_lstat too, as the API
++requires.
++
++Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
++(from upstream commit 193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4)
++---
++ dir.c | 29 +++++++++++++++++++++++++++--
++ 1 file changed, 27 insertions(+), 2 deletions(-)
++
++diff --git a/dir.c b/dir.c
++index adbb8a9..c343e4c 100644
++--- a/dir.c
+++++ b/dir.c
++@@ -1299,15 +1299,40 @@ local_stat (const char *path, struct stat *buf)
++ }
++ #endif
++ 
+++/* Similarly for lstat.  */
+++#if !defined(lstat) && !defined(WINDOWS32) || defined(VMS)
+++# ifndef VMS
+++#  ifndef HAVE_SYS_STAT_H
+++int lstat (const char *path, struct stat *sbuf);
+++#  endif
+++# else
+++    /* We are done with the fake lstat.  Go back to the real lstat */
+++#   ifdef lstat
+++#     undef lstat
+++#   endif
+++# endif
+++# define local_lstat lstat
+++#elif defined(WINDOWS32)
+++/* Windows doesn't support lstat().  */
+++# define local_lstat local_stat
+++#else
+++static int
+++local_lstat (const char *path, struct stat *buf)
+++{
+++  int e;
+++  EINTRLOOP (e, lstat (path, buf));
+++  return e;
+++}
+++#endif
+++
++ void
++ dir_setup_glob (glob_t *gl)
++ {
++   gl->gl_opendir = open_dirstream;
++   gl->gl_readdir = read_dirstream;
++   gl->gl_closedir = free;
+++  gl->gl_lstat = local_lstat;
++   gl->gl_stat = local_stat;
++-  /* We don't bother setting gl_lstat, since glob never calls it.
++-     The slot is only there for compatibility with 4.4 BSD.  */
++ }
++ 
++ void
++-- 
++2.21.0
++
+-- 
+2.21.0
