@@ -1,44 +1,87 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 4 Apr 2019 21:10:50 +0000
-Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
- PKCS#11 engine
-In-Reply-To: <20190404214556.10f7ef0d@windsurf>
-References: <20181207181314.24051-1-tpiepho@impinj.com>
- <20190404214556.10f7ef0d@windsurf>
-Message-ID: <1554412249.27243.12.camel@impinj.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 5 Apr 2019 02:05:03 +0300
+Subject: [Buildroot] [PATCH 1/1] infra/Makefile.in: Fix format_arg
+ issues after bump gettext-tiny to c6dcdcd
+In-Reply-To: <20190404224700.1346-1-vadim4j@gmail.com>
+References: <20190404224700.1346-1-vadim4j@gmail.com>
+Message-ID: <20190404230503.ohxfkac6extrghuv@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2019-04-04 at 21:45 +0200, Thomas Petazzoni wrote:
+Hi All,
+
+On Fri, Apr 05, 2019 at 01:47:00AM +0300, Vadim Kochan wrote:
+> After bump gettext-tiny to c6dcdcd there was change which enabled
+> gettext's macroses by default in:
 > 
-> > Library for using PKCS#11, which includes an engine for OpenSSL that
-> > lets it use PKCS#11 modules.  Which is really what this package is
-> > about, not that libp11 library itself, which has no users outside the of
-> > OpenSSL engine.
-> > 
-> > 
-> It also needs host-pkgconf, because pkg-config is used to detect
-> OpenSSL.
-
-I had assumed this was implicit in an autotools-package, but I see that
-it is not.
-
+>     https://github.com/sabotage-linux/gettext-tiny/commit/58187329ad9f00eb8c39379e7ee0b608dd14bab8
 > 
-> Then, even with this fixed, the package didn't build because it was
-> installing its OpenSSL modules in the wrong folder, as pkg-config
-> --variable enginesdir libcrypto returned a bogus value. I fixed that by
-> passing --with-enginesdir.
+> it leads libglib2 to fail with format_arg issues. So fix it by disabling
+> these macroses and use rather external functions which requires linking.
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+> I dont feel like this is a good solution actually. I need to clearly understand
+> why just using gettext's macrosses does not work for libglib2. But anyway I am
+> sending this patch to show the possible solution.
+> 
+>  package/Makefile.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dc818a2c18..c719d39235 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -159,6 +159,9 @@ TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+>  endif
+>  
+>  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+> +TARGET_CPPFLAGS += -DLIBINTL_NO_MACROS=1
+> +endif
+>  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+>  TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+> @@ -220,6 +223,9 @@ UNZIP := $(shell which unzip || type -p unzip) -q
+>  APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+>  
+>  HOST_CPPFLAGS  = -I$(HOST_DIR)/include
+> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+> +HOST_CPPFLAGS += -DLIBINTL_NO_MACROS=1
+> +endif
+>  HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+> -- 
+> 2.14.1
+> 
 
-This is interesting, as when I made this patch for an older buildroot,
-pkgconfig would return the correct value.  It was not prefixed with the
-stage.  This is a new behavior.
+So issue is caused by libglib2 here:
 
-And it looks like this already hit a bunch of packages with things like
-the x11 app-defaults dir.  Since "libdir" is in the whitelist of paths
-to prefix, it also hits enginesdir since the latter is based on libdir.
+    libglib2-2.56.4/gio/gunixconnection.c +566
 
-Maybe that pkg-config whitelist should not affect variables that use
-libdir and only prefix libdir itself?
+with the code:
+
+---------------8<------------------------------
+560           g_set_error (error,
+561                        G_IO_ERROR,
+562                        G_IO_ERROR_FAILED,
+563                        ngettext("Expecting 1 control message, got %d",
+564                                 "Expecting 1 control message, got %d",
+565                                 nscm),
+566                        nscm);
+567           goto out;
+--------------->8------------------------------
+
+so g_set_error takes formatted string which gcc does not like, but in
+case of disabled INTL macrosses in gettext-tiny the declared functions
+are used with special gcc attibutes which does not cause the issue.
+
+I think that may be package/Makefile.in is not good place for this but
+better to add another patch which will disable these macrosses ?
+
+Regards,
+Vadim Kochan
