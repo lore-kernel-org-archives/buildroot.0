@@ -1,34 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 23:26:16 +0200
-Subject: [Buildroot] [PATCH v2,1/2] package/oniguruma: new package
-In-Reply-To: <20190331151206.23277-1-fontaine.fabrice@gmail.com>
-References: <20190331151206.23277-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190404232616.059725ff@windsurf>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Fri, 5 Apr 2019 00:36:28 +0300
+Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version to add
+ --template option
+In-Reply-To: <20190404221806.20fa9881@windsurf>
+References: <20190404143132.7416-1-giulio.benetti@micronovasrl.com>
+ <20190404221806.20fa9881@windsurf>
+Message-ID: <20190404213628.wuudx3nhc7whbqci@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Mar 2019 17:12:05 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi Thomas, Giulio, All
 
-> Oniguruma is a modern and flexible regular expressions
-> library. It encompasses features from different regular
-> expression implementations that traditionally exist in
-> different languages.
+On Thu, Apr 04, 2019 at 10:18:06PM +0200, Thomas Petazzoni wrote:
+> On Thu,  4 Apr 2019 16:31:32 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
-> https://github.com/kkos/oniguruma
+> > Some package(i.e. rygel) uses gettext-tiny msgfmt with --template option
+> > to build, but current version(0.3.1) doesn't support --template flag and
+> > exits giving:
+> > "fopen: No such file or directory"
+> > On master branch they've added support for --template after lot of
+> > modifications, so it's hard to produce a patch to be applied against
+> > 0.3.1.
+> > 
+> > Then bump version to latest master branch commit.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/77b/77b1854c914915d3205d915a0f01001f6f3555df/
+> > 
+> > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> > ---
+> >  package/gettext-tiny/gettext-tiny.hash | 2 +-
+> >  package/gettext-tiny/gettext-tiny.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Remove host variant
+> Applied to master, thanks.
+> 
 
-Both patches applied. Thanks!
+It causes to fail libglib2 with formatting errors :(,
+just checked with ./utils/test-pkg ...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Vadim Kochan
