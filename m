@@ -1,61 +1,96 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 04 Apr 2019 00:30:39 -0300
-Subject: [Buildroot] [PATCH v3 4/4] support/testing: test_optee.py: test
- optee boot and testsuite
-References: <CAN5uoS-sKGtsQqep=pU5iX_4iNApu-TcpmsqxOWscdZFNnbrfg@mail.gmail.com>
-Message-ID: <5ca57a5f55355_5b873f82b8174e70724df@ultri5.mail>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Thu, 4 Apr 2019 10:53:15 +0700
+Subject: [Buildroot] [PATCH v3] package/libcamera: Add libcamera package
+In-Reply-To: <20190403225528.4d00a4c8@windsurf>
+References: <20190403112902.29930-1-kieran.bingham@ideasonboard.com>
+ <20190403225528.4d00a4c8@windsurf>
+Message-ID: <103473a8-35a2-9bd3-f8ac-0274ea2b532a@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, Apr 03, 2019 at 07:19 AM, Etienne Carriere wrote:
-
-[snip]
->> > +class TestOptee(infra.basetest.BRTest):
->> > +
->> > +    with open(os.path.join(os.getcwd(), 'configs',
->> > +                           'qemu_arm_vexpress_tz_defconfig'),
->> > +              'r') as config_file:
->>
->> Regarding the use of open(), I see no better option here.
->>
->> Regarding the use of os.getcwd(), I would prefer to have my patch applied
->> before this one:
->> http://patchwork.ozlabs.org/patch/992697/
->> So here you could use:
->>     with open(infra.basepath('configs/qemu_armv7a_tz_virt_defconfig'), 'r') as config_file:
->> This way we would keep the logic to get any path in a single point in the test
->> infra.
->> But this suggestion depends on what the maintainers think about my patch.
->> If you like the idea you can add my patch to your series.
+On 03/04/2019 21:55, Thomas Petazzoni wrote:
+> Hello Kieran,
 > 
-> Ok, thanks, it will be more consistent with the runtime env.
-> Maybe I could simply merge your proposal in my change (and append your
-> s-o-b tag to it), if you agree.
+> On Wed,  3 Apr 2019 18:29:02 +0700
+> Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
+> 
+>>   http://libcamera.org/
+> 
+> I've applied to master, with a few minor changes.
 
-I prefer my patch to stay as a separate commit because it changes how run-tests
-can be called. Currently we can chdir to one buildroot tree and call run-tests
-from another buildroot tree. Currently we also need to be in the buildroot top
-dir when we call run-tests. After that patch when run-tests is called it will
-execute in (and consequently test) the buildroot tree it belongs to, no matter
-which is the current directory when run-tests is called.
-That patch can still be applied with 'git am -3'.
+Thank you very much.
 
-But feel free to just grab only part of the code from there if you want to. No
-need for my SoB if you use only part of it. Maybe something like this is enough:
+I'm perfectly happy for you to have made changes as required.
 
-def basepath(relpath=""):
-    return os.path.join(os.getcwd(), relpath)
+> First, our canonical commit title for new packages is:
+> 
+> 	package/foo: new package
+> 
+>> diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+>> new file mode 100644
+>> index 000000000000..cc5e84424c38
+>> --- /dev/null
+>> +++ b/package/libcamera/Config.in
+>> @@ -0,0 +1,13 @@
+>> +config BR2_PACKAGE_LIBCAMERA
+>> +	bool "libcamera"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	# C++11 + https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54316
+>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>> +	depends on BR2_PACKAGE_HAS_UDEV
+>> +	help
+>> +	  libcamera provides a software stack to support
+>> +	  complex devices that need heavy hardware image
+>> +	  processing operations.
+>> +
+>> +		http://www.libcamera.org/
+> 
+> The indentation of the URL should have been one tab + two spaces.
+> 
+> More importantly (and that was the only thing really missing): the
+> Config.in comment that describes the dependencies was missing.
 
-This way we have all calls to os.getcwd() in support/testing/infra/__init__.py
-and I resend my patch later.
+Ahh, that's neat - so it shows up the comment when the dependencies
+aren't met.
 
-But also feel free to not do this right now. Up to you.
+Thank you for adding it.
 
 
-Regards,
-Ricardo
+>> diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+>> new file mode 100644
+>> index 000000000000..7d5392dde2bb
+>> --- /dev/null
+>> +++ b/package/libcamera/libcamera.hash
+>> @@ -0,0 +1,4 @@
+>> +sha256 2c01dc76d98ef257660f8ef3f4f17f042e112b5eca6b364ad615220c96fbd066  libcamera-d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080.tar.gz
+>> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
+>> +sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
+>> +
+> 
+> Unneeded empty new line that was causing a check-package warning.
+
+Doh :S at least that's an easy fix. :-)
+
+> Thanks for this contribution! Great to see libcamera moving forward!
+
+Thank you all for accepting it into Buildroot!
+
+It has already proved very valuable to us, catching several build issues
+when compiling against different toolchains.
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
+-- 
+Regards
+--
+Kieran
