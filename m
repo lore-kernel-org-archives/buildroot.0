@@ -1,104 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 21:45:56 +0200
-Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
- PKCS#11 engine
-In-Reply-To: <20181207181314.24051-1-tpiepho@impinj.com>
-References: <20181207181314.24051-1-tpiepho@impinj.com>
-Message-ID: <20190404214556.10f7ef0d@windsurf>
+Date: Thu, 4 Apr 2019 21:52:09 +0200
+Subject: [Buildroot] [git commit] package/gettext-tiny: bump version to add
+ --template option
+Message-ID: <20190404194932.26F0C83882@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Trent,
+commit: https://git.buildroot.net/buildroot/commit/?id=758ea0e518492c703482a323653c3d20520b599b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Dec 2018 18:13:30 +0000
-Trent Piepho <tpiepho@impinj.com> wrote:
+Some packages (i.e. rygel) uses the msgfmt tool with its --template
+option. However, the current version of gettext-tiny (0.3.1) doesn't
+support --template flag and exits giving: "fopen: No such file or
+directory".
 
-> Library for using PKCS#11, which includes an engine for OpenSSL that
-> lets it use PKCS#11 modules.  Which is really what this package is
-> about, not that libp11 library itself, which has no users outside the of
-> OpenSSL engine.
-> 
-> If p11-kit is enabled, configure the engine to use that as the default
-> PKCS#11 module.  That module is a sort of multiplexer that allows
-> multiple modules to be used at once, so it makes sense to use it even if
-> there are other modules present, e.g. softhsm2, nssckbi, pkcs11-proxy,
-> ykcs11, etc.
-> 
-> A host package is created too, with a host configuration option.  Since
-> this a dynamically loaded module, there is no build time reason to
-> select it from a host package.  It could be used by host openssl, to
-> allow host rauc to sign a software update bundle using a key from a HSM
-> with a PKCS#11 interface.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+In upstream gettext-tiny they have added support for --template after
+lots of modifications, so it's hard to produce a patch to be applied
+against 0.3.1. Therefore, we bump the version to the latest master
+branch commit.
 
-Thanks, I've applied after doing a number of changes, mainly to fix
-build failures. See below.
+Fixes:
 
-> ---
->  package/Config.in             |  1 +
->  package/Config.in.host        |  1 +
->  package/libp11/Config.in      |  7 +++++++
->  package/libp11/Config.in.host |  6 ++++++
->  package/libp11/libp11.hash    |  3 +++
->  package/libp11/libp11.mk      | 21 +++++++++++++++++++++
+  http://autobuild.buildroot.net/results/77b1854c914915d3205d915a0f01001f6f3555df/
 
-An entry in the DEVELOPERS file was missing.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gettext-tiny/gettext-tiny.hash | 2 +-
+ package/gettext-tiny/gettext-tiny.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-> diff --git a/package/libp11/Config.in b/package/libp11/Config.in
-> new file mode 100644
-> index 0000000000..0b9a739db3
-> --- /dev/null
-> +++ b/package/libp11/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBP11
-> +	bool "libp11"
-
-This lacked a:
-
-	depends on !BR2_STATIC_LIBS
-
-as libp11 requires dlopen(). This was detected by
-using ./utils/test-pkg.
-
-> diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-> new file mode 100644
-> index 0000000000..9dc098870e
-> --- /dev/null
-> +++ b/package/libp11/libp11.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# libp11
-> +#
-> +################################################################################
-> +
-> +LIBP11_VERSION = 0.4.9
-> +LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
-> +LIBP11_DEPENDENCIES = openssl
-
-It also needs host-pkgconf, because pkg-config is used to detect
-OpenSSL.
-
-Then, even with this fixed, the package didn't build because it was
-installing its OpenSSL modules in the wrong folder, as pkg-config
---variable enginesdir libcrypto returned a bogus value. I fixed that by
-passing --with-enginesdir.
-
-> +LIBP11_INSTALL_STAGING = YES
-> +LIBP11_LICENSE = LGPLv2.1
-
-I fixed the license information as well, as pointed out by Frank
-Hunleth in a previous review.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 672e964186..7d13054144 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -1,5 +1,5 @@
+ # Locally Computed:
+-sha256 654dcd52f2650476c8822b60bee89c20a0aa7f6a1bf6001701eeacd71a9e388b  gettext-tiny-v0.3.1.tar.gz
++sha256 00b03b08d909021aa5580fb45b6cf0ec45e9084ef94c26f034f03a64a69942bc  gettext-tiny-c6dcdcdef801127549d3906d153c061880d25a73.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+ # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 881edc6f35..e3a6d11399 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GETTEXT_TINY_VERSION = v0.3.1
++GETTEXT_TINY_VERSION = c6dcdcdef801127549d3906d153c061880d25a73
+ GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
+ GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
+ GETTEXT_TINY_INSTALL_STAGING = YES
