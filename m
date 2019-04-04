@@ -1,65 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 22:54:53 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: print
- warnings/errors to stderr
-Message-ID: <20190404205109.437CC8D50F@busybox.osuosl.org>
+Date: Thu, 4 Apr 2019 23:23:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: add h264 support
+In-Reply-To: <20190404130854.18876-1-skif@skif-web.ru>
+References: <20190404130854.18876-1-skif@skif-web.ru>
+Message-ID: <20190404232301.3250a15d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f82bd67a2f2e389584586a7016b3e7f85cff37
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Alexey,
 
-Instead of stdout where it gets mixed with the normal output, confusing
-software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
+Thanks for your contribution!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/getdeveloperlib.py | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+On Thu,  4 Apr 2019 16:08:54 +0300
+Alexey Lukyanchuk <skif@skif-web.ru> wrote:
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 2c8d477583..35c618f791 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -1,7 +1,9 @@
-+from __future__ import print_function
- import os
- import re
- import glob
- import subprocess
-+import sys
- 
- #
- # Patch parsing functions
-@@ -167,13 +169,15 @@ def parse_developers(basepath=None):
-                 continue
-             elif line.startswith("N:"):
-                 if name is not None or len(files) != 0:
--                    print("Syntax error in DEVELOPERS file, line %d" % linen)
-+                    print("Syntax error in DEVELOPERS file, line %d" % linen,
-+                          file=sys.stderr)
-                 name = line[2:].strip()
-             elif line.startswith("F:"):
-                 fname = line[2:].strip()
-                 dev_files = glob.glob(os.path.join(basepath, fname))
-                 if len(dev_files) == 0:
--                    print("WARNING: '%s' doesn't match any file" % fname)
-+                    print("WARNING: '%s' doesn't match any file" % fname,
-+                          file=sys.stderr)
-                 files += dev_files
-             elif line == "":
-                 if not name:
-@@ -182,7 +186,8 @@ def parse_developers(basepath=None):
-                 files = []
-                 name = None
-             else:
--                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
-+                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
-+                      file=sys.stderr)
-                 return None
-             linen += 1
-     # handle last developer
+> +config BR2_PACKAGE_FREERDP_H264
+> +        bool "h264 support"
+> +        depends on BR2_PACKAGE_X264
+> +        default y
+> +        help
+> +                h264 codec support for freerdp
+> +
+
+I think we would prefer to handle it like cups or ffmpeg, i.e as
+"automatic dependencies", without an explicit Config.in option.
+
+> +ifeq ($(BR2_PACKAGE_FREERDP_H264),y)
+> +       FREERDP_CONF_OPTS += -DWITH_GFX_H264=ON
+> +       FREERDP_DEPENDENCIES += x264
+> +endif
+
+i.e, make this:
+
+ifeq ($(BR2_PACKAGE_X264),y)
+FREERDP_CONF_OPTS += -DWITH_GFX_H264=ON
+FREERDP_DEPENDENCIES += x264
+else
+FREERDP_CONF_OPTS += -DWITH_GFX_H264=OFF
+endif
+
+Could you rework your patch accordingly and send an updated version?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
