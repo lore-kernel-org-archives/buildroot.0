@@ -1,35 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 22:54:22 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-tools: drop unused dbus /
- libglib2 dependencies
-In-Reply-To: <20190404190028.16680-1-peter@korsgaard.com>
-References: <20190404190028.16680-1-peter@korsgaard.com>
-Message-ID: <20190404225422.11d35d02@windsurf>
+Date: Thu, 4 Apr 2019 22:54:53 +0200
+Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: print
+ warnings/errors to stderr
+Message-ID: <20190404205109.437CC8D50F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  4 Apr 2019 21:00:28 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=83f82bd67a2f2e389584586a7016b3e7f85cff37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> tpm2-tools does not need dbus or libglib2, so remove them and the
-> corresponding toolchain dependencies.
-> 
-> The confusion may have come from the upstream travis configuration, which
-> also builds tpm2-abrmd (which uses dbus+libglib2).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/tpm2-tools/Config.in     | 11 ++---------
->  package/tpm2-tools/tpm2-tools.mk |  2 +-
->  2 files changed, 3 insertions(+), 10 deletions(-)
+Instead of stdout where it gets mixed with the normal output, confusing
+software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/getdeveloperlib.py | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 2c8d477583..35c618f791 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,7 +1,9 @@
++from __future__ import print_function
+ import os
+ import re
+ import glob
+ import subprocess
++import sys
+ 
+ #
+ # Patch parsing functions
+@@ -167,13 +169,15 @@ def parse_developers(basepath=None):
+                 continue
+             elif line.startswith("N:"):
+                 if name is not None or len(files) != 0:
+-                    print("Syntax error in DEVELOPERS file, line %d" % linen)
++                    print("Syntax error in DEVELOPERS file, line %d" % linen,
++                          file=sys.stderr)
+                 name = line[2:].strip()
+             elif line.startswith("F:"):
+                 fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(basepath, fname))
+                 if len(dev_files) == 0:
+-                    print("WARNING: '%s' doesn't match any file" % fname)
++                    print("WARNING: '%s' doesn't match any file" % fname,
++                          file=sys.stderr)
+                 files += dev_files
+             elif line == "":
+                 if not name:
+@@ -182,7 +186,8 @@ def parse_developers(basepath=None):
+                 files = []
+                 name = None
+             else:
+-                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
++                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
++                      file=sys.stderr)
+                 return None
+             linen += 1
+     # handle last developer
