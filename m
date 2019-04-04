@@ -1,67 +1,65 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 4 Apr 2019 20:55:05 +0200
-Subject: [Buildroot] [PATCH] package/dbus-python: fix build failure due
- to wrong auto-detected extra libs
-In-Reply-To: <20190404185228.112789-1-giulio.benetti@micronovasrl.com>
-References: <20190404185228.112789-1-giulio.benetti@micronovasrl.com>
-Message-ID: <34d1202c-a83c-93b2-1248-a86092c22c60@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  4 Apr 2019 21:00:28 +0200
+Subject: [Buildroot] [PATCH] package/tpm2-tools: drop unused dbus / libglib2
+ dependencies
+Message-ID: <20190404190028.16680-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+tpm2-tools does not need dbus or libglib2, so remove them and the
+corresponding toolchain dependencies.
 
-Il 04/04/2019 20:52, Giulio Benetti ha scritto:
-> Using Python 3, during configuration, if PYTHON_EXTRA_LIBS is not
-> defined, ./configure will launch a python script to retrieve LIBS and
-> SYSLIBS variables, but this is done using host-python resulting in
-> obtaining libraries that are not present in target. So while trying to
-> link configuration test it fails complaining it can't find a
-> library(i.e. libintl).
-> 
-> Set PYTHON_EXTRA_LIBS the same as PYTHON_LIBS to be sure host libs are
-> not used at all.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/4078ee9e8aa304f044dc92e9345c28341349d468/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   package/dbus-python/dbus-python.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-> index d6af7454af..49f0de5455 100644
-> --- a/package/dbus-python/dbus-python.mk
-> +++ b/package/dbus-python/dbus-python.mk
-> @@ -25,7 +25,8 @@ DBUS_PYTHON_DEPENDENCIES += python3 host-python3
->   DBUS_PYTHON_CONF_ENV += \
->   	PYTHON=$(HOST_DIR)/bin/python3 \
->   	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
-> -	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
-> +	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`" \
-> +	PYTHON_EXTRA_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
->   endif
->   
->   $(eval $(autotools-package))
-> 
+The confusion may have come from the upstream travis configuration, which
+also builds tpm2-abrmd (which uses dbus+libglib2).
 
-I'm not very happy about this solution, but I couldn't find a better one 
-with my experience.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tpm2-tools/Config.in     | 11 ++---------
+ package/tpm2-tools/tpm2-tools.mk |  2 +-
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-Does anyone have suggestion about it?
-
-Thanks in advance
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index d8660a8f71..35ca63bf64 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_TPM2_TOOLS
+ 	bool "tpm2-tools"
+-	depends on BR2_USE_MMU # dbus, libglib
+-	depends on BR2_USE_WCHAR # libglib -> gettext
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
+ 	depends on !BR2_STATIC_LIBS # tpm2-tss
+-	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_TPM2_TSS
+ 	help
+@@ -23,7 +18,5 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 
+ 	  https://github.com/tpm2-software/tpm2-tools
+ 
+-comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
++comment "tpm2-tools needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 381873a8f9..9e50170297 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -8,7 +8,7 @@ TPM2_TOOLS_VERSION = 3.1.4
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-2-Clause
+ TPM2_TOOLS_LICENSE_FILES = LICENSE
+-TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
++TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
+ 
+ # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
+ # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.11.0
