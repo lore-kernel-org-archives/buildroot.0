@@ -1,65 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  4 Apr 2019 21:00:28 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-tools: drop unused dbus / libglib2
- dependencies
-Message-ID: <20190404190028.16680-1-peter@korsgaard.com>
+From: Stuart Summers <stuart.summers@intel.com>
+Date: Thu,  4 Apr 2019 12:24:12 -0700
+Subject: [Buildroot] [PATCH 0/1] [RFC] fix kernel build failure for 5.1.0-rc3
+Message-ID: <20190404192413.10205-1-stuart.summers@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tpm2-tools does not need dbus or libglib2, so remove them and the
-corresponding toolchain dependencies.
+This is my first time posting here, and I'm looking for feedback.
+Our team is attempting to build with a kernel revision above 5.1.0-rc3.
+I noticed in this build, the integration with buildroot is failing.
+I was able to pinpoint this down to a patch to the kernel which now
+uses pkg-config to find the libelf package to support non-default
+paths for libelf.
 
-The confusion may have come from the upstream travis configuration, which
-also builds tpm2-abrmd (which uses dbus+libglib2).
+I was trying to quickly patch buildroot to work around this rather
+than changing the kernel itself. I noticed that pkgconf in buildroot 
+creates a symbolic link in the target from pkgconf to pkg-config,
+but not in the host directory. I have a patch which adds this link
+to the host directory as well, but I quickly noticed this seems to
+open a can of worms with packages, at least the ones we have enabled
+in our configuration (graphics focused), down the toolchain now
+failing dependencies in configuration and build, after attempting
+to work through a few of the configuration dependency issues.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-tools/Config.in     | 11 ++---------
- package/tpm2-tools/tpm2-tools.mk |  2 +-
- 2 files changed, 3 insertions(+), 10 deletions(-)
+I wanted to reach out to the community for feedback on the approach
+I have here, and what might be the best path forward on this. I would
+prefer not to do a complete overhaul of the buildroot packages which
+depend on a host-based pkg-config, as I don't have a way to properly
+test these changes.
 
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index d8660a8f71..35ca63bf64 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -1,12 +1,7 @@
- config BR2_PACKAGE_TPM2_TOOLS
- 	bool "tpm2-tools"
--	depends on BR2_USE_MMU # dbus, libglib
--	depends on BR2_USE_WCHAR # libglib -> gettext
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
--	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_TPM2_TSS
- 	help
-@@ -23,7 +18,5 @@ config BR2_PACKAGE_TPM2_TOOLS
- 
- 	  https://github.com/tpm2-software/tpm2-tools
- 
--comment "tpm2-tools needs a toolchain w/ dynamic library, wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+comment "tpm2-tools needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 381873a8f9..9e50170297 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -8,7 +8,7 @@ TPM2_TOOLS_VERSION = 3.1.4
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
- TPM2_TOOLS_LICENSE = BSD-2-Clause
- TPM2_TOOLS_LICENSE_FILES = LICENSE
--TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
-+TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
- 
- # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
- # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
+Thoughts?
+
+Here's the commit in the kernel:
+commit 056d28d135bca0b1d0908990338e00e9dadaf057
+Author: Rolf Eike Beer <eb@emlix.com>
+Date:   Tue Mar 26 12:48:39 2019 -0500
+
+    objtool: Query pkg-config for libelf location
+    
+    If it is not in the default location, compilation fails at several points.
+    
+    Signed-off-by: Rolf Eike Beer <eb@emlix.com>
+    Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+    Cc: stable at vger.kernel.org
+    Link: https://lkml.kernel.org/r/91a25e992566a7968fedc89ec80e7f4c83ad0548.1553622500.git.jpoimboe at redhat.com
+
+Thanks in advance!
+
+Stuart Summers (1):
+  package/pkgconf: add host link to pkg-config
+
+ linux/Config.in            | 8 ++++++++
+ linux/linux.mk             | 4 ++++
+ package/pkgconf/pkgconf.mk | 8 +++++++-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+
 -- 
-2.11.0
+2.20.1
