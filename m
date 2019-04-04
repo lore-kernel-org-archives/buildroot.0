@@ -1,32 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Apr 2019 08:48:12 +0200
-Subject: [Buildroot] [PATCH 0/2] [AUTOBUILD] Store package files list in
- results (branch yem/files-list)
-In-Reply-To: <20190403213012.GC2659@scaer>
-References: <cover.1554054435.git.yann.morin.1998@free.fr>
- <20190403231356.77a41b10@windsurf> <20190403213012.GC2659@scaer>
-Message-ID: <20190404084812.55d33ee3@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  4 Apr 2019 08:58:12 +0200
+Subject: [Buildroot] [PATCH] utils/getdeveloperlib.py: print warnings/errors
+ to stderr
+Message-ID: <20190404065812.22601-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 3 Apr 2019 23:30:12 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Instead of stdout where it gets mixed with the normal output, confusing
+software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
 
-> I would expect those files to be of about the same size as the build.log
-> snippet we keep.
-> 
-> If it turns out to be a problem, then we can restrict that to only failed
-> builds.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/getdeveloperlib.py | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-It is true that for failed builds, not much of the information we keep
-is interesting. Perhaps just the .config/defconfig are interesting. The
-build.log and other files are mainly useful to investigate issues.
-
-Thomas
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 2c8d477583..35c618f791 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,7 +1,9 @@
++from __future__ import print_function
+ import os
+ import re
+ import glob
+ import subprocess
++import sys
+ 
+ #
+ # Patch parsing functions
+@@ -167,13 +169,15 @@ def parse_developers(basepath=None):
+                 continue
+             elif line.startswith("N:"):
+                 if name is not None or len(files) != 0:
+-                    print("Syntax error in DEVELOPERS file, line %d" % linen)
++                    print("Syntax error in DEVELOPERS file, line %d" % linen,
++                          file=sys.stderr)
+                 name = line[2:].strip()
+             elif line.startswith("F:"):
+                 fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(basepath, fname))
+                 if len(dev_files) == 0:
+-                    print("WARNING: '%s' doesn't match any file" % fname)
++                    print("WARNING: '%s' doesn't match any file" % fname,
++                          file=sys.stderr)
+                 files += dev_files
+             elif line == "":
+                 if not name:
+@@ -182,7 +186,8 @@ def parse_developers(basepath=None):
+                 files = []
+                 name = None
+             else:
+-                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
++                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
++                      file=sys.stderr)
+                 return None
+             linen += 1
+     # handle last developer
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
