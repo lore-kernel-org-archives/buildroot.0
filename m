@@ -1,67 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 22:48:36 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] utils/getdeveloperlib.py:
- print warnings/errors to stderr
-Message-ID: <20190405204614.12B3E8DE57@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 22:32:46 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libfuse: only
+ install udev rules if (e)udev is enabled
+Message-ID: <20190405204612.841F08DCE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bdad8417df84d1199596cac6e3ae7abfcdc9dd2
+commit: https://git.buildroot.net/buildroot/commit/?id=d09d5a8411cdff5d9dba00f3cff10037ce1ae653
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Instead of stdout where it gets mixed with the normal output, confusing
-software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
+No point in installing udev rules if nothing will use it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 83f82bd67a2f2e389584586a7016b3e7f85cff37)
+(cherry picked from commit 4cba22bbfa21ac27d28cfb7e9973c2c91e30568f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/getdeveloperlib.py | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/libfuse/libfuse.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 2c8d477583..35c618f791 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -1,7 +1,9 @@
-+from __future__ import print_function
- import os
- import re
- import glob
- import subprocess
-+import sys
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 84027ebedb..ab0131b057 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -17,11 +17,18 @@ LIBFUSE_CONF_OPTS = \
+ 	--enable-util \
+ 	UDEV_RULES_PATH=/lib/udev/rules.d
  
- #
- # Patch parsing functions
-@@ -167,13 +169,15 @@ def parse_developers(basepath=None):
-                 continue
-             elif line.startswith("N:"):
-                 if name is not None or len(files) != 0:
--                    print("Syntax error in DEVELOPERS file, line %d" % linen)
-+                    print("Syntax error in DEVELOPERS file, line %d" % linen,
-+                          file=sys.stderr)
-                 name = line[2:].strip()
-             elif line.startswith("F:"):
-                 fname = line[2:].strip()
-                 dev_files = glob.glob(os.path.join(basepath, fname))
-                 if len(dev_files) == 0:
--                    print("WARNING: '%s' doesn't match any file" % fname)
-+                    print("WARNING: '%s' doesn't match any file" % fname,
-+                          file=sys.stderr)
-                 files += dev_files
-             elif line == "":
-                 if not name:
-@@ -182,7 +186,8 @@ def parse_developers(basepath=None):
-                 files = []
-                 name = None
-             else:
--                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
-+                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
-+                      file=sys.stderr)
-                 return None
-             linen += 1
-     # handle last developer
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define LIBFUSE_INSTALL_UDEV
++	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
++	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
++endef
++
++LIBFUSE_POST_INSTALL_TARGET_HOOKS += LIBFUSE_INSTALL_UDEV
++endif
++
+ define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+-	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
+-	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
+ endef
+ 
+ define LIBFUSE_DEVICES
