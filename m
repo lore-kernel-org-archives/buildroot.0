@@ -1,58 +1,85 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Apr 2019 06:18:31 +0000
-Subject: [Buildroot] [Bug 11756] New: package/syslinux: MBR's don't fit
- because of binutils new .note.gnu.property section
-Message-ID: <bug-11756-163@https.bugs.busybox.net/>
+From: Christian Stewart <christian@paral.in>
+Date: Thu,  4 Apr 2019 23:40:55 -0700
+Subject: [Buildroot] [PATCH 1/1] boot/syslinux: fix build with binutils note
+ gnu property section
+Message-ID: <20190405064055.19030-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11756
+This fixes the following build error with newer binutils:
 
-            Bug ID: 11756
-           Summary: package/syslinux: MBR's don't fit because of binutils
-                    new .note.gnu.property section
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: christian at paral.in
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+  objcopy -O binary mbr.elf mbr.bin
+  perl /build/syslinux/src/syslinux/mbr/checksize.pl mbr.bin
+  mbr.bin: too big (452 > 440)
 
 Corresponding bug reports:
 
  - https://bugs.archlinux.org/task/60405
  - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
 
+Strips the .note.gnu.property in the linker scripts for the MBRs.
 
-Build failure: 
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...h-binutils-note-gnu-property-section.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
 
-workspaces/qemu/host/bin/x86_64-buildroot-linux-gnu-ld  -T
-workspaces/qemu/build/syslinux-6.03/mbr/i386/mbr.ld -e _start -o mbr.elf mbr.o  
-objcopy -O binary mbr.elf mbr.bin
-perl workspaces/qemu/build/syslinux-6.03/mbr/checksize.pl mbr.bin
-mbr.bin: too big (452 > 440)
-make[7]: *** [workspaces/qemu/build/syslinux-6.03/mbr/Makefile:42: mbr.bin]
-Error 1
-
-
-Description:
-
-objcopy -O binary mbr.elf mbr.bin
-perl /build/syslinux/src/syslinux/mbr/checksize.pl mbr.bin
-mbr.bin: too big (452 > 440)
-
-Fixed in Archlinux32 by stripping the .note.gnu.property in the linker scripts
-of the MBRs.
-
+diff --git a/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch b/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
+new file mode 100644
+index 0000000000..fedd815691
+--- /dev/null
++++ b/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
+@@ -0,0 +1,47 @@
++From beb526ca925983c7da229043790ecd552d910650 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Thu, 4 Apr 2019 23:24:31 -0700
++Subject: [PATCH] Fix build with binutils note gnu property section
++
++This fixes the following build error with newer binutils:
++
++  objcopy -O binary mbr.elf mbr.bin
++  perl /build/syslinux/src/syslinux/mbr/checksize.pl mbr.bin
++  mbr.bin: too big (452 > 440)
++
++Corresponding bug reports:
++
++ - https://bugs.archlinux.org/task/60405
++ - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
++
++Strips the .note.gnu.property in the linker scripts for the MBRs.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ mbr/i386/mbr.ld   | 1 +
++ mbr/x86_64/mbr.ld | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/mbr/i386/mbr.ld b/mbr/i386/mbr.ld
++index d14ba802..53683461 100644
++--- a/mbr/i386/mbr.ld
+++++ b/mbr/i386/mbr.ld
++@@ -70,4 +70,5 @@ SECTIONS
++   .debug_typenames 0 : { *(.debug_typenames) }
++   .debug_varnames  0 : { *(.debug_varnames) }
++   /DISCARD/ : { *(.note.GNU-stack) }
+++  /DISCARD/ : { *(.note.gnu.property) }
++ }
++diff --git a/mbr/x86_64/mbr.ld b/mbr/x86_64/mbr.ld
++index ae27d49a..b8c0d895 100644
++--- a/mbr/x86_64/mbr.ld
+++++ b/mbr/x86_64/mbr.ld
++@@ -69,4 +69,5 @@ SECTIONS
++   .debug_typenames 0 : { *(.debug_typenames) }
++   .debug_varnames  0 : { *(.debug_varnames) }
++   /DISCARD/ : { *(.note.GNU-stack) }
+++  /DISCARD/ : { *(.note.gnu.property) }
++ }
++-- 
++2.21.0
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.21.0
