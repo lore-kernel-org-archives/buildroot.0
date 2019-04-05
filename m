@@ -1,56 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 22:33:02 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libfuse: bump
- version to 2.9.9
-Message-ID: <20190405204614.0F5FA815A0@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 22:47:22 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tools: bump
+ version to 3.1.4
+Message-ID: <20190405204614.1340F8DE5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78c2b9252b75d5f228a4b75796410b07407533f9
+commit: https://git.buildroot.net/buildroot/commit/?id=c0b8ab6dae5a285ec61d7a1655e9652781d182c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Contains a number of fixes for issues discovered post-2.9.8.  From the
-release notes:
-
-- Fixed readdir bug when non-zero offsets are given to filler and the
-  filesystem client, after reading a whole directory, re-reads it from a
-  non-zero offset e.g.  by calling seekdir followed by readdir.
-
-https://github.com/libfuse/libfuse/releases/tag/fuse-2.9.9
+Fixes a number of issues discovered post-3.1.3, including a completely
+broken -T option handling.  For details, see:
+https://github.com/tpm2-software/tpm2-tools/releases/tag/3.1.4
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3b6d842fea292662ab944777d82d766e56cb8320)
+(cherry picked from commit b7a36629d6dfb03b4310ad154b003a5d07fd4b12)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfuse/libfuse.hash | 2 +-
- package/libfuse/libfuse.mk   | 2 +-
+ package/tpm2-tools/tpm2-tools.hash | 2 +-
+ package/tpm2-tools/tpm2-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
-index 3d1b973071..f522325945 100644
---- a/package/libfuse/libfuse.hash
-+++ b/package/libfuse/libfuse.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	5e84f81d8dd527ea74f39b6bc001c874c02bad6871d7a9b0c14efb57430eafe3	fuse-2.9.8.tar.gz
-+sha256	d0e69d5d608cc22ff4843791ad097f554dd32540ddc9bed7638cc6fea7c1b4b5	fuse-2.9.9.tar.gz
- 
- # Hash for license files:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index ab0131b057..074dc59886 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
+index ae228c591c..d2bd31cdee 100644
+--- a/package/tpm2-tools/tpm2-tools.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 cc95576f49cf9bacf75772fd98dcb7edc5172a6a8dfa20c215fe3cc69b0a3a16  tpm2-tools-3.1.3.tar.gz
++sha256 2f515200e9a7958ee13015150f7958c8a332eb071c2564c33f81ebe32c4f6033  tpm2-tools-3.1.4.tar.gz
+ sha256 3d6b149c8b042bd5f3db678d587fbe55230d071ca084bd38dcae451679c6dd45  LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index f7e2f85228..381873a8f9 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE_VERSION = 2.9.8
-+LIBFUSE_VERSION = 2.9.9
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
+-TPM2_TOOLS_VERSION = 3.1.3
++TPM2_TOOLS_VERSION = 3.1.4
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-2-Clause
+ TPM2_TOOLS_LICENSE_FILES = LICENSE
