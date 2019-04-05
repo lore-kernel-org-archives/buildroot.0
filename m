@@ -1,171 +1,154 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 21:20:36 +0200
-Subject: [Buildroot] [git commit] package/qdecoder: bump to version 12.0.7
-Message-ID: <20190405192416.D973F8D56D@busybox.osuosl.org>
+From: jonsmirl at gmail.com <jonsmirl@gmail.com>
+Date: Fri, 5 Apr 2019 15:29:03 -0400
+Subject: [Buildroot] [PATCH v2] libp11: Add new package for OpenSSL
+ PKCS#11 engine
+In-Reply-To: <1554487021.27243.30.camel@impinj.com>
+References: <20181207181314.24051-1-tpiepho@impinj.com>
+ <20190404214556.10f7ef0d@windsurf>
+ <1554412249.27243.12.camel@impinj.com> <20190405094919.40f655c2@windsurf>
+ <1554487021.27243.30.camel@impinj.com>
+Message-ID: <CAKON4Ozg+dp1j5BwTOVemKmpL-e+Hmw9E+MPeM7n+drqaiV53g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87ec6e778701854ce58e0d907fcdf8eaaae0382a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I managed to get libp11 working with this makefile. The previous problems I
+encountered were fixed by a full rebuild of my tree. I needed libp11
+because we are using the ATECC608A for securely accessing with AWS IOT. It
+also works with Google and Azure.
+https://github.com/MicrochipTech/cryptoauthlib/wiki/PKCS11-Linux-Setup
 
-- Remove all patches (already in version)
-- Drop AUTORECONF as configure.ac is not patched anymore
-- Add hash for license file
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qdecoder/0001-fix-make-install.patch       | 40 ----------------------
- .../0002-configure.ac-drop-hardcoded-paths.patch   | 25 --------------
- package/qdecoder/0003-errno.patch                  | 34 ------------------
- package/qdecoder/qdecoder.hash                     |  3 +-
- package/qdecoder/qdecoder.mk                       |  4 +--
- 5 files changed, 3 insertions(+), 103 deletions(-)
+################################################################################
+#
+# libp11
+#
+################################################################################
 
-diff --git a/package/qdecoder/0001-fix-make-install.patch b/package/qdecoder/0001-fix-make-install.patch
-deleted file mode 100644
-index f353566839..0000000000
---- a/package/qdecoder/0001-fix-make-install.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--[PATCH] fix make install to respect DESTDIR
--
--And also ensure destination directories exist.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/Makefile.in |   17 +++++++++--------
-- 1 file changed, 9 insertions(+), 8 deletions(-)
--
--Index: qdecoder-r12.0.5/src/Makefile.in
--===================================================================
----- qdecoder-r12.0.5.orig/src/Makefile.in
--+++ qdecoder-r12.0.5/src/Makefile.in
--@@ -78,17 +78,18 @@
-- 	${LN_S} -f ${SLIBREALNAME} ${SLIBNAME}
-- 
-- install: all
---	${INSTALL_DATA} qdecoder.h ${HEADERDIR}/qdecoder.h
---	${INSTALL_DATA} ${LIBNAME} ${LIBDIR}/${LIBNAME}
---	${INSTALL_DATA} ${SLIBREALNAME} ${LIBDIR}/${SLIBREALNAME}
---	( cd ${LIBDIR}; ${LN_S} -f ${SLIBREALNAME} ${SLIBNAME} )
--+	mkdir -p ${DESTDIR}/${HEADERDIR} ${DESTDIR}/${LIBDIR}
--+	${INSTALL_DATA} qdecoder.h ${DESTDIR}/${HEADERDIR}/qdecoder.h
--+	${INSTALL_DATA} ${LIBNAME} ${DESTDIR}/${LIBDIR}/${LIBNAME}
--+	${INSTALL_DATA} ${SLIBREALNAME} ${DESTDIR}/${LIBDIR}/${SLIBREALNAME}
--+	( cd ${DESTDIR}/${LIBDIR}; ${LN_S} -f ${SLIBREALNAME} ${SLIBNAME} )
-- 
-- deinstall: uninstall
-- uninstall:
---	${RM} -f ${HEADERDIR}/qdecoder.h
---	${RM} -f ${LIBDIR}/${LIBNAME}
---	${RM} -f ${LIBDIR}/${SLIBREALNAME}
---	${RM} -f ${LIBDIR}/${SLIBNAME}
--+	${RM} -f ${DESTDIR}/${HEADERDIR}/qdecoder.h
--+	${RM} -f ${DESTDIR}/${LIBDIR}/${LIBNAME}
--+	${RM} -f ${DESTDIR}/${LIBDIR}/${SLIBREALNAME}
--+	${RM} -f ${DESTDIR}/${LIBDIR}/${SLIBNAME}
-- 
-- doc:
-- 	doxygen doxygen.conf
-diff --git a/package/qdecoder/0002-configure.ac-drop-hardcoded-paths.patch b/package/qdecoder/0002-configure.ac-drop-hardcoded-paths.patch
-deleted file mode 100644
-index 689d1d9124..0000000000
---- a/package/qdecoder/0002-configure.ac-drop-hardcoded-paths.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--[PATCH] configure.ac: drop hardcoded paths
--
--Causing problems with cross compilation.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- configure.ac |    5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
--
--Index: qdecoder-r12.0.5/configure.ac
--===================================================================
----- qdecoder-r12.0.5.orig/configure.ac
--+++ qdecoder-r12.0.5/configure.ac
--@@ -81,10 +81,7 @@
-- AC_CONFIG_HEADER([config.h])
-- AC_CONFIG_FILES([Makefile src/Makefile examples/Makefile])
-- 
---## Set path
---PATH="$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
---CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include -I./ -D_GNU_SOURCE"
---LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
--+CPPFLAGS="$CPPFLAGS -I./ -D_GNU_SOURCE"
-- 
-- ## Set autoconf setting
-- #AC_CANONICAL_TARGET
-diff --git a/package/qdecoder/0003-errno.patch b/package/qdecoder/0003-errno.patch
-deleted file mode 100644
-index 71d5cfd662..0000000000
---- a/package/qdecoder/0003-errno.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--Fixes build error
--
--qcgireq.c: In function '_parse_multipart_value_into_disk':
--qcgireq.c:738:60: error: 'errno' undeclared (first use in this function)
--         DEBUG("I/O error. (errno=%d)", (ioerror == true) ? errno : 0);
--
--Patch downloaded from upstream repo:
--https://github.com/wolkykim/qdecoder/commit/574f0216a51e3e852cd94e2a0a3b52dc64e74548
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From 574f0216a51e3e852cd94e2a0a3b52dc64e74548 Mon Sep 17 00:00:00 2001
--From: nyov <nyov@nexnode.net>
--Date: Fri, 5 Sep 2014 18:41:10 +0000
--Subject: [PATCH] add missing header include
--
--fixes #7
-----
-- src/qcgireq.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/qcgireq.c b/src/qcgireq.c
--index dcb8c57..d34ff83 100644
----- a/src/qcgireq.c
--+++ b/src/qcgireq.c
--@@ -139,6 +139,7 @@
-- #ifndef _WIN32
-- #include <dirent.h>
-- #endif
--+#include <errno.h>
-- #include "qdecoder.h"
-- #include "internal.h"
-- 
-diff --git a/package/qdecoder/qdecoder.hash b/package/qdecoder/qdecoder.hash
-index 6b30310784..181cbd7aab 100644
---- a/package/qdecoder/qdecoder.hash
-+++ b/package/qdecoder/qdecoder.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 641d3df4895626d7a530c5d26724e9b5887e9845d4b47f42c1cbce4a17ebf6af  qdecoder-r12.0.5.tar.gz
-+sha256 01d4852b9343757abe98bbdb9d4bf0dc142ccb602ec921906ddde32c16164376  qdecoder-v12.0.7.tar.gz
-+sha256 17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
-index bbbf42a98c..1112f0707b 100644
---- a/package/qdecoder/qdecoder.mk
-+++ b/package/qdecoder/qdecoder.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
- 
--QDECODER_VERSION = r12.0.5
-+QDECODER_VERSION = v12.0.7
- QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
- QDECODER_LICENSE = BSD-2
- QDECODER_LICENSE_FILES = COPYING
--# we patch configure.ac
--QDECODER_AUTORECONF = YES
- QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
- QDECODER_INSTALL_STAGING = YES
+LIBP11_VERSION = 4fa36e3a04bfe2d0a7b0b8b6f25866dac2f6cc8b
+LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+LIBP11_DEPENDENCIES = openssl
+LIBP11_LICENSE = LGPLv2.1
+LIBP11_LICENSE_FILES = COPYING
+LIBP11_AUTORECONF = YES
+LIBP11_INSTALL_STAGING = YES
+LIBP11_INSTALL_TARGET = YES
+
+LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib/engines-1.1
+ifeq ($(BR2_PACKAGE_P11_KIT),y)
+LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+endif
+
+define LIBP11_INSTALL_TARGET_CMDS
+$(INSTALL) -D -m 0755 $(@D)/src/.libs/libp11.so $(TARGET_DIR)/usr/lib
+$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/engines-1.1
+$(INSTALL) -D -m 0666 $(@D)/src/.libs/pkcs11.so
+$(TARGET_DIR)/usr/lib/engines-1.1
+endef
+
+$(eval $(autotools-package))
+
+################################################################################
+#
+# cryptoauthlib
+#
+################################################################################
+
+CRYPTOAUTHLIB_VERSION = 21f9f26f3dae7194177f8be1b38bf8081616cd61
+CRYPTOAUTHLIB_SITE = $(call
+github,MicrochipTech,cryptoauthlib,$(CRYPTOAUTHLIB_VERSION))
+CRYPTOAUTHLIB_LICENSE = LGPL-2.1
+CRYPTOAUTHLIB_DEPENDENCIES = libp11 udev
+CRYPTOAUTHLIB_CONF_OPTS += -DATCA_HAL_I2C=ON -DATCA_PRINTF=ON
+-DCMAKE_BUILD_TYPE=DEBUG -DATCA_HAL_KIT_HID=OFF
+CRYPTOAUTHLIB_INSTALL_TARGET = YES
+
+define CRYPTOAUTHLIB_INSTALL_TARGET_CMDS
+$(INSTALL) -D -m 0755 $(@D)/lib/libcryptoauth.so* $(TARGET_DIR)/usr/lib
+$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/cryptoauthlib
+$(INSTALL) -D -m 0666 $(@D)/cryptoauthlib.conf
+$(TARGET_DIR)/etc/cryptoauthlib
+$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/lib/cryptoauthlib
+$(INSTALL) -D -m 0666 $(@D)/app/pkcs11/slot.conf.tmpl
+$(TARGET_DIR)/var/lib/cryptoauthlib
+endef
+
+$(eval $(cmake-package))
+
+
+On Fri, Apr 5, 2019 at 1:57 PM Trent Piepho <tpiepho@impinj.com> wrote:
+
+> On Fri, 2019-04-05 at 09:49 +0200, Thomas Petazzoni wrote:
+> > On Thu, 4 Apr 2019 21:10:50 +0000
+> > Trent Piepho <tpiepho@impinj.com> wrote:
+> > Then, even with this fixed, the package didn't build because it was
+> > > > installing its OpenSSL modules in the wrong folder, as pkg-config
+> > > > --variable enginesdir libcrypto returned a bogus value. I fixed that
+> by
+> > > > passing --with-enginesdir.
+> > >
+> > > This is interesting, as when I made this patch for an older buildroot,
+> > > pkgconfig would return the correct value.  It was not prefixed with the
+> > > stage.  This is a new behavior.
+> > >
+> > > And it looks like this already hit a bunch of packages with things like
+> > > the x11 app-defaults dir.  Since "libdir" is in the whitelist of paths
+> > > to prefix, it also hits enginesdir since the latter is based on libdir.
+> > >
+> > > Maybe that pkg-config whitelist should not affect variables that use
+> > > libdir and only prefix libdir itself?
+> >
+> > We have bumped pkg-config not long ago, and indeed its behavior
+> > changed. When you have something like this:
+> >
+> > prefix=/usr
+> > libdir=${prefix}/lib
+> > enginesdir=${libdir}/engines
+>
+> I suppose another fix would be to patch the libcrypto pc file to use
+> ${prefix}/lib/engines.  If there were more consumers of enginesdir,
+> then perhaps better to fix it once at the source than in each user?
+>
+> > and "libdir" was part of the special list of variables that we want to
+> > prefix with the sysroot, then the old pkg-config would return libdir
+> > prefixed with the sysroot, but not enginesdir.
+>
+> I assume there are packages which install libraries to the stage in
+> sub-directories based on libdir, and this new pkg-config behavior is
+> better for those cases, while worse for cases like enginesdir.
+>
+> Maybe some kind of run time control of pkg-config would allow it to
+> work better?  For instance, an environment variable with some kind of
+> white/black list of variables to prefix.  Default value would prefix
+> libdir, etc.  But it could be tweaked on by intfras and/or packages.
+> Kind of like:
+>
+> LIBP11_PKGCONFIG_NOT_STAGE_VARS = enginesdir
+>
+> Maybe the plumbing costs of this aren't worth making a few packages
+> simpler.
+>
+> > Overall, the issue is that there is no concept in pkg-config for "the
+> > value of this variable is going to be used at build time" vs "the
+> > value of this variable is going to be used at run time".
+>
+> Shame.  Maybe buildroot should create a new build system, to replace
+> autotools, cmake, and meson, that knows about all the issues of cross
+> building?  Yes, huge project.  Need macos and windows support.  But
+> think of how much easier buildroot would be if you didn't have to fight
+> autotools and cmake!
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Jon Smirl
+jonsmirl at gmail.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190405/da160ad8/attachment.html>
