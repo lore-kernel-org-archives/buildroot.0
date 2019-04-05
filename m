@@ -1,79 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 17:19:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/binutils: xtensa:
- fix shrink_dynamic_reloc_sections
-Message-ID: <20190405152520.134DC81320@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 17:26:38 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/znc: security
+ bump to version 1.7.3
+Message-ID: <20190405152520.3FEF58134F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84a6ea6cb55637aa2e5bebb493a0bafdcc708f81
+commit: https://git.buildroot.net/buildroot/commit/?id=9c51de0bd1e2e05435190a9673cd42b95b773d9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This fixes the following build error caused by link-time relaxation
-removing copies of literals that reference undefined weak symbols with
-PLT entries created due to -rdynamic option passed to g++ link command:
+Changelog: https://wiki.znc.in/ChangeLog/1.7.3
 
-  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
-  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
+Fixes CVE-2019-9917:
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9917
+- ZNC before 1.7.3-rc1 allows an existing remote user to cause a Denial
+  of Service (crash) via invalid encoding.
 
-Fixes:
-http://autobuild.buildroot.net/results/d41/d41aae8a448c316187f9fbde40f1d077182bb244/
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop 2.32 patch]
-(cherry picked from commit 881dae3a9c086ee3880834e10f72baea221f4945)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 601d9cced09e59b386ead70e1125781d42e8bdd1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fix-shrink_dynamic_reloc_sections-for-exp.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch b/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
-new file mode 100644
-index 0000000000..b80e1fa7ce
---- /dev/null
-+++ b/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
-@@ -0,0 +1,41 @@
-+From 278989f23735aa501be1052e085540c75c126dbb Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 28 Mar 2019 17:03:57 -0700
-+Subject: [PATCH] bfd: xtensa: fix shrink_dynamic_reloc_sections for
-+ export-dynamic
-+
-+shrink_dynamic_reloc_sections must remove PLT entry that was created for
-+an undefined weak symbol in the presence of --export-dynamic option when
-+relaxation coalesces literals pointing to that symbol. This fixes the
-+following assertion:
-+
-+  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
-+  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
-+
-+2019-03-28  Max Filippov  <jcmvbkbc@gmail.com>
-+bfd/
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Add
-+	info->export_dynamic to the conditional.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c                                         |  3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index c3df3d6db756..37ea200eea74 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10083,7 +10083,8 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+       && (input_section->flags & SEC_ALLOC) != 0
-+       && (dynamic_symbol || bfd_link_pic (info))
-+       && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol && bfd_link_dll (info))))
-++	  || (dynamic_symbol
-++	      && (bfd_link_dll (info) || info->export_dynamic))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.11.0
-+
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index 0845df5355..b685a7bf7b 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 60b4e78f54c532c32673d1ef8e5f606c530ef3a6d6b76ea1daa66459a86682a9  znc-1.7.2.tar.gz
++sha256 1e4cc31837a1e8e6cc310873659a167cec16a3fd4281cbc3bf364e42352c113d  znc-1.7.3.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index b2e422c0f0..fdc147a8a1 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZNC_VERSION = 1.7.2
++ZNC_VERSION = 1.7.3
+ ZNC_SITE = http://znc.in/releases/archive
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
