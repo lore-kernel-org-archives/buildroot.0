@@ -1,58 +1,44 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 05 Apr 2019 08:58:50 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
- in cross file
-In-Reply-To: <20190403213327.299f23ca@windsurf>
-References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
- <20190403213327.299f23ca@windsurf>
-Message-ID: <65b6d73fc59a8e6d84eb13d65b37d754aeab1313.camel@embedded.rocks>
+From: Shyam Saini <shyam.saini@amarulasolutions.com>
+Date: Fri,  5 Apr 2019 13:09:53 +0530
+Subject: [Buildroot] [PATCH 01/10] configs: friendlyarm_nanopi_a64: Bump to
+ the linux kernel 5.0
+Message-ID: <20190405074002.9462-1-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This bumps to linux/linux-headers 5.0
 
-Am Mittwoch, den 03.04.2019, 21:33 +0200 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Wed,  3 Apr 2019 20:32:01 +0200
-> J?rg Krause <joerg.krause@embedded.rocks> wrote:
-> 
-> > Since version 0.49.0 the Meson build system has native support for
-> > looking for `libgcrypt-config` if no pkg-config file is found. As the
-> > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
-> > `libgcrypt-config` is the only way for detecting the required libraries
-> > when linking agains libgrypt.
-> > 
-> > The `libgcrypt-config` entry is necessary for updating package mpd,
-> > which switched from the Autotools to the Meson build system when bumping
-> > from version 0.20 to 0.21.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> >  package/meson/cross-compilation.conf.in | 1 +
-> >  package/meson/meson.mk                  | 1 +
-> >  package/pkg-meson.mk                    | 1 +
-> >  3 files changed, 3 insertions(+)
-> > 
-> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> > index fc8e27f7eb..b68499a6fa 100644
-> > --- a/package/meson/cross-compilation.conf.in
-> > +++ b/package/meson/cross-compilation.conf.in
-> > @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
-> >  ar = '@TARGET_CROSS at ar'
-> >  strip = '@TARGET_CROSS at strip'
-> >  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> > +libgcrypt-config = '@STAGING_DIR@/usr/bin/libgcrypt-config'
-> 
-> Hm, this is a bit annoying. We really have no other solution but to
-> pass this through cross-compilation.conf ? It cannot be passed on the
-> meson command line, on a per-package basis, like we do for the autotools ?
+Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+---
+ configs/friendlyarm_nanopi_a64_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I am not a Meson expert, but I did not find any options howto pass
-libgcrypt-config path through the command line.
-
-Best regards
-J?rg Krause
+diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
+index 1b668be2eb..9a0021b425 100644
+--- a/configs/friendlyarm_nanopi_a64_defconfig
++++ b/configs/friendlyarm_nanopi_a64_defconfig
+@@ -2,8 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 5.0 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
+-- 
+2.11.0
