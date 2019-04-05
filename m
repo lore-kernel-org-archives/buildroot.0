@@ -1,58 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 22:32:39 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libfuse: Install
- udev rules and set permissions
-Message-ID: <20190405204612.7CDFF890AF@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 22:47:03 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tss: bump
+ version to 2.1.2
+Message-ID: <20190405204614.117B48DE4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c5958664e4357c9a995415995966c38f21df145
+commit: https://git.buildroot.net/buildroot/commit/?id=00509612832093198b9d24e103750ad80a44cdde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This fixes some omissions from the installation.
+Fixes a number of issues discovered post-2.1.1. For details, see:
+https://github.com/tpm2-software/tpm2-tss/releases/tag/2.1.2
 
-Install the udev rules.
-
-Tell buildroot about the fuse device.
-
-Apply setuid permissions on the fusermount tool.
-
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ea62ff85b59aa1ff7757787061eb451b4b4780df)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2c47079d38a212074326570fda6c1fccad8acb07)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfuse/libfuse.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ package/tpm2-tss/tpm2-tss.hash | 2 +-
+ package/tpm2-tss/tpm2-tss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index e8a79a3166..84027ebedb 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -14,11 +14,22 @@ LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
- 	--disable-example \
- 	--enable-lib \
--	--enable-util
-+	--enable-util \
-+	UDEV_RULES_PATH=/lib/udev/rules.d
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index 8d62320239..a9a9f3c963 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 b3f3a0319a3ed9d03465755b57bc60ec5e3b3bac2a0d1d2c79ca1ed412aed8ce  tpm2-tss-2.1.1.tar.gz
++sha256 aba502ba70c7697a4ef1ff01a81802d4c6570509dd94acee74bb06d6d1e9f68c  tpm2-tss-2.1.2.tar.gz
+ sha256 f7da3c2da12cec3348bb7ee9e2a9e651a241450b2efb67da29d5a75ef2da058a  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 672f483d44..3b730acdeb 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define LIBFUSE_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
- 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(TARGET_DIR)/lib/udev/rules.d
-+	cp $(STAGING_DIR)/lib/udev/rules.d/*-fuse.rules $(TARGET_DIR)/lib/udev/rules.d
-+endef
-+
-+define LIBFUSE_DEVICES
-+	/dev/fuse  c  666  0  0  10  229  0  0  -
-+endef
-+
-+define LIBFUSE_PERMISSIONS
-+	/usr/bin/fusermount f 4755 0 0 - - - - -
- endef
- 
- $(eval $(autotools-package))
+-TPM2_TSS_VERSION = 2.1.1
++TPM2_TSS_VERSION = 2.1.2
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
