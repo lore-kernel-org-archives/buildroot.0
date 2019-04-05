@@ -1,38 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 17:40:39 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libxslt: change
- download site to http
-Message-ID: <20190405153704.DC0BB8D785@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 17:36:15 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/gstreamer1/gst-omx: make variant mutually exclusive
+Message-ID: <20190405153704.BFA548D783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b5cb1fd427906b071bb9ff5227d44fc31a5626b
+commit: https://git.buildroot.net/buildroot/commit/?id=54d556c0b71d3a1c67c262bbda0af6e45fef2f71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-ftp is blocked on some (corporate) networks.
+Commit cc419509506 added the GST_OMX_VARIANT option which gets a default
+value that gets overridden by subsequent conditions. check-package
+doesn't like that, so instead make the three cases explicitly mutually
+exclusive.
 
-Signed-off-by: Nityananda Padhan <ntneitin@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 58ea5f583585e6ec42a3caa568f9fc931d632526)
+(cherry picked from commit 5b217aad9c0242209e41155280b91a8d79fee305)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxslt/libxslt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gstreamer1/gst-omx/gst-omx.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 5b1c0ae268..4632301b16 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index b8a8cd8457..bb325ad1d2 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
+@@ -11,8 +11,6 @@ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ GST_OMX_LICENSE = LGPL-2.1
+ GST_OMX_LICENSE_FILES = COPYING
  
- LIBXSLT_VERSION = 1.1.32
--LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
-+LIBXSLT_SITE = http://xmlsoft.org/sources
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
- LIBXSLT_LICENSE_FILES = COPYING
+-GST_OMX_VARIANT = generic
+-
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ GST_OMX_VARIANT = rpi
+ GST_OMX_CONF_ENV = \
+@@ -20,9 +18,7 @@ GST_OMX_CONF_ENV = \
+ 		-I$(STAGING_DIR)/usr/include/IL \
+ 		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+ 		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
+-endif
+-
+-ifeq ($(BR2_PACKAGE_BELLAGIO),y)
++else ifeq ($(BR2_PACKAGE_BELLAGIO),y)
+ GST_OMX_VARIANT = bellagio
+ GST_OMX_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) \
+@@ -30,6 +26,8 @@ GST_OMX_CONF_ENV = \
+ 		-DOMX_VERSION_MINOR=1 \
+ 		-DOMX_VERSION_REVISION=2 \
+ 		-DOMX_VERSION_STEP=0"
++else
++GST_OMX_VARIANT = generic
+ endif
+ 
+ GST_OMX_CONF_OPTS += --with-omx-target=$(GST_OMX_VARIANT)
