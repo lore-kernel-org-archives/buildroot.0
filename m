@@ -1,28 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 22:34:55 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/libfuse: Install udev rules
- and set permissions
-In-Reply-To: <8736n0gm7a.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 02 Apr 2019 22:56:57 +0200")
-References: <20190315133033.5275-1-norbert.lange@andritz.com>
- <20190315133033.5275-2-norbert.lange@andritz.com>
- <8736n0gm7a.fsf@dell.be.48ers.dk>
-Message-ID: <87y34onqc0.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Apr 2019 22:46:14 +0200
+Subject: [Buildroot] [PATCH] package/webkitgtk: bump version to 2.22.7
+In-Reply-To: <20190403193943.27399-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 3 Apr 2019 21:39:43 +0200")
+References: <20190403193943.27399-1-peter@korsgaard.com>
+Message-ID: <87tvfcnpt5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
- >> This fixes some omissions from the installation.
- >> Install the udev rules.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- >> Tell buildroot about the fuse device.
+ > 2.22.7 contains a number of bugfixes. From the announcement:
+ >  - Fix rendering of glyphs in Hebrew (and possibly other languages) when
+ >    Unicode NFC normalization is used.
 
- >> Apply setuid permissions on the fusermount tool.
+ >  - Fix several crashes and race conditions.
 
- >> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+ > https://webkitgtk.org/2019/03/01/webkitgtk2.22.7-released.html
+
+ > Change SITE to https as the webserver uses HSTS.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x, thanks.
 
