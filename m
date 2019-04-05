@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Apr 2019 22:14:45 +0200
-Subject: [Buildroot] [PATCH 7/7] package/sysklogd: bump to version 1.6
-Message-ID: <20190405201445.24773-1-fontaine.fabrice@gmail.com>
+Date: Fri,  5 Apr 2019 22:16:37 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/sysklogd: bump to version 1.6
+Message-ID: <20190405201637.24831-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,6 +15,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix title (7/7 -> 1/1)
+
  ...place-deprecated-union-wait-with-int.patch | 28 -------
  .../0002-Fix-improper-header-includes.patch   | 78 -------------------
  .../0003-Remove-include-of-linux-time.h.patch | 50 ------------
