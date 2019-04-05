@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 21:20:52 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: use my personal email address
-In-Reply-To: <20190405133851.25379-1-casantos@datacom.com.br> (Carlos Santos's
- message of "Fri, 5 Apr 2019 10:38:51 -0300")
-References: <20190405133851.25379-1-casantos@datacom.com.br>
-Message-ID: <87wok8p8bv.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Apr 2019 21:21:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: bump to version 1.3.1
+In-Reply-To: <20190405170422.13365-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Apr 2019 19:04:22 +0200")
+References: <20190405170422.13365-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sguwp8bi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The current address will soon become invalid so drop it before the
- > messages start bouncing.
-
- > Change-Id: If631cedcaaa55d927d99b18ff299324e9d439cb0
+ > Remove all patches (already in version)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
