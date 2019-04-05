@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 17:28:04 +0200
-Subject: [Buildroot] [PATCH] package/binutils: xtensa: fix
- shrink_dynamic_reloc_sections
-In-Reply-To: <20190329015133.9535-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Thu, 28 Mar 2019 18:51:33 -0700")
-References: <20190329015133.9535-1-jcmvbkbc@gmail.com>
-Message-ID: <87y34osc8r.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Apr 2019 17:28:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: disable on nios2 and
+ microblaze
+In-Reply-To: <20190330133107.19895-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 30 Mar 2019 14:31:07 +0100")
+References: <20190330133107.19895-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvfcsc8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
-
- > This fixes the following build error caused by link-time relaxation
- > removing copies of literals that reference undefined weak symbols with
- > PLT entries created due to -rdynamic option passed to g++ link command:
-
- >   ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
- >   elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/d41/d41aae8a448c316187f9fbde40f1d077182bb244/
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ >  - http://autobuild.buildroot.org/results/4d7be00514f5276a9fd533adfdbc3d5183bb59ca
+ >  - http://autobuild.buildroot.org/results/64706f96db793777de9d3ec63b0a47d776cf33fd
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x, thanks.
 
