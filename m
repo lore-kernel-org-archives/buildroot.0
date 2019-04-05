@@ -1,28 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 21:27:46 +0200
-Subject: [Buildroot] [PATCH v2] package/make: include patch for gl_lstat
- support
-In-Reply-To: <20190404225457.5075-1-sam@mendozajonas.com> (Samuel
- Mendoza-Jonas's message of "Fri, 5 Apr 2019 09:54:57 +1100")
-References: <20190404225457.5075-1-sam@mendozajonas.com>
-Message-ID: <87ftqwp80d.fsf@dell.be.48ers.dk>
+Date: Fri, 5 Apr 2019 21:19:56 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: use my personal email address
+Message-ID: <20190405192416.CBB768D56D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2387c9604a42dbe4361d96286a223ab8be18dad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Include upstream commit 193f1e8 "glob: Do not assume glibc glob
- > internals". Without this if building glibc with host-make it will fail
- > with a segfault in make:
+The current address will soon become invalid so drop it before the
+messages start bouncing.
 
- >>>> glibc glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 Building
+Change-Id: If631cedcaaa55d927d99b18ff299324e9d439cb0
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Given the glibc version, I take it tht 2019.02.x is also affected?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ba21bdfd4..8bb7457985 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -432,7 +432,7 @@ F:	package/pdmenu/
+ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
+-N:	Carlos Santos <casantos@datacom.com.br>
++N:	Carlos Santos <unixmania@gmail.com>
+ F:	package/aer-inject/
+ F:	package/busybox/
+ F:	package/gtest/
