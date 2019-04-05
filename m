@@ -1,92 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 17:43:16 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/apache: security
- bump to version 2.4.39
-Message-ID: <20190405153921.2544B8D67D@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 17:41:31 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gerbera: fix
+ static build with openssl
+Message-ID: <20190405153921.1590D8D67D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f1a21a29c2c18acc9775d44042e4656360f5b69
+commit: https://git.buildroot.net/buildroot/commit/?id=e0f8bcf2dc7ef9479d2bb75c38728148609eba4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
+Fixes:
+ - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
 
-  *) SECURITY: CVE-2019-0197 (cve.mitre.org)
-     mod_http2: fixes a possible crash when HTTP/2 was enabled for a http:
-     host or H2Upgrade was enabled for h2 on a https: host. An Upgrade
-     request from http/1.1 to http/2 that was not the first request on a
-     connection could lead to a misconfiguration and crash. Servers that
-     never enabled the h2 protocol or only enabled it for https: and
-     did not set "H2Upgrade on" are unaffected by this issue.
-     [Stefan Eissing]
-
-  *) SECURITY: CVE-2019-0196 (cve.mitre.org)
-     mod_http2: using fuzzed network input, the http/2 request
-     handling could be made to access freed memory in string
-     comparision when determining the method of a request and
-     thus process the request incorrectly. [Stefan Eissing]
-
-  *) SECURITY: CVE-2019-0211 (cve.mitre.org)
-     MPMs unix: Fix a local priviledge escalation vulnerability by not
-     maintaining each child's listener bucket number in the scoreboard,
-     preventing unprivileged code like scripts run by/on the server (e.g. via
-     mod_php) from modifying it persistently to abuse the priviledged main
-     process.  [Charles Fol <folcharles gmail.com>, Yann Ylavic]
-
-  *) SECURITY: CVE-2019-0196 (cve.mitre.org)
-     mod_http2: using fuzzed network input, the http/2 request
-     handling could be made to access freed memory in string
-     comparision when determining the method of a request and
-     thus process the request incorrectly. [Stefan Eissing]
-
-  *) SECURITY: CVE-2019-0217 (cve.mitre.org)
-     mod_auth_digest: Fix a race condition checking user credentials which
-     could allow a user with valid credentials to impersonate another,
-     under a threaded MPM.  PR 63124.  [Simon Kappel <simon.kappel axis.com>]
-
-  *) SECURITY: CVE-2019-0215 (cve.mitre.org)
-     mod_ssl: Fix access control bypass for per-location/per-dir client
-     certificate verification in TLSv1.3.
-
-  *) SECURITY: CVE-2019-0220 (cve.mitre.org)
-     Merge consecutive slashes in URL's. Opt-out with
-     `MergeSlashes OFF`. [Eric Covener]
-
-For more details, see the CHANGES file:
-https://www.apache.org/dist/httpd/CHANGES_2.4.39
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 556ad6c25bb574cbfe05631cceb4329d69b49cad)
+(cherry picked from commit 38730bfdf6101c1a9e8d4eef8331e12aca145ea0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...make-FindLibUpnp.cmake-fix-static-linking.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index fd42cd4872..0c3a1d5303 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.38.tar.bz2.sha256
--sha256 7dc65857a994c98370dc4334b260101a7a04be60e6e74a5c57a6dee1bc8f394a httpd-2.4.38.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.39.tar.bz2.sha256
-+sha256 b4ca9d05773aa59b54d66cd8f4744b945289f084d3be17d7981d1783a5decfa2 httpd-2.4.39.tar.bz2
- # Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index dd8f175f9c..ebb28b653a 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.38
-+APACHE_VERSION = 2.4.39
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+new file mode 100644
+index 0000000000..510bf2837f
+--- /dev/null
++++ b/package/gerbera/0003-cmake-FindLibUpnp.cmake-fix-static-linking.patch
+@@ -0,0 +1,44 @@
++From e2f8e6c30e43c1818a6677d17de87f53c9414405 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 2 Apr 2019 10:44:06 +0200
++Subject: [PATCH] cmake/FindLibUpnp.cmake: fix static linking
++
++Fix static linking with an openssl enabled upnp:
++ - remove libupnp-1.8 from pkg_check_modules call otherwise test will
++   fail if libupnp-1.8.pc is not found
++ - add PC_UPNP_LIBRARIES to UPNP_LIBRARIES
++
++Fixes:
++ - http://autobuild.buildroot.org/results/10098c8972725d54b717ddc8ea41f4de5e5b066d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/gerbera/gerbera/pull/443]
++---
++ cmake/FindLibUpnp.cmake | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/FindLibUpnp.cmake b/cmake/FindLibUpnp.cmake
++index ec198d4d..5d2b032d 100644
++--- a/cmake/FindLibUpnp.cmake
+++++ b/cmake/FindLibUpnp.cmake
++@@ -8,7 +8,7 @@
++ #  UPNP_HAS_REUSEADDR - If LinUPnP was built with SO_REUSEADDR support
++ 
++ find_package(PkgConfig QUIET)
++-pkg_check_modules (PC_UPNP QUIET libupnp-1.8 libupnp)
+++pkg_search_module (PC_UPNP QUIET libupnp-1.8 libupnp)
++ 
++ find_path(UPNP_INCLUDE_DIR upnp.h
++     HINTS ${PC_UPNP_INCLUDEDIR} ${PC_UPNP_INCLUDE_DIRS}
++@@ -41,7 +41,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(UPnP
++     VERSION_VAR UPNP_VERSION_STRING)
++ 
++ if (UPNP_FOUND)
++-    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY})
+++    set (UPNP_LIBRARIES ${UPNP_UPNP_LIBRARY} ${UPNP_IXML_LIBRARY} ${PC_UPNP_LIBRARIES})
++     set (UPNP_INCLUDE_DIRS ${UPNP_INCLUDE_DIR} )
++ endif ()
++ 
++-- 
++2.14.1
++
