@@ -1,28 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 17:28:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/znc: security bump to version
- 1.7.3
-In-Reply-To: <20190330174249.30431-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 30 Mar 2019 18:42:49 +0100")
-References: <20190330174249.30431-1-bernd.kuhls@t-online.de>
-Message-ID: <87lg0osc7m.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Apr 2019 17:29:09 +0200
+Subject: [Buildroot] [PATCH] package/dovecot: security bump to version
+ 2.3.5.1
+In-Reply-To: <20190330195352.32164-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 30 Mar 2019 20:53:52 +0100")
+References: <20190330195352.32164-1-peter@korsgaard.com>
+Message-ID: <87h8bcsc6y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Changelog: https://wiki.znc.in/ChangeLog/1.7.3
- > Fixes CVE-2019-9917:
- > http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9917
- > - ZNC before 1.7.3-rc1 allows an existing remote user to cause a Denial
- >   of Service (crash) via invalid encoding.
+ > Fixes the following security issue:
+ >  * CVE-2019-7524: Missing input buffer size validation leads into
+ >    arbitrary buffer overflow when reading fts or pop3 uidl header
+ >    from Dovecot index. Exploiting this requires direct write access to
+ >    the index files.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to 2019.02.x, thanks.
+Committed to 2019.02.x (and the corresponding dovecot-pigeonhole bump), thanks.
 
 -- 
 Bye, Peter Korsgaard
