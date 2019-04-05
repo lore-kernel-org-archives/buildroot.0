@@ -1,23 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Apr 2019 22:48:56 +0200
-Subject: [Buildroot] [PATCH] utils/getdeveloperlib.py: print
- warnings/errors to stderr
-In-Reply-To: <20190404065812.22601-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 4 Apr 2019 08:58:12 +0200")
-References: <20190404065812.22601-1-peter@korsgaard.com>
-Message-ID: <87d0m0npon.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Apr 2019 22:49:51 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: use my personal email address
+In-Reply-To: <20190405133851.25379-1-casantos@datacom.com.br> (Carlos Santos's
+ message of "Fri, 5 Apr 2019 10:38:51 -0300")
+References: <20190405133851.25379-1-casantos@datacom.com.br>
+Message-ID: <878swonpn4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
- > Instead of stdout where it gets mixed with the normal output, confusing
- > software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
+ > The current address will soon become invalid so drop it before the
+ > messages start bouncing.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Change-Id: If631cedcaaa55d927d99b18ff299324e9d439cb0
 
 Committed to 2019.02.x, thanks.
 
