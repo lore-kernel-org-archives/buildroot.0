@@ -1,48 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Apr 2019 22:47:03 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tss: bump
- version to 2.1.2
-Message-ID: <20190405204614.117B48DE4D@busybox.osuosl.org>
+Date: Fri, 5 Apr 2019 22:48:36 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] utils/getdeveloperlib.py:
+ print warnings/errors to stderr
+Message-ID: <20190405204614.12B3E8DE57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00509612832093198b9d24e103750ad80a44cdde
+commit: https://git.buildroot.net/buildroot/commit/?id=6bdad8417df84d1199596cac6e3ae7abfcdc9dd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes a number of issues discovered post-2.1.1. For details, see:
-https://github.com/tpm2-software/tpm2-tss/releases/tag/2.1.2
+Instead of stdout where it gets mixed with the normal output, confusing
+software parsing the output (E.G. get-developers -e as git sendemail.ccCmd).
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c47079d38a212074326570fda6c1fccad8acb07)
+(cherry picked from commit 83f82bd67a2f2e389584586a7016b3e7f85cff37)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/getdeveloperlib.py | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index 8d62320239..a9a9f3c963 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 b3f3a0319a3ed9d03465755b57bc60ec5e3b3bac2a0d1d2c79ca1ed412aed8ce  tpm2-tss-2.1.1.tar.gz
-+sha256 aba502ba70c7697a4ef1ff01a81802d4c6570509dd94acee74bb06d6d1e9f68c  tpm2-tss-2.1.2.tar.gz
- sha256 f7da3c2da12cec3348bb7ee9e2a9e651a241450b2efb67da29d5a75ef2da058a  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 672f483d44..3b730acdeb 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 2c8d477583..35c618f791 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,7 +1,9 @@
++from __future__ import print_function
+ import os
+ import re
+ import glob
+ import subprocess
++import sys
  
--TPM2_TSS_VERSION = 2.1.1
-+TPM2_TSS_VERSION = 2.1.2
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
+ #
+ # Patch parsing functions
+@@ -167,13 +169,15 @@ def parse_developers(basepath=None):
+                 continue
+             elif line.startswith("N:"):
+                 if name is not None or len(files) != 0:
+-                    print("Syntax error in DEVELOPERS file, line %d" % linen)
++                    print("Syntax error in DEVELOPERS file, line %d" % linen,
++                          file=sys.stderr)
+                 name = line[2:].strip()
+             elif line.startswith("F:"):
+                 fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(basepath, fname))
+                 if len(dev_files) == 0:
+-                    print("WARNING: '%s' doesn't match any file" % fname)
++                    print("WARNING: '%s' doesn't match any file" % fname,
++                          file=sys.stderr)
+                 files += dev_files
+             elif line == "":
+                 if not name:
+@@ -182,7 +186,8 @@ def parse_developers(basepath=None):
+                 files = []
+                 name = None
+             else:
+-                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
++                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
++                      file=sys.stderr)
+                 return None
+             linen += 1
+     # handle last developer
