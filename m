@@ -1,60 +1,47 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 05 Apr 2019 03:58:00 -0700
-Subject: [Buildroot] [RFC PATCH v1 3/6] package/docker-containerd:
- upgrade to go modules
-In-Reply-To: <067385b4-62bb-fcdd-95f2-9f50fb5804e2@mind.be>
-References: <20190317012142.10545-1-christian@paral.in>
- <20190317012142.10545-3-christian@paral.in>
- <067385b4-62bb-fcdd-95f2-9f50fb5804e2@mind.be>
-Message-ID: <877ec8d8hz.fsf@paral.in>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Fri,  5 Apr 2019 15:21:51 +0300
+Subject: [Buildroot] [PATCH 1/1] Signed-off-by: Alexey Lukyanchuk
+ <skif@skif-web.ru>
+Message-ID: <20190405122151.2172-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+package/freerdp: bump version to 2.0.0-rc4
 
-Arnout Vandecappelle <arnout@mind.be> writes:
-> On 17/03/2019 02:21, Christian Stewart wrote:
->>  DOCKER_CONTAINERD_LDFLAGS = \
->> -	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
->> +	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
->
->  This looks like a completely independent change. Or is it because we now have a
-> go.mod that calls the module containerd/containerd instead of docker/containerd?
+Add support to set tls security level (for openssl >= 1.1.0), for RDP
+protocol version 10(needed for windows 10 and windows server 2016). Also have some fix and features, see
+https://github.com/FreeRDP/FreeRDP/commit/e21b72c95f857817b4b32b5ef5406355c005a9e8
 
-This is a fix that could be applied seperately, IIF the root import path
-is github.com/containerd/containerd in the current in-tree version (I'd
-have to confirm to be sure).
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+---
+ package/freerdp/freerdp.hash | 2 +-
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->> +DOCKER_CONTAINERD_BUILD_TARGETS = \
->> +	github.com/containerd/containerd/cmd/ctr \
->> +	github.com/containerd/containerd/cmd/containerd \
->> +	github.com/containerd/containerd/cmd/containerd-shim
->
->  Same question, how is this related to the go modules?
-
-Before, we specified which targets to build using a relative path like
-./cmd/dockerd. Now, we can actually specify the fully qualified path to
-the "main" package, and the Go tool is smart enough to locate the
-correct path inside $(@D). It's also more readable to specify it this
-way, and is considered best practice.
-
->  Would it be possible (and useful) to add those prefixes automatically?
-
-I don't see why. Consider this: I can give you a list of packages:
-
- - k8s.io/cmd/apiserver
- - k8s.io/cmd/kubectl
- - k8s.io/cmd/kubeadm
- - github.com/containerd/containerd/cmd/ctr
-
-... and all of these can be passed to "go build," which will resolve
-them and produce the outputs with the correct binary names (the last
-component of the path). It's not that much extra text to leave the
-"github.com/containerd/containerd" part in. It's a point of personal
-preference at this point though.
-
-Best regards,
-Christian
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 44b7b876a9..7a6859551f 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a09e338b996fada44bf1277f423240d0fa82289799e2e5dea9d9c63201554de1 freerdp-2.0.0-rc2.tar.gz
++sha256 3406f3bfab63f81c1533029a5bf73949ff60f22f6e155c5a08005b8b8afe6d49 freerdp-2.0.0-rc4.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 91e4ae47ee..0f32ff4718 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.0.0-rc2
++FREERDP_VERSION = 2.0.0-rc4
+ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+-- 
+2.20.1
