@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Apr 2019 09:13:26 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: stop monitoring aer-inject
-Message-ID: <20190406070959.ADF4B89129@busybox.osuosl.org>
+Date: Sat, 06 Apr 2019 09:14:50 +0200
+Subject: [Buildroot] [PATCH v2] package/make: include patch for gl_lstat
+ support
+In-Reply-To: <4fc8912ff2e937c24c86d5fa4a132c9389bc62c9.camel@mendozajonas.com>
+ (Samuel Mendoza-Jonas's message of "Sat, 06 Apr 2019 15:34:31 +1100")
+References: <20190404225457.5075-1-sam@mendozajonas.com>
+ <87ftqwp80d.fsf@dell.be.48ers.dk>
+ <4fc8912ff2e937c24c86d5fa4a132c9389bc62c9.camel@mendozajonas.com>
+Message-ID: <87zhp3mwph.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c45394c1b03dd79f39a017a14922a5d1f82de50b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
 
-I left DATACOM and will unlikely have access to the hardware required to
-test the package.
+ > On Fri, 2019-04-05 at 21:27 +0200, Peter Korsgaard wrote:
+ >> > > > > > "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com>
+ >> > > > > > writes:
+ >> 
+ >> > Include upstream commit 193f1e8 "glob: Do not assume glibc glob
+ >> > internals". Without this if building glibc with host-make it will
+ >> fail
+ >> > with a segfault in make:
+ >> 
+ >> >>>> glibc glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1
+ >> Building
+ >> 
+ >> Committed, thanks.
+ >> 
+ >> Given the glibc version, I take it tht 2019.02.x is also affected?
+ >> 
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ > Yes it is, I forgot to add that note in v2.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8bb7457985..01cb34057b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -433,7 +433,6 @@ N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
- N:	Carlos Santos <unixmania@gmail.com>
--F:	package/aer-inject/
- F:	package/busybox/
- F:	package/gtest/
- F:	package/initscripts/
+Ok - Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
