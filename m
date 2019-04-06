@@ -1,41 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Apr 2019 09:14:50 +0200
-Subject: [Buildroot] [PATCH v2] package/make: include patch for gl_lstat
- support
-In-Reply-To: <4fc8912ff2e937c24c86d5fa4a132c9389bc62c9.camel@mendozajonas.com>
- (Samuel Mendoza-Jonas's message of "Sat, 06 Apr 2019 15:34:31 +1100")
-References: <20190404225457.5075-1-sam@mendozajonas.com>
- <87ftqwp80d.fsf@dell.be.48ers.dk>
- <4fc8912ff2e937c24c86d5fa4a132c9389bc62c9.camel@mendozajonas.com>
-Message-ID: <87zhp3mwph.fsf@dell.be.48ers.dk>
+Date: Sat, 6 Apr 2019 09:14:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/make: include
+ patch for gl_lstat support
+Message-ID: <20190406071056.B37D6881B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7271600bd3dbb52a42b5d300aea3aa4acc2c6461
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > On Fri, 2019-04-05 at 21:27 +0200, Peter Korsgaard wrote:
- >> > > > > > "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com>
- >> > > > > > writes:
- >> 
- >> > Include upstream commit 193f1e8 "glob: Do not assume glibc glob
- >> > internals". Without this if building glibc with host-make it will
- >> fail
- >> > with a segfault in make:
- >> 
- >> >>>> glibc glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1
- >> Building
- >> 
- >> Committed, thanks.
- >> 
- >> Given the glibc version, I take it tht 2019.02.x is also affected?
- >> 
+Include upstream commit 193f1e8 "glob: Do not assume glibc glob
+internals". Without this if building glibc with host-make it will fail
+with a segfault in make:
 
- > Yes it is, I forgot to add that note in v2.
+>>> glibc glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 Building
+PATH="/scratch/builds/host-make/host/bin:/scratch/builds/host-make/host/sbin:/home/sam/bin:/home/sam/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"  /scratch/builds/host-make/host/bin/host-make -j25  -C /scratch/builds/host-make/build/glibc-glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1/build
+/scratch/builds/host-make/host/bin/host-make -r PARALLELMFLAGS="" -C /scratch/builds/host-make/build/glibc-glibc-2.28-69-g1e5c5303a522764d7e9d2302a60e4a32cdb902f1 objdir=`pwd` all
+Segmentation fault (core dumped)
 
-Ok - Committed to 2019.02.x, thanks.
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a07f69c81750f1196d6029dcd26521d9a9ab5306)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...1-glob-Do-not-assume-glibc-glob-internals.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch b/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch
+new file mode 100644
+index 0000000000..33ded3c501
+--- /dev/null
++++ b/package/make/0001-glob-Do-not-assume-glibc-glob-internals.patch
+@@ -0,0 +1,70 @@
++From 193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4 Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Sun, 24 Sep 2017 09:12:58 -0400
++Subject: [PATCH] glob: Do not assume glibc glob internals.
++
++It has been proposed that glibc glob start using gl_lstat,
++which the API allows it to do.  GNU 'make' should not get in
++the way of this.  See:
++https://sourceware.org/ml/libc-alpha/2017-09/msg00409.html
++
++* dir.c (local_lstat): New function, like local_stat.
++(dir_setup_glob): Use it to initialize gl_lstat too, as the API
++requires.
++
++Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
++(from upstream commit 193f1e81edd6b1b56b0eb0ff8aa4b41c7b4257b4)
++---
++ dir.c | 29 +++++++++++++++++++++++++++--
++ 1 file changed, 27 insertions(+), 2 deletions(-)
++
++diff --git a/dir.c b/dir.c
++index adbb8a9..c343e4c 100644
++--- a/dir.c
+++++ b/dir.c
++@@ -1299,15 +1299,40 @@ local_stat (const char *path, struct stat *buf)
++ }
++ #endif
++ 
+++/* Similarly for lstat.  */
+++#if !defined(lstat) && !defined(WINDOWS32) || defined(VMS)
+++# ifndef VMS
+++#  ifndef HAVE_SYS_STAT_H
+++int lstat (const char *path, struct stat *sbuf);
+++#  endif
+++# else
+++    /* We are done with the fake lstat.  Go back to the real lstat */
+++#   ifdef lstat
+++#     undef lstat
+++#   endif
+++# endif
+++# define local_lstat lstat
+++#elif defined(WINDOWS32)
+++/* Windows doesn't support lstat().  */
+++# define local_lstat local_stat
+++#else
+++static int
+++local_lstat (const char *path, struct stat *buf)
+++{
+++  int e;
+++  EINTRLOOP (e, lstat (path, buf));
+++  return e;
+++}
+++#endif
+++
++ void
++ dir_setup_glob (glob_t *gl)
++ {
++   gl->gl_opendir = open_dirstream;
++   gl->gl_readdir = read_dirstream;
++   gl->gl_closedir = free;
+++  gl->gl_lstat = local_lstat;
++   gl->gl_stat = local_stat;
++-  /* We don't bother setting gl_lstat, since glob never calls it.
++-     The slot is only there for compatibility with 4.4 BSD.  */
++ }
++ 
++ void
++-- 
++2.21.0
++
