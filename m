@@ -1,72 +1,29 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun, 7 Apr 2019 00:24:14 +0300
-Subject: [Buildroot] [PATCH 1/1] infra/Makefile.in: Fix format_arg
- issues after bump gettext-tiny to c6dcdcd
-In-Reply-To: <20190406210516.GF2659@scaer>
-References: <20190404224700.1346-1-vadim4j@gmail.com>
- <20190404230503.ohxfkac6extrghuv@vkochan-ThinkPad-T470p>
- <20190406205356.GE2659@scaer> <20190406210516.GF2659@scaer>
-Message-ID: <20190406212414.35qlmmpgklgt4ohy@vkochan-ThinkPad-T470p>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Apr 2019 00:16:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix hash
+Message-ID: <20190406221653.21833-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All
+Fixes:
+ - http://autobuild.buildroot.org/results/d4af0a277dc293ab0f9d7b4e1dd801fd6d00f2d7
 
-On Sat, Apr 06, 2019 at 11:05:16PM +0200, Yann E. MORIN wrote:
-> Vadim, All,
-> 
-> On 2019-04-06 22:53 +0200, Yann E. MORIN spake thusly:
-> > On 2019-04-05 02:05 +0300, Vadim Kochan spake thusly:
-> > > On Fri, Apr 05, 2019 at 01:47:00AM +0300, Vadim Kochan wrote:
-> > > > After bump gettext-tiny to c6dcdcd there was change which enabled
-> > > > gettext's macroses by default in:
-> > > > 
-> > > >     https://github.com/sabotage-linux/gettext-tiny/commit/58187329ad9f00eb8c39379e7ee0b608dd14bab8
-> > > > 
-> > > > it leads libglib2 to fail with format_arg issues. So fix it by disabling
-> > > > these macroses and use rather external functions which requires linking.
-> > > > 
-> > > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > > > ---
-> > > > I dont feel like this is a good solution actually. I need to clearly understand
-> > > > why just using gettext's macrosses does not work for libglib2. But anyway I am
-> > > > sending this patch to show the possible solution.
-> > [--SNIP--]
-> > > I think that may be package/Makefile.in is not good place for this but
-> > > better to add another patch which will disable these macrosses ?
-> > 
-> > Indeed, I don;t think this is th3e correct fix.
-> > 
-> > Instead, I suggest we use what upstream did apply very recently:
-> >     https://github.com/sabotage-linux/gettext-tiny/commit/73fc3e7ef7e016a3874b632fd0475969d288f309
-> 
-> Besides my usual typoes, I wsa mislead by the title of that patch. It
-> does not fix the actual issue we have.
-> 
-> Furthermore, we already have that patch in our tree anyway.
-> 
-> Forget what I said.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > Oh, wait, that name rings a bell... ;-)
-> > 
-> > Can you send a bump to gettext-tiny, now? ;-)
-> > 
-> > Regards,
-> > Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gerbera/gerbera.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, today the sabotage maintainers applied my modified version of the
-patch which is in buildroot tree, and yes this is a different issue.
-
-But I am not sure if the package/Makefile.in is the righ place to fix
-this new issue, may be better to add another patch into package/gettext-tiny
-to disable these macrosses with simple '#if 0', because Makefile.in
-should be more generic instead to keep package-specific fixes.
-
-Regards,
-Vadim Kochan
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index 5bbd8826b1..aa6a29f81e 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	89bbcebcf6beebb50b9453329b13e6a20e3e505dee5655486e90e1f085591f4a	gerbera-v1.3.1.tar.gz
++sha256	9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9	gerbera-v1.3.1.tar.gz
+ sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6	LICENSE.md
+-- 
+2.20.1
