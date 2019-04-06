@@ -1,85 +1,185 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Sat,  6 Apr 2019 15:20:59 +0200
-Subject: [Buildroot] [PATCH] package/go: fix building host go toolchain when
- target isn't supported
-Message-ID: <20190406132059.2601-1-anisse@astier.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Apr 2019 15:59:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sane-backends: security bump to
+ version 1.0.27
+Message-ID: <20190406135904.12623-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The go toolchain can cross-compile by default. So most of the time,
-building a toolchain that supports a target, allows us to also build go
-binaries for the host. This is how support for host go packages was
-added: we use the same toolchain that was initially built only for
-target.
+- Switch site to gitlab
+- Remove second patch (already in version)
+- Use new --{with,without}-usb option
+- Add hash for license file
+- Fix CVE-2017-6318
 
-But we might want to build a go binary for the host, when compiling a
-target for which go isn't supported. Then, building host-go will fail:
-by default, we build go for a specific target, and give the toolchain
-bootstrap scripts the cross compiler we'll use.
-
-This change modifies this behaviour: we only assume the go toolchain is
-cross-capable if we know the current target is supported. Otherwise this
-is a simple host go tool. For the host, only x86_64, i386 and arm are
-supported, to mimic the limitation of the go-bootstrap package.
-
-Fixes:
-http://autobuild.buildroot.net/results/98b9c7aaff2af4d19adfedac00b768d92530ce94
-http://autobuild.buildroot.net/results/bed228995ce3778720f991df9b41345a7c724a46
-http://autobuild.buildroot.net/results/3b3ea148165b96513ea511ee0d4adb334a6afac8
-
-Signed-off-by: Anisse Astier <anisse@astier.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/go/go.mk | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ ...002-Add-missing-sys-types.h-includes.patch | 106 ------------------
+ ...2-sane_backend-add-missing-config.h.patch} |   0
+ package/sane-backends/sane-backends.hash      |   7 +-
+ package/sane-backends/sane-backends.mk        |   9 +-
+ 4 files changed, 10 insertions(+), 112 deletions(-)
+ delete mode 100644 package/sane-backends/0002-Add-missing-sys-types.h-includes.patch
+ rename package/sane-backends/{0003-sane_backend-add-missing-config.h.patch => 0002-sane_backend-add-missing-config.h.patch} (100%)
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index c27f161f48..86f60b8514 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -62,6 +62,22 @@ else
- HOST_GO_CGO_ENABLED = 0
+diff --git a/package/sane-backends/0002-Add-missing-sys-types.h-includes.patch b/package/sane-backends/0002-Add-missing-sys-types.h-includes.patch
+deleted file mode 100644
+index 8ab41f1fef..0000000000
+--- a/package/sane-backends/0002-Add-missing-sys-types.h-includes.patch
++++ /dev/null
+@@ -1,106 +0,0 @@
+-From d33f16f463e888846d69ddfbeeb963d40972b654 Mon Sep 17 00:00:00 2001
+-From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+-Date: Thu, 15 Oct 2015 12:35:00 +0900
+-Subject: [PATCH] Add missing <sys/types.h> includes
+-
+-[Thomas: backport from upstream commit
+-33495ef9b42a783c8f5f2c056ac5699481d3cc7e, allows to fix the build with
+-the musl C library.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- backend/epsonds-io.c     | 3 +++
+- backend/hp5400.c         | 3 +++
+- backend/hp5590.c         | 3 +++
+- backend/kvs20xx_cmd.h    | 4 ++++
+- backend/kvs40xx.h        | 3 +++
+- include/sane/sanei_udp.h | 3 +++
+- 6 files changed, 19 insertions(+)
+-
+-diff --git a/backend/epsonds-io.c b/backend/epsonds-io.c
+-index 28bacfc..512997d 100644
+---- a/backend/epsonds-io.c
+-+++ b/backend/epsonds-io.c
+-@@ -16,6 +16,9 @@
+- #include "sane/config.h"
+- #include <ctype.h>
+- #include <unistd.h>     /* sleep */
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+- 
+- #include "epsonds.h"
+- #include "epsonds-io.h"
+-diff --git a/backend/hp5400.c b/backend/hp5400.c
+-index 61de3db..cfa2dc9 100644
+---- a/backend/hp5400.c
+-+++ b/backend/hp5400.c
+-@@ -67,6 +67,9 @@
+- #include <stdlib.h>		/* malloc, free */
+- #include <string.h>		/* memcpy */
+- #include <stdio.h>
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+- 
+- 
+- #define HP5400_CONFIG_FILE "hp5400.conf"
+-diff --git a/backend/hp5590.c b/backend/hp5590.c
+-index 7b1cd60..5422372 100644
+---- a/backend/hp5590.c
+-+++ b/backend/hp5590.c
+-@@ -48,6 +48,9 @@
+- #include <stdio.h>
+- #include <string.h>
+- #include <unistd.h>
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+- 
+- #include "../include/sane/sane.h"
+- #define BACKEND_NAME hp5590
+-diff --git a/backend/kvs20xx_cmd.h b/backend/kvs20xx_cmd.h
+-index c18b754..4acaf62 100644
+---- a/backend/kvs20xx_cmd.h
+-+++ b/backend/kvs20xx_cmd.h
+-@@ -9,6 +9,10 @@
+-    Panasonic KV-S20xx USB-SCSI scanners.
+- */
+- 
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+-+
+- #define COMMAND_BLOCK	1
+- #define DATA_BLOCK	2
+- #define RESPONSE_BLOCK	3
+-diff --git a/backend/kvs40xx.h b/backend/kvs40xx.h
+-index fa17163..02e0da6 100644
+---- a/backend/kvs40xx.h
+-+++ b/backend/kvs40xx.h
+-@@ -10,6 +10,9 @@
+- 
+- #include "../include/sane/config.h"
+- #include <semaphore.h>
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+- 
+- #undef  BACKEND_NAME
+- #define BACKEND_NAME kvs40xx
+-diff --git a/include/sane/sanei_udp.h b/include/sane/sanei_udp.h
+-index c44afdd..e32fc1a 100644
+---- a/include/sane/sanei_udp.h
+-+++ b/include/sane/sanei_udp.h
+-@@ -27,6 +27,9 @@
+- #include <netinet/in.h>
+- #include <netdb.h>
+- #endif
+-+#ifdef HAVE_SYS_TYPES_H
+-+#include <sys/types.h>
+-+#endif
+- 
+- extern SANE_Status sanei_udp_open(const char *host, int port, int *fdp);
+- extern SANE_Status sanei_udp_open_broadcast(int *fdp);
+--- 
+-2.7.4
+-
+diff --git a/package/sane-backends/0003-sane_backend-add-missing-config.h.patch b/package/sane-backends/0002-sane_backend-add-missing-config.h.patch
+similarity index 100%
+rename from package/sane-backends/0003-sane_backend-add-missing-config.h.patch
+rename to package/sane-backends/0002-sane_backend-add-missing-config.h.patch
+diff --git a/package/sane-backends/sane-backends.hash b/package/sane-backends/sane-backends.hash
+index a7693e2527..ddf82500bb 100644
+--- a/package/sane-backends/sane-backends.hash
++++ b/package/sane-backends/sane-backends.hash
+@@ -1,2 +1,5 @@
+-# From http://www.sane-project.org/sane-md5sums.txt
+-md5 f9ed5405b3c12f07c6ca51ee60225fe7  sane-backends-1.0.25.tar.gz
++# From https://gitlab.com/sane-project/backends/tags/RELEASE_1_0_27
++sha256 293747bf37275c424ebb2c833f8588601a60b2f9653945d5a3194875355e36c9  sane-backends-1.0.27.tar.gz
++
++#?Hash for license file
++sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index ed3b912479..092123e194 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-SANE_BACKENDS_VERSION = 1.0.25
+-SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/4146
++SANE_BACKENDS_VERSION = 1.0.27
++SANE_BACKENDS_SITE = \
++	https://gitlab.com/sane-project/backends/uploads/a3ba9fff29253a94e84074917bff581a
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
+ SANE_BACKENDS_LICENSE = GPL-2.0+
+ SANE_BACKENDS_LICENSE_FILES = COPYING
+@@ -23,9 +24,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
+-SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
++SANE_BACKENDS_CONF_OPTS += --with-usb
+ else
+-SANE_BACKENDS_CONF_OPTS += --disable-libusb
++SANE_BACKENDS_CONF_OPTS += --without-usb
  endif
  
-+HOST_GO_CROSS_ENV = \
-+	CC_FOR_TARGET="$(TARGET_CC)" \
-+	CXX_FOR_TARGET="$(TARGET_CXX)" \
-+	GO_ASSUME_CROSSCOMPILING=1
-+
-+ifneq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
-+HOST_GO_CROSS_ENV =
-+GO_GOARM =
-+ifeq ($(HOSTARCH),x86_64)
-+GO_GOARCH = amd64
-+else ifeq ($(HOSTARCH),i386)
-+GO_GOARCH = 386
-+else ifeq ($(HOSTARCH),arm)
-+GO_GOARCH = arm
-+endif
-+endif
- # The go build system is not compatible with ccache, so use
- # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
- HOST_GO_MAKE_ENV = \
-@@ -75,16 +91,12 @@ HOST_GO_MAKE_ENV = \
- 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
- 	GOOS=linux \
- 	CC=$(HOSTCC_NOCCACHE) \
--	CXX=$(HOSTCXX_NOCCACHE) \
--	GO_ASSUME_CROSSCOMPILING=1
-+	CXX=$(HOSTCXX_NOCCACHE)
- 
--HOST_GO_TARGET_CC = \
--	CC_FOR_TARGET="$(TARGET_CC)" \
--	CXX_FOR_TARGET="$(TARGET_CXX)"
- 
- define HOST_GO_BUILD_CMDS
- 	cd $(@D)/src && \
--		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
-+		$(HOST_GO_MAKE_ENV) $(HOST_GO_CROSS_ENV) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
- 		./make.bash $(if $(VERBOSE),-v)
- endef
- 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
 -- 
 2.20.1
