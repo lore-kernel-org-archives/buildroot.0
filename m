@@ -1,24 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Apr 2019 19:13:56 +0200
-Subject: [Buildroot] [PATCH] package/wget: security bump to version
- 1.20.3
-In-Reply-To: <20190406074212.30802-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 6 Apr 2019 09:42:12 +0200")
-References: <20190406074212.30802-1-peter@korsgaard.com>
-Message-ID: <87r2afm4yz.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Apr 2019 19:14:02 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/sysklogd: bump to version 1.6
+In-Reply-To: <20190405201637.24831-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Apr 2019 22:16:37 +0200")
+References: <20190405201637.24831-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mul3m4yt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes CVE-2019-5953: Buffer overflow vulnerability
- > For more details, see the announcement:
- > https://lists.gnu.org/archive/html/bug-wget/2019-04/msg00015.html
+ > - Switch site to github
+ > - Drop all patches (already in version or not needed anymore)
+ > - Switch to autotools infrastructure
+ > - Add hash for license file
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - Fix title (7/7 -> 1/1)
 
 Committed, thanks.
 
