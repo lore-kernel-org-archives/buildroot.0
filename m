@@ -1,35 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 10:38:24 +0200
-Subject: [Buildroot] [git commit] package/wsapi: update coxpcall dependency
-Message-ID: <20190407084214.5378683F9C@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 10:45:24 +0200
+Subject: [Buildroot] [git commit] package/vdr-plugin-vnsiserver: bump to
+ version 1.8.0
+Message-ID: <20190407084214.6BED28B6D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b8a7f3ac2c32d6fde841795ac09b7b9f296219
+commit: https://git.buildroot.net/buildroot/commit/?id=7df6b2f06d8efbcee7c8416379f575246cff955a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-since version 1.7, coxpcall is only required with Lua 5.1
+Add hash for license file
 
-see, https://github.com/keplerproject/wsapi/pull/41
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wsapi/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash | 3 ++-
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
-index 60c029ddf6..72e2dcd8e0 100644
---- a/package/wsapi/Config.in
-+++ b/package/wsapi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_WSAPI
- 	bool "wsapi"
--	select BR2_PACKAGE_COXPCALL # runtime
-+	select BR2_PACKAGE_COXPCALL if BR2_PACKAGE_LUA_5_1 # runtime
- 	select BR2_PACKAGE_LUAFILESYSTEM # runtime
- 	select BR2_PACKAGE_RINGS # runtime
- 	help
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
+index 97cb4b42aa..595b1dc8cb 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 f8170b4d6f983e7b5b5110e0432ff46355998e170f66459588170cc320717f7f  vdr-plugin-vnsiserver-v1.5.2.tar.gz
++sha256 d5989461541a91fe4de4ca9c396d4e7b2f4a8663fc9d6155d0830d2b143fce4d  vdr-plugin-vnsiserver-v1.8.0.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+index f41ad701d3..20644d3f6b 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VDR_PLUGIN_VNSISERVER_VERSION = v1.5.2
++VDR_PLUGIN_VNSISERVER_VERSION = v1.8.0
+ VDR_PLUGIN_VNSISERVER_SITE = $(call github,FernetMenta,vdr-plugin-vnsiserver,$(VDR_PLUGIN_VNSISERVER_VERSION))
+ VDR_PLUGIN_VNSISERVER_LICENSE = GPL-2.0+
+ VDR_PLUGIN_VNSISERVER_LICENSE_FILES = COPYING
