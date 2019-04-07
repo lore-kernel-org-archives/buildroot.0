@@ -1,48 +1,66 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Sun, 7 Apr 2019 23:49:41 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
- CGO_ENABLED setting
-In-Reply-To: <20180727024720.13370-1-camh@xdna.net>
-References: <20180727024720.13370-1-camh@xdna.net>
-Message-ID: <20190407214941.GA3117@jaya>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 7 Apr 2019 23:55:38 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: fix static build
+ failure due to missing -latomic
+In-Reply-To: <699842f1-d9e3-dd02-4770-e8a10499194b@micronovasrl.com>
+References: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+ <20190404224539.2d79cf30@windsurf>
+ <699842f1-d9e3-dd02-4770-e8a10499194b@micronovasrl.com>
+Message-ID: <e6f8db91-43e0-fc56-d071-1804616b2d61@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cam,
+Hello Thomas,
 
-Sorry for the delay,
-
-(+Angelo in cc)
-
-On Fri, Jul 27, 2018 at 12:47:20PM +1000, Cam Hutchison wrote:
-> Allow the CGO_ENABLED variable to be controlled per package and per
-> build target, instead of having the value determined by whether or not
-> the toolchain has threads.
+Il 05/04/2019 00:32, Giulio Benetti ha scritto:
+> Hello
 > 
-> Some build targets may not build with CGO_ENABLED=1, so allowing a per
-> package and build target override will allow those targets to be built
-> with Buildroot.
+> Il 04/04/2019 22:45, Thomas Petazzoni ha scritto:
+>> Hello Giulio,
+>>
+>> On Thu,  4 Apr 2019 17:39:04 +0200
+>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>
+>>> +# Uses __atomic_fetch_add_4. In adbd.mk Makefile there is no hunk to the end of
+>>> +# linking command. So need to add -latomic to LIBS using sed to provide
+>>> +# -latomic at the correct place in the linking command.
+>>> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>>> +define ANDROID_TOOLS_FIX_MAKEFILE
+>>> +	$(SED) 's/-lz -lcrypt/-lz -lcrypt -latomic/' $(@D)/debian/makefiles/adbd.mk
+>>> +endef
+>>> +ANDROID_TOOLS_POST_PATCH_HOOKS = ANDROID_TOOLS_FIX_MAKEFILE
+>>> +endif
+>>
+>> Instead of this, please do regular patch on adbd.mk that does this:
+>>
+>> -LIBS+= -lc -lpthread -lz -lcrypto -lcrypt `pkg-config --libs glib-2.0 gio-2.0`
 
-Just like Thomas, I'm wondering what specific use-case you have in mind;
-in particular, I'm interested why you needed build-target granularity in
-addition to package-level configuration.
+In current version there is not glib-2.0 or gio-2.0, do I add them 
+anyway as follows?
 
-To provide context: 
+>> +LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto` -lcrypt `pkg-config --libs glib-2.0 gio-2.0`
+>>
+>> and that's it.
+>>
+>> Also, adding host-pkgconf to ANDROID_TOOLS_DEPENDENCIES when adbd is
+>> selected would be necessary (but it should already be needed anyway, as
+>> pkg-config is already used to detect glib).
 
-Disabling CGO isn't an issue, until you try doing DNS requests, which
-are usually handled by your libc. If you have anything configured out of
-the ordinary /etc/resolv.conf, a cgo-disabled binary won't be able to do
-a DNS request. Same goes for user/group and user home dir resolution:
-anything outside of /etc/{passwd,group} (pam, NSS, etc.), won't work.
+Sure, I've checked it's needed otherwise my distro's pkgconfig will be 
+used(checked it to understand how it works).
 
-Disabling CGO allows you to have static binaries; if you don't use any
-native libraries.
+Thanks
+-- 
+Giulio Benetti
+CTO
 
-I don't know in which context it might be useful in buildroot.
-
-Regards,
-
-Anisse
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
