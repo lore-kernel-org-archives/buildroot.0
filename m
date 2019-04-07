@@ -1,43 +1,58 @@
 From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Sun,  7 Apr 2019 16:26:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to 8.0.0
-Message-ID: <20190407142611.19372-1-valentinkorenblit@gmail.com>
+Date: Sun,  7 Apr 2019 16:26:11 +0200
+Subject: [Buildroot] [PATCH 2/2] package/clang: bump to 8.0.0
+In-Reply-To: <20190407142611.19372-1-valentinkorenblit@gmail.com>
+References: <20190407142611.19372-1-valentinkorenblit@gmail.com>
+Message-ID: <20190407142611.19372-2-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Clang no longer needs llvm-config. It now looks for LLVMConfig.cmake,
+which is specified by LLVM_DIR option.
+
 Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
-llvmpipe tested on Raspberry Pi 3
+ package/clang/clang.hash | 4 ++--
+ package/clang/clang.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- package/llvm/llvm.hash | 4 ++--
- package/llvm/llvm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-index 531361ae10..4c5cea17ff 100644
---- a/package/llvm/llvm.hash
-+++ b/package/llvm/llvm.hash
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
+index fe868f5874..405e22ce22 100644
+--- a/package/clang/clang.hash
++++ b/package/clang/clang.hash
 @@ -1,3 +1,3 @@
  # locally calculated
--sha256 a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b llvm-7.0.1.src.tar.xz
--sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
-+sha256 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c llvm-8.0.0.src.tar.xz
-+sha256 24b67da19b1422a819395738cb83ea34eee3fdce52870b0d1758524ba1615069 LICENSE.TXT
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 952f678eee..cd374d74b4 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
+-sha256 a45b62dde5d7d5fdcdfa876b0af92f164d434b06e9e89b5d0b1cbc65dfe3f418 cfe-7.0.1.src.tar.xz
+-sha256 3f3f2e96e3b7319d2b4b49227d6da624a717340107ce2ca5342a25e0e57dfd35 LICENSE.TXT
++sha256 084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b cfe-8.0.0.src.tar.xz
++sha256 bdc41b826a9a50c7a31c1b613ca5d46415be68d5cc6da06f91f5bc1db8ad87aa LICENSE.TXT
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index c15f2b0d2a..6dda8ac2c3 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LLVM_VERSION = 7.0.1
-+LLVM_VERSION = 8.0.0
- LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
- LLVM_LICENSE = NCSA
+-CLANG_VERSION = 7.0.1
++CLANG_VERSION = 8.0.0
+ CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
+ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+ CLANG_LICENSE = NCSA
+@@ -49,9 +49,9 @@ CLANG_CONF_OPTS += \
+ 	-DCLANG_INCLUDE_DOCS=OFF \
+ 	-DCLANG_INCLUDE_TESTS=OFF
+ 
+-HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config \
++HOST_CLANG_CONF_OPTS += -DLLVM_DIR=$(HOST_DIR)/lib/cmake/llvm \
+ 	-DCLANG_DEFAULT_LINKER=$(TARGET_LD)
+-CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(STAGING_DIR)/usr/bin/llvm-config \
++CLANG_CONF_OPTS += -DLLVM_DIR=$(STAGING_DIR)/usr/lib/cmake/llvm \
+ 	-DCLANG_TABLEGEN:FILEPATH=$(HOST_DIR)/bin/clang-tblgen \
+ 	-DLLVM_TABLEGEN_EXE:FILEPATH=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
 2.11.0
