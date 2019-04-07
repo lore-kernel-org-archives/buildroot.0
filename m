@@ -1,40 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Apr 2019 21:54:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/glm: bump version to 0.9.9.5
-Message-ID: <20190407195455.13793-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Apr 2019 21:58:28 +0200
+Subject: [Buildroot] [PATCH 1/6] package/lldpd: update license file
+Message-ID: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/glm/glm.hash | 2 +-
- package/glm/glm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- Instead of README.md, use LICENSE file that has been added in version
+  0.9.5 with
+  https://github.com/vincentbernat/lldpd/commit/4d534a60ee33aa2431acb6bfe6d499d2e72d66d5
+- Add hash of license file
 
-diff --git a/package/glm/glm.hash b/package/glm/glm.hash
-index 9d5c94301d..2073d6bf04 100644
---- a/package/glm/glm.hash
-+++ b/package/glm/glm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3a073eb8f3be07cee74481db0e1f78eda553b554941e405c863ab64de6a2e954  glm-0.9.9.4.tar.gz
-+sha256 5e33b6131cea6a904339734b015110d4342b7dc02d995164fdb86332d28a5aa4  glm-0.9.9.5.tar.gz
- sha256 337130631a714eeae017556cad101d5324c2961214120b6214741d3d43667086  manual.md
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-index e15d4fea49..3ef106a943 100644
---- a/package/glm/glm.mk
-+++ b/package/glm/glm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lldpd/lldpd.hash | 1 +
+ package/lldpd/lldpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
+index 1785197737..1c0e380996 100644
+--- a/package/lldpd/lldpd.hash
++++ b/package/lldpd/lldpd.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 450b622aac7ae1758f1ef82f3b7b94ec47f2ff33abfb0e6ac82555b9ee55f151  lldpd-1.0.1.tar.gz
++sha256 0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 6a520448da..8d554ae5e2 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -8,7 +8,7 @@ LLDPD_VERSION = 1.0.1
+ LLDPD_SITE = http://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = host-pkgconf libevent
+ LLDPD_LICENSE = ISC
+-LLDPD_LICENSE_FILES = README.md
++LLDPD_LICENSE_FILES = LICENSE
+ # 0002-configure-do-not-check-for-libbsd.patch / 0003-configure-remove-check-on-CXX-compiler.patch
+ LLDPD_AUTORECONF = YES
  
--GLM_VERSION = 0.9.9.4
-+GLM_VERSION = 0.9.9.5
- GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
- GLM_LICENSE = MIT
- GLM_LICENSE_FILES = manual.md
 -- 
 2.20.1
