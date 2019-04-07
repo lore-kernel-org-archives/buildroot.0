@@ -1,102 +1,124 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Apr 2019 10:30:26 +0200
-Subject: [Buildroot] [PATCH] Revert "package/gettext-tiny: bump version
- to add --template option"
-In-Reply-To: <CADvTj4ofweg9YnvMz6bzd_QMsgOVv14EKL1ARCP6LKPCYdVXDA@mail.gmail.com>
-References: <20190407073708.11205-1-yann.morin.1998@free.fr>
- <CADvTj4ofweg9YnvMz6bzd_QMsgOVv14EKL1ARCP6LKPCYdVXDA@mail.gmail.com>
-Message-ID: <20190407083026.GI2659@scaer>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sun,  7 Apr 2019 11:46:24 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Do not install headers
+Message-ID: <20190407084624.25271-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Since:
 
-On 2019-04-07 10:23 +0200, James Hilliard spake thusly:
-> On Sun, Apr 7, 2019 at 9:37 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > This reverts commit 758ea0e518492c703482a323653c3d20520b599b.
-> >
-> > 758ea0e bumped gettext-tiny to the latest (at the time) head of the
-> > upstream git tree. In so doing, it included an upstream change of
-> > behaviour that eventually broke the build of packages that use
-> > -Werror=format-string.
-> I'm assuming the glib2 build error was caused by this change.
+    https://github.com/sabotage-linux/gettext-tiny/commit/58187329ad9f00eb8c39379e7ee0b608dd14bab8
 
-Yes, see the build failure I pointed to below...
+gettext macrosesss are used by default (if no LIBINTL_NO_MACROS is
+included in CPPFLAGS). It causes such packages like libglib2 fail
+with argument format error because in case of error the formatted
+string is passed as argument.
 
-> I have a potential fix for that here:
-> https://gitlab.gnome.org/GNOME/glib/merge_requests/770/diffs
+Fix it by prevent installation of libintl.h header from gettext-tiny
+by passing LIBINTL=NONE, because each kind of toolchain already provides
+gettext stubs. Also with this change the following patch is not needed:
 
-I've ahd a quick look, but since I don;t know the glib2 code, I have no
-idea if that is the correct solution.
+	0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
 
-However, you're probably going to have to provide more explanations
-about your change to upstream, because libglib2 does build with the
-non-tiny  implementations (either from glibc or from GNU gettext).
+Fixes:
+	http://autobuild.buildroot.net/results/89fcc4e80ea8c031c1abb350362c19c57eb80e7c/
+	http://autobuild.buildroot.net/results/84f3eb70fc1c58986dfa7c79d45aaabdf4c011cf/
 
-Regards,
-Yann E. MORIN.
+and a lot other autobuild reports.
 
-> >
-> > Even though in Buildroot we usually try to avoid building with -Werror,
-> > it is sometimes hard to go against such flags, especially when the
-> > package uses an expicit, long list of such -Werror=foo flags.
-> >
-> > Revert the bump.
-> >
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/dec/decbbcad11fbf312f6e5fbe0bf32143bedb6610b/
-> >     [and many more...]
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> > Cc: Vadim Kochan <vadim4j@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Peter Korsgaard <peter@korsgaard.com>
-> > ---
-> >  package/gettext-tiny/gettext-tiny.hash | 2 +-
-> >  package/gettext-tiny/gettext-tiny.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
-> > index 7d13054144..672e964186 100644
-> > --- a/package/gettext-tiny/gettext-tiny.hash
-> > +++ b/package/gettext-tiny/gettext-tiny.hash
-> > @@ -1,5 +1,5 @@
-> >  # Locally Computed:
-> > -sha256 00b03b08d909021aa5580fb45b6cf0ec45e9084ef94c26f034f03a64a69942bc  gettext-tiny-c6dcdcdef801127549d3906d153c061880d25a73.tar.gz
-> > +sha256 654dcd52f2650476c8822b60bee89c20a0aa7f6a1bf6001701eeacd71a9e388b  gettext-tiny-v0.3.1.tar.gz
-> >  sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
-> >  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
-> >  # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
-> > diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-> > index e3a6d11399..881edc6f35 100644
-> > --- a/package/gettext-tiny/gettext-tiny.mk
-> > +++ b/package/gettext-tiny/gettext-tiny.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -GETTEXT_TINY_VERSION = c6dcdcdef801127549d3906d153c061880d25a73
-> > +GETTEXT_TINY_VERSION = v0.3.1
-> >  GETTEXT_TINY_SITE = $(call github,sabotage-linux,gettext-tiny,$(GETTEXT_TINY_VERSION))
-> >  GETTEXT_TINY_LICENSE = MIT, GPL-3.0+ (extra gettext)
-> >  GETTEXT_TINY_INSTALL_STAGING = YES
-> > --
-> > 2.14.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ ...-format-not-a-string-literal-error-for-gc.patch | 55 ----------------------
+ package/gettext-tiny/gettext-tiny.mk               |  5 +-
+ 2 files changed, 3 insertions(+), 57 deletions(-)
+ delete mode 100644 package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
 
+diff --git a/package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch b/package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
+deleted file mode 100644
+index 44cda55998..0000000000
+--- a/package/gettext-tiny/0001-libintl-Fix-format-not-a-string-literal-error-for-gc.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 34f631ce80700aa1eaadc032026f12f86584bd8a Mon Sep 17 00:00:00 2001
+-From: Vadim Kochan <vadim4j@gmail.com>
+-Date: Mon, 31 Dec 2018 00:40:29 +0200
+-Subject: [PATCH] gettext-tiny: Fix format not a string literal error
+-
+-Add 'format_arg' attribute for the functions which may return string
+-as formatted parameter, otherwise it fails to compile on high versions
+-of gcc.
+-
+-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+----
+- include/libintl.h | 27 +++++++++++++++++++++------
+- 1 file changed, 21 insertions(+), 6 deletions(-)
+-
+-diff --git a/include/libintl.h b/include/libintl.h
+-index b1af2b4..1883e1b 100644
+---- a/include/libintl.h
+-+++ b/include/libintl.h
+-@@ -4,12 +4,27 @@
+- #ifdef __cplusplus
+- extern "C" {
+- #endif
+--char *gettext(const char *msgid);
+--char *dgettext(const char *domainname, const char *msgid);
+--char *dcgettext(const char *domainname, const char *msgid, int category);
+--char *ngettext(const char *msgid1, const char *msgid2, unsigned long n);
+--char *dngettext(const char *domainname, const char *msgid1, const char *msgid2, unsigned long n);
+--char *dcngettext(const char *domainname, const char *msgid1, const char *msgid2, unsigned long n, int category);
+-+/* _INTL_MAY_RETURN_STRING_ARG(n) declares that the given function may return
+-+ *    its n-th argument literally.  This enables GCC to warn for example about
+-+ *       printf (gettext ("foo %y")).  */
+-+#if defined __GNUC__ && __GNUC__ >= 3 && !(defined __APPLE_CC__ && __APPLE_CC__ > 1 && defined __cplusplus)
+-+# define _INTL_MAY_RETURN_STRING_ARG(n) __attribute__ ((__format_arg__ (n)))
+-+#else
+-+# define _INTL_MAY_RETURN_STRING_ARG(n)
+-+#endif
+-+
+-+char *gettext(const char *msgid)
+-+	_INTL_MAY_RETURN_STRING_ARG(1);
+-+char *dgettext(const char *domainname, const char *msgid)
+-+	_INTL_MAY_RETURN_STRING_ARG(2);
+-+char *dcgettext(const char *domainname, const char *msgid, int category)
+-+	_INTL_MAY_RETURN_STRING_ARG(2);
+-+char *ngettext(const char *msgid1, const char *msgid2, unsigned long n)
+-+	_INTL_MAY_RETURN_STRING_ARG(1) _INTL_MAY_RETURN_STRING_ARG(2);
+-+char *dngettext(const char *domainname, const char *msgid1, const char *msgid2, unsigned long n)
+-+	_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
+-+char *dcngettext(const char *domainname, const char *msgid1, const char *msgid2, unsigned long n, int category)
+-+	_INTL_MAY_RETURN_STRING_ARG(2) _INTL_MAY_RETURN_STRING_ARG(3);
+- 
+- char *textdomain(const char *domainname);
+- char *bind_textdomain_codeset(const char *domainname, const char *codeset);
+--- 
+-2.14.1
+-
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index e3a6d11399..4fa014e8dd 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -57,7 +57,7 @@ define HOST_GETTEXT_TINY_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS) -fPIC" \
+-		LIBINTL=NOOP
++		LIBINTL=NONE
+ 
+ 	cp $(@D)/extra/gettextize.in $(@D)/gettextize
+ 
+@@ -79,7 +79,8 @@ define HOST_GETTEXT_TINY_INSTALL_CMDS
+ 
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		prefix=$(HOST_DIR) install
++		prefix=$(HOST_DIR) \
++		LIBINTL=NONE install
+ 
+ 	$(SED) '/read dummy/d' $(@D)/gettextize
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
