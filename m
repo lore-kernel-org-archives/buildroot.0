@@ -1,21 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Apr 2019 15:12:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
- v0.12.1
-In-Reply-To: <20190407085142.79181-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sun, 7 Apr 2019 02:51:42 -0600")
-References: <20190407085142.79181-1-james.hilliard1@gmail.com>
-Message-ID: <8736muj6w7.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Apr 2019 15:13:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpc: bump to version 1.1.0
+In-Reply-To: <20190407100655.21077-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Apr 2019 12:06:55 +0200")
+References: <20190407100655.21077-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y34mhsbe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This should fix a kernel 5.x.x compatibility issue.
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > - Add hash for license file
+ > - Fix build with mpfr 4.0.2
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/56c0e9e7e42320cdb7f8825889ff560b80ac10d4
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
