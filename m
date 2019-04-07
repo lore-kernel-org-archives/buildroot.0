@@ -1,109 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 15:14:06 +0200
-Subject: [Buildroot] [git commit] package/numactl: remove unneeded patches
-Message-ID: <20190407131021.EFFA3810CA@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 15:14:07 +0200
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
+ 0.9.63
+Message-ID: <20190407131022.1034E810CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fda716432fb43c0d275c7194a33a20d106acdf9
+commit: https://git.buildroot.net/buildroot/commit/?id=67fa04ba6d7d380335e85f692cf07781c6152567
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both patches are already included (a bit earlier in the file) in version
-2.0.12, so drop the patches.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 35 -------------------
- ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 39 ----------------------
- 2 files changed, 74 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index ebb934f60f..0000000000
---- a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.]
-----
-- syscall.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 4589b85..37782d9 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,7 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
--+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
-diff --git a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index a98fd7247c..0000000000
---- a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 31dc2951c758698bff060aeae8ffd8854616183b Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b]
-----
-- syscall.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 37782d9..255853d 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,11 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
--+#ifndef __GLIBC_PREREQ
--+# define __GLIBC_PREREQ(x,y) 0
--+#endif
--+
--+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index d54d2bbc14..33160d90f2 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 cd0e5d3f95a9e55ef7cdf4d0530e997ba00b8411af9149d9287db785d729c471  libmicrohttpd-0.9.60.tar.gz
++sha256 37c36f1be177f0e37ef181a645cd3baac1000bd322a01c2eff70f3cc8c91749c  libmicrohttpd-0.9.63.tar.gz
+ sha256 70e12e2a60151b9ed1a4c94a5ffeb99cd086fa94542b5a92fec581506e8d3121  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index fd7c370855..5e138aaea9 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.60
++LIBMICROHTTPD_VERSION = 0.9.63
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
