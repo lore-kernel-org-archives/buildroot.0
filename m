@@ -1,70 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Apr 2019 13:51:16 +0200
-Subject: [Buildroot] [PATCH 01/10] infra/pkg-download: return just a list of
- URIs
+Date: Sun,  7 Apr 2019 13:51:18 +0200
+Subject: [Buildroot] [PATCH 03/10] infra/pkg-download: get rid of the FLOCK
+ variable
 In-Reply-To: <cover.1554637858.git.yann.morin.1998@free.fr>
 References: <cover.1554637858.git.yann.morin.1998@free.fr>
-Message-ID: <75ae0630f1759fb589a3a9ed20daa918c246e819.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <a788ed837b5b0d959ce67818571d2e71409bc3e6.1554637858.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the internal DOWNLOAD_URIS variable is set to be a list of
-options to pass to the download wrapper, with each URI passed as
-'-u URI'.
+The FLOCK variable is context-dependent, and expects the PKG
+variable to be set to the current package.
 
-This precludes using that variable to get just the list of URIs, in
-case we need to do something else with it.
+This is not so nice. Besides, it is used in a single location.
 
-Fix the variable to really only contain the list of URIs.
-
-Adapt the caller accordingly.
+Get rid of this intermediate variable, and directly use flock
+where we need it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/pkg-download.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/pkg-download.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7cd87c38ff..f9411213b6 100644
+index 611df5f982..b8adb0ca05 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -75,17 +75,17 @@ export BR_NO_CHECK_HASH_FOR =
+@@ -18,7 +18,6 @@ export SCP := $(call qstrip,$(BR2_SCP))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
- endif
+ DL_WRAPPER = support/download/dl-wrapper
+-FLOCK = flock $($(PKG)_DL_DIR)/
  
- ifeq ($(BR2_PRIMARY_SITE_ONLY),)
- DOWNLOAD_URIS += \
--	-u $(patsubst %/,%,$(dir $(call qstrip,$(1))))
-+	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
- endif
- endif
+ # DL_DIR may have been set already from the environment
+ ifeq ($(origin DL_DIR),undefined)
+@@ -97,7 +96,7 @@ endif
  
-@@ -101,7 +101,7 @@ define DOWNLOAD
- 		-N '$($(PKG)_RAWNAME)' \
- 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
- 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
--		$(DOWNLOAD_URIS) \
-+		$(patsubst %,-u %,$(DOWNLOAD_URIS)) \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_DL_OPTS)
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) flock $($(PKG)_DL_DIR)/ $(DL_WRAPPER) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
 -- 
 2.14.1
