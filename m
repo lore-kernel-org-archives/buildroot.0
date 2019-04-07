@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Apr 2019 08:07:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix hash
-In-Reply-To: <20190406221653.21833-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Apr 2019 00:16:53 +0200")
-References: <20190406221653.21833-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ef6emjq7.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Apr 2019 08:09:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mxml: bump to version 3.0
+In-Reply-To: <20190406211010.7676-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 6 Apr 2019 23:10:10 +0200")
+References: <20190406211010.7676-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7h2mjm8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d4af0a277dc293ab0f9d7b4e1dd801fd6d00f2d7
+ > - Remove patch (already in version)
+ > - Add hash for license files
+ > - Change license to "Apache-2.0 with exceptions", see:
+ >   https://github.com/michaelrsweet/mxml/commit/f166ad1977f2f13295689772a5d9e442f73d46f1
 
-Strange, what happened?
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
