@@ -1,105 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Apr 2019 10:55:41 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/syslinux: fix build with binutils
- note gnu property section
-In-Reply-To: <20190405064055.19030-1-christian@paral.in>
-References: <20190405064055.19030-1-christian@paral.in>
-Message-ID: <20190407085541.GK2659@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 7 Apr 2019 01:56:48 -0700
+Subject: [Buildroot] [PATCH 0/7] Bump docker packages to v18.09.4
+In-Reply-To: <875zrql1rk.fsf@dell.be.48ers.dk>
+References: <20190401182352.26342-1-peter@korsgaard.com>
+ <87mul8vgj8.fsf@paral.in> <875zrql1rk.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2oXCr-e0rhD0wfWnz13a06_sDvSMxy63eTebEKf6xmSRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Hi Peter,
 
-On 2019-04-04 23:40 -0700, Christian Stewart spake thusly:
-> This fixes the following build error with newer binutils:
-> 
->   objcopy -O binary mbr.elf mbr.bin
->   perl /build/syslinux/src/syslinux/mbr/checksize.pl mbr.bin
->   mbr.bin: too big (452 > 440)
-> 
-> Corresponding bug reports:
-> 
->  - https://bugs.archlinux.org/task/60405
->  - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
-> 
-> Strips the .note.gnu.property in the linker scripts for the MBRs.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
+On Sun, Apr 7, 2019, 12:20 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> ---
->  ...h-binutils-note-gnu-property-section.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
-> 
-> diff --git a/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch b/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
-> new file mode 100644
-> index 0000000000..fedd815691
-> --- /dev/null
-> +++ b/boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch
-> @@ -0,0 +1,47 @@
-> +From beb526ca925983c7da229043790ecd552d910650 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Thu, 4 Apr 2019 23:24:31 -0700
-> +Subject: [PATCH] Fix build with binutils note gnu property section
-> +
-> +This fixes the following build error with newer binutils:
-> +
-> +  objcopy -O binary mbr.elf mbr.bin
-> +  perl /build/syslinux/src/syslinux/mbr/checksize.pl mbr.bin
-> +  mbr.bin: too big (452 > 440)
-> +
-> +Corresponding bug reports:
-> +
-> + - https://bugs.archlinux.org/task/60405
-> + - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
-> +
-> +Strips the .note.gnu.property in the linker scripts for the MBRs.
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + mbr/i386/mbr.ld   | 1 +
-> + mbr/x86_64/mbr.ld | 1 +
-> + 2 files changed, 2 insertions(+)
-> +
-> +diff --git a/mbr/i386/mbr.ld b/mbr/i386/mbr.ld
-> +index d14ba802..53683461 100644
-> +--- a/mbr/i386/mbr.ld
-> ++++ b/mbr/i386/mbr.ld
-> +@@ -70,4 +70,5 @@ SECTIONS
-> +   .debug_typenames 0 : { *(.debug_typenames) }
-> +   .debug_varnames  0 : { *(.debug_varnames) }
-> +   /DISCARD/ : { *(.note.GNU-stack) }
-> ++  /DISCARD/ : { *(.note.gnu.property) }
-> + }
-> +diff --git a/mbr/x86_64/mbr.ld b/mbr/x86_64/mbr.ld
-> +index ae27d49a..b8c0d895 100644
-> +--- a/mbr/x86_64/mbr.ld
-> ++++ b/mbr/x86_64/mbr.ld
-> +@@ -69,4 +69,5 @@ SECTIONS
-> +   .debug_typenames 0 : { *(.debug_typenames) }
-> +   .debug_varnames  0 : { *(.debug_varnames) }
-> +   /DISCARD/ : { *(.note.GNU-stack) }
-> ++  /DISCARD/ : { *(.note.gnu.property) }
-> + }
-> +-- 
-> +2.21.0
-> +
-> -- 
-> 2.21.0
-> 
+> Any update on this? Thanks.
+>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I ran into some unrelated issues and was delayed a bit on this. I'm
+compiling the images now and will try to get the testing done within 24
+hours.
+
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190407/d1065b54/attachment.html>
