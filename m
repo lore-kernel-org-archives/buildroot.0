@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Apr 2019 10:45:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: disable asm on mips r6
-In-Reply-To: <20190407075816.8226-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Apr 2019 09:58:16 +0200")
-References: <20190407075816.8226-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wok6jj9z.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Apr 2019 10:45:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: bump to
+ version 1.8.0
+In-Reply-To: <20190407080048.9040-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Apr 2019 10:00:48 +0200")
+References: <20190407080048.9040-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sguujj9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +14,7 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f5125bde6d3604af3342a205a8445947aff95d5a
- >  - http://autobuild.buildroot.org/results/beb70bd6c1dd9abf7bc1b53299ba0094a36f4179
-
+ > Add hash for license file
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
