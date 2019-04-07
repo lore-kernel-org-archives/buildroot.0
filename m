@@ -1,43 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 15:14:07 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
- 0.9.63
-Message-ID: <20190407131022.1034E810CA@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 15:14:06 +0200
+Subject: [Buildroot] [git commit] package/mpc: bump to version 1.1.0
+Message-ID: <20190407131022.02A32810CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67fa04ba6d7d380335e85f692cf07781c6152567
+commit: https://git.buildroot.net/buildroot/commit/?id=b5909933127df4983f6bd79095cd90f681e8e276
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- Add hash for license file
+- Fix build with mpfr 4.0.2
+
+Fixes:
+ - http://autobuild.buildroot.org/results/56c0e9e7e42320cdb7f8825889ff560b80ac10d4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpc/mpc.hash | 5 +++--
+ package/mpc/mpc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index d54d2bbc14..33160d90f2 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 cd0e5d3f95a9e55ef7cdf4d0530e997ba00b8411af9149d9287db785d729c471  libmicrohttpd-0.9.60.tar.gz
-+sha256 37c36f1be177f0e37ef181a645cd3baac1000bd322a01c2eff70f3cc8c91749c  libmicrohttpd-0.9.63.tar.gz
- sha256 70e12e2a60151b9ed1a4c94a5ffeb99cd086fa94542b5a92fec581506e8d3121  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index fd7c370855..5e138aaea9 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+diff --git a/package/mpc/mpc.hash b/package/mpc/mpc.hash
+index 98f1447a0d..fa98f673d5 100644
+--- a/package/mpc/mpc.hash
++++ b/package/mpc/mpc.hash
+@@ -1,2 +1,3 @@
+-# From http://www.multiprecision.org/index.php?prog=mpc&page=download
+-sha1	b8be66396c726fdc36ebb0f692ed8a8cca3bcc66	mpc-1.0.3.tar.gz
++# Locally calculated
++sha256	6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e	mpc-1.1.0.tar.gz
++sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSER
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index 89bbfd9c51..0e84bc2770 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.60
-+LIBMICROHTTPD_VERSION = 0.9.63
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-MPC_VERSION = 1.0.3
++MPC_VERSION = 1.1.0
+ MPC_SITE = $(BR2_GNU_MIRROR)/mpc
+ MPC_LICENSE = LGPL-3.0+
+ MPC_LICENSE_FILES = COPYING.LESSER
