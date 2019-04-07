@@ -1,11 +1,11 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 8 Apr 2019 02:01:29 +0300
+Date: Mon, 8 Apr 2019 02:04:46 +0300
 Subject: [Buildroot] [git commit] package/gettext: turn into virtual
  package
-In-Reply-To: <88c125ee-6c2b-9f99-87cb-b4b1ba075ec3@gmail.com>
+In-Reply-To: <e1d4694d-420f-c479-7595-a1ccebed4f2e@gmail.com>
 References: <20190331121707.C1C2D86602@busybox.osuosl.org>
- <88c125ee-6c2b-9f99-87cb-b4b1ba075ec3@gmail.com>
-Message-ID: <CAMw6YJ+tN5QcX8EUgQua1wPdrRL2+Be2MV-4i1pF0j20N+O9cw@mail.gmail.com>
+ <e1d4694d-420f-c479-7595-a1ccebed4f2e@gmail.com>
+Message-ID: <CAMw6YJLmW_FvHER3pjgH=4pD+rJB9zs9Lx394-G7XA1e+KLK+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,9 @@ To: buildroot@busybox.net
 
 Hi Romain, All
 
-On Mon, Apr 8, 2019 at 12:43 AM Romain Naour <romain.naour@gmail.com> wrote:
+On Mon, Apr 8, 2019 at 12:33 AM Romain Naour <romain.naour@gmail.com> wrote:
 >
-> Hi, All
+> Hi All,
 >
 > Le 31/03/2019 ? 14:04, Thomas Petazzoni a ?crit :
 > > commit: https://git.buildroot.net/buildroot/commit/?id=ea1e7ee6068265d3f8ade97a387d77c77335b38e
@@ -30,31 +30,77 @@ On Mon, Apr 8, 2019 at 12:43 AM Romain Naour <romain.naour@gmail.com> wrote:
 > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > > ---
 >
-> > +ifeq ($(BR2_PACKAGE_GETTEXT_GNU),y)
-> >  GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
-> > +endif
+> [...]
 >
-> Why adding a if BR2_PACKAGE_GETTEXT_GNU here ?
-> We need to define GETTEXTIZE for gettextized packages (like host-flex).
+> >
+> > -config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+> > -     bool
+> > -     default y if BR2_SYSTEM_ENABLE_NLS
+> > -     depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
+> > +config BR2_PACKAGE_PROVIDES_GETTEXT
+> > +     default "gettext-gnu"
+> >
+> >  endif
+> >
 >
-> Currently the build is broken with:
+> [...]
 >
-> >>> host-flex 2.6.4 Gettextizing
-> cd [...]/build/host-flex-2.6.4/ &&
-> /bin/sh: -c: ligne 1: erreur de syntaxe : fin de fichier pr?matur?e
-> make[1]: *** [package/pkg-generic.mk:230:
-> [...]/build/host-flex-2.6.4/.stamp_configured] Error 1
+> > diff --git a/package/gettext/gettext.mk b/package/gettext-gnu/gettext-gnu.mk
+> > similarity index 57%
+> > copy from package/gettext/gettext.mk
+> > copy to package/gettext-gnu/gettext-gnu.mk
+> > index ec9588f8ad..61adf72738 100644
+> > --- a/package/gettext/gettext.mk
+> > +++ b/package/gettext-gnu/gettext-gnu.mk
+> > @@ -1,23 +1,24 @@
+> >  ################################################################################
+> >  #
+> > -# gettext
+> > +# gettext-gnu
+> >  #
+> >  ################################################################################
+> >
+> > -GETTEXT_VERSION = 0.19.8.1
+> > -GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+> > -GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+> > -GETTEXT_INSTALL_STAGING = YES
+> > -GETTEXT_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
+> > -GETTEXT_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
+> > +GETTEXT_GNU_VERSION = 0.19.8.1
+> > +GETTEXT_GNU_SITE = $(BR2_GNU_MIRROR)/gettext
+> > +GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
+> > +GETTEXT_GNU_INSTALL_STAGING = YES
+> > +GETTEXT_GNU_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
+> > +GETTEXT_GNU_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
+> >  # 0002-Update-after-gnulib-changed.patch
+> > -GETTEXT_AUTORECONF = YES
+> > -GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> > +GETTEXT_GNU_AUTORECONF = YES
+> > +GETTEXT_GNU_PROVIDES = gettext
+> > +GETTEXT_GNU_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> >
+>
+> [...]
+>
+> >
+> >  # Force the build of libintl, even if the C library provides a stub
+> >  # gettext implementation
+> > -ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+> > -GETTEXT_CONF_OPTS += --with-included-gettext
+> > +ifeq ($(BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL),y)
+>
+> It seems this patch introduced a typo here, There is no
+> BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL option but
+> BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL.
+>
+> Even with this patch my host-flex build is broken.
 >
 
-gettextizing is enabled depending on which provider is choosen
-gettext-gnu or gettext-tiny, they
-both provides GETTEXTIZE variable. The issue is caused on toolchains
-which provides
-BR2_TOOLCHAIN_HAS_FULL_GETTEXT=y, in that case gettext is not selected
-by NLS config
-and GETTEXTIZE is not defined. I will try to fix it ASAP.
+Yeah, this is a really typo  but anyway gettext/Config.in (which is a
+virtual package now) uses
+the right config option.
 
-Thanks for your findings!
+Thanks Romain!
 
 Regards,
 Vadim Kochan
