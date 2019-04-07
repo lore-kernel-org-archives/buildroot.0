@@ -1,92 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 15:20:49 +0200
-Subject: [Buildroot] [git commit] Revert "runc: depend on linux headers >=
- 3.11 for O_TMPFILE"
-Message-ID: <20190407131803.E5C2F8004A@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 15:21:30 +0200
+Subject: [Buildroot] [git commit] package/docker-cli: bump to version
+ v18.09.4
+Message-ID: <20190407131804.0D1F3802F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b13a216921ca88dfdd340e5cf12df1b970a9caa
+commit: https://git.buildroot.net/buildroot/commit/?id=426103703df02b0038cd1524fe5edf530265f771
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This reverts commit 905e976a6af224b3ed015c46fcea2d717c155f55.
-
-With the bump to 1.0.0-rc7, runc no longer needs O_TMPFILE.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-containerd/Config.in | 4 +---
- package/docker-engine/Config.in     | 6 ++----
- package/runc/Config.in              | 6 ++----
- 3 files changed, 5 insertions(+), 11 deletions(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 8d80d8623b..35867df21a 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
-@@ -33,5 +32,4 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8364759ae1..1fd229fcbb 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-@@ -51,9 +50,8 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 9782f34baa..41686f0de8 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	29f3a435bfcd52dbe26f6315ee92bffc0220a537608935a2c3870f6b729fc16e  docker-cli-v18.09.2.tar.gz
++sha256	f9be44f395617f3f75faac69ad90f93c94ee4050c193bfa05eddb520a27c5d44  docker-cli-v18.09.4.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index c3dd536937..65701d1530 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
+-DOCKER_CLI_VERSION = v18.09.2
++DOCKER_CLI_VERSION = v18.09.4
+ DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
--comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.11"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index 2f32bce207..f181ee334f 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	help
- 	  runC is a CLI tool for spawning and running containers
-@@ -11,8 +10,7 @@ config BR2_PACKAGE_RUNC
- 
- 	  https://github.com/opencontainers/runc
- 
--comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
-+comment "runc needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
- 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAN_USES_UCLIBC
