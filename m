@@ -1,55 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Apr 2019 21:58:33 +0200
-Subject: [Buildroot] [PATCH 6/6] package/lldpd: add libcap optional
- dependency
-In-Reply-To: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
-References: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190407195833.9275-6-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Apr 2019 21:59:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnfs: bump version to 4.0.0
+Message-ID: <20190407195940.5655-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcap optional dependency has been added in version 1.0.2 with
-https://github.com/vincentbernat/lldpd/commit/f6933edaf2edea12ef72ef7c70958c2a617f6a1f
+Removed patch 0002, applied upstream.
 
-Also refactor check and valgrind optional dependencies to put them on a
-single line
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lldpd/lldpd.mk | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ ...-libnfs.c-include-time.h-in-libnfs.c.patch | 35 -------------------
+ package/libnfs/libnfs.hash                    |  2 +-
+ package/libnfs/libnfs.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
 
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 99de40d498..86c825c4e1 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -6,18 +6,15 @@
- 
- LLDPD_VERSION = 1.0.3
- LLDPD_SITE = http://media.luffy.cx/files/lldpd
--LLDPD_DEPENDENCIES = host-pkgconf libevent
-+LLDPD_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_CHECK),check) \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-+	libevent \
-+	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
- LLDPD_LICENSE = ISC
- LLDPD_LICENSE_FILES = LICENSE
- 
--ifeq ($(BR2_PACKAGE_CHECK),y)
--LLDPD_DEPENDENCIES += check
--endif
+diff --git a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+deleted file mode 100644
+index 34e584017e..0000000000
+--- a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From b56bd3d99f67a3273fec3c0c5d9560413465a1db Mon Sep 17 00:00:00 2001
+-From: Anna Lyons <Anna.Lyons@data61.csiro.au>
+-Date: Thu, 12 Jul 2018 17:45:23 +1000
+-Subject: [PATCH] libnfs.c: include <time.h> in libnfs.c
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--ifeq ($(BR2_PACKAGE_VALGRIND),y)
--LLDPD_DEPENDENCIES += valgrind
--endif
+-time() is used in this file, which is from time.h. Fixes a warning.
 -
- # Detection of c99 support in configure fails without WCHAR. To enable
- # automatic detection of c99 support by configure, we need to enable
- # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
+-Note, that building with musl breaks otherwise, as it is more strict regarding
+-missing header inclusions.
+-
+-Backported from: 794a29f01f8e5961adc5c79d5ba5ac1062877e6c
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- lib/libnfs.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/lib/libnfs.c b/lib/libnfs.c
+-index d89d84d..43c17b9 100755
+---- a/lib/libnfs.c
+-+++ b/lib/libnfs.c
+-@@ -70,6 +70,7 @@
+- #include <stdarg.h>
+- #include <stdlib.h>
+- #include <string.h>
+-+#include <time.h>
+- #include "slist.h"
+- #include "libnfs.h"
+- #include "libnfs-raw.h"
+--- 
+-2.19.1
+-
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 0e4dc6fbc9..9cd2fd71c5 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 445d92c5fc55e4a5b115e358e60486cf8f87ee50e0103d46a02e7fb4618566a5  libnfs-libnfs-3.0.0.tar.gz
++sha256 6ee77e9fe220e2d3e3b1f53cfea04fb319828cc7dbb97dd9df09e46e901d797d  libnfs-libnfs-4.0.0.tar.gz
+ sha256 edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
+ sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 3a84e0aafa..5c8f66b011 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNFS_VERSION = libnfs-3.0.0
++LIBNFS_VERSION = libnfs-4.0.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
 -- 
 2.20.1
