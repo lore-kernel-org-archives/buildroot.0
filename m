@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 22:17:26 +0200
-Subject: [Buildroot] [RFC PATCH v1 1/6] package/go: implement go modules
- integration
-In-Reply-To: <20190317012142.10545-1-christian@paral.in>
-References: <20190317012142.10545-1-christian@paral.in>
-Message-ID: <20190407221726.130ca0fe@windsurf>
+Date: Sun, 7 Apr 2019 22:20:38 +0200
+Subject: [Buildroot] [RFC v3 4/4] libinput: bump version to 1.11.0 and
+ convert to meson build
+In-Reply-To: <20180719204355.10465-4-ps.report@gmx.net>
+References: <20180719204355.10465-1-ps.report@gmx.net>
+ <20180719204355.10465-4-ps.report@gmx.net>
+Message-ID: <20190407222038.2db5708d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Hello Peter,
 
-On Sat, 16 Mar 2019 18:21:37 -0700
-Christian Stewart <christian@paral.in> wrote:
+On Thu, 19 Jul 2018 22:43:55 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> This commit moves from the GOPATH mechanism to the new GO111MODULE approach for
-> Go based packages. Old Go packages (with the exception of docker-cli) will
-> compile without changes (for example, mender, flanneld).
+> For details since 1.8.x see [1], [2] and [3].
+> 
+> Build system changed from autotools to meson exclusively
+> since 1.9.0 (see [1]).
+> 
+> Add hash for license file.
+> 
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2017-October/035469.html
+> [2] https://lists.freedesktop.org/archives/wayland-devel/2018-February/036957.html
+> [3] https://lists.freedesktop.org/archives/wayland-devel/2018-June/038349.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-While browsing through the list of pending patches, I found the
-following patch series related to Go and package management:
+Sorry for the slow answer. Turns out that in the mean time, another
+libinput bump was merged which converted the package to use the meson
+build system.
 
-  http://patchwork.ozlabs.org/project/buildroot/list/?series=68102
+So I marked your patch as Superseded in patchwork.
 
-The first patch in the series,
-http://patchwork.ozlabs.org/patch/976322/, introduces:
-
-+	  Glide is a tool for managing the _vendor_ directory within a Go
-+	  package. This feature, first introduced in Go 1.5, allows each
-+	  package to have a _vendor_ directory containing dependent
-+	  packages for the project. These vendor packages can be
-+	  installed by a tool (e.g. glide), similar to go get or they
-+	  can be vendored and distributed with the package.
-
-and it does a fair amount of changes in pkg-golang.mk.
-
-How does this fit (or not) with the changes you're proposing ?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
