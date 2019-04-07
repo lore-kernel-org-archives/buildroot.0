@@ -1,142 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Apr 2019 13:51:06 +0200
-Subject: [Buildroot] [PATCH 00/10] infra: add solution to dump metadata from
- packages (branch yem/misc)
-Message-ID: <cover.1554637858.git.yann.morin.1998@free.fr>
+Date: Sun,  7 Apr 2019 13:51:17 +0200
+Subject: [Buildroot] [PATCH 02/10] infra/pkg-download: make the URI list a
+ callable macro
+In-Reply-To: <cover.1554637858.git.yann.morin.1998@free.fr>
+References: <cover.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <63416c278b970c4be6abe15af836fa39d9de91f9.1554637858.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, that variable is context-dependent, as it expects the PKG
+variable to exist and be defined to the current package.
 
-This series is a proposal to allow extracting metadata about packages,
-in a way that makes it reusable for tooling outside of Buildroot, that
-is both reliable and extendable, without causing too much burden on
-Buildroot own infrastructure.
+This is not so clean, so change the variable to a callable macro.
 
-This series introduces a global 'show-info' rule, and a per package and
-per filesystem 'show-info' rule, that dump the pacakge metadata as a
-JSON blob. JSON is a key-value based serialisation format. As such, it
-is easy to parse (there are implementations in virtually all languages,
-and there are even tools like jq, that can be used from shell scripts).
-But most importantly, it is easy to extend without breakign existing
-tools (as long as they use proper JSON parsers, that is).
+Adapt the caller accordingly.
 
-This series first introduces 4 cleanup preparatory patches in the
-download infra, so that it gets easy to get the list of URIs to report
-them. Strictly speaking, only patches 1 and 2 are required for this
-series, but the cleanup was extended to the infra with patches 3 and 4,
-for consistency.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/pkg-download.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Then, the series introduces a per package and per filesystem show-info
-rule, as well as a recursive variant. The per filesystem rule is needed
-to be able to get the info about packages that are a dependency of
-filesystems.
-
-Finally, a global show-info rule is introduced that generates a JSON
-array with all the information about a build.
-
-In the end, the output for a packages would look like (beautified manually
-for ease of reading):
-
-    $ make cracklib-show-info
-    {
-      "name": "cracklib",
-      "type": "target",
-      "virtual": false,
-      "version": "2.9.7",
-      "licenses": "LGPL-2.1",
-      "downloads": [
-        {
-          "source": "cracklib-2.9.7.tar.gz",
-          "URIs": [
-            "https+https://github.com/cracklib/cracklib/releases/download/v2.9.7",
-            "http|urlencode+http://sources.buildroot.net/cracklib",
-            "http|urlencode+http://sources.buildroot.net"
-          ]
-        },
-        {
-          "source": "cracklib-words-2.9.7.gz",
-          "URIs": [
-            "https://github.com/cracklib/cracklib/releases/download/v2.9.7",
-            "http|urlencode+http://sources.buildroot.net/cracklib",
-            "http|urlencode+http://sources.buildroot.net"
-          ]
-        },
-        null
-      ],
-      "depends on": [
-        "host-cracklib",
-        "host-skeleton",
-        "skeleton",
-        "toolchain"
-      ],
-      "dependency of": [
-        "libpwquality",
-        "linux-pam"
-      ]
-    }
-
-While the whole show-info would look like (elipsed for readbility):
-
-    $ make show-info
-    [
-    { "name": "host-gcc-final", "type": "host", "virtual": false, ... },
-    { "name": "host-binutils", "type": "host", "virtual": false, ... },
-    { "name": "toolchain-buildroot", "type": "target", ... },
-    { "name": "gettext-tiny", "type": "target", "virtual": false, ... },
-    { "name": "gettext", "type": "target", "virtual": true, ... },
-    { "name": "ifupdown-scripts", "type": "target", "virtual": false, ... },
-    ...
-    { "name": "rootfs-common", "type": "rootfs", ... },
-    { "name": "rootfs-tar", "type": "rootfs", ... }
-    ]
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 0ca17cdc925124d1b309788518e9d4834b9b2557
-
-  boot/syslinux: fix build with binutils note gnu property section (2019-04-07 11:54:48 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 9e4d027c3a353fadde428fbba702dcc9dac15d75
-
-  infra: introduce top-level, global show-info (2019-04-07 13:27:45 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (10):
-      infra/pkg-download: return just a list of URIs
-      infra/pkg-download: make the URI list a callable macro
-      infra/pkg-download: get rid of the FLOCK variable
-      infra/pkg-download: make the DOWNLOAD macro fully parameterised
-      infra/utils: add helper to generate comma-separated lists
-      infra/pkg-generic: introduce foo-show-info
-      infra/pkg-generic: introduce foo-show-recursive-info
-      infra/fs: introduce rootfs-foo-show-info
-      infar/fs: introduce rootfs-foo-show-recursive-info
-      infra: introduce top-level, global show-info
-
- Makefile                |  6 ++++++
- fs/common.mk            | 32 ++++++++++++++++++++++++++++++++
- package/pkg-download.mk | 41 ++++++++++++++++++++++++-----------------
- package/pkg-generic.mk  | 49 ++++++++++++++++++++++++++++++++++++++++++++++++-
- support/misc/utils.mk   |  4 ++++
- 5 files changed, 114 insertions(+), 18 deletions(-)
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index f9411213b6..611df5f982 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -71,11 +71,17 @@ export BR_NO_CHECK_HASH_FOR =
+ #
+ # Argument 1 is the source location
+ #
++#
++# DOWNLOAD_URIS - List the candidates URIs where to get the package from:
++#
++# Argument 1 is the source location
++# Argument 2 is the upper-case package name
++#
+ ################################################################################
+ 
+ ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
+ DOWNLOAD_URIS += \
+-	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
++	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
+ 	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
+ endif
+ 
+@@ -84,7 +90,7 @@ DOWNLOAD_URIS += \
+ 	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+-	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
++	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
+ 	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
+ endif
+ endif
+@@ -101,7 +107,7 @@ define DOWNLOAD
+ 		-N '$($(PKG)_RAWNAME)' \
+ 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
+ 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
+-		$(patsubst %,-u %,$(DOWNLOAD_URIS)) \
++		$(patsubst %,-u %,$(call DOWNLOAD_URIS,$(1),$(PKG))) \
+ 		$(QUIET) \
+ 		-- \
+ 		$($(PKG)_DL_OPTS)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
